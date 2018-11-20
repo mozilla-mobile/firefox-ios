@@ -8,17 +8,17 @@ class Debouncer {
     var completion: (() -> Void)?
     private let timeInterval: TimeInterval
     private var timer: Timer?
-    
+
     init(timeInterval: TimeInterval, completion: (() -> Void)? = nil) {
         self.timeInterval = timeInterval
         self.completion = completion
     }
-    
+
     func renewInterval() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(triggerCompletion), userInfo: nil, repeats: false)
     }
-    
+
     @objc private func triggerCompletion() {
         guard let timer = timer, timer.isValid else { return }
         completion?()

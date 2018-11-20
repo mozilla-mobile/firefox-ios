@@ -107,8 +107,8 @@ open class GradientProgressBar: UIProgressView {
         gradientLayer.frame = CGRect(x: bounds.origin.x, y: bounds.origin.y, width: bounds.size.width * 2, height: bounds.size.height)
         gradientLayer.colors = DefaultValues.gradientColors
         gradientLayer.locations = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.0]
-        gradientLayer.startPoint = CGPoint(x:0, y:0)
-        gradientLayer.endPoint = CGPoint(x:1, y:0)
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
         gradientLayer.drawsAsynchronously = true
     }
 
@@ -124,7 +124,6 @@ open class GradientProgressBar: UIProgressView {
         moveAnimation.toValue = CGPoint(x: gradientLayer.frame.width, y: gradientLayer.position.y)
         moveAnimation.fillMode = .forwards
         moveAnimation.isRemovedOnCompletion = false
-
 
         CATransaction.setCompletionBlock {
             self.resetProgressBar()

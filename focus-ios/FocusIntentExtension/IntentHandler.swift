@@ -5,12 +5,12 @@
 import Intents
 
 class IntentHandler: INExtension, EraseIntentHandling {
-    
+
     func handle(intent: EraseIntent, completion: @escaping (EraseIntentResponse) -> Void) {
         Settings.setSiriRequestErase(to: true)
         completion(EraseIntentResponse(code: .success, userActivity: nil ))
     }
-    
+
     override func handler(for intent: INIntent) -> Any {
         return self
     }

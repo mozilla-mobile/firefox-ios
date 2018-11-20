@@ -13,7 +13,7 @@ class SiriShortcuts {
         case eraseAndOpen = "org.mozilla.ios.Klar.eraseAndOpen"
         case openURL = "org.mozilla.ios.Klar.openUrl"
     }
-    
+
     func getActivity(for type: activityType) -> NSUserActivity? {
         switch type {
         case .eraseAndOpen:
@@ -24,7 +24,7 @@ class SiriShortcuts {
             return nil
         }
     }
-    
+
     func getIntent(for type: activityType) -> INIntent? {
         switch type {
         case .erase:
@@ -35,7 +35,7 @@ class SiriShortcuts {
             return nil
         }
     }
-    
+
     private var eraseAndOpenActivity: NSUserActivity = {
         let activity = NSUserActivity(activityType: activityType.eraseAndOpen.rawValue)
         activity.title = UIConstants.strings.eraseAndOpenSiri
@@ -46,7 +46,7 @@ class SiriShortcuts {
         activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.eraseAndOpen.rawValue)
         return activity
     }()
-    
+
     private var openUrlActivity: NSUserActivity? = {
         guard let url = UserDefaults.standard.value(forKey: "favoriteUrl") as? String else { return nil }
         let activity = NSUserActivity(activityType: activityType.openURL.rawValue)
@@ -58,7 +58,7 @@ class SiriShortcuts {
         activity.persistentIdentifier = NSUserActivityPersistentIdentifier(activityType.openURL.rawValue)
         return activity
     }()
-    
+
     func hasAddedActivity(type: SiriShortcuts.activityType, _ completion: @escaping (_ result: Bool) -> Void) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {
@@ -77,7 +77,7 @@ class SiriShortcuts {
             }
         }
     }
-    
+
     func displayAddToSiri(for activityType: activityType, in viewController: UIViewController) {
         var shortcut: INShortcut?
         if let activity = SiriShortcuts().getActivity(for: activityType) {
@@ -86,20 +86,20 @@ class SiriShortcuts {
             shortcut = INShortcut(intent: intent)
         }
         guard let foundShortcut = shortcut else { return }
-        
+
         let addViewController = INUIAddVoiceShortcutViewController(shortcut: foundShortcut)
         addViewController.modalPresentationStyle = .formSheet
         addViewController.delegate = viewController as? INUIAddVoiceShortcutViewControllerDelegate
         viewController.present(addViewController, animated: true, completion: nil)
     }
-    
+
     func displayEditSiri(for shortcut: INVoiceShortcut, in viewController: UIViewController) {
         let editViewController = INUIEditVoiceShortcutViewController(voiceShortcut: shortcut)
         editViewController.modalPresentationStyle = .formSheet
         editViewController.delegate = viewController as? INUIEditVoiceShortcutViewControllerDelegate
         viewController.present(editViewController, animated: true, completion: nil)
     }
-    
+
     func manageSiri(for activityType: SiriShortcuts.activityType, in viewController: UIViewController) {
         INVoiceShortcutCenter.shared.getAllVoiceShortcuts { (voiceShortcuts, error) in
             DispatchQueue.main.async {

@@ -9,15 +9,15 @@ import MobileCoreServices
 extension NSObject {
     func callSelector(selector: Selector, object: AnyObject?, delay: TimeInterval) {
         let delay = delay * Double(NSEC_PER_SEC)
-        let time = DispatchTime.init(uptimeNanoseconds: UInt64(delay))
+        let time = DispatchTime(uptimeNanoseconds: UInt64(delay))
         DispatchQueue.main.asyncAfter(deadline: time) {
-            Thread.detachNewThreadSelector(selector, toTarget:self, with: object)
+            Thread.detachNewThreadSelector(selector, toTarget: self, with: object)
         }
     }
 }
 
 extension NSURL {
-    var encodedUrl: String? { return absoluteString?.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.alphanumerics) }
+    var encodedUrl: String? { return absoluteString?.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.alphanumerics) }
 }
 
 extension NSItemProvider {
@@ -78,7 +78,7 @@ class ActionViewController: SLComposeServiceViewController {
             textProvider.processText { (textItem, error) in
                 guard let text = textItem as? String else { self.cancel(); return }
 
-                if let url = NSURL.init(string: text) {
+                if let url = NSURL(string: text) {
                     guard let focusUrl = url.encodedUrl.flatMap(self.focusUrl) else { self.cancel(); return }
                     self.handleUrl(focusUrl)
                 } else {
@@ -100,7 +100,7 @@ class ActionViewController: SLComposeServiceViewController {
         // From http://stackoverflow.com/questions/24297273/openurl-not-work-in-action-extension
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
-        while (responder != nil) {
+        while responder != nil {
             if responder!.responds(to: selectorOpenURL) {
                 responder!.callSelector(selector: selectorOpenURL, object: url, delay: 0)
             }
@@ -108,7 +108,7 @@ class ActionViewController: SLComposeServiceViewController {
             responder = responder!.next
         }
 
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.init(uptimeNanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))) {
             self.cancel()
         }
     }

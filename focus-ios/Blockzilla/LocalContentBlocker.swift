@@ -8,7 +8,7 @@ import WebKit
 class ContentBlockerHelper {
     static let shared = ContentBlockerHelper()
 
-    var handler: (([WKContentRuleList]) -> Void)? = nil
+    var handler: (([WKContentRuleList]) -> Void)?
 
     func reload() {
         guard let handler = handler else { return }

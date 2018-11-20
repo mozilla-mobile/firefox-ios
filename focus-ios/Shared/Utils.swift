@@ -20,7 +20,7 @@ class Utils {
         .blockAnalytics: "disconnect-analytics",
         .blockSocial: "disconnect-social",
         .blockOther: "disconnect-content",
-        .blockFonts: "web-fonts",
+        .blockFonts: "web-fonts"
     ]
 
     static func getEnabledLists() -> [String] {

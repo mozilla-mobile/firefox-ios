@@ -14,7 +14,7 @@ class SearchSettingsViewController: UITableViewController {
 
     private let searchEngineManager: SearchEngineManager
     private var isInEditMode = false
-    
+
     init(searchEngineManager: SearchEngineManager) {
         self.searchEngineManager = searchEngineManager
         super.init(style: .grouped)
@@ -35,19 +35,19 @@ class SearchSettingsViewController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.Edit, style: .plain, target: self, action: #selector(SearchSettingsViewController.toggleEditing))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "edit"
     }
-    
+
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = UITableViewCell()
         cell.textLabel?.text = " "
         cell.backgroundColor = UIConstants.colors.background
-        
+
         if section == 0 {
             let label = SmartLabel()
             label.text = UIConstants.strings.InstalledSearchEngines
             label.textColor = UIConstants.colors.tableSectionHeader
             label.font = UIConstants.fonts.tableSectionHeader
             cell.contentView.addSubview(label)
-            
+
             label.snp.makeConstraints { make in
                 make.leading.trailing.equalTo(cell.textLabel!)
                 make.centerY.equalTo(cell.textLabel!).offset(3)
@@ -56,15 +56,14 @@ class SearchSettingsViewController: UITableViewController {
 
         return cell
     }
-    
+
     override func numberOfSections(in tableView: UITableView) -> Int {
         if isInEditMode {
             return 1
-        }
-        else {
+        } else {
             return 2
         }
-        
+
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -99,7 +98,7 @@ class SearchSettingsViewController: UITableViewController {
             cell.backgroundColor = UIConstants.colors.cellBackground
             cell.accessibilityIdentifier = "restoreDefaults"
             cell.selectedBackgroundView = getBackgroundView()
-            
+
             if searchEngineManager.hasDisabledDefaultEngine() {
                 cell.textLabel?.textColor = UIConstants.colors.settingsTextLabel
                 cell.selectionStyle = .default
@@ -109,7 +108,7 @@ class SearchSettingsViewController: UITableViewController {
                 cell.selectionStyle = .none
                 cell.isUserInteractionEnabled = false
             }
-            
+
             return cell
         } else {
             let engine = engines[indexPath.item]
@@ -120,17 +119,17 @@ class SearchSettingsViewController: UITableViewController {
             cell.selectedBackgroundView = getBackgroundView()
             cell.backgroundColor = UIConstants.colors.cellBackground
             cell.accessibilityIdentifier = engine.name
-            
+
             if tableView.isEditing {
                 cell.contentView.snp.makeConstraints({ (make) in
                     make.leading.equalTo(0)
                 })
-                
+
                 cell.imageView?.snp.makeConstraints({ (make) in
                     make.leading.equalTo(50)
                     make.centerY.equalTo(cell)
                 })
-                
+
                 if let imageView = cell.imageView {
                     cell.textLabel?.snp.makeConstraints({ (make) in
                         make.centerY.equalTo(imageView.snp.centerY)
@@ -141,10 +140,10 @@ class SearchSettingsViewController: UITableViewController {
 
             if engine === searchEngineManager.activeEngine {
                 cell.accessoryType = .checkmark
-                
+
                 if tableView.isEditing {
                     cell.textLabel?.textColor = UIConstants.colors.settingsDisabled.withAlphaComponent(0.5)
-                    cell.separatorInset = UIEdgeInsets.init(top: 0, left: 93, bottom: 0, right: 0)
+                    cell.separatorInset = UIEdgeInsets(top: 0, left: 93, bottom: 0, right: 0)
                     cell.tintColor = tableView.tintColor.withAlphaComponent(0.5)
                     cell.imageView?.alpha = 0.5
                 }
@@ -153,16 +152,16 @@ class SearchSettingsViewController: UITableViewController {
             return cell
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.row == searchEngineManager.engines.count+1 ? 44*2 : 44
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+
         let engines = searchEngineManager.engines
-        
+
         if indexPath.item == engines.count {
             // Add search engine tapped
             let vc = AddSearchEngineViewController(delegate: self, searchEngineManager: searchEngineManager)
@@ -177,41 +176,41 @@ class SearchSettingsViewController: UITableViewController {
             let engine = engines[indexPath.item]
             searchEngineManager.activeEngine = engine
             Telemetry.default.configuration.defaultSearchEngineProvider = engine.name
-            
+
             _ = navigationController?.popViewController(animated: true)
             delegate?.searchSettingsViewController(self, didSelectEngine: engine)
         }
     }
-    
+
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let engines = searchEngineManager.engines
-        
+
         if indexPath.row >= engines.count {
             // Can not edit the add engine or restore default rows
             return false
         }
-        
+
         let engine = engines[indexPath.row]
         return engine != searchEngineManager.activeEngine
     }
-    
+
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            searchEngineManager.removeEngine(engine:searchEngineManager.engines[indexPath.row])
+            searchEngineManager.removeEngine(engine: searchEngineManager.engines[indexPath.row])
             tableView.reloadData()
         }
     }
-    
+
     @objc func toggleEditing() {
         isInEditMode = !isInEditMode
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.Edit : UIConstants.strings.Done
         tableView.setEditing(!tableView.isEditing, animated: true)
         tableView.reloadData()
-        
+
         navigationItem.hidesBackButton = tableView.isEditing
     }
-    
-    private func getBackgroundView(bgColor:UIColor = UIConstants.colors.cellSelected) -> UIView {
+
+    private func getBackgroundView(bgColor: UIColor = UIConstants.colors.cellSelected) -> UIView {
         let view = UIView()
         view.backgroundColor = bgColor
         return view

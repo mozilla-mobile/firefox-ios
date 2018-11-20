@@ -95,7 +95,7 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression?
 }
 
 @available(iOS 11, *)
-fileprivate class TPStatsBlocklists {
+private class TPStatsBlocklists {
     class Rule {
         let regex: NSRegularExpression
         let loadType: LoadType
@@ -221,4 +221,3 @@ fileprivate class TPStatsBlocklists {
         return nil
     }
 }
-

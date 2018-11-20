@@ -8,7 +8,7 @@ class URLBarContainer: UIView {
     private let backgroundEditing = GradientBackgroundView(background: UIConstants.colors.background)
     private let backgroundDark = UIView()
     private let backgroundBright = GradientBackgroundView(alpha: 0.8, background: UIConstants.colors.background)
-    
+
     init() {
         super.init(frame: CGRect.zero)
 
@@ -30,7 +30,7 @@ class URLBarContainer: UIView {
         backgroundBright.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
-        
+
         backgroundEditing.snp.makeConstraints { make in
             make.edges.equalTo(self)
         }
@@ -41,7 +41,7 @@ class URLBarContainer: UIView {
         case dark
         case editing
     }
-    
+
     var color: barState = .editing {
         didSet {
             backgroundDark.animateHidden(color != .dark, duration: UIConstants.layout.urlBarTransitionAnimationDuration)

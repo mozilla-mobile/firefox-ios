@@ -9,4 +9,3 @@ extension Dictionary {
         dictionary.forEach { updateValue($1, forKey: $0) }
     }
 }
-

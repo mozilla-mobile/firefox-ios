@@ -25,6 +25,3 @@ enum BlocklistName: String {
         return BlocklistName.basic + (isOn ? BlocklistName.strict : [])
     }
 }
-
-
-

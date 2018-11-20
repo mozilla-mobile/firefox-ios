@@ -5,17 +5,17 @@
 import XCTest
 
 class WebsiteMemoryTest: BaseTestCase {
-        
+
     override func setUp() {
         super.setUp()
         dismissFirstRunUI()
     }
-    
+
     override func tearDown() {
         XCUIApplication().terminate()
         super.tearDown()
     }
-    
+
     func testGoogleTextField() {
         let app = XCUIApplication()
         var googleSearchField: XCUIElement = app.webViews.otherElements["Search"]
@@ -56,5 +56,5 @@ class WebsiteMemoryTest: BaseTestCase {
         // check the world 'mozilla' does not appear in the list of autocomplete
         waitforNoExistence(element: app.webViews.textFields["mozilla"])
         waitforNoExistence(element: app.webViews.searchFields["mozilla"])
-    }    
+    }
 }

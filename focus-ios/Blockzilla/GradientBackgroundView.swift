@@ -33,18 +33,18 @@ class GradientBackgroundView: UIView {
 class IntroCardGradientBackgroundView: UIView {
     init(alpha: Float = 1) {
         super.init(frame: CGRect.zero)
-        
+
         backgroundColor = UIConstants.colors.gradientBackground
-        
+
         let gradient = self.layer as! CAGradientLayer
         let gradients = [UIColor(rgb: 0xF9F9FA), UIColor(rgb: 0xFFFFFF)]
         gradient.colors = gradients.map { $0.withAlphaComponent(CGFloat(alpha)).cgColor }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override class var layerClass: AnyClass {
         return CAGradientLayer.self
     }

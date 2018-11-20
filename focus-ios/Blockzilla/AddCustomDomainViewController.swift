@@ -16,25 +16,25 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
     private let textInput: UITextField = InsetTextField(insetBy: 10)
     private let inputDescription = SmartLabel()
     weak var delegate: AddCustomDomainViewControllerDelegate?
-    
+
     init(autocompleteSource: CustomAutocompleteSource) {
         self.autocompleteSource = autocompleteSource
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         title = UIConstants.strings.autocompleteAddCustomUrl
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: UIConstants.strings.cancel, style: .plain, target: self, action: #selector(AddCustomDomainViewController.cancelTapped))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: UIConstants.strings.save, style: .done, target: self, action: #selector(AddCustomDomainViewController.doneTapped))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "saveButton"
-        
+
         setupUI()
     }
-    
+
     private func setupUI() {
         view.backgroundColor = UIConstants.colors.background
 
@@ -77,7 +77,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
             make.leading.equalToSuperview().offset(10)
         }
     }
-    
+
     @objc func cancelTapped() {
         finish()
     }
@@ -86,7 +86,7 @@ class AddCustomDomainViewController: UIViewController, UITextFieldDelegate {
         doneTapped()
         return true
     }
-    
+
     @objc func doneTapped() {
         self.resignFirstResponder()
         guard let domain = textInput.text, !domain.isEmpty else {

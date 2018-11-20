@@ -46,7 +46,7 @@ class BrowserToolset {
         stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
         stopReloadButton.addTarget(self, action: #selector(didPressStopReload), for: .touchUpInside)
         stopReloadButton.accessibilityIdentifier = "BrowserToolset.stopReloadButton"
-        
+
         settingsButton.tintColor = UIConstants.colors.toolbarButtonNormal
         settingsButton.addTarget(self, action: #selector(didPressSettings), for: .touchUpInside)
         settingsButton.accessibilityLabel = UIConstants.strings.browserSettings
@@ -96,7 +96,7 @@ class BrowserToolset {
             delegate?.browserToolsetDidPressReload(self)
         }
     }
-    
+
     @objc func didLongPressReload(recognizer: UILongPressGestureRecognizer) {
         if recognizer.state == .began && !isLoading {
             stopReloadButton.alpha = 1
@@ -107,7 +107,7 @@ class BrowserToolset {
     @objc private func didPressSettings() {
         delegate?.browserToolsetDidPressSettings(self)
     }
-    
+
     func setHighlightWhatsNew(shouldHighlight: Bool) {
         if shouldHighlight {
             settingsButton.setImage(UIImage(named: "preferences_updated"), for: .normal)
@@ -122,16 +122,16 @@ extension BrowserToolset: WhatsNewDelegate {
         let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
         return counter != 0
     }
-    
+
     func didShowWhatsNew() {
         UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
         UserDefaults.standard.removeObject(forKey: AppDelegate.prefWhatsNewCounter)
     }
 }
 
-extension UIImage{
+extension UIImage {
 
-    func alpha(_ value:CGFloat) -> UIImage {
+    func alpha(_ value: CGFloat) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
         draw(at: CGPoint.zero, blendMode: .normal, alpha: value)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()

@@ -42,7 +42,7 @@ class AppInfo {
     static var shortVersion: String {
         return Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
     }
-    
+
     static var buildNumber: String {
         return Bundle.main.infoDictionary!["CFBundleVersion"] as! String
     }
@@ -52,13 +52,13 @@ class AppInfo {
     }
 
     static let isKlar: Bool = AppInfo.productName.contains("Klar")
-    
+
     static let config: AppConfig = AppInfo.isKlar ? KlarAppConfig() : FocusAppConfig()
-    
+
     open class func isSimulator() -> Bool {
         return ProcessInfo.processInfo.environment["SIMULATOR_ROOT"] != nil
     }
-    
+
     open class func isTesting() -> Bool {
         return ProcessInfo.processInfo.arguments.contains("testMode")
     }
@@ -66,7 +66,7 @@ class AppInfo {
     static var isBetaBuild: Bool {
         return (Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String)?.contains("enterprise") ?? false
     }
-    
+
     open class func testRequestsReset() -> Bool {
         return ProcessInfo.processInfo.arguments.contains("testMode")
     }

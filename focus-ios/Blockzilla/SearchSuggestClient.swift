@@ -10,15 +10,15 @@ let SearchSuggestClientErrorInvalidResponse = 1
 
 class SearchSuggestClient {
     private var request: NSMutableURLRequest?
-    
+
     func getSuggestions(_ query: String, callback: @escaping (_ response: [String]?, _ error: NSError?) -> Void) {
         guard let url = SearchEngineManager(prefs: UserDefaults.standard).activeEngine.urlForSuggestions(query) else {
             let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidEngine, userInfo: nil)
             callback(nil, error)
             return
         }
-        
-        let request = URLRequest(url:url)
+
+        let request = URLRequest(url: url)
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             do {
                 // The response will be of the following format:
@@ -27,11 +27,11 @@ class SearchSuggestClient {
                 guard let myData = data, let array = try JSONSerialization.jsonObject(with: myData, options: []) as? [Any] else {
                     throw NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
                 }
-                
+
                 if array.count < 2 {
                     throw NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
                 }
-                
+
                 if var suggestions = array[1] as? [String] {
                     if let searchWord = array[0] as? String {
                         suggestions = suggestions.filter { $0 != searchWord }

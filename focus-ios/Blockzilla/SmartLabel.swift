@@ -6,12 +6,12 @@ import UIKit
 
 class SmartLabel: UILabel {
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder:aDecoder)
+        super.init(coder: aDecoder)
         setupShrinkage()
     }
 
     override init(frame: CGRect) {
-        super.init(frame:frame)
+        super.init(frame: frame)
         setupShrinkage()
     }
 }

@@ -9,7 +9,7 @@ class BlockerToggle: Equatable {
     let label: String
     let setting: SettingsToggle
     let subtitle: String?
-    
+
     init(label: String, setting: SettingsToggle, subtitle: String? = nil) {
         self.label = label
         self.setting = setting
@@ -18,7 +18,7 @@ class BlockerToggle: Equatable {
         toggle.onTintColor = UIConstants.colors.toggleOn
         toggle.tintColor = UIConstants.colors.toggleOff
     }
-    
+
     static func == (lhs: BlockerToggle, rhs: BlockerToggle) -> Bool {
         return lhs.toggle == rhs.toggle && lhs.label == rhs.label && lhs.setting == rhs.setting
     }

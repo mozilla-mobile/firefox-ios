@@ -21,7 +21,7 @@ enum SettingsToggle: String {
 
 struct Settings {
     fileprivate static let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-    
+
     fileprivate static let customDomainSettingKey = "customDomains"
     private static let siriRequestsEraseKey = "siriRequestsErase"
 
@@ -45,11 +45,11 @@ struct Settings {
     static func getToggle(_ toggle: SettingsToggle) -> Bool {
         return prefs.object(forKey: toggle.rawValue) as? Bool ?? defaultForToggle(toggle)
     }
-    
+
     static func getCustomDomainSetting() -> [String] {
         return prefs.array(forKey: customDomainSettingKey) as? [String] ?? []
     }
-    
+
     static func setCustomDomainSetting(domains: [String]) {
         prefs.set(domains, forKey: customDomainSettingKey)
         prefs.synchronize()
@@ -59,11 +59,11 @@ struct Settings {
         prefs.set(value, forKey: toggle.rawValue)
         prefs.synchronize()
     }
-    
+
     static func siriRequestsErase() -> Bool {
         return prefs.bool(forKey: siriRequestsEraseKey)
     }
-    
+
     static func setSiriRequestErase(to value: Bool) {
         prefs.set(value, forKey: siriRequestsEraseKey)
         prefs.synchronize()

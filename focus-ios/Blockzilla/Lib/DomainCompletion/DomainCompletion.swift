@@ -41,12 +41,12 @@ class CustomCompletionSource: CustomAutocompleteSource {
     }
 
     func add(suggestion: String) -> CustomCompletionResult {
-        var sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSMakeRange(0, suggestion.count), withTemplate: "")
+        var sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSRange(location: 0, length: suggestion.count), withTemplate: "")
 
         guard !sanitizedSuggestion.isEmpty else { return .error(.invalidUrl) }
-        
+
         guard sanitizedSuggestion.contains(".") else { return .error(.invalidUrl) }
-        
+
         // Drop trailing slash, otherwise URLs will end with two when added from quick add URL menu action
         if sanitizedSuggestion.suffix(1) == "/" {
             sanitizedSuggestion = String(sanitizedSuggestion.dropLast())
@@ -62,7 +62,7 @@ class CustomCompletionSource: CustomAutocompleteSource {
     }
 
     func add(suggestion: String, atIndex: Int) -> CustomCompletionResult {
-        let sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSMakeRange(0, suggestion.count), withTemplate: "")
+        let sanitizedSuggestion = regex.stringByReplacingMatches(in: suggestion, options: [], range: NSRange(location: 0, length: suggestion.count), withTemplate: "")
 
         guard !sanitizedSuggestion.isEmpty else { return .error(.invalidUrl) }
 

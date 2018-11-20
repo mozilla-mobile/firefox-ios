@@ -7,7 +7,7 @@ import UIKit
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
 
-    fileprivate lazy var tableView : UITableView = {
+    fileprivate lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
         tableView.delegate = self
@@ -39,7 +39,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
 
-    override var preferredStatusBarStyle : UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
     }
 
@@ -79,7 +79,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.layoutMargins = UIEdgeInsets.zero
         cell.separatorInset = UIEdgeInsets.zero
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if section == 0 {
             let cell = UITableViewCell()
@@ -118,7 +118,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var url: URL? = nil
+        var url: URL?
         switch (indexPath as NSIndexPath).row {
         case 1:
             url = URL(string: "https://support.mozilla.org/\(AppInfo.config.supportPath)")
@@ -153,12 +153,12 @@ private protocol AboutHeaderViewDelegate: class {
 private class AboutHeaderView: UIView {
     weak var delegate: AboutHeaderViewDelegate?
 
-    private lazy var logo : UIImageView = {
+    private lazy var logo: UIImageView = {
         let logo = UIImageView(image: AppInfo.config.wordmark)
         return logo
     }()
 
-    private lazy var aboutParagraph : UILabel = {
+    private lazy var aboutParagraph: UILabel = {
         let bulletStyle = NSMutableParagraphStyle()
         bulletStyle.firstLineHeadIndent = 15
         bulletStyle.headIndent = 29.5
@@ -174,13 +174,11 @@ private class AboutHeaderView: UIView {
             NSAttributedString(string: UIConstants.strings.aboutSafariBulletHeader + "\n"),
             NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutSafariBullet1), attributes: bulletAttributes),
             NSAttributedString(string: String(format: bulletFormat, UIConstants.strings.aboutSafariBullet2 + "\n"), attributes: bulletAttributes),
-            NSAttributedString(string: String(format: UIConstants.strings.aboutMissionLabel, AppInfo.productName)),
+            NSAttributedString(string: String(format: UIConstants.strings.aboutMissionLabel, AppInfo.productName))
             ]
 
         let attributed = NSMutableAttributedString()
         paragraph.forEach { attributed.append($0) }
-
-
 
         let aboutParagraph = SmartLabel()
         aboutParagraph.attributedText = attributed
@@ -198,7 +196,7 @@ private class AboutHeaderView: UIView {
         return label
     }()
 
-    private lazy var learnMoreButton : UIButton = {
+    private lazy var learnMoreButton: UIButton = {
         let learnMoreButton = UIButton()
         learnMoreButton.setTitle(UIConstants.strings.aboutLearnMoreButton, for: .normal)
         learnMoreButton.setTitleColor(UIConstants.colors.settingsLink, for: .normal)

@@ -28,7 +28,10 @@ disabled_rules: # rule identifiers to exclude from running
   - closure_parameter_position
   - identifier_name
   - type_name
-  - function_body_length
+  - function_body_length 
+  - for_where
+  - force_cast
+  - force_try
 opt_in_rules: # some rules are only opt-in
   - closing_brace
   - opening_brace
@@ -44,7 +47,7 @@ included: # paths to include during linting. `--path` is ignored if present.
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
   - Pods
-  - XCUITests/
+  - XCUITest/
   - ClientTests/
   - ScreenshotTests/
   - Search/

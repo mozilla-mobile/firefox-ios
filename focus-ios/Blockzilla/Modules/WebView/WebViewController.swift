@@ -46,16 +46,16 @@ class WebViewController: UIViewController, WebController {
         case focusTrackingProtection
         case focusTrackingProtectionPostLoad
         case findInPageHandler
-        
+
         static var allValues: [ScriptHandlers] { return [.focusTrackingProtection, .focusTrackingProtectionPostLoad, .findInPageHandler] }
     }
-    
+
     private enum KVOConstants: String, CaseIterable {
         case URL = "URL"
         case canGoBack = "canGoBack"
         case canGoForward = "canGoForward"
     }
-    
+
     weak var delegate: WebControllerDelegate?
 
     private var browserView: WKWebView!
@@ -80,7 +80,7 @@ class WebViewController: UIViewController, WebController {
     var pageTitle: String? {
         return browserView.title
     }
-    
+
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
@@ -107,15 +107,15 @@ class WebViewController: UIViewController, WebController {
     func goBack() { browserView.goBack() }
     func goForward() { browserView.goForward() }
     func reload() { browserView.reload() }
-    
+
     @available(iOS 9, *)
     func requestDesktop() {
         guard let currentItem = browserView.backForwardList.currentItem else {
             return
         }
-    
+
         browserView.customUserAgent = UserAgent.getDesktopUserAgent()
-        
+
         if currentItem.url != currentItem.initialURL {
             // Reload the initial URL to avoid UA specific redirection
             browserView.load(URLRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalAndRemoteCacheData, timeoutInterval: 60))
@@ -128,14 +128,14 @@ class WebViewController: UIViewController, WebController {
     func resetUA() {
         browserView.customUserAgent = userAgent?.browserUserAgent
     }
-    
+
     func stop() { browserView.stopLoading() }
 
     private func setupWebview() {
         let wvConfig = WKWebViewConfiguration()
         wvConfig.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         browserView = WKWebView(frame: .zero, configuration: wvConfig)
-        
+
         browserView.allowsBackForwardNavigationGestures = true
         browserView.allowsLinkPreview = false
         browserView.scrollView.clipsToBounds = false
@@ -155,7 +155,7 @@ class WebViewController: UIViewController, WebController {
         browserView.snp.makeConstraints { make in
             make.edges.equalTo(view.snp.edges)
         }
-        
+
         KVOConstants.allCases.forEach { browserView.addObserver(self, forKeyPath: $0.rawValue, options: .new, context: nil) }
     }
 
@@ -165,13 +165,13 @@ class WebViewController: UIViewController, WebController {
             blockLists.forEach(self.browserView.configuration.userContentController.add)
         }
     }
-    
+
     private func setupBlockLists() {
         ContentBlockerHelper.shared.getBlockLists { lists in
             self.reloadBlockers(lists)
         }
     }
-    
+
     private func addScript(forResource resource: String, injectionTime: WKUserScriptInjectionTime, forMainFrameOnly mainFrameOnly: Bool) {
         let source = try! String(contentsOf: Bundle.main.url(forResource: resource, withExtension: "js")!)
         let script = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
@@ -184,7 +184,7 @@ class WebViewController: UIViewController, WebController {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.focusTrackingProtectionPostLoad.rawValue)
         addScript(forResource: "postload", injectionTime: .atDocumentEnd, forMainFrameOnly: false)
     }
-    
+
     private func setupFindInPageScripts() {
         browserView.configuration.userContentController.add(self, name: ScriptHandlers.findInPageHandler.rawValue)
         addScript(forResource: "FindInPage", injectionTime: .atDocumentEnd, forMainFrameOnly: true)
@@ -208,7 +208,7 @@ class WebViewController: UIViewController, WebController {
         setupTrackingProtectionScripts()
         trackingProtectionStatus = .on(TPPageStats())
     }
-    
+
     func evaluate(_ javascript: String, completion: ((Any?, Error?) -> Void)?) {
         browserView.evaluateJavaScript(javascript, completionHandler: completion)
     }
@@ -217,12 +217,12 @@ class WebViewController: UIViewController, WebController {
         self.browserView.addObserver(self, forKeyPath: "URL", options: .new, context: nil)
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let kp = keyPath, let path = KVOConstants(rawValue: kp) else {
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
             return
         }
-        
+
         switch path {
         case .URL:
             guard let url = browserView.url else { break }
@@ -269,7 +269,7 @@ extension WebViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         delegate?.webController(self, didFailNavigationWithError: error)
     }
-    
+
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
         let error = error as NSError
         guard error.code != Int(CFNetworkErrors.cfurlErrorCancelled.rawValue), let errorUrl = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL else { return }
@@ -290,7 +290,7 @@ extension WebViewController: WKNavigationDelegate {
         }
         decisionHandler(decision)
     }
-    
+
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         delegate?.webControllerDidStartProvisionalNavigation(self)
     }
@@ -314,23 +314,22 @@ extension WebViewController: WKUIDelegate {
     }
 }
 
-
 extension WebViewController: WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if message.name == "findInPageHandler" {
             let data = message.body as! [String: Int]
-            
+
             // We pass these separately as they're sent in different messages to the userContentController
             if let currentResult = data["currentResult"] {
                 delegate?.webController(self, didUpdateFindInPageResults: currentResult, totalResults: nil)
             }
-            
+
             if let totalResults = data["totalResults"] {
                 delegate?.webController(self, didUpdateFindInPageResults: nil, totalResults: totalResults)
             }
             return
         }
-        
+
         guard let body = message.body as? [String: String],
             let urlString = body["url"],
             var components = URLComponents(string: urlString) else {
@@ -359,7 +358,7 @@ extension WebViewController {
             self.onePasswordExtensionItem = extensionItem
         })
     }
-    
+
     func fillPasswords(returnedItems: [AnyObject]) {
         OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: browserView, completion: { (success, returnedItemsError) -> Void in
             if !success {

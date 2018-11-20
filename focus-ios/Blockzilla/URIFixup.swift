@@ -15,7 +15,7 @@ class URIFixup {
         // all valid requests starting with "http://", "about:", etc.
         // Also check with a regular expression if there is a port in the url
         // this will be handle later in this function adding http prefix
-        if let url = URL(string: entry), url.scheme != nil, trimmed.range(of: ":") == nil, trimmed.range(of:"\\b:[0-9]{1,5}", options: .regularExpression) == nil {
+        if let url = URL(string: entry), url.scheme != nil, trimmed.range(of: ":") == nil, trimmed.range(of: "\\b:[0-9]{1,5}", options: .regularExpression) == nil {
             return url
         }
 
@@ -30,7 +30,7 @@ class URIFixup {
         if trimmed.range(of: " ") != nil {
             return nil
         }
-        
+
         // If the input url has a prefix http or https, don't append again
         let finalurl = escaped.hasPrefix("http://") || escaped.hasPrefix("https://") ? escaped : "http://\(escaped)"
 

@@ -6,7 +6,7 @@ import Foundation
 import UIKit
 
 struct UIConstants {
-    
+
     static var ToolbarHeight: CGFloat = 46
 
     struct colors {
@@ -71,14 +71,14 @@ struct UIConstants {
         static let trackingProtectionBreakdownBackground = UIColor(rgb: 0x414146)
         static let trackingProtectionLearnMore = UIColor(rgb: 0x0A84FF)
     }
-    
+
     struct Photon {
         static let Magenta50 = UIColor(rgb: 0xff1ad9)
         static let Magenta60 = UIColor(rgb: 0xed00b5)
         static let Magenta70 = UIColor(rgb: 0xb5007f)
         static let Magenta80 = UIColor(rgb: 0x7d004f)
         static let Magenta90 = UIColor(rgb: 0x440027)
-        
+
         static let Purple30 = UIColor(rgb: 0xc069ff)
         static let Purple40 = UIColor(rgb: 0xad3bff)
         static let Purple50 = UIColor(rgb: 0x9400ff)
@@ -86,44 +86,44 @@ struct UIConstants {
         static let Purple70 = UIColor(rgb: 0x6200a4)
         static let Purple80 = UIColor(rgb: 0x440071)
         static let Purple90 = UIColor(rgb: 0x25003e)
-        
+
         static let Blue40 = UIColor(rgb: 0x45a1ff)
         static let Blue50 = UIColor(rgb: 0x0a84ff)
         static let Blue60 = UIColor(rgb: 0x0060df)
         static let Blue70 = UIColor(rgb: 0x003eaa)
         static let Blue80 = UIColor(rgb: 0x002275)
         static let Blue90 = UIColor(rgb: 0x000f40)
-        
+
         static let Teal50 = UIColor(rgb: 0x00feff)
         static let Teal60 = UIColor(rgb: 0x00c8d7)
         static let Teal70 = UIColor(rgb: 0x008ea4)
         static let Teal80 = UIColor(rgb: 0x005a71)
         static let Teal90 = UIColor(rgb: 0x002d3e)
-        
+
         static let Green50 = UIColor(rgb: 0x30e60b)
         static let Green60 = UIColor(rgb: 0x12bc00)
         static let Green70 = UIColor(rgb: 0x058b00)
         static let Green80 = UIColor(rgb: 0x006504)
         static let Green90 = UIColor(rgb: 0x003706)
-        
+
         static let Yellow50 = UIColor(rgb: 0xffe900)
         static let Yellow60 = UIColor(rgb: 0xd7b600)
         static let Yellow70 = UIColor(rgb: 0xa47f00)
         static let Yellow80 = UIColor(rgb: 0x715100)
         static let Yellow90 = UIColor(rgb: 0x3e2800)
-        
+
         static let Red50 = UIColor(rgb: 0xff0039)
         static let Red60 = UIColor(rgb: 0xd70022)
         static let Red70 = UIColor(rgb: 0xa4000f)
         static let Red80 = UIColor(rgb: 0x5a0002)
         static let Red90 = UIColor(rgb: 0x3e0200)
-        
+
         static let Orange50 = UIColor(rgb: 0xff9400)
         static let Orange60 = UIColor(rgb: 0xd76e00)
         static let Orange70 = UIColor(rgb: 0xa44900)
         static let Orange80 = UIColor(rgb: 0x712b00)
         static let Orange90 = UIColor(rgb: 0x3e1300)
-        
+
         static let Grey10 = UIColor(rgb: 0xf9f9fa)
         static let Grey20 = UIColor(rgb: 0xededf0)
         static let Grey30 = UIColor(rgb: 0xd7d7db)
@@ -133,13 +133,13 @@ struct UIConstants {
         static let Grey70 = UIColor(rgb: 0x38383d)
         static let Grey80 = UIColor(rgb: 0x2a2a2e)
         static let Grey90 = UIColor(rgb: 0x0c0c0d)
-        
+
         static let Ink70 = UIColor(rgb: 0x363959)
         static let Ink80 = UIColor(rgb: 0x202340)
         static let Ink90 = UIColor(rgb: 0x0f1126)
-        
+
         static let White100 = UIColor(rgb: 0xffffff)
-        
+
     }
 
     struct fonts {
@@ -185,7 +185,7 @@ struct UIConstants {
         static let largeDeviceMaxNumSuggestions: Int = 5
         static let progressVisibilityAnimationDuration: TimeInterval = 0.25
         static let searchButtonInset: CGFloat = 15
-        static let searchSuggestionsPromptCornerRadius: CGFloat = 12 
+        static let searchSuggestionsPromptCornerRadius: CGFloat = 12
         static let searchSuggestionsPromptButtonRadius: CGFloat = 8
         static let toastAnimationDuration: TimeInterval = 0.3
         static let toastDuration: TimeInterval = 1.5
@@ -303,7 +303,7 @@ struct UIConstants {
         static let settingsBlockOtherYes = NSLocalizedString("Settings.blockOtherYes", value: "I Understand", comment: "Button label for accepting Content blocker alert")
         static let settingsSearchTitle = NSLocalizedString("Settings.searchTitle2", value: "SEARCH", comment: "Title for the search selection screen")
         static let settingsSearchLabel = NSLocalizedString("Settings.searchLabel", value: "Search Engine", comment: "Label for the search engine in the search screen")
-        static let settingsSearchSuggestions = NSLocalizedString("Settings.searchSuggestions",value: "Get Search Suggestions",comment: "Label for the Search Suggestions toggle row")
+        static let settingsSearchSuggestions = NSLocalizedString("Settings.searchSuggestions", value: "Get Search Suggestions", comment: "Label for the Search Suggestions toggle row")
         static let detailTextSearchSuggestion = NSLocalizedString("Settings.detailTextSearchSuggestion", value: "%@ will send what you type in the address bar to your search engine.", comment: "Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar)")
         static let settingsAutocompleteSection = NSLocalizedString("Settings.autocompleteSection", value: "URL Autocomplete", comment: "Title for the URL Autocomplete row")
         static let settingsTitle = NSLocalizedString("Settings.screenTitle", value: "Settings", comment: "Title for settings screen")
@@ -413,7 +413,7 @@ struct UIConstants {
         static let findInPagePreviousLabel = NSLocalizedString("FindInPage.PreviousResult", value: "Find previous in page", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
         static let findInPageNextLabel = NSLocalizedString("FindInPage.NextResult", value: "Find next in page", comment: "Accessibility label for next result button in Find in Page Toolbar.")
         static let findInPageDoneLabel = NSLocalizedString("FindInPage.Done", value: "Find in page done", comment: "Accessibility label for done button in Find in Page Toolbar.")
-        
+
         static let siriShortcutsTitle = NSLocalizedString("Settinsg.siriShortcutsTitle", value: "SIRI SHORTCUTS", comment: "Title for settings section to enable different Siri Shortcuts.")
         static let eraseSiri = NSLocalizedString("Siri.erase", value: "Erase", comment: "Title of option in settings to set up Siri to erase")
         static let eraseAndOpenSiri = NSLocalizedString("Siri.eraseAndOpen", value: "Erase & Open", comment: "Title of option in settings to set up Siri to erase and then open the app.")
@@ -425,8 +425,8 @@ struct UIConstants {
         static let add = NSLocalizedString("Siri.add", value: "Add", comment: "Button to add a favorite URL to Siri.")
         static let autocompleteLabel = NSLocalizedString("Autocomplete.defaultLabel", value: "Autocomplete", comment: "Label for enabling or disabling autocomplete")
         static let autocompleteCustomSectionLabel = NSLocalizedString("Autocomplete.customLabel", value: "Custom URLs", comment: "Label for button taking you to your custom Autocomplete URL list")
-        static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs") 
-        
+        static let autocompleteCustomDescription = NSLocalizedString("Autocomplete.customDescriptoin", value: "Add and manage custom autocomplete URLs.", comment: "Description for adding and managing custom autocomplete URLs")
+
         static let userDefaultsLaunchThresholdKey = "launchThreshold"
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"

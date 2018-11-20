@@ -29,27 +29,27 @@ class TrackingProtectionMenu: BaseTestCase {
 
         // Wait for menu to open
         waitforExistence(element: app.staticTexts["Tracking Protection"])
-        
+
         // Check for the existence of one (1) analytical tracker on Mozilla
         waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
         XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "1")
-        
+
         waitforExistence(element: app.staticTexts["Ad trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
-        
+
         waitforExistence(element: app.staticTexts["Analytic trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "1")
-        
+
         waitforExistence(element: app.staticTexts["Social trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Social trackers.Subtitle"].label, "0")
-        
+
         waitforExistence(element: app.staticTexts["Content trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
-        
+
         // Close the menu
         waitforHittable(element: app.buttons["PhotonMenu.close"])
         app.buttons["PhotonMenu.close"].tap()
-        
+
         // Erase the history
         waitforHittable(element: app.buttons["URLBar.deleteButton"])
         app.buttons["URLBar.deleteButton"].tap()
@@ -108,27 +108,27 @@ class TrackingProtectionMenu: BaseTestCase {
         // Close the menu
         waitforHittable(element: app.buttons["PhotonMenu.close"])
         app.buttons["PhotonMenu.close"].tap()
-        
+
         // Erase the history
         waitforHittable(element: app.buttons["URLBar.deleteButton"])
         app.buttons["URLBar.deleteButton"].tap()
         waitforExistence(element: app.staticTexts["Your browsing history has been erased."])
     }
-    
+
     private func waitForZeroTrackers() {
         // Check for all 0 tracker count values in menu
         waitforExistence(element: app.staticTexts["Trackers blocked.Subtitle"])
         XCTAssertEqual(app.staticTexts["Trackers blocked.Subtitle"].label, "0")
-        
+
         waitforExistence(element: app.staticTexts["Ad trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Ad trackers.Subtitle"].label, "0")
-        
+
         waitforExistence(element: app.staticTexts["Analytic trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Analytic trackers.Subtitle"].label, "0")
-        
+
         waitforExistence(element: app.staticTexts["Social trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Social trackers.Subtitle"].label, "0")
-        
+
         waitforExistence(element: app.staticTexts["Content trackers.Subtitle"])
         XCTAssertEqual(app.staticTexts["Content trackers.Subtitle"].label, "0")
     }

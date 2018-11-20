@@ -9,30 +9,30 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
         super.setUp()
         dismissFirstRunUI()
     }
-    
+
     override func tearDown() {
         app.terminate()
         super.tearDown()
     }
-    
+
     func testURLContextMenu() {
-        
+
         let urlBarTextField = app.textFields["URLBar.urlText"]
         loadWebPage("fast.com")
 
         urlBarTextField.press(forDuration: 1.0)
         waitforHittable(element: app.cells["Add Custom URL"])
         app.cells["Add Custom URL"].tap()
-        
+
         waitforHittable(element: app.textFields["URLBar.urlText"])
         urlBarTextField.tap()
         urlBarTextField.typeText("fast.c\n")
-        
+
         guard let text = urlBarTextField.value as? String else {
             XCTFail()
             return
         }
-        
+
         XCTAssert(text == "fast.com")
     }
 }

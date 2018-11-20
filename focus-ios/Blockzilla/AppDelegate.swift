@@ -7,7 +7,7 @@ import Telemetry
 
 protocol AppSplashController {
     var splashView: UIView { get }
-    
+
     func toggleSplashView(hide: Bool)
 }
 
@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
     static let prefWhatsNewDone = "WhatsNewDone"
     static let prefWhatsNewCounter = "WhatsNewCounter"
     static var needsAuthenticated = false
-    
+
     // This enum can be expanded to support all new shortcuts added to menu.
     enum ShortcutIdentifier: String {
         case EraseAndOpen
@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             self.init(rawValue: shortIdentifier)
         }
     }
-    
+
     var window: UIWindow?
 
     var splashView: UIView = UIView()
@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // Count number of app launches for requesting a review
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
         UserDefaults.standard.set(currentLaunchCount + 1, forKey: UIConstants.strings.userDefaultsLaunchCountKey)
-        
+
         // Set original default values for showing tips
         let tipDefaults = [TipManager.TipKey.autocompleteTip: true,
                            TipManager.TipKey.sitesNotWorkingTip: true,
@@ -65,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                            TipManager.TipKey.siriEraseTip: true,
                            TipManager.TipKey.requestDesktopTip: true]
         UserDefaults.standard.register(defaults: tipDefaults)
-    
+
         // Disable localStorage.
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
         // localStorage in-memory (bug 1319208), so we just disable it altogether.
@@ -97,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             return true
         }
-        
+
         let needToShowFirstRunExperience = prefIntroDone < AppDelegate.prefIntroVersion
         if needToShowFirstRunExperience {
             // Show the first run UI asynchronously to avoid the "unbalanced calls to begin/end appearance transitions" warning.
@@ -108,10 +108,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 self.browserViewController.present(IntroViewController(), animated: false, completion: nil)
             }
         }
-        
+
         // Don't highlight whats new on a fresh install (prefIntroDone == 0 on a fresh install)
         if let lastShownWhatsNew = UserDefaults.standard.string(forKey: AppDelegate.prefWhatsNewDone)?.first, let currentMajorRelease = AppInfo.shortVersion.first {
-            if prefIntroDone != 0 && lastShownWhatsNew != currentMajorRelease  {
+            if prefIntroDone != 0 && lastShownWhatsNew != currentMajorRelease {
 
                 let counter = UserDefaults.standard.integer(forKey: AppDelegate.prefWhatsNewCounter)
                 switch counter {
@@ -125,11 +125,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 }
             }
         }
-        
+
         return true
     }
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return false
         }
@@ -147,7 +147,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
 
         let query = getQuery(url: url)
-
 
         if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
@@ -174,12 +173,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
         return true
     }
-    
+
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: (Bool) -> Void) {
-        
+
         completionHandler(handleShortcut(shortcutItem: shortcutItem))
     }
-    
+
     private func handleShortcut(shortcutItem: UIApplicationShortcutItem) -> Bool {
         let shortcutType = shortcutItem.type
         guard let shortcutIdentifier = ShortcutIdentifier(fullIdentifier: shortcutType) else {
@@ -278,7 +277,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
 
     }
-    
+
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Record an event indicating that we have entered the background and end our telemetry
         // session. This gets called every time the app goes to background but should not get
@@ -289,13 +288,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.background, object:
             TelemetryEventObject.app, value: nil, extras: ["orientation": orientation])
     }
-    
+
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         guard #available(iOS 12.0, *) else { return false }
         browserViewController.photonActionSheetDidDismiss()
         browserViewController.dismiss(animated: true, completion: nil)
         browserViewController.navigationController?.popViewController(animated: true)
-        
+
         switch userActivity.activityType {
         case "org.mozilla.ios.Klar.eraseAndOpen":
             browserViewController.resetBrowser(hidePreviousSession: true)
@@ -315,11 +314,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
         return true
     }
-    
+
     func toggleSplashView(hide: Bool) {
         let duration = 0.25
         splashView.animateHidden(hide, duration: duration)
-        
+
         if !hide {
             browserViewController.deactivateUrlBarOnHomeView()
         } else {
@@ -330,34 +329,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
 // MARK: - Telemetry & Tooling setup
 extension AppDelegate {
-    
+
     func setupContinuousDeploymentTooling() {
         #if BUDDYBUILD
             BuddyBuildSDK.setup()
         #endif
     }
-    
+
     func setupErrorTracking() {
         // Set up Sentry
         let sendUsageData = Settings.getToggle(.sendAnonymousUsageData)
         SentryIntegration.shared.setup(sendUsageData: sendUsageData)
     }
-    
+
     func setupTelemetry() {
 
         let telemetryConfig = Telemetry.default.configuration
         telemetryConfig.appName = AppInfo.isKlar ? "Klar" : "Focus"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.appVersion = AppInfo.shortVersion
-        
+
         // Since Focus always clears the caches directory and Telemetry files are
         // excluded from iCloud backup, we store pings in documents.
         telemetryConfig.dataDirectory = .documentDirectory
-        
+
         let activeSearchEngine = SearchEngineManager(prefs: UserDefaults.standard).activeEngine
         let defaultSearchEngineProvider = activeSearchEngine.isCustom ? "custom" : activeSearchEngine.name
         telemetryConfig.defaultSearchEngineProvider = defaultSearchEngineProvider
-        
+
         telemetryConfig.measureUserDefaultsSetting(forKey: SearchEngineManager.prefKeyEngine, withDefaultValue: defaultSearchEngineProvider)
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAds, withDefaultValue: Settings.getToggle(.blockAds))
         telemetryConfig.measureUserDefaultsSetting(forKey: SettingsToggle.blockAnalytics, withDefaultValue: Settings.getToggle(.blockAnalytics))
@@ -376,13 +375,13 @@ extension AppDelegate {
             telemetryConfig.isCollectionEnabled = Settings.getToggle(.sendAnonymousUsageData)
             telemetryConfig.isUploadEnabled = Settings.getToggle(.sendAnonymousUsageData)
         #endif
-        
+
         Telemetry.default.add(pingBuilderType: CorePingBuilder.self)
         Telemetry.default.add(pingBuilderType: FocusEventPingBuilder.self)
-        
+
         // Start the telemetry session and record an event indicating that we have entered the
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
-        
+
         // Only include Adjust SDK in Focus and NOT in Klar builds.
         #if FOCUS
             // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
@@ -393,7 +392,7 @@ extension AppDelegate {
             }
         #endif
     }
-    
+
     func presentModal(viewController: UIViewController, animated: Bool) {
         window?.rootViewController?.present(viewController, animated: animated, completion: nil)
     }
@@ -408,4 +407,3 @@ extension UINavigationController {
         return .lightContent
     }
 }
-

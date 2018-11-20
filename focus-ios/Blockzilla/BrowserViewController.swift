@@ -16,10 +16,10 @@ class BrowserViewController: UIViewController {
     private var context = LAContext()
     private let mainContainerView = UIView(frame: .zero)
     let darkView = UIView()
-    
+
     private let webViewController = WebViewController(userAgent: UserAgent.shared)
     private let webViewContainer = UIView()
-    
+
     var modalDelegate: ModalDelegate?
 
     fileprivate var keyboardState: KeyboardState?
@@ -74,27 +74,27 @@ class BrowserViewController: UIViewController {
     private var shouldEnsureBrowsingMode = false
     private var initialUrl: URL?
     var tipManager: TipManager?
-    
+
     static let userDefaultsTrackersBlockedKey = "lifetimeTrackersBlocked"
 
     init(appSplashController: AppSplashController, tipManager: TipManager = TipManager.shared) {
         self.appSplashController = appSplashController
         self.tipManager = tipManager
-        
+
         super.init(nibName: nil, bundle: nil)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("BrowserViewController hasn't implemented init?(coder:)")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         setupBiometrics()
         view.addSubview(mainContainerView)
-        
+
         darkView.isHidden = true
         darkView.backgroundColor = UIConstants.colors.background
         darkView.alpha = 0.4
@@ -171,29 +171,29 @@ class BrowserViewController: UIViewController {
             make.top.equalTo(urlBarContainer.snp.bottom)
             make.leading.trailing.bottom.equalTo(mainContainerView)
         }
-        
+
         view.addSubview(alertStackView)
         alertStackView.axis = .vertical
         alertStackView.alignment = .center
 
         // true if device is an iPad or is an iPhone in landscape mode
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == view.frame.size.width || view.frame.size.width > view.frame.size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && view.frame.size.width > view.frame.size.height)
-        
+
         containWebView()
         createHomeView()
         createURLBar()
         updateViewConstraints()
-        
+
         // Listen for request desktop site notifications
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil)  { _ in
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification), object: nil, queue: nil) { _ in
             self.webViewController.requestDesktop()
         }
-        
+
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
-      
+
         // Listen for find in page actvitiy notifications
-        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil)  { _ in
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue: UIConstants.strings.findInPageNotification), object: nil, queue: nil) { _ in
             self.updateFindInPageVisibility(visible: true, text: "")
         }
 
@@ -209,28 +209,28 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        
+
         if let homeViewToolset = homeView?.toolbar.toolset {
             homeViewToolset.setHighlightWhatsNew(shouldHighlight: homeViewToolset.shouldShowWhatsNew())
             homeView?.toolbar.layoutIfNeeded()
         }
         browserToolbar.toolset.setHighlightWhatsNew(shouldHighlight: browserToolbar.toolset.shouldShowWhatsNew())
         browserToolbar.layoutIfNeeded()
-        
+
         super.viewWillAppear(animated)
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         // Prevent the keyboard from showing up until after the user has viewed the Intro.
         let userHasSeenIntro = UserDefaults.standard.integer(forKey: AppDelegate.prefIntroDone) == AppDelegate.prefIntroVersion
-        
+
         if userHasSeenIntro && !urlBar.inBrowsingMode {
             urlBar.activateTextField()
         }
-        
+
         super.viewDidAppear(animated)
     }
-    
+
     private func setupBiometrics() {
         // Register for foreground notification to check biometric authentication
         NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: nil) { notification in
@@ -269,14 +269,14 @@ class BrowserViewController: UIViewController {
             }
         }
     }
-    
+
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
         // If the home view is not displayed, nor the overlayView hidden do not activate the text field:
         guard homeView != nil || !overlayView.isHidden else { return }
         urlBar.activateTextField()
     }
-    
+
     public func deactivateUrlBarOnHomeView() {
         urlBar.dismissTextField()
     }
@@ -290,7 +290,7 @@ class BrowserViewController: UIViewController {
             make.edges.equalTo(webViewContainer.snp.edges)
         }
     }
-    
+
     public func exitFullScreenVideo() {
         let js = "document.getElementsByTagName('video')[0].webkitExitFullScreen()"
         webViewController.evaluate(js, completion: nil)
@@ -300,8 +300,7 @@ class BrowserViewController: UIViewController {
         let homeView: HomeView
         if TipManager.shared.shouldShowTips() {
             homeView = HomeView(tipManager: tipManager)
-        }
-        else {
+        } else {
             homeView = HomeView()
         }
         homeView.delegate = self
@@ -316,7 +315,6 @@ class BrowserViewController: UIViewController {
             homeView.removeFromSuperview()
         }
         self.homeView = homeView
-        
 
     }
 
@@ -373,7 +371,7 @@ class BrowserViewController: UIViewController {
         alertStackView.snp.remakeConstraints { make in
             make.centerX.equalTo(self.view)
             make.width.equalTo(self.view.snp.width)
-            
+
             if let keyboardHeight = keyboardState?.intersectionHeightForView(view: self.view), keyboardHeight > 0 {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
             } else if !browserToolbar.isHidden {
@@ -386,12 +384,12 @@ class BrowserViewController: UIViewController {
             }
         }
     }
-    
+
     func updateFindInPageVisibility(visible: Bool, text: String = "") {
         if visible {
             if findInPageBar == nil {
                 Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.findInPageBar)
-                
+
                 urlBar.dismiss {
                     // Start our animation after urlBar dismisses
                     let findInPageBar = FindInPageBar()
@@ -401,11 +399,11 @@ class BrowserViewController: UIViewController {
                     fillerView.backgroundColor = UIConstants.Photon.Grey70
                     findInPageBar.text = text
                     findInPageBar.delegate = self
-                    
+
                     self.alertStackView.addArrangedSubview(findInPageBar)
                     self.mainContainerView.insertSubview(fillerView, belowSubview: self.browserToolbar)
-                    
-                    findInPageBar.snp.makeConstraints{ make in
+
+                    findInPageBar.snp.makeConstraints { make in
                         make.height.equalTo(UIConstants.ToolbarHeight)
                         make.leading.trailing.equalTo(self.alertStackView)
                         make.bottom.equalTo(self.alertStackView.snp.bottom)
@@ -432,19 +430,19 @@ class BrowserViewController: UIViewController {
     }
 
     func resetBrowser(hidePreviousSession: Bool = false) {
-        
+
         UserDefaults.standard.set(nil, forKey: "searchedHistory")
-        
+
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
             clearBrowser()
             urlBar.activateTextField()
             return
         }
-        
+
         // Screenshot the browser, showing the screenshot on top.
         let screenshotView = view.snapshotView(afterScreenUpdates: true) ?? UIView()
-        
+
         mainContainerView.addSubview(screenshotView)
         screenshotView.snp.makeConstraints { make in
             make.edges.equalTo(mainContainerView)
@@ -467,7 +465,7 @@ class BrowserViewController: UIViewController {
         })
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.eraseButton)
-        
+
         if #available(iOS 12.0, *) {
             userActivity = SiriShortcuts().getActivity(for: .eraseAndOpen)
             let interaction = INInteraction(intent: eraseIntent, response: nil)
@@ -476,7 +474,7 @@ class BrowserViewController: UIViewController {
             }
         }
     }
-    
+
     private func clearBrowser() {
         // Helper function for resetBrowser that handles all the logic of actually clearing user data and the browsing session
         overlayView.currentURL = ""
@@ -489,13 +487,13 @@ class BrowserViewController: UIViewController {
         urlBarContainer.alpha = 0
         createHomeView()
         createURLBar()
-        
+
         // Clear the cache and cookies, starting a new session.
         WebCacheUtils.reset()
         requestReviewIfNecessary()
         mainContainerView.layoutIfNeeded()
     }
-    
+
     func requestReviewIfNecessary() {
         if AppInfo.isTesting() { return }
         let currentLaunchCount = UserDefaults.standard.integer(forKey: UIConstants.strings.userDefaultsLaunchCountKey)
@@ -531,31 +529,31 @@ class BrowserViewController: UIViewController {
             default:
                 break
         }
-        
+
         SKStoreReviewController.requestReview()
     }
 
     fileprivate func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
-        
+
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
         let settingsNavController = UINavigationController(rootViewController: settingsViewController)
         settingsNavController.modalPresentationStyle = .formSheet
-        
+
         modalDelegate.presentModal(viewController: settingsNavController, animated: true)
 
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.settingsButton)
     }
-    
+
     @available(iOS 12.0, *)
     private func showSiriFavoriteSettings() {
         guard let modalDelegate = modalDelegate else { return }
-        
+
         urlBar.shouldPresent = false
         let siriFavoriteViewController = SiriFavoriteViewController()
         let siriFavoriteNavController = UINavigationController(rootViewController: siriFavoriteViewController)
         siriFavoriteNavController.modalPresentationStyle = .formSheet
-        
+
         modalDelegate.presentModal(viewController: siriFavoriteNavController, animated: true)
     }
 
@@ -602,16 +600,16 @@ class BrowserViewController: UIViewController {
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        
+
         // Fixes the issue of a user fresh-opening Focus via Split View
         guard isViewLoaded else { return }
-        
+
         // UIDevice.current.orientation isn't reliable. See https://bugzilla.mozilla.org/show_bug.cgi?id=1315370#c5
         // As a workaround, consider the phone to be in landscape if the new width is greater than the height.
         showsToolsetInURLBar = (UIDevice.current.userInterfaceIdiom == .pad && (UIScreen.main.bounds.width == size.width || size.width > size.height)) || (UIDevice.current.userInterfaceIdiom == .phone && size.width > size.height)
         urlBar.updateConstraints()
         browserToolbar.updateConstraints()
-        
+
         coordinator.animate(alongsideTransition: { _ in
             self.urlBar.showToolset = self.showsToolsetInURLBar
 
@@ -643,24 +641,24 @@ class BrowserViewController: UIViewController {
         alertController.addAction(UIAlertAction(title: UIConstants.strings.copyImage, style: .default) { _ in copyAction() })
         alertController.addAction(UIAlertAction(title: UIConstants.strings.cancel, style: .cancel))
 
-        alertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0)
+        alertController.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection(rawValue: 0)
         alertController.popoverPresentationController?.sourceView = self.view
         alertController.popoverPresentationController?.sourceRect = CGRect(x: self.view.bounds.size.width / 2.0, y: self.view.bounds.size.height / 2.0, width: 1.0, height: 1.0)
         present(alertController, animated: true, completion: nil)
     }
-    
+
     @objc private func selectLocationBar() {
         urlBar.activateTextField()
     }
-    
+
     @objc private func reload() {
         webViewController.reload()
     }
-    
+
     @objc private func goBack() {
         webViewController.goBack()
     }
-    
+
     @objc private func goForward() {
         webViewController.goForward()
     }
@@ -674,7 +672,7 @@ class BrowserViewController: UIViewController {
             urlBarContainer.color = .dark
         }
     }
-    
+
     private func toggleToolbarBackground() {
         switch trackingProtectionStatus {
         case .off:
@@ -683,28 +681,28 @@ class BrowserViewController: UIViewController {
             browserToolbar.color = .bright
         }
     }
-    
+
     override var keyCommands: [UIKeyCommand]? {
         return [
             UIKeyCommand(input: "l", modifierFlags: .command, action: #selector(BrowserViewController.selectLocationBar), discoverabilityTitle: UIConstants.strings.selectLocationBarTitle),
             UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(BrowserViewController.reload), discoverabilityTitle: UIConstants.strings.browserReload),
             UIKeyCommand(input: "[", modifierFlags: .command, action: #selector(BrowserViewController.goBack), discoverabilityTitle: UIConstants.strings.browserBack),
-            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward),
+            UIKeyCommand(input: "]", modifierFlags: .command, action: #selector(BrowserViewController.goForward), discoverabilityTitle: UIConstants.strings.browserForward)
         ]
     }
-    
+
     func refreshTipsDisplay() {
         createHomeView()
     }
-    
+
     private func getNumberOfLifetimeTrackersBlocked(userDefaults: UserDefaults = UserDefaults.standard) -> Int {
         return userDefaults.integer(forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
     }
-    
+
     private func setNumberOfLifetimeTrackersBlocked(numberOfTrackers: Int) {
         UserDefaults.standard.set(numberOfTrackers, forKey: BrowserViewController.userDefaultsTrackersBlockedKey)
     }
-    
+
     func updateURLBar() {
         if webViewController.url?.absoluteString != "about:blank" {
             urlBar.url = webViewController.url
@@ -717,18 +715,18 @@ extension BrowserViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: URL.self)
     }
-    
+
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
         return UIDropProposal(operation: .copy)
     }
-    
+
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         _ = session.loadObjects(ofClass: URL.self) { urls in
 
             guard let url = urls.first else {
                 return
             }
-            
+
             self.ensureBrowsingMode()
             self.urlBar.fillUrlBar(text: url.absoluteString)
             self.submit(url: url)
@@ -741,24 +739,24 @@ extension BrowserViewController: FindInPageBarDelegate {
     func findInPage(_ findInPage: FindInPageBar, didTextChange text: String) {
         find(text, function: "find")
     }
-    
+
     func findInPage(_ findInPage: FindInPageBar, didFindNextWithText text: String) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findNext)
         findInPageBar?.endEditing(true)
         find(text, function: "findNext")
     }
-    
+
     func findInPage(_ findInPage: FindInPageBar, didFindPreviousWithText text: String) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.findPrev)
         findInPageBar?.endEditing(true)
         find(text, function: "findPrevious")
     }
-    
+
     func findInPageDidPressClose(_ findInPage: FindInPageBar) {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.close, object: TelemetryEventObject.findInPageBar)
         updateFindInPageVisibility(visible: false)
     }
-    
+
     fileprivate func find(_ text: String, function: String) {
         let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
         webViewController.evaluate("__firefox__.\(function)(\"\(escaped)\")", completion: nil)
@@ -766,11 +764,11 @@ extension BrowserViewController: FindInPageBarDelegate {
 }
 
 extension BrowserViewController: URLBarDelegate {
-    
+
     func urlBar(_ urlBar: URLBar, didAddCustomURL url: URL) {
         // Add the URL to the autocomplete list:
         let autocompleteSource = CustomCompletionSource()
-        
+
         switch autocompleteSource.add(suggestion: url.absoluteString) {
         case .error(.duplicateDomain):
             break
@@ -782,22 +780,22 @@ extension BrowserViewController: URLBarDelegate {
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
         }
     }
-    
+
     func urlBar(_ urlBar: URLBar, didEnterText text: String) {
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
-        let isOnHomeView = homeView != nil 
+        let isOnHomeView = homeView != nil
 
         if Settings.getToggle(.enableSearchSuggestions) && !trimmedText.isEmpty {
             searchSuggestionsDebouncer.renewInterval()
             searchSuggestionsDebouncer.completion = {
                 self.searchSuggestClient.getSuggestions(trimmedText, callback: { suggestions, error in
                     let userInputText = urlBar.userInputText?.trimmingCharacters(in: .whitespaces) ?? ""
-                    
+
                     // Check if this callback is stale (new user input has been requested)
                     if userInputText.isEmpty || userInputText != trimmedText {
                         return
                     }
-                    
+
                     if userInputText == trimmedText {
                         let suggestions = suggestions ?? [trimmedText]
                         self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty)
@@ -815,13 +813,13 @@ extension BrowserViewController: URLBarDelegate {
         switch scrollBarState {
         case .expanded:
             let y = tap.location(in: urlBar).y
-            
+
             // If the tap is greater than this threshold, the user wants to type in the URL bar
             if y >= 10 {
                 urlBar.activateTextField()
                 return
             }
-            
+
             // Just scroll the vertical position so the page doesn't appear under
             // the notch on the iPhone X
             var point = webViewController.scrollView.contentOffset
@@ -839,10 +837,10 @@ extension BrowserViewController: URLBarDelegate {
             urlBar.url = webViewController.url
             return
         }
-        
+
         SearchHistoryUtils.pushSearchToStack(with: text)
         SearchHistoryUtils.isFromURLBar = true
-        
+
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -855,11 +853,11 @@ extension BrowserViewController: URLBarDelegate {
             submit(url: urlBarURL)
             urlBar.url = urlBarURL
         }
-        
+
         if let urlText = urlBar.url?.absoluteString {
             overlayView.currentURL = urlText
         }
-        
+
         urlBar.dismiss()
     }
 
@@ -879,7 +877,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-        
+
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
@@ -899,7 +897,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidTapShield(_ urlBar: URLBar) {
         Telemetry.default.recordEvent(TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.open, object: TelemetryEventObject.trackingProtectionDrawer))
-        
+
         switch trackingProtectionStatus {
         case .on(let info):
             let menuOn = buildTrackingProtectionMenu(info: info)
@@ -909,7 +907,7 @@ extension BrowserViewController: URLBarDelegate {
             presentPhotonActionSheet(menuOff, from: urlBar.shieldIcon)
         }
     }
-    
+
     func urlBarDidLongPress(_ urlBar: URLBar) {
         let customURLItem = PhotonActionSheetItem(title: UIConstants.strings.customURLMenuButton, iconString: "icon_link") { action in
             urlBar.addCustomURL()
@@ -934,18 +932,18 @@ extension BrowserViewController: URLBarDelegate {
         let urlContextMenu = PhotonActionSheet(actions: [[customURLItem], actions], style: .overCurrentContext)
         presentPhotonActionSheet(urlContextMenu, from: urlBar)
     }
-    
+
     func urlBarDidPressPageActions(_ urlBar: URLBar) {
         guard let url = urlBar.url else { return }
         let utils = OpenUtils(url: url, webViewController: webViewController)
         let items = PageActionSheetItems(url: url)
         let sharePageItem = PhotonActionSheetItem(title: UIConstants.strings.sharePage, iconString: "icon_openwith_active") { action in
             let shareVC = utils.buildShareViewController()
-            
+
             // Exact frame dimensions taken from presentPhotonActionSheet
             shareVC.popoverPresentationController?.sourceView = urlBar.pageActionsButton
             shareVC.popoverPresentationController?.sourceRect = CGRect(x: urlBar.pageActionsButton.frame.width/2, y: urlBar.pageActionsButton.frame.size.height * 0.75, width: 1, height: 1)
-            
+
             shareVC.becomeFirstResponder()
             self.present(shareVC, animated: true, completion: nil)
         }
@@ -962,7 +960,7 @@ extension BrowserViewController: URLBarDelegate {
             Toast(text: UIConstants.strings.copyURLToast).show()
         }
         shareItems.append(copyItem)
-        
+
         let actionItems = [items.findInPageItem, items.requestDesktopItem]
         let pageActionsMenu = PhotonActionSheet(title: UIConstants.strings.pageActionsTitle, actions: [shareItems, actionItems], style: .overCurrentContext)
         presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
@@ -988,12 +986,12 @@ extension BrowserViewController: PhotonActionSheetDelegate {
     }
     func photonActionSheetDidToggleProtection(enabled: Bool) {
         enabled ? webViewController.enableTrackingProtection() : webViewController.disableTrackingProtection()
-        
+
         let telemetryEvent = TelemetryEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.change, object: TelemetryEventObject.trackingProtectionToggle)
         telemetryEvent.addExtra(key: "to", value: enabled)
         Telemetry.default.recordEvent(telemetryEvent)
         UserDefaults.standard.set(false, forKey: TipManager.TipKey.sitesNotWorkingTip)
-        
+
         webViewController.reload()
     }
 }
@@ -1002,7 +1000,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
     func browserToolsetDidLongPressReload(_ browserToolbar: BrowserToolset) {
         // Request desktop site
         urlBar.dismiss()
-        
+
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Request Desktop Site", style: .default, handler: { (action) in
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
@@ -1014,20 +1012,20 @@ extension BrowserViewController: BrowserToolsetDelegate {
         let iPadAlert = alert.popoverPresentationController
         iPadAlert?.sourceView = browserToolbar.stopReloadButton
         iPadAlert?.sourceRect = browserToolbar.stopReloadButton.bounds
-        
+
         present(alert, animated: true)
     }
-    
+
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
         guard let navigatingFromAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
-        
+
         // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
         SearchHistoryUtils.isFromURLBar = true
 
         if !navigatingFromAmpSite {
             SearchHistoryUtils.goBack()
         }
-        
+
         webViewController.goBack()
     }
 
@@ -1038,7 +1036,7 @@ extension BrowserViewController: BrowserToolsetDelegate {
 
         // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally after the goForward call.
         guard let navigatingToAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
-        
+
         if !navigatingToAmpSite {
             SearchHistoryUtils.goForward()
         }
@@ -1059,14 +1057,14 @@ extension BrowserViewController: BrowserToolsetDelegate {
 }
 
 extension BrowserViewController: HomeViewDelegate {
-    
+
     func shareTrackerStatsButtonTapped() {
         guard let trackerStatsShareButton = homeView?.trackerStatsShareButton else { return }
-        
+
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.share, object: TelemetryEventObject.trackerStatsShareButton)
-        
+
         let numberOfTrackersBlocked = getNumberOfLifetimeTrackersBlocked()
-        let appStoreUrl = URL(string:String(format: "https://mzl.la/2GZBav0"))
+        let appStoreUrl = URL(string: String(format: "https://mzl.la/2GZBav0"))
         // Add space after shareTrackerStatsText to add URL in sentence
         let shareTrackerStatsText = "%@, the privacy browser from Mozilla, has already blocked %@ trackers for me. Fewer ads and trackers following me around means faster browsing! Get Focus for yourself here"
         let text = String(format: shareTrackerStatsText + " ", AppInfo.productName, String(numberOfTrackersBlocked))
@@ -1074,10 +1072,10 @@ extension BrowserViewController: HomeViewDelegate {
         // Exact frame dimensions taken from presentPhotonActionSheet
         shareController.popoverPresentationController?.sourceView = trackerStatsShareButton
         shareController.popoverPresentationController?.sourceRect = CGRect(x: trackerStatsShareButton.frame.width/2, y: 0, width: 1, height: 1)
-        
+
         present(shareController, animated: true)
     }
-    
+
     func tipTapped() {
         guard let tip = tipManager?.currentTip, tip.showVc else { return }
         switch tip.identifier {
@@ -1116,16 +1114,16 @@ extension BrowserViewController: OverlayViewDelegate {
 
         urlBar.dismiss()
     }
-    
+
     func overlayView(_ overlayView: OverlayView, didSearchOnPage query: String) {
         updateFindInPageVisibility(visible: true, text: query)
         self.find(query, function: "find")
     }
-    
+
     func overlayView(_ overlayView: OverlayView, didAddToAutocomplete query: String) {
         urlBar.dismiss()
 
-        let autocompleteSource = CustomCompletionSource()        
+        let autocompleteSource = CustomCompletionSource()
         switch autocompleteSource.add(suggestion: query) {
         case .error(.duplicateDomain):
             Toast(text: UIConstants.strings.autocompleteCustomURLDuplicate).show()
@@ -1137,14 +1135,14 @@ extension BrowserViewController: OverlayViewDelegate {
             Toast(text: UIConstants.strings.autocompleteCustomURLAdded).show()
         }
     }
-    
+
     func overlayView(_ overlayView: OverlayView, didSubmitText text: String) {
         let text = text.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else {
             urlBar.url = webViewController.url
             return
         }
-        
+
         var url = URIFixup.getURL(entry: text)
         if url == nil {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.typeQuery, object: TelemetryEventObject.searchBar)
@@ -1178,19 +1176,19 @@ extension BrowserViewController: WebControllerDelegate {
         urlBar.dismiss()
         updateFindInPageVisibility(visible: false)
     }
-    
+
     func webController(_ controller: WebController, didUpdateFindInPageResults currentResult: Int?, totalResults: Int?) {
         if let total = totalResults {
             findInPageBar?.totalResults = total
         }
-        
+
         if let current = currentResult {
             findInPageBar?.currentResult = current
         }
     }
-    
+
     func webControllerDidStartNavigation(_ controller: WebController) {
-        if (!SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating) {
+        if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating {
             SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
         }
         SearchHistoryUtils.isNavigating = false
@@ -1208,7 +1206,7 @@ extension BrowserViewController: WebControllerDelegate {
         toggleURLBarBackground(isBright: !urlBar.isEditing)
         urlBar.progressBar.hideProgressBar()
     }
-    
+
     func webControllerURLDidChange(_ controller: WebController, url: URL) {
         showToolbars()
         updateURLBar()
@@ -1329,7 +1327,7 @@ extension BrowserViewController: WebControllerDelegate {
         let scrollView = webViewController.scrollView
 
         scrollBarState = .animating
-        
+
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, delay: 0, options: .allowUserInteraction, animations: {
             self.urlBar.collapseUrlBar(expandAlpha: 1, collapseAlpha: 0)
             self.urlBarTopConstraint.update(offset: 0)
@@ -1394,7 +1392,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
 }
 
 extension BrowserViewController: UIPopoverPresentationControllerDelegate {
-    
+
     func popoverPresentationControllerDidDismissPopover(_ popoverPresentationController: UIPopoverPresentationController) {
         darkView.isHidden = true
     }
@@ -1411,6 +1409,5 @@ extension BrowserViewController {
 
 protocol WhatsNewDelegate {
     func shouldShowWhatsNew() -> Bool
-    func didShowWhatsNew() -> Void
+    func didShowWhatsNew()
 }
-

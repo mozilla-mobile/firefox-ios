@@ -43,9 +43,9 @@ class UserAgent {
         let lastFocusBuild = userDefaults.string(forKey: "LastFocusBuildNumber")
 
         if let focusUA = userDefaults.string(forKey: "UserAgent") {
-            if (lastiOSVersion == currentiOSVersion
+            if lastiOSVersion == currentiOSVersion
                 && lastFocusVersion == currentFocusVersion
-                && lastFocusBuild == currentFocusBuild) {
+                && lastFocusBuild == currentFocusBuild {
                 return focusUA
             }
         }
@@ -84,9 +84,8 @@ class UserAgent {
 
         return focusUA
     }
-    
+
     public static func getDesktopUserAgent() -> String {
-        // TODO: check if this is suffficient. Chose this user agent instead of Firefox's method as Firefox fails to load desktop on several sites (i.e. Facebook)
         let userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.12 (KHTML, like Gecko) Version/11.1 Safari/605.1.12"
         return String(userAgent)
     }

@@ -22,7 +22,7 @@ class BrowserToolbar: UIView {
 
         addSubview(backgroundLoading)
         addSubview(backgroundDark)
-        
+
         backgroundDark.backgroundColor = UIConstants.colors.background
 
         backgroundBright.isHidden = true
@@ -64,7 +64,7 @@ class BrowserToolbar: UIView {
         backgroundBright.snp.makeConstraints { make in
             make.edges.equalTo(background)
         }
-        
+
         backgroundLoading.snp.makeConstraints { make in
             make.edges.equalTo(background)
         }
@@ -97,7 +97,7 @@ class BrowserToolbar: UIView {
         case dark
         case loading
     }
-    
+
     var color: toolbarState = .loading {
         didSet {
             let duration = UIConstants.layout.urlBarTransitionAnimationDuration

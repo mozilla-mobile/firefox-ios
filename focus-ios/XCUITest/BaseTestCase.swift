@@ -5,20 +5,20 @@
 import XCTest
 
 class BaseTestCase: XCTestCase {
-    
+
     let app = XCUIApplication()
-    
+
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
         app.launchArguments = ["testMode"]
         app.launch()
     }
-    
+
     override func tearDown() {
         super.tearDown()
     }
-    
+
     //If it is a first run, first run window should be gone
     func dismissFirstRunUI() {
         let firstRunUI = XCUIApplication().buttons["OK, Got It!"]
@@ -32,10 +32,10 @@ class BaseTestCase: XCTestCase {
             onboardingUI.tap()
         }
     }
-    
+
     func waitforEnable(element: XCUIElement, file: String = #file, line: UInt = #line) {
         let exists = NSPredicate(format: "isEnabled == true")
-        
+
         expectation(for: exists, evaluatedWith: element, handler: nil)
         waitForExpectations(timeout: 20) {(error) -> Void in
             if (error != nil) {
@@ -45,10 +45,10 @@ class BaseTestCase: XCTestCase {
             }
         }
     }
-    
+
     func waitforExistence(element: XCUIElement, file: String = #file, line: UInt = #line) {
         let exists = NSPredicate(format: "exists == true")
-        
+
         expectation(for: exists, evaluatedWith: element, handler: nil)
         waitForExpectations(timeout: 30) {(error) -> Void in
             if (error != nil) {
@@ -58,10 +58,10 @@ class BaseTestCase: XCTestCase {
             }
         }
     }
-    
+
     func waitforHittable(element: XCUIElement, file: String = #file, line: UInt = #line) {
         let exists = NSPredicate(format: "isHittable == true")
-        
+
         expectation(for: exists, evaluatedWith: element, handler: nil)
         waitForExpectations(timeout: 30) {(error) -> Void in
             if (error != nil) {
@@ -71,10 +71,10 @@ class BaseTestCase: XCTestCase {
             }
         }
     }
-    
+
     func waitforNoExistence(element: XCUIElement, file: String = #file, line: UInt = #line) {
         let exists = NSPredicate(format: "exists != true")
-        
+
         expectation(for: exists, evaluatedWith: element, handler: nil)
         waitForExpectations(timeout: 10) {(error) -> Void in
             if (error != nil) {
@@ -84,11 +84,11 @@ class BaseTestCase: XCTestCase {
             }
         }
     }
-    
-    func waitForValueMatch(element:XCUIElement, value:String, file: String = #file, line: UInt = #line) {
+
+    func waitForValueMatch(element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
         let predicateText = "value MATCHES " + "'" + value + "'"
         let valueCheck = NSPredicate(format: predicateText)
-        
+
         expectation(for: valueCheck, evaluatedWith: element, handler: nil)
         waitForExpectations(timeout: 20) {(error) -> Void in
             if (error != nil) {
@@ -98,11 +98,11 @@ class BaseTestCase: XCTestCase {
             }
         }
     }
-    
-    func waitForValueContains(element:XCUIElement, value:String, file: String = #file, line: UInt = #line) {
+
+    func waitForValueContains(element: XCUIElement, value: String, file: String = #file, line: UInt = #line) {
         let predicateText = "value CONTAINS " + "'" + value + "'"
         let valueCheck = NSPredicate(format: predicateText)
-        
+
         expectation(for: valueCheck, evaluatedWith: element, handler: nil)
         waitForExpectations(timeout: 30) {(error) -> Void in
             if (error != nil) {
@@ -112,28 +112,28 @@ class BaseTestCase: XCTestCase {
             }
         }
     }
-    
+
     func iPad() -> Bool {
         if UIDevice.current.userInterfaceIdiom == .pad {
             return true
         }
         return false
     }
-    
+
     func search(searchWord: String, waitForLoadToFinish: Bool = true) {
         let app = XCUIApplication()
-        
+
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
         waitforHittable(element: searchOrEnterAddressTextField)
-        
+
         UIPasteboard.general.string = searchWord
 
         // Must press this way in order to support iPhone 5s
         searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
+        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
         waitforExistence(element: app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
-        
+
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
             let progressIndicator = app.progressIndicators.element(boundBy: 0)
@@ -143,21 +143,21 @@ class BaseTestCase: XCTestCase {
                 timeout: finishLoadingTimeout)
         }
     }
-    
+
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true) {
         let storedUrl = UIPasteboard.general.string
         let app = XCUIApplication()
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        
+
         UIPasteboard.general.string = url
         waitforHittable(element: searchOrEnterAddressTextField)
-        
+
         // Must press this way in order to support iPhone 5s
         searchOrEnterAddressTextField.tap()
-        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx:10,dy:0)).press(forDuration: 1.5)
+        searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
         waitforExistence(element: app.menuItems["Paste & Go"])
         app.menuItems["Paste & Go"].tap()
-        
+
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
             let progressIndicator = app.progressIndicators.element(boundBy: 0)
@@ -168,7 +168,7 @@ class BaseTestCase: XCTestCase {
         }
         UIPasteboard.general.string = storedUrl
     }
-    
+
     private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0) {
         let predicate = NSPredicate(format: predicateString)
         let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
@@ -178,7 +178,7 @@ class BaseTestCase: XCTestCase {
             print(message)
         }
     }
-    
+
     func checkForHomeScreen() {
         waitforExistence(element: app.buttons["Settings"])
     }

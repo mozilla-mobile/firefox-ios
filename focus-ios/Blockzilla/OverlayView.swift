@@ -17,7 +17,7 @@ protocol OverlayViewDelegate: class {
 
 class IndexedInsetButton: InsetButton {
     private var index: Int = 0
-    func setIndex(_ i:Int) {
+    func setIndex(_ i: Int) {
         index = i
     }
     func getIndex() -> Int {
@@ -43,23 +43,23 @@ class OverlayView: UIView {
     init() {
         super.init(frame: CGRect.zero)
         KeyboardHelper.defaultHelper.addDelegate(delegate: self)
-        
+
         searchSuggestionsPrompt.backgroundColor = UIConstants.colors.background
         searchSuggestionsPrompt.clipsToBounds = true
         searchSuggestionsPrompt.accessibilityIdentifier = "SearchSuggestionsPromptView"
         addSubview(searchSuggestionsPrompt)
-        
+
         searchSuggestionsPrompt.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
-        
-        for i in 0..<maxNumOfSuggestions  {
+
+        for i in 0..<maxNumOfSuggestions {
             makeSearchSuggestionButton(atIndex: i)
         }
-        
+
         topBorder.backgroundColor = UIConstants.Photon.Grey90.withAlphaComponent(0.4)
         addSubview(topBorder)
-        
+
         topBorder.snp.makeConstraints { make in
             make.top.equalTo(searchSuggestionsPrompt.snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
@@ -70,17 +70,17 @@ class OverlayView: UIView {
             make.top.equalTo(topBorder.snp.bottom)
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
-        for i in 1..<maxNumOfSuggestions  {
+        for i in 1..<maxNumOfSuggestions {
             self.searchButtonGroup[i].snp.makeConstraints { make in
                 make.top.equalTo(searchButtonGroup[i - 1].snp.bottom)
                 make.leading.trailing.equalTo(safeAreaLayoutGuide)
                 make.height.equalTo(UIConstants.layout.overlayButtonHeight)
             }
         }
-        
+
         let padding = UIConstants.layout.searchButtonInset
         let attributedString = NSMutableAttributedString(string: UIConstants.strings.addToAutocompleteButton, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
-        
+
         addToAutocompleteButton.titleLabel?.font = UIConstants.fonts.copyButton
         addToAutocompleteButton.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         addToAutocompleteButton.titleLabel?.lineBreakMode = .byTruncatingTail
@@ -92,7 +92,7 @@ class OverlayView: UIView {
         addToAutocompleteButton.backgroundColor = UIConstants.colors.background
         setUpOverlayButton(button: addToAutocompleteButton)
         addSubview(addToAutocompleteButton)
-        
+
         addToAutocompleteButton.snp.makeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
         }
@@ -151,7 +151,7 @@ class OverlayView: UIView {
         } else {
             button.contentHorizontalAlignment = .left
         }
-        
+
         let padding = UIConstants.layout.searchButtonInset
         button.imageEdgeInsets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         if UIView.userInterfaceLayoutDirection(for: button.semanticContentAttribute) == .rightToLeft {
@@ -160,7 +160,7 @@ class OverlayView: UIView {
             button.titleEdgeInsets = UIEdgeInsets(top: padding, left: padding * 2, bottom: padding, right: padding)
         }
     }
-    
+
     /**
      
      Localize and style 'phrase' text for use as a button title.
@@ -184,15 +184,15 @@ class OverlayView: UIView {
 
         return attributedString
     }
-    
+
     func setAttributedButtonTitle(phrase: String, button: InsetButton, localizedStringFormat: String) {
-        
+
         let attributedString = getAttributedButtonTitle(phrase: phrase,
                                                         localizedStringFormat: localizedStringFormat)
-        
+
         button.setAttributedTitle(attributedString, for: .normal)
     }
-    
+
     private func setURLicon(phrase: String, button: InsetButton) {
         if phrase.isUrl {
             button.setImage(#imageLiteral(resourceName: "icon_link"), for: .normal)
@@ -202,30 +202,30 @@ class OverlayView: UIView {
             button.setImage(#imageLiteral(resourceName: "icon_searchfor"), for: .highlighted)
         }
     }
-    
+
     func setSearchQuery(suggestions: [String], hideFindInPage: Bool) {
         searchQuery = suggestions[0]
         searchSuggestions = searchQuery.isEmpty ? [] : suggestions
         let searchSuggestionsPromptHidden = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) || searchQuery.isEmpty
         var copyButtonHidden = true
-        
+
         UIPasteboard.general.urlAsync() { handoffUrl in
             DispatchQueue.main.async {
                 if let url = handoffUrl, url.isWebPage() {
-                    let attributedTitle = NSMutableAttributedString(string: UIConstants.strings.copiedLink, attributes: [.foregroundColor : UIConstants.Photon.Grey10])
-                    let attributedCopiedUrl = NSMutableAttributedString(string: url.absoluteString, attributes: [.font: UIConstants.fonts.copyButtonQuery, .foregroundColor : UIConstants.Photon.Grey10])
+                    let attributedTitle = NSMutableAttributedString(string: UIConstants.strings.copiedLink, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+                    let attributedCopiedUrl = NSMutableAttributedString(string: url.absoluteString, attributes: [.font: UIConstants.fonts.copyButtonQuery, .foregroundColor: UIConstants.Photon.Grey10])
                     attributedTitle.append(attributedCopiedUrl)
                     self.copyButton.setAttributedTitle(attributedTitle, for: .normal)
                     copyButtonHidden = !url.isWebPage()
                 }
-               
+
                 self.updateSearchSuggestionsPrompt(hidden: searchSuggestionsPromptHidden)
-                
+
                 // Hide the autocomplete button on home screen and when the user is typing
                 self.addToAutocompleteButton.animateHidden(self.searchButton.isHidden == self.searchQuery.isEmpty, duration: 0)
                 self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
                 self.updateSearchButtons()
-                
+
                 let lastSearchButtonIndex = min(self.searchSuggestions.count, self.searchButtonGroup.count) - 1
                 self.updateFindInPageConstraints(
                     findInPageHidden: hideFindInPage,
@@ -239,12 +239,12 @@ class OverlayView: UIView {
             }
         }
     }
-    
+
     fileprivate func updateSearchButtons() {
         for index in 0..<self.searchButtonGroup.count {
-            let hasSuggestionInIndex = index < self.searchSuggestions.count;
+            let hasSuggestionInIndex = index < self.searchSuggestions.count
             self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
-            
+
             if hasSuggestionInIndex {
                 self.setAttributedButtonTitle(
                     phrase: self.searchSuggestions[index],
@@ -258,7 +258,7 @@ class OverlayView: UIView {
 
     fileprivate func updateFindInPageConstraints(findInPageHidden: Bool, lastSearchButtonIndex: Int) {
         findInPageButton.isHidden = findInPageHidden
-        
+
         findInPageButton.snp.remakeConstraints { (make) in
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
             if lastSearchButtonIndex >= 0 && !searchButtonGroup[lastSearchButtonIndex].isHidden {
@@ -268,17 +268,17 @@ class OverlayView: UIView {
             }
             make.height.equalTo(UIConstants.layout.overlayButtonHeight)
         }
-        
+
         self.setAttributedButtonTitle(phrase: self.searchQuery, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
     }
 
     fileprivate func updateCopyConstraints(copyButtonHidden: Bool, findInPageHidden: Bool, lastSearchButtonIndex: Int) {
         copyButton.isHidden = copyButtonHidden
-        
+
         if copyButtonHidden {
             return
         }
-    
+
         copyButton.snp.remakeConstraints { make in
             if !findInPageHidden {
                 make.top.equalTo(findInPageButton.snp.bottom)
@@ -287,7 +287,7 @@ class OverlayView: UIView {
             } else {
                 make.top.equalTo(topBorder.snp.bottom)
             }
-            
+
             make.leading.trailing.equalTo(safeAreaLayoutGuide)
             make.height.equalTo(UIConstants.layout.overlayButtonHeight)
         }
@@ -295,7 +295,7 @@ class OverlayView: UIView {
 
     @objc private func didPressSearch(sender: IndexedInsetButton) {
         delegate?.overlayView(self, didSearchForQuery: searchSuggestions[sender.getIndex()])
-        
+
         if !Settings.getToggle(.enableSearchSuggestions) { return }
         if sender.getIndex() == 0 {
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.searchSuggestionNotSelected)
@@ -338,17 +338,17 @@ class OverlayView: UIView {
             self.isUserInteractionEnabled = true
         }
     }
-    
+
     func setSearchSuggestionsPromptViewDelegate(delegate: SearchSuggestionsPromptViewDelegate) {
         searchSuggestionsPrompt.delegate = delegate
     }
 
     func updateSearchSuggestionsPrompt(hidden: Bool) {
         searchSuggestionsPrompt.isHidden = hidden
-        
+
         searchSuggestionsPrompt.snp.remakeConstraints { make in
             make.top.leading.trailing.equalTo(safeAreaLayoutGuide)
-            
+
             if hidden {
                 make.height.equalTo(0)
             }
@@ -373,7 +373,7 @@ extension OverlayView: KeyboardHelperDelegate {
 }
 
 extension UIPasteboard {
-    
+
     //
     // As of iOS 11: macOS/iOS's Universal Clipboard feature causes UIPasteboard to block.
     //
