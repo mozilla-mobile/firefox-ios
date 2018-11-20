@@ -560,7 +560,10 @@
                   Identifier = "SyncUITests/testUIFromSettings()">
                </Test>
                <Test
-                  Identifier = "TabTraySearchTabsTests">
+                  Identifier = "TabTraySearchTabsTests/testSearchFieldClearedAfterVisingWebsite()">
+               </Test>
+               <Test
+                  Identifier = "TabTraySearchTabsTests/testSearchTabsPrivateMode()">
                </Test>
                <Test
                   Identifier = "ThirdPartySearchTest">
