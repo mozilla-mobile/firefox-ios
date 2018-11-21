@@ -74,6 +74,16 @@ class Tab: NSObject {
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,
             let siteURL = URL(string: string) {
+
+            // If the canonical URL from the page metadata doesn't contain the
+            // "#" fragment, check if the tab's URL has a fragment and if so,
+            // append it to the canonical URL.
+            if siteURL.fragment == nil,
+                let fragment = self.url?.fragment,
+                let siteURLWithFragment = URL(string: "\(string)#\(fragment)") {
+                return siteURLWithFragment
+            }
+
             return siteURL
         }
         return self.url

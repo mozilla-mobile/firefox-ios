@@ -312,8 +312,8 @@ extension PhotonActionSheetProtocol {
             }
         }
         let copyAddressAction = PhotonActionSheetItem(title: Strings.CopyAddressTitle, iconString: "menu-Copy-Link") { action in
-            if let url = urlBar.currentURL {
-                UIPasteboard.general.url = url as URL
+            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
+                UIPasteboard.general.url = url
             }
         }
         if UIPasteboard.general.string != nil {
