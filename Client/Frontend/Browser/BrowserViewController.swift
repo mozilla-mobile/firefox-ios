@@ -379,8 +379,8 @@ class BrowserViewController: UIViewController {
             return false
         })
         copyAddressAction = AccessibleAction(name: Strings.CopyAddressTitle, handler: { () -> Bool in
-            if let url = self.urlBar.currentURL {
-                UIPasteboard.general.url = url as URL
+            if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? self.urlBar.currentURL {
+                UIPasteboard.general.url = url
             }
             return true
         })
