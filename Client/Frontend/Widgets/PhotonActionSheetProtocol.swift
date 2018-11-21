@@ -491,11 +491,12 @@ extension PhotonActionSheetProtocol {
         }
 
         guard let title = title(), let iconString = imageName() else { return nil }
-        // .none is also a case on the swift enum "Optional" so the value needs to be unwrapped before we check
-        var iconURL: URL? = nil
-        if let actionNeeded = account?.actionNeeded {
-            iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
+        guard let actionNeeded = account?.actionNeeded else {
+            let signInOption = PhotonActionSheetItem(title: title, iconString: iconString, handler: action)
+            return [signInOption]
         }
+
+        let iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
         let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, iconType: .URL, accessory: .Sync, handler: action)
         return [syncOption]
     }
