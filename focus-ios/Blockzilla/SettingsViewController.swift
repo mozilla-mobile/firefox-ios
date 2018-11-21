@@ -510,11 +510,11 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
                     siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
                 }
             } else if indexPath.row == 1 {
-                    siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
-                    siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
-                    SiriShortcuts().hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
-                        siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
-                    }
+                siriCell.labelText = UIConstants.strings.eraseAndOpenSiri
+                siriCell.accessibilityIdentifier = "settingsViewController.siriEraseAndOpenCell"
+                SiriShortcuts().hasAddedActivity(type: .eraseAndOpen) { (result: Bool) in
+                    siriCell.accessoryLabel.text = result ? UIConstants.strings.Edit : UIConstants.strings.addToSiri
+                }
             } else {
                 siriCell.labelText = UIConstants.strings.openUrlSiri
                 siriCell.accessibilityIdentifier = "settingsViewController.siriOpenURLCell"
