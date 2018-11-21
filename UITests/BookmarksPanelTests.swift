@@ -58,9 +58,8 @@ class BookmarksPanelTests: KIFTestCase {
         // show Desktop Bookmarks.
 
         createSomeBufferBookmarks()
+        BrowserUtils.openLibraryMenu(tester())
 
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
         EarlGrey.selectElement(with: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
         EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks Toolbar")).perform(grey_tap())
         EarlGrey.selectElement(with: grey_accessibilityLabel("AAA"))
@@ -75,6 +74,23 @@ class BookmarksPanelTests: KIFTestCase {
         // Strangely, earlgrey cannot find the label in buddybuild, but passes locally.
         // Using KIF for this check for now.
         EarlGrey.selectElement(with: grey_accessibilityValue("www.google.ca/")).assert(grey_sufficientlyVisible())
+
+        // Go back to the general bookmark folder for next test
+        BrowserUtils.openLibraryMenu(tester())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Desktop Bookmarks")).perform(grey_tap())
+
+        // Tapping on Bookmarks to get back to initial bookmark panel, need to use coordinates, no id or label for button
+        // Using these coordinates works on iPhone 6, 6s, 8 and iPad Air 2 sims
+        var bookmarksGoBackButton = CGPoint()
+        if BrowserUtils.iPad() {
+            bookmarksGoBackButton = CGPoint(x: 114.0, y: 252.0)
+        } else {
+            bookmarksGoBackButton = CGPoint(x: 0.0, y: 64.0)
+        }
+        tester().tapScreen(at: bookmarksGoBackButton)
+
+        // Closing Library Panel
+        BrowserUtils.closeLibraryMenu(tester())
     }
 
     private func navigateBackInTableView() {
@@ -103,6 +119,7 @@ class BookmarksPanelTests: KIFTestCase {
         // Rather than an elaborate setup() step, just continue from the previous test
         // as the view state is now setup for testing deletion.
         verifyMobileBookmarkDelete()
+        BrowserUtils.closeLibraryMenu(tester())
     }
 
     func verifyRootHasLocalAndBufferBookmarks() {
@@ -119,8 +136,7 @@ class BookmarksPanelTests: KIFTestCase {
             makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])
             ])
         XCTAssert(applyResult.value.isSuccess)
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        BrowserUtils.openLibraryMenu(tester())
 
         // is this in the root?
         assertRowExists(withTitle: "xyz")
@@ -175,7 +191,6 @@ class BookmarksPanelTests: KIFTestCase {
         navigateBackInTableView()
 
         // Test successful deletion
-
         assertRowExists(withTitle: "xyz")
 
         let tv = tester().waitForView(withAccessibilityIdentifier: "Bookmarks List") as! UITableView
@@ -186,8 +201,6 @@ class BookmarksPanelTests: KIFTestCase {
         EarlGrey.selectElement(with: deleteAction).perform(grey_tap())
 
         XCTAssert(tv.numberOfRows(inSection: 0) == rowCount - 1)
-
-        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
     }
 
     func testRefreshBookmarks() {
@@ -200,8 +213,7 @@ class BookmarksPanelTests: KIFTestCase {
             makeFolder(guid: BookmarkRoots.MobileFolderGUID, parentID: BookmarkRoots.RootGUID, title: "", childrenGuids: ["bm-guid0"])
             ])
         XCTAssert(applyResult.value.isSuccess)
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Bookmarks")).perform(grey_tap())
+        BrowserUtils.openLibraryMenu(tester())
 
         // Add a bookmark
         let isAdded = (bookmarks as! MergedSQLiteBookmarks).local.addToMobileBookmarks(URL(string: "http://new-bookmark")!, title: "NewBookmark", favicon: nil)
@@ -214,6 +226,7 @@ class BookmarksPanelTests: KIFTestCase {
         // Verify new bookmark exists
         assertRowExists(withTitle: "NewBookmark")
 
-        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
+        // Closing Bookmark (and so Library) panel
+        BrowserUtils.closeLibraryMenu(tester())
     }
 }

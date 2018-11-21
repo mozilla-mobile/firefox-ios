@@ -316,7 +316,6 @@ class BrowserUtils {
     }
 
 
-
     class func openClearPrivateDataDialog(_ swipe: Bool) {
         let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
                                                  grey_accessibilityID("menu-Settings")])
@@ -409,6 +408,20 @@ class BrowserUtils {
 
         XCTAssertTrue(autocompleteFieldlabel != nil, "The autocomplete was not found")
         XCTAssertEqual(completion, autocompleteFieldlabel!.text, "Expected prefix matches actual prefix")
+    }
+
+    class func openLibraryMenu(_ tester: KIFUITestActor) {
+        tester.waitForAnimationsToFinish()
+        tester.waitForView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.waitForAnimationsToFinish()
+        tester.tapView(withAccessibilityIdentifier: "menu-library")
+        tester.waitForView(withAccessibilityIdentifier: "HomePanels.History")
+    }
+
+    class func closeLibraryMenu(_ tester: KIFUITestActor) {
+        tester.tapView(withAccessibilityLabel: "Done")
+        tester.waitForAnimationsToFinish()
     }
 }
 
