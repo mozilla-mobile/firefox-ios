@@ -67,32 +67,29 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.PrefKey)
             self.tableView.reloadData()
         })
-        let showHomepage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabHomePage), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return (self.currentChoice == NewTabPage.homePage) && self.hasHomePage}, onChanged: {
 
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: HomePageConstants.HomePageURLPrefKey, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomePageSetting", settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.PrefKey)
             self.tableView.reloadData()
         })
+        showWebPage.textField.textAlignment = .natural
 
-        var firstSection = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showBlankPage, showBookmarks, showHistory])
+        let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showBlankPage, showBookmarks, showHistory, showWebPage])
 
-        self.hasHomePage = HomePageAccessors.getHomePage(self.prefs) != nil
-        if self.hasHomePage {
-            firstSection = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showBlankPage, showBookmarks, showHistory, showHomepage])
-        }
         let isPocketEnabledDefault = Pocket.IslocaleSupported(Locale.current.identifier)
         let pocketSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASPocketStoriesVisible, defaultValue: isPocketEnabledDefault, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabPocket))
-        let bookmarks = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASBookmarkHighlightsVisible, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabHighlightsBookmarks))
-        let history = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.ASRecentHighlightsVisible, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingsNewTabHiglightsHistory))
-        let secondSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: nil, children: [pocketSetting, bookmarks, history])
-
-        return [firstSection, secondSection]
-
+        let secondSection = SettingSection(title: NSAttributedString(string: Strings.SettingsNewTabASTitle), footerTitle: nil, children: [pocketSetting])
+        return [section, secondSection]
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         NotificationCenter.default.post(name: .HomePanelPrefsChanged, object: nil)
     }
-}
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.tableView.keyboardDismissMode = .onDrag
+    }
+}

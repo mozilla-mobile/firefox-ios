@@ -976,29 +976,6 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     }
 }
 
-class HomePageSetting: Setting {
-    let profile: Profile
-    var tabManager: TabManager!
-
-    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
-
-    override var accessibilityIdentifier: String? { return "Homepage" }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        self.tabManager = settings.tabManager
-
-        super.init(title: NSAttributedString(string: Strings.SettingsHomePageSectionName, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = HomePageSettingsViewController()
-        viewController.profile = profile
-        viewController.tabManager = tabManager
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
 class NewTabPageSetting: Setting {
     let profile: Profile
 

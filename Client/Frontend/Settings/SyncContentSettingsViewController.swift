@@ -99,11 +99,6 @@ class DeviceNamePersister: SettingValuePersister {
 
 class DeviceNameSetting: StringSetting {
 
-    override var Padding: CGFloat {
-        get { return 16 }
-        set { super.Padding = newValue }
-    }
-
     init(settings: SettingsTableViewController) {
         let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
         super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: settingsIsValid)

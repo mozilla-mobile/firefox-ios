@@ -260,6 +260,42 @@ class StringPrefSetting: StringSetting {
     }
 }
 
+class WebPageSetting: StringPrefSetting {
+    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingDidChange: ((String?) -> Void)? = nil) {
+        super.init(prefs: prefs,
+                   prefKey: prefKey,
+                   defaultValue: defaultValue,
+                   placeholder: placeholder,
+                   accessibilityIdentifier: accessibilityIdentifier,
+                   settingIsValid: WebPageSetting.isURLOrEmpty,
+                   settingDidChange: settingDidChange)
+        textField.keyboardType = .URL
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
+    }
+
+    override func prepareValidValue(userInput value: String?) -> String? {
+        guard let value = value else {
+            return nil
+        }
+        return URIFixup.getURL(value)?.absoluteString
+    }
+
+    override func onConfigureCell(_ cell: UITableViewCell) {
+        super.onConfigureCell(cell)
+        cell.accessoryType = .checkmark
+        textField.textAlignment = .left
+    }
+
+    static func isURLOrEmpty(_ string: String?) -> Bool {
+        guard let string = string, !string.isEmpty else {
+            return true
+        }
+        return URL(string: string)?.isWebPage() ?? false
+    }
+}
+
+
 protocol SettingValuePersister {
     func readPersistedValue() -> String?
     func writePersistedValue(value: String?)
@@ -269,7 +305,7 @@ protocol SettingValuePersister {
 /// This takes an optional settingIsValid and settingDidChange callback
 /// If settingIsValid returns false, the Setting will not change and the text remains red.
 class StringSetting: Setting, UITextFieldDelegate {
-    var Padding: CGFloat = 8
+    var Padding: CGFloat = 15
 
     fileprivate let defaultValue: String?
     fileprivate let placeholder: String
@@ -301,6 +337,7 @@ class StringSetting: Setting, UITextFieldDelegate {
             textField.placeholder = placeholder
         }
 
+        cell.tintColor = self.persister.readPersistedValue() != nil ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         textField.textAlignment = .center
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -341,6 +378,7 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 
     @objc func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
         return isValid(textField.text)
     }
 
