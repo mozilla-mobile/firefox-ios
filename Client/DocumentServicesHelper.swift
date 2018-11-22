@@ -11,10 +11,18 @@ private let log = Logger.browserLogger
 
 class DocumentServicesHelper: TabEventHandler {
     private var tabObservers: TabObservers!
-    private let prefs: Prefs
+
+    private lazy var singleThreadedQueue: OperationQueue = {
+        var queue = OperationQueue()
+        queue.name = "Document Services JSContext queue"
+        queue.maxConcurrentOperationCount = 1
+        queue.qualityOfService = .userInitiated
+        return queue
+    }()
 
     private lazy var context: JSContext = {
-        let context: JSContext = JSContext()
+        let virtualMachine = JSVirtualMachine()
+        let context: JSContext = JSContext(virtualMachine: virtualMachine)
 
         context.exceptionHandler = { context, exception in
             if let exception = exception {
@@ -45,11 +53,10 @@ class DocumentServicesHelper: TabEventHandler {
         return firefox
     }()
 
-    init(_ prefs: Prefs) {
-        self.prefs = prefs
+    init() {
         self.tabObservers = registerFor(
             .didLoadPageMetadata,
-            queue: .main)
+            queue: singleThreadedQueue)
     }
 
     deinit {

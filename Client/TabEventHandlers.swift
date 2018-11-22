@@ -12,7 +12,7 @@ class TabEventHandlers {
             UserActivityHandler(),
             MetadataParserHelper(),
             MediaImageLoader(prefs),
-            DocumentServicesHelper(prefs),
+            DocumentServicesHelper(),
         ]
     }
 }
