@@ -35,6 +35,16 @@ class DocumentServicesHelper: TabEventHandler {
         return context
     }()
 
+    private lazy var documentServices: JSValue? = {
+        guard let firefox = context.objectForKeyedSubscript("__firefox__"),
+            let isConfigured = firefox.objectForKeyedSubscript("isConfigured"),
+            isConfigured.isBoolean && isConfigured.toBool() else {
+                log.error("Unable to do anything without a firefox object.")
+                return nil
+        }
+        return firefox
+    }()
+
     init(_ prefs: Prefs) {
         self.prefs = prefs
         self.tabObservers = registerFor(
@@ -47,13 +57,19 @@ class DocumentServicesHelper: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        guard let firefox = context.objectForKeyedSubscript("__firefox__"),
-            let isConfigured = firefox.objectForKeyedSubscript("isConfigured"),
-            isConfigured.isBoolean && isConfigured.toBool() else {
-            log.error("Unable to do anything without a firefox object.")
+        let analyze = documentServices?.objectForKeyedSubscript("analyze")
+        guard let jsValue = analyze?.call(withArguments: [metadata.toDictionary() as NSDictionary]), jsValue.isObject else {
+            log.error("There was some problem in DocumentServices.js, see the log above")
             return
         }
 
-        log.info("We have a firefox object")
+        guard let dict = jsValue.toDictionary() as? [String: Any],
+            !dict.isEmpty else {
+            log.debug("Nothing interesting came back from DocumentServices. Exiting.")
+            return
+        }
+
+        log.info("DocumentServices returned = \(dict)")
+
     }
 }
