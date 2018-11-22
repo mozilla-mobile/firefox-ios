@@ -625,6 +625,13 @@ extension Strings {
     public static let AvailableCredentialsHeader = NSLocalizedString("PasswordAutoFill.PasswordsListTitle", value: "Available Credentials:",  comment: "Header for the list of credentials table")
 }
 
+// translation bar
+extension Strings {
+    public static let TranslateSnackBarPrompt = NSLocalizedString("TranslationToastHandler.PromptTranslate.Title", value: "This page appears to be in %1$@. Translate to %2$@?", comment: "Prompt for translation. The first parameter is the language the page is in. The second parameter is the name of our local language.")
+    public static let TranslateSnackBarYes = NSLocalizedString("TranslationToastHandler.PromptTranslate.OK", value: "Yes", comment: "Button to allow the page to be translated to the user locale language")
+    public static let TranslateSnackBarNo = NSLocalizedString("TranslationToastHandler.PromptTranslate.Cancel", value: "No", comment: "Button to disallow the page to be translated to the user locale language")
+}
+
 // Display Theme
 extension Strings {
     public static let SettingsDisplayThemeTitle = NSLocalizedString("Settings.DisplayTheme.Title", value: "Display", comment: "Title in main app settings for Display (theme) settings")
