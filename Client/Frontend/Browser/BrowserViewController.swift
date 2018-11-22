@@ -745,7 +745,7 @@ class BrowserViewController: UIViewController {
             if url.isAboutHomeURL {
                 let panel = NewTabPage.fromAboutHomeURL(url: url)
                 showHomePanelController(inline: true, panel: panel)
-            } else if url.isErrorPageURL || !url.isLocalUtility || url.isReaderModeURL {
+            } else if !url.absoluteString.hasPrefix("\(InternalScheme.url)/\(SessionRestoreHandler.path)") {
                 hideHomePanelController()
             }
         } else if url?.isAboutHomeURL ?? false {
@@ -1085,11 +1085,7 @@ class BrowserViewController: UIViewController {
             print("Cannot navigate in tab without a webView")
             return
         }
-
-        // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
-        // because that event wil not always fire due to unreliable page caching. This will either let us know that
-        // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
-        // ignore the result because we are being called back asynchronous when the readermode status changes.
+        
         webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
 
         if let url = webView.url {

@@ -23,13 +23,6 @@ func generateResponseThatRedirects(toUrl url: URL) -> (URLResponse, Data) {
 class SessionRestoreHandler: InternalSchemeResponse {
     static let path = "sessionrestore"
 
-    private func redirect(toUrl: URL) -> (URLResponse, Data)? {
-        // Catch if the url argument is nested like `url=internal://local/sessionrestore?url=`; this can be removed once this code is stable.
-        assert(!toUrl.absoluteString.starts(with: "\(InternalScheme.url)/\(SessionRestoreHandler.path)?url="))
-        print("(SRH redirect)" + toUrl.absoluteString)
-        return generateResponseThatRedirects(toUrl: toUrl)
-    }
-
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
         guard let url = request.url else { return nil }
 
@@ -44,7 +37,7 @@ class SessionRestoreHandler: InternalSchemeResponse {
 
             // These don't need to be privileged as they can only be pushed on the history stack by a privileged request, thus the back/forth history isn't hackable,
             // and a page directly loading a 'sessionrestore?url=<some url>' will just load <some url>.
-            return redirect(toUrl: url)
+            return generateResponseThatRedirects(toUrl: url)
         }
 
         // From here on, handle 'history=' query param

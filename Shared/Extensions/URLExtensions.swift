@@ -327,10 +327,11 @@ extension URL {
     }
 
     public func encodeReaderModeURL(_ baseReaderModeURL: String) -> URL? {
-        if let result = URL(string: "\(baseReaderModeURL)?url=\(absoluteString)") {
-                return result
+        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
+            if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
+                return aboutReaderURL
             }
-
+        }
         return nil
     }
 }
@@ -380,8 +381,7 @@ extension URL {
         return self.aboutComponent != nil
     }
 
-    /// If the URI is an about: URI, return the path after "about/" in the URI.
-    /// For example, return "home" for "http://localhost:1234/about/home/#panel=0".
+    /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         guard isInternalScheme else {
             return nil

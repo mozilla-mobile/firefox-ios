@@ -264,12 +264,6 @@ class ErrorPageHelper {
             return
         }
 
-        // TODO: consider base 64 encoding this url
-//        guard let base64url = url.absoluteString.data(using: .utf8)?.base64EncodedString else {
-//            assertionFailure()
-//            return
-//        }
-
         var queryItems = [
             URLQueryItem(name: URL.errorPageUrlParam, value: url.absoluteString),
             URLQueryItem(name: "code", value: String(error.code)),

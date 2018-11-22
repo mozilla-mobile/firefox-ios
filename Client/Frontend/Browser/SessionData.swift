@@ -19,6 +19,7 @@ private func sanitize(urls: [URL]) -> [URL] {
                 if comp.count > 2 {
                     // get the last instance of incorrectly nested urls
                     urlStr = newItem + (comp.last ?? "")
+                    assertionFailure("SessionData urls have nested internal links, investigate: [\(url.absoluteString)]")
                 }
                 url = URL(string: urlStr) ?? url
             }

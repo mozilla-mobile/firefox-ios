@@ -32,8 +32,6 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
             return false
         }
 
-        print(url)
-
         if url.absoluteString.contains("local/reader-mode/") {
             let path = url.lastPathComponent
             if let res = Bundle.main.path(forResource: path, ofType: nil), let str = try? String(contentsOfFile: res, encoding: .utf8), let data = str.data(using: .utf8) {
@@ -73,8 +71,7 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
         }
 
         let path = url.path.starts(with: "/") ? String(url.path.dropFirst()) : url.path
-        print("(ISH) [\(path)]  [\(url.absoluteString)]")
-
+        
         // History urls are unprivileged, but other unprivileged urls are treated as page resources and downloaded
         let historyUrlParam = "sessionrestore?url="
         if !urlSchemeTask.request.isPrivileged, !url.path.contains(historyUrlParam),
@@ -99,6 +96,5 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
 
     func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
         _ = downloadTasks.remove(urlSchemeTask)
-        print(" STOP \(urlSchemeTask.request.url)")
     }
 }
