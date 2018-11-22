@@ -12,6 +12,11 @@ class TranslationToastHandler: TabEventHandler {
     private var tabObservers: TabObservers!
     private let prefs: Prefs
 
+    private var serviceURL = "https://translate.google.com/translate"
+    private var serviceDestinationURL = "https://translate.googleusercontent.com/translate_c"
+
+    private let snackBarClassIdentifier = "translationPrompt"
+
     init(_ prefs: Prefs) {
         self.prefs = prefs
 
@@ -23,9 +28,16 @@ class TranslationToastHandler: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didDeriveMetadata metadata: DerivedMetadata) {
-        guard let myLanguage = Locale.current.languageCode,
+        // dismiss the previous translation snackbars.
+        tab.expireSnackbars(withClass: snackBarClassIdentifier)
+
+        guard let myLanguage = Locale.autoupdatingCurrent.languageCode,
             let pageLanguage = metadata.language else {
                 return
+        }
+
+        guard let url = tab.url, !url.absoluteString.starts(with: serviceDestinationURL) else {
+            return
         }
 
         if myLanguage != pageLanguage {
@@ -41,16 +53,33 @@ class TranslationToastHandler: TabEventHandler {
         let localizedPageLanguage = locale.localizedString(forLanguageCode: pageLanguage) ?? pageLanguage
 
         let promptMessage = String(format: Strings.TranslateSnackBarPrompt, localizedPageLanguage, localizedMyLanguage)
-        let snackBar = SnackBar(text: promptMessage, img: UIImage(named: "search"))
+        let snackBar = SnackBar(text: promptMessage, img: UIImage(named: "search"), snackbarClassIdentifier: snackBarClassIdentifier)
         let cancel = SnackButton(title: Strings.TranslateSnackBarNo, accessibilityIdentifier: "TranslationPrompt.dontTranslate", bold: false) { bar in
             tab.removeSnackbar(bar)
-            return
         }
         let ok = SnackButton(title: Strings.TranslateSnackBarYes, accessibilityIdentifier: "TranslationPrompt.doTranslate", bold: true) { bar in
             tab.removeSnackbar(bar)
+            self.translate(tab, from: pageLanguage, to: myLanguage)
         }
         snackBar.addButton(cancel)
         snackBar.addButton(ok)
         tab.addSnackbar(snackBar)
+    }
+
+    func translate(_ tab: Tab, from pageLanguage: String, to myLanguage: String) {
+        guard let urlString = tab.pageMetadata?.siteURL,
+            let url = URL(string: urlString),
+            let urlQueryParam = url.absoluteString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) else {
+                return
+        }
+
+        let translationURL = String(format: "\(serviceURL)?hl=%2$@&sl=%1$@&tl=en&u=%3$@",
+                             pageLanguage,
+                             myLanguage,
+                             urlQueryParam)
+
+        if let newURL = URL(string: translationURL) {
+            tab.loadRequest(URLRequest(url: newURL))
+        }
     }
 }
