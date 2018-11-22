@@ -13,6 +13,7 @@ class TabEventHandlers {
             MetadataParserHelper(),
             MediaImageLoader(prefs),
             DocumentServicesHelper(),
+            TranslationToastHandler(prefs)
         ]
     }
 }

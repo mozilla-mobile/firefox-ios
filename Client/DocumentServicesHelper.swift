@@ -76,7 +76,24 @@ class DocumentServicesHelper: TabEventHandler {
             return
         }
 
-        log.info("DocumentServices returned = \(dict)")
+        let derived = DerivedMetadata.fromDictionary(dict)
+        log.info("DocumentServices returned = \(derived)")
+        TabEvent.post(.didDeriveMetadata(derived), for: tab)
+    }
+}
 
+struct DerivedMetadata {
+    let language: String?
+
+    static func fromDictionary(_ d: [String: Any]) -> DerivedMetadata {
+        let language: String?
+        if let lang = d["language"] as? [String: String],
+            let identifier = lang["iso639_1"] ?? lang["iso639_2T"] {
+            language = Locale.canonicalLanguageIdentifier(from: identifier)
+        } else {
+            language = nil
+        }
+
+        return DerivedMetadata(language: language)
     }
 }
