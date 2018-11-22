@@ -841,7 +841,7 @@ class BrowserViewController: UIViewController {
         switch path {
         case .estimatedProgress:
             guard webView == tabManager.selectedTab?.webView else { break }
-            if !(webView.url?.isLocalUtility ?? false) {
+            if !(webView.url?.isInternalScheme ?? false) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
                 // Profiler.end triggers a screenshot, and a delay is needed here to capture the correct screen
                 // (otherwise the screen prior to this step completing is captured).
@@ -899,7 +899,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
-        guard let url = webView.url, url.isWebPage(), !url.isLocal else {
+        guard let url = webView.url, url.isWebPage(), !url.isInternalScheme else {
             return
         }
         if NoImageModeHelper.isActivated(profile.prefs) {
@@ -1086,15 +1086,15 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if let url = webView.url {
-            if !url.isErrorPageURL, !url.isAboutHomeURL, !url.isFileURL {
-                postLocationChangeNotificationForTab(tab, navigation: navigation)
+        // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
+        // because that event wil not always fire due to unreliable page caching. This will either let us know that
+        // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
+        // ignore the result because we are being called back asynchronous when the readermode status changes.
+        webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
 
-                // Fire the readability check. This is here and not in the pageShow event handler in ReaderMode.js anymore
-                // because that event wil not always fire due to unreliable page caching. This will either let us know that
-                // the currently loaded page can be turned into reading mode or if the page already is in reading mode. We
-                // ignore the result because we are being called back asynchronous when the readermode status changes.
-                webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+        if let url = webView.url {
+            if !url.isInternalScheme, !url.isFileURL {
+                postLocationChangeNotificationForTab(tab, navigation: navigation)
 
                 // Re-run additional scripts in webView to extract updated favicons and metadata.
                 runScriptsOnWebView(webView)
@@ -1279,20 +1279,19 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
-        if let tab = tabManager.selectedTab {
-            if let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode {
-                switch readerMode.state {
-                case .available:
-                    enableReaderMode()
-                    UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
-                    LeanPlumClient.shared.track(event: .useReaderView)
-                case .active:
-                    disableReaderMode()
-                    UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
-                case .unavailable:
-                    break
-                }
-            }
+        guard let tab = tabManager.selectedTab, let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode else {
+            return
+        }
+        switch readerMode.state {
+        case .available:
+            enableReaderMode()
+            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readerModeOpenButton)
+            LeanPlumClient.shared.track(event: .useReaderView)
+        case .active:
+            disableReaderMode()
+            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readerModeCloseButton)
+        case .unavailable:
+            break
         }
     }
 
@@ -1328,7 +1327,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool) {
         // use the initial value for the URL so we can do proper pattern matching with search URLs
         var searchURL = self.tabManager.selectedTab?.currentInitialURL
-        if searchURL?.isErrorPageURL ?? true {
+        if searchURL?.isInternalScheme ?? true {
             searchURL = url
         }
         if let query = profile.searchEngines.queryForSearchURL(searchURL as URL?) {
@@ -1607,7 +1606,7 @@ extension BrowserViewController: TabDelegate {
         contextMenuHelper.delegate = self
         tab.addContentScript(contextMenuHelper, name: ContextMenuHelper.name())
 
-        let errorHelper = ErrorPageHelper()
+        let errorHelper = ErrorPageHelper(certStore: profile.certStore)
         tab.addContentScript(errorHelper, name: ErrorPageHelper.name())
 
         let sessionRestoreHelper = SessionRestoreHelper(tab: tab)
@@ -1826,7 +1825,7 @@ extension BrowserViewController: TabManagerDelegate {
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
-        if !(selected?.webView?.url?.isLocalUtility ?? false) {
+        if !(selected?.webView?.url?.isInternalScheme ?? false) {
             self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
         }
 
@@ -2352,6 +2351,8 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
         if let tab = tabManager.selectedTab, tab.webView === tab.webView {
             updateUIForReaderHomeStateForTab(tab)
         }
+
+        clipboardBarDisplayHandler?.didRestoreSession()
     }
 }
 

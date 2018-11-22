@@ -102,7 +102,7 @@ extension WKNavigationAction {
             return true
         }
 
-        return !url.isWebPage(includeDataURIs: false) || !url.isLocal || request.isPrivileged
+        return !url.isWebPage(includeDataURIs: false) || !url.isInternalScheme || request.isPrivileged
     }
 }
 
@@ -161,7 +161,7 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if url.scheme == "about" {
+        if url.isInternalScheme {
             decisionHandler(.allow)
             return
         }
@@ -323,13 +323,13 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
-            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
+            ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
 
             // If the local web server isn't working for some reason (Firefox cellular data is
             // disabled in settings, for example), we'll fail to load the session restore URL.
             // We rely on loading that page to get the restore callback to reset the restoring
             // flag, so if we fail to load that page, reset it here.
-            if url.aboutComponent == "sessionrestore" {
+            if url.aboutComponent == "\(SessionRestoreHandler.path)" {
                 tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
             }
         }

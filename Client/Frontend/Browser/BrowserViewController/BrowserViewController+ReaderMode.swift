@@ -103,6 +103,7 @@ extension BrowserViewController {
                         try self.readerModeCache.put(currentURL, readabilityResult)
                     } catch _ {
                     }
+                    print(" enablereadermode \(readerModeURL)")
                     if let nav = webView.load(PrivilegedRequest(url: readerModeURL) as URLRequest) {
                         self.ignoreNavigationInTab(tab, navigation: nav)
                     }

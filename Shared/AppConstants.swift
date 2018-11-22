@@ -4,6 +4,11 @@
 
 import UIKit
 
+public struct InternalScheme {
+    public static let scheme = "internal"
+    public static let url = "\(scheme)://local"
+}
+
 public enum AppBuildChannel: String {
     case release = "release"
     case beta = "beta"

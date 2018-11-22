@@ -373,10 +373,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     fileprivate func setUpWebServer(_ profile: Profile) {
         let server = WebServer.sharedInstance
         ReaderModeHandlers.register(server, profile: profile)
-        ErrorPageHelper.register(server, certStore: profile.certStore)
-        AboutHomeHandler.register(server)
-        AboutLicenseHandler.register(server)
-        SessionRestoreHandler.register(server)
+
+        let responders: [(String, InternalSchemeResponse)] =
+            [ (AboutHomeHandler.path, AboutHomeHandler()),
+              (AboutLicenseHandler.path, AboutLicenseHandler()),
+              (SessionRestoreHandler.path, SessionRestoreHandler()),
+              (ErrorPageHandler.path, ErrorPageHandler())]
+        responders.forEach { (path, responder) in
+            InternalSchemeHandler.responders[path] = responder
+        }
 
         if AppConstants.IsRunningTest {
             registerHandlersForTestMethods(server: server.server)

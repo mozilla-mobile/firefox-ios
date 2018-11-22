@@ -28,7 +28,7 @@ class MetadataParserHelper: TabEventHandler {
         // Get the metadata out of the page-metadata-parser, and into a type safe struct as soon
         // as possible.
         guard let webView = tab.webView,
-            let url = webView.url, url.isWebPage(includeDataURIs: false), !url.isLocal else {
+            let url = webView.url, url.isWebPage(includeDataURIs: false), !url.isInternalScheme else {
             return
         }
 

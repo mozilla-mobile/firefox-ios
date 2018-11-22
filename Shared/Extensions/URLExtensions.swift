@@ -198,11 +198,11 @@ extension URL {
             return self.decodeReaderModeURL?.havingRemovedAuthorisationComponents()
         }
 
-        if self.isErrorPageURL {
-            return originalURLFromErrorURL?.displayURL
+        if self.isInternalErrorPage {
+            return originalURLFromErrorPage?.displayURL
         }
 
-        if !self.isAboutURL {
+        if !self.isInternalScheme {
             return self.havingRemovedAuthorisationComponents()
         }
 
@@ -277,32 +277,6 @@ extension URL {
         return scheme.map { schemes.contains($0) } ?? false
     }
 
-    // This helps find local urls that we do not want to show loading bars on.
-    // These utility pages should be invisible to the user
-    public var isLocalUtility: Bool {
-        guard self.isLocal else {
-            return false
-        }
-        let utilityURLs = ["/errors", "/about/sessionrestore", "/about/home", "/reader-mode"]
-        return utilityURLs.contains { self.path.hasPrefix($0) }
-    }
-
-    public var isLocal: Bool {
-        guard isWebPage(includeDataURIs: false) else {
-            return false
-        }
-        // iOS forwards hostless URLs (e.g., http://:6571) to localhost.
-        guard let host = host, !host.isEmpty else {
-            return true
-        }
-
-        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
-            return false
-        }
-
-        return host.lowercased() == "localhost" || host == "127.0.0.1"
-    }
-
     public var isIPv6: Bool {
         return host?.contains(":") ?? false
     }
@@ -353,11 +327,10 @@ extension URL {
     }
 
     public func encodeReaderModeURL(_ baseReaderModeURL: String) -> URL? {
-        if let encodedURL = absoluteString.addingPercentEncoding(withAllowedCharacters: .alphanumerics) {
-            if let aboutReaderURL = URL(string: "\(baseReaderModeURL)?url=\(encodedURL)") {
-                return aboutReaderURL
+        if let result = URL(string: "\(baseReaderModeURL)?url=\(absoluteString)") {
+                return result
             }
-        }
+
         return nil
     }
 }
@@ -365,26 +338,38 @@ extension URL {
 // Helpers to deal with ErrorPage URLs
 
 extension URL {
-    public var isErrorPageURL: Bool {
-        if let host = self.host {
-            return self.scheme == "http" && host == "localhost" && path == "/errors/error.html"
-        }
-        return false
+    public static let errorPagePath = "errorpage"
+    public static let errorPageUrlParam = "url"
+
+    public var isInternalErrorPage: Bool {
+        return isInternalScheme && path == "/\(URL.errorPagePath)"
     }
 
-    public var originalURLFromErrorURL: URL? {
+    public var originalURLFromErrorPage: URL? {
         let components = URLComponents(url: self, resolvingAgainstBaseURL: false)
-        if let queryURL = components?.queryItems?.find({ $0.name == "url" })?.value {
+        if let queryURL = components?.queryItems?.find({ $0.name == URL.errorPageUrlParam })?.value {
             return URL(string: queryURL)
         }
+
         return nil
+    }
+
+    public var isInternalScheme: Bool {
+        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
+            return false
+        }
+
+        // TODO: (reader-mode-custom-scheme) remove this line when updating.
+        if absoluteString.hasPrefix("http://localhost:6571/") { return true }
+
+        return scheme == InternalScheme.scheme
     }
 }
 
 // Helpers to deal with About URLs
 extension URL {
     public var isAboutHomeURL: Bool {
-        if let urlString = self.getQuery()["url"]?.unescape(), isErrorPageURL {
+        if isInternalScheme, let urlString = self.getQuery()["url"]?.unescape() {
             let url = URL(string: urlString) ?? self
             return url.aboutComponent == "home"
         }
@@ -398,11 +383,12 @@ extension URL {
     /// If the URI is an about: URI, return the path after "about/" in the URI.
     /// For example, return "home" for "http://localhost:1234/about/home/#panel=0".
     public var aboutComponent: String? {
-        let aboutPath = "/about/"
-        guard let scheme = self.scheme, let host = self.host else {
+        guard isInternalScheme else {
             return nil
         }
-        if scheme == "http" && host == "localhost" && path.hasPrefix(aboutPath) {
+
+        let aboutPath = "/about/"
+        if path.hasPrefix(aboutPath) {
             return String(path[aboutPath.endIndex...])
         }
         return nil

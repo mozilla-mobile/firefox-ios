@@ -6,6 +6,28 @@ import Foundation
 
 import Shared
 
+private func sanitize(urls: [URL]) -> [URL] {
+    return urls.compactMap { url in
+        var url = url
+        [("http://localhost:6571/errors/error.html?url=", "\(InternalScheme.url)/\(SessionRestoreHandler.path)?url=")
+            // TODO: handle reader pages ("http://localhost:6571/reader-mode/page?url=", "\(InternalScheme.url)/\(ReaderModeHandler.path)?url=")
+            ].forEach {
+            oldItem, newItem in
+            if url.absoluteString.hasPrefix(oldItem) {
+                var urlStr = url.absoluteString.replacingOccurrences(of: oldItem, with: newItem)
+                let comp = urlStr.components(separatedBy: newItem)
+                if comp.count > 2 {
+                    // get the last instance of incorrectly nested urls
+                    urlStr = newItem + (comp.last ?? "")
+                }
+                url = URL(string: urlStr) ?? url
+            }
+        }
+
+        return url
+    }
+}
+
 class SessionData: NSObject, NSCoding {
     let currentPage: Int
     let urls: [URL]
@@ -29,7 +51,7 @@ class SessionData: NSObject, NSCoding {
     **/
     init(currentPage: Int, urls: [URL], lastUsedTime: Timestamp) {
         self.currentPage = currentPage
-        self.urls = urls
+        self.urls = sanitize(urls: urls)
         self.lastUsedTime = lastUsedTime
 
         assert(urls.count > 0, "Session has at least one entry")
@@ -38,13 +60,13 @@ class SessionData: NSObject, NSCoding {
 
     required init?(coder: NSCoder) {
         self.currentPage = coder.decodeAsInt(forKey: "currentPage")
-        self.urls = coder.decodeObject(forKey: "urls") as? [URL] ?? []
+        self.urls = sanitize(urls: coder.decodeObject(forKey: "urls") as? [URL] ?? [URL]())
         self.lastUsedTime = coder.decodeAsUInt64(forKey: "lastUsedTime")
     }
 
     func encode(with coder: NSCoder) {
         coder.encode(currentPage, forKey: "currentPage")
-        coder.encode(urls, forKey: "urls")
+        coder.encode(sanitize(urls: urls), forKey: "urls")
         coder.encode(Int64(lastUsedTime), forKey: "lastUsedTime")
     }
 }

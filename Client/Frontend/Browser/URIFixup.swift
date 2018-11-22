@@ -7,6 +7,10 @@ import Shared
 
 class URIFixup {
     static func getURL(_ entry: String) -> URL? {
+        if entry.starts(with: "\(InternalScheme.scheme)://") {
+            return URL(string: entry)
+        }
+
         let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .URLAllowed) else {
             return nil

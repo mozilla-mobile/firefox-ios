@@ -16,14 +16,17 @@
    * error pages so that they will redirect to the correct URLs when loaded.
    */
   (function () {
+      const urlRedirectPrefix = "/sessionrestore?url="
+
       function getRestoreURL(url) {
           // If the url already points to an error page just return the url as is
-          if (url.indexOf(document.location.origin + '/errors/error.html') === 0) {
+          if (url.indexOf(location.origin + urlRedirectPrefix) === 0) {
                return url;
            }
-          // Otherwise, push an error page to trigger a redirect when loaded.
-          return '/errors/error.html?url=' + escape(url);
+
+          return urlRedirectPrefix + url;
       }
+   
       var index = document.location.href.search("history");
       // Pull the session out of the history query argument.
       // The session is a JSON-stringified array of all URLs to restore for this tab, plus the last active index.

@@ -168,7 +168,7 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
         self.titleText.text = tab.displayTitle
 
         if tab.displayTitle.isEmpty {
-            if tab.webView?.url?.isLocalUtility ?? true {
+            if tab.webView?.url?.isInternalScheme ?? true {
                 self.titleText.text = Strings.AppMenuNewTabTitleString
             } else {
                 self.titleText.text = tab.webView?.url?.absoluteDisplayString

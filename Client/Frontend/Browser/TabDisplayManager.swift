@@ -270,7 +270,7 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
         // If not, just create an empty `NSItemProvider` so we can create a drag item with the
         // `Tab` so that it can at still be re-ordered.
         var itemProvider: NSItemProvider
-        if url != nil, !(url?.isLocal ?? true) {
+        if url != nil, !(url?.isInternalScheme ?? true) {
             itemProvider = NSItemProvider(contentsOf: url) ?? NSItemProvider()
         } else {
             itemProvider = NSItemProvider()

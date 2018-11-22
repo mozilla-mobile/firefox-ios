@@ -43,8 +43,8 @@ a {
     text-decoration: none;
 }
 
+/* Margins between the li and buttons below it will not be collapsed. Remove the bottom margin here. */
 #errorShortDesc {
-    /* Margins between the li and buttons below it won't be collapsed. Remove the bottom margin here. */
     margin: 20px 0 0;
 }
 

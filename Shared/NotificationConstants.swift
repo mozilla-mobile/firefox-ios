@@ -17,8 +17,7 @@ extension Notification.Name {
 
     // Fired when the user finishes navigating to a page and the location has changed
     public static let OnLocationChange = Notification.Name("OnLocationChange")
-    public static let DidRestoreSession = Notification.Name("DidRestoreSession")
-
+  
     // MARK: Notification UserInfo Keys
     public static let UserInfoKeyHasSyncableAccount = Notification.Name("UserInfoKeyHasSyncableAccount")
 

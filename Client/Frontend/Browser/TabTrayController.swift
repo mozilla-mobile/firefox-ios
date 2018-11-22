@@ -421,7 +421,7 @@ extension TabTrayController: UITextFieldDelegate {
     func searchTabs(for searchString: String) {
         let currentTabs = self.tabDisplayManager.isPrivate ? self.tabManager.privateTabs : self.tabManager.normalTabs
         let filteredTabs = currentTabs.filter { tab in
-            if let url = tab.url, url.isLocal {
+            if let url = tab.url, url.isInternalScheme {
                 return false
             }
             let title = tab.title ?? tab.lastTitle
