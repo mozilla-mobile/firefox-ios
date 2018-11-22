@@ -12,7 +12,8 @@ class TranslationToastHandler: TabEventHandler {
     private var tabObservers: TabObservers!
     private let prefs: Prefs
 
-    private var serviceURL = "https://translate.google.com/translate"
+    // pageLanguage, myLanguage, urlencoded URL
+    private var serviceURLTemplate = "https://translate.google.com/translate?hl=%2$@&sl=%1$@&tl=en&u=%3$@"
     private var serviceDestinationURL = "https://translate.googleusercontent.com/translate_c"
 
     private let snackBarClassIdentifier = "translationPrompt"
@@ -29,7 +30,9 @@ class TranslationToastHandler: TabEventHandler {
 
     func tab(_ tab: Tab, didDeriveMetadata metadata: DerivedMetadata) {
         // dismiss the previous translation snackbars.
-        tab.expireSnackbars(withClass: snackBarClassIdentifier)
+        DispatchQueue.main.async {
+            tab.expireSnackbars(withClass: self.snackBarClassIdentifier)
+        }
 
         guard let myLanguage = Locale.autoupdatingCurrent.languageCode,
             let pageLanguage = metadata.language else {
@@ -73,7 +76,7 @@ class TranslationToastHandler: TabEventHandler {
                 return
         }
 
-        let translationURL = String(format: "\(serviceURL)?hl=%2$@&sl=%1$@&tl=en&u=%3$@",
+        let translationURL = String(format: serviceURLTemplate,
                              pageLanguage,
                              myLanguage,
                              urlQueryParam)
