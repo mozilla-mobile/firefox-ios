@@ -282,7 +282,6 @@ struct UIConstants {
         static let labelBlockFonts = NSLocalizedString("Settings.toggleBlockFonts", value: "Block Web fonts", comment: "Label for toggle on main screen")
         static let labelSendAnonymousUsageData = NSLocalizedString("Settings.toggleSendUsageData", value: "Send usage data", comment: "Label for Send Usage Data toggle on main screen")
         static let detailTextSendUsageData = NSLocalizedString("Settings.detailTextSendUsageData", value: "Mozilla strives to collect only what we need to provide and improve %@ for everyone.", comment: "Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar)")
-        static let sumoTopicUsageData = NSLocalizedString("Settings.usageData", value: "usage-data", comment: "URL for the learn more of the send usage data toggle")
         static let openCancel = NSLocalizedString("Open.Cancel", value: "Cancel", comment: "Label in share alert to cancel the alert")
         static let openFirefox = NSLocalizedString("Open.Firefox", value: "Firefox (Private Browsing)", comment: "Label in share alert to open the URL in Firefox")
         static let openMore = NSLocalizedString("Open.More", value: "More", comment: "Label in share alert to open the full system share menu")
@@ -449,6 +448,7 @@ struct UIConstants {
         static let sumoTopicWhatsNew = "whats-new-focus-ios-8"
         static let klarSumoTopicWhatsNew = "whats-new-firefox-klar-ios-version-8"
         static let sumoTopicSearchSuggestion = "search-suggestions-focus-ios"
+        static let sumoTopicUsageData = "usage-data"
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
     }
