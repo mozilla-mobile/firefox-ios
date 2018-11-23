@@ -48,7 +48,9 @@ let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
 let DisplaySettings = "DisplaySettings"
+let TranslationSettings = "TranslationSettings"
 let HomePanel_Library = "HomePanel_Library"
+let TranslatePageMenu = "TranslatePageMenu"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -61,6 +63,7 @@ let allSettingsScreens = [
     HomePageSettings,
     OpenWithSettings,
     DisplaySettings,
+    TranslationSettings,
 
     LoginsSettings,
     PasscodeSettings,
@@ -96,6 +99,15 @@ let HomePanel_Bookmarks = "HomePanel.Bookmarks.1"
 let HomePanel_History = "HomePanel.History.2"
 let HomePanel_ReadingList = "HomePanel.ReadingList.3"
 let HomePanel_Downloads = "HomePanel.Downloads.4"
+
+let allHomePanels = [
+    HomePanelsScreen,
+    HomePanel_TopSites,
+    HomePanel_Bookmarks,
+    HomePanel_History,
+    HomePanel_ReadingList,
+    HomePanel_Downloads
+]
 
 class Action {
     static let LoadURL = "LoadURL"
@@ -174,6 +186,8 @@ class Action {
     static let SelectDarkMode = "SelectDarkMode"
     static let SelectLightMode = "SelectLightMode"
     static let SelectAutomatically = "SelectAutomatically"
+
+    static let SelectTranslateThisPage = "SelectTranslateThisPage"
 }
 
 private var isTablet: Bool {
@@ -216,6 +230,8 @@ class FxUserState: MMUserState {
     var trackingProtectionPerTabEnabled = true // TP can be shut off on a per-tab basis
     var trackingProtectionSettingOnNormalMode = true
     var trackingProtectionSettingOnPrivateMode = true
+
+    var localeIsExpectedDifferent = false
 }
 
 fileprivate let defaultURL = "https://www.mozilla.org/en-US/book/"
@@ -493,6 +509,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["Homepage"], to: HomePageSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
+        screenState.tap(table.cells["TranslationOption"], to: TranslationSettings)
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
         screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
@@ -517,6 +534,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.SelectAutomatically) { userState in
             app.switches["DisplaySwitchValue"].tap()
         }
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(TranslationSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 
@@ -833,6 +854,19 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
             userState.isPrivate = !userState.isPrivate
         }
+
+        screenState.noop(to: TranslatePageMenu, if: "localeIsExpectedDifferent == true")
+    }
+
+    map.addScreenState(TranslatePageMenu) { screenState in
+        screenState.onEnterWaitFor(element: app.buttons["TranslationPrompt.doTranslate"])
+
+        screenState.backAction = {
+            app.buttons["TranslationPrompt.dontTranslate"].tap()
+        }
+
+        screenState.tap(app.buttons["TranslationPrompt.doTranslate"], forAction: Action.SelectTranslateThisPage, transitionTo: WebPageLoading)
+        screenState.dismissOnUse = true
     }
 
     map.addScreenState(ReloadLongPressMenu) { screenState in

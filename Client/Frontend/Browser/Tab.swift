@@ -486,6 +486,10 @@ class Tab: NSObject {
         bars.reversed().filter({ !$0.shouldPersist(self) }).forEach({ removeSnackbar($0) })
     }
 
+    func expireSnackbars(withClass snackbarClass: String) {
+        bars.reversed().filter({ $0.snackbarClassIdentifier == snackbarClass }).forEach({ removeSnackbar($0) })
+    }
+
     func setScreenshot(_ screenshot: UIImage?, revUUID: Bool = true) {
         self.screenshot = screenshot
         if revUUID {

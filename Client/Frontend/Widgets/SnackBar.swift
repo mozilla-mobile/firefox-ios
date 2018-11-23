@@ -67,6 +67,7 @@ class SnackButton: UIButton {
 }
 
 class SnackBar: UIView {
+    let snackbarClassIdentifier: String
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -108,9 +109,9 @@ class SnackBar: UIView {
     // The Constraint for the bottom of this snackbar. We use this to transition it
     var bottom: Constraint?
 
-    init(text: String, img: UIImage?) {
+    init(text: String, img: UIImage?, snackbarClassIdentifier: String? = nil) {
+        self.snackbarClassIdentifier = snackbarClassIdentifier ?? text
         super.init(frame: .zero)
-
         imageView.image = img ?? UIImage(named: "defaultFavicon")
         textLabel.text = text
         setup()
