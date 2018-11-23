@@ -77,8 +77,14 @@ class DocumentServicesHelper: TabEventHandler {
         }
 
         let derived = DerivedMetadata.fromDictionary(dict)
-        log.info("DocumentServices returned = \(derived)")
-        TabEvent.post(.didDeriveMetadata(derived), for: tab)
+
+        // XXX we came from the main thread (.PageMedataParser) and we're posting
+        // to the main thread for most of our use cases.
+        // NotificationCenter is deadlocked when we do that directly, so
+        // post to NotificationCenter indirectly.
+        DispatchQueue.global().async {
+            TabEvent.post(.didDeriveMetadata(derived), for: tab)
+        }
     }
 }
 

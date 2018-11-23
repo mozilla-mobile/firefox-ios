@@ -15,9 +15,8 @@ class TranslationToastHandler: TabEventHandler {
     private let setting: TranslationServices
 
     init(_ prefs: Prefs) {
-        self.prefs = prefs
         self.setting = TranslationServices(prefs: prefs)
-        tabObservers = registerFor(.didDeriveMetadata) // XXX this should be on queue: .main, but this causes deadlock.
+        tabObservers = registerFor(.didDeriveMetadata, queue: .main)
     }
 
     deinit {
@@ -26,9 +25,7 @@ class TranslationToastHandler: TabEventHandler {
 
     func tab(_ tab: Tab, didDeriveMetadata metadata: DerivedMetadata) {
         // dismiss the previous translation snackbars.
-        DispatchQueue.main.async {
-            tab.expireSnackbars(withClass: self.snackBarClassIdentifier)
-        }
+        tab.expireSnackbars(withClass: self.snackBarClassIdentifier)
 
         guard setting.translateOnOff else {
             return
@@ -44,9 +41,7 @@ class TranslationToastHandler: TabEventHandler {
         }
 
         if myLanguage != pageLanguage {
-            DispatchQueue.main.async { // XXX this should be on already be on .main
-                self.promptTranslation(tab, from: pageLanguage, to: myLanguage)
-            }
+            self.promptTranslation(tab, from: pageLanguage, to: myLanguage)
         }
     }
 
