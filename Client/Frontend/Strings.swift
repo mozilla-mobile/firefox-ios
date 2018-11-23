@@ -635,7 +635,7 @@ extension Strings {
     public static let SettingTranslateSnackBarSectionFooter = NSLocalizedString("Settings.TranslateSnackBar.SectionFooter", value: "The web page language is detected on the device, and a translation from a remote service is offered.", comment: "Translation settings footer describing how language detection and translation happens.")
     public static let SettingTranslateSnackBarTitle = NSLocalizedString("Settings.TranslateSnackBar.Title", value: "Translation", comment: "Title in main app settings for Translation toast settings")
     public static let SettingTranslateSnackBarSwitchTitle = NSLocalizedString("Settings.TranslateSnackBar.SwitchTitle", value: "Offer to translate pages", comment: "Switch to choose if the language of a page is detected and offer to translate.")
-    public static let SettingTranslateSnackBarSwitchSubtitle = NSLocalizedString("Settings.TranslateSnackBar.SwitchSubtitle", value: "Detect the language of the web page and offer to translate if not this locale", comment: "Switch to choose if the language of a page is detected and offer to translate.")
+    public static let SettingTranslateSnackBarSwitchSubtitle = NSLocalizedString("Settings.TranslateSnackBar.SwitchSubtitle", value: "Detect the language of the web page and offer to translate", comment: "Switch to choose if the language of a page is detected and offer to translate.")
 }
 
 // Display Theme
