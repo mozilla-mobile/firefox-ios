@@ -244,4 +244,14 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         app.tables["Bookmarks List"].cells.element(boundBy: 0).swipeLeft()
         snapshot("24BookmarksListTableRowMenu-01")
     }
+
+    func test25TranslationSnackbar() {
+        userState.localeIsExpectedDifferent = true
+        let lang = "ar" == Locale.autoupdatingCurrent.languageCode ? "zh-CN" : "ar"
+
+        navigator.openURL("https://mozilla.org/\(lang)/about/manifesto")
+        navigator.goto(TranslatePageMenu)
+
+        snapshot("25TranslationSnackbar-01")
+    }
 }
