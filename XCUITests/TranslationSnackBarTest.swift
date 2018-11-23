@@ -12,4 +12,8 @@ class TranslationSnackBarTest: BaseTestCase {
         navigator.goto(TranslatePageMenu)
         waitForExistence(app.buttons["TranslationPrompt.doTranslate"])
     }
+
+    func testSetting() {
+        navigator.goto(TranslationSettings)
+    }
 }

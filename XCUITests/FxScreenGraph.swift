@@ -48,6 +48,7 @@ let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
 let DisplaySettings = "DisplaySettings"
+let TranslationSettings = "TranslationSettings"
 let HomePanel_Library = "HomePanel_Library"
 let TranslatePageMenu = "TranslatePageMenu"
 
@@ -62,6 +63,7 @@ let allSettingsScreens = [
     HomePageSettings,
     OpenWithSettings,
     DisplaySettings,
+    TranslationSettings,
 
     LoginsSettings,
     PasscodeSettings,
@@ -97,6 +99,15 @@ let HomePanel_Bookmarks = "HomePanel.Bookmarks.1"
 let HomePanel_History = "HomePanel.History.2"
 let HomePanel_ReadingList = "HomePanel.ReadingList.3"
 let HomePanel_Downloads = "HomePanel.Downloads.4"
+
+let allHomePanels = [
+    HomePanelsScreen,
+    HomePanel_TopSites,
+    HomePanel_Bookmarks,
+    HomePanel_History,
+    HomePanel_ReadingList,
+    HomePanel_Downloads
+]
 
 class Action {
     static let LoadURL = "LoadURL"
@@ -498,6 +509,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["Homepage"], to: HomePageSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
+        screenState.tap(table.cells["TranslationOption"], to: TranslationSettings)
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
         screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
@@ -522,6 +534,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.SelectAutomatically) { userState in
             app.switches["DisplaySwitchValue"].tap()
         }
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(TranslationSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
     }
 
