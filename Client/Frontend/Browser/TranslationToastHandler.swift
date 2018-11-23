@@ -18,9 +18,11 @@ class TranslationToastHandler: TabEventHandler {
 
     private let snackBarClassIdentifier = "translationPrompt"
 
+    private let setting: TranslationServices
+
     init(_ prefs: Prefs) {
         self.prefs = prefs
-
+        self.setting = TranslationServices(prefs: prefs)
         tabObservers = registerFor(.didDeriveMetadata) // XXX this should be on queue: .main, but this causes deadlock.
     }
 
@@ -34,12 +36,16 @@ class TranslationToastHandler: TabEventHandler {
             tab.expireSnackbars(withClass: self.snackBarClassIdentifier)
         }
 
+        guard setting.translateOnOff else {
+            return
+        }
+
         guard let myLanguage = Locale.autoupdatingCurrent.languageCode,
             let pageLanguage = metadata.language else {
                 return
         }
 
-        guard let url = tab.url, !url.absoluteString.starts(with: serviceDestinationURL) else {
+        guard let url = tab.url, !url.absoluteString.starts(with: setting.useTranslationService.destinationURLPrefix) else {
             return
         }
 
@@ -55,7 +61,8 @@ class TranslationToastHandler: TabEventHandler {
         let localizedMyLanguage = locale.localizedString(forLanguageCode: myLanguage) ?? myLanguage
         let localizedPageLanguage = locale.localizedString(forLanguageCode: pageLanguage) ?? pageLanguage
 
-        let promptMessage = String(format: Strings.TranslateSnackBarPrompt, localizedPageLanguage, localizedMyLanguage)
+        let service = setting.useTranslationService
+        let promptMessage = String(format: Strings.TranslateSnackBarPrompt, localizedPageLanguage, localizedMyLanguage, service.name)
         let snackBar = SnackBar(text: promptMessage, img: UIImage(named: "search"), snackbarClassIdentifier: snackBarClassIdentifier)
         let cancel = SnackButton(title: Strings.TranslateSnackBarNo, accessibilityIdentifier: "TranslationPrompt.dontTranslate", bold: false) { bar in
             tab.removeSnackbar(bar)
@@ -76,7 +83,8 @@ class TranslationToastHandler: TabEventHandler {
                 return
         }
 
-        let translationURL = String(format: serviceURLTemplate,
+        let service = setting.useTranslationService
+        let translationURL = String(format: service.urlTemplate,
                              pageLanguage,
                              myLanguage,
                              urlQueryParam)
