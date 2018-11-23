@@ -120,7 +120,6 @@ class Tab: NSObject {
     }
 
     // Use computed property so @available can be used to guard `noImageMode`.
-    @available(iOS 11, *)
     var noImageMode: Bool {
         get { return _noImageMode }
         set {
@@ -128,13 +127,11 @@ class Tab: NSObject {
                 return
             }
             _noImageMode = newValue
-            let helper = (contentBlocker as? ContentBlockerHelper)
-            helper?.noImageMode(enabled: _noImageMode)
+            contentBlocker?.noImageMode(enabled: _noImageMode)
         }
     }
 
-    // There is no 'available macro' on props, we currently just need to store ownership.
-    var contentBlocker: AnyObject?
+    var contentBlocker: FirefoxTabContentBlocker?
 
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
@@ -169,10 +166,6 @@ class Tab: NSObject {
         self.configuration = configuration
         super.init()
         self.isPrivate = isPrivate
-
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
-            contentBlocker = ContentBlockerHelper(tab: self, profile: profile)
-        }
 
         debugTabCount += 1
     }
@@ -573,6 +566,20 @@ extension Tab: TabWebViewDelegate {
     }
     fileprivate func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String) {
         tabDelegate?.tab(self, didSelectSearchWithFirefoxForSelection: selection)
+    }
+}
+
+extension Tab: ContentBlockerTab {
+    func currentURL() -> URL? {
+        return url
+    }
+
+    func currentWebView() -> WKWebView? {
+        return webView
+    }
+
+    func imageContentBlockingEnabled() -> Bool {
+        return noImageMode
     }
 }
 

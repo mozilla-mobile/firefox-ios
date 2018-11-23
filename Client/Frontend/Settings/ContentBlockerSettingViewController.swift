@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 
-@available(iOS 11.0, *)
 class ContentBlockerSettingsTableView: SettingsTableViewController {
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -42,7 +41,6 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
     }
 }
 
-@available(iOS 11.0, *)
 extension BlockingStrength {
     var settingTitle: String {
         switch self {
@@ -72,7 +70,6 @@ extension BlockingStrength {
     }
 }
 
-@available(iOS 11.0, *)
 class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength
@@ -94,10 +91,10 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
 
     override func generateSettings() -> [SettingSection] {
         let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing)) { _ in
-            ContentBlockerHelper.prefsChanged()
+            TabContentBlocker.prefsChanged()
         }
         let privateBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.PrivateBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInPrivateBrowsing)) { _ in
-            ContentBlockerHelper.prefsChanged()
+            TabContentBlocker.prefsChanged()
         }
 
         let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
@@ -107,7 +104,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
             }, onChanged: {
                 self.currentBlockingStrength = option
                 self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
-                ContentBlockerHelper.prefsChanged()
+                TabContentBlocker.prefsChanged()
                 self.tableView.reloadData()
                 LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue])
                 UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockingConfig.Prefs.StrengthKey, extras: ["to": option.rawValue])

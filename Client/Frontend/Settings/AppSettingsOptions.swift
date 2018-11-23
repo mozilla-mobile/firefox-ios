@@ -835,7 +835,6 @@ class TouchIDPasscodeSetting: Setting {
     }
 }
 
-@available(iOS 11, *)
 class ContentBlockerSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!

@@ -2,10 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-// This file is largely verbatim from Focus iOS (Blockzilla/Lib/TrackingProtection).
-// The preload and postload js files are unmodified from Focus.
-
-import Shared
 import Deferred
 
 struct TPPageStats {
@@ -40,13 +36,13 @@ struct TPPageStats {
     }
 }
 
-@available(iOS 11, *)
 class TPStatsBlocklistChecker {
     static let shared = TPStatsBlocklistChecker()
 
+    // Initialized async, is non-nil when ready to be used.
     private var blockLists: TPStatsBlocklists?
 
-    func isBlocked(url: URL, isStrictMode: Bool) -> Deferred<BlocklistName?> {
+    func isBlocked(url: URL, enabledBlocklists: [BlocklistName]) -> Deferred<BlocklistName?> {
         let deferred = Deferred<BlocklistName?>()
 
         guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
@@ -56,11 +52,11 @@ class TPStatsBlocklistChecker {
         }
 
         // Make a copy on the main thread
-        let whitelistRegex = ContentBlockerHelper.whitelistedDomains.domainRegex
+        let whitelistRegex = ContentBlocker.shared.whitelistedDomains.domainRegex
 
         DispatchQueue.global().async {
-            let enabledLists = BlocklistName.forStrictMode(isOn: isStrictMode)
-            deferred.fill(blockLists.urlIsInList(url, whitelistedDomains: whitelistRegex).flatMap { return enabledLists.contains($0) ? $0 : nil })
+            // Return true in the Defered if the blocked url is in a list that is enabled.
+            deferred.fill(blockLists.urlIsInList(url, whitelistedDomains: whitelistRegex).flatMap { return enabledBlocklists.contains($0) ? $0 : nil })
         }
         return deferred
     }
@@ -99,8 +95,7 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression?
     }
 }
 
-@available(iOS 11, *)
-fileprivate class TPStatsBlocklists {
+class TPStatsBlocklists {
     class Rule {
         let regex: NSRegularExpression
         let loadType: LoadType
