@@ -10,12 +10,6 @@ private let log = Logger.browserLogger
 
 class TranslationToastHandler: TabEventHandler {
     private var tabObservers: TabObservers!
-    private let prefs: Prefs
-
-    // pageLanguage, myLanguage, urlencoded URL
-    private var serviceURLTemplate = "https://translate.google.com/translate?hl=%2$@&sl=%1$@&tl=en&u=%3$@"
-    private var serviceDestinationURL = "https://translate.googleusercontent.com/translate_c"
-
     private let snackBarClassIdentifier = "translationPrompt"
 
     private let setting: TranslationServices
