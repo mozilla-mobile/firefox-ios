@@ -229,7 +229,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         return cookie
     }
 
-    @available(iOS 11, *)
     func testClearsTrackingProtectionWhitelist() {
         let wait = expectation(description: "wait for file write")
         ContentBlocker.shared.whitelist(enable: true, url: URL(string: "http://www.mozilla.com")!) {

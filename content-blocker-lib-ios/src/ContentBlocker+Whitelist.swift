@@ -15,7 +15,6 @@ struct WhitelistedDomains {
     private(set) var domainRegex = [NSRegularExpression]()
 }
 
-@available(iOS 11.0, *)
 extension ContentBlocker {
 
     func whitelistFileURL() -> URL? {

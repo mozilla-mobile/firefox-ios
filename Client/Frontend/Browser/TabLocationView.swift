@@ -357,7 +357,7 @@ extension TabLocationView: TabEventHandler {
 
     private func updateBlockerStatus(forTab tab: Tab) {
         assertIsMainThread("UI changes must be on the main thread")
-        guard let blocker = tab.contentBlocker as? TabContentBlocker else { return }
+        guard let blocker = tab.contentBlocker else { return }
         switch blocker.status {
         case .Blocking:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)

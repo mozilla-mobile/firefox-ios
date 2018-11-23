@@ -151,7 +151,6 @@ class CookiesClearable: Clearable {
     }
 }
 
-@available(iOS 11, *)
 class TrackingProtectionClearable: Clearable {
     //@TODO: re-using string because we are too late in cycle to change strings
     var label: String {

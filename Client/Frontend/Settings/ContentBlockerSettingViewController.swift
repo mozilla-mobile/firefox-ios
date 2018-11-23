@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 
-@available(iOS 11.0, *)
 class ContentBlockerSettingsTableView: SettingsTableViewController {
     // The first section header gets a More Info link
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -42,7 +41,6 @@ class ContentBlockerSettingsTableView: SettingsTableViewController {
     }
 }
 
-@available(iOS 11.0, *)
 extension BlockingStrength {
     var settingTitle: String {
         switch self {
@@ -72,7 +70,6 @@ extension BlockingStrength {
     }
 }
 
-@available(iOS 11.0, *)
 class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
     let prefs: Prefs
     var currentBlockingStrength: BlockingStrength

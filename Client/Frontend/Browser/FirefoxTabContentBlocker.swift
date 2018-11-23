@@ -29,7 +29,6 @@ enum BlockingStrength: String {
 /**
  Firefox-specific implementation of tab content blocking.
  */
-@available(iOS 11.0, *)
 class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
     let userPrefs: Prefs
 
@@ -102,7 +101,7 @@ extension FirefoxTabContentBlocker {
     }
 
     static func isTrackingProtectionEnabled(tabManager: TabManager) -> Bool {
-        guard let blocker = tabManager.selectedTab?.contentBlocker as? FirefoxTabContentBlocker else { return false }
+        guard let blocker = tabManager.selectedTab?.contentBlocker else { return false }
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         return isPrivate ? blocker.isEnabledInPrivateBrowsing : blocker.isEnabledInNormalBrowsing
     }

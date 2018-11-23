@@ -5,7 +5,6 @@
 import WebKit
 import Deferred
 
-@available(iOS 11, *)
 extension TabContentBlocker {
     func clearPageStats() {
         stats = TPPageStats()

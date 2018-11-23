@@ -332,7 +332,7 @@ extension PhotonActionSheetProtocol {
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlocking, iconString: "menu-TrackingProtection") { _ in
             // When TP is off for the tab tapping enable in this menu should turn it back on for the Tab.
-            if let blocker = tab.contentBlocker as? FirefoxTabContentBlocker, blocker.isUserEnabled == false {
+            if let blocker = tab.contentBlocker, blocker.isUserEnabled == false {
                 blocker.isUserEnabled = true
             } else {
                 FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs, tabManager: self.tabManager)
@@ -349,7 +349,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionEnabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        guard let blocker = tab.contentBlocker as? TabContentBlocker, let currentURL = tab.url else {
+        guard let blocker = tab.contentBlocker, let currentURL = tab.url else {
             return []
         }
 
@@ -386,7 +386,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     func getTrackingMenu(for tab: Tab, presentingOn urlBar: URLBarView) -> [PhotonActionSheetItem] {
-        guard let blocker = tab.contentBlocker as? TabContentBlocker else {
+        guard let blocker = tab.contentBlocker else {
             return []
         }
 
@@ -420,7 +420,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     func getTrackingSubMenu(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        guard let blocker = tab.contentBlocker as? TabContentBlocker else {
+        guard let blocker = tab.contentBlocker else {
             return []
         }
         switch blocker.status {
@@ -445,7 +445,7 @@ extension PhotonActionSheetProtocol {
             tab.toggleDesktopSite()
         }
 
-        if let helper = tab.contentBlocker as? FirefoxTabContentBlocker {
+        if let helper = tab.contentBlocker {
             let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { action in

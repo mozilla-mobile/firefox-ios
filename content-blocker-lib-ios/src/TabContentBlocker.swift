@@ -16,7 +16,6 @@ protocol ContentBlockerTab: class {
     func imageContentBlockingEnabled() -> Bool
 }
 
-@available(iOS 11.0, *)
 class TabContentBlocker {
     weak var tab: ContentBlockerTab?
 

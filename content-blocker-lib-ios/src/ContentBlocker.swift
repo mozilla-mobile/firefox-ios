@@ -22,7 +22,6 @@ enum BlocklistName: String {
     }
 }
 
-@available(iOS 11.0, *)
 enum BlockerStatus: String {
     case Disabled
     case NoBlockedURLs // When TP is enabled but nothing is being blocked
@@ -35,7 +34,6 @@ struct NoImageModeDefaults {
     static let ScriptName = "images"
 }
 
-@available(iOS 11.0, *)
 class ContentBlocker {
     var whitelistedDomains = WhitelistedDomains()
     let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
@@ -132,7 +130,6 @@ class ContentBlocker {
 // On app boot, we need to check if the ruleStore's data is out-of-date, or if the names of the rule files
 // no longer match. Finally, any JSON rule files that aren't in the ruleStore need to be compiled and stored in the
 // ruleStore.
-@available(iOS 11, *)
 extension ContentBlocker {
     private func loadJsonFromBundle(forResource file: String, completion: @escaping (_ jsonString: String) -> Void) {
         DispatchQueue.global().async {

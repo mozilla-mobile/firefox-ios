@@ -37,7 +37,6 @@ func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
         .perform((grey_tap()))
 }
 
-@available(iOS 11.0, *)
 class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
     private var webRoot: String!
@@ -80,7 +79,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     }
 
     func tabDidChangeContentBlockerStatus(_ tab: Tab) {
-        stats = (tab.contentBlocker as! TabContentBlocker).stats
+        stats = tab.contentBlocker.stats
 
         if (stats.total == 0) {
             statsZero?.fulfill()
