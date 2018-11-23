@@ -995,6 +995,26 @@ class NewTabPageSetting: Setting {
     }
 }
 
+class HomeSetting: Setting {
+    let profile: Profile
+
+    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+
+    override var accessibilityIdentifier: String? { return "Home" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: Strings.AppMenuOpenHomePageTitleString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = HomePageSettingViewController(prefs: profile.prefs)
+        viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 @available(iOS 12.0, *)
 class SiriPageSetting: Setting {
     let profile: Profile

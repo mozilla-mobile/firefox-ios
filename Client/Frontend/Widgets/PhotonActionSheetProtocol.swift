@@ -64,10 +64,11 @@ extension PhotonActionSheetProtocol {
         }
 
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
-            if HomePageHelper(prefs: self.profile.prefs).isHomePageAvailable {
-                HomePageHelper(prefs: self.profile.prefs).openHomePage(tab)
-            } else {
-                tab.loadRequest(PrivilegedRequest(url: HomePanelType.topSites.localhostURL) as URLRequest)
+            let page = NewTabAccessors.getHomePage(self.profile.prefs)
+            if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
+                tab.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
+            } else if let homePanelURL = page.url {
+                tab.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
             }
         }
 
