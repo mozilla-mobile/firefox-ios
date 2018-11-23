@@ -25,6 +25,7 @@ let SyncSettings = "SyncSettings"
 let FxASigninScreen = "FxASigninScreen"
 let FxCreateAccount = "FxCreateAccount"
 let HomeSettings = "HomeSettings"
+let SiriSettings = "SiriSettings"
 let PasscodeSettings = "PasscodeSettings"
 let PasscodeIntervalSettings = "PasscodeIntervalSettings"
 let SearchSettings = "SearchSettings"
@@ -166,6 +167,8 @@ class Action {
     static let SelectHomeAsCustomURL = "SelectHomeAsCustomURL"
 
     static let GoToHomePage = "GoToHomePage"
+
+    static let OpenSiriFromSettings = "OpenSiriFromSettings"
 
     static let AcceptClearPrivateData = "AcceptClearPrivateData"
     static let AcceptClearAllWebsiteData = "AcceptClearAllWebsiteData"
@@ -516,6 +519,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
         screenState.tap(table.cells["TranslationOption"], to: TranslationSettings)
+        screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
         screenState.tap(table.cells["Logins"], to: LockedLoginsSettings, if: "passcode != nil")
@@ -550,6 +554,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(SearchSettings) { screenState in
         let table = app.tables.element(boundBy: 0)
         screenState.tap(table.cells["customEngineViewButton"], to: AddCustomSearchSettings)
+        screenState.backAction = navigationControllerBackAction
+    }
+
+    map.addScreenState(SiriSettings) { screenState in
+        screenState.gesture(forAction: Action.OpenSiriFromSettings) { userState in
+            app.staticTexts["Open New Tab"].tap()
+        }
         screenState.backAction = navigationControllerBackAction
     }
 

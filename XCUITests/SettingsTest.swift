@@ -23,4 +23,9 @@ class SettingsTest: BaseTestCase {
         let numTabs = app.buttons["Show Tabs"].value
         XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
     }
+
+    func testOpenSiriOption() {
+        navigator.performAction(Action.OpenSiriFromSettings)
+        waitForExistence(app.buttons["Start recording"], timeout: 5)
+    }
 }
