@@ -157,7 +157,6 @@ class ErrorPageHandler: InternalSchemeResponse {
         }
 
         var asset = Bundle.main.path(forResource: "NetError", ofType: "html")
-        var css = Bundle.main.path(forResource: "NetError", ofType: "css")
         var variables = [
             "error_code": "\(errCode)",
             "error_title": errDescription,
@@ -186,7 +185,6 @@ class ErrorPageHandler: InternalSchemeResponse {
             }
 
             asset = Bundle.main.path(forResource: "CertError", ofType: "html")
-            css = Bundle.main.path(forResource: "CertError", ofType: "css")
             actions = "<button onclick='history.back()'>\(Strings.ErrorPagesGoBackButton)</button>"
             variables["error_title"] = Strings.ErrorPagesCertWarningTitle
             variables["cert_error"] = certError
@@ -209,11 +207,6 @@ class ErrorPageHandler: InternalSchemeResponse {
 
         variables.forEach { (arg, value) in
             html = html.replacingOccurrences(of: "%\(arg)%", with: value)
-        }
-
-        if let css = css, let cssString = try? String(contentsOfFile: css).replacingOccurrences(of: "\n", with: " ") {
-            let jsString = "var style = document.createElement('style'); style.innerHTML = '\(cssString)'; document.head.appendChild(style);"
-            html = html.replacingOccurrences(of: "%insert_css%", with: jsString)
         }
 
         guard let data = html.data(using: .utf8) else { return nil }

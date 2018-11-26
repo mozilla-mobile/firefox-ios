@@ -32,7 +32,8 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
             return false
         }
 
-        if url.absoluteString.contains("local/reader-mode/") {
+        // Handle resources from internal pages. For example 'internal://local/errorpage-resource/CertError.css'.
+        if ["/reader-mode/", "/errorpage-resource/"].contains(where: { url.path.hasPrefix($0) }) {
             let path = url.lastPathComponent
             if let res = Bundle.main.path(forResource: path, ofType: nil), let str = try? String(contentsOfFile: res, encoding: .utf8), let data = str.data(using: .utf8) {
                 urlSchemeTask.didReceive(URLResponse(url: url, mimeType: nil, expectedContentLength: -1, textEncodingName: nil))
