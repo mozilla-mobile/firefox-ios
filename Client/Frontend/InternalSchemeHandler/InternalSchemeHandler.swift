@@ -26,14 +26,21 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
     // Responders are looked up based on the path component, for instance responder["about/license"] is used for 'internal://local/about/license'
     static var responders = [String: InternalSchemeResponse]()
 
-    // Unprivileged internal:// urls are probably resources on the page. Change to https:// and try download them.
+    // Unprivileged internal:// urls are probably resources on the page.
+    // Load from the app bundle or try download as https:// scheme.
     func downloadResource(urlSchemeTask: WKURLSchemeTask) -> Bool {
         guard let https = urlSchemeTask.request.url?.absoluteString.replacingOccurrences(of: "internal://", with: "https://"), let url = URL(string: https) else {
             return false
         }
 
+        let allowedInternalResources = [
+            "/errorpage-resource/NetError.css",
+            "/errorpage-resource/CertError.css",
+           // "/reader-mode/..."
+        ]
+
         // Handle resources from internal pages. For example 'internal://local/errorpage-resource/CertError.css'.
-        if ["/reader-mode/", "/errorpage-resource/"].contains(where: { url.path.hasPrefix($0) }) {
+        if allowedInternalResources.contains(where: { url.path == $0 }) {
             let path = url.lastPathComponent
             if let res = Bundle.main.path(forResource: path, ofType: nil), let str = try? String(contentsOfFile: res, encoding: .utf8), let data = str.data(using: .utf8) {
                 urlSchemeTask.didReceive(URLResponse(url: url, mimeType: nil, expectedContentLength: -1, textEncodingName: nil))
