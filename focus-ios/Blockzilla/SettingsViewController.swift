@@ -60,9 +60,6 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
             }
         }
 
-        textLabel?.numberOfLines = 0
-        textLabel?.text = " "
-
         contentView.addSubview(accessoryLabel)
         contentView.addSubview(newLabel)
         contentView.addSubview(spacerView)
@@ -82,7 +79,7 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
 
         spacerView.snp.makeConstraints { make in
             make.top.bottom.leading.equalToSuperview()
-            make.trailing.equalTo(textLabel!.snp.leading)
+            make.width.equalTo(UIConstants.layout.settingsFirstTitleOffset)
         }
 
         newLabel.snp.makeConstraints { make in
