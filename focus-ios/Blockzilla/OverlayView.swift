@@ -203,7 +203,7 @@ class OverlayView: UIView {
         }
     }
 
-    func setSearchQuery(suggestions: [String], hideFindInPage: Bool) {
+    func setSearchQuery(suggestions: [String], hideFindInPage: Bool, hideAddToComplete: Bool) {
         searchQuery = suggestions[0]
         searchSuggestions = searchQuery.isEmpty ? [] : suggestions
         let searchSuggestionsPromptHidden = UserDefaults.standard.bool(forKey: SearchSuggestionsPromptView.respondedToSearchSuggestionsPrompt) || searchQuery.isEmpty
@@ -222,7 +222,7 @@ class OverlayView: UIView {
                 self.updateSearchSuggestionsPrompt(hidden: searchSuggestionsPromptHidden)
 
                 // Hide the autocomplete button on home screen and when the user is typing
-                self.addToAutocompleteButton.animateHidden(self.searchButton.isHidden == self.searchQuery.isEmpty, duration: 0)
+                self.addToAutocompleteButton.animateHidden(hideAddToComplete, duration: 0)
                 self.topBorder.backgroundColor =  searchSuggestionsPromptHidden ? UIConstants.Photon.Grey90.withAlphaComponent(0.4) : UIColor(rgb: 0x42455A)
                 self.updateSearchButtons()
 
@@ -322,15 +322,15 @@ class OverlayView: UIView {
     }
 
     func dismiss() {
-        setSearchQuery(suggestions: [""], hideFindInPage: true)
+        setSearchQuery(suggestions: [""], hideFindInPage: true, hideAddToComplete: true)
         self.isUserInteractionEnabled = false
         animateHidden(true, duration: UIConstants.layout.overlayAnimationDuration) {
             self.isUserInteractionEnabled = true
         }
     }
 
-    func present() {
-        setSearchQuery(suggestions: [""], hideFindInPage: true)
+    func present(isOnHomeView: Bool) {
+        setSearchQuery(suggestions: [""], hideFindInPage: true, hideAddToComplete: false || isOnHomeView)
         self.isUserInteractionEnabled = false
         copyButton.isHidden = false
         addToAutocompleteButton.animateHidden(currentURL.isEmpty, duration: 0)

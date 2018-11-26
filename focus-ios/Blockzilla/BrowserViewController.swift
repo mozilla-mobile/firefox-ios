@@ -798,12 +798,12 @@ extension BrowserViewController: URLBarDelegate {
 
                     if userInputText == trimmedText {
                         let suggestions = suggestions ?? [trimmedText]
-                        self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty)
+                        self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty, hideAddToComplete: true)
                     }
                 })
             }
         } else {
-            overlayView.setSearchQuery(suggestions: [trimmedText], hideFindInPage: isOnHomeView || text.isEmpty)
+            overlayView.setSearchQuery(suggestions: [trimmedText], hideFindInPage: isOnHomeView || text.isEmpty, hideAddToComplete: true)
         }
     }
 
@@ -872,12 +872,12 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidFocus(_ urlBar: URLBar) {
-        overlayView.present()
+        let isOnHomeView = homeView != nil
+        overlayView.present(isOnHomeView: isOnHomeView)
         toggleURLBarBackground(isBright: false)
     }
 
     func urlBarDidActivate(_ urlBar: URLBar) {
-
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
             self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
