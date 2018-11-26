@@ -160,13 +160,8 @@ enum NavigationPath {
         rootNav.present(controller, animated: true, completion: nil)
 
         switch settings {
-        case .newTab:
+        case .newTab, .homePage:
             let viewController = NewTabChoiceViewController(prefs: baseSettingsVC.profile.prefs)
-            controller.pushViewController(viewController, animated: true)
-        case .homePage:
-            let viewController = HomePageSettingsViewController()
-            viewController.profile = profile
-            viewController.tabManager = tabManager
             controller.pushViewController(viewController, animated: true)
         case .mailto:
             let viewController = OpenWithSettingsViewController(prefs: profile.prefs)

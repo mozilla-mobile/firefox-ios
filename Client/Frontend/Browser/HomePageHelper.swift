@@ -49,23 +49,4 @@ class HomePageHelper {
         tab.loadRequest(URLRequest(url: url))
     }
 
-    func openHomePage(inTab tab: Tab, presentAlertOn viewController: UIViewController?) {
-        if isHomePageAvailable {
-            openHomePage(tab)
-        } else {
-            setHomePage(toTab: tab, presentAlertOn: viewController)
-        }
-    }
-
-    func setHomePage(toTab tab: Tab, presentAlertOn viewController: UIViewController?) {
-        let alertController = UIAlertController(
-            title: Strings.SetHomePageDialogTitle,
-            message: Strings.SetHomePageDialogMessage,
-            preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogNo, style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: Strings.SetHomePageDialogYes, style: .default) { _ in
-            self.currentURL = tab.url as URL?
-        })
-        viewController?.present(alertController, animated: true, completion: nil)
-    }
 }
