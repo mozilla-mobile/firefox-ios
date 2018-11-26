@@ -37,7 +37,7 @@ class ToolbarTests: BaseTestCase {
         // Navigate to two pages and press back once so that all buttons are enabled in landscape mode.
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
-        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
+        waitForExistence(app.webViews.links["Mozilla"], timeout: 10)
         let valueMozilla = app.textFields["url"].value as! String
         XCTAssertEqual(valueMozilla, urlValueLong)
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
@@ -58,11 +58,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertTrue(app.buttons["Forward"].isEnabled)
 
         // Open new tab and then go back to previous tab to test navigation buttons.
-        if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
-        } else {
-            waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 5)
-        }
+        waitForTabsButton()
         navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[website1["label"]!])
         app.collectionViews.cells[website1["label"]!].tap()
@@ -74,11 +70,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertTrue(app.buttons["Forward"].isEnabled)
 
         navigator.nowAt(BrowserTab)
-        if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
-        } else {
-            waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 5)
-        }
+        waitForTabsButton()
         navigator.goto(TabTray)
 
         waitForExistence(app.collectionViews.cells[website1["label"]!])
@@ -93,8 +85,10 @@ class ToolbarTests: BaseTestCase {
     func testClearURLTextUsingBackspace() {
         navigator.openURL(website1["url"]!)
         waitUntilPageLoad()
+        waitForTabsButton()
         waitForExistence(app.webViews.links["Mozilla"], timeout: 10)
-        waitForValueContains(app.textFields["url"], value: website1["value"]!)
+        let valueMozilla = app.textFields["url"].value as! String
+        XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Simulate pressing on backspace key should remove the text
         app.textFields["url"].tap()
@@ -114,7 +108,7 @@ class ToolbarTests: BaseTestCase {
         navigator.openURL(website1["url"]!, waitForLoading: true)
         // Adding the waiter right after navigating to the webpage in order to make the test more stable
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
         let pageActionMenuButton = app.buttons["TabLocationView.pageOptionsButton"]
         let statusbarElement = app.statusBars.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         XCTAssertTrue(statusbarElement.isHittable)
@@ -125,7 +119,7 @@ class ToolbarTests: BaseTestCase {
         XCTAssertTrue(pageActionMenuButton.isHittable)
         hiddenStatusbarElement.tap()
         let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
-        waitForExistence(topElement, timeout: 5)
+        waitForExistence(topElement, timeout: 10)
         XCTAssertTrue(topElement.isHittable)
     }
 
