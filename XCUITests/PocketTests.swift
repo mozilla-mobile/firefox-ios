@@ -8,7 +8,8 @@ class PocketTest: BaseTestCase {
 
     func testPocketEnabledByDefault() {
         navigator.goto(NewTabScreen)
-        waitForExistence(app.staticTexts["Recommended by Pocket"])
+        waitForExistence(app.staticTexts["pocketTitle"])
+        XCTAssertEqual(app.staticTexts["pocketTitle"].label, "Trending on Pocket")
 
         // There should be two stories on iPhone and three on iPad
         let numPocketStories = app.collectionViews.containing(.cell, identifier:"TopSitesCell").children(matching: .cell).count-1
@@ -21,11 +22,11 @@ class PocketTest: BaseTestCase {
         // Disable Pocked
         navigator.performAction(Action.TogglePocketInNewTab)
         navigator.goto(NewTabScreen)
-        waitForNoExistence(app.staticTexts["Recommended by Pocket"])
+        waitForNoExistence(app.staticTexts["pocketTitle"])
         // Enable it again
         navigator.performAction(Action.TogglePocketInNewTab)
         navigator.goto(NewTabScreen)
-        waitForExistence(app.staticTexts["Recommended by Pocket"])
+        waitForExistence(app.staticTexts["pocketTitle"])
 
         // Tap on the first Pocket element
         app.collectionViews.containing(.cell, identifier:"TopSitesCell").children(matching: .cell).element(boundBy: 1).tap()
