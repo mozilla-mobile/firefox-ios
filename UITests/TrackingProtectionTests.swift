@@ -79,7 +79,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     }
 
     func tabDidChangeContentBlockerStatus(_ tab: Tab) {
-        stats = tab.contentBlocker.stats
+        stats = tab.contentBlocker!.stats
 
         if (stats.total == 0) {
             statsZero?.fulfill()
