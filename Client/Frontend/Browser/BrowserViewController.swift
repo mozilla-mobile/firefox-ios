@@ -672,7 +672,6 @@ class BrowserViewController: UIViewController {
                 make.bottom.equalTo(self.view).offset(-keyboardHeight)
             } else if let toolbar = self.toolbar {
                 make.bottom.equalTo(toolbar.snp.top)
-                make.bottom.lessThanOrEqualTo(self.view.safeArea.bottom)
             } else {
                 make.bottom.equalTo(self.view)
             }
