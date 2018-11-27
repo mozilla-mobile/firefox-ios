@@ -373,9 +373,7 @@ extension TabTrayController: TabManagerDelegate {
             }
         }
     }
-    func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {}
-    func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {}
-
+   
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
     }

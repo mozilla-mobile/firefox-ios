@@ -373,12 +373,14 @@ extension TabDisplayManager: TabManagerDelegate {
         // any assumption of previous state of the view. Passing a previous tab (and relying on that to redraw the previous tab as unselected) would be making this assumption about the state of the view.
     }
 
-    func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
-        isDragging = false
-    }
-
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
         if isRestoring {
+            return
+        }
+
+        if isDragging {
+            isDragging = false
+            refreshStore()
             return
         }
 
@@ -390,11 +392,14 @@ extension TabDisplayManager: TabManagerDelegate {
         }
     }
 
-    func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {
-        isDragging = false
-    }
-
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+        if isDragging {
+            // All we can do (easily) is make the drag a no-op, and reload the data. Not elegant, but this is an edge case.
+            isDragging = false
+            refreshStore()
+            return
+        }
+
         let type = tabManager.normalTabs.isEmpty ? TabAnimationType.removedLastTab : TabAnimationType.removedNonLastTab
 
         updateWith(animationType: type) { [weak self] in
