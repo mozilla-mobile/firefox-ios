@@ -878,6 +878,7 @@ extension ASFooterView: Themeable {
 class ASHeaderView: UICollectionReusableView {
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
+        titleLabel.accessibilityIdentifier = "pocketTitle"
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         titleLabel.font = ASHeaderViewUX.TextFont
