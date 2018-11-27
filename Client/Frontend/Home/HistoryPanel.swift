@@ -116,6 +116,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         } else {
             syncDetailText = ""
         }
+        reloadData()
     }
 
     // MARK: - Refreshing TableView

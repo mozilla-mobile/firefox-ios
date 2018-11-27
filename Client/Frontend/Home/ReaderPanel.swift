@@ -199,6 +199,11 @@ class ReadingListPanel: UITableViewController, HomePanel {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshReadingList()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -214,16 +219,8 @@ class ReadingListPanel: UITableViewController, HomePanel {
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
         tableView.dragDelegate = self
+        refreshReadingList()
 
-        if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
-            records = newRecords
-
-            // If no records have been added yet, we display the empty state
-            if records?.count == 0 {
-                tableView.isScrollEnabled = false
-                view.addSubview(emptyStateOverlayView)
-            }
-        }
     }
 
     @objc func notificationReceived(_ notification: Notification) {
