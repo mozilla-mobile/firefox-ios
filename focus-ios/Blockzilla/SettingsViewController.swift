@@ -22,6 +22,17 @@ class SettingsTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    internal func setupDynamicFont(forLabels labels: [UILabel], addObserver: Bool = false) {
+        for label in labels {
+            label.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+            label.adjustsFontForContentSizeCategory = true
+        }
+
+        NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: nil, queue: nil) { _ in
+            self.setupDynamicFont(forLabels: labels)
+        }
+    }
 }
 
 class SettingsTableViewAccessoryCell: SettingsTableViewCell {
@@ -47,18 +58,10 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupDynamicFont(forLabels: [newLabel, accessoryLabel], addObserver: true)
+
         newLabel.numberOfLines = 0
         newLabel.lineBreakMode = .byWordWrapping
-        setupDynamicFont()
-
-        if #available(iOS 10.0, *) {
-            newLabel.adjustsFontForContentSizeCategory = true
-            accessoryLabel.adjustsFontForContentSizeCategory = true
-        } else {
-            NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: nil, queue: nil) { _ in
-                self.setupDynamicFont()
-            }
-        }
 
         contentView.addSubview(accessoryLabel)
         contentView.addSubview(newLabel)
@@ -94,11 +97,6 @@ class SettingsTableViewAccessoryCell: SettingsTableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    private func setupDynamicFont() {
-        newLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
-        accessoryLabel.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
-    }
 }
 
 class SettingsTableViewToggleCell: SettingsTableViewCell {
@@ -106,39 +104,40 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
     private let newDetailLabel = SmartLabel()
     private let spacerView = UIView()
     var navigationController: UINavigationController?
-    
+
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, toggle: BlockerToggle) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        setupDynamicFont(forLabels: [newLabel, newDetailLabel], addObserver: true)
+
         newLabel.numberOfLines = 0
         newLabel.text = toggle.label
+
         textLabel?.numberOfLines = 0
         textLabel?.text = toggle.label
-        
+
         newDetailLabel.numberOfLines = 0
-        newDetailLabel.text = toggle.subtitle
         detailTextLabel?.numberOfLines = 0
-        detailTextLabel?.text = nil
-        
+        detailTextLabel?.text = toggle.subtitle
+
         backgroundColor = UIConstants.colors.cellBackground
         newLabel.textColor = UIConstants.colors.settingsTextLabel
         textLabel?.textColor = UIConstants.colors.settingsTextLabel
         layoutMargins = UIEdgeInsets.zero
         newDetailLabel.textColor = UIConstants.colors.settingsDetailLabel
         detailTextLabel?.textColor = UIConstants.colors.settingsDetailLabel
-        
+
         accessoryView = PaddedSwitch(switchView: toggle.toggle)
         selectionStyle = .none
-        
+
         // Add "Learn More" button recognition
         if toggle.label == UIConstants.strings.labelSendAnonymousUsageData || toggle.label == UIConstants.strings.settingsSearchSuggestions {
-            
+
             addSubview(newLabel)
             addSubview(newDetailLabel)
             addSubview(spacerView)
-            
+
             textLabel?.isHidden = true
-            
+
             let selector = toggle.label == UIConstants.strings.labelSendAnonymousUsageData ? #selector(tappedLearnMoreFooter) : #selector(tappedLearnMoreSearchSuggestionsFooter)
             let learnMoreButton = UIButton()
             learnMoreButton.setTitle(UIConstants.strings.learnMore, for: .normal)
@@ -149,53 +148,53 @@ class SettingsTableViewToggleCell: SettingsTableViewCell {
             let tapGesture = UITapGestureRecognizer(target: self, action: selector)
             learnMoreButton.addGestureRecognizer(tapGesture)
             addSubview(learnMoreButton)
-            
+
             // Adjust the offsets to allow the buton to fit
             spacerView.snp.makeConstraints { make in
                 make.top.bottom.leading.equalToSuperview()
                 make.trailing.equalTo(textLabel!.snp.leading)
             }
-            
+
             newLabel.snp.makeConstraints { make in
                 make.leading.equalTo(spacerView.snp.trailing)
                 make.top.equalToSuperview().offset(8)
             }
-            
+
             learnMoreButton.snp.makeConstraints { make in
                 make.leading.equalTo(spacerView.snp.trailing)
                 make.bottom.equalToSuperview().offset(4)
             }
-            
+
             newDetailLabel.snp.makeConstraints { make in
                 let lineHeight = newLabel.font.lineHeight
                 make.top.equalToSuperview().offset(10 + lineHeight)
                 make.leading.equalTo(spacerView.snp.trailing)
                 make.trailing.equalTo(contentView)
-                
+
                 if let learnMoreHeight = learnMoreButton.titleLabel?.font.lineHeight {
                     make.bottom.equalToSuperview().offset(-8 - learnMoreHeight)
                 }
             }
-            
+
             newLabel.setupShrinkage()
             newDetailLabel.setupShrinkage()
         }
     }
-    
+
     private func tappedFooter(topic: String) {
         guard let url = SupportUtils.URLForTopic(topic: topic) else { return }
         let contentViewController = SettingsContentViewController(url: url)
         navigationController?.pushViewController(contentViewController, animated: true)
     }
-    
+
     @objc func tappedLearnMoreFooter(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(topic: UIConstants.strings.sumoTopicUsageData)
     }
-    
+
     @objc func tappedLearnMoreSearchSuggestionsFooter(gestureRecognizer: UIGestureRecognizer) {
         tappedFooter(topic: UIConstants.strings.sumoTopicSearchSuggestion)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -464,7 +463,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             else { return BlockerToggle(label: "Error", setting: SettingsToggle.blockAds)}
         return toggle
     }
-    
+
     private func setupToggleCell(indexPath: IndexPath, navigationController: UINavigationController?) -> SettingsTableViewToggleCell {
         let toggle = toggleForIndexPath(indexPath)
         let cell = SettingsTableViewToggleCell(style: .subtitle, reuseIdentifier: "toggleCell", toggle: toggle)
