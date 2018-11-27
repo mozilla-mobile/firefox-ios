@@ -19,7 +19,7 @@ class HomePageHelper {
 
     var currentURL: URL? {
         get {
-            return HomePageAccessors.getHomePage(prefs)
+            return NewTabHomePageAccessors.getHomePage(prefs)
         }
         set {
             if let url = newValue, url.isWebPage(includeDataURIs: false) && !url.isLocal {
@@ -31,7 +31,7 @@ class HomePageHelper {
     }
 
     var defaultURLString: String? {
-        return HomePageAccessors.getDefaultHomePageString(prefs)
+        return NewTabHomePageAccessors.getDefaultHomePageString(prefs)
     }
 
     var isHomePageAvailable: Bool { return currentURL != nil }

@@ -63,7 +63,7 @@ class UnifiedTelemetry {
         let prefs = profile.prefs
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
             var outputDict = inputDict // make a mutable copy
-            if let newTabChoice = prefs.stringForKey(NewTabAccessors.PrefKey) {
+            if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
                 outputDict["defaultNewTabExperience"] = newTabChoice as AnyObject?
             }
             if let chosenEmailClient = prefs.stringForKey(PrefsKeys.KeyMailToOption) {

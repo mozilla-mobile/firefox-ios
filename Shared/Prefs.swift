@@ -15,6 +15,10 @@ public struct PrefsKeys {
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"
+    public static let HomePageTab = "HomePageTab"
+    public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
+    public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
+
 
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
