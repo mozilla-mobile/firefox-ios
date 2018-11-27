@@ -395,8 +395,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // First section is reserved for Sync/recently closed.
-        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
+        defer {
             tableView.deselectRow(at: indexPath, animated: true)
+        }
+        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
             return indexPath.row == 0 ? navigateToRecentlyClosed() : navigateToSyncedTabs()
         }
 
