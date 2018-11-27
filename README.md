@@ -5,6 +5,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 
 This branch (master)
 -----------
+To sync this fork with the original firefox-ios GIT: https://help.github.com/articles/syncing-a-fork/
 
 This branch is for mainline development that will ship in *v15.0*.
 
