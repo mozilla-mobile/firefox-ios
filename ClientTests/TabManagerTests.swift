@@ -78,14 +78,6 @@ open class MockTabManagerDelegate: TabManagerDelegate {
         testDelegateMethodWithName(#function, tabs: [])
     }
 
-    public func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {
-        testDelegateMethodWithName(#function, tabs: [tab])
-    }
-
-    public func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
-        testDelegateMethodWithName(#function, tabs: [tab])
-    }
-
     public func tabManagerDidAddTabs(_ tabManager: TabManager) {
         testDelegateMethodWithName(#function, tabs: [])
     }
@@ -97,9 +89,7 @@ open class MockTabManagerDelegate: TabManagerDelegate {
 
 class TabManagerTests: XCTestCase {
 
-    let willRemove = MethodSpy(functionName: "tabManager(_:willRemoveTab:)")
     let didRemove = MethodSpy(functionName: "tabManager(_:didRemoveTab:isRestoring:)")
-    let willAdd = MethodSpy(functionName: "tabManager(_:willAddTab:)")
     let didAdd = MethodSpy(functionName: "tabManager(_:didAddTab:isRestoring:)")
 
     var profile: TabManagerMockProfile!
@@ -123,7 +113,7 @@ class TabManagerTests: XCTestCase {
 
     func testAddTabShouldAddOneNormalTab() {
         manager.addDelegate(delegate)
-        delegate.expect([willAdd, didAdd])
+        delegate.expect([didAdd])
         manager.addTab()
         delegate.verify("Not all delegate methods were called")
         XCTAssertEqual(manager.normalTabs.count, 1, "There should be one normal tab")
@@ -131,7 +121,7 @@ class TabManagerTests: XCTestCase {
 
     func testAddTabShouldAddOnePrivateTab() {
         manager.addDelegate(delegate)
-        delegate.expect([willAdd, didAdd])
+        delegate.expect([didAdd])
         manager.addTab(isPrivate: true)
         delegate.verify("Not all delegate methods were called")
         XCTAssertEqual(manager.privateTabs.count, 1, "There should be one private tab")
@@ -160,7 +150,7 @@ class TabManagerTests: XCTestCase {
         manager.selectTab(tab)
         manager.addDelegate(delegate)
         // it wont call didSelect because addTabAndSelect did not pass last removed tab
-        delegate.expect([willRemove, didRemove, willAdd, didAdd, didSelect])
+        delegate.expect([didRemove, didAdd, didSelect])
         manager.removeTabAndUpdateSelectedIndex(tab)
         delegate.verify("Not all delegate methods were called")
     }
@@ -182,7 +172,7 @@ class TabManagerTests: XCTestCase {
             XCTAssertTrue(previous.isPrivate)
             XCTAssertTrue(self.manager.selectedTab == next)
         }
-        delegate.expect([willRemove, didRemove, didSelect])
+        delegate.expect([didRemove, didSelect])
         manager.removeTabAndUpdateSelectedIndex(privateTab)
         delegate.verify("Not all delegate methods were called")
     }
@@ -203,7 +193,7 @@ class TabManagerTests: XCTestCase {
         }
 
         // This test makes sure that a normal tab is always added even when a normal tab is not selected when calling removeAll
-        delegate.expect([willRemove, didRemove, willAdd, didAdd, didSelect, removeAllTabs])
+        delegate.expect([didRemove, didAdd, didSelect, removeAllTabs])
 
         manager.removeTabsWithUndoToast(manager.normalTabs)
         delegate.verify("Not all delegate methods were called")
@@ -324,7 +314,7 @@ class TabManagerTests: XCTestCase {
             XCTAssertEqual(deleteTab, previous)
             XCTAssertEqual(next, newSelectedTab)
         }
-        delegate.expect([willRemove, didRemove, didSelect])
+        delegate.expect([didRemove, didSelect])
         manager.removeTabAndUpdateSelectedIndex(manager.tabs.last!)
 
         delegate.verify("Not all delegate methods were called")
@@ -384,7 +374,7 @@ class TabManagerTests: XCTestCase {
             XCTAssertEqual(deleteTab, previous)
             XCTAssertEqual(next, newSelectedTab)
         }
-        delegate.expect([willRemove, didRemove, didSelect])
+        delegate.expect([didRemove, didSelect])
         manager.removeTabAndUpdateSelectedIndex(manager.tabs.first!)
         delegate.verify("Not all delegate methods were called")
     }
@@ -445,7 +435,7 @@ class TabManagerTests: XCTestCase {
             XCTAssertEqual(last, previous)
             XCTAssert(next != privateOne && !next.isPrivate)
         }
-        delegate.expect([willRemove, didRemove, didSelect])
+        delegate.expect([didRemove, didSelect])
         manager.removeTabAndUpdateSelectedIndex(last)
 
         delegate.verify("Not all delegate methods were called")
@@ -490,7 +480,7 @@ class TabManagerTests: XCTestCase {
             XCTAssertEqual(deleted, previous)
             XCTAssertEqual(next, newSelected)
         }
-        delegate.expect([willRemove, didRemove, didSelect])
+        delegate.expect([didRemove, didSelect])
         manager.removeTabAndUpdateSelectedIndex(manager.tabs.first!)
         delegate.verify("Not all delegate methods were called")
     }

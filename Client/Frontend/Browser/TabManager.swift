@@ -12,9 +12,7 @@ private let log = Logger.browserLogger
 
 protocol TabManagerDelegate: AnyObject {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool)
-    func tabManager(_ tabManager: TabManager, willAddTab tab: Tab)
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool)
-    func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab)
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool)
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager)
@@ -308,8 +306,6 @@ class TabManager: NSObject {
     func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false) {
         assert(Thread.isMainThread)
 
-        delegates.forEach { $0.get()?.tabManager(self, willAddTab: tab) }
-
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
         } else if let parent = parent, var insertIndex = tabs.index(of: parent) {
@@ -415,10 +411,6 @@ class TabManager: NSObject {
         guard let removalIndex = tabs.index(where: { $0 === tab }) else {
             Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
             return
-        }
-
-        if notify {
-            delegates.forEach { $0.get()?.tabManager(self, willRemoveTab: tab) }
         }
 
         let prevCount = count

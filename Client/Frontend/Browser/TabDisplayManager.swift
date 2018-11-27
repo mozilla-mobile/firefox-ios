@@ -392,9 +392,6 @@ extension TabDisplayManager: TabManagerDelegate {
         }
     }
 
-    func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {}
-    func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {}
-
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         if isDragging {
             // All we can do (easily) is make the drag a no-op, and reload the data. Not elegant, but this is an edge case.
