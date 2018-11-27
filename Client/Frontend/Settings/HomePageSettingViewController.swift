@@ -32,21 +32,25 @@ class HomePageSettingViewController: SettingsTableViewController {
         let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
             self.currentChoice = NewTabPage.topSites
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.prefs.removeObjectForKey(PrefsKeys.HomeButtonHomePageURL)
             self.tableView.reloadData()
         })
         let showBlankPage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBlankPage), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.blankPage}, onChanged: {
             self.currentChoice = NewTabPage.blankPage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.prefs.removeObjectForKey(PrefsKeys.HomeButtonHomePageURL)
             self.tableView.reloadData()
         })
         let showBookmarks = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBookmarks), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.bookmarks}, onChanged: {
             self.currentChoice = NewTabPage.bookmarks
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.prefs.removeObjectForKey(PrefsKeys.HomeButtonHomePageURL)
             self.tableView.reloadData()
         })
         let showHistory = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabHistory), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.history}, onChanged: {
             self.currentChoice = NewTabPage.history
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
+            self.prefs.removeObjectForKey(PrefsKeys.HomeButtonHomePageURL)
             self.tableView.reloadData()
         })
 
