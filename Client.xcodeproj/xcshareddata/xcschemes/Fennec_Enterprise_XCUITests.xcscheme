@@ -242,6 +242,9 @@
                   Identifier = "FirstRunTourTests/testFirstRunTour()">
                </Test>
                <Test
+                  Identifier = "HomePageSettingsTest">
+               </Test>
+               <Test
                   Identifier = "HomePageUITest">
                </Test>
                <Test
@@ -282,6 +285,9 @@
                </Test>
                <Test
                   Identifier = "NewTabSettingsTest/testCheckNewTabSettingsByDefault()">
+               </Test>
+               <Test
+                  Identifier = "NewTabSettingsTest/testToggleOffOnAdditionalContentBookmarks()">
                </Test>
                <Test
                   Identifier = "NoImageTests">

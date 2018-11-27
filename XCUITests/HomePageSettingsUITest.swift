@@ -16,15 +16,28 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(value as? String, text, "The webpage typed does not match with the one saved")
     }
 
+    func testCheckHomeSettingsByDefault() {
+        navigator.goto(HomeSettings)
+        XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
+        XCTAssertTrue(app.tables.cells["Blank Page"].exists)
+        XCTAssertTrue(app.tables.cells["Bookmarks"].exists)
+        XCTAssertTrue(app.tables.cells["History"].exists)
+        XCTAssertTrue(app.tables.cells["HomePageSetting"].exists)
+        waitForExistence(app.tables.cells["TopSitesRows"])
+        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as! String, "Top Sites, 2 rows")
+        XCTAssertTrue(app.tables.switches["ASPocketStoriesVisible"].isEnabled)
+    }
+
     func testTyping() {
-        navigator.goto(HomePageSettings)
+        navigator.goto(HomeSettings)
         // Enter a webpage
         enterWebPageAsHomepage(text: websiteUrl1)
 
         // Check if it is saved going back and then again to home settings menu
-        navigator.goto(HomePageSettings)
+        navigator.goto(SettingsScreen)
+        navigator.goto(HomeSettings)
         let valueAfter = app.textFields["HomePageSettingTextField"].value
-        XCTAssertEqual(valueAfter as? String, websiteUrl1)
+        XCTAssertEqual(valueAfter as? String, "http://\(websiteUrl1)")
 
         // Check that it is actually set by opening a different website and going to Home
         navigator.openURL(websiteUrl2)
@@ -37,14 +50,15 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: websiteUrl1)
     }
 
+    /* Test disabled until bug 1510243 is fixed
     func testTypingBadURL() {
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
-        navigator.goto(HomePageSettings)
+        navigator.goto(HomeSettings)
         // Enter an invalid Url
         enterWebPageAsHomepage(text: invalidUrl)
         navigator.goto(SettingsScreen)
         // Check that it is not saved
-        navigator.goto(HomePageSettings)
+        navigator.goto(HomeSettings)
         waitForExistence(app.textFields["HomePageSettingTextField"])
         let valueAfter = app.textFields["HomePageSettingTextField"].value
         XCTAssertEqual("Enter a webpage", valueAfter as! String)
@@ -56,30 +70,25 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         let homePageMenuItem = app.tables["Context Menu"].cells["Open Homepage"]
         XCTAssertFalse(homePageMenuItem.exists)
-    }
+    }*/
 
     func testClipboard() {
-        // Go to a website and copy the url
-        navigator.openURL(websiteUrl1)
-        app.textFields["url"].press(forDuration: 5)
-        waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].cells["menu-Copy-Link"].tap()
-        // Go to HomePage settings and paste it using the option Used Copied Link
-        navigator.goto(HomePageSettings)
-        XCTAssertTrue(app.cells["Use Copied Link"].isEnabled)
-        app.cells["Use Copied Link"].tap()
-
+        // Check that what's in clipboard is copied
+        UIPasteboard.general.string = websiteUrl1
+        navigator.goto(HomeSettings)
+        app.textFields["HomePageSettingTextField"].tap()
+        app.textFields["HomePageSettingTextField"].press(forDuration: 3)
+        print(app.debugDescription)
+        waitForExistence(app.menuItems["Paste"])
+        app.menuItems["Paste"].tap()
+        waitForValueContains(app.textFields["HomePageSettingTextField"], value: "mozilla")
         // Check that the webpage has been correclty copied into the correct field
         let value = app.textFields["HomePageSettingTextField"].value as! String
-
-        if ((value == "https://\(websiteUrl1)/en-US/")) {
-            XCTAssertEqual(value, "https://\(websiteUrl1)/en-US/",
-                "The webpage typed does not match with the one saved")
-        } else {
-            XCTAssertTrue(value.contains("https://\(websiteUrl1)/en-US/?v="), "The webpage typed does not match with the one saved")
-        }
+        XCTAssertEqual(value, websiteUrl1)
     }
 
+    // Test disabled until bug 1510243 is fixed/clarified
+    /*
     func testDisabledClipboard() {
         // Type an incorrect URL and copy it
         navigator.goto(URLBarOpen)
@@ -92,7 +101,7 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Go to HomePage settings and check that it is not possible to copy it into the set webpage field
         navigator.nowAt(BrowserTab)
-        navigator.goto(HomePageSettings)
+        navigator.goto(HomeSettings)
         waitForExistence(app.staticTexts["Use Copied Link"])
 
         // Check that nothing is copied in the Set webpage field
@@ -100,5 +109,18 @@ class HomePageSettingsUITests: BaseTestCase {
         let value = app.textFields["HomePageSettingTextField"].value
 
         XCTAssertEqual("Enter a webpage", value as! String)
+    }*/
+
+    func testSetCustomURLAsHome() {
+        navigator.goto(HomeSettings)
+        // Enter a webpage
+        enterWebPageAsHomepage(text: websiteUrl1)
+
+        // Open a new tab and tap on Home option
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        navigator.performAction(Action.GoToHomePage)
+        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForValueContains(app.textFields["url"], value: "mozilla")
     }
 }
