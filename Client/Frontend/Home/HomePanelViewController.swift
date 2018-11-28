@@ -212,10 +212,12 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     func homePanelDidRequestToSignIn() {
+        self.dismiss(animated: false, completion: nil)
         delegate?.homePanelDidRequestToSignIn()
     }
 
     func homePanelDidRequestToCreateAccount() {
+        self.dismiss(animated: false, completion: nil)
         delegate?.homePanelDidRequestToCreateAccount()
     }
 
