@@ -398,6 +398,18 @@ extension BrowserViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let tab = tabManager[webView] {
             navigateInTab(tab: tab, to: navigation)
+
+            // If this tab had previously crashed, wait 5 seconds before resetting
+            // the consecutive crash counter. This allows a successful webpage load
+            // without a crash to reset the consecutive crash counter in the event
+            // that the tab begins crashing again in the future.
+            if tab.consecutiveCrashes > 0 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
+                    if tab.consecutiveCrashes > 0 {
+                        tab.consecutiveCrashes = 0
+                    }
+                }
+            }
         }
     }
 }
