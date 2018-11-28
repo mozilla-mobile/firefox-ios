@@ -219,8 +219,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
         tableView.dragDelegate = self
-        refreshReadingList()
-
     }
 
     @objc func notificationReceived(_ notification: Notification) {
