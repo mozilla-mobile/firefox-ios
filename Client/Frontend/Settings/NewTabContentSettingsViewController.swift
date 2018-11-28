@@ -27,25 +27,27 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         self.currentChoice = NewTabAccessors.getNewTabPage(self.prefs)
         self.hasHomePage = NewTabHomePageAccessors.getHomePage(self.prefs) != nil
 
+        let onFinished = {
+            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
+            self.prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
+            self.tableView.reloadData()
+        }
+
         let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
             self.currentChoice = NewTabPage.topSites
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
-            self.tableView.reloadData()
+            onFinished()
         })
         let showBlankPage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBlankPage), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.blankPage}, onChanged: {
             self.currentChoice = NewTabPage.blankPage
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
-            self.tableView.reloadData()
+            onFinished()
         })
         let showBookmarks = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBookmarks), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.bookmarks}, onChanged: {
             self.currentChoice = NewTabPage.bookmarks
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
-            self.tableView.reloadData()
+            onFinished()
         })
         let showHistory = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabHistory), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.history}, onChanged: {
             self.currentChoice = NewTabPage.history
-            self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
-            self.tableView.reloadData()
+            onFinished()
         })
 
         let showWebPage = WebPageSetting(prefs: prefs, prefKey: HomePageConstants.HomePageURLPrefKey, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomePageSetting", settingDidChange: { (string) in
