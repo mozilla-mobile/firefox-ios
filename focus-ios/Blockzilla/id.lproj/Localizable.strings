@@ -88,11 +88,20 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Dinonaktifkan";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL telah digunakan";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Tidak ada URL Ubahsuai untuk ditampilkan";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Diaktifkan";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Kelola Situs";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Situs Saya";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sesi Baru";

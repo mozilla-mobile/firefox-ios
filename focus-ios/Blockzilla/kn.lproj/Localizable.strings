@@ -43,8 +43,35 @@
 /* Label on About screen */
 "About.topLabel" = "%@ ನಿಮ್ಮನ್ನು ನಿಯಂತ್ರಣದಲ್ಲಿರಿಸುತ್ತದೆ.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@ ಗೆ ಮರಳಲು ದೃಢೀಕರಿಸಿ";
+
+/* Label for button to add a custom URL */
+"Autocomplete.addCustomUrl" = "ಕಸ್ಟಮ್ URL ಸೇರಿಸಿ";
+
+/* Label for error state when entering an invalid URL */
+"Autocomplete.addCustomUrlError" = "ನೀವು ನಮೂದಿಸಿದ URL ಮತ್ತೊಮ್ಮೆ-ಮಗದೊಮ್ಮೆ ಪರಿಶೀಲಿಸಿ.";
+
+/* A label displaying an example URL */
+"Autocomplete.addCustomUrlExample" = "ಉದಾಹರಣೆ: example.com";
+
 /* Label for the input to add a custom URL */
 "Autocomplete.addCustomUrlLabel" = "ಸೇರಿಸಲು URL";
+
+/* Placeholder for the input field to add a custom URL */
+"Autocomplete.addCustomUrlPlaceholder" = "ಅಂಟಿಸಿ ಅಥವಾ URL ಅನ್ನು ನಮೂದಿಸಿ";
+
+/* Label for button to add a custom URL with the + prefix */
+"Autocomplete.addCustomUrlWithPlus" = "+ ಕಸ್ಟಮ್ URL ಅನ್ನು ಸೇರಿಸಿ";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.customLabel" = "ಕಸ್ಟಮ್ URL ಗಳು";
+
+/* Title for the default URL list section */
+"Autocomplete.customTitle" = "CUSTOM URL LIST";
+
+/* Label for toast alerting a custom URL has been added */
+"Autocomplete.customUrlAdded" = "ಹೊಸ ಕಸ್ಟಮ್ URL ಸೇರಿಸಲಾಗಿದೆ.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
@@ -187,11 +214,35 @@
 /* Save button label */
 "Save" = "ಉಳಿಸು";
 
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "ಅದು ಕೆಲಸ ಮಾಡಲಿಲ್ಲ. ಹುಡುಕಾಟ ಪದವನ್ನು ಇದರೊಂದಿಗೆ ಬದಲಿಸಿ ಪ್ರಯತ್ನಿಸಿ: %s.";
+
+/* Text for button to add another search engine in settings */
+"Settings.Search.AddSearchEngineButton" = "ಮತ್ತೊಂದು ಹುಡುಕಾಟ ಇಂಜಿನ್ ಅನ್ನು ಸೇರಿಸಿ";
+
+/* Text for button to add another search engine in settings with the + prefix */
+"Settings.Search.AddSearchEngineButtonWithPlus" = "+ ಮತ್ತೊಂದು ಹುಡುಕಾಟ ಎಂಜಿನ್ ಸೇರಿಸಿ";
+
 /* Title on add search engine settings screen */
 "Settings.Search.AddSearchEngineTitle" = "ಹುಡುಕು ಸಾಧನವನ್ನು ಸೇರಿಸಿ";
 
 /* Header for rows of installed search engines */
 "Settings.Search.InstalledSearchEngines" = "INSTALLED SEARCH ENGINES";
+
+/* Label for input field for the name of the search engine to be added */
+"Settings.Search.NameToDisplay" = "ಪ್ರದರ್ಶಿಸಲು ಹೆಸರು";
+
+/* Toast displayed after adding a search engine */
+"Settings.Search.NewSearchEngineAdded" = "ಹೊಸ ಹುಡುಕಾಟ ಎಂಜಿನ್ ಸೇರಿಸಲಾಗಿದೆ.";
+
+/* Label for button to bring deleted default engines back */
+"Settings.Search.RestoreEngine" = "ಪೂರ್ವನಿಯೋಜಿತ ಹುಡುಕು ಎಂಜಿನ್‌ ಮರುಹೊಂದಿಸು";
+
+/* Placeholder text for input of new search engine name */
+"Settings.Search.SearchEngineName" = "ಹುಡುಕಾಟ ಎಂಜಿನ್ ಹೆಸರು";
+
+/* Placeholder text for input of new search engine template */
+"Settings.Search.SearchTemplatePlaceholder" = "ಅಂಟಿಸಿ ಅಥವಾ ಹುಡುಕಾಟ ಸಾಲನ್ನು ನಮೂದಿಸಿ. ಅಗತ್ಯವಿದ್ದರೆ, ಹುಡುಕಾಟ ಪದವನ್ನು ಇದರೊಂದಿಗೆ ಬದಲಾಯಿಸಿ: %s.";
 
 /* Title for the URL Autocomplete row */
 "Settings.autocompleteSection" = "URL ಸ್ವಯಂಪೂರ್ಣಗೊಳಿಸು";
@@ -256,6 +307,12 @@
 /* Label for toggle on main screen */
 "Settings.toggleBlockSocial" = "ಸಾಮಾಜಿಕ ಜಾಡುಹಿಡಿಯುವರನ್ನು ನಿರ್ಬಂಧಿಸು";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "ಅಪ್ಲಿಕೇಶನ್ ಅನ್ಲಾಕ್ ಮಾಡಲು ಫೇಸ್ ID ಬಳಸಿ";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "ಅಪ್ಲಿಕೇಶನ್ನಲ್ಲಿ ಈಗಾಗಲೇ URL ತೆರೆದಿದ್ದರೆ ಫೇಸ್ ID ಯು %@ ಅನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಬಹುದು";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "ಕೆಲವು ವಿಡಿಯೋ ಮತ್ತು ಜಾಲ ಪುಟಗಳನ್ನು ಹಾಳುಗೆಡುವಬಹುದು";
 
@@ -264,6 +321,12 @@
 
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "ಬಳಕೆಯ ದತ್ತಾಂಶ ಕಳುಹಿಸಿ";
+
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "ಅಪ್ಲಿಕೇಶನ್ ಅನ್ಲಾಕ್ ಮಾಡಲು ಫೇಸ್ ID ಬಳಸಿ";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "ಅಪ್ಲಿಕೇಶನ್ನಲ್ಲಿ ಈಗಾಗಲೇ URL ತೆರೆದಿದ್ದರೆ ಫೇಸ್ ID ಯು %@ ಅನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಬಹುದು";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "ಹೊಸತೇನಿದೆ";
@@ -295,6 +358,9 @@
 /* Text for the share menu option when a user wants to open the current website in the Safari app. */
 "ShareMenu.ShareOpenSafari" = "Safariಯಲ್ಲಿ ತೆರೆ";
 
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "ಇದರೊಂದಿಗೆ ಪುಟ ಹಂಚಿಕೊಳ್ಳಿ...";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "ಸೇರಿಸು";
 
@@ -312,6 +378,9 @@
 
 /* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
 "Siri.openURL" = "ಮೆಚ್ಚಿನ ತಾಣ ತೆರೆ";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "ತೆರೆಯಲು URL";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ರದ್ದು ಮಾಡು";
@@ -379,14 +448,26 @@
 /* Dialog title used for requesting a user to enable access to Photos. Placeholder is either Firefox Focus or Firefox Klar */
 "photosPermission.title" = "“%@” ನಿಮ್ಮ ಚಿತ್ರಗಳನ್ನು ಪ್ರವೇಶಿಸಲು ಬಯಸುತ್ತಿದೆ";
 
+/* Text displayed as an example of the template to add a search engine. */
+"settings.Search.SearchTemplateExample" = "ಉದಾಹರಣೆ: searchengineexample.com/search/?q=%s";
+
 /* Text for a share button */
 "share" = "ಹಂಚು";
 
 /* Text for the share menu when a user wants to copy a URL. */
 "shareMenu.copyAddress" = "ವಿಳಾಸವನ್ನು ನಕಲಿಸು";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "%@ ಗೆ ಹಿಂತಿರುಗಲು ಟಚ್ ID ಅನ್ನು ಬಳಸಿ";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "ಜಾಹಿರಾತುಗಳ ಜಾಡುಹಿಡಿಯುವವರು";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "ವಿಶ್ಲೇಷಣಾತ್ಮಕ ಅನ್ವೇಷಕಗಳು";
+
+/* label for content trackers. */
+"trackingProtection.contentTrackerLabel" = "ವಿಷಯ ಅನ್ವೇಷಕಗಳು";
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ಜಾಡು ಇರಿಸುವಿಕೆಗೆ ರಕ್ಷಣೆ ಸ್ಥಗಿತಗೊಳಿಸಲಾಗಿದೆ";
@@ -399,4 +480,13 @@
 
 /* label for social trackers. */
 "trackingProtection.socialTrackerLabel" = "ಸಾಮಾಜಿಕ ಜಾಡುಹಿಡಿಯುವವರು";
+
+/* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.toggleDescription1" = "ನೀವು %@ ಅನ್ನು ಮುಚ್ಚಿ ಅಥವಾ ERASE ಅನ್ನು ಟ್ಯಾಪ್ ಮಾಡುವವರೆಗೆ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ.";
+
+/* Text for the toggle that temporarily disables tracking protection. */
+"trackingProtection.toggleLabel" = "ಟ್ರ್ಯಾಕಿಂಗ್ ಪ್ರೊಟೆಕ್ಷನ್";
+
+/* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
+"trackingProtection.trackerDescriptionLabel" = "%@ ಬ್ಲಾಕ್ಗಳ ಜಾಹೀರಾತು, ವಿಶ್ಲೇಷಣಾತ್ಮಕ, ಸಾಮಾಜಿಕ ಮತ್ತು ಇತರ ಟ್ರ್ಯಾಕರ್ಗಳು ಎಂಬುದನ್ನು ಆಯ್ಕೆಮಾಡಿ.";
 

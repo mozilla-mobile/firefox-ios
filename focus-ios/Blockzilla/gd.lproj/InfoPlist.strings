@@ -2,6 +2,9 @@
 "NSCameraUsageDescription" = "Bheir seo comas dhut dealbhan a thogail is a luchdadh suas.";
 
 /* (No Comment) */
+"NSFaceIDUsageDescription" = "Leigidh seo leat a’ ghlas a thoirt far na h-aplacaid.";
+
+/* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Dh’fhaoidte gun iarr làraichean-lìn air an tadhal thu d’ ionad.";
 
 /* (No Comment) */

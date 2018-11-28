@@ -328,6 +328,9 @@
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "نیا کیا ہے";
 
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI SHORTCUTS";
+
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "صفحے میں ڈھونڈیں";
 
@@ -340,11 +343,23 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "ڈیسک ٹاپ سائٹ کی درخواست کریں";
 
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome میں کھولیں";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox میں کھولیں";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safari میں کھولیں";
+
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "اضافہ کریں";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "مٹائيں";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "مٹائیں اور کھولیں";
 
 /* Title for screen to add a favorite URL to Siri. */
 "Siri.favoriteUrl" = "پسندیدہ سائٹ کھولیں";
@@ -432,6 +447,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "سراغ کاری حفاظت بند";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "سراغ راہ حفاظت";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "مزید سیکھیں";

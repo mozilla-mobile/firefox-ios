@@ -2,7 +2,7 @@
 "NSCameraUsageDescription" = "Acest lucru îți permite să realizezi și să încarci fotografii.";
 
 /* (No Comment) */
-"NSFaceIDUsageDescription" = "Aceasta permite deblocarea aplicației.";
+"NSFaceIDUsageDescription" = "Acest lucru îți permite să deblochezi aplicația.";
 
 /* (No Comment) */
 "NSLocationWhenInUseUsageDescription" = "Site-urile web pe care le vizitezi îți pot solicita locația.";

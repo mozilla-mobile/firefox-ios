@@ -77,7 +77,7 @@
 "Autocomplete.customUrlAdded" = "เพิ่ม URL ที่กำหนดเองใหม่แล้ว";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "เปิดใช้งานเพื่อให้มีการเติมอัตโนมัติของ %@ ผ่าน 450 URL ยอดนิยมในแถบที่อยู่";
+"Autocomplete.defaultDescriptoin" = "เปิดใช้งานเพื่อให้มีการเติมมากกว่า 450 URL ยอดนิยมโดยอัตโนมัติของ %@ ในแถบที่อยู่";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "การเติมอัตโนมัติ";
@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "ถูกปิดใช้งาน";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "มี URL อยู่แล้ว";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "ไม่มี URL ที่กำหนดเองที่จะแสดงผล";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ถูกเปิดใช้งาน";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "จัดการไซต์";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "ไซต์ของฉัน";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "เปิดใช้งานเพื่อให้มีการเติม URL โปรดของคุณโดยอัตโนมัติของ %@";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "ไซต์เด่น";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "วาระใหม่";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "ไม่ได้ผล ลองแทนที่คำค้นหาด้วยสิ่งนี้: %s";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "ไม่";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "ใช่";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "เพื่อรับข้อเสนอแนะ %@ จำเป็นต้องส่งสิ่งที่คุณพิมพ์ในแถบที่อยู่ไปยังเครื่องมือค้นหา";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "แสดงข้อเสนอแนะการค้นหา?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "เพิ่มเครื่องมือค้นหาอื่น";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "ฉันเข้าใจ";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ จะส่งสิ่งที่คุณพิมพ์ในแถบที่อยู่ไปยังเครื่องมือค้นหาของคุณ";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla มุ่งมั่นที่จะเก็บรวบรวมเฉพาะสิ่งที่เราจำเป็นต้องให้บริการและปรับปรุง %@ สำหรับทุกคน";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "เครื่องมือค้นหา";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "รับข้อเสนอแนะการค้นหา";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "ค้นหา";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID สามารถปลดล็อค %@ หาก URL ถูกเปิดอยู่แล้วในแอป";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "แสดงเคล็ดลับหน้าจอหลัก";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "อาจทำให้วิดีโอและหน้าเว็บบางส่วนไม่สมบูรณ์";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID สามารถปลดล็อค %@ หาก URL ถูกเปิดอยู่แล้วในแอป";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "usage-data";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "มีอะไรใหม่";
@@ -414,6 +453,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL ที่จะเปิด";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "เพิ่มลิงก์ไปยังการเติมอัตโนมัติ";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ยกเลิก";

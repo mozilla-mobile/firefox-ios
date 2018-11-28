@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "გამორთულია";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL-ბმული უკვე არსებობს";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "საკუთარი URL-ები არაა დამატებული";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "ჩართულია";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "საიტების მართვა";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "ჩემი საიტები";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "ჩართეთ და %@ თავად დაასრულებს თქვენს რჩეულ URL-ბმულებს.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "რჩეული საიტები";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "ახალი სეანსი";
@@ -104,10 +119,10 @@
 "Browser.backLabel" = "უკან";
 
 /* Copy URL button in URL long press menu */
-"Browser.copyAddressLabel" = "მისამართის დაკოპირება";
+"Browser.copyAddressLabel" = "მისამართის ასლი";
 
 /* Copy URL button in URL long press menu */
-"Browser.copyMenuLabel" = "დაკოპირება";
+"Browser.copyMenuLabel" = "ასლი";
 
 /* Custom URL button in URL long press menu */
 "Browser.customURLMenuLabel" = "საკუთარი URL-ს დამატება";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "არ იმუშავა. სცადეთ საძიებო ფრაზის ამ სიმბოლოთი ჩანაცვლება: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "არა";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "დიახ";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "ძიების შემოთავაზებების მისაღებად, %@ საჭიროებს მისამართების ველში აკრეფილი ტექსტის, შერჩეული საძიებო სისტემისთვის გადაგზავნას.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "გსურთ ძიების შემოთავაზებების ჩვენება?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "სხვა საძიებო სისტემის დამატება";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "გასაგებია";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ გაუგზავნის საძიებო სისტემას, მისამართების ველში აკრეფილ ტექსტს";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla აღრიცხავს მხოლოდ იმ მონაცემებს, რაც საჭიროა %@-ის გასაუმჯობესებლად.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "საძიებო სისტემა";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "ძიების შემოთავაზებების მიღება";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "ძიება";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "სახის ამომცნობით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "ცნობების ჩვენება საწყის გვერდზე";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "შესაძლოა, ზოგიერთმა საიტმა ან ვიდეომ არ იმუშაოს გამართულად";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "თითის ანაბეჭდით შესაძლებელია გაიხსნას %@ თუ URL-ბმული უკვე გახსნილია პროგრამაში";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "გამოყენების-მონაცემები";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "რა სიახლეებია";
@@ -415,6 +454,9 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL-მისამართი გასახსნელად";
 
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "ბმულის დამატება თვითდასრულებისთვის";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "გაუქმება";
 
@@ -446,22 +488,22 @@
 "actionSheet.openIn" = "გახსნა %@-ით";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "URL-მისამართი დაკოპირებულია";
+"browser.copyAddressToast" = "URL-მისამართის ასლი აღებულია";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "მისამართების ველზე გადასვლა";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.clipboardLink" = "დაკოპირებული ბმული: %@";
+"contextMenu.clipboardLink" = "აღებული ბმულის ასლი: %@";
 
 /* Text for the context menu when a user wants to copy an image after long pressing it. */
-"contextMenu.copyImageTitle" = "სურათის დაკოპირება";
+"contextMenu.copyImageTitle" = "სურათის ასლი";
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
-"contextMenu.copyLink" = "ბმულის დაკოპირება";
+"contextMenu.copyLink" = "ბმულის ასლი";
 
 /* Text for the context menu when a user has a link on their clipboard. */
-"contextMenu.linkCopied" = "დაკოპირებული ბმული:";
+"contextMenu.linkCopied" = "აღებული ბმულის ასლი:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "სურათის შენახვა";
@@ -488,7 +530,7 @@
 "share" = "გაზიარება";
 
 /* Text for the share menu when a user wants to copy a URL. */
-"shareMenu.copyAddress" = "მისამართის დაკოპირება";
+"shareMenu.copyAddress" = "მისამართის ასლი";
 
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "გამოიყენეთ თითის ანაბეჭდი, %@-ზე დასაბრუნებლად";

@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Zakázané";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL adresa už existuje";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Žiadne vlastné URL adresy na zobrazenie";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Povolené";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Spravovať stránky";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Moje stránky";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Ak chcete, aby %@ automaticky dopĺňal vaše obľúbené adresy, aktivujte túto funkciu.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Top stránky";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nová relácia";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "To nefungovalo. Skúste nahradiť vyhľadávaný výraz s: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Nie";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Áno";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Ak chcete získavať návrhy vyhľadávania, %@ bude odosielať vami písaný text vyhľadávaciemu modulu.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Zobrazovať návrhy vyhľadávania?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Pridať ďalší vyhľadávací modul";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Rozumiem";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ bude odosielať vami písaný text vyhľadávaciemu modulu.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla sa usiluje zbierať len údaje, ktoré potrebujeme na vylepšenie aplikácie %@ pre všetkých.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Vyhľadávací modul";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Získať návrhy vyhľadávania";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "VYHĽADÁVANIE";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID môže odomknúť %@ ak je URL v aplikácii už otvorené";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Zobrazovať tipy na domovskej obrazovke";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Toto môže rozbiť niektoré videá a webové stránky";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID môže odomknúť %@ ak je URL v aplikácii už otvorené";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "údaje o používaní";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Čo je nové";
@@ -414,6 +453,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Adresa na otvorenie";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Pridať odkaz na automatické dopĺňanie";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Zrušiť";

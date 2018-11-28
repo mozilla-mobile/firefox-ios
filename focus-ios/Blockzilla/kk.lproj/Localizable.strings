@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Сөндірілген";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL бар болып тұр";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Көрсету үшін таңдауыңызша URL-дер жоқ";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Іске қосылған";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Сайттарды басқару";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Менің сайттарым";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "%@ сіздің таңдамалы URL автотолықтыруды іске қосу.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Үздік сайттар";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Жаңа сессия";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Бұл жасамады. Іздеу ұғымын келесімен алмастырып көріңіз: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Жоқ";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Иә";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Іздеу ұсыныстарын алу үшін, %@ сіз адрестік жолақта терген нәрсені іздеу жүйесіне жіберуі тиіс.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Іздеу ұсыныстарын көрсету керек пе?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Басқа іздеу жүйесін қосу";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Мен түсінемін";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ сіз адрестік жолақта терген нәрсені сіздің іздеу жүйеңізге жіберетін болады.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla тек %@ әркім үшін ұсыну және жақсарту мақсатында керек деректерді жинауға тырысады.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Іздеу жүйесі";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Іздеу ұсыныстарын алу";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "ІЗДЕУ";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID %@ бұғаттауын URL қолданбана ашық тұрған кезде босата алады";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Үй парағында кеңестерді көрсету";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Кейбір видео және веб парақтарының жұмысына кері әсерін тигізуі мүмкін";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID %@ бұғаттауын URL қолданбана ашық тұрған кезде босата алады";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "қолданылуы туралы деректер";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Не жаңалық";
@@ -414,6 +453,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Ашу үшін URL";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Автотолықтыру үшін сілтемені қосу";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Бас тарту";

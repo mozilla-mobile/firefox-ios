@@ -94,6 +94,15 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "مفعّل";
 
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "أدِر المواقع";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "مواقعي";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "المواقع الأكثر زيارة";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "جلسة جديدة";
 
@@ -232,6 +241,15 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "لم ينجح الأمر. جرّب استخدام نص البحث هذا بدل الحالي: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "لا";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "نعم";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "أأعرض اقتراحات البحث؟";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "أضف محرك بحث آخر";
 
@@ -274,6 +292,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "أفهم هذا";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "سيُرسل %@ ما تكتبه في شريط العنوان إلى محرك البحث الذي تُفضّله.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "تحاول موزيلا ألا تجمع أكثر مما تحتاجه لإتاحة %@ و تحسينه للجميع.";
 
@@ -291,6 +312,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "محرك البحث";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "اجلب اقتراحات البحث";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "البحث";
@@ -342,6 +366,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "يمكن أن يُلغي معرّف الوجه قفل %@ إن كان ثمة مسار مفتوح في التطبيق بالفعل";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "اعرض الفوائد في شاشة البداية";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "قد يعطل بعض الڤديو و صفحات الوب";

@@ -2,16 +2,16 @@
 "About.learnMoreButton" = "Află mai multe";
 
 /* Label on About screen */
-"About.missionLabel" = "%@ este produs de Mozilla. Misiunea noastră este de a promova un internet sănătos și deschis.";
+"About.missionLabel" = "%@ este produs de Mozilla. Misiunea noastră este să promovăm un internet sănătos și deschis.";
 
 /* Label on About screen */
 "About.privateBullet1" = "Caută și navighează direct din aplicație";
 
 /* Label on About screen */
-"About.privateBullet2" = "Blochează urmăritorii (sau actualizează setările pentru a permite urmăritorii)";
+"About.privateBullet2" = "Blochează elementele de urmărire (sau actualizează setările pentru a permite urmăritorii)";
 
 /* Label on About screen */
-"About.privateBullet3" = "Șterge pentru a elimina cookie-urile și istoricul de navigare și căutare";
+"About.privateBullet3" = "Șterge pentru a elimina cookie-urile, precum și istoricul de căutare și navigare";
 
 /* Label on About screen */
 "About.privateBulletHeader" = "Folosește-l ca browser privat:";
@@ -26,7 +26,7 @@
 "About.rowRights" = "Drepturile tale";
 
 /* Label on About screen */
-"About.safariBullet1" = "Blochează urmăritorii pentru confidențialitate crescută";
+"About.safariBullet1" = "Blochează elementele de urmărire pentru confidențialitate crescută";
 
 /* Label on About screen */
 "About.safariBullet2" = "Blochează fonturile web pentru a reduce mărimea paginii";
@@ -53,7 +53,7 @@
 "Autocomplete.addCustomUrlError" = "Reverifică URL-ul introdus.";
 
 /* A label displaying an example URL */
-"Autocomplete.addCustomUrlExample" = "Exemplu: example.com";
+"Autocomplete.addCustomUrlExample" = "Exemplu: exemplu.com";
 
 /* Label for the input to add a custom URL */
 "Autocomplete.addCustomUrlLabel" = "URL de adăugat";
@@ -65,7 +65,7 @@
 "Autocomplete.addCustomUrlWithPlus" = "+ Adaugă URL personalizat";
 
 /* Description for adding and managing custom autocomplete URLs */
-"Autocomplete.customDescriptoin" = "Adaugă și gestionează autocompletare URL-uri.";
+"Autocomplete.customDescriptoin" = "Adaugă și gestionează completarea automată personalizată de URL-uri.";
 
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "URL-uri personalizate";
@@ -77,22 +77,37 @@
 "Autocomplete.customUrlAdded" = "Nou URL personalizat adăugat.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "Activează pentru a beneficia de autocompletare %@ pentru peste 450 de URL-uri populare din bara de adrese.";
+"Autocomplete.defaultDescriptoin" = "Activează pentru ca %@ să completeze automat peste 450 de URL-uri populare în bara de adresă.";
 
 /* Label for enabling or disabling autocomplete */
-"Autocomplete.defaultLabel" = "Autocompletare";
+"Autocomplete.defaultLabel" = "Completare automată";
 
 /* Title for the default URL list section */
 "Autocomplete.defaultTitle" = "LISTĂ DE URL-URI IMPLICITE";
 
 /* label describing URL Autocomplete as disabled */
-"Autocomplete.disabled" = "Dezactivat";
+"Autocomplete.disabled" = "Dezactivată";
+
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL-ul există deja";
 
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Nu sunt URL-uri personalizate de afișat";
 
 /* label describing URL Autocomplete as enabled */
-"Autocomplete.enabled" = "Activat";
+"Autocomplete.enabled" = "Activată";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Gestionează site-urile";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Site-urile mele";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Permite ca %@ să completeze automat URL-urile tale favorite.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Site-uri de top";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sesiune nouă";
@@ -110,7 +125,7 @@
 "Browser.copyMenuLabel" = "Copiază";
 
 /* Custom URL button in URL long press menu */
-"Browser.customURLMenuLabel" = "Adaugă adresă particularizată";
+"Browser.customURLMenuLabel" = "Adaugă adresă personalizată";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "Înainte";
@@ -131,7 +146,7 @@
 "Cancel" = "Renunță";
 
 /* Label on button to complete edits */
-"Done" = "Gata";
+"Done" = "Terminat";
 
 /* Label on button to allow edits */
 "Edit" = "Editează";
@@ -170,19 +185,19 @@
 "ExternalLink.openMapsButton" = "Deschide Hărți";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
-"FindInPage.Done" = "Caută în pagina actuală";
+"FindInPage.Done" = "Căutarea în pagină s-a terminat";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
-"FindInPage.NextResult" = "Caută în pagina următoare";
+"FindInPage.NextResult" = "Caută rezultatul următor în pagină";
 
 /* Accessibility label for previous result button in Find in Page Toolbar. */
-"FindInPage.PreviousResult" = "Caută în pagina anterioară";
+"FindInPage.PreviousResult" = "Caută rezultatul anterior în pagină";
 
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "Ok, am înțeles!";
 
 /* Message label on the first run screen */
-"FirstRun.messageLabelDescription" = "Blochează automat urmăritorii online în timp ce navighezi. Apoi apasă pentru a șterge paginile vizitate, căutările, cookie-urile și parolele din dispozitiv.";
+"FirstRun.messageLabelDescription" = "Blochează automat elementele de urmărire online în timp ce navighezi. Apoi apasă pentru a șterge paginile vizitate, căutările, cookie-urile și parolele din dispozitiv.";
 
 /* Message label on the first run screen */
 "FirstRun.messageLabelTagline" = "Navighează fără grija de a fi urmărit.";
@@ -212,7 +227,7 @@
 "Open.Safari" = "Safari";
 
 /* Label for button that requests the desktop version of the currently loaded website. */
-"Request Desktop Site" = "Solicită site de desktop";
+"Request Desktop Site" = "Cere versiune de desktop";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Apasă pe Safari, apoi selectează Sisteme de blocare a conținutului";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Nu a funcționat. Încearcă să înlocuiești termenul de căutare cu: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Nu";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Da";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Pentru a obține sugestii, %@ trebuie să trimită ce tastezi în bara de adresă la motorul de căutare.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Afișezi sugestiile de căutare?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Adaugă alt motor de căutare";
 
@@ -248,7 +275,7 @@
 "Settings.Search.NameToDisplay" = "Nume de afișat";
 
 /* Toast displayed after adding a search engine */
-"Settings.Search.NewSearchEngineAdded" = "Noul motor de căutare a fost adăugat.";
+"Settings.Search.NewSearchEngineAdded" = "Motor nou de căutare adăugat.";
 
 /* Label for button to bring deleted default engines back */
 "Settings.Search.RestoreEngine" = "Restaurează motoarele de căutare implicite";
@@ -257,7 +284,7 @@
 "Settings.Search.SearchEngineName" = "Numele motorului de căutare";
 
 /* Label for input of search engine template */
-"Settings.Search.SearchTemplate" = "Format de căutare";
+"Settings.Search.SearchTemplate" = "Text de căutare spre utilizare";
 
 /* Placeholder text for input of new search engine template */
 "Settings.Search.SearchTemplatePlaceholder" = "Lipește sau introdu formatul de căutare. Dacă este necesar, înlocuiește termenul de căutare cu: %s.";
@@ -266,7 +293,7 @@
 "Settings.autocompleteSection" = "Completare automată de URL-uri";
 
 /* Alert message shown when toggling the Content blocker */
-"Settings.blockOtherMessage" = "Blocarea altor urmăritori de conținut ar putea afecta funcționalitatea unor videouri sau pagini web.";
+"Settings.blockOtherMessage" = "Blocarea altor elementele de urmărire de conținut ar putea afecta funcționalitatea unor videouri sau pagini web.";
 
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Nu, mersi";
@@ -274,14 +301,17 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Înțeleg";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ va trimite ce tastezi în bara de adresă la motorul de căutare.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
-"Settings.detailTextSendUsageData" = "La Mozilla noi colectăm doar strictul necesar de date pentru a crea și îmbunătăți %@ pentru toată lumea.";
+"Settings.detailTextSendUsageData" = "Mozilla se străduiește să colecteze doar strictul necesar pentru a furniza și a îmbunătăți %@ pentru toți.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "Află mai multe.";
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
-"Settings.rate" = "Acordă o recenzie pentru %@";
+"Settings.rate" = "Evaluează %@";
 
 /* Label for Safari integration section */
 "Settings.safariTitle" = "INTEGRARE CU SAFARI";
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Motor de căutare";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Obține sugestii de căutare";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "CAUTĂ";
@@ -311,37 +344,40 @@
 "Settings.sectionSecurity" = "SECURITATE";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAds" = "Blochează urmăritorii publicitari";
+"Settings.toggleBlockAds" = "Blochează elementele de urmărire publicitare";
 
 /* Description for 'Block ad Trackers' */
 "Settings.toggleBlockAdsDescription" = "Anumite reclame urmăresc vizitele pe site, chiar dacă nu dai clic pe reclame";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockAnalytics" = "Blochează urmăritorii analitici";
+"Settings.toggleBlockAnalytics" = "Blochează elementele de urmărire analitice";
 
 /* Description for 'Block analytics Trackers' */
-"Settings.toggleBlockAnalyticsDescription" = "Folosit pentru a colecta, analiza și măsura activități precum atingerea și derularea";
+"Settings.toggleBlockAnalyticsDescription" = "Folosite pentru a colecta, a analiza și a măsura activități precum atingerea și derularea";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockFonts" = "Blochează fonturile web";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockOther" = "Blochează alți urmăritori de conținut";
+"Settings.toggleBlockOther" = "Blochează alte elemente de urmărire de conținut";
 
 /* Description for 'Block other content Trackers' */
-"Settings.toggleBlockOtherDescription" = "Activarea poate cauza ca unele pagini să comporte în mod neașteptat";
+"Settings.toggleBlockOtherDescription" = "Activarea poate cauza un comportament neașteptat al unor pagini";
 
 /* Label for toggle on main screen */
-"Settings.toggleBlockSocial" = "Blochează urmăritorii de rețele sociale";
+"Settings.toggleBlockSocial" = "Blochează elementele de urmărire ale rețelelor sociale";
 
 /* Description for 'Block social Trackers' */
-"Settings.toggleBlockSocialDescription" = "Încorporat în site-uri pentru a-ți urmări vizitele și a afișa funcții precum butoane de distribuire";
+"Settings.toggleBlockSocialDescription" = "Încorporate în site-uri pentru a-ți urmări vizitele și a afișa funcții precum butoanele de distribuire";
 
 /* Label for toggle on settings screen */
 "Settings.toggleFaceID" = "Folosește Face ID pentru a debloca aplicația";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Afișează ponturi în ecranul principal";
 
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Ar putea afecta funcționalitatea unor videouri sau pagini web";
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID poate debloca %@ dacă o adresă este deja deschisă în aplicație";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "utilizarea-datelor";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Ce este nou";
@@ -374,10 +413,10 @@
 "ShareMenu.OpenInFocus" = "Deschide în %@";
 
 /* Title for the share menu where users can take actions for the current website they are on. */
-"ShareMenu.PageActions" = "Acțiuni pagină";
+"ShareMenu.PageActions" = "Acțiuni pe pagină";
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
-"ShareMenu.RequestDesktop" = "Solicită site de desktop";
+"ShareMenu.RequestDesktop" = "Cere versiune de desktop";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Deschide în Chrome";
@@ -398,7 +437,7 @@
 "Siri.addTo" = "Adaugă la Siri";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "Re-înregistrează sau șterge scurtătura";
+"Siri.editOpenUrl" = "Reînregistrează sau șterge scurtătura";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "Șterge";
@@ -414,6 +453,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Adresa de deschis";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Adaugă un link pentru completare automată";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Renunță";
@@ -440,13 +482,13 @@
 "URL.searchLabel" = "Caută &@";
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
-"URL.trackersBlockedLabel" = "Urmăritori blocați";
+"URL.trackersBlockedLabel" = "Elemente de urmărire blocate";
 
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Deschide în %@";
 
 /* Toast displayed after a URL has been copied to the clipboard */
-"browser.copyAddressToast" = "Adresa a fost copiată în clipboard";
+"browser.copyAddressToast" = "URL copiat în clipboard";
 
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Selectează bara adresei";
@@ -470,7 +512,7 @@
 "contextMenu.shareLinkTitle" = "Partajează linkul";
 
 /* Dialog title used for opening an external app from Focus. First placeholder string is the app name of either Focus or Klar and the second placeholder string specifies the app it wants to open. */
-"externalAppLinkWithAppName.messageTitle" = "%1$@ dorește să deschidă %2$@";
+"externalAppLinkWithAppName.messageTitle" = "%1$@ vrea să deschidă %2$@";
 
 /* Description for dialog used for requesting a user to enable access to Photos. */
 "photosPermission.description" = "Acest lucru îți permite să salvezi imaginea în Rolă film";
@@ -482,7 +524,7 @@
 "photosPermission.title" = "„%@” dorește să îți acceseze fotografiile";
 
 /* Text displayed as an example of the template to add a search engine. */
-"settings.Search.SearchTemplateExample" = "Exemplu: motor-de-căutare-exemplu.com/search/?q=%s";
+"settings.Search.SearchTemplateExample" = "Exemplu: exempludemotordecăutare.com/search/?q=%s";
 
 /* Text for a share button */
 "share" = "Împărtășește";
@@ -494,13 +536,13 @@
 "touchId.reason" = "Folosește Touch ID pentru a reveni la %@";
 
 /* Label for ad trackers. */
-"trackingProtection.adTrackersLabel" = "Urmăritori publicitari";
+"trackingProtection.adTrackersLabel" = "Elemente de urmărire publicitare";
 
 /* label for analytic trackers. */
-"trackingProtection.analyticTrackerLabel" = "Urmăritori analitici";
+"trackingProtection.analyticTrackerLabel" = "Elemente de urmărire analitice";
 
 /* label for content trackers. */
-"trackingProtection.contentTrackerLabel" = "Urmăritori de conținut";
+"trackingProtection.contentTrackerLabel" = "Elemente de urmărire de conținut";
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Protecție împotriva urmăririi dezactivată";
@@ -512,7 +554,7 @@
 "trackingProtection.learnMore" = "Află mai multe";
 
 /* label for social trackers. */
-"trackingProtection.socialTrackerLabel" = "Urmăritori de rețele sociale";
+"trackingProtection.socialTrackerLabel" = "Elemente de urmărire ale rețelelor sociale";
 
 /* Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar */
 "trackingProtection.toggleDescription1" = "Dezactivează până când închizi %@ sau apeși ȘTERGE.";
@@ -521,5 +563,5 @@
 "trackingProtection.toggleLabel" = "Protecție împotriva urmăririi";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Alege dacă %@ blochează mecanisme de urmărire de anunţuri, analitice, sociale și alte.";
+"trackingProtection.trackerDescriptionLabel" = "Alege dacă %@ blochează elementele de urmărire publicitare, analtice, ale rețelelor sociale și altele.";
 

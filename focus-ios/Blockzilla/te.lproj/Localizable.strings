@@ -70,14 +70,29 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "అచేతనం";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL ఇప్పటికే ఉంది";
+
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "చేతనం";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "సైట్ల నిర్వహణ";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "నా సైట్లు";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "మేటి సైట్లు";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "కొత్త సెషన్";
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "వెనక్కి";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "చిరునామాను కాపీ చేయి";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "కాపీచేయి";
@@ -157,6 +172,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "విహరించు. చెరిపివెయ్యు. మరల చెయ్యు.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "మూసివేయి";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "రద్దుచేయి";
 
@@ -183,6 +201,12 @@
 
 /* Save button label */
 "Save" = "భద్రపరుచు";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "కాదు";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "అవును";
 
 /* Label for input field for the name of the search engine to be added */
 "Settings.Search.NameToDisplay" = "ప్రదర్శించడానికి పేరు";
@@ -262,6 +286,21 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@ లో తెరువు";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "పేజీ చర్యలు";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "క్రోమ్‌లో తెరువు";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "సఫారీలో తెరువు";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "చేర్చు";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "సిరికి చేర్చు";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "రద్దు చేయి";
 
@@ -273,6 +312,9 @@
 
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "మీ విహరణ చరిత్ర తొలగించబడింది.";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "అతికించు";
 
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "వెతకండి లేదా చిరునామాను ఇవ్వండి";
@@ -322,14 +364,23 @@
 /* Text for a share button */
 "share" = "పంచుకోండి";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "చిరునామాను కాపీ చేయి";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "యాడ్ ట్రాకర్లు";
+
+/* label for analytic trackers. */
+"trackingProtection.analyticTrackerLabel" = "వైశ్లేషిక ట్రాకర్లు";
 
 /* label for content trackers. */
 "trackingProtection.contentTrackerLabel" = "కంటెంట్ ట్రాకర్లు";
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "ట్రాకింగ్ సంరక్షణ ఆఫ్";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "ట్రాకింగ్ సంరక్షణ";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ఇంకా తెలుసుకోండి";

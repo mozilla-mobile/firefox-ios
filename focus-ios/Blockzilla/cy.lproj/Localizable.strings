@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Analluogwyd";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL eisoes yn bod";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Dim URLau Cyfaddas i'w harddangos";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Galluogwyd";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Rheoli gwefannau";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Fy Ngwefannau";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Galluogi i gael %@ awtogwblhau eich hoff URLau.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Hoff Wefannau";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sesiwn Newydd";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Heb weithio. Ceisiwch amnewid y gair chwilio gyda : %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Na";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Iawn";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "I gael awgrymiadau, mae %@ angen anfon yr hyn rydych chi'n ei deipio yn y bar cyfeiriad i'r peiriant chwilio.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Dangos Awgrymiadau Chwilio?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Ychwanegu Peiriant Chwilio Arall";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Rwy'n Deall";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "Bydd %@ yn anfon yr hyn rydych yn ei deipio yn y bar cyfeiriad i'ch peiriant chwilio.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mae Mozilla'n ceisio casglu dim ond yr hyn sydd ei angen arnom i ddarparu a gwella %@ ar gyfer pawb.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Peiriant Chwilio";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Derbyn Awgrymiadau Chwilio";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "CHWILIO";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Gall Face ID ddatgloi %@ os oes URL eisoes ar agor yn yr ap";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Dangos cynghorion sgrin cartref";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Gall dorri rhai fideos a thudalennau Gwe";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Gall Touch ID ddatgloi %@ os oes URL eisoes ar agor yn yr ap";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "data defnydd";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Be sy'n Newydd";
@@ -414,6 +453,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL i'w agor";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Ychwanegu dolen i awtogwblhau";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Diddymu";

@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Desativado";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL já existe";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Sem URLs personalizados a apresentar";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Ativado";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Gerir sites";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Meus sites";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Ativar para ter o %@ a concluir automaticamente os seus URLs favoritos.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Sites mais visitados";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nova sessão";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Isso não funcionou. Tente substituir o termo de pesquisa com isto: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Não";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Sim";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Para obter sugestões, o %@ precisa de enviar o que escreve na barra de endereço para o motor de pesquisa.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Mostrar sugestões de pesquisa?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Adicionar outro motor de pesquisa";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Eu compreendo";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "O %@ irá enviar o que escreve na barra de endereço para o seu motor de pesquisa.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "A Mozilla esforça-se para apenas recolher o que precisamos para melhorar o %@ para todos.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Motor de pesquisa";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Obter sugestões de pesquisa";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "PESQUISA";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "O Face ID pode desbloquear o %@ se o URL já estiver aberto na aplicação";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Mostrar dicas de ecrã inicial";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Poderá quebrar alguns vídeos e páginas Web";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "O Touch ID pode desbloquear o %@ se o URL já estiver aberto na aplicação";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "dados-de-utilizacao";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novidades";
@@ -414,6 +453,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL a abrir";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Adicionar ligação à conclusão automática";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancelar";

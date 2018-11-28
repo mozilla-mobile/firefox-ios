@@ -37,6 +37,9 @@
 /* (No Comment) */
 "About.screenTitle" = "সম্পর্কে";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "পরিচিতি %@";
+
 /* Label on About screen */
 "About.topLabel" = "%@ আপনাকে নিয়ন্ত্রণ দেয়।";
 
@@ -82,8 +85,29 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "সক্রিয়";
 
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "সাইট ব্যবস্থাপনা";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "আমার সাইট";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "শীর্ষ সাইট";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "নতুন সেশন";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "পূর্ববর্তী";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "ঠিকানা অনুলিপি";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "অনুলিপি";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "কাস্টম URL যোগ করুন";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "পরবর্তী";
@@ -142,6 +166,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "মানচিত্র খুলুন";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "পাতায় অনুসন্ধান সম্পন্ন হয়েছে";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "পাতায় পরবর্তী অনুসন্ধান";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "পাতায় পূর্ববর্তী অনুসন্ধান";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "ঠিক আছে, বুঝেছি!";
 
@@ -160,6 +193,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "ব্রাউজ করুন। মুছে দিন। পুনরাবৃত্তি করুন।";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "বন্ধ";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "বাতিল";
 
@@ -171,6 +207,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "ডেস্কটপ সাইটের জন্য অনুরোধ করুন";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari তে ট্যাপ করুন, তারপর কন্টেন্ট ব্লকার নির্বাচন করুন";
@@ -186,6 +225,12 @@
 
 /* Save button label */
 "Save" = "সংরক্ষণ করুন";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "না";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "হ্যাঁ";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "অন্য আরেকটি সার্চ ইঞ্জিন যোগ করুন";

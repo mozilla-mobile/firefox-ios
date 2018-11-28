@@ -101,6 +101,9 @@
 "Browser.backLabel" = "Reen";
 
 /* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopii adreson";
+
+/* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopii";
 
 /* Custom URL button in URL long press menu */
