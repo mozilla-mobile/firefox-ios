@@ -16,7 +16,7 @@ class HomePageSettingViewController: SettingsTableViewController {
         self.prefs = prefs
         super.init(style: .grouped)
 
-        self.title = Strings.SettingsNewTabTitle
+        self.title = Strings.AppMenuOpenHomePageTitleString
         hasSectionSeparatorLine = false
     }
 
