@@ -639,7 +639,15 @@ extension TabManager: WKNavigationDelegate {
     /// then we immediately reload it.
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
         if let tab = selectedTab, tab.webView == webView {
-            webView.reload()
+            tab.consecutiveCrashes += 1
+
+            // Only automatically attempt to reload the crashed
+            // tab three times before giving up.
+            if tab.consecutiveCrashes < 3 {
+                webView.reload()
+            } else {
+                tab.consecutiveCrashes = 0
+            }
         }
     }
 }

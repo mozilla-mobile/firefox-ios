@@ -1551,6 +1551,8 @@
 		CEFC983B1EC0DC60008A3E48 /* TestBookmarksRepairRequestor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestBookmarksRepairRequestor.swift; path = SyncTests/TestBookmarksRepairRequestor.swift; sourceTree = "<group>"; };
 		D000661320472890009BA6F6 /* __firefox__.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = __firefox__.js; sourceTree = "<group>"; };
 		D01017F4219CB6BD009CBB5A /* DownloadContentScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadContentScript.swift; sourceTree = "<group>"; };
+		D010187121AF0E63009CBB5A /* TrackingProtectionStats.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TrackingProtectionStats.js; sourceTree = "<group>"; };
+		D010187E21AF1B26009CBB5A /* TrackingProtectionStats.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = TrackingProtectionStats.js; sourceTree = "<group>"; };
 		D0131B4C1F3CF7D8000CDE86 /* SQLiteFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteFavicons.swift; sourceTree = "<group>"; };
 		D018F93D1F44A7190098F8CA /* Schema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
 		D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryStateHelper.swift; sourceTree = "<group>"; };
@@ -2773,6 +2775,14 @@
 			path = BrowserViewController;
 			sourceTree = "<group>";
 		};
+		D010187021AF0E63009CBB5A /* js */ = {
+			isa = PBXGroup;
+			children = (
+				D010187121AF0E63009CBB5A /* TrackingProtectionStats.js */,
+			);
+			path = js;
+			sourceTree = "<group>";
+		};
 		D03F8F11200EAB8C003C2224 /* AtDocumentStart */ = {
 			isa = PBXGroup;
 			children = (
@@ -2827,6 +2837,7 @@
 				D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */,
 				D0C95DF9200EAE5E00E4E51C /* NoImageModeHelper.js */,
 				D0C95E03200FCA8800E4E51C /* ReaderMode.js */,
+				D010187E21AF1B26009CBB5A /* TrackingProtectionStats.js */,
 			);
 			path = AtDocumentStart;
 			sourceTree = "<group>";
@@ -3334,6 +3345,7 @@
 			isa = PBXGroup;
 			children = (
 				EBB894EB219398E500EB91A0 /* Lists */,
+				D010187021AF0E63009CBB5A /* js */,
 				EBB894F4219398E500EB91A0 /* src */,
 			);
 			path = "content-blocker-lib-ios";

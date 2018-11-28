@@ -71,6 +71,8 @@ class Tab: NSObject {
     // rest of the tab.
     var pageMetadata: PageMetadata?
 
+    var consecutiveCrashes: UInt = 0
+
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,
             let siteURL = URL(string: string) {

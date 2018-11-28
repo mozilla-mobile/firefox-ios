@@ -47,7 +47,7 @@ function install() {
     [].slice.apply(document.images).forEach(function(el) {
       // If the image's natural width is zero, then it has not loaded so we
       // can assume that it may have been blocked.
-      if (el.naturalWidth === 0) {
+      if (el.src && el.complete && el.naturalWidth === 0) {
         sendMessage(el.src);
       }
     });
@@ -150,11 +150,24 @@ function install() {
         if (!_tpErrorHandler.get(this)) {
           // If this `Image` instance fails to load, we can assume
           // it has been blocked.
-          var tpErrorHandler = function() {
+          let tpErrorHandler = () => {
             sendMessage(this.src);
           };
+
           _tpErrorHandler.set(this, tpErrorHandler);
-          this.addEventListener("error", tpErrorHandler);
+
+          // Unfortunately, we need to wait a tick before attaching
+          // our event listener otherwise we risk crashing the
+          // WKWebView content process (Bug 1489543).
+          requestAnimationFrame(() => {
+            // Check if the error has already occurred before
+            // we had a chance to attach our event listener.
+            if (this.src && this.complete && this.naturalWidth === 0) {
+              tpErrorHandler();
+            }
+
+            this.addEventListener("error", tpErrorHandler);
+          });
         }
 
         originalImageSrc.set.call(this, value);
