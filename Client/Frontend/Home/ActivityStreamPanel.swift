@@ -510,7 +510,6 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
             self.topSitesManager.currentTraits = self.view.traitCollection
 
-
             if newSites.count > Int(ActivityStreamTopSiteCacheSize) {
                 self.topSitesManager.content = Array(newSites[0..<Int(ActivityStreamTopSiteCacheSize)])
             } else if newSites.count > numRows * 4 {
