@@ -101,8 +101,9 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
         app.collectionViews.cells[url1Label].tap()
+        waitForTabsButton()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(SettingsScreen)
         closePrivateTabsSwitch.tap()
         navigator.goto(BrowserTab)
