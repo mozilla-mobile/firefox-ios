@@ -509,11 +509,11 @@ extension ActivityStreamPanel: DataObserverDelegate {
             self.reportMissingData(sites: mySites, source: .TopSites)
 
             self.topSitesManager.currentTraits = self.view.traitCollection
-
+            let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
             if newSites.count > Int(ActivityStreamTopSiteCacheSize) {
                 self.topSitesManager.content = Array(newSites[0..<Int(ActivityStreamTopSiteCacheSize)])
-            } else if newSites.count > numRows * 4 {
-                self.topSitesManager.content =  Array(newSites[0..<Int(numRows * 4)])
+            } else if newSites.count > maxItems {
+                self.topSitesManager.content =  Array(newSites[0..<maxItems])
             } else {
                 self.topSitesManager.content = newSites
             }
