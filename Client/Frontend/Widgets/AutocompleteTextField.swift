@@ -332,6 +332,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 }
 
 extension AutocompleteTextField: MenuHelperInterface {
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == MenuHelper.SelectorPasteAndGo {
+            return UIPasteboard.general.hasStrings
+        }
+
+        return super.canPerformAction(action, withSender: sender)
+    }
+
     @objc func menuHelperPasteAndGo() {
         autocompleteDelegate?.autocompletePasteAndGo(self)
     }
