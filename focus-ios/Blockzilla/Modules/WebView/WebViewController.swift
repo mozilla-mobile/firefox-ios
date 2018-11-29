@@ -27,6 +27,9 @@ protocol WebControllerDelegate: class {
     func webControllerDidStartProvisionalNavigation(_ controller: WebController)
     func webControllerDidStartNavigation(_ controller: WebController)
     func webControllerDidFinishNavigation(_ controller: WebController)
+    func webControllerDidNavigateBack(_ controller: WebController)
+    func webControllerDidNavigateForward(_ controller: WebController)
+    func webControllerDidReload(_ controller: WebController)
     func webControllerURLDidChange(_ controller: WebController, url: URL)
     func webController(_ controller: WebController, didFailNavigationWithError error: Error)
     func webController(_ controller: WebController, didUpdateCanGoBack canGoBack: Bool)
@@ -62,6 +65,7 @@ class WebViewController: UIViewController, WebController {
     var onePasswordExtensionItem: NSExtensionItem!
     private var progressObserver: NSKeyValueObservation?
     private var urlObserver: NSKeyValueObservation?
+    private var currentBackForwardItem: WKBackForwardListItem?
     private var userAgent: UserAgent?
     private var trackingProtectionStatus = TrackingProtectionStatus.on(TPPageStats()) {
         didSet {
@@ -279,6 +283,22 @@ extension WebViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let present: (UIViewController) -> Void = { self.present($0, animated: true, completion: nil) }
+
+        switch navigationAction.navigationType {
+            case .backForward:
+                let navigatingBack = webView.backForwardList.backList.filter { $0 == currentBackForwardItem }.count == 0
+                if navigatingBack {
+                    delegate?.webControllerDidNavigateBack(self)
+                } else {
+                    delegate?.webControllerDidNavigateForward(self)
+                }
+            case .reload:
+                delegate?.webControllerDidReload(self)
+            default:
+                break
+        }
+
+        currentBackForwardItem = webView.backForwardList.currentItem
 
         // prevent Focus from opening universal links
         // https://stackoverflow.com/questions/38450586/prevent-universal-links-from-opening-in-wkwebview-uiwebview

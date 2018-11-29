@@ -1017,24 +1017,33 @@ extension BrowserViewController: BrowserToolsetDelegate {
     }
 
     func browserToolsetDidPressBack(_ browserToolset: BrowserToolset) {
-        guard let navigatingFromAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
-
-        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
-        SearchHistoryUtils.isFromURLBar = true
-
-        if !navigatingFromAmpSite {
-            SearchHistoryUtils.goBack()
-        }
-
         webViewController.goBack()
     }
 
-    func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
+    private func handleNavigationBack() {
+        // Check if the previous site we were on was AMP
+        guard let navigatingFromAmpSite = SearchHistoryUtils.pullSearchFromStack()?.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else {
+            return
+        }
+
         // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
         SearchHistoryUtils.isFromURLBar = true
-        webViewController.goForward()
 
-        // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally after the goForward call.
+        // This function is now getting called after our new url is set!!
+        if !navigatingFromAmpSite {
+            SearchHistoryUtils.goBack()
+        }
+    }
+
+    func browserToolsetDidPressForward(_ browserToolset: BrowserToolset) {
+        webViewController.goForward()
+    }
+
+    private func handleNavigationForward() {
+        // Make sure our navigation is not pushed to the SearchHistoryUtils stack (since it already exists there)
+        SearchHistoryUtils.isFromURLBar = true
+
+        // Check if we're navigating to an AMP site *after* the URL bar is updated. This is intentionally grabbing the NEW url
         guard let navigatingToAmpSite = urlBar.url?.absoluteString.hasPrefix(UIConstants.strings.googleAmpURLPrefix) else { return }
 
         if !navigatingToAmpSite {
@@ -1187,10 +1196,15 @@ extension BrowserViewController: WebControllerDelegate {
         }
     }
 
+    func webControllerDidReload(_ controller: WebController) {
+        SearchHistoryUtils.isReload = true
+    }
+
     func webControllerDidStartNavigation(_ controller: WebController) {
-        if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating {
+        if !SearchHistoryUtils.isFromURLBar && !SearchHistoryUtils.isNavigating && !SearchHistoryUtils.isReload {
             SearchHistoryUtils.pushSearchToStack(with: (urlBar.url?.absoluteString)!)
         }
+        SearchHistoryUtils.isReload = false
         SearchHistoryUtils.isNavigating = false
         SearchHistoryUtils.isFromURLBar = false
         urlBar.isLoading = true
@@ -1308,6 +1322,14 @@ extension BrowserViewController: WebControllerDelegate {
         }
 
         return true
+    }
+
+    func webControllerDidNavigateBack(_ controller: WebController) {
+        handleNavigationBack()
+    }
+
+    func webControllerDidNavigateForward(_ controller: WebController) {
+        handleNavigationForward()
     }
 
     func webController(_ controller: WebController, stateDidChange state: BrowserState) {}

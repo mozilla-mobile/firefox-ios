@@ -28,6 +28,7 @@ class SearchHistoryUtils {
 
     static var isFromURLBar = false
     static var isNavigating = false
+    static var isReload = false
 
     static func pushSearchToStack(with searchedText: String) {
         var currentStack = [textSearched]()
