@@ -80,10 +80,8 @@ class HistoryTests: KIFTestCase {
 
         // Check that both appear in the history home panel
         BrowserUtils.openLibraryMenu(tester())
+        tester().waitForAnimationsToFinish()
 
-        // Workaround bug 1508368, go to bookmarks, then to library for updating data
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
         EarlGrey.selectElement(with: grey_accessibilityLabel(urls[0]))
             .perform(grey_longPress())
         EarlGrey.selectElement(with: grey_accessibilityLabel("Delete from History"))
@@ -115,14 +113,14 @@ class HistoryTests: KIFTestCase {
         for pageNo in 1...102 {
             BrowserUtils.addHistoryEntry("Page \(pageNo)", url: URL(string: "\(webRoot!)/numberedPage.html?page=\(pageNo)")!)
         }
+        tester().wait(forTimeInterval: 2)
         let urlToDelete = "\(webRoot!)/numberedPage.html?page=\(102)"
         let oldestUrl = "\(webRoot!)/numberedPage.html?page=\(101)"
-
+        tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
-
-        // Workaround bug 1508368, go to bookmarks, then to library for updating data
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().waitForAnimationsToFinish()
+        tester().waitForView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().waitForView(withAccessibilityLabel: "Page 102")
 
         EarlGrey.selectElement(with: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.4, 0.4))
         if !BrowserUtils.iPad() {
