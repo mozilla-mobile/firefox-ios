@@ -475,6 +475,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     func getTopSites() -> Success {
+        let numRows = max(self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows, 1)
         return self.profile.history.getTopSitesWithLimit(16).both(self.profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
             guard let mySites = topsites.successValue?.asArray(), let pinned = pinnedSites.successValue?.asArray() else {
                 return succeed()
@@ -509,8 +510,11 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
             self.topSitesManager.currentTraits = self.view.traitCollection
 
+
             if newSites.count > Int(ActivityStreamTopSiteCacheSize) {
                 self.topSitesManager.content = Array(newSites[0..<Int(ActivityStreamTopSiteCacheSize)])
+            } else if newSites.count > numRows * 4 {
+                self.topSitesManager.content =  Array(newSites[0..<Int(numRows * 4)])
             } else {
                 self.topSitesManager.content = newSites
             }
