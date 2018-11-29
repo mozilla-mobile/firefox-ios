@@ -138,6 +138,7 @@ class WebViewController: UIViewController, WebController {
     private func setupWebview() {
         let wvConfig = WKWebViewConfiguration()
         wvConfig.websiteDataStore = WKWebsiteDataStore.nonPersistent()
+        wvConfig.allowsInlineMediaPlayback = true
         browserView = WKWebView(frame: .zero, configuration: wvConfig)
 
         browserView.allowsBackForwardNavigationGestures = true
