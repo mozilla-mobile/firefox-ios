@@ -7,7 +7,7 @@ import Shared
 
 class URIFixup {
     static func getURL(_ entry: String) -> URL? {
-        if entry.starts(with: "\(InternalScheme.scheme)://") {
+        if let url = URL(string: entry), InternalURL.isValid(url: url) {
             return URL(string: entry)
         }
 

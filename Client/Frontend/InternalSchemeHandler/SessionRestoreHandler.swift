@@ -8,11 +8,9 @@ import GCDWebServers
 import Shared
 
 func generateResponseThatRedirects(toUrl url: URL) -> (URLResponse, Data) {
-    let html = """
-    <html><head><script>
-    location.replace('\(url.absoluteString)');
-    </script></head></html>
-    """
+    let startTags = "<!DOCTYPE html><html><head><script>"
+    let endTags = "</script></head></html>"
+    let html = startTags + "location.replace('\(url.absoluteString)');" + endTags
 
     let data = html.data(using: .utf8)!
     let response = InternalSchemeHandler.response(forUrl: url)
@@ -26,17 +24,27 @@ class SessionRestoreHandler: InternalSchemeResponse {
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
         guard let url = request.url else { return nil }
 
-        // Handle 'url=' query param
         if let query = url.query, query.starts(with: "url=") {
             let urlParam = String(query.dropFirst("url=".count))
 
-            guard let url = URL(string: urlParam) else {
+            // Handle 'url=' query param
+            // These don't need to be privileged as they can only be pushed on the history stack by a privileged request,
+            // and can only be loaded as a navigation type of backForward, see 'BrowserViewController.webView(decidePolicyFor:, navigationAction:)'.
+
+            guard let nested = URL(string: urlParam), let secondaryUrl = InternalURL(nested) else {
                 assertionFailure()
                 return nil
             }
 
-            // These don't need to be privileged as they can only be pushed on the history stack by a privileged request, thus the back/forth history isn't hackable,
-            // and a page directly loading a 'sessionrestore?url=<some url>' will just load <some url>.
+            if secondaryUrl.isErrorPage {
+                if let original = secondaryUrl.originalURLFromErrorPage {
+                    ErrorPageHelper.redirecting.append(original)
+                }
+                if let (res, data) = InternalSchemeHandler.responders[ErrorPageHandler.path]?.response(forRequest: URLRequest(url: nested)) {
+                    return (InternalSchemeHandler.response(forUrl: url), data)
+                }
+            }
+
             return generateResponseThatRedirects(toUrl: url)
         }
 

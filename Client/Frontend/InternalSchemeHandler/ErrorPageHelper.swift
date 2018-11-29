@@ -131,12 +131,10 @@ fileprivate func cfErrorToName(_ err: CFNetworkErrors) -> String {
 }
 
 class ErrorPageHandler: InternalSchemeResponse {
-    static let path = URL.errorPagePath
+    static let path = InternalURL.Path.errorPage.rawValue
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
-        guard
-            // request.isPrivileged, -> TODO: lock this down, session restore can redirect to an error page
-            let originalUrl = request.url?.originalURLFromErrorPage else {
+        guard let requestUrl = request.url, let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage else {
             return nil
         }
 
@@ -219,7 +217,7 @@ class ErrorPageHelper {
     // When an error page is intentionally loaded, its added to this set. If its in the set, we show
     // it as an error page. If its not, we assume someone is trying to reload this page somehow, and
     // we'll instead redirect back to the original URL.
-    fileprivate static var redirecting = [URL]()
+    static var redirecting = [URL]()
 
     fileprivate weak var certStore: CertStore?
 
@@ -229,8 +227,8 @@ class ErrorPageHelper {
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
         // Don't show error pages for error pages.
-        if url.isInternalErrorPage {
-            if let previousURL = url.originalURLFromErrorPage {
+        if let internalUrl = InternalURL(url), internalUrl.isErrorPage {
+            if let previousURL = internalUrl.originalURLFromErrorPage {
                 // If the previous URL is a local file URL that we know exists,
                 // just load it in the web view. This works around an issue
                 // where we are unable to redirect to a `file://` URL during
@@ -252,13 +250,13 @@ class ErrorPageHelper {
         // (instead of redirecting to the original URL).
         ErrorPageHelper.redirecting.append(url)
 
-        guard var components = URLComponents(string: "\(InternalScheme.url)/\(ErrorPageHandler.path)") else {
+        guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)") else {
             assertionFailure()
             return
         }
 
         var queryItems = [
-            URLQueryItem(name: URL.errorPageUrlParam, value: url.absoluteString),
+            URLQueryItem(name: InternalURL.Param.url.rawValue, value: url.absoluteString),
             URLQueryItem(name: "code", value: String(error.code)),
             URLQueryItem(name: "domain", value: error.domain),
             URLQueryItem(name: "description", value: error.localizedDescription)
@@ -297,24 +295,25 @@ extension ErrorPageHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let errorURL = message.frameInfo.request.url, errorURL.isInternalErrorPage,
+        guard let errorURL = message.frameInfo.request.url,
+            let internalUrl = InternalURL(errorURL),
+            internalUrl.isErrorPage,
+            let originalURL = internalUrl.originalURLFromErrorPage,
             let res = message.body as? [String: String],
-            let originalURL = errorURL.originalURLFromErrorPage,
-            let type = res["type"] {
+            let type = res["type"] else { return }
 
-            switch type {
-            case MessageOpenInSafari:
-                UIApplication.shared.open(originalURL, options: [:])
-            case MessageCertVisitOnce:
-                if let cert = certFromErrorURL(errorURL),
-                    let host = originalURL.host {
-                    let origin = "\(host):\(originalURL.port ?? 443)"
-                    certStore?.addCertificate(cert, forOrigin: origin)
-                    _ = message.webView?.reload()
-                }
-            default:
-                assertionFailure("Unknown error message")
+        switch type {
+        case MessageOpenInSafari:
+            UIApplication.shared.open(originalURL, options: [:])
+        case MessageCertVisitOnce:
+            if let cert = certFromErrorURL(errorURL),
+                let host = originalURL.host {
+                let origin = "\(host):\(originalURL.port ?? 443)"
+                certStore?.addCertificate(cert, forOrigin: origin)
+                _ = message.webView?.reload()
             }
+        default:
+            assertionFailure("Unknown error message")
         }
     }
 }

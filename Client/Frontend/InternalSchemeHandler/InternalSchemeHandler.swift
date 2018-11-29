@@ -26,7 +26,9 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
     // Responders are looked up based on the path component, for instance responder["about/license"] is used for 'internal://local/about/license'
     static var responders = [String: InternalSchemeResponse]()
 
-    // Unprivileged internal:// urls are probably resources on the page.
+    // Unprivileged internal:// urls might be resources on the page such as:
+    // 1) internal resources in the app bundle ( i.e. <link href="errorpage-resource/NetError.css"> )
+    // 2) images, javascript, other html with a relative URL (i.e. <img src="smiley.gif"> will have an absolute path of "internal://thedomain.com/thepage/smiley.gif"). Reader mode pages would have this problem.
     // Load from the app bundle or try download as https:// scheme.
     func downloadResource(urlSchemeTask: WKURLSchemeTask) -> Bool {
         guard let https = urlSchemeTask.request.url?.absoluteString.replacingOccurrences(of: "internal://", with: "https://"), let url = URL(string: https) else {
@@ -86,7 +88,7 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
             urlSchemeTask.request.mainDocumentURL != urlSchemeTask.request.url, downloadResource(urlSchemeTask: urlSchemeTask) {
             return
         }
-
+ 
         guard let responder = InternalSchemeHandler.responders[path] else {
             urlSchemeTask.didFailWithError(InternalPageSchemeHandlerError.noResponder)
             return

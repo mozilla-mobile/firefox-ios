@@ -168,12 +168,13 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
         self.titleText.text = tab.displayTitle
 
         if tab.displayTitle.isEmpty {
-            if tab.webView?.url?.isInternalScheme ?? true {
+            if let url = tab.webView?.url, let internalScheme = InternalURL(url) {
                 self.titleText.text = Strings.AppMenuNewTabTitleString
+                self.accessibilityLabel = internalScheme.aboutComponent
             } else {
                 self.titleText.text = tab.webView?.url?.absoluteDisplayString
             }
-            self.accessibilityLabel = tab.url?.aboutComponent ?? ""
+            
             self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
         } else {
             self.accessibilityLabel = tab.displayTitle

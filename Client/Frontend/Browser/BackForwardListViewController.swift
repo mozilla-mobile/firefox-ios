@@ -92,13 +92,11 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     func loadSitesFromProfile() {
         let sql = profile.favicons as! SQLiteHistory
         let urls: [String] = listData.compactMap {
-            if !$0.url.isInternalScheme {
+            guard let internalUrl = InternalURL($0.url) else {
                 return $0.url.absoluteString
             }
-            if let url = $0.url.getQuery()["url"]?.unescape() {
-                return url
-            }
-            return nil
+
+            return internalUrl.extractedUrlParam?.absoluteString
         }
 
         sql.getSitesForURLs(urls).uponQueue(.main) { result in
@@ -120,7 +118,14 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
 
         //error url's are OK as they are used to populate history on session restore.
         listData = items.filter {
-          return !($0.url.isInternalScheme && ($0.url.originalURLFromErrorPage?.isInternalScheme ?? true)) || $0.url.isAboutHomeURL
+            guard let internalUrl = InternalURL($0.url) else { return true }
+            if internalUrl.isAboutHomeURL {
+                return true
+            }
+            if let url = internalUrl.originalURLFromErrorPage, InternalURL.isValid(url: url){
+                return false
+            }
+            return true
         }
     }
 
@@ -231,18 +236,24 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: BackForwardListCellIdentifier, for: indexPath) as! BackForwardTableViewCell
         let item = listData[indexPath.item]
-        let urlString = item.url.isInternalScheme ? item.url.getQuery()["url"]?.unescape() : item.url.absoluteString
+        let urlString = { () -> String in
+            guard let url = InternalURL(item.url), let extracted = url.extractedUrlParam else {
+                return item.url.absoluteString
+            }
+            return extracted.absoluteString
+        }()
 
         cell.isCurrentTab = listData[indexPath.item] == self.currentItem
         cell.connectingBackwards = indexPath.item != listData.count-1
         cell.connectingForwards = indexPath.item != 0
 
-        guard let url = urlString, !item.url.isAboutHomeURL else {
+        let isAboutHomeURL = InternalURL(item.url)?.isAboutHomeURL ?? false
+        guard !isAboutHomeURL else {
             cell.site = Site(url: item.url.absoluteString, title: Strings.FirefoxHomePage)
             return cell
         }
 
-        cell.site = sites[url] ?? Site(url: url, title: item.title ?? "")
+        cell.site = sites[urlString] ?? Site(url: urlString, title: item.title ?? "")
         cell.setNeedsDisplay()
 
         return cell

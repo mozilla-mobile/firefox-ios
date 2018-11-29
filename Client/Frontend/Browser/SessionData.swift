@@ -6,10 +6,10 @@ import Foundation
 
 import Shared
 
-private func sanitize(urls: [URL]) -> [URL] {
+private func migrate(urls: [URL]) -> [URL] {
     return urls.compactMap { url in
         var url = url
-        [("http://localhost:6571/errors/error.html?url=", "\(InternalScheme.url)/\(SessionRestoreHandler.path)?url=")
+        [("http://localhost:6571/errors/error.html?url=", "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=")
             // TODO: handle reader pages ("http://localhost:6571/reader-mode/page?url=", "\(InternalScheme.url)/\(ReaderModeHandler.path)?url=")
             ].forEach {
             oldItem, newItem in
@@ -52,7 +52,7 @@ class SessionData: NSObject, NSCoding {
     **/
     init(currentPage: Int, urls: [URL], lastUsedTime: Timestamp) {
         self.currentPage = currentPage
-        self.urls = sanitize(urls: urls)
+        self.urls = migrate(urls: urls)
         self.lastUsedTime = lastUsedTime
 
         assert(urls.count > 0, "Session has at least one entry")
@@ -61,13 +61,13 @@ class SessionData: NSObject, NSCoding {
 
     required init?(coder: NSCoder) {
         self.currentPage = coder.decodeAsInt(forKey: "currentPage")
-        self.urls = sanitize(urls: coder.decodeObject(forKey: "urls") as? [URL] ?? [URL]())
+        self.urls = migrate(urls: coder.decodeObject(forKey: "urls") as? [URL] ?? [URL]())
         self.lastUsedTime = coder.decodeAsUInt64(forKey: "lastUsedTime")
     }
 
     func encode(with coder: NSCoder) {
         coder.encode(currentPage, forKey: "currentPage")
-        coder.encode(sanitize(urls: urls), forKey: "urls")
+        coder.encode(migrate(urls: urls), forKey: "urls")
         coder.encode(Int64(lastUsedTime), forKey: "lastUsedTime")
     }
 }

@@ -15,7 +15,7 @@ extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
 
-        guard navigationAction.isAllowed, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
+        guard !navigationAction.isInternalUnprivileged, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
             print("Denying popup from request: \(navigationAction.request)")
             return nil
         }
@@ -97,12 +97,12 @@ extension BrowserViewController: WKUIDelegate {
 
 extension WKNavigationAction {
     /// Allow local requests only if the request is privileged.
-    var isAllowed: Bool {
+    var isInternalUnprivileged: Bool {
         guard let url = request.url else {
             return true
         }
 
-        return !url.isWebPage(includeDataURIs: false) || !url.isInternalScheme || request.isPrivileged
+        return InternalURL.isValid(url: url) && !request.isPrivileged
     }
 }
 
@@ -161,17 +161,17 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if url.isInternalScheme {
-            decisionHandler(.allow)
-            return
-        }
+        if let url = InternalURL(url) {
+            if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
+                log.warning("Denying unprivileged request: \(navigationAction.request)")
+                decisionHandler(.cancel)
+                return
+            }
 
-        if !navigationAction.isAllowed && navigationAction.navigationType != .backForward {
-            log.warning("Denying unprivileged request: \(navigationAction.request)")
-            decisionHandler(.cancel)
-            return
-        }
+                decisionHandler(.allow)
+                return
 
+        }
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
@@ -324,14 +324,6 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
             ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
-
-            // If the local web server isn't working for some reason (Firefox cellular data is
-            // disabled in settings, for example), we'll fail to load the session restore URL.
-            // We rely on loading that page to get the restore callback to reset the restoring
-            // flag, so if we fail to load that page, reset it here.
-            if url.aboutComponent == "\(SessionRestoreHandler.path)" {
-                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
-            }
         }
     }
 

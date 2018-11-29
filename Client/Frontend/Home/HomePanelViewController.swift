@@ -36,7 +36,7 @@ enum HomePanelType: Int {
     case downloads = 4
 
     var internalUrl: URL {
-        let aboutUrl: URL! = URL(string:"\(InternalScheme.url)/\(AboutHomeHandler.path)")
+        let aboutUrl: URL! = URL(string:"\(InternalURL.baseUrl)/\(AboutHomeHandler.path)")
         return URL(string: "#panel=\(self.rawValue)", relativeTo: aboutUrl)!
     }
 }

@@ -198,11 +198,11 @@ extension URL {
             return self.decodeReaderModeURL?.havingRemovedAuthorisationComponents()
         }
 
-        if self.isInternalErrorPage {
-            return originalURLFromErrorPage?.displayURL
+        if let internalUrl = InternalURL(self), internalUrl.isErrorPage {
+            return internalUrl.originalURLFromErrorPage?.displayURL
         }
 
-        if !self.isInternalScheme {
+        if !InternalURL.isValid(url: self) {
             return self.havingRemovedAuthorisationComponents()
         }
 
@@ -338,62 +338,78 @@ extension URL {
 
 // Helpers to deal with ErrorPage URLs
 
-extension URL {
-    public static let errorPagePath = "errorpage"
-    public static let errorPageUrlParam = "url"
+public struct InternalURL {
+    public static let scheme = "internal"
+    public static let baseUrl = "\(scheme)://local"
+    public enum Path: String {
+        case errorPage = "errorpage"
+        case sessionRestore = "sessionrestore"
+        func matches(_ string: String) -> Bool { return string == self.rawValue }
+    }
 
-    public var isInternalErrorPage: Bool {
-        return isInternalScheme && path == "/\(URL.errorPagePath)"
+    public enum Param: String {
+        case url = "url"
+        func matches(_ string: String) -> Bool { return string == self.rawValue }
+    }
+
+    public let url: URL
+
+    public static func isValid(url: URL) -> Bool {
+        if AppConstants.IsRunningTest, url.path.contains("test-fixture/") {
+            return false
+        }
+
+        // TODO: (reader-mode-custom-scheme) remove this line when updating.
+        return url.absoluteString.hasPrefix("http://localhost:6571/") || InternalURL.scheme == url.scheme
+    }
+
+    public init?(_ url: URL) {
+        guard InternalURL.isValid(url: url) else {
+            return nil
+        }
+
+        self.url = url
+    }
+
+    public var isErrorPage: Bool {
+        return url.path == "/\(InternalURL.Path.errorPage)"
     }
 
     public var originalURLFromErrorPage: URL? {
-        let components = URLComponents(url: self, resolvingAgainstBaseURL: false)
-        if let queryURL = components?.queryItems?.find({ $0.name == URL.errorPageUrlParam })?.value {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        if let queryURL = components?.queryItems?.find({ Param.url.matches($0.name) })?.value {
             return URL(string: queryURL)
         }
 
         return nil
     }
 
-    public var isInternalScheme: Bool {
-        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
-            return false
-        }
-
-        // TODO: (reader-mode-custom-scheme) remove this line when updating.
-        if absoluteString.hasPrefix("http://localhost:6571/") { return true }
-
-        return scheme == InternalScheme.scheme
-    }
-}
-
-// Helpers to deal with About URLs
-extension URL {
-    public var isAboutHomeURL: Bool {
-        if isInternalScheme, let urlString = self.getQuery()["url"]?.unescape() {
-            let url = URL(string: urlString) ?? self
-            return url.aboutComponent == "home"
-        }
-        return self.aboutComponent == "home"
-    }
-
-    public var isAboutURL: Bool {
-        return self.aboutComponent != nil
-    }
-
-    /// Return the path after "about/" in the URI.
-    public var aboutComponent: String? {
-        guard isInternalScheme else {
-            return nil
-        }
-
-        let aboutPath = "/about/"
-        if path.hasPrefix(aboutPath) {
-            return String(path[aboutPath.endIndex...])
+    public var extractedUrlParam: URL? {
+        if let nestedUrl = url.getQuery()[InternalURL.Param.url.rawValue]?.unescape() {
+            return URL(string: nestedUrl)
         }
         return nil
     }
 
+    public var isAboutHomeURL: Bool {
+        if let urlParam = extractedUrlParam, let internalUrlParam = InternalURL(urlParam) {
+            return internalUrlParam.aboutComponent == "home"
+        }
+        return aboutComponent == "home"
+    }
+
+    public var isAboutURL: Bool {
+        return aboutComponent != nil
+    }
+
+    /// Return the path after "about/" in the URI.
+    public var aboutComponent: String? {
+        let aboutPath = "/about/"
+        if url.path.hasPrefix(aboutPath) {
+            return String(url.path[aboutPath.endIndex...])
+        }
+        return nil
+    }
 }
 
 //MARK: Private Helpers

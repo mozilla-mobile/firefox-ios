@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 
 /**
  * Handles screenshots for a given tab, including pages with non-webview content.
@@ -20,7 +21,7 @@ class ScreenshotHelper {
         var screenshot: UIImage?
 
         if let url = tab.url {
-            if url.isAboutHomeURL {
+            if InternalURL(url)?.isAboutHomeURL ?? false {
                 if let homePanel = controller?.homePanelController {
                     screenshot = homePanel.view.screenshot(quality: UIConstants.ActiveScreenshotQuality)
                 }

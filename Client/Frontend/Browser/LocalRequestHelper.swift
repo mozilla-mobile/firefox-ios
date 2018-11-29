@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import Shared
 
 class LocalRequestHelper: TabContentScript {
     func scriptMessageHandlerName() -> String? {
@@ -11,7 +12,7 @@ class LocalRequestHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard message.frameInfo.request.url?.isInternalScheme ?? false else { return }
+        guard let requestUrl = message.frameInfo.request.url, InternalURL.isValid(url: requestUrl) else { return }
 
         let params = message.body as! [String: String]
 

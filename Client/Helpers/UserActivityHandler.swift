@@ -36,7 +36,7 @@ class UserActivityHandler {
     }
 
     fileprivate func setUserActivityForTab(_ tab: Tab, url: URL) {
-        guard !tab.isPrivate, url.isWebPage(includeDataURIs: false), !url.isInternalScheme else {
+        guard !tab.isPrivate, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
             tab.userActivity?.resignCurrent()
             tab.userActivity = nil
             return

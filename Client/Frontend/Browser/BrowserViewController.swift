@@ -737,18 +737,19 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func updateInContentHomePanel(_ url: URL?) {
+        let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         if !urlBar.inOverlayMode {
             guard let url = url else {
                 hideHomePanelController()
                 return
             }
-            if url.isAboutHomeURL {
+            if isAboutHomeURL {
                 let panel = NewTabPage.fromAboutHomeURL(url: url)
                 showHomePanelController(inline: true, panel: panel)
-            } else if !url.absoluteString.hasPrefix("\(InternalScheme.url)/\(SessionRestoreHandler.path)") {
+            } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideHomePanelController()
             }
-        } else if url?.isAboutHomeURL ?? false {
+        } else if isAboutHomeURL {
             showHomePanelController(inline: false)
         }
     }
@@ -841,7 +842,7 @@ class BrowserViewController: UIViewController {
         switch path {
         case .estimatedProgress:
             guard webView == tabManager.selectedTab?.webView else { break }
-            if !(webView.url?.isInternalScheme ?? false) {
+            if let url = webView.url, !InternalURL.isValid(url: url) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
                 // Profiler.end triggers a screenshot, and a delay is needed here to capture the correct screen
                 // (otherwise the screen prior to this step completing is captured).
@@ -899,13 +900,12 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
-        guard let url = webView.url, url.isWebPage(), !url.isInternalScheme else {
+        guard let url = webView.url, url.isWebPage(), !InternalURL.isValid(url: url) else {
             return
         }
         if NoImageModeHelper.isActivated(profile.prefs) {
             webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
         }
-
     }
 
     func updateUIForReaderHomeStateForTab(_ tab: Tab) {
@@ -1085,15 +1085,15 @@ class BrowserViewController: UIViewController {
             print("Cannot navigate in tab without a webView")
             return
         }
-        
-        webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
 
         if let url = webView.url {
-            if !url.isInternalScheme, !url.isFileURL {
+            if !InternalURL.isValid(url: url), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
 
                 // Re-run additional scripts in webView to extract updated favicons and metadata.
                 runScriptsOnWebView(webView)
+
+                webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
             }
 
             TabEvent.post(.didChangeURL(url), for: tab)
@@ -1322,8 +1322,8 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDisplayTextForURL(_ url: URL?) -> (String?, Bool) {
         // use the initial value for the URL so we can do proper pattern matching with search URLs
-        var searchURL = self.tabManager.selectedTab?.currentInitialURL
-        if searchURL?.isInternalScheme ?? true {
+        var searchURL = self.tabManager.selectedTab?.url
+        if let url = searchURL, InternalURL.isValid(url: url) {
             searchURL = url
         }
         if let query = profile.searchEngines.queryForSearchURL(searchURL as URL?) {
@@ -1821,7 +1821,7 @@ extension BrowserViewController: TabManagerDelegate {
         navigationToolbar.updateReloadStatus(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
-        if !(selected?.webView?.url?.isInternalScheme ?? false) {
+        if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
             self.urlBar.updateProgressBar(Float(selected?.estimatedProgress ?? 0))
         }
 
@@ -1858,7 +1858,7 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        if let url = tab.url, !url.isAboutURL && !tab.isPrivate {
+        if let url = tab.url, !(InternalURL(url)?.isAboutURL ?? false), !tab.isPrivate {
             profile.recentlyClosedTabs.addTab(url as URL, title: tab.title, faviconURL: tab.displayFavicon?.url)
         }
         updateTabCountUsingTabManager(tabManager)

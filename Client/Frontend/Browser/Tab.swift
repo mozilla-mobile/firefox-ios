@@ -258,7 +258,7 @@ class Tab: NSObject {
                 return
             }
 
-            if let restoreURL = URL(string: "\(InternalScheme.url)/\(SessionRestoreHandler.path)?history=\(json)") {
+            if let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?history=\(json)") {
                 let request = PrivilegedRequest(url: restoreURL) as URLRequest
                 webView.load(request)
                 lastRequest = request
@@ -355,7 +355,7 @@ class Tab: NSObject {
 
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
-        if let url = self.url, url.isAboutHomeURL, sessionData == nil, !restoring {
+        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !restoring {
             return ""
         }
 
@@ -364,10 +364,6 @@ class Tab: NSObject {
         }
 
         return lastTitle
-    }
-
-    var currentInitialURL: URL? {
-        return self.webView?.backForwardList.currentItem?.initialURL
     }
 
     var displayFavicon: Favicon? {

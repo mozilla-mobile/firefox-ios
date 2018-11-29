@@ -72,7 +72,7 @@ class TabManager: NSObject {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         }
 
-        configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalScheme.scheme)
+        configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
     }
 
@@ -619,7 +619,7 @@ extension TabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         hideNetworkActivitySpinner()
         // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
-        if let url = webView.url, !url.isInternalScheme {
+        if let url = webView.url, !InternalURL.isValid(url: url) {
             storeChanges()
         }
     }
