@@ -29,7 +29,7 @@ private struct TabLocationViewUX {
     static let Spacing: CGFloat = 8
     static let StatusIconSize: CGFloat = 18
     static let TPIconSize: CGFloat = 24
-    static let ReaderModeIconSize: CGFloat = 34
+    static let ReaderModeButtonWidth: CGFloat = 34
     static let ButtonSize: CGFloat = 44
     static let URLBarPadding = 4
 }
@@ -222,7 +222,7 @@ class TabLocationView: UIView {
             make.height.equalTo(26)
         }
         readerModeButton.snp.makeConstraints { make in
-            make.width.equalTo(TabLocationViewUX.ReaderModeIconSize)
+            make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
             make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
 
