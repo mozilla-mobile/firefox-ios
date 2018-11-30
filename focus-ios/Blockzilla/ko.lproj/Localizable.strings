@@ -37,8 +37,14 @@
 /* (No Comment) */
 "About.screenTitle" = "정보";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, takes the user to a page with information about the product. Also displayed as a header for the About page. */
+"About.title" = "%@ 정보";
+
 /* Label on About screen */
 "About.topLabel" = "%@로 데이터 제어가 가능합니다.";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "%@로 돌아올 때 인증함";
 
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "사용자 정의 URL 추가";
@@ -82,14 +88,44 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "사용 안 함";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL이 이미 존재함";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "표시할 사용자 정의 URL 없음";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "사용함";
 
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "사이트 관리";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "내 사이트";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "%@가 내 즐겨찾기 URL을 자동 완성 할 수 있게 합니다.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "상위 사이트";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "새 세션";
+
+/* %@ is app name. Explanation for why the app needs access to biometric information. Prompt is only shown once when the user first tries to enable Face ID to open the app. */
+"BiometricPrompt.reason" = "허용되지 않은 접근을 막기 위해 %@를 다시 열 때 잠급니다.";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "뒤로";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "주소 복사";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyMenuLabel" = "복사";
+
+/* Custom URL button in URL long press menu */
+"Browser.customURLMenuLabel" = "사용자 정의 URL 추가";
 
 /* Accessibility label for the forward button */
 "Browser.forwardLabel" = "앞으로";
@@ -148,6 +184,15 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "지도 열기";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "페이지내 검색 완료";
+
+/* Accessibility label for next result button in Find in Page Toolbar. */
+"FindInPage.NextResult" = "페이지내 다음 찾기";
+
+/* Accessibility label for previous result button in Find in Page Toolbar. */
+"FindInPage.PreviousResult" = "페이지내 이전 찾기";
+
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "네, 알겠습니다!";
 
@@ -166,6 +211,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "쓰고, 지우고. 쓰고, 지우고.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "닫기";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "취소";
 
@@ -177,6 +225,9 @@
 
 /* Label in share alert to open the URL in Safari */
 "Open.Safari" = "Safari";
+
+/* Label for button that requests the desktop version of the currently loaded website. */
+"Request Desktop Site" = "데스크톱 사이트 요청";
 
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Safari에서 콘텐츠 차단";
@@ -192,6 +243,21 @@
 
 /* Save button label */
 "Save" = "저장";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "찾을 수 없습니다. 검색어를 이것으로 바꿔 보세요: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "아니오";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "예";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "추천 검색을 사용하려면 %@가 주소창에 입력한 내용을 검색 엔진에 보내야 합니다.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "추천 검색을 사용할까요?";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "다른 검색 엔진 추가";
@@ -235,17 +301,29 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "차단";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@가 주소창에 입력한 내용을 검색엔진에 전송합니다.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla는 %@ 이용에 더 나은 서비스를 제공하고 향상시키는 데 오직 필요한 정보만을 수집합니다.";
 
 /* Subtitle for Send Anonymous Usage Data toggle on main screen */
 "Settings.learnMore" = "더 알아보기.";
 
+/* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
+"Settings.rate" = "%@ 평가하기";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI 연동";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "설정";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "검색 엔진";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "추천 검색어 켜기";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "검색";
@@ -261,6 +339,9 @@
 
 /* Section label for privacy toggles */
 "Settings.sectionPrivacy" = "개인 정보";
+
+/* Header label for security toggles displayed in the settings menu */
+"Settings.sectionSecurity" = "보안";
 
 /* Label for toggle on main screen */
 "Settings.toggleBlockAds" = "광고 추적기 차단";
@@ -289,6 +370,15 @@
 /* Description for 'Block social Trackers' */
 "Settings.toggleBlockSocialDescription" = "사용자의 방문 기록을 추적하거나 공유 버튼과 같은 기능을 표시하기 위해 사이트에 내장되어 있습니다";
 
+/* Label for toggle on settings screen */
+"Settings.toggleFaceID" = "Face ID를 사용해서 앱 잠금 해제";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleFaceIDDescription" = "앱에서 URL이 이미 열렸다면 Face ID를 사용해서 %@ 잠금을 해제할 수 있습니다.";
+
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "홈 스크린 팁 표시";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "동영상이나 웹 페이지가 제대로 표시되지 않을 수 있음";
 
@@ -298,14 +388,74 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "사용현황 데이터 보내기";
 
+/* Label for toggle on settings screen */
+"Settings.toggleTouchID" = "Touch ID를 사용해서 앱 잠금 해제";
+
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "앱에서 URL이 이미 열렸다면 Touch ID를 사용해서 %@ 잠금을 해제할 수 있습니다.";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "사용 데이타";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "새로운 기능";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI 단축키";
+
+/* Text for the share menu option when a user wants to open the find in page menu */
+"ShareMenu.FindInPage" = "페이지내 검색";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
 "ShareMenu.GetFirefox" = "Firefox 앱 설치";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "%@에서 열기";
+
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "페이지 작업";
+
+/* Text for the share menu option when a user wants to reload the site as a desktop */
+"ShareMenu.RequestDesktop" = "데스크톱 사이트 요청";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Chrome에서 열기";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Firefox에서 열기";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Safari에서 열기";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "페이지 공유...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "추가";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Siri에 추가";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "바로 가기 다시 기록 또는 삭제";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "삭제";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "지우고 열기";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "즐겨 찾는 사이트 열기";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "즐겨 찾는 사이트 열기";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "열 URL";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "자동 완성에 링크 추가";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "취소";
@@ -319,6 +469,12 @@
 /* Message shown after pressing the Erase button */
 "URL.eraseMessageLabel" = "페이지 탐색 기록이 삭제되었습니다.";
 
+/* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
+"URL.findOnPageLabel" = "페이지내 검색: %@";
+
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "붙여넣기";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "검색어 또는 주소 입력";
 
@@ -331,6 +487,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "%@에서 열기";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "클립보드에 URL 복사됨";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "주소창 선택";
 
@@ -342,6 +501,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "링크 복사";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "복사 한 링크:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "이미지 저장";
@@ -364,6 +526,15 @@
 /* Text displayed as an example of the template to add a search engine. */
 "settings.Search.SearchTemplateExample" = "예: searchengineexample.com/search/?q=%s";
 
+/* Text for a share button */
+"share" = "공유";
+
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "주소 복사";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "Touch ID를 사용하여 %@로 돌아옴";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "광고 추적기";
 
@@ -374,7 +545,10 @@
 "trackingProtection.contentTrackerLabel" = "콘텐츠 추적기";
 
 /* text showing the tracking protection is disabled. */
-"trackingProtection.disabledLabel" = "추적 차단 해제";
+"trackingProtection.disabledLabel" = "추적 방지해제";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "추적 방지";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "자세히 보기";

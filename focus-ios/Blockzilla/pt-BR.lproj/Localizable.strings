@@ -88,6 +88,9 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Desativado";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "A URL já existe";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Não há URLs personalizadas para mostrar";
 

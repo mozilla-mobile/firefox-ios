@@ -107,7 +107,7 @@
 "Autocomplete.mySitesDesc" = "Activer pour que %@ complète automatiquement vos adresses web favorites.";
 
 /* Label for enabling or disabling top sites */
-"Autocomplete.topSites" = "Sites les plus visités";
+"Autocomplete.topSites" = "Sites populaires";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nouvelle session";
