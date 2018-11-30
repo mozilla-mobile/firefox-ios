@@ -64,6 +64,11 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadData()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -85,8 +90,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
-
-        reloadData()
     }
 
     deinit {
