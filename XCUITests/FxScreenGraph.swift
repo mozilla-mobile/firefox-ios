@@ -559,7 +559,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(SiriSettings) { screenState in
         screenState.gesture(forAction: Action.OpenSiriFromSettings) { userState in
-            app.staticTexts["Open New Tab"].tap()
+            // Tap on Open New Tab to open Siri
+            app.cells["SiriSettings"].staticTexts.element(boundBy: 0).tap()
         }
         screenState.backAction = navigationControllerBackAction
     }
