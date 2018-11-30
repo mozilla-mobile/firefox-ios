@@ -48,6 +48,7 @@ enum NewTabPage: String {
     case bookmarks = "Bookmarks"
     case history = "History"
     case readingList = "ReadingList"
+    case downloads = "Downloads"
 
     var settingTitle: String {
         switch self {
@@ -63,6 +64,8 @@ enum NewTabPage: String {
             return Strings.SettingsNewTabHistory
         case .readingList:
             return Strings.SettingsNewTabReadingList
+        case .downloads:
+            return Strings.DownloadsButtonTitle
         }
     }
 
@@ -86,6 +89,25 @@ enum NewTabPage: String {
             return nil
         }
         return homePanel.localhostURL as URL
+    }
+
+    static func fromAboutHomeURL(url: URL) -> NewTabPage? {
+        guard url.isAboutHomeURL else { return nil}
+        guard let panelNumber = url.fragment?.split(separator: "=").last else { return nil }
+        switch panelNumber {
+        case "0":
+            return NewTabPage.topSites
+        case "1":
+            return NewTabPage.bookmarks
+        case "2":
+            return NewTabPage.history
+        case "3":
+            return NewTabPage.readingList
+        case "4":
+            return NewTabPage.downloads
+        default:
+            return nil
+        }
     }
 
     static let allValues = [blankPage, topSites, bookmarks, history, readingList, homePage]

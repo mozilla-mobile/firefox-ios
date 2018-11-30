@@ -679,37 +679,22 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func showHomePanelController(inline: Bool) {
+    fileprivate func showHomePanelController(inline: Bool, panel: NewTabPage? = nil) {
         homePanelIsInline = inline
+        let currentChoice = NewTabAccessors.getNewTabPage(self.profile.prefs)
+
+        if let homePanelVC = homePanelController as? TabbedHomePanelController, (homePanelVC.currentPanelType != currentChoice || homePanelVC.currentPanelType != panel) {
+            hideHomePanelController()
+        }
 
         if homePanelController == nil {
-            var homePanelVC: (UIViewController & HomePanel)?
-            let currentChoice = NewTabAccessors.getNewTabPage(self.profile.prefs)
-            switch currentChoice {
-            case .topSites:
-                homePanelVC = ActivityStreamPanel(profile: profile)
-            case .bookmarks:
-                homePanelVC = BookmarksPanel(profile: profile)
-            case .history:
-                homePanelVC = HistoryPanel(profile: profile)
-            case .readingList:
-                homePanelVC = ReadingListPanel(profile: profile)
-            default:
-                break
-            }
-
-            if let vc = homePanelVC {
-                let navController = ThemedNavigationController(rootViewController: vc)
-                navController.setNavigationBarHidden(true, animated: false)
-                navController.interactivePopGestureRecognizer?.delegate = nil
-                navController.view.alpha = 0
+            if let navController = TabbedHomePanelController(choice: panel ?? currentChoice, profile: profile) {
                 self.homePanelController = navController
-                vc.homePanelDelegate = self
+                navController.currentPanel?.homePanelDelegate = self
                 addChildViewController(navController)
                 view.addSubview(navController.view)
-                vc.didMove(toParentViewController: self)
+                navController.currentPanel?.didMove(toParentViewController: self)
             }
-
         }
 
         guard let homePanelController = self.homePanelController else {
@@ -758,7 +743,8 @@ class BrowserViewController: UIViewController {
                 return
             }
             if url.isAboutHomeURL {
-                showHomePanelController(inline: true)
+                let panel = NewTabPage.fromAboutHomeURL(url: url)
+                showHomePanelController(inline: true, panel: panel)
             } else if url.isErrorPageURL || !url.isLocalUtility || url.isReaderModeURL {
                 hideHomePanelController()
             }
