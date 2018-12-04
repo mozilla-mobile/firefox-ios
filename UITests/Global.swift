@@ -416,7 +416,6 @@ class BrowserUtils {
         tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.waitForAnimationsToFinish()
         tester.tapView(withAccessibilityIdentifier: "menu-library")
-        tester.waitForView(withAccessibilityIdentifier: "HomePanels.History")
     }
 
     class func closeLibraryMenu(_ tester: KIFUITestActor) {

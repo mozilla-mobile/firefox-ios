@@ -123,10 +123,13 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let url1 = urls[0].url
         let url2 = urls[1].url
         BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false)
+        tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
         tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
-
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().waitForAnimationsToFinish()
         let historyListShown = GREYCondition(name: "Wait for history to appear", block: {
             var errorOrNil: NSError?
             EarlGrey.selectElement(with: grey_accessibilityLabel(url1))
