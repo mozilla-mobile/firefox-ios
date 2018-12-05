@@ -75,15 +75,11 @@ class IntegrationTests: BaseTestCase {
     }
 
     func testFxASyncBookmarkDesktop () {
-        // Bookmark is added by the DB
         // Sign into Firefox Accounts
         signInFxAccounts()
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
-        navigator.goto(HomePanelsScreen)
-        waitForTabsButton()
-        navigator.nowAt(HomePanelsScreen)
         navigator.goto(HomePanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"].cells.element(boundBy: 1).staticTexts["Example Domain"])
     }
@@ -141,9 +137,6 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced History
-        navigator.goto(HomePanelsScreen)
-        waitForTabsButton()
-        navigator.nowAt(HomePanelsScreen)
         navigator.goto(HomePanel_History)
         waitForExistence(app.tables.cells.staticTexts[historyItemSavedOnDesktop], timeout: 5)
     }
@@ -170,9 +163,6 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced Tabs
-        navigator.goto(HomePanelsScreen)
-        waitForTabsButton()
-        navigator.nowAt(HomePanelsScreen)
         navigator.goto(HomePanel_History)
         waitForExistence(app.cells["HistoryPanel.syncedDevicesCell"], timeout: 5)
         app.cells["HistoryPanel.syncedDevicesCell"].tap()
