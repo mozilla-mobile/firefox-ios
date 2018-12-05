@@ -60,7 +60,8 @@ class NewTabSettingsTest: BaseTestCase {
 
         // Add one history item and check the new tab screen
         navigator.openURL("example.com")
-        navigator.nowAt(BrowserTab)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForExistence(app.tables["History List"].cells.staticTexts["Example Domain"])
     }
