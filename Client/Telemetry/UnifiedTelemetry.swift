@@ -9,6 +9,13 @@ import Telemetry
 // 'Unified Telemetry' is the name for Mozilla's telemetry system
 //
 class UnifiedTelemetry {
+
+    // Boolean flag to temporarily remember if we crashed during the
+    // last run of the app. We cannot simply use `Sentry.crashedLastLaunch`
+    // because we want to clear this flag after we've already reported it
+    // to avoid re-reporting the same crash multiple times.
+    private var crashedLastLaunch: Bool
+
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
         guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(pathComponent).path, FileManager.default.fileExists(atPath: oldPath) else {
             return
@@ -30,6 +37,8 @@ class UnifiedTelemetry {
     }
 
     init(profile: Profile) {
+        crashedLastLaunch = Sentry.crashedLastLaunch
+
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("eventArray-MozTelemetry-Default-mobile-event.json", to: .cachesDirectory)
@@ -63,12 +72,24 @@ class UnifiedTelemetry {
         let prefs = profile.prefs
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
             var outputDict = inputDict // make a mutable copy
+
+            var settings: [String: Any?] = inputDict["settings"] as? [String: Any?] ?? [:]
+
             if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
                 outputDict["defaultNewTabExperience"] = newTabChoice as AnyObject?
             }
             if let chosenEmailClient = prefs.stringForKey(PrefsKeys.KeyMailToOption) {
                 outputDict["defaultMailClient"] = chosenEmailClient as AnyObject?
             }
+
+            // Report this flag as a `1` or `0` integer to allow it
+            // to be counted easily when reporting. Then, clear the
+            // flag to avoid it getting reported multiple times.
+            settings["crashedLastLaunch"] = self.crashedLastLaunch ? 1 : 0
+            self.crashedLastLaunch = false
+
+            outputDict["settings"] = settings
+
             return outputDict
         }
 
