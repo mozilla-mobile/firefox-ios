@@ -15,8 +15,6 @@ protocol InternalSchemeResponse {
     func response(forRequest: URLRequest) -> (URLResponse, Data)?
 }
 
-private var downloadTasks = WeakList<WKURLSchemeTask>()
-
 class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
 
     static func response(forUrl url: URL) -> URLResponse {
@@ -26,14 +24,9 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
     // Responders are looked up based on the path component, for instance responder["about/license"] is used for 'internal://local/about/license'
     static var responders = [String: InternalSchemeResponse]()
 
-    // Unprivileged internal:// urls might be resources on the page such as:
-    // 1) internal resources in the app bundle ( i.e. <link href="errorpage-resource/NetError.css"> )
-    // 2) images, javascript, other html with a relative URL (i.e. <img src="smiley.gif"> will have an absolute path of "internal://thedomain.com/thepage/smiley.gif"). Reader mode pages would have this problem.
-    // Load from the app bundle or try download as https:// scheme.
+    // Unprivileged internal:// urls might be internal resources in the app bundle ( i.e. <link href="errorpage-resource/NetError.css"> )
     func downloadResource(urlSchemeTask: WKURLSchemeTask) -> Bool {
-        guard let https = urlSchemeTask.request.url?.absoluteString.replacingOccurrences(of: "internal://", with: "https://"), let url = URL(string: https) else {
-            return false
-        }
+        guard let url = urlSchemeTask.request.url else { return false }
 
         let allowedInternalResources = [
             "/errorpage-resource/NetError.css",
@@ -52,26 +45,7 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
             }
         }
 
-        downloadTasks.insert(urlSchemeTask)
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            DispatchQueue.main.async {
-                guard downloadTasks.remove(urlSchemeTask) != nil else {
-                    return
-                }
-                guard let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                    let mimeType = response?.mimeType, let data = data
-                    else {
-                        urlSchemeTask.didFailWithError(InternalPageSchemeHandlerError.noResponder)
-                        return
-                }
-
-                urlSchemeTask.didReceive(URLResponse(url: url, mimeType: mimeType, expectedContentLength: -1, textEncodingName: nil))
-                urlSchemeTask.didReceive(data)
-                urlSchemeTask.didFinish()
-            }
-        }
-        task.resume()
-        return true
+        return false
     }
 
     func webView(_ webView: WKWebView, start urlSchemeTask: WKURLSchemeTask) {
@@ -104,7 +78,5 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
         urlSchemeTask.didFinish()
     }
 
-    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {
-        _ = downloadTasks.remove(urlSchemeTask)
-    }
+    func webView(_ webView: WKWebView, stop urlSchemeTask: WKURLSchemeTask) {}
 }
