@@ -211,12 +211,23 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         presentContextMenu(for: indexPath)
     }
 
+    // This is so hacky. I apologize in advance for how bad this code is.
+    // If you can find a better way to reverse the order of bookmarks in
+    // this view and remove this code, I will buy you a 🍺. -justindarc
+    fileprivate func invertIndexPathRow(_ row: Int) -> Int {
+        guard let count = source?.current.count, count - row > 0 else {
+            return 0
+        }
+
+        return count - 1 - row
+    }
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return source?.current.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let source = source, let bookmark = source.current[indexPath.row] else { return super.tableView(tableView, cellForRowAt: indexPath) }
+        guard let source = source, let bookmark = source.current[invertIndexPathRow(indexPath.row)] else { return super.tableView(tableView, cellForRowAt: indexPath) }
         switch bookmark {
         case let item as BookmarkItem:
             let cell = super.tableView(tableView, cellForRowAt: indexPath)
@@ -280,7 +291,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let it = self.source?.current[indexPath.row], it is BookmarkSeparator {
+        if let it = self.source?.current[invertIndexPathRow(indexPath.row)], it is BookmarkSeparator {
             return BookmarksPanelUX.SeparatorRowHeight
         }
 
@@ -307,10 +318,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         // Show a full-width border for cells above separators, so they don't have a weird step.
         // Separators themselves already have a full-width border, but let's force the issue
         // just in case.
-        let this = self.source?.current[indexPath.row]
-        if (indexPath.row + 1) < (self.source?.current.count)! {
-            let below = self.source?.current[indexPath.row + 1]
-            if this is BookmarkSeparator || below is BookmarkSeparator {
+        let this = self.source?.current[invertIndexPathRow(indexPath.row)]
+        if (invertIndexPathRow(indexPath.row) - 1) >= 0 {
+            let above = self.source?.current[invertIndexPathRow(indexPath.row) - 1]
+            if this is BookmarkSeparator || above is BookmarkSeparator {
                 return true
             }
         }
@@ -323,7 +334,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             return
         }
 
-        let bookmark = source.current[indexPath.row]
+        let bookmark = source.current[invertIndexPathRow(indexPath.row)]
 
         switch bookmark {
         case let item as BookmarkItem:
@@ -343,7 +354,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
                     // Nothing we can do.
                     return
                 }
-                let specificFactory = factory.factoryForIndex(indexPath.row, inFolder: source.current)
+                let specificFactory = factory.factoryForIndex(self.invertIndexPathRow(indexPath.row), inFolder: source.current)
                 nextController.source = BookmarksModel(modelFactory: specificFactory, root: folder)
                 self.navigationController?.pushViewController(nextController, animated: true)
             }
@@ -364,12 +375,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             return .none
         }
 
-        if source.current[indexPath.row] is BookmarkSeparator {
+        if source.current[invertIndexPathRow(indexPath.row)] is BookmarkSeparator {
             // Because the deletion block is too big.
             return .none
         }
 
-        if source.current.itemIsEditableAtIndex(indexPath.row) {
+        if source.current.itemIsEditableAtIndex(invertIndexPathRow(indexPath.row)) {
             return .delete
         }
 
@@ -380,7 +391,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         guard let source = source else {
             return false
         }
-        return source.current.itemIsEditableAtIndex(indexPath.row)
+        return source.current.itemIsEditableAtIndex(invertIndexPathRow(indexPath.row))
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -408,7 +419,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 
     func deleteBookmark(indexPath: IndexPath, source: BookmarksModel) {
-        guard let bookmark = source.current[indexPath.row] else {
+        guard let bookmark = source.current[invertIndexPathRow(indexPath.row)] else {
             return
         }
 
@@ -429,7 +440,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             return
         }
 
-        let specificFactory = factory.factoryForIndex(indexPath.row, inFolder: source.current)
+        let specificFactory = factory.factoryForIndex(invertIndexPathRow(indexPath.row), inFolder: source.current)
         if let err = specificFactory.removeByGUID(bookmark.guid).value.failureValue {
             log.debug("Failed to remove \(bookmark.guid).")
             self.onModelFailure(err)
@@ -458,7 +469,7 @@ extension BookmarksPanel: HomePanelContextMenu {
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        guard let bookmarkItem = source?.current[indexPath.row] as? BookmarkItem else { return nil }
+        guard let bookmarkItem = source?.current[invertIndexPathRow(indexPath.row)] as? BookmarkItem else { return nil }
         let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
         site.icon = bookmarkItem.favicon
         return site
@@ -475,7 +486,7 @@ extension BookmarksPanel: HomePanelContextMenu {
 
         // Only local bookmarks can be removed
         guard let source = source else { return nil }
-        if source.current.itemIsEditableAtIndex(indexPath.row) {
+        if source.current.itemIsEditableAtIndex(invertIndexPathRow(indexPath.row)) {
             let removeAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
                 self.deleteBookmark(indexPath: indexPath, source: source)
                 UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "long-press"])
