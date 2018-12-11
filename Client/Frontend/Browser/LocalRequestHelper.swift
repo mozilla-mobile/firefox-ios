@@ -12,7 +12,7 @@ class LocalRequestHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let requestUrl = message.frameInfo.request.url, InternalURL.isValid(url: requestUrl) else { return }
+        guard let requestUrl = message.frameInfo.request.url, let internalUrl = InternalURL(requestUrl) else { return }
 
         let params = message.body as! [String: String]
 
@@ -21,7 +21,12 @@ class LocalRequestHelper: TabContentScript {
            let url = URL(string: urlString) {
             _ = message.webView?.load(PrivilegedRequest(url: url) as URLRequest)
         } else if params["type"] == "reload" {
+            // If this is triggered by session restore pages, the url to reload is a nested url argument.
+            if let _url = internalUrl.extractedUrlParam, let nested = InternalURL(_url), let url = nested.extractedUrlParam {
+                message.webView?.evaluateJavaScript("location.replace('\(url.absoluteString)')", completionHandler: nil)
+            } else {
             _ = message.webView?.reload()
+            }
         } else {
             assertionFailure("Invalid message: \(message.body)")
         }

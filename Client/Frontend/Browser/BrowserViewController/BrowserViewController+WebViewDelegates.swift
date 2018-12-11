@@ -165,17 +165,17 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if let url = InternalURL(url) {
+        if InternalURL.isValid(url: url) {
             if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
                 log.warning("Denying unprivileged request: \(navigationAction.request)")
                 decisionHandler(.cancel)
                 return
             }
 
-                decisionHandler(.allow)
-                return
-
+            decisionHandler(.allow)
+            return
         }
+
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
         if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {

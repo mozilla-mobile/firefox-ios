@@ -31,12 +31,26 @@ fileprivate let CertErrorCodes = [
 ]
 
 fileprivate func certFromErrorURL(_ url: URL) -> SecCertificate? {
-    let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-    if let encodedCert = components?.queryItems?.filter({ $0.name == "badcert" }).first?.value,
-        let certData = Data(base64Encoded: encodedCert, options: []) {
-        return SecCertificateCreateWithData(nil, certData as CFData)
+    func getCert(_ url: URL) -> SecCertificate? {
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        if let encodedCert = components?.queryItems?.filter({ $0.name == "badcert" }).first?.value,
+            let certData = Data(base64Encoded: encodedCert, options: []) {
+            return SecCertificateCreateWithData(nil, certData as CFData)
+        }
+
+        return nil
     }
 
+    let result = getCert(url)
+    if result != nil {
+        return result
+    }
+
+    // Fallback case when the error url is nested, this happens when restoring an error url, it will be inside a 'sessionrestore' url.
+    // TODO: Investigate if we can restore directly as an error url and avoid the 'sessionrestore?url=' wrapping.
+    if let internalUrl = InternalURL(url), let url = internalUrl.extractedUrlParam {
+        return getCert(url)
+    }
     return nil
 }
 
@@ -195,6 +209,20 @@ class ErrorPageHandler: InternalSchemeResponse {
             "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitOnce)\"})'>\(Strings.ErrorPagesVisitOnceButton)</button></p>"
         }
 
+        // WKWebView has a bug when the internal pages change their location to redirect. The location change is immediate, but the page won't redirect. In sessionrestore.html this is worked around with a single `setTimeout(...,0)`. Here, `setTimeout` even with a delay of 2-3 seconds is not reliable, yet mysteriously a setInterval seems to respond in ~1 second.
+        variables["reloader"] = """
+            let reloaderCount = 0;
+            let reloader = setInterval(() => {
+                if (++reloaderCount > 6) { clearInterval(reloader); }
+                let url = new URL(location.href);
+                let original = url.searchParams.get('url');
+                if ( original.indexOf('\(originalUrl.absoluteString)') < 0 ) {
+                    clearInterval(reloader);
+                    history.go(0);
+                }
+            }, 500);
+        """
+
         variables["actions"] = actions
 
         let response = InternalSchemeHandler.response(forUrl: originalUrl)
@@ -226,26 +254,6 @@ class ErrorPageHelper {
     }
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
-        // Don't show error pages for error pages.
-        if let internalUrl = InternalURL(url), internalUrl.isErrorPage {
-            if let previousURL = internalUrl.originalURLFromErrorPage {
-                // If the previous URL is a local file URL that we know exists,
-                // just load it in the web view. This works around an issue
-                // where we are unable to redirect to a `file://` URL during
-                // session restore.
-                if previousURL.isFileURL, FileManager.default.fileExists(atPath: previousURL.path) {
-                    webView.loadFileURL(previousURL, allowingReadAccessTo: previousURL)
-                    return
-                }
-
-                if let index = ErrorPageHelper.redirecting.index(of: previousURL) {
-                    ErrorPageHelper.redirecting.remove(at: index)
-                }
-            }
-
-            return
-        }
-
         // Add this page to the redirecting list. This will cause the server to actually show the error page
         // (instead of redirecting to the original URL).
         ErrorPageHelper.redirecting.append(url)
@@ -310,7 +318,8 @@ extension ErrorPageHelper: TabContentScript {
                 let host = originalURL.host {
                 let origin = "\(host):\(originalURL.port ?? 443)"
                 certStore?.addCertificate(cert, forOrigin: origin)
-                _ = message.webView?.reload()
+            message.webView?.evaluateJavaScript("location.replace('\(originalURL.absoluteString)')", completionHandler: nil)
+                // webview.reload will not change the error URL back to the original URL
             }
         default:
             assertionFailure("Unknown error message")

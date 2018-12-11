@@ -53,9 +53,7 @@
       }
     
       // We'll end up at the last page pushed, so set the selected index to the current index in the session history.
-      if (currentPage != 0) {
-          history.go(currentPage);
-      }
+      history.go(currentPage);
 
       // Finally, reload the page to trigger the error redirection, which will load the actual URL.
       // For some reason (maybe a WebKit bug?), document.location still points to SessionRestore.html at this point,
