@@ -29,7 +29,6 @@ class BrowserViewController: UIViewController {
     fileprivate let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
     fileprivate let urlBarContainer = URLBarContainer()
     fileprivate var urlBar: URLBar!
-    fileprivate var topURLBarConstraints = [Constraint]()
     fileprivate let requestHandler = RequestHandler()
     fileprivate let searchSuggestClient = SearchSuggestClient()
     fileprivate var findInPageBar: FindInPageBar?
@@ -143,7 +142,6 @@ class BrowserViewController: UIViewController {
         }
 
         browserToolbar.snp.makeConstraints { make in
-
             make.leading.trailing.equalTo(mainContainerView)
             toolbarBottomConstraint = make.bottom.equalTo(mainContainerView).constraint
         }
@@ -319,11 +317,6 @@ class BrowserViewController: UIViewController {
     }
 
     private func createURLBar() {
-        guard let homeView = homeView else {
-            assertionFailure("Home view must exist to create the URL bar")
-            return
-        }
-
         urlBar = URLBar()
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
@@ -333,19 +326,8 @@ class BrowserViewController: UIViewController {
 
         urlBar.snp.makeConstraints { make in
             urlBarTopConstraint = make.top.equalTo(mainContainerView.safeAreaLayoutGuide.snp.top).constraint
-            topURLBarConstraints = [
-                urlBarTopConstraint,
-                make.leading.trailing.bottom.equalTo(urlBarContainer).constraint
-            ]
-
-            // Initial centered constraints, which will effectively be deactivated when
-            // the top constraints are active because of their reduced priorities.
-            make.centerX.equalToSuperview().priority(.required)
-            make.leading.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
-            make.trailing.equalTo(mainContainerView.safeAreaLayoutGuide).priority(.medium)
-            make.top.equalTo(homeView).priority(500)
+            make.leading.trailing.bottom.equalTo(urlBarContainer)
         }
-        topURLBarConstraints.forEach { $0.deactivate() }
     }
 
     private func buildTrackingProtectionMenu(info: TPPageStats?) -> PhotonActionSheet {
@@ -564,7 +546,6 @@ class BrowserViewController: UIViewController {
         urlBarContainer.alpha = 1
         urlBar.ensureBrowsingMode()
 
-        topURLBarConstraints.forEach { $0.activate() }
         shouldEnsureBrowsingMode = false
     }
 
@@ -879,7 +860,6 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidActivate(_ urlBar: URLBar) {
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration, animations: {
-            self.topURLBarConstraints.forEach { $0.activate() }
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
