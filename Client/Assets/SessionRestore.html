@@ -19,12 +19,16 @@
       const uuidKeyValue = "%INSERT_UUID_VALUE%"
       const uuidKeyName = "uuidkey"
       const sessionRestoreUrl = "internal://local/sessionrestore"
+      const errorPageUrl = "internal://local/errorpage"
 
       function getRestoreURL(urlString) {
           const url = new URL(urlString);
           // If the url already has getRestoreURL() called on it, just return it as-is.
-          if (urlString.startsWith(sessionRestoreUrl)) {
+        if (urlString.startsWith(sessionRestoreUrl) || urlString.startsWith(errorPageUrl)) {
               url.searchParams.set(uuidKeyName, uuidKeyValue);
+              if (urlString.startsWith(errorPageUrl)) {
+                   url.searchParams.delete("timestamp");
+              }
               return url.toString();
           }
           const wrappedUrl = new URL(sessionRestoreUrl);
@@ -55,11 +59,17 @@
       // We'll end up at the last page pushed, so set the selected index to the current index in the session history.
       history.go(currentPage);
 
+      // Without a delay, the reload() won't use the last url set.
+      setTimeout(() => {
+          if (currentPage != 0) {
+              location.reload();
+          }
+      });
+
       // Finally, reload the page to trigger the error redirection, which will load the actual URL.
       // For some reason (maybe a WebKit bug?), document.location still points to SessionRestore.html at this point,
       // so wait until the next tick when the location points to the correct index and URL.
       setTimeout(function () {
-          webkit.messageHandlers.localRequestHelper.postMessage({ type: "reload" });
           webkit.messageHandlers.sessionRestoreHelper.postMessage({ name: "didRestoreSession" });
       }, 0);
   }) ();

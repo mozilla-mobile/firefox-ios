@@ -24,14 +24,8 @@ class SessionRestoreHandler: InternalSchemeResponse {
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
         guard let _url = request.url, let url = InternalURL(_url) else { return nil }
 
+        // Handle the 'url='query param
         if let urlParam = url.extractedUrlParam {
-            if let nestedInternalUrl = InternalURL(urlParam), nestedInternalUrl.isErrorPage,
-                let original = nestedInternalUrl.originalURLFromErrorPage {
-                ErrorPageHelper.redirecting.append(original)
-                if let (response, data) = InternalSchemeHandler.responders[ErrorPageHandler.path]?.response(forRequest: URLRequest(url: nestedInternalUrl.url)) {
-                    return (response, data)
-                }
-            }
             return generateResponseThatRedirects(toUrl: urlParam)
         }
 

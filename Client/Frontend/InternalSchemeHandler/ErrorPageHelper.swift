@@ -152,12 +152,6 @@ class ErrorPageHandler: InternalSchemeResponse {
             return nil
         }
 
-        guard let index = ErrorPageHelper.redirecting.index(of: originalUrl) else {
-            return generateResponseThatRedirects(toUrl: originalUrl)
-        }
-
-        ErrorPageHelper.redirecting.remove(at: index)
-
         guard let url = request.url,
             let c = URLComponents(url: url, resolvingAgainstBaseURL: false),
             let code = c.valueForQuery("code"),
@@ -209,18 +203,24 @@ class ErrorPageHandler: InternalSchemeResponse {
             "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitOnce)\"})'>\(Strings.ErrorPagesVisitOnceButton)</button></p>"
         }
 
-        // WKWebView has a bug when the internal pages change their location to redirect. The location change is immediate, but the page won't redirect. In sessionrestore.html this is worked around with a single `setTimeout(...,0)`. Here, `setTimeout` even with a delay of 2-3 seconds is not reliable, yet mysteriously a setInterval seems to respond in ~1 second.
+        // If a reload is requested and this much time has expired since the page was shown, try to reload the original url. Alternatively, this could have been a boolean flag to indicate if a page has been shown to the user already (the code for that would be nearly identical).
+        // The previous method for this this was to track a list of urls for which errorpage should be shown instead of trying to load the original url.
+        // This old method was too fragile to reliably add and insert urls into that list, particularly on page restoration as only native code can modify that list.
+        let expiryTimeToTryReloadOriginal_ms = 2000
+
         variables["reloader"] = """
-            let reloaderCount = 0;
-            let reloader = setInterval(() => {
-                if (++reloaderCount > 6) { clearInterval(reloader); }
-                let url = new URL(location.href);
-                let original = url.searchParams.get('url');
-                if ( original.indexOf('\(originalUrl.absoluteString)') < 0 ) {
-                    clearInterval(reloader);
-                    history.go(0);
-                }
-            }, 500);
+        let url = new URL(location.href);
+        let lastTime = parseInt(url.searchParams.get('timestamp'), 10);
+        let originalUrl = url.searchParams.get('url');
+
+        if (isNaN(lastTime) || lastTime < 1) {
+            setTimeout(() => {
+              url.searchParams.set('timestamp', Date.now());
+              location.replace(url.toString());
+            })
+        } else if (lastTime > 0 && Date.now() - lastTime > \(expiryTimeToTryReloadOriginal_ms) {
+        location.replace(originalUrl);
+        }
         """
 
         variables["actions"] = actions
@@ -242,11 +242,6 @@ class ErrorPageHandler: InternalSchemeResponse {
 
 class ErrorPageHelper {
 
-    // When an error page is intentionally loaded, its added to this set. If its in the set, we show
-    // it as an error page. If its not, we assume someone is trying to reload this page somehow, and
-    // we'll instead redirect back to the original URL.
-    static var redirecting = [URL]()
-
     fileprivate weak var certStore: CertStore?
 
     init(certStore: CertStore?) {
@@ -254,12 +249,21 @@ class ErrorPageHelper {
     }
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
-        // Add this page to the redirecting list. This will cause the server to actually show the error page
-        // (instead of redirecting to the original URL).
-        ErrorPageHelper.redirecting.append(url)
-
         guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)") else {
             assertionFailure()
+            return
+        }
+
+        // When an error page is reloaded, the js on the page checks if >2s have passed since the error page was initially loaded, and if so, it reloads the original url for the page. If that original page immediately errors out again, we don't want to push another error page on history stack. This will detect this case, and clear the timestamp to ensure the error page doesn't try to reload.
+        if let weburl = webView.url, let internalUrl = InternalURL(weburl),
+            internalUrl.originalURLFromErrorPage == url {
+            webView.evaluateJavaScript("""
+                (function () {
+                   let url = new URL(location.href);
+                   url.searchParams.remove('timestamp');
+                   location.replace(url.toString());
+                })();
+            """)
             return
         }
 
@@ -267,7 +271,9 @@ class ErrorPageHelper {
             URLQueryItem(name: InternalURL.Param.url.rawValue, value: url.absoluteString),
             URLQueryItem(name: "code", value: String(error.code)),
             URLQueryItem(name: "domain", value: error.domain),
-            URLQueryItem(name: "description", value: error.localizedDescription)
+            URLQueryItem(name: "description", value: error.localizedDescription),
+            // 'timestamp' is used for the js reload logic
+            URLQueryItem(name: "timestamp", value: "\(Int(Date().timeIntervalSince1970 * 1000))")
         ]
 
         // If this is an invalid certificate, show a certificate error allowing the
