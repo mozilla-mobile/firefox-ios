@@ -59,7 +59,7 @@ def main():
 def downloadLocale(locale, scraper):
     print("scraping: %s..." % locale)
     files = scraper.getFileList()
-    if files == None:
+    if files is None:
         print("no files for locale: %s" % locale)
         return
 
