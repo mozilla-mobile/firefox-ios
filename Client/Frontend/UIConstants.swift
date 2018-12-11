@@ -18,8 +18,6 @@ extension UIColor {
 }
 
 public struct UIConstants {
-    static let AboutHomePage = URL(string: "\(InternalURL.baseUrl)/about/home/")!
-
     static let DefaultPadding: CGFloat = 10
     static let SnackbarButtonHeight: CGFloat = 57
     static let TopToolbarHeight: CGFloat = 56

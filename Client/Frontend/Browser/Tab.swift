@@ -103,7 +103,13 @@ class Tab: NSObject {
     fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
     var pendingScreenshot = false
-    var url: URL?
+    var url: URL? {
+        didSet {
+            if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
+                url = URL(string: internalUrl.stripAuthorization)
+            }
+        }
+    }
     var mimeType: String?
     var isEditing: Bool = false
 

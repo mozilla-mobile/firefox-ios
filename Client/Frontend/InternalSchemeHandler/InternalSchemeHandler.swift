@@ -9,6 +9,7 @@ enum InternalPageSchemeHandlerError: Error {
     case badURL
     case noResponder
     case responderUnableToHandle
+    case notAuthorized
 }
 
 protocol InternalSchemeResponse {
@@ -55,14 +56,17 @@ class InternalSchemeHandler: NSObject, WKURLSchemeHandler {
         }
 
         let path = url.path.starts(with: "/") ? String(url.path.dropFirst()) : url.path
-        
-        // History urls are unprivileged, but other unprivileged urls are treated as page resources and downloaded
-        let historyUrlParam = "sessionrestore?url="
-        if !urlSchemeTask.request.isPrivileged, !url.path.contains(historyUrlParam),
-            urlSchemeTask.request.mainDocumentURL != urlSchemeTask.request.url, downloadResource(urlSchemeTask: urlSchemeTask) {
+
+        // For non-main doc URL, try load it as a resource
+        if !urlSchemeTask.request.isPrivileged, urlSchemeTask.request.mainDocumentURL != urlSchemeTask.request.url, downloadResource(urlSchemeTask: urlSchemeTask) {
             return
         }
- 
+
+        if !urlSchemeTask.request.isPrivileged {
+            urlSchemeTask.didFailWithError(InternalPageSchemeHandlerError.notAuthorized)
+            return
+        }
+
         guard let responder = InternalSchemeHandler.responders[path] else {
             urlSchemeTask.didFailWithError(InternalPageSchemeHandlerError.noResponder)
             return

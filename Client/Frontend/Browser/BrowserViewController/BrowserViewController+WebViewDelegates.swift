@@ -102,7 +102,11 @@ extension WKNavigationAction {
             return true
         }
 
-        return InternalURL.isValid(url: url) && !request.isPrivileged
+        if let url = InternalURL(url) {
+            return !url.isAuthorized
+        } else {
+            return false
+        }
     }
 }
 

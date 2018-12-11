@@ -25,6 +25,10 @@ private func migrate(urls: [URL]) -> [URL] {
             }
         }
 
+        if let internalUrl = InternalURL(url), internalUrl.isAuthorized, let stripped = URL(string: internalUrl.stripAuthorization) {
+            return stripped
+        }
+
         return url
     }
 }

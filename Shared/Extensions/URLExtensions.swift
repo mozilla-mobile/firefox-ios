@@ -339,20 +339,26 @@ extension URL {
 // Helpers to deal with ErrorPage URLs
 
 public struct InternalURL {
+    public static let uuid = UUID().uuidString
     public static let scheme = "internal"
     public static let baseUrl = "\(scheme)://local"
     public enum Path: String {
         case errorPage = "errorpage"
         case sessionRestore = "sessionrestore"
-        func matches(_ string: String) -> Bool { return string == self.rawValue }
+        func matches(_ string: String) -> Bool {
+            return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
+        }
     }
 
     public enum Param: String {
+        case uuidKey = "uuidkey"
         case url = "url"
         func matches(_ string: String) -> Bool { return string == self.rawValue }
     }
 
     public let url: URL
+
+    private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionRestore.rawValue)?url="
 
     public static func isValid(url: URL) -> Bool {
         if AppConstants.IsRunningTest, url.path.contains("test-fixture/") {
@@ -371,16 +377,43 @@ public struct InternalURL {
         self.url = url
     }
 
+    public var isAuthorized: Bool {
+        return (url.getQuery()[InternalURL.Param.uuidKey.rawValue] ?? "") == InternalURL.uuid
+    }
+
+    public var stripAuthorization: String {
+        guard var components = URLComponents(string: url.absoluteString), let items = components.queryItems else { return url.absoluteString }
+        components.queryItems = items.filter { !Param.uuidKey.matches($0.name) }
+        return components.url?.absoluteString ?? ""
+    }
+
+    public static func authorize(url: URL) -> URL? {
+        guard var components = URLComponents(string: url.absoluteString) else { return nil }
+        if components.queryItems == nil {
+            components.queryItems = []
+        }
+
+        if var item = components.queryItems?.find({ Param.uuidKey.matches($0.name) }) {
+            item.value = InternalURL.uuid
+        } else {
+            components.queryItems?.append(URLQueryItem(name: Param.uuidKey.rawValue, value: InternalURL.uuid))
+        }
+        return components.url
+    }
+
     public var isErrorPage: Bool {
-        return url.path == "/\(InternalURL.Path.errorPage)"
+        // Error pages can be nested in session restore URLs, and session restore handler will forward them to the error page handler
+        let path = url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) ? extractedUrlParam?.path : url.path
+        return InternalURL.Path.errorPage.matches(path ?? "")
     }
 
     public var originalURLFromErrorPage: URL? {
-        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-        if let queryURL = components?.queryItems?.find({ Param.url.matches($0.name) })?.value {
-            return URL(string: queryURL)
+        if !url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) {
+            return isErrorPage ? extractedUrlParam : nil
         }
-
+        if let urlParam = extractedUrlParam, let nested = InternalURL(urlParam), nested.isErrorPage {
+            return nested.extractedUrlParam
+        }
         return nil
     }
 
@@ -393,9 +426,9 @@ public struct InternalURL {
 
     public var isAboutHomeURL: Bool {
         if let urlParam = extractedUrlParam, let internalUrlParam = InternalURL(urlParam) {
-            return internalUrlParam.aboutComponent == "home"
+            return internalUrlParam.aboutComponent?.hasPrefix("home") ?? false
         }
-        return aboutComponent == "home"
+        return aboutComponent?.hasPrefix("home") ?? false
     }
 
     public var isAboutURL: Bool {
@@ -405,8 +438,8 @@ public struct InternalURL {
     /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        if url.path.hasPrefix(aboutPath) {
-            return String(url.path[aboutPath.endIndex...])
+        if url.path.hasPrefix(aboutPath), let range = stripAuthorization.range(of: aboutPath) {
+            return String(stripAuthorization[range.upperBound...])
         }
         return nil
     }

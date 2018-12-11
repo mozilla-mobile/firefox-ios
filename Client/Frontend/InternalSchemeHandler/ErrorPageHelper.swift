@@ -197,7 +197,7 @@ class ErrorPageHandler: InternalSchemeResponse {
 
         variables["actions"] = actions
 
-        let response = InternalSchemeHandler.response(forUrl: url)
+        let response = InternalSchemeHandler.response(forUrl: originalUrl)
         guard let file = asset, var html = try? String(contentsOfFile: file) else {
             assert(false)
             return nil

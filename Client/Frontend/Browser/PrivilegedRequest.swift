@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-
+import Shared
 private let REQUEST_KEY_PRIVILEGED = "privileged"
 
 /**
@@ -19,8 +19,14 @@ private let REQUEST_KEY_PRIVILEGED = "privileged"
  needed, and when you are sure the URL is from a trustworthy source!
  **/
 class PrivilegedRequest: NSMutableURLRequest {
-    override init(url URL: URL, cachePolicy: NSURLRequest.CachePolicy, timeoutInterval: TimeInterval) {
-        super.init(url: URL, cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
+    override init(url: URL, cachePolicy: NSURLRequest.CachePolicy, timeoutInterval: TimeInterval) {
+        func getUrl() -> URL {
+            if let _ = InternalURL(url), let result = InternalURL.authorize(url: url) {
+                return result
+            }
+            return url
+        }
+        super.init(url: getUrl(), cachePolicy: cachePolicy, timeoutInterval: timeoutInterval)
         setPrivileged()
     }
 
@@ -36,6 +42,9 @@ class PrivilegedRequest: NSMutableURLRequest {
 
 extension URLRequest {
     var isPrivileged: Bool {
+        if let url = url, let internalUrl = InternalURL(url) {
+            return internalUrl.isAuthorized
+        }
         return URLProtocol.property(forKey: REQUEST_KEY_PRIVILEGED, in: self) != nil
     }
 }
