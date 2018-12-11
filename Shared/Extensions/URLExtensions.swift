@@ -401,6 +401,10 @@ public struct InternalURL {
         return components.url
     }
 
+    public var isSessionRestore: Bool {
+        return url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl)
+    }
+
     public var isErrorPage: Bool {
         // Error pages can be nested in session restore URLs, and session restore handler will forward them to the error page handler
         let path = url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) ? extractedUrlParam?.path : url.path

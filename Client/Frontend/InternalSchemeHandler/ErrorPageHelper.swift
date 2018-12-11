@@ -218,7 +218,7 @@ class ErrorPageHandler: InternalSchemeResponse {
               url.searchParams.set('timestamp', Date.now());
               location.replace(url.toString());
             })
-        } else if (lastTime > 0 && Date.now() - lastTime > \(expiryTimeToTryReloadOriginal_ms) {
+        } else if (lastTime > 0 && Date.now() - lastTime > \(expiryTimeToTryReloadOriginal_ms)) {
         location.replace(originalUrl);
         }
         """
@@ -249,14 +249,13 @@ class ErrorPageHelper {
     }
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
-        guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)") else {
+        guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)"), let webViewUrl = webView.url else {
             assertionFailure()
             return
         }
 
         // When an error page is reloaded, the js on the page checks if >2s have passed since the error page was initially loaded, and if so, it reloads the original url for the page. If that original page immediately errors out again, we don't want to push another error page on history stack. This will detect this case, and clear the timestamp to ensure the error page doesn't try to reload.
-        if let weburl = webView.url, let internalUrl = InternalURL(weburl),
-            internalUrl.originalURLFromErrorPage == url {
+        if let internalUrl = InternalURL(webViewUrl), internalUrl.originalURLFromErrorPage == url {
             webView.evaluateJavaScript("""
                 (function () {
                    let url = new URL(location.href);
@@ -294,7 +293,13 @@ class ErrorPageHelper {
 
         components.queryItems = queryItems
         if let urlWithQuery = components.url {
-            webView.load(PrivilegedRequest(url: urlWithQuery) as URLRequest)
+            if let internalUrl = InternalURL(webViewUrl), internalUrl.isSessionRestore, let page = InternalURL.authorize(url: urlWithQuery) {
+                // A session restore page is already on the history stack, so don't load another page on the history stack.
+                webView.evaluateJavaScript("location.replace('\(page.absoluteString)');")
+            } else {
+                // A new page needs to be added to the history stack (i.e. the simple case of trying to navigate to an url for the first time and it fails, without pushing a page on the history stack, the webview will just show the current page).
+                webView.load(PrivilegedRequest(url: urlWithQuery) as URLRequest)
+            }
         }
     }
 }
