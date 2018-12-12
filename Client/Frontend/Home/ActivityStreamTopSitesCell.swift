@@ -275,38 +275,26 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
     func calculateLayout(for size: CGSize) -> (size: CGSize, cellSize: CGSize, cellInsets: UIEdgeInsets) {
         let width = size.width
-        let height = size.height
         guard width != 0 else {
             return (size: .zero, cellSize: self.itemSize, cellInsets: self.insets)
         }
 
-        let horizontalItemsCount = maxHorizontalItemsCount(width: width)
-        var verticalItemsCount = maxVerticalItemsCount(height: height)
-        if cellCount <= horizontalItemsCount {
-            // If we have only a few items don't provide space for multiple rows.
-            verticalItemsCount = 1
-        }
+        let horizontalItemsCount = maxHorizontalItemsCount(width: width) // 8
 
         // Take the number of cells and subtract its space in the view from the height. The left over space is the white space.
         // The left over space is then devided evenly into (n + 1) parts to figure out how much space should be inbetween a cell
-        var verticalInsets = floor((height - (CGFloat(verticalItemsCount) * itemSize.height)) / CGFloat(verticalItemsCount + 1))
-        var horizontalInsets = floor((width - (CGFloat(horizontalItemsCount) * itemSize.width)) / CGFloat(horizontalItemsCount + 1))
+        let insets = ASHorizontalScrollCellUX.MinimumInsets
 
-        // We want a minimum inset to make things not look crowded. We also don't want uneven spacing.
-        // If we dont have this. Set a minimum inset and recalculate the size of a cell
         var estimatedItemSize = itemSize
-        if horizontalInsets != ASHorizontalScrollCellUX.MinimumInsets {
-            verticalInsets = ASHorizontalScrollCellUX.MinimumInsets
-            horizontalInsets = ASHorizontalScrollCellUX.MinimumInsets
-            estimatedItemSize.width = floor((width - (CGFloat(horizontalItemsCount + 1) * horizontalInsets)) / CGFloat(horizontalItemsCount))
-            estimatedItemSize.height = estimatedItemSize.width + TopSiteCellUX.TitleHeight
-        }
+        estimatedItemSize.width = floor((width - (CGFloat(horizontalItemsCount + 1) * insets)) / CGFloat(horizontalItemsCount))
+        estimatedItemSize.height = estimatedItemSize.width + TopSiteCellUX.TitleHeight
 
         //calculate our estimates.
-        let estimatedHeight = floor(estimatedItemSize.height * CGFloat(verticalItemsCount)) + (verticalInsets * (CGFloat(verticalItemsCount) + 1))
-        let estimatedSize = CGSize(width: CGFloat(numberOfPages(with: boundsSize)) * width, height: estimatedHeight)
+        let rows = CGFloat(ceil(Double(Float(cellCount)/Float(horizontalItemsCount))))
+        let estimatedHeight = (rows * estimatedItemSize.height) + (insets * (rows+1))
+        let estimatedSize = CGSize(width: width, height: estimatedHeight)
 
-        let estimatedInsets = UIEdgeInsets(top: verticalInsets, left: horizontalInsets, bottom: verticalInsets, right: horizontalInsets)
+        let estimatedInsets = UIEdgeInsets(equalInset: insets)
         return (size: estimatedSize, cellSize: estimatedItemSize, cellInsets: estimatedInsets)
     }
 
@@ -316,15 +304,6 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         itemSize = estimatedLayout.cellSize
         boundsSize.height = estimatedLayout.size.height
         return estimatedLayout.size
-    }
-
-    func maxVerticalItemsCount(height: CGFloat) -> Int {
-        let verticalItemsCount =  Int(floor(height / (ASHorizontalScrollCellUX.TopSiteItemSize.height + insets.top)))
-        if let delegate = self.collectionView?.delegate as? ASHorizontalLayoutDelegate {
-            return delegate.numberOfVerticalItems()
-        } else {
-            return verticalItemsCount
-        }
     }
 
     func maxHorizontalItemsCount(width: CGFloat) -> Int {
@@ -386,35 +365,17 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let row = indexPath.row
         let bounds = self.collectionView!.bounds
 
-        let verticalItemsCount = maxVerticalItemsCount(height: bounds.size.height)
         let horizontalItemsCount = maxHorizontalItemsCount(width: bounds.size.width)
-
-        let itemsPerPage = verticalItemsCount * horizontalItemsCount
-
         let columnPosition = row % horizontalItemsCount
-        let rowPosition = (row / horizontalItemsCount) % verticalItemsCount
-
-        let itemPage: Int
-        if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
-            itemPage = Int(floor(Double(row)/Double(itemsPerPage)))
-        } else {
-            // For RTL we invert the page position
-            let pageCount = Int(ceil(Double(cellCount)/Double(itemsPerPage)))
-            itemPage = pageCount - Int(floor(Double(row)/Double(itemsPerPage))) - 1
-        }
+        let rowPosition = Int(row/horizontalItemsCount)
 
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         var frame = CGRect.zero
-        if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
-            frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
-        } else {
-            // For RTL all we have to do is invert the colum
-            frame.origin.x = CGFloat(itemPage) * bounds.size.width + CGFloat(horizontalItemsCount - 1 - columnPosition) * (itemSize.width + insets.left) + insets.left
-        }
+        frame.origin.x = CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
         frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
+
         frame.size = itemSize
         attr.frame = frame
-
         return attr
     }
 }
@@ -428,7 +389,6 @@ private struct ASTopSiteSourceUX {
 }
 
 protocol ASHorizontalLayoutDelegate {
-    func numberOfVerticalItems() -> Int
     func numberOfHorizontalItems() -> Int
 }
 
