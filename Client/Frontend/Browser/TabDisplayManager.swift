@@ -384,6 +384,10 @@ extension TabDisplayManager: TabManagerDelegate {
             return
         }
 
+        if tab.isPrivate != self.isPrivate {
+            return
+        }
+
         updateWith(animationType: .addTab) { [weak self] in
             if let me = self {
                 me.dataStore.insert(tab)
