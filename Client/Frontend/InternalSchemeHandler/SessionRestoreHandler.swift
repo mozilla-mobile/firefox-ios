@@ -8,9 +8,14 @@ import GCDWebServers
 import Shared
 
 func generateResponseThatRedirects(toUrl url: URL) -> (URLResponse, Data) {
+    var urlString = url.absoluteString
+    if InternalURL.isValid(url: url), let authUrl = InternalURL.authorize(url: url) {
+        urlString = authUrl.absoluteString
+    }
+    
     let startTags = "<!DOCTYPE html><html><head><script>"
     let endTags = "</script></head></html>"
-    let html = startTags + "location.replace('\(url.absoluteString)');" + endTags
+    let html = startTags + "location.replace('\(urlString)');" + endTags
 
     let data = html.data(using: .utf8)!
     let response = InternalSchemeHandler.response(forUrl: url)
