@@ -1087,7 +1087,7 @@ class BrowserViewController: UIViewController {
         }
 
         if let url = webView.url {
-            if !InternalURL.isValid(url: url), !url.isFileURL {
+            if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
 
                 // Re-run additional scripts in webView to extract updated favicons and metadata.

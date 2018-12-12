@@ -317,8 +317,8 @@ extension URL {
 
     public var decodeReaderModeURL: URL? {
         if self.isReaderModeURL || self.isSyncedReaderModeURL {
-            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems, queryItems.count == 1 {
-                if let queryItem = queryItems.first, let value = queryItem.value {
+            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems {
+                if let queryItem = queryItems.find({ $0.name == "url"}), let value = queryItem.value {
                     return URL(string: value)
                 }
             }
@@ -343,22 +343,22 @@ public struct InternalURL {
     public static let scheme = "internal"
     public static let baseUrl = "\(scheme)://local"
     public enum Path: String {
-        case errorPage = "errorpage"
-        case sessionRestore = "sessionrestore"
+        case errorpage = "errorpage"
+        case sessionrestore = "sessionrestore"
         func matches(_ string: String) -> Bool {
             return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
         }
     }
 
     public enum Param: String {
-        case uuidKey = "uuidkey"
+        case uuidkey = "uuidkey"
         case url = "url"
         func matches(_ string: String) -> Bool { return string == self.rawValue }
     }
 
     public let url: URL
 
-    private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionRestore.rawValue)?url="
+    private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
 
     public static func isValid(url: URL) -> Bool {
         if AppConstants.IsRunningTest, url.path.contains("test-fixture/") {
@@ -378,12 +378,12 @@ public struct InternalURL {
     }
 
     public var isAuthorized: Bool {
-        return (url.getQuery()[InternalURL.Param.uuidKey.rawValue] ?? "") == InternalURL.uuid
+        return (url.getQuery()[InternalURL.Param.uuidkey.rawValue] ?? "") == InternalURL.uuid
     }
 
     public var stripAuthorization: String {
         guard var components = URLComponents(string: url.absoluteString), let items = components.queryItems else { return url.absoluteString }
-        components.queryItems = items.filter { !Param.uuidKey.matches($0.name) }
+        components.queryItems = items.filter { !Param.uuidkey.matches($0.name) }
         return components.url?.absoluteString ?? ""
     }
 
@@ -393,10 +393,10 @@ public struct InternalURL {
             components.queryItems = []
         }
 
-        if var item = components.queryItems?.find({ Param.uuidKey.matches($0.name) }) {
+        if var item = components.queryItems?.find({ Param.uuidkey.matches($0.name) }) {
             item.value = InternalURL.uuid
         } else {
-            components.queryItems?.append(URLQueryItem(name: Param.uuidKey.rawValue, value: InternalURL.uuid))
+            components.queryItems?.append(URLQueryItem(name: Param.uuidkey.rawValue, value: InternalURL.uuid))
         }
         return components.url
     }
@@ -408,7 +408,7 @@ public struct InternalURL {
     public var isErrorPage: Bool {
         // Error pages can be nested in session restore URLs, and session restore handler will forward them to the error page handler
         let path = url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) ? extractedUrlParam?.path : url.path
-        return InternalURL.Path.errorPage.matches(path ?? "")
+        return InternalURL.Path.errorpage.matches(path ?? "")
     }
 
     public var originalURLFromErrorPage: URL? {

@@ -145,7 +145,7 @@ fileprivate func cfErrorToName(_ err: CFNetworkErrors) -> String {
 }
 
 class ErrorPageHandler: InternalSchemeResponse {
-    static let path = InternalURL.Path.errorPage.rawValue
+    static let path = InternalURL.Path.errorpage.rawValue
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
         guard let requestUrl = request.url, let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage else {

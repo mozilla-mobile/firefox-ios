@@ -178,10 +178,23 @@ class NSURLExtensionsTests: XCTestCase {
         XCTAssertEqual(url.normalizedHost!, "[::1]")
     }
 
+    private func checkUrls(goodurls: [String], badurls: [String], checker: ((InternalURL) -> Bool)) {
+        goodurls.forEach {
+            var result = false
+            if let url = InternalURL(URL(string:$0)!) { result = checker(url) }
+            XCTAssertTrue(result)
+        }
+        badurls.forEach {
+            var result = false
+            if let url = InternalURL(URL(string:$0)!) { result = checker(url) }
+            XCTAssertFalse(result)
+        }
+    }
+
     func testisAboutHomeURL() {
         let goodurls = [
-            "\(InternalScheme.url)/sessionrestore?url=\(InternalScheme.url)/about/home%23panel%3D1",
-            "\(InternalScheme.url)/about/home#panel=0"
+            "\(InternalURL.baseUrl)/sessionrestore?url=\(InternalURL.baseUrl)/about/home%23panel%3D1",
+            "\(InternalURL.baseUrl)/about/home#panel=0"
             ]
         let badurls = [
             "http://google.com",
@@ -190,14 +203,15 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:6571/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
             ]
 
-        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isAboutHomeURL, $0) }
-        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isAboutHomeURL, $0) }
+        checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
+            return url.isAboutHomeURL
+        })
     }
 
     func testisAboutURL() {
         let goodurls = [
-            "\(InternalScheme.url)/about/home#panel=0",
-            "\(InternalScheme.url)/about/license"
+            "\(InternalURL.baseUrl)/about/home#panel=0",
+            "\(InternalURL.baseUrl)/about/license"
         ]
         let badurls = [
             "http://google.com",
@@ -206,13 +220,14 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:6571/errors/error.html?url=http%3A//mozilla.com/about/home/%23panel%3D1",
             ]
 
-        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isAboutURL, $0) }
-        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isAboutURL, $0) }
+        checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
+            return url.isAboutURL
+        })
     }
 
     func testisErrorPage() {
         let goodurls = [
-            "\(InternalScheme.url)/\(URL.errorPagePath)?url=http%3A//mozilla.com",
+            "\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//mozilla.com",
             ]
         let badurls = [
             "http://google.com",
@@ -220,24 +235,22 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:1234/about/home/#panel=0"
         ]
 
-        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isInternalErrorPage, $0) }
-        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isInternalErrorPage, $0) }
+        checkUrls(goodurls: goodurls, badurls: badurls, checker: { url in
+            return url.isErrorPage
+        })
     }
 
     func testoriginalURLFromErrorURL() {
         let goodurls = [
-            ("\(InternalScheme.url)/\(URL.errorPagePath)?url=http%3A//mozilla.com", URL(string: "http://mozilla.com")),
-            ("\(InternalScheme.url)/\(URL.errorPagePath)?url=http%3A//localhost%3A6571/about/home/%23panel%3D1", URL(string: "http://localhost:6571/about/home/#panel=1")),
+            ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//mozilla.com", URL(string: "http://mozilla.com")),
+            ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//localhost%3A6571/about/home/%23panel%3D1", URL(string: "http://localhost:6571/about/home/#panel=1")),
             ]
-        let badurls = [
-            "http://google.com",
-            "http://localhost:6571/sessionrestore.html",
-            "http://localhost:1234/about/home/#panel=0",
-            "http://localhost:6571/errors/error.html"
-        ]
 
-        goodurls.forEach { XCTAssertEqual(URL(string:$0.0)!.originalURLFromErrorPage, $0.1) }
-        badurls.forEach { XCTAssertNil(URL(string:$0)!.originalURLFromErrorPage) }
+        goodurls.forEach {
+            var result = false
+            if let url = InternalURL(URL(string:$0.0)!) { result = (url.originalURLFromErrorPage == $0.1) }
+            XCTAssertTrue(result)
+        }
     }
 
     func testisReaderModeURL() {
@@ -251,8 +264,9 @@ class NSURLExtensionsTests: XCTestCase {
             "http://localhost:1234/about/home/#panel=0"
         ]
 
-        goodurls.forEach { XCTAssertTrue(URL(string:$0)!.isReaderModeURL, $0) }
-        badurls.forEach { XCTAssertFalse(URL(string:$0)!.isReaderModeURL, $0) }
+        checkUrls(goodurls: goodurls, badurls: badurls) { url in
+            return url.url.isReaderModeURL
+        }
     }
 
     func testisSyncedReaderModeURL() {
@@ -274,9 +288,9 @@ class NSURLExtensionsTests: XCTestCase {
 
     func testdecodeReaderModeURL() {
         let goodurls = [
-            ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
-            ("about:reader?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
-            ("about:reader?url=http%3A%2F%2Fexample%2Ecom%3Furl%3Dparam%26key%3Dvalue", URL(string: "http://example.com?url=param&key=value"))
+            ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage&uuidkey=AAAAA", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
+            ("about:reader?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2FMain%5FPage&uuidkey=AAAAA", URL(string: "https://en.m.wikipedia.org/wiki/Main_Page")),
+            ("about:reader?url=http%3A%2F%2Fexample%2Ecom%3Furl%3Dparam%26key%3Dvalue&uuidkey=AAAAA", URL(string: "http://example.com?url=param&key=value"))
         ]
         let badurls = [
             "http://google.com",
@@ -351,9 +365,9 @@ class NSURLExtensionsTests: XCTestCase {
     func testdisplayURL() {
         let goodurls = [
             ("http://localhost:6571/reader-mode/page?url=https%3A%2F%2Fen%2Em%2Ewikipedia%2Eorg%2Fwiki%2F", "https://en.m.wikipedia.org/wiki/"),
-            ("\(InternalScheme.url)/\(URL.errorPagePath)?url=http%3A//mozilla.com", "http://mozilla.com"),
-            ("\(InternalScheme.url)/\(URL.errorPagePath)?url=http%3A//mozilla.com", "http://mozilla.com"),
-            ("\(InternalScheme.url)/\(URL.errorPagePath)?url=http%3A%2F%2Flocalhost%3A6571%2Freader-mode%2Fpage%3Furl%3Dhttps%253A%252F%252Fen%252Em%252Ewikipedia%252Eorg%252Fwiki%252F", "https://en.m.wikipedia.org/wiki/"),
+            ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//mozilla.com", "http://mozilla.com"),
+            ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A//mozilla.com", "http://mozilla.com"),
+            ("\(InternalURL.baseUrl)/\(InternalURL.Path.errorpage)?url=http%3A%2F%2Flocalhost%3A6571%2Freader-mode%2Fpage%3Furl%3Dhttps%253A%252F%252Fen%252Em%252Ewikipedia%252Eorg%252Fwiki%252F", "https://en.m.wikipedia.org/wiki/"),
             ("https://mail.example.co.uk/index.html", "https://mail.example.co.uk/index.html"),
         ]
         let badurls = [

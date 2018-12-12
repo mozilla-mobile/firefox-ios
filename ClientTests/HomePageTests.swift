@@ -11,7 +11,7 @@ class HomePageTests: XCTestCase {
 
     func testHomePageSettingForInternalURLs() {
         let helper = HomePageHelper(prefs: prefs)
-        helper.currentURL = URL(string: "\(InternalScheme.url)")
+        helper.currentURL = URL(string: "\(InternalURL.baseUrl)")
         XCTAssertNil(prefs.stringForKey(HomePageConstants.HomePageURLPrefKey))
     }
 }
