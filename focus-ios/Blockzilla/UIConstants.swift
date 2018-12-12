@@ -218,6 +218,9 @@ struct UIConstants {
         static let shareTrackersHeight: CGFloat = 36
         static let homeViewTextOffset: CGFloat = 5
         static let homeViewLabelMinimumScale: CGFloat = 0.65
+        static let truncateCharactersLimit = 160
+        static let truncateHeadCharactersCount = (truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2
+        static let truncateTailCharactersCount = Int(ceil(Double(truncateCharactersLimit - UIConstants.strings.truncateLeader.count) / 2.0))
     }
 
     struct strings {
@@ -451,5 +454,6 @@ struct UIConstants {
         static let sumoTopicUsageData = "usage-data"
         static let encodingNameUTF8 = "utf-8"
         static let googleAmpURLPrefix = "https://www.google.com/amp/s/"
+        static let truncateLeader = "..."
     }
 }
