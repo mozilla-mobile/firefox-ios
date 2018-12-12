@@ -57,17 +57,4 @@ public struct PageMetadata {
                             title: dict[MetadataKeys.title.rawValue] as? String, description: dict[MetadataKeys.description.rawValue] as? String,
                             type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String, faviconURL: dict[MetadataKeys.favicon.rawValue] as? String, keywords: dict[MetadataKeys.keywords.rawValue] as? String)
     }
-
-    public func toDictionary() -> [String: Any] {
-        return [
-            MetadataKeys.pageURL.rawValue: self.siteURL,
-            MetadataKeys.imageURL.rawValue: self.mediaURL as Any,
-            MetadataKeys.title.rawValue: self.title as Any,
-            MetadataKeys.description.rawValue: self.description as Any,
-            MetadataKeys.type.rawValue: self.type as Any,
-            MetadataKeys.provider.rawValue: self.providerName as Any,
-            MetadataKeys.favicon.rawValue: self.faviconURL as Any,
-            MetadataKeys.keywords.rawValue: self.keywords as Any,
-        ]
-    }
 }

@@ -11,8 +11,6 @@
   },
   "license": "MPL-2.0",
   "dependencies": {
-    "franc": "^4.0.0",
-    "iso-language-codes": "^1.0.2",
     "page-metadata-parser": "^1.1.2",
     "readability": "mozilla/readability#3c76104adb00eb9897517e6be6c74c6c05918dfe"
   },

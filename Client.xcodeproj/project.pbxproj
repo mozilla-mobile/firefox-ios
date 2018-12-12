@@ -234,7 +234,6 @@
 		39C22C2A1E897926000C0E56 /* PushCryptoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B0647C1E7ADAC2000BE173 /* PushCryptoTests.swift */; };
 		39C22C2F1E897BA7000C0E56 /* LivePushClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C22C2C1E897B9A000C0E56 /* LivePushClientTests.swift */; };
 		39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */; };
-		39CE74EE21A6D1C7007AE4F2 /* DocumentServices.js in Resources */ = {isa = PBXBuildFile; fileRef = 39CE74E521A6D1C7007AE4F2 /* DocumentServices.js */; };
 		39CE74F021A6D2B8007AE4F2 /* DocumentServicesHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CE74EF21A6D2B8007AE4F2 /* DocumentServicesHelper.swift */; };
 		39CE74F421A72309007AE4F2 /* TranslationToastHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CE74F321A72309007AE4F2 /* TranslationToastHandler.swift */; };
 		39CE74F621A823DD007AE4F2 /* TranslationSnackBarTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39CE74F521A823DD007AE4F2 /* TranslationSnackBarTest.swift */; };
@@ -1409,7 +1408,6 @@
 		39B0647C1E7ADAC2000BE173 /* PushCryptoTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PushCryptoTests.swift; path = PushTests/PushCryptoTests.swift; sourceTree = "<group>"; };
 		39C22C2C1E897B9A000C0E56 /* LivePushClientTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LivePushClientTests.swift; path = PushTests/LivePushClientTests.swift; sourceTree = "<group>"; };
 		39C261CB2018DE20009D97BD /* FxScreenGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxScreenGraphTests.swift; sourceTree = "<group>"; };
-		39CE74E521A6D1C7007AE4F2 /* DocumentServices.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = DocumentServices.js; sourceTree = "<group>"; };
 		39CE74EF21A6D2B8007AE4F2 /* DocumentServicesHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentServicesHelper.swift; sourceTree = "<group>"; };
 		39CE74F321A72309007AE4F2 /* TranslationToastHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationToastHandler.swift; sourceTree = "<group>"; };
 		39CE74F521A823DD007AE4F2 /* TranslationSnackBarTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationSnackBarTest.swift; sourceTree = "<group>"; };
@@ -3542,7 +3540,6 @@
 				D03F8F22200EAC1E003C2224 /* AllFramesAtDocumentStart.js */,
 				D0FCF8041FE4772D004A7995 /* MainFrameAtDocumentEnd.js */,
 				D0FCF8051FE4772D004A7995 /* MainFrameAtDocumentStart.js */,
-				39CE74E521A6D1C7007AE4F2 /* DocumentServices.js */,
 				3BC659581E5BA505006D560F /* top_sites.json */,
 				3BC659481E5BA4AE006D560F /* TopSites */,
 				D30684F01C84F12A002D8D82 /* SearchPlugins */,
@@ -4538,7 +4535,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D38A1EE01CB458EC0080C842 /* CertError.html in Resources */,
-				39CE74EE21A6D1C7007AE4F2 /* DocumentServices.js in Resources */,
 				0BA1E0301B051A07007675AF /* NetError.css in Resources */,
 				3BC659491E5BA4AE006D560F /* TopSites in Resources */,
 				E4B7B77E1A793CF20022C5E0 /* FiraSans-SemiBold.ttf in Resources */,

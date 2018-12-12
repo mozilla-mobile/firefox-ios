@@ -7,7 +7,6 @@ const AllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserSc
 const AllFramesAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.js");
 const MainFrameAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentStart/*.js");
 const MainFrameAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/MainFrame/AtDocumentEnd/*.js");
-const DocumentServices = glob.sync("./Client/Frontend/UserContent/UserScripts/DocumentServices/src/*.js");
 
 // Ensure the first script loaded at document start is __firefox__.js
 // since it defines the `window.__firefox__` global.
@@ -19,8 +18,6 @@ const needsFirefoxFile = {
   // to include __firefox__.js for the document end scripts.
   // ¯\_(ツ)_/¯
   AllFramesAtDocumentEnd,
-
-  DocumentServices
 };
 
 for (let [name, files] of Object.entries(needsFirefoxFile)) {
@@ -36,7 +33,6 @@ module.exports = {
     AllFramesAtDocumentEnd,
     MainFrameAtDocumentStart,
     MainFrameAtDocumentEnd,
-    DocumentServices,
   },
   output: {
     filename: "[name].js",
