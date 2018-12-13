@@ -50,10 +50,10 @@ extension BrowserViewController: DownloadQueueDelegate {
 
             if error == nil {
                 let downloadCompleteToast = ButtonToast(labelText: download.filename, imageName: "check", buttonText: Strings.DownloadsButtonTitle, completion: { buttonPressed in
-                    if buttonPressed {
-                        self.openURLInNewTab(HomePanelType.downloads.internalUrl, isPrivate: self.tabManager.selectedTab?.isPrivate ?? false, isPrivileged: true)
-                        UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .downloadCompleteToast)
-                    }
+                    guard buttonPressed else { return }
+
+                    self.showLibrary(panel: .downloads)
+                    UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .downloadCompleteToast)
                 })
 
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))

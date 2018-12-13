@@ -780,6 +780,27 @@ class BrowserViewController: UIViewController {
         searchController!.didMove(toParentViewController: self)
     }
 
+    func showLibrary(panel: LibraryPanelType? = nil) {
+        let homepanels = libraryPanelController ?? HomePanelViewController()
+        homepanels.profile = self.profile
+        homepanels.delegate = self
+        libraryPanelController = homepanels
+        if panel != nil {
+            libraryPanelController?.selectedPanel = panel
+        }
+
+
+        let controller = ThemedNavigationController(rootViewController: homepanels)
+        controller.popoverDelegate = self
+        controller.modalPresentationStyle = .formSheet
+
+        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
+        // of this popover on iPad seems to block the presentation of the modal VC.
+        DispatchQueue.main.async {
+            self.present(controller, animated: true, completion: nil)
+        }
+    }
+
     fileprivate func hideSearchController() {
         if let searchController = searchController {
             searchController.willMove(toParentViewController: nil)

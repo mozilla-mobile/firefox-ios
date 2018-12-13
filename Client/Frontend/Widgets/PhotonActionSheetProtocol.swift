@@ -47,20 +47,7 @@ extension PhotonActionSheetProtocol {
 
         let openLibrary = PhotonActionSheetItem(title: Strings.AppMenuLibraryTitleString, iconString: "menu-library") { action in
             let bvc = vcDelegate as? BrowserViewController
-            let homepanels = bvc?.libraryPanelController ?? HomePanelViewController()
-            bvc?.libraryPanelController = homepanels
-            homepanels.profile = self.profile
-            homepanels.delegate = vcDelegate as? HomePanelDelegate
-
-            let controller = ThemedNavigationController(rootViewController: homepanels)
-            controller.popoverDelegate = vcDelegate
-            controller.modalPresentationStyle = .formSheet
-
-            // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-            // of this popover on iPad seems to block the presentation of the modal VC.
-            DispatchQueue.main.async {
-                vcDelegate.present(controller, animated: true, completion: nil)
-            }
+            bvc?.showLibrary()
         }
 
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _ in
