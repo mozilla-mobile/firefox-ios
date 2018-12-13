@@ -86,12 +86,17 @@ open class SQLiteBookmarksModelFactory: BookmarksModelFactory {
         return self.getChildrenWithParent(guid, includeIcon: true)
     }
 
-    func folderForGUID(_ guid: GUID, title: String) -> Deferred<Maybe<BookmarkFolder>> {
+    func folderForGUID(_ guid: GUID, title: String, reversedOrder: Bool=false) -> Deferred<Maybe<BookmarkFolder>> {
         return self.getChildren(guid)
             >>== { cursor in
 
             if cursor.status == .failure {
                 return deferMaybe(DatabaseError(description: "Couldn't get children: \(cursor.statusMessage)."))
+            }
+
+            if reversedOrder {
+                let reversedCursor = ArrayCursor<BookmarkNode>(data: cursor.asArray().reversed(), status: cursor.status, statusMessage: cursor.statusMessage)
+                return deferMaybe(SQLiteBookmarkFolder(guid: guid, title: title, children: reversedCursor))
             }
 
             return deferMaybe(SQLiteBookmarkFolder(guid: guid, title: title, children: cursor))
@@ -871,14 +876,14 @@ open class UnsyncedBookmarksFallbackModelFactory: BookmarksModelFactory {
     open func modelForRoot() -> Deferred<Maybe<BookmarksModel>> {
         log.debug("Getting model for fallback root.")
         // Return a virtual model containing "Desktop bookmarks" prepended to the local mobile bookmarks.
-        return self.localFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile)
+        return self.localFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile, reversedOrder: true)
             >>== {
                 localMobileFolder in
 
-                self.bufferFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile) >>== {
+                self.bufferFactory.folderForGUID(BookmarkRoots.MobileFolderGUID, title: BookmarksFolderTitleMobile, reversedOrder: true) >>== {
                     bufferMobileFolder in
 
-                    let bufferAndLocalMobile = ConcatenatedBookmarkFolder(main: bufferMobileFolder, append: localMobileFolder)
+                    let bufferAndLocalMobile = ConcatenatedBookmarkFolder(main: localMobileFolder, append: bufferMobileFolder)
                     return self.bufferFactory.hasDesktopBookmarks() >>== { yes in
                         guard yes else {
                             return deferMaybe(BookmarksModel(modelFactory: self, root: bufferAndLocalMobile))
