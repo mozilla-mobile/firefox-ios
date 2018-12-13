@@ -11,7 +11,12 @@ class AboutHomeHandler: InternalSchemeResponse {
         let response = InternalSchemeHandler.response(forUrl: url)
         let bg = UIColor.theme.browser.background.hexString
         // Blank page with a color matching the background of the panels which is displayed for a split-second until the panel shows.
-        let html = "<html><body style='background-color:\(bg)'></body></html>"
+        let html = """
+            <!DOCTYPE html>
+            <html>
+              <body style='background-color:\(bg)'></body>
+            </html>
+        """
         guard let data = html.data(using: .utf8) else {
             return nil
         }

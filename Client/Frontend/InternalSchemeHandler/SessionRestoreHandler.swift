@@ -7,11 +7,25 @@ import WebKit
 import GCDWebServers
 import Shared
 
+private let apostropheEncoded = "%27"
+
+extension WKWebView {
+    // Use JS to redirect the page without adding a history entry
+    func replaceLocation(with url: URL) {
+        let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: apostropheEncoded)
+        evaluateJavaScript("location.replace('\(safeUrl)')")
+    }
+}
+
 func generateResponseThatRedirects(toUrl url: URL) -> (URLResponse, Data) {
-    var urlString = url.absoluteString
+    var urlString: String
     if InternalURL.isValid(url: url), let authUrl = InternalURL.authorize(url: url) {
         urlString = authUrl.absoluteString
+    } else {
+        urlString = url.absoluteString
     }
+
+    urlString = urlString.replacingOccurrences(of: "'", with: apostropheEncoded)
     
     let startTags = "<!DOCTYPE html><html><head><script>"
     let endTags = "</script></head></html>"
