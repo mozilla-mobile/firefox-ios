@@ -19,12 +19,11 @@ class HomePageSettingsUITests: BaseTestCase {
     func testCheckHomeSettingsByDefault() {
         navigator.goto(HomeSettings)
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
-        XCTAssertTrue(app.tables.cells["Blank Page"].exists)
         XCTAssertTrue(app.tables.cells["Bookmarks"].exists)
         XCTAssertTrue(app.tables.cells["History"].exists)
         XCTAssertTrue(app.tables.cells["HomePageSetting"].exists)
         waitForExistence(app.tables.cells["TopSitesRows"])
-        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as! String, "Top Sites, 2 rows")
+        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as! String, "Top Sites, Rows: 2")
         XCTAssertTrue(app.tables.switches["ASPocketStoriesVisible"].isEnabled)
     }
 
