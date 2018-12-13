@@ -48,7 +48,14 @@ class TabDisplayManager: NSObject {
 
     // Instead of using UICollectionView.hasActiveDrag, manage the 'drag is active' flag ourselves in order to cancel the drag. UICollectionView has no drag cancellation support.
     // ANY tab manager operation that arrives should set this to false, effectively cancelling the drag.
-    var isDragging = false
+    var isDragging = false {
+        didSet {
+            if !isDragging {
+                collectionView.cancelInteractiveMovement()
+            }
+        }
+    }
+
     fileprivate let collectionView: UICollectionView
 
     private var tabObservers: TabObservers!
