@@ -198,11 +198,11 @@ extension URL {
             return self.decodeReaderModeURL?.havingRemovedAuthorisationComponents()
         }
 
-        if self.isErrorPageURL {
-            return originalURLFromErrorURL?.displayURL
+        if let internalUrl = InternalURL(self), internalUrl.isErrorPage {
+            return internalUrl.originalURLFromErrorPage?.displayURL
         }
 
-        if !self.isAboutURL {
+        if !InternalURL.isValid(url: self) {
             return self.havingRemovedAuthorisationComponents()
         }
 
@@ -277,32 +277,6 @@ extension URL {
         return scheme.map { schemes.contains($0) } ?? false
     }
 
-    // This helps find local urls that we do not want to show loading bars on.
-    // These utility pages should be invisible to the user
-    public var isLocalUtility: Bool {
-        guard self.isLocal else {
-            return false
-        }
-        let utilityURLs = ["/errors", "/about/sessionrestore", "/about/home", "/reader-mode"]
-        return utilityURLs.contains { self.path.hasPrefix($0) }
-    }
-
-    public var isLocal: Bool {
-        guard isWebPage(includeDataURIs: false) else {
-            return false
-        }
-        // iOS forwards hostless URLs (e.g., http://:6571) to localhost.
-        guard let host = host, !host.isEmpty else {
-            return true
-        }
-
-        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
-            return false
-        }
-
-        return host.lowercased() == "localhost" || host == "127.0.0.1"
-    }
-
     public var isIPv6: Bool {
         return host?.contains(":") ?? false
     }
@@ -343,8 +317,8 @@ extension URL {
 
     public var decodeReaderModeURL: URL? {
         if self.isReaderModeURL || self.isSyncedReaderModeURL {
-            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems, queryItems.count == 1 {
-                if let queryItem = queryItems.first, let value = queryItem.value {
+            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems {
+                if let queryItem = queryItems.find({ $0.name == "url"}), let value = queryItem.value {
                     return URL(string: value)
                 }
             }
@@ -364,50 +338,115 @@ extension URL {
 
 // Helpers to deal with ErrorPage URLs
 
-extension URL {
-    public var isErrorPageURL: Bool {
-        if let host = self.host {
-            return self.scheme == "http" && host == "localhost" && path == "/errors/error.html"
+public struct InternalURL {
+    public static let uuid = UUID().uuidString
+    public static let scheme = "internal"
+    public static let baseUrl = "\(scheme)://local"
+    public enum Path: String {
+        case errorpage = "errorpage"
+        case sessionrestore = "sessionrestore"
+        func matches(_ string: String) -> Bool {
+            return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
         }
-        return false
     }
 
-    public var originalURLFromErrorURL: URL? {
-        let components = URLComponents(url: self, resolvingAgainstBaseURL: false)
-        if let queryURL = components?.queryItems?.find({ $0.name == "url" })?.value {
-            return URL(string: queryURL)
+    public enum Param: String {
+        case uuidkey = "uuidkey"
+        case url = "url"
+        func matches(_ string: String) -> Bool { return string == self.rawValue }
+    }
+
+    public let url: URL
+
+    private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
+
+    public static func isValid(url: URL) -> Bool {
+        if AppConstants.IsRunningTest, url.path.contains("test-fixture/") {
+            return false
+        }
+
+        // TODO: (reader-mode-custom-scheme) remove this line when updating.
+        return url.absoluteString.hasPrefix("http://localhost:6571/") || InternalURL.scheme == url.scheme
+    }
+
+    public init?(_ url: URL) {
+        guard InternalURL.isValid(url: url) else {
+            return nil
+        }
+
+        self.url = url
+    }
+
+    public var isAuthorized: Bool {
+        return (url.getQuery()[InternalURL.Param.uuidkey.rawValue] ?? "") == InternalURL.uuid
+    }
+
+    public var stripAuthorization: String {
+        guard var components = URLComponents(string: url.absoluteString), let items = components.queryItems else { return url.absoluteString }
+        components.queryItems = items.filter { !Param.uuidkey.matches($0.name) }
+        return components.url?.absoluteString ?? ""
+    }
+
+    public static func authorize(url: URL) -> URL? {
+        guard var components = URLComponents(string: url.absoluteString) else { return nil }
+        if components.queryItems == nil {
+            components.queryItems = []
+        }
+
+        if var item = components.queryItems?.find({ Param.uuidkey.matches($0.name) }) {
+            item.value = InternalURL.uuid
+        } else {
+            components.queryItems?.append(URLQueryItem(name: Param.uuidkey.rawValue, value: InternalURL.uuid))
+        }
+        return components.url
+    }
+
+    public var isSessionRestore: Bool {
+        return url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl)
+    }
+
+    public var isErrorPage: Bool {
+        // Error pages can be nested in session restore URLs, and session restore handler will forward them to the error page handler
+        let path = url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) ? extractedUrlParam?.path : url.path
+        return InternalURL.Path.errorpage.matches(path ?? "")
+    }
+
+    public var originalURLFromErrorPage: URL? {
+        if !url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) {
+            return isErrorPage ? extractedUrlParam : nil
+        }
+        if let urlParam = extractedUrlParam, let nested = InternalURL(urlParam), nested.isErrorPage {
+            return nested.extractedUrlParam
         }
         return nil
     }
-}
 
-// Helpers to deal with About URLs
-extension URL {
-    public var isAboutHomeURL: Bool {
-        if let urlString = self.getQuery()["url"]?.unescape(), isErrorPageURL {
-            let url = URL(string: urlString) ?? self
-            return url.aboutComponent == "home"
+    public var extractedUrlParam: URL? {
+        if let nestedUrl = url.getQuery()[InternalURL.Param.url.rawValue]?.unescape() {
+            return URL(string: nestedUrl)
         }
-        return self.aboutComponent == "home"
+        return nil
+    }
+
+    public var isAboutHomeURL: Bool {
+        if let urlParam = extractedUrlParam, let internalUrlParam = InternalURL(urlParam) {
+            return internalUrlParam.aboutComponent?.hasPrefix("home") ?? false
+        }
+        return aboutComponent?.hasPrefix("home") ?? false
     }
 
     public var isAboutURL: Bool {
-        return self.aboutComponent != nil
+        return aboutComponent != nil
     }
 
-    /// If the URI is an about: URI, return the path after "about/" in the URI.
-    /// For example, return "home" for "http://localhost:1234/about/home/#panel=0".
+    /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        guard let scheme = self.scheme, let host = self.host else {
-            return nil
-        }
-        if scheme == "http" && host == "localhost" && path.hasPrefix(aboutPath) {
-            return String(path[aboutPath.endIndex...])
+        if url.path.hasPrefix(aboutPath), let range = stripAuthorization.range(of: aboutPath) {
+            return String(stripAuthorization[range.upperBound...])
         }
         return nil
     }
-
 }
 
 //MARK: Private Helpers

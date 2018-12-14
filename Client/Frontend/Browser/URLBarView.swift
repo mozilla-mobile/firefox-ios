@@ -166,7 +166,11 @@ class URLBarView: UIView {
 
         set(newURL) {
             locationView.url = newURL
-            line.isHidden = newURL?.isAboutHomeURL ?? true
+            if let url = newURL, InternalURL(url)?.isAboutHomeURL ?? false {
+                line.isHidden = true
+            } else {
+                line.isHidden = false
+            }
         }
     }
 

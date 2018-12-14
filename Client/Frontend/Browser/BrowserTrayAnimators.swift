@@ -278,7 +278,9 @@ private func calculateExpandedCellFrameFromBVC(_ bvc: BrowserViewController) -> 
     // there is no toolbar for home panels
     if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
         return frame
-    } else if let url = bvc.tabManager.selectedTab?.url, url.isAboutURL && bvc.toolbar == nil {
+    }
+
+    if let url = bvc.tabManager.selectedTab?.url, bvc.toolbar == nil, let internalPage = InternalURL(url), internalPage.isAboutURL {
         frame.size.height += UIConstants.BottomToolbarHeight
     }
 
@@ -286,12 +288,9 @@ private func calculateExpandedCellFrameFromBVC(_ bvc: BrowserViewController) -> 
 }
 
 private func shouldDisplayFooterForBVC(_ bvc: BrowserViewController) -> Bool {
-    if bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
-        if let url = bvc.tabManager.selectedTab?.url {
-            return !url.isAboutURL
-        }
-    }
-    return false
+    guard let url = bvc.tabManager.selectedTab?.url else { return false }
+    let isAboutPage = InternalURL(url)?.isAboutURL ?? false
+    return bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) && !isAboutPage
 }
 
 private func toggleWebViewVisibility(_ show: Bool, usingTabManager tabManager: TabManager) {

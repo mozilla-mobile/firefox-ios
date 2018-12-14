@@ -103,7 +103,13 @@ class Tab: NSObject {
     fileprivate var lastRequest: URLRequest?
     var restoring: Bool = false
     var pendingScreenshot = false
-    var url: URL?
+    var url: URL? {
+        didSet {
+            if let _url = url, let internalUrl = InternalURL(_url), internalUrl.isAuthorized {
+                url = URL(string: internalUrl.stripAuthorization)
+            }
+        }
+    }
     var mimeType: String?
     var isEditing: Bool = false
 
@@ -254,13 +260,15 @@ class Tab: NSObject {
             var jsonDict = [String: AnyObject]()
             jsonDict["history"] = urls as AnyObject?
             jsonDict["currentPage"] = currentPage as AnyObject?
-            guard let json = JSON(jsonDict).stringify() else {
+            guard let json = JSON(jsonDict).stringify()?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else {
                 return
             }
-            let escapedJSON = json.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-            let restoreURL = URL(string: "\(WebServer.sharedInstance.base)/about/sessionrestore?history=\(escapedJSON)")
-            lastRequest = PrivilegedRequest(url: restoreURL!) as URLRequest
-            webView.load(lastRequest!)
+
+            if let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?history=\(json)") {
+                let request = PrivilegedRequest(url: restoreURL) as URLRequest
+                webView.load(request)
+                lastRequest = request
+            }
         } else if let request = lastRequest {
             webView.load(request)
         } else {
@@ -353,7 +361,7 @@ class Tab: NSObject {
 
         // When picking a display title. Tabs with sessionData are pending a restore so show their old title.
         // To prevent flickering of the display title. If a tab is restoring make sure to use its lastTitle.
-        if let url = self.url, url.isAboutHomeURL, sessionData == nil, !restoring {
+        if let url = self.url, InternalURL(url)?.isAboutHomeURL ?? false, sessionData == nil, !restoring {
             return ""
         }
 
@@ -362,10 +370,6 @@ class Tab: NSObject {
         }
 
         return lastTitle
-    }
-
-    var currentInitialURL: URL? {
-        return self.webView?.backForwardList.currentItem?.initialURL
     }
 
     var displayFavicon: Favicon? {

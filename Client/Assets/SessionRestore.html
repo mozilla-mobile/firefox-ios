@@ -16,18 +16,37 @@
    * error pages so that they will redirect to the correct URLs when loaded.
    */
   (function () {
-      function getRestoreURL(url) {
-          // If the url already points to an error page just return the url as is
-          if (url.indexOf(document.location.origin + '/errors/error.html') === 0) {
-               return url;
-           }
-          // Otherwise, push an error page to trigger a redirect when loaded.
-          return '/errors/error.html?url=' + escape(url);
+      const uuidKeyValue = "%INSERT_UUID_VALUE%"
+      const uuidKeyName = "uuidkey"
+      const sessionRestoreUrl = "internal://local/sessionrestore"
+      const errorPageUrl = "internal://local/errorpage"
+
+      function getRestoreURL(urlString) {
+          const url = new URL(urlString);
+          // If the url already has getRestoreURL() called on it, just return it as-is.
+        if (urlString.startsWith(sessionRestoreUrl) || urlString.startsWith(errorPageUrl)) {
+              url.searchParams.set(uuidKeyName, uuidKeyValue);
+              if (urlString.startsWith(errorPageUrl)) {
+                   url.searchParams.delete("timestamp");
+              }
+              return url.toString();
+          }
+          const wrappedUrl = new URL(sessionRestoreUrl);
+          wrappedUrl.searchParams.set("url", urlString);
+          wrappedUrl.searchParams.set(uuidKeyName, uuidKeyValue);
+          return wrappedUrl.toString();
       }
-      var index = document.location.href.search("history");
+
+      // Remove the ending uuid auth portion
+      const uuidSuffix = "&" + uuidKeyName + "=" + uuidKeyValue
+      const pageUrl = location.href.substr(0, location.href.lastIndexOf(uuidSuffix));
+
+      var index = pageUrl.search("history");
       // Pull the session out of the history query argument.
       // The session is a JSON-stringified array of all URLs to restore for this tab, plus the last active index.
-      var sessionRestoreComponents = JSON.parse(unescape(document.location.href.substring(index + "history=".length)));
+      var sessionRestoreComponents = JSON.parse(unescape(pageUrl.substring(index + "history=".length)));
+      // Pull the session out of the history query argument.
+      // The session is a JSON-stringified array of all URLs to restore for this tab, plus the last active index.
       var urlList = sessionRestoreComponents['history'];
       var currentPage = sessionRestoreComponents['currentPage'];
       // First, replace the session restore page (this page) with the first URL to be restored.
@@ -36,14 +55,21 @@
       for (var i = 1; i < urlList.length; i++) {
           history.pushState({}, '', getRestoreURL(urlList[i]));
       }
+    
       // We'll end up at the last page pushed, so set the selected index to the current index in the session history.
       history.go(currentPage);
+
+      // Without a delay, the reload() won't use the last url set.
+      setTimeout(() => {
+          if (currentPage !== 0) {
+              location.reload();
+          }
+      });
 
       // Finally, reload the page to trigger the error redirection, which will load the actual URL.
       // For some reason (maybe a WebKit bug?), document.location still points to SessionRestore.html at this point,
       // so wait until the next tick when the location points to the correct index and URL.
       setTimeout(function () {
-          webkit.messageHandlers.localRequestHelper.postMessage({ type: "reload" });
           webkit.messageHandlers.sessionRestoreHelper.postMessage({ name: "didRestoreSession" });
       }, 0);
   }) ();

@@ -4,13 +4,14 @@
 
 @testable import Client
 import XCTest
+import Shared
 
 class HomePageTests: XCTestCase {
     let prefs = NSUserDefaultsPrefs(prefix: "PrefsTests")
 
     func testHomePageSettingForInternalURLs() {
         let helper = HomePageHelper(prefs: prefs)
-        helper.currentURL = URL(string: "http://localhost:6571")
+        helper.currentURL = URL(string: "\(InternalURL.baseUrl)")
         XCTAssertNil(prefs.stringForKey(HomePageConstants.HomePageURLPrefKey))
     }
 }

@@ -88,11 +88,11 @@ enum NewTabPage: String {
         guard let homePanel = self.homePanelType else {
             return nil
         }
-        return homePanel.localhostURL as URL
+        return homePanel.internalUrl as URL
     }
 
     static func fromAboutHomeURL(url: URL) -> NewTabPage? {
-        guard url.isAboutHomeURL else { return nil}
+        guard let internalUrl = InternalURL(url), internalUrl.isAboutHomeURL else { return nil}
         guard let panelNumber = url.fragment?.split(separator: "=").last else { return nil }
         switch panelNumber {
         case "0":

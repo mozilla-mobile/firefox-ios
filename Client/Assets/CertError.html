@@ -6,7 +6,7 @@
   <head>
     <title>%error_title%</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="CertError.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="internal://local/errorpage-resource/CertError.css" type="text/css" media="all" />
 
     <script type="application/javascript">
       // If the user swipes back and forth to this tab, we want to make sure we make an attempt to reload the original page.
@@ -17,6 +17,8 @@
         else
           webkit.messageHandlers.localRequestHelper.postMessage({ type: "reload" });
       });
+      
+      %reloader%
     </script>
   </head>
 

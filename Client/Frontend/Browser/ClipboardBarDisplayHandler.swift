@@ -33,7 +33,6 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
 
         NotificationCenter.default.addObserver(self, selector: #selector(UIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didRestoreSession), name: .DidRestoreSession, object: nil)
     }
 
     @objc private func UIPasteboardChanged() {
@@ -68,20 +67,17 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         firstTab.observeURLChanges(delegate: self)
     }
 
-    @objc private func didRestoreSession() {
-        DispatchQueue.main.sync {
-            if let tabManager = self.tabManager,
-                let firstTab = tabManager.selectedTab {
-                self.observeURLForFirstTab(firstTab: firstTab)
-            } else {
-                firstTabLoaded = true
-            }
-
-            NotificationCenter.default.removeObserver(self, name: .DidRestoreSession, object: nil)
-
-            sessionRestored = true
-            checkIfShouldDisplayBar()
+    func didRestoreSession() {
+        guard !sessionRestored else { return }
+        if let tabManager = self.tabManager,
+            let firstTab = tabManager.selectedTab {
+            observeURLForFirstTab(firstTab: firstTab)
+        } else {
+            firstTabLoaded = true
         }
+
+        sessionRestored = true
+        checkIfShouldDisplayBar()
     }
 
     func tab(_ tab: Tab, urlDidChangeTo url: URL) {

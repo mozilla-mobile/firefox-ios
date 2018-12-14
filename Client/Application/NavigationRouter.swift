@@ -127,10 +127,10 @@ enum NavigationPath {
 
     private static func handleHomePanel(panel: HomePanelPath, with bvc: BrowserViewController) {
         switch panel {
-        case .bookmarks: bvc.openURLInNewTab(HomePanelType.bookmarks.localhostURL, isPrivileged: true)
-        case .history: bvc.openURLInNewTab(HomePanelType.history.localhostURL, isPrivileged: true)
-        case .readingList:bvc.openURLInNewTab(HomePanelType.readingList.localhostURL, isPrivileged: true)
-        case .topsites: bvc.openURLInNewTab(HomePanelType.topSites.localhostURL, isPrivileged: true)
+        case .bookmarks: bvc.openURLInNewTab(HomePanelType.bookmarks.internalUrl, isPrivileged: true)
+        case .history: bvc.openURLInNewTab(HomePanelType.history.internalUrl, isPrivileged: true)
+        case .readingList:bvc.openURLInNewTab(HomePanelType.readingList.internalUrl, isPrivileged: true)
+        case .topsites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl, isPrivileged: true)
         }
     }
 

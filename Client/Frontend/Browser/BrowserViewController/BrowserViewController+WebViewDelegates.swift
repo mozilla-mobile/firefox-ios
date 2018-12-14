@@ -15,7 +15,7 @@ extension BrowserViewController: WKUIDelegate {
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard let parentTab = tabManager[webView] else { return nil }
 
-        guard navigationAction.isAllowed, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
+        guard !navigationAction.isInternalUnprivileged, shouldRequestBeOpenedAsPopup(navigationAction.request) else {
             print("Denying popup from request: \(navigationAction.request)")
             return nil
         }
@@ -97,12 +97,16 @@ extension BrowserViewController: WKUIDelegate {
 
 extension WKNavigationAction {
     /// Allow local requests only if the request is privileged.
-    var isAllowed: Bool {
+    var isInternalUnprivileged: Bool {
         guard let url = request.url else {
             return true
         }
 
-        return !url.isWebPage(includeDataURIs: false) || !url.isLocal || request.isPrivileged
+        if let url = InternalURL(url) {
+            return !url.isAuthorized
+        } else {
+            return false
+        }
     }
 }
 
@@ -161,14 +165,14 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if url.scheme == "about" {
-            decisionHandler(.allow)
-            return
-        }
+        if InternalURL.isValid(url: url) {
+            if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
+                log.warning("Denying unprivileged request: \(navigationAction.request)")
+                decisionHandler(.cancel)
+                return
+            }
 
-        if !navigationAction.isAllowed && navigationAction.navigationType != .backForward {
-            log.warning("Denying unprivileged request: \(navigationAction.request)")
-            decisionHandler(.cancel)
+            decisionHandler(.allow)
             return
         }
 
@@ -323,15 +327,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if let url = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL {
-            ErrorPageHelper().showPage(error, forUrl: url, inWebView: webView)
-
-            // If the local web server isn't working for some reason (Firefox cellular data is
-            // disabled in settings, for example), we'll fail to load the session restore URL.
-            // We rely on loading that page to get the restore callback to reset the restoring
-            // flag, so if we fail to load that page, reset it here.
-            if url.aboutComponent == "sessionrestore" {
-                tabManager.tabs.filter { $0.webView == webView }.first?.restoring = false
-            }
+            ErrorPageHelper(certStore: profile.certStore).loadPage(error, forUrl: url, inWebView: webView)
         }
     }
 
