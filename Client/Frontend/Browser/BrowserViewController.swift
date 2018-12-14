@@ -789,7 +789,6 @@ class BrowserViewController: UIViewController {
             libraryPanelController?.selectedPanel = panel
         }
 
-
         let controller = ThemedNavigationController(rootViewController: homepanels)
         controller.popoverDelegate = self
         controller.modalPresentationStyle = .formSheet

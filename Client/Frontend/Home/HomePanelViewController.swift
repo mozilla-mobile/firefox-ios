@@ -46,10 +46,6 @@ enum LibraryPanelType: Int {
     case history = 1
     case readingList = 2
     case downloads = 3
-
-    var localhostURL: URL {
-        return URL(string: "#panel=\(self.rawValue)", relativeTo: UIConstants.AboutHomePage as URL)!
-    }
 }
 
 class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
