@@ -337,7 +337,11 @@ class TabManager: NSObject {
                 let url = NewTabHomePageAccessors.getHomePage(profile.prefs)!
                 tab.loadRequest(URLRequest(url: url))
             case .blankPage:
-                // Do nothing: we're already seeing a blank page.
+                // If we're showing "about:blank" in a webview, set
+                // the <html> `background-color` to match the theme.
+                if let webView = tab.webView as? TabWebView {
+                    webView.applyTheme()
+                }
                 break
             default:
                 // The common case, where the NewTabPage enum defines
