@@ -146,6 +146,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Loading data
 
     override func reloadData() {
+        guard !isFetchInProgress else { return }
         groupedSites = DateGroupedTableData<Site>()
 
         currentFetchOffset = 0
