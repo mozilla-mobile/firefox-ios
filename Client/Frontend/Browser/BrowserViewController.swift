@@ -2039,7 +2039,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         if let url = elements.link, let currentTab = tabManager.selectedTab {
             dialogTitle = url.absoluteString
             let isPrivate = currentTab.isPrivate
-            screenshotHelper.takeScreenshot(currentTab)
+            screenshotHelper.takeDelayedScreenshot(currentTab)
 
             let addTab = { (rURL: URL, isPrivate: Bool) in
                     let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
