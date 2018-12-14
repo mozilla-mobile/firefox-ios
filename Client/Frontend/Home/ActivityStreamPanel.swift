@@ -382,7 +382,7 @@ extension ActivityStreamPanel {
             return topSitesManager.content.isEmpty ? 0 : 1
         case .pocket:
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
-            return pocketStories.isEmpty || (pocketStories.count < Int(numItems)) ? 0 : Int(numItems)
+            return pocketStories.count
         }
     }
 
