@@ -186,6 +186,10 @@ extension URL {
     }
 
     public var displayURL: URL? {
+        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
+            return self
+        }
+
         if self.absoluteString.starts(with: "blob:") {
             return URL(string: "blob:")
         }
@@ -361,10 +365,6 @@ public struct InternalURL {
     private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
 
     public static func isValid(url: URL) -> Bool {
-        if AppConstants.IsRunningTest, url.path.contains("test-fixture/") {
-            return false
-        }
-
         // TODO: (reader-mode-custom-scheme) remove this line when updating.
         return url.absoluteString.hasPrefix("http://localhost:6571/") || InternalURL.scheme == url.scheme
     }
@@ -384,6 +384,9 @@ public struct InternalURL {
     public var stripAuthorization: String {
         guard var components = URLComponents(string: url.absoluteString), let items = components.queryItems else { return url.absoluteString }
         components.queryItems = items.filter { !Param.uuidkey.matches($0.name) }
+        if let items = components.queryItems, items.count == 0 {
+            components.queryItems = nil // This cleans up the url to not end with a '?'
+        }
         return components.url?.absoluteString ?? ""
     }
 
@@ -442,8 +445,12 @@ public struct InternalURL {
     /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        if url.path.hasPrefix(aboutPath), let range = stripAuthorization.range(of: aboutPath) {
-            return String(stripAuthorization[range.upperBound...])
+        guard let url = URL(string: stripAuthorization) else {
+            return nil
+        }
+
+        if url.path.hasPrefix(aboutPath) {
+            return String(url.path.dropFirst(aboutPath.count))
         }
         return nil
     }
