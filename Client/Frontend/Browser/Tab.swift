@@ -631,8 +631,17 @@ private protocol TabWebViewDelegate: AnyObject {
     func tabWebViewSearchWithFirefox(_ tabWebViewSearchWithFirefox: TabWebView, didSelectSearchWithFirefoxForSelection selection: String)
 }
 
-private class TabWebView: WKWebView, MenuHelperInterface {
+class TabWebView: WKWebView, MenuHelperInterface {
     fileprivate weak var delegate: TabWebViewDelegate?
+
+    // Updates the `background-color` of the webview to match
+    // the theme if the webview is showing "about:blank" (nil).
+    func applyTheme() {
+        if url == nil {
+            let backgroundColor = ThemeManager.instance.current.browser.background.hexString
+            evaluateJavaScript("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
+        }
+    }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         return super.canPerformAction(action, withSender: sender) || action == MenuHelper.SelectorFindInPage
@@ -652,7 +661,7 @@ private class TabWebView: WKWebView, MenuHelperInterface {
         }
     }
 
-    fileprivate override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    internal override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         // The find-in-page selection menu only appears if the webview is the first responder.
         becomeFirstResponder()
 

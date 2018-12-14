@@ -2385,6 +2385,10 @@ extension BrowserViewController: Themeable {
         setNeedsStatusBarAppearanceUpdate()
 
         (presentedViewController as? Themeable)?.applyTheme()
+
+        // Update the `background-color` of any blank webviews.
+        let webViews = tabManager.tabs.compactMap({ $0.webView as? TabWebView })
+        webViews.forEach({ $0.applyTheme() })
     }
 }
 
