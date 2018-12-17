@@ -97,9 +97,7 @@ class ActivityStreamTest: BaseTestCase {
 
         // Open a new page and wait for the completion
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText(newTopSite["url"]!)
-        app.textFields["address"].typeText("\r")
+        navigator.openURL(newTopSite["url"]!)
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
