@@ -8,8 +8,6 @@ class DownloadFilesTests: BaseTestCase {
 
     override func tearDown() {
         // The downloaded file has to be removed between tests
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
 
         let list = app.tables["DownloadsTable"].cells.count
@@ -47,6 +45,9 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileName].exists)
         XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
         app.buttons["Cancel"].tap()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(HomePanel_Downloads)
+        checkTheNumberOfDownloadedItems(items: 0)
     }
 
     func testDownloadFile() {
