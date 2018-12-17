@@ -365,8 +365,14 @@ public struct InternalURL {
     private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
 
     public static func isValid(url: URL) -> Bool {
-        // TODO: (reader-mode-custom-scheme) remove this line when updating.
-        return url.absoluteString.hasPrefix("http://localhost:6571/") || InternalURL.scheme == url.scheme
+        let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:6571/")
+        if isWebServerUrl, url.path.hasPrefix("/test-fixture/") {
+            // internal test pages need to be treated as external pages
+            return false
+        }
+
+        // TODO: (reader-mode-custom-scheme) remove isWebServerUrl when updating code.
+        return isWebServerUrl || InternalURL.scheme == url.scheme
     }
 
     public init?(_ url: URL) {
