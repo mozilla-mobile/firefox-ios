@@ -14,9 +14,9 @@ class PocketTest: BaseTestCase {
         // There should be two stories on iPhone and three on iPad
         let numPocketStories = app.collectionViews.containing(.cell, identifier:"TopSitesCell").children(matching: .cell).count-1
         if iPad() {
-            XCTAssertEqual(numPocketStories, 3)
+            XCTAssertEqual(numPocketStories, 9)
         } else {
-            XCTAssertEqual(numPocketStories, 2)
+            XCTAssertEqual(numPocketStories, 4)
         }
 
         // Disable Pocked
