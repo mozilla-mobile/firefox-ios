@@ -10,10 +10,10 @@ struct UIConstants {
     static var ToolbarHeight: CGFloat = 46
 
     struct colors {
-        static let background = UIConstants.Photon.Ink80
+        static let background = UIConstants.Photon.Ink90
         static let buttonHighlight = UIColor(rgb: 0x333333)
         static let cellSelected = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let cellBackground = UIConstants.Photon.Ink70
+        static let cellBackground = UIConstants.Photon.Ink80
         static let copyButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let defaultFont = UIColor(rgb: 0xE1E5EA)
         static let deleteButtonBackground = UIColor(white: 1, alpha: 0.2)
@@ -45,13 +45,13 @@ struct UIConstants {
         static let settingsTextLabel = UIConstants.Photon.Grey10
         static let settingsDetailLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let settingsSeparator = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
-        static let settingsLink = UIConstants.Photon.Magenta60
+        static let settingsLink = UIConstants.Photon.Magenta40
         static let settingsDisabled = UIColor(rgb: 0xB2B2B2)
         static let siriTint = UIConstants.Photon.Magenta60
         static let tableSectionHeader = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let toastBackground = UIColor(rgb: 0x414146)
         static let toastText = UIColor.white
-        static let toggleOn = UIConstants.Photon.Magenta70
+        static let toggleOn = UIConstants.Photon.Magenta40
         static let toggleOff = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         static let toolbarBorder = UIColor(rgb: 0x5F6368)
         static let toolbarButtonNormal = UIColor.darkGray
@@ -61,7 +61,7 @@ struct UIConstants {
         static let urlTextPlaceholder = UIConstants.Photon.Grey10.withAlphaComponent(0.4)
         static let urlTextShadow = UIColor.black
         static let whatsNew = UIConstants.Photon.Teal50
-        static let settingsNavBar = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
+        static let settingsNavBar = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
         static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
@@ -73,6 +73,7 @@ struct UIConstants {
     }
 
     struct Photon {
+        static let Magenta40 = UIColor(rgb: 0xe452b9)
         static let Magenta50 = UIColor(rgb: 0xff1ad9)
         static let Magenta60 = UIColor(rgb: 0xed00b5)
         static let Magenta70 = UIColor(rgb: 0xb5007f)

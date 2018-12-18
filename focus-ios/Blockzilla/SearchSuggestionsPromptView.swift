@@ -23,7 +23,7 @@ class SearchSuggestionsPromptView: UIView {
 
     init() {
         super.init(frame: CGRect.zero)
-        promptContainer.backgroundColor = UIConstants.Photon.Ink70.withAlphaComponent(0.9)
+        promptContainer.backgroundColor = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
         promptContainer.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptCornerRadius
         addSubview(promptContainer)
 
