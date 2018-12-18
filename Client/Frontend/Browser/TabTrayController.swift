@@ -239,17 +239,21 @@ class TabTrayController: UIViewController {
         }
 
         searchBarHolder.snp.makeConstraints { make in
-            make.leading.equalTo(view.safeArea.leading)
-            make.trailing.equalTo(view.safeArea.trailing)
+            make.leading.equalTo(view.snp.leading)
+            make.trailing.equalTo(view.snp.trailing)
             make.height.equalTo(TabTrayControllerUX.SearchBarHeight)
-            self.tabLayoutDelegate.searchHeightConstraint = make.bottom.equalTo(self.topLayoutGuide.snp.bottom).constraint
-        }
-        searchBar.snp.makeConstraints { make in
-            make.edges.equalTo(searchBarHolder).inset(UIEdgeInsetsMake(15, 20, 10, 40))
+            self.tabLayoutDelegate.searchHeightConstraint = make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.top).constraint
         }
 
         roundedSearchBarHolder.snp.makeConstraints { make in
-            make.edges.equalTo(searchBarHolder).inset(UIEdgeInsetsMake(15, 10, 10, 10))
+            make.top.equalTo(searchBarHolder).offset(15)
+            make.leading.equalTo(view.safeArea.leading).offset(10) // we can just make the nested view conform to the safe area
+            make.trailing.equalTo(view.safeArea.trailing).offset(-10)
+            make.bottom.equalTo(searchBarHolder).offset(-10)
+        }
+
+        searchBar.snp.makeConstraints { make in
+            make.edges.equalTo(roundedSearchBarHolder).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
     }
 
