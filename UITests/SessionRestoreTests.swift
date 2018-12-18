@@ -30,7 +30,7 @@ class SessionRestoreTests: KIFTestCase {
         let json = JSON(jsonDict)
         let escapedJSON = json.stringify()?.addingPercentEncoding(withAllowedCharacters: .URLAllowed)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
-        let restoreURL = URL(string: "/about/sessionrestore?history=\(escapedJSON!)", relativeTo: webView.url!)
+        let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?history=\(escapedJSON!)")
 
         // Enter the restore URL and verify the back/forward history.
         // After triggering the restore, the session should look like this:
