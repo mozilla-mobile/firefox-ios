@@ -71,7 +71,7 @@ private enum PresentationStyle {
     case popover // when displayed on the iPad
 }
 
-class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
+class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate, Themeable {
     fileprivate(set) var actions: [[PhotonActionSheetItem]]
 
     var syncManager: SyncManager? // used to display the sync button
@@ -94,7 +94,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setTitle(Strings.CloseButtonTitle, for: .normal)
-        button.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontExtraLargeBold
@@ -148,7 +147,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         if self.popoverPresentationController == nil {
             let blurEffect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
             let blurEffectView = UIVisualEffectView(effect: blurEffect)
-            blurEffectView.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
             tableView.backgroundView = blurEffectView
         }
         
@@ -186,6 +184,19 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidStartSyncing, object: nil)
     }
 
+    func applyTheme() {
+        if style == .popover {
+            view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
+        } else {
+            tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
+        }
+
+        tintColor = UIColor.theme.actionMenu.foreground
+        closeButton.backgroundColor = UIColor.theme.actionMenu.closeButtonBackground
+
+        tableView.reloadData()
+    }
+
     @objc func stopRotateSyncIcon() {
         ensureMainThread {
             self.tableView.reloadData()
@@ -217,6 +228,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let footer = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
         tableView.tableHeaderView = footer
         tableView.tableFooterView = footer.clone()
+
+        applyTheme()
     }
 
     override func viewDidLayoutSubviews() {
