@@ -138,10 +138,12 @@ class LoginsHelper: TabContentScript {
         }
 
         let promptMessage: String
-        if let username = login.username {
-            promptMessage = String(format: Strings.SaveLoginUsernamePrompt, username, login.hostname)
+        let https = "^https:\\/\\/"
+        let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
+        if let username = login.username, !username.isEmpty {
+            promptMessage = String(format: Strings.SaveLoginUsernamePrompt, username, url)
         } else {
-            promptMessage = String(format: Strings.SaveLoginPrompt, login.hostname)
+            promptMessage = String(format: Strings.SaveLoginPrompt, url)
         }
 
         if let existingPrompt = self.snackBar {
