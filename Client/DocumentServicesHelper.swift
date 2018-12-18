@@ -17,6 +17,10 @@ struct LanguageDetector: DocumentAnalyser {
     typealias NewMetadata = String //This matches the value for the DerivedMetadata key above
 
     func analyse(metadata: PageMetadata) -> LanguageDetector.NewMetadata?  {
+        if let metadataLanguage = metadata.language {
+            return metadataLanguage
+        }
+
         let text = [metadata.description].compactMap({$0}).joined(separator: " ")
         let language: String?
         if #available(iOS 12.0, *) {
