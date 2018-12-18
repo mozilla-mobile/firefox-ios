@@ -21,4 +21,7 @@ elif [ "$ver" -gt "27" ]; then
     ./build-disconnect3.py
 fi
 
+command -v swiftlint > /dev/null 2>&1 || { echo >&2 "swiftlint is not installed"; exit 1; }
+cp swiftlint.sh .git/hooks/pre-commit
+
 carthage bootstrap --platform iOS

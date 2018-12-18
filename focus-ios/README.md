@@ -33,21 +33,22 @@ Build Instructions for Master
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 2. Install [Carthage](https://github.com/Carthage/Carthage#installing-carthage).
-3. Clone the repository:
+3. Install [SwiftLint](https://github.com/realm/SwiftLint).
+4. Clone the repository:
 
   ```shell
   https://github.com/mozilla-mobile/focus-ios.git
   ```
 
-4. Pull in the project dependencies:
+5. Pull in the project dependencies:
 
   ```shell
   cd focus-ios
   ./checkout.sh
   ```
 
-5. Open `Blockzilla.xcodeproj` in Xcode.
-6. Build the `Focus` scheme in Xcode.
+6. Open `Blockzilla.xcodeproj` in Xcode.
+7. Build the `Focus` scheme in Xcode.
 
 Upcoming Release (Version 8.0)
 ------------------
