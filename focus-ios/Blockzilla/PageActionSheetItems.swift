@@ -65,4 +65,9 @@ class PageActionSheetItems {
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestDesktop)
         NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestDesktopNotification)))
     }
+
+    lazy var requestMobileItem = PhotonActionSheetItem(title: UIConstants.strings.shareMenuRequestMobile, iconString: "request_mobile_site_activity") { action in
+        Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: TelemetryEventObject.requestMobile)
+        NotificationCenter.default.post(Notification(name: Notification.Name(rawValue: UIConstants.strings.requestMobileNotification)))
+    }
 }

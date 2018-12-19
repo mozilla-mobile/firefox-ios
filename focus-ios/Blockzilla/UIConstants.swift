@@ -329,6 +329,7 @@ struct UIConstants {
         static let shareOpenInSafari = NSLocalizedString("ShareMenu.ShareOpenSafari", value: "Open in Safari", comment: "Text for the share menu option when a user wants to open the current website in the Safari app.")
         static let shareMenuOpenInFocus = NSLocalizedString("ShareMenu.OpenInFocus", value: "Open in %@", comment: "Text for the share menu option when a user wants to open a page in Focus.")
         static let shareMenuRequestDesktop = NSLocalizedString("ShareMenu.RequestDesktop", value: "Request Desktop Site", comment: "Text for the share menu option when a user wants to reload the site as a desktop")
+        static let shareMenuRequestMobile = NSLocalizedString("ShareMenu.RequestMobile", value: "Request Mobile Site", comment: "Text for the share menu option when a user wants to reload the site as a mobile device")
         static let shareMenuFindInPage = NSLocalizedString("ShareMenu.FindInPage", value: "Find in Page", comment: "Text for the share menu option when a user wants to open the find in page menu")
         static let shareMenuGetTheFirefoxApp = NSLocalizedString("ShareMenu.GetFirefox", value: "Get the Firefox App", comment: "Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string.")
         static let urlPaste = NSLocalizedString("URL.paste", value: "Paste", comment: "Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents.")
@@ -434,6 +435,7 @@ struct UIConstants {
         static let userDefaultsLaunchCountKey = "launchCount"
         static let userDefaultsLastReviewRequestDate = "lastReviewRequestDate"
         static let requestDesktopNotification = "Notification.requestDesktop"
+        static let requestMobileNotification = "Notification.requestMobile"
         static let findInPageNotification = "Notification.findInPage"
         static let autocompleteTipTitle = "Autocomplete URLs for the sites you use most:"
         static let autocompleteTipDescription = "Long-press any URL in the address bar"

@@ -85,6 +85,10 @@ class WebViewController: UIViewController, WebController {
         return browserView.title
     }
 
+    var userAgentString: String? {
+        return self.userAgent?.getUserAgent()
+    }
+
     var printFormatter: UIPrintFormatter { return browserView.viewPrintFormatter() }
     var scrollView: UIScrollView { return browserView.scrollView }
 
@@ -98,6 +102,7 @@ class WebViewController: UIViewController, WebController {
     }
 
     func reset() {
+        userAgent?.setup()
         browserView.load(URLRequest(url: URL(string: "about:blank")!))
         browserView.navigationDelegate = nil
         browserView.removeFromSuperview()
@@ -113,12 +118,13 @@ class WebViewController: UIViewController, WebController {
     func reload() { browserView.reload() }
 
     @available(iOS 9, *)
-    func requestDesktop() {
+    func requestUserAgentChange() {
         guard let currentItem = browserView.backForwardList.currentItem else {
             return
         }
 
-        browserView.customUserAgent = UserAgent.getDesktopUserAgent()
+        userAgent?.changeUserAgent()
+        browserView.customUserAgent = userAgent?.getUserAgent()
 
         if currentItem.url != currentItem.initialURL {
             // Reload the initial URL to avoid UA specific redirection

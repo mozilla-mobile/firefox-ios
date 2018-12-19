@@ -8,6 +8,7 @@ class UserAgent {
     static let shared = UserAgent()
 
     private var userDefaults: UserDefaults
+    private var isDesktopMode: Bool!
 
     var browserUserAgent: String?
 
@@ -17,6 +18,7 @@ class UserAgent {
     }
 
     func setup() {
+        isDesktopMode = false
         if let cachedUserAgent = cachedUserAgent() {
             setUserAgent(userAgent: cachedUserAgent)
             return
@@ -90,8 +92,22 @@ class UserAgent {
         return String(userAgent)
     }
 
+    public func getUserAgent() -> String? {
+        let userAgent = isDesktopMode ? UserAgent.getDesktopUserAgent() : userDefaults.string(forKey: "UserAgent")
+        return userAgent
+    }
+
     private func setUserAgent(userAgent: String) {
         userDefaults.register(defaults: ["UserAgent": userAgent])
         userDefaults.synchronize()
+    }
+
+    public func changeUserAgent() {
+        if isDesktopMode {
+            setup()
+        } else {
+            setUserAgent(userAgent: UserAgent.getDesktopUserAgent())
+            isDesktopMode = true
+        }
     }
 }
