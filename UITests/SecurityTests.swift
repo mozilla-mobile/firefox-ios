@@ -58,8 +58,9 @@ class SecurityTests: KIFTestCase {
             tabcount = tester().waitForView(withAccessibilityIdentifier: "TabToolbar.tabsButton")?.accessibilityValue
         }
 
-        // After running the exploit, make sure a new tab wasn't opened.
+        // make sure a new tab wasn't opened.
         tester().tapWebViewElementWithAccessibilityLabel("Error exploit")
+        tester().wait(forTimeInterval: 1.0)
         let newTabcount:String?
         if BrowserUtils.iPad() {
             newTabcount = tester().waitForView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")?.accessibilityValue
@@ -74,11 +75,11 @@ class SecurityTests: KIFTestCase {
     /// but we shouldn't be able to load session restore.
     func testWindowExploit() {
         tester().tapWebViewElementWithAccessibilityLabel("New tab exploit")
-        tester().wait(forTimeInterval: 30)
+        tester().wait(forTimeInterval: 5)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
 
         // Make sure the URL doesn't change.
-        XCTAssertEqual(webView.url!.path, "/errors/error.html")
+        XCTAssert(webView.url == nil)
 
         // Also make sure the XSS alert doesn't appear.
         XCTAssertFalse(tester().viewExistsWithLabel("Local page loaded"))

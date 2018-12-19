@@ -250,7 +250,6 @@ class ErrorPageHelper {
 
     func loadPage(_ error: NSError, forUrl url: URL, inWebView webView: WKWebView) {
         guard var components = URLComponents(string: "\(InternalURL.baseUrl)/\(ErrorPageHandler.path)"), let webViewUrl = webView.url else {
-            assertionFailure()
             return
         }
 
