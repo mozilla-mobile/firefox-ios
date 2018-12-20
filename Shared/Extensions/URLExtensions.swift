@@ -155,7 +155,7 @@ extension URL {
      * E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
      **/
     public var hostSLD: String {
-        guard let publicSuffix = self.publicSuffix, let baseDomain = self.baseDomain else {
+        guard let publicSuffix = self.publicSuffix, let baseDomain = self.normalizedHost else {
             return self.normalizedHost ?? self.absoluteString
         }
         return baseDomain.replacingOccurrences(of: ".\(publicSuffix)", with: "")

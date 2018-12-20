@@ -514,6 +514,13 @@
     "domain": "google"
   },
   {
+      "title": "accounts.google",
+      "url": "https://www.acounts.google.com/",
+      "image_url": "google-com.png",
+      "background_color": "#FFF",
+      "domain": "accounts.google.com"
+  },
+  {
     "title": "admin.google",
     "url": "https://admin.google.com/",
     "image_url": "google-admin.png",
@@ -860,7 +867,7 @@
     "title": "news.ycombinator",
     "url": "https://news.ycombinator.com/",
     "image_url": "news-ycombinator-com.png",
-    "background_color": "#D46D1D",
+    "background_color": "#ff6600",
     "domain": "news.ycombinator.com"
   },
   {

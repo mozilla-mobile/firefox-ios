@@ -51,7 +51,8 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         if multiRegionDomains.contains(hostName), let icon = defaultIcons[hostName] {
             return icon
         }
-        if let name = url.baseDomain, let icon = defaultIcons[name] {
+        let fullURL = url.absoluteDisplayString.remove("\(url.scheme ?? "")://")
+        if let name = url.baseDomain, let icon = defaultIcons[name] ?? defaultIcons[fullURL] {
             return icon
         }
         return nil

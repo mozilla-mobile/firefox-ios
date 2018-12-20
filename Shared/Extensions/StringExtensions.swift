@@ -86,4 +86,8 @@ public extension String {
             try? String(contentsOfFile: $0, encoding: encoding)
         }
     }
+
+    public func remove(_ string: String?) -> String {
+        return self.replacingOccurrences(of: string ?? "", with: "")
+    }
 }
