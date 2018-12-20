@@ -63,6 +63,7 @@ struct UIConstants {
         static let whatsNew = UIConstants.Photon.Teal50
         static let settingsNavBar = UIConstants.Photon.Ink80.withAlphaComponent(0.9)
         static let settingsNavBorder = UIConstants.Photon.Grey10.withAlphaComponent(0.5)
+        static let actionMenuItemSubtitleLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
 
         static let inputPlaceholder = UIColor(rgb: 0xb2b2b2)
 
@@ -170,6 +171,7 @@ struct UIConstants {
         static let actionMenuItem = UIFont.systemFont(ofSize: 16)
         static let actionMenuTitle = UIFont.systemFont(ofSize: 12)
         static let actionMenuItemBold = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.bold)
+        static let actionMenuItemSubtitle = UIFont.systemFont(ofSize: 12)
     }
 
     struct layout {
@@ -354,6 +356,7 @@ struct UIConstants {
         static let linkYouCopied = NSLocalizedString("contextMenu.clipboardLink", value: "Link you copied: %@", comment: "Text for the context menu when a user has a link on their clipboard.") // deprecated
         static let copiedLink = NSLocalizedString("contextMenu.linkCopied", value: "Link you copied: ", comment: "Text for the context menu when a user has a link on their clipboard.")
         static let trackingProtectionLabel = NSLocalizedString("trackingProtection.label", value: "Tracking Protection", comment: "Title for the tracking settings page to change what trackers are blocked.")
+        static let trackingProtectionLabelDescription = NSLocalizedString("trackingProtection.labelDescription", value: "Turning this off may fix some site problems", comment: "Description/subtitle for the tracking protection label.")
         static let trackingProtectionToggleLabel = NSLocalizedString("trackingProtection.toggleLabel", value: "Tracking Protection", comment: "Text for the toggle that temporarily disables tracking protection.") // deprecated
         static let trackingProtectionToggleDescription = NSLocalizedString("trackingProtection.toggleDescription1", value: "Disable until you close %@ or tap ERASE.", comment: "Description for the tracking protection toggle. Placeholder is either Firefox Focus or Firefox Klar")
         static let trackingProtectionDisabledLabel = NSLocalizedString("trackingProtection.disabledLabel", value: "Tracking Protection off", comment: "text showing the tracking protection is disabled.")

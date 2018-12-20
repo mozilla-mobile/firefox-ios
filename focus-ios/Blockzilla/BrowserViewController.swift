@@ -338,7 +338,7 @@ class BrowserViewController: UIViewController {
     private func buildTrackingProtectionMenu(info: TPPageStats?) -> PhotonActionSheet {
         var actions = [[PhotonActionSheetItem]]()
         if info != nil {
-            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
+            let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, text: UIConstants.strings.trackingProtectionLabelDescription, textStyle: .subtitle, iconString: "tracking_protection", isEnabled: true, accessory: .Switch)
             actions.append([titleItem])
         } else {
             let titleItem = PhotonActionSheetItem(title: UIConstants.strings.trackingProtectionLabel, iconString: "tracking_protection_off", isEnabled: false, accessory: .Switch)

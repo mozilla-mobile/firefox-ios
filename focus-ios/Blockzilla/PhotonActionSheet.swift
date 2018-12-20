@@ -40,8 +40,14 @@ public struct PhotonActionSheetItem {
         case right
     }
 
+    public enum TextStyle {
+        case normal
+        case subtitle
+    }
+
     public fileprivate(set) var title: String
     public fileprivate(set) var text: String?
+    public fileprivate(set) var textStyle: TextStyle
     public fileprivate(set) var iconString: String?
     public fileprivate(set) var iconURL: URL?
     public fileprivate(set) var iconAlignment: IconAlignment
@@ -52,7 +58,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
 
-    init(title: String, text: String? = nil, iconString: String? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, textStyle: TextStyle = .normal, iconString: String? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconAlignment = iconAlignment
@@ -60,6 +66,7 @@ public struct PhotonActionSheetItem {
         self.accessory = accessory
         self.handler = handler
         self.text = text
+        self.textStyle = textStyle
         self.accessoryText = accessoryText
         self.bold = bold ?? false
     }
@@ -563,6 +570,11 @@ private class PhotonActionSheetCell: UITableViewCell {
             }
         } else {
             statusIcon.removeFromSuperview()
+        }
+
+        if action.textStyle == .subtitle {
+            subtitleLabel.textColor = UIConstants.colors.actionMenuItemSubtitleLabel
+            subtitleLabel.font = UIConstants.fonts.actionMenuItemSubtitle
         }
 
         switch action.accessory {
