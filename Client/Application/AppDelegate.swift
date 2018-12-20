@@ -408,6 +408,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.register(defaults: ["UserAgent": firefoxUA])
 
         SDWebImageDownloader.shared().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
+        //SDWebImage is setting accept headers that report we support webp. We don't
+        SDWebImageDownloader.shared().setValue("image/*;q=0.8", forHTTPHeaderField: "Accept")
 
         // Record the user agent for use by search suggestion clients.
         SearchViewController.userAgent = firefoxUA
