@@ -7,11 +7,6 @@ import Storage
 import SnapKit
 import Shared
 
-private func isSmallScreen() -> Bool {
-    let size = UIScreen.main.bounds.size
-    return min(size.width, size.height) < 700
-}
-
 private struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
@@ -663,8 +658,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         contentView.addSubview(stackView)
 
         let padding = PhotonActionSheetCell.Padding
-        let shrinkage: CGFloat = isSmallScreen() ? 3 : 0
-        let topPadding = PhotonActionSheetCell.HorizontalPadding - shrinkage
+        let topPadding = PhotonActionSheetCell.HorizontalPadding
         stackView.snp.makeConstraints { make in
             make.edges.equalTo(contentView).inset(UIEdgeInsets(top: topPadding, left: padding, bottom: topPadding, right: padding))
         }
