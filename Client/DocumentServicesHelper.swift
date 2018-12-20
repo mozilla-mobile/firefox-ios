@@ -21,7 +21,7 @@ struct LanguageDetector: DocumentAnalyser {
             return metadataLanguage
         }
 
-        let text = [metadata.description].compactMap({$0}).joined(separator: " ")
+        guard let text = metadata.description else { return nil }
         let language: String?
         if #available(iOS 12.0, *) {
             language = NLLanguageRecognizer.dominantLanguage(for: text)?.rawValue
