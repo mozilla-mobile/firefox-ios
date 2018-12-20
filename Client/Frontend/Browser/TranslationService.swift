@@ -24,7 +24,7 @@ class TranslationServices {
                            destinationURLPrefix: "https://www.microsofttranslator.com/bv.aspx"),
         ]
 
-    private let defaultId = "googletranslate"
+    private let defaultId = BrowserProfile.isChinaEdition ? "bing" : "googletranslate"
 
     private let prefs: Prefs
 
