@@ -442,16 +442,18 @@ extension ActivityStreamPanel: DataObserverDelegate {
     func reloadAll() {
         // If the pocket stories are not availible for the Locale the PocketAPI will return nil
         // So it is okay if the default here is true
-        self.getPocketSites().uponQueue(.main) { _ in
-            if !self.pocketStories.isEmpty {
-                self.collectionView?.reloadData()
-            }
-        }
+
+
 
         self.getTopSites().uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
             self.collectionView?.reloadData()
 
+            self.getPocketSites().uponQueue(.main) { _ in
+                if !self.pocketStories.isEmpty {
+                    self.collectionView?.reloadData()
+                }
+            }
             // Refresh the AS data in the background so we'll have fresh data next time we show.
             self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
         }
@@ -483,7 +485,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
 
             // How sites are merged together. We compare against the url's base domain. example m.youtube.com is compared against `youtube.com`
             let unionOnURL = { (site: Site) -> String in
-                return URL(string: site.url)?.baseDomain ?? ""
+                return URL(string: site.url)?.normalizedHost ?? ""
             }
 
             // Fetch the default sites
@@ -501,7 +503,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
                 if let _ = site as? PinnedSite {
                     return site
                 }
-                let domain = URL(string: site.url)?.hostSLD
+                let domain = URL(string: site.url)?.shortDisplayString
                 return defaultSites.find { $0.title.lowercased() == domain } ?? site
             }
 
@@ -512,10 +514,12 @@ extension ActivityStreamPanel: DataObserverDelegate {
             let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
             if newSites.count > Int(ActivityStreamTopSiteCacheSize) {
                 self.topSitesManager.content = Array(newSites[0..<Int(ActivityStreamTopSiteCacheSize)])
-            } else if newSites.count > maxItems {
-                self.topSitesManager.content =  Array(newSites[0..<maxItems])
             } else {
                 self.topSitesManager.content = newSites
+            }
+
+            if newSites.count > maxItems {
+                self.topSitesManager.content =  Array(newSites[0..<maxItems])
             }
 
             self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in

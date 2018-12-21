@@ -47,11 +47,12 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         // Problem: Sites like amazon exist with .ca/.de and many other tlds.
         // Solution: They are stored in the default icons list as "amazon" instead of "amazon.com" this allows us to have favicons for every tld."
         // Here, If the site is in the multiRegionDomain array look it up via its second level domain (amazon) instead of its baseDomain (amazon.com)
-        let hostName = url.hostSLD
+        let hostName = url.shortDisplayString
         if multiRegionDomains.contains(hostName), let icon = defaultIcons[hostName] {
             return icon
         }
-        if let name = url.baseDomain, let icon = defaultIcons[name] {
+        let fullURL = url.absoluteDisplayString.remove("\(url.scheme ?? "")://")
+        if let name = url.baseDomain, let icon = defaultIcons[name] ?? defaultIcons[fullURL] {
             return icon
         }
         return nil

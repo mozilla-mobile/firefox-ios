@@ -178,7 +178,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
             self.siteImageView.contentMode = .center
         }
 
-        self.domainLabel.text = site.tileURL.hostSLD
+        self.domainLabel.text = site.tileURL.shortDisplayString
         self.titleLabel.text = site.title.isEmpty ? site.url : site.title
 
         if let bookmarked = site.bookmarked, bookmarked {
