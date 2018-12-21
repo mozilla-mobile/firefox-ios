@@ -26,21 +26,19 @@ struct PocketStory {
     let storyDescription: String
     let imageURL: URL
     let domain: String
-    let dedupeURL: URL
 
     static func parseJSON(list: Array<[String: Any]>) -> [PocketStory] {
         return list.compactMap({ (storyDict) -> PocketStory? in
             guard let urlS = storyDict["url"] as? String, let domain = storyDict["domain"] as? String,
-                let dedupe_URL = storyDict["dedupe_url"] as? String,
                 let imageURLS = storyDict["image_src"] as? String,
                 let title = storyDict["title"] as? String,
                 let description = storyDict["excerpt"] as? String else {
                     return nil
             }
-            guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS), let dedupeURL = URL(string: dedupe_URL) else {
+            guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS) else {
                 return nil
             }
-            return PocketStory(url: url, title: title, storyDescription: description, imageURL: imageURL, domain: domain, dedupeURL: dedupeURL)
+            return PocketStory(url: url, title: title, storyDescription: description, imageURL: imageURL, domain: domain)
         })
     }
 }
@@ -99,7 +97,7 @@ class Pocket {
             return deferred
         }
 
-        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["list"] as? Array<[String: Any]> {
+        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? Array<[String: Any]> {
             deferred.fill(PocketStory.parseJSON(list: items))
             return deferred
         }
@@ -109,7 +107,7 @@ class Pocket {
                 return deferred.fill([])
             }
             self.cache(response: response.response, for: request, with: response.data)
-            guard let items = result["list"] as? Array<[String: Any]> else {
+            guard let items = result["recommendations"] as? Array<[String: Any]> else {
                 return deferred.fill([])
             }
             return deferred.fill(PocketStory.parseJSON(list: items))
@@ -131,7 +129,7 @@ class Pocket {
 
         let locale = Locale.current.identifier
         let pocketLocale = locale.replacingOccurrences(of: "_", with: "-")
-        var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale)]
+        var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale), URLQueryItem(name: "version", value: "3")]
         if let consumerKey = Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String {
             params.append(URLQueryItem(name: "consumer_key", value: consumerKey))
         }
