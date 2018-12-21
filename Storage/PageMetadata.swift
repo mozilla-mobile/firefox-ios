@@ -12,6 +12,7 @@ enum MetadataKeys: String {
     case provider = "provider"
     case favicon = "icon"
     case keywords = "keywords"
+    case language = "language"
 }
 
 /*
@@ -27,6 +28,7 @@ public struct PageMetadata {
     public let providerName: String?
     public let faviconURL: String?
     public let keywordsString: String?
+    public let language: String?
     public var keywords: Set<String> {
         guard let string = keywordsString else {
             return Set()
@@ -36,7 +38,7 @@ public struct PageMetadata {
         return Set(strings)
     }
 
-    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, faviconURL: String? = nil, keywords: String? = nil) {
+    public init(id: Int?, siteURL: String, mediaURL: String?, title: String?, description: String?, type: String?, providerName: String?, faviconURL: String? = nil, language: String? = nil, keywords: String? = nil) {
         self.id = id
         self.siteURL = siteURL
         self.mediaURL = mediaURL
@@ -45,6 +47,7 @@ public struct PageMetadata {
         self.type = type
         self.providerName = providerName
         self.faviconURL = faviconURL
+        self.language = language
         self.keywordsString = keywords
     }
 
@@ -55,19 +58,6 @@ public struct PageMetadata {
 
         return PageMetadata(id: nil, siteURL: siteURL, mediaURL: dict[MetadataKeys.imageURL.rawValue] as? String,
                             title: dict[MetadataKeys.title.rawValue] as? String, description: dict[MetadataKeys.description.rawValue] as? String,
-                            type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String, faviconURL: dict[MetadataKeys.favicon.rawValue] as? String, keywords: dict[MetadataKeys.keywords.rawValue] as? String)
-    }
-
-    public func toDictionary() -> [String: Any] {
-        return [
-            MetadataKeys.pageURL.rawValue: self.siteURL,
-            MetadataKeys.imageURL.rawValue: self.mediaURL as Any,
-            MetadataKeys.title.rawValue: self.title as Any,
-            MetadataKeys.description.rawValue: self.description as Any,
-            MetadataKeys.type.rawValue: self.type as Any,
-            MetadataKeys.provider.rawValue: self.providerName as Any,
-            MetadataKeys.favicon.rawValue: self.faviconURL as Any,
-            MetadataKeys.keywords.rawValue: self.keywords as Any,
-        ]
+                            type: dict[MetadataKeys.type.rawValue] as? String, providerName: dict[MetadataKeys.provider.rawValue] as? String, faviconURL: dict[MetadataKeys.favicon.rawValue] as? String, language: dict[MetadataKeys.language.rawValue] as? String, keywords: dict[MetadataKeys.keywords.rawValue] as? String)
     }
 }

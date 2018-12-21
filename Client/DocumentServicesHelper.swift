@@ -2,61 +2,58 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import JavaScriptCore
 import Shared
 import Storage
-import XCGLogger
+import NaturalLanguage
 
-private let log = Logger.browserLogger
+protocol DocumentAnalyser {
+    var name: String { get }
+    associatedtype NewMetadata
+    func analyse(metadata: PageMetadata) -> NewMetadata?
+}
+
+struct LanguageDetector: DocumentAnalyser {
+    let name = "language" //This key matches the DerivedMetadata property
+    typealias NewMetadata = String //This matches the value for the DerivedMetadata key above
+
+    func analyse(metadata: PageMetadata) -> LanguageDetector.NewMetadata?  {
+        if let metadataLanguage = metadata.language {
+            return metadataLanguage
+        }
+
+        guard let text = metadata.description else { return nil }
+        let language: String?
+        if #available(iOS 12.0, *) {
+            language = NLLanguageRecognizer.dominantLanguage(for: text)?.rawValue
+        } else {
+            language = NSLinguisticTagger.dominantLanguage(for: text)
+        }
+        return language
+    }
+}
+
+struct DerivedMetadata: Codable {
+    let language: String?
+
+    // New keys need to be mapped in this constructor
+    static func from(dict: [String: Any?]) -> DerivedMetadata? {
+        return DerivedMetadata(language: dict["language"] as? String)
+    }
+}
 
 class DocumentServicesHelper: TabEventHandler {
     private var tabObservers: TabObservers!
 
     private lazy var singleThreadedQueue: OperationQueue = {
         var queue = OperationQueue()
-        queue.name = "Document Services JSContext queue"
+        queue.name = "Document Services queue"
         queue.maxConcurrentOperationCount = 1
         queue.qualityOfService = .userInitiated
         return queue
     }()
 
-    private lazy var context: JSContext = {
-        let virtualMachine = JSVirtualMachine()
-        let context: JSContext = JSContext(virtualMachine: virtualMachine)
-
-        context.exceptionHandler = { context, exception in
-            if let exception = exception {
-                log.error("DocumentServices.js: \(exception)")
-            }
-        }
-
-        let name = "DocumentServices"
-        guard let path = Bundle.main.path(forResource: name, ofType: "js"),
-            let jsFile = try? String(contentsOfFile: path, encoding: .utf8) else {
-            log.error("DocumentServices are unavailable due to missing or corrupt JS file")
-            return context
-        }
-
-        context.evaluateScript("var __firefox__;")
-        context.evaluateScript(jsFile)
-
-        return context
-    }()
-
-    private lazy var documentServices: JSValue? = {
-        guard let firefox = context.objectForKeyedSubscript("__firefox__"),
-            let isConfigured = firefox.objectForKeyedSubscript("isConfigured"),
-            isConfigured.isBoolean && isConfigured.toBool() else {
-                log.error("Unable to do anything without a firefox object.")
-                return nil
-        }
-        return firefox
-    }()
-
     init() {
-        self.tabObservers = registerFor(
-            .didLoadPageMetadata,
-            queue: singleThreadedQueue)
+        self.tabObservers = registerFor(.didLoadPageMetadata, queue: singleThreadedQueue)
     }
 
     deinit {
@@ -64,42 +61,13 @@ class DocumentServicesHelper: TabEventHandler {
     }
 
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        let analyze = documentServices?.objectForKeyedSubscript("analyze")
-        guard let jsValue = analyze?.call(withArguments: [metadata.toDictionary() as NSDictionary]), jsValue.isObject else {
-            log.error("There was some problem in DocumentServices.js, see the log above")
-            return
-        }
+        // New analyzers go here. We map through each one and reduce into one dictionary
+        let analyzers = [LanguageDetector()]
+        let dict = analyzers.map({ [$0.name: $0.analyse(metadata: metadata)] }).compactMap({$0}).reduce([:]) { $0.merging($1) { (current, _) in current } }
 
-        guard let dict = jsValue.toDictionary() as? [String: Any],
-            !dict.isEmpty else {
-            log.debug("Nothing interesting came back from DocumentServices. Exiting.")
-            return
-        }
-
-        let derived = DerivedMetadata.fromDictionary(dict)
-
-        // XXX we came from the main thread (.PageMedataParser) and we're posting
-        // to the main thread for most of our use cases.
-        // NotificationCenter is deadlocked when we do that directly, so
-        // post to NotificationCenter indirectly.
+        guard let derivedMetadata = DerivedMetadata.from(dict: dict) else { return }
         DispatchQueue.global().async {
-            TabEvent.post(.didDeriveMetadata(derived), for: tab)
+            TabEvent.post(.didDeriveMetadata(derivedMetadata), for: tab)
         }
-    }
-}
-
-struct DerivedMetadata {
-    let language: String?
-
-    static func fromDictionary(_ d: [String: Any]) -> DerivedMetadata {
-        let language: String?
-        if let lang = d["language"] as? [String: String],
-            let identifier = lang["iso639_1"] ?? lang["iso639_2T"] {
-            language = Locale.canonicalLanguageIdentifier(from: identifier)
-        } else {
-            language = nil
-        }
-
-        return DerivedMetadata(language: language)
     }
 }
