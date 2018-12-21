@@ -63,6 +63,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         let searchResultsViewController = WebsiteDataSearchResultsViewController()
 
         let searchController = UISearchController(searchResultsController: searchResultsViewController)
+
+        // No need to hide the navigation bar on iPad, on iPhone the additional height is useful.
+        searchController.hidesNavigationBarDuringPresentation = UIDevice.current.userInterfaceIdiom != .pad
+
         searchController.searchResultsUpdater = searchResultsViewController
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
@@ -180,7 +184,9 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let section = Section(rawValue: section)!
         switch section {
-        case .sites, .clearAllButton:
+        case .clearAllButton:
+            return 10 // Controls the space between the site list and the button
+        case .sites:
             return SettingsUX.TableViewHeaderFooterHeight
         case .showMore:
             return 0
