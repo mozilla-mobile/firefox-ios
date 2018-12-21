@@ -153,8 +153,9 @@ extension URL {
      * Returns the second level domain (SLD) of a url. It removes any subdomain/TLD
      *
      * E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
+     *       https://accounts.foo.com/bar/baz?noo=abc#123  => accounts.foo
      **/
-    public var hostSLD: String {
+    public var shortDisplayString: String {
         guard let publicSuffix = self.publicSuffix, let baseDomain = self.normalizedHost else {
             return self.normalizedHost ?? self.absoluteString
         }

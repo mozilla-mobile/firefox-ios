@@ -141,7 +141,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         if let provider = site.metadata?.providerName {
             titleLabel.text = provider.lowercased()
         } else {
-            titleLabel.text = site.tileURL.hostSLD
+            titleLabel.text = site.tileURL.shortDisplayString
         }
 
         // If its a pinned site add a bullet point to the front

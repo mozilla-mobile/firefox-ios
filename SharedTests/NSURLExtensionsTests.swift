@@ -396,13 +396,16 @@ class NSURLExtensionsTests: XCTestCase {
         badurls.forEach { XCTAssertNil(URL(string:$0)!.normalizedHostAndPath) }
     }
 
-    func testhostSLD() {
+    func testShortDisplayString() {
         let urls = [
             ("https://www.example.com/index.html", "example"),
             ("https://m.foo.com/bar/baz?noo=abc#123", "foo"),
             ("https://user:pass@m.foo.com/bar/baz?noo=abc#123", "foo"),
+            ("https://accounts.foo.com/bar/baz?noo=abc#123", "accounts.foo"),
+            ("https://accounts.what.foo.co.za/bar/baz?noo=abc#123", "accounts.what.foo"),
+
         ]
-        urls.forEach { XCTAssertEqual(URL(string:$0.0)!.hostSLD, $0.1) }
+        urls.forEach { XCTAssertEqual(URL(string:$0.0)!.shortDisplayString, $0.1) }
     }
 
     func testorigin() {

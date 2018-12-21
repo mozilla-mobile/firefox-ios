@@ -503,7 +503,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
                 if let _ = site as? PinnedSite {
                     return site
                 }
-                let domain = URL(string: site.url)?.hostSLD
+                let domain = URL(string: site.url)?.shortDisplayString
                 return defaultSites.find { $0.title.lowercased() == domain } ?? site
             }
 
