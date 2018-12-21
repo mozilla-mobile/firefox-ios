@@ -97,7 +97,7 @@ class Pocket {
             return deferred
         }
 
-        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["list"] as? Array<[String: Any]> {
+        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? Array<[String: Any]> {
             deferred.fill(PocketStory.parseJSON(list: items))
             return deferred
         }
