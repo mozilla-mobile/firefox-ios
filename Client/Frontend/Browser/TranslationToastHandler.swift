@@ -40,7 +40,7 @@ class TranslationToastHandler: TabEventHandler {
             return
         }
 
-        if myLanguage != pageLanguage {
+        if Locale(identifier: pageLanguage).languageCode != Locale(identifier: myLanguage).languageCode {
             self.promptTranslation(tab, from: pageLanguage, to: myLanguage)
         }
     }
