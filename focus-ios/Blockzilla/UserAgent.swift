@@ -99,7 +99,6 @@ class UserAgent {
 
     private func setUserAgent(userAgent: String) {
         userDefaults.register(defaults: ["UserAgent": userAgent])
-        userDefaults.synchronize()
     }
 
     public func changeUserAgent() {

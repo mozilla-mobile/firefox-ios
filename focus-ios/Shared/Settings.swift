@@ -52,12 +52,10 @@ struct Settings {
 
     static func setCustomDomainSetting(domains: [String]) {
         prefs.set(domains, forKey: customDomainSettingKey)
-        prefs.synchronize()
     }
 
     static func set(_ value: Bool, forToggle toggle: SettingsToggle) {
         prefs.set(value, forKey: toggle.rawValue)
-        prefs.synchronize()
     }
 
     static func siriRequestsErase() -> Bool {
@@ -66,6 +64,5 @@ struct Settings {
 
     static func setSiriRequestErase(to value: Bool) {
         prefs.set(value, forKey: siriRequestsEraseKey)
-        prefs.synchronize()
     }
 }

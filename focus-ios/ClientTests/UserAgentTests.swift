@@ -28,7 +28,6 @@ class UserAgentTests: XCTestCase {
         mockUserDefaults.set(fakeUserAgent, forKey: "UserAgent")
 
         _ = UserAgent(userDefaults: mockUserDefaults)
-        XCTAssertTrue(mockUserDefaults.synchronizeCalled)
         XCTAssertNotNil(mockUserDefaults.registerValue)
         XCTAssertEqual(mockUserDefaults.registerValue!["UserAgent"] as? String, fakeUserAgent)
     }
@@ -40,7 +39,6 @@ class UserAgentTests: XCTestCase {
         mockUserDefaults.removeObject(forKey: "UserAgent")
 
         _ = UserAgent(userDefaults: mockUserDefaults)
-        XCTAssertTrue(mockUserDefaults.synchronizeCalled)
         XCTAssertNotNil(mockUserDefaults.registerValue)
         XCTAssertNotNil(mockUserDefaults.string(forKey: "LastFocusVersionNumber"))
         XCTAssertTrue(((mockUserDefaults.registerValue!["UserAgent"] as? String)?.contains("FxiOS"))!)
@@ -52,7 +50,6 @@ class UserAgentTests: XCTestCase {
 }
 
 fileprivate class MockUserDefaults: UserDefaults {
-    var synchronizeCalled = false
     var registerValue: [String : Any]?
 
     func clear() {
@@ -60,13 +57,7 @@ fileprivate class MockUserDefaults: UserDefaults {
         removeObject(forKey: "LastFocusBuildNumber")
         removeObject(forKey: "LastDeviceSystemVersionNumber")
         removeObject(forKey: "UserAgent")
-        synchronizeCalled = false
         registerValue = nil
-    }
-
-    override func synchronize() -> Bool {
-        synchronizeCalled = true
-        return true
     }
 
     override func register(defaults registrationDictionary: [String : Any]) {
