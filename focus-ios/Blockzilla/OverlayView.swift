@@ -171,25 +171,35 @@ class OverlayView: UIView {
      - Returns: An NSAttributedString with `phrase` localized and styled appropriately.
      
      */
-    func getAttributedButtonTitle(phrase: String,
-                                  localizedStringFormat: String) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
-        let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
-                                                                           .foregroundColor: UIConstants.Photon.Grey10])
-
-        guard let range = attributedString.string.range(of: "%@") else { return phraseString }
-
-        let replaceRange = NSRange(range, in: attributedString.string)
-        attributedString.replaceCharacters(in: replaceRange, with: phraseString)
-
-        return attributedString
-    }
+	func getAttributedButtonTitle(phrase: String,
+								  localizedStringFormat: String) -> NSAttributedString {
+		let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
+		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+																		   .foregroundColor: UIConstants.Photon.Grey10])
+		if phrase != searchQuery {
+			let searchString = NSAttributedString(string: searchQuery, attributes: [.font: UIConstants.fonts.copyButtonQuery,
+																					.foregroundColor: UIConstants.Photon.Grey10])
+			// split suggestion into searchQuery and suggested part
+			let suggestion = phrase.components(separatedBy: searchQuery)
+			// suggestion was split
+			if suggestion.count > 1 {
+				let restOfSuggestion = NSAttributedString(string: suggestion[1], attributes: [
+					.foregroundColor: UIConstants.colors.searchSuggestion])
+				attributedString.append(searchString)
+				attributedString.append(restOfSuggestion)
+				return attributedString
+			}
+		}
+		guard let range = attributedString.string.range(of: "%@") else { return phraseString }
+		let replaceRange = NSRange(range, in: attributedString.string)
+		attributedString.replaceCharacters(in: replaceRange, with: phraseString)
+		return attributedString
+	}
 
     func setAttributedButtonTitle(phrase: String, button: InsetButton, localizedStringFormat: String) {
 
         let attributedString = getAttributedButtonTitle(phrase: phrase,
                                                         localizedStringFormat: localizedStringFormat)
-
         button.setAttributedTitle(attributedString, for: .normal)
     }
 

@@ -41,6 +41,7 @@ struct UIConstants {
         static let navigationTitle = UIConstants.Photon.Grey10
         static let overlayBackground = UIColor(white: 0, alpha: 0.8)
         static let progressBar = UIColor(rgb: 0xC86DD7)
+		static let searchSuggestion = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
         static let settingsButtonBorder = UIColor(rgb: 0x5F6368, alpha: 0.8)
         static let settingsTextLabel = UIConstants.Photon.Grey10
         static let settingsDetailLabel = UIConstants.Photon.Grey10.withAlphaComponent(0.6)
