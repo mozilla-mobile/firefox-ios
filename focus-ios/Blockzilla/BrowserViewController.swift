@@ -790,7 +790,9 @@ extension BrowserViewController: URLBarDelegate {
 
                     if userInputText == trimmedText {
                         let suggestions = suggestions ?? [trimmedText]
-                        self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty, hideAddToComplete: true)
+                        DispatchQueue.main.async {
+                            self.overlayView.setSearchQuery(suggestions: suggestions, hideFindInPage: isOnHomeView || text.isEmpty, hideAddToComplete: true)
+                        }
                     }
                 })
             }

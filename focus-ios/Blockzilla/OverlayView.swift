@@ -171,8 +171,7 @@ class OverlayView: UIView {
      - Returns: An NSAttributedString with `phrase` localized and styled appropriately.
      
      */
-	func getAttributedButtonTitle(phrase: String,
-								  localizedStringFormat: String) -> NSAttributedString {
+	func getAttributedButtonTitle(phrase: String, localizedStringFormat: String) -> NSAttributedString {
 		let attributedString = NSMutableAttributedString(string: localizedStringFormat, attributes: [.foregroundColor: UIConstants.Photon.Grey10])
 		let phraseString = NSAttributedString(string: phrase, attributes: [.font: UIConstants.fonts.copyButtonQuery,
 																		   .foregroundColor: UIConstants.Photon.Grey10])
@@ -304,7 +303,9 @@ class OverlayView: UIView {
     }
 
     @objc private func didPressSearch(sender: IndexedInsetButton) {
-        delegate?.overlayView(self, didSearchForQuery: searchSuggestions[sender.getIndex()])
+        // Safeguard against a potential update of searchSuggestions causing this index to no longer exist
+        let immutableSearchSuggestions = searchSuggestions
+        delegate?.overlayView(self, didSearchForQuery: immutableSearchSuggestions[sender.getIndex()])
 
         if !Settings.getToggle(.enableSearchSuggestions) { return }
         if sender.getIndex() == 0 {
