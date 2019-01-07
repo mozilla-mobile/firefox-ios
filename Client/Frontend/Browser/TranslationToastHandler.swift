@@ -31,16 +31,16 @@ class TranslationToastHandler: TabEventHandler {
             return
         }
 
-        guard let myLanguage = Locale.autoupdatingCurrent.languageCode,
-            let pageLanguage = metadata.language else {
+        guard let myLanguage = Locale.autoupdatingCurrent.languageCode, let pageLanguage = metadata.language else {
                 return
         }
 
         guard let url = tab.url, !url.absoluteString.starts(with: setting.useTranslationService.destinationURLPrefix) else {
             return
         }
+        let pageLocale = Locale(identifier: pageLanguage)
 
-        if Locale(identifier: pageLanguage).languageCode != Locale(identifier: myLanguage).languageCode {
+        if pageLocale.languageCode != Locale(identifier: myLanguage).languageCode, pageLocale.languageCode != "mul" {
             self.promptTranslation(tab, from: pageLanguage, to: myLanguage)
         }
     }
