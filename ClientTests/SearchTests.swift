@@ -11,12 +11,12 @@ import XCTest
 class SearchTests: XCTestCase {
     func testParsing() {
         let parser = OpenSearchParser(pluginMode: true)
-        let file = Bundle.main.path(forResource: "google", ofType: "xml", inDirectory: "SearchPlugins/")
-        let engine: OpenSearchEngine! = parser.parse(file!, engineID: "google")
+        let file = Bundle.main.path(forResource: "google-b-m", ofType: "xml", inDirectory: "SearchPlugins/")
+        let engine: OpenSearchEngine! = parser.parse(file!, engineID: "google-b-m")
         XCTAssertEqual(engine.shortName, "Google")
 
         // Test regular search queries.
-        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8&client=firefox-b")
+        XCTAssertEqual(engine.searchURLForQuery("foobar")!.absoluteString, "https://www.google.com/search?q=foobar&ie=utf-8&oe=utf-8&client=firefox-b-m")
 
         // Test search suggestion queries.
         XCTAssertEqual(engine.suggestURLForQuery("foobar")!.absoluteString, "https://www.google.com/complete/search?client=firefox&q=foobar")
@@ -100,7 +100,7 @@ class SearchTests: XCTestCase {
 
     func testExtractingOfSearchTermsFromURL() {
         let parser = OpenSearchParser(pluginMode: true)
-        var file = Bundle.main.path(forResource: "google", ofType: "xml", inDirectory: "SearchPlugins/")
+        var file = Bundle.main.path(forResource: "google-b-m", ofType: "xml", inDirectory: "SearchPlugins/")
         let googleEngine: OpenSearchEngine! = parser.parse(file!, engineID: "google")
 
         // create URL
