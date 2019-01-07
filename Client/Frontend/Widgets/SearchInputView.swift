@@ -22,7 +22,7 @@ private struct SearchInputViewUX {
     func searchInputViewFinishedEditing(_ searchView: SearchInputView)
 }
 
-class SearchInputView: UIView {
+class SearchInputView: UIView, Themeable {
 
     weak var delegate: SearchInputViewDelegate?
 
@@ -71,7 +71,6 @@ class SearchInputView: UIView {
 
     fileprivate lazy var overlay: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.Photon.White100
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedSearch)))
 
         view.isAccessibilityElement = true
@@ -100,7 +99,6 @@ class SearchInputView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundColor = UIColor.Photon.White100
         isUserInteractionEnabled = true
 
         addSubview(inputField)
@@ -115,6 +113,8 @@ class SearchInputView: UIView {
         setupConstraints()
 
         setEditing(false)
+
+        applyTheme()
     }
 
     fileprivate func setupConstraints() {
@@ -161,6 +161,13 @@ class SearchInputView: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func applyTheme() {
+        backgroundColor = UIColor.theme.tableView.rowBackground
+        overlay.backgroundColor = backgroundColor
+        titleLabel.textColor = UIColor.theme.tableView.rowText
+        inputField.textColor = titleLabel.textColor
     }
 }
 

@@ -145,7 +145,6 @@ extension LoginDetailViewController: UITableViewDataSource {
         switch InfoItem(rawValue: indexPath.row)! {
         case .usernameItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.style = .noIconAndBothLabels
             loginCell.highlightedLabelTitle = NSLocalizedString("username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
             loginCell.descriptionLabel.text = login.username
             loginCell.descriptionLabel.keyboardType = .emailAddress
@@ -157,7 +156,6 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .passwordItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.style = .noIconAndBothLabels
             loginCell.highlightedLabelTitle = NSLocalizedString("password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
             loginCell.descriptionLabel.text = login.password
             loginCell.descriptionLabel.returnKeyType = .default
@@ -169,7 +167,6 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .websiteItem:
             let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.style = .noIconAndBothLabels
             loginCell.highlightedLabelTitle = NSLocalizedString("website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
             loginCell.descriptionLabel.text = login.hostname
             websiteField = loginCell.descriptionLabel
@@ -177,12 +174,12 @@ extension LoginDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .lastModifiedSeparator:
-            let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: SeparatorIdentifier) as! ThemedTableSectionHeaderFooterView
-            footer.titleAlignment = .top
+            let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
             let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the current login was last modified with the timestamp as the parameter.")
             let formattedLabel = String(format: lastModified, Date.fromMicrosecondTimestamp(login.timePasswordChanged).toRelativeTimeString())
-            footer.titleLabel.text = formattedLabel
-            let cell = wrapFooter(footer, withCellFromTableView: tableView, atIndexPath: indexPath)
+            // Setting only the detail text produces smaller text as desired, and it is centered.
+            cell.detailTextLabel?.text = formattedLabel
+            cell.backgroundColor = view.backgroundColor
             return cell
 
         case .deleteItem:
@@ -191,6 +188,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             deleteCell.textLabel?.textAlignment = .center
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraitButton
+            deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
             return deleteCell
         }
     }

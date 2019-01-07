@@ -15,17 +15,11 @@ protocol LoginTableViewCellDelegate: AnyObject {
 private struct LoginTableViewCellUX {
     static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
     static let highlightedLabelTextColor = UIConstants.SystemBlueColor
-    static let highlightedLabelEditingTextColor = UIColor.theme.tableView.headerTextLight
-
     static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
-    static let descriptionLabelTextColor = UIColor.black
-
     static let HorizontalMargin: CGFloat = 14
     static let IconImageSize: CGFloat = 34
-
     static let indentWidth: CGFloat = 44
     static let IndentAnimationDuration: TimeInterval = 0.2
-
     static let editingDescriptionIndent: CGFloat = IconImageSize + HorizontalMargin
 }
 
@@ -35,7 +29,7 @@ enum LoginTableViewCellStyle {
     case iconAndDescriptionLabel
 }
 
-class LoginTableViewCell: UITableViewCell {
+class LoginTableViewCell: ThemedTableViewCell {
 
     fileprivate let labelContainer = UIView()
 
@@ -73,8 +67,6 @@ class LoginTableViewCell: UITableViewCell {
     lazy var descriptionLabel: UITextField = {
         let label = UITextField()
         label.font = LoginTableViewCellUX.descriptionLabelFont
-        label.textColor = LoginTableViewCellUX.descriptionLabelTextColor
-        label.backgroundColor = UIColor.Photon.White100
         label.isUserInteractionEnabled = false
         label.autocapitalizationType = .none
         label.autocorrectionType = .no
@@ -92,22 +84,12 @@ class LoginTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = LoginTableViewCellUX.highlightedLabelFont
         label.textColor = LoginTableViewCellUX.highlightedLabelTextColor
-        label.backgroundColor = UIColor.Photon.White100
         label.numberOfLines = 1
         return label
     }()
 
-    fileprivate lazy var iconImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.Photon.White100
-        imageView.contentMode = .scaleAspectFit
-        return imageView
-    }()
-
     fileprivate var showingIndent: Bool = false
-
     fileprivate var customIndentView = UIView()
-
     fileprivate var customCheckmarkIcon = UIImageView(image: UIImage(named: "loginUnselected"))
 
     /// Override the default accessibility label since it won't include the description by default
@@ -122,14 +104,6 @@ class LoginTableViewCell: UITableViewCell {
         }
         set {
             // Ignore sets
-        }
-    }
-
-    var style: LoginTableViewCellStyle = .iconAndBothLabels {
-        didSet {
-            if style != oldValue {
-                configureLayoutForStyle(style)
-            }
         }
     }
 
@@ -157,10 +131,10 @@ class LoginTableViewCell: UITableViewCell {
                 descriptionLabel.isUserInteractionEnabled = editingDescription
 
                 highlightedLabel.textColor = editingDescription ?
-                    LoginTableViewCellUX.highlightedLabelEditingTextColor : LoginTableViewCellUX.highlightedLabelTextColor
+                     UIColor.theme.tableView.headerTextLight: LoginTableViewCellUX.highlightedLabelTextColor
 
                 // Trigger a layout configuration if we changed to editing/not editing the description.
-                configureLayoutForStyle(self.style)
+                configureLayout()
             }
         }
     }
@@ -180,19 +154,15 @@ class LoginTableViewCell: UITableViewCell {
         indentationWidth = 0
         selectionStyle = .none
 
-        contentView.backgroundColor = UIColor.Photon.White100
-        labelContainer.backgroundColor = UIColor.Photon.White100
-
         labelContainer.addSubview(highlightedLabel)
         labelContainer.addSubview(descriptionLabel)
 
-        contentView.addSubview(iconImageView)
         contentView.addSubview(labelContainer)
 
         customIndentView.addSubview(customCheckmarkIcon)
         addSubview(customIndentView)
 
-        configureLayoutForStyle(self.style)
+        configureLayout()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -227,81 +197,27 @@ class LoginTableViewCell: UITableViewCell {
         contentView.frame = contentFrame
     }
 
-    fileprivate func configureLayoutForStyle(_ style: LoginTableViewCellStyle) {
-        switch style {
-        case .iconAndBothLabels:
-            iconImageView.snp.remakeConstraints { make in
-                make.centerY.equalTo(contentView)
-                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
-                make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
-            }
+    fileprivate func configureLayout() {
+        // Currently we only support modifying the description for this layout which is why
+        // we factor in the editingOffset when calculating the constraints.
+        let editingOffset = editingDescription ? LoginTableViewCellUX.editingDescriptionIndent : 0
 
-            labelContainer.snp.remakeConstraints { make in
-                make.centerY.equalTo(contentView)
-                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.leading.equalTo(iconImageView.snp.trailing).offset(LoginTableViewCellUX.HorizontalMargin)
-            }
+        labelContainer.snp.remakeConstraints { make in
+            make.centerY.equalTo(contentView)
+            make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
+            make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin + editingOffset)
+        }
 
-            highlightedLabel.snp.remakeConstraints { make in
-                make.leading.top.equalTo(labelContainer)
-                make.bottom.equalTo(descriptionLabel.snp.top)
-                make.width.equalTo(labelContainer)
-            }
+        highlightedLabel.snp.remakeConstraints { make in
+            make.leading.top.equalTo(labelContainer)
+            make.bottom.equalTo(descriptionLabel.snp.top)
+            make.width.equalTo(labelContainer)
+        }
 
-            descriptionLabel.snp.remakeConstraints { make in
-                make.leading.bottom.equalTo(labelContainer)
-                make.top.equalTo(highlightedLabel.snp.bottom)
-                make.width.equalTo(labelContainer)
-            }
-        case .iconAndDescriptionLabel:
-            iconImageView.snp.remakeConstraints { make in
-                make.centerY.equalTo(contentView)
-                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
-                make.height.width.equalTo(LoginTableViewCellUX.IconImageSize)
-            }
-
-            labelContainer.snp.remakeConstraints { make in
-                make.centerY.equalTo(contentView)
-                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.leading.equalTo(iconImageView.snp.trailing).offset(LoginTableViewCellUX.HorizontalMargin)
-            }
-
-            highlightedLabel.snp.remakeConstraints { make in
-                make.height.width.equalTo(0)
-            }
-
-            descriptionLabel.snp.remakeConstraints { make in
-                make.top.leading.bottom.equalTo(labelContainer)
-                make.width.equalTo(labelContainer)
-            }
-        case .noIconAndBothLabels:
-            // Currently we only support modifying the description for this layout which is why
-            // we factor in the editingOffset when calculating the constraints.
-            let editingOffset = editingDescription ? LoginTableViewCellUX.editingDescriptionIndent : 0
-
-            iconImageView.snp.remakeConstraints { make in
-                make.centerY.equalTo(contentView)
-                make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
-                make.height.width.equalTo(0)
-            }
-
-            labelContainer.snp.remakeConstraints { make in
-                make.centerY.equalTo(contentView)
-                make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-                make.leading.equalTo(iconImageView.snp.trailing).offset(editingOffset)
-            }
-
-            highlightedLabel.snp.remakeConstraints { make in
-                make.leading.top.equalTo(labelContainer)
-                make.bottom.equalTo(descriptionLabel.snp.top)
-                make.width.equalTo(labelContainer)
-            }
-
-            descriptionLabel.snp.remakeConstraints { make in
-                make.leading.bottom.equalTo(labelContainer)
-                make.top.equalTo(highlightedLabel.snp.bottom)
-                make.width.equalTo(labelContainer)
-            }
+        descriptionLabel.snp.remakeConstraints { make in
+            make.leading.bottom.equalTo(labelContainer)
+            make.top.equalTo(highlightedLabel.snp.bottom)
+            make.width.equalTo(labelContainer)
         }
 
         setNeedsUpdateConstraints()
@@ -329,6 +245,12 @@ class LoginTableViewCell: UITableViewCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         customCheckmarkIcon.image = UIImage(named: selected ? "loginSelected" : "loginUnselected")
+    }
+
+    override func applyTheme() {
+        super.applyTheme()
+
+        descriptionLabel.textColor = UIColor.theme.tableView.rowText
     }
 }
 
@@ -358,7 +280,6 @@ extension LoginTableViewCell {
     func updateCellWithLogin(_ login: LoginData) {
         descriptionLabel.text = login.hostname
         highlightedLabel.text = login.username
-        iconImageView.image = UIImage(named: "faviconFox")
     }
 }
 
