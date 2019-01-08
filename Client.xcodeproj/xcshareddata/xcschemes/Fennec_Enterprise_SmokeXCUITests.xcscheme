@@ -649,6 +649,9 @@
                <Test
                   Identifier = "TrackingProtectionTests/testTrackingProtectionToggle()">
                </Test>
+               <Test
+                  Identifier = "TranslationSnackBarTest">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
