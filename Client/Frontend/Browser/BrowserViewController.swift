@@ -440,15 +440,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
-
-    override func becomeFirstResponder() -> Bool {
-        // Make the web view the first responder so that it can show the selection menu.
-        return tabManager.selectedTab?.webView?.becomeFirstResponder() ?? false
-    }
-
     func loadQueuedTabs(receivedURLs: [URL]? = nil) {
         // Chain off of a trivial deferred in order to run on the background queue.
         succeed().upon() { res in
