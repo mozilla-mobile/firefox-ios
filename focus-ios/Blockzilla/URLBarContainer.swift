@@ -36,21 +36,48 @@ class URLBarContainer: UIView {
         }
     }
 
-    enum barState {
+    enum BarState {
         case bright
         case dark
         case editing
     }
 
-    var color: barState = .editing {
+    var barState: BarState = .editing {
         didSet {
-            backgroundDark.animateHidden(color != .dark, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            backgroundBright.animateHidden(color != .bright, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
-            backgroundEditing.animateHidden(color != .editing, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            guard barState != oldValue else { return }
+
+            let newBackgroundView = view(for: barState)
+            let oldBackgroundView = view(for: oldValue)
+            let newBackgroundViewZIndex = subviews.firstIndex(of: newBackgroundView) ?? -1
+            let oldBackgroundViewZIndex = subviews.firstIndex(of: oldBackgroundView) ?? -1
+
+            if newBackgroundViewZIndex > oldBackgroundViewZIndex {
+                // If the background view to show is above the last shown view, wait to hide the previous view until the
+                // animation completes to prevent content below the url bar from displaying
+                newBackgroundView.animateHidden(false, duration: UIConstants.layout.urlBarTransitionAnimationDuration) {
+                    oldBackgroundView.animateHidden(true, duration: 0)
+                }
+            } else {
+                // If the background view to show is below the last updated, display it immediatly so content below the url
+                // bar is not displayed during the transition
+                newBackgroundView.animateHidden(false, duration: 0)
+                oldBackgroundView.animateHidden(true, duration: UIConstants.layout.urlBarTransitionAnimationDuration)
+            }
         }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    private func view(for barState: BarState) -> UIView {
+        switch barState {
+        case .bright:
+            return backgroundBright
+        case .dark:
+            return backgroundDark
+        case .editing:
+            return backgroundEditing
+        }
     }
 }

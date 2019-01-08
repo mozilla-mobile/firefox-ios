@@ -657,11 +657,11 @@ class BrowserViewController: UIViewController {
 
     private func toggleURLBarBackground(isBright: Bool) {
         if urlBar.isEditing {
-            urlBarContainer.color = .editing
+            urlBarContainer.barState = .editing
         } else if case .on = trackingProtectionStatus {
-            urlBarContainer.color = .bright
+            urlBarContainer.barState = .bright
         } else {
-            urlBarContainer.color = .dark
+            urlBarContainer.barState = .dark
         }
     }
 
