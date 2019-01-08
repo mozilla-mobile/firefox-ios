@@ -13,8 +13,6 @@ private struct LoginListUX {
     static let RowHeight: CGFloat = 58
     static let SearchHeight: CGFloat = 58
     static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
-    static let selectionButtonTextColor = UIColor.Photon.White100
-    static let selectionButtonBackground = UIColor.theme.general.highlightBlue
     static let NoResultsFont: UIFont = UIFont.systemFont(ofSize: 16)
     static let NoResultsTextColor: UIColor = UIColor.Photon.Grey40
 }
@@ -42,14 +40,14 @@ class LoginListViewController: SensitiveViewController {
     }()
 
     fileprivate let profile: Profile
-
     fileprivate let searchView = SearchInputView()
-
     fileprivate var activeLoginQuery: Deferred<Maybe<[Login]>>?
-
     fileprivate let loadingView = SettingsLoadingView()
-
     fileprivate var deleteAlert: UIAlertController?
+    fileprivate var selectionButtonHeightConstraint: Constraint?
+    fileprivate var selectedIndexPaths = [IndexPath]()
+    fileprivate let tableView = UITableView()
+    weak var settingsDelegate: SettingsDelegate?
 
     // Titles for selection/deselect/delete buttons
     fileprivate let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Label for the button used to deselect all logins.")
@@ -60,18 +58,9 @@ class LoginListViewController: SensitiveViewController {
         let button = UIButton()
         button.titleLabel?.font = LoginListUX.selectionButtonFont
         button.setTitle(self.selectAllTitle, for: [])
-        button.setTitleColor(LoginListUX.selectionButtonTextColor, for: [])
-        button.backgroundColor = LoginListUX.selectionButtonBackground
         button.addTarget(self, action: #selector(tappedSelectionButton), for: .touchUpInside)
         return button
     }()
-
-    fileprivate var selectionButtonHeightConstraint: Constraint?
-    fileprivate var selectedIndexPaths = [IndexPath]()
-
-    fileprivate let tableView = UITableView()
-
-    weak var settingsDelegate: SettingsDelegate?
 
     init(profile: Profile) {
         self.profile = profile
@@ -90,7 +79,6 @@ class LoginListViewController: SensitiveViewController {
         notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
-        self.view.backgroundColor = UIColor.Photon.White100
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
 
         self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen.")
@@ -127,6 +115,8 @@ class LoginListViewController: SensitiveViewController {
         loadingView.snp.makeConstraints { make in
             make.edges.equalTo(tableView)
         }
+
+        applyTheme()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -150,6 +140,20 @@ class LoginListViewController: SensitiveViewController {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+
+    func applyTheme() {
+        view.backgroundColor = UIColor.theme.tableView.rowBackground
+
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        tableView.reloadData()
+
+        (tableView.tableHeaderView as? Themeable)?.applyTheme()
+
+        selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
+        selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
+
     }
 
     fileprivate func toggleDeleteBarButton() {
@@ -458,7 +462,6 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: LoginCellIdentifier, for: indexPath) as! LoginTableViewCell
         let login = loginAtIndexPath(indexPath)!
-        cell.style = .noIconAndBothLabels
         cell.updateCellWithLogin(login)
         return cell
     }
