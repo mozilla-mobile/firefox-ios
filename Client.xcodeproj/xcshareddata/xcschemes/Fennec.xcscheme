@@ -147,66 +147,6 @@
       </PreActions>
       <Testables>
          <TestableReference
-            skipped = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
-               BuildableName = "XCUITests.xctest"
-               BlueprintName = "XCUITests"
-               ReferencedContainer = "container:Client.xcodeproj">
-            </BuildableReference>
-            <SkippedTests>
-               <Test
-                  Identifier = "BaseTestCase">
-               </Test>
-               <Test
-                  Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
-               </Test>
-               <Test
-                  Identifier = "DragAndDropTests">
-               </Test>
-               <Test
-                  Identifier = "HomePageUITest">
-               </Test>
-               <Test
-                  Identifier = "IntegrationTests">
-               </Test>
-               <Test
-                  Identifier = "NavigationTest/testNavigationPreservesDesktopSiteOnSameHost()">
-               </Test>
-               <Test
-                  Identifier = "NavigationTest/testReloadPreservesMobileOrDesktopSite()">
-               </Test>
-               <Test
-                  Identifier = "NavigationTest/testScrollsToTopWithMultipleTabs()">
-               </Test>
-               <Test
-                  Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
-               </Test>
-               <Test
-                  Identifier = "PhotonActionSheetTest/testSendToDeviceFromShareOption()">
-               </Test>
-               <Test
-                  Identifier = "SaveLoginTest">
-               </Test>
-               <Test
-                  Identifier = "SiteLoadTest">
-               </Test>
-               <Test
-                  Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingLandscape()">
-               </Test>
-               <Test
-                  Identifier = "ToolbarTests/testShowDoNotShowToolbarWhenScrollingPortrait()">
-               </Test>
-               <Test
-                  Identifier = "ToolbarTests/testShowToolbarWhenScrollingDefaultOption()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTest/testCloseTabFromPageOptionsMenu()">
-               </Test>
-            </SkippedTests>
-         </TestableReference>
-         <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
