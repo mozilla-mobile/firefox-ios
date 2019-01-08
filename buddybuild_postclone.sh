@@ -8,9 +8,6 @@ function setup_virtualenv {
   echo password | sudo -S pip install virtualenv
 }
 
-# temporary hack to fix BB node error 
-rm -rf /usr/local/lib/node_modules/npm; n 10
-
 #
 # Install Node.js dependencies and build user scripts
 #
