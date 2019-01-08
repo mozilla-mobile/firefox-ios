@@ -266,16 +266,6 @@
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "28F9520519D0F9FB00DCE892"
-               BuildableName = "FxATests.xctest"
-               BlueprintName = "FxATests"
-               ReferencedContainer = "container:FxA/FxA.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
