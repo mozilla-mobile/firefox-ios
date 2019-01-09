@@ -1802,11 +1802,38 @@ extension BrowserViewController: TabManagerDelegate {
             }
             ReaderModeHandlers.readerModeCache = readerModeCache
 
-            scrollController.tab = selected
+            scrollController.tab = tab
             webViewContainer.addSubview(webView)
             webView.snp.makeConstraints { make in
                 make.left.right.top.bottom.equalTo(self.webViewContainer)
             }
+
+            // This is a terrible workaround for a bad iOS 12 bug where PDF
+            // content disappears any time the view controller changes (i.e.
+            // the user taps on the tabs tray). It seems the only way to get
+            // the PDF to redraw is to either reload it or revisit it from
+            // back/forward list. To try and avoid hitting the network again
+            // for the same PDF, we revisit the current back/forward item and
+            // restore the previous scrollview zoom scale and content offset
+            // after a short 100ms delay. *facepalm*
+            //
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=1516524
+            if #available(iOS 12.0, *) {
+                if tab.mimeType == MIMEType.PDF {
+                    let previousZoomScale = webView.scrollView.zoomScale
+                    let previousContentOffset = webView.scrollView.contentOffset
+
+                    if let currentItem = webView.backForwardList.currentItem {
+                        webView.go(to: currentItem)
+                    }
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+                        webView.scrollView.setZoomScale(previousZoomScale, animated: false)
+                        webView.scrollView.setContentOffset(previousContentOffset, animated: false)
+                    }
+                }
+            }
+
             webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
             webView.accessibilityIdentifier = "contentView"
             webView.accessibilityElementsHidden = false
