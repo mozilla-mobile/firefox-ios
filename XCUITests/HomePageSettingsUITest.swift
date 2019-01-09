@@ -24,7 +24,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertTrue(app.tables.cells["History"].exists)
         XCTAssertTrue(app.tables.cells["HomePageSetting"].exists)
         waitForExistence(app.tables.cells["TopSitesRows"])
-        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as! String, "Top Sites, Rows: 2")
+        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: 2")
         XCTAssertTrue(app.tables.switches["ASPocketStoriesVisible"].isEnabled)
     }
 
