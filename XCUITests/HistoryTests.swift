@@ -48,6 +48,9 @@ class HistoryTests: BaseTestCase {
 
         // Go to Clear Data
         navigator.performAction(Action.AcceptClearPrivateData)
+        
+        //Ensure that 'Clear Private Data Button' is disabled- since devs aren't using built-in enable/disable using workaround involving presence of the OK alert confirmation which only comes up if 'Clear Private Data' is clickable
+        XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
 
         // Back on History panel view check that there is not any item
         navigator.goto(HomePanel_History)
