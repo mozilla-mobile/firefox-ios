@@ -67,7 +67,7 @@ class UnifiedTelemetry {
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue, withDefaultValue: false)
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSliderValue.rawValue, withDefaultValue: 0)
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.themeName.rawValue, withDefaultValue: "normal")
-
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.show-translation", withDefaultValue: true)
 
         let prefs = profile.prefs
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
@@ -139,6 +139,7 @@ extension UnifiedTelemetry {
     public enum EventCategory: String {
         case action = "action"
         case appExtensionAction = "app-extension-action"
+        case prompt = "prompt"
     }
 
     public enum EventMethod: String {
@@ -156,6 +157,7 @@ extension UnifiedTelemetry {
         case scan = "scan"
         case share = "share"
         case tap = "tap"
+        case translate = "translate"
         case view = "view"
         case applicationOpenUrl = "application-open-url"
     }
