@@ -618,7 +618,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 
     override var url: URL? {
-        return URL(string: WebServer.sharedInstance.URLForResource("license", module: "about"))
+        return URL(string: "\(InternalURL.baseUrl)/\(AboutLicenseHandler.path)")
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

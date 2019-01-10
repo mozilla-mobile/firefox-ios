@@ -87,7 +87,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             configuration: config
         )
         webView.allowsLinkPreview = false
-        webView.navigationDelegate = self
         webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
 
         // Don't allow overscrolling.
@@ -103,7 +102,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         ] as [String: Any]
         let json = JSON(data).stringify() ?? ""
         let script = "window.postMessage(\(json), '\(self.url.absoluteString)');"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        settingsWebView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     fileprivate func onCanLinkAccount(_ data: JSON) {
@@ -222,14 +221,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         }).joined(separator: "&")
 
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
-    }
-
-    override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        // Ignore for now.
-    }
-
-    override func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        // Ignore for now.
     }
 }
 
