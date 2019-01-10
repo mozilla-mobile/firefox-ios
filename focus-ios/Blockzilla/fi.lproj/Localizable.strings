@@ -2,6 +2,9 @@
 "About.learnMoreButton" = "Lue lisää";
 
 /* Label on About screen */
+"About.privateBullet1" = "Hae ja selaa suoraan sovelluksessa";
+
+/* Label on About screen */
 "About.privateBulletHeader" = "Käytä sitä yksityisenä selaimena:";
 
 /* Label for row in About screen */
@@ -46,6 +49,9 @@
 /* Label for button to add a custom URL with the + prefix */
 "Autocomplete.addCustomUrlWithPlus" = "+ Lisää mukautettu osoite";
 
+/* Description for adding and managing custom autocomplete URLs */
+"Autocomplete.customDescriptoin" = "Lisää ja hallinnoi mukautettuja automaattisen täydennyksen URL-osoitteita.";
+
 /* Label for button taking you to your custom Autocomplete URL list */
 "Autocomplete.customLabel" = "Mukautetut osoitteet";
 
@@ -55,11 +61,23 @@
 /* Label for toast alerting a custom URL has been added */
 "Autocomplete.customUrlAdded" = "Uusi mukautettu osoite lisätty.";
 
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.defaultLabel" = "Automaattinen täydennys";
+
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Pois käytöstä";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Käytössä";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Hallitse sivustoja";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Omat sivustot";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Suosituimmat sivustot";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Uusi istunto";
@@ -163,11 +181,29 @@
 /* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
 "Safari.instructionsContentBlockers" = "Valitse Safari ja sen jälkeen Sisällönestäjät";
 
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsEnable" = "Ota käyttöön %@";
+
 /* Error label when the blocker is not enabled, shown in the intro and main app when disabled */
 "Safari.instructionsNotEnabled" = "%@ ei ole käytössä.";
 
+/* Label for instructions to enable Safari, shown when enabling Safari Integration in Settings */
+"Safari.instructionsOpen" = "Avaa Asetukset-sovellus";
+
 /* Save button label */
 "Save" = "Tallenna";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Tuo ei toiminut. Yritä korvata hakutermi seuraavasti: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Ei";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Kyllä";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Näytetäänkö hakuehdotukset?";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Lisää toinen hakukone";
@@ -193,11 +229,17 @@
 /* Placeholder text for input of new search engine name */
 "Settings.Search.SearchEngineName" = "Hakukoneen nimi";
 
+/* Label for input of search engine template */
+"Settings.Search.SearchTemplate" = "Käytettävä hakulause";
+
 /* Button label for declining Content blocker alert */
 "Settings.blockOtherNo" = "Ei kiitos";
 
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Ymmärrän";
+
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ lähettää osoiteriville kirjoittamasi tiedot hakukoneelle.";
 
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla pyrkii keräämään vain tietoja, jotka ovat tarpeellisia %@en jakelun ja kehittämisen kannalta.";
@@ -207,6 +249,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Arvostele %@";
+
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI-INTEGROINTI";
 
 /* Title for settings screen */
 "Settings.screenTitle" = "Asetukset";
@@ -259,8 +304,14 @@
 /* Label for Send Usage Data toggle on main screen */
 "Settings.toggleSendUsageData" = "Lähetä käyttötilastoja";
 
+/* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
+"Settings.toggleTouchIDDescription" = "Avaa Touch ID:llä %@ jos URL on auki sovelluksessa";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Mitä uutta";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI-OIKOTIET";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Etsi sivulta";
@@ -289,6 +340,21 @@
 /* Button to add a specified shortcut option to Siri. */
 "Siri.addTo" = "Lisää Siriin";
 
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Tyhjennä";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Tyhjennä ja avaa";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Avaa suosikkisivusto";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Avaa suosikkisivusto";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "Avattava URL-osoite";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Kumoa";
 
@@ -315,6 +381,9 @@
 
 /* Text for the URL bar showing the number of trackers blocked on a webpage. */
 "URL.trackersBlockedLabel" = "Seuraimia estetty";
+
+/* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
+"actionSheet.openIn" = "Avaa sovelluksella %@";
 
 /* Toast displayed after a URL has been copied to the clipboard */
 "browser.copyAddressToast" = "Osoite kopioitu leikepöydälle";

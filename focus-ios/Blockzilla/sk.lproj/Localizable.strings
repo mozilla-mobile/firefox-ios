@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Verzia stránky pre počítače";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mobilná verzia stránky";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Otvoriť v Chrome";
 
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Ochrana pred sledovaním";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Vypnutie tejto funkcie môže odstrániť niektoré problémy";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Ďalšie informácie";

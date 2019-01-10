@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Asztali oldal kérése";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mobil oldal kérése";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Megnyitás a Chrome-ban";
 
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Követés elleni védelem";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Ennek a kikapcsolása megoldhatja egyes webhelyek problémáit";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "További tudnivalók";

@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Disactivate";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "Le URL existe ja";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Nulle URLs personalisate a monstrar";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Activate";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Gerer le sitos";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Mi sitos";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Activar pro que %@ completa automaticamente te URLs favorite.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Sitos popular";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nove session";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Illo non functiona. Prova a supplantar le termino de recerca con isto: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "No";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Si";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Pro obtener suggestiones, %@ debe inviar lo que tu scribe in le barra de adresses verso le motor de recerca.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Monstrar le suggestiones de recerca?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Adder un altere motor de recerca";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Io ha comprendite";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ inviara a tu motor de recerca lo que tu scribe in le barra de adresse.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla se effortia a colliger solmente le informationes necessari pro fornir e meliorar %@ pro totes.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Motor de recerca";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Obtener suggestiones de recerca";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "RECERCA";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID pote disblocar %@ si un URL es jam aperte in le application";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Monstrar le suggestiones del pagina principal";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Pote causar problemas a alcun videos e paginas web";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID pote disblocar %@ si un URL es jam aperte in le application";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "datos de uso";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novas";
@@ -378,6 +417,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Requirer le version scriptorio del sito";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Requirer le version mobile";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Aperir in Chrome";
@@ -414,6 +456,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL a aperir";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Adde ligamine pro autocompletar";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancellar";
@@ -507,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Protection contra le traciamento";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Disactivar isto pote remediar alicun problemas del sito";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Saper plus";

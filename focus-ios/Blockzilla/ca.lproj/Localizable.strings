@@ -77,7 +77,7 @@
 "Autocomplete.customUrlAdded" = "S'ha afegit un URL personalitzat nou.";
 
 /* Description for enabling or disabling the default list. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
-"Autocomplete.defaultDescriptoin" = "Activeu-lo per fer permetre que el %@ empleni automàticament més de 450 URL populars a la barra d'adreces.";
+"Autocomplete.defaultDescriptoin" = "Activeu-lo per fer que el %@ empleni automàticament més de 450 URL populars a la barra d'adreces.";
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.defaultLabel" = "Emplenament automàtic";
@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Desactivat";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "L'URL ja existeix";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "No hi ha cap URL personalitzat per mostrar";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Activat";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Gestiona els llocs";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Els meus llocs";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Activeu-ho per fer que el %@ empleni automàticament els vostres URL preferits.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Llocs principals";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sessió nova";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "No ha funcionat. Proveu-ho substituint els termes de cerca per això: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "No";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Sí";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Per veure els suggeriments, el %@ ha d'enviar al motor de cerca tot allò que escriviu a la barra d'adreces.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Voleu veure suggeriments de cerca?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Afegeix un altre motor de cerca";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Entesos";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "El %@ enviarà al motor de cerca tot allò que escriviu a la barra d'adreces.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla s'esforça per recollir només les dades necessàries per oferir i millorar el %@ per a tothom.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Motor de cerca";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Mostra suggeriments de cerca";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "CERCA";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "El Face ID pot desblocar el %@ si ja hi ha un URL obert en l'aplicació";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Mostra consells a la pantalla d'inici";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Pot causar problemes amb alguns vídeos i pàgines web";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "El Touch ID pot desblocar el %@ si ja hi ha un URL obert en l'aplicació";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "usage-data";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Novetats";
@@ -414,6 +453,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL que s'obrirà";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Afegeix l'enllaç a l'emplenament automàtic";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancel·la";

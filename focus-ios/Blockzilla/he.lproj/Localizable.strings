@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "‏%@ שם אותך בשליטה.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "עליך לעבור אימות כדי לחזור אל %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "הוספת כתובת מותאמת אישית";
 
@@ -85,14 +88,32 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "מושבת";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "הכתובת כבר קיימת";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "אין כתובת בהתאמה אישית להצגה";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "פעיל";
 
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "ניהול אתרים";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "האתרים שלי";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "אתרים מובילים";
+
+/* Create a new session after failing a biometric check */
+"BiometricPrompt.newSession" = "הפעלה חדשה";
+
 /* Accessibility label for the back button */
 "Browser.backLabel" = "אחורה";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "העתקת כתובת";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "העתקה";
@@ -157,6 +178,9 @@
 /* Button label in Maps URL dialog to open Maps. Test page: https://people-mozilla.org/~bnicholson/test/schemes.html */
 "ExternalLink.openMapsButton" = "פתיחת מפות";
 
+/* Accessibility label for done button in Find in Page Toolbar. */
+"FindInPage.Done" = "החיפוש בדף הסתיים";
+
 /* Accessibility label for next result button in Find in Page Toolbar. */
 "FindInPage.NextResult" = "חיפוש הבא בדף";
 
@@ -180,6 +204,9 @@
 
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "גלישה, מחיקה, חזרה להתחלה.";
+
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "סגירה";
 
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "ביטול";
@@ -210,6 +237,12 @@
 
 /* Save button label */
 "Save" = "שמירה";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "לא";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "כן";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "הוספת מנוע חיפוש נוסף";
@@ -262,11 +295,17 @@
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "דירוג %@";
 
+/* Label for Safari integration section */
+"Settings.safariTitle" = "שילוב עם Safari";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "הגדרות";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "מנוע חיפוש";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "קבלת הצעות חיפוש";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "חיפוש";
@@ -319,6 +358,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "‏Face ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "הצגת עצות במסך הבית";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "עלולה לשבש את פעילותם של דפי אינטרנט ומספר סרטונים";
 
@@ -334,8 +376,14 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "‏Touch ID יכול לשחרר את הנעילה של %@ אם כתובת אתר כבר פתוחה ביישומון";
 
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "usage-data";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "מה חדש";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "קיצורי דרך ל־Siri";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "חיפוש בדף";
@@ -346,8 +394,50 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "פתיחה ב־%@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "פעולות דף";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "בקשת אתר שולחני";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "פתיחה ב־Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "פתיחה ב־Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "פתיחה ב־Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "שיתוף הדף עם...";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "הוספה";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "הוספה ל־Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "הקלטה מחדש או מחיקה של קיצור דרך";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "מחיקה";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "מחיקה ופתיחה";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "פתיחת אתר מועדף";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "פתיחת אתר מועדף";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "כתובת לפתיחה";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "הוספת קישור להשלמה אוטומטית";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ביטול";
@@ -364,6 +454,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "חיפוש בדף: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "הדבקה";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "חיפוש או הכנסת כתובת";
 
@@ -376,6 +469,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "פתיחה ב־%@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "הכתובת הועתקה ללוח העריכה";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "בחירת סרגל מיקום";
 
@@ -387,6 +483,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "העתקת קישור";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "הקישור שהעתקת:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "שמירת תמונה";
@@ -412,6 +511,12 @@
 /* Text for a share button */
 "share" = "שיתוף";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "העתקת כתובת";
+
+/* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
+"touchId.reason" = "יש להשתמש ב־Touch ID כדי לחזור אל %@";
+
 /* Label for ad trackers. */
 "trackingProtection.adTrackersLabel" = "עוקבי פרסומות";
 
@@ -423,6 +528,9 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "הגנת מעקב כבויה";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "הגנת מעקב";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "מידע נוסף";

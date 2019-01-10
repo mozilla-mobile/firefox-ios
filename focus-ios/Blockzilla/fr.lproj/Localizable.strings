@@ -415,6 +415,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Voir la version ordinateur";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Voir la version mobile";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Ouvrir dans Chrome";
 
@@ -452,7 +455,7 @@
 "Siri.urlToOpen" = "URL à ouvrir";
 
 /* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
-"URL.addToAutocompleteLabel" = "Ajouter un lien à la saisie semi-automatique";
+"URL.addToAutocompleteLabel" = "Ajouter le lien à la saisie semi-automatique";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Annuler";
@@ -546,6 +549,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Protection contre le pistage";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Désactiver cette option peut résoudre certains problèmes du site";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "En savoir plus";

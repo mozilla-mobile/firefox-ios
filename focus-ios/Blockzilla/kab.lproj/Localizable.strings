@@ -254,7 +254,7 @@
 "SearchSuggestions.promptEnable" = "Ih";
 
 /* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
-"SearchSuggestions.promptMessage" = "Akken ad tawiḍ isumar n unadi,  %@ isra ad yazen  ayen tettaruḍ deg ufeggag n tansa ɣer umsedday n unadi.";
+"SearchSuggestions.promptMessage" = "Akken ad tawiḍ isumar n unadi, %@ isra ad yazen ayen tettaruḍ deg ufeggag n tansa ɣer umsedday n unadi.";
 
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "Sken isumar n unadi?";
@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Suter asmel n tnarit";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Suter asmel aziraz";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Ldi deg Chrome";
 
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Ammesten mgal asfuɣel";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Ma tsenseḍ aya, izmer ad frun kra n uguren";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Issin ugar";

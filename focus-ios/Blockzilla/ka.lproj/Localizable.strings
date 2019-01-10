@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "სრული საიტის მოთხოვნა";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "საიტი მობილურისთვის";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome-ში გახსნა";
 
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "თვალთვალისგან დაცვა";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "გამორთვის შედეგად, საიტის ხარვეზები წესით გასწორდება";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "ვრცლად";

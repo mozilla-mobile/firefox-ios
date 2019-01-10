@@ -97,6 +97,18 @@
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Ativado";
 
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Gerenciar sites";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Meus sites";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Ativar para o %@ completar automaticamente suas URLs preferidas.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Sites preferidos";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nova sessão";
 
@@ -173,13 +185,13 @@
 "ExternalLink.openMapsButton" = "Abrir Maps";
 
 /* Accessibility label for done button in Find in Page Toolbar. */
-"FindInPage.Done" = "Busca na página finalizada";
+"FindInPage.Done" = "Procurar na página concluído";
 
 /* Accessibility label for next result button in Find in Page Toolbar. */
-"FindInPage.NextResult" = "Localizar próxima ocorrência na página";
+"FindInPage.NextResult" = "Procurar próxima ocorrência na página";
 
 /* Accessibility label for previous result button in Find in Page Toolbar. */
-"FindInPage.PreviousResult" = "Localizar ocorrência anterior na página";
+"FindInPage.PreviousResult" = "Procurar ocorrência anterior na página";
 
 /* Label on button to dismiss first run UI */
 "FirstRun.lastSlide.buttonLabel" = "OK, entendi!";
@@ -235,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Isto não funcionou. Tente substituir o termo de pesquisa com isto: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Não";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Sim";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Para receber sugestões, o %@ precisa enviar o que você escreve na barra de endereços para o mecanismo de pesquisa.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Mostrar sugestões de pesquisa?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Adicionar outro mecanismo de pesquisa";
 
@@ -277,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Eu compreendo";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "O %@ enviará o que você escreve na barra de endereços para seu mecanismo de pesquisa.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "A Mozilla se empenha para coletar somente o que é necessário para melhorar o %@ para todos.";
 
@@ -294,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Mecanismo de pesquisa";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Receber sugestões de pesquisa";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "PESQUISA";
@@ -346,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "O Face ID pode desbloquear o %@ se uma URL já estiver aberta no aplicativo";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Mostrar dicas na tela inicial";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Pode quebrar alguns vídeos e páginas web";
 
@@ -361,6 +394,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "O Touch ID pode desbloquear o %@ se uma URL já estiver aberta no aplicativo";
 
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "dados-de-uso";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "O que há de novo";
 
@@ -368,10 +404,10 @@
 "Settinsg.siriShortcutsTitle" = "ATALHOS DA SIRI";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
-"ShareMenu.FindInPage" = "Localizar na página";
+"ShareMenu.FindInPage" = "Procurar na página";
 
 /* Text for the share menu option when a user wants to open a page in Firefox but doesn’t have it installed. This string will not wrap in the interface. Instead, it will truncate. To prevent this, please keep the localized string to 18 or fewer characters. If your string runs longer than 18 characters, you can use 'Get Firefox' as the basis for your string. However, if at all possible, we’d like to signal to the user that they will be going to the App Store and installing the application from there. That is why we are using Get and App in the en-US string. */
-"ShareMenu.GetFirefox" = "Obter o Firefox";
+"ShareMenu.GetFirefox" = "Instalar o Firefox";
 
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Abrir no %@";
@@ -381,6 +417,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Requisitar site para desktop";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Solicitar site para celular";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Abrir no Chrome";
@@ -418,6 +457,9 @@
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL a ser aberta";
 
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Adicionar link para completar automaticamente";
+
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Cancelar";
 
@@ -431,7 +473,7 @@
 "URL.eraseMessageLabel" = "Seu histórico de navegação foi apagado.";
 
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
-"URL.findOnPageLabel" = "Localizar na página: %@";
+"URL.findOnPageLabel" = "Procurar na página: %@";
 
 /* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
 "URL.paste" = "Colar";
@@ -510,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Proteção contra rastreamento";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Desligar isso pode resolver alguns problemas do site";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Saiba mais";

@@ -88,6 +88,9 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "معطّل";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "المسار موجود بالفعل";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "لا مسارات مخصصة لعرضها";
 
@@ -99,6 +102,9 @@
 
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "مواقعي";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "فعّله ليُكمل %@ المسارات في المفضّلة.";
 
 /* Label for enabling or disabling top sites */
 "Autocomplete.topSites" = "المواقع الأكثر زيارة";
@@ -247,6 +253,9 @@
 /* Label for enable option on search suggestions prompt */
 "SearchSuggestions.promptEnable" = "نعم";
 
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "لتستلم الاقتراحات، يحتاج %@ إلى إرسال ما تكتبه في شريط العنوان إلى محرك البحث.";
+
 /* Title for search suggestions prompt */
 "SearchSuggestions.promptTitle" = "أأعرض اقتراحات البحث؟";
 
@@ -385,6 +394,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "يمكن أن يُلغي معرّف اللمس قفل %@ إن كان ثمة مسار مفتوح في التطبيق بالفعل";
 
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "usage-data";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "ما الجديد";
 
@@ -433,8 +445,17 @@
 /* Title of option in settings to set up Siri to erase and then open the app. */
 "Siri.eraseAndOpen" = "امسح وافتح";
 
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "افتح الموقع المفضل";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "افتح الموقع المفضل";
+
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "المسار الذي سيُفتح";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "أضِف رابطا لإكماله تلقائيا";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "ألغِ";

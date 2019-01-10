@@ -563,5 +563,5 @@
 "trackingProtection.toggleLabel" = "Protecție împotriva urmăririi";
 
 /* General description of tracking protection settings, which is displayed underneath the trackers preferences in Settings. Placeholder is either Firefox Focus or Firefox Klar */
-"trackingProtection.trackerDescriptionLabel" = "Alege dacă %@ blochează elementele de urmărire publicitare, analtice, ale rețelelor sociale și altele.";
+"trackingProtection.trackerDescriptionLabel" = "Alege dacă %@ blochează elementele de urmărire publicitare, analitice, ale rețelelor sociale și altele.";
 

@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Изключено";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "Адресът вече съществува";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Няма потребителски адреси за показване";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Включено";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Управление на сайтовете";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Моите сайтове";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Включете, за да имате автоматично довършване в %@ на вашите отбелязани адреси.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Често посещавани сайтове";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Нова сесия";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Това няма да работи. Опитайте да замените думите за търсене със следното: „%s“.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Не";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Да";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "За да получавате предложения, %@ трябва да изпраща към търсачката всичко, каквото въвеждате в адресната лента.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Показване на предложения при търсене?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Добавяне на друга търсачка";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Разбирам";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ ще изпраща към търсачката всичко, каквото въвеждате в адресната лента.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla се старае да събира само нужните данни за подобряване на %@ за всички.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Търсачка";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Получаване на предложения при търсене";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "ТЪРСЕНЕ";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Лицевото разпознаване може да отключва %@, ако вече е отворен адрес в приложението";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Показване на съвети на началния екран";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Видео и някои уеб страници може да не работят";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Пръстовото разпознаване може да отключва %@, ако вече е отворен адрес в приложението";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "данни за използването";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Новото в това издание";
@@ -379,11 +418,14 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Настолна версия на сайта";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Мобилна версия на сайта";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Отваряне в Chrome";
 
 /* Text for the share menu option when a user wants to open the current website in the Firefox app. */
-"ShareMenu.ShareOpenFirefox" = "Отваряне във  Firefox";
+"ShareMenu.ShareOpenFirefox" = "Отваряне във Firefox";
 
 /* Text for the share menu option when a user wants to open the current website in the Safari app. */
 "ShareMenu.ShareOpenSafari" = "Отваряне в Safari";
@@ -414,6 +456,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "Адрес за отваряне";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Добавяне на препратката към автоматичното довършване";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Отказ";
@@ -507,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Защита от проследяване";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Изключването на тази функция би могла да реши някои проблеми със сайта";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Научете повече";

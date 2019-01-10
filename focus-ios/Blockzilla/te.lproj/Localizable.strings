@@ -340,6 +340,9 @@
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "లంకె నకలుతీయి";
 
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "మీరు కాపీచేసిన లంకె:";
+
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "చిత్రాన్ని భద్రపరచు";
 

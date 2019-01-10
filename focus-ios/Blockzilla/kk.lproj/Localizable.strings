@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Сайттың толық нұсқасы";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Сайттың мобильді нұсқасы";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome көмегімен ашу";
 
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Бақылаудан қорғаныс";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Бұл мүмкіндікті өшіру кейбір сайт мәселелерін шешуі мүмкін";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Көбірек білу";

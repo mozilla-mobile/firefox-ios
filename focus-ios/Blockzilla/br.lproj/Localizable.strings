@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Goulenn al lec'hienn evit an urzhiataerioù";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Lec'hienn hezoug";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Digeriñ e Chrome";
 
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Gwarez heuliañ";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Diweredekaat an dra-se a c'hallfe diskoulmañ kudennoù 'zo el lec'hienn";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Gouzout hiroc'h";

@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktopowe sedło pominaś";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mobilne sedło pominaś";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "W Chrome wócyniś";
 
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Slědowański šćit";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Gaž to znjemóžnjaśo, se někotare sedłowe problemy rozwězuju";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Dalšne informacije";

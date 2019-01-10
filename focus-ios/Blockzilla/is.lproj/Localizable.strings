@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Óvirkt";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "Slóð þegar til";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Engin sérsniðin URL til sýnis";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Virkt";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Stjórna vefsvæðum";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Mín vefsvæði";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Leyfa %@ að klára uppáhaldsvefsvæði þín.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Vinsælustu svæðin";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Nýtt innlit";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Þetta gekk ekki. Skipta um leitarorð í: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Nei";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Já";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Til að fá tillögur, þarf% @ að senda það sem þú skrifar í slóðina til leitarvélarinnar.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Sýna leitar tillögur?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Bæta við annari leitarvél";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Ég skil";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "% @ mun senda það sem þú skrifar í slóðina yfir á leitarvélina þína.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla safnar eingöngu því sem nauðsynlegt er til að betrumbæta %@ fyrir alla.";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Leitarvél";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Fá leitartillögur";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "LEITA";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Andlitsauðkenning getur aflæst %@ ef URL er nú þegar opið í smáforritinu";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Sýna ábendingar á heimasvæði";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Gæti haft áhrif á sum myndbönd og vefsíður";
 
@@ -357,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Fingrafara auðkenning getur aflæst %@ ef URL er nú þegar opið í smáforritinu";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "notkunargögn";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Hvað er nýtt";
@@ -378,6 +417,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Fá borðtölvu vefsvæði";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Biðja um svæði fyrir snjalltæki";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Opna í Chrome";
@@ -414,6 +456,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL til að opna";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Bæta vefslóð við í autocomplete";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Hætta við";
@@ -507,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Vörn gegn gagnasöfnun";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Slökktu á þessu má laga vandamál á vefsvæði";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Fræðast meira";

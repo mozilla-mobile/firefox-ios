@@ -131,7 +131,7 @@
 "Browser.forwardLabel" = "Naprzód";
 
 /* Accessibility label for the reload button */
-"Browser.reloadLabel" = "Wczytaj ponownie";
+"Browser.reloadLabel" = "Odśwież";
 
 /* Accessibility label for the settings button */
 "Browser.settingsLabel" = "Ustawienia";
@@ -394,6 +394,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID może odblokowywać %@, jeśli jakiś adres jest już otwarty w aplikacji";
 
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "usage-data";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Co nowego";
 
@@ -414,6 +417,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Zażądaj wersji na komputery";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Zażądaj wersji na urządzenia przenośne";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Otwórz w Chrome";
@@ -546,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Ochrona przed śledzeniem";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Wyłączenie może rozwiązać niektóre problemy ze stroną";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Więcej informacji";

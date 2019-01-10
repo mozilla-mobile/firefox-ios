@@ -107,7 +107,7 @@
 "Autocomplete.mySitesDesc" = "%@’un sık kullandığınız adresleri otomatik tamamlaması için etkinleştirin.";
 
 /* Label for enabling or disabling top sites */
-"Autocomplete.topSites" = "Sık kullandıklarım";
+"Autocomplete.topSites" = "Sık kullanılanlar";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Yeni oturum";
@@ -394,6 +394,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "%@’ta açık bir adres varsa Touch ID, uygulamanın kilidini açabilir";
 
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "usage-data";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Yeni neler var?";
 
@@ -415,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Masaüstü sitesini iste";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mobil siteyi iste";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome’da aç";
 
@@ -425,7 +431,7 @@
 "ShareMenu.ShareOpenSafari" = "Safari’de aç";
 
 /* Text for the share menu option when a user wants to share the current website they are on through another app. */
-"ShareMenu.SharePage" = "Sayfayı Paylaş...";
+"ShareMenu.SharePage" = "Sayfayı paylaş...";
 
 /* Button to add a favorite URL to Siri. */
 "Siri.add" = "Ekle";
@@ -546,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "İzlenme Koruması";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Bunu kapatmak bazı site sorunlarını düzeltebilir";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Daha fazla bilgi al";

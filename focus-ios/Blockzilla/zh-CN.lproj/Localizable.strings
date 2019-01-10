@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "要求桌面版网站";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "请求移动版网站";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "在 Chrome 中打开";
 
@@ -437,7 +440,7 @@
 "Siri.addTo" = "添加到 Siri";
 
 /* Label for button to edit the Siri phrase or delete the Siri functionality. */
-"Siri.editOpenUrl" = "重新记录或删除捷径";
+"Siri.editOpenUrl" = "重新录制或删除捷径";
 
 /* Title of option in settings to set up Siri to erase */
 "Siri.erase" = "清除";
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "跟踪保护";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "关闭此功能或许可以解决一些网站的问题";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "详细了解";

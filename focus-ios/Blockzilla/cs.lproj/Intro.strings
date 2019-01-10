@@ -8,10 +8,10 @@
 "Intro.Slides.Next.Button" = "Další";
 
 /* Description for the 'Favorite Search Engine' panel in the First Run tour. */
-"Intro.Slides.Search.Description" = "Hledáte něco jiného? Zvolte si jako výchozí jiný vyhledávací modul.";
+"Intro.Slides.Search.Description" = "Hledáte něco jiného? Zvolte si jako výchozí jiný vyhledávač.";
 
 /* Title for the second  panel 'Search' in the First Run tour. */
-"Intro.Slides.Search.Title" = "Vaše hledání, vaše cesta";
+"Intro.Slides.Search.Title" = "Vyhledávání jak vy chcete";
 
 /* Button to skip onboarding in Focus */
 "Intro.Slides.Skip.Button" = "Přeskočit";

@@ -88,11 +88,23 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "निष्क्रिय";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL पहले से मौजूद है";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "प्रदर्शित करने के लिए कोई उपभोक्ता संशोधित URLs नहीं";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "सक्रिय";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "साइटों को प्रबंधित करें";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "मेरी साइटें";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "सर्वोत्तम साइटें";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "नया सत्र";
@@ -232,6 +244,15 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "वह काम नहीं किया. खोज शब्द को इसके साथ बदलने का प्रयास करें: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "नहीं";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "हाँ‌";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "खोज सुझाव दिखाएँ?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "एक और खोज इंजन जोड़ें";
 
@@ -292,6 +313,9 @@
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "खोज इंजन";
 
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "खोज सुझाव प्राप्त करें";
+
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "खोज";
 
@@ -343,6 +367,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "अगर ऐप में यूआरएल पहले से खुला है तो मुख आईडी %@ को अनलॉक कर सकती है";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "मुख पृष्ठ युक्तियाँ दिखाएँ";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "कुछ वीडियो और वेब पृष्ठों को नुकसान पहुँच सकता है";
 
@@ -357,6 +384,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "अगर ऐप में यूआरएल पहले से खुला है तो स्पर्श आईडी %@ को अनलॉक कर सकती है";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "डेटा का उपयोग";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "क्या नया है";
@@ -414,6 +444,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "खोलने के लिए यूआरएल";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "स्वतः पूर्णता हेतु लिंक जोड़ें";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "रद्द करें";

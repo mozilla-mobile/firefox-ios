@@ -88,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "無効";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "登録済みの URL です";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "表示するカスタム URL はありません";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "有効";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "サイトを管理";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "マイサイト";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "%@ によるお気に入りの URL の自動補完を有効にします。";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "トップサイト";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "新規セッション";
@@ -232,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "動作しませんでした。次の検索語に置き換えてみてください: %s";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "いいえ";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "はい";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "検索候補を取得するには、アドレスバーに入力した内容を %@ が検索エンジンへ送信する必要があります。";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "検索候補を表示しますか？";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "別の検索エンジンを追加";
 
@@ -274,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "ブロックする";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "アドレスバーに入力した内容を %@ が検索エンジンに送信します。";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla は皆さんに %@ を提供し改善するのに必要な情報だけを収集するよう努めています。";
 
@@ -291,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "検索エンジン";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "検索候補を取得";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "検索";
@@ -343,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "URL をアプリ内ですでに開いていても、Face ID で %@ のロックを解除できます";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "ホーム画面にヒントを表示";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "動画やウェブページが正常に表示されない場合があります";
 
@@ -353,10 +389,13 @@
 "Settings.toggleSendUsageData" = "使用状況データを送信";
 
 /* Label for toggle on settings screen */
-"Settings.toggleTouchID" = "アプリのロック解除にタッチ ID を使用";
+"Settings.toggleTouchID" = "アプリのロック解除に Touch ID を使用";
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
-"Settings.toggleTouchIDDescription" = "URL をアプリ内ですでに開いていても、タッチ ID で %@ のロックを解除できます";
+"Settings.toggleTouchIDDescription" = "URL をアプリ内ですでに開いていても、Touch ID で %@ のロックを解除できます";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "使用状況データ";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "新機能";
@@ -378,6 +417,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "デスクトップ版を見る";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "モバイル版サイトを見る";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Chrome で開く";
@@ -414,6 +456,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "開く URL";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "自動補完にリンクを追加";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "キャンセル";
@@ -507,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "トラッキング防止";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "この設定をオフにすると、一部のサイトの問題が解決する可能性があります";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "詳細情報";

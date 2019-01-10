@@ -394,6 +394,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID có thể mở khóa %@ nếu một URL đã được mở trong ứng dụng";
 
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "usage-data";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Có gì mới";
 
@@ -414,6 +417,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Yêu cầu trang web trên máy tính";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Yêu cầu trang web di động";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Mở trong Chrome";
@@ -546,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Trình chống theo dõi";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Tắt tính năng này có thể khắc phục một số vấn đề về trang web";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Tìm hiểu thêm";

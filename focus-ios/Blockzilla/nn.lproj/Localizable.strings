@@ -43,6 +43,9 @@
 /* Label on About screen */
 "About.topLabel" = "%@ gjev deg kontroll.";
 
+/* %@ is app name. Prompt shown to ask the user to use Touch ID, Face ID, or passcode to continue browsing after returning to the app. */
+"Authentication.reason" = "Autentiser for å gå tilbake til %@";
+
 /* Label for button to add a custom URL */
 "Autocomplete.addCustomUrl" = "Legg til tilpassa nettadresse";
 
@@ -85,11 +88,26 @@
 /* label describing URL Autocomplete as disabled */
 "Autocomplete.disabled" = "Slått av";
 
+/* Label for toast alerting that the custom URL being added is a duplicate */
+"Autocomplete.duplicateUrl" = "URL-en finst allereie";
+
 /* Label for button to add a custom URL */
 "Autocomplete.emptyState" = "Ingen tilpassa adresser å vise";
 
 /* label describing URL Autocomplete as enabled */
 "Autocomplete.enabled" = "Slått på";
+
+/* Label for button taking you to your custom Autocomplete URL list */
+"Autocomplete.manageSites" = "Handter nettsider";
+
+/* Label for enabling or disabling autocomplete */
+"Autocomplete.mySites" = "Mine nettsider";
+
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Aktiver for å få %@ til å autofullføre dei føretrekte nettadressene dine.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Mest besøkte nettstadar";
 
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Ny økt";
@@ -99,6 +117,9 @@
 
 /* Accessibility label for the back button */
 "Browser.backLabel" = "Tilbake";
+
+/* Copy URL button in URL long press menu */
+"Browser.copyAddressLabel" = "Kopier adresse";
 
 /* Copy URL button in URL long press menu */
 "Browser.copyMenuLabel" = "Kopier";
@@ -190,6 +211,9 @@
 /* Second label for product description on the home screen */
 "Home.descriptionLabel2" = "Surf. Slett. Repeter.";
 
+/* Button label used to close a menu that displays as a popup. */
+"Menu.Close" = "Lat att";
+
 /* Label in share alert to cancel the alert */
 "Open.Cancel" = "Avbryt";
 
@@ -219,6 +243,21 @@
 
 /* Save button label */
 "Save" = "Lagra";
+
+/* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
+"SearchEngine.addEngineError" = "Det fungerte ikkje. Prøv å erstatte søkjeordet med dette: %s.";
+
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Nei";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Ja";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "For å få forslag må %@ sende det du skriv i adressefeltet til søkjemotoren.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Vise søkjeforslag?";
 
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Legg til ein annan søkjemotor";
@@ -262,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Eg forstår";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ sender det du skriv i adressefeltet til søkjemotoren din.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla strevar etter å berre samla inn det vi treng for å tilby og forbetre %@ for alle.";
 
@@ -271,11 +313,17 @@
 /* %@ is the name of the app (Focus / Klar). Title displayed in the settings screen that, when tapped, allows the user to leave a review for the app on the app store. */
 "Settings.rate" = "Vurder %@";
 
+/* Label for Safari integration section */
+"Settings.safariTitle" = "SAFARI-INTEGRASJON";
+
 /* Title for settings screen */
 "Settings.screenTitle" = "Innstillingar";
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Søkjemotor";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Få søkjeforslag";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "SØK";
@@ -328,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "«Face ID» kan låse opp %@ om ei adresse allereie er open i appen";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Vis tips på starskjermen";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Kan øydeleggja nokre videoar og nettsider";
 
@@ -343,8 +394,14 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "«Touch ID» kan låse opp %@ om ei adresse allereie er open i appen";
 
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "bruksdata";
+
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Kva er nytt";
+
+/* Title for settings section to enable different Siri Shortcuts. */
+"Settinsg.siriShortcutsTitle" = "SIRI-SNARVEGAR";
 
 /* Text for the share menu option when a user wants to open the find in page menu */
 "ShareMenu.FindInPage" = "Søk på sida";
@@ -355,8 +412,53 @@
 /* Text for the share menu option when a user wants to open a page in Focus. */
 "ShareMenu.OpenInFocus" = "Opna i %@";
 
+/* Title for the share menu where users can take actions for the current website they are on. */
+"ShareMenu.PageActions" = "Sidehandlingar";
+
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Vis skrivebordsversjon";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Vis mobilversjon";
+
+/* Text for the share menu option when a user wants to open the current website in the Chrome app. */
+"ShareMenu.ShareOpenChrome" = "Opna i Chrome";
+
+/* Text for the share menu option when a user wants to open the current website in the Firefox app. */
+"ShareMenu.ShareOpenFirefox" = "Opna i Firefox";
+
+/* Text for the share menu option when a user wants to open the current website in the Safari app. */
+"ShareMenu.ShareOpenSafari" = "Opna i Safari";
+
+/* Text for the share menu option when a user wants to share the current website they are on through another app. */
+"ShareMenu.SharePage" = "Del sida med…";
+
+/* Button to add a favorite URL to Siri. */
+"Siri.add" = "Legg til";
+
+/* Button to add a specified shortcut option to Siri. */
+"Siri.addTo" = "Legg til i Siri";
+
+/* Label for button to edit the Siri phrase or delete the Siri functionality. */
+"Siri.editOpenUrl" = "Spel inn att eller slett snarvegen";
+
+/* Title of option in settings to set up Siri to erase */
+"Siri.erase" = "Slett";
+
+/* Title of option in settings to set up Siri to erase and then open the app. */
+"Siri.eraseAndOpen" = "Slett og opna";
+
+/* Title for screen to add a favorite URL to Siri. */
+"Siri.favoriteUrl" = "Opna favorittnettstaden";
+
+/* Title of option in settings to set up Siri to open a specified URL in Focus/Klar. */
+"Siri.openURL" = "Opna favorittnettstaden";
+
+/* Label for input to set a favorite URL to be opened by Siri. */
+"Siri.urlToOpen" = "URL for å opna";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Legg til lenke til autofullfør";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Avbryt";
@@ -373,6 +475,9 @@
 /* Label displayed for find in page button when typing in the URL Bar. %@ is any text the user has typed into the URL bar that they want to find on the current page. */
 "URL.findOnPageLabel" = "Søk på sida: %@";
 
+/* Text for a menu displayed from the bottom of the screen when a user long presses on the URL bar with clipboard contents. */
+"URL.paste" = "Lim inn";
+
 /* Placeholder text shown in the URL bar before the user navigates to a page */
 "URL.placeholderText" = "Søk eller skriv inn ei adresse";
 
@@ -385,6 +490,9 @@
 /* Title for action sheet item to open the current page in another application. Placeholder is the name of the application to open the current page. */
 "actionSheet.openIn" = "Opna i %@";
 
+/* Toast displayed after a URL has been copied to the clipboard */
+"browser.copyAddressToast" = "URL kopiert til utklippstavla";
+
 /* Label to display in the Discoverability overlay for keyboard shortcuts */
 "browserShortcutDescription.selectLocationBar" = "Vel adresselinje";
 
@@ -396,6 +504,9 @@
 
 /* Text for the context menu when a user wants to copy a link after long pressing it. */
 "contextMenu.copyLink" = "Kopier lenke";
+
+/* Text for the context menu when a user has a link on their clipboard. */
+"contextMenu.linkCopied" = "Lenka du kopierte:";
 
 /* Text for the context menu when a user wants to save an image after long pressing it. */
 "contextMenu.saveImageTitle" = "Lagre bilde";
@@ -421,6 +532,9 @@
 /* Text for a share button */
 "share" = "Del";
 
+/* Text for the share menu when a user wants to copy a URL. */
+"shareMenu.copyAddress" = "Kopier adresse";
+
 /* %@ is app name. Prompt shown to ask the user to use Touch ID to continue browsing after returning to the app. */
 "touchId.reason" = "Bruk «Touch ID» for å gå tilbake til %@";
 
@@ -435,6 +549,12 @@
 
 /* text showing the tracking protection is disabled. */
 "trackingProtection.disabledLabel" = "Sporingsvern av";
+
+/* Title for the tracking settings page to change what trackers are blocked. */
+"trackingProtection.label" = "Sporingsvern";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Viss du slår av dette, kan det løyse nokre nettsideproblem";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Les meir";

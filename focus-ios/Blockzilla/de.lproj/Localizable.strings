@@ -418,6 +418,9 @@
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Desktop-Website anfordern";
 
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Mobile Website anfordern";
+
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "In Chrome öffnen";
 
@@ -549,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Schutz vor Aktivitätenverfolgung";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Wenn Sie diese Option deaktivieren, werden möglicherweise einige Probleme mit der Website behoben";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Weitere Informationen";

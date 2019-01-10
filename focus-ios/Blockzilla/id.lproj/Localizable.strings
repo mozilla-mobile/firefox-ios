@@ -103,6 +103,12 @@
 /* Label for enabling or disabling autocomplete */
 "Autocomplete.mySites" = "Situs Saya";
 
+/* Description for adding and managing custom autocomplete URLs. The placeholder is replaced with the application name, which can be either Firefox Focus or Firefox Klar. */
+"Autocomplete.mySitesDesc" = "Aktifkan %@ melengkapi otomatis URL favorit Anda.";
+
+/* Label for enabling or disabling top sites */
+"Autocomplete.topSites" = "Situs Teratas";
+
 /* Create a new session after failing a biometric check */
 "BiometricPrompt.newSession" = "Sesi Baru";
 
@@ -241,6 +247,18 @@
 /* Label for error state when entering an invalid search engine URL. %s is a search term in a URL. */
 "SearchEngine.addEngineError" = "Tidak dapat digunakan. Coba ganti istilah pencarian dengan ini: %s.";
 
+/* Label for disable option on search suggestions prompt */
+"SearchSuggestions.promptDisable" = "Tidak";
+
+/* Label for enable option on search suggestions prompt */
+"SearchSuggestions.promptEnable" = "Ya";
+
+/* %@ is the name of the app (Focus / Klar). Label for search suggestions prompt message */
+"SearchSuggestions.promptMessage" = "Untuk mendapatkan saran, %@ perlu mengirim apa yang Anda ketikkan di bilah alamat ke mesin pencari.";
+
+/* Title for search suggestions prompt */
+"SearchSuggestions.promptTitle" = "Tampilkan Saran Pencarian?";
+
 /* Text for button to add another search engine in settings */
 "Settings.Search.AddSearchEngineButton" = "Tambahkan Mesin Pencari Lainnya";
 
@@ -283,6 +301,9 @@
 /* Button label for accepting Content blocker alert */
 "Settings.blockOtherYes" = "Paham";
 
+/* Description associated to the Search Suggestions toggle on main screen. %@ is the app name (Focus/Klar) */
+"Settings.detailTextSearchSuggestion" = "%@ akan mengirim apa yang Anda ketikkan di bilah alamat ke mesin pencari Anda.";
+
 /* Description associated to the Send Usage Data toggle on main screen. %@ is the app name (Focus/Klar) */
 "Settings.detailTextSendUsageData" = "Mozilla berusaha untuk mengumpulkan hanya apa yang kami perlu untuk menghadirkan dan meningkatkan %@ untuk setiap orang.";
 
@@ -300,6 +321,9 @@
 
 /* Label for the search engine in the search screen */
 "Settings.searchLabel" = "Mesin Pencari";
+
+/* Label for the Search Suggestions toggle row */
+"Settings.searchSuggestions" = "Dapatkan Saran Pencarian";
 
 /* Title for the search selection screen */
 "Settings.searchTitle2" = "CARI";
@@ -352,6 +376,9 @@
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Face ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleFaceIDDescription" = "Face ID dapat membuka %@ jika URL telah terbuka di aplikasi";
 
+/* Show home screen tips toggle label on settings screen */
+"Settings.toggleHomeScreenTips" = "Tampilkan kiat beranda";
+
 /* Label subtitle for toggle on main screen */
 "Settings.toggleOtherSubtitle" = "Mungkin menghentikan beberapa video dan laman Web";
 
@@ -366,6 +393,9 @@
 
 /* %@ is the name of the app (Focus / Klar). Description for 'Enable Touch ID' displayed under its respective toggle in the settings menu. */
 "Settings.toggleTouchIDDescription" = "Touch ID dapat membuka %@ jika URL telah terbuka di aplikasi";
+
+/* URL for the learn more of the send usage data toggle */
+"Settings.usageData" = "data penggunaan";
 
 /* Title for What's new screen */
 "Settings.whatsNewTitle" = "Yang Baru";
@@ -387,6 +417,9 @@
 
 /* Text for the share menu option when a user wants to reload the site as a desktop */
 "ShareMenu.RequestDesktop" = "Minta Situs Desktop";
+
+/* Text for the share menu option when a user wants to reload the site as a mobile device */
+"ShareMenu.RequestMobile" = "Meminta Situs Seluler";
 
 /* Text for the share menu option when a user wants to open the current website in the Chrome app. */
 "ShareMenu.ShareOpenChrome" = "Buka di Chrome";
@@ -423,6 +456,9 @@
 
 /* Label for input to set a favorite URL to be opened by Siri. */
 "Siri.urlToOpen" = "URL untuk dibuka";
+
+/* Label displayed for button used as a shortcut to add a link to the list of URLs to autocomplete. */
+"URL.addToAutocompleteLabel" = "Tambahkan tautan untuk dilengkapi secara otomatis";
 
 /* Label for cancel button shown when entering a URL or search */
 "URL.cancelLabel" = "Batal";
@@ -516,6 +552,9 @@
 
 /* Title for the tracking settings page to change what trackers are blocked. */
 "trackingProtection.label" = "Perlindungan Pelacakan";
+
+/* Description/subtitle for the tracking protection label. */
+"trackingProtection.labelDescription" = "Menonaktifkan ini mungkin membantu memecahkan masalah beberapa situs";
 
 /* Text for the button to learn more about Tracking Protection. */
 "trackingProtection.learnMore" = "Pelajari Lebih Lanjut";
