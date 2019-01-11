@@ -132,7 +132,12 @@ class TranslationSettingsController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return !setting.translateOnOff ? 2 : (section == Section.translationOnOff.rawValue ? 1 : setting.list.count)
+        if section == 0 {
+            return 1
+        } else if section == 1 {
+            return setting.list.count
+        }
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
