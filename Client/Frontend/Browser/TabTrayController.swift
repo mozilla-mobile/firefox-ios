@@ -51,9 +51,9 @@ class TabTrayController: UIViewController {
 
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
-        toolbar.addTabButton.addTarget(self, action: #selector(openTab), for: .touchUpInside)
+        toolbar.addTabButton.addTarget(self, action: #selector(didTapToolbarAddTab), for: .touchUpInside)
         toolbar.maskButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
-        toolbar.deleteButton.addTarget(self, action: #selector(didTapDelete), for: .touchUpInside)
+        toolbar.deleteButton.addTarget(self, action: #selector(didTapToolbarDelete), for: .touchUpInside)
         return toolbar
     }()
 
@@ -352,7 +352,10 @@ class TabTrayController: UIViewController {
         return tabDisplayManager.isPrivate && tabManager.privateTabs.isEmpty
     }
 
-    @objc func openTab() {
+    @objc func didTapToolbarAddTab() {
+        if tabDisplayManager.isDragging {
+            return
+        }
         openNewTab()
     }
 
@@ -580,16 +583,21 @@ extension TabTrayController: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
         guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
-            self.removeTab(tab: tab)
+            self.removeByButtonOrSwipe(tab: tab, cell: tabCell)
             UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
         }
+    }
+
+    // Disable swipe delete while drag reordering
+    func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool {
+        return !tabDisplayManager.isDragging
     }
 }
 
 extension TabTrayController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.dataStore.at(indexPath.item) {
-            removeTab(tab: tab)
+            removeByButtonOrSwipe(tab: tab, cell: cell)
         }
     }
 }
@@ -667,14 +675,18 @@ extension TabTrayController: TabDisplayCompletionDelegate {
 }
 
 extension TabTrayController {
-    func removeTab(tab: Tab) {
+    func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
         tabDisplayManager.tabDisplayCompletionDelegate = self
-        tabManager.removeTabAndUpdateSelectedIndex(tab)
+        tabDisplayManager.closeActionPerformed(forCell: cell)
     }
 }
 
 extension TabTrayController {
-    @objc func didTapDelete(_ sender: UIButton) {
+    @objc func didTapToolbarDelete(_ sender: UIButton) {
+        if tabDisplayManager.isDragging {
+            return
+        }
+
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
         controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")

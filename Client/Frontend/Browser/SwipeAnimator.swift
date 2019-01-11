@@ -24,6 +24,7 @@ private let DefaultParameters =
 
 protocol SwipeAnimatorDelegate: AnyObject {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView)
+    func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool
 }
 
 class SwipeAnimator: NSObject {
@@ -70,6 +71,11 @@ extension SwipeAnimator {
 
     fileprivate func animateAwayWithVelocity(_ velocity: CGPoint, speed: CGFloat) {
         guard let animatingView = self.animatingView else {
+            return
+        }
+
+        if !(delegate?.swipeAnimatorIsAnimateAwayEnabled(self) ?? false) {
+            animateBackToCenter()
             return
         }
 

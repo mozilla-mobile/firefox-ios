@@ -98,7 +98,6 @@ class TopTabsViewController: UIViewController {
         tabDisplayManager.refreshStore(evenIfHidden: true)
     }
 
-
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
     }
@@ -227,7 +226,7 @@ extension TopTabsViewController: TabDisplayer {
 
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
-        tabDisplayManager.close(cell: cell)
+        tabDisplayManager.closeActionPerformed(forCell: cell)
     }
 }
 
