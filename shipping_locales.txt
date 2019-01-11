@@ -1,5 +1,6 @@
 af
 an
+anp
 ar
 ast
 az
@@ -8,6 +9,7 @@ bn
 br
 bs
 ca
+co
 cs
 cy
 da
@@ -39,6 +41,7 @@ id
 is
 it
 ja
+jv
 ka
 kab
 kk
@@ -70,6 +73,7 @@ si
 sk
 sl
 sq
+su
 sv-SE
 ta
 te
