@@ -1690,6 +1690,13 @@ extension BrowserViewController: TabDelegate {
     }
 
     func tab(_ tab: Tab, didAddSnackbar bar: SnackBar) {
+        // If the Tab that had a SnackBar added to it is not currently
+        // the selected Tab, do nothing right now. If/when the Tab gets
+        // selected later, we will show the SnackBar at that time.
+        guard tab == tabManager.selectedTab else {
+            return
+        }
+
         showBar(bar, animated: true)
     }
 
