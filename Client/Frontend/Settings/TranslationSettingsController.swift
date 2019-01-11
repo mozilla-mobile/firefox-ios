@@ -85,6 +85,8 @@ class TranslationSettingsController: ThemedTableViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             UIView.transition(with: self.tableView, duration: 0.2, options: .transitionCrossDissolve, animations: { self.tableView.reloadData()  })
         }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: "show-translation", extras: ["to": control.isOn ? "on" : "off"])
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
