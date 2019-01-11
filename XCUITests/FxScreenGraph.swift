@@ -751,10 +751,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.AcceptClearPrivateData) { userState in
             app.tables.cells["ClearPrivateData"].tap()
             app.alerts.buttons["OK"].tap()
-            //Tap on 'Clear Private Data' again so that we can verify if the 'OK' alert shows
-            //Adding timeout is required for test to work
-            app.tables.cells["ClearPrivateData"].waitForExistence(timeout: 3)
-            app.tables.cells["ClearPrivateData"].tap()
         }
         screenState.backAction = navigationControllerBackAction
     }
