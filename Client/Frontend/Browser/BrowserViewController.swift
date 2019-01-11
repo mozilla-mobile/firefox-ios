@@ -2124,13 +2124,15 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
             let saveImageTitle = NSLocalizedString("Save Image", comment: "Context menu item for saving an image")
             let saveImageAction = UIAlertAction(title: saveImageTitle, style: .default) { _ in
-                if photoAuthorizeStatus == .authorized || photoAuthorizeStatus == .notDetermined {
-                    self.getImageData(url as URL) { data in
+                let handlePhotoLibraryAuthorized = {
+                    self.getImageData(url) { data in
                         PHPhotoLibrary.shared().performChanges({
                             PHAssetCreationRequest.forAsset().addResource(with: .photo, data: data, options: nil)
                         })
                     }
-                } else {
+                }
+
+                let handlePhotoLibraryDenied = {
                     let accessDenied = UIAlertController(title: NSLocalizedString("Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7"), message: NSLocalizedString("This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7"), preferredStyle: .alert)
                     let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
                     accessDenied.addAction(dismissAction)
@@ -2139,6 +2141,21 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
                     accessDenied.addAction(settingsAction)
                     self.present(accessDenied, animated: true, completion: nil)
+                }
+
+                if photoAuthorizeStatus == .notDetermined {
+                    PHPhotoLibrary.requestAuthorization({ status in
+                        guard status == .authorized else {
+                            handlePhotoLibraryDenied()
+                            return
+                        }
+
+                        handlePhotoLibraryAuthorized()
+                    })
+                } else if photoAuthorizeStatus == .authorized {
+                    handlePhotoLibraryAuthorized()
+                } else {
+                    handlePhotoLibraryDenied()
                 }
             }
             actionSheetController.addAction(saveImageAction, accessibilityIdentifier: "linkContextMenu.saveImage")
