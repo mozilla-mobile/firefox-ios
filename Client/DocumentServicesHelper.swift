@@ -20,7 +20,7 @@ struct LanguageDetector: DocumentAnalyser {
         if let metadataLanguage = metadata.language {
             return metadataLanguage
         }
-        // Lets not use any language detection until we can pass more text then the webpage description.
+        // Lets not use any language detection until we can pass more text to the language detector
         return nil // https://bugzilla.mozilla.org/show_bug.cgi?id=1519503
         guard let text = metadata.description else { return nil }
         let language: String?
