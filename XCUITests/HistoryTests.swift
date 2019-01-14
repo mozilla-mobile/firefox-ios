@@ -55,6 +55,22 @@ class HistoryTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts[webpage["label"]!].exists)
     }
 
+    func testClearPrivateDataButtonDisabled() {
+        //Clear private data from settings and confirm
+        navigator.goto(ClearPrivateDataSettings)
+        app.tables.cells["ClearPrivateData"].tap()
+        app.alerts.buttons["OK"].tap()
+        
+        //Wait for OK pop-up to disappear after confirming
+        waitForNoExistence(app.alerts.buttons["OK"], timeoutValue:5)
+        
+        //Try to tap on the disabled Clear Private Data button
+        app.tables.cells["ClearPrivateData"].tap()
+        
+        //If the button is disabled, the confirmation pop-up should not exist
+        XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
+    }
+
     func testRecentlyClosedOptionAvailable() {
         navigator.goto(HistoryRecentlyClosed)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
