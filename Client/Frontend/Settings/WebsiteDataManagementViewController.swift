@@ -168,10 +168,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         }
 
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, for: [record]) {
-            self.siteRecords?.remove(at: indexPath.row)
-            self.tableView.reloadData()
-        }
+        WKWebsiteDataStore.default().removeData(ofTypes: types, for: [record]) {}
+
+        siteRecords?.remove(at: indexPath.row)
+        tableView.reloadData()
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -226,10 +226,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func clearWebsiteData(_ action: UIAlertAction) {
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) {
-            self.siteRecords = []
-            self.showMoreButtonEnabled = false
-            self.tableView.reloadData()
-        }
+        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) {}
+
+        siteRecords = []
+        showMoreButtonEnabled = false
+        tableView.reloadData()
     }
 }
