@@ -8,10 +8,7 @@ import Shared
 class TranslationSettingsController: ThemedTableViewController {
     struct UX {
         static var rowHeight: CGFloat = 70
-        static var moonSunIconSize: CGFloat = 18
         static var footerFontSize: CGFloat = 12
-        static var sliderLeftRightInset: CGFloat = 16
-        static var spaceBetweenTableSections: CGFloat = 20
     }
 
     enum Section: Int {
@@ -19,14 +16,7 @@ class TranslationSettingsController: ThemedTableViewController {
         case lightDarkPicker
     }
 
-    // A non-interactable slider is underlaid to show the current screen brightness indicator
-    private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
-
-    // TODO decide if this is themeable, or if it is being replaced by a different style of slider
-    private let deviceBrightnessIndicatorColor = UIColor(white: 182/255, alpha: 1.0)
-
     private let profile: Profile
-
     private let setting: TranslationServices
 
     init(_ profile: Profile) {
@@ -70,14 +60,6 @@ class TranslationSettingsController: ThemedTableViewController {
         return footer
     }
 
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        guard !setting.translateOnOff else {
-            return section == Section.translationOnOff.rawValue ? UX.spaceBetweenTableSections : 1
-        }
-        // When auto is on, make footer arbitrarily large enough to handle large block of text.
-        return 120
-    }
-
     @objc func switchValueChanged(control: UISwitch) {
         self.setting.translateOnOff = control.isOn
 
@@ -98,17 +80,23 @@ class TranslationSettingsController: ThemedTableViewController {
             if indexPath.row == 0 {
                 cell.textLabel?.text = Strings.SettingTranslateSnackBarSwitchTitle
                 cell.detailTextLabel?.text = Strings.SettingTranslateSnackBarSwitchSubtitle
-                cell.detailTextLabel?.numberOfLines = 2
+                cell.detailTextLabel?.numberOfLines = 4
                 cell.detailTextLabel?.minimumScaleFactor = 0.5
                 cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
 
                 let control = UISwitchThemed()
-
                 control.accessibilityIdentifier = "TranslateSwitchValue"
                 control.onTintColor = UIColor.theme.tableView.controlTint
                 control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
                 control.isOn = setting.translateOnOff
-                cell.accessoryView = control
+
+                // Add spacing between label and switch by wrapping the switch in a view.
+                cell.accessoryView = UIView(frame: CGRect(width: 64, height: 44))
+                cell.accessoryView?.addSubview(control)
+                control.snp.makeConstraints { make in
+                    make.centerY.equalToSuperview()
+                    make.right.equalToSuperview()
+                }
             }
 
         case .lightDarkPicker:
