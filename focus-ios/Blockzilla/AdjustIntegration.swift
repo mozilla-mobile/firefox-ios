@@ -33,7 +33,7 @@
     }
 
     class AdjustIntegration {
-        fileprivate static var adjustSettings: AdjustSettings?
+        private static var adjustSettings: AdjustSettings?
 
         public static func applicationDidFinishLaunching() {
             if let url = Bundle.main.url(forResource: AppInfo.config.adjustFile, withExtension: "plist"),

@@ -368,7 +368,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         scrollViewControllerDelegate?.scrollViewController(scrollViewController: self, didDismissSlideDeck: true)
     }
 
-    fileprivate func attributedStringForLabel(_ text: String) -> NSMutableAttributedString {
+    private func attributedStringForLabel(_ text: String) -> NSMutableAttributedString {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = IntroViewControllerUX.CardTextLineHeight
         paragraphStyle.alignment = .center

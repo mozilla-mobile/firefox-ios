@@ -29,11 +29,11 @@ class URLBar: UIView {
     let progressBar = GradientProgressBar(progressViewStyle: .bar)
     var inBrowsingMode: Bool = false
     var shouldPresent = false
-    fileprivate(set) var isEditing = false
+    private(set) var isEditing = false
 
     private let cancelButton = InsetButton()
-    fileprivate let deleteButton = InsetButton()
-    fileprivate let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
+    private let deleteButton = InsetButton()
+    private let domainCompletion = DomainCompletion(completionSources: [TopDomainsCompletionSource(), CustomCompletionSource()])
 
     private let toolset = BrowserToolset()
     private let urlText = URLTextField()
@@ -551,7 +551,7 @@ class URLBar: UIView {
 
     }
 
-    fileprivate func present() {
+    private func present() {
         guard !isEditing else { return }
 
         UIView.animate(withDuration: UIConstants.layout.urlBarTransitionAnimationDuration) {
@@ -722,7 +722,7 @@ class URLBar: UIView {
         delegate?.urlBarDidPressPageActions(self)
     }
 
-    fileprivate func setTextToURL(displayFullUrl: Bool = false) {
+    private func setTextToURL(displayFullUrl: Bool = false) {
         var fullUrl: String?
         var truncatedURL: String?
         var displayText: String?

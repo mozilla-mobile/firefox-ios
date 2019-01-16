@@ -278,7 +278,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
 
-    fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
+    private let tableView = UITableView(frame: .zero, style: .grouped)
 
     // Hold a strong reference to the block detector so it isn't deallocated
     // in the middle of its detection.
@@ -435,7 +435,7 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
         return .lightContent
     }
 
-    fileprivate func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
+    private func createBiometricLoginToggleIfAvailable() -> BlockerToggle? {
         guard biometryType.hasBiometry else { return nil }
 
         let label: String

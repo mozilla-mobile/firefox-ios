@@ -19,10 +19,10 @@ private let BaseDeviceRatio: CGFloat = 1.875
 class WaveView: UIView {
     var active = true
 
-    fileprivate let frontWaveView = SCSiriWaveformView()
-    fileprivate let backWaveView = SCSiriWaveformView()
-    fileprivate var waveLevel: CGFloat = 0
-    fileprivate var colorLerp: Float = 0
+    private let frontWaveView = SCSiriWaveformView()
+    private let backWaveView = SCSiriWaveformView()
+    private var waveLevel: CGFloat = 0
+    private var colorLerp: Float = 0
 
     init() {
         super.init(frame: CGRect.zero)

@@ -217,7 +217,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             "" as CFString) as String
     }
 
-    fileprivate func displaySplashAnimation() {
+    private func displaySplashAnimation() {
         let splashView = self.splashView
         splashView.backgroundColor = UIConstants.colors.background
         window!.addSubview(splashView)

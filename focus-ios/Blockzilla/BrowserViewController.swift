@@ -22,29 +22,29 @@ class BrowserViewController: UIViewController {
 
     var modalDelegate: ModalDelegate?
 
-    fileprivate var keyboardState: KeyboardState?
-    fileprivate let browserToolbar = BrowserToolbar()
-    fileprivate var homeView: HomeView?
-    fileprivate let overlayView = OverlayView()
-    fileprivate let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
-    fileprivate let urlBarContainer = URLBarContainer()
-    fileprivate var urlBar: URLBar!
-    fileprivate let requestHandler = RequestHandler()
-    fileprivate let searchSuggestClient = SearchSuggestClient()
-    fileprivate var findInPageBar: FindInPageBar?
-    fileprivate var fillerView: UIView?
-    fileprivate let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
+    private var keyboardState: KeyboardState?
+    private let browserToolbar = BrowserToolbar()
+    private var homeView: HomeView?
+    private let overlayView = OverlayView()
+    private let searchEngineManager = SearchEngineManager(prefs: UserDefaults.standard)
+    private let urlBarContainer = URLBarContainer()
+    private var urlBar: URLBar!
+    private let requestHandler = RequestHandler()
+    private let searchSuggestClient = SearchSuggestClient()
+    private var findInPageBar: FindInPageBar?
+    private var fillerView: UIView?
+    private let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
 
-    fileprivate var toolbarBottomConstraint: Constraint!
-    fileprivate var urlBarTopConstraint: Constraint!
-    fileprivate var homeViewBottomConstraint: Constraint!
-    fileprivate var browserBottomConstraint: Constraint!
-    fileprivate var lastScrollOffset = CGPoint.zero
-    fileprivate var lastScrollTranslation = CGPoint.zero
-    fileprivate var scrollBarOffsetAlpha: CGFloat = 0
-    fileprivate var scrollBarState: URLBarScrollState = .expanded
+    private var toolbarBottomConstraint: Constraint!
+    private var urlBarTopConstraint: Constraint!
+    private var homeViewBottomConstraint: Constraint!
+    private var browserBottomConstraint: Constraint!
+    private var lastScrollOffset = CGPoint.zero
+    private var lastScrollTranslation = CGPoint.zero
+    private var scrollBarOffsetAlpha: CGFloat = 0
+    private var scrollBarState: URLBarScrollState = .expanded
 
-    fileprivate enum URLBarScrollState {
+    private enum URLBarScrollState {
         case collapsed
         case expanded
         case transitioning
@@ -59,7 +59,7 @@ class BrowserViewController: UIViewController {
 
     private var homeViewContainer = UIView()
 
-    fileprivate var showsToolsetInURLBar = false {
+    private var showsToolsetInURLBar = false {
         didSet {
             if showsToolsetInURLBar {
                 browserBottomConstraint.deactivate()
@@ -520,7 +520,7 @@ class BrowserViewController: UIViewController {
         SKStoreReviewController.requestReview()
     }
 
-    fileprivate func showSettings(shouldScrollToSiri: Bool = false) {
+    private func showSettings(shouldScrollToSiri: Bool = false) {
         guard let modalDelegate = modalDelegate else { return }
 
         let settingsViewController = SettingsViewController(searchEngineManager: searchEngineManager, whatsNew: browserToolbar.toolset, shouldScrollToSiri: shouldScrollToSiri)
@@ -609,7 +609,7 @@ class BrowserViewController: UIViewController {
         })
     }
 
-    fileprivate func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {
+    private func presentImageActionSheet(title: String, link: String?, saveAction: @escaping () -> Void, copyAction: @escaping () -> Void) {
 
         var normalizedTitle = title
         if title.count > UIConstants.layout.truncateCharactersLimit {
@@ -749,7 +749,7 @@ extension BrowserViewController: FindInPageBarDelegate {
         updateFindInPageVisibility(visible: false)
     }
 
-    fileprivate func find(_ text: String, function: String) {
+    private func find(_ text: String, function: String) {
         let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
         webViewController.evaluate("__firefox__.\(function)(\"\(escaped)\")", completion: nil)
     }

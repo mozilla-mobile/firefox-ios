@@ -6,7 +6,7 @@ import Foundation
 import Telemetry
 
 class AutocompleteSettingViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
+    private let tableView = UITableView(frame: .zero, style: .grouped)
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)

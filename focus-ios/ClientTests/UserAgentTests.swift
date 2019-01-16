@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-
 import XCTest
 
 #if FOCUS
@@ -49,8 +48,8 @@ class UserAgentTests: XCTestCase {
     }
 }
 
-fileprivate class MockUserDefaults: UserDefaults {
-    var registerValue: [String : Any]?
+private class MockUserDefaults: UserDefaults {
+    var registerValue: [String: Any]?
 
     func clear() {
         removeObject(forKey: "LastFocusVersionNumber")
@@ -60,7 +59,7 @@ fileprivate class MockUserDefaults: UserDefaults {
         registerValue = nil
     }
 
-    override func register(defaults registrationDictionary: [String : Any]) {
+    override func register(defaults registrationDictionary: [String: Any]) {
         registerValue = registrationDictionary
     }
 }

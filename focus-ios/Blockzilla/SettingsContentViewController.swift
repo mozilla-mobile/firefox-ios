@@ -36,7 +36,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         }
     }
 
-    fileprivate var isError: Bool = false {
+    private var isError: Bool = false {
         didSet {
             if isError {
                 interstitialErrorView.isHidden = false
@@ -56,14 +56,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     }
 
     // The view shown while the content is loading in the background web view.
-    fileprivate var interstitialView: UIView!
-    fileprivate var interstitialSpinnerView: UIActivityIndicatorView!
-    fileprivate var interstitialErrorView: UILabel!
+    private var interstitialView: UIView!
+    private var interstitialSpinnerView: UIActivityIndicatorView!
+    private var interstitialErrorView: UILabel!
 
     // The web view that displays content.
     var webView: WKWebView!
 
-    fileprivate func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
+    private func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
         if self.isLoaded {
             return
         }
@@ -132,7 +132,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         return webView
     }
 
-    fileprivate func makeInterstitialViews() -> (UIView, UIActivityIndicatorView, UILabel) {
+    private func makeInterstitialViews() -> (UIView, UIActivityIndicatorView, UILabel) {
         let view = UIView()
 
         // Keeping the background constant prevents a pop of mismatched color.

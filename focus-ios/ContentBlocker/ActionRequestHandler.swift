@@ -25,7 +25,7 @@ class ActionRequestHandler: NSObject, NSExtensionRequestHandling {
     }
 
     /// Gets the dictionary form of the tracking list with the specified file name.
-    fileprivate func itemsFromFile(_ name: String) -> [NSDictionary] {
+    private func itemsFromFile(_ name: String) -> [NSDictionary] {
         let url = Bundle.main.url(forResource: name, withExtension: "json")
         let data = try! Data(contentsOf: url!)
         return try! JSONSerialization.jsonObject(with: data, options: []) as! [NSDictionary]

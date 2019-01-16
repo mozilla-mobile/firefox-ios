@@ -249,7 +249,7 @@ class OverlayView: UIView {
         }
     }
 
-    fileprivate func updateSearchButtons() {
+    private func updateSearchButtons() {
         for index in 0..<self.searchButtonGroup.count {
             let hasSuggestionInIndex = index < self.searchSuggestions.count
             self.searchButtonGroup[index].isHidden = !hasSuggestionInIndex
@@ -265,7 +265,7 @@ class OverlayView: UIView {
         }
     }
 
-    fileprivate func updateFindInPageConstraints(findInPageHidden: Bool, lastSearchButtonIndex: Int) {
+    private func updateFindInPageConstraints(findInPageHidden: Bool, lastSearchButtonIndex: Int) {
         findInPageButton.isHidden = findInPageHidden
 
         findInPageButton.snp.remakeConstraints { (make) in
@@ -281,7 +281,7 @@ class OverlayView: UIView {
         self.setAttributedButtonTitle(phrase: self.searchQuery, button: self.findInPageButton, localizedStringFormat: UIConstants.strings.findInPageButton)
     }
 
-    fileprivate func updateCopyConstraints(copyButtonHidden: Bool, findInPageHidden: Bool, lastSearchButtonIndex: Int) {
+    private func updateCopyConstraints(copyButtonHidden: Bool, findInPageHidden: Bool, lastSearchButtonIndex: Int) {
         copyButton.isHidden = copyButtonHidden
 
         if copyButtonHidden {

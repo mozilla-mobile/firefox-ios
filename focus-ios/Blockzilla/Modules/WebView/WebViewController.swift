@@ -73,7 +73,7 @@ class WebViewController: UIViewController, WebController {
         }
     }
 
-    fileprivate var trackingInformation = TPPageStats() {
+    private var trackingInformation = TPPageStats() {
         didSet {
             if case .on = trackingProtectionStatus {
                 trackingProtectionStatus = .on(trackingInformation)

@@ -10,9 +10,9 @@ private let LocalResources = ["rights-focus", "rights-klar", "licenses", "gpl"]
 class LocalWebServer {
     static let sharedInstance = LocalWebServer(port: 6573)
 
-    fileprivate let server = GCDWebServer()
-    fileprivate let port: UInt
-    fileprivate let base: String
+    private let server = GCDWebServer()
+    private let port: UInt
+    private let base: String
 
     init(port: UInt) {
         self.port = port

@@ -8,7 +8,7 @@ import UIKit
 import Telemetry
 
 class TrackingProtectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    fileprivate let tableView = UITableView(frame: .zero, style: .grouped)
+    private let tableView = UITableView(frame: .zero, style: .grouped)
 
     private let toggles = [
         BlockerToggle(label: UIConstants.strings.labelBlockAds, setting: SettingsToggle.blockAds, subtitle: UIConstants.strings.labelBlockAdsDescription),

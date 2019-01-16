@@ -8,9 +8,9 @@ import OnePasswordExtension
 
 class OpenUtils: NSObject {
     private let app = UIApplication.shared
-    fileprivate let selectedURL: URL
-    fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
-    fileprivate let webViewController: WebViewController
+    private let selectedURL: URL
+    private let browserFillIdentifier = "org.appextension.fill-browser-action"
+    private let webViewController: WebViewController
 
     init(url: URL, webViewController: WebViewController) {
         self.selectedURL = url

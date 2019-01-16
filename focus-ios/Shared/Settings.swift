@@ -20,9 +20,9 @@ enum SettingsToggle: String {
 }
 
 struct Settings {
-    fileprivate static let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+    private static let prefs = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
-    fileprivate static let customDomainSettingKey = "customDomains"
+    private static let customDomainSettingKey = "customDomains"
     private static let siriRequestsEraseKey = "siriRequestsErase"
 
     private static func defaultForToggle(_ toggle: SettingsToggle) -> Bool {

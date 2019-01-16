@@ -7,7 +7,7 @@ import UIKit
 
 class AboutViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, AboutHeaderViewDelegate {
 
-    fileprivate lazy var tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.dataSource = self
         tableView.delegate = self
@@ -21,7 +21,7 @@ class AboutViewController: UIViewController, UITableViewDataSource, UITableViewD
         return tableView
     }()
 
-    fileprivate let headerView = AboutHeaderView()
+    private let headerView = AboutHeaderView()
 
     override func viewDidLoad() {
         headerView.delegate = self

@@ -74,7 +74,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
         navigationItem.rightBarButtonItem?.isEnabled = tableView.isEditing || domains.count > 0
     }
 
-    @objc fileprivate func updateEmptyStateView() {
+    @objc private func updateEmptyStateView() {
         if tableView.isEditing && domains.isEmpty {
             tableView.backgroundView?.animateHidden(false, duration: 0.2)
         } else {

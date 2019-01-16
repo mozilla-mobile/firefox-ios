@@ -45,18 +45,18 @@ public struct PhotonActionSheetItem {
         case subtitle
     }
 
-    public fileprivate(set) var title: String
-    public fileprivate(set) var text: String?
-    public fileprivate(set) var textStyle: TextStyle
-    public fileprivate(set) var iconString: String?
-    public fileprivate(set) var iconURL: URL?
-    public fileprivate(set) var iconAlignment: IconAlignment
+    public private(set) var title: String
+    public private(set) var text: String?
+    public private(set) var textStyle: TextStyle
+    public private(set) var iconString: String?
+    public private(set) var iconURL: URL?
+    public private(set) var iconAlignment: IconAlignment
 
     public var isEnabled: Bool
-    public fileprivate(set) var accessory: PhotonActionSheetCellAccessoryType
-    public fileprivate(set) var accessoryText: String?
-    public fileprivate(set) var bold: Bool = false
-    public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
+    public private(set) var accessory: PhotonActionSheetCellAccessoryType
+    public private(set) var accessoryText: String?
+    public private(set) var bold: Bool = false
+    public private(set) var handler: ((PhotonActionSheetItem) -> Void)?
 
     init(title: String, text: String? = nil, textStyle: TextStyle = .normal, iconString: String? = nil, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
@@ -79,7 +79,7 @@ protocol PhotonActionSheetDelegate: class {
 
 class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate {
     weak var delegate: PhotonActionSheetDelegate?
-    fileprivate(set) var actions: [[PhotonActionSheetItem]]
+    private(set) var actions: [[PhotonActionSheetItem]]
 
     private var tintColor = UIConstants.Photon.Grey10
     private var heightConstraint: Constraint?
