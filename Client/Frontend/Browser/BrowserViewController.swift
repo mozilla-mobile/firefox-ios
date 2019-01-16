@@ -1745,13 +1745,8 @@ extension BrowserViewController: HomePanelDelegate {
         guard !topTabsVisible, !self.urlBar.inOverlayMode else {
             return
         }
-        // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-        let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
-            if buttonPressed {
-                self.tabManager.selectTab(tab)
-            }
-        })
-        self.show(toast: toast)
+        
+        self.checkIfOpenInBackground(tab: tab)
     }
 }
 
@@ -2079,13 +2074,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     guard !self.topTabsVisible else {
                         return
                     }
-                    // We're not showing the top tabs; show a toast to quick switch to the fresh new tab.
-                    let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
-                        if buttonPressed {
-                            self.tabManager.selectTab(tab)
-                        }
-                    })
-                    self.show(toast: toast)
+                    self.checkIfOpenInBackground(tab: tab)
             }
 
             if !isPrivate {
@@ -2223,6 +2212,26 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
         displayedPopoverController?.dismiss(animated: true) {
             self.displayedPopoverController = nil
+        }
+    }
+}
+
+extension BrowserViewController {
+    func checkIfOpenInBackground(tab: Tab) {
+        // Depending on user preference, new tab to be opened in background or be switched to immediately
+        // Default is to open in foreground
+        let openInBackground = self.profile.prefs.boolForKey("setting.newTabInBackground") ?? false
+        if openInBackground {
+            // Show the toast if to be opened in background?
+            let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
+                if buttonPressed {
+                    self.tabManager.selectTab(tab)
+                }
+            })
+            self.show(toast: toast)
+        } else {
+            // Consider animations here instead of plain switching to the new tab
+            self.tabManager.selectTab(tab)
         }
     }
 }
