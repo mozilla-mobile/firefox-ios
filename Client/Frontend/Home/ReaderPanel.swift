@@ -182,8 +182,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
         return UILongPressGestureRecognizer(target: self, action: #selector(longPress))
     }()
 
-    fileprivate lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverview()
-
     fileprivate var records: [ReadingListItem]?
 
     init(profile: Profile) {
@@ -227,10 +225,6 @@ class ReadingListPanel: UITableViewController, HomePanel {
             refreshReadingList()
             break
         case .DynamicFontChanged:
-            if emptyStateOverlayView.superview != nil {
-                emptyStateOverlayView.removeFromSuperview()
-            }
-            emptyStateOverlayView = createEmptyStateOverview()
             refreshReadingList()
             break
         default:
@@ -242,19 +236,17 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     func refreshReadingList() {
         let prevNumberOfRecords = records?.count
+        tableView.tableHeaderView = nil
 
         if let newRecords = profile.readingList.getAvailableRecords().value.successValue {
             records = newRecords
 
             if records?.count == 0 {
                 tableView.isScrollEnabled = false
-                if emptyStateOverlayView.superview == nil {
-                    view.addSubview(emptyStateOverlayView)
-                }
+                tableView.tableHeaderView = createEmptyStateOverview()
             } else {
                 if prevNumberOfRecords == 0 {
                     tableView.isScrollEnabled = true
-                    emptyStateOverlayView.removeFromSuperview()
                 }
             }
             self.tableView.reloadData()
@@ -262,30 +254,22 @@ class ReadingListPanel: UITableViewController, HomePanel {
     }
 
     fileprivate func createEmptyStateOverview() -> UIView {
-        let overlayView = UIScrollView(frame: tableView.bounds)
-        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        // Unknown why this does not work with autolayout
-        overlayView.autoresizingMask = [UIViewAutoresizing.flexibleHeight, UIViewAutoresizing.flexibleWidth]
-
-        let containerView = UIView()
-        overlayView.addSubview(containerView)
+        let overlayView = UIView(frame: tableView.bounds)
 
         let welcomeLabel = UILabel()
-        containerView.addSubview(welcomeLabel)
+        overlayView.addSubview(welcomeLabel)
         welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         welcomeLabel.adjustsFontSizeToFitWidth = true
         welcomeLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(containerView)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset(50)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
-            make.top.equalTo(containerView)
-            // Sets proper center constraint for iPhones in landscape.
-            make.centerY.lessThanOrEqualTo(overlayView.snp.centerY).offset(-40).priority(1000)
         }
 
         let readerModeLabel = UILabel()
-        containerView.addSubview(readerModeLabel)
+        overlayView.addSubview(readerModeLabel)
         readerModeLabel.text = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
         readerModeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         readerModeLabel.numberOfLines = 0
@@ -296,14 +280,14 @@ class ReadingListPanel: UITableViewController, HomePanel {
         }
 
         let readerModeImageView = UIImageView(image: UIImage(named: "ReaderModeCircle"))
-        containerView.addSubview(readerModeImageView)
+        overlayView.addSubview(readerModeImageView)
         readerModeImageView.snp.makeConstraints { make in
             make.centerY.equalTo(readerModeLabel)
             make.trailing.equalTo(welcomeLabel.snp.trailing)
         }
 
         let readingListLabel = UILabel()
-        containerView.addSubview(readingListLabel)
+        overlayView.addSubview(readingListLabel)
         readingListLabel.text = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
         readingListLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         readingListLabel.numberOfLines = 0
@@ -311,23 +295,14 @@ class ReadingListPanel: UITableViewController, HomePanel {
             make.top.equalTo(readerModeLabel.snp.bottom).offset(ReadingListPanelUX.WelcomeScreenPadding)
             make.leading.equalTo(welcomeLabel.snp.leading)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth)
-            make.bottom.equalTo(overlayView).offset(-20) // making AutoLayout compute the overlayView's contentSize
+
         }
 
         let readingListImageView = UIImageView(image: UIImage(named: "AddToReadingListCircle"))
-        containerView.addSubview(readingListImageView)
+        overlayView.addSubview(readingListImageView)
         readingListImageView.snp.makeConstraints { make in
             make.centerY.equalTo(readingListLabel)
             make.trailing.equalTo(welcomeLabel.snp.trailing)
-        }
-
-        containerView.snp.makeConstraints { make in
-            // Let the container wrap around the content
-            make.left.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenItemOffset)
-            make.right.equalTo(welcomeLabel).offset(ReadingListPanelUX.WelcomeScreenCircleOffset)
-
-            // And then center it in the overlay view that sits on top of the UITableView
-            make.centerX.equalTo(overlayView)
         }
 
         [welcomeLabel, readerModeLabel, readingListLabel].forEach {
@@ -405,7 +380,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
                 tableView.deleteRows(at: [indexPath], with: .automatic)
                 // reshow empty state if no records left
                 if records?.count == 0 {
-                    view.addSubview(emptyStateOverlayView)
+                    refreshReadingList()
                 }
             }
         }
@@ -468,9 +443,6 @@ extension ReadingListPanel: Themeable {
     func applyTheme() {
         tableView.separatorColor = UIColor.theme.tableView.separator
         view.backgroundColor = UIColor.theme.tableView.rowBackground
-
-        emptyStateOverlayView.removeFromSuperview()
-        emptyStateOverlayView = createEmptyStateOverview()
 
         refreshReadingList()
     }
