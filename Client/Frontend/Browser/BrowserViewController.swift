@@ -1746,7 +1746,7 @@ extension BrowserViewController: HomePanelDelegate {
             return
         }
         
-        self.checkIfOpenInBackground(tab: tab)
+        self.checkIfSwitchTabImmediately(tab: tab)
     }
 }
 
@@ -2074,7 +2074,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     guard !self.topTabsVisible else {
                         return
                     }
-                    self.checkIfOpenInBackground(tab: tab)
+                    self.checkIfSwitchTabImmediately(tab: tab)
             }
 
             if !isPrivate {
@@ -2217,11 +2217,14 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 }
 
 extension BrowserViewController {
-    func checkIfOpenInBackground(tab: Tab) {
+    func checkIfSwitchTabImmediately(tab: Tab) {
         // Depending on user preference, new tab to be opened in background or be switched to immediately
         // Default is to open in foreground
-        let openInBackground = self.profile.prefs.boolForKey("setting.newTabInBackground") ?? false
-        if openInBackground {
+        let switchToNewTabImmediately = self.profile.prefs.boolForKey("setting.switchToNewTabImmediately") ?? true
+        if switchToNewTabImmediately {
+            // Consider animations here instead of plain switching to the new tab
+            self.tabManager.selectTab(tab)
+        } else {
             // Show the toast if to be opened in background?
             let toast = ButtonToast(labelText: Strings.ContextMenuButtonToastNewTabOpenedLabelText, buttonText: Strings.ContextMenuButtonToastNewTabOpenedButtonText, completion: { buttonPressed in
                 if buttonPressed {
@@ -2229,9 +2232,6 @@ extension BrowserViewController {
                 }
             })
             self.show(toast: toast)
-        } else {
-            // Consider animations here instead of plain switching to the new tab
-            self.tabManager.selectTab(tab)
         }
     }
 }

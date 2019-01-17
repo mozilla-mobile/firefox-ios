@@ -58,11 +58,8 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         showWebPage.textField.textAlignment = .natural
 
         let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showBlankPage, showBookmarks, showHistory, showWebPage])
-
-        let newTabInBackgroundSetting = BoolSetting(prefs: profile.prefs, prefKey: "setting.newTabInBackground", defaultValue: false, attributedTitleText: NSAttributedString(string: "Open in Background"))
-        let newTabInBackgroundSection = SettingSection(title: nil, footerTitle: NSAttributedString(string: "Choose to open new tab in background"), children: [newTabInBackgroundSetting])
         
-        return [section, newTabInBackgroundSection]
+        return [section]
     }
 
     override func viewDidDisappear(_ animated: Bool) {
