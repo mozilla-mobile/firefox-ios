@@ -242,6 +242,9 @@
                   Identifier = "FirstRunTourTests/testFirstRunTour()">
                </Test>
                <Test
+                  Identifier = "HistoryTests/testClearPrivateDataButtonDisabled()">
+               </Test>
+               <Test
                   Identifier = "HomePageSettingsTest">
                </Test>
                <Test
