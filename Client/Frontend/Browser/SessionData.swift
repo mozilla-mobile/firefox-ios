@@ -9,7 +9,8 @@ import Shared
 private func migrate(urls: [URL]) -> [URL] {
     return urls.compactMap { url in
         var url = url
-        [("http://localhost:6571/errors/error.html?url=", "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=")
+        let port = AppInfo.webserverPort
+        [("http://localhost:\(port)/errors/error.html?url=", "\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)?url=")
             // TODO: handle reader pages ("http://localhost:6571/reader-mode/page?url=", "\(InternalScheme.url)/\(ReaderModeHandler.path)?url=")
             ].forEach {
             oldItem, newItem in

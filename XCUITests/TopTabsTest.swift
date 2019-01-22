@@ -7,12 +7,12 @@ import XCTest
 let url = "www.mozilla.org"
 let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
-let urlValueLong = "localhost:6571/test-fixture/test-mozilla-org.html"
+let urlValueLong = "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
 
 let urlExample = path(forTestPage: "test-example.html")
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
-let urlValueLongExample = "localhost:6571/test-fixture/test-example.html"
+let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.html"
 
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
