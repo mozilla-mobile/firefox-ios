@@ -84,7 +84,6 @@
 		D0967A811EC50002009D937F /* TelemetryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0967A801EC50002009D937F /* TelemetryIntegration.swift */; };
 		D30179071BC6CB19009AD388 /* BlockerEnabledDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */; };
 		D30179C31BCC6F65009AD388 /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30179C21BCC6F65009AD388 /* AboutViewController.swift */; };
-		D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */ = {isa = PBXBuildFile; fileRef = D30179C71BCD78E2009AD388 /* SCSiriWaveformView.m */; };
 		D30AEEBB1DE4CB1B0096A2E7 /* FileManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */; };
 		D30DF93E1DC1634F0064736C /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D30DF93D1DC1634F0064736C /* Toast.swift */; };
 		D32817221BD0689800185845 /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = D328171E1BD0689800185845 /* disconnect-advertising.json */; };
@@ -109,7 +108,6 @@
 		D362D2AB1C4EAF940041980A /* rights-focus.html in Resources */ = {isa = PBXBuildFile; fileRef = D362D2AA1C4EAF940041980A /* rights-focus.html */; };
 		D364DC261DC4163700562991 /* BrowserToolset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D364DC251DC4163700562991 /* BrowserToolset.swift */; };
 		D36C1BAA1DB02EBB0073C1AB /* OpenUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */; };
-		D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE55C1BCDBD6100906364 /* WaveView.swift */; };
 		D38D693D1C471A98003EF211 /* GCDWebServers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38D693B1C471A98003EF211 /* GCDWebServers.framework */; };
 		D38D693E1C471A98003EF211 /* SnapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D38D693C1C471A98003EF211 /* SnapKit.framework */; };
 		D38EDB961DCA8A9400E28196 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */; };
@@ -577,8 +575,6 @@
 		D30179061BC6CB19009AD388 /* BlockerEnabledDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockerEnabledDetector.swift; sourceTree = "<group>"; };
 		D30179C21BCC6F65009AD388 /* AboutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		D30179C51BCD78E1009AD388 /* Blockzilla-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Blockzilla-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
-		D30179C61BCD78E2009AD388 /* SCSiriWaveformView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SCSiriWaveformView.h; path = SCSiriWaveformView/SCSiriWaveformView/SCSiriWaveformView.h; sourceTree = "<group>"; };
-		D30179C71BCD78E2009AD388 /* SCSiriWaveformView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SCSiriWaveformView.m; path = SCSiriWaveformView/SCSiriWaveformView/SCSiriWaveformView.m; sourceTree = "<group>"; };
 		D30AEEBA1DE4CB1B0096A2E7 /* FileManagerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileManagerExtensions.swift; sourceTree = "<group>"; };
 		D30DF93D1DC1634F0064736C /* Toast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D328171E1BD0689800185845 /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "disconnect-advertising.json"; path = "Lists/disconnect-advertising.json"; sourceTree = SOURCE_ROOT; };
@@ -603,7 +599,6 @@
 		D362D2AA1C4EAF940041980A /* rights-focus.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "rights-focus.html"; sourceTree = "<group>"; };
 		D364DC251DC4163700562991 /* BrowserToolset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserToolset.swift; sourceTree = "<group>"; };
 		D36C1BA91DB02EBB0073C1AB /* OpenUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenUtils.swift; sourceTree = "<group>"; };
-		D37DE55C1BCDBD6100906364 /* WaveView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 		D38D693B1C471A98003EF211 /* GCDWebServers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServers.framework; path = Carthage/Build/iOS/GCDWebServers.framework; sourceTree = "<group>"; };
 		D38D693C1C471A98003EF211 /* SnapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SnapKit.framework; path = Carthage/Build/iOS/SnapKit.framework; sourceTree = "<group>"; };
 		D38EDB951DCA8A9400E28196 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -1109,23 +1104,6 @@
 			path = DomainCompletion;
 			sourceTree = "<group>";
 		};
-		D30179C41BCD78BF009AD388 /* SCSiriWaveformView */ = {
-			isa = PBXGroup;
-			children = (
-				D30179C61BCD78E2009AD388 /* SCSiriWaveformView.h */,
-				D30179C71BCD78E2009AD388 /* SCSiriWaveformView.m */,
-			);
-			name = SCSiriWaveformView;
-			sourceTree = "<group>";
-		};
-		D30179D31BCDA5EE009AD388 /* ThirdParty */ = {
-			isa = PBXGroup;
-			children = (
-				D30179C41BCD78BF009AD388 /* SCSiriWaveformView */,
-			);
-			name = ThirdParty;
-			sourceTree = "<group>";
-		};
 		D33A1A391BC476D40003D929 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
@@ -1245,7 +1223,6 @@
 				D77FE464056F274978E025ED /* Frameworks */,
 				E4BF2DD41BACE8CA00DA9D68 /* Products */,
 				D33A1A391BC476D40003D929 /* Shared */,
-				D30179D31BCDA5EE009AD388 /* ThirdParty */,
 				0BA39A841DD2B8E4005F970A /* XCUITest */,
 				E44A34681E0A18C100BFD777 /* SnapshotTests */,
 			);
@@ -1342,7 +1319,6 @@
 				D3E2C9601DA2F7C600DEBE3D /* URLBar.swift */,
 				D3426B021DBAE3800016DA5A /* URLBarContainer.swift */,
 				E40AFB0F1DC9014700DA5651 /* UserAgent.swift */,
-				D37DE55C1BCDBD6100906364 /* WaveView.swift */,
 				F805722E1DBEE504004339C1 /* WebCacheUtils.swift */,
 				D3426AEE1DB846BB0016DA5A /* topdomains.txt */,
 				E4BF2DDD1BACE8CA00DA9D68 /* Assets.xcassets */,
@@ -1902,7 +1878,6 @@
 				D3E251FB1DAF0668005918DC /* AppInfo.swift in Sources */,
 				31421EB12176492A0015F48B /* TitleActivityItemProvider.swift in Sources */,
 				E4BF2E111BAD8AC500DA9D68 /* Settings.swift in Sources */,
-				D30179C81BCD78E2009AD388 /* SCSiriWaveformView.m in Sources */,
 				D3E54FDE1DF0E0D7003E1AFF /* UIImageExtensions.swift in Sources */,
 				16D716A5211503CD000C8A66 /* PageActionSheetItems.swift in Sources */,
 				D597608C1F9FEFB300A2D212 /* TrackingProtection.swift in Sources */,
@@ -1933,7 +1908,6 @@
 				B3481A551FCF261900CA2EA6 /* AutocompleteCustomUrlViewController.swift in Sources */,
 				161D90312108085F00C2A74A /* HomeViewToolbar.swift in Sources */,
 				EBE44F4E20ADDF6A005AFEA6 /* SmartLabel.swift in Sources */,
-				D37DE55D1BCDBD6100906364 /* WaveView.swift in Sources */,
 				E4BF2DD71BACE8CA00DA9D68 /* AppDelegate.swift in Sources */,
 				D3E2C9691DA3024800DEBE3D /* InsetButton.swift in Sources */,
 				F7FF8B5B2194084000CCA80F /* UIDeviceExtensions.swift in Sources */,

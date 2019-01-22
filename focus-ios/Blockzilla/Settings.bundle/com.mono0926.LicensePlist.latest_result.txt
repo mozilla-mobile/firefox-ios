@@ -1,7 +1,5 @@
 name: focus-ios, nameSpecified: Firefox Focus, owner: mozilla-mobile, version: 
 
-name: SCSiriWaveformView, nameSpecified: , owner: stefanceriu, version: 
-
 name: onepassword-extension, nameSpecified: , owner: AgileBits, version: 04f146a
 
 name: SnapKit, nameSpecified: , owner: SnapKit, version: 4.0.0

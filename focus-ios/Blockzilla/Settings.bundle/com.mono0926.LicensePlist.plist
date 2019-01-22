@@ -54,14 +54,6 @@
 		</dict>
 		<dict>
 			<key>File</key>
-			<string>com.mono0926.LicensePlist/SCSiriWaveformView</string>
-			<key>Title</key>
-			<string>SCSiriWaveformView</string>
-			<key>Type</key>
-			<string>PSChildPaneSpecifier</string>
-		</dict>
-		<dict>
-			<key>File</key>
 			<string>com.mono0926.LicensePlist/sentry-cocoa</string>
 			<key>Title</key>
 			<string>Sentry</string>
