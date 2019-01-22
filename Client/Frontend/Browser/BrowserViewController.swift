@@ -665,7 +665,7 @@ class BrowserViewController: UIViewController {
                 make.bottom.lessThanOrEqualTo(toolbar.snp.top)
                 make.bottom.lessThanOrEqualTo(self.view.safeArea.bottom)
             } else {
-                make.bottom.equalTo(self.view)
+                make.bottom.equalTo(self.view.safeArea.bottom)
             }
         }
     }
