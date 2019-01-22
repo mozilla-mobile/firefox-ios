@@ -243,6 +243,14 @@ extension Strings {
     public static let ShowPreviousTabTitle = NSLocalizedString("Hotkeys.ShowPreviousTab.DiscoveryTitle", value: "Show Previous Tab", comment: "Label to display in the Discoverability overlay for keyboard shortcuts")
 }
 
+// Tab settings strings
+extension Strings {
+    public static let SettingsTabsTitle = NSLocalizedString("Settings.Tabs.Title", value: "Tabs", comment: "Title displayed in header of the setting panel.")
+    public static let SettingsTabsImmediateSwitchTitle = NSLocalizedString("Settings.Tabs.ImmediateSwitch.Title", value: "When opening link in a new tab", comment: "Option title for immediate switch to opened tab.")
+    public static let SettingsTabsImmediateSwitch = NSLocalizedString("Settings.Tabs.ImmediateSwitch", value: "Switch to it immediately", comment: "Option for immediate switch to opened tab.")
+
+}
+
 // New tab choice settings
 extension Strings {
     public static let CustomNewPageURL = NSLocalizedString("Settings.NewTab.CustomURL", value: "Custom URL", comment: "Label used to set a custom url as the new tab option (homepage).")
