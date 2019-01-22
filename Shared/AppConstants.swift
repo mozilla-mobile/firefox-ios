@@ -144,7 +144,7 @@ public struct AppConstants {
     ///  Toggle use of Document Services — initially language detection.
     public static let MOZ_DOCUMENT_SERVICES: Bool = {
         #if MOZ_CHANNEL_RELEASE
-        return false
+        return true
         #elseif MOZ_CHANNEL_BETA
         return true
         #elseif MOZ_CHANNEL_FENNEC
