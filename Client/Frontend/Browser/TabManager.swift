@@ -587,7 +587,7 @@ extension TabManager {
         }
 
         var tabToSelect = store.restoreStartupTabs(clearPrivateTabs: shouldClearPrivateTabs(), tabManager: self)
-        let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "isPrivate")
+        let wasLastSessionPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
         if wasLastSessionPrivate, !(tabToSelect?.isPrivate ?? false) {
             tabToSelect = addTab(isPrivate: true)
         }

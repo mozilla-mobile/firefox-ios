@@ -122,7 +122,7 @@ class TabDisplayManager: NSObject {
         guard isPrivate != isOn else { return }
 
         isPrivate = isOn
-        UserDefaults.standard.set(isPrivate, forKey: "isPrivate")
+        UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
         searchedTabs = nil
         refreshStore()
