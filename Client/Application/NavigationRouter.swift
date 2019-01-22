@@ -86,7 +86,9 @@ enum NavigationPath {
             self = .fxa(params: FxALaunchParams(query: url.getQuery()))
         } else if urlString.starts(with: "\(scheme)://open-url") {
             let url = components.valueForQuery("url")?.asURL
-            let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? false
+            // Unless the `open-url` URL specifies a `private` parameter,
+            // use the last browsing mode the user was in.
+            let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
