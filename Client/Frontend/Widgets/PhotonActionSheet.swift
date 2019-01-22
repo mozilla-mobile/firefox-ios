@@ -759,19 +759,20 @@ private class PhotonActionSheetCell: UITableViewCell {
             stackView.addArrangedSubview(toggleSwitch.mainView)
         case .Sync:
             if let manager = syncManager {
+                let padding = PhotonActionSheetCell.Padding
                 if syncButton == nil {
                     let button = SyncMenuButton(with: manager)
                     stackView.addArrangedSubview(button)
                     syncButton = button
-                    syncButton?.contentHorizontalAlignment = .right
+                    syncButton?.contentHorizontalAlignment = .center
                     syncButton?.snp.makeConstraints { make in
-                        make.size.equalTo(40)
+                        make.width.equalTo(40 + padding)
+                        make.height.equalTo(40)
                     }
                 }
                 syncButton?.updateAnimations()
-                let padding = PhotonActionSheetCell.Padding
                 stackView.snp.remakeConstraints { make in
-                    make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: padding))
+                    make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0))
                 }
             }
         default:
