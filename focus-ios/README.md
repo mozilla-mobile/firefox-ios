@@ -49,8 +49,3 @@ Build Instructions for Master
 
 6. Open `Blockzilla.xcodeproj` in Xcode.
 7. Build the `Focus` scheme in Xcode.
-
-Upcoming Release (Version 8.0)
-------------------
-
-Features planned for the next release can be found in the [V8.0 milestone](https://github.com/mozilla-mobile/focus-ios/milestone/29). 
