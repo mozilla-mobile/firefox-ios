@@ -326,7 +326,7 @@ class BrowserViewController: UIViewController {
         urlBar.delegate = self
         urlBar.toolsetDelegate = self
         urlBar.shrinkFromView = urlBarContainer
-        urlBar.showToolset = showsToolsetInURLBar
+        urlBar.shouldShowToolset = showsToolsetInURLBar
         mainContainerView.insertSubview(urlBar, aboveSubview: urlBarContainer)
 
         urlBar.snp.makeConstraints { make in
@@ -597,7 +597,7 @@ class BrowserViewController: UIViewController {
         browserToolbar.updateConstraints()
 
         coordinator.animate(alongsideTransition: { _ in
-            self.urlBar.showToolset = self.showsToolsetInURLBar
+            self.urlBar.shouldShowToolset = self.showsToolsetInURLBar
 
             if self.homeView == nil && self.scrollBarState != .expanded {
                 self.hideToolbars()
@@ -876,9 +876,7 @@ extension BrowserViewController: URLBarDelegate {
             self.urlBarContainer.alpha = 1
             self.updateFindInPageVisibility(visible: false)
             self.view.layoutIfNeeded()
-        }) { (_) in
-            self.urlBar.displayClearButton(shouldDisplay: true)
-        }
+        })
     }
 
     func urlBarDidDeactivate(_ urlBar: URLBar) {
