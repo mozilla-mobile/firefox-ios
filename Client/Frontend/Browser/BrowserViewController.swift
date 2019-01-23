@@ -1885,8 +1885,12 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateInContentHomePanel(selected?.url as URL?)
-        if let tab = selected, tab.url == nil, !tab.restoring, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
-            self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+        if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+            if tab.url == nil, !tab.restoring {
+                urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+            } else {
+                urlBar.leaveOverlayMode()
+            }
         }
     }
 
