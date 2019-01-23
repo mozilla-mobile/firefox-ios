@@ -6,7 +6,7 @@ import XCTest
 
 let webpage = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
 // This is part of the info the user will see in recent closed tabs once the default visited website (https://www.mozilla.org/en-US/book/) is closed
-let closedWebPageLabel = "localhost:6571/test-fixture/test-mozilla-book.html"
+let closedWebPageLabel = "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"
 
 class HistoryTests: BaseTestCase {
     let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings"]

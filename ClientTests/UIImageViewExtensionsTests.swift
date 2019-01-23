@@ -42,7 +42,7 @@ class UIImageViewExtensionsTests: XCTestCase {
         }
 
         let favImageView = UIImageView()
-        favImageView.setIcon(Favicon(url: "http://localhost:6571/favicon/icon"), forURL: URL(string: "http://localhost:6571"))
+        favImageView.setIcon(Favicon(url: "http://localhost:\(AppInfo.webserverPort)/favicon/icon"), forURL: URL(string: "http://localhost:\(AppInfo.webserverPort)"))
 
         let expect = expectation(description: "UIImageView async load")
         let time = Int64(2 * Double(NSEC_PER_SEC))

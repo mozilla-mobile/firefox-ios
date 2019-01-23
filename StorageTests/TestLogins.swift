@@ -361,9 +361,7 @@ class TestSQLiteLoginsPerf: XCTestCase {
 
         // Measure time to find all matching results
         self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
-            for _ in 0...5 {
-                self.logins.searchLoginsWithQuery("username").succeeded()
-            }
+            self.logins.searchLoginsWithQuery("username").succeeded()
             self.stopMeasuring()
         }
 

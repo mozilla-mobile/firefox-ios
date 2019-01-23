@@ -4,7 +4,7 @@
 
 import XCTest
 
-let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost", "longValue": "localhost:6571/test-fixture/test-mozilla-org.html"]
+let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost", "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"]
 let website2 = path(forTestPage: "test-example.html")
 
 let PDFWebsite = ["url": "http://www.pdf995.com/samples/pdf.pdf"]
@@ -46,7 +46,7 @@ class ToolbarTests: BaseTestCase {
 
         navigator.openURL(website2)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "localhost:6571")
+        waitForValueContains(app.textFields["url"], value: "localhost:\(serverPort)")
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
 

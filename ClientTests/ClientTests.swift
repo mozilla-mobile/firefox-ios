@@ -60,7 +60,7 @@ class ClientTests: XCTestCase {
 
     fileprivate func hostIsValid(_ host: String) -> Bool {
         let expectation = self.expectation(description: "Validate host for \(host)")
-        let request = URLRequest(url: URL(string: "http://\(host):6571/about/license")!)
+        let request = URLRequest(url: URL(string: "http://\(host):\(AppInfo.webserverPort)/about/license")!)
         var response: HTTPURLResponse?
         Alamofire.request(request).authenticate(usingCredential: WebServer.sharedInstance.credentials).response { (res) -> Void in
             response = res.response

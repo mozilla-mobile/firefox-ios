@@ -36,7 +36,7 @@ class WebServer {
     @discardableResult func start() throws -> Bool {
         if !server.isRunning {
             try server.start(options: [
-                GCDWebServerOption_Port: 6571,
+                GCDWebServerOption_Port: AppInfo.webserverPort,
                 GCDWebServerOption_BindToLocalhost: true,
                 GCDWebServerOption_AutomaticallySuspendInBackground: true,
                 GCDWebServerOption_AuthenticationMethod: GCDWebServerAuthenticationMethod_Basic,

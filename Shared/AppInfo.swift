@@ -83,4 +83,7 @@ open class AppInfo {
     public static var isApplication: Bool {
         return Bundle.main.object(forInfoDictionaryKey: "CFBundlePackageType") as! String == "APPL"
     }
+
+    // The port for the internal webserver, tests can change this
+    public static var webserverPort = 6571
 }
