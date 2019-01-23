@@ -20,13 +20,13 @@ open class GradientProgressBar: UIProgressView {
         static let backgroundColor = UIColor.clear
 
         static let gradientColors = [
-            UIColor(rgb: 0xFF1AD9).cgColor,
-            UIColor(rgb: 0x9400FF).cgColor,
-            UIColor(rgb: 0xFF1AD9).cgColor,
-            UIColor(rgb: 0x9400FF).cgColor,
-            UIColor(rgb: 0xFF1AD9).cgColor,
-            UIColor(rgb: 0x9400FF).cgColor,
-            UIColor(rgb: 0xFF1AD9).cgColor
+            UIConstants.Photon.Magenta50.cgColor,
+            UIConstants.Photon.Purple50.cgColor,
+            UIConstants.Photon.Magenta50.cgColor,
+            UIConstants.Photon.Purple50.cgColor,
+            UIConstants.Photon.Magenta50.cgColor,
+            UIConstants.Photon.Purple50.cgColor,
+            UIConstants.Photon.Magenta50.cgColor
         ]
 
         static let animationDuration = 0.2 // CALayer default animation duration
