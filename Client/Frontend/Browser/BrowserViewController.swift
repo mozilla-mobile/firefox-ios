@@ -1160,7 +1160,8 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
 
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
-        self.openURLInNewTab(url, isPrivileged: false)
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: false)
     }
 }
 
