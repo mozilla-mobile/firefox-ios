@@ -88,19 +88,16 @@ class SearchEngine: NSObject, NSCoding {
     private static func generateImage(name: String) -> UIImage {
         let faviconLetter = name.uppercased()[name.startIndex]
 
-        var faviconImage = UIImage()
-
         let faviconLabel = SmartLabel(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         faviconLabel.backgroundColor = UIConstants.Photon.Purple80
         faviconLabel.text = String(faviconLetter)
         faviconLabel.textAlignment = .center
         faviconLabel.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.medium)
         faviconLabel.textColor = UIColor.white
-        UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
-        faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
-        faviconImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
+        let imageRenderer = UIGraphicsImageRenderer(size: faviconLabel.bounds.size)
 
-        return faviconImage
+        return imageRenderer.image(actions: { (context) in
+            faviconLabel.layer.render(in: context.cgContext)
+        })
     }
 }

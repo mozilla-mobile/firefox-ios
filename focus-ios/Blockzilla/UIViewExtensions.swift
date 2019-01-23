@@ -25,13 +25,12 @@ extension UIView {
     /// Takes a screenshot of the view with the given size.
     func screenshot(quality: CGFloat = 1) -> UIImage? {
         assert(0...1 ~= quality)
-
-        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale * quality)
-        drawHierarchy(in: CGRect(origin: CGPoint.zero, size: frame.size), afterScreenUpdates: false)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-
-        return image
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale * quality
+        let imageRenderer = UIGraphicsImageRenderer(bounds: bounds, format: format)
+        return imageRenderer.image(actions: { (context) in
+            drawHierarchy(in: CGRect(origin: .zero, size: frame.size), afterScreenUpdates: false)
+        })
     }
 
     /// Returns a Boolean value indicating whether the receiver or any of its subviews is the first responder.

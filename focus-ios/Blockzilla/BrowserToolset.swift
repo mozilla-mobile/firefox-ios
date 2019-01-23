@@ -132,10 +132,9 @@ extension BrowserToolset: WhatsNewDelegate {
 extension UIImage {
 
     func alpha(_ value: CGFloat) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, scale)
-        draw(at: CGPoint.zero, blendMode: .normal, alpha: value)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return newImage!
+        let imageRenderer = UIGraphicsImageRenderer(size: size)
+        return imageRenderer.image(actions: { (context) in
+            draw(at: .zero, blendMode: .normal, alpha: value)
+        })
     }
 }

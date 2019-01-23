@@ -7,10 +7,9 @@ import UIKit
 
 extension UIImage {
     public func createScaled(size: CGSize) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: size))
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return scaledImage!
+        let imageRenderer = UIGraphicsImageRenderer(size: size)
+        return imageRenderer.image(actions: { (context) in
+            draw(in: CGRect(origin: .zero, size: size))
+        })
     }
 }
