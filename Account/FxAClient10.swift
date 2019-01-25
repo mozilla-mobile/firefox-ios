@@ -38,6 +38,13 @@ public struct FxAKeysResponse {
     let wrapkB: Data
 }
 
+public struct FxAScopedKeyDataResponse {
+    let scope: String
+    let identifier: String
+    let keyRotationSecret: String
+    let keyRotationTimestamp: Timestamp
+}
+
 public struct FxASignResponse {
     let certificate: String
 }
@@ -244,6 +251,37 @@ open class FxAClient10 {
         let kA = xoredBytes.subdata(in: 0..<KeyLength)
         let wrapkB = xoredBytes.subdata(in: KeyLength..<(2 * KeyLength))
         return FxAKeysResponse(kA: kA, wrapkB: wrapkB)
+    }
+
+    fileprivate class func scopedKeyDataResponse(fromJSON json: JSON) -> [FxAScopedKeyDataResponse]? {
+        guard json.error == nil else {
+            return nil
+        }
+
+        var responses: [FxAScopedKeyDataResponse] = []
+
+        // Example JSON response:
+        // ```
+        // {
+        //     "https://identity.mozilla.com/apps/oldsync": {
+        //         "identifier": "https://identity.mozilla.com/apps/oldsync",
+        //         "keyRotationSecret": "0000000000000000000000000000000000000000000000000000000000000000",
+        //         "keyRotationTimestamp": 1510726317123
+        //     },
+        //     ...
+        // }
+        // ```
+        for item in json {
+            let scope = item.0
+            let scopedJSON = item.1
+            if let identifier = scopedJSON["identifier"].string,
+                let keyRotationSecret = scopedJSON["keyRotationSecret"].string,
+                let keyRotationTimestamp = scopedJSON["keyRotationTimestamp"].uInt64 {
+                responses.append(FxAScopedKeyDataResponse(scope: scope, identifier: identifier, keyRotationSecret: keyRotationSecret, keyRotationTimestamp: keyRotationTimestamp))
+            }
+        }
+
+        return responses
     }
 
     fileprivate class func signResponse(fromJSON json: JSON) -> FxASignResponse? {
@@ -610,6 +648,27 @@ extension FxAClient10: FxALoginClient {
         let keyRequestKey = key.subdata(in: rangeStart..<(rangeStart + KeyLength))
 
         return makeRequest(mutableURLRequest) { FxAClient10.keysResponse(fromJSON: keyRequestKey, json: $0) }
+    }
+
+    open func scopedKeyData(_ sessionToken: NSData, scope: String) -> Deferred<Maybe<[FxAScopedKeyDataResponse]>> {
+        let parameters = [
+            "client_id": AppConstants.FxAiOSClientId,
+            "scope": scope
+        ]
+
+        let url = self.authURL.appendingPathComponent("/account/scoped-key-data")
+        var mutableURLRequest = URLRequest(url: url)
+        mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
+
+        mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        mutableURLRequest.httpBody = JSON(parameters as NSDictionary).stringify()?.utf8EncodedData
+
+        let salt: Data = Data()
+        let contextInfo: Data = FxAClient10.KW("sessionToken")
+        let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
+        mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
+
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.scopedKeyDataResponse)
     }
 
     open func sign(_ sessionToken: Data, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
