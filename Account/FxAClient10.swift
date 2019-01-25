@@ -92,6 +92,13 @@ public enum FxAClientError {
     case local(NSError)
 }
 
+// FxA OAuth scopes as defined here:
+// https://github.com/mozilla/fxa-auth-server/blob/master/fxa-oauth-server/docs/scopes.md
+public struct FxAOAuthScope {
+    static let Profile = "profile"
+    static let OldSync = "https://identity.mozilla.com/apps/oldsync"
+}
+
 // Be aware that string interpolation doesn't work: rdar://17318018, much good that it will do.
 extension FxAClientError: MaybeErrorType {
     public var description: String {
@@ -491,14 +498,17 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxADevice.fromJSON)
     }
 
-    open func oauthAuthorize(withSessionToken sessionToken: NSData, keyPair: RSAKeyPair, certificate: String) -> Deferred<Maybe<FxAOAuthResponse>> {
-        let audience = self.getAudience(forURL: self.oauthURL)
+    open func oauthAuthorize(withSessionToken sessionToken: NSData, scope: String) -> Deferred<Maybe<FxAOAuthResponse>> {
+        let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
+        return sign(sessionToken as Data, publicKey: keyPair.publicKey) >>== { signResult in
+            return self.oauthAuthorize(withSessionToken: sessionToken, keyPair: keyPair, certificate: signResult.certificate, scope: scope)
+        }
+    }
 
-        let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSign(with: keyPair.privateKey,
-                                                                              certificate: certificate,
-                                                                              audience: audience)
-
-        let oauthAuthorizationURL = self.oauthURL.appendingPathComponent("/authorization")
+    open func oauthAuthorize(withSessionToken sessionToken: NSData, keyPair: RSAKeyPair, certificate: String, scope: String) -> Deferred<Maybe<FxAOAuthResponse>> {
+        let audience = getAudience(forURL: oauthURL)
+        let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSign(with: keyPair.privateKey, certificate: certificate, audience: audience)
+        let oauthAuthorizationURL = oauthURL.appendingPathComponent("/authorization")
         var mutableURLRequest = URLRequest(url: oauthAuthorizationURL)
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -507,7 +517,7 @@ open class FxAClient10 {
             "assertion": assertion,
             "client_id": AppConstants.FxAiOSClientId,
             "response_type": "token",
-            "scope": "profile",
+            "scope": scope,
             "ttl": "300"
         ]
 
@@ -526,19 +536,15 @@ open class FxAClient10 {
     }
 
     open func getProfile(withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxAProfileResponse>> {
-        let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
-        return self.sign(sessionToken as Data, publicKey: keyPair.publicKey) >>== { signResult in
-            return self.oauthAuthorize(withSessionToken: sessionToken, keyPair: keyPair, certificate: signResult.certificate) >>== { oauthResult in
+        return oauthAuthorize(withSessionToken: sessionToken, scope: FxAOAuthScope.Profile) >>== { oauthResult in
+            let profileURL = self.profileURL.appendingPathComponent("/profile")
+            var mutableURLRequest = URLRequest(url: profileURL)
+            mutableURLRequest.httpMethod = HTTPMethod.get.rawValue
 
-                let profileURL = self.profileURL.appendingPathComponent("/profile")
-                var mutableURLRequest = URLRequest(url: profileURL)
-                mutableURLRequest.httpMethod = HTTPMethod.get.rawValue
+            mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            mutableURLRequest.setValue("Bearer " + oauthResult.accessToken, forHTTPHeaderField: "Authorization")
 
-                mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                mutableURLRequest.setValue("Bearer " + oauthResult.accessToken, forHTTPHeaderField: "Authorization")
-
-                return self.makeRequest(mutableURLRequest, responseHandler: FxAClient10.profileResponse)
-            }
+            return self.makeRequest(mutableURLRequest, responseHandler: FxAClient10.profileResponse)
         }
     }
 
