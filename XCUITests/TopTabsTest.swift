@@ -388,6 +388,7 @@ class TopTabsTestIpad: IpadOnlyTestCase {
 
         // This first cell gets closed during the test
         navigator.openURL(urlValueLong)
+        waitForTabsButton()
 
         // Create enough tabs that tabs bar needs to scroll
         for _ in 0..<6 {

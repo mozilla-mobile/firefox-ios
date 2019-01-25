@@ -101,6 +101,7 @@ fileprivate extension BaseTestCase {
     func openTwoWebsites() {
         // Open two tabs
         navigator.openURL(firstWebsite.url)
+        waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
         navigator.openURL(secondWebsite.url)
