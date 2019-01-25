@@ -22,7 +22,7 @@ class TabSettingsViewController: SettingsTableViewController {
     }
     
     override func generateSettings() -> [SettingSection] {
-        let switchToNewTabSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.KeySwitchToNewTabImmediately, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingsTabsImmediateSwitch))
+        let switchToNewTabSetting = BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.KeySwitchToNewTabImmediately, defaultValue: false, attributedTitleText: NSAttributedString(string: Strings.SettingsTabsImmediateSwitch))
         let section = SettingSection(title: NSAttributedString(string: Strings.SettingsTabsImmediateSwitchTitle), footerTitle: nil, children: [switchToNewTabSetting])
         
         return [section]

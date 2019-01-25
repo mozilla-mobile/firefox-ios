@@ -2220,7 +2220,7 @@ extension BrowserViewController {
     func checkIfSwitchTabImmediately(tab: Tab) {
         // Depending on user preference, new tab to be opened in background or be switched to immediately
         // Default is to open in foreground
-        let switchToNewTabImmediately = self.profile.prefs.boolForKey(PrefsKeys.KeySwitchToNewTabImmediately) ?? true
+        let switchToNewTabImmediately = self.profile.prefs.boolForKey(PrefsKeys.KeySwitchToNewTabImmediately) ?? false
         if switchToNewTabImmediately {
             // Consider animations here instead of plain switching to the new tab
             self.tabManager.selectTab(tab)
