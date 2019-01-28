@@ -47,7 +47,7 @@ public class DBOperationCancelled : MaybeErrorType {
 }
 
 class DeferredDBOperation<T>: Deferred<T>, Cancellable {
-    fileprivate var dispatchWorkItem: DispatchWorkItem?
+    fileprivate weak var dispatchWorkItem: DispatchWorkItem?
     private var _running = false
 
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
