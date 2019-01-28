@@ -982,9 +982,14 @@ class NewTabPageSetting: Setting {
 
     override var accessibilityIdentifier: String? { return "NewTab" }
 
+    override var status: NSAttributedString {
+        return NSAttributedString(string: NewTabAccessors.getNewTabPage(self.profile.prefs).rawValue)
+    }
+
+    override var style: UITableViewCellStyle { return .value1 }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-
         super.init(title: NSAttributedString(string: Strings.SettingsNewTabSectionName, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1001,6 +1006,12 @@ class HomeSetting: Setting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "Home" }
+
+    override var status: NSAttributedString {
+        return NSAttributedString(string: NewTabAccessors.getHomePage(self.profile.prefs).rawValue)
+    }
+
+    override var style: UITableViewCellStyle { return .value1 }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -1042,6 +1053,15 @@ class OpenWithSetting: Setting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
+
+    override var status: NSAttributedString {
+        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), provider != "mailto:" else {
+            return NSAttributedString(string: "")
+        }
+        return NSAttributedString(string: provider)
+    }
+
+    override var style: UITableViewCellStyle { return .value1 }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -1087,6 +1107,13 @@ class ThemeSetting: Setting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
     override var style: UITableViewCellStyle { return .value1 }
     override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
+
+    override var status: NSAttributedString {
+        if ThemeManager.instance.automaticBrightnessIsOn {
+            return NSAttributedString(string: Strings.DisplayThemeAutomaticStatusLabel)
+        }
+        return NSAttributedString(string: "")
+    }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile

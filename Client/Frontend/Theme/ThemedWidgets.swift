@@ -14,9 +14,9 @@ class ThemedTableViewCell: UITableViewCell, Themeable {
     }
 
     func applyTheme() {
-        [textLabel, detailTextLabel].forEach {
-            $0?.textColor = UIColor.theme.tableView.rowText
-        }
+        textLabel?.textColor = UIColor.theme.tableView.rowText
+        detailTextLabel?.textColor = UIColor.theme.tableView.disabledRowText
+
         backgroundColor = UIColor.theme.tableView.rowBackground
         tintColor = UIColor.theme.general.controlTint
     }
