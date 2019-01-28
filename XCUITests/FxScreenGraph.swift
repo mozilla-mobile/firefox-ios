@@ -52,6 +52,7 @@ let DisplaySettings = "DisplaySettings"
 let TranslationSettings = "TranslationSettings"
 let HomePanel_Library = "HomePanel_Library"
 let TranslatePageMenu = "TranslatePageMenu"
+let DontTranslatePageMenu = "DontTranslatePageMenu"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -197,6 +198,12 @@ class Action {
     static let SelectAutomatically = "SelectAutomatically"
 
     static let SelectTranslateThisPage = "SelectTranslateThisPage"
+    static let SelectDontTranslateThisPage = "SelectDontTranslateThisPage"
+    
+    static let EnableTranslation = "EnableTranlation"
+    static let DisableTranslation = "DisableTranlation"
+    static let SelectGoogle = "SelectGoogle"
+    static let SelectBing = "SelectBing"
 }
 
 private var isTablet: Bool {
@@ -548,6 +555,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(TranslationSettings) { screenState in
+        screenState.gesture(forAction: Action.DisableTranslation) { userState in
+                app.switches["TranslateSwitchValue"].tap()
+        }
+        screenState.gesture(forAction: Action.EnableTranslation) { userState in
+            app.switches["TranslateSwitchValue"].tap()
+        }
+        screenState.gesture(forAction: Action.SelectGoogle) { userstate in
+            app.tables.cells.element(boundBy:1).tap()
+        }
+        screenState.gesture(forAction: Action.SelectBing) { userstate in
+                app.tables.cells.element(boundBy:2).tap()
+        }
         screenState.backAction = navigationControllerBackAction
     }
 
@@ -858,11 +877,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.press(link, to: WebLinkContextMenu)
         screenState.press(image, to: WebImageContextMenu)
-
-        let reloadButton = app.buttons["TabToolbar.stopReloadButton"]
+        
+        if !isTablet {
+            let reloadButton = app.buttons["TabToolbar.stopReloadButton"]
         screenState.press(reloadButton, to: ReloadLongPressMenu)
         screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
-
+        } else {
+            let reloadButton = app.buttons["Reload"]
+        screenState.press(reloadButton, to: ReloadLongPressMenu)
+        screenState.tap(reloadButton, forAction: Action.ReloadURL, transitionTo: WebPageLoading) { _ in }
+        }
         // For iPad there is no long press on tabs button
         if !isTablet {
             let tabsButton = app.buttons["TabToolbar.tabsButton"]
@@ -891,9 +915,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(TranslatePageMenu) { screenState in
         screenState.onEnterWaitFor(element: app.buttons["TranslationPrompt.doTranslate"])
 
-        screenState.backAction = {
-            app.buttons["TranslationPrompt.dontTranslate"].tap()
-        }
+        screenState.tap(app.buttons["TranslationPrompt.dontTranslate"], forAction: Action.SelectDontTranslateThisPage)
 
         screenState.tap(app.buttons["TranslationPrompt.doTranslate"], forAction: Action.SelectTranslateThisPage, transitionTo: WebPageLoading)
         screenState.dismissOnUse = true
