@@ -9,22 +9,28 @@ let url_2 = ["url": "test-mozilla-org.html", "bookmarkLabel": "Internet for peop
 
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Bookmark This Page"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        // Workaround to routing issues
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 3)
         app.tables.cells["Bookmark This Page"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func unbookmark() {
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Remove Bookmark"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        // Workaround to routing issues
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        waitForExistence(app.tables.cells["Remove Bookmark"], timeout: 3)
         app.cells["Remove Bookmark"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func checkBookmarked() {
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Remove Bookmark"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        // Workaround to routing issues
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        waitForExistence(app.tables.cells["Remove Bookmark"], timeout: 10)
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -34,8 +40,10 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func checkUnbookmarked() {
-        navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Bookmark This Page"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        // Workaround to routing issues
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
+        waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 10)
         if iPad() {
             app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
@@ -66,6 +74,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkBookmarked()
+        waitForTabsButton()
 
         // Open it, then unbookmark it, and check it's no longer on bookmarks home panel
         unbookmark()
@@ -91,6 +100,7 @@ class BookmarkingTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        waitForTabsButton()
         bookmark()
 
         //There should be a bookmark

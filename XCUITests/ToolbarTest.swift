@@ -59,7 +59,17 @@ class ToolbarTests: BaseTestCase {
 
         // Open new tab and then go back to previous tab to test navigation buttons.
         waitForTabsButton()
-        navigator.goto(TabTray)
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            // iPhone sim tabs button is called differently when in portrait or landscape
+            if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+                app.buttons["URLBarView.tabsButton"].tap()
+            } else {
+                app.buttons["TabToolbar.tabsButton"].tap()
+            }
+        }
+        navigator.nowAt(TabTray)
         waitForExistence(app.collectionViews.cells[website1["label"]!])
         app.collectionViews.cells[website1["label"]!].tap()
         XCTAssertEqual(valueMozilla, urlValueLong)
@@ -71,7 +81,17 @@ class ToolbarTests: BaseTestCase {
 
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
-        navigator.goto(TabTray)
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            // iPhone sim tabs button is called differently when in portrait or landscape
+            if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+                app.buttons["URLBarView.tabsButton"].tap()
+            } else {
+                app.buttons["TabToolbar.tabsButton"].tap()
+            }
+        }
+        navigator.nowAt(TabTray)
 
         waitForExistence(app.collectionViews.cells[website1["label"]!])
         app.collectionViews.cells[website1["label"]!].swipeRight()

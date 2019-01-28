@@ -45,7 +45,17 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
-        navigator.goto(TabTray)
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            // iPhone sim tabs button is called differently when in portrait or landscape
+            if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+                app.buttons["URLBarView.tabsButton"].tap()
+            } else {
+                app.buttons["TabToolbar.tabsButton"].tap()
+            }
+        }
+        navigator.nowAt(TabTray)
 
         waitForExistence(app.collectionViews.cells[url1Label])
         let numTabs = userState.numTabs
@@ -90,10 +100,16 @@ class PrivateBrowsingTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
-
+        // Workaround for routing issue
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         // Go back to regular browser
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-
+        waitForExistence(app.buttons["Private Mode"], timeout: 5)
         // Go back to private browsing and check that the tab has not been closed
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         waitForExistence(app.collectionViews.cells[url1Label], timeout: 5)
@@ -102,8 +118,10 @@ class PrivateBrowsingTest: BaseTestCase {
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
         app.collectionViews.cells[url1Label].tap()
         waitForTabsButton()
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 15)
         navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.cells["menu-Settings"], timeout: 5)
         navigator.goto(SettingsScreen)
         closePrivateTabsSwitch.tap()
         navigator.goto(BrowserTab)
@@ -177,6 +195,10 @@ fileprivate extension BaseTestCase {
     }
 
     func enableClosePrivateBrowsingOptionWhenLeaving() {
+        navigator.nowAt(BrowserTab)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 15)
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.cells["menu-Settings"], timeout: 10)
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
 
@@ -195,7 +217,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 15)
         enableClosePrivateBrowsingOptionWhenLeaving()
         // Leave PM by tapping on PM shourt cut
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)

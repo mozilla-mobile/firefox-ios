@@ -101,11 +101,20 @@ fileprivate extension BaseTestCase {
     func openTwoWebsites() {
         // Open two tabs
         navigator.openURL(firstWebsite.url)
-        waitUntilPageLoad()
         waitForTabsButton()
-        navigator.goto(TabTray)
+        // Workaround to routing issues
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            // iPhone sim tabs button is called differently when in portrait or landscape
+            if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+               app.buttons["URLBarView.tabsButton"].tap()
+            } else {
+               app.buttons["TabToolbar.tabsButton"].tap()
+            }
+        }
+        navigator.nowAt(TabTray)
         navigator.openURL(secondWebsite.url)
-        waitUntilPageLoad()
         waitForTabsButton()
     }
 

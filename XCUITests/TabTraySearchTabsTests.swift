@@ -46,7 +46,13 @@ class TabTraySearchTabsTests: BaseTestCase {
         waitUntilPageLoad()
         navigator.openNewURL(urlString: path(forTestPage: "test-example.html"))
         waitForTabsButton()
-        navigator.goto(TabTray)
+        // Workaround for routing issues
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         searchTabs(tabTitleOrUrl: "internet")
         XCTAssertEqual(app.collectionViews.cells.count, 1)
     }
@@ -64,12 +70,24 @@ class TabTraySearchTabsTests: BaseTestCase {
     func testSearchFieldClearedAfterVisingWebsite() {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
-        navigator.goto(TabTray)
+        //navigator.goto(TabTray)
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         searchTabs(tabTitleOrUrl: "mozilla")
         app.collectionViews.cells["Internet for people, not profit — Mozilla"].tap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
-        navigator.goto(TabTray)
+        // Workaround for routing issue
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         let searchValue = app.textFields["Search Tabs"].value
         XCTAssertEqual(searchValue as! String, "Search Tabs")
     }

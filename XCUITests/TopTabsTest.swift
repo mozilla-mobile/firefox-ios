@@ -61,10 +61,22 @@ class TopTabsTest: BaseTestCase {
         // Open two urls from tab tray and switch between them
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitForTabsButton()
-        navigator.goto(TabTray)
+        // Workaround to routing issues
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         navigator.openURL(urlExample)
         waitForTabsButton()
-        navigator.goto(TabTray)
+        // Workaround to routing issues
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
 
         waitForExistence(app.collectionViews.cells[urlLabel])
         app.collectionViews.cells[urlLabel].tap()
@@ -73,8 +85,12 @@ class TopTabsTest: BaseTestCase {
 
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
-        navigator.goto(TabTray)
-
+        //navigator.goto(TabTray)
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
         waitForExistence(app.collectionViews.cells[urlLabelExample])
         app.collectionViews.cells[urlLabelExample].tap()
         let value = app.textFields["url"].value as! String
@@ -85,8 +101,12 @@ class TopTabsTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
-        navigator.goto(TabTray)
-
+        // Workaround to routing issues
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
         waitForExistence(app.collectionViews.cells[urlLabel])
 
         // 'x' button to close the tab is not visible, so closing by swiping the tab
@@ -110,6 +130,13 @@ class TopTabsTest: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
+        // Workaround to routing issues
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
@@ -150,7 +177,14 @@ class TopTabsTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
+        // Workaround to routing issues
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         if !iPad() {
@@ -175,6 +209,13 @@ class TopTabsTest: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
+        // Workaround to routing issues
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()

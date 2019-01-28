@@ -848,11 +848,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(BrowserTab) { screenState in
-        makeURLBarAvailable(screenState)
+        //makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabLocationView.pageOptionsButton"], to: PageOptionsMenu)
         screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
 
-        makeToolBarAvailable(screenState)
+        //makeToolBarAvailable(screenState)
         let link = app.webViews.element(boundBy: 0).links.element(boundBy: 0)
         let image = app.webViews.element(boundBy: 0).images.element(boundBy: 0)
 
@@ -993,6 +993,7 @@ extension MMNavigator where T == FxUserState {
     // Opens a URL in a new tab.
     func openNewURL(urlString: String) {
         let app = XCUIApplication()
+        self.nowAt(BrowserTab)
         if isTablet {
             waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
         } else {
@@ -1005,7 +1006,18 @@ extension MMNavigator where T == FxUserState {
     // Add a new Tab from the New Tab option in Browser Tab Menu
     func createNewTab() {
         let app = XCUIApplication()
-        self.goto(TabTray)
+        // Workaround routing issues
+        if isTablet {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            // iPhone sim tabs button is called differently when in portrait or landscape
+            if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+                app.buttons["URLBarView.tabsButton"].tap()
+            } else {
+                app.buttons["TabToolbar.tabsButton"].tap()
+            }
+        }
+        self.nowAt(TabTray)
         app.buttons["TabTrayController.addTabButton"].tap()
         self.nowAt(NewTabScreen)
     }

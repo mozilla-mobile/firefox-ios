@@ -209,7 +209,13 @@ class HistoryTests: BaseTestCase {
         navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
-        navigator.goto(TabTray)
+        // Workaround for routing issues
+        if iPad() {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            app.buttons["TabToolbar.tabsButton"].tap()
+        }
+        navigator.nowAt(TabTray)
         waitForExistence(app.collectionViews.cells[webpage["label"]!])
         // 'x' button to close the tab is not visible, so closing by swiping the tab
         app.collectionViews.cells[webpage["label"]!].swipeRight()
