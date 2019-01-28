@@ -337,6 +337,10 @@ open class FirefoxAccount {
         guard let married = stateCache.value as? MarriedState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
+        guard scope == FxAOAuthScope.OldSync else {
+            log.error("oauthKeyID(for scope:) is currently only valid for 'oldsync'.")
+            return deferMaybe(ScopedKeyError())
+        }
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
         return client.scopedKeyData(married.sessionToken as NSData, scope: scope) >>== { response in
             guard let scopedKeyData = response.find({ $0.scope == scope }) else {
