@@ -333,8 +333,30 @@ open class FirefoxAccount {
         }
     }
 
+    open func oauthKeyID(for scope: String) -> Deferred<Maybe<String>> {
+        guard let married = stateCache.value as? MarriedState else {
+            return deferMaybe(NotATokenStateError(state: stateCache.value))
+        }
+        guard scope == FxAOAuthScope.OldSync else {
+            log.error("oauthKeyID(for scope:) is currently only valid for 'oldsync'.")
+            return deferMaybe(ScopedKeyError())
+        }
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        return client.scopedKeyData(married.sessionToken as NSData, scope: scope) >>== { response in
+            guard let scopedKeyData = response.find({ $0.scope == scope }) else {
+                return deferMaybe(ScopedKeyError())
+            }
+            let kid = "\(scopedKeyData.keyRotationTimestamp)-\(married.kXCS)"
+            return deferMaybe(kid)
+        }
+    }
+
     public class NotifyError: MaybeErrorType {
         public var description = "The server could not notify the clients."
+    }
+
+    public class ScopedKeyError: MaybeErrorType {
+        public var description = "No key data found for scope."
     }
 
     @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {

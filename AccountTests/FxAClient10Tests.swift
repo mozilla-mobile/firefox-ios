@@ -168,4 +168,15 @@ class FxAClient10Tests: LiveAccountTest {
             XCTAssertNotNil(response?.uid)
         }
     }
+
+    func testScopedKeyDataSuccess() {
+        withVerifiedAccountNoExpectations { emailUTF8, quickStretchedPW in
+            let stageConfiguration = StageFirefoxAccountConfiguration()
+            let client = FxAClient10(authEndpoint: stageConfiguration.authEndpointURL, oauthEndpoint: stageConfiguration.oauthEndpointURL, profileEndpoint: stageConfiguration.profileEndpointURL)
+            let response = (client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true) >>== { login in
+                    return client.scopedKeyData(login.sessionToken as NSData, scope: "profile")
+                }).value.successValue
+            XCTAssert(response!.count > 0)
+        }
+    }
 }
