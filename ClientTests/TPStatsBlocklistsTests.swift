@@ -30,7 +30,7 @@ class TPStatsBlocklistsTests: XCTestCase {
     func testURLInListPerformance() {
         blocklists.load()
         
-        let whitelistedRegexs = [".google.com"].compactMap { (domain) -> NSRegularExpression? in
+        let whitelistedRegexs = ["*google.com"].compactMap { (domain) -> NSRegularExpression? in
             return wildcardContentBlockerDomainToRegex(domain: domain)
         }
         
@@ -71,6 +71,6 @@ class TPStatsBlocklistsTests: XCTestCase {
 
         XCTAssertEqual(blocklist("https://sub.xiti.com/track"), .analytics)
         XCTAssertEqual(blocklist("https://backtype.com"), .social)
-        XCTAssertEqual(blocklist("https://backtype.com", [".firefox.com", "e.com"]), nil)
+        XCTAssertEqual(blocklist("https://backtype.com", ["*firefox.com", "*e.com"]), nil)
     }
 }
