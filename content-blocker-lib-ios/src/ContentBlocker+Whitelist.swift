@@ -12,7 +12,7 @@ struct WhitelistedDomains {
         }
     }
 
-    private(set) var domainRegex = [NSRegularExpression]()
+    private(set) var domainRegex = [String]()
 }
 
 extension ContentBlocker {
