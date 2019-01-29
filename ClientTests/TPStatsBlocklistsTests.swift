@@ -30,7 +30,7 @@ class TPStatsBlocklistsTests: XCTestCase {
     func testURLInListPerformance() {
         blocklists.load()
         
-        let whitelistedRegexs = ["*google.com"].compactMap { (domain) -> NSRegularExpression? in
+        let whitelistedRegexs = ["*google.com"].compactMap { (domain) -> String? in
             return wildcardContentBlockerDomainToRegex(domain: domain)
         }
         
@@ -46,7 +46,7 @@ class TPStatsBlocklistsTests: XCTestCase {
         blocklists.load()
         
         func blocklist(_ urlString: String, _ whitelistedDomains: [String] = []) -> BlocklistName? {
-            let whitelistedRegexs = whitelistedDomains.compactMap { (domain) -> NSRegularExpression? in
+            let whitelistedRegexs = whitelistedDomains.compactMap { (domain) -> String? in
                 return wildcardContentBlockerDomainToRegex(domain: domain)
             }
 
