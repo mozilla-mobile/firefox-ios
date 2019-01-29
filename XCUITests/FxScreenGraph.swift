@@ -166,6 +166,7 @@ class Action {
     static let SelectHomeAsBookmarksPage = "SelectHomeAsBookmarksPage"
     static let SelectHomeAsHistoryPage = "SelectHomeAsHistoryPage"
     static let SelectHomeAsCustomURL = "SelectHomeAsCustomURL"
+    static let SelectTopSitesRows = "SelectTopSitesRows"
 
     static let GoToHomePage = "GoToHomePage"
 
@@ -242,6 +243,8 @@ class FxUserState: MMUserState {
     var fxaPassword: String? = nil
 
     var numTabs: Int = 0
+
+    var numTopSitesRows: Int = 2
 
     var trackingProtectionPerTabEnabled = true // TP can be shut off on a per-tab basis
     var trackingProtectionSettingOnNormalMode = true
@@ -670,7 +673,17 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             app.switches["ASPocketStoriesVisible"].tap()
         }
 
+        screenState.gesture(forAction: Action.SelectTopSitesRows) { userState in
+            app.tables.cells["TopSitesRows"].tap()
+            select(rows: userState.numTopSitesRows)
+            app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        }
+
         screenState.backAction = navigationControllerBackAction
+    }
+
+    func select(rows: Int) {
+        app.staticTexts[String(rows)].tap()
     }
 
     map.addScreenState(PasscodeSettings) { screenState in
