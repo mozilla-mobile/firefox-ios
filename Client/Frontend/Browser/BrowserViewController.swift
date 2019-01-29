@@ -2318,7 +2318,7 @@ extension BrowserViewController {
         guard let webView = tabManager.selectedTab?.webView else {
             return
         }
-        webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
+        webView.evaluateJavaScript("__firefox__.searchQueryForField && __firefox__.searchQueryForField()") { (result, _) in
             guard let searchQuery = result as? String, let favicon = self.tabManager.selectedTab!.displayFavicon else {
                 //Javascript responded with an incorrectly formatted message. Show an error.
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
@@ -2374,7 +2374,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         guard let webView = tabManager.selectedTab?.webView else {
             return
         }
-        webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
+        webView.evaluateJavaScript("__firefox__.searchQueryForField && __firefox__.searchQueryForField()") { (result, _) in
             guard let _ = result as? String else {
                 return
             }
