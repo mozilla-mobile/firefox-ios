@@ -300,10 +300,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             alert.addAction(action)
         }
 
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(cancelAction)
-
         present(alert, animated: true)
     }
 
@@ -323,7 +321,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         clearHistoryCell = cell
         cell.textLabel?.text = Strings.HistoryPanelClearHistoryButtonTitle
         cell.detailTextLabel?.text = ""
-        cell.imageView?.image = UIImage(named: "recently_closed") //
+        cell.imageView?.image = UIImage(named: "forget")
         cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.clearHistory"
 
@@ -562,7 +560,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 tableView.addSubview(emptyStateOverlayView)
                 emptyStateOverlayView.snp.makeConstraints { make -> Void in
                     make.left.right.bottom.equalTo(self.view)
-                    make.top.equalTo(self.view).offset(100)
+                    make.top.equalTo(self.view).offset(144)
                 }
             }
         } else {
