@@ -848,11 +848,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(BrowserTab) { screenState in
-        //makeURLBarAvailable(screenState)
+        makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabLocationView.pageOptionsButton"], to: PageOptionsMenu)
         screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
 
-        //makeToolBarAvailable(screenState)
+        makeToolBarAvailable(screenState)
         let link = app.webViews.element(boundBy: 0).links.element(boundBy: 0)
         let image = app.webViews.element(boundBy: 0).images.element(boundBy: 0)
 
