@@ -327,7 +327,7 @@ extension LoginDetailViewController {
         login.update(password: password, username: username)
 
         if login.isValid.isSuccess {
-            profile.logins.updateLoginByGUID(login.guid, new: login, significant: true)
+            profile.logins.updateLoginByGUID(login.guid, new: login)
         } else if let oldUsername = oldUsername {
             login.update(password: oldPassword, username: oldUsername)
         }

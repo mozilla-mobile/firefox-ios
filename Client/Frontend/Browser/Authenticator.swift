@@ -52,7 +52,7 @@ class Authenticator {
         return self.promptForUsernamePassword(viewController, credentials: nil, protectionSpace: challenge.protectionSpace, loginsHelper: nil)
     }
 
-    static func findMatchingCredentialsForChallenge(_ challenge: URLAuthenticationChallenge, fromLoginsProvider loginsProvider: BrowserLogins) -> Deferred<Maybe<URLCredential?>> {
+    static func findMatchingCredentialsForChallenge(_ challenge: URLAuthenticationChallenge, fromLoginsProvider loginsProvider: RustLogins) -> Deferred<Maybe<URLCredential?>> {
         return loginsProvider.getLoginsForProtectionSpace(challenge.protectionSpace) >>== { cursor in
             guard cursor.count >= 1 else {
                 return deferMaybe(nil)
@@ -84,7 +84,7 @@ class Authenticator {
                 let login = logins[0]
                 credentials = login.credentials
                 let new = Login(credential: login.credentials, protectionSpace: challenge.protectionSpace)
-                return loginsProvider.updateLoginByGUID(login.guid, new: new, significant: true)
+                return loginsProvider.updateLoginByGUID(login.guid, new: new)
                     >>> { deferMaybe(credentials) }
             }
 

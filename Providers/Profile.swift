@@ -11,6 +11,7 @@ import Account
 import Shared
 import Storage
 import Sync
+import Logins
 import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
@@ -103,7 +104,7 @@ protocol Profile: AnyObject {
     var metadata: Metadata { get }
     var recommendations: HistoryRecommendations { get }
     var favicons: Favicons { get }
-    var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage { get }
+    var logins: RustLogins { get }
     var certStore: CertStore { get }
     var recentlyClosedTabs: ClosedTabsStore { get }
     var panelDataObservers: PanelDataObservers { get }
@@ -173,12 +174,12 @@ open class BrowserProfile: Profile {
     let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
-    private static var loginsKey: String? {
+    private static var loginsKey: String {
         let key = "sqlcipher.key.logins.db"
         let keychain = KeychainWrapper.sharedAppContainerKeychain
         keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
-        if keychain.hasValue(forKey: key) {
-            return keychain.string(forKey: key)
+        if keychain.hasValue(forKey: key), let secret = keychain.string(forKey: key) {
+            return secret
         }
 
         let Length: UInt = 256
@@ -508,8 +509,9 @@ open class BrowserProfile: Profile {
         return result
     }
 
-    lazy var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage = {
-        return SQLiteLogins(db: self.loginsDB)
+    lazy var logins: RustLogins = {
+        let databasePath = URL(fileURLWithPath: files.rootPath, isDirectory: true).appendingPathComponent("rust-logins.db").path
+        return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey)
     }()
 
     static var isChinaEdition: Bool = {
@@ -921,8 +923,7 @@ open class BrowserProfile: Profile {
             case "history":
                 return HistorySynchronizer.resetSynchronizerWithStorage(self.profile.history, basePrefs: self.prefsForSync, collection: "history")
             case "passwords":
-                return LoginsSynchronizer.resetSynchronizerWithStorage(self.profile.logins, basePrefs: self.prefsForSync, collection: "passwords")
-
+                return self.profile.logins.reset()
             case "forms":
                 log.debug("Requested reset for forms, but this client doesn't sync them yet.")
                 return succeed()
@@ -949,7 +950,7 @@ open class BrowserProfile: Profile {
             let remove = [
                 profile.history.onRemovedAccount,
                 profile.remoteClientsAndTabs.onRemovedAccount,
-                profile.logins.onRemovedAccount,
+                profile.logins.reset,
                 profile.bookmarks.onRemovedAccount,
             ]
 
@@ -1028,9 +1029,25 @@ open class BrowserProfile: Profile {
         }
 
         fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
+            guard let account = profile.account else {
+                return deferMaybe(SyncStatus.notStarted(.noAccount))
+            }
+
             log.debug("Syncing logins to storage.")
-            let loginsSynchronizer = ready.synchronizer(LoginsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return loginsSynchronizer.synchronizeLocalLogins(self.profile.logins, withServer: ready.client, info: ready.info)
+            return account.syncUnlockInfo().bind({ result in
+                guard let syncUnlockInfo = result.successValue else {
+                    return deferMaybe(SyncStatus.notStarted(.unknown))
+                }
+
+                return self.profile.logins.sync(unlockInfo: syncUnlockInfo).bind({ result in
+                    guard result.isSuccess else {
+                        return deferMaybe(SyncStatus.notStarted(.unknown))
+                    }
+
+                    let syncEngineStatsSession = SyncEngineStatsSession(collection: "logins")
+                    return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
+                })
+            })
         }
 
         fileprivate func mirrorBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {

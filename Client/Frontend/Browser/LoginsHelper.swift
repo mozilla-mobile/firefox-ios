@@ -18,7 +18,7 @@ class LoginsHelper: TabContentScript {
     fileprivate var snackBar: SnackBar?
 
     // Exposed for mocking purposes
-    var logins: BrowserLogins {
+    var logins: RustLogins {
         return profile.logins
     }
 
@@ -100,8 +100,8 @@ class LoginsHelper: TabContentScript {
         return profile.logins.getLoginsForProtectionSpace(protectionSpace)
     }
 
-    func updateLoginByGUID(_ guid: GUID, new: LoginData, significant: Bool) -> Success {
-        return profile.logins.updateLoginByGUID(guid, new: new, significant: significant)
+    func updateLoginByGUID(_ guid: GUID, new: LoginData) -> Success {
+        return profile.logins.updateLoginByGUID(guid, new: new)
     }
 
     func setCredentials(_ login: LoginData) {
@@ -194,7 +194,7 @@ class LoginsHelper: TabContentScript {
         let update = SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", bold: true) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
-            self.profile.logins.updateLoginByGUID(guid, new: new, significant: new.isSignificantlyDifferentFrom(old))
+            _ = self.profile.logins.updateLoginByGUID(guid, new: new)
         }
         snackBar?.addButton(dontSave)
         snackBar?.addButton(update)

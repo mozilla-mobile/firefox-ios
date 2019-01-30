@@ -9,6 +9,7 @@ import Deferred
 import SwiftKeychainWrapper
 import SwiftyJSON
 import FxA
+import Logins
 import SDWebImage
 
 private let log = Logger.syncLogger
@@ -322,6 +323,29 @@ open class FirefoxAccount {
         }
     }
 
+    open func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
+        guard let married = stateCache.value as? MarriedState else {
+            return deferMaybe(NotATokenStateError(state: stateCache.value))
+        }
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        return client.oauthAuthorize(withSessionToken: married.sessionToken as NSData, scope: FxAOAuthScope.OldSync).bind({ result in
+            guard let oauthResponse = result.successValue else {
+                return deferMaybe(ScopedKeyError())
+            }
+
+            return self.oauthKeyID(for: FxAOAuthScope.OldSync).bind({ result in
+                guard let kid = result.successValue,
+                    let kSync = married.kSync.base64urlSafeEncodedString else {
+                    return deferMaybe(ScopedKeyError())
+                }
+
+                let accessToken = oauthResponse.accessToken
+                let tokenServerURL = self.configuration.sync15Configuration.tokenServerEndpointURL.absoluteString
+                return deferMaybe(SyncUnlockInfo(kid: kid, fxaAccessToken: accessToken, syncKey: kSync, tokenserverURL: tokenServerURL))
+            })
+        })
+    }
+
     // Fetch the devices list from FxA then replace the current stored remote devices.
     open func updateFxADevices(remoteDevices: RemoteDevices) -> Success {
         guard let session = stateCache.value as? TokenState else {
@@ -342,11 +366,11 @@ open class FirefoxAccount {
             return deferMaybe(ScopedKeyError())
         }
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
-        return client.scopedKeyData(married.sessionToken as NSData, scope: scope) >>== { response in
-            guard let scopedKeyData = response.find({ $0.scope == scope }) else {
+        return client.scopedKeyData(married.sessionToken as NSData, scope: scope).bind { response in
+            guard let allScopedKeyData = response.successValue, let scopedKeyData = allScopedKeyData.find({ $0.scope == scope }), let kXCS = married.kXCS.hexDecodedData.base64urlSafeEncodedString else {
                 return deferMaybe(ScopedKeyError())
             }
-            let kid = "\(scopedKeyData.keyRotationTimestamp)-\(married.kXCS)"
+            let kid = "\(scopedKeyData.keyRotationTimestamp)-\(kXCS)"
             return deferMaybe(kid)
         }
     }
