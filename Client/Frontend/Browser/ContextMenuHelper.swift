@@ -24,14 +24,26 @@ class ContextMenuHelper: NSObject {
 
     required init(tab: Tab) {
         super.init()
-
         self.tab = tab
+    }
 
-        nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
+    func replaceWebViewLongPress() {
+        // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
+        // See also https://bugs.webkit.org/show_bug.cgi?id=193366
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            guard self.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil else {
+                return
+            }
 
-        if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
-            nativeLongPressRecognizer.removeTarget(nil, action: nil)
-            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected))
+            self.nativeHighlightLongPressRecognizer = self.gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
+
+            if let nativeLongPressRecognizer = self.gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
+                nativeLongPressRecognizer.removeTarget(nil, action: nil)
+                nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
+            } else {
+                // The ContextMenuHelper gesture hook is not installed yet, try again
+                self.replaceWebViewLongPress()
+            }
         }
     }
 
