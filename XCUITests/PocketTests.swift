@@ -8,7 +8,7 @@ class PocketTest: BaseTestCase {
 
     func testPocketEnabledByDefault() {
         navigator.goto(NewTabScreen)
-        waitForExistence(app.staticTexts["pocketTitle"])
+        waitForExistence(app.staticTexts["pocketTitle"], timeout: 5)
         XCTAssertEqual(app.staticTexts["pocketTitle"].label, "Trending on Pocket")
 
         // There should be two stories on iPhone and three on iPad
@@ -26,7 +26,7 @@ class PocketTest: BaseTestCase {
         // Enable it again
         navigator.performAction(Action.TogglePocketInNewTab)
         navigator.goto(NewTabScreen)
-        waitForExistence(app.staticTexts["pocketTitle"])
+        waitForExistence(app.staticTexts["pocketTitle"], timeout: 5)
 
         // Tap on the first Pocket element
         app.collectionViews.containing(.cell, identifier:"TopSitesCell").children(matching: .cell).element(boundBy: 1).tap()

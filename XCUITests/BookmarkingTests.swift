@@ -12,7 +12,7 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
         // Workaround to routing issues
         app.buttons["TabLocationView.pageOptionsButton"].tap()
-        waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 3)
+        waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 10)
         app.tables.cells["Bookmark This Page"].tap()
         navigator.nowAt(BrowserTab)
     }
@@ -21,7 +21,7 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
         // Workaround to routing issues
         app.buttons["TabLocationView.pageOptionsButton"].tap()
-        waitForExistence(app.tables.cells["Remove Bookmark"], timeout: 3)
+        waitForExistence(app.tables.cells["Remove Bookmark"], timeout: 10)
         app.cells["Remove Bookmark"].tap()
         navigator.nowAt(BrowserTab)
     }

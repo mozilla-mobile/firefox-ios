@@ -37,7 +37,7 @@ class SyncUITests: BaseTestCase {
     }
 
     private func verifyFxASigninScreen() {
-        waitForExistence(app.webViews.staticTexts["Sign in"])
+        waitForExistence(app.webViews.staticTexts["Sign in"], timeout: 5)
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
         XCTAssertTrue(app.webViews.secureTextFields["Password"].exists)

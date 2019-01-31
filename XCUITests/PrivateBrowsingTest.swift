@@ -120,9 +120,11 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForTabsButton()
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 15)
         navigator.nowAt(BrowserTab)
-        navigator.goto(BrowserTabMenu)
+        //navigator.goto(BrowserTabMenu)
+        app.buttons["TabToolbar.menuButton"].tap()
         waitForExistence(app.tables.cells["menu-Settings"], timeout: 5)
-        navigator.goto(SettingsScreen)
+        app.tables.cells["menu-Settings"].tap()
+        navigator.nowAt(SettingsScreen)
         closePrivateTabsSwitch.tap()
         navigator.goto(BrowserTab)
         waitForTabsButton()
@@ -197,7 +199,8 @@ fileprivate extension BaseTestCase {
     func enableClosePrivateBrowsingOptionWhenLeaving() {
         navigator.nowAt(BrowserTab)
         waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 15)
-        navigator.goto(BrowserTabMenu)
+        //navigator.goto(BrowserTabMenu)
+        app.buttons["TabToolbar.menuButton"].tap()
         waitForExistence(app.tables.cells["menu-Settings"], timeout: 10)
         navigator.goto(SettingsScreen)
         let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
