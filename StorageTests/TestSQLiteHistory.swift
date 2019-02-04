@@ -1365,7 +1365,6 @@ class TestSQLiteHistory: XCTestCase {
             siteR.guid = "remoteremote"
             siteB.guid = "bothbothboth"
             // Site visit uses microsec timestamp
-            print(date.toMicrosecondTimestamp())
             let siteVisitL1 = SiteVisit(site: siteL, date: 1_000_000, type: VisitType.link)
             let siteVisitL2 = SiteVisit(site: siteR, date: 2_000_000, type: VisitType.link)
             let siteVisitBL1 = SiteVisit(site: siteB, date: 4_000_000, type: VisitType.link)

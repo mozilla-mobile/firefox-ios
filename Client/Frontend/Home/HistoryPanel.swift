@@ -25,7 +25,8 @@ private class FetchInProgressError: MaybeErrorType {
 
 class HistoryPanel: SiteTableViewController, HomePanel {
     enum Section: Int {
-        case syncAndRecentlyClosed
+        // Showing synced tabs, showing recently closed, and clearing recent history are action rows of this type.
+        case additionalHistoryActions
         case today
         case yesterday
         case lastWeek
@@ -45,6 +46,25 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 return Strings.TableDateSectionTitleLastMonth
             default:
                 return nil
+            }
+        }
+    }
+
+    enum AdditionalHistoryActionRow: Int {
+        case clearRecent
+        case showRecentlyClosedTabs
+        case showSyncTabs
+
+        // Use to enable/disable the additional history action rows.
+        static func setStyle(enabled: Bool, forCell cell: UITableViewCell) {
+            if enabled {
+                cell.textLabel?.alpha = 1.0
+                cell.imageView?.alpha = 1.0
+                cell.selectionStyle = .default
+            } else {
+                cell.textLabel?.alpha = 0.5
+                cell.imageView?.alpha = 0.5
+                cell.selectionStyle = .none
             }
         }
     }
@@ -167,7 +187,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 Profiler.shared?.end(bookend: .history_panel_fetch)
 
                 if let cell = self.clearHistoryCell {
-                    self.enable(on: !self.groupedSites.isEmpty, forButtonCell: cell)
+                    AdditionalHistoryActionRow.setStyle(enabled: !self.groupedSites.isEmpty, forCell: cell)
                 }
             }
         }
@@ -242,14 +262,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             self.tableView.endUpdates()
             self.updateEmptyPanelState()
 
-            var isEmpty = true
-            for i in Section.today.rawValue..<self.tableView.numberOfSections {
-                if self.tableView.numberOfRows(inSection: i) > 0 {
-                    isEmpty = false
-                }
-            }
             if let cell = self.clearHistoryCell {
-                self.enable(on: !isEmpty, forButtonCell: cell)
+                AdditionalHistoryActionRow.setStyle(enabled: !self.groupedSites.isEmpty, forCell: cell)
             }
         }
     }
@@ -300,7 +314,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             alert.addAction(action)
         }
 
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        let cancelAction = UIAlertAction(title: Strings.CancelString, style: .cancel)
         alert.addAction(cancelAction)
         present(alert, animated: true)
     }
@@ -309,7 +323,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func siteForIndexPath(_ indexPath: IndexPath) -> Site? {
         // First section is reserved for Sync.
-        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
+        guard indexPath.section > Section.additionalHistoryActions.rawValue else {
             return nil
         }
 
@@ -331,21 +345,9 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 isEmpty = false
             }
         }
-        enable(on: !isEmpty, forButtonCell: cell)
+        AdditionalHistoryActionRow.setStyle(enabled: !isEmpty, forCell: cell)
 
         return cell
-    }
-
-    private func enable(on: Bool, forButtonCell cell: UITableViewCell) {
-        if on {
-            cell.textLabel?.alpha = 1.0
-            cell.imageView?.alpha = 1.0
-            cell.selectionStyle = .default
-        } else {
-            cell.textLabel?.alpha = 0.5
-            cell.imageView?.alpha = 0.5
-            cell.selectionStyle = .none
-        }
     }
 
     func configureRecentlyClosed(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
@@ -354,7 +356,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.detailTextLabel?.text = ""
         cell.imageView?.image = UIImage(named: "recently_closed")
         cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
-        enable(on: hasRecentlyClosed, forButtonCell: cell)
+        AdditionalHistoryActionRow.setStyle(enabled: hasRecentlyClosed, forCell: cell)
         cell.accessibilityIdentifier = "HistoryPanel.recentlyClosedCell"
         return cell
     }
@@ -416,7 +418,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
 
-        if indexPath.section != Section.syncAndRecentlyClosed.rawValue {
+        if indexPath.section != Section.additionalHistoryActions.rawValue {
             presentContextMenu(for: indexPath)
         }
     }
@@ -433,7 +435,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // First section is for Sync/recently closed and always has 2 rows.
-        guard section > Section.syncAndRecentlyClosed.rawValue else {
+        guard section > Section.additionalHistoryActions.rawValue else {
             return 3
         }
 
@@ -442,7 +444,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         // First section is for Sync/recently closed and has no title.
-        guard section > Section.syncAndRecentlyClosed.rawValue else {
+        guard section > Section.additionalHistoryActions.rawValue else {
             return nil
         }
 
@@ -459,15 +461,20 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.accessoryType = .none
 
         // First section is reserved for Sync/recently closed.
-        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
+        guard indexPath.section > Section.additionalHistoryActions.rawValue else {
             cell.imageView?.layer.borderWidth = 0
 
-            switch indexPath.row {
-            case 0:
+            guard let row = AdditionalHistoryActionRow(rawValue: indexPath.row) else {
+                assertionFailure("Bad row number")
+                return cell
+            }
+
+            switch row {
+            case .clearRecent:
                 return configureClearHistory(cell, for: indexPath)
-            case 1:
+            case .showRecentlyClosedTabs:
                 return configureRecentlyClosed(cell, for: indexPath)
-            default:
+            case .showSyncTabs:
                 return configureSyncedTabs(cell, for: indexPath)
             }
         }
@@ -481,7 +488,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         defer {
             tableView.deselectRow(at: indexPath, animated: true)
         }
-        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
+        guard indexPath.section > Section.additionalHistoryActions.rawValue else {
             switch indexPath.row {
             case 0:
                 showClearRecentHistory()
@@ -511,7 +518,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         // First section is for Sync/recently closed and its header has no view.
-        guard section > Section.syncAndRecentlyClosed.rawValue else {
+        guard section > Section.additionalHistoryActions.rawValue else {
             return nil
         }
 
@@ -525,7 +532,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // First section is for Sync/recently closed and its header has no height.
-        guard section > Section.syncAndRecentlyClosed.rawValue else {
+        guard section > Section.additionalHistoryActions.rawValue else {
             return 0
         }
 
@@ -542,7 +549,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        if indexPath.section == Section.syncAndRecentlyClosed.rawValue {
+        if indexPath.section == Section.additionalHistoryActions.rawValue {
             return []
         }
         let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
@@ -625,7 +632,7 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
     }
 
     func shouldLoadRow(for indexPath: IndexPath) -> Bool {
-        guard indexPath.section > Section.syncAndRecentlyClosed.rawValue else {
+        guard indexPath.section > Section.additionalHistoryActions.rawValue else {
             return false
         }
 

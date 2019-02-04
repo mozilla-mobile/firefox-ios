@@ -160,11 +160,10 @@ extension Strings {
 
 // Clear recent history action menu
 extension Strings {
-    public static let ClearHistoryMenuTitle = NSLocalizedString("ClearHistoryMenuTitle", value: "Clearing Recent History will remove history, cookies, and other browser data.", comment: "Title for popup action menu to clear recent history.")
-    public static let ClearHistoryMenuOptionTheLastHour = NSLocalizedString("ClearHistoryMenuOptionTheLastHour", value: "The Last Hour", comment: "Button to perform action to clear history for the last hour")
-    public static let ClearHistoryMenuOptionToday = NSLocalizedString("ClearHistoryMenuOptionToday", value: "Today", comment: "Button to perform action to clear history for today only")
-    public static let ClearHistoryMenuOptionTodayAndYesterday = NSLocalizedString("ClearHistoryMenuOptionTodayAndYesterday", value: "Today and Yesterday", comment: "Button to perform action to clear history for yesterday and today")
-
+    public static let ClearHistoryMenuTitle = NSLocalizedString("HistoryPanel.ClearHistoryMenuTitle", value: "Clearing Recent History will remove history, cookies, and other browser data.", comment: "Title for popup action menu to clear recent history.")
+    public static let ClearHistoryMenuOptionTheLastHour = NSLocalizedString("HistoryPanel.ClearHistoryMenuOptionTheLastHour", value: "The Last Hour", comment: "Button to perform action to clear history for the last hour")
+    public static let ClearHistoryMenuOptionToday = NSLocalizedString("HistoryPanel.ClearHistoryMenuOptionToday", value: "Today", comment: "Button to perform action to clear history for today only")
+    public static let ClearHistoryMenuOptionTodayAndYesterday = NSLocalizedString("HistoryPanel.ClearHistoryMenuOptionTodayAndYesterday", value: "Today and Yesterday", comment: "Button to perform action to clear history for yesterday and today")
 }
 
 // Syncing
