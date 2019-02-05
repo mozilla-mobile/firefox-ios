@@ -170,7 +170,6 @@ open class BrowserProfile: Profile {
     internal let files: FileAccessor
 
     let db: BrowserDB
-    let loginsDB: BrowserDB
     let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
@@ -200,8 +199,7 @@ open class BrowserProfile: Profile {
      * see Bug 1218833. Be sure to only perform synchronous actions here.
      *
      * A SyncDelegate can be provided in this initializer, or once the profile is initialized.
-     * However, if we provide it here, it's assumed that we're initializing it from the application,
-     * and initialize the logins.db.
+     * However, if we provide it here, it's assumed that we're initializing it from the application.
      */
     init(localName: String, syncDelegate: SyncDelegate? = nil, clear: Bool = false) {
         log.debug("Initing profile \(localName) on thread \(Thread.current).")
@@ -226,7 +224,6 @@ open class BrowserProfile: Profile {
         let isNewProfile = !files.exists("")
 
         // Set up our database handles.
-        self.loginsDB = BrowserDB(filename: "logins.db", secretKey: BrowserProfile.loginsKey, schema: LoginsSchema(), files: files)
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
@@ -286,7 +283,6 @@ open class BrowserProfile: Profile {
         isShutdown = false
 
         db.reopenIfClosed()
-        loginsDB.reopenIfClosed()
     }
 
     func shutdown() {
@@ -294,7 +290,6 @@ open class BrowserProfile: Profile {
         isShutdown = true
 
         db.forceClose()
-        loginsDB.forceClose()
     }
 
     @objc
@@ -510,7 +505,7 @@ open class BrowserProfile: Profile {
     }
 
     lazy var logins: RustLogins = {
-        let databasePath = URL(fileURLWithPath: files.rootPath, isDirectory: true).appendingPathComponent("rust-logins.db").path
+        let databasePath = URL(fileURLWithPath: files.rootPath, isDirectory: true).appendingPathComponent("logins.db").path
         return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey)
     }()
 
@@ -790,16 +785,11 @@ open class BrowserProfile: Profile {
         }
 
         private func handleRecreationOfDatabaseNamed(name: String?) -> Success {
-            let loginsCollections = ["passwords"]
             let browserCollections = ["bookmarks", "history", "tabs"]
 
             let dbName = name ?? "<all>"
             switch dbName {
-            case "<all>":
-                return self.locallyResetCollections(loginsCollections + browserCollections)
-            case "logins.db":
-                return self.locallyResetCollections(loginsCollections)
-            case "browser.db":
+            case "<all>", "browser.db":
                 return self.locallyResetCollections(browserCollections)
             default:
                 log.debug("Unknown database \(dbName).")
