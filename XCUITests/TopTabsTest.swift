@@ -184,24 +184,6 @@ class TopTabsTest: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
     }
-    // This test is disabled, this option is not shown now
-    func testCloseTabFromPageOptionsMenu() {
-        // Open two websites so that there are two tabs open and the page options menu is available
-        navigator.openURL(urlValue)
-        navigator.openNewURL(urlString: urlExample)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-
-        // Go back to one website so that the page options menu is available and close one tab from there
-        closeTabTrayView(goBackToBrowserTab: urlLabelExample)
-        navigator.performAction(Action.CloseTabFromPageOptions)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-
-        // Go back to the website left open, close it and check that it has been closed
-        closeTabTrayView(goBackToBrowserTab: urlLabel)
-        navigator.performAction(Action.CloseTabFromPageOptions)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        waitForNoExistence(app.collectionViews.cells[urlLabel])
-    }
 
     // Smoketest
     func testLongTapTabCounter() {
