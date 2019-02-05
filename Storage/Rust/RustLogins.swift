@@ -64,6 +64,12 @@ public class RustLogins {
         queue.async {
             do {
                 let record = try self.storage.get(id: id)
+                if record?.formSubmitURL?.isEmpty ?? false {
+                    record?.formSubmitURL = nil
+                }
+                if record?.httpRealm?.isEmpty ?? false {
+                    record?.httpRealm = nil
+                }
                 deferred.fill(Maybe(success: record))
             } catch let err as NSError {
                 deferred.fill(Maybe(failure: err))
