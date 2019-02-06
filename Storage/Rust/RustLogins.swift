@@ -250,6 +250,14 @@ public class RustLogins {
     public func update(login: LoginRecord) -> Success {
         let deferred = Success()
 
+        // TEMP: Workaround for https://github.com/mozilla/application-services/issues/623
+        if login.formSubmitURL?.isEmpty ?? false {
+            login.formSubmitURL = nil
+        }
+        if login.httpRealm?.isEmpty ?? false {
+            login.httpRealm = nil
+        }
+
         queue.async {
             do {
                 try self.storage.update(login: login)
