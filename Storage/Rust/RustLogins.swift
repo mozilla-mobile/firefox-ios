@@ -5,7 +5,92 @@
 import Foundation
 import Shared
 import Deferred
-import Logins
+
+@_exported import Logins
+
+public extension LoginRecord {
+    public convenience init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
+        let hostname: String
+        if let _ = protectionSpace.`protocol` {
+            hostname = protectionSpace.urlString()
+        } else {
+            hostname = protectionSpace.host
+        }
+
+        let httpRealm = protectionSpace.realm
+        let username = credentials.user
+        let password = credentials.password
+
+        self.init(fromJSONDict: [
+            "hostname": hostname,
+            "httpRealm": httpRealm as Any,
+            "username": username ?? "",
+            "password": password ?? ""
+        ])
+    }
+
+    public var credentials: URLCredential {
+        return URLCredential(user: username ?? "", password: password, persistence: .none)
+    }
+
+    public var protectionSpace: URLProtectionSpace {
+        // Break down the full url hostname into its scheme/protocol and host components
+        let hostnameURL = hostname.asURL
+        let host = hostnameURL?.host ?? hostname
+        let scheme = hostnameURL?.scheme ?? ""
+
+        // We should ignore any SSL or normal web ports in the URL.
+        var port = hostnameURL?.port ?? 0
+        if port == 443 || port == 80 {
+            port = 0
+        }
+
+        return URLProtectionSpace(host: host, port: port, protocol: scheme, realm: nil, authenticationMethod: nil)
+    }
+
+    public var hasMalformedHostname: Bool {
+        let hostnameURL = hostname.asURL
+        guard let _ = hostnameURL?.host else {
+            return true
+        }
+
+        return false
+    }
+
+    public var isValid: Maybe<()> {
+        // Referenced from https://mxr.mozilla.org/mozilla-central/source/toolkit/components/passwordmgr/nsLoginManager.js?rev=f76692f0fcf8&mark=280-281#271
+
+        // Logins with empty hostnames are not valid.
+        if hostname.isEmpty {
+            return Maybe(failure: LoginRecordError(description: "Can't add a login with an empty hostname."))
+        }
+
+        // Logins with empty passwords are not valid.
+        if password.isEmpty {
+            return Maybe(failure: LoginRecordError(description: "Can't add a login with an empty password."))
+        }
+
+        // Logins with both a formSubmitURL and httpRealm are not valid.
+        if let _ = formSubmitURL, let _ = httpRealm {
+            return Maybe(failure: LoginRecordError(description: "Can't add a login with both a httpRealm and formSubmitURL."))
+        }
+
+        // Login must have at least a formSubmitURL or httpRealm.
+        if (formSubmitURL == nil) && (httpRealm == nil) {
+            return Maybe(failure: LoginRecordError(description: "Can't add a login without a httpRealm or formSubmitURL."))
+        }
+
+        // All good.
+        return Maybe(success: ())
+    }
+}
+
+public class LoginRecordError: MaybeErrorType {
+    public let description: String
+    public init(description: String) {
+        self.description = description
+    }
+}
 
 public class RustLogins {
     let databasePath: String
@@ -43,21 +128,6 @@ public class RustLogins {
         return deferred
     }
 
-    public func getLoginDataForGUID(_ guid: GUID) -> Deferred<Maybe<Login>> {
-        return get(id: guid).bind({ result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
-            }
-
-            if let successValue = result.successValue, let record = successValue {
-                let login = Login(guid: record.id, hostname: record.hostname, username: record.username ?? "", password: record.password)
-                return deferMaybe(login)
-            }
-
-            return deferMaybe(LoginDataError(description: "Login not found for GUID \(guid)"))
-        })
-    }
-
     public func get(id: String) -> Deferred<Maybe<LoginRecord?>> {
         let deferred = Deferred<Maybe<LoginRecord?>>()
 
@@ -79,7 +149,7 @@ public class RustLogins {
         return deferred
     }
 
-    public func searchLoginsWithQuery(_ query: String?) -> Deferred<Maybe<Cursor<Login>>> {
+    public func searchLoginsWithQuery(_ query: String?) -> Deferred<Maybe<Cursor<LoginRecord>>> {
         return list().bind({ result in
             if let error = result.failureValue {
                 return deferMaybe(error)
@@ -90,8 +160,7 @@ public class RustLogins {
             }
 
             guard let query = query, !query.isEmpty else {
-                let logins = records.map({ Login(guid: $0.id, hostname: $0.hostname, username: $0.username ?? "", password: $0.password )})
-                return deferMaybe(ArrayCursor(data: logins))
+                return deferMaybe(ArrayCursor(data: records))
             }
 
             let filteredRecords = records.filter({
@@ -99,12 +168,11 @@ public class RustLogins {
                 ($0.username ?? "").contains(query) ||
                 $0.password.contains(query)
             })
-            let filteredLogins = filteredRecords.map({ Login(guid: $0.id, hostname: $0.hostname, username: $0.username ?? "", password: $0.password )})
-            return deferMaybe(ArrayCursor(data: filteredLogins))
+            return deferMaybe(ArrayCursor(data: filteredRecords))
         })
     }
 
-    public func getLoginsForProtectionSpace(_ protectionSpace: URLProtectionSpace, withUsername username: String? = nil) -> Deferred<Maybe<Cursor<LoginData>>> {
+    public func getLoginsForProtectionSpace(_ protectionSpace: URLProtectionSpace, withUsername username: String? = nil) -> Deferred<Maybe<Cursor<LoginRecord>>> {
         return list().bind({ result in
             if let error = result.failureValue {
                 return deferMaybe(error)
@@ -128,8 +196,7 @@ public class RustLogins {
                     $0.hostname == protectionSpace.host
                 })
             }
-            let filteredLogins = filteredRecords.map({ Login(guid: $0.id, hostname: $0.hostname, username: $0.username ?? "", password: $0.password )})
-            return deferMaybe(ArrayCursor(data: filteredLogins))
+            return deferMaybe(ArrayCursor(data: filteredRecords))
         })
     }
 
@@ -158,18 +225,6 @@ public class RustLogins {
         return deferred
     }
 
-    public func addLogin(_ login: LoginData) -> Success {
-        let record = loginRecord(from: login)
-
-        return add(login: record).bind({ result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
-            }
-
-            return succeed()
-        })
-    }
-
     public func add(login: LoginRecord) -> Deferred<Maybe<String>> {
         let deferred = Deferred<Maybe<String>>()
 
@@ -185,28 +240,11 @@ public class RustLogins {
         return deferred
     }
 
-    public func updateLoginByGUID(_ guid: GUID, new: LoginData) -> Success {
-        let record = loginRecord(from: new)
-        record.id = guid
+    public func use(login: LoginRecord) -> Success {
+        login.timesUsed += 1
+        login.timeLastUsed = Int64(Date.nowMicroseconds())
 
-        return update(login: record)
-    }
-
-    public func addUseOfLoginByGUID(_ guid: GUID) -> Success {
-        return get(id: guid).bind({ result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
-            }
-
-            guard let successValue = result.successValue, let record = successValue else {
-                return deferMaybe(LoginDataError(description: "Login not found for GUID \(guid)"))
-            }
-
-            record.timesUsed += 1
-            record.timeLastUsed = Int64(Date.nowMicroseconds())
-
-            return self.update(login: record)
-        })
+        return self.update(login: login)
     }
 
     public func update(login: LoginRecord) -> Success {
@@ -224,20 +262,8 @@ public class RustLogins {
         return deferred
     }
 
-    public func removeLoginByGUID(_ guid: GUID) -> Success {
-        return delete(id: guid).bind({ result in
-            if let error = result.failureValue {
-                return deferMaybe(error)
-            }
-
-            return succeed()
-        })
-    }
-
-    public func removeLoginsWithGUIDs(_ guids: [GUID]) -> Success {
-        return all(guids.map({ removeLoginByGUID($0) })).bind({ _ in
-            return succeed()
-        })
+    public func delete(ids: [String]) -> Deferred<[Maybe<Bool>]> {
+        return all(ids.map({ delete(id: $0) }))
     }
 
     public func delete(id: String) -> Deferred<Maybe<Bool>> {
@@ -268,18 +294,5 @@ public class RustLogins {
         }
 
         return deferred
-    }
-
-    private func loginRecord(from loginData: LoginData) -> LoginRecord {
-        let record = LoginRecord(fromJSONDict: loginData.toDict())
-
-        if record.httpRealm?.isEmpty ?? false {
-            record.httpRealm = nil
-        }
-        if record.formSubmitURL?.isEmpty ?? false {
-            record.formSubmitURL = nil
-        }
-
-        return record
     }
 }

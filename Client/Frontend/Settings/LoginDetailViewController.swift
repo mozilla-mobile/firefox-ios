@@ -31,7 +31,7 @@ class LoginDetailViewController: SensitiveViewController {
 
     fileprivate let tableView = UITableView()
 
-    fileprivate var login: Login {
+    fileprivate var login: LoginRecord {
         didSet {
             tableView.reloadData()
         }
@@ -60,7 +60,7 @@ class LoginDetailViewController: SensitiveViewController {
 
     weak var settingsDelegate: SettingsDelegate?
 
-    init(profile: Profile, login: Login) {
+    init(profile: Profile, login: LoginRecord) {
         self.login = login
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
@@ -176,7 +176,7 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .lastModifiedSeparator:
             let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
             let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the current login was last modified with the timestamp as the parameter.")
-            let formattedLabel = String(format: lastModified, Date.fromMicrosecondTimestamp(login.timePasswordChanged).toRelativeTimeString())
+            let formattedLabel = String(format: lastModified, Date.fromMicrosecondTimestamp(MicrosecondTimestamp(login.timePasswordChanged)).toRelativeTimeString())
             // Setting only the detail text produces smaller text as desired, and it is centered.
             cell.detailTextLabel?.text = formattedLabel
             cell.backgroundColor = view.backgroundColor
@@ -279,7 +279,7 @@ extension LoginDetailViewController {
     func deleteLogin() {
         profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
-                self.profile.logins.removeLoginByGUID(self.login.guid).uponQueue(.main) { _ in
+                self.profile.logins.delete(id: self.login.id).uponQueue(.main) { _ in
                     _ = self.navigationController?.popViewController(animated: true)
                 }
             }, hasSyncedLogins: yes.successValue ?? true)
@@ -290,8 +290,8 @@ extension LoginDetailViewController {
 
     func onProfileDidFinishSyncing() {
         // Reload details after syncing.
-        profile.logins.getLoginDataForGUID(login.guid).uponQueue(.main) { result in
-            if let syncedLogin = result.successValue {
+        profile.logins.get(id: login.id).uponQueue(.main) { result in
+            if let successValue = result.successValue, let syncedLogin = successValue {
                 self.login = syncedLogin
             }
         }
@@ -324,12 +324,14 @@ extension LoginDetailViewController {
         // Keep a copy of the old data in case we fail and need to revert back
         let oldPassword = login.password
         let oldUsername = login.username
-        login.update(password: password, username: username)
+        login.password = password
+        login.username = username
 
         if login.isValid.isSuccess {
-            profile.logins.updateLoginByGUID(login.guid, new: login)
+            _ = profile.logins.update(login: login)
         } else if let oldUsername = oldUsername {
-            login.update(password: oldPassword, username: oldUsername)
+            login.password = oldPassword
+            login.username = oldUsername
         }
     }
 }

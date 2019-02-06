@@ -35,6 +35,62 @@ class LoginsHelper: TabContentScript {
         return "loginsManagerMessageHandler"
     }
 
+    fileprivate func getPasswordOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
+        var realm: String? = nil
+        if let uri = URL(string: uriString),
+            let scheme = uri.scheme, !scheme.isEmpty,
+            let host = uri.host {
+            if allowJS && scheme == "javascript" {
+                return "javascript:"
+            }
+
+            realm = "\(scheme)://\(host)"
+
+            // If the URI explicitly specified a port, only include it when
+            // it's not the default. (We never want "http://foo.com:80")
+            if let port = uri.port {
+                realm? += ":\(port)"
+            }
+        } else {
+            // bug 159484 - disallow url types that don't support a hostPort.
+            // (although we handle "javascript:..." as a special case above.)
+            log.debug("Couldn't parse origin for \(uriString)")
+            realm = nil
+        }
+        return realm
+    }
+
+    func loginRecordFromScript(_ script: [String : Any], url: URL) -> LoginRecord? {
+        guard let username = script["username"] as? String,
+            let password = script["password"] as? String else {
+                return nil
+        }
+
+        guard let origin = getPasswordOrigin(url.absoluteString) else {
+            return nil
+        }
+
+        var dict: [String : Any] = [
+            "hostname": origin,
+            "username": username,
+            "password": password
+        ]
+
+        if let formSubmit = script["formSubmitURL"] as? String {
+            dict["formSubmitURL"] = formSubmit
+        }
+
+        if let passwordField = script["passwordField"] as? String {
+            dict["passwordField"] = passwordField
+        }
+
+        if let userField = script["usernameField"] as? String {
+            dict["usernameField"] = userField
+        }
+
+        return LoginRecord(fromJSONDict: dict)
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard var res = message.body as? [String: AnyObject] else { return }
         guard let type = res["type"] as? String else { return }
@@ -56,13 +112,13 @@ class LoginsHelper: TabContentScript {
             if message.frameInfo.isMainFrame && type == "request" {
                 res["username"] = "" as AnyObject?
                 res["password"] = "" as AnyObject?
-                if let login = Login.fromScript(url, script: res),
+                if let login = loginRecordFromScript(res, url: url),
                    let requestId = res["requestId"] as? String {
                     requestLogins(login, requestId: requestId)
                 }
             } else if type == "submit" {
                 if self.profile.prefs.boolForKey("saveLogins") ?? true {
-                    if let login = Login.fromScript(url, script: res) {
+                    if let login = loginRecordFromScript(res, url: url) {
                         setCredentials(login)
                     }
                 }
@@ -96,15 +152,7 @@ class LoginsHelper: TabContentScript {
         return attr
     }
 
-    func getLoginsForProtectionSpace(_ protectionSpace: URLProtectionSpace) -> Deferred<Maybe<Cursor<LoginData>>> {
-        return profile.logins.getLoginsForProtectionSpace(protectionSpace)
-    }
-
-    func updateLoginByGUID(_ guid: GUID, new: LoginData) -> Success {
-        return profile.logins.updateLoginByGUID(guid, new: new)
-    }
-
-    func setCredentials(_ login: LoginData) {
+    func setCredentials(_ login: LoginRecord) {
         if login.password.isEmpty {
             log.debug("Empty password")
             return
@@ -118,7 +166,7 @@ class LoginsHelper: TabContentScript {
                 for saved in data {
                     if let saved = saved {
                         if saved.password == login.password {
-                            self.profile.logins.addUseOfLoginByGUID(saved.guid)
+                            _ = self.profile.logins.use(login: saved)
                             return
                         }
 
@@ -132,7 +180,7 @@ class LoginsHelper: TabContentScript {
         }
     }
 
-    fileprivate func promptSave(_ login: LoginData) {
+    fileprivate func promptSave(_ login: LoginRecord) {
         guard login.isValid.isSuccess else {
             return
         }
@@ -159,7 +207,7 @@ class LoginsHelper: TabContentScript {
         let save = SnackButton(title: Strings.LoginsHelperSaveLoginButtonTitle, accessibilityIdentifier: "SaveLoginPrompt.saveLoginButton", bold: true) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
-            self.profile.logins.addLogin(login)
+            _ = self.profile.logins.add(login: login)
             LeanPlumClient.shared.track(event: .savedLoginAndPassword)
         }
         snackBar?.addButton(dontSave)
@@ -167,12 +215,12 @@ class LoginsHelper: TabContentScript {
         tab?.addSnackbar(snackBar!)
     }
 
-    fileprivate func promptUpdateFromLogin(login old: LoginData, toLogin new: LoginData) {
+    fileprivate func promptUpdateFromLogin(login old: LoginRecord, toLogin new: LoginRecord) {
         guard new.isValid.isSuccess else {
             return
         }
 
-        let guid = old.guid
+        new.id = old.id
 
         let formatted: String
         if let username = new.username {
@@ -189,26 +237,25 @@ class LoginsHelper: TabContentScript {
         let dontSave = SnackButton(title: Strings.LoginsHelperDontUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.donttUpdateButton", bold: false) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
-            return
         }
         let update = SnackButton(title: Strings.LoginsHelperUpdateButtonTitle, accessibilityIdentifier: "UpdateLoginPrompt.updateButton", bold: true) { bar in
             self.tab?.removeSnackbar(bar)
             self.snackBar = nil
-            _ = self.profile.logins.updateLoginByGUID(guid, new: new)
+            _ = self.profile.logins.update(login: new)
         }
         snackBar?.addButton(dontSave)
         snackBar?.addButton(update)
         tab?.addSnackbar(snackBar!)
     }
 
-    fileprivate func requestLogins(_ login: LoginData, requestId: String) {
+    fileprivate func requestLogins(_ login: LoginRecord, requestId: String) {
         profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(.main) { res in
             var jsonObj = [String: Any]()
             if let cursor = res.successValue {
                 log.debug("Found \(cursor.count) logins.")
                 jsonObj["requestId"] = requestId
                 jsonObj["name"] = "RemoteLogins:loginsFound"
-                jsonObj["logins"] = cursor.map { $0!.toDict() }
+                jsonObj["logins"] = cursor.map { $0!.toJSONDict() }
             }
 
             let json = JSON(jsonObj)

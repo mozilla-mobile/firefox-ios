@@ -4,12 +4,12 @@
 
 import Foundation
 import Shared
+import Storage
 import XCGLogger
 import Deferred
 import SwiftKeychainWrapper
 import SwiftyJSON
 import FxA
-import Logins
 import SDWebImage
 
 private let log = Logger.syncLogger

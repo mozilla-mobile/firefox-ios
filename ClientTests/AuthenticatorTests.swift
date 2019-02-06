@@ -22,8 +22,8 @@ class MockChallengeSender: NSObject, URLAuthenticationChallengeSender {
     func cancel(_ challenge: URLAuthenticationChallenge) {}
 }
 
-class MockMalformableLogin: LoginData {
-    var guid: String
+class MockMalformableLogin: LoginRecord {
+    var id: String
     var credentials: URLCredential
     var protectionSpace: URLProtectionSpace
     var hostname: String
@@ -37,11 +37,11 @@ class MockMalformableLogin: LoginData {
     var isValid = Maybe(success: ())
 
     static func createWithHostname(_ hostname: String, username: String, password: String, formSubmitURL: String) -> MockMalformableLogin {
-        return self.init(guid: Bytes.generateGUID(), hostname: hostname, username: username, password: password, formSubmitURL: formSubmitURL)
+        return self.init(id: Bytes.generateGUID(), hostname: hostname, username: username, password: password, formSubmitURL: formSubmitURL)
     }
 
-    required init(guid: String, hostname: String, username: String, password: String, formSubmitURL: String) {
-        self.guid = guid
+    required init(id: String, hostname: String, username: String, password: String, formSubmitURL: String) {
+        self.id = id
         self.credentials = URLCredential(user: username, password: password, persistence: .none)
         self.hostname = hostname
         self.password = password
@@ -53,11 +53,6 @@ class MockMalformableLogin: LoginData {
     func toDict() -> [String: String] {
         // Not used for this mock
         return [String: String]()
-    }
-
-    func isSignificantlyDifferentFrom(_ login: LoginData) -> Bool {
-        // Not used for this mock
-        return true
     }
 }
 

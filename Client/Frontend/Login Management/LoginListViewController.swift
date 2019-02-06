@@ -41,7 +41,7 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate let profile: Profile
     fileprivate let searchView = SearchInputView()
-    fileprivate var activeLoginQuery: Deferred<Maybe<[Login]>>?
+    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
     fileprivate let loadingView = SettingsLoadingView()
     fileprivate var deleteAlert: UIAlertController?
     fileprivate var selectionButtonHeightConstraint: Constraint?
@@ -177,8 +177,8 @@ class LoginListViewController: SensitiveViewController {
     }
 
     // Wrap the SQLiteLogins method to allow us to cancel it from our end.
-    fileprivate func queryLogins(_ query: String) -> Deferred<Maybe<[Login]>> {
-        let deferred = Deferred<Maybe<[Login]>>()
+    fileprivate func queryLogins(_ query: String) -> Deferred<Maybe<[LoginRecord]>> {
+        let deferred = Deferred<Maybe<[LoginRecord]>>()
         profile.logins.searchLoginsWithQuery(query) >>== { logins in
             deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
             succeed()
@@ -233,10 +233,10 @@ private extension LoginListViewController {
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
-                    self.loginDataSource.loginAtIndexPath(indexPath)!.guid
+                    self.loginDataSource.loginAtIndexPath(indexPath)!.id
                 }
 
-                self.profile.logins.removeLoginsWithGUIDs(guidsToDelete).uponQueue(.main) { _ in
+                self.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
                     self.cancelSelection()
                     self.loadLogins()
                 }
@@ -424,7 +424,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
     fileprivate let emptyStateView = NoLoginsView()
 
-    fileprivate var sections = [Character: [Login]]() {
+    fileprivate var sections = [Character: [LoginRecord]]() {
         didSet {
             assert(Thread.isMainThread, "Must be assigned to from the main thread or else data will be out of sync with reloadData.")
             self.dataObserver?.loginSectionsDidUpdate()
@@ -433,12 +433,12 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
     fileprivate var titles = [Character]()
 
-    fileprivate func loginsForSection(_ section: Int) -> [Login]? {
+    fileprivate func loginsForSection(_ section: Int) -> [LoginRecord]? {
         let titleForSectionIndex = titles[section]
         return sections[titleForSectionIndex]
     }
 
-    func loginAtIndexPath(_ indexPath: IndexPath) -> Login? {
+    func loginAtIndexPath(_ indexPath: IndexPath) -> LoginRecord? {
         let titleForSectionIndex = titles[indexPath.section]
         return sections[titleForSectionIndex]?[indexPath.row]
     }
@@ -478,7 +478,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         return String(titles[section])
     }
 
-    func setLogins(_ logins: [Login]) {
+    func setLogins(_ logins: [LoginRecord]) {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.
         return computeSectionsFromLogins(logins).uponQueue(.main) { result in
@@ -495,20 +495,20 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         }
     }
 
-    fileprivate func computeSectionsFromLogins(_ logins: [Login]) -> Deferred<Maybe<([Character], [Character: [Login]])>> {
+    fileprivate func computeSectionsFromLogins(_ logins: [LoginRecord]) -> Deferred<Maybe<([Character], [Character: [LoginRecord]])>> {
         guard logins.count > 0 else {
-            return deferMaybe( ([Character](), [Character: [Login]]()) )
+            return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
         }
 
         var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
-        var sections = [Character: [Login]]()
+        var sections = [Character: [LoginRecord]]()
         var titleSet = Set<Character>()
 
         // Small helper method for using the precomputed base domain to determine the title/section of the
         // given login.
-        func titleForLogin(_ login: Login) -> Character {
+        func titleForLogin(_ login: LoginRecord) -> Character {
             // Fallback to hostname if we can't extract a base domain.
-            let titleString = domainLookup[login.guid]?.baseDomain?.uppercased() ?? login.hostname
+            let titleString = domainLookup[login.id]?.baseDomain?.uppercased() ?? login.hostname
             return titleString.first ?? Character("")
         }
 
@@ -516,9 +516,9 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         // 1. Compare base domains
         // 2. If bases are equal, compare hosts
         // 3. If login URL was invalid, revert to full hostname
-        func sortByDomain(_ loginA: Login, loginB: Login) -> Bool {
-            guard let domainsA = domainLookup[loginA.guid],
-                  let domainsB = domainLookup[loginB.guid] else {
+        func sortByDomain(_ loginA: LoginRecord, loginB: LoginRecord) -> Bool {
+            guard let domainsA = domainLookup[loginA.id],
+                  let domainsB = domainLookup[loginB.id] else {
                 return false
             }
 
@@ -540,7 +540,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
             // baseDomain() is a costly call because of the ETLD lookup tables.
             logins.forEach { login in
-                domainLookup[login.guid] = (
+                domainLookup[login.id] = (
                     login.hostname.asURL?.baseDomain,
                     login.hostname.asURL?.host,
                     login.hostname
@@ -551,7 +551,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             logins.forEach { titleSet.insert(titleForLogin($0)) }
 
             // 2. Setup an empty list for each title found.
-            titleSet.forEach { sections[$0] = [Login]() }
+            titleSet.forEach { sections[$0] = [LoginRecord]() }
 
             // 3. Go through our logins and put them in the right section.
             logins.forEach { sections[titleForLogin($0)]?.append($0) }

@@ -277,7 +277,7 @@ extension LoginTableViewCell: MenuHelperInterface {
 
 // MARK: - Cell Decorators
 extension LoginTableViewCell {
-    func updateCellWithLogin(_ login: LoginData) {
+    func updateCellWithLogin(_ login: LoginRecord) {
         descriptionLabel.text = login.hostname
         highlightedLabel.text = login.username
     }
