@@ -92,13 +92,20 @@ open class MockActivityStreamDataObserver: DataObserver {
     }
 }
 
+class MockFiles: FileAccessor {
+    init() {
+        let docPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        super.init(rootPath: (docPath as NSString).appendingPathComponent("testing"))
+    }
+}
+
 open class MockProfile: Profile {
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
     public var files: FileAccessor
     public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
-    public var logins: BrowserLogins & SyncableLogins & ResettableSyncStorage
+    public var logins: RustLogins
     public var syncManager: SyncManager!
 
     public lazy var panelDataObservers: PanelDataObservers = {
@@ -113,7 +120,7 @@ open class MockProfile: Profile {
     init() {
         files = MockFiles()
         syncManager = MockSyncManager()
-        logins = MockLogins(files: files)
+        logins = RustLogins(databasePath: "mock_logins.db", encryptionKey: "AAAAAAAA")
         db = BrowserDB(filename: "mock.db", schema: BrowserSchema(), files: files)
         readingListDB = BrowserDB(filename: "mock_ReadingList.db", schema: ReadingListSchema(), files: files)
         places = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
