@@ -6,7 +6,6 @@ import Foundation
 import Storage
 import Shared
 import SwiftKeychainWrapper
-import Logins
 
 enum InfoItem: Int {
     case websiteItem = 0

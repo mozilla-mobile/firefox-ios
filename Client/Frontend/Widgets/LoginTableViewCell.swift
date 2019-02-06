@@ -5,7 +5,6 @@
 import UIKit
 import SnapKit
 import Storage
-import Logins
 
 protocol LoginTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginTableViewCell)
