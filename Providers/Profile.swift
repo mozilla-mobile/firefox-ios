@@ -11,7 +11,6 @@ import Account
 import Shared
 import Storage
 import Sync
-import Logins
 import XCGLogger
 import SwiftKeychainWrapper
 import Deferred
