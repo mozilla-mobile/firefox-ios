@@ -8,6 +8,7 @@ import Storage
 import Shared
 import SwiftKeychainWrapper
 import Deferred
+import Logins
 
 private struct LoginListUX {
     static let RowHeight: CGFloat = 58

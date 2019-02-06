@@ -5,8 +5,7 @@
 import Foundation
 import Shared
 import Deferred
-
-@_exported import Logins
+import Logins
 
 public extension LoginRecord {
     public convenience init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {

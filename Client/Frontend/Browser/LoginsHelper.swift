@@ -9,6 +9,7 @@ import XCGLogger
 import WebKit
 import Deferred
 import SwiftyJSON
+import Logins
 
 private let log = Logger.browserLogger
 
