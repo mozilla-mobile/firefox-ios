@@ -81,7 +81,7 @@ class LoginListViewController: SensitiveViewController {
         automaticallyAdjustsScrollViewInsets = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
 
-        self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen.")
+        self.title = Strings.LoginsAndPasswordsTitle
 
         searchView.delegate = self
         tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)

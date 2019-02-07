@@ -761,9 +761,8 @@ class LoginsSetting: Setting {
         self.tabManager = settings.tabManager
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
-
-        let loginsTitle = NSLocalizedString("Logins", comment: "Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.")
-        super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]),
+        
+        super.init(title: NSAttributedString(string: Strings.LoginsAndPasswordsTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]),
                    delegate: delegate)
     }
 

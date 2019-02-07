@@ -58,7 +58,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     
         let syncAction = syncMenuButton(showFxA: presentSignInViewController)
-        let item = PhotonActionSheetItem(title: "Logins", text: nil, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
+        let item = PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
             let logins = LoginListViewController(profile: self.profile)
             let navController = ThemedNavigationController(rootViewController: logins)
             logins.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.dismissLogins)), animated: true)
