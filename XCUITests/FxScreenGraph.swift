@@ -175,6 +175,8 @@ class Action {
     static let AcceptClearAllWebsiteData = "AcceptClearAllWebsiteData"
     static let TapOnFilterWebsites = "TapOnFilterWebsites"
     static let ShowMoreWebsiteDataEntries = "ShowMoreWebsiteDataEntries"
+    
+    static let ClearRecentHistory = "ClearRecentHistory"
 
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
     static let ToggleTrackingProtectionSettingOnNormalMode = "ToggleTrackingProtectionSettingAlwaysOn"
@@ -483,6 +485,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
         screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
         screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
+        screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
+            app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
+        }
+        screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(HomePanel_ReadingList) { screenState in

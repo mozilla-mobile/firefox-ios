@@ -5,11 +5,12 @@
 import XCTest
 
 let webpage = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
+let oldHistoryEntries: [String] = ["Internet for people, not profit — Mozilla", "Twitter", "Home - YouTube"]
 // This is part of the info the user will see in recent closed tabs once the default visited website (https://www.mozilla.org/en-US/book/) is closed
 let closedWebPageLabel = "localhost:\(serverPort)/test-fixture/test-mozilla-book.html"
 
 class HistoryTests: BaseTestCase {
-    let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings"]
+    let testWithDB = ["testOpenHistoryFromBrowserContextMenuOptions", "testClearHistoryFromSettings", "testClearRecentHistory"]
 
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample.db"
@@ -226,5 +227,32 @@ class HistoryTests: BaseTestCase {
         navigator.goto(HomePanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
+    }
+    
+    // Private function created to select desired option from the "Clear Recent History" list
+    // We used this aproch to avoid code duplication
+    private func tapOnClearRecentHistoryOption(optionSelected: String) {
+        app.sheets.buttons[optionSelected].tap()
+    }
+    
+    func testClearRecentHistory() {
+        navigator.performAction(Action.ClearRecentHistory)
+        tapOnClearRecentHistoryOption(optionSelected: "The Last Hour")
+        // No data will be removed after Action.ClearRecentHistory since there is no recent history created.
+        for entry in oldHistoryEntries {
+            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+        }
+        // Go to 'goolge.com' to create a recent history entry.
+        navigator.openURL("google.com")
+        navigator.goto(HomePanel_History)
+        XCTAssertTrue(app.tables.cells.staticTexts["Google"].exists)
+        navigator.performAction(Action.ClearRecentHistory)
+        // Recent data will be removed after calling tapOnClearRecentHistoryOption(optionSelected: "Today").
+        // Older data will not be removed
+        tapOnClearRecentHistoryOption(optionSelected: "Today")
+        for entry in oldHistoryEntries {
+            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+        }
+        XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
     }
 }
