@@ -154,8 +154,8 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForTabsButton()
         navigator.performAction(Action.GoToHomePage)
         waitForExistence(app.tables["History List"], timeout: 3)
-        // There are only two cells for recently closed and sync, no entries
-        XCTAssertEqual(app.tables["History List"].cells.count, 2)
+        // There are three cells for, clear recent history, recently closed and sync, no entries
+        XCTAssertEqual(app.tables["History List"].cells.count, 3)
         // Go to home to check that the changes are done, one history
         // Using local server does not work here, the item is not displayed
         navigator.openURL("www.example.com")
@@ -165,6 +165,6 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.GoToHomePage)
         waitForExistence(app.tables["History List"], timeout: 3)
         // There is one entry
-        XCTAssertEqual(app.tables["History List"].cells.count, 3)
+        XCTAssertEqual(app.tables["History List"].cells.count, 4)
     }
 }

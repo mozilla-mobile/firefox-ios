@@ -259,8 +259,8 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         navigator.goto(HomePanel_History)
 
         let firstEntryOnList = app.tables["History List"].cells.element(boundBy:
-            5).staticTexts[exampleDomainTitle]
-        let secondEntryOnList = app.tables["History List"].cells.element(boundBy: 2).staticTexts[twitterTitle]
+            6).staticTexts[exampleDomainTitle]
+        let secondEntryOnList = app.tables["History List"].cells.element(boundBy: 3).staticTexts[twitterTitle]
 
         XCTAssertTrue(firstEntryOnList.exists, "first entry before is not correct")
         XCTAssertTrue(secondEntryOnList.exists, "second entry before is not correct")
