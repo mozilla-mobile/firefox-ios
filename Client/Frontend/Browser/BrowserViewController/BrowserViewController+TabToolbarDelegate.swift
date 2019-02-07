@@ -47,14 +47,30 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showBackForwardList()
     }
 
+    @objc func dismissLogins() {
+        dismiss(animated: true)
+    }
+
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         var actions: [[PhotonActionSheetItem]] = []
 
-        if let syncAction = syncMenuButton(showFxA: presentSignInViewController) {
-            actions.append(syncAction)
+    
+        let syncAction = syncMenuButton(showFxA: presentSignInViewController)
+        let item = PhotonActionSheetItem(title: "Logins", text: nil, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
+            let logins = LoginListViewController(profile: self.profile)
+            let navController = ThemedNavigationController(rootViewController: logins)
+            logins.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.dismissLogins)), animated: true)
+            self.present(navController, animated: true)
         }
+
+        if let sync = syncAction {
+            actions.append(sync + [item])
+        } else {
+            actions.append([item])
+        }
+
         actions.append(getLibraryActions(vcDelegate: self))
         actions.append(getOtherPanelActions(vcDelegate: self))
         // force a modal if the menu is being displayed in compact split screen
