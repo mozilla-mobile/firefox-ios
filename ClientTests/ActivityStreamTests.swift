@@ -20,9 +20,6 @@ class ActivityStreamTests: XCTestCase {
         self.panel = ActivityStreamPanel(profile: profile)
     }
 
-    override func tearDown() {
-Client/Application/AppDelegate.swift    }
-
     func testDeletionOfSingleSuggestedSite() {
         let siteToDelete = panel.defaultTopSites()[0]
 
