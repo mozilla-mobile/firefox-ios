@@ -8,6 +8,8 @@ import Deferred
 
 @_exported import Logins
 
+private let log = Logger.syncLogger
+
 public extension LoginRecord {
     public convenience init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
         let hostname: String
@@ -99,28 +101,144 @@ public class RustLogins {
     let queue: DispatchQueue
     let storage: LoginsStorage
 
+    public fileprivate(set) var isOpen: Bool = false
+
+    private var didAttemptToMoveToBackup = false
+
     public init(databasePath: String, encryptionKey: String) {
         self.databasePath = databasePath
         self.encryptionKey = encryptionKey
 
         self.queue =  DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
         self.storage = LoginsStorage(databasePath: databasePath)
+    }
+
+    private func moveDatabaseFileToBackupLocation() {
+        let databaseURL = URL(fileURLWithPath: databasePath)
+        let databaseContainingDirURL = databaseURL.deletingLastPathComponent()
+        let baseFilename = databaseURL.lastPathComponent
+
+        // Attempt to make a backup as long as the database file still exists.
+        if FileManager.default.fileExists(atPath: databasePath) {
+            Sentry.shared.sendWithStacktrace(message: "Unable to open Logins database", tag: SentryTag.rustLogins, severity: .warning, description: "Attempting to move '\(baseFilename)'")
+
+            // Note that a backup file might already exist! We append a counter to avoid this.
+            var bakCounter = 0
+            var bakBaseFilename: String
+            var bakDatabasePath: String
+            repeat {
+                bakCounter += 1
+                bakBaseFilename = "\(baseFilename).bak.\(bakCounter)"
+                bakDatabasePath = databaseContainingDirURL.appendingPathComponent(bakBaseFilename).path
+            } while FileManager.default.fileExists(atPath: bakDatabasePath)
+
+            do {
+                try FileManager.default.moveItem(atPath: bakDatabasePath, toPath: bakDatabasePath)
+
+                let shmBaseFilename = baseFilename + "-shm"
+                let walBaseFilename = baseFilename + "-wal"
+                log.debug("Moving \(shmBaseFilename) and \(walBaseFilename)…")
+
+                let shmDatabasePath = databaseContainingDirURL.appendingPathComponent(shmBaseFilename).path
+                if FileManager.default.fileExists(atPath: shmDatabasePath) {
+                    log.debug("\(shmBaseFilename) exists.")
+                    try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-shm")
+                }
+
+                let walDatabasePath = databaseContainingDirURL.appendingPathComponent(walBaseFilename).path
+                if FileManager.default.fileExists(atPath: walDatabasePath) {
+                    log.debug("\(walBaseFilename) exists.")
+                    try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-wal")
+                }
+
+                log.debug("Finished moving Logins database successfully.")
+            } catch let error as NSError {
+                Sentry.shared.sendWithStacktrace(message: "Unable to move Logins database to backup location", tag: SentryTag.rustLogins, severity: .error, description: "Attempted to move to '\(bakBaseFilename)'. \(error.localizedDescription)")
+            }
+        } else {
+            // No backup was attempted since the database file did not exist.
+            Sentry.shared.sendWithStacktrace(message: "The Logins database was deleted while in use", tag: SentryTag.rustLogins)
+        }
+    }
+
+    private func open() -> NSError? {
         do {
             try self.storage.unlock(withEncryptionKey: encryptionKey)
-        } catch let err {
-            print(err)
+            isOpen = true
+            return nil
+        } catch let err as NSError {
+            if let loginsStoreError = err as? LoginsStoreError {
+                switch loginsStoreError {
+                // The encryption key is incorrect, or the `databasePath`
+                // specified is not a valid database. This is an unrecoverable
+                // state unless we can move the existing file to a backup
+                // location and start over.
+                case .InvalidKey(let message):
+                    log.error(message)
+
+                    if !didAttemptToMoveToBackup {
+                        moveDatabaseFileToBackupLocation()
+                        didAttemptToMoveToBackup = true
+                        return open()
+                    }
+                case .Panic(let message):
+                    Sentry.shared.sendWithStacktrace(message: "Panicked when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
+                default:
+                    Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
+                }
+            } else {
+                Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+            }
+
+            return err
+        }
+    }
+
+    private func close() -> NSError? {
+        do {
+            try self.storage.lock()
+            isOpen = false
+            return nil
+        } catch let err as NSError {
+            Sentry.shared.sendWithStacktrace(message: "Unknown error when closing Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+            return err
+        }
+    }
+
+    public func reopenIfClosed() {
+        if !isOpen {
+            _ = open()
+        }
+    }
+
+    public func forceClose() {
+        if isOpen {
+            _ = close()
         }
     }
 
     public func sync(unlockInfo: SyncUnlockInfo) -> Success {
-        //return succeed() // TEMP: Don't let this Sync yet
         let deferred = Success()
 
         queue.async {
+            if !self.isOpen, let error = self.open() {
+                deferred.fill(Maybe(failure: error))
+                return
+            }
+
             do {
                 try self.storage.sync(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
+                if let loginsStoreError = err as? LoginsStoreError {
+                    switch loginsStoreError {
+                    case .Panic(let message):
+                        Sentry.shared.sendWithStacktrace(message: "Panicked when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
+                    default:
+                        Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
+                    }
+                }
+
                 deferred.fill(Maybe(failure: err))
             }
         }
@@ -132,6 +250,11 @@ public class RustLogins {
         let deferred = Deferred<Maybe<LoginRecord?>>()
 
         queue.async {
+            if !self.isOpen, let error = self.open() {
+                deferred.fill(Maybe(failure: error))
+                return
+            }
+
             do {
                 let record = try self.storage.get(id: id)
                 if record?.formSubmitURL?.isEmpty ?? false {
@@ -214,6 +337,11 @@ public class RustLogins {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
 
         queue.async {
+            if !self.isOpen, let error = self.open() {
+                deferred.fill(Maybe(failure: error))
+                return
+            }
+
             do {
                 let records = try self.storage.list()
                 deferred.fill(Maybe(success: records))
@@ -229,6 +357,11 @@ public class RustLogins {
         let deferred = Deferred<Maybe<String>>()
 
         queue.async {
+            if !self.isOpen, let error = self.open() {
+                deferred.fill(Maybe(failure: error))
+                return
+            }
+
             do {
                 let id = try self.storage.add(login: login)
                 deferred.fill(Maybe(success: id))
@@ -259,6 +392,11 @@ public class RustLogins {
         }
 
         queue.async {
+            if !self.isOpen, let error = self.open() {
+                deferred.fill(Maybe(failure: error))
+                return
+            }
+
             do {
                 try self.storage.update(login: login)
                 deferred.fill(Maybe(success: ()))
@@ -278,6 +416,11 @@ public class RustLogins {
         let deferred = Deferred<Maybe<Bool>>()
 
         queue.async {
+            if !self.isOpen, let error = self.open() {
+                deferred.fill(Maybe(failure: error))
+                return
+            }
+
             do {
                 let existed = try self.storage.delete(id: id)
                 deferred.fill(Maybe(success: existed))
@@ -293,6 +436,11 @@ public class RustLogins {
         let deferred = Success()
 
         queue.async {
+            if !self.isOpen, let error = self.open() {
+                deferred.fill(Maybe(failure: error))
+                return
+            }
+
             do {
                 try self.storage.reset()
                 deferred.fill(Maybe(success: ()))
