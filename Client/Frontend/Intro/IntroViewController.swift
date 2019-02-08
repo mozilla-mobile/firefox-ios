@@ -276,7 +276,6 @@ extension IntroViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        Profiler.shared?.end(bookend: .intro_did_appear)
     }
 
     @objc func dynamicFontChanged(_ notification: Notification) {

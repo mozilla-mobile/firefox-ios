@@ -197,8 +197,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
-        Profiler.appDidFinishLaunching() // NimbleDroid lib setup, runs in non-release only
-
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
         UNUserNotificationCenter.current().delegate = self
@@ -297,8 +295,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
-
-        Profiler.shared?.appIsActive()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
