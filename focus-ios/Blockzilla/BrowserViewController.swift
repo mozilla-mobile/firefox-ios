@@ -640,6 +640,7 @@ class BrowserViewController: UIViewController {
     }
 
     @objc private func selectLocationBar() {
+        showToolbars()
         urlBar.activateTextField()
     }
 
