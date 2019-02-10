@@ -57,7 +57,7 @@ class PageControl: UIView {
         }
 
         for _ in 0..<numberOfPages {
-            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 6, height: 6))
+            let button = UIButton(frame: UIConstants.layout.introViewButtonFrame)
             button.setImage(UIImage(imageLiteralResourceName: "page_indicator"), for: .normal)
             buttonArray.append(button)
         }
@@ -158,7 +158,7 @@ class IntroViewController: UIViewController {
         pageControl.stack.snp.makeConstraints { make in
             make.top.equalTo(pageViewController.view.snp.centerY).offset(IntroViewControllerUX.Height/2 + IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom).priority(.high)
             make.centerX.equalTo(self.view)
-            make.bottom.lessThanOrEqualTo(self.view).offset(24).priority(.required)
+            make.bottom.lessThanOrEqualTo(self.view).offset(UIConstants.layout.introViewPageControlOffset).priority(.required)
         }
 
         skipButton.backgroundColor = .clear
@@ -172,7 +172,7 @@ class IntroViewController: UIViewController {
         skipButton.snp.makeConstraints { make in
             make.bottom.equalTo(pageViewController.view.snp.centerY).offset(-IntroViewControllerUX.Height/2 - IntroViewControllerUX.PagerCenterOffsetFromScrollViewBottom).priority(.high)
             make.leading.equalTo(self.view.snp.centerX).offset(-IntroViewControllerUX.Width/2)
-            make.leading.top.greaterThanOrEqualTo(self.view).offset(24).priority(.required)
+            make.leading.top.greaterThanOrEqualTo(self.view).offset(UIConstants.layout.introViewSkipButtonOffset).priority(.required)
         }
     }
 
@@ -274,7 +274,7 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
     func addCard(title: String, text: String, viewController: UIViewController, image: UIImageView) {
         let introView = UIView()
         let gradientLayer = IntroCardGradientBackgroundView()
-        gradientLayer.layer.cornerRadius = 6
+        gradientLayer.layer.cornerRadius = UIConstants.layout.introViewCornerRadius
 
         introView.addSubview(gradientLayer)
         viewController.view.backgroundColor = .clear
@@ -284,17 +284,17 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
             make.edges.equalTo(introView)
         }
 
-        introView.layer.shadowRadius = 12
-        introView.layer.shadowOpacity = 0.2
-        introView.layer.cornerRadius = 6
+        introView.layer.shadowRadius = UIConstants.layout.introViewShadowRadius
+        introView.layer.shadowOpacity = UIConstants.layout.introViewShadowOpacity
+        introView.layer.cornerRadius = UIConstants.layout.introViewCornerRadius
         introView.layer.masksToBounds = false
 
         introView.addSubview(image)
         image.snp.makeConstraints { make in
             make.top.equalTo(introView)
             make.centerX.equalTo(introView)
-            make.width.equalTo(280)
-            make.height.equalTo(212)
+            make.width.equalTo(UIConstants.layout.introViewImageWidth)
+            make.height.equalTo(UIConstants.layout.introViewImageHeight)
         }
 
         let titleLabel = UILabel()
@@ -308,9 +308,9 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 
         introView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { (make ) -> Void in
-            make.top.equalTo(image.snp.bottom).offset(24)
-            make.leading.equalTo(introView).offset(24)
-            make.trailing.equalTo(introView).inset(24)
+            make.top.equalTo(image.snp.bottom).offset(UIConstants.layout.introViewTitleLabelOffset)
+            make.leading.equalTo(introView).offset(UIConstants.layout.introViewTitleLabelOffset)
+            make.trailing.equalTo(introView).inset(UIConstants.layout.introViewTitleLabelInset)
             make.centerX.equalTo(introView)
         }
 
@@ -326,18 +326,18 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
 
         introView.addSubview(textLabel)
         textLabel.snp.makeConstraints({ (make) -> Void in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIConstants.layout.introViewTextLabelOffset)
             make.centerX.equalTo(introView)
-            make.leading.equalTo(introView).offset(24)
-            make.trailing.equalTo(introView).inset(24)
+            make.leading.equalTo(introView).offset(UIConstants.layout.introViewTextLabelPadding)
+            make.trailing.equalTo(introView).inset(UIConstants.layout.introViewTextLabelInset)
         })
 
         introView.snp.makeConstraints { (make) -> Void in
             make.center.equalTo(viewController.view)
             make.width.equalTo(IntroViewControllerUX.Width).priority(.high)
             make.height.equalTo(IntroViewControllerUX.Height)
-            make.leading.greaterThanOrEqualTo(viewController.view).offset(24).priority(.required)
-            make.trailing.lessThanOrEqualTo(viewController.view).offset(24).priority(.required)
+            make.leading.greaterThanOrEqualTo(viewController.view).offset(UIConstants.layout.introViewOffset).priority(.required)
+            make.trailing.lessThanOrEqualTo(viewController.view).offset(UIConstants.layout.introViewOffset).priority(.required)
         }
 
         let cardButton = UIButton()
@@ -357,8 +357,8 @@ class ScrollViewController: UIPageViewController, PageControlDelegate {
         introView.addSubview(cardButton)
         introView.bringSubviewToFront(cardButton)
         cardButton.snp.makeConstraints { make in
-            make.top.greaterThanOrEqualTo(textLabel.snp.bottom).offset(5).priority(.required)
-            make.bottom.equalTo(introView).offset(-24).priority(.low)
+            make.top.greaterThanOrEqualTo(textLabel.snp.bottom).offset(UIConstants.layout.introViewCardButtonOffset).priority(.required)
+            make.bottom.equalTo(introView).offset(-UIConstants.layout.introViewOffset).priority(.low)
             make.centerX.equalTo(introView)
         }
         orderedViewControllers.append(viewController)

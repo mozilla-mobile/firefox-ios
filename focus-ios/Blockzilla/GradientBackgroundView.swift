@@ -37,7 +37,7 @@ class IntroCardGradientBackgroundView: UIView {
         backgroundColor = UIConstants.colors.gradientBackground
 
         let gradient = self.layer as! CAGradientLayer
-        let gradients = [UIColor(rgb: 0xF9F9FA), UIColor(rgb: 0xFFFFFF)]
+        let gradients = [UIConstants.Photon.Grey10, UIConstants.Photon.White100]
         gradient.colors = gradients.map { $0.withAlphaComponent(CGFloat(alpha)).cgColor }
     }
 

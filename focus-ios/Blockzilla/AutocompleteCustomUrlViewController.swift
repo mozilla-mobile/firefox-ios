@@ -34,7 +34,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
         label.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(50)
+            make.top.equalToSuperview().offset(UIConstants.layout.AutocompleteCustomURLLabelOffset)
         }
 
         tableView.snp.makeConstraints { make in
@@ -68,7 +68,7 @@ class AutocompleteCustomUrlViewController: UIViewController {
         navigationItem.rightBarButtonItem?.title = tableView.isEditing ? UIConstants.strings.edit : UIConstants.strings.done
 
         tableView.setEditing(!tableView.isEditing, animated: true)
-        addDomainCell?.animateHidden(tableView.isEditing, duration: 0.2)
+        addDomainCell?.animateHidden(tableView.isEditing, duration: UIConstants.layout.autocompleteAnimationDuration)
         navigationItem.setHidesBackButton(tableView.isEditing, animated: true)
         updateEmptyStateView()
         navigationItem.rightBarButtonItem?.isEnabled = tableView.isEditing || domains.count > 0
@@ -76,10 +76,10 @@ class AutocompleteCustomUrlViewController: UIViewController {
 
     @objc private func updateEmptyStateView() {
         if tableView.isEditing && domains.isEmpty {
-            tableView.backgroundView?.animateHidden(false, duration: 0.2)
+            tableView.backgroundView?.animateHidden(false, duration: UIConstants.layout.autocompleteAnimationDuration)
         } else {
             guard !tableView.backgroundView!.isHidden else { return }
-            tableView.backgroundView?.animateHidden(true, duration: 0.2)
+            tableView.backgroundView?.animateHidden(true, duration: UIConstants.layout.autocompleteAnimationDuration)
         }
     }
 }
@@ -150,7 +150,7 @@ extension AutocompleteCustomUrlViewController: UITableViewDataSource {
 
             // We need to wait till after the editing animation when swiping to delete
             // to make sure we're really not in editing mode
-            perform(#selector(updateEmptyStateView), with: nil, afterDelay: 0.5)
+            perform(#selector(updateEmptyStateView), with: nil, afterDelay: UIConstants.layout.autocompleteAfterDelayDuration)
         }
     }
 

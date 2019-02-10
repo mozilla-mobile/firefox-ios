@@ -16,8 +16,8 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
     private var saveButton: UIBarButtonItem?
     private var dataTask: URLSessionDataTask?
 
-    private let leftMargin = 10
-    private let rowHeight = 44
+    private let leftMargin = UIConstants.layout.addSearchEngineInputWidth
+    private let rowHeight = UIConstants.layout.addSearchEngineInputHeight
 
     private var nameInput = UITextField()
     private var templateInput = UITextView()
@@ -59,7 +59,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         nameInput.textColor = UIConstants.colors.settingsTextLabel
         nameInput.leftView = UIView(frame: CGRect(x: 0, y: 0, width: leftMargin, height: rowHeight))
         nameInput.leftViewMode = .always
-        nameInput.font = UIFont.systemFont(ofSize: 15)
+        nameInput.font = UIConstants.fonts.addSearchEngineInput
         nameInput.accessibilityIdentifier = "nameInput"
         nameInput.autocorrectionType = .no
         container.addSubview(nameInput)
@@ -71,7 +71,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templatePlaceholderLabel.backgroundColor = UIConstants.colors.cellBackground
         templatePlaceholderLabel.textColor = UIConstants.colors.settingsDetailLabel
         templatePlaceholderLabel.text = UIConstants.strings.AddSearchEngineTemplatePlaceholder
-        templatePlaceholderLabel.font = UIFont.systemFont(ofSize: 15)
+        templatePlaceholderLabel.font = UIConstants.fonts.addSearchEngineInput
         templatePlaceholderLabel.numberOfLines = 0
         templateContainer.addSubview(templatePlaceholderLabel)
 
@@ -83,7 +83,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         templateInput.backgroundColor = .clear
         templateInput.textColor = UIConstants.colors.settingsTextLabel
         templateInput.keyboardType = .URL
-        templateInput.font = UIFont.systemFont(ofSize: 15)
+        templateInput.font = UIConstants.fonts.addSearchEngineInput
         templateInput.accessibilityIdentifier = "templateInput"
         templateInput.autocapitalizationType = .none
         templateInput.keyboardAppearance = .dark
@@ -99,7 +99,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
 
         exampleLabel.numberOfLines = 1
         exampleLabel.attributedText = subtitle
-        exampleLabel.font = UIFont.systemFont(ofSize: 12)
+        exampleLabel.font = UIConstants.fonts.addSearchEngineExampleLabel
         exampleLabel.adjustsFontSizeToFitWidth = true
         exampleLabel.minimumScaleFactor = 0.5
         exampleLabel.isUserInteractionEnabled = true
@@ -114,7 +114,7 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         }
 
         nameLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(UIConstants.layout.addSearchEngineInputOffset)
             make.height.equalTo(rowHeight)
             make.leading.equalTo(leftMargin)
             make.width.equalToSuperview()
@@ -127,33 +127,33 @@ class AddSearchEngineViewController: UIViewController, UITextViewDelegate {
         }
 
         templateLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(nameInput.snp.bottom).offset(16)
+            make.top.equalTo(nameInput.snp.bottom).offset(UIConstants.layout.addSearchEngineInputOffset)
             make.leading.equalTo(leftMargin)
             make.height.equalTo(rowHeight)
         }
 
         templateContainer.snp.makeConstraints { (make) in
             make.top.equalTo(templateLabel.snp.bottom)
-            make.height.equalTo(88)
+            make.height.equalTo(UIConstants.layout.addSearchEngineTemplateContainerHeight)
             make.width.equalToSuperview()
         }
 
         templateInput.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-4)
-            make.leading.equalToSuperview().offset(5)
+            make.trailing.equalToSuperview().offset(-UIConstants.layout.addSearchEngineTemplateInputPadding)
+            make.leading.equalToSuperview().offset(UIConstants.layout.addSearchEngineTemplateInputPadding)
         }
 
         templatePlaceholderLabel.snp.makeConstraints { (make) in
-            make.height.equalTo(44)
-            make.top.equalToSuperview().offset(4)
-            make.leading.equalToSuperview().offset(9)
+            make.height.equalTo(UIConstants.layout.addSearchEnginePlaceholderHeight)
+            make.top.equalToSuperview().offset(UIConstants.layout.addSearchEnginePlaceholderOffset)
+            make.leading.equalToSuperview().offset(UIConstants.layout.addSearchEnginePlaceholderPadding)
             make.trailing.equalToSuperview().offset(-leftMargin)
         }
 
         exampleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(templateInput.snp.bottom).offset(2)
+            make.top.equalTo(templateInput.snp.bottom).offset(UIConstants.layout.addSearchEngineExampleLabelOffset)
             make.leading.equalToSuperview().offset(leftMargin)
             make.trailing.equalToSuperview().offset(-leftMargin)
         }

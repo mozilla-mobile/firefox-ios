@@ -160,8 +160,8 @@ class URLBar: UIView {
         shieldIcon.tintColor = .white
         shieldIcon.alpha = 0
         shieldIcon.contentMode = .center
-        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        shieldIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        shieldIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         shieldIcon.accessibilityIdentifier = "URLBar.trackingProtectionIcon"
 
         let gestureRecognizer = UITapGestureRecognizer()
@@ -176,7 +176,7 @@ class URLBar: UIView {
         let myImage = UIImage(named: "icon_cancel")
         cancelButton.setImage(myImage, for: .normal)
 
-        cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        cancelButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
         cancelButton.accessibilityIdentifier = "URLBar.cancelButton"
         cancelButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
@@ -188,8 +188,8 @@ class URLBar: UIView {
         deleteButton.isHidden = true
         deleteButton.alpha = 0
         deleteButton.setImage(#imageLiteral(resourceName: "icon_delete"), for: .normal)
-        deleteButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        deleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        deleteButton.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        deleteButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         deleteButton.addTarget(self, action: #selector(didPressDelete), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIEdgeInsets(top: UIConstants.layout.urlBarMargin,
                                                       left: UIConstants.layout.urlBarMargin,
@@ -201,36 +201,36 @@ class URLBar: UIView {
         lockIcon.isHidden = true
         lockIcon.alpha = 0
         lockIcon.contentMode = .center
-        lockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        lockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        lockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        lockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         textAndLockContainer.addSubview(lockIcon)
 
         pageActionsButton.isHidden = true
         pageActionsButton.alpha = 0
         pageActionsButton.setImage(#imageLiteral(resourceName: "icon_page_action"), for: .normal)
-        pageActionsButton.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        pageActionsButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        pageActionsButton.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        pageActionsButton.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         pageActionsButton.addTarget(self, action: #selector(didPressPageActions), for: .touchUpInside)
         pageActionsButton.accessibilityIdentifier = "URLBar.pageActionsButton"
-        pageActionsButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 8, bottom: 8, right: 10)
+        pageActionsButton.contentEdgeInsets = UIConstants.layout.urlBarPageActionsButtonInsets
         textAndLockContainer.addSubview(pageActionsButton)
 
         urlBarBorderView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.1)
         urlBarBorderView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        urlBarBorderView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        urlBarBorderView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         addSubview(urlBarBorderView)
 
         urlBarBackgroundView.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         urlBarBackgroundView.layer.cornerRadius = UIConstants.layout.urlBarCornerRadius
-        urlBarBackgroundView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        urlBarBackgroundView.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        urlBarBackgroundView.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         urlBarBorderView.addSubview(urlBarBackgroundView)
 
         smallLockIcon.alpha = 0
         smallLockIcon.contentMode = .center
-        smallLockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        smallLockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        smallLockIcon.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        smallLockIcon.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
         smallLockIcon.accessibilityIdentifier = "Collapsed.smallLockIcon"
 
         truncatedUrlText.alpha = 0
@@ -240,14 +240,14 @@ class URLBar: UIView {
         truncatedUrlText.backgroundColor = UIColor.clear
         truncatedUrlText.contentMode = .bottom
         truncatedUrlText.textColor = UIConstants.colors.urlTextFont
-        truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
+        truncatedUrlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         truncatedUrlText.isScrollEnabled = false
         truncatedUrlText.accessibilityIdentifier = "Collapsed.truncatedUrlText"
 
         collapsedTrackingProtectionBadge.alpha = 0
         collapsedTrackingProtectionBadge.tintColor = .white
-        collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
-        collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
+        collapsedTrackingProtectionBadge.setContentCompressionResistancePriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
+        collapsedTrackingProtectionBadge.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .horizontal)
 
         collapsedUrlAndLockWrapper.addSubview(smallLockIcon)
         collapsedUrlAndLockWrapper.addSubview(truncatedUrlText)
@@ -256,7 +256,7 @@ class URLBar: UIView {
 
         // UITextField doesn't allow customization of the clear button, so we create
         // our own so we can use it as the rightView.
-        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: UIConstants.layout.urlBarClearButtonWidth, height: UIConstants.layout.urlBarClearButtonHeight))
         clearButton.isHidden = true
         clearButton.setImage(#imageLiteral(resourceName: "icon_clear"), for: .normal)
         clearButton.addTarget(self, action: #selector(didPressClear), for: .touchUpInside)
@@ -270,7 +270,7 @@ class URLBar: UIView {
         urlText.autocorrectionType = .no
         urlText.rightView = clearButton
         urlText.rightViewMode = .whileEditing
-        urlText.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
+        urlText.setContentHuggingPriority(UILayoutPriority(rawValue: UIConstants.layout.urlBarLayoutPriorityRawValue), for: .vertical)
         urlText.autocompleteDelegate = self
         urlText.completionSource = domainCompletion
         urlText.accessibilityIdentifier = "URLBar.urlText"
@@ -399,8 +399,8 @@ class URLBar: UIView {
 
         progressBar.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.bottom.equalTo(self).offset(1)
-            make.height.equalTo(3)
+            make.bottom.equalTo(self).offset(UIConstants.layout.progressBarHeight)
+            make.height.equalTo(UIConstants.layout.progressBarHeight)
         }
 
         smallLockIcon.snp.makeConstraints { make in
@@ -410,7 +410,7 @@ class URLBar: UIView {
         }
 
         collapsedTrackingProtectionBadge.snp.makeConstraints { make in
-            make.leading.equalTo(safeAreaLayoutGuide).offset(10)
+            make.leading.equalTo(safeAreaLayoutGuide).offset(UIConstants.layout.collapsedProtectionBadgeOffset)
             make.width.height.equalTo(smallLockIcon)
             make.bottom.top.equalTo(smallLockIcon)
         }
@@ -418,7 +418,7 @@ class URLBar: UIView {
         truncatedUrlText.snp.makeConstraints { make in
             make.leading.equalTo(smallLockIcon.snp.trailing)
             make.trailing.equalTo(collapsedUrlAndLockWrapper)
-            make.bottom.equalTo(smallLockIcon).offset(5)
+            make.bottom.equalTo(smallLockIcon).offset(UIConstants.layout.truncatedUrlTextOffset)
         }
 
         collapsedUrlAndLockWrapper.snp.makeConstraints { make in
@@ -1012,12 +1012,12 @@ class CollapsedTrackingProtectionBadge: TrackingProtectionBadge {
 
         trackingProtectionOn.snp.makeConstraints { make in
             make.leading.centerY.equalTo(self)
-            make.width.height.equalTo(18)
+            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
         }
 
         trackingProtectionOff.snp.makeConstraints { make in
             make.leading.centerY.equalTo(self)
-            make.width.height.equalTo(18)
+            make.width.height.equalTo(UIConstants.layout.trackingProtectionHeight)
         }
     }
 

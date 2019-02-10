@@ -28,47 +28,47 @@ class SearchSuggestionsPromptView: UIView {
         addSubview(promptContainer)
 
         promptContainer.snp.makeConstraints { make in
-            make.top.equalTo(self).offset(8).priority(.medium)
-            make.bottom.equalTo(self).offset(-8).priority(.medium)
-            make.leading.equalTo(self).offset(6)
-            make.trailing.equalTo(self).offset(-6)
+            make.top.equalTo(self).offset(UIConstants.layout.promptContainerOffset).priority(.medium)
+            make.bottom.equalTo(self).offset(-UIConstants.layout.promptContainerOffset).priority(.medium)
+            make.leading.equalTo(self).offset(UIConstants.layout.promptContainerPadding)
+            make.trailing.equalTo(self).offset(-UIConstants.layout.promptContainerPadding)
         }
 
         promptTitle.text = UIConstants.strings.searchSuggestionsPromptTitle
         promptTitle.textColor = UIConstants.Photon.Grey10
-        promptTitle.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
+        promptTitle.font = UIConstants.fonts.promptTitle
         promptTitle.textAlignment = NSTextAlignment.center
         promptTitle.numberOfLines = 0
         promptTitle.lineBreakMode = .byWordWrapping
         promptContainer.addSubview(promptTitle)
 
         promptTitle.snp.makeConstraints { make in
-            make.top.equalTo(promptContainer).offset(20).priority(.medium)
-            make.leading.equalTo(promptContainer).offset(10)
-            make.trailing.equalTo(promptContainer).offset(-10)
+            make.top.equalTo(promptContainer).offset(UIConstants.layout.promptTitleOffset).priority(.medium)
+            make.leading.equalTo(promptContainer).offset(UIConstants.layout.promptTitlePadding)
+            make.trailing.equalTo(promptContainer).offset(-UIConstants.layout.promptTitlePadding)
         }
 
         promptMessage.text = String(format: UIConstants.strings.searchSuggestionsPromptMessage, AppInfo.productName)
         promptMessage.textColor = UIConstants.Photon.Grey10
-        promptMessage.font = UIFont.systemFont(ofSize: 14)
+        promptMessage.font = UIConstants.fonts.promptMessage
         promptMessage.textAlignment = NSTextAlignment.center
         promptMessage.numberOfLines = 0
         promptMessage.lineBreakMode = .byWordWrapping
         promptContainer.addSubview(promptMessage)
 
         promptMessage.snp.makeConstraints { make in
-            make.top.equalTo(promptTitle.snp.bottom).offset(5).priority(.medium)
-            make.leading.equalTo(promptContainer).offset(10)
-            make.trailing.equalTo(promptContainer).offset(-10)
+            make.top.equalTo(promptTitle.snp.bottom).offset(UIConstants.layout.promptMessageOffset).priority(.medium)
+            make.leading.equalTo(promptContainer).offset(UIConstants.layout.promptMessagePadding)
+            make.trailing.equalTo(promptContainer).offset(-UIConstants.layout.promptMessagePadding)
         }
 
         buttonBorderTop.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
         addSubview(buttonBorderTop)
 
         buttonBorderTop.snp.makeConstraints { make in
-            make.top.equalTo(promptMessage.snp.bottom).offset(20).priority(.medium)
+            make.top.equalTo(promptMessage.snp.bottom).offset(UIConstants.layout.buttonBorderTopOffset).priority(.medium)
             make.leading.trailing.equalTo(promptContainer)
-            make.height.equalTo(0.5).priority(.medium)
+            make.height.equalTo(UIConstants.layout.buttonBorderTopHeight).priority(.medium)
         }
 
         buttonBorderMiddle.backgroundColor = UIConstants.Photon.Grey10.withAlphaComponent(0.2)
@@ -77,14 +77,14 @@ class SearchSuggestionsPromptView: UIView {
         buttonBorderMiddle.snp.makeConstraints { make in
             make.top.equalTo(buttonBorderTop.snp.bottom).priority(.medium)
             make.bottom.equalTo(promptContainer).priority(.medium)
-            make.width.equalTo(0.5)
-            make.height.equalTo(40).priority(.medium)
+            make.width.equalTo(UIConstants.layout.buttonBorderMiddleWidth)
+            make.height.equalTo(UIConstants.layout.buttonBorderMiddleHeight).priority(.medium)
             make.centerX.equalTo(self)
         }
 
         disableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.disableButton"
         disableButton.setTitle(UIConstants.strings.searchSuggestionsPromptDisable, for: .normal)
-        disableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        disableButton.titleLabel?.font = UIConstants.fonts.disableButton
         disableButton.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptButtonRadius
         disableButton.addTarget(self, action: #selector(didPressDisable), for: .touchUpInside)
         addSubview(disableButton)
@@ -97,7 +97,7 @@ class SearchSuggestionsPromptView: UIView {
 
         enableButton.accessibilityIdentifier = "SearchSuggestionsPromptView.enableButton"
         enableButton.setTitle(UIConstants.strings.searchSuggestionsPromptEnable, for: .normal)
-        enableButton.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.bold)
+        enableButton.titleLabel?.font = UIConstants.fonts.enableButton
         enableButton.layer.cornerRadius = UIConstants.layout.searchSuggestionsPromptButtonRadius
         enableButton.addTarget(self, action: #selector(didPressEnable), for: .touchUpInside)
         addSubview(enableButton)
