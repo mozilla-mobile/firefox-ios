@@ -48,6 +48,7 @@ class LoginListViewController: SensitiveViewController {
     fileprivate var selectedIndexPaths = [IndexPath]()
     fileprivate let tableView = UITableView()
     weak var settingsDelegate: SettingsDelegate?
+    var shownFromAppMenu: Bool = false
 
     // Titles for selection/deselect/delete buttons
     fileprivate let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Label for the button used to deselect all logins.")
@@ -118,7 +119,8 @@ class LoginListViewController: SensitiveViewController {
         notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+
+        setupDefaultNavButtons()
 
         self.title = Strings.LoginsAndPasswordsTitle
 
@@ -192,7 +194,20 @@ class LoginListViewController: SensitiveViewController {
 
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
+    }
 
+    @objc func dismissLogins() {
+        dismiss(animated: true)
+    }
+
+    fileprivate func setupDefaultNavButtons() {
+        if shownFromAppMenu {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
+            navigationItem.rightBarButtonItem = nil
+        } else {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+        }
     }
 
     fileprivate func toggleDeleteBarButton() {
@@ -263,8 +278,7 @@ private extension LoginListViewController {
         self.view.layoutIfNeeded()
 
         tableView.setEditing(false, animated: true)
-        navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+        setupDefaultNavButtons()
     }
 
     @objc func tappedDelete() {
@@ -400,8 +414,7 @@ extension LoginListViewController: SearchInputViewDelegate {
     }
 
     @objc func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
-        // Show the edit after we're done with the search
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+        setupDefaultNavButtons()
         loadLogins()
     }
 }

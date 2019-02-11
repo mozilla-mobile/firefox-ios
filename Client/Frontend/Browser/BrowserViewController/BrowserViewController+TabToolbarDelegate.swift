@@ -47,10 +47,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showBackForwardList()
     }
 
-    @objc func dismissLogins() {
-        dismiss(animated: true)
-    }
-
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
@@ -61,8 +57,8 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             guard let navController = self.navigationController else { return }
             LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self).uponQueue(.main) { loginsVC in
                 guard let loginsVC = loginsVC else { return }
+                loginsVC.shownFromAppMenu = true
                 let navController = ThemedNavigationController(rootViewController: loginsVC)
-                loginsVC.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.dismissLogins)), animated: true)
                 navController.modalPresentationStyle = .formSheet
                 self.present(navController, animated: true)
             }
