@@ -855,11 +855,6 @@ class BrowserViewController: UIViewController {
             guard webView == tabManager.selectedTab?.webView else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
-                // Profiler.end triggers a screenshot, and a delay is needed here to capture the correct screen
-                // (otherwise the screen prior to this step completing is captured).
-                if webView.estimatedProgress > 0.9 {
-                    Profiler.shared?.end(bookend: .load_url, delay: 0.200)
-                }
             } else {
                 urlBar.hideProgressBar()
             }

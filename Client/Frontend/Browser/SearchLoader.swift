@@ -53,8 +53,6 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
-            Profiler.shared?.begin(bookend: .url_autocomplete)
-
             if let currentDbQuery = currentDbQuery {
                 currentDbQuery.cancel()
             }
@@ -65,7 +63,6 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             deferred.uponQueue(.main) { result in
                 defer {
                     self.currentDbQuery = nil
-                    Profiler.shared?.end(bookend: .url_autocomplete)
                 }
 
                 guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
