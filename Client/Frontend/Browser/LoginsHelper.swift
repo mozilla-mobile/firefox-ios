@@ -36,27 +36,27 @@ class LoginsHelper: TabContentScript {
     }
 
     fileprivate func getPasswordOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
-        var realm: String? = nil
-        if let uri = URL(string: uriString),
+        guard let uri = URL(string: uriString),
             let scheme = uri.scheme, !scheme.isEmpty,
-            let host = uri.host {
-            if allowJS && scheme == "javascript" {
-                return "javascript:"
-            }
-
-            realm = "\(scheme)://\(host)"
-
-            // If the URI explicitly specified a port, only include it when
-            // it's not the default. (We never want "http://foo.com:80")
-            if let port = uri.port {
-                realm? += ":\(port)"
-            }
-        } else {
+            let host = uri.host else {
             // bug 159484 - disallow url types that don't support a hostPort.
             // (although we handle "javascript:..." as a special case above.)
             log.debug("Couldn't parse origin for \(uriString)")
-            realm = nil
+            return nil
         }
+
+        if allowJS && scheme == "javascript" {
+            return "javascript:"
+        }
+
+        var realm = "\(scheme)://\(host)"
+
+        // If the URI explicitly specified a port, only include it when
+        // it's not the default. (We never want "http://foo.com:80")
+        if let port = uri.port {
+            realm += ":\(port)"
+        }
+
         return realm
     }
 
