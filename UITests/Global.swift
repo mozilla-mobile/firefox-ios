@@ -672,7 +672,7 @@ class HomePageUtils {
     }
 
     static func homePageSetting(_ tester: KIFUITestActor) -> String? {
-        let view = tester.waitForView(withAccessibilityIdentifier: "HomePageSettingTextField")
+        let view = tester.waitForView(withAccessibilityIdentifier: "HomeAsCustomURLTextField")
         guard let textField = view as? UITextField else {
             XCTFail("View is not a textField: view is \(String(describing: view))")
             return nil

@@ -158,11 +158,12 @@ class Action {
     static let ToggleHistoryInNewTab = "ToggleHistoryInNewTab"
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
+    static let SelectNewTabAsFirefoxHomePage = "SelectNewTabAsFirefoxHomePage"
     static let SelectNewTabAsBookmarksPage = "SelectNewTabAsBookmarksPage"
     static let SelectNewTabAsHistoryPage = "SelectNewTabAsHistoryPage"
     static let SelectNewTabAsCustomURL = "SelectNewTabAsCustomURL"
 
-    static let SelectHomeAsBlankPage = "SelectHomeAsBlankPage"
+    static let SelectHomeAsFirefoxHomePage = "SelectHomeAsFirefoxHomePage"
     static let SelectHomeAsBookmarksPage = "SelectHomeAsBookmarksPage"
     static let SelectHomeAsHistoryPage = "SelectHomeAsHistoryPage"
     static let SelectHomeAsCustomURL = "SelectHomeAsCustomURL"
@@ -636,17 +637,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let table = app.tables.element(boundBy: 0)
 
         screenState.gesture(forAction: Action.SelectNewTabAsBlankPage) { UserState in
-            table.cells["Blank Page"].tap()
+            table.cells["NewTabAsBlankPage"].tap()
+        }
+        screenState.gesture(forAction: Action.SelectNewTabAsFirefoxHomePage) { UserState in
+            table.cells["NewTabAsFirefoxHome"].tap()
         }
         screenState.gesture(forAction: Action.SelectNewTabAsBookmarksPage) { UserState in
-            table.cells["Bookmarks"].tap()
+            table.cells["NewTabAsBookmarks"].tap()
         }
         screenState.gesture(forAction: Action.SelectNewTabAsHistoryPage) { UserState in
-            table.cells["History"].tap()
+            table.cells["NewTabAsHistory"].tap()
         }
 
         screenState.gesture(forAction: Action.SelectNewTabAsCustomURL) { UserState in
-            table.cells["HomePageSetting"].tap()
+            table.cells["NewTabAsCustomURL"].tap()
         }
 
         screenState.backAction = navigationControllerBackAction
@@ -654,18 +658,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(HomeSettings) { screenState in
 
-        screenState.gesture(forAction: Action.SelectHomeAsBlankPage) { UserState in
-            app.cells["Blank Page"].tap()
+        screenState.gesture(forAction: Action.SelectHomeAsFirefoxHomePage) { UserState in
+            app.cells["HomeAsFirefoxHome"].tap()
         }
         screenState.gesture(forAction: Action.SelectHomeAsBookmarksPage) { UserState in
-            app.cells["Bookmarks"].tap()
+            app.cells["HomeAsBookmarks"].tap()
         }
         screenState.gesture(forAction: Action.SelectHomeAsHistoryPage) { UserState in
-            app.cells["History"].tap()
+            app.cells["HomeAsHistory"].tap()
         }
 
         screenState.gesture(forAction: Action.SelectHomeAsCustomURL) { UserState in
-            app.cells["HomePageSetting"].tap()
+            app.cells["HomeAsCustomURL"].tap()
         }
 
         screenState.gesture(forAction: Action.TogglePocketInNewTab) { userState in
