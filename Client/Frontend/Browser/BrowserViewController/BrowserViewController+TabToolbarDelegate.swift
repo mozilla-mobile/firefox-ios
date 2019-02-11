@@ -56,19 +56,22 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         var actions: [[PhotonActionSheetItem]] = []
 
-    
         let syncAction = syncMenuButton(showFxA: presentSignInViewController)
-        let item = PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
-            let logins = LoginListViewController(profile: self.profile)
-            let navController = ThemedNavigationController(rootViewController: logins)
-            logins.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.dismissLogins)), animated: true)
-            self.present(navController, animated: true)
+        let viewLogins = PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
+            guard let navController = self.navigationController else { return }
+            LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self).uponQueue(.main) { loginsVC in
+                guard let loginsVC = loginsVC else { return }
+                let navController = ThemedNavigationController(rootViewController: loginsVC)
+                loginsVC.navigationItem.setLeftBarButton(UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.dismissLogins)), animated: true)
+                navController.modalPresentationStyle = .formSheet
+                self.present(navController, animated: true)
+            }
         }
 
         if let sync = syncAction {
-            actions.append(sync + [item])
+            actions.append(sync + [viewLogins])
         } else {
-            actions.append([item])
+            actions.append([viewLogins])
         }
 
         actions.append(getLibraryActions(vcDelegate: self))

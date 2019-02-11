@@ -62,7 +62,46 @@ class LoginListViewController: SensitiveViewController {
         return button
     }()
 
-    init(profile: Profile) {
+    static func create(authenticateInNavigationController navigationController: UINavigationController, profile: Profile, settingsDelegate: SettingsDelegate) -> Deferred<LoginListViewController?> {
+        let deferred = Deferred<LoginListViewController?>()
+
+        func fillDeferred(ok: Bool, showingAuthDialog: Bool = true) {
+            if ok {
+                if showingAuthDialog {
+                    navigationController.dismiss(animated: true)
+                }
+
+                LeanPlumClient.shared.track(event: .openedLogins)
+                let viewController = LoginListViewController(profile: profile)
+                viewController.settingsDelegate = settingsDelegate
+                deferred.fill(viewController)
+            } else {
+                deferred.fill(nil)
+            }
+        }
+
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
+            fillDeferred(ok: true, showingAuthDialog: false)
+            return deferred
+        }
+
+        if authInfo.requiresValidation() {
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: AuthenticationStrings.loginsTouchReason, success: {
+                fillDeferred(ok: true)
+            }, cancel: {
+                fillDeferred(ok: false)
+            }, fallback: {
+                AppAuthenticator.presentPasscodeAuthentication(navigationController).uponQueue(.main) { isOk in
+                    fillDeferred(ok: isOk)
+                }
+            })
+        } else {
+            fillDeferred(ok: true)
+        }
+        return deferred
+    }
+
+    private init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
     }
