@@ -257,12 +257,6 @@ public class RustLogins {
 
             do {
                 let record = try self.storage.get(id: id)
-                if record?.formSubmitURL?.isEmpty ?? false {
-                    record?.formSubmitURL = nil
-                }
-                if record?.httpRealm?.isEmpty ?? false {
-                    record?.httpRealm = nil
-                }
                 deferred.fill(Maybe(success: record))
             } catch let err as NSError {
                 deferred.fill(Maybe(failure: err))
@@ -382,14 +376,6 @@ public class RustLogins {
 
     public func update(login: LoginRecord) -> Success {
         let deferred = Success()
-
-        // TEMP: Workaround for https://github.com/mozilla/application-services/issues/623
-        if login.formSubmitURL?.isEmpty ?? false {
-            login.formSubmitURL = nil
-        }
-        if login.httpRealm?.isEmpty ?? false {
-            login.httpRealm = nil
-        }
 
         queue.async {
             if !self.isOpen, let error = self.open() {
