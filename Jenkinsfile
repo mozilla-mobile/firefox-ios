@@ -13,6 +13,21 @@ pipeline {
                 checkout scm
             }
         }
+        stage('rust') {
+            steps {
+                sh 'curl https://sh.rustup.rs -sSf | sh -s -- -y'
+                sh 'source $HOME/.cargo/env'
+                sh '/Users/synctesting/.cargo/bin/rustup target add aarch64-apple-ios armv7-apple-ios armv7s-apple-ios x86_64-apple-ios i386-apple-ios'
+                sh '''
+                    if ! [ -x "$(command -v /Users/synctesting/.cargo/bin/cargo-lipo)" ] ; then
+                    echo "Cargo-lipo is not installed, installing"
+                    /Users/synctesting/.cargo/bin/cargo install cargo-lipo
+                    else
+                    echo "cargo-lipo installed"
+                    fi
+                    '''
+            }
+        }
         stage('bootstrap') {
             steps {
                 sh '''carthage bootstrap --platform ios'''
