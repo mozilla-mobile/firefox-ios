@@ -563,14 +563,21 @@ open class FxAClient10 {
     }
 
     private func cachedOAuthResponse(forScope scope: String) -> FxAOAuthResponse? {
-        let key = "FxAOAuthResponse:\(scope)"
-        guard let dictionary = KeychainStore.shared.dictionary(forKey: key),
+        let responseKeychainKey = "FxAOAuthResponse:\(scope)"
+        guard let dictionary = KeychainStore.shared.dictionary(forKey: responseKeychainKey),
             let oauthResponse = FxAOAuthResponse(dictionary: dictionary) else {
             return nil
         }
 
+        // If the OAuth token has expired, remove it from the cache.
         guard Date() < oauthResponse.expires else {
-            KeychainStore.shared.setDictionary(nil, forKey: key)
+            KeychainStore.shared.setDictionary(nil, forKey: responseKeychainKey)
+
+            // Even though the KeyID should be stable, clear it from the
+            // cache when the OAuth token expires just to be safe and keep
+            // things easier to manage.
+            let kidKeychainKey = "FxAOAuthKeyID:\(scope)"
+            KeychainStore.shared.setDictionary(nil, forKey: kidKeychainKey)
             return nil
         }
 
@@ -578,6 +585,7 @@ open class FxAClient10 {
     }
 
     open func oauthAuthorize(withSessionToken sessionToken: NSData, scope: String) -> Deferred<Maybe<FxAOAuthResponse>> {
+        // If we have a cached copy of the OAuth token in the Keychain, use it.
         if let cachedOAuthResponse = cachedOAuthResponse(forScope: scope) {
             return deferMaybe(cachedOAuthResponse)
         }
@@ -589,6 +597,7 @@ open class FxAClient10 {
     }
 
     open func oauthAuthorize(withSessionToken sessionToken: NSData, keyPair: RSAKeyPair, certificate: String, scope: String) -> Deferred<Maybe<FxAOAuthResponse>> {
+        // If we have a cached copy of the OAuth token in the Keychain, use it.
         if let cachedOAuthResponse = cachedOAuthResponse(forScope: scope) {
             return deferMaybe(cachedOAuthResponse)
         }
@@ -605,7 +614,7 @@ open class FxAClient10 {
             "client_id": AppConstants.FxAiOSClientId,
             "response_type": "token",
             "scope": scope,
-            "ttl": "300"
+            "ttl": "21600" // 6 hours
         ]
 
         let salt: Data = Data()
@@ -620,9 +629,10 @@ open class FxAClient10 {
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
         return makeRequest(mutableURLRequest, responseHandler: FxAClient10.oauthResponse) >>== { result in
-            let key = "FxAOAuthResponse:\(scope)"
+            let responseKeychainKey = "FxAOAuthResponse:\(scope)"
             let dictionary = result.dictionary()
-            KeychainStore.shared.setDictionary(dictionary, forKey: key)
+            // Cache the OAuth token in the Keychain for subsequent requests.
+            KeychainStore.shared.setDictionary(dictionary, forKey: responseKeychainKey)
             return deferMaybe(result)
         }
     }
