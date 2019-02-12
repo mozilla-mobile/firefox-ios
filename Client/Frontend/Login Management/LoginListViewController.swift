@@ -48,6 +48,7 @@ class LoginListViewController: SensitiveViewController {
     fileprivate var selectedIndexPaths = [IndexPath]()
     fileprivate let tableView = UITableView()
     weak var settingsDelegate: SettingsDelegate?
+    var shownFromAppMenu: Bool = false
 
     // Titles for selection/deselect/delete buttons
     fileprivate let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Label for the button used to deselect all logins.")
@@ -62,7 +63,46 @@ class LoginListViewController: SensitiveViewController {
         return button
     }()
 
-    init(profile: Profile) {
+    static func create(authenticateInNavigationController navigationController: UINavigationController, profile: Profile, settingsDelegate: SettingsDelegate) -> Deferred<LoginListViewController?> {
+        let deferred = Deferred<LoginListViewController?>()
+
+        func fillDeferred(ok: Bool, showingAuthDialog: Bool = true) {
+            if ok {
+                if showingAuthDialog {
+                    navigationController.dismiss(animated: true)
+                }
+
+                LeanPlumClient.shared.track(event: .openedLogins)
+                let viewController = LoginListViewController(profile: profile)
+                viewController.settingsDelegate = settingsDelegate
+                deferred.fill(viewController)
+            } else {
+                deferred.fill(nil)
+            }
+        }
+
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
+            fillDeferred(ok: true, showingAuthDialog: false)
+            return deferred
+        }
+
+        if authInfo.requiresValidation() {
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: AuthenticationStrings.loginsTouchReason, success: {
+                fillDeferred(ok: true)
+            }, cancel: {
+                fillDeferred(ok: false)
+            }, fallback: {
+                AppAuthenticator.presentPasscodeAuthentication(navigationController).uponQueue(.main) { isOk in
+                    fillDeferred(ok: isOk)
+                }
+            })
+        } else {
+            fillDeferred(ok: true)
+        }
+        return deferred
+    }
+
+    private init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
     }
@@ -79,9 +119,10 @@ class LoginListViewController: SensitiveViewController {
         notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
 
         automaticallyAdjustsScrollViewInsets = false
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
 
-        self.title = NSLocalizedString("Logins", tableName: "LoginManager", comment: "Title for Logins List View screen.")
+        setupDefaultNavButtons()
+
+        self.title = Strings.LoginsAndPasswordsTitle
 
         searchView.delegate = self
         tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
@@ -153,7 +194,20 @@ class LoginListViewController: SensitiveViewController {
 
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
+    }
 
+    @objc func dismissLogins() {
+        dismiss(animated: true)
+    }
+
+    fileprivate func setupDefaultNavButtons() {
+        if shownFromAppMenu {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
+            navigationItem.rightBarButtonItem = nil
+        } else {
+            navigationItem.leftBarButtonItem = nil
+            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+        }
     }
 
     fileprivate func toggleDeleteBarButton() {
@@ -224,8 +278,7 @@ private extension LoginListViewController {
         self.view.layoutIfNeeded()
 
         tableView.setEditing(false, animated: true)
-        navigationItem.leftBarButtonItem = nil
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+        setupDefaultNavButtons()
     }
 
     @objc func tappedDelete() {
@@ -361,8 +414,7 @@ extension LoginListViewController: SearchInputViewDelegate {
     }
 
     @objc func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
-        // Show the edit after we're done with the search
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
+        setupDefaultNavButtons()
         loadLogins()
     }
 }

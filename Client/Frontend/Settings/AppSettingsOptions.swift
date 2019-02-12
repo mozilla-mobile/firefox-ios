@@ -761,9 +761,8 @@ class LoginsSetting: Setting {
         self.tabManager = settings.tabManager
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
-
-        let loginsTitle = NSLocalizedString("Logins", comment: "Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.")
-        super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]),
+        
+        super.init(title: NSAttributedString(string: Strings.LoginsAndPasswordsTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]),
                    delegate: delegate)
     }
 
@@ -774,29 +773,13 @@ class LoginsSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
-            settings?.navigateToLoginsList()
+        deselectRow()
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let navController = navigationController else { return }
+        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: appDelegate.browserViewController).uponQueue(.main) { loginsVC in
+            guard let loginsVC = loginsVC else { return }
             LeanPlumClient.shared.track(event: .openedLogins)
-            return
-        }
-
-        if authInfo.requiresValidation() {
-            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-            touchIDReason: AuthenticationStrings.loginsTouchReason,
-            success: {
-                self.settings?.navigateToLoginsList()
-                LeanPlumClient.shared.track(event: .openedLogins)
-            },
-            cancel: {
-                self.deselectRow()
-            },
-            fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self.settings)
-                self.deselectRow()
-            })
-        } else {
-            settings?.navigateToLoginsList()
-            LeanPlumClient.shared.track(event: .openedLogins)
+            navController.pushViewController(loginsVC, animated: true)
         }
     }
 }

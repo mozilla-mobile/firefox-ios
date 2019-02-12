@@ -122,21 +122,22 @@ class RequirePasscodeSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
+        deselectRow()
         guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
             navigateToRequireInterval()
             return
         }
 
         if authInfo.requiresValidation() {
-            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-            touchIDReason: AuthenticationStrings.requirePasscodeTouchReason,
-            success: {
+            AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: AuthenticationStrings.requirePasscodeTouchReason, success: {
                 self.navigateToRequireInterval()
-            },
-            cancel: nil,
-            fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
-                self.deselectRow()
+            }, cancel: nil, fallback: {
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController).uponQueue(.main) { isOk in
+                    guard isOk else { return }
+                    self.navigationController?.dismiss(animated: true) {
+                        self.navigateToRequireInterval()
+                    }
+                }
             })
         } else {
             self.navigateToRequireInterval()
@@ -145,14 +146,6 @@ class RequirePasscodeSetting: Setting {
 
     fileprivate func navigateToRequireInterval() {
         navigationController?.pushViewController(RequirePasscodeIntervalViewController(), animated: true)
-    }
-}
-
-extension RequirePasscodeSetting: PasscodeEntryDelegate {
-    @objc func passcodeValidationDidSucceed() {
-        navigationController?.dismiss(animated: true) {
-            self.navigateToRequireInterval()
-        }
     }
 }
 
@@ -336,7 +329,7 @@ extension AuthenticationSettingsViewController {
     }
 }
 
-extension AuthenticationSettingsViewController: PasscodeEntryDelegate {
+extension AuthenticationSettingsViewController {
     fileprivate func getTouchIDSetting() -> TouchIDSetting? {
         guard settings.count >= 2 && settings[1].count >= 2 else {
             return nil
@@ -344,16 +337,15 @@ extension AuthenticationSettingsViewController: PasscodeEntryDelegate {
         return settings[1][1] as? TouchIDSetting
     }
 
-    func touchIDAuthenticationSucceeded() {
+    fileprivate func touchIDAuthenticationSucceeded() {
         getTouchIDSetting()?.toggleTouchID(false)
     }
 
     func fallbackOnTouchIDFailure() {
-        AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
-    }
-
-    @objc func passcodeValidationDidSucceed() {
-        getTouchIDSetting()?.toggleTouchID(false)
-        navigationController?.dismiss(animated: true, completion: nil)
+        AppAuthenticator.presentPasscodeAuthentication(self.navigationController).uponQueue(.main) { isPasscodeOk in
+            guard isPasscodeOk else { return }
+            self.getTouchIDSetting()?.toggleTouchID(false)
+            self.navigationController?.dismiss(animated: true, completion: nil)
+        }
     }
 }
