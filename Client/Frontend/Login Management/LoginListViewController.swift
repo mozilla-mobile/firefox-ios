@@ -81,24 +81,21 @@ class LoginListViewController: SensitiveViewController {
             }
         }
 
-        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
+        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo(), authInfo.requiresValidation() else {
             fillDeferred(ok: true, showingAuthDialog: false)
             return deferred
         }
 
-        if authInfo.requiresValidation() {
-            AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: AuthenticationStrings.loginsTouchReason, success: {
-                fillDeferred(ok: true)
-            }, cancel: {
-                fillDeferred(ok: false)
-            }, fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(navigationController).uponQueue(.main) { isOk in
-                    fillDeferred(ok: isOk)
-                }
-            })
-        } else {
+        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: AuthenticationStrings.loginsTouchReason, success: {
             fillDeferred(ok: true)
-        }
+        }, cancel: {
+            fillDeferred(ok: false)
+        }, fallback: {
+            AppAuthenticator.presentPasscodeAuthentication(navigationController).uponQueue(.main) { isOk in
+                fillDeferred(ok: isOk)
+            }
+        })
+
         return deferred
     }
 
