@@ -119,45 +119,46 @@ public class RustLogins {
         let baseFilename = databaseURL.lastPathComponent
 
         // Attempt to make a backup as long as the database file still exists.
-        if FileManager.default.fileExists(atPath: databasePath) {
-            Sentry.shared.sendWithStacktrace(message: "Unable to open Logins database", tag: SentryTag.rustLogins, severity: .warning, description: "Attempting to move '\(baseFilename)'")
-
-            // Note that a backup file might already exist! We append a counter to avoid this.
-            var bakCounter = 0
-            var bakBaseFilename: String
-            var bakDatabasePath: String
-            repeat {
-                bakCounter += 1
-                bakBaseFilename = "\(baseFilename).bak.\(bakCounter)"
-                bakDatabasePath = databaseContainingDirURL.appendingPathComponent(bakBaseFilename).path
-            } while FileManager.default.fileExists(atPath: bakDatabasePath)
-
-            do {
-                try FileManager.default.moveItem(atPath: bakDatabasePath, toPath: bakDatabasePath)
-
-                let shmBaseFilename = baseFilename + "-shm"
-                let walBaseFilename = baseFilename + "-wal"
-                log.debug("Moving \(shmBaseFilename) and \(walBaseFilename)…")
-
-                let shmDatabasePath = databaseContainingDirURL.appendingPathComponent(shmBaseFilename).path
-                if FileManager.default.fileExists(atPath: shmDatabasePath) {
-                    log.debug("\(shmBaseFilename) exists.")
-                    try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-shm")
-                }
-
-                let walDatabasePath = databaseContainingDirURL.appendingPathComponent(walBaseFilename).path
-                if FileManager.default.fileExists(atPath: walDatabasePath) {
-                    log.debug("\(walBaseFilename) exists.")
-                    try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-wal")
-                }
-
-                log.debug("Finished moving Logins database successfully.")
-            } catch let error as NSError {
-                Sentry.shared.sendWithStacktrace(message: "Unable to move Logins database to backup location", tag: SentryTag.rustLogins, severity: .error, description: "Attempted to move to '\(bakBaseFilename)'. \(error.localizedDescription)")
-            }
-        } else {
+        guard FileManager.default.fileExists(atPath: databasePath) else {
             // No backup was attempted since the database file did not exist.
             Sentry.shared.sendWithStacktrace(message: "The Logins database was deleted while in use", tag: SentryTag.rustLogins)
+            return
+        }
+
+        Sentry.shared.sendWithStacktrace(message: "Unable to open Logins database", tag: SentryTag.rustLogins, severity: .warning, description: "Attempting to move '\(baseFilename)'")
+
+        // Note that a backup file might already exist! We append a counter to avoid this.
+        var bakCounter = 0
+        var bakBaseFilename: String
+        var bakDatabasePath: String
+        repeat {
+            bakCounter += 1
+            bakBaseFilename = "\(baseFilename).bak.\(bakCounter)"
+            bakDatabasePath = databaseContainingDirURL.appendingPathComponent(bakBaseFilename).path
+        } while FileManager.default.fileExists(atPath: bakDatabasePath)
+
+        do {
+            try FileManager.default.moveItem(atPath: bakDatabasePath, toPath: bakDatabasePath)
+
+            let shmBaseFilename = baseFilename + "-shm"
+            let walBaseFilename = baseFilename + "-wal"
+            log.debug("Moving \(shmBaseFilename) and \(walBaseFilename)…")
+
+            let shmDatabasePath = databaseContainingDirURL.appendingPathComponent(shmBaseFilename).path
+            if FileManager.default.fileExists(atPath: shmDatabasePath) {
+                log.debug("\(shmBaseFilename) exists.")
+                try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-shm")
+            }
+
+            let walDatabasePath = databaseContainingDirURL.appendingPathComponent(walBaseFilename).path
+            if FileManager.default.fileExists(atPath: walDatabasePath) {
+                log.debug("\(walBaseFilename) exists.")
+                try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-wal")
+            }
+
+            log.debug("Finished moving Logins database successfully.")
+        } catch let error as NSError {
+            Sentry.shared.sendWithStacktrace(message: "Unable to move Logins database to backup location", tag: SentryTag.rustLogins, severity: .error, description: "Attempted to move to '\(bakBaseFilename)'. \(error.localizedDescription)")
         }
     }
 
