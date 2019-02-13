@@ -72,6 +72,29 @@ public struct FxACommandsResponse {
 
 public struct FxAOAuthResponse {
     let accessToken: String
+    let expires: Date
+
+    init(accessToken: String, expires: Date) {
+        self.accessToken = accessToken
+        self.expires = expires
+    }
+
+    init?(dictionary: [String : Any]) {
+        guard let accessToken = dictionary["accessToken"] as? String,
+            let expiresTimeInterval = dictionary["expires"] as? TimeInterval else {
+            return nil
+        }
+
+        self.accessToken = accessToken
+        self.expires = Date(timeIntervalSince1970: expiresTimeInterval)
+    }
+
+    public func dictionary() -> [String : Any] {
+        return [
+            "accessToken": accessToken,
+            "expires": expires.timeIntervalSince1970
+        ]
+    }
 }
 
 public struct FxAProfileResponse {
@@ -343,11 +366,14 @@ open class FxAClient10 {
 
     fileprivate class func oauthResponse(fromJSON json: JSON) -> FxAOAuthResponse? {
         guard json.error == nil,
-            let accessToken = json["access_token"].string else {
+            let accessToken = json["access_token"].string,
+            let expiresIn = json["expires_in"].int else {
                 return nil
         }
 
-        return FxAOAuthResponse(accessToken: accessToken)
+        let expires = Date(timeIntervalSinceNow: Double(expiresIn) - 1)
+
+        return FxAOAuthResponse(accessToken: accessToken, expires: expires)
     }
 
     fileprivate class func profileResponse(fromJSON json: JSON) -> FxAProfileResponse? {
@@ -536,7 +562,34 @@ open class FxAClient10 {
         return makeRequest(mutableURLRequest, responseHandler: FxADevice.fromJSON)
     }
 
+    private func cachedOAuthResponse(forScope scope: String) -> FxAOAuthResponse? {
+        let responseKeychainKey = "FxAOAuthResponse:\(scope)"
+        guard let dictionary = KeychainStore.shared.dictionary(forKey: responseKeychainKey),
+            let oauthResponse = FxAOAuthResponse(dictionary: dictionary) else {
+            return nil
+        }
+
+        // If the OAuth token has expired, remove it from the cache.
+        guard Date() < oauthResponse.expires else {
+            KeychainStore.shared.setDictionary(nil, forKey: responseKeychainKey)
+
+            // Even though the KeyID should be stable, clear it from the
+            // cache when the OAuth token expires just to be safe and keep
+            // things easier to manage.
+            let kidKeychainKey = "FxAOAuthKeyID:\(scope)"
+            KeychainStore.shared.setDictionary(nil, forKey: kidKeychainKey)
+            return nil
+        }
+
+        return oauthResponse
+    }
+
     open func oauthAuthorize(withSessionToken sessionToken: NSData, scope: String) -> Deferred<Maybe<FxAOAuthResponse>> {
+        // If we have a cached copy of the OAuth token in the Keychain, use it.
+        if let cachedOAuthResponse = cachedOAuthResponse(forScope: scope) {
+            return deferMaybe(cachedOAuthResponse)
+        }
+
         let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
         return sign(sessionToken as Data, publicKey: keyPair.publicKey) >>== { signResult in
             return self.oauthAuthorize(withSessionToken: sessionToken, keyPair: keyPair, certificate: signResult.certificate, scope: scope)
@@ -544,6 +597,11 @@ open class FxAClient10 {
     }
 
     open func oauthAuthorize(withSessionToken sessionToken: NSData, keyPair: RSAKeyPair, certificate: String, scope: String) -> Deferred<Maybe<FxAOAuthResponse>> {
+        // If we have a cached copy of the OAuth token in the Keychain, use it.
+        if let cachedOAuthResponse = cachedOAuthResponse(forScope: scope) {
+            return deferMaybe(cachedOAuthResponse)
+        }
+
         let audience = getAudience(forURL: oauthURL)
         let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSign(with: keyPair.privateKey, certificate: certificate, audience: audience)
         let oauthAuthorizationURL = oauthURL.appendingPathComponent("/authorization")
@@ -556,7 +614,7 @@ open class FxAClient10 {
             "client_id": AppConstants.FxAiOSClientId,
             "response_type": "token",
             "scope": scope,
-            "ttl": "300"
+            "ttl": "21600" // 6 hours
         ]
 
         let salt: Data = Data()
@@ -570,7 +628,13 @@ open class FxAClient10 {
         mutableURLRequest.httpBody = httpBody
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
-        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.oauthResponse)
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.oauthResponse) >>== { result in
+            let responseKeychainKey = "FxAOAuthResponse:\(scope)"
+            let dictionary = result.dictionary()
+            // Cache the OAuth token in the Keychain for subsequent requests.
+            KeychainStore.shared.setDictionary(dictionary, forKey: responseKeychainKey)
+            return deferMaybe(result)
+        }
     }
 
     open func getProfile(withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxAProfileResponse>> {
@@ -668,7 +732,10 @@ extension FxAClient10: FxALoginClient {
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
 
-        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.scopedKeyDataResponse)
+        return makeRequest(mutableURLRequest, responseHandler: FxAClient10.scopedKeyDataResponse) >>== { result in
+            // TODO: Save `result` to Keychain
+            return deferMaybe(result)
+        }
     }
 
     open func sign(_ sessionToken: Data, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {

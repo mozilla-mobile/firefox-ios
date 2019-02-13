@@ -18,16 +18,12 @@ open class BrowserDB {
     // appear in a query string.
     public static let MaxVariableNumber = 999
 
-    public init(filename: String, secretKey: String? = nil, schema: Schema, files: FileAccessor) {
+    public init(filename: String, schema: Schema, files: FileAccessor) {
         log.debug("Initializing BrowserDB: \(filename).")
 
         let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
-        if AppConstants.BuildChannel == .developer && secretKey != nil {
-            log.debug("Will attempt to use encrypted DB: \(file) with secret = \(secretKey ?? "nil")")
-        }
-
-        self.db = SwiftData(filename: file, key: secretKey, prevKey: nil, schema: schema, files: files)
+        self.db = SwiftData(filename: file, schema: schema, files: files)
     }
 
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`

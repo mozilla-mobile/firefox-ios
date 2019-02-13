@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Storage
 import XCGLogger
 import Deferred
 import SwiftKeychainWrapper
@@ -322,6 +323,29 @@ open class FirefoxAccount {
         }
     }
 
+    open func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
+        guard let married = stateCache.value as? MarriedState else {
+            return deferMaybe(NotATokenStateError(state: stateCache.value))
+        }
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        return client.oauthAuthorize(withSessionToken: married.sessionToken as NSData, scope: FxAOAuthScope.OldSync).bind({ result in
+            guard let oauthResponse = result.successValue else {
+                return deferMaybe(ScopedKeyError())
+            }
+
+            return self.oauthKeyID(for: FxAOAuthScope.OldSync).bind({ result in
+                guard let kid = result.successValue,
+                    let kSync = married.kSync.base64urlSafeEncodedString else {
+                    return deferMaybe(ScopedKeyError())
+                }
+
+                let accessToken = oauthResponse.accessToken
+                let tokenServerURL = self.configuration.sync15Configuration.tokenServerEndpointURL.absoluteString
+                return deferMaybe(SyncUnlockInfo(kid: kid, fxaAccessToken: accessToken, syncKey: kSync, tokenserverURL: tokenServerURL))
+            })
+        })
+    }
+
     // Fetch the devices list from FxA then replace the current stored remote devices.
     open func updateFxADevices(remoteDevices: RemoteDevices) -> Success {
         guard let session = stateCache.value as? TokenState else {
@@ -334,19 +358,31 @@ open class FirefoxAccount {
     }
 
     open func oauthKeyID(for scope: String) -> Deferred<Maybe<String>> {
+        // Ensure we are in a "married" state before continuing.
         guard let married = stateCache.value as? MarriedState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
+        // This method of forming a KeyID is currently only valid for 'oldsync'.
         guard scope == FxAOAuthScope.OldSync else {
             log.error("oauthKeyID(for scope:) is currently only valid for 'oldsync'.")
             return deferMaybe(ScopedKeyError())
         }
+        // If we have a cached copy of the KeyID in the Keychain, use it.
+        let kidKeychainKey = "FxAOAuthKeyID:\(scope)"
+        if let cachedOAuthKeyID = KeychainStore.shared.string(forKey: kidKeychainKey) {
+            return deferMaybe(cachedOAuthKeyID)
+        }
+        // Otherwise, request the scoped key data from the server.
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
-        return client.scopedKeyData(married.sessionToken as NSData, scope: scope) >>== { response in
-            guard let scopedKeyData = response.find({ $0.scope == scope }) else {
+        return client.scopedKeyData(married.sessionToken as NSData, scope: scope).bind { response in
+            guard let allScopedKeyData = response.successValue, let scopedKeyData = allScopedKeyData.find({ $0.scope == scope }), let kXCS = married.kXCS.hexDecodedData.base64urlSafeEncodedString else {
                 return deferMaybe(ScopedKeyError())
             }
-            let kid = "\(scopedKeyData.keyRotationTimestamp)-\(married.kXCS)"
+            let kid = "\(scopedKeyData.keyRotationTimestamp)-\(kXCS)"
+
+            // Cache the KeyID in the Keychain for subsequent requests.
+            KeychainStore.shared.setString(kid, forKey: kidKeychainKey)
+
             return deferMaybe(kid)
         }
     }
