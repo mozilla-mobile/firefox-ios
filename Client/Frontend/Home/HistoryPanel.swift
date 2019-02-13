@@ -61,10 +61,12 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 cell.textLabel?.alpha = 1.0
                 cell.imageView?.alpha = 1.0
                 cell.selectionStyle = .default
+                cell.isUserInteractionEnabled = true
             } else {
                 cell.textLabel?.alpha = 0.5
                 cell.imageView?.alpha = 0.5
                 cell.selectionStyle = .none
+                cell.isUserInteractionEnabled = false
             }
         }
     }
@@ -334,7 +336,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         clearHistoryCell = cell
         cell.textLabel?.text = Strings.HistoryPanelClearHistoryButtonTitle
         cell.detailTextLabel?.text = ""
-        cell.imageView?.image = UIImage(named: "forget")
+        cell.imageView?.image = UIImage.templateImageNamed("forget")
+        cell.imageView?.tintColor = UIColor(colorString: "0xb2b2b2")
         cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.clearHistory"
 
