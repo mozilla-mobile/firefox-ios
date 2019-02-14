@@ -84,9 +84,14 @@ class LoginManagerTests: KIFTestCase {
         let usernames = generateStringListWithFormat("%@%d@email.com", numRange: numRange, prefixes: prefixes)
 
         (0..<(numRange.count * prefixes.count)).forEach { index in
-            let login = Login(guid: "\(index)", hostname: hostnames[index], username: usernames[index], password: passwords[index])
+            let login = LoginRecord(fromJSONDict: [
+                "id": "\(index)",
+                "hostname": hostnames[index],
+                "username": usernames[index],
+                "password": passwords[index]
+            ])
             login.formSubmitURL = hostnames[index]
-            profile.logins.addLogin(login).value
+            _ = profile.logins.add(login: login).value
         }
     }
 
@@ -118,7 +123,7 @@ class LoginManagerTests: KIFTestCase {
 
     fileprivate func clearLogins() {
         let profile = (UIApplication.shared.delegate as! AppDelegate).profile!
-        profile.logins.removeAll().value
+        _ = profile.logins.wipe().value
     }
 
     func testListFiltering() {
