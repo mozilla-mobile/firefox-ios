@@ -438,4 +438,24 @@ public class RustLogins {
 
         return deferred
     }
+
+    public func wipe() -> Success {
+        let deferred = Success()
+
+        queue.async {
+            if !self.isOpen, let error = self.open() {
+                deferred.fill(Maybe(failure: error))
+                return
+            }
+
+            do {
+                try self.storage.wipe()
+                deferred.fill(Maybe(success: ()))
+            } catch let err as NSError {
+                deferred.fill(Maybe(failure: err))
+            }
+        }
+
+        return deferred
+    }
 }
