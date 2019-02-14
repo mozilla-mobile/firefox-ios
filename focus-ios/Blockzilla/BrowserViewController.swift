@@ -418,8 +418,6 @@ class BrowserViewController: UIViewController {
 
     func resetBrowser(hidePreviousSession: Bool = false) {
 
-        UserDefaults.standard.set(nil, forKey: "searchedHistory")
-
         // Used when biometrics fail and the previous session should be obscured
         if hidePreviousSession {
             clearBrowser()

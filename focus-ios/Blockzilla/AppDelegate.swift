@@ -70,6 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         // We clear the Caches directory after each Erase, but WebKit apparently maintains
         // localStorage in-memory (bug 1319208), so we just disable it altogether.
         UserDefaults.standard.set(false, forKey: "WebKitLocalStorageEnabledPreferenceKey")
+        UserDefaults.standard.removeObject(forKey: "searchedHistory")
 
         // Re-register the blocking lists at startup in case they've changed.
         Utils.reloadSafariContentBlocker()
