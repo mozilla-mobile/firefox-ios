@@ -39,6 +39,6 @@ class TranslationSnackBarTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
         waitUntilPageLoad()
         navigator.performAction(Action.SelectTranslateThisPage)
-        waitForValueContains(app.textFields["url"], value: "microsofttranslator")
+        waitForValueContains(app.textFields["url"], value: "translatetheweb")
     }
 }
