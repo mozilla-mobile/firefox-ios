@@ -110,7 +110,7 @@ class SyncUITests: BaseTestCase {
     }
 
     // Smoketest
-    func testAccountManagmentPage() {
+    func testAccountManagementPage() {
         deleteInbox()
         // Log in
         navigator.goto(FxASigninScreen)
@@ -139,11 +139,7 @@ class SyncUITests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables.cells["menu-TrackingProtection"])
         // Tap on the sync name option
-        if iPad() {
-            app.tables.cells.element(boundBy: 6).tap()
-        } else {
-            app.tables.cells.element(boundBy: 0).tap()
-        }
+        navigator.goto(FxAccountManagementPage)
         waitForExistence(app.navigationBars["Firefox Account"])
         XCTAssertTrue(app.tables.cells["Manage"].exists)
         XCTAssertTrue(app.cells.switches["sync.engine.bookmarks.enabled"].exists)

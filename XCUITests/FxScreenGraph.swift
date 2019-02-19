@@ -24,6 +24,7 @@ let SettingsScreen = "SettingsScreen"
 let SyncSettings = "SyncSettings"
 let FxASigninScreen = "FxASigninScreen"
 let FxCreateAccount = "FxCreateAccount"
+let FxAccountManagementPage = "FxAccountManagementPage"
 let HomeSettings = "HomeSettings"
 let SiriSettings = "SiriSettings"
 let PasscodeSettings = "PasscodeSettings"
@@ -970,6 +971,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.dismissOnUse = true
     }
 
+    map.addScreenState(FxAccountManagementPage) { screenState in
+        screenState.backAction = navigationControllerBackAction
+    }
+    
     map.addScreenState(FindInPage) { screenState in
         screenState.tap(app.buttons["FindInPage.close"], to: BrowserTab)
     }
@@ -989,6 +994,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.tables.cells["menu-sync"], to: FxASigninScreen, if: "fxaUsername == nil")
         screenState.tap(app.tables.cells["menu-library"], to: HomePanel_Library)
+        screenState.tap(app.tables.cells["placeholder-avatar"], to: FxAccountManagementPage)
 
         screenState.tap(app.tables.cells["menu-NoImageMode"], forAction: Action.ToggleNoImageMode, transitionTo: BrowserTabMenu) { userState in
             userState.noImageMode = !userState.noImageMode
