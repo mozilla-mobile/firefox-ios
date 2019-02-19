@@ -34,20 +34,20 @@ class HomePageSettingViewController: SettingsTableViewController {
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
             self.currentChoice = NewTabPage.topSites
             onFinished()
         })
-        let showBookmarks = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBookmarks), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.bookmarks}, onChanged: {
+        let showBookmarks = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBookmarks), subtitle: nil, accessibilityIdentifier: "HomeAsBookmarks", isEnabled: {return self.currentChoice == NewTabPage.bookmarks}, onChanged: {
             self.currentChoice = NewTabPage.bookmarks
             onFinished()
         })
-        let showHistory = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabHistory), subtitle: nil, accessibilityIdentifier: nil, isEnabled: {return self.currentChoice == NewTabPage.history}, onChanged: {
+        let showHistory = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabHistory), subtitle: nil, accessibilityIdentifier: "HomeAsHistory", isEnabled: {return self.currentChoice == NewTabPage.history}, onChanged: {
             self.currentChoice = NewTabPage.history
             onFinished()
         })
 
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomePageSetting", settingDidChange: { (string) in
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
