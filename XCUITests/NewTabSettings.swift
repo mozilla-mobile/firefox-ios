@@ -4,6 +4,7 @@
 
 import XCTest
 
+let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
@@ -82,5 +83,37 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForExistence(app.textFields["url"])
         waitForValueContains(app.textFields["url"], value: "mozilla")
+    }
+    
+    func testChangeNewTabSettingsLabel() {
+        //Go to New Tab settings and select Custom URL option
+        navigator.performAction(Action.SelectNewTabAsCustomURL)
+        navigator.nowAt(NewTabSettings)
+        //Enter a custom URL
+        app.textFields["NewTabAsCustomURLTextField"].typeText(websiteUrl)
+        waitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
+        navigator.goto(SettingsScreen)
+        //Assert that the label showing up in Settings is equal to the URL entere (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD)
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, HomePage")
+        //Switch to Bookmark and check label
+        navigator.performAction(Action.SelectNewTabAsBookmarksPage)
+        navigator.nowAt(NewTabSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Bookmarks")
+        //Switch to History and check the label
+        navigator.performAction(Action.SelectNewTabAsHistoryPage)
+        navigator.nowAt(NewTabSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, History")
+        //Switch to FXHome and check label
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+        navigator.nowAt(NewTabSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Blank")
+        //Switch to FXHome and check label
+        navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
+        navigator.nowAt(NewTabSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, TopSites")
     }
 }
