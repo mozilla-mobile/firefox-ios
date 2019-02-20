@@ -137,9 +137,10 @@ class TopTabsColor {
 }
 
 class TextFieldColor {
-    var background: UIColor { return .white }
+    var background: UIColor { return UIColor.Photon.Grey90A10 }
+    var backgroundInOverlay : UIColor { return .white }
     var textAndTint: UIColor { return defaultTextAndTint }
-    var separator: UIColor { return defaultSeparator }
+    var separator: UIColor { return .white }
 }
 
 class HomePanelColor {
