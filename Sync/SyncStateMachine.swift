@@ -30,11 +30,15 @@ private let DefaultEngines: [String: Int] = [
     "clients": ClientsStorageVersion,
     "history": HistoryStorageVersion,
     "tabs": TabsStorageVersion,
-    // We opt-in to syncing collections we don't know about, since no client offers to sync non-enabled,
-    // non-declined engines yet.  See Bug 969669.
+    // We include collections we don't know about, or don't implement in Swift,
+    // because they'll be disabled on other clients if we omit them (bug
+    // 1479929).
+    "passwords": 1,
     "forms": 1,
     "addons": 1,
     "prefs": 2,
+    "addresses": 1,
+    "creditcards": 1,
 ]
 
 // Names of collections which will appear as declined in a default
