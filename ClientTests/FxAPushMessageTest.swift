@@ -57,7 +57,7 @@ class FxAPushMessageTest: XCTestCase {
 
         let profile = MockProfile()
 
-        let account = FirefoxAccount(
+        let account = Account.FirefoxAccount(
             configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
             email: "testtest@test.com",
             uid: "uid",
@@ -84,7 +84,7 @@ class FxAPushMessageTest: XCTestCase {
     }
 
     func createHandler(_ profile: Profile = MockProfile()) -> FxAPushMessageHandler {
-        let account = FirefoxAccount(
+        let account = Account.FirefoxAccount(
             configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
             email: "testtest@test.com",
             uid: "uid",

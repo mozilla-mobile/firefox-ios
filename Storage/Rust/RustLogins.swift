@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import Deferred
 
-@_exported import Logins
+@_exported import MozillaAppServices
 
 private let log = Logger.syncLogger
 
