@@ -9,7 +9,7 @@ import Shared
 private struct TabsButtonUX {
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
-    static let BorderStrokeWidth: CGFloat = 3
+    static let BorderStrokeWidth: CGFloat = 1.5
 }
 
 class TabsButton: UIButton {

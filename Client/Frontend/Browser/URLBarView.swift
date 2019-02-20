@@ -90,8 +90,10 @@ class URLBarView: UIView {
 
     lazy var locationView: TabLocationView = {
         let locationView = TabLocationView()
+        locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.readerModeState = ReaderModeState.unavailable
+        locationView.backgroundColor = URLBarViewUX.TextFieldBorderColor
         locationView.delegate = self
         return locationView
     }()
@@ -99,9 +101,6 @@ class URLBarView: UIView {
     lazy var locationContainer: UIView = {
         let locationContainer = TabLocationContainerView()
         locationContainer.translatesAutoresizingMaskIntoConstraints = false
-        locationContainer.layer.shadowColor = self.locationBorderColor.cgColor
-        locationContainer.layer.borderWidth = URLBarViewUX.TextFieldBorderWidth
-        locationContainer.layer.borderColor = self.locationBorderColor.cgColor
         locationContainer.backgroundColor = .clear
         return locationContainer
     }()
@@ -351,6 +350,7 @@ class URLBarView: UIView {
         }
 
         locationTextField.applyTheme()
+        locationTextField.backgroundColor = UIColor.theme.textField.backgroundInOverlay
     }
 
     override func becomeFirstResponder() -> Bool {
@@ -476,6 +476,7 @@ class URLBarView: UIView {
 
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.cgColor
+        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
 
         if inOverlayMode {
             line.isHidden = inOverlayMode
@@ -690,6 +691,7 @@ extension URLBarView: Themeable {
     func applyTheme() {
         locationView.applyTheme()
         locationTextField?.applyTheme()
+
         actionButtons.forEach { $0.applyTheme() }
         tabsButton.applyTheme()
 
@@ -699,7 +701,8 @@ extension URLBarView: Themeable {
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
 
         locationBorderColor = UIColor.theme.urlbar.border
-        locationContainer.layer.shadowColor = locationBorderColor.cgColor
+        locationView.backgroundColor = UIColor.theme.textField.background
+        locationContainer.backgroundColor = UIColor.theme.textField.background
     }
 }
 
@@ -719,33 +722,18 @@ extension URLBarView: PrivateModeUI {
 class TabLocationContainerView: UIView {
 
     private struct LocationContainerUX {
-        static let CornerRadius: CGFloat = 4
-        static let ShadowRadius: CGFloat = 2
-        static let ShadowOpacity: Float = 1
+        static let CornerRadius: CGFloat = 8
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         let layer = self.layer
         layer.cornerRadius = LocationContainerUX.CornerRadius
-        layer.shadowRadius = LocationContainerUX.ShadowRadius
-        layer.shadowOpacity = LocationContainerUX.ShadowOpacity
         layer.masksToBounds = false
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        let layer = self.layer
-
-        layer.shadowOffset = CGSize(width: 0, height: 1)
-        // the shadow appears 2px off from the view rect
-        let shadowLength: CGFloat = 2
-        let shadowPath = CGRect(x: shadowLength, y: shadowLength, width: layer.frame.width - (shadowLength * 2), height: layer.frame.height - (shadowLength * 2))
-        layer.shadowPath = UIBezierPath(roundedRect: shadowPath, cornerRadius: layer.cornerRadius).cgPath
-        super.layoutSubviews()
     }
 }
 
