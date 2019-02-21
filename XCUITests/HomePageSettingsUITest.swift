@@ -209,6 +209,33 @@ class HomePageSettingsUITests: BaseTestCase {
             }
         }
     }
+    
+    func testChangeHomeSettingsLabel() {
+        //Go to New Tab settings and select Custom URL option
+        navigator.performAction(Action.SelectHomeAsCustomURL)
+        navigator.nowAt(HomeSettings)
+        //Enter a custom URL
+        enterWebPageAsHomepage(text: websiteUrl1)
+        waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
+        navigator.goto(SettingsScreen)
+        //Assert that the label showing up in Settings is equal to the URL entere (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD OF URL)
+        XCTAssertEqual(app.tables.cells["Home"].label, "Home, HomePage")
+        //Switch to Bookmark and check label
+        navigator.performAction(Action.SelectHomeAsBookmarksPage)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Bookmarks")
+        //Switch to History and check the label
+        navigator.performAction(Action.SelectHomeAsHistoryPage)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["Home"].label, "Home, History")
+        //Switch to FXHome and check label
+        navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["Home"].label, "Home, TopSites")
+    }
     //Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
         waitForExistence(app.cells["TopSitesCell"])
