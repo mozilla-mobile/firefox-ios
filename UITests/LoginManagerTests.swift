@@ -44,7 +44,7 @@ class LoginManagerTests: KIFTestCase {
         let success = menuAppeared.wait(withTimeout: 20)
         GREYAssertTrue(success, reason: "Failed to display settings dialog")
         if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Logins"))
+            EarlGrey.selectElement(with: grey_accessibilityID("Logins"))
                 .using(searchAction: grey_scrollInDirection(.down, 200),
                        onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
                 .assert(grey_notNil())
@@ -84,9 +84,14 @@ class LoginManagerTests: KIFTestCase {
         let usernames = generateStringListWithFormat("%@%d@email.com", numRange: numRange, prefixes: prefixes)
 
         (0..<(numRange.count * prefixes.count)).forEach { index in
-            let login = Login(guid: "\(index)", hostname: hostnames[index], username: usernames[index], password: passwords[index])
+            let login = LoginRecord(fromJSONDict: [
+                "id": "\(index)",
+                "hostname": hostnames[index],
+                "username": usernames[index],
+                "password": passwords[index]
+            ])
             login.formSubmitURL = hostnames[index]
-            profile.logins.addLogin(login).value
+            _ = profile.logins.add(login: login).value
         }
     }
 
@@ -118,7 +123,7 @@ class LoginManagerTests: KIFTestCase {
 
     fileprivate func clearLogins() {
         let profile = (UIApplication.shared.delegate as! AppDelegate).profile!
-        profile.logins.removeAll().value
+        _ = profile.logins.wipe().value
     }
 
     func testListFiltering() {
@@ -227,7 +232,7 @@ class LoginManagerTests: KIFTestCase {
         EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
         waitForMatcher(name: "Copy")
 
-        tester().tapView(withAccessibilityLabel: "Logins")
+        tester().tapView(withAccessibilityLabel: "Logins & Passwords")
         closeLoginManager()
         XCTAssertEqual(UIPasteboard.general.string, "passworda0")
     }
@@ -319,7 +324,7 @@ class LoginManagerTests: KIFTestCase {
         EarlGrey.selectElement(with: grey_accessibilityID("usernameField")).perform(grey_tap())
         waitForMatcher(name: "Copy")
 
-        tester().tapView(withAccessibilityLabel: "Logins")
+        tester().tapView(withAccessibilityLabel: "Logins & Passwords")
         closeLoginManager()
         XCTAssertEqual(UIPasteboard.general.string!, "a0@email.com")
     }
@@ -628,7 +633,7 @@ class LoginManagerTests: KIFTestCase {
         passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         XCTAssertEqual(passwordCell.descriptionLabel.text, "changedpassword")
 
-        tester().tapView(withAccessibilityLabel: "Logins")
+        tester().tapView(withAccessibilityLabel: "Logins & Passwords")
         closeLoginManager()
     }
 
@@ -646,7 +651,7 @@ class LoginManagerTests: KIFTestCase {
 
         // Verify that we are looking at the nonsynced alert dialog
         tester().waitForView(withAccessibilityLabel: "Are you sure?")
-        tester().waitForView(withAccessibilityLabel: "Logins will be permanently removed.")
+        tester().waitForView(withAccessibilityLabel: "Logins will be removed from all connected devices.")
 
         tester().tapView(withAccessibilityLabel: "Delete")
         tester().waitForAnimationsToFinish()
@@ -668,7 +673,7 @@ class LoginManagerTests: KIFTestCase {
 
         XCTAssertTrue(tester().viewExistsWithLabelPrefixedBy("Last modified"))
         tester().wait(forTimeInterval: 1)
-        tester().tapView(withAccessibilityLabel: "Logins")
+        tester().tapView(withAccessibilityLabel: "Logins & Passwords")
         closeLoginManager()
     }
 
@@ -699,7 +704,7 @@ class LoginManagerTests: KIFTestCase {
         // Confirm that when entering a blank password we revert back to the original
         XCTAssertEqual(passwordField.text, "passworda0")
 
-        tester().tapView(withAccessibilityLabel: "Logins")
+        tester().tapView(withAccessibilityLabel: "Logins & Passwords")
         closeLoginManager()
     }
 
@@ -723,6 +728,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
 
         // Check that edit button has been disabled
+        tester().wait(forTimeInterval: 1)
         tester().waitForView(withAccessibilityLabel: "Edit", traits: UIAccessibilityTraitNotEnabled)
 
         closeLoginManager()

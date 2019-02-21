@@ -699,9 +699,26 @@ extension SQLiteHistory: BrowserHistory {
         let deleteVisits = "DELETE FROM visits WHERE siteID = (SELECT id FROM history WHERE url = ?)"
 
         let markArgs: Args = [Date.nowNumber(), url]
-        let markDeleted = "UPDATE history SET url = NULL, is_deleted = 1, title = '',    should_upload = 1, local_modified = ? WHERE url = ?"
+        let markDeleted = "UPDATE history SET url = NULL, is_deleted = 1, title = '', should_upload = 1, local_modified = ? WHERE url = ?"
         //return db.run([(sql: String, args: Args?)])
         let command = [(sql: deleteVisits, args: visitArgs), (sql: markDeleted, args: markArgs), self.favicons.getCleanupFaviconsQuery()] as [(sql: String, args: Args?)]
+        return db.run(command)
+    }
+
+    public func removeHistoryFromDate(_ date: Date) -> Success {
+        let visitTimestamp = date.toMicrosecondTimestamp()
+
+        let historyRemoval = """
+            WITH deletionIds as (SELECT history.id from history INNER JOIN visits on history.id = visits.siteID WHERE visits.date > ?)
+            UPDATE history SET url = NULL, is_deleted=1, title = '', should_upload = 1, local_modified = ?
+            WHERE history.id in deletionIds
+        """
+        let historyRemovalArgs: Args = [visitTimestamp, Date.nowNumber()]
+
+        let visitRemoval = "DELETE FROM visits WHERE visits.date > ?"
+        let visitRemovalArgs: Args = [visitTimestamp]
+
+        let command = [(sql: historyRemoval, args: historyRemovalArgs), (sql: visitRemoval, args: visitRemovalArgs), self.favicons.getCleanupFaviconsQuery()] as [(sql: String, args: Args?)]
         return db.run(command)
     }
 

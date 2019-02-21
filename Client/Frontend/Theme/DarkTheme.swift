@@ -71,8 +71,10 @@ fileprivate class DarkTopTabsColor: TopTabsColor {
 
 fileprivate class DarkTextFieldColor: TextFieldColor {
     override var background: UIColor { return UIColor.Photon.Grey60 }
-    override var textAndTint: UIColor { return defaultTextAndTint }
+    override var backgroundInOverlay: UIColor { return self.background }
 
+    override var textAndTint: UIColor { return defaultTextAndTint }
+    override var separator: UIColor { return super.separator.withAlphaComponent(0.3) }
 }
 
 fileprivate class DarkHomePanelColor: HomePanelColor {

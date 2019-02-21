@@ -47,7 +47,7 @@ public class DBOperationCancelled : MaybeErrorType {
 }
 
 class DeferredDBOperation<T>: Deferred<T>, Cancellable {
-    fileprivate var dispatchWorkItem: DispatchWorkItem?
+    fileprivate weak var dispatchWorkItem: DispatchWorkItem?
     private var _running = false
 
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
@@ -132,28 +132,18 @@ open class SwiftData {
     /// Secondary shared connection to this database.
     fileprivate var secondaryConnection: ConcreteSQLiteDBConnection?
 
-    /// SQLCipher keys for encrypted databases.
-    fileprivate var key: String?
-    fileprivate var prevKey: String?
-
     /// A simple state flag to track whether we should accept new connection requests.
     /// If a connection request is made while the database is closed, a
     /// FailedSQLiteDBConnection will be returned.
     fileprivate(set) var closed = false
 
-    init(filename: String, key: String? = nil, prevKey: String? = nil, schema: Schema, files: FileAccessor) {
+    init(filename: String, schema: Schema, files: FileAccessor) {
         self.filename = filename
-        self.key = key
-        self.prevKey = prevKey
         self.schema = schema
         self.files = files
 
         self.primaryConnectionQueue = DispatchQueue(label: "SwiftData primary queue: \(filename)", attributes: [])
         self.secondaryConnectionQueue = DispatchQueue(label: "SwiftData secondary queue: \(filename)", attributes: [])
-
-        // Ensure that multi-thread mode is enabled by default.
-        // See https://www.sqlite.org/threadsafe.html
-        assert(sqlite3_threadsafe() == 2)
     }
 
     /**
@@ -194,9 +184,9 @@ open class SwiftData {
 
             if !self.closed {
                 if useSecondaryConnection && self.secondaryConnection == nil {
-                    self.secondaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readOnly, key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
+                    self.secondaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readOnly, schema: self.schema, files: self.files)
                 } else if self.primaryConnection == nil {
-                    self.primaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate, key: self.key, prevKey: self.prevKey, schema: self.schema, files: self.files)
+                    self.primaryConnection = ConcreteSQLiteDBConnection(filename: self.filename, flags: SwiftData.Flags.readWriteCreate, schema: self.schema, files: self.files)
                 }
             }
 
@@ -453,7 +443,7 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
     private var didAttemptToMoveToBackup = false
 
-    init?(filename: String, flags: SwiftData.Flags, key: String? = nil, prevKey: String? = nil, schema: Schema, files: FileAccessor) {
+    init?(filename: String, flags: SwiftData.Flags, schema: Schema, files: FileAccessor) {
         log.debug("Opening connection to \(filename).")
 
         self.filename = filename
@@ -467,25 +457,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 return false
             }
 
-            if key == nil && prevKey == nil {
-                do {
-                    try self.prepareCleartext()
-                } catch {
-                    return false
-                }
-            } else {
-                do {
-                    try self.prepareEncrypted(flags, key: key, prevKey: prevKey)
-                } catch {
-                    // Don't attempt to move the database if this is a read-only
-                    // connection or if we've already attempted to move it.
-                    if self.flags != .readOnly && !didAttemptToMoveToBackup {
-                        self.moveDatabaseFileToBackupLocation()
-                        return doOpen()
-                    }
-
-                    return false
-                }
+            do {
+                try self.prepareCleartext()
+            } catch {
+                return false
             }
 
             return true
@@ -565,28 +540,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         self.closeCustomConnection()
     }
 
-    fileprivate func setKey(_ key: String?) -> NSError? {
-        sqlite3_key(sqliteDB, key ?? "", Int32((key ?? "").count))
-        let cursor = executeQuery("SELECT count(*) FROM sqlite_master;", factory: IntFactory, withArgs: nil as Args?)
-        if cursor.status != .success {
-            return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid key"])
-        }
-        return nil
-    }
-
-    fileprivate func reKey(_ oldKey: String?, newKey: String?) -> NSError? {
-        sqlite3_key(sqliteDB, oldKey ?? "", Int32((oldKey ?? "").count))
-        sqlite3_rekey(sqliteDB, newKey ?? "", Int32((newKey ?? "").count))
-        // Check that the new key actually works
-        sqlite3_key(sqliteDB, newKey ?? "", Int32((newKey ?? "").count))
-        let cursor = executeQuery("SELECT count(*) FROM sqlite_master;", factory: IntFactory, withArgs: nil as Args?)
-        if cursor.status != .success {
-            return NSError(domain: "mozilla", code: 0, userInfo: [NSLocalizedDescriptionKey: "Rekey failed"])
-        }
-
-        return nil
-    }
-
     public func setVersion(_ version: Int) throws -> Void {
         try executeChange("PRAGMA user_version = \(version)")
     }
@@ -617,33 +570,6 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
 
         // Retry queries before returning locked errors.
         sqlite3_busy_timeout(self.sqliteDB, DatabaseBusyTimeout)
-    }
-
-    fileprivate func prepareEncrypted(_ flags: SwiftData.Flags, key: String?, prevKey: String? = nil) throws {
-        // Setting the key needs to be the first thing done with the database.
-        if let _ = setKey(key) {
-            if let err = closeCustomConnection(immediately: true) {
-                log.error("Couldn't close connection: \(err). Failing to open.")
-                throw err
-            }
-            if let err = openWithFlags(flags) {
-                Sentry.shared.sendWithStacktrace(message: "Error opening database with flags.", tag: SentryTag.swiftData, severity: .error, description: "\(err.code), \(err)")
-                throw err
-            }
-            if let err = reKey(prevKey, newKey: key) {
-                // Note: Don't log the error here as it may contain sensitive data.
-                Sentry.shared.sendWithStacktrace(message: "Unable to encrypt database.", tag: SentryTag.swiftData, severity: .error)
-                throw err
-            }
-        }
-
-        if SwiftData.EnableWAL {
-            log.info("Enabling WAL mode.")
-            try pragma("journal_mode=WAL", expected: "wal",
-                       factory: StringFactory, message: "WAL journal mode set")
-        }
-
-        self.prepareShared()
     }
 
     fileprivate func prepareCleartext() throws {

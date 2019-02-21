@@ -345,6 +345,64 @@ class NavigationTest: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
+    func testLongPressOnAddressBar() {
+        //This test is for populated clipboard only so we need to make sure there's something in Pasteboard
+        navigator.goto(URLBarOpen)
+        app.textFields["address"].typeText("www.google.com\n")
+        waitUntilPageLoad()
+        app.textFields["url"].press(forDuration:3)
+        app.tables.cells["menu-Copy-Link"].tap()
+        app.textFields["url"].tap()
+        app.textFields["address"].press(forDuration: 2)
+
+        //Ensure that long press on address bar brings up a menu with Select All, Select, Paste, and Paste & Go
+        waitForExistence(app.menuItems["Select All"], timeout: 3)
+        XCTAssertTrue(app.menuItems["Select All"].exists)
+        XCTAssertTrue(app.menuItems["Select"].exists)
+        XCTAssertTrue(app.menuItems["Paste"].exists)
+        XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+
+        //Tap on Select option and make sure Copy, Cut, Paste, and Look Up are shown
+        app.menuItems["Select"].tap()
+        waitForExistence(app.menuItems["Copy"])
+        if iPad() {
+            XCTAssertTrue(app.menuItems["Copy"].exists)
+            XCTAssertTrue(app.menuItems["Cut"].exists)
+            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Share…"].exists)
+            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+            XCTAssertTrue(app.menuItems["Paste"].exists)
+        } else {
+            XCTAssertTrue(app.menuItems["Copy"].exists)
+            XCTAssertTrue(app.menuItems["Cut"].exists)
+            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Paste"].exists)
+            XCTAssertTrue(app.menus.children(matching: .menuItem).element(boundBy: 4).exists)
+        }
+
+        //Go back from Select and redo the tap
+        app.textFields["address"].tap()
+        app.textFields["address"].press(forDuration: 2)
+
+        //Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
+        app.menuItems["Select All"].tap()
+        waitForExistence(app.menuItems["Copy"])
+        if iPad() {
+            XCTAssertTrue(app.menuItems["Copy"].exists)
+            XCTAssertTrue(app.menuItems["Cut"].exists)
+            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Share…"].exists)
+            XCTAssertTrue(app.menuItems["Paste"].exists)
+            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+        } else {
+            XCTAssertTrue(app.menuItems["Copy"].exists)
+            XCTAssertTrue(app.menuItems["Cut"].exists)
+            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Paste"].exists)
+            XCTAssertTrue(app.menus.children(matching: .menuItem).element(boundBy: 4).exists)
+        }
+    }
+
     private func longPressLinkOptions(optionSelected: String) {
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()

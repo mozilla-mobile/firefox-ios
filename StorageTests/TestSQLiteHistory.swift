@@ -1351,6 +1351,44 @@ class TestSQLiteHistory: XCTestCase {
         }
     }
 
+    func testRemoveRecentHistory() {
+        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let prefs = MockProfilePrefs()
+        let history = SQLiteHistory(db: db, prefs: prefs)
+
+        func delete(date: Date, expectedDeletions: Int) {
+            history.clearHistory().succeeded()
+            let siteL = Site(url: "http://url1/", title: "title local only")
+            let siteR = Site(url: "http://url2/", title: "title remote only")
+            let siteB = Site(url: "http://url3/", title: "title local and remote")
+            siteL.guid = "locallocal12"
+            siteR.guid = "remoteremote"
+            siteB.guid = "bothbothboth"
+            // Site visit uses microsec timestamp
+            let siteVisitL1 = SiteVisit(site: siteL, date: 1_000_000, type: VisitType.link)
+            let siteVisitL2 = SiteVisit(site: siteR, date: 2_000_000, type: VisitType.link)
+            let siteVisitBL1 = SiteVisit(site: siteB, date: 4_000_000, type: VisitType.link)
+
+            let deferred = history.addLocalVisit(siteVisitL1)
+                    >>> { history.addLocalVisit(siteVisitL2) }
+                    >>> { history.addLocalVisit(siteVisitBL1) }
+                    >>> { history.insertOrUpdatePlace(siteL.asPlace(), modified: baseInstantInMillis + 2) }
+                    >>> { history.insertOrUpdatePlace(siteR.asPlace(), modified: baseInstantInMillis + 3) }
+                    >>> { history.insertOrUpdatePlace(siteB.asPlace(), modified: baseInstantInMillis + 5) }
+
+            XCTAssert(deferred.value.isSuccess)
+
+            history.removeHistoryFromDate(date).succeeded()
+            history.getDeletedHistoryToUpload() >>== { guids in
+                XCTAssertEqual(expectedDeletions, guids.count)
+            }
+        }
+
+        delete(date: Date(timeIntervalSinceNow: 0), expectedDeletions: 0)
+        delete(date: Date(timeIntervalSince1970: 0), expectedDeletions: 3)
+        delete(date: Date(timeIntervalSince1970: 3), expectedDeletions: 1)
+    }
+
     func testRemoveHistoryForUrl() {
         let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()

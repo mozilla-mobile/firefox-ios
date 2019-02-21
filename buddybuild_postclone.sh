@@ -16,6 +16,15 @@ npm install
 npm run build
 
 #
+# Install Rust to build dependencies that require it
+#
+
+curl https://sh.rustup.rs -sSf | sh -s -- -y
+source $HOME/.cargo/env
+rustup target add aarch64-apple-ios x86_64-apple-ios
+cargo install cargo-lipo
+
+#
 # Add a badge for FirefoxBeta
 #
 
@@ -49,7 +58,7 @@ if [ "$BUDDYBUILD_SCHEME" = "Fennec_Enterprise" ] && [ "$BUDDYBUILD_PULL_REQUEST
   ./ios-l10n-scripts/import-locales-firefox.sh
 fi
 
-# workaround, earlgrey needs to have dependencies downloaded before setup 
+# workaround, earlgrey needs to have dependencies downloaded before setup
 # https://github.com/google/EarlGrey/issues/732
 carthage checkout
 ./Carthage/Checkouts/EarlGrey/Scripts/setup-earlgrey.sh

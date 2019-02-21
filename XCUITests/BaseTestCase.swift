@@ -5,8 +5,10 @@
 import MappaMundi
 import XCTest
 
+let serverPort = Int.random(in: 1025..<65000)
+
 func path(forTestPage page: String) -> String {
-    return "http://localhost:6571/test-fixture/\(page)"
+    return "http://localhost:\(serverPort)/test-fixture/\(page)"
 }
 
 class BaseTestCase: XCTestCase {
@@ -19,7 +21,7 @@ class BaseTestCase: XCTestCase {
 
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
-    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName]
+    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)"]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()

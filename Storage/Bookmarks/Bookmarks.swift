@@ -9,6 +9,17 @@ import SwiftyJSON
 
 private let log = Logger.syncLogger
 
+enum SyncStatus: Int {
+    // Ordinarily not needed; synced items are removed from the overlay. But they start here when cloned.
+    case synced = 0
+
+    // A material change that we want to upload on next sync.
+    case changed = 1
+
+    // Created locally.
+    case new = 2
+}
+
 public protocol SearchableBookmarks: AnyObject {
     func bookmarksByURL(_ url: URL) -> Deferred<Maybe<Cursor<BookmarkItem>>>
 }

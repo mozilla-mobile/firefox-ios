@@ -88,6 +88,9 @@ class Setting: NSObject {
         cell.layoutMargins = .zero
         // So that the separator line goes all the way to the left edge.
         cell.separatorInset = .zero
+        if let cell = cell as? ThemedTableViewCell {
+            cell.applyTheme()
+        }
     }
 
     // Called when the pref is tapped.

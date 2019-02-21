@@ -20,8 +20,8 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForExistence(app.tables["History List"])
 
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
-        // History without counting Recently Closed and Synced devices
-        let history = app.tables["History List"].cells.count - 2
+        // History without counting Clear Recent History, Recently Closed and Synced devices
+        let history = app.tables["History List"].cells.count - 3
 
         XCTAssertEqual(history, 1, "History entries in regular browsing do not match")
 
@@ -36,7 +36,7 @@ class PrivateBrowsingTest: BaseTestCase {
         XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
 
         // Open one tab in private browsing and check the total number of tabs
-        let privateHistory = app.tables["History List"].cells.count - 2
+        let privateHistory = app.tables["History List"].cells.count - 3
         XCTAssertEqual(privateHistory, 1, "History entries in private browsing do not match")
     }
 
@@ -220,8 +220,8 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
         navigator.goto(HomePanel_History)
         waitForExistence(app.tables["History List"])
-        // History without counting Recently Closed and Synced devices
-        let history = app.tables["History List"].cells.count - 2
+        // History without counting Clear Recent History, Recently Closed and Synced devices
+        let history = app.tables["History List"].cells.count - 3
         XCTAssertEqual(history, 0, "History list should be empty")
     }
 
@@ -239,8 +239,8 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
         navigator.goto(HomePanel_History)
         waitForExistence(app.tables["History List"])
-        // History without counting Recently Closed and Synced devices
-        let history = app.tables["History List"].cells.count - 2
+        // History without counting Clear Recent History, Recently Closed and Synced devices
+        let history = app.tables["History List"].cells.count - 3
         XCTAssertEqual(history, 1, "There should be one entry in History")
         let savedToHistory = app.tables["History List"].cells.staticTexts[url1Label]
         waitForExistence(savedToHistory)

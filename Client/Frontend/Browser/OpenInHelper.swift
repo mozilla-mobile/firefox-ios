@@ -6,6 +6,7 @@ import Foundation
 import MobileCoreServices
 import PassKit
 import WebKit
+import QuickLook
 import Shared
 
 struct MIMEType {
@@ -22,6 +23,7 @@ struct MIMEType {
     static let PNG = "image/png"
     static let WebP = "image/webp"
     static let Calendar = "text/calendar"
+    static let USDZ = "model/usd"
 
     private static let webViewViewableTypes: [String] = [MIMEType.Bitmap, MIMEType.GIF, MIMEType.JPEG, MIMEType.HTML, MIMEType.PDF, MIMEType.PlainText, MIMEType.PNG, MIMEType.WebP]
 
@@ -143,5 +145,36 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
             let addController = PKAddPassesViewController(pass: pass)
             browserViewController.present(addController, animated: true, completion: nil)
         }
+    }
+}
+
+class OpenQLPreviewHelper: NSObject, OpenInHelper, QLPreviewControllerDataSource {
+    var url: NSURL
+
+    fileprivate let browserViewController: BrowserViewController
+
+    fileprivate let previewController: QLPreviewController
+
+    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
+        guard let mimeType = response.mimeType, mimeType == MIMEType.USDZ, let responseURL = response.url as NSURL?, QLPreviewController.canPreview(responseURL), !forceDownload, !canShowInWebView else { return nil }
+        self.url = responseURL
+        self.browserViewController = browserViewController
+        self.previewController = QLPreviewController()
+        super.init()
+    }
+
+    func open() {
+        self.previewController.dataSource = self
+        ensureMainThread {
+            self.browserViewController.present(self.previewController, animated: true, completion: nil)
+        }
+    }
+
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return 1
+    }
+
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        return self.url
     }
 }

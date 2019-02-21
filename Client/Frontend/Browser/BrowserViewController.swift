@@ -665,7 +665,7 @@ class BrowserViewController: UIViewController {
                 make.bottom.lessThanOrEqualTo(toolbar.snp.top)
                 make.bottom.lessThanOrEqualTo(self.view.safeArea.bottom)
             } else {
-                make.bottom.equalTo(self.view)
+                make.bottom.equalTo(self.view.safeArea.bottom)
             }
         }
     }
@@ -855,11 +855,6 @@ class BrowserViewController: UIViewController {
             guard webView == tabManager.selectedTab?.webView else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
-                // Profiler.end triggers a screenshot, and a delay is needed here to capture the correct screen
-                // (otherwise the screen prior to this step completing is captured).
-                if webView.estimatedProgress > 0.9 {
-                    Profiler.shared?.end(bookend: .load_url, delay: 0.200)
-                }
             } else {
                 urlBar.hideProgressBar()
             }
@@ -1160,7 +1155,8 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
 
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
-        self.openURLInNewTab(url, isPrivileged: false)
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: false)
     }
 }
 
@@ -1447,141 +1443,6 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
         dismissVisibleMenus()
-    }
-}
-
-extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
-    func tabToolbarDidPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.goBack()
-    }
-
-    func tabToolbarDidLongPressBack(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        showBackForwardList()
-    }
-
-    func tabToolbarDidPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.reload()
-    }
-
-    func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard let tab = tabManager.selectedTab else {
-            return
-        }
-        let urlActions = self.getRefreshLongPressMenu(for: tab)
-        guard !urlActions.isEmpty else {
-            return
-        }
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
-    }
-
-    func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.stop()
-    }
-
-    func tabToolbarDidPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        tabManager.selectedTab?.goForward()
-    }
-
-    func tabToolbarDidLongPressForward(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-        showBackForwardList()
-    }
-
-    func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        // ensure that any keyboards or spinners are dismissed before presenting the menu
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-        var actions: [[PhotonActionSheetItem]] = []
-
-        if let syncAction = syncMenuButton(showFxA: presentSignInViewController) {
-            actions.append(syncAction)
-        }
-        actions.append(getLibraryActions(vcDelegate: self))
-        actions.append(getOtherPanelActions(vcDelegate: self))
-        // force a modal if the menu is being displayed in compact split screen
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
-    }
-
-    func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        showTabTray()
-    }
-
-    func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {
-        guard let selectedTab = tabManager.selectedTab else { return [] }
-        let count = selectedTab.isPrivate ? tabManager.normalTabs.count : tabManager.privateTabs.count
-        let infinity = "\u{221E}"
-        let tabCount = (count < 100) ? count.description : infinity
-
-        func action() {
-            let result = tabManager.switchPrivacyMode()
-            if result == .createdNewTab, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
-                focusLocationTextField(forTab: tabManager.selectedTab)
-            }
-        }
-
-        let privateBrowsingMode = PhotonActionSheetItem(title: Strings.privateBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _ in
-                action()
-            }
-        let normalBrowsingMode = PhotonActionSheetItem(title: Strings.normalBrowsingModeTitle, iconString: "nav-tabcounter", iconType: .TabsButton, tabCount: tabCount) { _ in
-                action()
-        }
-
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [normalBrowsingMode] : [privateBrowsingMode]
-        }
-        return [privateBrowsingMode]
-    }
-
-    func getMoreTabToolbarLongPressActions() -> [PhotonActionSheetItem] {
-        let newTab = PhotonActionSheetItem(title: Strings.NewTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: false)}
-        let newPrivateTab = PhotonActionSheetItem(title: Strings.NewPrivateTabTitle, iconString: "quick_action_new_tab", iconType: .Image) { action in
-            let shouldFocusLocationField = NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage
-            self.openBlankNewTab(focusLocationField: shouldFocusLocationField, isPrivate: true)}
-        let closeTab = PhotonActionSheetItem(title: Strings.CloseTabTitle, iconString: "tab_close", iconType: .Image) { action in
-            if let tab = self.tabManager.selectedTab {
-                self.tabManager.removeTabAndUpdateSelectedIndex(tab)
-                self.updateTabCountUsingTabManager(self.tabManager)
-            }}
-        if let tab = self.tabManager.selectedTab {
-            return tab.isPrivate ? [newPrivateTab, closeTab] : [newTab, closeTab]
-        }
-        return [newTab, closeTab]
-    }
-  
-    func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        guard self.presentedViewController == nil else {
-            return
-        }
-        var actions: [[PhotonActionSheetItem]] = []
-        actions.append(getTabToolbarLongPressActionsForModeSwitching())
-        actions.append(getMoreTabToolbarLongPressActions())
-
-        // Force a modal if the menu is being displayed in compact split screen.
-        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
-
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
-    }
-
-    func showBackForwardList() {
-        if let backForwardList = tabManager.selectedTab?.webView?.backForwardList {
-            let backForwardViewController = BackForwardListViewController(profile: profile, backForwardList: backForwardList)
-            backForwardViewController.tabManager = tabManager
-            backForwardViewController.bvc = self
-            backForwardViewController.modalPresentationStyle = .overCurrentContext
-            backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
-            self.present(backForwardViewController, animated: true, completion: nil)
-        }
     }
 }
 
@@ -1879,8 +1740,12 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateInContentHomePanel(selected?.url as URL?)
-        if let tab = selected, tab.url == nil, !tab.restoring, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
-            self.urlBar.tabLocationViewDidTapLocation(self.urlBar.locationView)
+        if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
+            if tab.url == nil, !tab.restoring {
+                urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
+            } else {
+                urlBar.leaveOverlayMode()
+            }
         }
     }
 
@@ -1934,7 +1799,7 @@ extension BrowserViewController: TabManagerDelegate {
         show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
     }
 
-    fileprivate func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
+    func updateTabCountUsingTabManager(_ tabManager: TabManager, animated: Bool = true) {
         if let selectedTab = tabManager.selectedTab {
             let count = selectedTab.isPrivate ? tabManager.privateTabs.count : tabManager.normalTabs.count
             toolbar?.updateTabCount(count, animated: animated)
@@ -2322,7 +2187,7 @@ extension BrowserViewController {
         guard let webView = tabManager.selectedTab?.webView else {
             return
         }
-        webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
+        webView.evaluateJavaScript("__firefox__.searchQueryForField && __firefox__.searchQueryForField()") { (result, _) in
             guard let searchQuery = result as? String, let favicon = self.tabManager.selectedTab!.displayFavicon else {
                 //Javascript responded with an incorrectly formatted message. Show an error.
                 let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
@@ -2378,7 +2243,7 @@ extension BrowserViewController: KeyboardHelperDelegate {
         guard let webView = tabManager.selectedTab?.webView else {
             return
         }
-        webView.evaluateJavaScript("__firefox__.searchQueryForField()") { (result, _) in
+        webView.evaluateJavaScript("__firefox__.searchQueryForField && __firefox__.searchQueryForField()") { (result, _) in
             guard let _ = result as? String else {
                 return
             }

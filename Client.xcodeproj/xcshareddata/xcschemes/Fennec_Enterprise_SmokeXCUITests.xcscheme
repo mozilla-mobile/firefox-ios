@@ -362,7 +362,31 @@
                   Identifier = "FxScreenGraphTests">
                </Test>
                <Test
-                  Identifier = "HistoryTests">
+                  Identifier = "HistoryTests/testClearHistoryFromSettings()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testClearRecentlyClosedHistory()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testEmptyHistoryListFirstTime()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testLongTapOptionsRecentlyClosedItem()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testOpenInNewPrivateTabRecentlyClosedItem()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testOpenInNewTabRecentlyClosedItem()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testOpenSyncDevices()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testPrivateClosedSiteDoesNotAppearOnRecentlyClosed()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testRecentlyClosedOptionAvailable()">
                </Test>
                <Test
                   Identifier = "HomePageSettingsTest">
@@ -396,6 +420,9 @@
                </Test>
                <Test
                   Identifier = "NavigationTest/testLongPressLinkOptionsPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "NavigationTest/testLongPressOnAddressBar()">
                </Test>
                <Test
                   Identifier = "NavigationTest/testNavigation()">

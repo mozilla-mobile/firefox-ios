@@ -500,36 +500,49 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
         tableView.delegate = nil
         tableView.dataSource = nil
-
-        refreshControl = UIRefreshControl()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refreshControl?.addTarget(self, action: #selector(refreshTabs), for: .valueChanged)
+
+        // Add a refresh control if the user is logged in and the control was not added before. If the user is not
+        // logged in, remove any existing control.
+        if profile.hasSyncableAccount() && refreshControl == nil {
+            addRefreshControl()
+        } else if !profile.hasSyncableAccount() && refreshControl != nil {
+            removeRefreshControl()
+        }
+
+        onRefreshPulled()
+    }
+
+    // MARK: - Refreshing TableView
+
+    func addRefreshControl() {
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(onRefreshPulled), for: .valueChanged)
+        refreshControl = control
+        tableView.refreshControl = control
+    }
+
+    func removeRefreshControl() {
+        tableView.refreshControl = nil
+        refreshControl = nil
+    }
+
+    @objc func onRefreshPulled() {
+        refreshControl?.beginRefreshing()
         refreshTabs()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        refreshControl?.removeTarget(self, action: #selector(refreshTabs), for: .valueChanged)
-    }
-
-    fileprivate func startRefreshing() {
-        if let refreshControl = self.refreshControl {
-            let height = -refreshControl.bounds.size.height
-            tableView.setContentOffset(CGPoint(x: 0, y: height), animated: true)
-            refreshControl.beginRefreshing()
-        }
-    }
-
     func endRefreshing() {
-        if self.refreshControl?.isRefreshing ?? false {
-            self.refreshControl?.endRefreshing()
-        }
+        // Always end refreshing, even if we failed!
+        refreshControl?.endRefreshing()
 
-        self.tableView.isScrollEnabled = true
-        self.tableView.reloadData()
+        // Remove the refresh control if the user has logged out in the meantime
+        if !profile.hasSyncableAccount() {
+            removeRefreshControl()
+        }
     }
 
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
@@ -542,49 +555,38 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
                 self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .noTabs)
             } else {
                 self.tableViewDelegate = RemoteTabsPanelClientAndTabsDataSource(homePanel: remoteTabsPanel, clientAndTabs: nonEmptyClientAndTabs)
-                tableView.allowsSelection = true
             }
         }
     }
 
-    @objc fileprivate func refreshTabs() {
+    fileprivate func refreshTabs() {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
 
         assert(Thread.isMainThread)
 
-        tableView.isScrollEnabled = false
-        tableView.allowsSelection = false
-        tableView.tableFooterView = UIView(frame: .zero)
-
         // Short circuit if the user is not logged in
-        if !profile.hasSyncableAccount() {
-            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .notLoggedIn)
+        guard profile.hasSyncableAccount() else {
             self.endRefreshing()
+            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .notLoggedIn)
             return
         }
 
+        // Get cached tabs.
         self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
-            if let clientAndTabs = result.successValue {
-                self.updateDelegateClientAndTabData(clientAndTabs)
+            guard let clientAndTabs = result.successValue else {
+                self.endRefreshing()
+                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .failedToSync)
+                return
             }
 
-            // Fetch the tabs from the cloud if it has been more than 5 seconds since the last sync.
-            let lastSyncTime = self.profile.prefs.timestampForKey(PrefsKeys.KeyLastRemoteTabSyncTime) ?? 0
-            if Date.now() > lastSyncTime && Date.now() - lastSyncTime > OneSecondInMilliseconds * 5 {
-                self.startRefreshing()
-                self.profile.getClientsAndTabs().uponQueue(.main) { result in
-                    // We set the last sync time to now, regardless of whether the sync was successful, to avoid trying to sync over
-                    // and over again in cases whether the client is unable to sync (e.g. when there is no network connectivity).
-                    self.profile.prefs.setTimestamp(Date.now(), forKey: PrefsKeys.KeyLastRemoteTabSyncTime)
-                    if let clientAndTabs = result.successValue {
-                        self.updateDelegateClientAndTabData(clientAndTabs)
-                    }
-                    self.endRefreshing()
-                }
-            } else {
-                // If we failed before and didn't sync, show the failure delegate
-                if let _ = result.failureValue {
-                    self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .failedToSync)
+            // Update UI with cached data.
+            self.updateDelegateClientAndTabData(clientAndTabs)
+
+            // Fetch updated tabs.
+            self.profile.getClientsAndTabs().uponQueue(.main) { result in
+                if let clientAndTabs = result.successValue {
+                    // Update UI with updated tabs.
+                    self.updateDelegateClientAndTabData(clientAndTabs)
                 }
 
                 self.endRefreshing()

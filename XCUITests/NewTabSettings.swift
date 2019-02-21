@@ -13,7 +13,7 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertTrue(app.tables.cells["Blank Page"].exists)
         XCTAssertTrue(app.tables.cells["Bookmarks"].exists)
         XCTAssertTrue(app.tables.cells["History"].exists)
-        XCTAssertTrue(app.tables.cells["HomePageSetting"].exists)
+        XCTAssertTrue(app.tables.cells["NewTabAsCustomURL"].exists)
         //XCTAssertTrue(app.tables.switches["ASPocketStoriesVisible"].isEnabled)
     }
 
@@ -70,13 +70,13 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.goto(NewTabSettings)
         waitForExistence(app.navigationBars["New Tab"])
         // Check the placeholder value
-        let placeholderValue = app.textFields["HomePageSettingTextField"].value as! String
+        let placeholderValue = app.textFields["NewTabAsCustomURLTextField"].value as! String
         XCTAssertEqual(placeholderValue, "Custom URL")
         navigator.performAction(Action.SelectNewTabAsCustomURL)
         // Check the value typed
-        app.textFields["HomePageSettingTextField"].typeText("mozilla.org")
-        let valueTyped = app.textFields["HomePageSettingTextField"].value as! String
-        waitForValueContains(app.textFields["HomePageSettingTextField"], value: "mozilla")
+        app.textFields["NewTabAsCustomURLTextField"].typeText("mozilla.org")
+        let valueTyped = app.textFields["NewTabAsCustomURLTextField"].value as! String
+        waitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
         XCTAssertEqual(valueTyped, "mozilla.org")
         // Open new page and check that the custom url is used
         navigator.performAction(Action.OpenNewTabFromTabTray)

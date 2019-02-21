@@ -4,7 +4,7 @@
 
 import XCTest
 
-let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost", "longValue": "localhost:6571/test-fixture/test-mozilla-org.html"]
+let website1: [String: String] = ["url": path(forTestPage: "test-mozilla-org.html"), "label": "Internet for people, not profit — Mozilla", "value": "localhost", "longValue": "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"]
 let website2 = path(forTestPage: "test-example.html")
 
 let PDFWebsite = ["url": "http://www.pdf995.com/samples/pdf.pdf"]
@@ -46,7 +46,7 @@ class ToolbarTests: BaseTestCase {
 
         navigator.openURL(website2)
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: "localhost:6571")
+        waitForValueContains(app.textFields["url"], value: "localhost:\(serverPort)")
         XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
         XCTAssertFalse(app.buttons["Forward"].isEnabled)
 
@@ -121,65 +121,5 @@ class ToolbarTests: BaseTestCase {
         let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
         waitForExistence(topElement, timeout: 10)
         XCTAssertTrue(topElement.isHittable)
-    }
-
-    func testShowToolbarWhenScrollingDefaultOption() {
-        navigator.goto(SettingsScreen)
-        // Check that the setting is off by default
-        XCTAssertFalse(app.cells.switches["AlwaysShowToolbar"].isSelected)
-    }
-
-    func testShowDoNotShowToolbarWhenScrollingPortrait() {
-        XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
-        // The toolbar should dissapear when scrolling up
-        navigator.openURL(PDFWebsite["url"]!)
-        waitUntilPageLoad()
-
-        // Swipe Up and check that the toolbar is not available and Down and it is available again
-        let toolbarElement = app.buttons["TopTabsViewController.tabsButton"]
-        let element = app.webViews.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
-        element.swipeUp()
-        XCTAssertFalse(toolbarElement.isHittable)
-
-        element.swipeDown()
-        XCTAssertTrue(toolbarElement.isHittable)
-
-        // Change the setting
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.ToggleShowToolbarWhenScrolling)
-        XCTAssertTrue(toolbarElement.isHittable)
-
-        // The toolbar should not dissapear when scrolling up
-        element.swipeUp()
-        XCTAssertTrue(toolbarElement.isHittable)
-        element.swipeDown()
-        XCTAssertTrue(toolbarElement.isHittable)
-    }
-
-    func testShowDoNotShowToolbarWhenScrollingLandscape() {
-        // The toolbar should dissapear when scrolling up
-        navigator.openURL(PDFWebsite["url"]!)
-        waitUntilPageLoad()
-
-        // Swipe Up and check that the toolbar is not available and Down and it is available again
-        let toolbarElement = app.buttons["TopTabsViewController.tabsButton"]
-        let element = app.webViews.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
-        element.swipeUp()
-        XCTAssertFalse(toolbarElement.isHittable)
-
-        element.swipeDown()
-        XCTAssertTrue(toolbarElement.isHittable)
-
-        // Change the setting
-        navigator.goto(SettingsScreen)
-        navigator.performAction(Action.ToggleShowToolbarWhenScrolling)
-        XCTAssertTrue(toolbarElement.isHittable)
-        XCTAssertTrue(toolbarElement.isHittable)
-
-        // The toolbar should not dissapear when scrolling up
-        element.swipeUp()
-        XCTAssertTrue(toolbarElement.isHittable)
-        element.swipeDown()
-        XCTAssertTrue(toolbarElement.isHittable)
     }
 }

@@ -22,6 +22,15 @@ class TestAppDelegate: AppDelegate {
         let launchArguments = ProcessInfo.processInfo.arguments
 
         launchArguments.forEach { arg in
+            if arg.starts(with: LaunchArguments.ServerPort) {
+                let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
+                if let port = Int(portString) {
+                    AppInfo.webserverPort = port
+                } else {
+                    fatalError("Failed to set web server port override.")
+                }
+            }
+
             if arg.starts(with: LaunchArguments.LoadDatabasePrefix) {
                 if launchArguments.contains(LaunchArguments.ClearProfile) {
                     fatalError("Clearing profile and loading a test database is not a supported combination.")

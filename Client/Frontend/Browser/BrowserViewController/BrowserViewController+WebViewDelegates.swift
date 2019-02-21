@@ -127,8 +127,6 @@ extension BrowserViewController: WKNavigationDelegate {
                 hideReaderModeBar(animated: false)
             }
         }
-
-        Profiler.shared?.begin(bookend: .load_url)
     }
 
     // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise
@@ -274,6 +272,29 @@ extension BrowserViewController: WKNavigationDelegate {
             passbookHelper.open()
             decisionHandler(.cancel)
             return
+        }
+
+        if #available(iOS 12.0, *) {
+            // Check if this response should be displayed in a QuickLook for USDZ files.
+            if let previewHelper = OpenQLPreviewHelper(request: request, response: response, canShowInWebView: canShowInWebView, forceDownload: forceDownload, browserViewController: self) {
+
+                // Certain files are too large to download before the preview presents, block and use a temporary document instead
+                if let tab = tabManager[webView] {
+                    if navigationResponse.isForMainFrame, response.mimeType != MIMEType.HTML, let request = request {
+                        tab.temporaryDocument = TemporaryDocument(preflightResponse: response, request: request)
+                        previewHelper.url = tab.temporaryDocument!.getURL().value as NSURL
+
+                        // Open our helper and cancel this response from the webview.
+                        previewHelper.open()
+                        decisionHandler(.cancel)
+                        return
+                    } else {
+                        tab.temporaryDocument = nil
+                    }
+                }
+
+                // We don't have a temporary document, fallthrough
+            }
         }
 
         // Check if this response should be downloaded.

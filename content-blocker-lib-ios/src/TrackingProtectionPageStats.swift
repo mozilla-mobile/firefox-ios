@@ -73,8 +73,9 @@ class TPStatsBlocklistChecker {
 }
 
 // The 'unless-domain' and 'if-domain' rules use wildcard expressions, convert this to regex.
-func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression? {
-    struct Memo { static var domains =  [String: NSRegularExpression]() }
+func wildcardContentBlockerDomainToRegex(domain: String) -> String? {
+    struct Memo { static var domains =  [String: String]() }
+    
     if let memoized = Memo.domains[domain] {
         return memoized
     }
@@ -85,25 +86,20 @@ func wildcardContentBlockerDomainToRegex(domain: String) -> NSRegularExpression?
         regex = "." + regex
     }
     regex = regex.replacingOccurrences(of: ".", with: "\\.")
-    do {
-        let result = try NSRegularExpression(pattern: regex, options: [])
-        Memo.domains[domain] = result
-        return result
-    } catch {
-        assertionFailure("Blocklists: \(error.localizedDescription)")
-        return nil
-    }
+    
+    Memo.domains[domain] = regex
+    return regex
 }
 
 class TPStatsBlocklists {
     class Rule {
-        let regex: NSRegularExpression
+        let regex: String
         let loadType: LoadType
         let resourceType: ResourceType
-        let domainExceptions: [NSRegularExpression]?
+        let domainExceptions: [String]?
         let list: BlocklistName
 
-        init(regex: NSRegularExpression, loadType: LoadType, resourceType: ResourceType, domainExceptions: [NSRegularExpression]?, list: BlocklistName) {
+        init(regex: String, loadType: LoadType, resourceType: ResourceType, domainExceptions: [String]?, list: BlocklistName) {
             self.regex = regex
             self.loadType = loadType
             self.resourceType = resourceType
@@ -149,8 +145,7 @@ class TPStatsBlocklists {
 
             for rule in list {
                 guard let trigger = rule["trigger"] as? [String: AnyObject],
-                    let filter = trigger["url-filter"] as? String,
-                    let filterRegex = try? NSRegularExpression(pattern: filter, options: []) else {
+                    let filter = trigger["url-filter"] as? String else {
                         assertionFailure("Blocklists error: Rule has unexpected format.")
                         continue
                 }
@@ -180,15 +175,14 @@ class TPStatsBlocklists {
                 let resourceTypes = trigger["resource-type"] as? [String] ?? []
                 let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
 
-                let rule = Rule(regex: filterRegex, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList)
+                let rule = Rule(regex: filter, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList)
                 blockRules[baseDomain] = (blockRules[baseDomain] ?? []) + [rule]
             }
         }
     }
 
-    func urlIsInList(_ url: URL, whitelistedDomains: [NSRegularExpression]) -> BlocklistName? {
+    func urlIsInList(_ url: URL, whitelistedDomains: [String]) -> BlocklistName? {
         let resourceString = url.absoluteString
-        let resourceRange = NSRange(location: 0, length: resourceString.count)
 
         guard let baseDomain = url.baseDomain, let rules = blockRules[baseDomain] else {
             return nil
@@ -196,19 +190,18 @@ class TPStatsBlocklists {
 
         domainSearch: for rule in rules {
             // First, test the top-level filters to see if this URL might be blocked.
-            if rule.regex.firstMatch(in: resourceString, options: .anchored, range: resourceRange) != nil {
+            if resourceString.range(of: rule.regex, options: .regularExpression) != nil {
                 // Check the domain exceptions. If a domain exception matches, this filter does not apply.
                 for domainRegex in (rule.domainExceptions ?? []) {
-                    if domainRegex.firstMatch(in: resourceString, options: [], range: resourceRange) != nil {
+                    if resourceString.range(of: domainRegex, options: .regularExpression) != nil {
                         continue domainSearch
                     }
                 }
 
                 // Check the whitelist.
                 if let baseDomain = url.baseDomain, !whitelistedDomains.isEmpty {
-                    let range = NSRange(location: 0, length: baseDomain.count)
                     for ignoreDomain in whitelistedDomains {
-                        if ignoreDomain.firstMatch(in: baseDomain, options: [], range: range) != nil {
+                        if baseDomain.range(of: ignoreDomain, options: .regularExpression) != nil {
                             return nil
                         }
                     }

@@ -57,7 +57,16 @@ class SensitiveViewController: UIViewController {
             },
             fallback: {
                 self.promptingForTouchID = false
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController).uponQueue(.main) { isOk in
+                    if isOk {
+                        self.removeBackgroundedBlur()
+                        self.navigationController?.dismiss(animated: true, completion: nil)
+                        self.authState = .notAuthenticating
+                    } else {
+                        _ = self.navigationController?.popToRootViewController(animated: false)
+                        self.authState = .notAuthenticating
+                    }
+                }
             }
         )
         authState = .presenting
@@ -92,20 +101,6 @@ class SensitiveViewController: UIViewController {
         view.layoutIfNeeded()
 
         return blurView
-    }
-}
-
-// MARK: - PasscodeEntryDelegate
-extension SensitiveViewController: PasscodeEntryDelegate {
-    func passcodeValidationDidSucceed() {
-        removeBackgroundedBlur()
-        self.navigationController?.dismiss(animated: true, completion: nil)
-        self.authState = .notAuthenticating
-    }
-
-    func userDidCancelValidation() {
-        _ = self.navigationController?.popToRootViewController(animated: false)
-        self.authState = .notAuthenticating
     }
 }
 

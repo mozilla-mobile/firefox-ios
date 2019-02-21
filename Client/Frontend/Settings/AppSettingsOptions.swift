@@ -761,9 +761,8 @@ class LoginsSetting: Setting {
         self.tabManager = settings.tabManager
         self.navigationController = settings.navigationController
         self.settings = settings as? AppSettingsTableViewController
-
-        let loginsTitle = NSLocalizedString("Logins", comment: "Label used as an item in Settings. When touched, the user will be navigated to the Logins/Password manager.")
-        super.init(title: NSAttributedString(string: loginsTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]),
+        
+        super.init(title: NSAttributedString(string: Strings.LoginsAndPasswordsTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]),
                    delegate: delegate)
     }
 
@@ -774,29 +773,13 @@ class LoginsSetting: Setting {
     }
 
     override func onClick(_: UINavigationController?) {
-        guard let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo() else {
-            settings?.navigateToLoginsList()
+        deselectRow()
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let navController = navigationController else { return }
+        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: appDelegate.browserViewController).uponQueue(.main) { loginsVC in
+            guard let loginsVC = loginsVC else { return }
             LeanPlumClient.shared.track(event: .openedLogins)
-            return
-        }
-
-        if authInfo.requiresValidation() {
-            AppAuthenticator.presentAuthenticationUsingInfo(authInfo,
-            touchIDReason: AuthenticationStrings.loginsTouchReason,
-            success: {
-                self.settings?.navigateToLoginsList()
-                LeanPlumClient.shared.track(event: .openedLogins)
-            },
-            cancel: {
-                self.deselectRow()
-            },
-            fallback: {
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self.settings)
-                self.deselectRow()
-            })
-        } else {
-            settings?.navigateToLoginsList()
-            LeanPlumClient.shared.track(event: .openedLogins)
+            navController.pushViewController(loginsVC, animated: true)
         }
     }
 }
@@ -982,9 +965,14 @@ class NewTabPageSetting: Setting {
 
     override var accessibilityIdentifier: String? { return "NewTab" }
 
+    override var status: NSAttributedString {
+        return NSAttributedString(string: NewTabAccessors.getNewTabPage(self.profile.prefs).rawValue)
+    }
+
+    override var style: UITableViewCellStyle { return .value1 }
+
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-
         super.init(title: NSAttributedString(string: Strings.SettingsNewTabSectionName, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
@@ -1021,6 +1009,12 @@ class HomeSetting: Setting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "Home" }
+
+    override var status: NSAttributedString {
+        return NSAttributedString(string: NewTabAccessors.getHomePage(self.profile.prefs).rawValue)
+    }
+
+    override var style: UITableViewCellStyle { return .value1 }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -1062,6 +1056,15 @@ class OpenWithSetting: Setting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
+
+    override var status: NSAttributedString {
+        guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), provider != "mailto:" else {
+            return NSAttributedString(string: "")
+        }
+        return NSAttributedString(string: provider)
+    }
+
+    override var style: UITableViewCellStyle { return .value1 }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
@@ -1107,6 +1110,13 @@ class ThemeSetting: Setting {
     override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
     override var style: UITableViewCellStyle { return .value1 }
     override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
+
+    override var status: NSAttributedString {
+        if ThemeManager.instance.automaticBrightnessIsOn {
+            return NSAttributedString(string: Strings.DisplayThemeAutomaticStatusLabel)
+        }
+        return NSAttributedString(string: "")
+    }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile

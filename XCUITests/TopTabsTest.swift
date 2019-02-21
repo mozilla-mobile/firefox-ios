@@ -7,12 +7,12 @@ import XCTest
 let url = "www.mozilla.org"
 let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
-let urlValueLong = "localhost:6571/test-fixture/test-mozilla-org.html"
+let urlValueLong = "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
 
 let urlExample = path(forTestPage: "test-example.html")
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
-let urlValueLongExample = "localhost:6571/test-fixture/test-example.html"
+let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.html"
 
 let toastUrl = ["url": "twitter.com", "link": "About", "urlLabel": "about"]
 
@@ -183,24 +183,6 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
-    }
-    // This test is disabled, this option is not shown now
-    func testCloseTabFromPageOptionsMenu() {
-        // Open two websites so that there are two tabs open and the page options menu is available
-        navigator.openURL(urlValue)
-        navigator.openNewURL(urlString: urlExample)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-
-        // Go back to one website so that the page options menu is available and close one tab from there
-        closeTabTrayView(goBackToBrowserTab: urlLabelExample)
-        navigator.performAction(Action.CloseTabFromPageOptions)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-
-        // Go back to the website left open, close it and check that it has been closed
-        closeTabTrayView(goBackToBrowserTab: urlLabel)
-        navigator.performAction(Action.CloseTabFromPageOptions)
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        waitForNoExistence(app.collectionViews.cells[urlLabel])
     }
 
     // Smoketest

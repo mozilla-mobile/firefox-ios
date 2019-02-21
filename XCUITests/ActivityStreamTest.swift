@@ -325,20 +325,6 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
     }
 
-    func testActivityStreamPages() {
-        let pagecontrolButton = app.cells["TopSitesCell"].buttons["pageControl"]
-        waitForExistence(pagecontrolButton, timeout: 5)
-        XCTAssert(pagecontrolButton.exists, "The Page Control button must exist")
-        let topSiteCells = TopSiteCellgroup.cells
-        // Lets just check that the button appears or not, tapping on it to go to second screen
-        // is causing regressions lately. Disabling so far that check. Once it stable it will be
-        // added again
-        topSiteCells.element(boundBy: 1).press(forDuration: 1)
-        app.tables["Context Menu"].cells["Remove"].tap()
-        waitForNoExistence(pagecontrolButton)
-        XCTAssertFalse(pagecontrolButton.exists, "The Page Control button should disappear after an item is deleted.")
-    }
-
     func testContextMenuInLandscape() {
         XCUIDevice.shared.orientation = .landscapeLeft
 
