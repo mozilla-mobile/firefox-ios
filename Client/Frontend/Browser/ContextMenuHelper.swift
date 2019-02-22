@@ -13,6 +13,8 @@ class ContextMenuHelper: NSObject {
     struct Elements {
         let link: URL?
         let image: URL?
+        let title: String?
+        let alt: String?
     }
 
     fileprivate weak var tab: Tab?
@@ -105,7 +107,9 @@ extension ContextMenuHelper: TabContentScript {
         }
 
         if linkURL != nil || imageURL != nil {
-            elements = Elements(link: linkURL, image: imageURL)
+            let title = data["title"] as? String
+            let alt = data["alt"] as? String
+            elements = Elements(link: linkURL, image: imageURL, title: title, alt: alt)
         } else {
             elements = nil
         }
