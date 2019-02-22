@@ -21,6 +21,7 @@ extension Strings {
     public static let CancelString = NSLocalizedString("Cancel", comment: "Label for Cancel button")
     public static let NotNowString = NSLocalizedString("Toasts.NotNow", value: "Not Now", comment: "label for Not Now button")
     public static let AppStoreString = NSLocalizedString("Toasts.OpenAppStore", value: "Open App Store", comment: "Open App Store button")
+    public static let OpenSettingsString = NSLocalizedString("Open Settings", comment: "See http://mzl.la/1G7uHo7")
 }
 
 // Table date section titles.
@@ -417,6 +418,24 @@ extension Strings {
     public static let ContextMenuButtonToastNewTabOpenedButtonText = NSLocalizedString("ContextMenu.ButtonToast.NewTabOpened.ButtonText", value: "Switch", comment: "The button text in the Button Toast for switching to a fresh New Tab.")
     public static let ContextMenuButtonToastNewPrivateTabOpenedLabelText = NSLocalizedString("ContextMenu.ButtonToast.NewPrivateTabOpened.LabelText", value: "New Private Tab opened", comment: "The label text in the Button Toast for switching to a fresh New Private Tab.")
     public static let ContextMenuButtonToastNewPrivateTabOpenedButtonText = NSLocalizedString("ContextMenu.ButtonToast.NewPrivateTabOpened.ButtonText", value: "Switch", comment: "The button text in the Button Toast for switching to a fresh New Private Tab.")
+}
+
+// Page context menu items (i.e. links and images).
+extension Strings {
+    public static let ContextMenuOpenInNewTab = NSLocalizedString("ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "Context menu item for opening a link in a new tab")
+    public static let ContextMenuOpenInNewPrivateTab = NSLocalizedString("ContextMenu.OpenInNewPrivateTab", tableName: "PrivateBrowsing", value: "Open in New Private Tab", comment: "Context menu option for opening a link in a new private tab")
+    public static let ContextMenuDownloadLink = NSLocalizedString("ContextMenu.DownloadLink", value: "Download Link", comment: "Context menu item for downloading a link URL")
+    public static let ContextMenuCopyLink = NSLocalizedString("ContextMenu.CopyLink", value: "Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
+    public static let ContextMenuShareLink = NSLocalizedString("ContextMenu.ShareLink", value: "Share Link", comment: "Context menu item for sharing a link URL")
+    public static let ContextMenuSaveImage = NSLocalizedString("ContextMenu.SaveImage", value: "Save Image", comment: "Context menu item for saving an image")
+    public static let ContextMenuCopyImage = NSLocalizedString("ContextMenu.CopyImage", value: "Copy Image", comment: "Context menu item for copying an image to the clipboard")
+    public static let ContextMenuCopyImageLink = NSLocalizedString("ContextMenu.CopyImageLink", value: "Copy Image Link", comment: "Context menu item for copying an image URL to the clipboard")
+}
+
+// Photo Library access.
+extension Strings {
+    public static let PhotoLibraryFirefoxWouldLikeAccessTitle = NSLocalizedString("PhotoLibrary.FirefoxWouldLikeAccessTitle", value: "Firefox would like to access your Photos", comment: "See http://mzl.la/1G7uHo7")
+    public static let PhotoLibraryFirefoxWouldLikeAccessMessage = NSLocalizedString("PhotoLibrary.FirefoxWouldLikeAccessMessage", value: "This allows you to save the image to your Camera Roll.", comment: "See http://mzl.la/1G7uHo7")
 }
 
 // Sent tabs notifications. These are displayed when the app is backgrounded or the device is locked.
