@@ -75,7 +75,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
 
       fields[0].addEventListener("blur", onBlur)
 
-      var formOrigin = LoginUtils._getPasswordOrigin();
+      var formOrigin = LoginUtils._getPasswordOrigin(form.ownerDocument.documentURI);
       var actionOrigin = LoginUtils._getActionOrigin(form);
       if (actionOrigin == null) {
         return Promise.reject("Action origin is null")
@@ -430,7 +430,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
         return {
           hostname: login.hostname,
           formSubmitURL: login.formSubmitURL,
-          httpReal : login.httpRealm,
+          httpRealm: login.httpRealm,
           username: login.username,
           password: login.password,
           usernameField: login.usernameField,

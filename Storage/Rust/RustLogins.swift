@@ -36,18 +36,7 @@ public extension LoginRecord {
     }
 
     public var protectionSpace: URLProtectionSpace {
-        // Break down the full url hostname into its scheme/protocol and host components
-        let hostnameURL = hostname.asURL
-        let host = hostnameURL?.host ?? hostname
-        let scheme = hostnameURL?.scheme ?? ""
-
-        // We should ignore any SSL or normal web ports in the URL.
-        var port = hostnameURL?.port ?? 0
-        if port == 443 || port == 80 {
-            port = 0
-        }
-
-        return URLProtectionSpace(host: host, port: port, protocol: scheme, realm: nil, authenticationMethod: nil)
+        return URLProtectionSpace.fromOrigin(hostname)
     }
 
     public var hasMalformedHostname: Bool {
