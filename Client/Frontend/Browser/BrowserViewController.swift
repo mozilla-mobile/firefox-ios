@@ -1990,7 +1990,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
         if let url = elements.image {
             if dialogTitle == nil {
-                dialogTitle = url.absoluteString
+                dialogTitle = elements.title ?? elements.alt ?? url.absoluteString
             }
 
             let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
@@ -2057,6 +2057,12 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 }
             }
             actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
+
+            let copyImageLinkTitle = NSLocalizedString("Copy Image Link", comment: "Context menu item for copying an image URL to the clipboard")
+            let copyImageLinkAction = UIAlertAction(title: copyImageLinkTitle, style: .default) { _ in
+                UIPasteboard.general.url = url as URL
+            }
+            actionSheetController.addAction(copyImageLinkAction, accessibilityIdentifier: "linkContextMenu.copyImageLink")
         }
 
         // If we're showing an arrow popup, set the anchor to the long press location.
@@ -2071,7 +2077,14 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             displayedPopoverController = actionSheetController
         }
 
-        actionSheetController.title = dialogTitle?.ellipsize(maxLength: ActionSheetTitleMaxLength)
+        if let dialogTitle = dialogTitle {
+            if let _ = dialogTitle.asURL {
+                actionSheetController.title = dialogTitle.ellipsize(maxLength: ActionSheetTitleMaxLength)
+            } else {
+                actionSheetController.title = dialogTitle
+            }
+        }
+
         let cancelAction = UIAlertAction(title: Strings.CancelString, style: UIAlertActionStyle.cancel, handler: nil)
         actionSheetController.addAction(cancelAction)
         self.present(actionSheetController, animated: true, completion: nil)
