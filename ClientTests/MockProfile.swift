@@ -50,7 +50,7 @@ open class MockSyncManager: SyncManager {
     open func onAddedAccount() -> Success {
         return succeed()
     }
-    open func onRemovedAccount(_ account: FirefoxAccount?) -> Success {
+    open func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
         return succeed()
     }
 
@@ -74,7 +74,7 @@ open class MockTabQueue: TabQueue {
 }
 
 open class MockPanelDataObservers: PanelDataObservers {
-    override init(profile: Profile) {
+    override init(profile: Client.Profile) {
         super.init(profile: profile)
         self.activityStream = MockActivityStreamDataObserver(profile: profile)
     }
@@ -84,10 +84,10 @@ open class MockActivityStreamDataObserver: DataObserver {
     public func refreshIfNeeded(forceTopSites topSites: Bool) {
     }
 
-    public var profile: Profile
+    public var profile: Client.Profile
     public weak var delegate: DataObserverDelegate?
 
-    init(profile: Profile) {
+    init(profile: Client.Profile) {
         self.profile = profile
     }
 }
@@ -99,7 +99,7 @@ class MockFiles: FileAccessor {
     }
 }
 
-open class MockProfile: Profile {
+open class MockProfile: Client.Profile {
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
@@ -193,7 +193,7 @@ open class MockProfile: Profile {
     }()
 
     public let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
-    var account: FirefoxAccount?
+    var account: Account.FirefoxAccount?
 
     public func hasAccount() -> Bool {
         return account != nil
@@ -203,11 +203,11 @@ open class MockProfile: Profile {
         return account?.actionNeeded == FxAActionNeeded.none
     }
 
-    public func getAccount() -> FirefoxAccount? {
+    public func getAccount() -> Account.FirefoxAccount? {
         return account
     }
 
-    public func setAccount(_ account: FirefoxAccount) {
+    public func setAccount(_ account: Account.FirefoxAccount) {
         self.account = account
         self.syncManager.onAddedAccount()
     }

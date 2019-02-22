@@ -14,7 +14,7 @@ import XCTest
  * A base test type for tests that need a profile.
  */
 class ProfileTest: XCTestCase {
-    func withTestProfile(_ callback: (_ profile: Profile) -> Void) {
+    func withTestProfile(_ callback: (_ profile: Client.Profile) -> Void) {
         callback(MockProfile())
     }
 
