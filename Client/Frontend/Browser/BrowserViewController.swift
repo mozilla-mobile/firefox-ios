@@ -1102,7 +1102,7 @@ class BrowserViewController: UIViewController {
                 webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
             }
 
-            if urlBar.inOverlayMode, InternalURL.isValid(url: url), url.path.starts(with: "/about/home") {
+            if urlBar.inOverlayMode, InternalURL.isValid(url: url), url.path.starts(with: "/\(AboutHomeHandler.path)") {
                 urlBar.leaveOverlayMode()
             }
 
