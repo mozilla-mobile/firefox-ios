@@ -189,7 +189,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if url.scheme == "javascript", navigationAction.request.isPrivileged {
             decisionHandler(.cancel)
-            if let javaScriptString = String(url.absoluteString.dropFirst(11)).removingPercentEncoding {
+            if let javaScriptString = url.absoluteString.replaceFirstOccurrence(of: "javascript:", with: "").removingPercentEncoding {
                 webView.evaluateJavaScript(javaScriptString)
             }
             return
