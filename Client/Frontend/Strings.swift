@@ -424,6 +424,7 @@ extension Strings {
 extension Strings {
     public static let ContextMenuOpenInNewTab = NSLocalizedString("ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "Context menu item for opening a link in a new tab")
     public static let ContextMenuOpenInNewPrivateTab = NSLocalizedString("ContextMenu.OpenInNewPrivateTab", tableName: "PrivateBrowsing", value: "Open in New Private Tab", comment: "Context menu option for opening a link in a new private tab")
+    public static let ContextMenuBookmarkLink = NSLocalizedString("ContextMenu.BookmarkLink", value: "Bookmark Link", comment: "Context menu item for bookmarking a link URL")
     public static let ContextMenuDownloadLink = NSLocalizedString("ContextMenu.DownloadLink", value: "Download Link", comment: "Context menu item for downloading a link URL")
     public static let ContextMenuCopyLink = NSLocalizedString("ContextMenu.CopyLink", value: "Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
     public static let ContextMenuShareLink = NSLocalizedString("ContextMenu.ShareLink", value: "Share Link", comment: "Context menu item for sharing a link URL")

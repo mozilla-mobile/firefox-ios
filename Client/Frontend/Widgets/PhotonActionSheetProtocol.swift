@@ -170,18 +170,11 @@ extension PhotonActionSheetProtocol {
         }
 
         let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString, iconString: "menu-Bookmark") { action in
-            //TODO: can all this logic go somewhere else?
-            guard let url = tab.canonicalURL?.displayURL else { return }
-            let absoluteString = url.absoluteString
-            let shareItem = ShareItem(url: absoluteString, title: tab.title, favicon: tab.displayFavicon)
-            _ = self.profile.bookmarks.shareItem(shareItem)
-            var userData = [QuickActions.TabURLKey: shareItem.url]
-            if let title = shareItem.title {
-                userData[QuickActions.TabTitleKey] = title
+            guard let url = tab.canonicalURL?.displayURL,
+                let bvc = presentableVC as? BrowserViewController else {
+                return
             }
-            QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-                                                                                withUserData: userData,
-                                                                                toApplication: .shared)
+            bvc.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
             success(Strings.AppMenuAddBookmarkConfirmMessage)
         }

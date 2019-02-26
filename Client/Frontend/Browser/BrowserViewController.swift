@@ -815,18 +815,19 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    func addBookmark(_ tabState: TabState) {
-        guard let url = tabState.url else { return }
-        let absoluteString = url.absoluteString
-        let shareItem = ShareItem(url: absoluteString, title: tabState.title, favicon: tabState.favicon)
-        _ = profile.bookmarks.shareItem(shareItem)
+    func addBookmark(url: String, title: String? = nil, favicon: Favicon? = nil) {
+        var title = (title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        if title.count == 0 {
+            title = url
+        }
+
+        let shareItem = ShareItem(url: url, title: title, favicon: favicon)
+        _ = self.profile.bookmarks.shareItem(shareItem)
         var userData = [QuickActions.TabURLKey: shareItem.url]
         if let title = shareItem.title {
             userData[QuickActions.TabTitleKey] = title
         }
-        QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark,
-            withUserData: userData,
-            toApplication: UIApplication.shared)
+        QuickActions.sharedInstance.addDynamicApplicationShortcutItemOfType(.openLastBookmark, withUserData: userData, toApplication: .shared)
     }
 
     override func accessibilityPerformEscape() -> Bool {
@@ -1969,6 +1970,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             }
             actionSheetController.addAction(openNewPrivateTabAction, accessibilityIdentifier: "linkContextMenu.openInNewPrivateTab")
 
+            let bookmarkAction = UIAlertAction(title: Strings.ContextMenuBookmarkLink, style: .default) { _ in
+                self.addBookmark(url: url.absoluteString, title: elements.title)
+                SimpleToast().showAlertWithText(Strings.AppMenuAddBookmarkConfirmMessage, bottomContainer: self.webViewContainer)
+                UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
+            }
+            actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")
+
             let downloadAction = UIAlertAction(title: Strings.ContextMenuDownloadLink, style: .default) { _ in
                 self.pendingDownloadWebView = currentTab.webView
                 currentTab.webView?.evaluateJavaScript("window.__firefox__.download('\(url.absoluteString)', '\(UserScriptManager.securityToken)')")
@@ -1989,7 +1997,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
         if let url = elements.image {
             if dialogTitle == nil {
-                dialogTitle = elements.title ?? elements.alt ?? url.absoluteString
+                dialogTitle = elements.title ?? url.absoluteString
             }
 
             let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
@@ -2298,7 +2306,9 @@ extension BrowserViewController: TabTrayDelegate {
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }
-        self.addBookmark(tab.tabState)
+        let tabState = tab.tabState
+        addBookmark(url: url, title: tabState.title, favicon: tabState.favicon)
+        UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .tabTray)
     }
 
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem? {
