@@ -670,16 +670,19 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func showHomePanelController(inline: Bool, panel: NewTabPage? = nil) {
-        homePanelIsInline = inline
-        let currentChoice = NewTabAccessors.getNewTabPage(self.profile.prefs)
+    fileprivate func showDefaultHomePanelController(inline: Bool) {
+        let defaultPanel = NewTabAccessors.getNewTabPage(profile.prefs)
+        showHomePanelController(defaultPanel, inline: inline)
+    }
 
-        if let homePanelVC = homePanelController as? TabbedHomePanelController, (homePanelVC.currentPanelType != currentChoice || homePanelVC.currentPanelType != panel) {
+    fileprivate func showHomePanelController(_ panel: NewTabPage, inline: Bool) {
+        homePanelIsInline = inline
+        if let homePanelVC = homePanelController as? TabbedHomePanelController, homePanelVC.currentPanelType != panel {
             hideHomePanelController()
         }
 
         if homePanelController == nil {
-            if let navController = TabbedHomePanelController(choice: panel ?? currentChoice, profile: profile) {
+            if let navController = TabbedHomePanelController(choice: panel, profile: profile) {
                 self.homePanelController = navController
                 navController.currentPanel?.homePanelDelegate = self
                 addChildViewController(navController)
@@ -735,13 +738,16 @@ class BrowserViewController: UIViewController {
                 return
             }
             if isAboutHomeURL {
-                let panel = NewTabPage.fromAboutHomeURL(url: url)
-                showHomePanelController(inline: true, panel: panel)
+                if let panel = NewTabPage.fromAboutHomeURL(url: url) {
+                    showHomePanelController(panel, inline: true)
+                } else {
+                    showDefaultHomePanelController(inline: true)
+                }
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideHomePanelController()
             }
         } else if isAboutHomeURL {
-            showHomePanelController(inline: false)
+            showDefaultHomePanelController(inline: false)
         }
     }
 
@@ -1434,7 +1440,7 @@ extension BrowserViewController: URLBarDelegate {
             if let toast = clipboardBarDisplayHandler?.clipboardToast {
                 toast.removeFromSuperview()
             }
-            showHomePanelController(inline: false)
+            showDefaultHomePanelController(inline: false)
         }
 
         LeanPlumClient.shared.track(event: .interactWithURLBar)
