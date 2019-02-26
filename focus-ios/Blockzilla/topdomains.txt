@@ -90,7 +90,6 @@ citi.com
 sears.com
 jcpenney.com
 webmd.com
-ijreview.com
 nih.gov
 answers.com
 foodnetwork.com
@@ -102,7 +101,6 @@ office365.com
 theguardian.com
 staples.com
 bleacherreport.com
-toysrus.com
 verizon.com
 github.com
 wayfair.com
@@ -203,7 +201,6 @@ quizlet.com
 nydailynews.com
 sbnation.com
 nbcsports.com
-likes.com
 bbc.co.uk
 ew.com
 nike.com
@@ -250,7 +247,6 @@ shopify.com
 yellowpages.com
 pcmag.com
 redfin.com
-emgn.com
 weibo.com
 alibaba.com
 cabelas.com
@@ -319,7 +315,6 @@ autotrader.com
 hilton.com
 irs.gov
 monster.com
-fatwallet.com
 mailchimp.com
 webex.com
 landsend.com
@@ -340,7 +335,6 @@ opentable.com
 hm.com
 duckduckgo.com
 chron.com
-photobucket.com
 shareasale.com
 directv.com
 avg.com
@@ -384,9 +378,7 @@ edmunds.com
 nhl.com
 zergnet.com
 techcrunch.com
-regnok.com
 pogo.com
-backpage.com
 mozilla.org
 naver.com
 giphy.com
@@ -405,7 +397,6 @@ liveleak.com
 merriam-webster.com
 wnd.com
 earthlink.net
-conservativetribune.com
 independent.co.uk
 drugs.com
 rotoworld.com
