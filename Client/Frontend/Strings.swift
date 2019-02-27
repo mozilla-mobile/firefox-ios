@@ -440,15 +440,15 @@ extension Strings {
 
 // Page context menu items (i.e. links and images).
 extension Strings {
-    public static let ContextMenuOpenInNewTab = NSLocalizedString("ContextMenu.OpenInNewTab", value: "Open in New Tab", comment: "Context menu item for opening a link in a new tab")
-    public static let ContextMenuOpenInNewPrivateTab = NSLocalizedString("ContextMenu.OpenInNewPrivateTab", tableName: "PrivateBrowsing", value: "Open in New Private Tab", comment: "Context menu option for opening a link in a new private tab")
-    public static let ContextMenuBookmarkLink = NSLocalizedString("ContextMenu.BookmarkLink", value: "Bookmark Link", comment: "Context menu item for bookmarking a link URL")
-    public static let ContextMenuDownloadLink = NSLocalizedString("ContextMenu.DownloadLink", value: "Download Link", comment: "Context menu item for downloading a link URL")
-    public static let ContextMenuCopyLink = NSLocalizedString("ContextMenu.CopyLink", value: "Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
-    public static let ContextMenuShareLink = NSLocalizedString("ContextMenu.ShareLink", value: "Share Link", comment: "Context menu item for sharing a link URL")
-    public static let ContextMenuSaveImage = NSLocalizedString("ContextMenu.SaveImage", value: "Save Image", comment: "Context menu item for saving an image")
-    public static let ContextMenuCopyImage = NSLocalizedString("ContextMenu.CopyImage", value: "Copy Image", comment: "Context menu item for copying an image to the clipboard")
-    public static let ContextMenuCopyImageLink = NSLocalizedString("ContextMenu.CopyImageLink", value: "Copy Image Link", comment: "Context menu item for copying an image URL to the clipboard")
+    public static let ContextMenuOpenInNewTab = NSLocalizedString("ContextMenu.OpenInNewTabButtonTitle", value: "Open in New Tab", comment: "Context menu item for opening a link in a new tab")
+    public static let ContextMenuOpenInNewPrivateTab = NSLocalizedString("ContextMenu.OpenInNewPrivateTabButtonTitle", tableName: "PrivateBrowsing", value: "Open in New Private Tab", comment: "Context menu option for opening a link in a new private tab")
+    public static let ContextMenuBookmarkLink = NSLocalizedString("ContextMenu.BookmarkLinkButtonTitle", value: "Bookmark Link", comment: "Context menu item for bookmarking a link URL")
+    public static let ContextMenuDownloadLink = NSLocalizedString("ContextMenu.DownloadLinkButtonTitle", value: "Download Link", comment: "Context menu item for downloading a link URL")
+    public static let ContextMenuCopyLink = NSLocalizedString("ContextMenu.CopyLinkButtonTitle", value: "Copy Link", comment: "Context menu item for copying a link URL to the clipboard")
+    public static let ContextMenuShareLink = NSLocalizedString("ContextMenu.ShareLinkButtonTitle", value: "Share Link", comment: "Context menu item for sharing a link URL")
+    public static let ContextMenuSaveImage = NSLocalizedString("ContextMenu.SaveImageButtonTitle", value: "Save Image", comment: "Context menu item for saving an image")
+    public static let ContextMenuCopyImage = NSLocalizedString("ContextMenu.CopyImageButtonTitle", value: "Copy Image", comment: "Context menu item for copying an image to the clipboard")
+    public static let ContextMenuCopyImageLink = NSLocalizedString("ContextMenu.CopyImageLinkButtonTitle", value: "Copy Image Link", comment: "Context menu item for copying an image URL to the clipboard")
 }
 
 // Photo Library access.
