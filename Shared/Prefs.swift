@@ -19,7 +19,8 @@ public struct PrefsKeys {
     public static let HomePageTab = "HomePageTab"
     public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
     public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
-
+    public static let LoginsSaveEnabled = "saveLogins"
+    public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
 
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"

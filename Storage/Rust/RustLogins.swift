@@ -266,14 +266,13 @@ public class RustLogins {
                 return deferMaybe(ArrayCursor(data: []))
             }
 
-            guard let query = query, !query.isEmpty else {
+            guard let query = query?.lowercased(), !query.isEmpty else {
                 return deferMaybe(ArrayCursor(data: records))
             }
 
             let filteredRecords = records.filter({
-                $0.hostname.contains(query) ||
-                ($0.username ?? "").contains(query) ||
-                $0.password.contains(query)
+                $0.hostname.lowercased().contains(query) ||
+                ($0.username?.lowercased() ?? "").contains(query)
             })
             return deferMaybe(ArrayCursor(data: filteredRecords))
         })

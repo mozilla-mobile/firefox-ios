@@ -4,18 +4,20 @@
 import UIKit
 
 class ThemedTableViewCell: UITableViewCell, Themeable {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        applyTheme()
-    }
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    var detailTextColor: UIColor = UIColor.theme.tableView.disabledRowText
+
+    override func willMove(toWindow newWindow: UIWindow?) {
+        super.willMove(toWindow: newWindow)
+        if newWindow != nil {
+            // UIView appearing
+            applyTheme()
+        }
     }
 
     func applyTheme() {
         textLabel?.textColor = UIColor.theme.tableView.rowText
-        detailTextLabel?.textColor = UIColor.theme.tableView.disabledRowText
+        detailTextLabel?.textColor = detailTextColor
 
         backgroundColor = UIColor.theme.tableView.rowBackground
         tintColor = UIColor.theme.general.controlTint
