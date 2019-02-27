@@ -9,10 +9,10 @@ import SwiftKeychainWrapper
 
 enum InfoItem: Int {
     case websiteItem = 0
-    case usernameItem = 1
-    case passwordItem = 2
-    case lastModifiedSeparator = 3
-    case deleteItem = 4
+    case usernameItem
+    case passwordItem
+    case lastModifiedSeparator
+    case deleteItem
 
     var indexPath: IndexPath {
         return IndexPath(row: rawValue, section: 0)
@@ -26,10 +26,15 @@ private struct LoginDetailUX {
 }
 
 class LoginDetailViewController: SensitiveViewController {
-
     fileprivate let profile: Profile
-
     fileprivate let tableView = UITableView()
+    fileprivate weak var websiteField: UITextField?
+    fileprivate weak var usernameField: UITextField?
+    fileprivate weak var passwordField: UITextField?
+    // Used to temporarily store a reference to the cell the user is showing the menu controller for
+    fileprivate var menuControllerCell: LoginTableViewCell?
+    fileprivate var deleteAlert: UIAlertController?
+    weak var settingsDelegate: SettingsDelegate?
 
     fileprivate var login: LoginRecord {
         didSet {
@@ -45,20 +50,6 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    fileprivate let LoginCellIdentifier = "LoginCell"
-    fileprivate let DefaultCellIdentifier = "DefaultCellIdentifier"
-    fileprivate let SeparatorIdentifier = "SeparatorIdentifier"
-
-    // Used to temporarily store a reference to the cell the user is showing the menu controller for
-    fileprivate var menuControllerCell: LoginTableViewCell?
-
-    fileprivate weak var websiteField: UITextField?
-    fileprivate weak var usernameField: UITextField?
-    fileprivate weak var passwordField: UITextField?
-
-    fileprivate var deleteAlert: UIAlertController?
-
-    weak var settingsDelegate: SettingsDelegate?
 
     init(profile: Profile, login: LoginRecord) {
         self.login = login
@@ -76,10 +67,6 @@ class LoginDetailViewController: SensitiveViewController {
         super.viewDidLoad()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
-
-        tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SeparatorIdentifier)
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -107,10 +94,6 @@ class LoginDetailViewController: SensitiveViewController {
         // Normally UITableViewControllers handle responding to content inset changes from keyboard events when editing
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLayoutSubviews() {
@@ -144,8 +127,8 @@ extension LoginDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InfoItem(rawValue: indexPath.row)! {
         case .usernameItem:
-            let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
+            let loginCell = cell(forIndexPath: indexPath)
+            loginCell.highlightedLabelTitle = NSLocalizedString("Username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
             loginCell.descriptionLabel.text = login.username
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
@@ -155,8 +138,8 @@ extension LoginDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .passwordItem:
-            let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
+            let loginCell = cell(forIndexPath: indexPath)
+            loginCell.highlightedLabelTitle = NSLocalizedString("Password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
             loginCell.descriptionLabel.text = login.password
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
@@ -166,8 +149,8 @@ extension LoginDetailViewController: UITableViewDataSource {
             return loginCell
 
         case .websiteItem:
-            let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
+            let loginCell = cell(forIndexPath: indexPath)
+            loginCell.highlightedLabelTitle = NSLocalizedString("Website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
             loginCell.descriptionLabel.text = login.hostname
             websiteField = loginCell.descriptionLabel
             websiteField?.accessibilityIdentifier = "websiteField"
@@ -183,7 +166,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             return cell
 
         case .deleteItem:
-            let deleteCell = tableView.dequeueReusableCell(withIdentifier: DefaultCellIdentifier, for: indexPath)
+            let deleteCell = cell(forIndexPath: indexPath)
             deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
             deleteCell.textLabel?.textAlignment = .center
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
@@ -193,15 +176,15 @@ extension LoginDetailViewController: UITableViewDataSource {
         }
     }
 
-    fileprivate func dequeueLoginCellForIndexPath(_ indexPath: IndexPath) -> LoginTableViewCell {
-        let loginCell = tableView.dequeueReusableCell(withIdentifier: LoginCellIdentifier, for: indexPath) as! LoginTableViewCell
+    fileprivate func cell(forIndexPath indexPath: IndexPath) -> LoginTableViewCell {
+        let loginCell = LoginTableViewCell()
         loginCell.selectionStyle = .none
         loginCell.delegate = self
         return loginCell
     }
 
     fileprivate func wrapFooter(_ footer: UITableViewHeaderFooterView, withCellFromTableView tableView: UITableView, atIndexPath indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: DefaultCellIdentifier, for: indexPath)
+        let cell = self.cell(forIndexPath: indexPath)
         cell.selectionStyle = .none
         cell.addSubview(footer)
         footer.snp.makeConstraints { make in

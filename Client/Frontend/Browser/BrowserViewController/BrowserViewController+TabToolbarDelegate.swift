@@ -53,7 +53,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         var actions: [[PhotonActionSheetItem]] = []
 
         let syncAction = syncMenuButton(showFxA: presentSignInViewController)
-        let viewLogins = PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
+        let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
+        let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
+            PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
             guard let navController = self.navigationController else { return }
             LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self).uponQueue(.main) { loginsVC in
                 guard let loginsVC = loginsVC else { return }
@@ -64,10 +66,9 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             }
         }
 
-        if let sync = syncAction {
-            actions.append(sync + [viewLogins])
-        } else {
-            actions.append([viewLogins])
+        let optionalActions = [syncAction, viewLogins].compactMap { $0 }
+        if !optionalActions.isEmpty {
+            actions.append(optionalActions)
         }
 
         actions.append(getLibraryActions(vcDelegate: self))
