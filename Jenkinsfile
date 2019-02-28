@@ -30,7 +30,7 @@ pipeline {
         }
         stage('bootstrap') {
             steps {
-                sh '''carthage bootstrap --platform ios'''
+                sh '''./bootstrap.sh'''
             }
         }
         stage('test') {
