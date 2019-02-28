@@ -65,6 +65,7 @@ class AuthenticationTests: KIFTestCase {
             .perform(grey_tap())
         EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.addTabButton"))
             .perform(grey_tap())
+        tester().waitForAnimationsToFinish()
         loadAuthPage()
 
         // Make sure the auth prompt is shown.
@@ -76,6 +77,7 @@ class AuthenticationTests: KIFTestCase {
     }
 
     fileprivate func loadAuthPage() {
+        tester().wait(forTimeInterval: 3)
         EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
         EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText("\(webRoot!)/auth.html"))
         EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
