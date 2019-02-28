@@ -966,7 +966,7 @@ class NewTabPageSetting: Setting {
     override var accessibilityIdentifier: String? { return "NewTab" }
 
     override var status: NSAttributedString {
-        return NSAttributedString(string: NewTabAccessors.getNewTabPage(self.profile.prefs).rawValue)
+        return NSAttributedString(string: NewTabAccessors.getNewTabPage(self.profile.prefs).settingTitle)
     }
 
     override var style: UITableViewCellStyle { return .value1 }
@@ -991,7 +991,7 @@ class HomeSetting: Setting {
     override var accessibilityIdentifier: String? { return "Home" }
 
     override var status: NSAttributedString {
-        return NSAttributedString(string: NewTabAccessors.getHomePage(self.profile.prefs).rawValue)
+        return NSAttributedString(string: NewTabAccessors.getHomePage(self.profile.prefs).settingTitle)
     }
 
     override var style: UITableViewCellStyle { return .value1 }
