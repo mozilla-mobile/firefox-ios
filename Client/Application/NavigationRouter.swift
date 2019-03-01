@@ -30,7 +30,6 @@ enum SettingsPage: String {
     case clearData = "clear-private-data"
     case fxa = "fxa"
     case theme = "theme"
-    case translation = "translation"
 }
 
 // Used by the App to navigate to different views.
@@ -195,9 +194,6 @@ enum NavigationPath {
             controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)
-        case .translation:
-            controller.pushViewController(TranslationSettingsController(profile), animated: true)
-        }
     }
 }
 
