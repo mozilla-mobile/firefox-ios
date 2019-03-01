@@ -194,6 +194,7 @@ enum NavigationPath {
             controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)
+        }
     }
 }
 
