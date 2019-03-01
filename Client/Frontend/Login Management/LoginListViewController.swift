@@ -18,14 +18,16 @@ private struct LoginListUX {
 }
 
 private extension UITableView {
-    var allIndexPaths: [IndexPath] {
-        return (0..<self.numberOfSections).flatMap { sectionNum in
-            (0..<self.numberOfRows(inSection: sectionNum)).map { IndexPath(row: $0, section: sectionNum) }
+    var allLoginIndexPaths: [IndexPath] {
+        return ((LoginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
+            (0..<self.numberOfRows(inSection: sectionNum)).map {
+                IndexPath(row: $0, section: sectionNum)
+            }
         }
     }
 }
 
-private let LoginCellIdentifier = "LoginCell"
+private let CellReuseIdentifier = "cell-reuse-id"
 private let SectionHeaderId = "section-header-id"
 private let LoginsSettingsSection = 0
 
@@ -36,7 +38,7 @@ class LoginListViewController: SensitiveViewController {
     }()
 
     fileprivate lazy var loginDataSource: LoginDataSource = {
-        let dataSource = LoginDataSource(profile: profile)
+        let dataSource = LoginDataSource(profile: profile, searchController: searchController)
         dataSource.dataObserver = self
         return dataSource
     }()
@@ -119,7 +121,7 @@ class LoginListViewController: SensitiveViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = Strings.LoginsAndPasswordsTitle
-        tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
+        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
 
         tableView.accessibilityIdentifier = "Login List"
@@ -133,6 +135,7 @@ class LoginListViewController: SensitiveViewController {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = Strings.LoginsListSearchPlaceholder
+        searchController.delegate = self
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
         definesPresentationContext = true
@@ -186,6 +189,11 @@ class LoginListViewController: SensitiveViewController {
 
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
+
+        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+        if theme == .dark {
+            searchController.searchBar.barStyle = .black
+        }
     }
 
     @objc func dismissLogins() {
@@ -193,12 +201,11 @@ class LoginListViewController: SensitiveViewController {
     }
 
     fileprivate func setupDefaultNavButtons() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
-            navigationItem.rightBarButtonItem = nil
         } else {
             navigationItem.leftBarButtonItem = nil
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
         }
     }
 
@@ -237,6 +244,18 @@ extension LoginListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let query = searchController.searchBar.text else { return }
         loadLogins(query)
+    }
+}
+
+fileprivate var isDuringSearchControllerDismiss = false
+
+extension LoginListViewController: UISearchControllerDelegate {
+    func willDismissSearchController(_ searchController: UISearchController) {
+        isDuringSearchControllerDismiss = true
+    }
+
+    func didDismissSearchController(_ searchController: UISearchController) {
+        isDuringSearchControllerDismiss = false
     }
 }
 
@@ -286,8 +305,8 @@ private extension LoginListViewController {
         profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
-                let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
-                    self.loginDataSource.loginAtIndexPath(indexPath)!.id
+                let guidsToDelete = self.loginSelectionController.selectedIndexPaths.compactMap { indexPath in
+                    self.loginDataSource.loginAtIndexPath(indexPath)?.id
                 }
 
                 self.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
@@ -304,7 +323,7 @@ private extension LoginListViewController {
         // If we haven't selected everything yet, select all
         if loginSelectionController.selectedCount < loginDataSource.count {
             // Find all unselected indexPaths
-            let unselectedPaths = tableView.allIndexPaths.filter { indexPath in
+            let unselectedPaths = tableView.allLoginIndexPaths.filter { indexPath in
                 return !loginSelectionController.indexPathIsSelected(indexPath)
             }
             loginSelectionController.selectIndexPaths(unselectedPaths)
@@ -316,7 +335,7 @@ private extension LoginListViewController {
         // If everything has been selected, deselect all
         else {
             loginSelectionController.deselectAll()
-            tableView.allIndexPaths.forEach { indexPath in
+            tableView.allLoginIndexPaths.forEach { indexPath in
                 self.tableView.deselectRow(at: indexPath, animated: true)
             }
         }
@@ -437,10 +456,8 @@ extension LoginListViewController: SearchInputViewDelegate {
 
 /// Controller that keeps track of selected indexes
 fileprivate class ListSelectionController: NSObject {
-
-    fileprivate unowned let tableView: UITableView
-
-    fileprivate(set) var selectedIndexPaths = [IndexPath]()
+    private unowned let tableView: UITableView
+    private(set) var selectedIndexPaths = [IndexPath]()
 
     var selectedCount: Int {
         return selectedIndexPaths.count
@@ -487,12 +504,14 @@ protocol LoginDataSourceObserver: AnyObject {
 class LoginDataSource: NSObject, UITableViewDataSource {
     var count = 0
     weak var dataObserver: LoginDataSourceObserver?
+    weak var searchController: UISearchController?
     fileprivate let emptyStateView = NoLoginsView()
     fileprivate var titles = [Character]()
 
     let boolSettings: (BoolSetting, BoolSetting)
 
-    init(profile: Profile) {
+    init(profile: Profile, searchController: UISearchController) {
+        self.searchController = searchController
         boolSettings = (
             BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.LoginsSaveEnabled, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToSaveLogins)),
             BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.LoginsShowShortcutMenuItem, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToShowLoginsInAppMenu)))
@@ -517,17 +536,26 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
     func loginAtIndexPath(_ indexPath: IndexPath) -> LoginRecord? {
         guard indexPath.section > 0 else {
+            assertionFailure()
             return nil
         }
         let titleForSectionIndex = titles[indexPath.section - 1]
-        return loginRecordSections[titleForSectionIndex]?[indexPath.row]
+        guard let section = loginRecordSections[titleForSectionIndex] else {
+            assertionFailure()
+            return nil
+        }
+
+        assert(indexPath.row <= section.count)
+
+        return section[indexPath.row]
     }
 
     @objc func numberOfSections(in tableView: UITableView) -> Int {
-        guard loginRecordSections.count > 0 else {
+        let searchActive = searchController?.isActive ?? false
+        if !searchActive && loginRecordSections.isEmpty {
             tableView.backgroundView = emptyStateView
             tableView.separatorStyle = .none
-            return 0
+            return 1
         }
 
         tableView.backgroundView = nil
@@ -544,10 +572,26 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
 
         if indexPath.section == LoginsSettingsSection {
-            indexPath.row == 0 ? boolSettings.0.onConfigureCell(cell) : boolSettings.1.onConfigureCell(cell)
+            let hideSettings = searchController?.isActive ?? false || tableView.isEditing
+            let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
+            setting.onConfigureCell(cell)
+            if hideSettings {
+                cell.isHidden = true
+            }
+
+            // Fade in the cell while dismissing the search or the cell showing suddenly looks janky
+            if isDuringSearchControllerDismiss {
+                cell.isHidden = false
+                cell.contentView.alpha = 0
+                cell.accessoryView?.alpha = 0
+                UIView.animate(withDuration: 0.6) {
+                    cell.contentView.alpha = 1
+                    cell.accessoryView?.alpha = 1
+                }
+            }
         } else {
             guard let login = loginAtIndexPath(indexPath) else { return cell }
             cell.textLabel?.text = login.hostname
@@ -555,6 +599,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.detailTextLabel?.text = login.username
             cell.accessoryType = .disclosureIndicator
         }
+        cell.applyTheme()
         return cell
     }
 
@@ -572,6 +617,12 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             self.count = logins.count
             self.titles = titles
             self.loginRecordSections = sections
+
+            // Disable the search controller if there are no logins saved
+            if !(self.searchController?.isActive ?? true) {
+                self.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
+                self.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
+            }
         }
     }
 

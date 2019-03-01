@@ -6,6 +6,15 @@ import UIKit
 class ThemedTableViewCell: UITableViewCell, Themeable {
     var detailTextColor: UIColor = UIColor.theme.tableView.disabledRowText
 
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        applyTheme()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     func applyTheme() {
         textLabel?.textColor = UIColor.theme.tableView.rowText
         detailTextLabel?.textColor = detailTextColor
