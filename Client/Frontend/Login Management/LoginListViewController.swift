@@ -18,9 +18,11 @@ private struct LoginListUX {
 }
 
 private extension UITableView {
-    var allIndexPaths: [IndexPath] {
-        return (0..<self.numberOfSections).flatMap { sectionNum in
-            (0..<self.numberOfRows(inSection: sectionNum)).map { IndexPath(row: $0, section: sectionNum) }
+    var allLoginIndexPaths: [IndexPath] {
+        return ((LoginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
+            (0..<self.numberOfRows(inSection: sectionNum)).map {
+                IndexPath(row: $0, section: sectionNum)
+            }
         }
     }
 }
@@ -299,8 +301,8 @@ private extension LoginListViewController {
         profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
-                let guidsToDelete = self.loginSelectionController.selectedIndexPaths.map { indexPath in
-                    self.loginDataSource.loginAtIndexPath(indexPath)!.id
+                let guidsToDelete = self.loginSelectionController.selectedIndexPaths.compactMap { indexPath in
+                    self.loginDataSource.loginAtIndexPath(indexPath)?.id
                 }
 
                 self.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
@@ -317,7 +319,7 @@ private extension LoginListViewController {
         // If we haven't selected everything yet, select all
         if loginSelectionController.selectedCount < loginDataSource.count {
             // Find all unselected indexPaths
-            let unselectedPaths = tableView.allIndexPaths.filter { indexPath in
+            let unselectedPaths = tableView.allLoginIndexPaths.filter { indexPath in
                 return !loginSelectionController.indexPathIsSelected(indexPath)
             }
             loginSelectionController.selectIndexPaths(unselectedPaths)
@@ -329,7 +331,7 @@ private extension LoginListViewController {
         // If everything has been selected, deselect all
         else {
             loginSelectionController.deselectAll()
-            tableView.allIndexPaths.forEach { indexPath in
+            tableView.allLoginIndexPaths.forEach { indexPath in
                 self.tableView.deselectRow(at: indexPath, animated: true)
             }
         }
@@ -450,10 +452,8 @@ extension LoginListViewController: SearchInputViewDelegate {
 
 /// Controller that keeps track of selected indexes
 fileprivate class ListSelectionController: NSObject {
-
-    fileprivate unowned let tableView: UITableView
-
-    fileprivate(set) var selectedIndexPaths = [IndexPath]()
+    private unowned let tableView: UITableView
+    private(set) var selectedIndexPaths = [IndexPath]()
 
     var selectedCount: Int {
         return selectedIndexPaths.count
@@ -532,10 +532,18 @@ class LoginDataSource: NSObject, UITableViewDataSource {
 
     func loginAtIndexPath(_ indexPath: IndexPath) -> LoginRecord? {
         guard indexPath.section > 0 else {
+            assertionFailure()
             return nil
         }
         let titleForSectionIndex = titles[indexPath.section - 1]
-        return loginRecordSections[titleForSectionIndex]?[indexPath.row]
+        guard let section = loginRecordSections[titleForSectionIndex] else {
+            assertionFailure()
+            return nil
+        }
+
+        assert(indexPath.row <= section.count)
+
+        return section[indexPath.row]
     }
 
     @objc func numberOfSections(in tableView: UITableView) -> Int {
