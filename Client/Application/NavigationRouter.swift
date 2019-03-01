@@ -15,6 +15,7 @@ enum HomePanelPath: String {
     case topSites = "top-sites"
     case readingList = "reading-list"
     case history = "history"
+    case downloads = "downloads"
     case newPrivateTab = "new-private-tab"
 }
 
@@ -131,9 +132,10 @@ enum NavigationPath {
 
     private static func handleHomePanel(panel: HomePanelPath, with bvc: BrowserViewController) {
         switch panel {
-        case .bookmarks: bvc.openURLInNewTab(HomePanelType.bookmarks.internalUrl, isPrivileged: true)
-        case .history: bvc.openURLInNewTab(HomePanelType.history.internalUrl, isPrivileged: true)
-        case .readingList:bvc.openURLInNewTab(HomePanelType.readingList.internalUrl, isPrivileged: true)
+        case .bookmarks: bvc.showLibrary(panel: .bookmarks)
+        case .history: bvc.showLibrary(panel: .history)
+        case .readingList: bvc.showLibrary(panel: .readingList)
+        case .downloads: bvc.showLibrary(panel: .downloads)
         case .topSites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl, isPrivileged: true)
         case .newPrivateTab: bvc.openBlankNewTab(focusLocationField: false, isPrivate: true)
         }
