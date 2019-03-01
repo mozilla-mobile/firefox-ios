@@ -15,13 +15,15 @@ enum HomePanelPath: String {
     case topsites
     case readingList
     case history
+    case newPrivateTab = "new-private-tab"
 }
 
 // An enum to route to a settings page.
 // This could be extended to provide default values to pass to fxa
 enum SettingsPage: String {
-    case newTab
-    case homePage
+    case general = "general"
+    case newTab = "newtab"
+    case homePage = "homepage"
     case mailto
     case search
     case clearData = "clear-private-data"
@@ -133,6 +135,7 @@ enum NavigationPath {
         case .history: bvc.openURLInNewTab(HomePanelType.history.internalUrl, isPrivileged: true)
         case .readingList:bvc.openURLInNewTab(HomePanelType.readingList.internalUrl, isPrivileged: true)
         case .topsites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl, isPrivileged: true)
+        case .newPrivateTab: bvc.openBlankNewTab(focusLocationField: false, isPrivate: true)
         }
     }
 
@@ -162,8 +165,15 @@ enum NavigationPath {
         rootNav.present(controller, animated: true, completion: nil)
 
         switch settings {
-        case .newTab, .homePage:
+        case .general:
+            break // Intentional NOOP; Already displaying the general settings VC
+        case .newTab:
             let viewController = NewTabContentSettingsViewController(prefs: baseSettingsVC.profile.prefs)
+            viewController.profile = profile
+            controller.pushViewController(viewController, animated: true)
+        case .homePage:
+            let viewController = HomePageSettingViewController(prefs: baseSettingsVC.profile.prefs)
+            viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
         case .mailto:
             let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
