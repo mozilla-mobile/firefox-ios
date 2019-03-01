@@ -238,9 +238,12 @@ open class SwiftData {
     /// If an operation is queued with an open connection, it will execute before this runs.
     func forceClose() {
         primaryConnectionQueue.sync {
+            guard !self.closed else { return }
             self.closed = true
             self.primaryConnection = nil
             self.secondaryConnection = nil
+            let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
+            NotificationCenter.default.post(name: .DatabaseWasClosed, object: baseFilename)
         }
     }
 
@@ -248,7 +251,10 @@ open class SwiftData {
     /// Does nothing if this database is already open.
     func reopenIfClosed() {
         primaryConnectionQueue.sync {
+            guard self.closed else { return }
             self.closed = false
+            let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
+            NotificationCenter.default.post(name: .DatabaseWasReopened, object: baseFilename)
         }
     }
 
