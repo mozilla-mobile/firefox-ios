@@ -159,7 +159,8 @@ extension LoginDetailViewController: UITableViewDataSource {
         case .lastModifiedSeparator:
             let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
             let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the current login was last modified with the timestamp as the parameter.")
-            let formattedLabel = String(format: lastModified, Date.fromMicrosecondTimestamp(MicrosecondTimestamp(login.timePasswordChanged)).toRelativeTimeString())
+            let t = UInt64(login.timePasswordChanged)
+            let formattedLabel = String(format: lastModified, Date.fromTimestamp(t).toRelativeTimeString())
             // Setting only the detail text produces smaller text as desired, and it is centered.
             cell.detailTextLabel?.text = formattedLabel
             cell.backgroundColor = view.backgroundColor
