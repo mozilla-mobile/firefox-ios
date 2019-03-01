@@ -782,9 +782,6 @@ class BrowserViewController: UIViewController {
         homepanels.profile = self.profile
         homepanels.delegate = self
         libraryPanelController = homepanels
-        if panel != nil {
-            libraryPanelController?.selectedPanel = panel
-        }
 
         let controller = ThemedNavigationController(rootViewController: homepanels)
         controller.popoverDelegate = self
@@ -793,6 +790,10 @@ class BrowserViewController: UIViewController {
         // Wait to present VC in an async dispatch queue to prevent a case where dismissal
         // of this popover on iPad seems to block the presentation of the modal VC.
         DispatchQueue.main.async {
+            if panel != nil {
+                self.libraryPanelController?.selectedPanel = panel
+            }
+
             self.present(controller, animated: true, completion: nil)
         }
     }
