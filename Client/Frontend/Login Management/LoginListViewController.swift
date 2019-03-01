@@ -196,12 +196,11 @@ class LoginListViewController: SensitiveViewController {
     }
 
     fileprivate func setupDefaultNavButtons() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
         if shownFromAppMenu {
             navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissLogins))
-            navigationItem.rightBarButtonItem = nil
         } else {
             navigationItem.leftBarButtonItem = nil
-            navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(beginEditing))
         }
     }
 
