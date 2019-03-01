@@ -25,7 +25,7 @@ private extension UITableView {
     }
 }
 
-private let LoginCellIdentifier = "LoginCell"
+private let CellReuseIdentifier = "cell-reuse-id"
 private let SectionHeaderId = "section-header-id"
 private let LoginsSettingsSection = 0
 
@@ -36,7 +36,7 @@ class LoginListViewController: SensitiveViewController {
     }()
 
     fileprivate lazy var loginDataSource: LoginDataSource = {
-        let dataSource = LoginDataSource(profile: profile)
+        let dataSource = LoginDataSource(profile: profile, searchController: searchController)
         dataSource.dataObserver = self
         return dataSource
     }()
@@ -119,7 +119,7 @@ class LoginListViewController: SensitiveViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = Strings.LoginsAndPasswordsTitle
-        tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
+        tableView.register(ThemedTableViewCell.self, forCellReuseIdentifier: CellReuseIdentifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderId)
 
         tableView.accessibilityIdentifier = "Login List"
@@ -133,6 +133,7 @@ class LoginListViewController: SensitiveViewController {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = Strings.LoginsListSearchPlaceholder
+        searchController.delegate = self
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
         definesPresentationContext = true
@@ -237,6 +238,18 @@ extension LoginListViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let query = searchController.searchBar.text else { return }
         loadLogins(query)
+    }
+}
+
+fileprivate var isDuringSearchControllerDismiss = false
+
+extension LoginListViewController: UISearchControllerDelegate {
+    func willDismissSearchController(_ searchController: UISearchController) {
+        isDuringSearchControllerDismiss = true
+    }
+
+    func didDismissSearchController(_ searchController: UISearchController) {
+        isDuringSearchControllerDismiss = false
     }
 }
 
@@ -487,12 +500,14 @@ protocol LoginDataSourceObserver: AnyObject {
 class LoginDataSource: NSObject, UITableViewDataSource {
     var count = 0
     weak var dataObserver: LoginDataSourceObserver?
+    weak var searchController: UISearchController?
     fileprivate let emptyStateView = NoLoginsView()
     fileprivate var titles = [Character]()
 
     let boolSettings: (BoolSetting, BoolSetting)
 
-    init(profile: Profile) {
+    init(profile: Profile, searchController: UISearchController) {
+        self.searchController = searchController
         boolSettings = (
             BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.LoginsSaveEnabled, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToSaveLogins)),
             BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.LoginsShowShortcutMenuItem, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToShowLoginsInAppMenu)))
@@ -524,10 +539,11 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func numberOfSections(in tableView: UITableView) -> Int {
-        guard loginRecordSections.count > 0 else {
+        let searchActive = searchController?.isActive ?? false
+        if !searchActive && loginRecordSections.isEmpty {
             tableView.backgroundView = emptyStateView
             tableView.separatorStyle = .none
-            return 0
+            return 1
         }
 
         tableView.backgroundView = nil
@@ -544,10 +560,26 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
+        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
 
         if indexPath.section == LoginsSettingsSection {
-            indexPath.row == 0 ? boolSettings.0.onConfigureCell(cell) : boolSettings.1.onConfigureCell(cell)
+            let hideSettings = searchController?.isActive ?? false || tableView.isEditing
+            let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
+            setting.onConfigureCell(cell)
+            if hideSettings {
+                cell.isHidden = true
+            }
+
+            // Fade in the cell while dismissing the search or the cell showing suddenly looks janky
+            if isDuringSearchControllerDismiss {
+                cell.isHidden = false
+                cell.contentView.alpha = 0
+                cell.accessoryView?.alpha = 0
+                UIView.animate(withDuration: 0.6) {
+                    cell.contentView.alpha = 1
+                    cell.accessoryView?.alpha = 1
+                }
+            }
         } else {
             guard let login = loginAtIndexPath(indexPath) else { return cell }
             cell.textLabel?.text = login.hostname
@@ -572,6 +604,12 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             self.count = logins.count
             self.titles = titles
             self.loginRecordSections = sections
+
+            // Disable the search controller if there are no logins saved
+            if !(self.searchController?.isActive ?? true) {
+                self.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
+                self.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
+            }
         }
     }
 
