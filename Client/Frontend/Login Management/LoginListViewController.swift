@@ -594,6 +594,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.detailTextLabel?.text = login.username
             cell.accessoryType = .disclosureIndicator
         }
+        cell.applyTheme()
         return cell
     }
 
