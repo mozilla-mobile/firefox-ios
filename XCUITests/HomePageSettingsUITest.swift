@@ -219,7 +219,7 @@ class HomePageSettingsUITests: BaseTestCase {
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
         //Assert that the label showing up in Settings is equal to the URL entere (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD OF URL)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Home, HomePage")
+        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Homepage")
         //Switch to Bookmark and check label
         navigator.performAction(Action.SelectHomeAsBookmarksPage)
         navigator.nowAt(HomeSettings)
@@ -234,7 +234,7 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.nowAt(HomeSettings)
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Home, TopSites")
+        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Firefox Home")
     }
     //Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
