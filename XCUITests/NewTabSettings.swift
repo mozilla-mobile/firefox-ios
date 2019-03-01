@@ -94,7 +94,7 @@ class NewTabSettingsTest: BaseTestCase {
         waitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
         //Assert that the label showing up in Settings is equal to the URL entere (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD)
-        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, HomePage")
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Homepage")
         //Switch to Bookmark and check label
         navigator.performAction(Action.SelectNewTabAsBookmarksPage)
         navigator.nowAt(NewTabSettings)
@@ -109,11 +109,11 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.nowAt(NewTabSettings)
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Blank")
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Blank Page")
         //Switch to FXHome and check label
         navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
         navigator.nowAt(NewTabSettings)
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, TopSites")
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Firefox Home")
     }
 }
