@@ -11,10 +11,10 @@ struct FxALaunchParams {
 
 // An enum to route to HomePanels
 enum HomePanelPath: String {
-    case bookmarks
-    case topsites
-    case readingList
-    case history
+    case bookmarks = "bookmarks"
+    case topSites = "top-sites"
+    case readingList = "reading-list"
+    case history = "history"
     case newPrivateTab = "new-private-tab"
 }
 
@@ -24,12 +24,12 @@ enum SettingsPage: String {
     case general = "general"
     case newTab = "newtab"
     case homePage = "homepage"
-    case mailto
-    case search
+    case mailto = "mailto"
+    case search = "search"
     case clearData = "clear-private-data"
-    case fxa
-    case theme
-    case translation
+    case fxa = "fxa"
+    case theme = "theme"
+    case translation = "translation"
 }
 
 // Used by the App to navigate to different views.
@@ -134,7 +134,7 @@ enum NavigationPath {
         case .bookmarks: bvc.openURLInNewTab(HomePanelType.bookmarks.internalUrl, isPrivileged: true)
         case .history: bvc.openURLInNewTab(HomePanelType.history.internalUrl, isPrivileged: true)
         case .readingList:bvc.openURLInNewTab(HomePanelType.readingList.internalUrl, isPrivileged: true)
-        case .topsites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl, isPrivileged: true)
+        case .topSites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl, isPrivileged: true)
         case .newPrivateTab: bvc.openBlankNewTab(focusLocationField: false, isPrivate: true)
         }
     }
@@ -189,7 +189,8 @@ enum NavigationPath {
             viewController.tabManager = tabManager
             controller.pushViewController(viewController, animated: true)
         case .fxa:
-            bvc.presentSignInViewController()
+            let viewController = bvc.getSignInViewController()
+            controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)
         case .translation:
