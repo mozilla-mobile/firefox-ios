@@ -40,7 +40,7 @@ class NavigationRouterTests: XCTestCase {
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/search")!), NavigationPath.deepLink(DeepLink.settings(.search)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/fxa")!), NavigationPath.deepLink(DeepLink.settings(.fxa)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/bookmarks")!), NavigationPath.deepLink(DeepLink.homePanel(.bookmarks)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/topsites")!), NavigationPath.deepLink(DeepLink.homePanel(.topsites)))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/topsites")!), NavigationPath.deepLink(DeepLink.homePanel(.topSites)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/history")!), NavigationPath.deepLink(DeepLink.homePanel(.history)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/readingList")!), NavigationPath.deepLink(DeepLink.homePanel(.readingList)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/badbad")!), nil)
