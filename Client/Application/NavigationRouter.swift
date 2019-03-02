@@ -12,11 +12,11 @@ struct FxALaunchParams {
 // An enum to route to HomePanels
 enum HomePanelPath: String {
     case bookmarks = "bookmarks"
-    case topSites = "top-sites"
-    case readingList = "reading-list"
+    case topSites = "topsites"
+    case readingList = "readinglist"
     case history = "history"
     case downloads = "downloads"
-    case newPrivateTab = "new-private-tab"
+    case newPrivateTab = "newprivatetab"
 }
 
 // An enum to route to a settings page.
@@ -82,7 +82,7 @@ enum NavigationPath {
             return nil
         }
 
-        if urlString.starts(with: "\(scheme)://deep-link"), let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL) {
+        if urlString.starts(with: "\(scheme)://deep-link"), let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
             self = .deepLink(link)
         } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
             self = .fxa(params: FxALaunchParams(query: url.getQuery()))
