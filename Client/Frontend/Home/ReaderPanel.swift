@@ -187,8 +187,12 @@ class ReadingListPanel: UITableViewController, HomePanel {
     init(profile: Profile) {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .DynamicFontChanged, object: nil)
+
+        [ Notification.Name.FirefoxAccountChanged,
+          Notification.Name.DynamicFontChanged,
+          Notification.Name.DatabaseWasReopened ].forEach {
+            NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil)
+        }
 
         applyTheme()
     }
@@ -221,12 +225,12 @@ class ReadingListPanel: UITableViewController, HomePanel {
 
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case .FirefoxAccountChanged:
+        case .FirefoxAccountChanged, .DynamicFontChanged:
             refreshReadingList()
-            break
-        case .DynamicFontChanged:
-            refreshReadingList()
-            break
+        case .DatabaseWasReopened:
+            if let dbName = notification.object as? String, dbName == "ReadingList.db" {
+                refreshReadingList()
+            }
         default:
             // no need to do anything at all
             log.warning("Received unexpected notification \(notification.name)")

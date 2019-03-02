@@ -34,6 +34,8 @@ extension Notification.Name {
     public static let ProfileDidFinishSyncing = Notification.Name("ProfileDidFinishSyncing")
 
     public static let DatabaseWasRecreated = Notification.Name("DatabaseWasRecreated")
+    public static let DatabaseWasClosed = Notification.Name("DatabaseWasClosed")
+    public static let DatabaseWasReopened = Notification.Name("DatabaseWasReopened")
 
     public static let PasscodeDidChange = Notification.Name("PasscodeDidChange")
 

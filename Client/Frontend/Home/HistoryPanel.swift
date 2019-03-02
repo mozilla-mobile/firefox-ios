@@ -78,7 +78,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         [ Notification.Name.FirefoxAccountChanged,
           Notification.Name.PrivateDataClearedHistory,
-          Notification.Name.DynamicFontChanged ].forEach {
+          Notification.Name.DynamicFontChanged,
+          Notification.Name.DatabaseWasReopened ].forEach {
             NotificationCenter.default.addObserver(self, selector: #selector(onNotificationReceived), name: $0, object: nil)
         }
     }
@@ -316,21 +317,27 @@ class HistoryPanel: SiteTableViewController, HomePanel {
     // MARK: - Selector callbacks
 
     @objc func onNotificationReceived(_ notification: Notification) {
-        reloadData()
-
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
+            reloadData()
+
             if profile.hasSyncableAccount() {
                 resyncHistory()
             }
             break
         case .DynamicFontChanged:
+            reloadData()
+
             if emptyStateOverlayView.superview != nil {
                 emptyStateOverlayView.removeFromSuperview()
             }
             emptyStateOverlayView = createEmptyStateOverlayView()
             resyncHistory()
             break
+        case .DatabaseWasReopened:
+            if let dbName = notification.object as? String, dbName == "browser.db" {
+                reloadData()
+            }
         default:
             // no need to do anything at all
             print("Error: Received unexpected notification \(notification.name)")

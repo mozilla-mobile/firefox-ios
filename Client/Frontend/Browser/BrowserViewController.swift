@@ -778,12 +778,17 @@ class BrowserViewController: UIViewController {
     }
 
     func showLibrary(panel: LibraryPanelType? = nil) {
+        if let presentedVC = self.presentedViewController {
+            presentedVC.dismiss(animated: true, completion: nil)
+        }
+
         let homepanels = libraryPanelController ?? HomePanelViewController()
         homepanels.profile = self.profile
         homepanels.delegate = self
         libraryPanelController = homepanels
+
         if panel != nil {
-            libraryPanelController?.selectedPanel = panel
+            self.libraryPanelController?.selectedPanel = panel
         }
 
         let controller = ThemedNavigationController(rootViewController: homepanels)
@@ -2029,18 +2034,21 @@ extension BrowserViewController: IntroViewControllerDelegate {
         }
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil) {
+    func getSignInViewController(_ fxaOptions: FxALaunchParams? = nil) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
-        let vcToPresent: UIViewController
-        if profile.hasAccount(), let status = profile.getAccount()?.actionNeeded, status == .none {
-            let settingsTableViewController = SyncContentSettingsViewController()
-            settingsTableViewController.profile = profile
-            vcToPresent = settingsTableViewController
-        } else {
+        guard profile.hasAccount(), let status = profile.getAccount()?.actionNeeded, status == .none else {
             let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions)
             signInVC.delegate = self
-            vcToPresent = signInVC
+            return signInVC
         }
+
+        let settingsTableViewController = SyncContentSettingsViewController()
+        settingsTableViewController.profile = profile
+        return settingsTableViewController
+    }
+
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil) {
+        let vcToPresent = getSignInViewController(fxaOptions)
         vcToPresent.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
 		themedNavigationController.modalPresentationStyle = .formSheet

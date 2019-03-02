@@ -50,7 +50,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     override init(profile: Profile) {
         super.init(profile: profile)
-        NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
+
+        [ Notification.Name.FirefoxAccountChanged,
+          Notification.Name.DynamicFontChanged,
+          Notification.Name.DatabaseWasReopened ].forEach {
+            NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil)
+        }
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
@@ -106,9 +111,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     @objc func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case .FirefoxAccountChanged:
-            self.reloadData()
-            break
+        case .FirefoxAccountChanged, .DynamicFontChanged:
+            reloadData()
+        case .DatabaseWasReopened:
+            if let dbName = notification.object as? String, dbName == "browser.db" {
+                reloadData()
+            }
         default:
             // no need to do anything at all
             log.warning("Received unexpected notification \(notification.name)")
