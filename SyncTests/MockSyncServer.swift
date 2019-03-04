@@ -40,7 +40,7 @@ private struct SyncRequestSpec {
         // Input is "/1.5/user/storage/collection", possibly with "/id" at the end.
         // That means we get five or six path components here, the first being empty.
 
-        let parts = request.path!.components(separatedBy: "/").filter { !$0.isEmpty }
+        let parts = request.path.components(separatedBy: "/").filter { !$0.isEmpty }
         let id: String?
         let query = request.query as! [String: AnyObject]
         let ids = optStringArray(x: query["ids"])
@@ -99,7 +99,7 @@ struct SyncDeleteRequestSpec {
     static func fromRequest(request: GCDWebServerRequest) -> SyncDeleteRequestSpec? {
         // Input is "/1.5/user{/storage{/collection{/id}}}".
         // That means we get four, five, or six path components here, the first being empty.
-        return SyncDeleteRequestSpec.fromPath(path: request.path!, withQuery: request.query as! [NSString : AnyObject])
+        return SyncDeleteRequestSpec.fromPath(path: request.path, withQuery: request.query as! [NSString : AnyObject])
     }
 
     static func fromPath(path: String, withQuery query: [NSString: AnyObject]) -> SyncDeleteRequestSpec? {
@@ -135,7 +135,7 @@ private struct SyncPutRequestSpec {
         // Input is "/1.5/user/storage/collection/id}}}".
         // That means we get six path components here, the first being empty.
 
-        let parts = request.path!.components(separatedBy: "/").filter { !$0.isEmpty }
+        let parts = request.path.components(separatedBy: "/").filter { !$0.isEmpty }
 
         guard parts.count == 5 else {
             return nil
@@ -283,13 +283,13 @@ class MockSyncServer {
         let body = record.asJSON().stringify()!
         let bodyData = body.utf8EncodedData
         let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
-        return MockSyncServer.withHeaders(response: response!, lastModified: record.modified)
+        return MockSyncServer.withHeaders(response: response, lastModified: record.modified)
     }
 
     private func modifiedResponse(timestamp: Timestamp) -> GCDWebServerResponse {
         let body = JSON(["modified": timestamp]).stringify()
         let bodyData = body?.utf8EncodedData
-        let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")!
+        let response = GCDWebServerDataResponse(data: bodyData!, contentType: "application/json")
         return MockSyncServer.withHeaders(response: response)
     }
 
@@ -308,7 +308,7 @@ class MockSyncServer {
         let storagePath = "\(basePath)/storage/"
 
         let infoCollectionsPath = "\(basePath)/info/collections"
-        server?.addHandler(forMethod: "GET", path: infoCollectionsPath, request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        server.addHandler(forMethod: "GET", path: infoCollectionsPath, request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
             var ic = [String: Any]()
             var lastModified: Timestamp = 0
             for collection in self.collections.keys {
@@ -321,19 +321,19 @@ class MockSyncServer {
             let body = JSON(ic).stringify()
             let bodyData = body?.utf8EncodedData
 
-            let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")!
+            let response = GCDWebServerDataResponse(data: bodyData!, contentType: "application/json")
             return MockSyncServer.withHeaders(response: response, lastModified: lastModified, records: ic.count)
         }
 
         let matchPut: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
             guard method == "PUT",
-                path?.hasPrefix(basePath) ?? false else {
+                path.hasPrefix(basePath) ?? false else {
                 return nil
             }
             return GCDWebServerDataRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
 
-        server?.addHandler(match: matchPut) { (request) -> GCDWebServerResponse! in
+        server.addHandler(match: matchPut) { (request) -> GCDWebServerResponse! in
             guard let request = request as? GCDWebServerDataRequest else {
                 return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 400))
             }
@@ -349,18 +349,18 @@ class MockSyncServer {
             let timestamp = self.modifiedTimeForCollection(collection: spec.collection)!
 
             let response = GCDWebServerDataResponse(data: millisecondsToDecimalSeconds(timestamp).utf8EncodedData, contentType: "application/json")
-            return MockSyncServer.withHeaders(response: response!)
+            return MockSyncServer.withHeaders(response: response)
         }
 
         let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "DELETE" && (path?.hasPrefix(basePath))! else {
+            guard method == "DELETE" && (path.hasPrefix(basePath)) else {
                 return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
 
-        server?.addHandler(match: matchDelete) { (request) -> GCDWebServerResponse! in
-            guard let spec = SyncDeleteRequestSpec.fromRequest(request: request!) else {
+        server.addHandler(match: matchDelete) { (request) -> GCDWebServerResponse! in
+            guard let spec = SyncDeleteRequestSpec.fromRequest(request: request) else {
                 return GCDWebServerDataResponse(statusCode: 400)
             }
 
@@ -398,17 +398,17 @@ class MockSyncServer {
         }
 
         let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest! in
-            guard method == "GET", path?.hasPrefix(storagePath) ?? false else {
+            guard method == "GET", path.hasPrefix(storagePath) ?? false else {
                 return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
 
-        server?.addHandler(match: match) { (request) -> GCDWebServerResponse! in
+        server.addHandler(match: match) { (request) -> GCDWebServerResponse! in
             // 1. Decide what the URL is asking for. It might be a collection fetch or
             //    an individual record, and it might have query parameters.
 
-            guard let spec = SyncRequestSpec.fromRequest(request: request!) else {
+            guard let spec = SyncRequestSpec.fromRequest(request: request) else {
                 return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 400))
             }
 
@@ -432,22 +432,22 @@ class MockSyncServer {
 
             let body = JSON(items.map { $0.asJSON() }).stringify()
             let bodyData = body?.utf8EncodedData
-            let response = GCDWebServerDataResponse(data: bodyData, contentType: "application/json")
+            let response = GCDWebServerDataResponse(data: bodyData!, contentType: "application/json")
 
             // 3. Compute the correct set of headers: timestamps, X-Weave-Records, etc.
             if let offset = offset {
-                response?.setValue(offset, forAdditionalHeader: "X-Weave-Next-Offset")
+                response.setValue(offset, forAdditionalHeader: "X-Weave-Next-Offset")
             }
 
             let timestamp = self.modifiedTimeForCollection(collection: spec.collection)!
             log.debug("Returning GET response with X-Last-Modified for \(items.count) records: \(timestamp).")
-            return MockSyncServer.withHeaders(response: response!, lastModified: timestamp, records: items.count)
+            return MockSyncServer.withHeaders(response: response, lastModified: timestamp, records: items.count)
         }
 
-        if server?.start(withPort: 0, bonjourName: nil) == false {
+        if server.start(withPort: 0, bonjourName: nil) == false {
             XCTFail("Can't start the GCDWebServer.")
         }
 
-        baseURL = "http://localhost:\(server!.port)\(basePath)"
+        baseURL = "http://localhost:\(server.port)\(basePath)"
     }
 }

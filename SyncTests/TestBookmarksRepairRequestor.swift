@@ -377,7 +377,7 @@ class TestBookmarksRepairRequestor: XCTestCase {
 func checkOutgoingCommand(remoteClients: MockRemoteClientsAndTabs, clientID: GUID) {
     let outgoingCmds = remoteClients.commands[clientID]!
     XCTAssertEqual(outgoingCmds.count, 1)
-    XCTAssertEqual(JSON.parse(outgoingCmds.first!.value)["command"].stringValue, "repairRequest")
+    XCTAssertEqual(JSON(parseJSON: outgoingCmds.first!.value)["command"].stringValue, "repairRequest")
 }
 
 func checkRecordedEvents(fromPrefs prefs: Prefs, expected: Event...) {
