@@ -4595,6 +4595,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
+				"$(SRCROOT)/Carthage/Build/iOS//ObjcExceptionBridging.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
