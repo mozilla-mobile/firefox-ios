@@ -36,12 +36,11 @@ private func parsedJSONResponseSerializer() -> DataResponseSerializer<JSON> {
             return .failure(JSONSerializeError.noData)
         }
 
-        let json = JSON(data: data)
-        if json.isError() {
+        if let json = try? JSON(data: data) {
+            return .success(json)
+        } else {
             return .failure(JSONSerializeError.parseError)
         }
-
-        return .success(json)
     }
 }
 

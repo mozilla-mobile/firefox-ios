@@ -1,16 +1,16 @@
-github "getsentry/sentry-cocoa"             "4.0.1"
-github "Alamofire/Alamofire"                ~> 4.0
+github "getsentry/sentry-cocoa"             ~> 4.2.1
+github "Alamofire/Alamofire"                ~> 4.8
 github "sleroux/Deferred"                   "Swift3.0"
-github "SnapKit/SnapKit"                    "3.1.2"
-github "rs/SDWebImage"                      "4.1.0"
-github "swisspol/GCDWebServer"              "3.3.2"
-github "kif-framework/KIF"                  "v3.7.3"
+github "SnapKit/SnapKit"                    ~> 4.2.0
+github "rs/SDWebImage"                      ~> 4.4.6
+github "swisspol/GCDWebServer"              ~> 3.5.2
+github "kif-framework/KIF"                  "v3.7.4"
 github "adjust/ios_sdk"                     "v4.17.1"
 github "AgileBits/onepassword-app-extension"    "add-framework-support"
 github "mozilla-mobile/SwiftKeychainWrapper"       "master"
-github "DaveWoodCom/XCGLogger"              "Version_4.0.0"
-github "cezheng/Fuzi"                       "2.0.2"
-github "SwiftyJSON/SwiftyJSON"              "3.1.4"
+github "DaveWoodCom/XCGLogger"              ~> 6.1.0
+github "cezheng/Fuzi"                       ~> 2.1.0
+github "SwiftyJSON/SwiftyJSON"              ~> 4.2.0
 github "st3fan/EarlGrey"                    "master"
 github "mozilla-mobile/telemetry-ios"       "v1.1.0"
 github "mozilla-mobile/MappaMundi"          "master"
