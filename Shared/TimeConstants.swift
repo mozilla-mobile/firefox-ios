@@ -62,25 +62,25 @@ extension Date {
         return Date(timeIntervalSince1970: Double(microsecondTimestamp) / 1000000)
     }
 
-    public func toRelativeTimeString() -> String {
+    public func toRelativeTimeString(dateStyle: DateFormatter.Style = .short, timeStyle: DateFormatter.Style = .short) -> String {
         let now = Date()
 
         let units: Set<Calendar.Component> = [.second, .minute, .day, .weekOfYear, .month, .year, .hour]
         let components = Calendar.current.dateComponents(units, from: self, to: now)
 
-        if components.year! > 0 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: .short, timeStyle: .short))
+        if components.year ?? 0 > 0 {
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: dateStyle, timeStyle: timeStyle))
         }
 
         if components.month == 1 {
             return String(format: NSLocalizedString("more than a month ago", comment: "Relative date for dates older than a month and less than two months."))
         }
 
-        if components.month! > 1 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: .short, timeStyle: .short))
+        if components.month ?? 0 > 1 {
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: dateStyle, timeStyle: timeStyle))
         }
 
-        if components.weekOfYear! > 0 {
+        if components.weekOfYear ?? 0 > 0 {
             return String(format: NSLocalizedString("more than a week ago", comment: "Description for a date more than a week ago, but less than a month ago."))
         }
 
@@ -88,12 +88,14 @@ extension Date {
             return String(format: NSLocalizedString("yesterday", comment: "Relative date for yesterday."))
         }
 
-        if components.day! > 1 {
+        if components.day ?? 0 > 1 {
             return String(format: NSLocalizedString("this week", comment: "Relative date for date in past week."), String(describing: components.day))
         }
 
-        if components.hour! > 0 || components.minute! > 0 {
-            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: .short)
+        if components.hour ?? 0 > 0 || components.minute ?? 0 > 0 {
+            // Can't have no time specified for this formatting case.
+            let timeStyle = timeStyle != .none ? timeStyle : .short
+            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: timeStyle)
             let format = NSLocalizedString("today at %@", comment: "Relative date for date older than a minute.")
             return String(format: format, absoluteTime)
         }

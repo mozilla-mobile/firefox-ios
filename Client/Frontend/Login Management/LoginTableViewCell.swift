@@ -20,7 +20,6 @@ private struct LoginTableViewCellUX {
     static let IconImageSize: CGFloat = 34
     static let indentWidth: CGFloat = 44
     static let IndentAnimationDuration: TimeInterval = 0.2
-    static let editingDescriptionIndent: CGFloat = IconImageSize + HorizontalMargin
 }
 
 enum LoginTableViewCellStyle {
@@ -125,17 +124,11 @@ class LoginTableViewCell: ThemedTableViewCell {
         }
     }
 
-    var editingDescription: Bool = false {
+    var isEditingFieldData: Bool = false {
         didSet {
-            if editingDescription != oldValue {
-                descriptionLabel.isUserInteractionEnabled = editingDescription
-
-                highlightedLabel.textColor = editingDescription ?
-                     UIColor.theme.tableView.headerTextLight: LoginTableViewCellUX.highlightedLabelTextColor
-
-                // Trigger a layout configuration if we changed to editing/not editing the description.
-                configureLayout()
-            }
+            guard isEditingFieldData != oldValue else { return }
+            descriptionLabel.isUserInteractionEnabled = isEditingFieldData
+            highlightedLabel.textColor = isEditingFieldData ? UIColor.theme.tableView.headerTextLight: LoginTableViewCellUX.highlightedLabelTextColor
         }
     }
 
@@ -198,14 +191,10 @@ class LoginTableViewCell: ThemedTableViewCell {
     }
 
     fileprivate func configureLayout() {
-        // Currently we only support modifying the description for this layout which is why
-        // we factor in the editingOffset when calculating the constraints.
-        let editingOffset = editingDescription ? LoginTableViewCellUX.editingDescriptionIndent : 0
-
         labelContainer.snp.remakeConstraints { make in
             make.centerY.equalTo(contentView)
             make.trailing.equalTo(contentView).offset(-LoginTableViewCellUX.HorizontalMargin)
-            make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin + editingOffset)
+            make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
         }
 
         highlightedLabel.snp.remakeConstraints { make in
