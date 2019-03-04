@@ -253,16 +253,16 @@ private class CachedPageServer {
 
     func start() -> String {
         let webServer = GCDWebServer()
-        webServer?.addHandler(forMethod: "GET", path: "/cachedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/cachedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             self.requests += 1
             return GCDWebServerDataResponse(html: "<html><head><title>Cached page</title></head><body>Cache test</body></html>")
         }
 
-        webServer?.start(withPort: 0, bonjourName: nil)
+        webServer.start(withPort: 0, bonjourName: nil)
 
         // We use 127.0.0.1 explicitly here, rather than localhost, in order to avoid our
         // history exclusion code (Bug 1188626).
-        let port = (webServer?.port)!
+        let port = webServer.port
         let webRoot = "http://127.0.0.1:\(port)"
         return webRoot
     }

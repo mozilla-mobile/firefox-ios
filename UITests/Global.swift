@@ -436,7 +436,7 @@ class SimplePageServer {
         let webServer: GCDWebServer = GCDWebServer()
 
         webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
-            let img = UIImagePNGRepresentation(UIImage(named: "goBack")!)
+            let img = UIImagePNGRepresentation(UIImage(named: "goBack")!)!
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
@@ -449,7 +449,7 @@ class SimplePageServer {
         // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
         webServer.addHandler(forMethod: "GET", path: "/scrollablePage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("scrollablePage")
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int(request.query?["page"] ?? "0")!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
             return GCDWebServerDataResponse(html: pageData as String)
         }
@@ -457,7 +457,7 @@ class SimplePageServer {
         webServer.addHandler(forMethod: "GET", path: "/numberedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("numberedPage")
 
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int(request.query?["page"] ?? "0")!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
 
             return GCDWebServerDataResponse(html: pageData as String)
@@ -483,14 +483,14 @@ class SimplePageServer {
             // "user:pass", Base64-encoded.
             let expectedAuth = "Basic dXNlcjpwYXNz"
 
-            let response: GCDWebServerDataResponse
-            if request?.headers["Authorization"] as? String == expectedAuth && request?.query["logout"] == nil {
+            let response: GCDWebServerDataResponse?
+            if request?.headers["Authorization"] == expectedAuth && request?.query?["logout"] == nil {
                 response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")
             } else {
                 // Request credentials if the user isn't logged in.
                 response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")
-                response.statusCode = 401
-                response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
+                response?.statusCode = 401
+                response?.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
             }
 
             return response
