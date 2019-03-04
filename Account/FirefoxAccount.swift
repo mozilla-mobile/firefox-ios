@@ -312,12 +312,12 @@ open class FirefoxAccount {
     // emits two `NotificationFirefoxAccountProfileChanged`, once when the profile has been downloaded and
     // another when the avatar image has been downloaded.
     open func updateProfile() {
-        guard let session = stateCache.value as? TokenState else {
+        guard let married = stateCache.value as? MarriedState else {
             return
         }
 
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
-        client.getProfile(withSessionToken: session.sessionToken as NSData) >>== { result in
+        client.getProfile(withSessionToken: married.sessionToken as NSData) >>== { result in
             self.fxaProfile = FxAProfile(email: result.email, displayName: result.displayName, avatar: result.avatarURL)
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
@@ -434,6 +434,14 @@ open class FirefoxAccount {
 
         // Clear Send Tab keys from Keychain.
         commandsClient.sendTab.sendTabKeysCache.value = nil
+
+        // Clear cached OAuth data from Keychain.
+        [ FxAOAuthScope.Profile, FxAOAuthScope.OldSync ].forEach { scope in
+            let oauthKeyIDKeychainKey = "FxAOAuthKeyID:\(scope)"
+            let oauthResponseKeychainKey = "FxAOAuthResponse:\(scope)"
+            KeychainStore.shared.setDictionary(nil, forKey: oauthKeyIDKeychainKey)
+            KeychainStore.shared.setDictionary(nil, forKey: oauthResponseKeychainKey)
+        }
 
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
         return client.destroyDevice(ownDeviceId: ownDeviceId, withSessionToken: session.sessionToken as NSData) >>> succeed
