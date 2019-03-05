@@ -139,6 +139,8 @@ class LoginListViewController: SensitiveViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.searchController = searchController
         definesPresentationContext = true
+        // No need to hide the navigation bar on iPad to make room, and hiding makes the search bar too close to the top
+        searchController.hidesNavigationBarDuringPresentation = UIDevice.current.userInterfaceIdiom != .pad
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(remoteLoginsDidChange), name: .DataRemoteLoginChangesWereApplied, object: nil)
