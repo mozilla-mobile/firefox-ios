@@ -6,6 +6,7 @@ import UIKit
 import WebKit
 import Telemetry
 import OnePasswordExtension
+import PassKit
 
 protocol BrowserState {
     var url: URL? { get }
@@ -286,6 +287,62 @@ extension WebViewController: WKNavigationDelegate {
         guard error.code != Int(CFNetworkErrors.cfurlErrorCancelled.rawValue), let errorUrl = error.userInfo[NSURLErrorFailingURLErrorKey] as? URL else { return }
         let errorPageData = ErrorPage(error: error).data
         webView.load(errorPageData, mimeType: "", characterEncodingName: UIConstants.strings.encodingNameUTF8, baseURL: errorUrl)
+    }
+
+    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
+        let response = navigationResponse.response
+
+        guard let responseMimeType = response.mimeType else {
+            decisionHandler(.allow)
+            return
+        }
+
+        // Check for passbook response
+        if responseMimeType == "application/vnd.apple.pkpass" {
+            decisionHandler(.allow)
+            browserView.load(URLRequest(url: URL(string: "about:blank")!))
+
+            func presentPassErrorAlert() {
+                let passErrorAlert = UIAlertController(title: UIConstants.strings.addPassErrorAlertTitle, message: UIConstants.strings.addPassErrorAlertMessage, preferredStyle: .alert)
+                let passErrorDismissAction = UIAlertAction(title: UIConstants.strings.addPassErrorAlertDismiss, style: .default) { (UIAlertAction) in
+                    passErrorAlert.dismiss(animated: true, completion: nil)
+                }
+                passErrorAlert.addAction(passErrorDismissAction)
+                self.present(passErrorAlert, animated: true, completion: nil)
+            }
+
+            guard let responseURL = response.url else {
+                presentPassErrorAlert()
+                return
+            }
+
+            guard let passData = try? Data(contentsOf: responseURL) else {
+                presentPassErrorAlert()
+                return
+            }
+
+            guard let pass = try? PKPass(data: passData) else {
+                // Alert user to add pass failure
+                presentPassErrorAlert()
+                return
+            }
+
+            // Present pass
+            let passLibrary = PKPassLibrary()
+            if passLibrary.containsPass(pass) {
+                UIApplication.shared.open(pass.passURL!, options: [:])
+            } else {
+                guard let addController = PKAddPassesViewController(pass: pass) else {
+                    presentPassErrorAlert()
+                    return
+                }
+                self.present(addController, animated: true, completion: nil)
+            }
+
+            return
+        }
+
+        decisionHandler(.allow)
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
