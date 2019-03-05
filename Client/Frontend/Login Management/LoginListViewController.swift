@@ -601,6 +601,9 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.detailTextLabel?.text = login.username
             cell.accessoryType = .disclosureIndicator
         }
+        
+        // Need to override the default background multi-select color to support theming
+        cell.multipleSelectionBackgroundView = UIView()
         cell.applyTheme()
         return cell
     }
