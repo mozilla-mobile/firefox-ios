@@ -168,7 +168,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     // MARK: Button behaviour
     @objc func onPressNewTab(_ view: UIView) {
-        openContainingApp()
+        openContainingApp("?private=false")
     }
 
     @objc func onPressNewPrivateTab(_ view: UIView) {
