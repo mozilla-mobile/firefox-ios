@@ -1597,6 +1597,10 @@ extension BrowserViewController: HomePanelDelegate {
         presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same
     }
 
+    func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
+        showLibrary(panel: panel)
+    }
+
     func homePanelDidRequestToCreateAccount() {
         let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
         presentSignInViewController(fxaParams) // TODO UX Right now the flow for sign in and create account is the same

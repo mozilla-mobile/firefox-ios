@@ -26,6 +26,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
     func homePanel(didSelectURL url: URL, visitType: VisitType)
     func homePanel(didSelectURLString url: String, visitType: VisitType)
+    func homePanelDidRequestToOpenLibrary(panel : LibraryPanelType)
 }
 
 enum HomePanelType: Int {
@@ -218,6 +219,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     func homePanel(_ homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType) {
 
+    }
+
+    func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
+        delegate?.homePanelDidRequestToOpenLibrary(panel: panel)
     }
 
     func homePanelDidRequestToSignIn() {
