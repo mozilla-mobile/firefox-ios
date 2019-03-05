@@ -32,17 +32,17 @@ class NavigationRouterTests: XCTestCase {
 
     // Test EVERY deep link
     func testDeepLinks() {
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/clear-private-data")!), NavigationPath.deepLink(DeepLink.settings(.clearData)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/newTab")!), NavigationPath.deepLink(DeepLink.settings(.newTab)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/newTab/")!), NavigationPath.deepLink(DeepLink.settings(.newTab)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/homePage")!), NavigationPath.deepLink(DeepLink.settings(.homePage)))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/clear-private-data")!), NavigationPath.deepLink(DeepLink.settings(.clearPrivateData)))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/newTab")!), NavigationPath.deepLink(DeepLink.settings(.newtab)))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/newTab/")!), NavigationPath.deepLink(DeepLink.settings(.newtab)))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/homePage")!), NavigationPath.deepLink(DeepLink.settings(.homepage)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/mailto")!), NavigationPath.deepLink(DeepLink.settings(.mailto)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/search")!), NavigationPath.deepLink(DeepLink.settings(.search)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/settings/fxa")!), NavigationPath.deepLink(DeepLink.settings(.fxa)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/bookmarks")!), NavigationPath.deepLink(DeepLink.homePanel(.bookmarks)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/topsites")!), NavigationPath.deepLink(DeepLink.homePanel(.topSites)))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/top-sites")!), NavigationPath.deepLink(DeepLink.homePanel(.topSites)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/history")!), NavigationPath.deepLink(DeepLink.homePanel(.history)))
-        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/readingList")!), NavigationPath.deepLink(DeepLink.homePanel(.readingList)))
+        XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/reading-list")!), NavigationPath.deepLink(DeepLink.homePanel(.readingList)))
         XCTAssertEqual(NavigationPath(url: URL(string: "\(appScheme)://deep-link?url=/homepanel/badbad")!), nil)
     }
 

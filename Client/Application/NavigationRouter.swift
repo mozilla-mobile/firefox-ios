@@ -12,22 +12,22 @@ struct FxALaunchParams {
 // An enum to route to HomePanels
 enum HomePanelPath: String {
     case bookmarks = "bookmarks"
-    case topSites = "topsites"
-    case readingList = "readinglist"
+    case topSites = "top-sites"
+    case readingList = "reading-list"
     case history = "history"
     case downloads = "downloads"
-    case newPrivateTab = "newprivatetab"
+    case newPrivateTab = "new-private-tab"
 }
 
 // An enum to route to a settings page.
 // This could be extended to provide default values to pass to fxa
 enum SettingsPage: String {
     case general = "general"
-    case newTab = "newtab"
-    case homePage = "homepage"
+    case newtab = "newtab"
+    case homepage = "homepage"
     case mailto = "mailto"
     case search = "search"
-    case clearData = "clear-private-data"
+    case clearPrivateData = "clear-private-data"
     case fxa = "fxa"
     case theme = "theme"
 }
@@ -168,11 +168,11 @@ enum NavigationPath {
         switch settings {
         case .general:
             break // Intentional NOOP; Already displaying the general settings VC
-        case .newTab:
+        case .newtab:
             let viewController = NewTabContentSettingsViewController(prefs: baseSettingsVC.profile.prefs)
             viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
-        case .homePage:
+        case .homepage:
             let viewController = HomePageSettingViewController(prefs: baseSettingsVC.profile.prefs)
             viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
@@ -184,7 +184,7 @@ enum NavigationPath {
             viewController.model = profile.searchEngines
             viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
-        case .clearData:
+        case .clearPrivateData:
             let viewController = ClearPrivateDataTableViewController()
             viewController.profile = profile
             viewController.tabManager = tabManager
