@@ -19,15 +19,22 @@ class HomeView: UIView {
     private let tipTitleLabel = SmartLabel()
     private let tipDescriptionLabel = SmartLabel()
     private let shieldLogo = UIImageView()
+    private let textLogo = UIImageView()
 
     let toolbar = HomeViewToolbar()
     let trackerStatsShareButton = UIButton()
 
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
     init(tipManager: TipManager? = nil) {
         super.init(frame: CGRect.zero)
+        rotated()
+        NotificationCenter.default.addObserver(self, selector: #selector(HomeView.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
 
         let wordmark = AppInfo.config.wordmark
-        let textLogo = UIImageView(image: wordmark)
+        textLogo.image = wordmark
         addSubview(textLogo)
 
         privateBrowsingDescription.textColor = .white
@@ -89,12 +96,12 @@ class HomeView: UIView {
 
         privateBrowsingDescription.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(textLogo.snp.bottom).offset(25)
+            make.top.equalTo(textLogo.snp.bottom).offset(UIConstants.layout.homePrivateBrowsingDescriptionLabelTopOffset)
         }
 
         browseEraseRepeatTagline.snp.makeConstraints { make in
             make.leading.trailing.equalTo(self)
-            make.top.equalTo(privateBrowsingDescription.snp.bottom).offset(UIConstants.layout.homeViewTextOffset)
+            make.top.equalTo(privateBrowsingDescription.snp.bottom)
         }
 
         tipView.snp.makeConstraints { make in
@@ -112,7 +119,7 @@ class HomeView: UIView {
 
         tipTitleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(tipDescriptionLabel.snp.top).offset(-UIConstants.layout.homeViewTextOffset)
+            make.bottom.equalTo(tipDescriptionLabel.snp.top).offset(UIConstants.layout.homeTipTitleLableOffset)
         }
 
         toolbar.snp.makeConstraints { make in
@@ -178,6 +185,22 @@ class HomeView: UIView {
         shieldLogo.isHidden = true
         trackerStatsLabel.isHidden = true
         trackerStatsShareButton.isHidden = true
+    }
+
+    @objc private func rotated() {
+        if UIDevice.current.orientation.isLandscape {
+            hideTextLogo()
+        } else {
+            showTextLogo()
+        }
+    }
+
+    private func hideTextLogo() {
+        textLogo.isHidden = true
+    }
+
+    private func showTextLogo() {
+        textLogo.isHidden = false
     }
 
     func showTextTip(_ tip: TipManager.Tip) {
