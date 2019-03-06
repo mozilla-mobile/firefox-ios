@@ -96,7 +96,7 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         app.tables.cells.element(boundBy: 0).tap()
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
-        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec on iOS")
+        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (synctesting) on iOS")
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
