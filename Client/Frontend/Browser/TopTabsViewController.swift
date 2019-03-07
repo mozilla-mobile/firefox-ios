@@ -105,10 +105,8 @@ class TopTabsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if LeanPlumClient.shared.enableTabBarReorder.boolValue() {
-            collectionView.dragDelegate = tabDisplayManager
-            collectionView.dropDelegate = tabDisplayManager
-        }
+        collectionView.dragDelegate = tabDisplayManager
+        collectionView.dropDelegate = tabDisplayManager
 
         let topTabFader = TopTabFader()
         topTabFader.semanticContentAttribute = .forceLeftToRight
