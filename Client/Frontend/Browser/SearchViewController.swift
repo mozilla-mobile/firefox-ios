@@ -24,8 +24,7 @@ private struct SearchViewControllerUX {
 
     static let SearchImage = "search"
     static let SearchEngineTopBorderWidth = 0.5
-    static let SearchImageHeight: Float = 44
-    static let SearchImageWidth: Float = 24
+    static let SearchPillIconSize = 12
 
     static var SuggestionBackgroundColor: UIColor { return UIColor.theme.homePanel.searchSuggestionPillBackground }
     static var SuggestionBorderColor: UIColor { return UIColor.theme.homePanel.searchSuggestionPillForeground }
@@ -206,11 +205,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
         searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
         searchButton.accessibilityLabel = String(format: NSLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button."))
-
-        searchButton.imageView?.snp.makeConstraints { make in
-            make.width.height.equalTo(SearchViewControllerUX.SearchImageWidth)
-            return
-        }
 
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
@@ -582,7 +576,8 @@ fileprivate class SuggestionCell: UITableViewCell {
 
                 // If this is the first image, add the search icon.
                 if container.subviews.isEmpty {
-                    let image = UIImage(named: SearchViewControllerUX.SearchImage)
+                    let size = SearchViewControllerUX.SearchPillIconSize
+                    let image = UIImage.templateImageNamed(SearchViewControllerUX.SearchImage)?.createScaled(CGSize(width: size, height: size)).tinted(withColor: UIColor.theme.homePanel.searchSuggestionPillForeground)
                     button.setImage(image, for: [])
                     if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
                         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
