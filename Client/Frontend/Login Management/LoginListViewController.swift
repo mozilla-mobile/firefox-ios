@@ -553,8 +553,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func numberOfSections(in tableView: UITableView) -> Int {
-        let searchActive = searchController?.isActive ?? false
-        if !searchActive && loginRecordSections.isEmpty {
+        if  loginRecordSections.isEmpty {
             tableView.backgroundView = emptyStateView
             tableView.separatorStyle = .none
             return 1
