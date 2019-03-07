@@ -226,6 +226,33 @@ open class BrowserProfile: Profile {
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
+        // Set up logging from Rust.
+        if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
+            let logString = "[RUST][\(tag ?? "no-tag")] \(message)"
+
+            switch level {
+            case .trace:
+                if Logger.logPII {
+                    log.verbose(logString)
+                }
+            case .debug:
+                log.debug(logString)
+            case .info:
+                log.info(logString)
+            case .warn:
+                log.warning(logString)
+            case .error:
+                log.error(logString)
+            }
+
+            return true
+        }) {
+            log.error("ERROR: Unable to enable logging from Rust")
+        }
+
+        // By default, filter logging from Rust below `.info` level.
+        try? RustLog.shared.setLevelFilter(filter: .info)
+
         // This has to happen prior to the databases being opened, because opening them can trigger
         // events to which the SyncManager listens.
         self.syncManager = BrowserSyncManager(profile: self)
