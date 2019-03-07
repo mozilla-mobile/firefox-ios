@@ -144,6 +144,10 @@ open class SwiftData {
 
         self.primaryConnectionQueue = DispatchQueue(label: "SwiftData primary queue: \(filename)", attributes: [])
         self.secondaryConnectionQueue = DispatchQueue(label: "SwiftData secondary queue: \(filename)", attributes: [])
+
+        // Ensure that multi-thread mode is enabled by default.
+        // See https://www.sqlite.org/threadsafe.html
+        assert(sqlite3_threadsafe() == SQLITE_CONFIG_MULTITHREAD)
     }
 
     /**
@@ -915,7 +919,11 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             return createErr("During: Opening Database with Flags", status: Int(status))
         }
         guard let _ = self.cipherVersion else {
-            return createErr("Expected SQLCipher, got SQLite", status: Int(-1))
+            // XXX: Temporarily remove this assertion until we find a way to
+            // reuse the copy of sqlcipher that comes with the Rust components.
+            // return createErr("Expected SQLCipher, got SQLite", status: Int(-1))
+            log.warning("Database \(self.filename) was not opened with SQLCipher")
+            return nil
         }
         return nil
     }

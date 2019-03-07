@@ -1,0 +1,336 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		F3BA81411CFB4D5B003DC1BA /* amalgamation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = F3BA81441CFB4D5B003DC1BA /* Build configuration list for PBXAggregateTarget "amalgamation" */;
+			buildPhases = (
+				EEDD06761CFE1FD300478EC5 /* Copy .example configuration, if no USER configuration present */,
+				F3BA81451CFB4D7B003DC1BA /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = amalgamation;
+			productName = amalgamation;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		EE751A3F1D9D774E00A88200 /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = EE751A3E1D9D774E00A88200 /* sqlite3.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F3BA81461CFB4DA5003DC1BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F3BA81411CFB4D5B003DC1BA;
+			remoteInfo = amalgamation;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D2AAC046055464E500DB518D /* libsqlitecustom.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libsqlitecustom.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EE751A3E1D9D774E00A88200 /* sqlite3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = sqlite3.c; path = ../sqlite/sqlite3.c; sourceTree = BUILT_PRODUCTS_DIR; };
+		F32EB7781CFBC91D007C7948 /* sqlite3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sqlite3.h; sourceTree = "<group>"; };
+		F3F14A621CF9E59E00E8D86B /* SQLiteLib.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = SQLiteLib.xcconfig; sourceTree = "<group>"; };
+		F3F14A6D1CF9E9DB00E8D86B /* SQLiteLib-USER.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "SQLiteLib-USER.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D289987405E68DCB004EDB86 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* sqlcipher */ = {
+			isa = PBXGroup;
+			children = (
+				F3F14A6D1CF9E9DB00E8D86B /* SQLiteLib-USER.xcconfig */,
+				F3F14A621CF9E59E00E8D86B /* SQLiteLib.xcconfig */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6A0FF2B0290797F04C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = sqlcipher;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				EE751A3E1D9D774E00A88200 /* sqlite3.c */,
+				F32EB7781CFBC91D007C7948 /* sqlite3.h */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D2AAC046055464E500DB518D /* libsqlitecustom.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6A0FF2B0290797F04C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		D2AAC043055464E500DB518D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		D2AAC045055464E500DB518D /* sqlitecustom */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "sqlitecustom" */;
+			buildPhases = (
+				D2AAC043055464E500DB518D /* Headers */,
+				D2AAC044055464E500DB518D /* Sources */,
+				D289987405E68DCB004EDB86 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F3BA81471CFB4DA5003DC1BA /* PBXTargetDependency */,
+			);
+			name = sqlitecustom;
+			productName = sqlcipher;
+			productReference = D2AAC046055464E500DB518D /* libsqlitecustom.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+				TargetAttributes = {
+					F3BA81411CFB4D5B003DC1BA = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "SQLiteLib" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* sqlcipher */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D2AAC045055464E500DB518D /* sqlitecustom */,
+				F3BA81411CFB4D5B003DC1BA /* amalgamation */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		EEDD06761CFE1FD300478EC5 /* Copy .example configuration, if no USER configuration present */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/SQLiteLib-USER.xcconfig.example",
+			);
+			name = "Copy .example configuration, if no USER configuration present";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "copiedfiles=false\nfor ((i=0; i < SCRIPT_INPUT_FILE_COUNT ; i++))\ndo\n    INFILE=SCRIPT_INPUT_FILE_$i\n    EXAMPLEFILE=${!INFILE};\n    OUTPUTFILE=${EXAMPLEFILE%.example}\n    echo \"${INFILE}=${EXAMPLEFILE}\"\n    if [ -f \"$EXAMPLEFILE\" ]\n    then\n        if [ ! -f \"$OUTPUTFILE\" ];\n        then\n            echo \"Expected USER configuration file doesn't exist\"\n            echo \"Copying .example file\"\n            cp $EXAMPLEFILE $OUTPUTFILE\n            touch $OUTPUTFILE\n            copiedfiles=true\n        else\n            echo \"USER Configuration file already exists: ${OUTPUTFILE}\"\n            echo \"Skipping .example copy.\"\n        fi\n    else\n        echo \"Missing input .example file: ${EXAMPLEFILE}\"\n        exit 1\n    fi\ndone\n\nif [ \"$copiedfiles\" = true ] ; then\n    touch \"${SRCROOT}/SQLiteLib.xcconfig\"\n    sleep 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F3BA81451CFB4D7B003DC1BA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/sqlite",
+				"$(SRCROOT)/SQLiteLib.xcconfig",
+				"$(SRCROOT)/SQLiteLib-Custom.xcconfig",
+			);
+			outputPaths = (
+				"${BUILD_DIR}/sqlite/sqlite3.c",
+				"${PROJECT_DIR}/sqlite3.h",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\necho \"Configure and generate SQLite amalgamation files\"\n\npattern=\" |'\"\nif [[ ${PROJECT_DIR} =~ $pattern ]]\nthen\necho \"Unsafe PROJECT_DIR for make - contains spaces.\"\necho \"PROJECT_DIR=${PROJECT_DIR}\"\nexit 1\nfi\n\n# Ensure we always run configure/make as if we were compiling for macOS (as parts of the\n# configure/make process require building & running an executable)\n#\n# The generated sqlite3.c will be built for the correct platform by Xcode via the\n# 'sqlitecustom' target\nSDK_PLATFORM_NAME=\"macosx\"\nMACOSX_VERSION_MIN=\"$(sw_vers -productVersion | cut -d '.' -f 1,2)\"\n\n\nSDKROOT=\"$(xcrun --sdk $SDK_PLATFORM_NAME --show-sdk-path)\"\nCC=\"$(xcrun --sdk $SDK_PLATFORM_NAME -f clang)\"\nCXX=\"$(xcrun --sdk $SDK_PLATFORM_NAME -f clang++)\"\nCFLAGS=\"-arch x86_64 -isysroot $SDKROOT -mmacosx-version-min=$MACOSX_VERSION_MIN $OTHER_CFLAGS\"\nCXXFLAGS=$CFLAGS\nexport CC CXX CFLAGS CXXFLAGS\n\nmkdir -p \"${DERIVED_SOURCES_DIR}\"\ncd \"${DERIVED_SOURCES_DIR}\"\n\necho \"Clean-up previous files if necessary\"\n[ -e Makefile ] && make distclean\n\necho \"Configure makefile\"\n\"${PROJECT_DIR}/sqlite/configure\" --srcdir=\"${PROJECT_DIR}/sqlite/\"\n\necho \"Make SQLite amalgamation\"\nmake sqlite3.c\n\n# copy generated amalgamation files (sqlite3.c and sqlite3.h)\n# to BUILD_DIR/sqlite\nSQLITE_OUTPUT_DIR=\"${BUILD_DIR}/sqlite\"\nmkdir -p \"${SQLITE_OUTPUT_DIR}\"\necho \"Copying sqlite3.c to ${SQLITE_OUTPUT_DIR}/sqlite3.c\"\ncp ./sqlite3.c \"${SQLITE_OUTPUT_DIR}/sqlite3.c\"\necho \"Copying sqlite3.h to ${PROJECT_DIR}/sqlite3.h\"\ncp ./sqlite3.h \"${PROJECT_DIR}/sqlite3.h\"\n\necho \"Finished generating SQLite amalgamation files\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D2AAC044055464E500DB518D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE751A3F1D9D774E00A88200 /* sqlite3.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F3BA81471CFB4DA5003DC1BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F3BA81411CFB4D5B003DC1BA /* amalgamation */;
+			targetProxy = F3BA81461CFB4DA5003DC1BA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB91EC08733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3F14A621CF9E59E00E8D86B /* SQLiteLib.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				"GCC_WARN_64_TO_32_BIT_CONVERSION[arch=*64]" = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					"${BUILT_PRODUCTS_DIR}",
+				);
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = sqlitecustom;
+				"VALID_ARCHS[sdk=watchos*]" = "${ARCHS_STANDARD}";
+			};
+			name = Debug;
+		};
+		1DEB91ED08733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3F14A621CF9E59E00E8D86B /* SQLiteLib.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				"GCC_WARN_64_TO_32_BIT_CONVERSION[arch=*64]" = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)",
+					"${BUILT_PRODUCTS_DIR}",
+				);
+				INSTALL_PATH = /usr/local/lib;
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = sqlitecustom;
+				"VALID_ARCHS[sdk=watchos*]" = "${ARCHS_STANDARD}";
+			};
+			name = Release;
+		};
+		1DEB91F008733DB70010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ENABLE_TESTABILITY = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
+			};
+			name = Debug;
+		};
+		1DEB91F108733DB70010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphonesimulator macosx iphoneos";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
+			};
+			name = Release;
+		};
+		F3BA81421CFB4D5B003DC1BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3F14A621CF9E59E00E8D86B /* SQLiteLib.xcconfig */;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+			};
+			name = Debug;
+		};
+		F3BA81431CFB4D5B003DC1BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3F14A621CF9E59E00E8D86B /* SQLiteLib.xcconfig */;
+			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = s;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "sqlitecustom" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91EC08733DB70010E9CD /* Debug */,
+				1DEB91ED08733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "SQLiteLib" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB91F008733DB70010E9CD /* Debug */,
+				1DEB91F108733DB70010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F3BA81441CFB4D5B003DC1BA /* Build configuration list for PBXAggregateTarget "amalgamation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F3BA81421CFB4D5B003DC1BA /* Debug */,
+				F3BA81431CFB4D5B003DC1BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}
