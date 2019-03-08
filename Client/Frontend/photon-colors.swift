@@ -96,4 +96,8 @@ extension UIColor {
         static let White100 = UIColor(rgb: 0xffffff)
 
     }
+
+    struct Pocket {
+        static let red = UIColor(rgb: 0xEF4156)
+    }
 }

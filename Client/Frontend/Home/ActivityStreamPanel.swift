@@ -23,6 +23,8 @@ struct ASPanelUX {
     static let SectionInsetsForIpad: CGFloat = 101
     static let SectionInsetsForIphone: CGFloat = 14
     static let MinimumInsets: CGFloat = 14
+    static let LibraryShortcutsHeight: CGFloat = 100
+    static let LibraryShortcutsMaxWidth: CGFloat = 350
 }
 /*
  Size classes are the way Apple requires us to specify our UI.
@@ -153,28 +155,35 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 extension ActivityStreamPanel {
     enum Section: Int {
         case topSites
+        case libraryShortcuts
         case pocket
 
-        static let count = 2
-        static let allValues = [topSites, pocket]
+        static let count = 3
+        static let allValues = [topSites, libraryShortcuts, pocket]
 
         var title: String? {
             switch self {
             case .pocket: return Strings.ASPocketTitle
-            case .topSites: return nil
+            case .topSites: return Strings.ASTopSitesTitle
+            case .libraryShortcuts: return Strings.AppMenuLibraryTitleString
             }
         }
 
         var headerHeight: CGSize {
+            return CGSize(width: 50, height: 40)
+        }
+
+        var headerImage: UIImage? {
             switch self {
-            case .pocket: return CGSize(width: 50, height: 40)
-            case .topSites: return .zero
+            case .pocket: return UIImage.templateImageNamed("menu-pocket")
+            case .topSites: return UIImage.templateImageNamed("menu-panel-TopSites")
+            case .libraryShortcuts: return UIImage.templateImageNamed("menu-library")
             }
         }
 
         var footerHeight: CGSize {
             switch self {
-            case .pocket: return .zero
+            case .pocket, .libraryShortcuts: return .zero
             case .topSites: return CGSize(width: 50, height: 5)
             }
         }
@@ -183,6 +192,7 @@ extension ActivityStreamPanel {
             switch self {
             case .pocket: return ASPanelUX.highlightCellHeight
             case .topSites: return 0 //calculated dynamically
+            case .libraryShortcuts: return ASPanelUX.LibraryShortcutsHeight
             }
         }
 
@@ -203,6 +213,9 @@ extension ActivityStreamPanel {
                 return insets
             case .topSites:
                 return ASPanelUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
+            case .libraryShortcuts:
+                let shortcutsWidth = min(ASPanelUX.LibraryShortcutsMaxWidth, frameWidth)
+                return (frameWidth - shortcutsWidth)/2
             }
         }
 
@@ -217,7 +230,7 @@ extension ActivityStreamPanel {
                     numItems = numItems - 1
                 }
                 return numItems
-            case .topSites:
+            case .topSites, .libraryShortcuts:
                 return 1
             }
         }
@@ -230,26 +243,22 @@ extension ActivityStreamPanel {
             case .pocket:
                 let numItems = numberOfItemsForRow(traits)
                 return CGSize(width: floor(((frameWidth - inset) - (ASPanelUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
-            case .topSites:
+            case .topSites, .libraryShortcuts:
                 return CGSize(width: frameWidth - inset, height: height)
             }
         }
 
         var headerView: UIView? {
-            switch self {
-            case .pocket:
-                let view = ASHeaderView()
-                view.title = title
-                return view
-            case .topSites:
-                return nil
-            }
+            let view = ASHeaderView()
+            view.title = title
+            return view
         }
 
         var cellIdentifier: String {
             switch self {
             case .topSites: return "TopSiteCell"
             case .pocket: return "PocketCell"
+            case .libraryShortcuts: return  "LibraryShortcutsCell"
             }
         }
 
@@ -257,6 +266,7 @@ extension ActivityStreamPanel {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
             case .pocket: return ActivityStreamHighlightCell.self
+            case .libraryShortcuts: return ASLibraryCell.self
             }
         }
 
@@ -277,20 +287,27 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
         switch kind {
             case UICollectionElementKindSectionHeader:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+                view.iconView.isHidden = false
+                view.iconView.image = Section(indexPath.section).headerImage
                 let title = Section(indexPath.section).title
                 switch Section(indexPath.section) {
                 case .pocket:
                     view.title = title
                     view.moreButton.isHidden = false
                     view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
+                    view.titleLabel.textColor = UIColor.Pocket.red
+                    view.moreButton.setTitleColor(UIColor.Pocket.red, for: .normal)
+                    view.iconView.tintColor = UIColor.Pocket.red
                     return view
-                case .topSites:
-                    return UICollectionReusableView()
+                case .topSites, .libraryShortcuts:
+                    view.title = title
+                    view.moreButton.isHidden = true
+                    return view
             }
             case UICollectionElementKindSectionFooter:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
                 switch Section(indexPath.section) {
-                case .topSites, .pocket:
+                case .topSites, .pocket, .libraryShortcuts:
                     return view
             }
             default:
@@ -314,6 +331,10 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             return CGSize(width: cellSize.width, height: estimatedLayout.size.height)
         case .pocket:
             return cellSize
+        case .libraryShortcuts:
+            let numberofshortcuts: CGFloat = 4
+            let titleSpacing: CGFloat = 10
+            return CGSize(width: min(ASPanelUX.LibraryShortcutsMaxWidth, cellSize.width), height: (cellSize.width / numberofshortcuts) + titleSpacing)
         }
     }
 
@@ -323,6 +344,8 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             return pocketStories.isEmpty ? .zero : Section(section).headerHeight
         case .topSites:
             return Section(section).headerHeight
+        case .libraryShortcuts:
+            return UIDevice.current.userInterfaceIdiom == .pad ? CGSize.zero : Section(section).headerHeight
         }
     }
 
@@ -330,7 +353,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
         switch Section(section) {
         case .pocket:
             return .zero
-        case .topSites:
+        case .topSites, .libraryShortcuts:
             return Section(section).footerHeight
         }
     }
@@ -358,7 +381,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 extension ActivityStreamPanel {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 3
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -375,6 +398,9 @@ extension ActivityStreamPanel {
         case .pocket:
             // There should always be a full row of pocket stories (numItems) otherwise don't show them
             return pocketStories.count
+        case .libraryShortcuts:
+            // disable the libary shortcuts on the ipad
+            return UIDevice.current.userInterfaceIdiom == .pad ? 0 : 1
         }
     }
 
@@ -387,7 +413,19 @@ extension ActivityStreamPanel {
             return configureTopSitesCell(cell, forIndexPath: indexPath)
         case .pocket:
             return configurePocketItemCell(cell, forIndexPath: indexPath)
+        case .libraryShortcuts:
+            return configureLibraryShortcutsCell(cell, forIndexPath: indexPath)
         }
+    }
+
+    func configureLibraryShortcutsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
+        let libraryCell = cell as! ASLibraryCell
+        let targets = [#selector(openBookmarks), #selector(openHistory), #selector(openReadingList), #selector(openDownloads)]
+        libraryCell.libraryButtons.map({ $0.button }).zip(targets).forEach { (button, selector) in
+            button.removeTarget(nil, action: nil, for: .allEvents)
+            button.addTarget(self, action: selector, for: .touchUpInside)
+        }
+        return cell
     }
 
     //should all be collectionview
@@ -569,6 +607,8 @@ extension ActivityStreamPanel: DataObserverDelegate {
             let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
             guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
             presentContextMenu(for: topSiteIndexPath)
+        case .libraryShortcuts:
+            return
         }
     }
 
@@ -594,10 +634,31 @@ extension ActivityStreamPanel: DataObserverDelegate {
             LeanPlumClient.shared.track(event: .openedPocketStory, withParameters: params)
         case .topSites:
             return
+        case .libraryShortcuts:
+            return
         }
         if let site = site {
             showSiteWithURLHandler(URL(string: site.url)!)
         }
+    }
+}
+
+extension ActivityStreamPanel {
+
+    @objc func openBookmarks() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
+    }
+
+    @objc func openHistory() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
+    }
+
+    @objc func openReadingList() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
+    }
+
+    @objc func openDownloads() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .downloads)
     }
 }
 
@@ -616,6 +677,8 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             return Site(url: pocketStories[indexPath.row].url.absoluteString, title: pocketStories[indexPath.row].title)
         case .topSites:
             return topSitesManager.content[indexPath.item]
+        case .libraryShortcuts:
+            return nil
         }
     }
 
@@ -629,6 +692,8 @@ extension ActivityStreamPanel: HomePanelContextMenu {
             }
         case .pocket:
             sourceView = self.collectionView?.cellForItem(at: indexPath)
+        case .libraryShortcuts:
+            return nil
         }
 
         let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
@@ -712,6 +777,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         switch Section(indexPath.section) {
             case .pocket: break
             case .topSites: actions.append(contentsOf: topSiteActions)
+            case .libraryShortcuts: break
         }
         return actions
     }
@@ -790,6 +856,13 @@ class ASHeaderView: UICollectionReusableView {
         return button
     }()
 
+    lazy fileprivate var iconView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.tintColor = UIColor.Photon.Grey50
+        imageView.isHidden = true
+        return imageView
+    }()
+
     var title: String? {
         willSet(newTitle) {
             titleLabel.text = newTitle
@@ -810,11 +883,17 @@ class ASHeaderView: UICollectionReusableView {
         moreButton.isHidden = true
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
+        iconView.isHidden = true
+        iconView.tintColor =  UIColor.theme.homePanel.activityStreamHeaderText
+        titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
+        moreButton.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
     }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
         addSubview(moreButton)
+        addSubview(iconView)
         moreButton.snp.makeConstraints { make in
             make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
             make.bottom.equalTo(self)
@@ -822,10 +901,15 @@ class ASHeaderView: UICollectionReusableView {
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            self.leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(titleInsets).constraint
+            make.leading.equalTo(iconView.snp.trailing).offset(10)
             make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.TitleTopInset)
-            make.top.equalTo(self).inset(ASHeaderViewUX.TitleTopInset)
-            make.bottom.equalTo(self)
+            make.top.equalTo(self.snp.top).offset(4)
+            make.bottom.equalToSuperview().offset(-4)
+        }
+        iconView.snp.makeConstraints { make in
+            self.leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(titleInsets).constraint
+            make.centerY.equalTo(self.snp.centerY)
+            make.size.equalTo(16)
         }
     }
 
@@ -838,6 +922,96 @@ class ASHeaderView: UICollectionReusableView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+class LibraryShortcutView: UIView {
+
+    lazy var button: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = UIColor(rgb: 0xc7eafd)
+        button.setImage(UIImage.templateImageNamed("menu-panel-Bookmarks"), for: .normal)
+        button.tintColor = .white
+        return button
+    }()
+
+    lazy var title: UILabel = {
+        let title = UILabel()
+        return title
+    }()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addSubview(button)
+        addSubview(title)
+        button.snp.makeConstraints { make in
+            make.width.equalTo(self)
+            make.height.equalTo(self.snp.width)
+        }
+        title.adjustsFontSizeToFitWidth = true
+        title.minimumScaleFactor = 0.7
+        title.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        title.textAlignment = .center
+        title.snp.makeConstraints { make in
+            make.top.equalTo(button.snp.bottom).offset(5)
+            make.leading.trailing.equalToSuperview()
+        }
+        button.imageView?.contentMode = .scaleToFill
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageEdgeInsets = UIEdgeInsets(equalInset: 15)
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        button.layer.cornerRadius = self.frame.width / 2
+        super.layoutSubviews()
+    }
+}
+
+class ASLibraryCell: UICollectionViewCell {
+
+    var mainView = UIStackView()
+
+    struct LibraryPanel {
+        let title: String
+        let image: UIImage?
+        let color: UIColor
+    }
+
+    var libraryButtons: [LibraryShortcutView] = []
+
+    let bookmarks = LibraryPanel(title: "Bookmarks", image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor(rgb: 0x0A84FF))
+    let history = LibraryPanel(title: "History", image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor(rgb: 0xFF9402))
+    let readingList = LibraryPanel(title: "Reading List", image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor(rgb: 0x00C8D7))
+    let downloads = LibraryPanel(title: "Downloads", image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor(rgb: 0xEC00B5))
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        mainView.distribution = .fillEqually
+        mainView.spacing = 25
+        addSubview(mainView)
+        mainView.snp.makeConstraints { make in
+            make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5))
+        }
+
+        [bookmarks, history, readingList, downloads].forEach { item in
+            let view = LibraryShortcutView()
+            view.button.setImage(item.image, for: .normal)
+            view.title.text = item.title
+            view.button.backgroundColor = item.color
+            view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
+            mainView.addArrangedSubview(view)
+            libraryButtons.append(view)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
 }
 
 open class PinnedSite: Site {
