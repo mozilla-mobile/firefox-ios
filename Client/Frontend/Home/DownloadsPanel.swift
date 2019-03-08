@@ -243,11 +243,12 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         let overlayView = UIView()
         overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
 
-        let logoImageView = UIImageView(image: UIImage(named: "emptyDownloads"))
+        let logoImageView = UIImageView(image: UIImage.templateImageNamed("emptyDownloads"))
+        logoImageView.tintColor = UIColor.Photon.Grey60
         overlayView.addSubview(logoImageView)
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
-
+            make.size.equalTo(60)
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
             make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
 
