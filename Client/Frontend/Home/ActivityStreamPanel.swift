@@ -334,7 +334,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
         case .libraryShortcuts:
             let numberofshortcuts: CGFloat = 4
             let titleSpacing: CGFloat = 10
-            return CGSize(width: min(ASPanelUX.LibraryShortcutsMaxWidth, cellSize.width), height: (cellSize.width/numberofshortcuts) + titleSpacing)
+            return CGSize(width: min(ASPanelUX.LibraryShortcutsMaxWidth, cellSize.width), height: (cellSize.width / numberofshortcuts) + titleSpacing)
         }
     }
 
