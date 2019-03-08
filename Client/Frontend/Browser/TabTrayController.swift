@@ -861,7 +861,8 @@ fileprivate class EmptyPrivateTabsView: UIView {
     }()
 
     fileprivate var iconImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "largePrivateMask"))
+        let imageView = UIImageView(image: UIImage.templateImageNamed("largePrivateMask"))
+        imageView.tintColor = UIColor.Photon.Grey60
         return imageView
     }()
 
@@ -883,7 +884,8 @@ fileprivate class EmptyPrivateTabsView: UIView {
         }
 
         iconImageView.snp.makeConstraints { make in
-            make.bottom.equalTo(titleLabel.snp.top).offset(-EmptyPrivateTabsViewUX.TextMargin)
+            make.bottom.equalTo(titleLabel.snp.top)
+            make.height.width.equalTo(120)
             make.centerX.equalTo(self)
         }
 
