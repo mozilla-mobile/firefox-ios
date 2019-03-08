@@ -97,11 +97,6 @@ class FxALoginHelper {
         // accountVerified is needed by delegates.
         accountVerified = account.actionNeeded != .needsVerification
 
-        if let _ = account.pushRegistration {
-            // We have an account, and it's already registered for push notifications.
-            return loginDidSucceed()
-        }
-
         // Now: we have an account that does not have push notifications set up.
         // however, we need to deal with cases of asking for permissions too frequently.
         let asked = profile.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
@@ -224,20 +219,23 @@ class FxALoginHelper {
             return pushRegistrationDidFail()
         }
 
-        if let pushRegistration = account.pushRegistration {
-            // Currently, we don't support routine changing of push subscriptions
-            // then we can assume that if we've already registered with the
-            // push server, then we don't need to do it again.
-            _ = pushClient.updateUAID(apnsToken, withRegistration: pushRegistration)
+        guard let pushRegistration = account.pushRegistration else {
+            pushClient.register(apnsToken).upon { res in
+                guard let pushRegistration = res.successValue else {
+                    return self.pushRegistrationDidFail()
+                }
+                return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
+            }
             return
         }
 
-        pushClient.register(apnsToken).upon { res in
-            guard let pushRegistration = res.successValue else {
-                return self.pushRegistrationDidFail()
-            }
-            return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
+        // If we've already registered this push subscription,
+        // we don't need to do it again.
+        guard KeychainStore.shared.string(forKey: "apnsToken") != apnsToken else {
+            return
         }
+
+        _ = pushClient.updateUAID(apnsToken, withRegistration: pushRegistration)
     }
 
     func apnsRegisterDidFail() {
@@ -324,6 +322,9 @@ extension FxALoginHelper {
 
         // TODO: fix Bug 1168690, to tell Sync to delete this client and its tabs.
         // i.e. upload a {deleted: true} client record.
+
+        // Clear the APNS token from memory.
+        self.apnsTokenDeferred = nil
 
         // Tell FxA we're no longer attached.
         self.account.destroyDevice()
