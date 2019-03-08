@@ -136,11 +136,12 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     fileprivate func createEmptyStateOverlayView() -> UIView {
         let overlayView = UIView()
 
-        let logoImageView = UIImageView(image: UIImage(named: "emptyBookmarks"))
+        let logoImageView = UIImageView(image: UIImage.templateImageNamed("emptyBookmarks"))
+        logoImageView.tintColor = UIColor.Photon.Grey60
         overlayView.addSubview(logoImageView)
         logoImageView.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
-
+            make.size.equalTo(60)
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
             make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
 
