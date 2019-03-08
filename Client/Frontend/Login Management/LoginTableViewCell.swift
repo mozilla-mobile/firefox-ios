@@ -17,9 +17,6 @@ private struct LoginTableViewCellUX {
     static let highlightedLabelTextColor = UIConstants.SystemBlueColor
     static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
     static let HorizontalMargin: CGFloat = 14
-    static let IconImageSize: CGFloat = 34
-    static let indentWidth: CGFloat = 44
-    static let IndentAnimationDuration: TimeInterval = 0.2
 }
 
 enum LoginTableViewCellStyle {
@@ -87,10 +84,6 @@ class LoginTableViewCell: ThemedTableViewCell {
         return label
     }()
 
-    fileprivate var showingIndent: Bool = false
-    fileprivate var customIndentView = UIView()
-    fileprivate var customCheckmarkIcon = UIImageView(image: UIImage(named: "loginUnselected"))
-
     /// Override the default accessibility label since it won't include the description by default
     /// since it's a UITextField acting as a label.
     override var accessibilityLabel: String? {
@@ -143,17 +136,11 @@ class LoginTableViewCell: ThemedTableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        indentationWidth = 0
         selectionStyle = .none
 
         labelContainer.addSubview(highlightedLabel)
         labelContainer.addSubview(descriptionLabel)
-
         contentView.addSubview(labelContainer)
-
-        customIndentView.addSubview(customCheckmarkIcon)
-        addSubview(customIndentView)
 
         configureLayout()
     }
@@ -169,25 +156,6 @@ class LoginTableViewCell: ThemedTableViewCell {
         descriptionLabel.keyboardType = .default
         descriptionLabel.returnKeyType = .default
         descriptionLabel.isUserInteractionEnabled = false
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        // Adjust indent frame
-        var indentFrame = CGRect(width: LoginTableViewCellUX.indentWidth, height: frame.height)
-
-        if !showingIndent {
-            indentFrame.origin.x = -LoginTableViewCellUX.indentWidth
-        }
-
-        customIndentView.frame = indentFrame
-        customCheckmarkIcon.frame.center = CGPoint(x: indentFrame.width / 2, y: indentFrame.height / 2)
-
-        // Adjust content view frame based on indent
-        var contentFrame = self.contentView.frame
-        contentFrame.origin.x += showingIndent ? LoginTableViewCellUX.indentWidth : 0
-        contentView.frame = contentFrame
     }
 
     fileprivate func configureLayout() {
@@ -212,33 +180,8 @@ class LoginTableViewCell: ThemedTableViewCell {
         setNeedsUpdateConstraints()
     }
 
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        showingIndent = editing
-
-        let adjustConstraints = { [unowned self] in
-
-            // Shift over content view
-            var contentFrame = self.contentView.frame
-            contentFrame.origin.x += editing ? LoginTableViewCellUX.indentWidth : -LoginTableViewCellUX.indentWidth
-            self.contentView.frame = contentFrame
-
-            // Shift over custom indent view
-            var indentFrame = self.customIndentView.frame
-            indentFrame.origin.x += editing ? LoginTableViewCellUX.indentWidth : -LoginTableViewCellUX.indentWidth
-            self.customIndentView.frame = indentFrame
-        }
-
-        animated ? UIView.animate(withDuration: LoginTableViewCellUX.IndentAnimationDuration, animations: adjustConstraints) : adjustConstraints()
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        customCheckmarkIcon.image = UIImage(named: selected ? "loginSelected" : "loginUnselected")
-    }
-
     override func applyTheme() {
         super.applyTheme()
-
         descriptionLabel.textColor = UIColor.theme.tableView.rowText
     }
 }
