@@ -25,7 +25,6 @@ struct ASPanelUX {
     static let MinimumInsets: CGFloat = 14
     static let LibraryShortcutsHeight: CGFloat = 100
     static let LibraryShortcutsMaxWidth: CGFloat = 350
-    static let PocketRed = UIColor(rgb: 0xEF4156)
 }
 /*
  Size classes are the way Apple requires us to specify our UI.
@@ -296,20 +295,15 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                     view.title = title
                     view.moreButton.isHidden = false
                     view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
-                    view.titleLabel.textColor = ASPanelUX.PocketRed
-                    view.moreButton.setTitleColor(ASPanelUX.PocketRed, for: .normal)
-                    view.iconView.tintColor = ASPanelUX.PocketRed
+                    view.titleLabel.textColor = UIColor.Pocket.red
+                    view.moreButton.setTitleColor(UIColor.Pocket.red, for: .normal)
+                    view.iconView.tintColor = UIColor.Pocket.red
                     return view
-                case .topSites:
-                    view.title = title
-                    view.moreButton.isHidden = true
-                    return view
-                case .libraryShortcuts:
+                case .topSites, .libraryShortcuts:
                     view.title = title
                     view.moreButton.isHidden = true
                     return view
             }
-
             case UICollectionElementKindSectionFooter:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
                 switch Section(indexPath.section) {
@@ -338,7 +332,9 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
         case .pocket:
             return cellSize
         case .libraryShortcuts:
-            return CGSize(width: min(ASPanelUX.LibraryShortcutsMaxWidth, cellSize.width), height: (cellSize.width/4)+10)
+            let numberofshortcuts: CGFloat = 4
+            let titleSpacing: CGFloat = 10
+            return CGSize(width: min(ASPanelUX.LibraryShortcutsMaxWidth, cellSize.width), height: (cellSize.width/numberofshortcuts) + titleSpacing)
         }
     }
 
@@ -425,7 +421,7 @@ extension ActivityStreamPanel {
     func configureLibraryShortcutsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let libraryCell = cell as! ASLibraryCell
         let targets = [#selector(openBookmarks), #selector(openHistory), #selector(openReadingList), #selector(openDownloads)]
-        libraryCell.libraryButtons.map({ $0.button }).zip(targets).forEach { (button,selector) in
+        libraryCell.libraryButtons.map({ $0.button }).zip(targets).forEach { (button, selector) in
             button.removeTarget(nil, action: nil, for: .allEvents)
             button.addTarget(self, action: selector, for: .touchUpInside)
         }
@@ -891,8 +887,8 @@ class ASHeaderView: UICollectionReusableView {
         iconView.tintColor =  UIColor.theme.homePanel.activityStreamHeaderText
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         moreButton.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
-
     }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
@@ -970,11 +966,10 @@ class LibraryShortcutView: UIView {
     }
 
     override func layoutSubviews() {
-        button.layer.cornerRadius = self.frame.width/2
+        button.layer.cornerRadius = self.frame.width / 2
         super.layoutSubviews()
     }
 }
-
 
 class ASLibraryCell: UICollectionViewCell {
 
@@ -984,7 +979,6 @@ class ASLibraryCell: UICollectionViewCell {
         let title: String
         let image: UIImage?
         let color: UIColor
-        //let selector: Selector
     }
 
     var libraryButtons: [LibraryShortcutView] = []
@@ -1003,11 +997,12 @@ class ASLibraryCell: UICollectionViewCell {
             make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5))
         }
 
-        [bookmarks,history,readingList, downloads].forEach { item in
+        [bookmarks, history, readingList, downloads].forEach { item in
             let view = LibraryShortcutView()
             view.button.setImage(item.image, for: .normal)
             view.title.text = item.title
             view.button.backgroundColor = item.color
+            view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
             mainView.addArrangedSubview(view)
             libraryButtons.append(view)
         }
