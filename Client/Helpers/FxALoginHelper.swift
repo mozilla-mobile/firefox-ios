@@ -61,9 +61,9 @@ class FxALoginHelper {
 
     fileprivate weak var profile: Profile?
 
-    fileprivate var account: FirefoxAccount!
+    fileprivate var account: FirefoxAccount?
 
-    fileprivate var accountVerified: Bool!
+    fileprivate var accountVerified = false
 
     fileprivate var pushClient: PushClient? {
         guard let pushConfiguration = self.getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration,
@@ -77,7 +77,7 @@ class FxALoginHelper {
         return PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
     }
 
-    fileprivate var apnsTokenDeferred: Deferred<Maybe<String>>!
+    fileprivate var apnsTokenDeferred: Deferred<Maybe<String>>?
 
     // This should be called when the application has started.
     // This configures the helper for logging into Firefox Accounts, and
@@ -154,11 +154,6 @@ class FxALoginHelper {
         requestUserNotifications(application)
     }
 
-    func getDeviceToken(_ application: UIApplication) -> Deferred<Maybe<String>> {
-        self.requestUserNotifications(application)
-        return self.apnsTokenDeferred
-    }
-
     func requestUserNotifications(_ application: UIApplication) {
         if let deferred = self.apnsTokenDeferred, deferred.isFilled,
             let token = deferred.value.successValue {
@@ -209,7 +204,7 @@ class FxALoginHelper {
     }
 
     fileprivate func apnsRegisterDidSucceed(_ apnsToken: String) {
-        guard self.account != nil else {
+        guard let _ = self.account else {
             // If we aren't logged in to FxA at this point
             // we should bail.
             return loginDidFail()
@@ -219,7 +214,7 @@ class FxALoginHelper {
             return pushRegistrationDidFail()
         }
 
-        guard let pushRegistration = account.pushRegistration else {
+        guard let pushRegistration = account?.pushRegistration else {
             pushClient.register(apnsToken).upon { res in
                 guard let pushRegistration = res.successValue else {
                     return self.pushRegistrationDidFail()
@@ -244,7 +239,7 @@ class FxALoginHelper {
     }
 
     fileprivate func pushRegistrationDidSucceed(apnsToken: String, pushRegistration: PushRegistration) {
-        account.pushRegistration = pushRegistration
+        account?.pushRegistration = pushRegistration
         readyForSyncing()
     }
 
@@ -315,7 +310,7 @@ extension FxALoginHelper {
 
         // Whatever, we should unregister from the autopush server. That means we definitely won't be getting any
         // messages.
-        if let pushRegistration = self.account.pushRegistration,
+        if let pushRegistration = self.account?.pushRegistration,
             let pushClient = self.pushClient {
             _ = pushClient.unregister(pushRegistration)
         }
@@ -327,14 +322,14 @@ extension FxALoginHelper {
         self.apnsTokenDeferred = nil
 
         // Tell FxA we're no longer attached.
-        self.account.destroyDevice()
+        self.account?.destroyDevice()
 
         // Cleanup the database.
         self.profile?.removeAccount()
 
         // Cleanup the FxALoginHelper.
         self.account = nil
-        self.accountVerified = nil
+        self.accountVerified = false
 
         self.profile?.prefs.removeObjectForKey(PendingAccountDisconnectedKey)
     }
