@@ -61,9 +61,9 @@ class FxALoginHelper {
 
     fileprivate weak var profile: Profile?
 
-    fileprivate var account: FirefoxAccount!
+    fileprivate var account: FirefoxAccount?
 
-    fileprivate var accountVerified: Bool!
+    fileprivate var accountVerified = false
 
     fileprivate var pushClient: PushClient? {
         guard let pushConfiguration = self.getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration,
@@ -77,7 +77,7 @@ class FxALoginHelper {
         return PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
     }
 
-    fileprivate var apnsTokenDeferred: Deferred<Maybe<String>>!
+    fileprivate var apnsTokenDeferred: Deferred<Maybe<String>>?
 
     // This should be called when the application has started.
     // This configures the helper for logging into Firefox Accounts, and
@@ -96,11 +96,6 @@ class FxALoginHelper {
 
         // accountVerified is needed by delegates.
         accountVerified = account.actionNeeded != .needsVerification
-
-        if let _ = account.pushRegistration {
-            // We have an account, and it's already registered for push notifications.
-            return loginDidSucceed()
-        }
 
         // Now: we have an account that does not have push notifications set up.
         // however, we need to deal with cases of asking for permissions too frequently.
@@ -159,11 +154,6 @@ class FxALoginHelper {
         requestUserNotifications(application)
     }
 
-    func getDeviceToken(_ application: UIApplication) -> Deferred<Maybe<String>> {
-        self.requestUserNotifications(application)
-        return self.apnsTokenDeferred
-    }
-
     func requestUserNotifications(_ application: UIApplication) {
         if let deferred = self.apnsTokenDeferred, deferred.isFilled,
             let token = deferred.value.successValue {
@@ -214,7 +204,7 @@ class FxALoginHelper {
     }
 
     fileprivate func apnsRegisterDidSucceed(_ apnsToken: String) {
-        guard self.account != nil else {
+        guard let _ = self.account else {
             // If we aren't logged in to FxA at this point
             // we should bail.
             return loginDidFail()
@@ -224,20 +214,23 @@ class FxALoginHelper {
             return pushRegistrationDidFail()
         }
 
-        if let pushRegistration = account.pushRegistration {
-            // Currently, we don't support routine changing of push subscriptions
-            // then we can assume that if we've already registered with the
-            // push server, then we don't need to do it again.
-            _ = pushClient.updateUAID(apnsToken, withRegistration: pushRegistration)
+        guard let pushRegistration = account?.pushRegistration else {
+            pushClient.register(apnsToken).upon { res in
+                guard let pushRegistration = res.successValue else {
+                    return self.pushRegistrationDidFail()
+                }
+                return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
+            }
             return
         }
 
-        pushClient.register(apnsToken).upon { res in
-            guard let pushRegistration = res.successValue else {
-                return self.pushRegistrationDidFail()
-            }
-            return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
+        // If we've already registered this push subscription,
+        // we don't need to do it again.
+        guard KeychainStore.shared.string(forKey: "apnsToken") != apnsToken else {
+            return
         }
+
+        _ = pushClient.updateUAID(apnsToken, withRegistration: pushRegistration)
     }
 
     func apnsRegisterDidFail() {
@@ -246,7 +239,7 @@ class FxALoginHelper {
     }
 
     fileprivate func pushRegistrationDidSucceed(apnsToken: String, pushRegistration: PushRegistration) {
-        account.pushRegistration = pushRegistration
+        account?.pushRegistration = pushRegistration
         readyForSyncing()
     }
 
@@ -317,7 +310,7 @@ extension FxALoginHelper {
 
         // Whatever, we should unregister from the autopush server. That means we definitely won't be getting any
         // messages.
-        if let pushRegistration = self.account.pushRegistration,
+        if let pushRegistration = self.account?.pushRegistration,
             let pushClient = self.pushClient {
             _ = pushClient.unregister(pushRegistration)
         }
@@ -325,15 +318,18 @@ extension FxALoginHelper {
         // TODO: fix Bug 1168690, to tell Sync to delete this client and its tabs.
         // i.e. upload a {deleted: true} client record.
 
+        // Clear the APNS token from memory.
+        self.apnsTokenDeferred = nil
+
         // Tell FxA we're no longer attached.
-        self.account.destroyDevice()
+        self.account?.destroyDevice()
 
         // Cleanup the database.
         self.profile?.removeAccount()
 
         // Cleanup the FxALoginHelper.
         self.account = nil
-        self.accountVerified = nil
+        self.accountVerified = false
 
         self.profile?.prefs.removeObjectForKey(PendingAccountDisconnectedKey)
     }

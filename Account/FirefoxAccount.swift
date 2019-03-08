@@ -433,6 +433,7 @@ open class FirefoxAccount {
         }
 
         // Clear Send Tab keys from Keychain.
+        KeychainStore.shared.setDictionary(nil, forKey: "apnsToken")
         commandsClient.sendTab.sendTabKeysCache.value = nil
 
         // Clear cached OAuth data from Keychain.
@@ -459,6 +460,7 @@ open class FirefoxAccount {
 
     open func availableCommands() -> JSON {
         guard AppConstants.MOZ_FXA_MESSAGES, let sendTabKey = commandsClient.sendTab.getEncryptedKey() else {
+            KeychainStore.shared.setDictionary(nil, forKey: "apnsToken")
             return JSON()
         }
 
@@ -489,6 +491,16 @@ open class FirefoxAccount {
             let now = Date.now()
             return stateMachine.advance(fromState: cachedState, now: now).map { newState in
                 self.stateCache.value = newState
+
+                // If we were not previously married, but we are now,
+                // we need to re-register our device for push.
+                if let newSession = newState as? MarriedState,
+                    cachedState as? MarriedState == nil {
+                    DispatchQueue.main.async {
+                        _ = self.registerOrUpdateDevice(session: newSession)
+                    }
+                }
+
                 return newState
             }
         }
