@@ -16,10 +16,10 @@ class PocketTest: BaseTestCase {
         if iPad() {
             XCTAssertEqual(numPocketStories, 9)
         } else {
-            XCTAssertEqual(numPocketStories, 4)
+            XCTAssertEqual(numPocketStories, 3)
         }
 
-        // Disable Pocked
+        // Disable Pocket
         navigator.performAction(Action.TogglePocketInNewTab)
         navigator.goto(NewTabScreen)
         waitForNoExistence(app.staticTexts["pocketTitle"])
