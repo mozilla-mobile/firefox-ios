@@ -455,9 +455,6 @@ extension ActivityStreamPanel: DataObserverDelegate {
         // If the pocket stories are not availible for the Locale the PocketAPI will return nil
         // So it is okay if the default here is true
 
-        //Reopen the db if its closed. If it is already open this will do nothing.
-        self.profile.reopen()
-
         self.getTopSites().uponQueue(.main) { _ in
             // If there is no pending cache update and highlights are empty. Show the onboarding screen
             self.collectionView?.reloadData()
