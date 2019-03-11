@@ -231,6 +231,11 @@ open class BrowserProfile: Profile {
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
+        // Log SQLite compile_options.
+        // db.sqliteCompileOptions() >>== { compileOptions in
+        //     log.debug("SQLite compile_options:\n\(compileOptions.joined(separator: "\n"))")
+        // }
+
         // Set up logging from Rust.
         if !RustLog.shared.tryEnable({ (level, tag, message) -> Bool in
             let logString = "[RUST][\(tag ?? "no-tag")] \(message)"

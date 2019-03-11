@@ -11,4 +11,4 @@
 // For more information on the options, see: https://www.sqlite.org/compile.html
 
 // Added to OTHER_CFLAGS in all cases
-CUSTOM_SQLLIBRARY_CFLAGS =
+CUSTOM_SQLLIBRARY_CFLAGS = -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_TEMP_STORE=2 -DSQLITE_THREADSAFE=2
