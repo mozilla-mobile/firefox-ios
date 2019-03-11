@@ -132,10 +132,10 @@ open class MockProfile: Client.Profile {
         return name
     }
 
-    public func reopen() {
+    public func _reopen() {
     }
 
-    public func shutdown() {
+    public func _shutdown() {
     }
 
     public var isShutdown: Bool = false
