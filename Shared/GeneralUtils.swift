@@ -13,6 +13,8 @@ public func assertIsMainThread(_ message: String) {
     assert(Thread.isMainThread, message)
 }
 
+public var debugSimulateSlowDBOperations = false
+
 // Simple timer for manual profiling. Not for production use.
 // Prints only if timing is longer than a threshold (to reduce noisy output).
 open class PerformanceTimer {

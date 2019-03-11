@@ -579,6 +579,16 @@ class ForceCrashSetting: HiddenSetting {
     }
 }
 
+class SlowTheDatabase: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: simulate slow database operations", attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        debugSimulateSlowDBOperations = !debugSimulateSlowDBOperations
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
