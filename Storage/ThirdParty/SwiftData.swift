@@ -254,8 +254,9 @@ open class SwiftData {
     /// Reopens a database that had previously been force-closed.
     /// Does nothing if this database is already open.
     func reopenIfClosed() {
+        // Non guarded read to avoid locking the queue (which can be slow). Simultaneous read-writes are a non-issue with a bool in this case.
+        guard self.closed else { return }
         primaryConnectionQueue.sync {
-            guard self.closed else { return }
             self.closed = false
             let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
             NotificationCenter.default.post(name: .DatabaseWasReopened, object: baseFilename)
