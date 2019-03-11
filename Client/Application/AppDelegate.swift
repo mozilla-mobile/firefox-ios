@@ -166,13 +166,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
-        self.profile?.shutdown()
+        profile?._shutdown()
 
         // Allow deinitializers to close our database connections.
-        self.profile = nil
-        self.tabManager = nil
-        self.browserViewController = nil
-        self.rootViewController = nil
+        profile = nil
+        tabManager = nil
+        browserViewController = nil
+        rootViewController = nil
     }
 
     /**
@@ -270,7 +270,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.synchronize()
 
         if let profile = self.profile {
-            profile.reopen()
+            profile._reopen()
 
             if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
                 FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
@@ -351,7 +351,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 application.endBackgroundTask(taskId)
             }
         } else {
-            profile.shutdown()
+            profile._shutdown()
             application.endBackgroundTask(taskId)
         }
     }
@@ -362,7 +362,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             return
         }
 
-        profile?.shutdown()
+        profile?._shutdown()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

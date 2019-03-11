@@ -34,7 +34,7 @@ class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControll
 
         let profile = BrowserProfile(localName: "profile")
         profile.sendItem(item, toClients: clients).uponQueue(.main) { _ in
-            profile.shutdown()
+            profile._shutdown()
             self.finish()
 
             addAppExtensionTelemetryEvent(forMethod: "send-to-device")
@@ -52,7 +52,7 @@ class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControll
     private func hasAccount() -> Bool {
         let profile = BrowserProfile(localName: "profile")
         defer {
-            profile.shutdown()
+            profile._shutdown()
         }
         return profile.hasAccount()
     }

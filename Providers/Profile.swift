@@ -114,8 +114,13 @@ protocol Profile: AnyObject {
 
     var isShutdown: Bool { get }
 
-    func shutdown()
-    func reopen()
+    /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
+    /// or from App Extension code.
+    func _shutdown()
+
+    /// WARNING: Only to be called as part of the app lifecycle from the AppDelegate
+    /// or from App Extension code.
+    func _reopen()
 
     // I got really weird EXC_BAD_ACCESS errors on a non-null reference when I made this a getter.
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
@@ -304,7 +309,7 @@ open class BrowserProfile: Profile {
         }
     }
 
-    func reopen() {
+    func _reopen() {
         log.debug("Reopening profile.")
         isShutdown = false
 
@@ -312,7 +317,7 @@ open class BrowserProfile: Profile {
         logins.reopenIfClosed()
     }
 
-    func shutdown() {
+    func _shutdown() {
         log.debug("Shutting down profile.")
         isShutdown = true
 

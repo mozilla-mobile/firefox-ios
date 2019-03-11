@@ -159,7 +159,7 @@ class ClientPickerViewController: UITableViewController {
             // Re-open the profile if it was shutdown. This happens when we run from an app extension, where we must
             // make sure that the profile is only open for brief moments of time.
             if profile.isShutdown {
-                profile.reopen()
+                profile._reopen()
             }
             return profile
         }
@@ -204,7 +204,7 @@ class ClientPickerViewController: UITableViewController {
                 // If we are running from an app extension then make sure we shut down the profile as soon as we are
                 // done with it.
                 if self.profileNeedsShutdown {
-                    profile.shutdown()
+                    profile._shutdown()
                 }
 
                 self.loadState = .Loaded

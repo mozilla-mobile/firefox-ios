@@ -313,7 +313,7 @@ extension ShareViewController {
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
             profile.queue.addToQueue(item).uponQueue(.main) { _ in
-                profile.shutdown()
+                profile._shutdown()
             }
 
             addAppExtensionTelemetryEvent(forMethod: "load-in-background")
@@ -329,7 +329,7 @@ extension ShareViewController {
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
             _ = profile.bookmarks.shareItem(item).value // Blocks until database has settled
-            profile.shutdown()
+            profile._shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "bookmark-this-page")
         }
@@ -344,7 +344,7 @@ extension ShareViewController {
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
             profile.readingList.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
-            profile.shutdown()
+            profile._shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "add-to-reading-list")
         }
