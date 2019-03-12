@@ -11,7 +11,17 @@ fileprivate let log = Logger.syncLogger
 
 extension SQLiteHistory: HistoryRecommendations {
     static let MaxHistoryRowCount: UInt = 200000
-    static let PruneHistoryRowCount: UInt = 5000
+    static let PruneHistoryRowCount: UInt = 10000
+
+    public func cleanupHistoryIfNeeded() {
+        DispatchQueue.global(qos: .background).async {
+            self.checkIfCleanupIsNeeded(maxHistoryRows: SQLiteHistory.MaxHistoryRowCount) >>== { doCleanup in
+                if doCleanup {
+                    _ = self.db.run(self.cleanupOldHistory(numberOfRowsToPrune: SQLiteHistory.PruneHistoryRowCount))
+                }
+            }
+        }
+    }
 
     // Checks if there are more than the specified number of rows in the
     // `history` table. This is used as an indicator that `cleanupOldHistory()`
@@ -34,6 +44,8 @@ extension SQLiteHistory: HistoryRecommendations {
     // the threshold used in `checkIfCleanupIsNeeded()` and therefore, this may
     // end up running several times until that threshold is crossed.
     func cleanupOldHistory(numberOfRowsToPrune: UInt) -> [(String, Args?)] {
+        log.debug("Cleaning up \(numberOfRowsToPrune) rows of history.")
+
         let sql = """
             DELETE FROM \(TableHistory) WHERE id IN (
                 SELECT siteID
@@ -47,25 +59,10 @@ extension SQLiteHistory: HistoryRecommendations {
     }
 
     public func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool) -> Success {
-        var queries: [(String, Args?)] = []
-
-        func runQueries() -> Success {
-            if shouldInvalidateTopSites {
-                queries.append(contentsOf: self.refreshTopSitesQuery())
-            }
-            return self.db.run(queries)
-        }
-
-        // Only check for and perform cleanup operation if we're already invalidating a cache.
         if shouldInvalidateTopSites {
-            return checkIfCleanupIsNeeded(maxHistoryRows: SQLiteHistory.MaxHistoryRowCount) >>== { doCleanup in
-                if doCleanup {
-                    queries.append(contentsOf: self.cleanupOldHistory(numberOfRowsToPrune: SQLiteHistory.PruneHistoryRowCount))
-                }
-                return runQueries()
-            }
+            return db.run(refreshTopSitesQuery())
         } else {
-            return runQueries()
+            return succeed()
         }
     }
 

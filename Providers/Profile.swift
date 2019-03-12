@@ -145,6 +145,8 @@ protocol Profile: AnyObject {
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
+    func cleanupHistoryIfNeeded()
+
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
     func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success
@@ -473,6 +475,10 @@ open class BrowserProfile: Profile {
 
     public func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>> {
         return self.remoteClientsAndTabs.getClientsAndTabs()
+    }
+
+    public func cleanupHistoryIfNeeded() {
+        recommendations.cleanupHistoryIfNeeded()
     }
 
     func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
