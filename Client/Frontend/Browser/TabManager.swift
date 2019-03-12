@@ -629,7 +629,11 @@ extension TabManager: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         hideNetworkActivitySpinner()
         // tab restore uses internal pages, so don't call storeChanges unnecessarily on startup
-        if let _ = webView.url {
+        if let url = webView.url {
+            if let internalUrl = InternalURL(url), internalUrl.isSessionRestore {
+                return
+            }
+
             storeChanges()
         }
     }

@@ -51,6 +51,7 @@ public protocol FrecentHistory {
  * An interface for accessing recommendation content from Storage
  */
 public protocol HistoryRecommendations {
+    func cleanupHistoryIfNeeded()
     func repopulate(invalidateTopSites shouldInvalidateTopSites: Bool) -> Success
 }
 

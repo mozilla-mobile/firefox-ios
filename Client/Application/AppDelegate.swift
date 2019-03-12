@@ -160,6 +160,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
+        profile.cleanupHistoryIfNeeded()
+
         log.info("startApplication end")
         return true
     }
