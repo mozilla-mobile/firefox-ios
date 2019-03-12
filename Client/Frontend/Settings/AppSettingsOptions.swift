@@ -1041,7 +1041,13 @@ class OpenWithSetting: Setting {
         guard let provider = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), provider != "mailto:" else {
             return NSAttributedString(string: "")
         }
-        return NSAttributedString(string: provider)
+        if let path = Bundle.main.path(forResource: "MailSchemes", ofType: "plist"), let dictRoot = NSArray(contentsOfFile: path) {
+            let mailProvider = dictRoot.compactMap({$0 as? NSDictionary }).first { (dict) -> Bool in
+                return (dict["scheme"] as? String) == provider
+            }
+            return NSAttributedString(string: (mailProvider?["name"] as? String) ?? "")
+        }
+        return NSAttributedString(string: "")
     }
 
     override var style: UITableViewCellStyle { return .value1 }
