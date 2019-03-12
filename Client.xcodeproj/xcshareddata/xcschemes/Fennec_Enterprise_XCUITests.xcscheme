@@ -338,7 +338,7 @@
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
-                  Identifier = "SyncUITests/testAccountManagmentPage()">
+                  Identifier = "SyncUITests/testAccountManagementPage()">
                </Test>
                <Test
                   Identifier = "TabTraySearchTabsTests/testSearchTabs()">
