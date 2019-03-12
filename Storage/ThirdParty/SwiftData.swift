@@ -194,6 +194,10 @@ open class SwiftData {
                 }
             }
 
+            if debugSimulateSlowDBOperations {
+                sleep(2)
+            }
+
             guard let connection = useSecondaryConnection ? self.secondaryConnection : self.primaryConnection else {
                 do {
                     _ = try callback(FailedSQLiteDBConnection())
