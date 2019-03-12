@@ -236,6 +236,8 @@ open class MockProfile: Client.Profile {
         return deferMaybe([])
     }
 
+    public func cleanupHistoryIfNeeded() {}
+
     public func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return deferMaybe(0)
     }
