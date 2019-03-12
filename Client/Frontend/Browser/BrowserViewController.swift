@@ -2138,6 +2138,11 @@ extension BrowserViewController {
 extension BrowserViewController: HistoryStateHelperDelegate {
     func historyStateHelper(_ historyStateHelper: HistoryStateHelper, didPushOrReplaceStateInTab tab: Tab) {
         navigateInTab(tab: tab)
+
+        if let url = tab.url, let internalUrl = InternalURL(url), internalUrl.isSessionRestore {
+            return
+        }
+
         tabManager.storeChanges()
     }
 }
