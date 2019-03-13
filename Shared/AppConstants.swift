@@ -115,19 +115,6 @@ public struct AppConstants {
         #endif
     }()
 
-    ///  Toggle full-text search for Awesomebar
-    public static let MOZ_ENABLE_HISTORY_FTS: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
     ///  Toggle use of FxA Messages (Pushbox) for "Send Tab"
     public static let MOZ_FXA_MESSAGES: Bool = {
         #if MOZ_CHANNEL_RELEASE
