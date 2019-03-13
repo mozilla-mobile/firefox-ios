@@ -63,12 +63,11 @@ static int blobSeekToRow(Incrblob *p, sqlite3_int64 iRow, char **pzErr){
   v->aMem[1].u.i = iRow;
 
   /* If the statement has been run before (and is paused at the OP_ResultRow)
-  ** then back it up to the point where it does the OP_NotExists.  This could
+  ** then back it up to the point where it does the OP_SeekRowid.  This could
   ** have been down with an extra OP_Goto, but simply setting the program
   ** counter is faster. */
-  if( v->pc>4 ){
-    v->pc = 4;
-    assert( v->aOp[v->pc].opcode==OP_NotExists );
+  if( v->pc>3 ){
+    v->pc = 3;
     rc = sqlite3VdbeExec(v);
   }else{
     rc = sqlite3_step(p->pStmt);
@@ -130,8 +129,8 @@ int sqlite3_blob_open(
   int rc = SQLITE_OK;
   char *zErr = 0;
   Table *pTab;
+  Parse *pParse = 0;
   Incrblob *pBlob = 0;
-  Parse sParse;
 
 #ifdef SQLITE_ENABLE_API_ARMOR
   if( ppBlob==0 ){
@@ -149,34 +148,37 @@ int sqlite3_blob_open(
   sqlite3_mutex_enter(db->mutex);
 
   pBlob = (Incrblob *)sqlite3DbMallocZero(db, sizeof(Incrblob));
+  if( !pBlob ) goto blob_open_out;
+  pParse = sqlite3StackAllocRaw(db, sizeof(*pParse));
+  if( !pParse ) goto blob_open_out;
+
   do {
-    memset(&sParse, 0, sizeof(Parse));
-    if( !pBlob ) goto blob_open_out;
-    sParse.db = db;
+    memset(pParse, 0, sizeof(Parse));
+    pParse->db = db;
     sqlite3DbFree(db, zErr);
     zErr = 0;
 
     sqlite3BtreeEnterAll(db);
-    pTab = sqlite3LocateTable(&sParse, 0, zTable, zDb);
+    pTab = sqlite3LocateTable(pParse, 0, zTable, zDb);
     if( pTab && IsVirtual(pTab) ){
       pTab = 0;
-      sqlite3ErrorMsg(&sParse, "cannot open virtual table: %s", zTable);
+      sqlite3ErrorMsg(pParse, "cannot open virtual table: %s", zTable);
     }
     if( pTab && !HasRowid(pTab) ){
       pTab = 0;
-      sqlite3ErrorMsg(&sParse, "cannot open table without rowid: %s", zTable);
+      sqlite3ErrorMsg(pParse, "cannot open table without rowid: %s", zTable);
     }
 #ifndef SQLITE_OMIT_VIEW
     if( pTab && pTab->pSelect ){
       pTab = 0;
-      sqlite3ErrorMsg(&sParse, "cannot open view: %s", zTable);
+      sqlite3ErrorMsg(pParse, "cannot open view: %s", zTable);
     }
 #endif
     if( !pTab ){
-      if( sParse.zErrMsg ){
+      if( pParse->zErrMsg ){
         sqlite3DbFree(db, zErr);
-        zErr = sParse.zErrMsg;
-        sParse.zErrMsg = 0;
+        zErr = pParse->zErrMsg;
+        pParse->zErrMsg = 0;
       }
       rc = SQLITE_ERROR;
       sqlite3BtreeLeaveAll(db);
@@ -240,7 +242,7 @@ int sqlite3_blob_open(
       }
     }
 
-    pBlob->pStmt = (sqlite3_stmt *)sqlite3VdbeCreate(&sParse);
+    pBlob->pStmt = (sqlite3_stmt *)sqlite3VdbeCreate(pParse);
     assert( pBlob->pStmt || db->mallocFailed );
     if( pBlob->pStmt ){
       
@@ -276,8 +278,7 @@ int sqlite3_blob_open(
       sqlite3VdbeAddOp4Int(v, OP_Transaction, iDb, wrFlag, 
                            pTab->pSchema->schema_cookie,
                            pTab->pSchema->iGeneration);
-      sqlite3VdbeChangeP5(v, 1);
-      assert( sqlite3VdbeCurrentAddr(v)==2 || db->mallocFailed );
+      sqlite3VdbeChangeP5(v, 1);     
       aOp = sqlite3VdbeAddOpList(v, ArraySize(openBlob), openBlob, iLn);
 
       /* Make sure a mutex is held on the table to be accessed */
@@ -292,7 +293,7 @@ int sqlite3_blob_open(
         aOp[0].p1 = iDb;
         aOp[0].p2 = pTab->tnum;
         aOp[0].p3 = wrFlag;
-        sqlite3VdbeChangeP4(v, 2, pTab->zName, P4_TRANSIENT);
+        sqlite3VdbeChangeP4(v, 1, pTab->zName, P4_TRANSIENT);
       }
       if( db->mallocFailed==0 ){
 #endif
@@ -314,10 +315,10 @@ int sqlite3_blob_open(
         aOp[1].p4.i = pTab->nCol+1;
         aOp[3].p2 = pTab->nCol;
 
-        sParse.nVar = 0;
-        sParse.nMem = 1;
-        sParse.nTab = 1;
-        sqlite3VdbeMakeReady(v, &sParse);
+        pParse->nVar = 0;
+        pParse->nMem = 1;
+        pParse->nTab = 1;
+        sqlite3VdbeMakeReady(v, pParse);
       }
     }
    
@@ -339,7 +340,8 @@ blob_open_out:
   }
   sqlite3ErrorWithMsg(db, rc, (zErr ? "%s" : 0), zErr);
   sqlite3DbFree(db, zErr);
-  sqlite3ParserReset(&sParse);
+  sqlite3ParserReset(pParse);
+  sqlite3StackFree(db, pParse);
   rc = sqlite3ApiExit(db, rc);
   sqlite3_mutex_leave(db->mutex);
   return rc;

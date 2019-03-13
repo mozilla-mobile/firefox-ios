@@ -266,7 +266,6 @@ static sqlite3_module stmtModule = {
   0,                         /* xSavepoint */
   0,                         /* xRelease */
   0,                         /* xRollbackTo */
-  0,                         /* xShadowName */
 };
 
 #endif /* SQLITE_OMIT_VIRTUALTABLE */

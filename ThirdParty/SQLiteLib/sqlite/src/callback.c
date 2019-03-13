@@ -105,7 +105,6 @@ CollSeq *sqlite3GetCollSeq(
   assert( !p || p->xCmp );
   if( p==0 ){
     sqlite3ErrorMsg(pParse, "no such collation sequence: %s", zName);
-    pParse->rc = SQLITE_ERROR_MISSING_COLLSEQ;
   }
   return p;
 }
@@ -283,7 +282,7 @@ static int matchQuality(
 ** Search a FuncDefHash for a function with the given name.  Return
 ** a pointer to the matching FuncDef if found, or 0 if there is no match.
 */
-FuncDef *sqlite3FunctionSearch(
+static FuncDef *functionSearch(
   int h,               /* Hash of the name */
   const char *zFunc    /* Name of function */
 ){
@@ -308,9 +307,9 @@ void sqlite3InsertBuiltinFuncs(
     FuncDef *pOther;
     const char *zName = aDef[i].zName;
     int nName = sqlite3Strlen30(zName);
-    int h = SQLITE_FUNC_HASH(zName[0], nName);
+    int h = (zName[0] + nName) % SQLITE_FUNC_HASH_SZ;
     assert( zName[0]>='a' && zName[0]<='z' );
-    pOther = sqlite3FunctionSearch(h, zName);
+    pOther = functionSearch(h, zName);
     if( pOther ){
       assert( pOther!=&aDef[i] && pOther->pNext!=&aDef[i] );
       aDef[i].pNext = pOther->pNext;
@@ -375,7 +374,7 @@ FuncDef *sqlite3FindFunction(
 
   /* If no match is found, search the built-in functions.
   **
-  ** If the DBFLAG_PreferBuiltin flag is set, then search the built-in
+  ** If the SQLITE_PreferBuiltin flag is set, then search the built-in
   ** functions even if a prior app-defined function was found.  And give
   ** priority to built-in functions.
   **
@@ -385,10 +384,10 @@ FuncDef *sqlite3FindFunction(
   ** new function.  But the FuncDefs for built-in functions are read-only.
   ** So we must not search for built-ins when creating a new function.
   */ 
-  if( !createFlag && (pBest==0 || (db->mDbFlags & DBFLAG_PreferBuiltin)!=0) ){
+  if( !createFlag && (pBest==0 || (db->flags & SQLITE_PreferBuiltin)!=0) ){
     bestScore = 0;
-    h = SQLITE_FUNC_HASH(sqlite3UpperToLower[(u8)zName[0]], nName);
-    p = sqlite3FunctionSearch(h, zName);
+    h = (sqlite3UpperToLower[(u8)zName[0]] + nName) % SQLITE_FUNC_HASH_SZ;
+    p = functionSearch(h, zName);
     while( p ){
       int score = matchQuality(p, nArg, enc);
       if( score>bestScore ){
@@ -406,12 +405,10 @@ FuncDef *sqlite3FindFunction(
   if( createFlag && bestScore<FUNC_PERFECT_MATCH && 
       (pBest = sqlite3DbMallocZero(db, sizeof(*pBest)+nName+1))!=0 ){
     FuncDef *pOther;
-    u8 *z;
     pBest->zName = (const char*)&pBest[1];
     pBest->nArg = (u16)nArg;
     pBest->funcFlags = enc;
     memcpy((char*)&pBest[1], zName, nName+1);
-    for(z=(u8*)pBest->zName; *z; z++) *z = sqlite3UpperToLower[*z];
     pOther = (FuncDef*)sqlite3HashInsert(&db->aFunc, pBest->zName, pBest);
     if( pOther==pBest ){
       sqlite3DbFree(db, pBest);
@@ -460,8 +457,8 @@ void sqlite3SchemaClear(void *p){
   pSchema->pSeqTab = 0;
   if( pSchema->schemaFlags & DB_SchemaLoaded ){
     pSchema->iGeneration++;
+    pSchema->schemaFlags &= ~DB_SchemaLoaded;
   }
-  pSchema->schemaFlags &= ~(DB_SchemaLoaded|DB_ResetWanted);
 }
 
 /*

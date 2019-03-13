@@ -15,10 +15,6 @@
 */
 #include "sqlite3.h"
 
-#ifdef SQLITE_OMIT_VIRTUALTABLE
-# undef SQLITE_ENABLE_RTREE
-#endif
-
 #ifdef __cplusplus
 extern "C" {
 #endif  /* __cplusplus */

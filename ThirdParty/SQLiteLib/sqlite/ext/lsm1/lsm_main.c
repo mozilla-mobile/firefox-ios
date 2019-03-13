@@ -583,14 +583,14 @@ int lsm_info(lsm_db *pDb, int eParam, ...){
     }
 
     case LSM_INFO_ARRAY_STRUCTURE: {
-      LsmPgno pgno = va_arg(ap, LsmPgno);
+      Pgno pgno = va_arg(ap, Pgno);
       char **pzVal = va_arg(ap, char **);
       rc = lsmInfoArrayStructure(pDb, 0, pgno, pzVal);
       break;
     }
 
     case LSM_INFO_ARRAY_PAGES: {
-      LsmPgno pgno = va_arg(ap, LsmPgno);
+      Pgno pgno = va_arg(ap, Pgno);
       char **pzVal = va_arg(ap, char **);
       rc = lsmInfoArrayPages(pDb, pgno, pzVal);
       break;
@@ -598,7 +598,7 @@ int lsm_info(lsm_db *pDb, int eParam, ...){
 
     case LSM_INFO_PAGE_HEX_DUMP:
     case LSM_INFO_PAGE_ASCII_DUMP: {
-      LsmPgno pgno = va_arg(ap, LsmPgno);
+      Pgno pgno = va_arg(ap, Pgno);
       char **pzVal = va_arg(ap, char **);
       int bUnlock = 0;
       rc = infoGetWorker(pDb, 0, &bUnlock);
@@ -683,7 +683,7 @@ static int doWriteOp(
     int nDiff;
 
     if( nQuant>pDb->nTreeLimit ){
-      nQuant = LSM_MAX(pDb->nTreeLimit, pgsz);
+      nQuant = pDb->nTreeLimit;
     }
 
     nBefore = lsmTreeSize(pDb);
