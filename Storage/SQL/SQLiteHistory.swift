@@ -668,8 +668,8 @@ extension SQLiteHistory: BrowserHistory {
 
     public func getPinnedTopSites() -> Deferred<Maybe<Cursor<Site>>> {
         let sql = """
-            SELECT * FROM pinned_top_sites LEFT OUTER JOIN view_history_id_favicon ON
-                historyID = view_history_id_favicon.id
+            SELECT * FROM pinned_top_sites LEFT OUTER JOIN view_favicons_widest ON
+                historyID = view_favicons_widest.siteID
             ORDER BY pinDate DESC
             """
         return db.runQueryConcurrently(sql, args: [], factory: SQLiteHistory.iconHistoryMetadataColumnFactory)
