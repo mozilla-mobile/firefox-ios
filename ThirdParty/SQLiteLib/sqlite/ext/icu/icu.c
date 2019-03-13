@@ -28,9 +28,7 @@
 **     provide case-independent matching.
 */
 
-#if !defined(SQLITE_CORE)                  \
- || defined(SQLITE_ENABLE_ICU)             \
- || defined(SQLITE_ENABLE_ICU_COLLATIONS)
+#if !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_ICU)
 
 /* Include ICU headers */
 #include <unicode/utypes.h>
@@ -46,26 +44,6 @@
 #else
   #include "sqlite3.h"
 #endif
-
-/*
-** This function is called when an ICU function called from within
-** the implementation of an SQL scalar function returns an error.
-**
-** The scalar function context passed as the first argument is 
-** loaded with an error message based on the following two args.
-*/
-static void icuFunctionError(
-  sqlite3_context *pCtx,       /* SQLite scalar function context */
-  const char *zName,           /* Name of ICU function that failed */
-  UErrorCode e                 /* Error code returned by ICU function */
-){
-  char zBuf[128];
-  sqlite3_snprintf(128, zBuf, "ICU error: %s(): %s", zName, u_errorName(e));
-  zBuf[127] = '\0';
-  sqlite3_result_error(pCtx, zBuf, -1);
-}
-
-#if !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_ICU)
 
 /*
 ** Maximum length (in bytes) of the pattern in a LIKE or GLOB
@@ -124,15 +102,15 @@ static int icuLikeCompare(
   const uint8_t *zString,    /* The UTF-8 string to compare against */
   const UChar32 uEsc         /* The escape character */
 ){
-  static const uint32_t MATCH_ONE = (uint32_t)'_';
-  static const uint32_t MATCH_ALL = (uint32_t)'%';
+  static const int MATCH_ONE = (UChar32)'_';
+  static const int MATCH_ALL = (UChar32)'%';
 
   int prevEscape = 0;     /* True if the previous character was uEsc */
 
   while( 1 ){
 
     /* Read (and consume) the next character from the input pattern. */
-    uint32_t uPattern;
+    UChar32 uPattern;
     SQLITE_ICU_READ_UTF8(zPattern, uPattern);
     if( uPattern==0 ) break;
 
@@ -174,16 +152,16 @@ static int icuLikeCompare(
       if( *zString==0 ) return 0;
       SQLITE_ICU_SKIP_UTF8(zString);
 
-    }else if( !prevEscape && uPattern==(uint32_t)uEsc){
+    }else if( !prevEscape && uPattern==uEsc){
       /* Case 3. */
       prevEscape = 1;
 
     }else{
       /* Case 4. */
-      uint32_t uString;
+      UChar32 uString;
       SQLITE_ICU_READ_UTF8(zString, uString);
-      uString = (uint32_t)u_foldCase((UChar32)uString, U_FOLD_CASE_DEFAULT);
-      uPattern = (uint32_t)u_foldCase((UChar32)uPattern, U_FOLD_CASE_DEFAULT);
+      uString = u_foldCase(uString, U_FOLD_CASE_DEFAULT);
+      uPattern = u_foldCase(uPattern, U_FOLD_CASE_DEFAULT);
       if( uString!=uPattern ){
         return 0;
       }
@@ -244,6 +222,24 @@ static void icuLikeFunc(
   if( zA && zB ){
     sqlite3_result_int(context, icuLikeCompare(zA, zB, uEsc));
   }
+}
+
+/*
+** This function is called when an ICU function called from within
+** the implementation of an SQL scalar function returns an error.
+**
+** The scalar function context passed as the first argument is 
+** loaded with an error message based on the following two args.
+*/
+static void icuFunctionError(
+  sqlite3_context *pCtx,       /* SQLite scalar function context */
+  const char *zName,           /* Name of ICU function that failed */
+  UErrorCode e                 /* Error code returned by ICU function */
+){
+  char zBuf[128];
+  sqlite3_snprintf(128, zBuf, "ICU error: %s(): %s", zName, u_errorName(e));
+  zBuf[127] = '\0';
+  sqlite3_result_error(pCtx, zBuf, -1);
 }
 
 /*
@@ -411,8 +407,6 @@ static void icuCaseFunc16(sqlite3_context *p, int nArg, sqlite3_value **apArg){
   assert( 0 );     /* Unreachable */
 }
 
-#endif /* !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_ICU) */
-
 /*
 ** Collation sequence destructor function. The pCtx argument points to
 ** a UCollator structure previously allocated using ucol_open().
@@ -507,7 +501,6 @@ int sqlite3IcuInit(sqlite3 *db){
     void (*xFunc)(sqlite3_context*,int,sqlite3_value**);
   } scalars[] = {
     {"icu_load_collation",  2, SQLITE_UTF8,                1, icuLoadCollation},
-#if !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_ICU)
     {"regexp", 2, SQLITE_ANY|SQLITE_DETERMINISTIC,         0, icuRegexpFunc},
     {"lower",  1, SQLITE_UTF16|SQLITE_DETERMINISTIC,       0, icuCaseFunc16},
     {"lower",  2, SQLITE_UTF16|SQLITE_DETERMINISTIC,       0, icuCaseFunc16},
@@ -519,10 +512,10 @@ int sqlite3IcuInit(sqlite3 *db){
     {"upper",  2, SQLITE_UTF8|SQLITE_DETERMINISTIC,        1, icuCaseFunc16},
     {"like",   2, SQLITE_UTF8|SQLITE_DETERMINISTIC,        0, icuLikeFunc},
     {"like",   3, SQLITE_UTF8|SQLITE_DETERMINISTIC,        0, icuLikeFunc},
-#endif /* !defined(SQLITE_CORE) || defined(SQLITE_ENABLE_ICU) */
   };
   int rc = SQLITE_OK;
   int i;
+
   
   for(i=0; rc==SQLITE_OK && i<(int)(sizeof(scalars)/sizeof(scalars[0])); i++){
     const struct IcuScalar *p = &scalars[i];

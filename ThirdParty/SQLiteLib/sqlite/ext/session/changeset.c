@@ -42,7 +42,7 @@ static void usage(const char *argv0){
 */
 static void readFile(const char *zFilename, int *pSz, void **ppBuf){
   FILE *f;
-  sqlite3_int64 sz;
+  int sz;
   void *pBuf;
   f = fopen(zFilename, "rb");
   if( f==0 ){
@@ -50,9 +50,9 @@ static void readFile(const char *zFilename, int *pSz, void **ppBuf){
     exit(1);
   }
   fseek(f, 0, SEEK_END);
-  sz = ftell(f);
+  sz = (int)ftell(f);
   rewind(f);
-  pBuf = sqlite3_malloc64( sz ? sz : 1 );
+  pBuf = sqlite3_malloc( sz ? sz : 1 );
   if( pBuf==0 ){
     fprintf(stderr, "cannot allocate %d to hold content of \"%s\"\n",
             sz, zFilename);

@@ -39,8 +39,8 @@ SQLite. Documentation follows.
     To utilise "general" case mapping, the upper() or lower() scalar 
     functions are invoked with one argument:
 
-        upper('abc') -> 'ABC'
-        lower('ABC') -> 'abc'
+        upper('ABC') -> 'abc'
+        lower('abc') -> 'ABC'
 
     To access ICU "language specific" case mapping, upper() or lower()
     should be invoked with two arguments. The second argument is the name

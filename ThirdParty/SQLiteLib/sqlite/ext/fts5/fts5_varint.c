@@ -76,7 +76,7 @@ int sqlite3Fts5GetVarint32(const unsigned char *p, u32 *v){
     u8 n;
     p -= 2;
     n = sqlite3Fts5GetVarint(p, &v64);
-    *v = ((u32)v64) & 0x7FFFFFFF;
+    *v = (u32)v64;
     assert( n>3 && n<=9 );
     return n;
   }
@@ -342,3 +342,4 @@ int sqlite3Fts5GetVarintLen(u32 iVal){
   if( iVal<(1 << 28) ) return 4;
   return 5;
 }
+

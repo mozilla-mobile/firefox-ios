@@ -96,8 +96,7 @@ static int memjrnlRead(
   int iChunkOffset;
   FileChunk *pChunk;
 
-#if defined(SQLITE_ENABLE_ATOMIC_WRITE) \
- || defined(SQLITE_ENABLE_BATCH_ATOMIC_WRITE)
+#ifdef SQLITE_ENABLE_ATOMIC_WRITE
   if( (iAmt+iOfst)>p->endpoint.iOffset ){
     return SQLITE_IOERR_SHORT_READ;
   }
@@ -216,8 +215,7 @@ static int memjrnlWrite(
     ** atomic-write optimization. In this case the first 28 bytes of the
     ** journal file may be written as part of committing the transaction. */ 
     assert( iOfst==p->endpoint.iOffset || iOfst==0 );
-#if defined(SQLITE_ENABLE_ATOMIC_WRITE) \
- || defined(SQLITE_ENABLE_BATCH_ATOMIC_WRITE)
+#ifdef SQLITE_ENABLE_ATOMIC_WRITE
     if( iOfst==0 && p->pFirst ){
       assert( p->nChunkSize>iAmt );
       memcpy((u8*)p->pFirst->zChunk, zBuf, iAmt);
@@ -386,31 +384,17 @@ void sqlite3MemJournalOpen(sqlite3_file *pJfd){
   sqlite3JournalOpen(0, 0, pJfd, 0, -1);
 }
 
-#if defined(SQLITE_ENABLE_ATOMIC_WRITE) \
- || defined(SQLITE_ENABLE_BATCH_ATOMIC_WRITE)
+#ifdef SQLITE_ENABLE_ATOMIC_WRITE
 /*
 ** If the argument p points to a MemJournal structure that is not an 
 ** in-memory-only journal file (i.e. is one that was opened with a +ve
-** nSpill parameter or as SQLITE_OPEN_MAIN_JOURNAL), and the underlying 
-** file has not yet been created, create it now.
+** nSpill parameter), and the underlying file has not yet been created, 
+** create it now.
 */
-int sqlite3JournalCreate(sqlite3_file *pJfd){
+int sqlite3JournalCreate(sqlite3_file *p){
   int rc = SQLITE_OK;
-  MemJournal *p = (MemJournal*)pJfd;
-  if( p->pMethod==&MemJournalMethods && (
-#ifdef SQLITE_ENABLE_ATOMIC_WRITE
-     p->nSpill>0
-#else
-     /* While this appears to not be possible without ATOMIC_WRITE, the
-     ** paths are complex, so it seems prudent to leave the test in as
-     ** a NEVER(), in case our analysis is subtly flawed. */
-     NEVER(p->nSpill>0)
-#endif
-#ifdef SQLITE_ENABLE_BATCH_ATOMIC_WRITE
-     || (p->flags & SQLITE_OPEN_MAIN_JOURNAL)
-#endif
-  )){
-    rc = memjrnlCreateFile(p);
+  if( p->pMethods==&MemJournalMethods && ((MemJournal*)p)->nSpill>0 ){
+    rc = memjrnlCreateFile((MemJournal*)p);
   }
   return rc;
 }

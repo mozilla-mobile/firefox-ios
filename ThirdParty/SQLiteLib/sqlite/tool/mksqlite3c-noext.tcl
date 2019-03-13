@@ -351,7 +351,6 @@ foreach file {
    wherecode.c
    whereexpr.c
    where.c
-   window.c
 
    parse.c
 

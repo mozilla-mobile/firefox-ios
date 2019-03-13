@@ -47,9 +47,9 @@ static void rot13func(
   const unsigned char *zIn;
   int nIn;
   unsigned char *zOut;
-  unsigned char *zToFree = 0;
+  char *zToFree = 0;
   int i;
-  unsigned char zTemp[100];
+  char zTemp[100];
   assert( argc==1 );
   if( sqlite3_value_type(argv[0])==SQLITE_NULL ) return;
   zIn = (const unsigned char*)sqlite3_value_text(argv[0]);
@@ -57,7 +57,7 @@ static void rot13func(
   if( nIn<sizeof(zTemp)-1 ){
     zOut = zTemp;
   }else{
-    zOut = zToFree = (unsigned char*)sqlite3_malloc64( nIn+1 );
+    zOut = zToFree = sqlite3_malloc( nIn+1 );
     if( zOut==0 ){
       sqlite3_result_error_nomem(context);
       return;

@@ -44,49 +44,32 @@ Table *sqlite3SrcListLookup(Parse *pParse, SrcList *pSrc){
   return pTab;
 }
 
-/* Return true if table pTab is read-only.
-**
-** A table is read-only if any of the following are true:
-**
-**   1) It is a virtual table and no implementation of the xUpdate method
-**      has been provided
-**
-**   2) It is a system table (i.e. sqlite_master), this call is not
-**      part of a nested parse and writable_schema pragma has not 
-**      been specified
-**
-**   3) The table is a shadow table, the database connection is in
-**      defensive mode, and the current sqlite3_prepare()
-**      is for a top-level SQL statement.
-*/
-static int tabIsReadOnly(Parse *pParse, Table *pTab){
-  sqlite3 *db;
-  if( IsVirtual(pTab) ){
-    return sqlite3GetVTable(pParse->db, pTab)->pMod->pModule->xUpdate==0;
-  }
-  if( (pTab->tabFlags & (TF_Readonly|TF_Shadow))==0 ) return 0;
-  db = pParse->db;
-  if( (pTab->tabFlags & TF_Readonly)!=0 ){
-    return sqlite3WritableSchema(db)==0 && pParse->nested==0;
-  }
-  assert( pTab->tabFlags & TF_Shadow );
-  return (db->flags & SQLITE_Defensive)!=0 
-#ifndef SQLITE_OMIT_VIRTUALTABLE
-          && db->pVtabCtx==0
-#endif
-          && db->nVdbeExec==0;
-}
-
 /*
 ** Check to make sure the given table is writable.  If it is not
 ** writable, generate an error message and return 1.  If it is
 ** writable return 0;
 */
 int sqlite3IsReadOnly(Parse *pParse, Table *pTab, int viewOk){
-  if( tabIsReadOnly(pParse, pTab) ){
+  /* A table is not writable under the following circumstances:
+  **
+  **   1) It is a virtual table and no implementation of the xUpdate method
+  **      has been provided, or
+  **   2) It is a system table (i.e. sqlite_master), this call is not
+  **      part of a nested parse and writable_schema pragma has not 
+  **      been specified.
+  **
+  ** In either case leave an error message in pParse and return non-zero.
+  */
+  if( ( IsVirtual(pTab) 
+     && sqlite3GetVTable(pParse->db, pTab)->pMod->pModule->xUpdate==0 )
+   || ( (pTab->tabFlags & TF_Readonly)!=0
+     && (pParse->db->flags & SQLITE_WriteSchema)==0
+     && pParse->nested==0 )
+  ){
     sqlite3ErrorMsg(pParse, "table %s may not be modified", pTab->zName);
     return 1;
   }
+
 #ifndef SQLITE_OMIT_VIEW
   if( !viewOk && pTab->pSelect ){
     sqlite3ErrorMsg(pParse,"cannot modify %s because it is a view",pTab->zName);
@@ -107,8 +90,6 @@ void sqlite3MaterializeView(
   Parse *pParse,       /* Parsing context */
   Table *pView,        /* View definition */
   Expr *pWhere,        /* Optional WHERE clause to be added */
-  ExprList *pOrderBy,  /* Optional ORDER BY clause */
-  Expr *pLimit,        /* Optional LIMIT clause */
   int iCur             /* Cursor number for ephemeral table */
 ){
   SelectDest dest;
@@ -117,7 +98,7 @@ void sqlite3MaterializeView(
   sqlite3 *db = pParse->db;
   int iDb = sqlite3SchemaToIndex(db, pView->pSchema);
   pWhere = sqlite3ExprDup(db, pWhere, 0);
-  pFrom = sqlite3SrcListAppend(pParse, 0, 0, 0);
+  pFrom = sqlite3SrcListAppend(db, 0, 0, 0);
   if( pFrom ){
     assert( pFrom->nSrc==1 );
     pFrom->a[0].zName = sqlite3DbStrDup(db, pView->zName);
@@ -125,8 +106,8 @@ void sqlite3MaterializeView(
     assert( pFrom->a[0].pOn==0 );
     assert( pFrom->a[0].pUsing==0 );
   }
-  pSel = sqlite3SelectNew(pParse, 0, pFrom, pWhere, 0, 0, pOrderBy, 
-                          SF_IncludeHidden, pLimit);
+  pSel = sqlite3SelectNew(pParse, 0, pFrom, pWhere, 0, 0, 0, 
+                          SF_IncludeHidden, 0, 0);
   sqlite3SelectDestInit(&dest, SRT_EphemTab, iCur);
   sqlite3Select(pParse, pSel, &dest);
   sqlite3SelectDelete(db, pSel);
@@ -148,29 +129,29 @@ Expr *sqlite3LimitWhere(
   Expr *pWhere,                /* The WHERE clause.  May be null */
   ExprList *pOrderBy,          /* The ORDER BY clause.  May be null */
   Expr *pLimit,                /* The LIMIT clause.  May be null */
+  Expr *pOffset,               /* The OFFSET clause.  May be null */
   char *zStmtType              /* Either DELETE or UPDATE.  For err msgs. */
 ){
-  sqlite3 *db = pParse->db;
-  Expr *pLhs = NULL;           /* LHS of IN(SELECT...) operator */
+  Expr *pWhereRowid = NULL;    /* WHERE rowid .. */
   Expr *pInClause = NULL;      /* WHERE rowid IN ( select ) */
+  Expr *pSelectRowid = NULL;   /* SELECT rowid ... */
   ExprList *pEList = NULL;     /* Expression list contaning only pSelectRowid */
   SrcList *pSelectSrc = NULL;  /* SELECT rowid FROM x ... (dup of pSrc) */
   Select *pSelect = NULL;      /* Complete SELECT tree */
-  Table *pTab;
 
   /* Check that there isn't an ORDER BY without a LIMIT clause.
   */
-  if( pOrderBy && pLimit==0 ) {
+  if( pOrderBy && (pLimit == 0) ) {
     sqlite3ErrorMsg(pParse, "ORDER BY without LIMIT on %s", zStmtType);
-    sqlite3ExprDelete(pParse->db, pWhere);
-    sqlite3ExprListDelete(pParse->db, pOrderBy);
-    return 0;
+    goto limit_where_cleanup;
   }
 
   /* We only need to generate a select expression if there
   ** is a limit/offset term to enforce.
   */
   if( pLimit == 0 ) {
+    /* if pLimit is null, pOffset will always be null as well. */
+    assert( pOffset == 0 );
     return pWhere;
   }
 
@@ -183,47 +164,36 @@ Expr *sqlite3LimitWhere(
   **   );
   */
 
-  pTab = pSrc->a[0].pTab;
-  if( HasRowid(pTab) ){
-    pLhs = sqlite3PExpr(pParse, TK_ROW, 0, 0);
-    pEList = sqlite3ExprListAppend(
-        pParse, 0, sqlite3PExpr(pParse, TK_ROW, 0, 0)
-    );
-  }else{
-    Index *pPk = sqlite3PrimaryKeyIndex(pTab);
-    if( pPk->nKeyCol==1 ){
-      const char *zName = pTab->aCol[pPk->aiColumn[0]].zName;
-      pLhs = sqlite3Expr(db, TK_ID, zName);
-      pEList = sqlite3ExprListAppend(pParse, 0, sqlite3Expr(db, TK_ID, zName));
-    }else{
-      int i;
-      for(i=0; i<pPk->nKeyCol; i++){
-        Expr *p = sqlite3Expr(db, TK_ID, pTab->aCol[pPk->aiColumn[i]].zName);
-        pEList = sqlite3ExprListAppend(pParse, pEList, p);
-      }
-      pLhs = sqlite3PExpr(pParse, TK_VECTOR, 0, 0);
-      if( pLhs ){
-        pLhs->x.pList = sqlite3ExprListDup(db, pEList, 0);
-      }
-    }
-  }
+  pSelectRowid = sqlite3PExpr(pParse, TK_ROW, 0, 0);
+  if( pSelectRowid == 0 ) goto limit_where_cleanup;
+  pEList = sqlite3ExprListAppend(pParse, 0, pSelectRowid);
+  if( pEList == 0 ) goto limit_where_cleanup;
 
   /* duplicate the FROM clause as it is needed by both the DELETE/UPDATE tree
   ** and the SELECT subtree. */
-  pSrc->a[0].pTab = 0;
   pSelectSrc = sqlite3SrcListDup(pParse->db, pSrc, 0);
-  pSrc->a[0].pTab = pTab;
-  pSrc->a[0].pIBIndex = 0;
+  if( pSelectSrc == 0 ) {
+    sqlite3ExprListDelete(pParse->db, pEList);
+    goto limit_where_cleanup;
+  }
 
   /* generate the SELECT expression tree. */
-  pSelect = sqlite3SelectNew(pParse, pEList, pSelectSrc, pWhere, 0 ,0, 
-      pOrderBy,0,pLimit
-  );
+  pSelect = sqlite3SelectNew(pParse,pEList,pSelectSrc,pWhere,0,0,
+                             pOrderBy,0,pLimit,pOffset);
+  if( pSelect == 0 ) return 0;
 
   /* now generate the new WHERE rowid IN clause for the DELETE/UDPATE */
-  pInClause = sqlite3PExpr(pParse, TK_IN, pLhs, 0);
+  pWhereRowid = sqlite3PExpr(pParse, TK_ROW, 0, 0);
+  pInClause = pWhereRowid ? sqlite3PExpr(pParse, TK_IN, pWhereRowid, 0) : 0;
   sqlite3PExprAddSelect(pParse, pInClause, pSelect);
   return pInClause;
+
+limit_where_cleanup:
+  sqlite3ExprDelete(pParse->db, pWhere);
+  sqlite3ExprListDelete(pParse->db, pOrderBy);
+  sqlite3ExprDelete(pParse->db, pLimit);
+  sqlite3ExprDelete(pParse->db, pOffset);
+  return 0;
 }
 #endif /* defined(SQLITE_ENABLE_UPDATE_DELETE_LIMIT) */
        /*      && !defined(SQLITE_OMIT_SUBQUERY) */
@@ -238,9 +208,7 @@ Expr *sqlite3LimitWhere(
 void sqlite3DeleteFrom(
   Parse *pParse,         /* The parser context */
   SrcList *pTabList,     /* The table from which we should delete things */
-  Expr *pWhere,          /* The WHERE clause.  May be null */
-  ExprList *pOrderBy,    /* ORDER BY clause. May be null */
-  Expr *pLimit           /* LIMIT clause. May be null */
+  Expr *pWhere           /* The WHERE clause.  May be null */
 ){
   Vdbe *v;               /* The virtual database engine */
   Table *pTab;           /* The table from which records will be deleted */
@@ -255,7 +223,7 @@ void sqlite3DeleteFrom(
   AuthContext sContext;  /* Authorization context */
   NameContext sNC;       /* Name context to resolve expressions in */
   int iDb;               /* Database number */
-  int memCnt = 0;        /* Memory cell used for change counting */
+  int memCnt = -1;       /* Memory cell used for change counting */
   int rcauth;            /* Value returned by authorization callback */
   int eOnePass;          /* ONEPASS_OFF or _SINGLE or _MULTI */
   int aiCurOnePass[2];   /* The write cursors opened by WHERE_ONEPASS */
@@ -285,7 +253,6 @@ void sqlite3DeleteFrom(
   }
   assert( pTabList->nSrc==1 );
 
-
   /* Locate the table which we want to delete.  This table has to be
   ** put in an SrcList structure because some of the subroutines we
   ** will be calling are designed to work with multiple tables and expect
@@ -300,24 +267,14 @@ void sqlite3DeleteFrom(
 #ifndef SQLITE_OMIT_TRIGGER
   pTrigger = sqlite3TriggersExist(pParse, pTab, TK_DELETE, 0, 0);
   isView = pTab->pSelect!=0;
+  bComplex = pTrigger || sqlite3FkRequired(pParse, pTab, 0, 0);
 #else
 # define pTrigger 0
 # define isView 0
 #endif
-  bComplex = pTrigger || sqlite3FkRequired(pParse, pTab, 0, 0);
 #ifdef SQLITE_OMIT_VIEW
 # undef isView
 # define isView 0
-#endif
-
-#ifdef SQLITE_ENABLE_UPDATE_DELETE_LIMIT
-  if( !isView ){
-    pWhere = sqlite3LimitWhere(
-        pParse, pTabList, pWhere, pOrderBy, pLimit, "DELETE"
-    );
-    pOrderBy = 0;
-    pLimit = 0;
-  }
 #endif
 
   /* If pTab is really a view, make sure it has been initialized.
@@ -360,19 +317,15 @@ void sqlite3DeleteFrom(
     goto delete_from_cleanup;
   }
   if( pParse->nested==0 ) sqlite3VdbeCountChanges(v);
-  sqlite3BeginWriteOperation(pParse, bComplex, iDb);
+  sqlite3BeginWriteOperation(pParse, 1, iDb);
 
   /* If we are trying to delete from a view, realize that view into
   ** an ephemeral table.
   */
 #if !defined(SQLITE_OMIT_VIEW) && !defined(SQLITE_OMIT_TRIGGER)
   if( isView ){
-    sqlite3MaterializeView(pParse, pTab, 
-        pWhere, pOrderBy, pLimit, iTabCur
-    );
+    sqlite3MaterializeView(pParse, pTab, pWhere, iTabCur);
     iDataCur = iIdxCur = iTabCur;
-    pOrderBy = 0;
-    pLimit = 0;
   }
 #endif
 
@@ -388,10 +341,7 @@ void sqlite3DeleteFrom(
   /* Initialize the counter of the number of rows deleted, if
   ** we are counting rows.
   */
-  if( (db->flags & SQLITE_CountRows)!=0
-   && !pParse->nested
-   && !pParse->pTriggerTab
-  ){
+  if( db->flags & SQLITE_CountRows ){
     memCnt = ++pParse->nMem;
     sqlite3VdbeAddOp2(v, OP_Integer, 0, memCnt);
   }
@@ -419,7 +369,7 @@ void sqlite3DeleteFrom(
     assert( !isView );
     sqlite3TableLock(pParse, iDb, pTab->tnum, 1, pTab->zName);
     if( HasRowid(pTab) ){
-      sqlite3VdbeAddOp4(v, OP_Clear, pTab->tnum, iDb, memCnt ? memCnt : -1,
+      sqlite3VdbeAddOp4(v, OP_Clear, pTab->tnum, iDb, memCnt,
                         pTab->zName, P4_STATIC);
     }
     for(pIdx=pTab->pIndex; pIdx; pIdx=pIdx->pNext){
@@ -464,10 +414,9 @@ void sqlite3DeleteFrom(
     eOnePass = sqlite3WhereOkOnePass(pWInfo, aiCurOnePass);
     assert( IsVirtual(pTab)==0 || eOnePass!=ONEPASS_MULTI );
     assert( IsVirtual(pTab) || bComplex || eOnePass!=ONEPASS_OFF );
-    if( eOnePass!=ONEPASS_SINGLE ) sqlite3MultiWrite(pParse);
   
     /* Keep track of the number of rows to be deleted */
-    if( memCnt ){
+    if( db->flags & SQLITE_CountRows ){
       sqlite3VdbeAddOp2(v, OP_AddImm, memCnt, 1);
     }
   
@@ -480,8 +429,9 @@ void sqlite3DeleteFrom(
       }
       iKey = iPk;
     }else{
-      iKey = ++pParse->nMem;
-      sqlite3ExprCodeGetColumnOfTable(v, pTab, iTabCur, -1, iKey);
+      iKey = pParse->nMem + 1;
+      iKey = sqlite3ExprCodeGetColumn(pParse, pTab, -1, iTabCur, iKey, 0);
+      if( iKey>pParse->nMem ) pParse->nMem = iKey;
     }
   
     if( eOnePass!=ONEPASS_OFF ){
@@ -517,7 +467,7 @@ void sqlite3DeleteFrom(
     /* If this DELETE cannot use the ONEPASS strategy, this is the 
     ** end of the WHERE loop */
     if( eOnePass!=ONEPASS_OFF ){
-      addrBypass = sqlite3VdbeMakeLabel(pParse);
+      addrBypass = sqlite3VdbeMakeLabel(v);
     }else{
       sqlite3WhereEnd(pWInfo);
     }
@@ -552,11 +502,7 @@ void sqlite3DeleteFrom(
       }
     }else if( pPk ){
       addrLoop = sqlite3VdbeAddOp1(v, OP_Rewind, iEphCur); VdbeCoverage(v);
-      if( IsVirtual(pTab) ){
-        sqlite3VdbeAddOp3(v, OP_Column, iEphCur, 0, iKey);
-      }else{
-        sqlite3VdbeAddOp2(v, OP_RowData, iEphCur, iKey);
-      }
+      sqlite3VdbeAddOp2(v, OP_RowData, iEphCur, iKey);
       assert( nKey==0 );  /* OP_Found will use a composite key */
     }else{
       addrLoop = sqlite3VdbeAddOp3(v, OP_RowSetRead, iRowSet, 0, iKey);
@@ -569,16 +515,13 @@ void sqlite3DeleteFrom(
     if( IsVirtual(pTab) ){
       const char *pVTab = (const char *)sqlite3GetVTable(db, pTab);
       sqlite3VtabMakeWritable(pParse, pTab);
-      assert( eOnePass==ONEPASS_OFF || eOnePass==ONEPASS_SINGLE );
-      sqlite3MayAbort(pParse);
-      if( eOnePass==ONEPASS_SINGLE ){
-        sqlite3VdbeAddOp1(v, OP_Close, iTabCur);
-        if( sqlite3IsToplevel(pParse) ){
-          pParse->isMultiWrite = 0;
-        }
-      }
       sqlite3VdbeAddOp4(v, OP_VUpdate, 0, 1, iKey, pVTab, P4_VTAB);
       sqlite3VdbeChangeP5(v, OE_Abort);
+      assert( eOnePass==ONEPASS_OFF || eOnePass==ONEPASS_SINGLE );
+      sqlite3MayAbort(pParse);
+      if( eOnePass==ONEPASS_SINGLE && sqlite3IsToplevel(pParse) ){
+        pParse->isMultiWrite = 0;
+      }
     }else
 #endif
     {
@@ -612,7 +555,7 @@ void sqlite3DeleteFrom(
   ** generating code because of a call to sqlite3NestedParse(), do not
   ** invoke the callback function.
   */
-  if( memCnt ){
+  if( (db->flags&SQLITE_CountRows) && !pParse->nested && !pParse->pTriggerTab ){
     sqlite3VdbeAddOp2(v, OP_ResultRow, memCnt, 1);
     sqlite3VdbeSetNumCols(v, 1);
     sqlite3VdbeSetColName(v, 0, COLNAME_NAME, "rows deleted", SQLITE_STATIC);
@@ -622,10 +565,6 @@ delete_from_cleanup:
   sqlite3AuthContextPop(&sContext);
   sqlite3SrcListDelete(db, pTabList);
   sqlite3ExprDelete(db, pWhere);
-#if defined(SQLITE_ENABLE_UPDATE_DELETE_LIMIT) 
-  sqlite3ExprListDelete(db, pOrderBy);
-  sqlite3ExprDelete(db, pLimit);
-#endif
   sqlite3DbFree(db, aToOpen);
   return;
 }
@@ -706,7 +645,7 @@ void sqlite3GenerateRowDelete(
   /* Seek cursor iCur to the row to delete. If this row no longer exists 
   ** (this can happen if a trigger program has already deleted it), do
   ** not attempt to delete it or fire any DELETE triggers.  */
-  iLabel = sqlite3VdbeMakeLabel(pParse);
+  iLabel = sqlite3VdbeMakeLabel(v);
   opSeek = HasRowid(pTab) ? OP_NotExists : OP_NotFound;
   if( eMode==ONEPASS_OFF ){
     sqlite3VdbeAddOp4Int(v, opSeek, iDataCur, iLabel, iPk, nPk);
@@ -783,7 +722,7 @@ void sqlite3GenerateRowDelete(
     u8 p5 = 0;
     sqlite3GenerateRowIndexDelete(pParse, pTab, iDataCur, iIdxCur,0,iIdxNoSeek);
     sqlite3VdbeAddOp2(v, OP_Delete, iDataCur, (count?OPFLAG_NCHANGE:0));
-    if( pParse->nested==0 || 0==sqlite3_stricmp(pTab->zName, "sqlite_stat1") ){
+    if( pParse->nested==0 ){
       sqlite3VdbeAppendP4(v, (char*)pTab, P4_TABLE);
     }
     if( eMode!=ONEPASS_OFF ){
@@ -912,8 +851,9 @@ int sqlite3GenerateIndexKey(
 
   if( piPartIdxLabel ){
     if( pIdx->pPartIdxWhere ){
-      *piPartIdxLabel = sqlite3VdbeMakeLabel(pParse);
+      *piPartIdxLabel = sqlite3VdbeMakeLabel(v);
       pParse->iSelfTab = iDataCur + 1;
+      sqlite3ExprCachePush(pParse);
       sqlite3ExprIfFalseDup(pParse, pIdx->pPartIdxWhere, *piPartIdxLabel, 
                             SQLITE_JUMPIFNULL);
       pParse->iSelfTab = 0;
@@ -960,5 +900,6 @@ int sqlite3GenerateIndexKey(
 void sqlite3ResolvePartIdxLabel(Parse *pParse, int iLabel){
   if( iLabel ){
     sqlite3VdbeResolveLabel(pParse->pVdbe, iLabel);
+    sqlite3ExprCachePop(pParse);
   }
 }

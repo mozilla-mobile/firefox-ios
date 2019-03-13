@@ -50,12 +50,11 @@ struct sqlite3_mutex {
 #endif
 };
 #if SQLITE_MUTEX_NREF
-# define SQLITE3_MUTEX_INITIALIZER(id) \
-     {PTHREAD_MUTEX_INITIALIZER,id,0,(pthread_t)0,0}
+#define SQLITE3_MUTEX_INITIALIZER {PTHREAD_MUTEX_INITIALIZER,0,0,(pthread_t)0,0}
 #elif defined(SQLITE_ENABLE_API_ARMOR)
-# define SQLITE3_MUTEX_INITIALIZER(id) { PTHREAD_MUTEX_INITIALIZER, id }
+#define SQLITE3_MUTEX_INITIALIZER { PTHREAD_MUTEX_INITIALIZER, 0 }
 #else
-#define SQLITE3_MUTEX_INITIALIZER(id) { PTHREAD_MUTEX_INITIALIZER }
+#define SQLITE3_MUTEX_INITIALIZER { PTHREAD_MUTEX_INITIALIZER }
 #endif
 
 /*
@@ -152,18 +151,18 @@ static int pthreadMutexEnd(void){ return SQLITE_OK; }
 */
 static sqlite3_mutex *pthreadMutexAlloc(int iType){
   static sqlite3_mutex staticMutexes[] = {
-    SQLITE3_MUTEX_INITIALIZER(2),
-    SQLITE3_MUTEX_INITIALIZER(3),
-    SQLITE3_MUTEX_INITIALIZER(4),
-    SQLITE3_MUTEX_INITIALIZER(5),
-    SQLITE3_MUTEX_INITIALIZER(6),
-    SQLITE3_MUTEX_INITIALIZER(7),
-    SQLITE3_MUTEX_INITIALIZER(8),
-    SQLITE3_MUTEX_INITIALIZER(9),
-    SQLITE3_MUTEX_INITIALIZER(10),
-    SQLITE3_MUTEX_INITIALIZER(11),
-    SQLITE3_MUTEX_INITIALIZER(12),
-    SQLITE3_MUTEX_INITIALIZER(13)
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER,
+    SQLITE3_MUTEX_INITIALIZER
   };
   sqlite3_mutex *p;
   switch( iType ){
@@ -182,9 +181,6 @@ static sqlite3_mutex *pthreadMutexAlloc(int iType){
         pthread_mutex_init(&p->mutex, &recursiveAttr);
         pthread_mutexattr_destroy(&recursiveAttr);
 #endif
-#if SQLITE_MUTEX_NREF || defined(SQLITE_ENABLE_API_ARMOR)
-        p->id = SQLITE_MUTEX_RECURSIVE;
-#endif
       }
       break;
     }
@@ -192,9 +188,6 @@ static sqlite3_mutex *pthreadMutexAlloc(int iType){
       p = sqlite3MallocZero( sizeof(*p) );
       if( p ){
         pthread_mutex_init(&p->mutex, 0);
-#if SQLITE_MUTEX_NREF || defined(SQLITE_ENABLE_API_ARMOR)
-        p->id = SQLITE_MUTEX_FAST;
-#endif
       }
       break;
     }
@@ -210,7 +203,7 @@ static sqlite3_mutex *pthreadMutexAlloc(int iType){
     }
   }
 #if SQLITE_MUTEX_NREF || defined(SQLITE_ENABLE_API_ARMOR)
-  assert( p==0 || p->id==iType );
+  if( p ) p->id = iType;
 #endif
   return p;
 }

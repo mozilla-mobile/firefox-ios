@@ -17,22 +17,6 @@
 #include <string.h>
 
 
-#if !defined(SQLITE_OMIT_WINDOWFUNC)
-/*
-** Walk all expressions linked into the list of Window objects passed
-** as the second argument.
-*/
-static int walkWindowList(Walker *pWalker, Window *pList){
-  Window *pWin;
-  for(pWin=pList; pWin; pWin=pWin->pNextWin){
-    if( sqlite3WalkExprList(pWalker, pWin->pOrderBy) ) return WRC_Abort;
-    if( sqlite3WalkExprList(pWalker, pWin->pPartition) ) return WRC_Abort;
-    if( sqlite3WalkExpr(pWalker, pWin->pFilter) ) return WRC_Abort;
-  }
-  return WRC_Continue;
-}
-#endif
-
 /*
 ** Walk an expression tree.  Invoke the callback once for each node
 ** of the expression, while descending.  (In other words, the callback
@@ -56,27 +40,18 @@ static SQLITE_NOINLINE int walkExpr(Walker *pWalker, Expr *pExpr){
   int rc;
   testcase( ExprHasProperty(pExpr, EP_TokenOnly) );
   testcase( ExprHasProperty(pExpr, EP_Reduced) );
-  while(1){
-    rc = pWalker->xExprCallback(pWalker, pExpr);
-    if( rc ) return rc & WRC_Abort;
-    if( !ExprHasProperty(pExpr,(EP_TokenOnly|EP_Leaf)) ){
-      if( pExpr->pLeft && walkExpr(pWalker, pExpr->pLeft) ) return WRC_Abort;
-       assert( pExpr->x.pList==0 || pExpr->pRight==0 );
-      if( pExpr->pRight ){
-        pExpr = pExpr->pRight;
-        continue;
-      }else if( ExprHasProperty(pExpr, EP_xIsSelect) ){
-        if( sqlite3WalkSelect(pWalker, pExpr->x.pSelect) ) return WRC_Abort;
-      }else if( pExpr->x.pList ){
-        if( sqlite3WalkExprList(pWalker, pExpr->x.pList) ) return WRC_Abort;
-      }
-#ifndef SQLITE_OMIT_WINDOWFUNC
-      if( ExprHasProperty(pExpr, EP_WinFunc) ){
-        if( walkWindowList(pWalker, pExpr->y.pWin) ) return WRC_Abort;
-      }
-#endif
+  rc = pWalker->xExprCallback(pWalker, pExpr);
+  if( rc ) return rc & WRC_Abort;
+  if( !ExprHasProperty(pExpr,(EP_TokenOnly|EP_Leaf)) ){
+    if( pExpr->pLeft && walkExpr(pWalker, pExpr->pLeft) ) return WRC_Abort;
+    assert( pExpr->x.pList==0 || pExpr->pRight==0 );
+    if( pExpr->pRight ){
+      if( walkExpr(pWalker, pExpr->pRight) ) return WRC_Abort;
+    }else if( ExprHasProperty(pExpr, EP_xIsSelect) ){
+      if( sqlite3WalkSelect(pWalker, pExpr->x.pSelect) ) return WRC_Abort;
+    }else if( pExpr->x.pList ){
+      if( sqlite3WalkExprList(pWalker, pExpr->x.pList) ) return WRC_Abort;
     }
-    break;
   }
   return WRC_Continue;
 }
@@ -112,16 +87,7 @@ int sqlite3WalkSelectExpr(Walker *pWalker, Select *p){
   if( sqlite3WalkExpr(pWalker, p->pHaving) ) return WRC_Abort;
   if( sqlite3WalkExprList(pWalker, p->pOrderBy) ) return WRC_Abort;
   if( sqlite3WalkExpr(pWalker, p->pLimit) ) return WRC_Abort;
-#if !defined(SQLITE_OMIT_WINDOWFUNC) && !defined(SQLITE_OMIT_ALTERTABLE)
-  {
-    Parse *pParse = pWalker->pParse;
-    if( pParse && IN_RENAME_OBJECT ){
-      int rc = walkWindowList(pWalker, p->pWinDefn);
-      assert( rc==WRC_Continue );
-      return rc;
-    }
-  }
-#endif
+  if( sqlite3WalkExpr(pWalker, p->pOffset) ) return WRC_Abort;
   return WRC_Continue;
 }
 
@@ -138,15 +104,16 @@ int sqlite3WalkSelectFrom(Walker *pWalker, Select *p){
   struct SrcList_item *pItem;
 
   pSrc = p->pSrc;
-  assert( pSrc!=0 );
-  for(i=pSrc->nSrc, pItem=pSrc->a; i>0; i--, pItem++){
-    if( pItem->pSelect && sqlite3WalkSelect(pWalker, pItem->pSelect) ){
-      return WRC_Abort;
-    }
-    if( pItem->fg.isTabFunc
-     && sqlite3WalkExprList(pWalker, pItem->u1.pFuncArg)
-    ){
-      return WRC_Abort;
+  if( ALWAYS(pSrc) ){
+    for(i=pSrc->nSrc, pItem=pSrc->a; i>0; i--, pItem++){
+      if( pItem->pSelect && sqlite3WalkSelect(pWalker, pItem->pSelect) ){
+        return WRC_Abort;
+      }
+      if( pItem->fg.isTabFunc
+       && sqlite3WalkExprList(pWalker, pItem->u1.pFuncArg)
+      ){
+        return WRC_Abort;
+      }
     }
   }
   return WRC_Continue;

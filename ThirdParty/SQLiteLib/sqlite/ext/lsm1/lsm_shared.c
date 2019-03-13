@@ -340,6 +340,9 @@ static int doDbConnect(lsm_db *pDb){
   /* Obtain a pointer to the shared-memory header */
   assert( pDb->pShmhdr==0 );
   assert( pDb->bReadonly==0 );
+  rc = lsmShmCacheChunks(pDb, 1);
+  if( rc!=LSM_OK ) return rc;
+  pDb->pShmhdr = (ShmHeader *)pDb->apShm[0];
 
   /* Block for an exclusive lock on DMS1. This lock serializes all calls
   ** to doDbConnect() and doDbDisconnect() across all processes.  */
@@ -350,11 +353,10 @@ static int doDbConnect(lsm_db *pDb){
     nUs = nUs * 2;
     if( nUs>nUsMax ) nUs = nUsMax;
   }
-  if( rc==LSM_OK ){
-    rc = lsmShmCacheChunks(pDb, 1);
+  if( rc!=LSM_OK ){
+    pDb->pShmhdr = 0;
+    return rc;
   }
-  if( rc!=LSM_OK ) return rc;
-  pDb->pShmhdr = (ShmHeader *)pDb->apShm[0];
 
   /* Try an exclusive lock on DMS2/DMS3. If successful, this is the first 
   ** and only connection to the database. In this case initialize the 
@@ -520,11 +522,13 @@ int lsmDbDatabaseConnect(
   ** recovery as necessary. Or, if this is a read-only database handle,
   ** defer attempting to connect to the system until a read-transaction
   ** is opened.  */
-  if( rc==LSM_OK ){
-    rc = lsmFsConfigure(pDb);
-  }
-  if( rc==LSM_OK && pDb->bReadonly==0 ){
-    rc = doDbConnect(pDb);
+  if( pDb->bReadonly==0 ){
+    if( rc==LSM_OK ){
+      rc = lsmFsConfigure(pDb);
+    }
+    if( rc==LSM_OK ){
+      rc = doDbConnect(pDb);
+    }
   }
 
   return rc;
