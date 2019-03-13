@@ -980,10 +980,10 @@ class ASLibraryCell: UICollectionViewCell {
 
     var libraryButtons: [LibraryShortcutView] = []
 
-    let bookmarks = LibraryPanel(title: "Bookmarks", image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor(rgb: 0x0A84FF))
-    let history = LibraryPanel(title: "History", image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor(rgb: 0xFF9402))
-    let readingList = LibraryPanel(title: "Reading List", image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor(rgb: 0x00C8D7))
-    let downloads = LibraryPanel(title: "Downloads", image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor(rgb: 0xEC00B5))
+    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor(rgb: 0x0A84FF))
+    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor(rgb: 0xFF9402))
+    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor(rgb: 0x00C8D7))
+    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor(rgb: 0xEC00B5))
 
     override init(frame: CGRect) {
         super.init(frame: frame)
