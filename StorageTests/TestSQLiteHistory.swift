@@ -1398,24 +1398,11 @@ class TestSQLiteHistory: XCTestCase {
         history.clearTopSitesCache().succeeded()
         history.clearHistory().succeeded()
 
-        let url1 = "http://url1/"
-        let site1 = Site(url: "http://url1/", title: "title one")
-        let siteVisit1 = SiteVisit(site: site1, date: Date.nowMicroseconds(), type: VisitType.link)
+        // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
+        populateHistoryForFrecencyCalculations(history, siteCount: 3)
 
-        let url2 = "http://url2/"
-        let site2 = Site(url: "http://url2/", title: "title two")
-        let siteVisit2 = SiteVisit(site: site2, date: Date.nowMicroseconds() + 2000, type: VisitType.link)
-
-        let url3 = "http://url3/"
-        let site3 = Site(url: url3, title: "title three")
-        let siteVisit3 = SiteVisit(site: site3, date: Date.nowMicroseconds() + 4000, type: VisitType.link)
-
-        history.addLocalVisit(siteVisit1).succeeded()
-        history.addLocalVisit(siteVisit2).succeeded()
-        history.addLocalVisit(siteVisit3).succeeded()
-
-        history.removeHistoryForURL(url1).succeeded()
-        history.removeHistoryForURL(url2).succeeded()
+        history.removeHistoryForURL("http://s0ite0.com/foo").succeeded()
+        history.removeHistoryForURL("http://s1ite1.com/foo").succeeded()
 
         let deletedResult = history.getDeletedHistoryToUpload().value
         XCTAssertTrue(deletedResult.isSuccess)
