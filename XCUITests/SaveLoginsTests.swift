@@ -52,22 +52,20 @@ class SaveLoginTest: BaseTestCase {
     func testSavedLoginSelectUnselect() {
         saveLogin()
         openLoginsSettings()
-        XCTAssertTrue(app.tables.cells[savedLoginEntry].exists)
-
         app.buttons["Edit"].tap()
-        XCTAssertTrue(app.cells.images["loginUnselected"].exists)
         XCTAssertTrue(app.buttons["Select All"].exists)
 
-        app.tables.cells[savedLoginEntry].tap()
-        XCTAssertTrue(app.cells.images["loginSelected"].exists)
+        let selectionButton = app.tables["Login List"].cells.allElementsBoundByIndex[2].buttons.allElementsBoundByIndex.first!
+        XCTAssertFalse(selectionButton.isSelected)
+        app.tables["Login List"].cells.staticTexts["test@example.com"].tap()
+        XCTAssertTrue(selectionButton.isSelected)
+       
         XCTAssertTrue(app.buttons["Deselect All"].exists)
         XCTAssertTrue(app.buttons["Delete"].exists)
 
         app.buttons["Cancel"].tap()
         app.buttons["Edit"].tap()
-        XCTAssertTrue(app.cells.images["loginUnselected"].exists)
     }
-
 
     func testDeleteLogin() {
         saveLogin()
