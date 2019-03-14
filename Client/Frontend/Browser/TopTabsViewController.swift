@@ -124,7 +124,7 @@ class TopTabsViewController: UIViewController {
 
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)
-            make.trailing.equalTo(tabsButton.snp.leading).offset(-10)
+            make.trailing.equalTo(tabsButton.snp.leading)
             make.size.equalTo(view.snp.height)
         }
         tabsButton.snp.makeConstraints { make in
