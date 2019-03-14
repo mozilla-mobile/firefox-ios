@@ -136,7 +136,7 @@ static void fts5HighlightAppend(
   HighlightContext *p, 
   const char *z, int n
 ){
-  if( *pRc==SQLITE_OK ){
+  if( *pRc==SQLITE_OK && z ){
     if( n<0 ) n = (int)strlen(z);
     p->zOut = sqlite3_mprintf("%z%.*s", p->zOut, n, z);
     if( p->zOut==0 ) *pRc = SQLITE_NOMEM;
@@ -268,7 +268,7 @@ static int fts5SentenceFinderAdd(Fts5SFinder *p, int iAdd){
     int nNew = p->nFirstAlloc ? p->nFirstAlloc*2 : 64;
     int *aNew;
 
-    aNew = (int*)sqlite3_realloc(p->aFirst, nNew*sizeof(int));
+    aNew = (int*)sqlite3_realloc64(p->aFirst, nNew*sizeof(int));
     if( aNew==0 ) return SQLITE_NOMEM;
     p->aFirst = aNew;
     p->nFirstAlloc = nNew;
@@ -335,11 +335,12 @@ static int fts5SnippetScore(
   int nInst;
   int nScore = 0;
   int iLast = 0;
+  sqlite3_int64 iEnd = (sqlite3_int64)iPos + nToken;
 
   rc = pApi->xInstCount(pFts, &nInst);
   for(i=0; i<nInst && rc==SQLITE_OK; i++){
     rc = pApi->xInst(pFts, i, &ip, &ic, &iOff);
-    if( rc==SQLITE_OK && ic==iCol && iOff>=iPos && iOff<(iPos+nToken) ){
+    if( rc==SQLITE_OK && ic==iCol && iOff>=iPos && iOff<iEnd ){
       nScore += (aSeen[ip] ? 1 : 1000);
       aSeen[ip] = 1;
       if( iFirst<0 ) iFirst = iOff;
@@ -349,13 +350,23 @@ static int fts5SnippetScore(
 
   *pnScore = nScore;
   if( piPos ){
-    int iAdj = iFirst - (nToken - (iLast-iFirst)) / 2;
+    sqlite3_int64 iAdj = iFirst - (nToken - (iLast-iFirst)) / 2;
     if( (iAdj+nToken)>nDocsize ) iAdj = nDocsize - nToken;
     if( iAdj<0 ) iAdj = 0;
     *piPos = iAdj;
   }
 
   return rc;
+}
+
+/*
+** Return the value in pVal interpreted as utf-8 text. Except, if pVal 
+** contains a NULL value, return a pointer to a static string zero
+** bytes in length instead of a NULL pointer.
+*/
+static const char *fts5ValueToText(sqlite3_value *pVal){
+  const char *zRet = (const char*)sqlite3_value_text(pVal);
+  return zRet ? zRet : "";
 }
 
 /*
@@ -393,9 +404,9 @@ static void fts5SnippetFunction(
   nCol = pApi->xColumnCount(pFts);
   memset(&ctx, 0, sizeof(HighlightContext));
   iCol = sqlite3_value_int(apVal[0]);
-  ctx.zOpen = (const char*)sqlite3_value_text(apVal[1]);
-  ctx.zClose = (const char*)sqlite3_value_text(apVal[2]);
-  zEllips = (const char*)sqlite3_value_text(apVal[3]);
+  ctx.zOpen = fts5ValueToText(apVal[1]);
+  ctx.zClose = fts5ValueToText(apVal[2]);
+  zEllips = fts5ValueToText(apVal[3]);
   nToken = sqlite3_value_int(apVal[4]);
 
   iBestCol = (iCol>=0 ? iCol : 0);
@@ -432,7 +443,9 @@ static void fts5SnippetFunction(
         int jj;
 
         rc = pApi->xInst(pFts, ii, &ip, &ic, &io);
-        if( ic!=i || rc!=SQLITE_OK ) continue;
+        if( ic!=i ) continue;
+        if( io>nDocsize ) rc = FTS5_CORRUPT;
+        if( rc!=SQLITE_OK ) continue;
         memset(aSeen, 0, nPhrase);
         rc = fts5SnippetScore(pApi, pFts, nDocsize, aSeen, i,
             io, nToken, &nScore, &iAdj
@@ -558,13 +571,13 @@ static int fts5Bm25GetData(
     int nPhrase;                  /* Number of phrases in query */
     sqlite3_int64 nRow = 0;       /* Number of rows in table */
     sqlite3_int64 nToken = 0;     /* Number of tokens in table */
-    int nByte;                    /* Bytes of space to allocate */
+    sqlite3_int64 nByte;          /* Bytes of space to allocate */
     int i;
 
     /* Allocate the Fts5Bm25Data object */
     nPhrase = pApi->xPhraseCount(pFts);
     nByte = sizeof(Fts5Bm25Data) + nPhrase*2*sizeof(double);
-    p = (Fts5Bm25Data*)sqlite3_malloc(nByte);
+    p = (Fts5Bm25Data*)sqlite3_malloc64(nByte);
     if( p==0 ){
       rc = SQLITE_NOMEM;
     }else{
@@ -576,6 +589,7 @@ static int fts5Bm25GetData(
 
     /* Calculate the average document length for this FTS5 table */
     if( rc==SQLITE_OK ) rc = pApi->xRowCount(pFts, &nRow);
+    assert( rc!=SQLITE_OK || nRow>0 );
     if( rc==SQLITE_OK ) rc = pApi->xColumnTotalSize(pFts, -1, &nToken);
     if( rc==SQLITE_OK ) p->avgdl = (double)nToken  / (double)nRow;
 
@@ -700,5 +714,3 @@ int sqlite3Fts5AuxInit(fts5_api *pApi){
 
   return rc;
 }
-
-

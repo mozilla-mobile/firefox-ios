@@ -22,26 +22,23 @@ close $in
 # ILLEGAL *must* be the last two token codes and they must be in that order.
 #
 set extras {
-  TO_TEXT
-  TO_BLOB
-  TO_NUMERIC
-  TO_INT
-  TO_REAL
+  TRUEFALSE
   ISNOT
-  END_OF_FILE
-  UNCLOSED_STRING
   FUNCTION
   COLUMN
   AGG_FUNCTION
   AGG_COLUMN
   UMINUS
   UPLUS
+  TRUTH
   REGISTER
   VECTOR
   SELECT_COLUMN
   IF_NULL_ROW
   ASTERISK
   SPAN
+  END_OF_FILE
+  UNCLOSED_STRING
   SPACE
   ILLEGAL
 }
