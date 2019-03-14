@@ -113,7 +113,7 @@ open class KeyBundle: Hashable {
 
         let success: CCCryptorStatus =
             CCCrypt(op,
-                    CCHmacAlgorithm(kCCAlgorithmAES128),
+                    CCAlgorithm(kCCAlgorithmAES128), // Block size, *NOT* key size
                     CCOptions(kCCOptionPKCS7Padding),
                     encKey.getBytes(),
                     kCCKeySizeAES256,
