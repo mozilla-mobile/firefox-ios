@@ -1389,34 +1389,26 @@ class TestSQLiteHistory: XCTestCase {
         delete(date: Date(timeIntervalSince1970: 3), expectedDeletions: 1)
     }
 
-    func testRemoveHistoryForUrl() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
-
-        history.setTopSitesCacheSize(20)
-        history.clearTopSitesCache().succeeded()
-        history.clearHistory().succeeded()
-
-        // Lets create some history. This will create 3 sites that will have 4 local and 4 remote visits
-        populateHistoryForFrecencyCalculations(history, siteCount: 3)
-
-        // Try waiting a second before removing the newly-inserted history to avoid
-        // an intermittent test crash on BuddyBuild.
-        let expectation = self.expectation(description: "Waiting to remove history.")
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            history.removeHistoryForURL("http://s0ite0.com/foo").succeeded()
-            history.removeHistoryForURL("http://s1ite1.com/foo").succeeded()
-
-            let deletedResult = history.getDeletedHistoryToUpload().value
-            XCTAssertTrue(deletedResult.isSuccess)
-            let guids = deletedResult.successValue!
-            XCTAssertEqual(2, guids.count)
-            expectation.fulfill()
-        }
-
-        waitForExpectations(timeout: 10, handler: nil)
-    }
+//    func testRemoveHistoryForUrl() {
+//        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+//        let prefs = MockProfilePrefs()
+//        let history = SQLiteHistory(db: db, prefs: prefs)
+//
+//        history.setTopSitesCacheSize(20)
+//        history.clearTopSitesCache().succeeded()
+//        history.clearHistory().succeeded()
+//
+//        // Lets create some history. This will create 3 sites that will have 4 local and 4 remote visits
+//        populateHistoryForFrecencyCalculations(history, siteCount: 3)
+//
+//        history.removeHistoryForURL("http://s0ite0.com/foo").succeeded()
+//        history.removeHistoryForURL("http://s1ite1.com/foo").succeeded()
+//
+//        let deletedResult = history.getDeletedHistoryToUpload().value
+//        XCTAssertTrue(deletedResult.isSuccess)
+//        let guids = deletedResult.successValue!
+//        XCTAssertEqual(2, guids.count)
+//    }
 
     func testTopSitesFrecencyOrder() {
         let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
