@@ -923,24 +923,16 @@ class ASHeaderView: UICollectionReusableView {
 
 class LibraryShortcutView: UIView {
 
-    lazy var button: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = UIColor(rgb: 0xc7eafd)
-        button.setImage(UIImage.templateImageNamed("menu-panel-Bookmarks"), for: .normal)
-        button.tintColor = .white
-        return button
-    }()
-
-    lazy var title: UILabel = {
-        let title = UILabel()
-        return title
-    }()
+    var button = UIButton()
+    var title = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(button)
         addSubview(title)
         button.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.centerX.equalToSuperview()
             make.width.equalTo(self)
             make.height.equalTo(self.snp.width)
         }
@@ -956,6 +948,7 @@ class LibraryShortcutView: UIView {
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageEdgeInsets = UIEdgeInsets(equalInset: 15)
+        button.tintColor = .white
     }
 
     required init(coder: NSCoder) {
