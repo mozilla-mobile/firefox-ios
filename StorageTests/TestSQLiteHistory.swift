@@ -1398,7 +1398,7 @@ class TestSQLiteHistory: XCTestCase {
         history.clearTopSitesCache().succeeded()
         history.clearHistory().succeeded()
 
-        // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
+        // Lets create some history. This will create 3 sites that will have 4 local and 4 remote visits
         populateHistoryForFrecencyCalculations(history, siteCount: 3)
 
         history.removeHistoryForURL("http://s0ite0.com/foo").succeeded()
@@ -1419,7 +1419,7 @@ class TestSQLiteHistory: XCTestCase {
         history.clearTopSitesCache().succeeded()
         history.clearHistory().succeeded()
 
-        // Lets create some history. This will create 100 sites that will have 21 local and 21 remote visits
+        // Lets create some history. This will create 100 sites that will have 4 local and 4 remote visits
         populateHistoryForFrecencyCalculations(history, siteCount: 100)
 
         // Create a new site thats for an existing domain but a different URL.
