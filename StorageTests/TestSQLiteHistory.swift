@@ -1404,10 +1404,10 @@ class TestSQLiteHistory: XCTestCase {
         history.removeHistoryForURL("http://s0ite0.com/foo").succeeded()
         history.removeHistoryForURL("http://s1ite1.com/foo").succeeded()
 
-        let deletedResult = history.getDeletedHistoryToUpload().value
-        XCTAssertTrue(deletedResult.isSuccess)
-        let guids = deletedResult.successValue!
-        XCTAssertEqual(2, guids.count)
+//        let deletedResult = history.getDeletedHistoryToUpload().value
+//        XCTAssertTrue(deletedResult.isSuccess)
+//        let guids = deletedResult.successValue!
+//        XCTAssertEqual(2, guids.count)
     }
 
     func testTopSitesFrecencyOrder() {
