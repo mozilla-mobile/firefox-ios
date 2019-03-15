@@ -47,6 +47,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showBackForwardList()
     }
 
+    func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        showLibrary()
+    }
+
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
