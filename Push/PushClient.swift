@@ -172,7 +172,7 @@ extension PushClient {
                         return deferred.fill(Maybe(failure: PushClientError.Local(PushClientUnknownError)))
                     }
 
-                    let json = JSON(data: data)
+                    let json = try! JSON(data: data)
 
                     if let remoteError = PushRemoteError.from(json: json) {
                         return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))

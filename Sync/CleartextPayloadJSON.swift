@@ -17,7 +17,7 @@ open class BasePayloadJSON {
     }
 
     // Override me.
-    fileprivate func isValid() -> Bool {
+    func isValid() -> Bool {
         return self.json.type != .unknown &&
                self.json.error == nil
     }
