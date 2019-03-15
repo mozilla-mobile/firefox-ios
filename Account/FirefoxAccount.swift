@@ -316,9 +316,25 @@ open class FirefoxAccount {
             return
         }
 
+        if self.fxaProfile == nil,
+            let fxaProfileCache = KeychainStore.shared.dictionary(forKey: "fxaProfileCache"),
+            let email = fxaProfileCache["email"] as? String {
+            let displayName = fxaProfileCache["displayName"] as? String
+            let avatarURL = fxaProfileCache["avatarURL"] as? String
+            self.fxaProfile = FxAProfile(email: email, displayName: displayName, avatar: avatarURL)
+        }
+
         let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         client.getProfile(withSessionToken: married.sessionToken as NSData) >>== { result in
             self.fxaProfile = FxAProfile(email: result.email, displayName: result.displayName, avatar: result.avatarURL)
+
+            let fxaProfileCache: [String : Any] = [
+                "email": result.email,
+                "displayName": result.displayName as Any,
+                "avatarURL": result.avatarURL as Any
+            ]
+            KeychainStore.shared.setDictionary(fxaProfileCache, forKey: "fxaProfileCache")
+
             NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         }
     }
@@ -435,6 +451,9 @@ open class FirefoxAccount {
         // Clear Send Tab keys from Keychain.
         KeychainStore.shared.setDictionary(nil, forKey: "apnsToken")
         commandsClient.sendTab.sendTabKeysCache.value = nil
+
+        // Clear cached FxA profile data from Keychain.
+        KeychainStore.shared.setDictionary(nil, forKey: "fxaProfileCache")
 
         // Clear cached OAuth data from Keychain.
         [ FxAOAuthScope.Profile, FxAOAuthScope.OldSync ].forEach { scope in
