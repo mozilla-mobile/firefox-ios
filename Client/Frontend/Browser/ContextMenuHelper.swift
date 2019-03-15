@@ -23,34 +23,48 @@ class ContextMenuHelper: NSObject {
 
     fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
     fileprivate var elements: Elements?
+    private var kvoInfo: (layer: CALayer?, observation: NSKeyValueObservation?) = (nil, nil)
 
     required init(tab: Tab) {
         super.init()
         self.tab = tab
     }
 
-    func replaceWebViewLongPress() {
-        // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
-        // See also https://bugs.webkit.org/show_bug.cgi?id=193366
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            guard self.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil else {
-                return
-            }
+    // BVC KVO events for all changes on the webview will call this. It is called a lot during a page load.
+    func replaceGestureHandlerIfNeeded() {
+        // If the main layer changes, re-install KVO observation.
+        // It seems the main layer changes only once after intialization of the webview,
+        // so the if condition only runs twice.
+        guard let layer = self.tab?.webView?.scrollView.subviews[0].layer, layer != kvoInfo.layer else {
+            return
+        }
 
-            self.nativeHighlightLongPressRecognizer = self.gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
-
-            if let nativeLongPressRecognizer = self.gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
-                nativeLongPressRecognizer.removeTarget(nil, action: nil)
-                nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
-            } else {
-                // The ContextMenuHelper gesture hook is not installed yet, try again
+        kvoInfo.layer = layer
+        kvoInfo.observation = layer.observe(\.bounds) { (_, _) in
+            // The layer bounds updates when the document context (and gestures) have been setup
+            if self.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil  {
                 self.replaceWebViewLongPress()
             }
         }
     }
 
-    func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UIGestureRecognizer? {
-        return tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: { $0.description.contains(descriptionFragment) })
+    func replaceWebViewLongPress() {
+        // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
+        // See also https://bugs.webkit.org/show_bug.cgi?id=193366
+
+        self.nativeHighlightLongPressRecognizer = self.gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:")
+
+        if let nativeLongPressRecognizer = self.gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
+            nativeLongPressRecognizer.removeTarget(nil, action: nil)
+            nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
+        }
+    }
+
+    func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UILongPressGestureRecognizer? {
+        let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: {
+            (($0 as? UILongPressGestureRecognizer) != nil) && $0.description.contains(descriptionFragment)
+        })
+        return result as? UILongPressGestureRecognizer
     }
 
     @objc func longPressGestureDetected(_ sender: UIGestureRecognizer) {

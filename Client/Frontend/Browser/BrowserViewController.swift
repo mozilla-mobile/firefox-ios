@@ -862,6 +862,10 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        if webView == tabManager.selectedTab?.webView, let tab = tabManager.selectedTab, let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
+             helper.replaceGestureHandlerIfNeeded()
+        }
+
         switch path {
         case .estimatedProgress:
             guard webView == tabManager.selectedTab?.webView else { break }
