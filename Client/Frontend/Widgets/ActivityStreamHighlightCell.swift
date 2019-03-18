@@ -160,6 +160,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         contentView.backgroundColor = UIColor.clear
         siteImageView.backgroundColor = UIColor.clear
         playLabel.isHidden = true
+        descriptionLabel.textColor = UIColor.theme.homePanel.activityStreamCellDescription
     }
 
     func configureWithSite(_ site: Site) {
@@ -205,7 +206,9 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         playLabel.isHidden = false
         self.configureWithPocketStory(pocketStory)
     }
+
 }
+
 
 private struct HighlightIntroCellUX {
     static let margin: CGFloat = 20
