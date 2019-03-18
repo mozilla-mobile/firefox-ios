@@ -863,7 +863,8 @@ class BrowserViewController: UIViewController {
         }
 
         if webView == tabManager.selectedTab?.webView, let tab = tabManager.selectedTab, let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
-             helper.replaceGestureHandlerIfNeeded()
+            // This is zero-cost if already installed. It needs to be checked frequently (hence every event here triggers this function), as when a new tab is created it requires multiple attempts to setup the handler correctly.
+	    helper.replaceGestureHandlerIfNeeded()
         }
 
         switch path {
