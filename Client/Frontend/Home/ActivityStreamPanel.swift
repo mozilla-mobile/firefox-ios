@@ -296,11 +296,18 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                     view.moreButton.isHidden = false
                     view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
                     view.titleLabel.textColor = UIColor.Pocket.red
+                    view.titleLabel.accessibilityIdentifier = "pocketTitle"
                     view.moreButton.setTitleColor(UIColor.Pocket.red, for: .normal)
                     view.iconView.tintColor = UIColor.Pocket.red
                     return view
-                case .topSites, .libraryShortcuts:
+                case .topSites:
                     view.title = title
+                    view.titleLabel.accessibilityIdentifier = "topSitesTitle"
+                    view.moreButton.isHidden = true
+                    return view
+                case .libraryShortcuts:
+                    view.title = title
+                    view.titleLabel.accessibilityIdentifier = "libraryTitle"
                     view.moreButton.isHidden = true
                     return view
             }
@@ -832,7 +839,6 @@ extension ASFooterView: Themeable {
 class ASHeaderView: UICollectionReusableView {
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.accessibilityIdentifier = "pocketTitle"
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         titleLabel.font = ASHeaderViewUX.TextFont
