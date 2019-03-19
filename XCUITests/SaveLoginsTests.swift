@@ -117,9 +117,11 @@ class SaveLoginTest: BaseTestCase {
         // Due to Bug 1533475 this isn't working
         //XCTAssertTrue(app.cells.images["loginUnselected"].exists)
         XCTAssertTrue(app.buttons["Select All"].exists)
-
         XCTAssertTrue(app.staticTexts[domain].exists)
         XCTAssertTrue(app.staticTexts[domainLogin].exists)
+
+        app.staticTexts[domain].tap()
+        waitForExistence(app.buttons["Deselect All"])
         // Due to Bug 1533475 this isn't working
         //XCTAssertTrue(app.cells.images["loginSelected"].exists)
         XCTAssertTrue(app.buttons["Deselect All"].exists)
