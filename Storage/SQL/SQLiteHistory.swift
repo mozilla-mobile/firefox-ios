@@ -78,10 +78,18 @@ fileprivate func escapeFTSSearchString(_ search: String) -> String {
     // Remove double-quotes and split search string on whitespace.
     let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces)
 
-    // Remove empty strings, wrap each word in double-quotes and "*",
-    // then join it all back together.
-    // Example: "foo bar baz" -> "\"*foo*\"\"*bar*\"\"*baz*\""
-    return words.filter({ !$0.isEmpty }).map({ "\"*\($0)*\"" }).joined()
+    // Remove empty strings, wrap each word in double-quotes, append
+    // "*", then join it all back together. For words with fewer than
+    // three characters, anchor the search to the beginning of word
+    // bounds by prepending "^".
+    // Example: "foo bar a b" -> "\"foo*\"\"bar*\"\"^a*\"\"^b*\""
+    return words.filter({ !$0.isEmpty }).map({
+        if $0.count < 3 {
+            return "\"^\($0)*\""
+        } else {
+            return "\"\($0)*\""
+        }
+    }).joined()
 }
 
 fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
