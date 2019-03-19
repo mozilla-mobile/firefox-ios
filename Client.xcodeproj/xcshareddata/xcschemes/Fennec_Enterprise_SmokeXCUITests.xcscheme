@@ -536,6 +536,12 @@
                   Identifier = "SaveLoginTest/testEditOneLoginEntry()">
                </Test>
                <Test
+                  Identifier = "SaveLoginTest/testLoginsListFromBrowserTabMenu()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testPasscodeLoginsListFromBrowserTabMenu()">
+               </Test>
+               <Test
                   Identifier = "SaveLoginTest/testSaveLogin()">
                </Test>
                <Test

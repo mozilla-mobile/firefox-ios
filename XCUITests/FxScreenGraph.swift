@@ -994,8 +994,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.tap(app.tables.cells["menu-Settings"], to: SettingsScreen)
-
         screenState.tap(app.tables.cells["menu-sync"], to: FxASigninScreen, if: "fxaUsername == nil")
+        screenState.tap(app.tables.cells["key"], to: LoginsSettings)
         screenState.tap(app.tables.cells["menu-library"], to: HomePanel_Library)
         screenState.tap(app.tables.cells["placeholder-avatar"], to: FxAccountManagementPage)
 
