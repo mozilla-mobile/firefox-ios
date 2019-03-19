@@ -160,6 +160,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
         log.info("startApplication end")
+
+        TabWebViewMenuHelper.setupSwizzling()
+
         return true
     }
 

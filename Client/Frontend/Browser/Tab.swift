@@ -683,11 +683,36 @@ class TabWebView: WKWebView, MenuHelperInterface {
 //
 
 class TabWebViewMenuHelper: UIView {
+    typealias ClosureType = @convention(c) (AnyObject, Selector) -> Void
+    static var originalDidMoveToWindow: ClosureType?
+
     @objc func swizzledMenuHelperFindInPage() {
         if let tabWebView = superview?.superview as? TabWebView {
             tabWebView.evaluateJavaScript("getSelection().toString()") { result, _ in
                 let selection = result as? String ?? ""
                 tabWebView.delegate?.tabWebView(tabWebView, didSelectFindInPageForSelection: selection)
+            }
+        }
+    }
+
+    static func setupSwizzling() {
+        if let clazz = NSClassFromString("WKCont" + "ent" + "View"), let swizzledMethod = class_getInstanceMethod(TabWebViewMenuHelper.self, #selector(TabWebViewMenuHelper.swizzledDidMoveToWindow)), let originalMethod = class_getInstanceMethod(clazz, #selector(UIView.didMoveToWindow)) {
+
+            let imp = method_getImplementation(originalMethod)
+            TabWebViewMenuHelper.originalDidMoveToWindow = unsafeBitCast(imp, to: TabWebViewMenuHelper.ClosureType.self)
+
+            method_setImplementation(originalMethod, method_getImplementation(swizzledMethod));
+        }
+    }
+
+    @objc func swizzledDidMoveToWindow() {
+        TabWebViewMenuHelper.originalDidMoveToWindow?(self, #selector(UIView.didMoveToWindow))
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let tabManager = appDelegate.tabManager
+        DispatchQueue.main.async {
+            if let tab = tabManager?.selectedTab, let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
+                helper.replaceWebViewLongPress()
             }
         }
     }
