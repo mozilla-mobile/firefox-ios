@@ -517,6 +517,7 @@ open class FirefoxAccount {
                     cachedState as? MarriedState == nil {
                     DispatchQueue.main.async {
                         _ = self.registerOrUpdateDevice(session: newSession)
+                        self.updateProfile()
                     }
                 }
 
