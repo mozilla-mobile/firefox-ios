@@ -116,7 +116,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             class_addMethod(clazz, MenuHelper.SelectorFindInPage, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
         }
 
-
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
 
         // Add restoration class, the factory that will return the ViewController we
@@ -248,7 +247,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
             UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
         }
-
 
         DispatchQueue.main.async {
             NavigationPath.handle(nav: routerpath, with: self.browserViewController)
