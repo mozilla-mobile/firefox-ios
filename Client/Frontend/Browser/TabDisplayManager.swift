@@ -476,11 +476,9 @@ extension TabDisplayManager: TabManagerDelegate {
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
         cancelDragAndGestures()
-        refreshStore()
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
         cancelDragAndGestures()
-        refreshStore()
     }
 }

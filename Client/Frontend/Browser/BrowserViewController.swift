@@ -473,10 +473,6 @@ class BrowserViewController: UIViewController {
             if !receivedURLs.isEmpty {
                 DispatchQueue.main.async {
                     self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
-
-                    if let lastURL = receivedURLs.last, let tab = self.tabManager.getTabForURL(lastURL) {
-                        self.tabManager.selectTab(tab)
-                    }
                 }
             }
         }
