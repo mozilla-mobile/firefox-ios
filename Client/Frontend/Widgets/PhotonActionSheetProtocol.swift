@@ -487,7 +487,8 @@ extension PhotonActionSheetProtocol {
         }
 
         let iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
-        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, iconType: .URL, accessory: .Sync, handler: action)
+        let iconType: PhotonActionSheetIconType = (actionNeeded == .none) ? .URL : .Image
+        let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, iconType: iconType, accessory: .Sync, handler: action)
         return syncOption
     }
 }
