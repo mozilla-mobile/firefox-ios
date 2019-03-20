@@ -15,7 +15,7 @@ class WebServer {
         return WebServerSharedInstance
     }
 
-    let server = GCDWebServer()
+    let server: GCDWebServer = GCDWebServer()
 
     var base: String {
         return "http://localhost:\(server.port)"

@@ -220,7 +220,7 @@ class LeanPlumClient {
     }
 
     func isFxAPrePushEnabled() -> Bool {
-       return AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST && useFxAPrePush.boolValue()
+        return AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST && (useFxAPrePush?.boolValue() ?? false)
     }
 
     /*

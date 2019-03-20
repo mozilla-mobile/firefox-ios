@@ -43,7 +43,7 @@ class TabContentBlocker {
         }
     }
 
-    var stats = TPPageStats() {
+    var stats: TPPageStats = TPPageStats() {
         didSet {
             guard let tab = self.tab else { return }
             if stats.total <= 1 {
