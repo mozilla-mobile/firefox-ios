@@ -89,7 +89,6 @@ class RemoteTabsPanel: UIViewController, HomePanel {
         switch notification.name {
         case .FirefoxAccountChanged, .ProfileDidFinishSyncing:
             DispatchQueue.main.async {
-                print(notification.name)
                 self.tableViewController.refreshTabs()
             }
             break
@@ -532,7 +531,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
     @objc func onRefreshPulled() {
         refreshControl?.beginRefreshing()
-        refreshTabs()
+        refreshTabs(updateCache: true)
     }
 
     func endRefreshing() {
@@ -559,7 +558,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         }
     }
 
-    fileprivate func refreshTabs() {
+    fileprivate func refreshTabs(updateCache: Bool = false) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
 
         assert(Thread.isMainThread)
@@ -582,13 +581,17 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
             // Update UI with cached data.
             self.updateDelegateClientAndTabData(clientAndTabs)
 
-            // Fetch updated tabs.
-            self.profile.getClientsAndTabs().uponQueue(.main) { result in
-                if let clientAndTabs = result.successValue {
-                    // Update UI with updated tabs.
-                    self.updateDelegateClientAndTabData(clientAndTabs)
-                }
+            if updateCache {
+                // Fetch updated tabs.
+                self.profile.getClientsAndTabs().uponQueue(.main) { result in
+                    if let clientAndTabs = result.successValue {
+                        // Update UI with updated tabs.
+                        self.updateDelegateClientAndTabData(clientAndTabs)
+                    }
 
+                    self.endRefreshing()
+                }
+            } else {
                 self.endRefreshing()
             }
         }
