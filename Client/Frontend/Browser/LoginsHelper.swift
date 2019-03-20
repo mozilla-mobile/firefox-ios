@@ -60,14 +60,14 @@ class LoginsHelper: TabContentScript {
         return realm
     }
 
-    func loginRecordFromScript(_ script: [String : Any], url: URL) -> LoginRecord? {
+    func loginRecordFromScript(_ script: [String: Any], url: URL) -> LoginRecord? {
         guard let username = script["username"] as? String,
             let password = script["password"] as? String,
             let origin = getOrigin(url.absoluteString) else {
             return nil
         }
 
-        var dict: [String : Any] = [
+        var dict: [String: Any] = [
             "hostname": origin,
             "username": username,
             "password": password
@@ -90,7 +90,7 @@ class LoginsHelper: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let res = message.body as? [String : Any],
+        guard let res = message.body as? [String: Any],
             let type = res["type"] as? String else {
             return
         }
@@ -234,7 +234,7 @@ class LoginsHelper: TabContentScript {
         tab?.addSnackbar(snackBar!)
     }
 
-    fileprivate func requestLogins(_ request: [String : Any], url: URL) {
+    fileprivate func requestLogins(_ request: [String: Any], url: URL) {
         guard let requestId = request["requestId"] as? String,
             // Even though we don't currently use these two fields,
             // verify that they were received as additional confirmation
@@ -257,7 +257,7 @@ class LoginsHelper: TabContentScript {
 
             log.debug("Found \(cursor.count) logins.")
 
-            let dict: [String : Any] = [
+            let dict: [String: Any] = [
                 "requestId": requestId,
                 "name": "RemoteLogins:loginsFound",
                 "logins": cursor.compactMap({ $0?.toJSONDict() })

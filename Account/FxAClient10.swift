@@ -79,7 +79,7 @@ public struct FxAOAuthResponse {
         self.expires = expires
     }
 
-    init?(dictionary: [String : Any]) {
+    init?(dictionary: [String: Any]) {
         guard let accessToken = dictionary["accessToken"] as? String,
             let expiresTimeInterval = dictionary["expires"] as? TimeInterval else {
             return nil
@@ -89,7 +89,7 @@ public struct FxAOAuthResponse {
         self.expires = Date(timeIntervalSince1970: expiresTimeInterval)
     }
 
-    public func dictionary() -> [String : Any] {
+    public func dictionary() -> [String: Any] {
         return [
             "accessToken": accessToken,
             "expires": expires.timeIntervalSince1970

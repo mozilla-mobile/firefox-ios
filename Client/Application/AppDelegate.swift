@@ -234,7 +234,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return shouldPerformAdditionalDelegateHandling
     }
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey: Any] = [:]) -> Bool {
         guard let routerpath = NavigationPath(url: url) else {
             return false
         }
