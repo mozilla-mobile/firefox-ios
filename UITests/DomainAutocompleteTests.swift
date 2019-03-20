@@ -26,15 +26,23 @@ class DomainAutocompleteTests: KIFTestCase {
         BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "f", completion: "oo.bar.baz.org")
         tester().clearTextFromFirstResponder()
         tester().waitForAnimationsToFinish()
-        tester().enterText(intoCurrentFirstResponder: "b")
+        // Expected behavior but changed intentionally https://bugzilla.mozilla.org/show_bug.cgi?id=1536746
+        // tester().enterText(intoCurrentFirstResponder: "b")
+        // BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "b", completion: "ar.baz.org")
+        // tester().enterText(intoCurrentFirstResponder: "a")
+        // BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ba", completion: "r.baz.org")
+        // tester().enterText(intoCurrentFirstResponder: "z")
+
+        // Current and temporary behaviour entering more than 2 chars for the matching
+        tester().enterText(intoCurrentFirstResponder: "bar")
         tester().waitForAnimationsToFinish()
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "b", completion: "ar.baz.org")
-        tester().enterText(intoCurrentFirstResponder: "a")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "bar", completion: ".baz.org")
+        tester().enterText(intoCurrentFirstResponder: ".ba")
         tester().waitForAnimationsToFinish()
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "ba", completion: "r.baz.org")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "bar.ba", completion: "z.org")
         tester().enterText(intoCurrentFirstResponder: "z")
         tester().waitForAnimationsToFinish()
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "baz", completion: ".org")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField, prefix: "bar.baz", completion: ".org")
     }
 
     override func tearDown() {
