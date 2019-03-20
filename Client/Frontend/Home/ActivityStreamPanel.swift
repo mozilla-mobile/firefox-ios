@@ -432,6 +432,7 @@ extension ActivityStreamPanel {
             button.removeTarget(nil, action: nil, for: .allEvents)
             button.addTarget(self, action: selector, for: .touchUpInside)
         }
+        libraryCell.applyTheme()
         return cell
     }
 
@@ -967,7 +968,7 @@ class LibraryShortcutView: UIView {
     }
 }
 
-class ASLibraryCell: UICollectionViewCell {
+class ASLibraryCell: UICollectionViewCell, Themeable {
 
     var mainView = UIStackView()
 
@@ -1008,6 +1009,11 @@ class ASLibraryCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func applyTheme() {
+        libraryButtons.forEach { button in
+            button.title.textColor = UIColor.theme.homePanel.activityStreamCellTitle
+        }
+    }
 }
 
 open class PinnedSite: Site {
