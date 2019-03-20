@@ -1,6 +1,6 @@
 //
 //  Leanplum.h
-//  Leanplum iOS SDK Version 2.0.5
+//  Leanplum iOS SDK Version 2.0.6
 //
 //  Copyright (c) 2012 Leanplum, Inc. All rights reserved.
 //
@@ -24,9 +24,18 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "LPInbox.h"
+#import "LPActionArg.h"
+#import "LPActionContext.h"
+#import "LPVar.h"
+#import "LPMessageArchiveData.h"
+#import "LPEnumConstants.h"
 
 #ifndef LP_NOT_TV
-#define LP_NOT_TV (!defined(TARGET_OS_TV) || !TARGET_OS_TV)
+#if (!defined(TARGET_OS_TV) || !TARGET_OS_TV)
+#define LP_NOT_TV 1
+#else
+#define LP_NOT_TV 0
+#endif
 #endif
 
 #define _LP_DEFINE_HELPER(name,val,type) LPVar* name; \
@@ -122,7 +131,6 @@ name = [LPVar define:[@#name stringByReplacingOccurrencesOfString:@"_" withStrin
  * @{
  */
 typedef void (^LeanplumStartBlock)(BOOL success);
-typedef void (^LeanplumVariablesChangedBlock)(void);
 typedef void (^LeanplumInterfaceChangedBlock)(void);
 typedef void (^LeanplumSetLocationBlock)(BOOL success);
 // Returns whether the action was handled.
@@ -365,6 +373,20 @@ typedef enum {
  */
 + (void)onceVariablesChangedAndNoDownloadsPending:(LeanplumVariablesChangedBlock)block;
 
+typedef void (^LeanplumMessageDisplayedCallbackBlock)(LPMessageArchiveData *messageArchiveData);
+
+/**
+ * Block to call when a message is displayed to the user.
+ */
++ (void)onMessageDisplayed:(LeanplumMessageDisplayedCallbackBlock)block;
+
+/**
+ * Clears cached values for messages, variables and test assignments.
+ * Use sparingly as if the app is updated, you'll have to deal with potentially
+ * inconsistent state or user experience.
+ */
++ (void)clearUserContent;
+
 /**
  * @{
  * Defines new action and message types to be performed at points set up on the Leanplum dashboard.
@@ -589,6 +611,8 @@ typedef NS_ENUM(NSUInteger, LPTrackScreenMode) {
 + (void)track:(NSString *)event withValue:(double)value andInfo:(NSString *)info andParameters:(NSDictionary *)params;
 /**@}*/
 
++ (void)trackGeofence:(LPGeofenceEventType)event withInfo:(NSString *)info;
+
 /**
  * @{
  * Gets the path for a particular resource. The resource can be overridden by the server.
@@ -597,6 +621,18 @@ typedef NS_ENUM(NSUInteger, LPTrackScreenMode) {
 + (id)objectForKeyPath:(id)firstComponent, ... NS_REQUIRES_NIL_TERMINATION;
 + (id)objectForKeyPathComponents:(NSArray *)pathComponents;
 /**@}*/
+
+
+/**
+ * Set variant debug info to be obtained from the server.
+ */
++ (void)setVariantDebugInfoEnabled:(BOOL)variantDebugInfoEnabled;
+
+/**
+ * Gets a list of content assignments for the current user.
+ */
++ (NSDictionary *)variantDebugInfo;
+
 
 /**
  * Gets a list of variants that are currently active for this user.
@@ -719,211 +755,5 @@ typedef enum {
  * Disables collecting location automatically. Will do nothing if Leanplum-Location is not used.
  */
 + (void)disableLocationCollection;
-
-@end
-
-@interface LeanplumCompatibility : NSObject
-
-/**
- * Used only for compatibility with Google Analytics.
- */
-+ (void)gaTrack:(NSObject *)trackingObject;
-
-@end
-
-@class LPVar;
-
-/**
- * Receives callbacks for {@link LPVar}
- */
-@protocol LPVarDelegate <NSObject>
-@optional
-/**
- * For file variables, called when the file is ready.
- */
-- (void)fileIsReady:(LPVar *)var;
-/**
- * Called when the value of the variable changes.
- */
-- (void)valueDidChange:(LPVar *)var;
-@end
-
-/**
- * A variable is any part of your application that can change from an experiment.
- * Check out {@link Macros the macros} for defining variables more easily.
- */
-@interface LPVar : NSObject
-/**
- * @{
- * Defines a {@link LPVar}
- */
-
-+ (LPVar *)define:(NSString *)name;
-+ (LPVar *)define:(NSString *)name withInt:(int)defaultValue;
-+ (LPVar *)define:(NSString *)name withFloat:(float)defaultValue;
-+ (LPVar *)define:(NSString *)name withDouble:(double)defaultValue;
-+ (LPVar *)define:(NSString *)name withCGFloat:(CGFloat)cgFloatValue;
-+ (LPVar *)define:(NSString *)name withShort:(short)defaultValue;
-+ (LPVar *)define:(NSString *)name withChar:(char)defaultValue;
-+ (LPVar *)define:(NSString *)name withBool:(BOOL)defaultValue;
-+ (LPVar *)define:(NSString *)name withString:(NSString *)defaultValue;
-+ (LPVar *)define:(NSString *)name withNumber:(NSNumber *)defaultValue;
-+ (LPVar *)define:(NSString *)name withInteger:(NSInteger)defaultValue;
-+ (LPVar *)define:(NSString *)name withLong:(long)defaultValue;
-+ (LPVar *)define:(NSString *)name withLongLong:(long long)defaultValue;
-+ (LPVar *)define:(NSString *)name withUnsignedChar:(unsigned char)defaultValue;
-+ (LPVar *)define:(NSString *)name withUnsignedInt:(unsigned int)defaultValue;
-+ (LPVar *)define:(NSString *)name withUnsignedInteger:(NSUInteger)defaultValue;
-+ (LPVar *)define:(NSString *)name withUnsignedLong:(unsigned long)defaultValue;
-+ (LPVar *)define:(NSString *)name withUnsignedLongLong:(unsigned long long)defaultValue;
-+ (LPVar *)define:(NSString *)name withUnsignedShort:(unsigned short)defaultValue;
-+ (LPVar *)define:(NSString *)name withFile:(NSString *)defaultFilename;
-+ (LPVar *)define:(NSString *)name withDictionary:(NSDictionary *)defaultValue;
-+ (LPVar *)define:(NSString *)name withArray:(NSArray *)defaultValue;
-+ (LPVar *)define:(NSString *)name withColor:(UIColor *)defaultValue;
-/**@}*/
-
-/**
- * Returns the name of the variable.
- */
-- (NSString *)name;
-
-/**
- * Returns the components of the variable's name.
- */
-- (NSArray *)nameComponents;
-
-/**
- * Returns the default value of a variable.
- */
-- (id)defaultValue;
-
-/**
- * Returns the kind of the variable.
- */
-- (NSString *)kind;
-
-/**
- * Returns whether the variable has changed since the last time the app was run.
- */
-- (BOOL)hasChanged;
-
-/**
- * For file variables, called when the file is ready.
- */
-- (void)onFileReady:(LeanplumVariablesChangedBlock)block;
-
-/**
- * Called when the value of the variable changes.
- */
-- (void)onValueChanged:(LeanplumVariablesChangedBlock)block;
-
-/**
- * Sets the delegate of the variable in order to use
- * {@link LPVarDelegate::fileIsReady:} and {@link LPVarDelegate::valueDidChange:}
- */
-- (void)setDelegate:(id <LPVarDelegate>)delegate;
-
-/**
- * @{
- * Accessess the value(s) of the variable
- */
-- (id)objectForKey:(NSString *)key;
-- (id)objectAtIndex:(NSUInteger )index;
-- (id)objectForKeyPath:(id)firstComponent, ... NS_REQUIRES_NIL_TERMINATION;
-- (id)objectForKeyPathComponents:(NSArray *)pathComponents;
-- (NSUInteger)count;
-
-- (NSNumber *)numberValue;
-- (NSString *)stringValue;
-- (NSString *)fileValue;
-- (UIImage *)imageValue;
-- (int)intValue;
-- (double)doubleValue;
-- (CGFloat)cgFloatValue;
-- (float)floatValue;
-- (short)shortValue;
-- (BOOL)boolValue;
-- (char)charValue;
-- (long)longValue;
-- (long long)longLongValue;
-- (NSInteger)integerValue;
-- (unsigned char)unsignedCharValue;
-- (unsigned short)unsignedShortValue;
-- (unsigned int)unsignedIntValue;
-- (NSUInteger)unsignedIntegerValue;
-- (unsigned long)unsignedLongValue;
-- (unsigned long long)unsignedLongLongValue;
-- (UIColor *)colorValue;
-/**@}*/
-@end
-
-@interface LPActionArg : NSObject
-/**
- * @{
- * Defines a Leanplum Action Argument
- */
-+ (LPActionArg *)argNamed:(NSString *)name withNumber:(NSNumber *)defaultValue;
-+ (LPActionArg *)argNamed:(NSString *)name withString:(NSString *)defaultValue;
-+ (LPActionArg *)argNamed:(NSString *)name withBool:(BOOL)defaultValue;
-+ (LPActionArg *)argNamed:(NSString *)name withFile:(NSString *)defaultValue;
-+ (LPActionArg *)argNamed:(NSString *)name withDict:(NSDictionary *)defaultValue;
-+ (LPActionArg *)argNamed:(NSString *)name withArray:(NSArray *)defaultValue;
-+ (LPActionArg *)argNamed:(NSString *)name withAction:(NSString *)defaultValue;
-+ (LPActionArg *)argNamed:(NSString *)name withColor:(UIColor *)defaultValue;
-/**@}*/
-- (NSString *)name;
-- (NSString *)kind;
-- (id)defaultValue;
-
-@end
-
-@interface LPActionContext : NSObject
-
-- (NSString *)actionName;
-
-- (NSString *)stringNamed:(NSString *)name;
-- (NSString *)fileNamed:(NSString *)name;
-- (NSNumber *)numberNamed:(NSString *)name;
-- (BOOL)boolNamed:(NSString *)name;
-- (NSDictionary *)dictionaryNamed:(NSString *)name;
-- (NSArray *)arrayNamed:(NSString *)name;
-- (UIColor *)colorNamed:(NSString *)name;
-- (NSString *)htmlWithTemplateNamed:(NSString *)templateName;
-
-/**
- * Runs the action given by the "name" key.
- */
-- (void)runActionNamed:(NSString *)name;
-
-/**
- * Runs and tracks an event for the action given by the "name" key.
- * This will track an event if no action is set.
- */
-- (void)runTrackedActionNamed:(NSString *)name;
-
-/**
- * Tracks an event in the context of the current message.
- */
-- (void)track:(NSString *)event withValue:(double)value andParameters:(NSDictionary *)params;
-
-/**
- * Tracks an event in the conext of the current message, with any parent actions prepended to the
- * message event name.
- */
-- (void)trackMessageEvent:(NSString *)event
-                withValue:(double)value
-                  andInfo:(NSString *)info
-            andParameters:(NSDictionary *)params;
-
-/**
- * Prevents the currently active message from appearing again in the future.
- */
-- (void)muteFutureMessagesOfSameKind;
-
-/**
- * Checks if the action context has any missing files that still need to be downloaded.
- */
-- (BOOL)hasMissingFiles;
 
 @end
