@@ -157,6 +157,8 @@ class SyncNowSetting: WithAccountSetting {
         return attributedString
     }
 
+    override var hidden: Bool { return !enabled }
+
     override var enabled: Bool {
         if !DeviceInfo.hasConnectivity() {
             return false
