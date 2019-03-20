@@ -9,7 +9,7 @@ private struct PasscodeUX {
     static let TitleVerticalSpacing: CGFloat = 32
     static let DigitSize: CGFloat = 30
     static let TopMargin: CGFloat = 80
-    static let PasscodeFieldSize: CGSize = CGSize(width: 160, height: 32)
+    static let PasscodeFieldSize = CGSize(width: 160, height: 32)
 }
 
 @objc protocol PasscodeInputViewDelegate: AnyObject {

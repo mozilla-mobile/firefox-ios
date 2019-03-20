@@ -82,7 +82,7 @@ open class MockProfilePrefs: Prefs {
     }
 
     // Public for testing.
-    open var things: NSMutableDictionary = NSMutableDictionary()
+    open var things = NSMutableDictionary()
 
     public init(things: NSMutableDictionary, prefix: String) {
         self.things = things

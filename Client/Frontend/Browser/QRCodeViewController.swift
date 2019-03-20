@@ -33,8 +33,8 @@ class QRCodeViewController: UIViewController {
     }()
 
     private var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-    private let scanLine: UIImageView = UIImageView(image: UIImage(named: "qrcode-scanLine"))
-    private let scanBorder: UIImageView = UIImageView(image: UIImage(named: "qrcode-scanBorder"))
+    private let scanLine = UIImageView(image: UIImage(named: "qrcode-scanLine"))
+    private let scanBorder = UIImageView(image: UIImage(named: "qrcode-scanBorder"))
     private lazy var instructionsLabel: UILabel = {
         let label = UILabel()
         label.text = Strings.ScanQRCodeInstructionsLabel
@@ -43,10 +43,10 @@ class QRCodeViewController: UIViewController {
         label.numberOfLines = 0
         return label
     }()
-    private var maskView: UIView = UIView()
+    private var maskView = UIView()
     private var isAnimationing: Bool = false
     private var isLightOn: Bool = false
-    private var shapeLayer: CAShapeLayer = CAShapeLayer()
+    private var shapeLayer = CAShapeLayer()
 
     private var scanRange: CGRect {
         let size = UIDevice.current.userInterfaceIdiom == .pad ?

@@ -205,7 +205,7 @@ open class FxAClient10 {
     }
 
     open class func computeUnwrapKey(_ stretchedPW: Data) -> Data {
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = KW("unwrapBkey")
         let bytes = (stretchedPW as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(KeyLength))
         return bytes!
@@ -254,7 +254,7 @@ open class FxAClient10 {
         let ciphertext = data.subdata(in: 0..<(2 * KeyLength))
         let MAC = data.subdata(in: (2 * KeyLength)..<(3 * KeyLength))
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = KW("account/keys")
         let bytes = (keyRequestKey as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))
         let respHMACKey = bytes?.subdata(in: 0..<KeyLength)
@@ -438,7 +438,7 @@ open class FxAClient10 {
 
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
@@ -484,7 +484,7 @@ open class FxAClient10 {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = httpBody.stringify()?.utf8EncodedData
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
@@ -495,12 +495,12 @@ open class FxAClient10 {
     open func destroyDevice(ownDeviceId: GUID, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxADeviceDestroyResponse>> {
         let URL = self.authURL.appendingPathComponent("/account/device/destroy")
         var mutableURLRequest = URLRequest(url: URL)
-        let httpBody: JSON = JSON(["id": ownDeviceId])
+        let httpBody = JSON(["id": ownDeviceId])
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = httpBody.stringify()?.utf8EncodedData
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
@@ -522,7 +522,7 @@ open class FxAClient10 {
         mutableURLRequest.httpMethod = HTTPMethod.get.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
@@ -533,12 +533,12 @@ open class FxAClient10 {
     open func invokeCommand(name: String, targetDeviceID: GUID, payload: String, withSessionToken sessionToken: NSData) -> Deferred<Maybe<FxASendMessageResponse>> {
         let URL = self.authURL.appendingPathComponent("/account/devices/invoke_command")
         var mutableURLRequest = URLRequest(url: URL)
-        let httpBody: JSON = JSON(["command": name, "target": targetDeviceID, "payload": ["encrypted": payload]])
+        let httpBody = JSON(["command": name, "target": targetDeviceID, "payload": ["encrypted": payload]])
         mutableURLRequest.httpMethod = HTTPMethod.post.rawValue
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = httpBody.stringify()?.utf8EncodedData
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
@@ -554,7 +554,7 @@ open class FxAClient10 {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = device.toJSON().rawString(options: [])?.utf8EncodedData
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
@@ -617,7 +617,7 @@ open class FxAClient10 {
             "ttl": "21600" // 6 hours
         ]
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
 
@@ -703,7 +703,7 @@ extension FxAClient10: FxALoginClient {
         var mutableURLRequest = URLRequest(url: URL)
         mutableURLRequest.httpMethod = HTTPMethod.get.rawValue
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("keyFetchToken")
         let key = (keyFetchToken as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(3 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
@@ -727,7 +727,7 @@ extension FxAClient10: FxALoginClient {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = JSON(parameters as NSDictionary).stringify()?.utf8EncodedData
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = sessionToken.deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)
@@ -751,7 +751,7 @@ extension FxAClient10: FxALoginClient {
         mutableURLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         mutableURLRequest.httpBody = JSON(parameters as NSDictionary).stringify()?.utf8EncodedData
 
-        let salt: Data = Data()
+        let salt = Data()
         let contextInfo: Data = FxAClient10.KW("sessionToken")
         let key = (sessionToken as NSData).deriveHKDFSHA256Key(withSalt: salt, contextInfo: contextInfo, length: UInt(2 * KeyLength))!
         mutableURLRequest.addAuthorizationHeader(forHKDFSHA256Key: key)

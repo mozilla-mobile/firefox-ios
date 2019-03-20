@@ -50,7 +50,7 @@ class ReaderModeBarView: UIView {
     var settingsButton: UIButton!
     var listStatusButton: UIButton!
 
-    @objc dynamic var buttonTintColor: UIColor = UIColor.clear {
+    @objc dynamic var buttonTintColor = UIColor.clear {
         didSet {
             readStatusButton.tintColor = self.buttonTintColor
             settingsButton.tintColor = self.buttonTintColor

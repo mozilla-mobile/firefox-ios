@@ -58,7 +58,7 @@ class ReadingListTableViewCell: UITableViewCell, Themeable {
         }
     }
 
-    var url: URL = URL(string: "http://www.example.com")! {
+    var url = URL(string: "http://www.example.com")! {
         didSet {
             hostnameLabel.text = simplifiedHostnameFromURL(url)
             updateAccessibilityLabel()
@@ -415,7 +415,7 @@ extension ReadingListPanel: HomePanelContextMenu {
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
 
-        let removeAction: PhotonActionSheetItem = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+        let removeAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.deleteItem(atIndex: indexPath)
         })
 

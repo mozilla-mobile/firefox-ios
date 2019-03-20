@@ -36,7 +36,7 @@ struct NoImageModeDefaults {
 
 class ContentBlocker {
     var whitelistedDomains = WhitelistedDomains()
-    let ruleStore: WKContentRuleListStore = WKContentRuleListStore.default()
+    let ruleStore = WKContentRuleListStore.default()
     var blockImagesRule: WKContentRuleList?
     var setupCompleted = false
 

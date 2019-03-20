@@ -131,7 +131,7 @@ class LoginsHelper: TabContentScript {
         attributes[NSAttributedStringKey.font] = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
         attributes[NSAttributedStringKey.foregroundColor] = UIColor.Photon.Grey60
         let attr = NSMutableAttributedString(string: string, attributes: attributes)
-        let font: UIFont = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.medium)
+        let font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.medium)
         for range in ranges {
             attr.addAttribute(NSAttributedStringKey.font, value: font, range: range)
         }

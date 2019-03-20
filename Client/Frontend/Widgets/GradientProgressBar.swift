@@ -22,10 +22,10 @@ open class GradientProgressBar: UIProgressView {
 
     var gradientColors: [CGColor] = []
     // Alpha mask for visible part of gradient.
-    private var alphaMaskLayer: CALayer = CALayer()
+    private var alphaMaskLayer = CALayer()
 
     // Gradient layer.
-    open var gradientLayer: CAGradientLayer = CAGradientLayer()
+    open var gradientLayer = CAGradientLayer()
 
     // Duration for "setProgress(animated: true)"
     open var animationDuration = DefaultValues.animationDuration

@@ -99,8 +99,8 @@ class LeanPlumClient {
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
-    private var useFxAPrePush: LPVar = LPVar.define("useFxAPrePush", with: false)
-    var enablePocketVideo: LPVar = LPVar.define("pocketVideo", with: false)
+    private var useFxAPrePush = LPVar.define("useFxAPrePush", with: false)
+    var enablePocketVideo = LPVar.define("pocketVideo", with: false)
 
     var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
 

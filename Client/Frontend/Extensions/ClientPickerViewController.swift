@@ -323,7 +323,7 @@ class ClientPickerTableViewCell: UITableViewCell {
         }
     }
 
-    var clientType: ClientType = ClientType.Mobile {
+    var clientType = ClientType.Mobile {
         didSet {
             self.imageView?.image = UIImage(named: clientType.rawValue)
         }

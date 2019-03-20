@@ -944,7 +944,7 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
         return button
     }()
 
-    lazy var maskButton: PrivateModeButton = PrivateModeButton()
+    lazy var maskButton = PrivateModeButton()
     fileprivate let sideOffset: CGFloat = 32
 
     fileprivate override init(frame: CGRect) {

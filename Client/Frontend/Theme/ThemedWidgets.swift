@@ -4,7 +4,7 @@
 import UIKit
 
 class ThemedTableViewCell: UITableViewCell, Themeable {
-    var detailTextColor: UIColor = UIColor.theme.tableView.disabledRowText
+    var detailTextColor = UIColor.theme.tableView.disabledRowText
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

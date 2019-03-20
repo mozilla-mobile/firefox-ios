@@ -60,7 +60,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
-    fileprivate let flowLayout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
+    fileprivate let flowLayout = UICollectionViewFlowLayout()
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()

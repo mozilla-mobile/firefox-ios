@@ -493,7 +493,7 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
 
 private struct PhotonActionSheetCellUX {
     static let LabelColor = UIConstants.SystemBlueColor
-    static let BorderWidth: CGFloat = CGFloat(0.5)
+    static let BorderWidth = CGFloat(0.5)
     static let CellSideOffset = 20
     static let TitleLabelOffset = 10
     static let CellTopBottomOffset = 12

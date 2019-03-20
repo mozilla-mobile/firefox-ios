@@ -127,7 +127,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         if let range = domainWithDotPrefix.range(of: ".\(query)", options: .caseInsensitive, range: nil, locale: nil) {
             // We don't actually want to match the top-level domain ("com", "org", etc.) by itself, so
             // so make sure the result includes at least one ".".
-            let matchedDomain: String = String(domainWithDotPrefix[domainWithDotPrefix.index(range.lowerBound, offsetBy: 1)...])
+            let matchedDomain = String(domainWithDotPrefix[domainWithDotPrefix.index(range.lowerBound, offsetBy: 1)...])
             if matchedDomain.contains(".") {
                 return matchedDomain
             }
