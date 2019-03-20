@@ -86,7 +86,7 @@ class FaviconManager: TabContentScript {
             }
         }
 
-        var fetch: SDWebImageOperation? = nil
+        var fetch: SDWebImageOperation?
         fetch = manager.loadImage(with: iconUrl, options: SDWebImageOptions(options),
                                   progress: { (receivedSize, expectedSize, _) in
                                     if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {

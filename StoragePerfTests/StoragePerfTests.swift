@@ -53,7 +53,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         XCTAssertTrue(doCleanup2, "We should not need to perform clean-up")
 
         // Trigger the actual clean-up operation to happen and re-check.
-        let _ = db.run(history.cleanupOldHistory(numberOfRowsToPrune: 50)).value.successValue
+        _ = db.run(history.cleanupOldHistory(numberOfRowsToPrune: 50)).value.successValue
         let doCleanup3 = history.checkIfCleanupIsNeeded(maxHistoryRows: maxRows).value.successValue!
         XCTAssertFalse(doCleanup3, "We should not need to perform clean-up")
     }

@@ -72,7 +72,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
         if DebugSettingsBundleOptions.saveLogsToDocuments {
-            Logger.copyPreviousLogsToDocuments();
+            Logger.copyPreviousLogsToDocuments()
         }
 
         return startApplication(application, withLaunchOptions: launchOptions)

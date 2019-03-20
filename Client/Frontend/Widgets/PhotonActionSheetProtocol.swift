@@ -447,7 +447,7 @@ extension PhotonActionSheetProtocol {
         }
     }
 
-    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?) -> ()) -> PhotonActionSheetItem? {
+    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?) -> Void) -> PhotonActionSheetItem? {
         profile.getAccount()?.updateProfile()
         let account = profile.getAccount()
 

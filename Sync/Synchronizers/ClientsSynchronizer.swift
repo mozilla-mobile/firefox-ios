@@ -338,7 +338,7 @@ open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchro
 
         let ourGUID = self.scratchpad.clientGUID
         var toInsert = [RemoteClient]()
-        var ours: Record<ClientPayload>? = nil
+        var ours: Record<ClientPayload>?
 
         for (rec) in records {
             guard rec.payload.isValid() else {

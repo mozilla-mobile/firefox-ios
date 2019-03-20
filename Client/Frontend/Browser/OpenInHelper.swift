@@ -123,7 +123,7 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
 
     func open() {
         guard let passData = try? Data(contentsOf: url) else { return }
-        var error: NSError? = nil
+        var error: NSError?
         let pass = PKPass(data: passData, error: &error)
         if let _ = error {
             // display an error
