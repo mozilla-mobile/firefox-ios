@@ -408,6 +408,7 @@ private class PhotonActionSheetTitleHeaderView: UITableViewHeaderFooterView {
     }
 
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.titleLabel.text = nil
     }
 }
@@ -475,6 +476,7 @@ private class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
     }
 
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.siteImageView.image = nil
         self.siteImageView.backgroundColor = UIColor.clear
     }
@@ -641,6 +643,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     }
 
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.statusIcon.image = nil
         disclosureIndicator.removeFromSuperview()
         disclosureLabel.removeFromSuperview()

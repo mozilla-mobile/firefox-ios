@@ -55,7 +55,7 @@ class ReaderModeStyleViewController: UIViewController {
 
     override func viewDidLoad() {
         // Our preferred content size has a fixed width and height based on the rows + padding
-
+        super.viewDidLoad()
         preferredContentSize = CGSize(width: ReaderModeStyleViewControllerUX.Width, height: ReaderModeStyleViewControllerUX.Height)
 
         popoverPresentationController?.backgroundColor = ReaderModeStyleViewControllerUX.FontTypeRowBackground

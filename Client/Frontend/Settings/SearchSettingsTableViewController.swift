@@ -285,6 +285,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         navigationItem.rightBarButtonItem?.action = editing ?
             #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
+        super.setEditing(editing, animated: animated)
     }
 }
 
