@@ -93,7 +93,6 @@ class URLBarView: UIView {
         locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.readerModeState = ReaderModeState.unavailable
-        locationView.backgroundColor = URLBarViewUX.TextFieldBorderColor
         locationView.delegate = self
         return locationView
     }()
@@ -431,6 +430,8 @@ class URLBarView: UIView {
 
         delegate?.urlBarDidEnterOverlayMode(self)
 
+        applyTheme()
+
         // Bug 1193755 Workaround - Calling becomeFirstResponder before the animation happens
         // won't take the initial frame of the label into consideration, which makes the label
         // look squished at the start of the animation and expand to be correct. As a workaround,
@@ -457,6 +458,7 @@ class URLBarView: UIView {
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
+        applyTheme()
     }
 
     func prepareOverlayAnimation() {
@@ -486,7 +488,6 @@ class URLBarView: UIView {
 
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.cgColor
-        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
 
         if inOverlayMode {
             line.isHidden = inOverlayMode
@@ -712,7 +713,7 @@ extension URLBarView: Themeable {
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
 
         locationBorderColor = UIColor.theme.urlbar.border
-        locationView.backgroundColor = UIColor.theme.textField.background
+        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
         locationContainer.backgroundColor = UIColor.theme.textField.background
     }
 }
@@ -794,7 +795,7 @@ class ToolbarTextField: AutocompleteTextField {
 
 extension ToolbarTextField: Themeable {
     func applyTheme() {
-        backgroundColor = UIColor.theme.textField.background
+        backgroundColor = UIColor.theme.textField.backgroundInOverlay
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode
