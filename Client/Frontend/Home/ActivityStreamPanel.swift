@@ -149,6 +149,10 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
             collectionView.reloadData()
         }
     }
+
+    func scrollToTop(animated: Bool = false) {
+        collectionView?.setContentOffset(.zero, animated: animated)
+    }
 }
 
 // MARK: -  Section management
