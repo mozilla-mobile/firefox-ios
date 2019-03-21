@@ -602,6 +602,8 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 
     // Without calling this, the TabContentScriptManager will leak.
     func uninstall(tab: Tab) {
+        (helpers[ContextMenuHelper.name()] as? ContextMenuHelper)?.uninstall()
+        
         helpers.forEach { helper in
             if let name = helper.value.scriptMessageHandlerName() {
                 tab.webView?.configuration.userContentController.removeScriptMessageHandler(forName: name)
