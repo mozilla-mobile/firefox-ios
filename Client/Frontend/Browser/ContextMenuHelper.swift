@@ -30,20 +30,27 @@ class ContextMenuHelper: NSObject {
         self.tab = tab
     }
 
+    func uninstall() {
+        kvoInfo.observation?.invalidate()
+    }
+
     // BVC KVO events for all changes on the webview will call this. It is called a lot during a page load.
     func replaceGestureHandlerIfNeeded() {
         // If the main layer changes, re-install KVO observation.
         // It seems the main layer changes only once after intialization of the webview,
         // so the if condition only runs twice.
-        guard let layer = self.tab?.webView?.scrollView.subviews[0].layer, layer != kvoInfo.layer else {
+
+        guard let scrollview = tab?.webView?.scrollView else { return }
+        let wkContentView = scrollview.subviews.first { String(describing: $0).hasPrefix("<WKContentView") }
+        guard let layer = wkContentView?.layer, layer != kvoInfo.layer else {
             return
         }
 
         kvoInfo.layer = layer
-        kvoInfo.observation = layer.observe(\.bounds) { (_, _) in
+        kvoInfo.observation = layer.observe(\.bounds) { [weak self] (_, _) in
             // The layer bounds updates when the document context (and gestures) have been setup
-            if self.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil {
-                self.replaceWebViewLongPress()
+            if self?.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil {
+                self?.replaceWebViewLongPress()
             }
         }
     }
@@ -52,9 +59,9 @@ class ContextMenuHelper: NSObject {
         // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
         // See also https://bugs.webkit.org/show_bug.cgi?id=193366
 
-        self.nativeHighlightLongPressRecognizer = self.gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:")
+        nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:")
 
-        if let nativeLongPressRecognizer = self.gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
+        if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
             nativeLongPressRecognizer.removeTarget(nil, action: nil)
             nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
         }
