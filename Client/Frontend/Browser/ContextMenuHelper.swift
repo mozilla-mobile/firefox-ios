@@ -40,10 +40,10 @@ class ContextMenuHelper: NSObject {
         }
 
         kvoInfo.layer = layer
-        kvoInfo.observation = layer.observe(\.bounds) { (_, _) in
+        kvoInfo.observation = layer.observe(\.bounds) { [weak self] (_, _) in
             // The layer bounds updates when the document context (and gestures) have been setup
-            if self.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil {
-                self.replaceWebViewLongPress()
+            if self?.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil {
+                self?.replaceWebViewLongPress()
             }
         }
     }
