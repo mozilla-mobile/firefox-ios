@@ -59,7 +59,7 @@ class Authenticator {
             }
 
             let logins = cursor.asArray()
-            var credentials: URLCredential? = nil
+            var credentials: URLCredential?
 
             // It is possible that we might have duplicate entries since we match against host and scheme://host.
             // This is a side effect of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.

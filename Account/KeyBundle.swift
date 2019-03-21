@@ -46,7 +46,7 @@ open class KeyBundle: Hashable {
 
     fileprivate func _hmac(_ ciphertext: Data) -> (data: UnsafeMutablePointer<CUnsignedChar>, len: Int) {
         let hmacAlgorithm = CCHmacAlgorithm(kCCHmacAlgSHA256)
-        let digestLen: Int = Int(CC_SHA256_DIGEST_LENGTH)
+        let digestLen = Int(CC_SHA256_DIGEST_LENGTH)
         let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
         CCHmac(hmacAlgorithm, hmacKey.getBytes(), hmacKey.count, ciphertext.getBytes(), ciphertext.count, result)
         return (result, digestLen)

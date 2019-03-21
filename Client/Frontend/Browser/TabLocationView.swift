@@ -410,7 +410,7 @@ class ReaderModeButton: UIButton {
         }
     }
 
-    var _readerModeState: ReaderModeState = ReaderModeState.unavailable
+    var _readerModeState = ReaderModeState.unavailable
 
     var readerModeState: ReaderModeState {
         get {

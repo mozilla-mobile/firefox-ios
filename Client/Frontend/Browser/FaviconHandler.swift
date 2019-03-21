@@ -33,7 +33,7 @@ class FaviconHandler {
         let site = Site(url: url, title: "")
         let options: SDWebImageOptions = tab.isPrivate ? SDWebImageOptions([.lowPriority, .cacheMemoryOnly]) : SDWebImageOptions([.lowPriority])
 
-        var fetch: SDWebImageOperation? = nil
+        var fetch: SDWebImageOperation?
 
         let onProgress: SDWebImageDownloaderProgressBlock = { (receivedSize, expectedSize, _) -> Void in
             if receivedSize > FaviconHandler.MaximumFaviconSize || expectedSize > FaviconHandler.MaximumFaviconSize {

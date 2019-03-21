@@ -46,6 +46,18 @@ opt_in_rules: # some rules are only opt-in
   - explicit_init
   - shorthand_operator
   - file_header
+  - deployment_target
+  - discouraged_optional_collection
+  - duplicate_imports
+  - empty_string
+  - implicit_return
+  - overridden_super_call
+  - prohibited_interface_builder
+  - prohibited_super_call
+  - protocol_property_accessors_order
+  - redundant_objc_attribute
+  - redundant_type_annotation
+  - unused_import
   # Find all the available rules by running:
   # swiftlint rules
 included: # paths to include during linting. `--path` is ignored if present.

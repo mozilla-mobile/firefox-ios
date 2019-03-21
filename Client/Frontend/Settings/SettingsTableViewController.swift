@@ -298,7 +298,6 @@ class WebPageSetting: StringPrefSetting {
     }
 }
 
-
 protocol SettingValuePersister {
     func readPersistedValue() -> String?
     func writePersistedValue(value: String?)

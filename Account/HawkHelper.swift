@@ -19,7 +19,7 @@ open class HawkHelper {
 
     // Produce a HAWK value suitable for an "Authorization: value" header, timestamped now.
     open func getAuthorizationValueFor(_ request: URLRequest) -> String {
-        let timestampInSeconds: Int64 = Int64(Date().timeIntervalSince1970)
+        let timestampInSeconds = Int64(Date().timeIntervalSince1970)
         return getAuthorizationValueFor(request, at: timestampInSeconds)
     }
 

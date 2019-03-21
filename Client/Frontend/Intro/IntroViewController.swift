@@ -83,6 +83,7 @@ class IntroViewController: UIViewController {
     fileprivate var imagesBackgroundView = UIView()
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         syncViaLP()
 
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")

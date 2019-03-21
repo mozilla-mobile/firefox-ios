@@ -110,7 +110,7 @@ public struct MetaGlobal: Equatable {
 
     // TODO: make a whole record JSON for this.
     public func asPayload() -> CleartextPayloadJSON {
-        let json: JSON = JSON([
+        let json = JSON([
             "syncID": self.syncID,
             "storageVersion": self.storageVersion,
             "engines": enginesPayload().dictionaryObject as Any,

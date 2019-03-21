@@ -135,7 +135,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                 let root = try? HTMLDocument(data: data as Data) else {
                     return deferMaybe([])
             }
-            var reloadUrl: URL? = nil
+            var reloadUrl: URL?
             for meta in root.xpath("//head/meta") {
                 if let refresh = meta["http-equiv"], refresh == "Refresh",
                     let content = meta["content"],

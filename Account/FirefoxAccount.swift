@@ -178,7 +178,7 @@ open class FirefoxAccount {
     }
 
     fileprivate class func fromDictionaryV1(_ dictionary: [String: Any]) -> FirefoxAccount? {
-        var configurationLabel: FirefoxAccountConfigurationLabel? = nil
+        var configurationLabel: FirefoxAccountConfigurationLabel?
         if let rawValue = dictionary["configurationLabel"] as? String {
             configurationLabel = FirefoxAccountConfigurationLabel(rawValue: rawValue)
         }

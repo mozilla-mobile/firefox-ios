@@ -528,7 +528,7 @@ class ExportLogDataSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        Logger.copyPreviousLogsToDocuments();
+        Logger.copyPreviousLogsToDocuments()
     }
 }
 

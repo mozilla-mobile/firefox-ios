@@ -53,7 +53,7 @@ class BrowserViewController: UIViewController {
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
 
-    lazy var mailtoLinkHandler: MailtoLinkHandler = MailtoLinkHandler()
+    lazy var mailtoLinkHandler = MailtoLinkHandler()
 
     lazy fileprivate var customSearchEngineButton: UIButton = {
         let searchButton = UIButton()

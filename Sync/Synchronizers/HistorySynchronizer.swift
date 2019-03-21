@@ -23,7 +23,7 @@ func makeDeletedHistoryRecord(_ guid: GUID) -> Record<HistoryPayload> {
 
     let ttl = HistoryTTLInSeconds
 
-    let json: JSON = JSON([
+    let json = JSON([
         "id": guid,
         "deleted": true,
         ])
@@ -36,7 +36,7 @@ func makeHistoryRecord(_ place: Place, visits: [Visit]) -> Record<HistoryPayload
     let modified: Timestamp = 0    // Ignored in upload serialization.
     let sortindex = 1              // TODO: frecency!
     let ttl = HistoryTTLInSeconds
-    let json: JSON = JSON([
+    let json = JSON([
         "id": id,
         "visits": visits.map { $0.toJSON() },
         "histUri": place.url,

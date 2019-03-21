@@ -13,8 +13,8 @@ private struct LoginListUX {
     static let RowHeight: CGFloat = 58
     static let SearchHeight: CGFloat = 58
     static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
-    static let NoResultsFont: UIFont = UIFont.systemFont(ofSize: 16)
-    static let NoResultsTextColor: UIColor = UIColor.Photon.Grey40
+    static let NoResultsFont = UIFont.systemFont(ofSize: 16)
+    static let NoResultsTextColor = UIColor.Photon.Grey40
 }
 
 private extension UITableView {

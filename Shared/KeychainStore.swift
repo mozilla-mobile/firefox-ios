@@ -18,7 +18,7 @@ public class KeychainStore {
         self.keychainWrapper = KeychainWrapper.sharedAppContainerKeychain
     }
 
-    public func setDictionary(_ value: [String : Any]?, forKey key: String, withAccessibility accessibility: SwiftKeychainWrapper.KeychainItemAccessibility = .afterFirstUnlock) {
+    public func setDictionary(_ value: [String: Any]?, forKey key: String, withAccessibility accessibility: SwiftKeychainWrapper.KeychainItemAccessibility = .afterFirstUnlock) {
         guard let value = value else {
             setString(nil, forKey: key, withAccessibility: accessibility)
             return
@@ -38,7 +38,7 @@ public class KeychainStore {
         keychainWrapper.set(value, forKey: key, withAccessibility: accessibility)
     }
 
-    public func dictionary(forKey key: String, withAccessibility accessibility: SwiftKeychainWrapper.KeychainItemAccessibility = .afterFirstUnlock) -> [String : Any]? {
+    public func dictionary(forKey key: String, withAccessibility accessibility: SwiftKeychainWrapper.KeychainItemAccessibility = .afterFirstUnlock) -> [String: Any]? {
         guard let stringValue = string(forKey: key, withAccessibility: accessibility) else {
             return nil
         }

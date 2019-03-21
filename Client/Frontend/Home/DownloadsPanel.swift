@@ -51,7 +51,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     private lazy var emptyStateOverlayView: UIView = self.createEmptyStateOverlayView()
 
     private var groupedDownloadedFiles = DateGroupedTableData<DownloadedFile>()
-    private var fileExtensionIcons: [String : UIImage] = [:]
+    private var fileExtensionIcons: [String: UIImage] = [:]
 
     // MARK: - Lifecycle
     init(profile: Profile) {
