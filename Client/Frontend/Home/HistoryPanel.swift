@@ -15,6 +15,7 @@ private struct HistoryPanelUX {
     static let IconSize = 23
     static let IconBorderColor = UIColor.Photon.Grey30
     static let IconBorderWidth: CGFloat = 0.5
+    static let actionIconColor = UIColor.Photon.Grey40 // Works for light and dark theme.
 }
 
 private class FetchInProgressError: MaybeErrorType {
@@ -338,7 +339,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.textLabel?.text = Strings.HistoryPanelClearHistoryButtonTitle
         cell.detailTextLabel?.text = ""
         cell.imageView?.image = UIImage.templateImageNamed("forget")
-        cell.imageView?.tintColor = UIColor(colorString: "0xb2b2b2")
+        cell.imageView?.tintColor = HistoryPanelUX.actionIconColor
         cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.clearHistory"
 
@@ -357,7 +358,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.accessoryType = .disclosureIndicator
         cell.textLabel?.text = Strings.RecentlyClosedTabsButtonTitle
         cell.detailTextLabel?.text = ""
-        cell.imageView?.image = UIImage(named: "recently_closed")
+        cell.imageView?.image = UIImage.templateImageNamed("recently_closed")
+        cell.imageView?.tintColor = HistoryPanelUX.actionIconColor
         cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         AdditionalHistoryActionRow.setStyle(enabled: hasRecentlyClosed, forCell: cell)
         cell.accessibilityIdentifier = "HistoryPanel.recentlyClosedCell"
@@ -368,7 +370,10 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         cell.accessoryType = .disclosureIndicator
         cell.textLabel?.text = Strings.SyncedTabsTableViewCellTitle
         cell.detailTextLabel?.text = syncDetailText
-        cell.imageView?.image = UIImage(named: "synced_devices")
+        cell.imageView?.image = UIImage.templateImageNamed("synced_devices")
+        cell.imageView?.tintColor = HistoryPanelUX.actionIconColor
+        cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
+
         cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
         return cell
