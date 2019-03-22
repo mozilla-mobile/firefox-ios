@@ -31,6 +31,9 @@ class TabsButton: UIButton {
     // updateTabCount() can be called in rapid succession, this ensures only final tab count is displayed.
     private var countToBe = "1"
 
+    // Re-entrancy guard to ensure the function is complete before starting another animation.
+    private var isUpdatingTabCount = false
+
     override var isHighlighted: Bool {
         didSet {
             if isHighlighted {
@@ -144,6 +147,16 @@ class TabsButton: UIButton {
             return
         }
 
+        // Re-entrancy guard: if this code is running just update the tab count value without starting another animation.
+        if isUpdatingTabCount {
+            if let clone = self.clonedTabsButton {
+                clone.countLabel.text = countToBe
+                clone.accessibilityValue = countToBe
+            }
+            return
+        }
+        isUpdatingTabCount = true
+
         if let _ = self.clonedTabsButton {
             self.clonedTabsButton?.layer.removeAllAnimations()
             self.clonedTabsButton?.removeFromSuperview()
@@ -196,6 +209,7 @@ class TabsButton: UIButton {
             self.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
             self.countLabel.text = self.countToBe
             self.accessibilityValue = self.countToBe
+            self.isUpdatingTabCount = false
         }
 
         if animated {
