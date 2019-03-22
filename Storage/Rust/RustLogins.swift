@@ -127,7 +127,7 @@ public class RustLogins {
         } while FileManager.default.fileExists(atPath: bakDatabasePath)
 
         do {
-            try FileManager.default.moveItem(atPath: bakDatabasePath, toPath: bakDatabasePath)
+            try FileManager.default.moveItem(atPath: databasePath, toPath: bakDatabasePath)
 
             let shmBaseFilename = baseFilename + "-shm"
             let walBaseFilename = baseFilename + "-wal"
