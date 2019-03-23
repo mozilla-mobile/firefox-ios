@@ -55,7 +55,7 @@ class ContextMenuHelper: NSObject {
         }
     }
 
-    func replaceWebViewLongPress() {
+    private func replaceWebViewLongPress() {
         // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
         // See also https://bugs.webkit.org/show_bug.cgi?id=193366
 
