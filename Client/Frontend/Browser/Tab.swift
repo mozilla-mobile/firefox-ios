@@ -534,10 +534,6 @@ class Tab: NSObject {
             return
         }
 
-        if let helper = contentScriptManager.getContentScript(ContextMenuHelper.name()) as? ContextMenuHelper {
-                helper.replaceWebViewLongPress()
-        }
-
         self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
     }
 
@@ -602,8 +598,6 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
 
     // Without calling this, the TabContentScriptManager will leak.
     func uninstall(tab: Tab) {
-        (helpers[ContextMenuHelper.name()] as? ContextMenuHelper)?.uninstall()
-        
         helpers.forEach { helper in
             if let name = helper.value.scriptMessageHandlerName() {
                 tab.webView?.configuration.userContentController.removeScriptMessageHandler(forName: name)
