@@ -23,39 +23,25 @@ class ContextMenuHelper: NSObject {
 
     fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
     fileprivate var elements: Elements?
-    private var kvoInfo: (layer: CALayer?, observation: NSKeyValueObservation?) = (nil, nil)
 
     required init(tab: Tab) {
         super.init()
         self.tab = tab
     }
 
-    func uninstall() {
-        kvoInfo.observation?.invalidate()
-    }
-
-    // BVC KVO events for all changes on the webview will call this. It is called a lot during a page load.
+    // BVC KVO events for all changes on the webview will call this. 
+    // It is called frequently during a page load (particularly on progress changes and URL changes).
+    // As of iOS 12, WKContentView gesture setup is async, but it has been called by the time
+    // the webview is ready to load an URL. After this has happened, we can override the gesture.
     func replaceGestureHandlerIfNeeded() {
-        // If the main layer changes, re-install KVO observation.
-        // It seems the main layer changes only once after intialization of the webview,
-        // so the if condition only runs twice.
-
-        guard let scrollview = tab?.webView?.scrollView else { return }
-        let wkContentView = scrollview.subviews.first { String(describing: $0).hasPrefix("<WKContentView") }
-        guard let layer = wkContentView?.layer, layer != kvoInfo.layer else {
-            return
-        }
-
-        kvoInfo.layer = layer
-        kvoInfo.observation = layer.observe(\.bounds) { [weak self] (_, _) in
-            // The layer bounds updates when the document context (and gestures) have been setup
-            if self?.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil {
-                self?.replaceWebViewLongPress()
+        DispatchQueue.main.async {
+            if self.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil {
+                self.replaceWebViewLongPress()
             }
         }
     }
 
-    func replaceWebViewLongPress() {
+    private func replaceWebViewLongPress() {
         // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
         // See also https://bugs.webkit.org/show_bug.cgi?id=193366
 
