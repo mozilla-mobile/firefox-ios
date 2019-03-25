@@ -85,6 +85,11 @@ class DeferredDBOperation<T>: Deferred<T>, Cancellable {
             _running = newValue
         }
     }
+    
+    override func fill(_ value: T) {
+        dispatchWorkItem = nil
+        super.fill(value)
+    }
 }
 
 enum SQLiteDBConnectionCreatedResult {
