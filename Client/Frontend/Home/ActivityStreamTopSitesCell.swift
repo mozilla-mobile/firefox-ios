@@ -291,7 +291,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
         //calculate our estimates.
         let rows = CGFloat(ceil(Double(Float(cellCount)/Float(horizontalItemsCount))))
-        let estimatedHeight = (rows * estimatedItemSize.height) + (insets * (rows+1))
+        let estimatedHeight = (rows * estimatedItemSize.height) + (insets * rows)
         let estimatedSize = CGSize(width: width, height: estimatedHeight)
 
         let estimatedInsets = UIEdgeInsets(equalInset: insets)
@@ -372,7 +372,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         var frame = CGRect.zero
         frame.origin.x = CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
-        frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
+        frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top)
 
         frame.size = itemSize
         attr.frame = frame
