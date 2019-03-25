@@ -151,64 +151,69 @@ public class RustLogins {
         }
     }
 
-    public func open() -> NSError? {
-        var error: NSError? = nil
+    private func open() -> NSError? {
+        do {
+            try storage.unlock(withEncryptionKey: encryptionKey)
+            isOpen = true
+            return nil
+        } catch let err as NSError {
+            if let loginsStoreError = err as? LoginsStoreError {
+                switch loginsStoreError {
+                // The encryption key is incorrect, or the `databasePath`
+                // specified is not a valid database. This is an unrecoverable
+                // state unless we can move the existing file to a backup
+                // location and start over.
+                case .InvalidKey(let message):
+                    log.error(message)
 
-        func doOpen() {
-            guard !isOpen else { return }
-
-            do {
-                try storage.unlock(withEncryptionKey: encryptionKey)
-                isOpen = true
-            } catch let err as NSError {
-                error = err
-
-                if let loginsStoreError = err as? LoginsStoreError {
-                    switch loginsStoreError {
-                        // The encryption key is incorrect, or the `databasePath`
-                        // specified is not a valid database. This is an unrecoverable
-                        // state unless we can move the existing file to a backup
-                    // location and start over.
-                    case .InvalidKey(let message):
-                        log.error(message)
-
-                        if !didAttemptToMoveToBackup {
-                            moveDatabaseFileToBackupLocation()
-                            didAttemptToMoveToBackup = true
-                            return doOpen()
-                        }
-                    case .Panic(let message):
-                        Sentry.shared.sendWithStacktrace(message: "Panicked when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
-                    default:
-                        Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
+                    if !didAttemptToMoveToBackup {
+                        moveDatabaseFileToBackupLocation()
+                        didAttemptToMoveToBackup = true
+                        return open()
                     }
-                } else {
-                    Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+                case .Panic(let message):
+                    Sentry.shared.sendWithStacktrace(message: "Panicked when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
+                default:
+                    Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
                 }
+            } else {
+                Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
             }
+
+            return err
         }
+    }
+
+    private func close() -> NSError? {
+        do {
+            try storage.lock()
+            isOpen = false
+            return nil
+        } catch let err as NSError {
+            Sentry.shared.sendWithStacktrace(message: "Unknown error when closing Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+            return err
+        }
+    }
+
+    public func reopenIfClosed() -> NSError? {
+        var error: NSError?  = nil
 
         queue.sync {
-            doOpen()
+            guard !isOpen else { return }
+
+            error = open()
         }
 
         return error
     }
 
-    public func close() -> NSError? {
+    public func forceClose() -> NSError? {
         var error: NSError? = nil
 
         queue.sync {
             guard isOpen else { return }
 
-            do {
-                try storage.lock()
-                isOpen = false
-            } catch let err as NSError {
-                error = err
-
-                Sentry.shared.sendWithStacktrace(message: "Unknown error when closing Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
-            }
+            error = close()
         }
 
         return error
