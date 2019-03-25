@@ -211,19 +211,18 @@ extension ActivityStreamPanel {
             if (traits.horizontalSizeClass == .regular && UIScreen.main.bounds.size.width != frameWidth) || UIDevice.current.userInterfaceIdiom == .phone {
                 currentTraits = UITraitCollection(horizontalSizeClass: .compact)
             }
+            var insets = ASPanelUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
+
             switch self {
             case .pocket, .libraryShortcuts:
                 let window = UIApplication.shared.keyWindow
-                let safeAreaInsets = window?.safeAreaInsets.left
-                var insets = ASPanelUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
-                insets = insets + ASPanelUX.MinimumInsets + (safeAreaInsets ?? 0)
+                let safeAreaInsets = window?.safeAreaInsets.left ?? 0
+                insets += ASPanelUX.MinimumInsets + safeAreaInsets
                 return insets
             case .topSites:
-                var insets = ASPanelUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
-                insets = insets + ASPanelUX.TopSitesInsets
+                insets += ASPanelUX.TopSitesInsets
                 return insets
             }
-
         }
 
         func numberOfItemsForRow(_ traits: UITraitCollection) -> CGFloat {
@@ -819,7 +818,7 @@ private struct ASHeaderViewUX {
 class ASFooterView: UICollectionReusableView {
 
     private var separatorLineView: UIView?
-    var leftConstraint: Constraint?
+    var leftConstraint: Constraint? //This constraint aligns content (Titles, buttons) between all sections.
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -838,9 +837,7 @@ class ASFooterView: UICollectionReusableView {
     }
 
     var insets: CGFloat {
-        get {
-            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? ASHeaderViewUX.Insets : ASPanelUX.MinimumInsets
-        }
+        return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? ASHeaderViewUX.Insets : ASPanelUX.MinimumInsets
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -849,6 +846,7 @@ class ASFooterView: UICollectionReusableView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        // update the insets every time a layout happens.Insets change depending on orientation or size (ipad split screen)
         leftConstraint?.update(offset: insets)
     }
 }
@@ -1043,7 +1041,6 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
         super.prepareForReuse()
         applyTheme()
     }
-
 }
 
 open class PinnedSite: Site {
@@ -1054,5 +1051,4 @@ open class PinnedSite: Site {
         self.icon = site.icon
         self.metadata = site.metadata
     }
-
 }

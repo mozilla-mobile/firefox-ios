@@ -209,7 +209,6 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
 
 }
 
-
 private struct HighlightIntroCellUX {
     static let margin: CGFloat = 20
     static let foxImageWidth: CGFloat = 168
