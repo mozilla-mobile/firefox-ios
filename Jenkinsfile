@@ -38,16 +38,17 @@ pipeline {
                 dir('SyncIntegrationTests') {
                     sh 'pipenv install'
                     sh 'pipenv check'
-                    sh 'pipenv run pytest ' +
+                    /* sh 'pipenv run pytest ' +
                         '--color=yes ' +
                         '--junit-xml=results/junit.xml ' +
                         '--html=results/index.html'
+                    */
                 }
             }
         }
     }
     post {
-        always {
+        /*always {
             archiveArtifacts 'SyncIntegrationTests/results/*'
             junit 'SyncIntegrationTests/results/*.xml'
             publishHTML(target: [
@@ -57,7 +58,7 @@ pipeline {
                 reportDir: 'SyncIntegrationTests/results',
                 reportFiles: 'index.html',
                 reportName: 'HTML Report'])
-        }
+        }*/
         failure {
             script {
                 if (env.BRANCH_NAME == 'master') {
