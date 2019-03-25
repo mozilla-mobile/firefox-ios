@@ -15,7 +15,7 @@ class RustLoginsTests: XCTestCase {
     override func setUp() {
         files = MockFiles()
 
-        let databasePath = URL(fileURLWithPath: files.rootPath, isDirectory: true).appendingPathComponent("testlogins.db").path
+        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("testlogins.db").path
         try? files.remove("testlogins.db")
 
         let encryptionKey = Bytes.generateRandomBytes(256).base64EncodedString

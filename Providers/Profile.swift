@@ -321,7 +321,7 @@ open class BrowserProfile: Profile {
         isShutdown = false
 
         db.reopenIfClosed()
-        logins.reopenIfClosed()
+        _ = logins.reopenIfClosed()
     }
 
     func _shutdown() {
@@ -329,7 +329,7 @@ open class BrowserProfile: Profile {
         isShutdown = true
 
         db.forceClose()
-        logins.forceClose()
+        _ = logins.forceClose()
     }
 
     @objc
@@ -549,7 +549,7 @@ open class BrowserProfile: Profile {
     }
 
     lazy var logins: RustLogins = {
-        let databasePath = URL(fileURLWithPath: files.rootPath, isDirectory: true).appendingPathComponent("logins.db").path
+        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
         return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey)
     }()
 

@@ -153,7 +153,7 @@ public class RustLogins {
 
     private func open() -> NSError? {
         do {
-            try self.storage.unlock(withEncryptionKey: encryptionKey)
+            try storage.unlock(withEncryptionKey: encryptionKey)
             isOpen = true
             return nil
         } catch let err as NSError {
@@ -186,7 +186,7 @@ public class RustLogins {
 
     private func close() -> NSError? {
         do {
-            try self.storage.lock()
+            try storage.lock()
             isOpen = false
             return nil
         } catch let err as NSError {
@@ -195,16 +195,28 @@ public class RustLogins {
         }
     }
 
-    public func reopenIfClosed() {
-        if !isOpen {
-            _ = open()
+    public func reopenIfClosed() -> NSError? {
+        var error: NSError?  = nil
+
+        queue.sync {
+            guard !isOpen else { return }
+
+            error = open()
         }
+
+        return error
     }
 
-    public func forceClose() {
-        if isOpen {
-            _ = close()
+    public func forceClose() -> NSError? {
+        var error: NSError? = nil
+
+        queue.sync {
+            guard isOpen else { return }
+
+            error = close()
         }
+
+        return error
     }
 
     public func sync(unlockInfo: SyncUnlockInfo) -> Success {
@@ -360,7 +372,7 @@ public class RustLogins {
         login.timesUsed += 1
         login.timeLastUsed = Int64(Date.nowMicroseconds())
 
-        return self.update(login: login)
+        return update(login: login)
     }
 
     public func update(login: LoginRecord) -> Success {
