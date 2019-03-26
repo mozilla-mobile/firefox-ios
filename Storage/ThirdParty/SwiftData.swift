@@ -49,6 +49,7 @@ public class DBOperationCancelled : MaybeErrorType {
 class DeferredDBOperation<T>: Deferred<T>, Cancellable {
     fileprivate var dispatchWorkItem: DispatchWorkItem?
     private var _running = false
+    private var _cancelled = false
 
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
 
@@ -56,21 +57,22 @@ class DeferredDBOperation<T>: Deferred<T>, Cancellable {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
 
+        if _running {
+            connection?.interrupt()
+        }
+
         let queue = OperationQueue.current?.underlyingQueue
         queue?.suspend()
         defer { queue?.resume() }
 
         dispatchWorkItem?.cancel()
-
-        if _running {
-            connection?.interrupt()
-        }
+        _cancelled = true
     }
 
     var cancelled: Bool {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
-        return dispatchWorkItem?.isCancelled ?? false
+        return _cancelled
     }
 
     var running: Bool {
@@ -206,10 +208,6 @@ open class SwiftData {
                 }
             }
 
-            if debugSimulateSlowDBOperations {
-                sleep(2)
-            }
-
             guard let connection = useSecondaryConnection ? self.secondaryConnection : self.primaryConnection else {
                 do {
                     _ = try callback(FailedSQLiteDBConnection())
@@ -222,6 +220,10 @@ open class SwiftData {
             }
 
             deferred.connection = connection
+
+            if debugSimulateSlowDBOperations {
+                sleep(2)
+            }
 
             do {
                 let result = try callback(connection)
@@ -1069,7 +1071,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
                 Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
-            Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500))).")
+            // Don't log errors caused by `sqlite3_interrupt()` to Sentry.
+            if error.code != Int(SQLITE_INTERRUPT) {
+                Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500))).")
+            }
 
             return Cursor<T>(err: error)
         }
