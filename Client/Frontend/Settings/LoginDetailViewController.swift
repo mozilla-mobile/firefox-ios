@@ -315,10 +315,13 @@ extension LoginDetailViewController {
         guard username != login.username || password != login.password || website != login.hostname else { return }
 
         // Keep a copy of the old data in case we fail and need to revert back
-        let oldInfo = (pass: login.password, user: login.username, site: login.hostname)
+        let oldInfo = (pass: login.password, user: login.username, site: login.hostname, formSubmitURL: login.formSubmitURL)
         login.password = password
         login.username = username
-        login.hostname = website
+        if website != login.hostname {
+            login.hostname = website
+            login.formSubmitURL = website
+        }
 
         if login.isValid.isSuccess {
             _ = profile.logins.update(login: login)
@@ -326,6 +329,7 @@ extension LoginDetailViewController {
             login.password = oldInfo.pass
             login.username = oldInfo.user
             login.hostname = oldInfo.site
+            login.formSubmitURL = oldInfo.formSubmitURL
         }
     }
 }
