@@ -345,8 +345,9 @@ class TopTabsTestIpad: IpadOnlyTestCase {
     func testUpdateTabCounter(){
         if skipPlatform {return}
         // Open three tabs by tapping on '+' button
-        app/*@START_MENU_TOKEN@*/.buttons["New Tab"]/*[[".buttons[\"New Tab\"]",".buttons[\"TopTabsViewController.newTabButton\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
-        app/*@START_MENU_TOKEN@*/.buttons["New Tab"]/*[[".buttons[\"New Tab\"]",".buttons[\"TopTabsViewController.newTabButton\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        app.buttons["TopTabsViewController.newTabButton"].tap()
+        app.buttons["TopTabsViewController.newTabButton"].tap()
+        waitForExistence(app.buttons["TopTabsViewController.tabsButton"])
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("3", numTab)
         // Remove one tab by tapping on 'x' button
