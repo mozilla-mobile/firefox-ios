@@ -71,13 +71,20 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
 
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
-                    // First, see if the query matches any URLs from the user's search history.
+
+                    // Load the data in the table view.
                     self.load(cursor)
+
+                    // If the new search string is not longer than the previous,
+                    // we don't need to find an autocomplete suggestion.
+                    guard oldValue.count < self.query.count else {
+                        return
+                    }
+
+                    // First, see if the query matches any URLs from the user's search history.
                     for site in cursor {
                         if let url = site?.url, let completion = self.completionForURL(url) {
-                            if oldValue.count < self.query.count {
-                                self.urlBar.setAutocompleteSuggestion(completion)
-                            }
+                            self.urlBar.setAutocompleteSuggestion(completion)
                             return
                         }
                     }
@@ -85,9 +92,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     // If there are no search history matches, try matching one of the Alexa top domains.
                     for domain in self.topDomains {
                         if let completion = self.completionForDomain(domain) {
-                            if oldValue.count < self.query.count {
-                                self.urlBar.setAutocompleteSuggestion(completion)
-                            }
+                            self.urlBar.setAutocompleteSuggestion(completion)
                             return
                         }
                     }

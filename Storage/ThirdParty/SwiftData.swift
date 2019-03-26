@@ -87,7 +87,14 @@ class DeferredDBOperation<T>: Deferred<T>, Cancellable {
     }
     
     override func fill(_ value: T) {
-        dispatchWorkItem = nil
+        defer {
+            dispatchWorkItem = nil
+        }
+
+        guard !cancelled else {
+            return
+        }
+
         super.fill(value)
     }
 }
