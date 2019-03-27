@@ -951,6 +951,7 @@ class ASHeaderView: UICollectionReusableView {
 }
 
 class LibraryShortcutView: UIView {
+    static let spacing: CGFloat = 15
 
     var button = UIButton()
     var title = UILabel()
@@ -962,11 +963,12 @@ class LibraryShortcutView: UIView {
         button.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.width.equalTo(self)
-            make.height.equalTo(self.snp.width)
+            make.width.equalTo(self).offset(-LibraryShortcutView.spacing)
+            make.height.equalTo(self.snp.width).offset(-LibraryShortcutView.spacing)
         }
         title.adjustsFontSizeToFitWidth = true
         title.minimumScaleFactor = 0.7
+        title.numberOfLines = 2
         title.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         title.textAlignment = .center
         title.snp.makeConstraints { make in
@@ -976,7 +978,7 @@ class LibraryShortcutView: UIView {
         button.imageView?.contentMode = .scaleToFill
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
-        button.imageEdgeInsets = UIEdgeInsets(equalInset: 15)
+        button.imageEdgeInsets = UIEdgeInsets(equalInset: LibraryShortcutView.spacing)
         button.tintColor = .white
     }
 
@@ -985,7 +987,7 @@ class LibraryShortcutView: UIView {
     }
 
     override func layoutSubviews() {
-        button.layer.cornerRadius = self.frame.width / 2
+        button.layer.cornerRadius = (self.frame.width - LibraryShortcutView.spacing) / 2
         super.layoutSubviews()
     }
 }
@@ -1010,7 +1012,7 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
     override init(frame: CGRect) {
         super.init(frame: frame)
         mainView.distribution = .fillEqually
-        mainView.spacing = 25
+        mainView.spacing = 10
         addSubview(mainView)
         mainView.snp.makeConstraints { make in
             make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
