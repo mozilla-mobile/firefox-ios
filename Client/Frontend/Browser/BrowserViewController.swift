@@ -64,6 +64,7 @@ class BrowserViewController: UIViewController {
     }()
 
     fileprivate var customSearchBarButton: UIBarButtonItem?
+    private weak var currentBookmarksKeywordQuery: Cancellable?
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -810,6 +811,8 @@ class BrowserViewController: UIViewController {
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
+        currentBookmarksKeywordQuery?.cancel()
+
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
@@ -1386,6 +1389,9 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
         guard let currentTab = tabManager.selectedTab else { return }
+
+        currentBookmarksKeywordQuery?.cancel()
+
         if let fixupURL = URIFixup.getURL(text) {
             // The user entered a URL, so use it.
             finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
@@ -1402,7 +1408,18 @@ extension BrowserViewController: URLBarDelegate {
         let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
         let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
 
-        profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(.main) { result in
+        let deferred = profile.bookmarks.getURLForKeywordSearch(possibleKeyword)
+        currentBookmarksKeywordQuery = deferred as? Cancellable
+
+        deferred.uponQueue(.main) { result in
+            defer {
+                self.currentBookmarksKeywordQuery = nil
+            }
+
+            guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
+                return
+            }
+
             if var urlString = result.successValue,
                 let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed),
                 let range = urlString.range(of: "%s") {
