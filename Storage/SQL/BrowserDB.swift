@@ -46,6 +46,16 @@ open class BrowserDB {
         }
     }
 
+    // Returns the SQLite secure_delete setting for debug purposes.
+    public func sqliteSecureDelete() -> Deferred<Maybe<Int>> {
+        return withConnection { connection -> Int in
+            let result = connection.executeQueryUnsafe("PRAGMA secure_delete", factory: { row -> Int in
+                return row[0] as? Int ?? 0
+            }, withArgs: nil)
+            return result.asArray().first ?? 0
+        }
+    }
+
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`
     // instance has been initialized (schema is created/updated).
     public func touch() -> Success {

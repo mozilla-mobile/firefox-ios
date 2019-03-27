@@ -159,9 +159,11 @@ open class SwiftData {
         self.primaryConnectionQueue = DispatchQueue(label: "SwiftData primary queue: \(filename)", attributes: [])
         self.secondaryConnectionQueue = DispatchQueue(label: "SwiftData secondary queue: \(filename)", attributes: [])
 
-        // Ensure that multi-thread mode is enabled by default.
-        // See https://www.sqlite.org/threadsafe.html
-        assert(sqlite3_threadsafe() == SQLITE_CONFIG_MULTITHREAD)
+        // Ensure that SQLite/SQLCipher has been compiled with
+        // `SQLITE_THREADSAFE=1` or `SQLITE_THREADSAFE=2`.
+        // https://www.sqlite.org/compile.html#threadsafe
+        // https://www.sqlite.org/threadsafe.html
+        assert(sqlite3_threadsafe() > 0)
     }
 
     /**
@@ -285,14 +287,20 @@ open class SwiftData {
         case readWrite
         case readWriteCreate
 
+        // We use `SQLITE_OPEN_NOMUTEX` here which effectively makes
+        // `SQLITE_THREADSAFE=1` behave like `SQLITE_THREADSAFE=2`.
+        // This is safe ONLY IF no two threads touch the same connection
+        // at the same time.
+        // https://www.sqlite.org/compile.html#threadsafe
+        // https://www.sqlite.org/threadsafe.html
         fileprivate func toSQL() -> Int32 {
             switch self {
             case .readOnly:
-                return SQLITE_OPEN_READONLY
+                return SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READONLY
             case .readWrite:
-                return SQLITE_OPEN_READWRITE
+                return SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READWRITE
             case .readWriteCreate:
-                return SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
+                return SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
             }
         }
     }
