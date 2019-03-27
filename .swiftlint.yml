@@ -50,7 +50,6 @@ opt_in_rules: # some rules are only opt-in
   - discouraged_optional_collection
   - duplicate_imports
   - empty_string
-  - implicit_return
   - overridden_super_call
   - prohibited_interface_builder
   - prohibited_super_call
