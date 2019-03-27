@@ -53,9 +53,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
-            if let currentDbQuery = currentDbQuery {
-                currentDbQuery.cancel()
-            }
+            currentDbQuery?.cancel()
 
             let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
             currentDbQuery = deferred as? Cancellable

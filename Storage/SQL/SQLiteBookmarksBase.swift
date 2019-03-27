@@ -52,10 +52,10 @@ open class SQLiteBookmarks: BookmarksModelFactorySource, KeywordSearchSource {
     }
 
     open func getURLForKeywordSearch(_ keyword: String) -> Deferred<Maybe<String>> {
-        let sql = "SELECT bmkUri FROM view_bookmarksBuffer_on_mirror WHERE keyword = ?"
+        let sql = "SELECT bmkUri FROM view_bookmarksBuffer_on_mirror WHERE keyword = ? LIMIT 1"
         let args: Args = [keyword]
 
-        return self.db.runQuery(sql, args: args, factory: { $0["bmkUri"] as! String })
+        return self.db.runQueryConcurrently(sql, args: args, factory: { $0["bmkUri"] as! String })
             >>== { cursor in
                 if cursor.status == .success {
                     if let str = cursor[0] {
