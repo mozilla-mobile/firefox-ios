@@ -180,10 +180,25 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         return hasActiveCompletion
     }
 
+    @objc fileprivate func clear() {
+        text = ""
+        removeCompletion()
+        autocompleteDelegate?.autocompleteTextField(self, didEnterText: "")
+    }
+
     // `shouldChangeCharactersInRange` is called before the text changes, and textDidChange is called after.
     // Since the text has changed, remove the completion here, and textDidChange will fire the callback to
     // get the new autocompletion.
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // This happens when you begin typing overtop the old highlighted
+        // text immediately after focusing the text field. We need to trigger
+        // a `didEnterText` that looks like a `clear()` so that the SearchLoader
+        // can reset itself since it will only lookup results if the new text is
+        // longer than the previous text.
+        if lastReplacement == nil {
+            autocompleteDelegate?.autocompleteTextField(self, didEnterText: "")
+        }
+
         lastReplacement = string
         return true
     }
@@ -257,7 +272,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         button.setImage(UIImage.templateImageNamed("topTabs-closeTabs"), for: .normal)
         button.tintColor = self.textColor
         button.backgroundColor = backgroundColor
-        button.addTarget(self, action: #selector(removeCompletion), for: .touchUpInside)
+        button.addTarget(self, action: #selector(clear), for: .touchUpInside)
         return button
     }
 
