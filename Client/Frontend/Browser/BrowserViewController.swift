@@ -748,32 +748,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func showSearchController() {
-        if searchController != nil {
-            return
-        }
-
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
-        searchController!.searchEngines = profile.searchEngines
-        searchController!.searchDelegate = self
-
-        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-        searchLoader?.addListener(searchController!)
-
-        addChildViewController(searchController!)
-        view.addSubview(searchController!.view)
-        searchController!.view.snp.makeConstraints { make in
-            make.top.equalTo(self.urlBar.snp.bottom)
-            make.left.right.bottom.equalTo(self.view)
-            return
-        }
-
-        homePanelController?.view?.isHidden = true
-
-        searchController!.didMove(toParentViewController: self)
-    }
-
     func showLibrary(panel: LibraryPanelType? = nil) {
         if let presentedVC = self.presentedViewController {
             presentedVC.dismiss(animated: true, completion: nil)
@@ -799,15 +773,56 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    fileprivate func createSearchControllerIfNeeded() {
+        guard self.searchController == nil else {
+            return
+        }
+
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        let searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
+        searchController.searchEngines = profile.searchEngines
+        searchController.searchDelegate = self
+
+        let searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+        searchLoader.addListener(searchController)
+
+        self.searchController = searchController
+        self.searchLoader = searchLoader
+    }
+
+    fileprivate func showSearchController() {
+        createSearchControllerIfNeeded()
+
+        guard let searchController = self.searchController else {
+            return
+        }
+
+        addChildViewController(searchController)
+        view.addSubview(searchController.view)
+        searchController.view.snp.makeConstraints { make in
+            make.top.equalTo(self.urlBar.snp.bottom)
+            make.left.right.bottom.equalTo(self.view)
+        }
+
+        homePanelController?.view?.isHidden = true
+
+        searchController.didMove(toParentViewController: self)
+    }
+
     fileprivate func hideSearchController() {
-        if let searchController = searchController {
+        if let searchController = self.searchController {
             searchController.willMove(toParentViewController: nil)
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
-            self.searchController = nil
             homePanelController?.view?.isHidden = false
-            searchLoader = nil
         }
+    }
+
+    fileprivate func destroySearchController() {
+        hideSearchController()
+
+        searchController = nil
+        searchLoader = nil
     }
 
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
@@ -1382,9 +1397,10 @@ extension BrowserViewController: URLBarDelegate {
             hideSearchController()
         } else {
             showSearchController()
-            searchController?.searchQuery = text
-            searchLoader?.query = text
         }
+
+        searchController?.searchQuery = text
+        searchLoader?.query = text
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
@@ -1467,7 +1483,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
-        hideSearchController()
+        destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
     }
 

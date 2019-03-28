@@ -24,10 +24,14 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
     fileprivate let urlBar: URLBarView
     fileprivate let frecentHistory: FrecentHistory
 
+    private var isFirstQuery: Bool
+
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
         self.urlBar = urlBar
-        frecentHistory = profile.history.getFrecentHistory()
+        self.frecentHistory = profile.history.getFrecentHistory()
+
+        self.isFirstQuery = true
 
         super.init()
     }
@@ -48,12 +52,12 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
+            currentDbQuery?.cancel()
+
             if query.isEmpty {
                 load(Cursor(status: .success, msg: "Empty query"))
                 return
             }
-
-            currentDbQuery?.cancel()
 
             let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
             currentDbQuery = deferred as? Cancellable
@@ -73,9 +77,16 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     // Load the data in the table view.
                     self.load(cursor)
 
-                    // If the new search string is not longer than the previous,
+                    // If the new search string is not longer than the previous
                     // we don't need to find an autocomplete suggestion.
                     guard oldValue.count < self.query.count else {
+                        return
+                    }
+
+                    // If this is the first change of the value, we
+                    // don't need to find an autocomplete suggestion.
+                    guard !self.isFirstQuery else {
+                        self.isFirstQuery = false
                         return
                     }
 
