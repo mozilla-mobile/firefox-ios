@@ -802,7 +802,6 @@ class BrowserViewController: UIViewController {
         searchController.view.snp.makeConstraints { make in
             make.top.equalTo(self.urlBar.snp.bottom)
             make.left.right.bottom.equalTo(self.view)
-            return
         }
 
         homePanelController?.view?.isHidden = true
