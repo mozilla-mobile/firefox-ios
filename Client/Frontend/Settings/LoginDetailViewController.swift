@@ -162,7 +162,10 @@ extension LoginDetailViewController: UITableViewDataSource {
             loginCell.descriptionLabel.text = login.hostname
             websiteField = loginCell.descriptionLabel
             websiteField?.accessibilityIdentifier = "websiteField"
-            loginCell.isEditingFieldData = isEditingFieldData
+            loginCell.isEditingFieldData = false
+            if isEditingFieldData {
+                loginCell.contentView.alpha = 0.5
+            }
             return loginCell
 
         case .lastModifiedSeparator:
@@ -296,7 +299,7 @@ extension LoginDetailViewController {
 
     @objc func edit() {
         isEditingFieldData = true
-        guard let cell = tableView.cellForRow(at: InfoItem.websiteItem.indexPath) as? LoginTableViewCell else { return }
+        guard let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as? LoginTableViewCell else { return }
         cell.descriptionLabel.becomeFirstResponder()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
     }
@@ -311,21 +314,19 @@ extension LoginDetailViewController {
         }
 
         // Only update if user made changes
-        guard let username = usernameField?.text, let password = passwordField?.text, let website = websiteField?.text else { return }
-        guard username != login.username || password != login.password || website != login.hostname else { return }
+        guard let username = usernameField?.text, let password = passwordField?.text else { return }
+        guard username != login.username || password != login.password else { return }
 
         // Keep a copy of the old data in case we fail and need to revert back
-        let oldInfo = (pass: login.password, user: login.username, site: login.hostname)
+        let oldInfo = (pass: login.password, user: login.username)
         login.password = password
         login.username = username
-        login.hostname = website
 
         if login.isValid.isSuccess {
             _ = profile.logins.update(login: login)
         } else {
             login.password = oldInfo.pass
             login.username = oldInfo.user
-            login.hostname = oldInfo.site
         }
     }
 }
