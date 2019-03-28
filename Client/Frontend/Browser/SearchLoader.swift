@@ -83,8 +83,8 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                         return
                     }
 
-                    // If this is not the first change of the value,
-                    // we don't need to find an autocomplete suggestion.
+                    // If this is the first change of the value, we
+                    // don't need to find an autocomplete suggestion.
                     guard !self.isFirstQuery else {
                         self.isFirstQuery = false
                         return
