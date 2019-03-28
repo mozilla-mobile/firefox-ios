@@ -264,6 +264,10 @@ open class SwiftData {
         primaryConnectionQueue.sync {
             guard !self.closed else { return }
             self.closed = true
+
+            // Optimize the database if needed, but only on the read/write connection.
+            self.primaryConnection?.optimize()
+
             self.primaryConnection = nil
             self.secondaryConnection = nil
             let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
@@ -406,6 +410,7 @@ public protocol SQLiteDBConnection {
     func interrupt()
     func checkpoint()
     func checkpoint(_ mode: Int32)
+    func optimize()
     func vacuum() throws -> Void
     func setVersion(_ version: Int) throws -> Void
 }
@@ -444,6 +449,7 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     func interrupt() {}
     func checkpoint() {}
     func checkpoint(_ mode: Int32) {}
+    func optimize() {}
     func vacuum() throws -> Void {
         throw fail("Non-open connection; can't vacuum.")
     }
@@ -904,6 +910,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         log.debug("Running WAL checkpoint on \(self.filename) on thread \(Thread.current).")
         sqlite3_wal_checkpoint_v2(sqliteDB, nil, mode, nil, nil)
         log.debug("WAL checkpoint done on \(self.filename).")
+    }
+
+    public func optimize() {
+        _ = pragma("optimize", factory: StringFactory)
     }
 
     public func vacuum() throws -> Void {
