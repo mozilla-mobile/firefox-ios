@@ -75,21 +75,35 @@ func getLocalFrecencySQL() -> String {
 }
 
 fileprivate func escapeFTSSearchString(_ search: String) -> String {
-    // Remove double-quotes and split search string on whitespace.
-    let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces)
+    // Remove double-quotes, split search string on whitespace
+    // and remove any empty strings
+    let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces).filter({ !$0.isEmpty })
+
+    // If there's only one word, ensure it is longer than 2
+    // characters. Otherwise, form a different type of search
+    // string to attempt to match the start of URLs.
+    guard words.count > 1 else {
+        if let word = words.first {
+            if word.count > 2 {
+                return "\"\(word)*\""
+            } else {
+                return "title: \"^\(word)*\" OR " +
+                    "url: \"^http://\(word)*\" OR " +
+                    "url: \"^https://\(word)*\" OR " +
+                    "url: \"^http://www.\(word)*\" OR " +
+                    "url: \"^https://www.\(word)*\""
+            }
+        } else {
+            return ""
+        }
+    }
 
     // Remove empty strings, wrap each word in double-quotes, append
     // "*", then join it all back together. For words with fewer than
     // three characters, anchor the search to the beginning of word
     // bounds by prepending "^".
     // Example: "foo bar a b" -> "\"foo*\"\"bar*\"\"^a*\"\"^b*\""
-    return words.filter({ !$0.isEmpty }).map({
-        if $0.count < 3 {
-            return "\"^\($0)*\""
-        } else {
-            return "\"\($0)*\""
-        }
-    }).joined()
+    return words.map({ "\"\($0)*\"" }).joined()
 }
 
 fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {
