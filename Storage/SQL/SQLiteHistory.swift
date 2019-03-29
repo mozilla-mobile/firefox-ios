@@ -91,7 +91,9 @@ fileprivate func escapeFTSSearchString(_ search: String) -> String {
                     "url: \"^http://\(word)*\" OR " +
                     "url: \"^https://\(word)*\" OR " +
                     "url: \"^http://www.\(word)*\" OR " +
-                    "url: \"^https://www.\(word)*\""
+                    "url: \"^https://www.\(word)*\" OR " +
+                    "url: \"^http://m.\(word)*\" OR " +
+                    "url: \"^https://m.\(word)*\""
             }
         } else {
             return ""
