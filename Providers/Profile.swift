@@ -1263,14 +1263,23 @@ open class BrowserProfile: Profile {
         }
 
         @discardableResult public func syncEverything(why: SyncReason) -> Success {
-            return self.syncSeveral(
-                why: why,
-                synchronizers:
+            var synchronizers = [
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
-                ("logins", self.syncLoginsWithDelegate),
                 ("bookmarks", self.mirrorBookmarksWithDelegate),
-                ("history", self.syncHistoryWithDelegate)) >>> succeed
+                ("history", self.syncHistoryWithDelegate)
+            ]
+
+            // Only Sync "logins" if we're not syncing in the background.
+            // Currently, the application-services implementation of Sync
+            // cannot let the database be closed while a pending Sync
+            // operation is in progress.
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=1540256
+            if why != .backgrounded {
+                synchronizers.append(("logins", self.syncLoginsWithDelegate))
+            }
+
+            return self.syncSeveral(why: why, synchronizers: synchronizers) >>> succeed
         }
 
         func syncEverythingSoon() {
