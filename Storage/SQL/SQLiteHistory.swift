@@ -83,20 +83,27 @@ fileprivate func escapeFTSSearchString(_ search: String) -> String {
     // characters. Otherwise, form a different type of search
     // string to attempt to match the start of URLs.
     guard words.count > 1 else {
-        if let word = words.first {
-            if word.count > 2 {
-                return "\"\(word)*\""
-            } else {
-                return "title: \"^\(word)*\" OR " +
-                    "url: \"^http://\(word)*\" OR " +
-                    "url: \"^https://\(word)*\" OR " +
-                    "url: \"^http://www.\(word)*\" OR " +
-                    "url: \"^https://www.\(word)*\" OR " +
-                    "url: \"^http://m.\(word)*\" OR " +
-                    "url: \"^https://m.\(word)*\""
-            }
-        } else {
+        guard let word = words.first else {
             return ""
+        }
+
+        let charThresholdForSearchAll = 2
+        if word.count > charThresholdForSearchAll {
+            return "\"\(word)*\""
+        } else {
+            let titlePrefix = "title: \"^"
+            let httpPrefix = "url: \"^http://"
+            let httpsPrefix = "url: \"^https://"
+
+            return [titlePrefix,
+                    httpPrefix,
+                    httpsPrefix,
+                    httpPrefix + "www.",
+                    httpsPrefix + "www.",
+                    httpPrefix + "m.",
+                    httpsPrefix + "m."]
+                .map({ "\($0)\(word)*\"" })
+                .joined(separator: " OR ")
         }
     }
 
