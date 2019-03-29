@@ -961,6 +961,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             log.warning("Database \(self.filename) was not opened with SQLCipher")
             return nil
         }
+
+        // Since we're using SQLCipher, ensure that `cipher_memory_security` is
+        // turned off. Otherwise, there is a HUGE performance penalty.
+        _ = pragma("cipher_memory_security=OFF", factory: StringFactory)
         return nil
     }
 
