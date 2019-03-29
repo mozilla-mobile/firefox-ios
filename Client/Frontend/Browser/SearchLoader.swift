@@ -24,14 +24,14 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
     fileprivate let urlBar: URLBarView
     fileprivate let frecentHistory: FrecentHistory
 
-    private var isFirstQuery: Bool
+    private var skipNextAutocomplete: Bool
 
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
         self.urlBar = urlBar
         self.frecentHistory = profile.history.getFrecentHistory()
 
-        self.isFirstQuery = true
+        self.skipNextAutocomplete = false
 
         super.init()
     }
@@ -83,10 +83,10 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                         return
                     }
 
-                    // If this is the first change of the value, we
-                    // don't need to find an autocomplete suggestion.
-                    guard !self.isFirstQuery else {
-                        self.isFirstQuery = false
+                    // If we should skip the next autocomplete, reset
+                    // the flag and bail out here.
+                    guard !self.skipNextAutocomplete else {
+                        self.skipNextAutocomplete = false
                         return
                     }
 
@@ -108,6 +108,11 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 }
             }
         }
+    }
+
+    func setQueryWithoutAutocomplete(_ query: String) {
+        skipNextAutocomplete = true
+        self.query = query
     }
 
     fileprivate func completionForURL(_ url: String) -> String? {

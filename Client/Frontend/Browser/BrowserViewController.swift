@@ -1392,6 +1392,17 @@ extension BrowserViewController: URLBarDelegate {
         return locationActionsForURLBar(urlBar).map { $0.accessibilityCustomAction }
     }
 
+    func urlBar(_ urlBar: URLBarView, didRestoreText text: String) {
+        if text.isEmpty {
+            hideSearchController()
+        } else {
+            showSearchController()
+        }
+
+        searchController?.searchQuery = text
+        searchLoader?.setQueryWithoutAutocomplete(text)
+    }
+
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
         if text.isEmpty {
             hideSearchController()
