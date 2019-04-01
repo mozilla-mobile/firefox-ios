@@ -702,7 +702,7 @@ class LoginManagerTests: KIFTestCase {
         var passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         var passwordField = passwordCell.descriptionLabel
 
-        tester().tapView(withAccessibilityLabel: "Siguiente")
+        tester().tapView(withAccessibilityLabel: "Next")
         tester().waitForAnimationsToFinish()
         tester().clearTextFromView(withAccessibilityIdentifier: "passwordField")
         tester().tapView(withAccessibilityLabel: "Done")
