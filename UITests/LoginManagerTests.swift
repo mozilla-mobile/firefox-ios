@@ -598,21 +598,15 @@ class LoginManagerTests: KIFTestCase {
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
         tester().waitForAnimationsToFinish()
         tester().tapView(withAccessibilityLabel: "Edit")
-        // Check that we've selected the website field, editable starting on v16.x
-        var firstResponder = UIApplication.shared.keyWindow?.firstResponder()
-        let websiteCell = list.cellForRow(at: IndexPath(row: 0, section: 0)) as! LoginTableViewCell
-        let websiteField = websiteCell.descriptionLabel
-        XCTAssertEqual(websiteField, firstResponder)
-        tester().waitForAnimationsToFinish()
 
-        // Change username field
-        tester().clearText(fromAndThenEnterText: "changedeusername", intoViewWithAccessibilityIdentifier: "usernameField")
+        // Check that we've selected the username field
+        var firstResponder = UIApplication.shared.keyWindow?.firstResponder()
 
         let usernameCell = list.cellForRow(at: IndexPath(row: 1, section: 0)) as! LoginTableViewCell
         let usernameField = usernameCell.descriptionLabel
-        XCTAssertEqual(usernameField.text, "changedeusername")
+        XCTAssertEqual(usernameField, firstResponder)
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedusername")
         tester().tapView(withAccessibilityLabel: "Next")
-
         firstResponder = UIApplication.shared.keyWindow?.firstResponder()
         var passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         let passwordField = passwordCell.descriptionLabel
@@ -621,10 +615,8 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertEqual(passwordField, firstResponder)
         XCTAssertFalse(passwordField.isSecureTextEntry)
 
-        tester().clearText(fromAndThenEnterText: "changedpassword", intoViewWithAccessibilityIdentifier: "passwordField")
+        tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedpassword")
         tester().tapView(withAccessibilityLabel: "Done")
-        let passwordFieldAfterChange = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
-        XCTAssertTrue(passwordFieldAfterChange.isSecureTextEntry)
 
         // Tap the 'Reveal' menu option
         EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
@@ -710,7 +702,7 @@ class LoginManagerTests: KIFTestCase {
         var passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         var passwordField = passwordCell.descriptionLabel
 
-        tester().tapView(withAccessibilityLabel: "Next")
+        tester().tapView(withAccessibilityLabel: "Siguiente")
         tester().waitForAnimationsToFinish()
         tester().clearTextFromView(withAccessibilityIdentifier: "passwordField")
         tester().tapView(withAccessibilityLabel: "Done")
