@@ -123,7 +123,7 @@ class LoginManagerTests: KIFTestCase {
 
     fileprivate func clearLogins() {
         let profile = (UIApplication.shared.delegate as! AppDelegate).profile!
-        _ = profile.logins.wipe().value
+        _ = profile.logins.wipeLocal().value
     }
 
     func testListFiltering() {
