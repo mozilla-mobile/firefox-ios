@@ -41,7 +41,7 @@ class SiriOpenURLSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        if #available(iOS 12.0, *), let vc = navigationController?.topViewController {
+        if let vc = navigationController?.topViewController {
             SiriShortcuts.manageSiri(for: SiriShortcuts.activityType.openURL, in: vc)
         }
     }
