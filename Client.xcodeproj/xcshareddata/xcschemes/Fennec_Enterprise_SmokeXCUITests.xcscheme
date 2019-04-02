@@ -404,6 +404,9 @@
                   Identifier = "IntegrationTests/testFxASyncBookmark()">
                </Test>
                <Test
+                  Identifier = "LibraryTest">
+               </Test>
+               <Test
                   Identifier = "MailAppSettingsTests">
                </Test>
                <Test
