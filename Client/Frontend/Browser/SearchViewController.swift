@@ -60,7 +60,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate let searchEngineScrollViewContent = UIView()
 
     fileprivate lazy var bookmarkedBadge: UIImage = {
-        return UIImage(named: "bookmarked_passive")!
+        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
     }()
 
     // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
