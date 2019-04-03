@@ -9,7 +9,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 struct HomePageConstants {
-    static let NewTabCustomUrlPrefKey = "HomePageURLPref"
+    static let NewTabCustomUrlPrefKey = PrefsKeys.NewTabCustomUrlPrefKey
     static let DefaultHomePageURLPrefKey = PrefsKeys.KeyDefaultHomePageURL
 }
 
