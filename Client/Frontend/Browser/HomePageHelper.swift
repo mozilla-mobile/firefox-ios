@@ -9,7 +9,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 struct HomePageConstants {
-    static let HomePageURLPrefKey = "HomePageURLPref"
+    static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     static let DefaultHomePageURLPrefKey = PrefsKeys.KeyDefaultHomePageURL
 }
 
@@ -23,9 +23,9 @@ class HomePageHelper {
         }
         set {
             if let url = newValue, url.isWebPage(includeDataURIs: false) && !InternalURL.isValid(url: url) {
-                prefs.setString(url.absoluteString, forKey: HomePageConstants.HomePageURLPrefKey)
+                prefs.setString(url.absoluteString, forKey: HomePageConstants.NewTabCustomUrlPrefKey)
             } else {
-                prefs.removeObjectForKey(HomePageConstants.HomePageURLPrefKey)
+                prefs.removeObjectForKey(HomePageConstants.NewTabCustomUrlPrefKey)
             }
         }
     }
