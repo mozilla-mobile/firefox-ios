@@ -904,9 +904,9 @@ fileprivate class EmptyPrivateTabsView: UIView {
 }
 
 extension TabTrayController: ClientPickerViewControllerDelegate {
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickDevices devices: [RemoteDevice]) {
         if let item = clientPickerViewController.shareItem {
-            _ = self.profile.sendItem(item, toClients: clients)
+            _ = self.profile.sendItem(item, toDevices: devices)
         }
         clientPickerViewController.dismiss(animated: true, completion: nil)
     }

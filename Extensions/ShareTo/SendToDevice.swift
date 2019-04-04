@@ -27,13 +27,13 @@ class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControll
         delegate?.finish(afterDelay: 0)
     }
 
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickDevices devices: [RemoteDevice]) {
         guard let item = sharedItem else {
             return finish()
         }
 
         let profile = BrowserProfile(localName: "profile")
-        profile.sendItem(item, toClients: clients).uponQueue(.main) { _ in
+        profile.sendItem(item, toDevices: devices).uponQueue(.main) { _ in
             profile._shutdown()
             self.finish()
 
