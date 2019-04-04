@@ -164,6 +164,9 @@ class HomePanelColor {
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
     var topSiteDomain: UIColor { return UIColor.black }
+    var topSitesGradientStart:  UIColor { return UIColor.white }
+    var topSitesGradientEnd:  UIColor { return UIColor(rgb: 0xf8f8f8) }
+    var topSitesBackground: UIColor { return UIColor.white }
 
     var activityStreamHeaderText: UIColor { return UIColor.Photon.Grey50 }
     var activityStreamCellTitle: UIColor { return UIColor.black }

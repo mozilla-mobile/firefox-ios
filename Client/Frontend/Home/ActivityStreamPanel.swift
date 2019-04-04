@@ -62,6 +62,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
+    fileprivate let gradient = CAGradientLayer()
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -108,11 +109,28 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         self.profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
+
+        let bgview = UIView()
+        bgview.frame = self.view.bounds
+        bgview.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        self.collectionView?.backgroundView = bgview
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadAll()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        // Apply the gradient. The gradient goes from the top to the bottom of the library shortcuts
+        let frame  = self.collectionView?.cellForItem(at: IndexPath(item: 0, section: 1))?.frame ?? CGRect.zero
+        let bottom = frame.origin.y + frame.size.height
+        gradient.removeFromSuperlayer()
+        gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: bottom)
+        gradient.colors = [UIColor.theme.homePanel.topSitesGradientStart.cgColor, UIColor.theme.homePanel.topSitesGradientEnd.cgColor]
+        self.collectionView?.backgroundView?.layer.insertSublayer(gradient, at: 0)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -144,7 +162,8 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     }
 
     func applyTheme() {
-        collectionView?.backgroundColor = UIColor.theme.browser.background
+        collectionView?.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        collectionView?.backgroundView?.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         topSiteCell.collectionView.reloadData()
         if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
             collectionView.reloadData()
@@ -320,7 +339,10 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
             case UICollectionElementKindSectionFooter:
                 let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
                 switch Section(indexPath.section) {
-                case .topSites, .pocket, .libraryShortcuts:
+                case .topSites, .pocket:
+                    return view
+                case .libraryShortcuts:
+                    view.separatorLineView?.isHidden = true
                     return view
             }
             default:
@@ -817,7 +839,7 @@ private struct ASHeaderViewUX {
 
 class ASFooterView: UICollectionReusableView {
 
-    private var separatorLineView: UIView?
+    var separatorLineView: UIView?
     var leftConstraint: Constraint? //This constraint aligns content (Titles, buttons) between all sections.
 
     override init(frame: CGRect) {
@@ -842,6 +864,11 @@ class ASFooterView: UICollectionReusableView {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        separatorLineView?.isHidden = false
     }
 
     override func layoutSubviews() {
@@ -1015,7 +1042,7 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
         mainView.spacing = 10
         addSubview(mainView)
         mainView.snp.makeConstraints { make in
-            make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
+            make.edges.equalTo(self)
         }
 
         [bookmarks, history, readingList, downloads].forEach { item in
