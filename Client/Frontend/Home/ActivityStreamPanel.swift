@@ -831,7 +831,8 @@ extension ActivityStreamPanel: UIPopoverPresentationControllerDelegate {
 // MARK: - Section Header View
 private struct ASHeaderViewUX {
     static var SeparatorColor: UIColor { return UIColor.theme.homePanel.separator }
-    static let TextFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
+    static let TextFont = DynamicFontHelper.defaultHelper.SmallSizeHeavyWeightAS
+    static let ButtonFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
     static let SeparatorHeight = 0.5
     static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASPanelUX.MinimumInsets : ASPanelUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
@@ -902,7 +903,7 @@ class ASHeaderView: UICollectionReusableView {
         let button = UIButton()
         button.setTitle(Strings.PocketMoreStoriesText, for: .normal)
         button.isHidden = true
-        button.titleLabel?.font = ASHeaderViewUX.TextFont
+        button.titleLabel?.font = ASHeaderViewUX.ButtonFont
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
