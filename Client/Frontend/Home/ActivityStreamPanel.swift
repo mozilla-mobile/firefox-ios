@@ -1042,7 +1042,7 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
         mainView.spacing = 10
         addSubview(mainView)
         mainView.snp.makeConstraints { make in
-            make.edges.equalTo(self).inset(UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 12))
+            make.edges.equalTo(self)
         }
 
         [bookmarks, history, readingList, downloads].forEach { item in
