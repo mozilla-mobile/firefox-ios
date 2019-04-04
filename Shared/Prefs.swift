@@ -22,6 +22,7 @@ public struct PrefsKeys {
     public static let LoginsSaveEnabled = "saveLogins"
     public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
 
+    public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"

@@ -14,7 +14,7 @@ import XCGLogger
 class NewTabHomePageAccessors {
 
     static func getHomePage(_ prefs: Prefs) -> URL? {
-        let string = prefs.stringForKey(HomePageConstants.HomePageURLPrefKey) ?? getDefaultHomePageString(prefs)
+        let string = prefs.stringForKey(HomePageConstants.NewTabCustomUrlPrefKey) ?? getDefaultHomePageString(prefs)
         guard let urlString = string else {
             return nil
         }
