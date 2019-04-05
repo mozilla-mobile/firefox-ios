@@ -41,8 +41,17 @@ class ClientPickerViewController: UITableViewController {
     enum DeviceOrClient {
         case client(RemoteClient)
         case device(RemoteDevice)
+
+        var identifier: String? {
+            switch self {
+            case .client(let c):
+                return c.fxaDeviceId
+            case .device(let d):
+                return d.id 
+            }
+        }
     }
-    var devicesAndClients: [DeviceOrClient] = []
+    var devicesAndClients = [DeviceOrClient]()
 
     var profile: Profile?
     var profileNeedsShutdown = true
@@ -50,7 +59,7 @@ class ClientPickerViewController: UITableViewController {
     var clientPickerDelegate: ClientPickerViewControllerDelegate?
 
     var loadState = LoadingState.LoadingFromCache
-    var selectedClients = Set<IndexPath>()
+    var selectedIdentifiers = Set<String>() // Stores DeviceOrClient.identifier
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to provide Share To functionality
     // And in this case we need to be able to store the item we are sharing as we may not have access to the
@@ -73,6 +82,8 @@ class ClientPickerViewController: UITableViewController {
         tableView.register(ClientPickerTableViewCell.self, forCellReuseIdentifier: ClientPickerTableViewCell.CellIdentifier)
         tableView.register(ClientPickerNoClientsTableViewCell.self, forCellReuseIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier)
         tableView.tableFooterView = UIView(frame: .zero)
+
+        tableView.allowsSelection = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -118,7 +129,9 @@ class ClientPickerViewController: UITableViewController {
                     clientCell.clientType = device.type == "mobile" ? .Mobile : .Desktop
                 }
 
-                clientCell.checked = selectedClients.contains(indexPath)
+                if let id = item.identifier {
+                    clientCell.checked = selectedIdentifiers.contains(id)
+                }
                 cell = clientCell
             }
         } else {
@@ -143,15 +156,18 @@ class ClientPickerViewController: UITableViewController {
 
         tableView.deselectRow(at: indexPath, animated: true)
 
-        if selectedClients.contains(indexPath) {
-            selectedClients.remove(indexPath)
+        guard let id = devicesAndClients[indexPath.row].identifier else { return }
+
+        if selectedIdentifiers.contains(id) {
+            selectedIdentifiers.remove(id)
         } else {
-            selectedClients.insert(indexPath)
+            selectedIdentifiers.insert(id)
         }
 
-        tableView.reloadRows(at: [indexPath], with: .none)
-
-        navigationItem.rightBarButtonItem?.isEnabled = (selectedClients.count != 0)
+        UIView.performWithoutAnimation { // if the selected cell is off-screen when the tableview is first shown, the tableview will re-scroll without disabling animation
+            tableView.reloadRows(at: [indexPath], with: .none)
+        }
+        navigationItem.rightBarButtonItem?.isEnabled = !selectedIdentifiers.isEmpty
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -248,12 +264,18 @@ class ClientPickerViewController: UITableViewController {
             + oldRemoteClients.sorted { $0.guid ?? "" > $1.guid ?? "" }.map { DeviceOrClient.client($0) }
 
         // Sort the lists, and compare guids and modified, to see if the list has changed and tableview needs reloading.
-        let isSame = false
-//            fullList.elementsEqual(devicesAndClients) { new, old in
-//
-//            guard let g0 = $0.guid, let g1 = $1.guid else { return false }
-//            return g0 == g1 && $0.modified == $1.modified
-//        }
+        let isSame = fullList.elementsEqual(devicesAndClients) { new, old in
+            switch (new, old) {
+            case (.device(let a), .device(let b)):
+                return a.id == b.id && a.lastAccessTime == b.lastAccessTime
+            case (.client(let a), .client(let b)):
+                return a == b // is equatable
+            case (.device(_), .client(_)):
+                return false
+            case (.client(_), .device(_)):
+                return false
+            }
+        }
 
         guard !isSame else {
             if endRefreshing {
@@ -270,7 +292,7 @@ class ClientPickerViewController: UITableViewController {
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SendToSendButtonTitle, style: .done, target: self, action: #selector(self.send))
             navigationItem.rightBarButtonItem?.isEnabled = false
         }
-        selectedClients.removeAll()
+
         tableView.reloadData()
         if endRefreshing {
             refreshControl?.endRefreshing()
@@ -278,13 +300,12 @@ class ClientPickerViewController: UITableViewController {
     }
 
     @objc func refresh() {
-        DispatchQueue.main.async {
-            if let refreshControl = self.refreshControl {
-                refreshControl.beginRefreshing()
-                let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
-                self.tableView.contentOffset = CGPoint(x: 0, y: height)
-            }
+        if let refreshControl = self.refreshControl {
+            refreshControl.beginRefreshing()
+            let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
+            self.tableView.contentOffset = CGPoint(x: 0, y: height)
         }
+
         reloadClients()
     }
 
@@ -296,8 +317,10 @@ class ClientPickerViewController: UITableViewController {
         guard let profile = self.ensureOpenProfile() as? BrowserProfile else { return }
 
         var pickedItems = [DeviceOrClient]()
-        for indexPath in selectedClients {
-            pickedItems.append(devicesAndClients[indexPath.row])
+        for id in selectedIdentifiers {
+            if let item = devicesAndClients.find({ $0.identifier == id }) {
+                pickedItems.append(item)
+            }
         }
 
         profile.remoteClientsAndTabs.getRemoteDevices().uponQueue(.main) { result in
@@ -398,7 +421,6 @@ class ClientPickerTableViewCell: UITableViewCell {
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }
 
 class ClientPickerNoClientsTableViewCell: UITableViewCell {
