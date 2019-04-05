@@ -62,7 +62,6 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
     fileprivate let flowLayout = UICollectionViewFlowLayout()
-    fileprivate let gradient = CAGradientLayer()
 
     fileprivate lazy var topSitesManager: ASHorizontalScrollCellManager = {
         let manager = ASHorizontalScrollCellManager()
@@ -109,28 +108,11 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         self.profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
-
-        let bgview = UIView()
-        bgview.frame = self.view.bounds
-        bgview.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        self.collectionView?.backgroundView = bgview
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadAll()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        // Apply the gradient. The gradient goes from the top to the bottom of the library shortcuts
-        let frame  = self.collectionView?.cellForItem(at: IndexPath(item: 0, section: 1))?.frame ?? CGRect.zero
-        let bottom = frame.origin.y + frame.size.height
-        gradient.removeFromSuperlayer()
-        gradient.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: bottom)
-        gradient.colors = [UIColor.theme.homePanel.topSitesGradientStart.cgColor, UIColor.theme.homePanel.topSitesGradientEnd.cgColor]
-        self.collectionView?.backgroundView?.layer.insertSublayer(gradient, at: 0)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -163,7 +145,6 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 
     func applyTheme() {
         collectionView?.backgroundColor = UIColor.theme.homePanel.topSitesBackground
-        collectionView?.backgroundView?.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         topSiteCell.collectionView.reloadData()
         if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
             collectionView.reloadData()
@@ -955,7 +936,7 @@ class ASHeaderView: UICollectionReusableView {
         }
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(iconView.snp.trailing).offset(10)
+            make.leading.equalTo(iconView.snp.trailing).offset(5)
             make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.TitleTopInset)
             make.top.equalTo(self.snp.top).offset(ASHeaderView.verticalInsets)
             make.bottom.equalToSuperview().offset(-ASHeaderView.verticalInsets)
