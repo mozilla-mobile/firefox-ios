@@ -424,7 +424,7 @@ class BrowserViewController: UIViewController {
         }
 
         header.snp.makeConstraints { make in
-            scrollController.headerTopConstraint = make.top.equalTo(self.topLayoutGuide.snp.bottom).constraint
+            scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
             make.left.right.equalTo(self.view)
         }
 
@@ -437,7 +437,7 @@ class BrowserViewController: UIViewController {
         super.viewDidLayoutSubviews()
         statusBarOverlay.snp.remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
-            make.height.equalTo(self.topLayoutGuide.length)
+            make.height.equalTo(self.view.safeAreaInsets.top)
         }
     }
 

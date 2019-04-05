@@ -178,7 +178,7 @@ class TabTrayController: UIViewController {
         view.addSubview(statusBarBG)
         statusBarBG.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view)
-            make.bottom.equalTo(self.topLayoutGuide.snp.bottom)
+            make.bottom.equalTo(self.view.safeArea.top)
         }
 
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
@@ -223,7 +223,7 @@ class TabTrayController: UIViewController {
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
             make.bottom.equalTo(toolbar.snp.top)
-            make.top.equalTo(self.topLayoutGuide.snp.bottom)
+            make.top.equalTo(self.view.safeArea.top)
         }
 
         toolbar.snp.makeConstraints { make in
