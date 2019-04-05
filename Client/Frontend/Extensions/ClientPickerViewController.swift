@@ -210,7 +210,7 @@ class ClientPickerViewController: UITableViewController {
         // Load and display the cached clients.
         // Don't shut down the profile here: we immediately call `reloadClients`.
         profile.remoteClientsAndTabs.getRemoteDevices() >>== { devices in
-            profile.remoteClientsAndTabs.getClients().uponQueue(.main){ result in
+            profile.remoteClientsAndTabs.getClients().uponQueue(.main) { result in
                 withExtendedLifetime(profile) {
                     guard let clients = result.successValue else { return }
                     self.update(devices: devices, clients: clients, endRefreshing: false)
@@ -258,7 +258,7 @@ class ClientPickerViewController: UITableViewController {
             return clients.find({ $0.fxaDeviceId == device.id })
         }
         let oldRemoteClients = devices.filter { !account.commandsClient.sendTab.isDeviceCompatible($0) }
-            .compactMap{ findClient(forDevice: $0) }
+            .compactMap { findClient(forDevice: $0) }
 
         let fullList = newRemoteDevices.sorted { $0.id ?? "" > $1.id ?? "" }.map { DeviceOrClient.device($0) }
             + oldRemoteClients.sorted { $0.guid ?? "" > $1.guid ?? "" }.map { DeviceOrClient.client($0) }
