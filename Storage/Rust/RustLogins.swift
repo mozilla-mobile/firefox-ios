@@ -439,7 +439,7 @@ public class RustLogins {
         return deferred
     }
 
-    public func wipe() -> Success {
+    public func wipeLocal() -> Success {
         let deferred = Success()
 
         queue.async {
@@ -449,7 +449,7 @@ public class RustLogins {
             }
 
             do {
-                try self.storage.wipe()
+                try self.storage.wipeLocal()
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 deferred.fill(Maybe(failure: err))
