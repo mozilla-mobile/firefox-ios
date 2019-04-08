@@ -218,7 +218,7 @@ open class FxACommandSendTab {
     }
 
     public func isDeviceCompatible(_ device: RemoteDevice) -> Bool {
-        guard device.id != nil, let marriedState = account.stateCache.value as? MarriedState,
+        guard let marriedState = account.stateCache.value as? MarriedState,
             let availableCommands = device.availableCommands else {
             return false
         }

@@ -51,7 +51,7 @@ class DevicePickerViewController: UITableViewController {
             }
         }
 
-        public static func ==(lhs: DeviceOrClient, rhs: DeviceOrClient) -> Bool {
+        public static func == (lhs: DeviceOrClient, rhs: DeviceOrClient) -> Bool {
             switch (lhs, rhs) {
             case (.device(let a), .device(let b)):
                 return a.id == b.id && a.lastAccessTime == b.lastAccessTime
