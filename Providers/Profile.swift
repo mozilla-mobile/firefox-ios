@@ -37,7 +37,7 @@ public protocol SyncManager {
     func syncClientsThenTabs() -> SyncResult
     func syncHistory() -> SyncResult
     func syncLogins() -> SyncResult
-    func mirrorBookmarks() -> SyncResult
+    func syncBookmarks() -> SyncResult
     @discardableResult func syncEverything(why: SyncReason) -> Success
     func syncNamedCollections(why: SyncReason, names: [String]) -> Success
 
@@ -93,8 +93,7 @@ class CommandStoringSyncDelegate: SyncDelegate {
  * A Profile manages access to the user's data.
  */
 protocol Profile: AnyObject {
-    var bookmarks: BookmarksModelFactorySource & KeywordSearchSource & ShareToDestination & SyncableBookmarks & LocalItemSource & MirrorItemSource { get }
-    // var favicons: Favicons { get }
+    var places: RustPlaces { get }
     var prefs: Prefs { get }
     var queue: TabQueue { get }
     var searchEngines: SearchEngines { get }
@@ -391,22 +390,22 @@ open class BrowserProfile: Profile {
     }()
 
     /**
-     * Favicons, history, and bookmarks are all stored in one intermeshed
+     * Favicons, history, and tabs are all stored in one intermeshed
      * collection of tables.
      *
      * Any other class that needs to access any one of these should ensure
      * that this is initialized first.
      */
-    fileprivate lazy var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations  = {
+    fileprivate lazy var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations  = {
         return SQLiteHistory(db: self.db, prefs: self.prefs)
     }()
 
     var favicons: Favicons {
-        return self.places
+        return self.legacyPlaces
     }
 
     var history: BrowserHistory & SyncableHistory & ResettableSyncStorage {
-        return self.places
+        return self.legacyPlaces
     }
 
     lazy var panelDataObservers: PanelDataObservers = {
@@ -418,20 +417,12 @@ open class BrowserProfile: Profile {
     }()
 
     var recommendations: HistoryRecommendations {
-        return self.places
+        return self.legacyPlaces
     }
 
-    lazy var bookmarks: BookmarksModelFactorySource & KeywordSearchSource & ShareToDestination & SyncableBookmarks & LocalItemSource & MirrorItemSource = {
-        // Make sure the rest of our tables are initialized before we try to read them!
-        // This expression is for side-effects only.
-        withExtendedLifetime(self.places) {
-            return MergedSQLiteBookmarks(db: self.db)
-        }
-    }()
-
-    lazy var mirrorBookmarks: BookmarkBufferStorage & BufferItemSource = {
-        // Yeah, this is lazy. Sorry.
-        return self.bookmarks as! MergedSQLiteBookmarks
+    lazy var places: RustPlaces = {
+        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("rust-browser.db").path
+        return RustPlaces(databasePath: databasePath)
     }()
 
     lazy var searchEngines: SearchEngines = {
@@ -762,69 +753,11 @@ open class BrowserProfile: Profile {
             center.addObserver(self, selector: #selector(onLoginDidChange), name: .DataLoginDidChange, object: nil)
             center.addObserver(self, selector: #selector(onStartSyncing), name: .ProfileDidStartSyncing, object: nil)
             center.addObserver(self, selector: #selector(onFinishSyncing), name: .ProfileDidFinishSyncing, object: nil)
-            center.addObserver(self, selector: #selector(onBookmarkBufferValidated), name: .BookmarkBufferValidated, object: nil)
         }
 
-        @objc func onBookmarkBufferValidated(notification: NSNotification) {
-            #if MOZ_TARGET_CLIENT
-                // We don't send this ad hoc telemetry on the release channel.
-                guard AppConstants.BuildChannel != AppBuildChannel.release else {
-                    return
-                }
-
-                guard profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true else {
-                    log.debug("Profile isn't sending usage data. Not sending bookmark event.")
-                    return
-                }
-
-                guard let validations = notification.object as? [String: Bool] else {
-                    log.warning("Notification didn't have validations.")
-                    return
-                }
-
-                let attempt: Int32 = self.prefs.intForKey("bookmarkvalidationattempt") ?? 1
-                self.prefs.setInt(attempt + 1, forKey: "bookmarkvalidationattempt")
-
-                // Capture the buffer count ASAP, not in the delayed op, because the merge could wipe it!
-                let bufferRows = (self.profile.bookmarks as? MergedSQLiteBookmarks)?.synchronousBufferCount()
-
-                self.doInBackgroundAfter(300) {
-                    self.profile.remoteClientsAndTabs.getClientGUIDs() >>== { clients in
-                        // We would love to include the version and OS etc. of each remote client,
-                        // but we don't store that information. For now, just do a count.
-                        let clientCount = clients.count
-
-                        let id = DeviceInfo.clientIdentifier(self.prefs)
-                        let ping = makeAdHocBookmarkMergePing(Bundle.main, clientID: id, attempt: attempt, bufferRows: bufferRows, valid: validations, clientCount: clientCount)
-                        let payload = ping.stringValue
-
-                        log.debug("Payload is: \(payload)")
-                        guard let body = payload.data(using: .utf8) else {
-                            log.debug("Invalid JSON!")
-                            return
-                        }
-
-                        guard let url = URL(string: "https://mozilla-anonymous-sync-metrics.moo.mx/post/bookmarkvalidation") else {
-                            return
-                        }
-
-                        var request = URLRequest(url: url)
-                        request.httpMethod = "POST"
-                        request.httpBody = body
-                        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-                        URLSession.shared.dataTask(with: request) { data, response, error in
-                            let httpResponse = response as? HTTPURLResponse
-                            log.debug("Bookmark validation upload response: \(httpResponse?.statusCode ?? -1).")
-                        }
-                    }
-                }
-            #endif
-        }
-
+        // TODO: Do we still need this/do we need to do this for our new DB too?
         private func handleRecreationOfDatabaseNamed(name: String?) -> Success {
-            let browserCollections = ["bookmarks", "history", "tabs"]
-
+            let browserCollections = ["history", "tabs"]
             let dbName = name ?? "<all>"
             switch dbName {
             case "<all>", "browser.db":
@@ -939,8 +872,8 @@ open class BrowserProfile: Profile {
         func locallyResetCollection(_ collection: String) -> Success {
             switch collection {
             case "bookmarks":
-                return BufferingBookmarksSynchronizer.resetSynchronizerWithStorage(self.profile.bookmarks, basePrefs: self.prefsForSync, collection: "bookmarks")
-
+                // TODO: Do we need to limit this to just Bookmarks?
+                return self.profile.places.reset()
             case "clients":
                 fallthrough
             case "tabs":
@@ -979,7 +912,7 @@ open class BrowserProfile: Profile {
                 profile.history.onRemovedAccount,
                 profile.remoteClientsAndTabs.onRemovedAccount,
                 profile.logins.reset,
-                profile.bookmarks.onRemovedAccount,
+                profile.places.reset, // TODO: Do we need to limit this to just Bookmarks?
             ]
 
             let clearPrefs: () -> Success = {
@@ -1078,10 +1011,27 @@ open class BrowserProfile: Profile {
             })
         }
 
-        fileprivate func mirrorBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
-            log.debug("Synchronizing server bookmarks to storage.")
-            let bookmarksMirrorer = ready.synchronizer(BufferingBookmarksSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return bookmarksMirrorer.synchronizeBookmarksToStorage(self.profile.bookmarks, usingBuffer: self.profile.mirrorBookmarks, withServer: ready.client, info: ready.info, greenLight: self.greenLight(), remoteClientsAndTabs: self.profile.remoteClientsAndTabs)
+        fileprivate func syncBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
+            guard let account = profile.account else {
+                return deferMaybe(SyncStatus.notStarted(.noAccount))
+            }
+
+            log.debug("Syncing bookmarks to storage.")
+            return account.syncUnlockInfo().bind({ result in
+                guard let syncUnlockInfo = result.successValue else {
+                    return deferMaybe(SyncStatus.notStarted(.unknown))
+                }
+
+                // TODO: Do we need to limit this to just Bookmarks?
+                return self.profile.places.sync(unlockInfo: syncUnlockInfo).bind({ result in
+                    guard result.isSuccess else {
+                        return deferMaybe(SyncStatus.notStarted(.unknown))
+                    }
+
+                    let syncEngineStatsSession = SyncEngineStatsSession(collection: "bookmarks")
+                    return deferMaybe(SyncStatus.completed(syncEngineStatsSession))
+                })
+            })
         }
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(_ changes: T) -> Deferred<Maybe<T>> {
@@ -1260,7 +1210,7 @@ open class BrowserProfile: Profile {
             var synchronizers = [
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
-                ("bookmarks", self.mirrorBookmarksWithDelegate),
+                ("bookmarks", self.syncBookmarksWithDelegate), // TODO: Should we avoid doing this in background?
                 ("history", self.syncHistoryWithDelegate)
             ]
 
@@ -1309,7 +1259,7 @@ open class BrowserProfile: Profile {
                 case "clients": return ("clients", self.syncClientsWithDelegate)
                 case "tabs": return ("tabs", self.syncTabsWithDelegate)
                 case "logins": return ("logins", self.syncLoginsWithDelegate)
-                case "bookmarks": return ("bookmarks", self.mirrorBookmarksWithDelegate)
+                case "bookmarks": return ("bookmarks", self.syncBookmarksWithDelegate)
                 case "history": return ("history", self.syncHistoryWithDelegate)
                 default: return nil
                 }
@@ -1345,6 +1295,10 @@ open class BrowserProfile: Profile {
             }
         }
 
+        @discardableResult public func syncBookmarks() -> SyncResult {
+            return self.sync("bookmarks", function: syncBookmarksWithDelegate)
+        }
+
         @discardableResult public func syncLogins() -> SyncResult {
             return self.sync("logins", function: syncLoginsWithDelegate)
         }
@@ -1352,10 +1306,6 @@ open class BrowserProfile: Profile {
         public func syncHistory() -> SyncResult {
             // TODO: recognize .NotStarted.
             return self.sync("history", function: syncHistoryWithDelegate)
-        }
-
-        public func mirrorBookmarks() -> SyncResult {
-            return self.sync("bookmarks", function: mirrorBookmarksWithDelegate)
         }
 
         /**
