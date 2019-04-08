@@ -198,4 +198,11 @@ class SearchTests: BaseTestCase {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
     }
+    // Bug https://bugzilla.mozilla.org/show_bug.cgi?id=1541832 scenario 4
+    func testSearchStartAfterTypingTwoWords() {
+        navigator.goto(URLBarOpen)
+        app.typeText("foo bar")
+        app.typeText(XCUIKeyboardKey.return.rawValue)
+        waitForValueContains(app.textFields["url"], value: "google")
+    }
 }
