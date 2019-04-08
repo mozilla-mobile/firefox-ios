@@ -498,8 +498,8 @@ open class BrowserProfile: Profile {
         let result = Success()
 
         self.remoteClientsAndTabs.getClients() >>== { clients in
-            let newRemoteDevices = devices.filter({ fxaDeviceIds.contains($0.id ?? "") && account.commandsClient.sendTab.isDeviceCompatible($0) })
-            var oldRemoteClients = devices.filter({ fxaDeviceIds.contains($0.id ?? "") && !account.commandsClient.sendTab.isDeviceCompatible($0) }).compactMap({ remoteDevice in
+            let newRemoteDevices = devices.filter({ account.commandsClient.sendTab.isDeviceCompatible($0) })
+            var oldRemoteClients = devices.filter({ !account.commandsClient.sendTab.isDeviceCompatible($0) }).compactMap({ remoteDevice in
                 clients.find { $0.fxaDeviceId == remoteDevice.id }
             })
 

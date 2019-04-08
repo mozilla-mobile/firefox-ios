@@ -38,7 +38,7 @@ enum LoadingState {
 }
 
 class ClientPickerViewController: UITableViewController {
-    enum DeviceOrClient {
+    enum DeviceOrClient: Equatable {
         case client(RemoteClient)
         case device(RemoteDevice)
 
@@ -48,6 +48,19 @@ class ClientPickerViewController: UITableViewController {
                 return c.fxaDeviceId
             case .device(let d):
                 return d.id 
+            }
+        }
+
+        public static func ==(lhs: DeviceOrClient, rhs: DeviceOrClient) -> Bool {
+            switch (lhs, rhs) {
+            case (.device(let a), .device(let b)):
+                return a.id == b.id && a.lastAccessTime == b.lastAccessTime
+            case (.client(let a), .client(let b)):
+                return a == b // is equatable
+            case (.device(_), .client(_)):
+                return false
+            case (.client(_), .device(_)):
+                return false
             }
         }
     }
@@ -203,7 +216,7 @@ class ClientPickerViewController: UITableViewController {
 
     // Load cached clients from the profile, triggering a sync to fetch newer data.
     fileprivate func loadCachedClients() {
-        guard let profile = (self.ensureOpenProfile() as? BrowserProfile) else { return }
+        guard let profile = self.ensureOpenProfile() as? BrowserProfile else { return }
        
         self.loadState = .LoadingFromCache
 
@@ -251,7 +264,6 @@ class ClientPickerViewController: UITableViewController {
         guard let profile = self.ensureOpenProfile() as? BrowserProfile, let account = profile.getAccount() else { return }
 
         let fxaDeviceIds = devices.compactMap { $0.id }
-        let devices = devices.filter { fxaDeviceIds.contains($0.id ?? "") }
         let newRemoteDevices = devices.filter { account.commandsClient.sendTab.isDeviceCompatible($0) }
 
         func findClient(forDevice device: RemoteDevice) -> RemoteClient? {
@@ -265,16 +277,7 @@ class ClientPickerViewController: UITableViewController {
 
         // Sort the lists, and compare guids and modified, to see if the list has changed and tableview needs reloading.
         let isSame = fullList.elementsEqual(devicesAndClients) { new, old in
-            switch (new, old) {
-            case (.device(let a), .device(let b)):
-                return a.id == b.id && a.lastAccessTime == b.lastAccessTime
-            case (.client(let a), .client(let b)):
-                return a == b // is equatable
-            case (.device(_), .client(_)):
-                return false
-            case (.client(_), .device(_)):
-                return false
-            }
+            new == old // equatable
         }
 
         guard !isSame else {
