@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 
-class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
+class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
 
@@ -17,17 +17,17 @@ class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControll
             return instructionsViewController
         }
 
-        let clientPickerViewController = ClientPickerViewController()
-        clientPickerViewController.clientPickerDelegate = self
-        clientPickerViewController.profile = nil // This means the picker will open and close the default profile
-        return clientPickerViewController
+        let devicePickerViewController = DevicePickerViewController()
+        devicePickerViewController.pickerDelegate = self
+        devicePickerViewController.profile = nil // This means the picker will open and close the default profile
+        return devicePickerViewController
     }
 
     func finish() {
         delegate?.finish(afterDelay: 0)
     }
 
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickDevices devices: [RemoteDevice]) {
+    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         guard let item = sharedItem else {
             return finish()
         }
@@ -41,7 +41,7 @@ class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControll
         }
     }
 
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
+    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
         finish()
     }
 

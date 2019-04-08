@@ -2412,16 +2412,16 @@ extension BrowserViewController: TopTabsDelegate {
     }
 }
 
-extension BrowserViewController: ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
+extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         self.popToBVC()
     }
 
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
+    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
         self.popToBVC()
     }
 
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickDevices devices: [RemoteDevice]) {
+    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
         let shareItem = ShareItem(url: url, title: tab.title, favicon: tab.displayFavicon)
         guard shareItem.isShareable else {

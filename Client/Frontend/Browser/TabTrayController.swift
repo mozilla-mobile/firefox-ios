@@ -903,16 +903,16 @@ fileprivate class EmptyPrivateTabsView: UIView {
     }
 }
 
-extension TabTrayController: ClientPickerViewControllerDelegate {
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickDevices devices: [RemoteDevice]) {
-        if let item = clientPickerViewController.shareItem {
+extension TabTrayController: DevicePickerViewControllerDelegate {
+    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
+        if let item = devicePickerViewController.shareItem {
             _ = self.profile.sendItem(item, toDevices: devices)
         }
-        clientPickerViewController.dismiss(animated: true, completion: nil)
+        devicePickerViewController.dismiss(animated: true, completion: nil)
     }
 
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
-        clientPickerViewController.dismiss(animated: true, completion: nil)
+    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
+        devicePickerViewController.dismiss(animated: true, completion: nil)
     }
 }
 

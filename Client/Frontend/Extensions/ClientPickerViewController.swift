@@ -8,12 +8,12 @@ import Shared
 import Storage
 import SnapKit
 
-protocol ClientPickerViewControllerDelegate {
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController)
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickDevices devices: [RemoteDevice])
+protocol DevicePickerViewControllerDelegate {
+    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
+    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice])
 }
 
-private struct ClientPickerViewControllerUX {
+private struct DevicePickerViewControllerUX {
     static let TableHeaderRowHeight = CGFloat(50)
     static let TableHeaderTextFont = UIFont.systemFont(ofSize: 16)
     static let TableHeaderTextColor = UIColor.Photon.Grey50
@@ -26,7 +26,7 @@ private struct ClientPickerViewControllerUX {
     static let DeviceRowTextPaddingRight = CGFloat(50)
 }
 
-/// The ClientPickerViewController displays a list of clients associated with the provided Account.
+/// The DevicePickerViewController displays a list of clients associated with the provided Account.
 /// The user can select a number of devices and hit the Send button.
 /// This viewcontroller does not implement any specific business logic that needs to happen with the selected clients.
 /// That is up to it's delegate, who can listen for cancellation and success events.
@@ -37,7 +37,7 @@ enum LoadingState {
     case Loaded
 }
 
-class ClientPickerViewController: UITableViewController {
+class DevicePickerViewController: UITableViewController {
     enum DeviceOrClient: Equatable {
         case client(RemoteClient)
         case device(RemoteDevice)
@@ -69,7 +69,7 @@ class ClientPickerViewController: UITableViewController {
     var profile: Profile?
     var profileNeedsShutdown = true
 
-    var clientPickerDelegate: ClientPickerViewControllerDelegate?
+    var pickerDelegate: DevicePickerViewControllerDelegate?
 
     var loadState = LoadingState.LoadingFromCache
     var selectedIdentifiers = Set<String>() // Stores DeviceOrClient.identifier
@@ -91,9 +91,9 @@ class ClientPickerViewController: UITableViewController {
             action: #selector(cancel)
         )
 
-        tableView.register(ClientPickerTableViewHeaderCell.self, forCellReuseIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier)
-        tableView.register(ClientPickerTableViewCell.self, forCellReuseIdentifier: ClientPickerTableViewCell.CellIdentifier)
-        tableView.register(ClientPickerNoClientsTableViewCell.self, forCellReuseIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier)
+        tableView.register(DevicePickerTableViewHeaderCell.self, forCellReuseIdentifier: DevicePickerTableViewHeaderCell.CellIdentifier)
+        tableView.register(DevicePickerTableViewCell.self, forCellReuseIdentifier: DevicePickerTableViewCell.CellIdentifier)
+        tableView.register(DevicePickerNoClientsTableViewCell.self, forCellReuseIdentifier: DevicePickerNoClientsTableViewCell.CellIdentifier)
         tableView.tableFooterView = UIView(frame: .zero)
 
         tableView.allowsSelection = true
@@ -129,9 +129,9 @@ class ClientPickerViewController: UITableViewController {
 
         if !devicesAndClients.isEmpty {
             if indexPath.section == 0 {
-                cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerTableViewHeaderCell.CellIdentifier, for: indexPath) as! ClientPickerTableViewHeaderCell
+                cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewHeaderCell.CellIdentifier, for: indexPath) as! DevicePickerTableViewHeaderCell
             } else {
-                let clientCell = tableView.dequeueReusableCell(withIdentifier: ClientPickerTableViewCell.CellIdentifier, for: indexPath) as! ClientPickerTableViewCell
+                let clientCell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewCell.CellIdentifier, for: indexPath) as! DevicePickerTableViewCell
                 let item = devicesAndClients[indexPath.row]
                 switch item {
                 case .client(let client):
@@ -149,7 +149,7 @@ class ClientPickerViewController: UITableViewController {
             }
         } else {
             if self.loadState == .Loaded {
-                cell = tableView.dequeueReusableCell(withIdentifier: ClientPickerNoClientsTableViewCell.CellIdentifier, for: indexPath) as! ClientPickerNoClientsTableViewCell
+                cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerNoClientsTableViewCell.CellIdentifier, for: indexPath) as! DevicePickerNoClientsTableViewCell
             } else {
                 cell = UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
             }
@@ -186,9 +186,9 @@ class ClientPickerViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if !devicesAndClients.isEmpty {
             if indexPath.section == 0 {
-                return ClientPickerViewControllerUX.TableHeaderRowHeight
+                return DevicePickerViewControllerUX.TableHeaderRowHeight
             } else {
-                return ClientPickerViewControllerUX.DeviceRowHeight
+                return DevicePickerViewControllerUX.DeviceRowHeight
             }
         } else {
             return tableView.frame.height
@@ -313,7 +313,7 @@ class ClientPickerViewController: UITableViewController {
     }
 
     @objc func cancel() {
-        clientPickerDelegate?.clientPickerViewControllerDidCancel(self)
+        pickerDelegate?.devicePickerViewControllerDidCancel(self)
     }
 
     @objc func send() {
@@ -338,7 +338,7 @@ class ClientPickerViewController: UITableViewController {
                 }
             }
 
-            self.clientPickerDelegate?.clientPickerViewController(self, didPickDevices: pickedDevices)
+            self.pickerDelegate?.devicePickerViewController(self, didPickDevices: pickedDevices)
         }
 
         // Replace the Send button with a loading indicator since it takes a while to sync
@@ -351,19 +351,19 @@ class ClientPickerViewController: UITableViewController {
     }
 }
 
-class ClientPickerTableViewHeaderCell: UITableViewCell {
+class DevicePickerTableViewHeaderCell: UITableViewCell {
     static let CellIdentifier = "ClientPickerTableViewSectionHeader"
     let nameLabel = UILabel()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(nameLabel)
-        nameLabel.font = ClientPickerViewControllerUX.TableHeaderTextFont
+        nameLabel.font = DevicePickerViewControllerUX.TableHeaderTextFont
         nameLabel.text = Strings.SendToDevicesListTitle
-        nameLabel.textColor = ClientPickerViewControllerUX.TableHeaderTextColor
+        nameLabel.textColor = DevicePickerViewControllerUX.TableHeaderTextColor
 
         nameLabel.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(ClientPickerViewControllerUX.TableHeaderTextPaddingLeft)
+            make.left.equalTo(DevicePickerViewControllerUX.TableHeaderTextPaddingLeft)
             make.centerY.equalTo(self)
             make.right.equalTo(self)
         }
@@ -383,7 +383,7 @@ public enum ClientType: String {
     case Desktop = "deviceTypeDesktop"
 }
 
-class ClientPickerTableViewCell: UITableViewCell {
+class DevicePickerTableViewCell: UITableViewCell {
     static let CellIdentifier = "ClientPickerTableViewCell"
 
     var nameLabel: UILabel
@@ -403,10 +403,10 @@ class ClientPickerTableViewCell: UITableViewCell {
         nameLabel = UILabel()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(nameLabel)
-        nameLabel.font = ClientPickerViewControllerUX.DeviceRowTextFont
+        nameLabel.font = DevicePickerViewControllerUX.DeviceRowTextFont
         nameLabel.numberOfLines = 2
         nameLabel.lineBreakMode = .byWordWrapping
-        self.tintColor = ClientPickerViewControllerUX.DeviceRowTintColor
+        self.tintColor = DevicePickerViewControllerUX.DeviceRowTintColor
         self.preservesSuperviewLayoutMargins = false
         self.selectionStyle = .none
     }
@@ -415,9 +415,9 @@ class ClientPickerTableViewCell: UITableViewCell {
         super.layoutSubviews()
 
         nameLabel.snp.makeConstraints { (make) -> Void in
-            make.left.equalTo(ClientPickerViewControllerUX.DeviceRowTextPaddingLeft)
+            make.left.equalTo(DevicePickerViewControllerUX.DeviceRowTextPaddingLeft)
             make.centerY.equalTo(self.snp.centerY)
-            make.right.equalTo(self.snp.right).offset(-ClientPickerViewControllerUX.DeviceRowTextPaddingRight)
+            make.right.equalTo(self.snp.right).offset(-DevicePickerViewControllerUX.DeviceRowTextPaddingRight)
         }
     }
 
@@ -426,7 +426,7 @@ class ClientPickerTableViewCell: UITableViewCell {
     }
 }
 
-class ClientPickerNoClientsTableViewCell: UITableViewCell {
+class DevicePickerNoClientsTableViewCell: UITableViewCell {
     static let CellIdentifier = "ClientPickerNoClientsTableViewCell"
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
