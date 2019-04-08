@@ -149,7 +149,7 @@ protocol Profile: AnyObject {
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
-    func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success
+    func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success
 
     var syncManager: SyncManager! { get }
 }
@@ -492,11 +492,7 @@ open class BrowserProfile: Profile {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
 
-    public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
-        func clientForRemoteDevice(_ remoteDevice: RemoteDevice) -> RemoteClient? {
-            return clients.find({ $0.fxaDeviceId == remoteDevice.id })
-        }
-
+    public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         guard let account = self.getAccount() else {
             return deferMaybe(NoAccountError())
         }
@@ -504,24 +500,15 @@ open class BrowserProfile: Profile {
         let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
         let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
         let command = SyncCommand.displayURIFromShareItem(item, asClient: id)
-        let fxaDeviceIds = clients.compactMap { $0.fxaDeviceId }
-
-        // If FxA Messages (Pushbox) is not enabled for this build, simply send the
-        // tabs using the old mechanism via Sync.
-        guard AppConstants.MOZ_FXA_MESSAGES else {
-            return self.remoteClientsAndTabs.insertCommands([command], forClients: clients) >>> {
-                self.syncManager.syncClients() >>> {
-                    account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
-                    return succeed()
-                }
-            }
-        }
+        let fxaDeviceIds = devices.compactMap { $0.id }
 
         let result = Success()
 
-        self.remoteClientsAndTabs.getRemoteDevices() >>== { remoteDevices in
-            let newRemoteDevices = remoteDevices.filter({ fxaDeviceIds.contains($0.id ?? "") && account.commandsClient.sendTab.isDeviceCompatible($0) })
-            var oldRemoteClients = remoteDevices.filter({ fxaDeviceIds.contains($0.id ?? "") && !account.commandsClient.sendTab.isDeviceCompatible($0) }).compactMap({ clientForRemoteDevice($0) })
+        self.remoteClientsAndTabs.getClients() >>== { clients in
+            let newRemoteDevices = devices.filter { account.commandsClient.sendTab.isDeviceCompatible($0) }
+            var oldRemoteClients = devices.filter { !account.commandsClient.sendTab.isDeviceCompatible($0) }.compactMap { remoteDevice in
+                clients.find { $0.fxaDeviceId == remoteDevice.id }
+            }
 
             func sendViaSyncFallback() {
                 if oldRemoteClients.isEmpty {
@@ -540,7 +527,7 @@ open class BrowserProfile: Profile {
                 account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "") >>== { report in
                     for failedRemoteDevice in report.failed {
                         log.debug("Failed to send a tab with FxA commands for \(failedRemoteDevice.name). Falling back on the Sync back-end")
-                        if let oldRemoteClient = clientForRemoteDevice(failedRemoteDevice) {
+                        if let oldRemoteClient = clients.find({ $0.fxaDeviceId == failedRemoteDevice.id }) {
                             oldRemoteClients.append(oldRemoteClient)
                         }
                     }

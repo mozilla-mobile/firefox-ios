@@ -218,7 +218,7 @@ extension PhotonActionSheetProtocol {
         }
 
         let sendToDevice = PhotonActionSheetItem(title: Strings.SendToDeviceTitle, iconString: "menu-Send-to-Device") { action in
-            guard let bvc = presentableVC as? PresentableVC & InstructionsViewControllerDelegate & ClientPickerViewControllerDelegate else { return }
+            guard let bvc = presentableVC as? PresentableVC & InstructionsViewControllerDelegate & DevicePickerViewControllerDelegate else { return }
             if !self.profile.hasAccount() {
                 let instructionsViewController = InstructionsViewController()
                 instructionsViewController.delegate = bvc
@@ -228,11 +228,11 @@ extension PhotonActionSheetProtocol {
                 return
             }
 
-            let clientPickerViewController = ClientPickerViewController()
-            clientPickerViewController.clientPickerDelegate = bvc
-            clientPickerViewController.profile = self.profile
-            clientPickerViewController.profileNeedsShutdown = false
-            let navigationController = UINavigationController(rootViewController: clientPickerViewController)
+            let devicePickerViewController = DevicePickerViewController()
+            devicePickerViewController.pickerDelegate = bvc
+            devicePickerViewController.profile = self.profile
+            devicePickerViewController.profileNeedsShutdown = false
+            let navigationController = UINavigationController(rootViewController: devicePickerViewController)
             navigationController.modalPresentationStyle = .formSheet
             bvc.present(navigationController, animated: true, completion: nil)
         }
