@@ -5,5 +5,5 @@
 #import <Foundation/Foundation.h>
 
 @interface Try : NSObject
-- (id) initWithTry: (void(^)()) tryBlock catch: (void(^)(NSException *exception)) catchBlock;
+- (id) initWithTry: (void(^)(void)) tryBlock catch: (void(^)(NSException *exception)) catchBlock;
 @end

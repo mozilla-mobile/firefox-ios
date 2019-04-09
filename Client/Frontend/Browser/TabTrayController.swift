@@ -178,7 +178,7 @@ class TabTrayController: UIViewController {
         view.addSubview(statusBarBG)
         statusBarBG.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view)
-            make.bottom.equalTo(self.topLayoutGuide.snp.bottom)
+            make.bottom.equalTo(self.view.safeArea.top)
         }
 
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
@@ -223,7 +223,7 @@ class TabTrayController: UIViewController {
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
             make.bottom.equalTo(toolbar.snp.top)
-            make.top.equalTo(self.topLayoutGuide.snp.bottom)
+            make.top.equalTo(self.view.safeArea.top)
         }
 
         toolbar.snp.makeConstraints { make in
@@ -903,16 +903,16 @@ fileprivate class EmptyPrivateTabsView: UIView {
     }
 }
 
-extension TabTrayController: ClientPickerViewControllerDelegate {
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
-        if let item = clientPickerViewController.shareItem {
-            _ = self.profile.sendItem(item, toClients: clients)
+extension TabTrayController: DevicePickerViewControllerDelegate {
+    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
+        if let item = devicePickerViewController.shareItem {
+            _ = self.profile.sendItem(item, toDevices: devices)
         }
-        clientPickerViewController.dismiss(animated: true, completion: nil)
+        devicePickerViewController.dismiss(animated: true, completion: nil)
     }
 
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
-        clientPickerViewController.dismiss(animated: true, completion: nil)
+    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
+        devicePickerViewController.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -944,7 +944,7 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
         return button
     }()
 
-    lazy var maskButton: PrivateModeButton = PrivateModeButton()
+    lazy var maskButton = PrivateModeButton()
     fileprivate let sideOffset: CGFloat = 32
 
     fileprivate override init(frame: CGRect) {

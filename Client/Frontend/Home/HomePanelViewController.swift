@@ -74,6 +74,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     fileprivate var buttonSelectedTintColor: UIColor?
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = UIColor.theme.browser.background
         self.edgesForExtendedLayout = []
 

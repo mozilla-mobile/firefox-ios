@@ -93,7 +93,7 @@ class TabLocationView: UIView {
 
     lazy var placeholder: NSAttributedString = {
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
-        return NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey40])
+        return NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey50])
     }()
 
     lazy var urlTextField: UITextField = {
@@ -410,7 +410,7 @@ class ReaderModeButton: UIButton {
         }
     }
 
-    var _readerModeState: ReaderModeState = ReaderModeState.unavailable
+    var _readerModeState = ReaderModeState.unavailable
 
     var readerModeState: ReaderModeState {
         get {

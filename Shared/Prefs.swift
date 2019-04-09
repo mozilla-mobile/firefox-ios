@@ -22,6 +22,7 @@ public struct PrefsKeys {
     public static let LoginsSaveEnabled = "saveLogins"
     public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
 
+    public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
@@ -82,7 +83,7 @@ open class MockProfilePrefs: Prefs {
     }
 
     // Public for testing.
-    open var things: NSMutableDictionary = NSMutableDictionary()
+    open var things = NSMutableDictionary()
 
     public init(things: NSMutableDictionary, prefix: String) {
         self.things = things

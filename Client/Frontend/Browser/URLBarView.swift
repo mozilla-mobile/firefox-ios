@@ -15,7 +15,7 @@ private struct URLBarViewUX {
     static let ButtonHeight: CGFloat = 44
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 8
-    static let TextFieldBorderWidth: CGFloat = 1
+    static let TextFieldBorderWidth: CGFloat = 0
     static let TextFieldBorderWidthSelected: CGFloat = 4
     static let ProgressBarHeight: CGFloat = 3
 
@@ -39,6 +39,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton)
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView)
+    func urlBar(_ urlBar: URLBarView, didRestoreText text: String)
     func urlBar(_ urlBar: URLBarView, didEnterText text: String)
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String)
     // Returns either (search query, true) or (url, false).
@@ -93,7 +94,6 @@ class URLBarView: UIView {
         locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.readerModeState = ReaderModeState.unavailable
-        locationView.backgroundColor = URLBarViewUX.TextFieldBorderColor
         locationView.delegate = self
         return locationView
     }()
@@ -416,7 +416,7 @@ class URLBarView: UIView {
         if search {
             locationTextField?.text = text
             // Not notifying when empty agrees with AutocompleteTextField.textDidChange.
-            delegate?.urlBar(self, didEnterText: text)
+            delegate?.urlBar(self, didRestoreText: text)
         } else {
             locationTextField?.setTextWithoutSearching(text)
         }
@@ -430,6 +430,8 @@ class URLBarView: UIView {
         animateToOverlayState(overlayMode: true)
 
         delegate?.urlBarDidEnterOverlayMode(self)
+
+        applyTheme()
 
         // Bug 1193755 Workaround - Calling becomeFirstResponder before the animation happens
         // won't take the initial frame of the label into consideration, which makes the label
@@ -457,6 +459,7 @@ class URLBarView: UIView {
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
+        applyTheme()
     }
 
     func prepareOverlayAnimation() {
@@ -486,7 +489,6 @@ class URLBarView: UIView {
 
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.cgColor
-        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
 
         if inOverlayMode {
             line.isHidden = inOverlayMode
@@ -712,7 +714,7 @@ extension URLBarView: Themeable {
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
 
         locationBorderColor = UIColor.theme.urlbar.border
-        locationView.backgroundColor = UIColor.theme.textField.background
+        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
         locationContainer.backgroundColor = UIColor.theme.textField.background
     }
 }
@@ -794,7 +796,7 @@ class ToolbarTextField: AutocompleteTextField {
 
 extension ToolbarTextField: Themeable {
     func applyTheme() {
-        backgroundColor = UIColor.theme.textField.background
+        backgroundColor = UIColor.theme.textField.backgroundInOverlay
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode

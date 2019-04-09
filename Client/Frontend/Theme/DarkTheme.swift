@@ -98,7 +98,10 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey30 }
 
     override var topSiteDomain: UIColor { return defaultTextAndTint }
-    
+    override var topSitesGradientStart:  UIColor { return UIColor(rgb: 0x29282d) }
+    override var topSitesGradientEnd:  UIColor { return UIColor(rgb: 0x212104) }
+    override var topSitesBackground: UIColor { return UIColor(rgb: 0x29282d) }
+
     override var downloadedFileIcon: UIColor { return UIColor.Photon.Grey30 }
 
     override var historyHeaderIconsBackground: UIColor { return UIColor.clear }

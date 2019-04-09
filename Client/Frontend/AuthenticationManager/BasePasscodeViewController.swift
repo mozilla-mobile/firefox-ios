@@ -27,7 +27,6 @@ class BasePasscodeViewController: UIViewController {
         super.viewDidLoad()
         applyTheme()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(self.dismissAnimated))
-        automaticallyAdjustsScrollViewInsets = false
     }
 
     @objc func dismissAnimated() {

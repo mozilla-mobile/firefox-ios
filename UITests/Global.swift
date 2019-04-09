@@ -319,7 +319,11 @@ class BrowserUtils {
     class func openClearPrivateDataDialog(_ swipe: Bool) {
         let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
                                                  grey_accessibilityID("menu-Settings")])
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
 
         // Need this for simulator only
         if swipe {
@@ -552,7 +556,7 @@ class SimplePageServer {
 class SearchUtils {
     static func navigateToSearchSettings(_ tester: KIFUITestActor) {
         let engine = SearchUtils.getDefaultEngine().shortName
-        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.waitForAnimationsToFinish()
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.waitForView(withAccessibilityLabel: "Settings")
@@ -666,7 +670,7 @@ class PasscodeUtils {
 class HomePageUtils {
     static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.tapView(withAccessibilityIdentifier: "Homepage")
     }

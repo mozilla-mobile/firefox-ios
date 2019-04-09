@@ -146,7 +146,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 38    // Bug 1486583.
+    static let DefaultVersion = 39    // Bug 1539483.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -1383,6 +1383,17 @@ open class BrowserSchema: Schema {
             // Create the "materialized view" table `matview_awesomebar_bookmarks_with_favicons`.
             if !self.run(db, queries: [
                 awesomebarBookmarksWithFaviconsCreate,
+                ]) {
+                return false
+            }
+        }
+
+        if from < 39 && to >= 39 {
+            // Create indices on the bookmarks tables for the `keyword` column.
+            if !self.run(db, queries: [
+                "CREATE INDEX IF NOT EXISTS idx_bookmarksBuffer_keyword ON bookmarksBuffer (keyword)",
+                "CREATE INDEX IF NOT EXISTS idx_bookmarksLocal_keyword ON bookmarksLocal (keyword)",
+                "CREATE INDEX IF NOT EXISTS idx_bookmarksMirror_keyword ON bookmarksMirror (keyword)",
                 ]) {
                 return false
             }

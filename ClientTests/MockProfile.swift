@@ -120,7 +120,8 @@ open class MockProfile: Client.Profile {
     init() {
         files = MockFiles()
         syncManager = MockSyncManager()
-        logins = RustLogins(databasePath: "mock_logins.db", encryptionKey: "AAAAAAAA")
+        let loginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("mock_logins.db").path
+        logins = RustLogins(databasePath: loginsDatabasePath, encryptionKey: "AAAAAAAA")
         db = BrowserDB(filename: "mock.db", schema: BrowserSchema(), files: files)
         readingListDB = BrowserDB(filename: "mock_ReadingList.db", schema: ReadingListSchema(), files: files)
         places = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
@@ -242,7 +243,7 @@ open class MockProfile: Client.Profile {
         return deferMaybe(0)
     }
 
-    public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
+    public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         return succeed()
     }
 }

@@ -16,12 +16,13 @@ struct LanguageDetector: DocumentAnalyser {
     let name = "language" //This key matches the DerivedMetadata property
     typealias NewMetadata = String //This matches the value for the DerivedMetadata key above
 
-    func analyse(metadata: PageMetadata) -> LanguageDetector.NewMetadata?  {
+    func analyse(metadata: PageMetadata) -> LanguageDetector.NewMetadata? {
         if let metadataLanguage = metadata.language {
             return metadataLanguage
         }
         // Lets not use any language detection until we can pass more text to the language detector
         return nil // https://bugzilla.mozilla.org/show_bug.cgi?id=1519503
+        /*
         guard let text = metadata.description else { return nil }
         let language: String?
         if #available(iOS 12.0, *) {
@@ -30,6 +31,7 @@ struct LanguageDetector: DocumentAnalyser {
             language = NSLinguisticTagger.dominantLanguage(for: text)
         }
         return language
+        */
     }
 }
 

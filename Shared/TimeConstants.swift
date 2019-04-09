@@ -108,7 +108,7 @@ extension Date {
     }
 }
 
-let MaxTimestampAsDouble: Double = Double(UInt64.max)
+let MaxTimestampAsDouble = Double(UInt64.max)
 
 /** This is just like decimalSecondsStringToTimestamp, but it looks for values that seem to be
  *  milliseconds and fixes them. That's necessary because Firefox for iOS <= 7.3 uploaded millis
@@ -175,6 +175,6 @@ public func decimalSecondsStringToTimestamp(_ input: String) -> Timestamp? {
 }
 
 public func millisecondsToDecimalSeconds(_ input: Timestamp) -> String {
-    let val: Double = Double(input) / 1000
+    let val = Double(input) / 1000
     return String(format: "%.2F", val)
 }

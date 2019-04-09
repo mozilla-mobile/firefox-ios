@@ -9,11 +9,13 @@ pipeline {
     }
     stages {
         stage('checkout') {
+            when { branch 'master' }
             steps {
                 checkout scm
             }
         }
         stage('rust') {
+            when { branch 'master' }
             steps {
                 sh 'curl https://sh.rustup.rs -sSf | sh -s -- -y'
                 sh 'source $HOME/.cargo/env'
@@ -29,11 +31,13 @@ pipeline {
             }
         }
         stage('bootstrap') {
+            when { branch 'master' }
             steps {
-                sh '''./bootstrap.sh'''
+                sh './bootstrap.sh'
             }
         }
         stage('test') {
+            when { branch 'master' }
             steps {
                 dir('SyncIntegrationTests') {
                     sh 'pipenv install'
@@ -48,16 +52,21 @@ pipeline {
     }
     post {
         always {
-            archiveArtifacts 'SyncIntegrationTests/results/*'
-            junit 'SyncIntegrationTests/results/*.xml'
-            publishHTML(target: [
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'SyncIntegrationTests/results',
-                reportFiles: 'index.html',
-                reportName: 'HTML Report'])
+            script {
+                if (env.BRANCH_NAME == 'master') {
+                archiveArtifacts 'SyncIntegrationTests/results/*'
+                junit 'SyncIntegrationTests/results/*.xml'
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'SyncIntegrationTests/results',
+                    reportFiles: 'index.html',
+                    reportName: 'HTML Report'])
+                }
+            }
         }
+
         failure {
             script {
                 if (env.BRANCH_NAME == 'master') {

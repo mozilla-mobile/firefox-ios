@@ -25,16 +25,18 @@ class AppAuthenticator {
                     return
                 }
 
-                guard let authError = error,
-                          let code = LAError.Code(rawValue: authError._code) else {
+                guard let authError = error else {
                     return
                 }
 
                 DispatchQueue.main.async {
-                    switch code {
-                    case .userFallback, .touchIDNotEnrolled, .touchIDNotAvailable, .touchIDLockout:
+                    switch Int32(authError._code) {
+                    case kLAErrorUserFallback,
+                         kLAErrorBiometryNotEnrolled,
+                         kLAErrorBiometryNotAvailable,
+                         kLAErrorBiometryLockout:
                         fallback?()
-                    case .userCancel:
+                    case kLAErrorUserCancel:
                         cancel?()
                     default:
                         cancel?()

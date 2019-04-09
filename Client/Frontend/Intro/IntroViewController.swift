@@ -83,6 +83,7 @@ class IntroViewController: UIViewController {
     fileprivate var imagesBackgroundView = UIView()
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         syncViaLP()
 
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
@@ -434,11 +435,8 @@ struct IntroCard: Codable {
 
     static func defaultCards() -> [IntroCard] {
         let welcome = IntroCard(title: Strings.CardTitleWelcome, text: Strings.CardTextWelcome, imageName: "tour-Welcome")
-        let search = IntroCard(title: Strings.CardTitleSearch, text: Strings.CardTextSearch, imageName: "tour-Search")
-        let privateBrowsing = IntroCard(title: Strings.CardTitlePrivate, text: Strings.CardTextPrivate, imageName: "tour-Private")
-        let mailTo = IntroCard(title: Strings.CardTitleMail, text: Strings.CardTextMail, imageName: "tour-Mail")
         let sync = IntroCard(title: Strings.CardTitleSync, text: Strings.CardTextSync, imageName: "tour-Sync", buttonText: Strings.SignInButtonTitle, buttonSelector: #selector(IntroViewController.login).description)
-        return [welcome, search, privateBrowsing, mailTo, sync]
+        return [welcome, sync]
     }
 
     /* Codable doesnt allow quick conversion to a dictonary */

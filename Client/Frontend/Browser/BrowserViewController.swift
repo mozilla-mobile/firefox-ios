@@ -53,7 +53,7 @@ class BrowserViewController: UIViewController {
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
 
-    lazy var mailtoLinkHandler: MailtoLinkHandler = MailtoLinkHandler()
+    lazy var mailtoLinkHandler = MailtoLinkHandler()
 
     lazy fileprivate var customSearchEngineButton: UIButton = {
         let searchButton = UIButton()
@@ -64,6 +64,7 @@ class BrowserViewController: UIViewController {
     }()
 
     fileprivate var customSearchBarButton: UIBarButtonItem?
+    private weak var currentBookmarksKeywordQuery: Cancellable?
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?
@@ -423,7 +424,7 @@ class BrowserViewController: UIViewController {
         }
 
         header.snp.makeConstraints { make in
-            scrollController.headerTopConstraint = make.top.equalTo(self.topLayoutGuide.snp.bottom).constraint
+            scrollController.headerTopConstraint = make.top.equalTo(self.view.safeArea.top).constraint
             make.left.right.equalTo(self.view)
         }
 
@@ -436,7 +437,7 @@ class BrowserViewController: UIViewController {
         super.viewDidLayoutSubviews()
         statusBarOverlay.snp.remakeConstraints { make in
             make.top.left.right.equalTo(self.view)
-            make.height.equalTo(self.topLayoutGuide.length)
+            make.height.equalTo(self.view.safeAreaInsets.top)
         }
     }
 
@@ -473,10 +474,6 @@ class BrowserViewController: UIViewController {
             if !receivedURLs.isEmpty {
                 DispatchQueue.main.async {
                     self.tabManager.addTabsForURLs(receivedURLs, zombie: false)
-
-                    if let lastURL = receivedURLs.last, let tab = self.tabManager.getTabForURL(lastURL) {
-                        self.tabManager.selectTab(tab)
-                    }
                 }
             }
         }
@@ -751,32 +748,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    fileprivate func showSearchController() {
-        if searchController != nil {
-            return
-        }
-
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
-        searchController!.searchEngines = profile.searchEngines
-        searchController!.searchDelegate = self
-
-        searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
-        searchLoader?.addListener(searchController!)
-
-        addChildViewController(searchController!)
-        view.addSubview(searchController!.view)
-        searchController!.view.snp.makeConstraints { make in
-            make.top.equalTo(self.urlBar.snp.bottom)
-            make.left.right.bottom.equalTo(self.view)
-            return
-        }
-
-        homePanelController?.view?.isHidden = true
-
-        searchController!.didMove(toParentViewController: self)
-    }
-
     func showLibrary(panel: LibraryPanelType? = nil) {
         if let presentedVC = self.presentedViewController {
             presentedVC.dismiss(animated: true, completion: nil)
@@ -802,18 +773,61 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    fileprivate func createSearchControllerIfNeeded() {
+        guard self.searchController == nil else {
+            return
+        }
+
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        let searchController = SearchViewController(profile: profile, isPrivate: isPrivate)
+        searchController.searchEngines = profile.searchEngines
+        searchController.searchDelegate = self
+
+        let searchLoader = SearchLoader(profile: profile, urlBar: urlBar)
+        searchLoader.addListener(searchController)
+
+        self.searchController = searchController
+        self.searchLoader = searchLoader
+    }
+
+    fileprivate func showSearchController() {
+        createSearchControllerIfNeeded()
+
+        guard let searchController = self.searchController else {
+            return
+        }
+
+        addChildViewController(searchController)
+        view.addSubview(searchController.view)
+        searchController.view.snp.makeConstraints { make in
+            make.top.equalTo(self.urlBar.snp.bottom)
+            make.left.right.bottom.equalTo(self.view)
+        }
+
+        homePanelController?.view?.isHidden = true
+
+        searchController.didMove(toParentViewController: self)
+    }
+
     fileprivate func hideSearchController() {
-        if let searchController = searchController {
+        if let searchController = self.searchController {
             searchController.willMove(toParentViewController: nil)
             searchController.view.removeFromSuperview()
             searchController.removeFromParentViewController()
-            self.searchController = nil
             homePanelController?.view?.isHidden = false
-            searchLoader = nil
         }
     }
 
+    fileprivate func destroySearchController() {
+        hideSearchController()
+
+        searchController = nil
+        searchLoader = nil
+    }
+
     func finishEditingAndSubmit(_ url: URL, visitType: VisitType, forTab tab: Tab) {
+        currentBookmarksKeywordQuery?.cancel()
+
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
@@ -853,7 +867,7 @@ class BrowserViewController: UIViewController {
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-        guard let webView = object as? WKWebView else {
+        guard let webView = object as? WKWebView, let tab = tabManager[webView] else {
             assert(false)
             return
         }
@@ -862,9 +876,14 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        if let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper {
+            // This is zero-cost if already installed. It needs to be checked frequently (hence every event here triggers this function), as when a new tab is created it requires multiple attempts to setup the handler correctly.
+             helper.replaceGestureHandlerIfNeeded()
+        }
+
         switch path {
         case .estimatedProgress:
-            guard webView == tabManager.selectedTab?.webView else { break }
+            guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
             } else {
@@ -873,7 +892,7 @@ class BrowserViewController: UIViewController {
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
 
-            if webView == tabManager.selectedTab?.webView {
+            if tab === tabManager.selectedTab {
                 navigationToolbar.updateReloadStatus(loading)
             }
 
@@ -881,8 +900,6 @@ class BrowserViewController: UIViewController {
                 runScriptsOnWebView(webView)
             }
         case .URL:
-            guard let tab = tabManager[webView] else { break }
-
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
@@ -894,8 +911,6 @@ class BrowserViewController: UIViewController {
                 }
             }
         case .title:
-            guard let tab = tabManager[webView] else { break }
-
             // Ensure that the tab title *actually* changed to prevent repeated calls
             // to navigateInTab(tab:).
             guard let title = tab.title else { break }
@@ -903,14 +918,14 @@ class BrowserViewController: UIViewController {
                 navigateInTab(tab: tab)
             }
         case .canGoBack:
-            guard webView == tabManager.selectedTab?.webView,
-                let canGoBack = change?[.newKey] as? Bool else { break }
-
+            guard tab === tabManager.selectedTab, let canGoBack = change?[.newKey] as? Bool else {
+                break
+            }
             navigationToolbar.updateBackStatus(canGoBack)
         case .canGoForward:
-            guard webView == tabManager.selectedTab?.webView,
-                let canGoForward = change?[.newKey] as? Bool else { break }
-
+            guard tab === tabManager.selectedTab, let canGoForward = change?[.newKey] as? Bool else {
+                break
+            }
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
@@ -1377,18 +1392,33 @@ extension BrowserViewController: URLBarDelegate {
         return locationActionsForURLBar(urlBar).map { $0.accessibilityCustomAction }
     }
 
+    func urlBar(_ urlBar: URLBarView, didRestoreText text: String) {
+        if text.isEmpty {
+            hideSearchController()
+        } else {
+            showSearchController()
+        }
+
+        searchController?.searchQuery = text
+        searchLoader?.setQueryWithoutAutocomplete(text)
+    }
+
     func urlBar(_ urlBar: URLBarView, didEnterText text: String) {
         if text.isEmpty {
             hideSearchController()
         } else {
             showSearchController()
-            searchController?.searchQuery = text
-            searchLoader?.query = text
         }
+
+        searchController?.searchQuery = text
+        searchLoader?.query = text
     }
 
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String) {
         guard let currentTab = tabManager.selectedTab else { return }
+
+        currentBookmarksKeywordQuery?.cancel()
+
         if let fixupURL = URIFixup.getURL(text) {
             // The user entered a URL, so use it.
             finishEditingAndSubmit(fixupURL, visitType: VisitType.typed, forTab: currentTab)
@@ -1405,7 +1435,18 @@ extension BrowserViewController: URLBarDelegate {
         let possibleKeyword = String(trimmedText[..<possibleKeywordQuerySeparatorSpace])
         let possibleQuery = String(trimmedText[trimmedText.index(after: possibleKeywordQuerySeparatorSpace)...])
 
-        profile.bookmarks.getURLForKeywordSearch(possibleKeyword).uponQueue(.main) { result in
+        let deferred = profile.bookmarks.getURLForKeywordSearch(possibleKeyword)
+        currentBookmarksKeywordQuery = deferred as? Cancellable
+
+        deferred.uponQueue(.main) { result in
+            defer {
+                self.currentBookmarksKeywordQuery = nil
+            }
+
+            guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
+                return
+            }
+
             if var urlString = result.successValue,
                 let escapedQuery = possibleQuery.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed),
                 let range = urlString.range(of: "%s") {
@@ -1453,7 +1494,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
-        hideSearchController()
+        destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
     }
 
@@ -1662,6 +1703,14 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
+        // Reset the scroll position for the ActivityStreamPanel so that it
+        // is always presented scrolled to the top when switching tabs.
+        if !isRestoring, selected != previous,
+            let homePanelVC = homePanelController as? TabbedHomePanelController,
+            let activityStreamPanel = homePanelVC.currentPanel as? ActivityStreamPanel {
+            activityStreamPanel.scrollToTop()
+        }
+
         // Remove the old accessibilityLabel. Since this webview shouldn't be visible, it doesn't need it
         // and having multiple views with the same label confuses tests.
         if let wv = previous?.webView {
@@ -1772,9 +1821,6 @@ extension BrowserViewController: TabManagerDelegate {
                 urlBar.leaveOverlayMode()
             }
         }
-    }
-
-    func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
@@ -2393,16 +2439,16 @@ extension BrowserViewController: TopTabsDelegate {
     }
 }
 
-extension BrowserViewController: ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
+extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         self.popToBVC()
     }
 
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
+    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
         self.popToBVC()
     }
 
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         guard let tab = tabManager.selectedTab, let url = tab.canonicalURL?.displayURL?.absoluteString else { return }
         let shareItem = ShareItem(url: url, title: tab.title, favicon: tab.displayFavicon)
         guard shareItem.isShareable else {
@@ -2411,7 +2457,7 @@ extension BrowserViewController: ClientPickerViewControllerDelegate, Instruction
             present(alert, animated: true, completion: nil)
             return
         }
-        profile.sendItem(shareItem, toClients: clients).uponQueue(.main) { _ in
+        profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
             self.popToBVC()
         }
     }

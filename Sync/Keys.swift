@@ -126,7 +126,7 @@ open class Keys: Equatable {
     }
 
     open func asPayload() -> KeysPayload {
-        let json: JSON = JSON([
+        let json = JSON([
             "id": "keys",
             "collection": "crypto",
             "default": self.defaultBundle.asPair(),

@@ -18,7 +18,7 @@ open class SuggestedSite: Site {
     }
 }
 
-public let SuggestedSites: SuggestedSitesCursor = SuggestedSitesCursor()
+public let SuggestedSites = SuggestedSitesCursor()
 
 open class SuggestedSitesCursor: ArrayCursor<SuggestedSite> {
     fileprivate init() {

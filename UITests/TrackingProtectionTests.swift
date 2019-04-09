@@ -116,8 +116,11 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
             let success = errorOrNil == nil
             return success
         }
-
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        if BrowserUtils.iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
         EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
 
         let success = menuAppeared.wait(withTimeout: 20)

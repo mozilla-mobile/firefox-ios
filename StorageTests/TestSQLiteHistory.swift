@@ -943,7 +943,7 @@ class TestSQLiteHistory: XCTestCase {
 
     // Test that our visit partitioning for frecency is correct.
     func testHistoryLocalAndRemoteVisits() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testHistoryLocalAndRemoteVisits.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1065,7 +1065,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testDomainUpgrade() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testDomainUpgrade.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1097,7 +1097,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testDomains() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testDomains.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1167,7 +1167,7 @@ class TestSQLiteHistory: XCTestCase {
     // This is a very basic test. Adds an entry, retrieves it, updates it,
     // and then clears the database.
     func testHistoryTable() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testHistoryTable.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
@@ -1289,7 +1289,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testFaviconTable() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testFaviconTable.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
         let bookmarks = SQLiteBookmarks(db: db)
@@ -1352,7 +1352,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testRemoveRecentHistory() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testRemoveRecentHistory.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1390,7 +1390,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testRemoveHistoryForUrl() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testRemoveHistoryForUrl.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1411,7 +1411,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testTopSitesFrecencyOrder() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testTopSitesFrecencyOrder.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1459,7 +1459,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testTopSitesFiltersGoogle() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testTopSitesFiltersGoogle.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1517,7 +1517,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testTopSitesCache() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testTopSitesCache.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1602,7 +1602,7 @@ class TestSQLiteHistory: XCTestCase {
     }
 
     func testPinnedTopSites() {
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testPinnedTopSites.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
@@ -1694,7 +1694,7 @@ class TestSQLiteHistory: XCTestCase {
 class TestSQLiteHistoryTransactionUpdate: XCTestCase {
     func testUpdateInTransaction() {
         let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
+        let db = BrowserDB(filename: "testUpdateInTransaction.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 

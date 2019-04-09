@@ -24,10 +24,14 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
     fileprivate let urlBar: URLBarView
     fileprivate let frecentHistory: FrecentHistory
 
+    private var skipNextAutocomplete: Bool
+
     init(profile: Profile, urlBar: URLBarView) {
         self.profile = profile
         self.urlBar = urlBar
-        frecentHistory = profile.history.getFrecentHistory()
+        self.frecentHistory = profile.history.getFrecentHistory()
+
+        self.skipNextAutocomplete = false
 
         super.init()
     }
@@ -48,13 +52,11 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                 return
             }
 
+            currentDbQuery?.cancel()
+
             if query.isEmpty {
                 load(Cursor(status: .success, msg: "Empty query"))
                 return
-            }
-
-            if let currentDbQuery = currentDbQuery {
-                currentDbQuery.cancel()
             }
 
             let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
@@ -71,13 +73,27 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
 
                 // Failed cursors are excluded in .get().
                 if let cursor = result.successValue {
-                    // First, see if the query matches any URLs from the user's search history.
+
+                    // Load the data in the table view.
                     self.load(cursor)
+
+                    // If the new search string is not longer than the previous
+                    // we don't need to find an autocomplete suggestion.
+                    guard oldValue.count < self.query.count else {
+                        return
+                    }
+
+                    // If we should skip the next autocomplete, reset
+                    // the flag and bail out here.
+                    guard !self.skipNextAutocomplete else {
+                        self.skipNextAutocomplete = false
+                        return
+                    }
+
+                    // First, see if the query matches any URLs from the user's search history.
                     for site in cursor {
                         if let url = site?.url, let completion = self.completionForURL(url) {
-                            if oldValue.count < self.query.count {
-                                self.urlBar.setAutocompleteSuggestion(completion)
-                            }
+                            self.urlBar.setAutocompleteSuggestion(completion)
                             return
                         }
                     }
@@ -85,15 +101,18 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
                     // If there are no search history matches, try matching one of the Alexa top domains.
                     for domain in self.topDomains {
                         if let completion = self.completionForDomain(domain) {
-                            if oldValue.count < self.query.count {
-                                self.urlBar.setAutocompleteSuggestion(completion)
-                            }
+                            self.urlBar.setAutocompleteSuggestion(completion)
                             return
                         }
                     }
                 }
             }
         }
+    }
+
+    func setQueryWithoutAutocomplete(_ query: String) {
+        skipNextAutocomplete = true
+        self.query = query
     }
 
     fileprivate func completionForURL(_ url: String) -> String? {
@@ -127,7 +146,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
         if let range = domainWithDotPrefix.range(of: ".\(query)", options: .caseInsensitive, range: nil, locale: nil) {
             // We don't actually want to match the top-level domain ("com", "org", etc.) by itself, so
             // so make sure the result includes at least one ".".
-            let matchedDomain: String = String(domainWithDotPrefix[domainWithDotPrefix.index(range.lowerBound, offsetBy: 1)...])
+            let matchedDomain = String(domainWithDotPrefix[domainWithDotPrefix.index(range.lowerBound, offsetBy: 1)...])
             if matchedDomain.contains(".") {
                 return matchedDomain
             }

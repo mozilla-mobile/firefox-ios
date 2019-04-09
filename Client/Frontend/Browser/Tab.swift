@@ -298,13 +298,13 @@ class Tab: NSObject {
     }
 
     func closeAndRemovePrivateBrowsingData() {
+        contentScriptManager.uninstall(tab: self)
+
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
 
         if let webView = webView {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
-
-        contentScriptManager.helpers.removeAll()
 
         if isPrivate {
             removeAllBrowsingData()
@@ -534,10 +534,6 @@ class Tab: NSObject {
             return
         }
 
-        if let helper = contentScriptManager.getContentScript(ContextMenuHelper.name()) as? ContextMenuHelper {
-                helper.replaceWebViewLongPress()
-        }
-
         self.urlDidChangeDelegate?.tab(self, urlDidChangeTo: url)
     }
 
@@ -598,15 +594,22 @@ extension Tab: ContentBlockerTab {
 }
 
 private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
-    fileprivate var helpers = [String: TabContentScript]()
+    private var helpers = [String: TabContentScript]()
+
+    // Without calling this, the TabContentScriptManager will leak.
+    func uninstall(tab: Tab) {
+        helpers.forEach { helper in
+            if let name = helper.value.scriptMessageHandlerName() {
+                tab.webView?.configuration.userContentController.removeScriptMessageHandler(forName: name)
+            }
+        }
+    }
 
     @objc func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         for helper in helpers.values {
-            if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-                if scriptMessageHandlerName == message.name {
-                    helper.userContentController(userContentController, didReceiveScriptMessage: message)
-                    return
-                }
+            if let scriptMessageHandlerName = helper.scriptMessageHandlerName(), scriptMessageHandlerName == message.name {
+                helper.userContentController(userContentController, didReceiveScriptMessage: message)
+                return
             }
         }
     }

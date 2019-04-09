@@ -5,4 +5,6 @@
 
 #import <sqlite3.h>
 
+#import "Shared-Bridging-Header.h"
+
 #endif

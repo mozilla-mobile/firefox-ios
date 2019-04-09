@@ -47,8 +47,9 @@ public class DBOperationCancelled : MaybeErrorType {
 }
 
 class DeferredDBOperation<T>: Deferred<T>, Cancellable {
-    fileprivate weak var dispatchWorkItem: DispatchWorkItem?
+    fileprivate var dispatchWorkItem: DispatchWorkItem?
     private var _running = false
+    private var _cancelled = false
 
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
 
@@ -56,21 +57,22 @@ class DeferredDBOperation<T>: Deferred<T>, Cancellable {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
 
+        if _running {
+            connection?.interrupt()
+        }
+
         let queue = OperationQueue.current?.underlyingQueue
         queue?.suspend()
         defer { queue?.resume() }
 
         dispatchWorkItem?.cancel()
-
-        if _running {
-            connection?.interrupt()
-        }
+        _cancelled = true
     }
 
     var cancelled: Bool {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
-        return dispatchWorkItem?.isCancelled ?? false
+        return _cancelled
     }
 
     var running: Bool {
@@ -84,6 +86,18 @@ class DeferredDBOperation<T>: Deferred<T>, Cancellable {
             defer { objc_sync_exit(self) }
             _running = newValue
         }
+    }
+    
+    override func fill(_ value: T) {
+        defer {
+            dispatchWorkItem = nil
+        }
+
+        guard !cancelled else {
+            return
+        }
+
+        super.fill(value)
     }
 }
 
@@ -145,9 +159,11 @@ open class SwiftData {
         self.primaryConnectionQueue = DispatchQueue(label: "SwiftData primary queue: \(filename)", attributes: [])
         self.secondaryConnectionQueue = DispatchQueue(label: "SwiftData secondary queue: \(filename)", attributes: [])
 
-        // Ensure that multi-thread mode is enabled by default.
-        // See https://www.sqlite.org/threadsafe.html
-        assert(sqlite3_threadsafe() == SQLITE_CONFIG_MULTITHREAD)
+        // Ensure that SQLite/SQLCipher has been compiled with
+        // `SQLITE_THREADSAFE=1` or `SQLITE_THREADSAFE=2`.
+        // https://www.sqlite.org/compile.html#threadsafe
+        // https://www.sqlite.org/threadsafe.html
+        assert(sqlite3_threadsafe() > 0)
     }
 
     /**
@@ -194,10 +210,6 @@ open class SwiftData {
                 }
             }
 
-            if debugSimulateSlowDBOperations {
-                sleep(2)
-            }
-
             guard let connection = useSecondaryConnection ? self.secondaryConnection : self.primaryConnection else {
                 do {
                     _ = try callback(FailedSQLiteDBConnection())
@@ -210,6 +222,10 @@ open class SwiftData {
             }
 
             deferred.connection = connection
+
+            if debugSimulateSlowDBOperations {
+                sleep(2)
+            }
 
             do {
                 let result = try callback(connection)
@@ -245,9 +261,13 @@ open class SwiftData {
     /// The shutdown is *sync*, meaning the queue will complete the current db operations before closing.
     /// If an operation is queued with an open connection, it will execute before this runs.
     func forceClose() {
-        primaryConnectionQueue.async {
+        primaryConnectionQueue.sync {
             guard !self.closed else { return }
             self.closed = true
+
+            // Optimize the database if needed, but only on the read/write connection.
+            self.primaryConnection?.optimize()
+
             self.primaryConnection = nil
             self.secondaryConnection = nil
             let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
@@ -258,7 +278,7 @@ open class SwiftData {
     /// Reopens a database that had previously been force-closed.
     /// Does nothing if this database is already open.
     func reopenIfClosed() {
-        primaryConnectionQueue.async {
+        primaryConnectionQueue.sync {
             guard self.closed else { return }
             self.closed = false
             let baseFilename = URL(fileURLWithPath: self.filename).lastPathComponent
@@ -271,14 +291,20 @@ open class SwiftData {
         case readWrite
         case readWriteCreate
 
+        // We use `SQLITE_OPEN_NOMUTEX` here which effectively makes
+        // `SQLITE_THREADSAFE=1` behave like `SQLITE_THREADSAFE=2`.
+        // This is safe ONLY IF no two threads touch the same connection
+        // at the same time.
+        // https://www.sqlite.org/compile.html#threadsafe
+        // https://www.sqlite.org/threadsafe.html
         fileprivate func toSQL() -> Int32 {
             switch self {
             case .readOnly:
-                return SQLITE_OPEN_READONLY
+                return SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READONLY
             case .readWrite:
-                return SQLITE_OPEN_READWRITE
+                return SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READWRITE
             case .readWriteCreate:
-                return SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
+                return SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
             }
         }
     }
@@ -384,6 +410,7 @@ public protocol SQLiteDBConnection {
     func interrupt()
     func checkpoint()
     func checkpoint(_ mode: Int32)
+    func optimize()
     func vacuum() throws -> Void
     func setVersion(_ version: Int) throws -> Void
 }
@@ -422,6 +449,7 @@ class FailedSQLiteDBConnection: SQLiteDBConnection {
     func interrupt() {}
     func checkpoint() {}
     func checkpoint(_ mode: Int32) {}
+    func optimize() {}
     func vacuum() throws -> Void {
         throw fail("Non-open connection; can't vacuum.")
     }
@@ -884,15 +912,65 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
         log.debug("WAL checkpoint done on \(self.filename).")
     }
 
+    public func optimize() {
+        _ = pragma("optimize", factory: StringFactory)
+    }
+
     public func vacuum() throws -> Void {
         try executeChange("VACUUM")
     }
 
     // Developers can manually add a call to this to trace to console.
     func traceOn() {
-        sqlite3_trace(sqliteDB, { _, sql in
-            guard let sql = sql else { return }
-            print(String(cString: sql))
+        let uMask = UInt32(
+            SQLITE_TRACE_STMT |
+            SQLITE_TRACE_PROFILE |
+            SQLITE_TRACE_ROW |
+            SQLITE_TRACE_CLOSE
+        )
+
+        // https://stackoverflow.com/questions/43593618/sqlite-trace-for-logging/43595437
+        sqlite3_trace_v2(sqliteDB, uMask, { (reason, context, p, x) -> Int32 in
+            switch Int32(reason) {
+            case SQLITE_TRACE_STMT:
+                // The P argument is a pointer to the prepared statement.
+                // The X argument is a pointer to a string which is the unexpanded SQL text
+                guard let pStmt = OpaquePointer(p) /*, let cSql = x?.assumingMemoryBound(to: CChar.self) */ else {
+                    return 0
+                }
+
+                // let sql = String(cString: cSql) // The unexpanded SQL text
+                let expandedSql = String(cString: sqlite3_expanded_sql(pStmt)) // The expanded SQL text
+                print("SQLITE_TRACE_STMT:", expandedSql)
+            case SQLITE_TRACE_PROFILE:
+                // The P argument is a pointer to the prepared statement and the X argument points
+                // to a 64-bit integer which is the estimated of the number of nanosecond that the
+                // prepared statement took to run.
+                guard let pStmt = OpaquePointer(p), let duration = x?.load(as: UInt64.self) else {
+                    return 0
+                }
+
+                let milliSeconds = Double(duration)/Double(NSEC_PER_MSEC)
+                let sql = String(cString: sqlite3_sql(pStmt)) // The unexpanded SQL text
+                print("SQLITE_TRACE_PROFILE:", milliSeconds, "ms for statement:", sql)
+            case SQLITE_TRACE_ROW:
+                // The P argument is a pointer to the prepared statement and the X argument is unused.
+                guard let _ = OpaquePointer(p) else {
+                    return 0
+                }
+
+                print("SQLITE_TRACE_ROW")
+            case SQLITE_TRACE_CLOSE:
+                // The P argument is a pointer to the database connection object and the X argument is unused.
+                guard let _ = OpaquePointer(p) else {
+                    return 0
+                }
+
+                print("SQLITE_TRACE_CLOSE")
+            default:
+                break
+            }
+            return 0
         }, nil)
     }
 
@@ -929,6 +1007,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             log.warning("Database \(self.filename) was not opened with SQLCipher")
             return nil
         }
+
+        // Since we're using SQLCipher, ensure that `cipher_memory_security` is
+        // turned off. Otherwise, there is a HUGE performance penalty.
+        _ = pragma("cipher_memory_security=OFF", factory: StringFactory)
         return nil
     }
 
@@ -1057,7 +1139,10 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
                 writeCorruptionInfoForDBNamed(filename, toLogger: Logger.corruptLogger)
                 Sentry.shared.sendWithStacktrace(message: "SQLITE_CORRUPT", tag: SentryTag.swiftData, severity: .error, description: "DB file '\(filename)'. \(error.localizedDescription)")
             }
-            Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500))).")
+            // Don't log errors caused by `sqlite3_interrupt()` to Sentry.
+            if error.code != Int(SQLITE_INTERRUPT) {
+                Sentry.shared.sendWithStacktrace(message: "SQL error", tag: SentryTag.swiftData, severity: .error, description: "Error code: \(error.code), \(error) for SQL \(String(sqlStr.prefix(500))).")
+            }
 
             return Cursor<T>(err: error)
         }

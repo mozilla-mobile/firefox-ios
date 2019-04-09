@@ -77,23 +77,22 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         super.init(frame: frame)
         isAccessibilityElement = true
         accessibilityIdentifier = "TopSite"
-
         contentView.addSubview(titleLabel)
         contentView.addSubview(faviconBG)
         contentView.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
         titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(TopSiteCellUX.TitleOffset)
-            make.right.equalTo(self).offset(-TopSiteCellUX.TitleOffset)
+            make.left.equalTo(contentView).offset(TopSiteCellUX.TitleOffset)
+            make.right.equalTo(contentView).offset(-TopSiteCellUX.TitleOffset)
             make.height.equalTo(TopSiteCellUX.TitleHeight)
-            make.bottom.equalTo(self)
+            make.bottom.equalTo(contentView)
         }
 
         imageView.snp.makeConstraints { make in
             make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
-            make.centerX.equalTo(self)
-            make.centerY.equalTo(self).inset(-TopSiteCellUX.TitleHeight/2)
+            make.centerX.equalTo(contentView)
+            make.centerY.equalTo(contentView).inset(-TopSiteCellUX.TitleHeight/2)
         }
 
         selectedOverlay.snp.makeConstraints { make in
@@ -101,20 +100,14 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         }
 
         faviconBG.snp.makeConstraints { make in
-            make.top.left.right.equalTo(self)
-            make.bottom.equalTo(self).inset(TopSiteCellUX.TitleHeight)
+            make.top.left.right.equalTo(contentView)
+            make.bottom.equalTo(contentView).inset(TopSiteCellUX.TitleHeight)
         }
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         titleBorder.frame = CGRect(x: 0, y: frame.height - TopSiteCellUX.TitleHeight -  TopSiteCellUX.BorderWidth, width: frame.width, height: TopSiteCellUX.BorderWidth)
-
-        imageView.snp.remakeConstraints { make in
-            make.size.equalTo(floor(self.frame.width * TopSiteCellUX.IconSizePercent))
-            make.centerX.equalTo(self)
-            make.centerY.equalTo(self).inset(-TopSiteCellUX.TitleHeight/2)
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -130,9 +123,6 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         pinImageView.removeFromSuperview()
         imageView.sd_cancelCurrentImageLoad()
         titleLabel.text = ""
-        titleLabel.snp.updateConstraints { make in
-            make.left.equalTo(self).offset(TopSiteCellUX.TitleOffset)
-        }
     }
 
     func configureWithTopSiteItem(_ site: Site) {
@@ -153,7 +143,11 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
                 make.centerY.equalTo(self.titleLabel.snp.centerY)
             }
             titleLabel.snp.updateConstraints { make in
-                make.left.equalTo(self).offset(TopSiteCellUX.PinIconSize)
+                make.left.equalTo(contentView).offset(TopSiteCellUX.PinIconSize)
+            }
+        } else {
+            titleLabel.snp.updateConstraints { make in
+                make.left.equalTo(contentView).offset(TopSiteCellUX.TitleOffset)
             }
         }
 
@@ -291,7 +285,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
 
         //calculate our estimates.
         let rows = CGFloat(ceil(Double(Float(cellCount)/Float(horizontalItemsCount))))
-        let estimatedHeight = (rows * estimatedItemSize.height) + (insets * (rows+1))
+        let estimatedHeight = (rows * estimatedItemSize.height) + (insets * rows)
         let estimatedSize = CGSize(width: width, height: estimatedHeight)
 
         let estimatedInsets = UIEdgeInsets(equalInset: insets)
@@ -372,7 +366,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
         let attr = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         var frame = CGRect.zero
         frame.origin.x = CGFloat(columnPosition) * (itemSize.width + insets.left) + insets.left
-        frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top) + insets.top
+        frame.origin.y = CGFloat(rowPosition) * (itemSize.height + insets.top)
 
         frame.size = itemSize
         attr.frame = frame
@@ -429,7 +423,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         }
         // On iPad
         // The number of items in a row is equal to the number of highlights in a row * 2
-        var numItems: Int = Int(ASPanelUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass])
+        var numItems = Int(ASPanelUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass])
         if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) || (traits.horizontalSizeClass == .compact && isLandscape) {
             numItems = numItems - 1
         }

@@ -75,13 +75,44 @@ func getLocalFrecencySQL() -> String {
 }
 
 fileprivate func escapeFTSSearchString(_ search: String) -> String {
-    // Remove double-quotes and split search string on whitespace.
-    let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces)
+    // Remove double-quotes, split search string on whitespace
+    // and remove any empty strings
+    let words = search.replacingOccurrences(of: "\"", with: "").components(separatedBy: .whitespaces).filter({ !$0.isEmpty })
 
-    // Remove empty strings, wrap each word in double-quotes and "*",
-    // then join it all back together.
-    // Example: "foo bar baz" -> "\"*foo*\"\"*bar*\"\"*baz*\""
-    return words.filter({ !$0.isEmpty }).map({ "\"*\($0)*\"" }).joined()
+    // If there's only one word, ensure it is longer than 2
+    // characters. Otherwise, form a different type of search
+    // string to attempt to match the start of URLs.
+    guard words.count > 1 else {
+        guard let word = words.first else {
+            return ""
+        }
+
+        let charThresholdForSearchAll = 2
+        if word.count > charThresholdForSearchAll {
+            return "\"\(word)*\""
+        } else {
+            let titlePrefix = "title: \"^"
+            let httpPrefix = "url: \"^http://"
+            let httpsPrefix = "url: \"^https://"
+
+            return [titlePrefix,
+                    httpPrefix,
+                    httpsPrefix,
+                    httpPrefix + "www.",
+                    httpsPrefix + "www.",
+                    httpPrefix + "m.",
+                    httpsPrefix + "m."]
+                .map({ "\($0)\(word)*\"" })
+                .joined(separator: " OR ")
+        }
+    }
+
+    // Remove empty strings, wrap each word in double-quotes, append
+    // "*", then join it all back together. For words with fewer than
+    // three characters, anchor the search to the beginning of word
+    // bounds by prepending "^".
+    // Example: "foo bar a b" -> "\"foo*\"\"bar*\"\"^a*\"\"^b*\""
+    return words.map({ "\"\($0)*\"" }).joined()
 }
 
 fileprivate func computeWordsWithFilter(_ filter: String) -> [String] {

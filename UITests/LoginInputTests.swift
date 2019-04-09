@@ -19,7 +19,7 @@ class LoginInputTests: KIFTestCase {
     }
 
     override func tearDown() {
-        _ = profile.logins.wipe().value
+        _ = profile.logins.wipeLocal().value
         BrowserUtils.resetToAboutHome()
         BrowserUtils.clearPrivateData()
         super.tearDown()

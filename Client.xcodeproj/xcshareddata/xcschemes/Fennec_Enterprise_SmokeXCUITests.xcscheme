@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0940"
+   LastUpgradeVersion = "1010"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -404,6 +404,9 @@
                   Identifier = "IntegrationTests/testFxASyncBookmark()">
                </Test>
                <Test
+                  Identifier = "LibraryTest">
+               </Test>
+               <Test
                   Identifier = "MailAppSettingsTests">
                </Test>
                <Test
@@ -534,6 +537,12 @@
                </Test>
                <Test
                   Identifier = "SaveLoginTest/testEditOneLoginEntry()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testLoginsListFromBrowserTabMenu()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testPasscodeLoginsListFromBrowserTabMenu()">
                </Test>
                <Test
                   Identifier = "SaveLoginTest/testSaveLogin()">

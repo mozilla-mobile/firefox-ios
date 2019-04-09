@@ -245,8 +245,8 @@ class ImageButtonWithLabel: UIView {
 }
 
 class ButtonWithSublabel: UIButton {
-    lazy var subtitleLabel: UILabel = UILabel()
-    lazy var label: UILabel = UILabel()
+    lazy var subtitleLabel = UILabel()
+    lazy var label = UILabel()
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
