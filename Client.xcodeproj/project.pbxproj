@@ -1792,7 +1792,6 @@
 		E65075C11E37F956006961AC /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = "<group>"; };
 		E653422C1C5944F90039DD9E /* BrowserPrompts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserPrompts.swift; sourceTree = "<group>"; };
 		E65607601C08B4E200534B02 /* SearchInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
-		E659A60A1EB7C1D300D7A6AD /* BuddyBuildSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BuddyBuildSDK.framework; sourceTree = "<group>"; };
 		E65D89171C8647420006EA35 /* AppAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppAuthenticator.swift; sourceTree = "<group>"; };
 		E660BDD81BB06521009AC090 /* TabsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsButton.swift; sourceTree = "<group>"; };
 		E660BE051BB0666D009AC090 /* InnerStrokedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InnerStrokedView.swift; sourceTree = "<group>"; };
@@ -2308,7 +2307,6 @@
 			children = (
 				D8FDEB54220CFE970069A582 /* UIImage+ImageEffects.h */,
 				D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */,
-				E659A6091EB7C1D300D7A6AD /* BuddyBuild */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
@@ -3181,15 +3179,6 @@
 				D3BE7B451B054F8600641031 /* TestAppDelegate.swift */,
 			);
 			name = Delegates;
-			sourceTree = "<group>";
-		};
-		E659A6091EB7C1D300D7A6AD /* BuddyBuild */ = {
-			isa = PBXGroup;
-			children = (
-				E659A60A1EB7C1D300D7A6AD /* BuddyBuildSDK.framework */,
-			);
-			name = BuddyBuild;
-			path = ThirdParty/BuddyBuild;
 			sourceTree = "<group>";
 		};
 		E689C6FF1E0C716F008BAADB /* Entitlements */ = {
@@ -6480,7 +6469,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7383,7 +7371,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7399,8 +7386,6 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
-					"-framework",
-					BuddyBuildSDK,
 					"-framework",
 					AssetsLibrary,
 					"-framework",
@@ -7966,7 +7951,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8346,7 +8330,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8362,8 +8345,6 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
-					"-framework",
-					BuddyBuildSDK,
 					"-framework",
 					AssetsLibrary,
 					"-framework",
