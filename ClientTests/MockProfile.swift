@@ -243,7 +243,7 @@ open class MockProfile: Client.Profile {
         return deferMaybe(0)
     }
 
-    public func sendItem(_ item: ShareItem, toClients clients: [RemoteClient]) -> Success {
+    public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         return succeed()
     }
 }
