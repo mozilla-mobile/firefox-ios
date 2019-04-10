@@ -185,9 +185,9 @@ class SaveLoginTest: BaseTestCase {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
         app.webViews.links["Sign in"].tap()
-        waitForExistence(app.webViews.textFields["Email"])
-        app.webViews.textFields["Email"].tap()
-        app.webViews.textFields["Email"].typeText(mailLogin)
+        waitForExistence(app.webViews.textFields["Email or Phone"])
+        app.webViews.textFields["Email or Phone"].tap()
+        app.webViews.textFields["Email or Phone"].typeText(mailLogin)
 
         app.webViews.secureTextFields["Password"].tap()
         app.webViews.secureTextFields["Password"].typeText("test15mz")
