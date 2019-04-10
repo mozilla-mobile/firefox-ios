@@ -122,6 +122,21 @@ class HomePageSettingsUITests: BaseTestCase {
 
         XCTAssertEqual("Enter a webpage", value as! String)
     }*/
+    
+    func testSetFirefoxHomeAsHome() {
+        // Start by setting to History since FF Home is default
+        navigator.goto(HomeSettings)
+        navigator.performAction(Action.SelectHomeAsHistoryPage)
+        navigator.performAction(Action.GoToHomePage)
+        waitForExistence(app.tables["History List"], timeout: 3)
+        
+        // Now after setting History, make sure FF home is set
+        navigator.goto(SettingsScreen)
+        navigator.goto(NewTabSettings)
+        navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
+        navigator.performAction(Action.GoToHomePage)
+        waitForExistence(app.collectionViews.cells["TopSitesCell"])
+    }
 
     func testSetCustomURLAsHome() {
         navigator.goto(HomeSettings)

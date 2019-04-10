@@ -30,6 +30,21 @@ class NewTabSettingsTest: BaseTestCase {
         waitForNoExistence(app.collectionViews.cells["TopSitesCell"].collectionViews.cells["youtube"])
         waitForNoExistence(app.staticTexts["Highlights"])
     }
+    
+    func testChangeNewTabSettingsShowFirefoxHome() {
+        // Set to history page first since FF Home is default
+        navigator.goto(NewTabSettings)
+        navigator.performAction(Action.SelectNewTabAsHistoryPage)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForExistence(app.tables["History List"])
+        
+        // Now check if it switches to FF Home
+        navigator.goto(SettingsScreen)
+        navigator.goto(NewTabSettings)
+        navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForExistence(app.collectionViews.cells["TopSitesCell"])
+    }
 
     // Smoketest
     func testChangeNewTabSettingsShowYourBookmarks() {

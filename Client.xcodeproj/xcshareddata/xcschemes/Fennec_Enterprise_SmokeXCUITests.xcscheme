@@ -464,6 +464,9 @@
                   Identifier = "NewTabSettingsTest/testChangeNewTabSettingsLabel()">
                </Test>
                <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowFirefoxHome()">
+               </Test>
+               <Test
                   Identifier = "NewTabSettingsTest/testToggleOffOnAdditionalContentBookmarks()">
                </Test>
                <Test
