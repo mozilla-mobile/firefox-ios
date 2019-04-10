@@ -162,7 +162,8 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
 
         for tab in tabs {
-            if tab.webView?.url == url {
+            if let webViewUrl = tab.webView?.url,
+                url.isEqual(webViewUrl) {
                 return tab
             }
 

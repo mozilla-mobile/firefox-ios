@@ -306,6 +306,14 @@ extension URL {
         }
         return self
     }
+    
+    public func isEqual(_ url: URL) -> Bool {
+        var absoluteString = url.absoluteString
+        if let lastCh = url.absoluteString.last, lastCh == "/" {
+            absoluteString.removeLast()
+        }
+        return (absoluteString == self.absoluteString) ? true : false
+    }
 }
 
 // Extensions to deal with ReaderMode URLs
