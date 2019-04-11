@@ -308,11 +308,18 @@ extension URL {
     }
     
     public func isEqual(_ url: URL) -> Bool {
-        var absoluteString = url.absoluteString
-        if let lastCh = url.absoluteString.last, lastCh == "/" {
-            absoluteString.removeLast()
+        if self == url {
+            return true
         }
-        return (absoluteString == self.absoluteString) ? true : false
+
+        // Try an additional equality case by chopping off the trailing slash
+        let urls: [String] = [url.absoluteString, absoluteString].map { item in
+            if let lastCh = item.last, lastCh == "/" {
+                return item.dropLast().lowercased()
+            }
+            return item.lowercased()
+        }
+        return urls[0] == urls[1]
     }
 }
 
