@@ -41,12 +41,7 @@ public extension UIImageView {
     * Fetch a background color for a specfic favicon UIImage. It uses the URL to store the UIColor in memory for subsequent requests.
     */
     private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor) -> Void)? = nil) {
-        guard let domain = url.baseDomain else {
-            self.backgroundColor = UIColor.Photon.Grey50
-            completionBlock?(UIColor.Photon.Grey50)
-            return
-        }
-
+        let domain = url.domainURL.absoluteString
         if let color = FaviconFetcher.colors[domain] {
             self.backgroundColor = color
             completionBlock?(color)
