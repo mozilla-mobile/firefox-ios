@@ -497,6 +497,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         tableView.rowHeight = RemoteTabsPanelUX.RowHeight
         tableView.separatorInset = .zero
 
+        tableView.tableFooterView = UIView() // prevent extra empty rows at end
         tableView.delegate = nil
         tableView.dataSource = nil
     }
