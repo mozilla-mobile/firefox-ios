@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 
-private struct ActivityStreamHighlightCellUX {
+private struct FirefoxHomeHighlightCellUX {
     static let BorderWidth: CGFloat = 0.5
     static let CellSideOffset = 20
     static let TitleLabelOffset = 2
@@ -19,7 +19,7 @@ private struct ActivityStreamHighlightCellUX {
     static let BorderColor = UIColor.Photon.Grey30
 }
 
-class ActivityStreamHighlightCell: UICollectionViewCell {
+class FirefoxHomeHighlightCell: UICollectionViewCell {
 
     fileprivate lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -54,9 +54,9 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         siteImageView.contentMode = .scaleAspectFit
         siteImageView.clipsToBounds = true
         siteImageView.contentMode = .center
-        siteImageView.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
-        siteImageView.layer.borderColor = ActivityStreamHighlightCellUX.BorderColor.cgColor
-        siteImageView.layer.borderWidth = ActivityStreamHighlightCellUX.BorderWidth
+        siteImageView.layer.cornerRadius = FirefoxHomeHighlightCellUX.CornerRadius
+        siteImageView.layer.borderColor = FirefoxHomeHighlightCellUX.BorderColor.cgColor
+        siteImageView.layer.borderWidth = FirefoxHomeHighlightCellUX.BorderWidth
         siteImageView.layer.masksToBounds = true
         return siteImageView
     }()
@@ -65,13 +65,13 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         let statusIcon = UIImageView()
         statusIcon.contentMode = .scaleAspectFit
         statusIcon.clipsToBounds = true
-        statusIcon.layer.cornerRadius = ActivityStreamHighlightCellUX.CornerRadius
+        statusIcon.layer.cornerRadius = FirefoxHomeHighlightCellUX.CornerRadius
         return statusIcon
     }()
 
     fileprivate lazy var selectedOverlay: UIView = {
         let selectedOverlay = UIView()
-        selectedOverlay.backgroundColor = ActivityStreamHighlightCellUX.SelectedOverlayColor
+        selectedOverlay.backgroundColor = FirefoxHomeHighlightCellUX.SelectedOverlayColor
         selectedOverlay.isHidden = true
         return selectedOverlay
     }()
@@ -115,7 +115,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
             make.leading.equalTo(contentView.safeArea.leading)
             make.trailing.equalTo(contentView.safeArea.trailing)
             make.centerX.equalTo(contentView)
-            make.height.equalTo(ActivityStreamHighlightCellUX.SiteImageViewSize)
+            make.height.equalTo(FirefoxHomeHighlightCellUX.SiteImageViewSize)
         }
 
         selectedOverlay.snp.makeConstraints { make in
@@ -135,12 +135,12 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(statusIcon.snp.trailing).offset(ActivityStreamHighlightCellUX.TitleLabelOffset)
+            make.leading.equalTo(statusIcon.snp.trailing).offset(FirefoxHomeHighlightCellUX.TitleLabelOffset)
             make.bottom.equalTo(contentView)
         }
 
         statusIcon.snp.makeConstraints { make in
-            make.size.equalTo(ActivityStreamHighlightCellUX.StatusIconSize)
+            make.size.equalTo(FirefoxHomeHighlightCellUX.StatusIconSize)
             make.centerY.equalTo(descriptionLabel.snp.centerY)
             make.leading.equalTo(siteImageView)
         }
@@ -172,7 +172,7 @@ class ActivityStreamHighlightCell: UICollectionViewCell {
             let itemURL = site.tileURL
             self.siteImageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url)  in
                 if itemURL == url {
-                    self?.siteImageView.image = self?.siteImageView.image?.createScaled(ActivityStreamHighlightCellUX.FaviconSize)
+                    self?.siteImageView.image = self?.siteImageView.image?.createScaled(FirefoxHomeHighlightCellUX.FaviconSize)
                     self?.siteImageView.backgroundColor = color
                 }
             })
