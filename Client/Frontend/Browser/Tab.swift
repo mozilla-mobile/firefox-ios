@@ -346,7 +346,9 @@ class Tab: NSObject {
     var historyList: [URL] {
         func listToUrl(_ item: WKBackForwardListItem) -> URL { return item.url }
         var tabs = self.backList?.map(listToUrl) ?? [URL]()
-        tabs.append(self.url!)
+        if let url = url {
+            tabs.append(url)
+        }
         return tabs
     }
 
