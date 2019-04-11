@@ -232,7 +232,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     fileprivate func updateEmptyPanelState() {
         if bookmarkFolder?.guid == BookmarkRoots.RootGUID,
-            bookmarkNodes.count == 0 {
+            bookmarkNodes.isEmpty {
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubview(toFront: emptyStateOverlayView)
@@ -473,7 +473,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         }
 
         let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
-            _ = self.profile.history.addPinnedTopSite(site).value
+            _ = self.profile.history.addPinnedTopSite(site)
         })
         actions.append(pinTopSite)
 

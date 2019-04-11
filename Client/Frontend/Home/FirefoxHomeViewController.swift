@@ -694,7 +694,8 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     }
 
     fileprivate func fetchBookmarkStatus(for site: Site, with indexPath: IndexPath, forSection section: Section, completionHandler: @escaping () -> Void) {
-        profile.places.isBookmarked(url: site.url) >>== { isBookmarked in
+        profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
+            let isBookmarked = result.successValue ?? false
             site.setBookmarked(isBookmarked)
             completionHandler()
         }
@@ -796,7 +797,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         } else {
             bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-                _ = self.profile.places.createBookmark(parentGUID: "mobile______", url: shareItem.url, title: shareItem.title)
+                _ = self.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
 
                 var userData = [QuickActions.TabURLKey: shareItem.url]
                 if let title = shareItem.title {
