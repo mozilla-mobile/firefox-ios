@@ -4,7 +4,7 @@ github "sleroux/Deferred"                   "Swift3.0"
 github "SnapKit/SnapKit"                    "3.1.2"
 github "rs/SDWebImage"                      "4.1.0"
 github "swisspol/GCDWebServer"              "3.3.2"
-github "kif-framework/KIF"                  "v3.7.3"
+github "kif-framework/KIF"                  "v3.7.5"
 github "adjust/ios_sdk"                     "v4.17.1"
 github "AgileBits/onepassword-app-extension"    "add-framework-support"
 github "mozilla-mobile/SwiftKeychainWrapper"       "master"
@@ -18,7 +18,7 @@ github "Leanplum/Leanplum-iOS-SDK"          "2.4.1"
 github "apple/swift-protobuf"               "1.3.1"
 
 # Use release version of application-services
-github "mozilla/application-services"       "v0.22.1"
+github "mozilla/application-services"       "v0.24.0"
 
 # Use interim binary version of application-services
 # binary "https://circleci.com/api/v1.1/project/github/mozilla/application-services/2862/artifacts/0/dist/mozilla.app-services.json" ~> 0.0.1-snapshot # mozilla/application-services@fb5c540e99133980911216055425688f22a27be2
