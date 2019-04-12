@@ -9,14 +9,14 @@ extension BrowserViewController {
 
     @objc private func reloadTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "reload"])
-        if let tab = tabManager.selectedTab, homePanelController == nil {
+        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
             tab.reload()
         }
     }
 
     @objc private func goBackKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "go-back"])
-        if let tab = tabManager.selectedTab, tab.canGoBack, homePanelController == nil {
+        if let tab = tabManager.selectedTab, tab.canGoBack, firefoxHomeViewController == nil {
             tab.goBack()
         }
     }
@@ -30,7 +30,7 @@ extension BrowserViewController {
 
     @objc private func findInPageKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "find-in-page"])
-        if let tab = tabManager.selectedTab, homePanelController == nil {
+        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
             self.tab(tab, didSelectFindInPageForSelection: "")
         }
     }
