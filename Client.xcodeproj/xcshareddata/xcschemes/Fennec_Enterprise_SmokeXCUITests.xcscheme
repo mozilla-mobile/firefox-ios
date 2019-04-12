@@ -407,6 +407,12 @@
                   Identifier = "LibraryTest">
                </Test>
                <Test
+                  Identifier = "LibraryTestsIpad">
+               </Test>
+               <Test
+                  Identifier = "LibraryTestsIphone">
+               </Test>
+               <Test
                   Identifier = "MailAppSettingsTests">
                </Test>
                <Test

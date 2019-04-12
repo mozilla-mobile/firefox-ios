@@ -181,6 +181,7 @@ class SaveLoginTest: BaseTestCase {
     }
 
     // Smoketest
+    /* Disabling this test until a local website can be used to prevent from false failures
     func testSavedLoginAutofilled() {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
@@ -206,5 +207,5 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(emailValue as! String, mailLogin)
         let passwordValue = app.webViews.secureTextFields["Password"].value!
         XCTAssertEqual(passwordValue as! String, "••••••••")
-    }
+    }*/
 }
