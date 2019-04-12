@@ -95,32 +95,6 @@ open class DisplayURICommand: Command {
     }
 }
 
-open class RepairResponseCommand: Command {
-    let repairResponse: RepairResponse
-
-    public init(command: String, args: [JSON]) {
-        self.repairResponse = RepairResponse.fromJSON(args: args[0])
-    }
-
-    open class func fromName(_ command: String, args: [JSON]) -> Command? {
-        return RepairResponseCommand(command: command, args: args)
-    }
-
-    open func run(_ synchronizer: ClientsSynchronizer) -> Success {
-        let repairer = BookmarksRepairRequestor(scratchpad: synchronizer.scratchpad, basePrefs: synchronizer.basePrefs, remoteClients: synchronizer.localClients!)
-        return repairer.continueRepairs(response: self.repairResponse) >>> succeed
-    }
-
-    public static func commandFromSyncCommand(_ syncCommand: SyncCommand) -> Command? {
-        let json = JSON(parseJSON: syncCommand.value)
-        if let name = json["command"].string,
-            let args = json["args"].array {
-            return RepairResponseCommand.fromName(name, args: args)
-        }
-        return nil
-    }
-}
-
 let Commands: [String: (String, [JSON]) -> Command?] = [
     "wipeAll": WipeCommand.fromName,
     "wipeEngine": WipeCommand.fromName,
@@ -128,7 +102,7 @@ let Commands: [String: (String, [JSON]) -> Command?] = [
     // resetAll
     // logout
     "displayURI": DisplayURICommand.fromName,
-    "repairResponse": RepairResponseCommand.fromName
+    // repairResponse
 ]
 
 open class ClientsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchronizer {

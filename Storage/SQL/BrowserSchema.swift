@@ -211,21 +211,27 @@ open class BrowserSchema: Schema {
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
         let type = BookmarkNodeType.folder.rawValue
         let now = Date.nowNumber()
-        let status = SyncStatus.new.rawValue
+        let status = 2 // "new"
 
         let localArgs: Args = [
-            BookmarkRoots.RootID, BookmarkRoots.RootGUID, type, now, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            0, BookmarkRoots.RootGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            1, BookmarkRoots.MobileFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            2, BookmarkRoots.MenuFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            3, BookmarkRoots.ToolbarFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            4, BookmarkRoots.UnfiledFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
         ]
 
         // Compute these args using the sequence in RootChildren, rather than hard-coding.
         var idx = 0
         var structureArgs = Args()
-        structureArgs.reserveCapacity(BookmarkRoots.RootChildren.count * 3)
-        BookmarkRoots.RootChildren.forEach { guid in
+        let rootChildren: [GUID] = [
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
+            BookmarkRoots.MobileFolderGUID,
+        ]
+        structureArgs.reserveCapacity(rootChildren.count * 3)
+        rootChildren.forEach { guid in
             structureArgs.append(BookmarkRoots.RootGUID)
             structureArgs.append(guid)
             structureArgs.append(idx)
@@ -239,11 +245,11 @@ open class BrowserSchema: Schema {
 
         let local =
             "INSERT INTO bookmarksLocal (id, guid, type, date_added, parentid, title, parentName, sync_status, local_modified) VALUES " +
-            Array(repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)", count: BookmarkRoots.RootChildren.count + 1).joined(separator: ", ")
+            Array(repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)", count: rootChildren.count + 1).joined(separator: ", ")
 
         let structure =
             "INSERT INTO bookmarksLocalStructure (parent, child, idx) VALUES " +
-            Array(repeating: "(?, ?, ?)", count: BookmarkRoots.RootChildren.count).joined(separator: ", ")
+            Array(repeating: "(?, ?, ?)", count: rootChildren.count).joined(separator: ", ")
 
         return self.run(db, queries: [(local, localArgs), (structure, structureArgs)])
     }
@@ -1053,7 +1059,7 @@ open class BrowserSchema: Schema {
             // There should be nothing else in the table, and no structure.
             // Our old bookmarks table didn't have creation date, so we use the current timestamp.
             let modified = Date.now()
-            let status = SyncStatus.new.rawValue
+            let status = 2 // "new"
 
             // We don't specify a title, expecting it to be generated on the fly, because we're smarter than Android.
             // We also don't migrate the 'id' column; we'll generate new ones that won't conflict with our roots.
