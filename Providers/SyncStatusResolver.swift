@@ -55,12 +55,7 @@ public struct SyncStatusResolver {
 
     public func resolveResults() -> SyncDisplayState {
         guard let results = engineResults.successValue else {
-            switch engineResults.failureValue {
-            case _ as BookmarksMergeError, _ as BufferInvalidError:
-                return SyncDisplayState.warning(message: String(format: Strings.FirefoxSyncPartialTitle, Strings.localizedStringForSyncComponent("bookmarks") ?? ""))
-            default:
-                return SyncDisplayState.bad(message: nil)
-            }
+            return SyncDisplayState.bad(message: nil)
         }
 
         // Run through the engine results and produce a relevant display status for each one

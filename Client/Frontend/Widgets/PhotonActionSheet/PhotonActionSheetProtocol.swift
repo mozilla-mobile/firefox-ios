@@ -179,17 +179,13 @@ extension PhotonActionSheetProtocol {
         }
 
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
-            //TODO: can all this logic go somewhere else?
             guard let url = tab.url?.displayURL else { return }
-            let absoluteString = url.absoluteString
-            self.profile.bookmarks.modelFactory >>== {
-                $0.removeByURL(absoluteString).uponQueue(.main) { res in
-                    if res.isSuccess {
-                        UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
-                        success(Strings.AppMenuRemoveBookmarkConfirmMessage)
-                    }
-                }
+
+            self.profile.places.deleteBookmarksWithURL(url: url.absoluteString) >>== {
+                success(Strings.AppMenuRemoveBookmarkConfirmMessage)
             }
+
+            UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
         }
 
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
@@ -277,12 +273,7 @@ extension PhotonActionSheetProtocol {
     }
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
-        return self.profile.bookmarks.modelFactory.bind {
-            guard let factory = $0.successValue else {
-                return deferMaybe(false)
-            }
-            return factory.isBookmarked(url)
-        }
+        return profile.places.isBookmarked(url: url)
     }
 
     func fetchPinnedTopSiteStatus(for url: String) -> Deferred<Maybe<Bool>> {

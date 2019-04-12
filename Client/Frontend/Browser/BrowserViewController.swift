@@ -848,7 +848,8 @@ class BrowserViewController: UIViewController {
         }
 
         let shareItem = ShareItem(url: url, title: title, favicon: favicon)
-        _ = self.profile.bookmarks.shareItem(shareItem)
+        _ = profile.places.createBookmark(parentGUID: "mobile______", url: shareItem.url, title: shareItem.title)
+
         var userData = [QuickActions.TabURLKey: shareItem.url]
         if let title = shareItem.title {
             userData[QuickActions.TabTitleKey] = title
@@ -1427,6 +1428,10 @@ extension BrowserViewController: URLBarDelegate {
             return
         }
 
+        // TODO: We need a `getURLForKeywordSearch` API in RustPlaces to
+        // handle the keyword search.
+        submitSearchText(text, forTab: currentTab)
+        /*
         // We couldn't build a URL, so check for a matching search keyword.
         let trimmedText = text.trimmingCharacters(in: .whitespaces)
         guard let possibleKeywordQuerySeparatorSpace = trimmedText.index(of: " ") else {
@@ -1462,6 +1467,7 @@ extension BrowserViewController: URLBarDelegate {
 
             self.submitSearchText(text, forTab: currentTab)
         }
+        */
     }
 
     fileprivate func submitSearchText(_ text: String, forTab tab: Tab) {
