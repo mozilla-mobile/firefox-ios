@@ -26,7 +26,6 @@ private let LocalEngines: [String] = TogglableEngines + ["clients"]
 // Names of collections which will appear in a default meta/global produced locally.
 // Map collection name to engine version.  See http://docs.services.mozilla.com/sync/objectformats.html.
 private let DefaultEngines: [String: Int] = [
-    "bookmarks": BookmarksStorageVersion,
     "clients": ClientsStorageVersion,
     "history": HistoryStorageVersion,
     "tabs": TabsStorageVersion,
