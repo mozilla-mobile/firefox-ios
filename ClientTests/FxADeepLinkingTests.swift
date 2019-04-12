@@ -18,6 +18,11 @@ class FxADeepLinkingTests: XCTestCase {
         self.vc = FxAContentViewController(profile: self.profile)
     }
 
+    override func tearDown() {
+        self.profile._shutdown()
+        super.tearDown()
+    }
+
     func testLaunchWithNilOptions() {
         let testUrl = self.vc.createFxAURLWith(nil, profile: self.profile)
         // Should use default urls for nil options

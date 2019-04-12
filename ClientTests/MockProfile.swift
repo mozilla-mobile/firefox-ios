@@ -102,11 +102,13 @@ class MockFiles: FileAccessor {
 open class MockProfile: Client.Profile {
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
-    public var places: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
+    public var places: RustPlaces
     public var files: FileAccessor
     public var history: BrowserHistory & SyncableHistory & ResettableSyncStorage
     public var logins: RustLogins
     public var syncManager: SyncManager!
+
+    fileprivate var legacyPlaces: BrowserHistory & Favicons & SyncableHistory & ResettableSyncStorage & HistoryRecommendations
 
     public lazy var panelDataObservers: PanelDataObservers = {
         return MockPanelDataObservers(profile: self)
@@ -117,16 +119,18 @@ open class MockProfile: Client.Profile {
 
     fileprivate let name: String = "mockaccount"
 
-    init() {
+    init(databasePrefix: String = "mock") {
         files = MockFiles()
         syncManager = MockSyncManager()
-        let loginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("mock_logins.db").path
+        let loginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
         logins = RustLogins(databasePath: loginsDatabasePath, encryptionKey: "AAAAAAAA")
-        db = BrowserDB(filename: "mock.db", schema: BrowserSchema(), files: files)
-        readingListDB = BrowserDB(filename: "mock_ReadingList.db", schema: ReadingListSchema(), files: files)
-        places = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
-        recommendations = places
-        history = places
+        db = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
+        readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
+        let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
+        places = RustPlaces(databasePath: placesDatabasePath)
+        legacyPlaces = SQLiteHistory(db: self.db, prefs: MockProfilePrefs())
+        recommendations = legacyPlaces
+        history = legacyPlaces
     }
 
     public func localName() -> String {
@@ -134,15 +138,25 @@ open class MockProfile: Client.Profile {
     }
 
     public func _reopen() {
+        isShutdown = false
+
+        db.reopenIfClosed()
+        _ = logins.reopenIfClosed()
+        _ = places.reopenIfClosed()
     }
 
     public func _shutdown() {
+        isShutdown = true
+
+        db.forceClose()
+        _ = logins.forceClose()
+        _ = places.forceClose()
     }
 
     public var isShutdown: Bool = false
 
     public var favicons: Favicons {
-        return self.places
+        return self.legacyPlaces
     }
 
     lazy public var queue: TabQueue = {
@@ -159,14 +173,6 @@ open class MockProfile: Client.Profile {
 
     lazy public var certStore: CertStore = {
         return CertStore()
-    }()
-
-    lazy public var bookmarks: BookmarksModelFactorySource & KeywordSearchSource & SyncableBookmarks & LocalItemSource & MirrorItemSource & ShareToDestination = {
-        // Make sure the rest of our tables are initialized before we try to read them!
-        // This expression is for side-effects only.
-        let p = self.places
-
-        return MergedSQLiteBookmarks(db: self.db)
     }()
 
     lazy public var searchEngines: SearchEngines = {

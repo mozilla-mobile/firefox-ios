@@ -328,6 +328,7 @@ open class BrowserProfile: Profile {
 
         db.reopenIfClosed()
         _ = logins.reopenIfClosed()
+        _ = places.reopenIfClosed()
     }
 
     func _shutdown() {
@@ -336,6 +337,7 @@ open class BrowserProfile: Profile {
 
         db.forceClose()
         _ = logins.forceClose()
+        _ = places.forceClose()
     }
 
     @objc
