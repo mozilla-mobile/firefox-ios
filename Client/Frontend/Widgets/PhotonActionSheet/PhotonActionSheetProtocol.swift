@@ -182,8 +182,10 @@ extension PhotonActionSheetProtocol {
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
             guard let url = tab.url?.displayURL else { return }
 
-            self.profile.places.deleteBookmarksWithURL(url: url.absoluteString) >>== {
-                success(Strings.AppMenuRemoveBookmarkConfirmMessage)
+            self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
+                if result.isSuccess {
+                    success(Strings.AppMenuRemoveBookmarkConfirmMessage)
+                }
             }
 
             UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)

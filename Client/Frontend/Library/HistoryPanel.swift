@@ -24,7 +24,7 @@ private class FetchInProgressError: MaybeErrorType {
     }
 }
 
-class HistoryPanel: SiteTableViewController, HomePanel {
+class HistoryPanel: SiteTableViewController, LibraryPanel {
     enum Section: Int {
         // Showing synced tabs, showing recently closed, and clearing recent history are action rows of this type.
         case additionalHistoryActions
@@ -74,7 +74,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     let QueryLimitPerFetch = 100
 
-    var homePanelDelegate: HomePanelDelegate?
+    var libraryPanelDelegate: LibraryPanelDelegate?
 
     var groupedSites = DateGroupedTableData<Site>()
 
@@ -277,7 +277,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
     func navigateToSyncedTabs() {
         let nextController = RemoteTabsPanel(profile: profile)
-        nextController.homePanelDelegate = homePanelDelegate
+        nextController.libraryPanelDelegate = libraryPanelDelegate
         refreshControl?.endRefreshing()
         navigationController?.pushViewController(nextController, animated: true)
     }
@@ -288,7 +288,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
 
         let nextController = RecentlyClosedTabsPanel(profile: profile)
-        nextController.homePanelDelegate = homePanelDelegate
+        nextController.libraryPanelDelegate = libraryPanelDelegate
         refreshControl?.endRefreshing()
         navigationController?.pushViewController(nextController, animated: true)
     }
@@ -524,8 +524,8 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         }
 
         if let site = siteForIndexPath(indexPath), let url = URL(string: site.url) {
-            if let homePanelDelegate = homePanelDelegate {
-                homePanelDelegate.homePanel(didSelectURL: url, visitType: VisitType.typed)
+            if let libraryPanelDelegate = libraryPanelDelegate {
+                libraryPanelDelegate.libraryPanel(didSelectURL: url, visitType: VisitType.typed)
             }
             return
         }
@@ -615,7 +615,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalTo(overlayView)
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
+            make.centerY.equalTo(overlayView).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView).offset(50)
             make.width.equalTo(HistoryPanelUX.WelcomeScreenItemWidth)
@@ -663,7 +663,7 @@ extension HistoryPanel: UITableViewDataSourcePrefetching {
     }
 }
 
-extension HistoryPanel: HomePanelContextMenu {
+extension HistoryPanel: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         present(contextMenu, animated: true, completion: nil)
@@ -674,7 +674,7 @@ extension HistoryPanel: HomePanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
-        guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
+        guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
         let removeAction = PhotonActionSheetItem(title: Strings.DeleteFromHistoryContextMenuTitle, iconString: "action_delete", handler: { action in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)

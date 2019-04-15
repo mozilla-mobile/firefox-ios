@@ -37,8 +37,8 @@ private struct RemoteTabsPanelUX {
 private let RemoteClientIdentifier = "RemoteClient"
 private let RemoteTabIdentifier = "RemoteTab"
 
-class RemoteTabsPanel: UIViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate?
+class RemoteTabsPanel: UIViewController, LibraryPanel {
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()
     fileprivate lazy var historyBackButton: HistoryBackButton = {
         let button = HistoryBackButton()
@@ -128,11 +128,11 @@ protocol RemoteTabsPanelDataSource: UITableViewDataSource, UITableViewDelegate {
 }
 
 class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSource {
-    weak var homePanel: HomePanel?
+    weak var libraryPanel: LibraryPanel?
     fileprivate var clientAndTabs: [ClientAndTabs]
 
-    init(homePanel: HomePanel, clientAndTabs: [ClientAndTabs]) {
-        self.homePanel = homePanel
+    init(libraryPanel: LibraryPanel, clientAndTabs: [ClientAndTabs]) {
+        self.libraryPanel = libraryPanel
         self.clientAndTabs = clientAndTabs
     }
 
@@ -204,9 +204,9 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         let tab = tabAtIndexPath(indexPath)
-        if let homePanel = self.homePanel {
+        if let libraryPanel = self.libraryPanel {
             // It's not a bookmark, so let's call it Typed (which means History, too).
-            homePanel.homePanelDelegate?.homePanel(didSelectURL: tab.URL, visitType: VisitType.typed)
+            libraryPanel.libraryPanelDelegate?.libraryPanel(didSelectURL: tab.URL, visitType: VisitType.typed)
         }
     }
 }
@@ -214,12 +214,12 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
 // MARK: -
 
 class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
-    weak var homePanel: HomePanel?
+    weak var libraryPanel: LibraryPanel?
     var error: RemoteTabsError
     var notLoggedCell: UITableViewCell?
 
-    init(homePanel: HomePanel, error: RemoteTabsError) {
-        self.homePanel = homePanel
+    init(libraryPanel: LibraryPanel, error: RemoteTabsError) {
+        self.libraryPanel = libraryPanel
         self.error = error
         self.notLoggedCell = nil
     }
@@ -251,7 +251,7 @@ class RemoteTabsPanelErrorDataSource: NSObject, RemoteTabsPanelDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch error {
         case .notLoggedIn:
-            let cell = RemoteTabsNotLoggedInCell(homePanel: homePanel)
+            let cell = RemoteTabsNotLoggedInCell(libraryPanel: libraryPanel)
             self.notLoggedCell = cell
             return cell
         default:
@@ -320,7 +320,7 @@ class RemoteTabsErrorCell: UITableViewCell {
             make.centerX.equalTo(contentView)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView.snp.centerY).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
+            make.centerY.equalTo(contentView.snp.centerY).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(contentView.snp.top).offset(20).priority(1000)
@@ -347,17 +347,17 @@ class RemoteTabsErrorCell: UITableViewCell {
 
 class RemoteTabsNotLoggedInCell: UITableViewCell {
     static let Identifier = "RemoteTabsNotLoggedInCell"
-    var homePanel: HomePanel?
+    var libraryPanel: LibraryPanel?
     let instructionsLabel = UILabel()
     let signInButton = UIButton()
     let titleLabel = UILabel()
     let emptyStateImageView = UIImageView()
 
-    init(homePanel: HomePanel?) {
+    init(libraryPanel: LibraryPanel?) {
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
         selectionStyle = .none
 
-        self.homePanel = homePanel
+        self.libraryPanel = libraryPanel
         let createAnAccountButton = UIButton(type: .system)
 
         emptyStateImageView.image = UIImage.templateImageNamed(emptySyncImageName)
@@ -390,7 +390,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
             make.centerX.equalTo(instructionsLabel)
 
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(contentView).offset(HomePanelUX.EmptyTabContentOffset + 30).priority(100)
+            make.centerY.equalTo(contentView).offset(LibraryPanelUX.EmptyTabContentOffset + 30).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(contentView.snp.top).priority(1000)
@@ -423,14 +423,14 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 
     @objc fileprivate func signIn() {
-        if let homePanel = self.homePanel {
-            homePanel.homePanelDelegate?.homePanelDidRequestToSignIn()
+        if let libraryPanel = self.libraryPanel {
+            libraryPanel.libraryPanelDelegate?.libraryPanelDidRequestToSignIn()
         }
     }
 
     @objc fileprivate func createAnAccount() {
-        if let homePanel = self.homePanel {
-            homePanel.homePanelDelegate?.homePanelDidRequestToCreateAccount()
+        if let libraryPanel = self.libraryPanel {
+            libraryPanel.libraryPanelDelegate?.libraryPanelDidRequestToCreateAccount()
         }
     }
 
@@ -550,13 +550,13 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     func updateDelegateClientAndTabData(_ clientAndTabs: [ClientAndTabs]) {
         guard let remoteTabsPanel = remoteTabsPanel else { return }
         if clientAndTabs.count == 0 {
-            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .noClients)
+            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(libraryPanel: remoteTabsPanel, error: .noClients)
         } else {
             let nonEmptyClientAndTabs = clientAndTabs.filter { $0.tabs.count > 0 }
             if nonEmptyClientAndTabs.count == 0 {
-                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .noTabs)
+                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(libraryPanel: remoteTabsPanel, error: .noTabs)
             } else {
-                self.tableViewDelegate = RemoteTabsPanelClientAndTabsDataSource(homePanel: remoteTabsPanel, clientAndTabs: nonEmptyClientAndTabs)
+                self.tableViewDelegate = RemoteTabsPanelClientAndTabsDataSource(libraryPanel: remoteTabsPanel, clientAndTabs: nonEmptyClientAndTabs)
             }
         }
     }
@@ -569,7 +569,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         // Short circuit if the user is not logged in
         guard profile.hasSyncableAccount() else {
             self.endRefreshing()
-            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .notLoggedIn)
+            self.tableViewDelegate = RemoteTabsPanelErrorDataSource(libraryPanel: remoteTabsPanel, error: .notLoggedIn)
             return
         }
 
@@ -577,7 +577,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         self.profile.getCachedClientsAndTabs().uponQueue(.main) { result in
             guard let clientAndTabs = result.successValue else {
                 self.endRefreshing()
-                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(homePanel: remoteTabsPanel, error: .failedToSync)
+                self.tableViewDelegate = RemoteTabsPanelErrorDataSource(libraryPanel: remoteTabsPanel, error: .failedToSync)
                 return
             }
 
@@ -608,7 +608,7 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
     }
 }
 
-extension RemoteTabsTableViewController: HomePanelContextMenu {
+extension RemoteTabsTableViewController: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
@@ -620,7 +620,7 @@ extension RemoteTabsTableViewController: HomePanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
-        return getDefaultContextMenuActions(for: site, homePanelDelegate: remoteTabsPanel?.homePanelDelegate)
+        return getDefaultContextMenuActions(for: site, libraryPanelDelegate: remoteTabsPanel?.libraryPanelDelegate)
     }
 }
 
