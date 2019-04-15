@@ -129,8 +129,8 @@ fileprivate protocol BookmarkFolderTableViewHeaderDelegate {
     func didSelectHeader()
 }
 
-class BookmarksPanel: SiteTableViewController, HomePanel {
-    var homePanelDelegate: HomePanelDelegate?
+class BookmarksPanel: SiteTableViewController, LibraryPanel {
+    var libraryPanelDelegate: LibraryPanelDelegate?
 
     let refreshControl = UIRefreshControl()
     let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
@@ -215,7 +215,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
             make.centerX.equalTo(overlayView)
             make.size.equalTo(60)
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
+            make.centerY.equalTo(overlayView).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView).offset(50)
@@ -232,7 +232,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
 
     fileprivate func updateEmptyPanelState() {
         if bookmarkFolder?.guid == BookmarkRoots.RootGUID,
-            bookmarkNodes.count == 0 {
+            bookmarkNodes.isEmpty {
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
                 view.bringSubview(toFront: emptyStateOverlayView)
@@ -323,10 +323,10 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolder:
             let nextController = BookmarksPanel(profile: profile, bookmarkFolderGUID: bookmarkFolder.guid)
-            nextController.homePanelDelegate = homePanelDelegate
+            nextController.libraryPanelDelegate = libraryPanelDelegate
             navigationController?.pushViewController(nextController, animated: true)
         case let bookmarkItem as BookmarkItem:
-            homePanelDelegate?.homePanel(didSelectURLString: bookmarkItem.url, visitType: .bookmark)
+            libraryPanelDelegate?.libraryPanel(didSelectURLString: bookmarkItem.url, visitType: .bookmark)
             LeanPlumClient.shared.track(event: .openedBookmark)
             UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .bookmark, value: .bookmarksPanel)
         default:
@@ -463,9 +463,9 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
     }
 }
 
-// MARK: HomePanelContextMenu
+// MARK: LibraryPanelContextMenu
 
-extension BookmarksPanel: HomePanelContextMenu {
+extension BookmarksPanel: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else {
             return
@@ -486,12 +486,12 @@ extension BookmarksPanel: HomePanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
-        guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else {
+        guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else {
             return nil
         }
 
         let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
-            _ = self.profile.history.addPinnedTopSite(site).value
+            _ = self.profile.history.addPinnedTopSite(site)
         })
         actions.append(pinTopSite)
 

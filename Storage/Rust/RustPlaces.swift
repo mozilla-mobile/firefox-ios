@@ -149,7 +149,7 @@ public class RustPlaces {
                 return deferMaybe(false)
             }
 
-            return deferMaybe(bookmarks.count > 0)
+            return deferMaybe(!bookmarks.isEmpty)
         }
     }
 
