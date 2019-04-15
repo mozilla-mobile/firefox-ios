@@ -209,7 +209,7 @@ open class BrowserSchema: Schema {
     }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
-        let type = BookmarkNodeType.folder.rawValue
+        let type = 2 // "folder"
         let now = Date.nowNumber()
         let status = 2 // "new"
 
