@@ -7,39 +7,25 @@ import SnapKit
 import UIKit
 import Storage
 
-private struct HomePanelViewControllerUX {
+private struct LibraryViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 50
 }
 
-protocol HomePanel: AnyObject, Themeable {
-    var homePanelDelegate: HomePanelDelegate? { get set }
+protocol LibraryPanel: AnyObject, Themeable {
+    var libraryPanelDelegate: LibraryPanelDelegate? { get set }
 }
 
-struct HomePanelUX {
+struct LibraryPanelUX {
     static let EmptyTabContentOffset = -180
 }
 
-protocol HomePanelDelegate: AnyObject {
-    func homePanelDidRequestToSignIn()
-    func homePanelDidRequestToCreateAccount()
-    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
-    func homePanel(didSelectURL url: URL, visitType: VisitType)
-    func homePanel(didSelectURLString url: String, visitType: VisitType)
-    func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
-}
-
-enum HomePanelType: Int {
-    case topSites = 0
-    case bookmarks = 1
-    case history = 2
-    case readingList = 3
-    case downloads = 4
-
-    var internalUrl: URL {
-        let aboutUrl: URL! = URL(string: "\(InternalURL.baseUrl)/\(AboutHomeHandler.path)")
-        return URL(string: "#panel=\(self.rawValue)", relativeTo: aboutUrl)!
-    }
+protocol LibraryPanelDelegate: AnyObject {
+    func libraryPanelDidRequestToSignIn()
+    func libraryPanelDidRequestToCreateAccount()
+    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType)
+    func libraryPanel(didSelectURLString url: String, visitType: VisitType)
 }
 
 enum LibraryPanelType: Int {
@@ -49,11 +35,11 @@ enum LibraryPanelType: Int {
     case downloads = 3
 }
 
-class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelDelegate {
+class LibraryViewController: UIViewController, UITextFieldDelegate, LibraryPanelDelegate {
     var profile: Profile!
-    var panels: [HomePanelDescriptor] = HomePanels().enabledPanels
+    var panels: [LibraryPanelDescriptor] = LibraryPanels().enabledPanels
     var url: URL?
-    weak var delegate: HomePanelDelegate?
+    weak var delegate: LibraryPanelDelegate?
 
     fileprivate lazy var buttonContainerView: UIStackView = {
         let stackView = UIStackView()
@@ -63,7 +49,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         stackView.spacing = 14
         stackView.clipsToBounds = true
         stackView.accessibilityNavigationStyle = .combined
-        stackView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Home panel's top toolbar containing list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
+        stackView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
         return stackView
     }()
 
@@ -78,10 +64,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         view.backgroundColor = UIColor.theme.browser.background
         self.edgesForExtendedLayout = []
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
-            style: .done,
-            target: self, action: #selector(done))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
 
         view.addSubview(buttonContainerView)
         view.addSubview(controllerContainerView)
@@ -89,7 +72,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         buttonContainerView.snp.makeConstraints { make in
             make.bottom.equalTo(self.view.safeArea.bottom)
             make.leading.trailing.equalTo(self.view).inset(14)
-            make.height.equalTo(HomePanelViewControllerUX.ButtonContainerHeight)
+            make.height.equalTo(LibraryViewControllerUX.ButtonContainerHeight)
         }
 
         controllerContainerView.snp.makeConstraints { make in
@@ -137,10 +120,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
                     let accessibilityLabel = self.panels[index].accessibilityLabel
                     if let panelController = panel as? UINavigationController,
                         let rootPanel = panelController.viewControllers.first {
-                        setupHomePanel(rootPanel, accessibilityLabel: accessibilityLabel)
+                        setupLibraryPanel(rootPanel, accessibilityLabel: accessibilityLabel)
                         self.showPanel(panelController)
                     } else {
-                        setupHomePanel(panel, accessibilityLabel: accessibilityLabel)
+                        setupLibraryPanel(panel, accessibilityLabel: accessibilityLabel)
                         self.showPanel(panel)
                     }
                     self.navigationItem.title = self.panels[index].accessibilityLabel
@@ -150,8 +133,8 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
     }
 
-    func setupHomePanel(_ panel: UIViewController, accessibilityLabel: String) {
-        (panel as? HomePanel)?.homePanelDelegate = self
+    func setupLibraryPanel(_ panel: UIViewController, accessibilityLabel: String) {
+        (panel as? LibraryPanel)?.libraryPanelDelegate = self
         panel.view.accessibilityNavigationStyle = .combined
         panel.view.accessibilityLabel = accessibilityLabel
     }
@@ -221,34 +204,30 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         }
     }
 
-    func homePanel(_ homePanel: HomePanel, didSelectURLString url: String, visitType: VisitType) {
+    func libraryPanel(_ libraryPanel: LibraryPanel, didSelectURLString url: String, visitType: VisitType) {
 
     }
 
-    func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
-        delegate?.homePanelDidRequestToOpenLibrary(panel: panel)
-    }
-
-    func homePanelDidRequestToSignIn() {
+    func libraryPanelDidRequestToSignIn() {
         self.dismiss(animated: false, completion: nil)
-        delegate?.homePanelDidRequestToSignIn()
+        delegate?.libraryPanelDidRequestToSignIn()
     }
 
-    func homePanelDidRequestToCreateAccount() {
+    func libraryPanelDidRequestToCreateAccount() {
         self.dismiss(animated: false, completion: nil)
-        delegate?.homePanelDidRequestToCreateAccount()
+        delegate?.libraryPanelDidRequestToCreateAccount()
     }
 
-    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        delegate?.homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
+    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
+        delegate?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
     }
 
-    func homePanel(didSelectURL url: URL, visitType: VisitType) {
-        delegate?.homePanel(didSelectURL: url, visitType: visitType)
+    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
+        delegate?.libraryPanel(didSelectURL: url, visitType: visitType)
         dismiss(animated: true, completion: nil)
     }
 
-    func homePanel(didSelectURLString url: String, visitType: VisitType) {
+    func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
         // If we can't get a real URL out of what should be a URL, we let the user's
         // default search engine give it a shot.
         // Typically we'll be in this state if the user has tapped a bookmarked search template
@@ -259,7 +238,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
             return
         }
-        return self.homePanel(didSelectURL: url, visitType: visitType)
+        return self.libraryPanel(didSelectURL: url, visitType: visitType)
     }
 }
 
@@ -288,7 +267,7 @@ class LibraryPanelButton: UIButton {
 }
 
 // MARK: UIAppearance
-extension HomePanelViewController: Themeable {
+extension LibraryViewController: Themeable {
     func applyTheme() {
         func apply(_ vc: UIViewController) -> Bool {
             guard let vc = vc as? Themeable else { return false }
@@ -311,14 +290,14 @@ extension HomePanelViewController: Themeable {
     }
 }
 
-protocol HomePanelContextMenu {
+protocol LibraryPanelContextMenu {
     func getSiteDetails(for indexPath: IndexPath) -> Site?
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]?
     func presentContextMenu(for indexPath: IndexPath)
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
 }
 
-extension HomePanelContextMenu {
+extension LibraryPanelContextMenu {
     func presentContextMenu(for indexPath: IndexPath) {
         guard let site = getSiteDetails(for: indexPath) else { return }
 
@@ -340,15 +319,15 @@ extension HomePanelContextMenu {
         return contextMenu
     }
 
-    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonActionSheetItem]? {
+    func getDefaultContextMenuActions(for site: Site, libraryPanelDelegate: LibraryPanelDelegate?) -> [PhotonActionSheetItem]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
         let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
-            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+            libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
         let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
-            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+            libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
         return [openInNewTabAction, openInNewPrivateTabAction]

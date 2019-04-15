@@ -41,15 +41,6 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             self.currentChoice = NewTabPage.blankPage
             onFinished()
         })
-        let showBookmarks = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBookmarks), subtitle: nil, accessibilityIdentifier: "NewTabAsBookmarks", isEnabled: {return self.currentChoice == NewTabPage.bookmarks}, onChanged: {
-            self.currentChoice = NewTabPage.bookmarks
-            onFinished()
-        })
-        let showHistory = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabHistory), subtitle: nil, accessibilityIdentifier: "NewTabAsHistory", isEnabled: {return self.currentChoice == NewTabPage.history}, onChanged: {
-            self.currentChoice = NewTabPage.history
-            onFinished()
-        })
-
         let showWebPage = WebPageSetting(prefs: prefs, prefKey: HomePageConstants.NewTabCustomUrlPrefKey, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "NewTabAsCustomURL", settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
@@ -57,7 +48,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         })
         showWebPage.textField.textAlignment = .natural
 
-        let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showBlankPage, showBookmarks, showHistory, showWebPage])
+        let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showBlankPage, showWebPage])
 
         return [section]
     }

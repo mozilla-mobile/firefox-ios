@@ -41,8 +41,8 @@ struct DownloadedFile: Equatable {
     }
 }
 
-class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, HomePanel, UIDocumentInteractionControllerDelegate {
-    weak var homePanelDelegate: HomePanelDelegate?
+class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSource, LibraryPanel, UIDocumentInteractionControllerDelegate {
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
     var tableView = UITableView()
 
@@ -250,7 +250,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
             make.centerX.equalTo(overlayView)
             make.size.equalTo(60)
             // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(HomePanelUX.EmptyTabContentOffset).priority(100)
+            make.centerY.equalTo(overlayView).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
 
             // Sets proper top constraint for iPhone 4, 5 in portrait.
             make.top.greaterThanOrEqualTo(overlayView).offset(50)
@@ -336,7 +336,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
                 shareDownloadedFile(downloadedFile, indexPath: indexPath)
                 return
             }
-            homePanelDelegate?.homePanel(didSelectURL: downloadedFile.path, visitType: VisitType.typed)
+            libraryPanelDelegate?.libraryPanel(didSelectURL: downloadedFile.path, visitType: VisitType.typed)
         }
     }
 
