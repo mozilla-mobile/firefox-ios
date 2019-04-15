@@ -345,14 +345,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             application.endBackgroundTask(taskId)
         })
 
+        func endTask() {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                // Allow time for db closure, as iOS will kill the app immediately if file handles are still open.
+                application.endBackgroundTask(taskId)
+            }
+        }
+
         if profile.hasSyncableAccount() {
             profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
-                application.endBackgroundTask(taskId)
+                endTask()
             }
         } else {
             profile._shutdown()
-            application.endBackgroundTask(taskId)
+            endTask()
         }
     }
 
