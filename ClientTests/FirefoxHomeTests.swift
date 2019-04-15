@@ -9,21 +9,26 @@ import Shared
 import Storage
 import SyncTelemetry
 
-class ActivityStreamTests: XCTestCase {
+class FirefoxHomeTests: XCTestCase {
     var profile: MockProfile!
-    var panel: ActivityStreamPanel!
+    var vc: FirefoxHomeViewController!
 
     override func setUp() {
         super.setUp()
         self.profile = MockProfile()
-        self.panel = ActivityStreamPanel(profile: profile)
+        self.vc = FirefoxHomeViewController(profile: self.profile)
+    }
+
+    override func tearDown() {
+        self.profile._shutdown()
+        super.tearDown()
     }
 
     func testDeletionOfSingleSuggestedSite() {
-        let siteToDelete = panel.defaultTopSites()[0]
+        let siteToDelete = vc.defaultTopSites()[0]
 
-        panel.hideURLFromTopSites(siteToDelete)
-        let newSites = panel.defaultTopSites()
+        vc.hideURLFromTopSites(siteToDelete)
+        let newSites = vc.defaultTopSites()
 
         XCTAssertFalse(newSites.contains(siteToDelete, f: { (a, b) -> Bool in
             return a.url == b.url
@@ -31,12 +36,12 @@ class ActivityStreamTests: XCTestCase {
     }
 
     func testDeletionOfAllDefaultSites() {
-        let defaultSites = panel.defaultTopSites()
+        let defaultSites = vc.defaultTopSites()
         defaultSites.forEach({
-            panel.hideURLFromTopSites($0)
+            vc.hideURLFromTopSites($0)
         })
 
-        let newSites = panel.defaultTopSites()
+        let newSites = vc.defaultTopSites()
         XCTAssertTrue(newSites.isEmpty)
     }
 }
