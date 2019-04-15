@@ -26,30 +26,6 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.resetToAboutHome()
     }
     /*
-    func testAboutHomeDisposed() {
-        // about:home is already active on startup; grab a reference to it.
-        let browserViewController = getTopViewController()
-        weak var aboutHomeController = getChildViewController(browserViewController, childClass: "HomePanelViewController")
-
-        // Change the page to make about:home go away.
-        tester().tapViewWithAccessibilityIdentifier("url")
-        let url = "\(webRoot)/numberedPage.html?page=1"
-
-        // Work around potential KIF bug. The nillification does not seem to propagate unless we use and explicit autorelease pool.
-        // https://github.com/kif-framework/KIF/issues/739
-        autoreleasepool {
-            tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url)\n")
-        }
-
-        tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
-
-
-        tester().runBlock { _ in
-            return (aboutHomeController == nil) ? KIFTestStepResult.Success : KIFTestStepResult.Wait
-        }
-        XCTAssertNil(aboutHomeController, "about:home controller disposed")
-    }
-
     func testSearchViewControllerDisposed() {
         // Type the URL to make the search controller appear.
         tester().tapViewWithAccessibilityIdentifier("url")

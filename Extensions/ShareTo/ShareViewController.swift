@@ -328,7 +328,7 @@ extension ShareViewController {
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
-            _ = profile.places.createBookmark(parentGUID: "mobile______", url: item.url, title: item.title).value // Intentionally block thread with database call.
+            _ = profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: item.url, title: item.title).value // Intentionally block thread with database call.
             profile._shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "bookmark-this-page")
