@@ -98,7 +98,7 @@ class MetaGlobalTests: XCTestCase {
         guard let engineConfiguration = ready.scratchpad.engineConfiguration else {
             return
         }
-        XCTAssertEqual(engineConfiguration.enabled.sorted(), ["addons", "bookmarks", "clients", "forms", "history", "prefs", "tabs"])
+        XCTAssertEqual(engineConfiguration.enabled.sorted(), ["addons", "clients", "forms", "history", "prefs", "tabs"])
         XCTAssertEqual(engineConfiguration.declined, [])
 
         // Basic verifications.
