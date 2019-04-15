@@ -104,6 +104,7 @@ class TabManagerTests: XCTestCase {
     }
 
     override func tearDown() {
+        profile._shutdown()
         manager.removeDelegate(delegate)
         manager.removeAll()
 
