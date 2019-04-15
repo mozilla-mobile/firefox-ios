@@ -16,8 +16,8 @@ private struct RecentlyClosedPanelUX {
     static let IconBorderWidth: CGFloat = 0.5
 }
 
-class RecentlyClosedTabsPanel: UIViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate?
+class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
 
     fileprivate lazy var recentlyClosedHeader: UILabel = {
@@ -53,7 +53,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
 
         view.backgroundColor = UIColor.theme.tableView.headerBackground
 
-        tableViewController.homePanelDelegate = homePanelDelegate
+        tableViewController.libraryPanelDelegate = libraryPanelDelegate
         tableViewController.recentlyClosedTabsPanel = self
 
         self.addChild(tableViewController)
@@ -88,7 +88,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
 }
 
 class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
-    weak var homePanelDelegate: HomePanelDelegate?
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     var recentlyClosedTabs: [ClosedTab] = []
     weak var recentlyClosedTabsPanel: RecentlyClosedTabsPanel?
 
@@ -132,12 +132,12 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let homePanelDelegate = homePanelDelegate else {
+        guard let libraryPanelDelegate = libraryPanelDelegate else {
             log.warning("No site or no URL when selecting row.")
             return
         }
         let visitType = VisitType.typed    // Means History, too.
-        homePanelDelegate.homePanel(didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
+        libraryPanelDelegate.libraryPanel(didSelectURL: recentlyClosedTabs[indexPath.row].url, visitType: visitType)
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -155,7 +155,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
 
 }
 
-extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
+extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
@@ -173,7 +173,7 @@ extension RecentlyClosedTabsPanelSiteTableViewController: HomePanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
-        return getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate)
+        return getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate)
     }
 }
 

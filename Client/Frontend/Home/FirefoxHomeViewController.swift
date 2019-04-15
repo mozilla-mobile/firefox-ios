@@ -14,7 +14,7 @@ private let log = Logger.browserLogger
 private let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
 
 // MARK: -  Lifecycle
-struct ASPanelUX {
+struct FirefoxHomeUX {
     static let rowSpacing: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 30 : 20
     static let highlightCellHeight: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 250 : 200
     static let sectionInsetsForSizeClass = UXSizeClasses(compact: 0, regular: 101, other: 20)
@@ -56,7 +56,71 @@ struct UXSizeClasses {
     }
 }
 
-class ActivityStreamPanel: UICollectionViewController, HomePanel {
+protocol HomePanelDelegate: AnyObject {
+    func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
+    func homePanel(didSelectURL url: URL, visitType: VisitType)
+    func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
+}
+
+protocol HomePanel: AnyObject, Themeable {
+    var homePanelDelegate: HomePanelDelegate? { get set }
+}
+
+enum HomePanelType: Int {
+    case topSites = 0
+
+    var internalUrl: URL {
+        let aboutUrl: URL! = URL(string: "\(InternalURL.baseUrl)/\(AboutHomeHandler.path)")
+        return URL(string: "#panel=\(self.rawValue)", relativeTo: aboutUrl)!
+    }
+}
+
+protocol HomePanelContextMenu {
+    func getSiteDetails(for indexPath: IndexPath) -> Site?
+    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]?
+    func presentContextMenu(for indexPath: IndexPath)
+    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
+}
+
+extension HomePanelContextMenu {
+    func presentContextMenu(for indexPath: IndexPath) {
+        guard let site = getSiteDetails(for: indexPath) else { return }
+
+        presentContextMenu(for: site, with: indexPath, completionHandler: {
+            return self.contextMenu(for: site, with: indexPath)
+        })
+    }
+
+    func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
+        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
+
+        let contextMenu = PhotonActionSheet(site: site, actions: actions)
+        contextMenu.modalPresentationStyle = .overFullScreen
+        contextMenu.modalTransitionStyle = .crossDissolve
+
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+
+        return contextMenu
+    }
+
+    func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonActionSheetItem]? {
+        guard let siteURL = URL(string: site.url) else { return nil }
+
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
+            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
+        }
+
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
+            homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
+        }
+
+        return [openInNewTabAction, openInNewPrivateTabAction]
+    }
+}
+
+
+class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     fileprivate let profile: Profile
     fileprivate let pocketAPI = Pocket()
@@ -156,7 +220,7 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
 }
 
 // MARK: -  Section management
-extension ActivityStreamPanel {
+extension FirefoxHomeViewController {
     enum Section: Int {
         case topSites
         case libraryShortcuts
@@ -194,9 +258,9 @@ extension ActivityStreamPanel {
 
         func cellHeight(_ traits: UITraitCollection, width: CGFloat) -> CGFloat {
             switch self {
-            case .pocket: return ASPanelUX.highlightCellHeight
+            case .pocket: return FirefoxHomeUX.highlightCellHeight
             case .topSites: return 0 //calculated dynamically
-            case .libraryShortcuts: return ASPanelUX.LibraryShortcutsHeight
+            case .libraryShortcuts: return FirefoxHomeUX.LibraryShortcutsHeight
             }
         }
 
@@ -210,16 +274,16 @@ extension ActivityStreamPanel {
             if (traits.horizontalSizeClass == .regular && UIScreen.main.bounds.size.width != frameWidth) || UIDevice.current.userInterfaceIdiom == .phone {
                 currentTraits = UITraitCollection(horizontalSizeClass: .compact)
             }
-            var insets = ASPanelUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
+            var insets = FirefoxHomeUX.sectionInsetsForSizeClass[currentTraits.horizontalSizeClass]
 
             switch self {
             case .pocket, .libraryShortcuts:
                 let window = UIApplication.shared.keyWindow
                 let safeAreaInsets = window?.safeAreaInsets.left ?? 0
-                insets += ASPanelUX.MinimumInsets + safeAreaInsets
+                insets += FirefoxHomeUX.MinimumInsets + safeAreaInsets
                 return insets
             case .topSites:
-                insets += ASPanelUX.TopSitesInsets
+                insets += FirefoxHomeUX.TopSitesInsets
                 return insets
             }
         }
@@ -247,7 +311,7 @@ extension ActivityStreamPanel {
             switch self {
             case .pocket:
                 let numItems = numberOfItemsForRow(traits)
-                return CGSize(width: floor(((frameWidth - inset) - (ASPanelUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
+                return CGSize(width: floor(((frameWidth - inset) - (FirefoxHomeUX.MinimumInsets * (numItems - 1))) / numItems), height: height)
             case .topSites, .libraryShortcuts:
                 return CGSize(width: frameWidth - inset, height: height)
             }
@@ -270,7 +334,7 @@ extension ActivityStreamPanel {
         var cellType: UICollectionViewCell.Type {
             switch self {
             case .topSites: return ASHorizontalScrollCell.self
-            case .pocket: return ActivityStreamHighlightCell.self
+            case .pocket: return FirefoxHomeHighlightCell.self
             case .libraryShortcuts: return ASLibraryCell.self
             }
         }
@@ -286,7 +350,7 @@ extension ActivityStreamPanel {
 }
 
 // MARK: -  Tableview Delegate
-extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
+extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
 
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
@@ -349,7 +413,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
         case .libraryShortcuts:
             let numberofshortcuts: CGFloat = 4
             let titleSpacing: CGFloat = 10
-            let width = min(ASPanelUX.LibraryShortcutsMaxWidth, cellSize.width)
+            let width = min(FirefoxHomeUX.LibraryShortcutsMaxWidth, cellSize.width)
             return CGSize(width: width, height: (width / numberofshortcuts) + titleSpacing)
         }
     }
@@ -381,7 +445,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return ASPanelUX.rowSpacing
+        return FirefoxHomeUX.rowSpacing
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -396,7 +460,7 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 }
 
 // MARK: - Tableview Data Source
-extension ActivityStreamPanel {
+extension FirefoxHomeViewController {
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 3
@@ -458,7 +522,7 @@ extension ActivityStreamPanel {
 
     func configurePocketItemCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let pocketStory = pocketStories[indexPath.row]
-        let pocketItemCell = cell as! ActivityStreamHighlightCell
+        let pocketItemCell = cell as! FirefoxHomeHighlightCell
         pocketItemCell.configureWithPocketStory(pocketStory)
         return pocketItemCell
     }
@@ -466,7 +530,7 @@ extension ActivityStreamPanel {
 }
 
 // MARK: - Data Management
-extension ActivityStreamPanel: DataObserverDelegate {
+extension FirefoxHomeViewController: DataObserverDelegate {
 
     // Reloads both highlights and top sites data from their respective caches. Does not invalidate the cache.
     // See ActivityStreamDataObserver for invalidation logic.
@@ -629,7 +693,8 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 
     fileprivate func fetchBookmarkStatus(for site: Site, with indexPath: IndexPath, forSection section: Section, completionHandler: @escaping () -> Void) {
-        profile.places.isBookmarked(url: site.url) >>== { isBookmarked in
+        profile.places.isBookmarked(url: site.url).uponQueue(.main) { result in
+            let isBookmarked = result.successValue ?? false
             site.setBookmarked(isBookmarked)
             completionHandler()
         }
@@ -653,8 +718,7 @@ extension ActivityStreamPanel: DataObserverDelegate {
     }
 }
 
-extension ActivityStreamPanel {
-
+extension FirefoxHomeViewController {
     @objc func openBookmarks() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .bookmarks)
     }
@@ -672,7 +736,7 @@ extension ActivityStreamPanel {
     }
 }
 
-extension ActivityStreamPanel: HomePanelContextMenu {
+extension FirefoxHomeViewController: HomePanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
 
         fetchBookmarkStatus(for: site, with: indexPath, forSection: Section(indexPath.section)) {
@@ -732,7 +796,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
         } else {
             bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
-                _ = self.profile.places.createBookmark(parentGUID: "mobile______", url: shareItem.url, title: shareItem.title)
+                _ = self.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
 
                 var userData = [QuickActions.TabURLKey: shareItem.url]
                 if let title = shareItem.title {
@@ -793,7 +857,7 @@ extension ActivityStreamPanel: HomePanelContextMenu {
     }
 }
 
-extension ActivityStreamPanel: UIPopoverPresentationControllerDelegate {
+extension FirefoxHomeViewController: UIPopoverPresentationControllerDelegate {
 
     // Dismiss the popover if the device is being rotated.
     // This is used by the Share UIActivityViewController action sheet on iPad
@@ -803,12 +867,12 @@ extension ActivityStreamPanel: UIPopoverPresentationControllerDelegate {
 }
 
 // MARK: - Section Header View
-private struct ASHeaderViewUX {
+private struct FirefoxHomeHeaderViewUX {
     static var SeparatorColor: UIColor { return UIColor.theme.homePanel.separator }
     static let TextFont = DynamicFontHelper.defaultHelper.SmallSizeHeavyWeightAS
     static let ButtonFont = DynamicFontHelper.defaultHelper.MediumSizeBoldFontAS
     static let SeparatorHeight = 0.5
-    static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? ASPanelUX.SectionInsetsForIpad + ASPanelUX.MinimumInsets : ASPanelUX.MinimumInsets
+    static let Insets: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeUX.SectionInsetsForIpad + FirefoxHomeUX.MinimumInsets : FirefoxHomeUX.MinimumInsets
     static let TitleTopInset: CGFloat = 5
 }
 
@@ -824,7 +888,7 @@ class ASFooterView: UICollectionReusableView {
         self.backgroundColor = UIColor.clear
         addSubview(separatorLine)
         separatorLine.snp.makeConstraints { make in
-            make.height.equalTo(ASHeaderViewUX.SeparatorHeight)
+            make.height.equalTo(FirefoxHomeHeaderViewUX.SeparatorHeight)
             leftConstraint = make.leading.equalTo(self.safeArea.leading).inset(insets).constraint
             make.trailing.equalTo(self.safeArea.trailing).inset(insets)
             make.top.equalTo(self.snp.top)
@@ -834,7 +898,7 @@ class ASFooterView: UICollectionReusableView {
     }
 
     var insets: CGFloat {
-        return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? ASHeaderViewUX.Insets : ASPanelUX.MinimumInsets
+        return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.Insets : FirefoxHomeUX.MinimumInsets
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -855,7 +919,7 @@ class ASFooterView: UICollectionReusableView {
 
 extension ASFooterView: Themeable {
     func applyTheme() {
-        separatorLineView?.backgroundColor = ASHeaderViewUX.SeparatorColor
+        separatorLineView?.backgroundColor = FirefoxHomeHeaderViewUX.SeparatorColor
     }
 }
 
@@ -866,7 +930,7 @@ class ASHeaderView: UICollectionReusableView {
         let titleLabel = UILabel()
         titleLabel.text = self.title
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
-        titleLabel.font = ASHeaderViewUX.TextFont
+        titleLabel.font = FirefoxHomeHeaderViewUX.TextFont
         titleLabel.minimumScaleFactor = 0.6
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
@@ -877,7 +941,7 @@ class ASHeaderView: UICollectionReusableView {
         let button = UIButton()
         button.setTitle(Strings.PocketMoreStoriesText, for: .normal)
         button.isHidden = true
-        button.titleLabel?.font = ASHeaderViewUX.ButtonFont
+        button.titleLabel?.font = FirefoxHomeHeaderViewUX.ButtonFont
         button.contentHorizontalAlignment = .right
         button.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
         button.setTitleColor(UIColor.Photon.Grey50, for: .highlighted)
@@ -902,7 +966,7 @@ class ASHeaderView: UICollectionReusableView {
 
     var titleInsets: CGFloat {
         get {
-            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? ASHeaderViewUX.Insets : ASPanelUX.MinimumInsets
+            return UIScreen.main.bounds.size.width == self.frame.size.width && UIDevice.current.userInterfaceIdiom == .pad ? FirefoxHomeHeaderViewUX.Insets : FirefoxHomeUX.MinimumInsets
         }
     }
 
@@ -930,7 +994,7 @@ class ASHeaderView: UICollectionReusableView {
         moreButton.setContentCompressionResistancePriority(.required, for: .horizontal)
         titleLabel.snp.makeConstraints { make in
             make.leading.equalTo(iconView.snp.trailing).offset(5)
-            make.trailing.equalTo(moreButton.snp.leading).inset(-ASHeaderViewUX.TitleTopInset)
+            make.trailing.equalTo(moreButton.snp.leading).inset(-FirefoxHomeHeaderViewUX.TitleTopInset)
             make.top.equalTo(self.snp.top).offset(ASHeaderView.verticalInsets)
             make.bottom.equalToSuperview().offset(-ASHeaderView.verticalInsets)
         }

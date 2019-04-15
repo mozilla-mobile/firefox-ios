@@ -174,8 +174,8 @@ class ReadingListTableViewCell: UITableViewCell, Themeable {
     }
 }
 
-class ReadingListPanel: UITableViewController, HomePanel {
-    weak var homePanelDelegate: HomePanelDelegate?
+class ReadingListPanel: UITableViewController, LibraryPanel {
+    weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
 
     fileprivate lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -371,7 +371,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
             profile.readingList.updateRecord(record, unread: false)
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
-            homePanelDelegate?.homePanel(didSelectURL: encodedURL, visitType: visitType)
+            libraryPanelDelegate?.libraryPanel(didSelectURL: encodedURL, visitType: visitType)
             UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .readingListItem)
         }
     }
@@ -401,7 +401,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
     }
 }
 
-extension ReadingListPanel: HomePanelContextMenu {
+extension ReadingListPanel: LibraryPanelContextMenu {
     func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?) {
         guard let contextMenu = completionHandler() else { return }
         self.present(contextMenu, animated: true, completion: nil)
@@ -413,7 +413,7 @@ extension ReadingListPanel: HomePanelContextMenu {
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
-        guard var actions = getDefaultContextMenuActions(for: site, homePanelDelegate: homePanelDelegate) else { return nil }
+        guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
         let removeAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
             self.deleteItem(atIndex: indexPath)
