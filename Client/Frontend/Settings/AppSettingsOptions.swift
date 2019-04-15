@@ -627,7 +627,7 @@ class VersionSetting: Setting {
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
         getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
         UIPasteboard.general.string = self.title?.string
-        navigationController?.topViewController?.present(alert, animated: true) { [unowned self] in
+        navigationController?.topViewController?.present(alert, animated: true) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 alert.dismiss(animated: true)
             }
