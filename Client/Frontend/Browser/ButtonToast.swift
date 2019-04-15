@@ -36,12 +36,13 @@ class ButtonToast: Toast {
         self.toastView.backgroundColor = backgroundColor
 
         self.toastView.snp.makeConstraints { make in
-            make.left.right.height.equalTo(self)
-            self.animationConstraint = make.top.equalTo(self).offset(ButtonToastUX.ToastHeight).constraint
+            make.left.right.equalTo(self)
+            make.height.equalTo(ButtonToastUX.ToastHeight)
+            self.animationConstraint = make.top.equalTo(self).offset(ButtonToastUX.ToastHeight + UIConstants.BottomToolbarHeight).constraint
         }
 
         self.snp.makeConstraints { make in
-            make.height.equalTo(ButtonToastUX.ToastHeight)
+            make.height.equalTo(ButtonToastUX.ToastHeight + UIConstants.BottomToolbarHeight)
         }
     }
 

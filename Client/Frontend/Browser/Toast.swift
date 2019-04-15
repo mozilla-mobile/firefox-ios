@@ -22,6 +22,17 @@ class Toast: UIView {
     lazy var toastView: UIView = {
         let toastView = UIView()
         toastView.backgroundColor = SimpleToastUX.ToastDefaultColor
+
+        let tabToolBarFooterMaskView = UIView()
+        tabToolBarFooterMaskView.backgroundColor = SimpleToastUX.ToastDefaultColor
+        toastView.addSubview(tabToolBarFooterMaskView)
+
+        tabToolBarFooterMaskView.snp.makeConstraints { make in
+          make.left.right.equalTo(toastView)
+          make.height.equalTo(UIConstants.BottomToolbarHeight)
+          make.bottom.equalTo(toastView).offset(UIConstants.BottomToolbarHeight)
+        }
+
         return toastView
     }()
 
