@@ -164,25 +164,6 @@ extension BrowserDB {
         return cursor[0]
     }
 
-    func getSyncStatusForGUID(_ guid: GUID) -> SyncStatus? {
-        let args: Args = [guid]
-        let cursor = self.runQuery("SELECT sync_status FROM bookmarksLocal WHERE guid = ?", args: args, factory: { $0[0] as! Int }).value.successValue!
-        if let raw = cursor[0] {
-            return SyncStatus(rawValue: raw)
-        }
-        return nil
-    }
-
-    func getRecordByURL(_ url: String, fromTable table: String) -> BookmarkMirrorItem {
-        let args: Args = [url]
-        return self.runQuery("SELECT * FROM \(table) WHERE bmkUri = ?", args: args, factory: BookmarkFactory.mirrorItemFactory).value.successValue![0]!
-    }
-
-    func getRecordByGUID(_ guid: GUID, fromTable table: String) -> BookmarkMirrorItem {
-        let args: Args = [guid]
-        return self.runQuery("SELECT * FROM \(table) WHERE guid = ?", args: args, factory: BookmarkFactory.mirrorItemFactory).value.successValue![0]!
-    }
-
     func getChildrenOfFolder(_ folder: GUID) -> [GUID] {
         let args: Args = [folder]
         let sql = """
