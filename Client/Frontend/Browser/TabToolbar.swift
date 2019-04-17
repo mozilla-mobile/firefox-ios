@@ -51,7 +51,7 @@ class ToolbarBadge: UIImageView {
         super.init(coder: aDecoder)
     }
 
-    func layout(onButton button: UIButton) {
+    func layout(onButton button: UIView) {
         snp.remakeConstraints { make in
             make.size.equalTo(badgeSize)
             make.centerX.equalTo(button).offset(badgeOffset)
@@ -237,7 +237,7 @@ class TabToolbar: UIView {
     let actionButtons: [Themeable & UIButton]
 
     fileprivate let privateModeBadge = ToolbarBadge(imageName: "privateModeBadge")
-    fileprivate let hideImagesBadge = ToolbarBadge(imageName: "privateModeBadge")
+    fileprivate let hideImagesBadge = ToolbarBadge(imageName: "menu-NoImageMode")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()

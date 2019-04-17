@@ -43,8 +43,9 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var tabCount: String?
     public fileprivate(set) var handler: ((PhotonActionSheetItem) -> Void)?
-    
-    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, bold: Bool? = false, tabCount: String? = nil, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+     public fileprivate(set) var badgeIconName: String?
+
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconURL = iconURL
@@ -57,6 +58,7 @@ public struct PhotonActionSheetItem {
         self.accessoryText = accessoryText
         self.bold = bold ?? false
         self.tabCount = tabCount
+        self.badgeIconName = badgeIconNamed
     }
 }
 
@@ -636,6 +638,17 @@ private class PhotonActionSheetCell: UITableViewCell {
         return stackView
     }()
 
+    lazy var circleToggled: UIView = {
+        let circleSize = CGFloat(34)
+        let circle = UIView(frame: CGRect(width: circleSize, height: circleSize))
+        circle.alpha = 0.15
+        circle.layer.cornerRadius = circleSize / 2
+        circle.backgroundColor = .black
+        return circle
+    }()
+
+    var badgeOverlay: UIView?
+
     override var isSelected: Bool {
         didSet {
             self.selectedOverlay.isHidden = !isSelected
@@ -649,6 +662,7 @@ private class PhotonActionSheetCell: UITableViewCell {
         disclosureLabel.removeFromSuperview()
         toggleSwitch.mainView.removeFromSuperview()
         statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
+        circleToggled.removeFromSuperview()
     }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -760,6 +774,21 @@ private class PhotonActionSheetCell: UITableViewCell {
         case .Switch:
             toggleSwitch.setOn(action.isEnabled)
             stackView.addArrangedSubview(toggleSwitch.mainView)
+
+            if let name = action.badgeIconName, action.isEnabled, let parent = statusIcon.superview {
+                let circle = circleToggled
+                parent.addSubview(circle)
+                let width = circle.frame.size.width
+                circle.snp.makeConstraints { make in
+                    make.center.equalTo(statusIcon)
+                    make.width.height.equalTo(width)
+                }
+                parent.sendSubview(toBack: circle)
+
+                let badge = ToolbarBadge(imageName: name)
+                circle.addSubview(badge)
+                badge.layout(onButton: circle)
+            }
         case .Sync:
             if let manager = syncManager {
                 let padding = PhotonActionSheetCell.Padding

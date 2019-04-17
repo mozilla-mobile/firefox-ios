@@ -176,7 +176,7 @@ class URLBarView: UIView {
     }
 
     fileprivate let privateModeBadge = ToolbarBadge(imageName: "privateModeBadge")
-    fileprivate let hideImagesBadge = ToolbarBadge(imageName: "privateModeBadge")
+    fileprivate let hideImagesBadge = ToolbarBadge(imageName: "menu-NoImageMode")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
