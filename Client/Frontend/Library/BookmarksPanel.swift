@@ -11,7 +11,6 @@ private let log = Logger.browserLogger
 
 private let BookmarkFolderCellIdentifier = "BookmarkFolderCellIdentifier"
 private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
-private let BookmarkFolderHeaderViewIdentifier = "BookmarkFolderHeaderViewIdentifier"
 
 private struct BookmarksPanelUX {
     static let BookmarkFolderHeaderViewChevronInset: CGFloat = 10
@@ -23,6 +22,13 @@ private struct BookmarksPanelUX {
     static let IconSize: CGFloat = 23
     static let IconBorderWidth: CGFloat = 0.5
 }
+
+private let LocalizedRootFolderStrings = [
+    BookmarkRoots.MenuFolderGUID: Strings.BookmarksFolderTitleMenu,
+    BookmarkRoots.ToolbarFolderGUID: Strings.BookmarksFolderTitleToolbar,
+    BookmarkRoots.UnfiledFolderGUID: Strings.BookmarksFolderTitleUnsorted,
+    BookmarkRoots.MobileFolderGUID: Strings.BookmarksFolderTitleMobile
+]
 
 fileprivate class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -47,88 +53,6 @@ fileprivate class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     }
 }
 
-fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
-    var delegate: BookmarkFolderTableViewHeaderDelegate?
-
-    let titleLabel = UILabel()
-    let topBorder = UIView()
-    let bottomBorder = UIView()
-
-    lazy var chevron: ChevronView = {
-        let chevron = ChevronView(direction: .left)
-        chevron.tintColor = UIColor.theme.general.highlightBlue
-        chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
-        return chevron
-    }()
-
-    override var textLabel: UILabel? { return titleLabel }
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-
-        isUserInteractionEnabled = true
-
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewWasTapped))
-        addGestureRecognizer(tapGestureRecognizer)
-
-        addSubview(topBorder)
-        addSubview(bottomBorder)
-        contentView.addSubview(chevron)
-        contentView.addSubview(titleLabel)
-
-        chevron.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
-            make.centerY.equalTo(contentView)
-            make.size.equalTo(BookmarksPanelUX.BookmarkFolderChevronSize)
-        }
-
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(chevron.snp.trailing).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
-            make.trailing.greaterThanOrEqualTo(contentView).offset(-BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
-            make.centerY.equalTo(contentView)
-        }
-
-        topBorder.snp.makeConstraints { make in
-            make.left.right.equalTo(self)
-            make.top.equalTo(self).offset(-0.5)
-            make.height.equalTo(0.5)
-        }
-
-        bottomBorder.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(self)
-            make.height.equalTo(0.5)
-        }
-
-        applyTheme()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc fileprivate func viewWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        delegate?.didSelectHeader()
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
-        applyTheme()
-    }
-
-    func applyTheme() {
-        textLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
-        titleLabel.textColor = UIColor.theme.homePanel.bookmarkCurrentFolderText
-        topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        contentView.backgroundColor = UIColor.theme.homePanel.bookmarkBackNavCellBackground
-    }
-}
-
-fileprivate protocol BookmarkFolderTableViewHeaderDelegate {
-    func didSelectHeader()
-}
-
 class BookmarksPanel: SiteTableViewController, LibraryPanel {
     var libraryPanelDelegate: LibraryPanelDelegate?
 
@@ -139,8 +63,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     var bookmarkFolder: BookmarkFolder?
     var bookmarkNodes = [BookmarkNode]()
-
-    lazy var emptyStateOverlayView = createEmptyStateOverlayView()
 
     init(profile: Profile, bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID) {
         self.bookmarkFolderGUID = bookmarkFolderGUID
@@ -154,7 +76,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
         self.tableView.register(SeparatorTableCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
         self.tableView.register(BookmarkFolderTableViewCell.self, forCellReuseIdentifier: BookmarkFolderCellIdentifier)
-        self.tableView.register(BookmarkFolderTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BookmarkFolderHeaderViewIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -167,6 +88,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.addSubview(refreshControl)
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -184,65 +109,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     override func applyTheme() {
         super.applyTheme()
-
-        emptyStateOverlayView.removeFromSuperview()
-        emptyStateOverlayView = createEmptyStateOverlayView()
-        updateEmptyPanelState()
     }
 
     override func reloadData() {
         loadData()
-    }
-
-    fileprivate func createEmptyStateOverlayView() -> UIView {
-        let logoImageView = UIImageView(image: UIImage.templateImageNamed("emptyBookmarks"))
-        logoImageView.tintColor = UIColor.Photon.Grey60
-
-        let welcomeLabel = UILabel()
-        welcomeLabel.text = Strings.BookmarksPanelEmptyStateTitle
-        welcomeLabel.textAlignment = .center
-        welcomeLabel.textColor = UIColor.theme.homePanel.welcomeScreenText
-        welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        welcomeLabel.numberOfLines = 0
-        welcomeLabel.adjustsFontSizeToFitWidth = true
-
-        let overlayView = UIView()
-        overlayView.backgroundColor = UIColor.theme.homePanel.panelBackground
-        overlayView.addSubview(logoImageView)
-        overlayView.addSubview(welcomeLabel)
-
-        logoImageView.snp.makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-            make.size.equalTo(60)
-            // Sets proper top constraint for iPhone 6 in portait and for iPad.
-            make.centerY.equalTo(overlayView).offset(LibraryPanelUX.EmptyTabContentOffset).priority(100)
-
-            // Sets proper top constraint for iPhone 4, 5 in portrait.
-            make.top.greaterThanOrEqualTo(overlayView).offset(50)
-        }
-
-        welcomeLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(overlayView)
-            make.top.equalTo(logoImageView.snp.bottom).offset(BookmarksPanelUX.WelcomeScreenPadding)
-            make.width.equalTo(BookmarksPanelUX.WelcomeScreenItemWidth)
-        }
-
-        return overlayView
-    }
-
-    fileprivate func updateEmptyPanelState() {
-        if bookmarkFolder?.guid == BookmarkRoots.RootGUID,
-            bookmarkNodes.isEmpty {
-            if emptyStateOverlayView.superview == nil {
-                view.addSubview(emptyStateOverlayView)
-                view.bringSubview(toFront: emptyStateOverlayView)
-                emptyStateOverlayView.snp.makeConstraints { make -> Void in
-                    make.edges.equalTo(tableView)
-                }
-            }
-        } else {
-            emptyStateOverlayView.removeFromSuperview()
-        }
     }
 
     fileprivate func loadData() {
@@ -254,14 +124,12 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 self.bookmarkFolder = nil
                 self.bookmarkNodes = []
                 self.tableView.reloadData()
-                self.updateEmptyPanelState()
                 return
             }
 
             self.bookmarkFolder = folder
             self.bookmarkNodes = folder.children ?? []
             self.tableView.reloadData()
-            self.updateEmptyPanelState()
         }
     }
 
@@ -285,8 +153,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         bookmarkNodes.remove(at: indexPath.row)
         tableView.deleteRows(at: [indexPath], with: .left)
         tableView.endUpdates()
-
-        updateEmptyPanelState()
     }
 
     @objc fileprivate func didLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
@@ -323,6 +189,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolder:
             let nextController = BookmarksPanel(profile: profile, bookmarkFolderGUID: bookmarkFolder.guid)
+            if bookmarkFolder.isRoot, let localizedString = LocalizedRootFolderStrings[bookmarkFolder.guid] {
+                nextController.title = localizedString
+            } else {
+                nextController.title = bookmarkFolder.title
+            }
             nextController.libraryPanelDelegate = libraryPanelDelegate
             navigationController?.pushViewController(nextController, animated: true)
         case let bookmarkItem as BookmarkItem:
@@ -346,7 +217,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         switch bookmarkNode {
         case let bookmarkFolder as BookmarkFolder:
             let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkFolderCellIdentifier, for: indexPath)
-            cell.textLabel?.text = bookmarkFolder.title
+            if bookmarkFolder.isRoot, let localizedString = LocalizedRootFolderStrings[bookmarkFolder.guid] {
+                cell.textLabel?.text = localizedString
+            } else {
+                cell.textLabel?.text = bookmarkFolder.title
+            }
             return cell
         case let bookmarkItem as BookmarkItem:
             let cell = super.tableView(tableView, cellForRowAt: indexPath)
@@ -372,6 +247,14 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
 
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0
+    }
+
     override func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         // Show a full-width border for cells above separators, so they don't have a weird step.
         // Separators themselves already have a full-width border, but let's force the issue
@@ -383,44 +266,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         return super.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath)
-    }
-
-    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // Don't show a header for the root.
-        guard let bookmarkFolder = self.bookmarkFolder, bookmarkFolder.guid != BookmarkRoots.RootGUID else {
-            return nil
-        }
-
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkFolderHeaderViewIdentifier) as? BookmarkFolderTableViewHeader else {
-            return nil
-        }
-<<<<<<< HEAD
-    }
-
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        // Intentionally blank. Required to use UITableViewRowActions
-    }
-
-    private func editingStyleforRow(atIndexPath indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        guard let source = source else {
-            return .none
-        }
-=======
-
-        header.delegate = self
-        header.textLabel?.text = bookmarkFolder.title
->>>>>>> 51425725c... Bug 1542869 - Replace Bookmarks back-end with application-services Rust component (#4743)
-
-        return header
-    }
-
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // Don't show a header for the root.
-        guard let bookmarkFolder = self.bookmarkFolder, bookmarkFolder.guid != BookmarkRoots.RootGUID else {
-            return 0
-        }
-
-        return SiteTableViewControllerUX.RowHeight
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -436,17 +281,12 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
-<<<<<<< HEAD
-    func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return editingStyleforRow(atIndexPath: indexPath)
-=======
     func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
         if bookmarkNodes[safe: indexPath.row] is BookmarkSeparator {
             return .none
         }
 
         return .delete
->>>>>>> 51425725c... Bug 1542869 - Replace Bookmarks back-end with application-services Rust component (#4743)
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -504,120 +344,3 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         return actions
     }
 }
-
-// MARK: BookmarkFolderTableViewHeaderDelegate
-
-extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
-    fileprivate func didSelectHeader() {
-        _ = self.navigationController?.popViewController(animated: true)
-    }
-}
-<<<<<<< HEAD
-
-class BookmarkFolderTableViewCell: TwoLineTableViewCell {
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        imageView?.image = UIImage(named: "bookmarkFolder")
-        accessoryType = .disclosureIndicator
-        separatorInset = .zero
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func applyTheme() {
-        super.applyTheme()
-
-        self.backgroundColor = UIColor.theme.homePanel.bookmarkFolderBackground
-        textLabel?.backgroundColor = UIColor.clear
-        textLabel?.textColor = UIColor.theme.homePanel.bookmarkFolderText
-    }
-}
-
-fileprivate class BookmarkFolderTableViewHeader: UITableViewHeaderFooterView {
-    var delegate: BookmarkFolderTableViewHeaderDelegate?
-
-    let titleLabel = UILabel()
-    let topBorder = UIView()
-    let bottomBorder = UIView()
-
-    lazy var chevron: ChevronView = {
-        let chevron = ChevronView(direction: .left)
-        chevron.tintColor = UIColor.theme.general.highlightBlue
-        chevron.lineWidth = BookmarksPanelUX.BookmarkFolderChevronLineWidth
-        return chevron
-    }()
-
-    override var textLabel: UILabel? {
-        return titleLabel
-    }
-
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-
-        isUserInteractionEnabled = true
-
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(viewWasTapped))
-        tapGestureRecognizer.numberOfTapsRequired = 1
-        addGestureRecognizer(tapGestureRecognizer)
-
-        addSubview(topBorder)
-        addSubview(bottomBorder)
-        contentView.addSubview(chevron)
-        contentView.addSubview(titleLabel)
-
-        chevron.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
-            make.centerY.equalTo(contentView)
-            make.size.equalTo(BookmarksPanelUX.BookmarkFolderChevronSize)
-        }
-
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(chevron.snp.trailing).offset(BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
-            make.trailing.greaterThanOrEqualTo(contentView).offset(-BookmarksPanelUX.BookmarkFolderHeaderViewChevronInset)
-            make.centerY.equalTo(contentView)
-        }
-
-        topBorder.snp.makeConstraints { make in
-            make.left.right.equalTo(self)
-            make.top.equalTo(self).offset(-0.5)
-            make.height.equalTo(0.5)
-        }
-
-        bottomBorder.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(self)
-            make.height.equalTo(0.5)
-        }
-
-        applyTheme()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    @objc fileprivate func viewWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        delegate?.didSelectHeader()
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        applyTheme()
-    }
-
-    func applyTheme() {
-        titleLabel.textColor = UIColor.theme.homePanel.bookmarkCurrentFolderText
-        topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        contentView.backgroundColor = UIColor.theme.homePanel.bookmarkBackNavCellBackground
-    }
-}
-=======
->>>>>>> 51425725c... Bug 1542869 - Replace Bookmarks back-end with application-services Rust component (#4743)
