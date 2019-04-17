@@ -121,6 +121,10 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         updateSyncedDevicesCount().uponQueue(.main) { result in
             self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
         }
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -276,6 +280,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     func navigateToSyncedTabs() {
         let nextController = RemoteTabsPanel(profile: profile)
+        nextController.title = Strings.SyncedTabsTableViewCellTitle
         nextController.libraryPanelDelegate = libraryPanelDelegate
         refreshControl?.endRefreshing()
         navigationController?.pushViewController(nextController, animated: true)
@@ -287,6 +292,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         }
 
         let nextController = RecentlyClosedTabsPanel(profile: profile)
+        nextController.title = Strings.RecentlyClosedTabsButtonTitle
         nextController.libraryPanelDelegate = libraryPanelDelegate
         refreshControl?.endRefreshing()
         navigationController?.pushViewController(nextController, animated: true)
