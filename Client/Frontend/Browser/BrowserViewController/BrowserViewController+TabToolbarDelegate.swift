@@ -65,7 +65,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
                 guard let loginsVC = loginsVC else { return }
                 loginsVC.shownFromAppMenu = true
                 let navController = ThemedNavigationController(rootViewController: loginsVC)
-                navController.modalPresentationStyle = .formSheet
                 self.present(navController, animated: true)
             }
         }
