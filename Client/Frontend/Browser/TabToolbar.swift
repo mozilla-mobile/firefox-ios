@@ -22,6 +22,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
+    func hideImagesBadge(visible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -38,23 +39,23 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
-class ToolbarPrivateModeBadge: UIImageView {
-    let privateModeBadgeSize = CGFloat(16)
-    let privateModeBadgeOffset = CGFloat(10)
+class ToolbarBadge: UIImageView {
+    let badgeSize = CGFloat(16)
+    let badgeOffset = CGFloat(10)
 
-    init() {
-        super.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
+    init(imageName: String) {
+        super.init(image: UIImage(imageLiteralResourceName: imageName))
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
-    func layout(forTabsButton button: UIButton) {
+    func layout(onButton button: UIButton) {
         snp.remakeConstraints { make in
-            make.size.equalTo(privateModeBadgeSize)
-            make.centerX.equalTo(button).offset(privateModeBadgeOffset)
-            make.centerY.equalTo(button).offset(-privateModeBadgeOffset)
+            make.size.equalTo(badgeSize)
+            make.centerX.equalTo(button).offset(badgeOffset)
+            make.centerY.equalTo(button).offset(-badgeOffset)
         }
     }
 }
@@ -235,11 +236,8 @@ class TabToolbar: UIView {
     let stopReloadButton = ToolbarButton()
     let actionButtons: [Themeable & UIButton]
 
-    private let privateModeBadge = ToolbarPrivateModeBadge()
-    
-    func privateModeBadge(visible: Bool) {
-        privateModeBadge.isHidden = !visible
-    }
+    fileprivate let privateModeBadge = ToolbarBadge(imageName: "privateModeBadge")
+    fileprivate let hideImagesBadge = ToolbarBadge(imageName: "privateModeBadge")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -252,14 +250,16 @@ class TabToolbar: UIView {
         addSubview(contentView)
         helper = TabToolbarHelper(toolbar: self)
         addButtons(actionButtons)
-        contentView.addSubview(privateModeBadge)
+
+        [privateModeBadge, hideImagesBadge].forEach { contentView.addSubview($0) }
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
 
     override func updateConstraints() {
-        privateModeBadge.layout(forTabsButton: tabsButton)
+        privateModeBadge.layout(onButton: tabsButton)
+        hideImagesBadge.layout(onButton: menuButton)
 
         contentView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
@@ -302,6 +302,14 @@ class TabToolbar: UIView {
 }
 
 extension TabToolbar: TabToolbarProtocol {
+    func privateModeBadge(visible: Bool) {
+        privateModeBadge.isHidden = !visible
+    }
+
+    func hideImagesBadge(visible: Bool) {
+        hideImagesBadge.isHidden = !visible
+    }
+
     func updateBackStatus(_ canGoBack: Bool) {
         backButton.isEnabled = canGoBack
     }

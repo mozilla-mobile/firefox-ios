@@ -175,13 +175,8 @@ class URLBarView: UIView {
         }
     }
 
-    private let privateModeBadge = ToolbarPrivateModeBadge()
-
-    func privateModeBadge(visible: Bool) {
-        if UIDevice.current.userInterfaceIdiom != .pad {
-            privateModeBadge.isHidden = !visible
-        }
-    }
+    fileprivate let privateModeBadge = ToolbarBadge(imageName: "privateModeBadge")
+    fileprivate let hideImagesBadge = ToolbarBadge(imageName: "privateModeBadge")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -197,11 +192,13 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationView)
 
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         libraryButton, menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge].forEach {
+         libraryButton, menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge,
+             hideImagesBadge].forEach {
             addSubview($0)
         }
 
         privateModeBadge.isHidden = true
+        hideImagesBadge.isHidden = true
 
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
@@ -279,8 +276,8 @@ class URLBarView: UIView {
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-
-        privateModeBadge.layout(forTabsButton: tabsButton)
+        privateModeBadge.layout(onButton: tabsButton)
+        hideImagesBadge.layout(onButton: menuButton)
     }
 
     override func updateConstraints() {
@@ -516,7 +513,7 @@ class URLBarView: UIView {
         stopReloadButton.isHidden = !toolbarIsShowing || inOverlayMode
 
         // badge isHidden is tied to private mode on/off, use alpha to hide in this case
-        privateModeBadge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
+        [privateModeBadge, hideImagesBadge].forEach { $0.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1 }
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
@@ -552,6 +549,15 @@ class URLBarView: UIView {
 }
 
 extension URLBarView: TabToolbarProtocol {
+    func privateModeBadge(visible: Bool) {
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            privateModeBadge.isHidden = !visible
+        }
+    }
+
+    func hideImagesBadge(visible: Bool) {
+        hideImagesBadge.isHidden = !visible
+    }
 
     func updateBackStatus(_ canGoBack: Bool) {
         backButton.isEnabled = canGoBack

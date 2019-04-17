@@ -169,6 +169,8 @@ class BrowserViewController: UIViewController {
         downloadQueue.delegate = self
 
         NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged), name: .DisplayThemeChanged, object: nil)
+
+        NoImageModeHelper.toggle(isEnabled: NoImageModeHelper.isActivated(profile.prefs), profile: profile, tabManager: tabManager)
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
