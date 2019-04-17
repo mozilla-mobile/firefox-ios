@@ -5,10 +5,10 @@
 import UIKit
 
 class ThemedNavigationController: UINavigationController {
-    var popoverDelegate: PresentingModalViewControllerDelegate?
+    var presentingModalViewControllerDelegate: PresentingModalViewControllerDelegate?
 
     @objc func done() {
-        if let delegate = popoverDelegate {
+        if let delegate = presentingModalViewControllerDelegate {
             delegate.dismissPresentedModalViewController(self, animated: true)
         } else {
             self.dismiss(animated: true, completion: nil)
@@ -21,6 +21,7 @@ class ThemedNavigationController: UINavigationController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        modalPresentationStyle = .formSheet
         applyTheme()
     }
 }
@@ -37,7 +38,7 @@ extension ThemedNavigationController: Themeable {
     }
 }
 
-protocol PresentingModalViewControllerDelegate {
+protocol PresentingModalViewControllerDelegate: AnyObject {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool)
 }
 

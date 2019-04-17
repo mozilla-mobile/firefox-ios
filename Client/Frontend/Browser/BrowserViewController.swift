@@ -732,27 +732,23 @@ class BrowserViewController: UIViewController {
     }
 
     func showLibrary(panel: LibraryPanelType? = nil) {
-        if let presentedVC = self.presentedViewController {
-            presentedVC.dismiss(animated: true, completion: nil)
+        if let presentedViewController = self.presentedViewController {
+            presentedViewController.dismiss(animated: true, completion: nil)
         }
 
-        let libraryViewController = self.libraryViewController ?? LibraryViewController()
-        libraryViewController.profile = self.profile
+        let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile)
         libraryViewController.delegate = self
+
         self.libraryViewController = libraryViewController
 
         if panel != nil {
             libraryViewController.selectedPanel = panel
         }
 
-        let controller = ThemedNavigationController(rootViewController: libraryViewController)
-        controller.popoverDelegate = self
-        controller.modalPresentationStyle = .formSheet
-
         // Wait to present VC in an async dispatch queue to prevent a case where dismissal
         // of this popover on iPad seems to block the presentation of the modal VC.
         DispatchQueue.main.async {
-            self.present(controller, animated: true, completion: nil)
+            self.present(libraryViewController, animated: true, completion: nil)
         }
     }
 
@@ -1078,8 +1074,7 @@ class BrowserViewController: UIViewController {
         settingsTableViewController.settingsDelegate = self
 
         let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-        controller.popoverDelegate = self
-        controller.modalPresentationStyle = .formSheet
+        controller.presentingModalViewControllerDelegate = self
         self.present(controller, animated: true, completion: nil)
     }
 
@@ -1978,7 +1973,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
         let vcToPresent = getSignInViewController(fxaOptions)
         vcToPresent.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
-		themedNavigationController.modalPresentationStyle = .formSheet
         themedNavigationController.navigationBar.isTranslucent = false
         self.present(themedNavigationController, animated: true, completion: nil)
     }

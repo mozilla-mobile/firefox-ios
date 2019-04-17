@@ -12,33 +12,10 @@ private struct LibraryViewControllerUX {
     static let ButtonContainerHeight: CGFloat = 40
 }
 
-protocol LibraryPanel: AnyObject, Themeable {
-    var libraryPanelDelegate: LibraryPanelDelegate? { get set }
-}
+class LibraryViewController: UIViewController {
+    let profile: Profile
+    let panelDescriptors: [LibraryPanelDescriptor]
 
-struct LibraryPanelUX {
-    static let EmptyTabContentOffset = -180
-}
-
-protocol LibraryPanelDelegate: AnyObject {
-    func libraryPanelDidRequestToSignIn()
-    func libraryPanelDidRequestToCreateAccount()
-    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool)
-    func libraryPanel(didSelectURL url: URL, visitType: VisitType)
-    func libraryPanel(didSelectURLString url: String, visitType: VisitType)
-}
-
-enum LibraryPanelType: Int {
-    case bookmarks = 0
-    case history = 1
-    case readingList = 2
-    case downloads = 3
-}
-
-class LibraryViewController: UIViewController, UITextFieldDelegate, LibraryPanelDelegate {
-    var profile: Profile!
-    var panels: [LibraryPanelDescriptor] = LibraryPanels().enabledPanels
-    var url: URL?
     weak var delegate: LibraryPanelDelegate?
 
     fileprivate lazy var buttonContainerView: UIStackView = {
@@ -59,12 +36,22 @@ class LibraryViewController: UIViewController, UITextFieldDelegate, LibraryPanel
     fileprivate var buttonTintColor: UIColor?
     fileprivate var buttonSelectedTintColor: UIColor?
 
+    init(profile: Profile) {
+        self.profile = profile
+
+        self.panelDescriptors = LibraryPanels(profile: profile).enabledPanels
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.theme.browser.background
         self.edgesForExtendedLayout = []
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
 
         view.addSubview(buttonContainerView)
         view.addSubview(controllerContainerView)
@@ -85,10 +72,6 @@ class LibraryViewController: UIViewController, UITextFieldDelegate, LibraryPanel
         if selectedPanel == nil {
             selectedPanel = .bookmarks
         }
-    }
-
-    @objc func done() {
-        self.dismiss(animated: true, completion: nil)
     }
 
     var selectedPanel: LibraryPanelType? = nil {
@@ -115,18 +98,12 @@ class LibraryViewController: UIViewController, UITextFieldDelegate, LibraryPanel
                     newButton.isUserInteractionEnabled = false
                 }
 
-                if index < panels.count {
-                    let panel = self.panels[index].makeViewController(profile)
-                    let accessibilityLabel = self.panels[index].accessibilityLabel
-                    if let panelController = panel as? UINavigationController,
-                        let rootPanel = panelController.viewControllers.first {
-                        setupLibraryPanel(rootPanel, accessibilityLabel: accessibilityLabel)
-                        self.showPanel(panelController)
-                    } else {
-                        setupLibraryPanel(panel, accessibilityLabel: accessibilityLabel)
-                        self.showPanel(panel)
-                    }
-                    self.navigationItem.title = self.panels[index].accessibilityLabel
+                if index < panelDescriptors.count {
+                    let panel = self.panelDescriptors[index].viewController
+                    let navigationController = self.panelDescriptors[index].navigationController
+                    let accessibilityLabel = self.panelDescriptors[index].accessibilityLabel
+                    setupLibraryPanel(panel, accessibilityLabel: accessibilityLabel)
+                    self.showPanel(navigationController)
                 }
             }
             self.updateButtonTints()
@@ -137,6 +114,7 @@ class LibraryViewController: UIViewController, UITextFieldDelegate, LibraryPanel
         (panel as? LibraryPanel)?.libraryPanelDelegate = self
         panel.view.accessibilityNavigationStyle = .combined
         panel.view.accessibilityLabel = accessibilityLabel
+        panel.title = accessibilityLabel
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -177,7 +155,7 @@ class LibraryViewController: UIViewController, UITextFieldDelegate, LibraryPanel
     }
 
     fileprivate func updateButtons() {
-        for panel in panels {
+        for panel in panelDescriptors {
             let button = UIButton()
             button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
             if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
@@ -200,11 +178,9 @@ class LibraryViewController: UIViewController, UITextFieldDelegate, LibraryPanel
             }
         }
     }
+}
 
-    func libraryPanel(_ libraryPanel: LibraryPanel, didSelectURLString url: String, visitType: VisitType) {
-
-    }
-
+extension LibraryViewController: LibraryPanelDelegate {
     func libraryPanelDidRequestToSignIn() {
         self.dismiss(animated: false, completion: nil)
         delegate?.libraryPanelDidRequestToSignIn()
@@ -250,7 +226,7 @@ extension LibraryViewController: Themeable {
 
         childViewControllers.forEach {
             if !apply($0) {
-                // BookmarksPanel is nested in a UINavigationController, go one layer deeper
+                // LibraryPanels are nested in a UINavigationController, so go one layer deeper.
                 $0.childViewControllers.forEach { _ = apply($0) }
             }
         }
