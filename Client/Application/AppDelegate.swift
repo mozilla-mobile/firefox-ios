@@ -205,11 +205,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         SentTabAction.registerActions()
         UIScrollView.doBadSwizzleStuff()
 
-        #if BUDDYBUILD
-            print("Setting up BuddyBuild SDK")
-            BuddyBuildSDK.setup()
-        #endif
-
         window!.makeKeyAndVisible()
 
         // Now roll logs.

@@ -610,16 +610,35 @@ class VersionSetting: Setting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        cell.selectionStyle = .none
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        copyAppVersionAndPresentAlert(by: navigationController)
         DebugSettingsClickCount += 1
         if DebugSettingsClickCount >= 5 {
             DebugSettingsClickCount = 0
             ShowDebugSettings = !ShowDebugSettings
             settings.tableView.reloadData()
         }
+    }
+    
+    func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
+        let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
+        let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+        getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
+        UIPasteboard.general.string = self.title?.string
+        navigationController?.topViewController?.present(alert, animated: true) { [unowned self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+    
+    func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        guard let indexPath = tableView?.indexPathForSelectedRow else { return nil }
+        return tableView?.cellForRow(at: indexPath)
     }
 }
 

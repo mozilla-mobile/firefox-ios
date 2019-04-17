@@ -500,4 +500,17 @@ class NavigationTest: BaseTestCase {
         waitForExistence(app.webViews.otherElements["expired.badssl.com"], timeout: 10)
         XCTAssertTrue(app.webViews.otherElements["expired.badssl.com"].exists)
     }
+
+    // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
+    func testWriteToChildPopupTab() {
+        navigator.goto(SettingsScreen)
+        waitForExistence(app.tables["AppSettingsTableViewController.tableView"])
+        let switchBlockPopUps = app.tables.cells.switches["blockPopups"]
+        switchBlockPopUps.tap()
+        let switchValueAfter = switchBlockPopUps.value!
+        XCTAssertEqual(switchValueAfter as? String, "0")
+        navigator.goto(BrowserTab)
+        navigator.openURL(path(forTestPage: "test-window-opener.html"))
+        waitForExistence(app.links["link-created-by-parent"], timeout: 10)
+    }
  }

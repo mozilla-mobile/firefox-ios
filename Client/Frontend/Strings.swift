@@ -41,10 +41,6 @@ extension Strings {
 
 // Activity Stream.
 extension Strings {
-    public static let HighlightIntroTitle = NSLocalizedString("ActivityStream.HighlightIntro.Title", value: "Be on the Lookout", comment: "The title that appears for the introduction to highlights in AS.")
-    public static let HighlightIntroDescription = NSLocalizedString("ActivityStream.HighlightIntro.Description", value: "Firefox will place things here that you’ve discovered on the web so you can find your way back to the great articles, videos, bookmarks and other pages", comment: "The detailed text that explains what highlights are in AS.")
-    public static let ASPageControlButton = NSLocalizedString("ActivityStream.PageControl.Button", value: "Next Page", comment: "The page control button that lets you switch between pages in top sites")
-    public static let ASHighlightsTitle =  NSLocalizedString("ActivityStream.Highlights.Title", value: "Highlights", comment: "Section title label for the Highlights section")
     public static let ASPocketTitle = NSLocalizedString("ActivityStream.Pocket.SectionTitle", value: "Trending on Pocket", comment: "Section title label for Recommended by Pocket section")
     public static let ASTopSitesTitle =  NSLocalizedString("ActivityStream.TopSites.SectionTitle", value: "Top Sites", comment: "Section title label for Top Sites")
     public static let HighlightVistedText = NSLocalizedString("ActivityStream.Highlights.Visited", value: "Visited", comment: "The description of a highlight if it is a site the user has visited")
@@ -53,6 +49,8 @@ extension Strings {
     public static let PocketMoreStoriesText = NSLocalizedString("ActivityStream.Pocket.MoreLink", value: "More", comment: "The link that shows more Pocket trending stories")
     public static let TopSitesRowSettingFooter = NSLocalizedString("ActivityStream.TopSites.RowSettingFooter", value: "Set Rows", comment: "The title for the setting page which lets you select the number of top site rows")
     public static let TopSitesRowCount = NSLocalizedString("ActivityStream.TopSites.RowCount", value: "Rows: %d", comment: "label showing how many rows of topsites are shown. %d represents a number")
+    public static let RecentlyBookmarkedTitle = NSLocalizedString("ActivityStream.RecentBookmarks.Title", value: "Recently Bookmarked", comment: "Section title label for recently bookmarked websites")
+    public static let RecentlyVisitedTitle = NSLocalizedString("ActivityStream.RecentHistory.Title", value: "Recently Visited", comment: "Section title label for recently visited websites")
 }
 
 // Home Panel Context Menu.
@@ -115,6 +113,7 @@ extension Strings {
     public static let SettingsSearchEditButton = NSLocalizedString("Settings.Search.Edit.Button", value: "Edit", comment: "Button displayed at the top of the search settings.")
     public static let UseTouchID = NSLocalizedString("Use Touch ID", tableName: "AuthenticationManager", comment: "List section title for when to use Touch ID")
     public static let UseFaceID = NSLocalizedString("Use Face ID", tableName: "AuthenticationManager", comment: "List section title for when to use Face ID")
+    public static let SettingsCopyAppVersionAlertTitle = NSLocalizedString("Settings.CopyAppVersion.Title", value: "Copied to clipboard", comment: "Copy app version alert shown in settings.")
 }
 
 // Error pages.
@@ -537,6 +536,10 @@ extension Strings {
     public static let AppMenuAddToReadingListConfirmMessage = NSLocalizedString("Menu.AddToReadingList.Confirm", value: "Added To Reading List", comment: "Toast displayed to the user after adding the item to their reading list.")
     public static let SendToDeviceTitle = NSLocalizedString("Send to Device", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to send the current tab to another device")
     public static let PageActionMenuTitle = NSLocalizedString("Menu.PageActions.Title", value: "Page Actions", comment: "Label for title in page action menu.")
+    public static let WhatsNewString = NSLocalizedString("Menu.WhatsNew.Title", value: "What's New", comment: "The title for the option to view the What's new page.")
+    public static let AppMenuShowPageSourceString = NSLocalizedString("Menu.PageSourceAction.Title", tableName: "Menu", value: "View Page Source", comment: "Label for the button, displayed in the menu, used to show the html page source")
+
+
 }
 
 // Snackbar shown when tapping app store link
@@ -611,14 +614,14 @@ extension Strings {
     public static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
     public static let CardTitlePrivate = NSLocalizedString("Intro.Slides.Private.Title", tableName: "Intro", value: "Browse like no one’s watching", comment: "Title for the third panel 'Private Browsing' in the First Run tour.")
     public static let CardTitleMail = NSLocalizedString("Intro.Slides.Mail.Title", tableName: "Intro", value: "You’ve got mail… options", comment: "Title for the fourth panel 'Mail' in the First Run tour.")
-    public static let CardTitleSync = NSLocalizedString("Intro.Slides.Sync.Title", tableName: "Intro", value: "Pick up where you left off", comment: "Title for the fifth panel 'Sync' in the First Run tour.")
+    public static let CardTitleSync = NSLocalizedString("Intro.Slides.Sync.Title", tableName: "Intro", value: "Take Firefox with You", comment: "Title for the fifth panel 'Sync' in the First Run tour.")
 
     public static let CardTextWelcome = NSLocalizedString("Intro.Slides.Welcome.Description", tableName: "Intro", value: "A modern mobile browser from Mozilla, the non-profit committed to a free and open web.", comment: "Description for the 'Welcome' panel in the First Run tour.")
     public static let CardTextSearch = NSLocalizedString("Intro.Slides.Search.Description", tableName: "Intro", value: "Searching for something different? Choose another default search engine (or add your own) in Settings.", comment: "Description for the 'Favorite Search Engine' panel in the First Run tour.")
     public static let CardTextPrivate = NSLocalizedString("Intro.Slides.Private.Description", tableName: "Intro", value: "Tap the mask icon to slip into Private Browsing mode.", comment: "Description for the 'Private Browsing' panel in the First Run tour.")
     public static let CardTextMail = NSLocalizedString("Intro.Slides.Mail.Description", tableName: "Intro", value: "Use any email app — not just Mail — with Firefox.", comment: "Description for the 'Mail' panel in the First Run tour.")
-    public static let CardTextSync = NSLocalizedString("Intro.Slides.Sync.Description", tableName: "Intro", value: "Use Sync to find the bookmarks, passwords, and other things you save to Firefox on all your devices.", comment: "Description for the 'Sync' panel in the First Run tour.")
-    public static let SignInButtonTitle = NSLocalizedString("Sign in to Firefox", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
+    public static let CardTextSync = NSLocalizedString("Intro.Slides.Sync.Description", tableName: "Intro", value: "Get your bookmarks, history and passwords on all your devices.", comment: "Description for the 'Sync' panel in the First Run tour.")
+    public static let SignInButtonTitle = NSLocalizedString("Turn on Sync...", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
     public static let StartBrowsingButtonTitle = NSLocalizedString("Start Browsing", tableName: "Intro", comment: "See http://mzl.la/1T8gxwo")
 }
 
@@ -696,9 +699,3 @@ extension Strings {
     public static let DisplayThemeOptionLight = NSLocalizedString("Settings.DisplayTheme.OptionLight", value: "Light", comment: "Option choice in display theme settings for light theme")
     public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayTheme.OptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
 }
-
-// MARK: Deprecated Strings (to be removed in next version)
-private let logOut = NSLocalizedString("Log Out", comment: "Button in settings screen to disconnect from your account")
-private let logOutQuestion = NSLocalizedString("Log Out?", comment: "Title of the 'log out firefox account' alert")
-private let logOutDestructive = NSLocalizedString("Log Out", comment: "Disconnect button in the 'log out firefox account' alert")
-
