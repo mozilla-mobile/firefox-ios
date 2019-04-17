@@ -229,6 +229,10 @@ open class BrowserProfile: Profile {
         // since the DB handles will create new DBs under the new profile folder.
         let isNewProfile = !files.exists("")
 
+        if isNewProfile {
+            _ = keychain.removeAllKeys()
+        }
+
         // Set up our database handles.
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
