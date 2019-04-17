@@ -80,6 +80,10 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         }
 
         tableViewController.didMove(toParentViewController: self)
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -102,6 +106,10 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Recently Closed Tabs List"
         self.recentlyClosedTabs = profile.recentlyClosedTabs.tabs
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {

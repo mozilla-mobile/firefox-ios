@@ -106,8 +106,7 @@ extension PhotonActionSheetProtocol {
             settingsTableViewController.settingsDelegate = vcDelegate
 
             let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-            controller.popoverDelegate = vcDelegate
-            controller.modalPresentationStyle = .formSheet
+            controller.presentingModalViewControllerDelegate = vcDelegate
 
             // Wait to present VC in an async dispatch queue to prevent a case where dismissal
             // of this popover on iPad seems to block the presentation of the modal VC.

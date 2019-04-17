@@ -161,7 +161,7 @@ enum NavigationPath {
         }
 
         let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
-        controller.popoverDelegate = bvc
+        controller.presentingModalViewControllerDelegate = bvc
         controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
         rootNav.present(controller, animated: true, completion: nil)
 

@@ -90,6 +90,10 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     deinit {
