@@ -60,6 +60,51 @@ class ToolbarBadge: UIImageView {
     }
 }
 
+class BadgeWithBackdrop {
+    let badge: ToolbarBadge
+    let backdrop: UIView
+    static let circleSize = CGFloat(40)
+    static let backdropAlpha = CGFloat(0.15)
+    static func makeCircle(color: UIColor?) -> UIView {
+        let circle = UIView()
+        circle.alpha = BadgeWithBackdrop.backdropAlpha
+        circle.layer.cornerRadius = circleSize / 2
+        if let c = color {
+            circle.backgroundColor = c
+        } else {
+            circle.backgroundColor = .black
+        }
+        return circle
+    }
+
+    init(imageName: String, color: UIColor? = nil) {
+        badge = ToolbarBadge(imageName: imageName)
+        backdrop = BadgeWithBackdrop.makeCircle(color: color)
+
+        badge.isHidden = true
+        backdrop.isHidden = true
+    }
+
+    func add(toParent parent: UIView) {
+        parent.addSubview(badge)
+        parent.addSubview(backdrop)
+    }
+
+    func layout(onButton button: UIView) {
+        badge.layout(onButton: button)
+        backdrop.snp.makeConstraints { make in
+            make.center.equalTo(button)
+            make.size.equalTo(BadgeWithBackdrop.circleSize)
+        }
+        button.superview?.sendSubview(toBack: backdrop)
+    }
+
+    func show(_ visible: Bool) {
+        badge.isHidden = !visible
+        backdrop.isHidden = !visible
+    }
+}
+
 @objcMembers
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
@@ -236,8 +281,8 @@ class TabToolbar: UIView {
     let stopReloadButton = ToolbarButton()
     let actionButtons: [Themeable & UIButton]
 
-    fileprivate let privateModeBadge = ToolbarBadge(imageName: "privateModeBadge")
-    fileprivate let hideImagesBadge = ToolbarBadge(imageName: "menu-NoImageMode")
+    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", color: UIColor.Defaults.MobilePrivatePurple)
+    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menu-NoImageMode")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -251,7 +296,8 @@ class TabToolbar: UIView {
         helper = TabToolbarHelper(toolbar: self)
         addButtons(actionButtons)
 
-        [privateModeBadge, hideImagesBadge].forEach { contentView.addSubview($0) }
+        privateModeBadge.add(toParent: contentView)
+        hideImagesBadge.add(toParent: contentView)
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
@@ -303,11 +349,11 @@ class TabToolbar: UIView {
 
 extension TabToolbar: TabToolbarProtocol {
     func privateModeBadge(visible: Bool) {
-        privateModeBadge.isHidden = !visible
+        privateModeBadge.show(visible)
     }
 
     func hideImagesBadge(visible: Bool) {
-        hideImagesBadge.isHidden = !visible
+        hideImagesBadge.show(visible)
     }
 
     func updateBackStatus(_ canGoBack: Bool) {
