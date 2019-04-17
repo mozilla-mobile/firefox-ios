@@ -83,6 +83,10 @@ class RemoteTabsPanel: UIViewController, LibraryPanel {
         }
 
         tableViewController.didMove(toParentViewController: self)
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     @objc func notificationReceived(_ notification: Notification) {
@@ -500,6 +504,10 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         tableView.tableFooterView = UIView() // prevent extra empty rows at end
         tableView.delegate = nil
         tableView.dataSource = nil
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
