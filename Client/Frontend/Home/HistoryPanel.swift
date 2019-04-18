@@ -376,6 +376,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
 
         cell.imageView?.backgroundColor = UIColor.theme.homePanel.historyHeaderIconsBackground
         cell.accessibilityIdentifier = "HistoryPanel.syncedDevicesCell"
+        removeTableSeparator(for: cell)
         return cell
     }
 
@@ -394,6 +395,14 @@ class HistoryPanel: SiteTableViewController, HomePanel {
             })
         }
         return cell
+    }
+    
+    func removeTableSeparator(for lastCell: UITableViewCell) {
+        lastCell.subviews.forEach { view in
+            if !(view is UIButton) && !(view == lastCell.contentView) {
+                view.removeFromSuperview()
+            }
+        }
     }
 
     // MARK: - Selector callbacks
@@ -581,7 +590,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
                 tableView.addSubview(emptyStateOverlayView)
                 emptyStateOverlayView.snp.makeConstraints { make -> Void in
                     make.left.right.bottom.equalTo(self.view)
-                    make.top.equalTo(self.view).offset(144)
+                    make.top.equalTo(self.view).offset(132)
                 }
             }
         } else {
