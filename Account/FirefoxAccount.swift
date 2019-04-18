@@ -356,7 +356,12 @@ open class FirefoxAccount {
                 }
 
                 let accessToken = oauthResponse.accessToken
-                let tokenServerURL = self.configuration.sync15Configuration.tokenServerEndpointURL.absoluteString
+                let sync15Suffix = "1.0/sync/1.5"
+                var tokenServerURL = self.configuration.sync15Configuration.tokenServerEndpointURL.absoluteString
+                if tokenServerURL.hasSuffix(sync15Suffix) {
+                    tokenServerURL.removeLast(sync15Suffix.count)
+                }
+
                 return deferMaybe(SyncUnlockInfo(kid: kid, fxaAccessToken: accessToken, syncKey: kSync, tokenserverURL: tokenServerURL))
             })
         })
