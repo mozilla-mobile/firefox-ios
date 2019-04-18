@@ -734,7 +734,10 @@ extension URLBarView: Themeable {
 
 extension URLBarView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
-        privateModeBadge.show(isPrivate)
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            privateModeBadge.show(isPrivate)
+        }
+        
         locationActiveBorderColor = UIColor.theme.urlbar.activeBorder(isPrivate)
         progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start(isPrivate), endColor: UIColor.theme.loadingBar.end(isPrivate))
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)
