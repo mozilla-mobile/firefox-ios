@@ -21,10 +21,10 @@ class FirstRunTourTests: BaseTestCase {
 
         // Swipe to the second screen
         app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        waitForExistence(app.staticTexts["Pick up where you left off"])
+        waitForExistence(app.staticTexts["Take Firefox with You"])
         XCTAssertTrue(app.buttons["IntroViewController.startBrowsingButton"].exists)
         XCTAssertTrue(app.images["tour-Sync"].exists)
-        XCTAssertTrue(app.buttons["Sign in to Firefox"].exists)
+        XCTAssertTrue(app.buttons["turnOnSync.button"].exists)
         XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 2 of 2")
     }
 

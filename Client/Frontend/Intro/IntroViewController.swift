@@ -371,6 +371,7 @@ class CardView: UIView {
         button.setTitleColor(.white, for: [])
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         button.clipsToBounds = true
+        button.accessibilityIdentifier = "turnOnSync.button"
         return button
     }()
 
