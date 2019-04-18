@@ -176,7 +176,7 @@ class URLBarView: UIView {
     }
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", color: UIColor.Defaults.MobilePrivatePurple)
-    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menu-NoImageMode")
+    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menuBadge")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -726,6 +726,9 @@ extension URLBarView: Themeable {
         locationBorderColor = UIColor.theme.urlbar.border
         locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
         locationContainer.backgroundColor = UIColor.theme.textField.background
+
+        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        hideImagesBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 }
 

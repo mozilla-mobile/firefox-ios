@@ -39,16 +39,23 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
-class ToolbarBadge: UIImageView {
+class ToolbarBadge: UIView {
     let badgeSize = CGFloat(16)
     let badgeOffset = CGFloat(10)
 
+    private let background: UIImageView
+    private let badge: UIImageView
     init(imageName: String) {
-        super.init(image: UIImage(imageLiteralResourceName: imageName))
+        background = UIImageView(image: UIImage(imageLiteralResourceName: "badge-mask"))
+        badge = UIImageView(image: UIImage(imageLiteralResourceName: imageName))
+        super.init(frame: CGRect(width: badgeSize, height: badgeSize))
+
+        addSubview(background)
+        addSubview(badge)
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     func layout(onButton button: UIView) {
@@ -58,13 +65,19 @@ class ToolbarBadge: UIImageView {
             make.centerY.equalTo(button).offset(-badgeOffset)
         }
     }
+
+    func tintBackground(color: UIColor) {
+        background.tintColor = color
+    }
 }
 
+// Puts a backdrop (i.e. dark highlight) circle on the badged button.
 class BadgeWithBackdrop {
     let badge: ToolbarBadge
     let backdrop: UIView
     static let circleSize = CGFloat(40)
     static let backdropAlpha = CGFloat(0.15)
+
     static func makeCircle(color: UIColor?) -> UIView {
         let circle = UIView()
         circle.alpha = BadgeWithBackdrop.backdropAlpha
@@ -80,7 +93,6 @@ class BadgeWithBackdrop {
     init(imageName: String, color: UIColor? = nil) {
         badge = ToolbarBadge(imageName: imageName)
         backdrop = BadgeWithBackdrop.makeCircle(color: color)
-
         badge.isHidden = true
         backdrop.isHidden = true
     }
@@ -282,7 +294,7 @@ class TabToolbar: UIView {
     let actionButtons: [Themeable & UIButton]
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", color: UIColor.Defaults.MobilePrivatePurple)
-    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menu-NoImageMode")
+    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menuBadge")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -381,6 +393,9 @@ extension TabToolbar: Themeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
         helper?.setTheme(forButtons: actionButtons)
+
+        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        hideImagesBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 
     func applyUIMode(isPrivate: Bool) {

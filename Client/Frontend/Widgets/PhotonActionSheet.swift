@@ -548,6 +548,7 @@ private class PhotonActionSheetCell: UITableViewCell {
     static let IconSize = 16
 
     var syncButton: SyncMenuButton?
+    var badgeOverlay: BadgeWithBackdrop?
 
     private func createLabel() -> UILabel {
         let label = UILabel()
@@ -638,17 +639,6 @@ private class PhotonActionSheetCell: UITableViewCell {
         return stackView
     }()
 
-    lazy var circleToggled: UIView = {
-        let circleSize = CGFloat(34)
-        let circle = UIView(frame: CGRect(width: circleSize, height: circleSize))
-        circle.alpha = 0.15
-        circle.layer.cornerRadius = circleSize / 2
-        circle.backgroundColor = .black
-        return circle
-    }()
-
-    var badgeOverlay: UIView?
-
     override var isSelected: Bool {
         didSet {
             self.selectedOverlay.isHidden = !isSelected
@@ -662,7 +652,8 @@ private class PhotonActionSheetCell: UITableViewCell {
         disclosureLabel.removeFromSuperview()
         toggleSwitch.mainView.removeFromSuperview()
         statusIcon.layer.cornerRadius = PhotonActionSheetCellUX.CornerRadius
-        circleToggled.removeFromSuperview()
+        badgeOverlay?.backdrop.removeFromSuperview()
+        badgeOverlay?.badge.removeFromSuperview()
     }
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -776,18 +767,13 @@ private class PhotonActionSheetCell: UITableViewCell {
             stackView.addArrangedSubview(toggleSwitch.mainView)
 
             if let name = action.badgeIconName, action.isEnabled, let parent = statusIcon.superview {
-                let circle = circleToggled
-                parent.addSubview(circle)
-                let width = circle.frame.size.width
-                circle.snp.makeConstraints { make in
-                    make.center.equalTo(statusIcon)
-                    make.width.height.equalTo(width)
-                }
-                parent.sendSubview(toBack: circle)
-
-                let badge = ToolbarBadge(imageName: name)
-                circle.addSubview(badge)
-                badge.layout(onButton: circle)
+                badgeOverlay = BadgeWithBackdrop(imageName: name)
+                badgeOverlay?.add(toParent: parent)
+                badgeOverlay?.layout(onButton: statusIcon)
+                badgeOverlay?.show(true)
+                // Custom dark theme tint needed here, it is overkill to create a '.theme' color just for this.
+                let color =  ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 1): UIColor.theme.actionMenu.closeButtonBackground
+                badgeOverlay?.badge.tintBackground(color: color)
             }
         case .Sync:
             if let manager = syncManager {
