@@ -399,24 +399,6 @@
 		D04D1B92209790B60074B35F /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D04D1B91209790B60074B35F /* Toast.swift */; };
 		D053D6742211CD53006C6B64 /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D053D6732211CD53006C6B64 /* KeychainStore.swift */; };
 		D05434C02257DE9A00FDE4EF /* Leanplum.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D05434BF2257DE9900FDE4EF /* Leanplum.framework */; };
-		D054358E2268E10400FDE4EF /* libfreebl3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D05435872268E0E900FDE4EF /* libfreebl3.dylib */; };
-		D054358F2268E10400FDE4EF /* libnspr4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D05435892268E0E900FDE4EF /* libnspr4.dylib */; };
-		D05435902268E10400FDE4EF /* libnss3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D05435852268E0E900FDE4EF /* libnss3.dylib */; };
-		D05435912268E10400FDE4EF /* libnssckbi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D05435882268E0E900FDE4EF /* libnssckbi.dylib */; };
-		D05435922268E10400FDE4EF /* libnssutil3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D054358A2268E0EA00FDE4EF /* libnssutil3.dylib */; };
-		D05435932268E10400FDE4EF /* libplc4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D054358D2268E0EA00FDE4EF /* libplc4.dylib */; };
-		D05435942268E10400FDE4EF /* libplds4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D05435862268E0E900FDE4EF /* libplds4.dylib */; };
-		D05435952268E10400FDE4EF /* libsmime3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D054358C2268E0EA00FDE4EF /* libsmime3.dylib */; };
-		D05435962268E10400FDE4EF /* libsoftokn3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D054358B2268E0EA00FDE4EF /* libsoftokn3.dylib */; };
-		D05435972268E10A00FDE4EF /* libfreebl3.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D05435872268E0E900FDE4EF /* libfreebl3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D05435982268E10A00FDE4EF /* libnspr4.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D05435892268E0E900FDE4EF /* libnspr4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D05435992268E10A00FDE4EF /* libnss3.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D05435852268E0E900FDE4EF /* libnss3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D054359A2268E10A00FDE4EF /* libnssckbi.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D05435882268E0E900FDE4EF /* libnssckbi.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D054359B2268E10A00FDE4EF /* libnssutil3.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D054358A2268E0EA00FDE4EF /* libnssutil3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D054359C2268E10A00FDE4EF /* libplc4.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D054358D2268E0EA00FDE4EF /* libplc4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D054359D2268E10A00FDE4EF /* libplds4.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D05435862268E0E900FDE4EF /* libplds4.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D054359E2268E10A00FDE4EF /* libsmime3.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D054358C2268E0EA00FDE4EF /* libsmime3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		D054359F2268E10A00FDE4EF /* libsoftokn3.dylib in Copy Dynamic Libraries */ = {isa = PBXBuildFile; fileRef = D054358B2268E0EA00FDE4EF /* libsoftokn3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D057B2AB220103BC000614E0 /* RustLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057B2AA220103BC000614E0 /* RustLogins.swift */; };
 		D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625C97208E87F10081F3B2 /* DownloadQueue.swift */; };
 		D0625CA8208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0625CA7208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift */; };
@@ -1166,25 +1148,6 @@
 			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		D054357B2268E05900FDE4EF /* Copy Dynamic Libraries */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				D05435972268E10A00FDE4EF /* libfreebl3.dylib in Copy Dynamic Libraries */,
-				D05435982268E10A00FDE4EF /* libnspr4.dylib in Copy Dynamic Libraries */,
-				D05435992268E10A00FDE4EF /* libnss3.dylib in Copy Dynamic Libraries */,
-				D054359A2268E10A00FDE4EF /* libnssckbi.dylib in Copy Dynamic Libraries */,
-				D054359B2268E10A00FDE4EF /* libnssutil3.dylib in Copy Dynamic Libraries */,
-				D054359C2268E10A00FDE4EF /* libplc4.dylib in Copy Dynamic Libraries */,
-				D054359D2268E10A00FDE4EF /* libplds4.dylib in Copy Dynamic Libraries */,
-				D054359E2268E10A00FDE4EF /* libsmime3.dylib in Copy Dynamic Libraries */,
-				D054359F2268E10A00FDE4EF /* libsoftokn3.dylib in Copy Dynamic Libraries */,
-			);
-			name = "Copy Dynamic Libraries";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		E6B09CD31C74EEDB00C63FA1 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1595,15 +1558,6 @@
 		D04D1B91209790B60074B35F /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D053D6732211CD53006C6B64 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
 		D05434BF2257DE9900FDE4EF /* Leanplum.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Leanplum.framework; path = Carthage/Build/iOS/Leanplum.framework; sourceTree = "<group>"; };
-		D05435852268E0E900FDE4EF /* libnss3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnss3.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libnss3.dylib; sourceTree = "<group>"; };
-		D05435862268E0E900FDE4EF /* libplds4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libplds4.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libplds4.dylib; sourceTree = "<group>"; };
-		D05435872268E0E900FDE4EF /* libfreebl3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreebl3.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libfreebl3.dylib; sourceTree = "<group>"; };
-		D05435882268E0E900FDE4EF /* libnssckbi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.bundle"; name = libnssckbi.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libnssckbi.dylib; sourceTree = "<group>"; };
-		D05435892268E0E900FDE4EF /* libnspr4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnspr4.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libnspr4.dylib; sourceTree = "<group>"; };
-		D054358A2268E0EA00FDE4EF /* libnssutil3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libnssutil3.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libnssutil3.dylib; sourceTree = "<group>"; };
-		D054358B2268E0EA00FDE4EF /* libsoftokn3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsoftokn3.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libsoftokn3.dylib; sourceTree = "<group>"; };
-		D054358C2268E0EA00FDE4EF /* libsmime3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsmime3.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libsmime3.dylib; sourceTree = "<group>"; };
-		D054358D2268E0EA00FDE4EF /* libplc4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libplc4.dylib; path = Carthage/Build/iOS/MozillaAppServices.framework/libplc4.dylib; sourceTree = "<group>"; };
 		D057B2AA220103BC000614E0 /* RustLogins.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustLogins.swift; sourceTree = "<group>"; };
 		D0625C97208E87F10081F3B2 /* DownloadQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadQueue.swift; sourceTree = "<group>"; };
 		D0625CA7208FC47A0081F3B2 /* BrowserViewController+DownloadQueueDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+DownloadQueueDelegate.swift"; sourceTree = "<group>"; };
@@ -2051,15 +2005,6 @@
 				D09A0CD81FAA23F6009A0273 /* Shared.framework in Frameworks */,
 				7B604FBD1C495E31006EEEC3 /* XCGLogger.framework in Frameworks */,
 				C8E18F22222EE11B00E30E52 /* MozillaAppServices.framework in Frameworks */,
-				D054358E2268E10400FDE4EF /* libfreebl3.dylib in Frameworks */,
-				D054358F2268E10400FDE4EF /* libnspr4.dylib in Frameworks */,
-				D05435902268E10400FDE4EF /* libnss3.dylib in Frameworks */,
-				D05435912268E10400FDE4EF /* libnssckbi.dylib in Frameworks */,
-				D05435922268E10400FDE4EF /* libnssutil3.dylib in Frameworks */,
-				D05435932268E10400FDE4EF /* libplc4.dylib in Frameworks */,
-				D05435942268E10400FDE4EF /* libplds4.dylib in Frameworks */,
-				D05435952268E10400FDE4EF /* libsmime3.dylib in Frameworks */,
-				D05435962268E10400FDE4EF /* libsoftokn3.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2781,15 +2726,6 @@
 				E4B334891BBF23F9004E2BFF /* AdSupport.framework */,
 				E4B334871BBF23F3004E2BFF /* iAd.framework */,
 				3905274B1C874D35007E0BB7 /* NotificationCenter.framework */,
-				D05435872268E0E900FDE4EF /* libfreebl3.dylib */,
-				D05435892268E0E900FDE4EF /* libnspr4.dylib */,
-				D05435852268E0E900FDE4EF /* libnss3.dylib */,
-				D05435882268E0E900FDE4EF /* libnssckbi.dylib */,
-				D054358A2268E0EA00FDE4EF /* libnssutil3.dylib */,
-				D054358D2268E0EA00FDE4EF /* libplc4.dylib */,
-				D05435862268E0E900FDE4EF /* libplds4.dylib */,
-				D054358C2268E0EA00FDE4EF /* libsmime3.dylib */,
-				D054358B2268E0EA00FDE4EF /* libsoftokn3.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -3858,7 +3794,6 @@
 				2FCAE2161ABB51F800877008 /* Frameworks */,
 				2FCAE2171ABB51F800877008 /* Headers */,
 				2FCAE2181ABB51F800877008 /* Resources */,
-				D054357B2268E05900FDE4EF /* Copy Dynamic Libraries */,
 			);
 			buildRules = (
 			);
