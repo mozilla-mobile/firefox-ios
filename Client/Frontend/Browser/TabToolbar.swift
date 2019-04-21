@@ -236,6 +236,7 @@ class TabToolbar: UIView {
     let actionButtons: [Themeable & UIButton]
 
     private let privateModeBadge = ToolbarPrivateModeBadge()
+    private let lineLayer = CALayer()
     
     func privateModeBadge(visible: Bool) {
         privateModeBadge.isHidden = !visible
@@ -254,6 +255,9 @@ class TabToolbar: UIView {
         addButtons(actionButtons)
         contentView.addSubview(privateModeBadge)
 
+        lineLayer.backgroundColor = UIColor.black.withAlphaComponent(0.05).cgColor
+        layer.addSublayer(lineLayer)
+
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
@@ -266,6 +270,11 @@ class TabToolbar: UIView {
             make.bottom.equalTo(self.safeArea.bottom)
         }
         super.updateConstraints()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        lineLayer.frame = CGRect(origin: .zero, size: CGSize(width: bounds.width, height: 1))
     }
 
     private func setupAccessibility() {
@@ -284,20 +293,6 @@ class TabToolbar: UIView {
 
     func addButtons(_ buttons: [UIButton]) {
         buttons.forEach { contentView.addArrangedSubview($0) }
-    }
-
-    override func draw(_ rect: CGRect) {
-        if let context = UIGraphicsGetCurrentContext() {
-            drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
-        }
-    }
-
-    fileprivate func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
-        context.setStrokeColor(UIColor.black.withAlphaComponent(0.05).cgColor)
-        context.setLineWidth(2)
-        context.move(to: CGPoint(x: start.x, y: start.y))
-        context.addLine(to: CGPoint(x: end.x, y: end.y))
-        context.strokePath()
     }
 }
 
