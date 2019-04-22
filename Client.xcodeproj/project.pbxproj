@@ -504,6 +504,7 @@
 		D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */; };
 		D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */; };
 		DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACDE995225E537900C8F37F /* VersionSettingTests.swift */; };
+		DADC62DA226E3297003AFF8B /* ReopenLastTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC62D9226E3297003AFF8B /* ReopenLastTabTests.swift */; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
@@ -1668,6 +1669,7 @@
 		D8FDEB54220CFE970069A582 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ImageEffects.h"; path = "ThirdParty/Apple/UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "ThirdParty/Apple/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
 		DACDE995225E537900C8F37F /* VersionSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSettingTests.swift; sourceTree = "<group>"; };
+		DADC62D9226E3297003AFF8B /* ReopenLastTabTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReopenLastTabTests.swift; sourceTree = "<group>"; };
 		DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabPrintPageRenderer.swift; sourceTree = "<group>"; };
 		DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSearchPrefs.swift; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
@@ -2950,6 +2952,7 @@
 				744B0FFD1B4F172E00100422 /* ToolbarTests.swift */,
 				D375A91F1AE71675001B30D5 /* ViewMemoryLeakTests.swift */,
 				D39FA1611A83E0EC00EE869C /* Supporting Files */,
+				DADC62D9226E3297003AFF8B /* ReopenLastTabTests.swift */,
 			);
 			path = UITests;
 			sourceTree = "<group>";
@@ -5028,6 +5031,7 @@
 				4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */,
 				C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */,
 				E6A92ADB1C52A8DA00743291 /* LoginInputTests.swift in Sources */,
+				DADC62DA226E3297003AFF8B /* ReopenLastTabTests.swift in Sources */,
 				D375A9201AE71675001B30D5 /* ViewMemoryLeakTests.swift in Sources */,
 				D313BE981B2F5096009EF241 /* DomainAutocompleteTests.swift in Sources */,
 				D3CFD3641CC5605B0064AB4A /* SecurityTests.swift in Sources */,

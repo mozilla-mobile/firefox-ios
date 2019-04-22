@@ -136,6 +136,10 @@ open class EarlGrey: NSObject {
                 .rotateDevice(to: orientation,
                               errorOrNil: errorOrNil)
     }
+    
+    public static func shakeDevice(file: StaticString = #file, line: UInt = #line) {
+        EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line).shakeDeviceWithError(nil)
+    }
 }
 
 extension GREYInteraction {
