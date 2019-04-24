@@ -801,7 +801,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             for _ in 1...4 {
                 introScrollView.swipeLeft()
             }
-            app.buttons["Sign in to Firefox"].tap()
+            let turnOnSyncButton = app.buttons["turnOnSync.button"]
+            turnOnSyncButton.tap()
         }
         screenState.backAction = {
             introScrollView.swipeLeft()
