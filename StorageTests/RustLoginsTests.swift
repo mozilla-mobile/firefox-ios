@@ -20,6 +20,7 @@ class RustLoginsTests: XCTestCase {
 
         let encryptionKey = Bytes.generateRandomBytes(256).base64EncodedString
         logins = RustLogins(databasePath: databasePath, encryptionKey: encryptionKey)
+        _ = logins.reopenIfClosed()
     }
 
     func addLogin() -> Deferred<Maybe<String>> {
