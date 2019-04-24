@@ -73,8 +73,8 @@ extension PhotonActionSheetProtocol {
         var items: [PhotonActionSheetItem] = []
 
         let noImageEnabled = NoImageModeHelper.isActivated(profile.prefs)
-        let noImageMode = PhotonActionSheetItem(title: Strings.AppMenuNoImageMode, iconString: "menu-NoImageMode", isEnabled: noImageEnabled, accessory: .Switch) { action in
-            NoImageModeHelper.toggle(profile: self.profile, tabManager: self.tabManager)
+        let noImageMode = PhotonActionSheetItem(title: Strings.AppMenuNoImageMode, iconString: "menu-NoImageMode", isEnabled: noImageEnabled, accessory: .Switch, badgeIconNamed: "menuBadge") { action in
+            NoImageModeHelper.toggle(isEnabled: action.isEnabled, profile: self.profile, tabManager: self.tabManager)
         }
 
         let trackingProtectionEnabled = FirefoxTabContentBlocker.isTrackingProtectionEnabled(tabManager: self.tabManager)

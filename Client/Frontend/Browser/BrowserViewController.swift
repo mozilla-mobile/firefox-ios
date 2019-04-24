@@ -169,7 +169,7 @@ class BrowserViewController: UIViewController {
         downloadQueue.delegate = self
 
         NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged), name: .DisplayThemeChanged, object: nil)
-    }
+  }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return ThemeManager.instance.statusBarStyle
@@ -201,6 +201,7 @@ class BrowserViewController: UIViewController {
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
+        urlBar.hideImagesBadge(visible: NoImageModeHelper.isActivated(profile.prefs))
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         toolbar = nil
@@ -211,6 +212,7 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
+            toolbar?.hideImagesBadge(visible: NoImageModeHelper.isActivated(profile.prefs))
             updateTabCountUsingTabManager(self.tabManager)
         }
 

@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "badge-private.pdf",
+      "filename" : "badge-mask.pdf",
       "scale" : "1x"
     },
     {
@@ -19,6 +19,7 @@
     "author" : "xcode"
   },
   "properties" : {
+    "template-rendering-intent" : "template",
     "preserves-vector-representation" : true
   }
 }
