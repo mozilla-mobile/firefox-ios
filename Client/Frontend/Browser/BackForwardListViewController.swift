@@ -99,7 +99,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             return internalUrl.extractedUrlParam?.absoluteString
         }
 
-        sql.getSitesForURLs(urls).uponQueue(.main) { result in
+        sql.getSites(forURLs: urls).uponQueue(.main) { result in
             guard let results = result.successValue else {
                 return
             }

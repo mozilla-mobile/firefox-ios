@@ -230,7 +230,19 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             } else {
                 cell.textLabel?.text = bookmarkItem.title
             }
-            // TODO: Determine how to pull in a favicon
+
+            let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
+            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
+                // Check that we successfully retrieved an image (should always happen)
+                // and ensure that the cell we were fetching for is still on-screen.
+                guard let image = result.successValue, let cell = tableView.cellForRow(at: indexPath) else {
+                    return
+                }
+
+                cell.imageView?.image = image
+                cell.setNeedsLayout()
+            }
+
             return cell
         case is BookmarkSeparator:
             return tableView.dequeueReusableCell(withIdentifier: BookmarkSeparatorCellIdentifier, for: indexPath)

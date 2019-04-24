@@ -64,7 +64,7 @@ class BrowserViewController: UIViewController {
     }()
 
     fileprivate var customSearchBarButton: UIBarButtonItem?
-    private weak var currentBookmarksKeywordQuery: Cancellable?
+    private weak var currentBookmarksKeywordQuery: CancellableDeferred<Maybe<String>>?
 
     // popover rotation handling
     var displayedPopoverController: UIViewController?

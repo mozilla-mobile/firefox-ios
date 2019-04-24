@@ -42,10 +42,19 @@ open class SQLiteFavicons {
             DELETE FROM favicons
             WHERE favicons.id NOT IN (
                 SELECT faviconID FROM favicon_sites
-                UNION ALL
-                SELECT faviconID FROM bookmarksLocal WHERE faviconID IS NOT NULL
-                UNION ALL
-                SELECT faviconID FROM bookmarksMirror WHERE faviconID IS NOT NULL
+            )
+            """
+
+        return (sql: sql, args: nil)
+    }
+
+    public func getCleanupFaviconSiteURLsQuery() -> (sql: String, args: Args?) {
+        let sql = """
+            DELETE FROM favicon_site_urls
+            WHERE id IN (
+                SELECT favicon_site_urls.id FROM favicon_site_urls
+                LEFT OUTER JOIN history ON favicon_site_urls.site_url = history.url
+                WHERE history.id IS NULL
             )
             """
 
@@ -81,9 +90,5 @@ open class SQLiteFavicons {
         }
 
         return Int(conn.lastInsertedRowID)
-    }
-
-    public func cleanupFavicons() -> Success {
-        return self.db.run([getCleanupFaviconsQuery()])
     }
 }

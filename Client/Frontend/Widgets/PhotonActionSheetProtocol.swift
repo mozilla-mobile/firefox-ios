@@ -193,19 +193,19 @@ extension PhotonActionSheetProtocol {
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
-            sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
+            sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
                 guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
                     return succeed()
                 }
 
                 return self.profile.history.addPinnedTopSite(site)
-                }.uponQueue(.main) { _ in }
+            }.uponQueue(.main) { _ in }
         }
 
         let removeTopSitesPin = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin") { action in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
-            sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
+            sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
                 guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
                     return succeed()
                 }
