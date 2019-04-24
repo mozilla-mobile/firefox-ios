@@ -276,6 +276,7 @@ class RemoteTabsErrorCell: UITableViewCell {
 
     init(error: RemoteTabsError) {
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
+        selectionStyle = .none
 
         separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
 
@@ -354,6 +355,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
     init(homePanel: HomePanel?) {
         super.init(style: .default, reuseIdentifier: RemoteTabsErrorCell.Identifier)
+        selectionStyle = .none
 
         self.homePanel = homePanel
         let createAnAccountButton = UIButton(type: .system)
