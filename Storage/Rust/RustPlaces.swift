@@ -12,7 +12,6 @@ private let log = Logger.syncLogger
 
 public class RustPlaces {
     let databasePath: String
-    let encryptionKey: String?
 
     let writerQueue: DispatchQueue
     let readerQueue: DispatchQueue
@@ -26,9 +25,8 @@ public class RustPlaces {
 
     private var didAttemptToMoveToBackup = false
 
-    public init(databasePath: String, encryptionKey: String? = nil) {
+    public init(databasePath: String) {
         self.databasePath = databasePath
-        self.encryptionKey = encryptionKey
 
         self.writerQueue = DispatchQueue(label: "RustPlaces writer queue: \(databasePath)", attributes: [])
         self.readerQueue = DispatchQueue(label: "RustPlaces reader queue: \(databasePath)", attributes: [])
@@ -38,19 +36,19 @@ public class RustPlaces {
 
     private func open() -> NSError? {
         do {
-            api = try PlacesAPI(path: databasePath, encryptionKey: encryptionKey)
+            api = try PlacesAPI(path: databasePath)
             isOpen = true
             return nil
         } catch let err as NSError {
             if let placesError = err as? PlacesError {
                 switch placesError {
                 case .panic(let message):
-                    Sentry.shared.sendWithStacktrace(message: "Panicked when opening Rust Browser database", tag: SentryTag.rustBrowser, severity: .error, description: message)
+                    Sentry.shared.sendWithStacktrace(message: "Panicked when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: message)
                 default:
-                    Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Browser database", tag: SentryTag.rustBrowser, severity: .error, description: placesError.localizedDescription)
+                    Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
                 }
             } else {
-                Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Rust Browser database", tag: SentryTag.rustBrowser, severity: .error, description: err.localizedDescription)
+                Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Rust Places database", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
             }
 
             return err
@@ -247,13 +245,26 @@ public class RustPlaces {
         let deferred = Success()
 
         writerQueue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
                 return
             }
 
-            // TODO: Call Rust API
-            deferred.fill(Maybe(success: ()))
+            do {
+                try self.api?.syncBookmarks(unlockInfo: unlockInfo)
+                deferred.fill(Maybe(success: ()))
+            } catch let err as NSError {
+                if let placesError = err as? PlacesError {
+                    switch placesError {
+                    case .panic(let message):
+                        Sentry.shared.sendWithStacktrace(message: "Panicked when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: message)
+                    default:
+                        Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Places database", tag: SentryTag.rustPlaces, severity: .error, description: placesError.localizedDescription)
+                    }
+                }
+
+                deferred.fill(Maybe(failure: err))
+            }
         }
 
         return deferred
@@ -263,8 +274,8 @@ public class RustPlaces {
         let deferred = Success()
 
         writerQueue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
                 return
             }
 

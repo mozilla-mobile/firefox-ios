@@ -423,7 +423,7 @@ open class BrowserProfile: Profile {
     }
 
     lazy var places: RustPlaces = {
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("rust-browser.db").path
+        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
         return RustPlaces(databasePath: databasePath)
     }()
 
