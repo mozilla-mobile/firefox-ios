@@ -915,6 +915,7 @@ class BrowserViewController: UIViewController {
             // to navigateInTab(tab:).
             guard let title = tab.title else { break }
             if !title.isEmpty && title != tab.lastTitle {
+                tab.lastTitle = title
                 navigateInTab(tab: tab)
             }
         case .canGoBack:
