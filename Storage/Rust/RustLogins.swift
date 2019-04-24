@@ -196,7 +196,7 @@ public class RustLogins {
     }
 
     public func reopenIfClosed() -> NSError? {
-        var error: NSError?  = nil
+        var error: NSError?
 
         queue.sync {
             guard !isOpen else { return }
@@ -208,7 +208,7 @@ public class RustLogins {
     }
 
     public func forceClose() -> NSError? {
-        var error: NSError? = nil
+        var error: NSError?
 
         do {
             try storage.interrupt()
