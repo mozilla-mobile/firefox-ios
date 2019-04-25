@@ -4,7 +4,6 @@
 
 import Foundation
 import Alamofire
-import Deferred
 import Shared
 import SwiftyJSON
 

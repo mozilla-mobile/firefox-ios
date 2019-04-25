@@ -13,7 +13,6 @@ import Storage
 import Sync
 import XCGLogger
 import SwiftKeychainWrapper
-import Deferred
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT

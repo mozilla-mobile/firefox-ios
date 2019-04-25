@@ -5,7 +5,6 @@
 import Foundation
 import Account
 import Shared
-import Deferred
 @testable import Sync
 @testable import Storage
 

@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import Storage
 import SDWebImage
-import Deferred
 
 class FaviconHandler {
     static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit

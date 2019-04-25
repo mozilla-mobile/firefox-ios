@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import XCGLogger
-import Deferred
 
 private let log = Logger.syncLogger
 public let TopSiteCacheSize: Int32 = 16

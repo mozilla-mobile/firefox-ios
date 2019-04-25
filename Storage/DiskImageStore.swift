@@ -4,7 +4,6 @@
 
 import Shared
 import UIKit
-import Deferred
 import XCGLogger
 
 private var log = XCGLogger.default

@@ -4,7 +4,6 @@
 
 import UIKit
 import SnapKit
-import Deferred
 import Shared
 import Storage
 

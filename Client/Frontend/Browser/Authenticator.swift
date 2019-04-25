@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import Deferred
 
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Label for Cancel button")
 private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")

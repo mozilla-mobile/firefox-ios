@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Deferred
 
 @_exported import MozillaAppServices
 

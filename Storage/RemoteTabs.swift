@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Deferred
 
 public struct ClientAndTabs: Equatable, CustomStringConvertible {
     public let client: RemoteClient

@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import Deferred
 import SwiftyJSON
 import SyncTelemetry
 

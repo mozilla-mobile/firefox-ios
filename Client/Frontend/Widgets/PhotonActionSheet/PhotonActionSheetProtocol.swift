@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import Deferred
 
 protocol PhotonActionSheetProtocol {
     var tabManager: TabManager { get }

@@ -17,7 +17,6 @@ import SDWebImage
 import SwiftyJSON
 import Telemetry
 import Sentry
-import Deferred
 
 private let KVOs: [KVOConstants] = [
     .estimatedProgress,

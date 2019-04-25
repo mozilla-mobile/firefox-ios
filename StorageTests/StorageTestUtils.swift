@@ -4,7 +4,6 @@
 
 // Note that this file is imported into SyncTests, too.
 
-import Deferred
 import Foundation
 import Shared
 @testable import Storage

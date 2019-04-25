@@ -6,7 +6,6 @@ import Storage
 import Shared
 import Alamofire
 import XCGLogger
-import Deferred
 import SDWebImage
 import Fuzi
 import SwiftyJSON
