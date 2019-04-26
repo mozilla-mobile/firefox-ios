@@ -81,10 +81,10 @@ extension UIImage {
     @available(*, deprecated, message: "use only in testing code")
     public func isStrictlyEqual(to other: UIImage) -> Bool {
         // Must use same constructor for PNG metadata block to be the same.
-        let imageA = UIImage(data: UIImagePNGRepresentation(self)!)!
-        let imageB = UIImage(data: UIImagePNGRepresentation(other)!)!
-        let dataA = UIImagePNGRepresentation(imageA)!
-        let dataB = UIImagePNGRepresentation(imageB)!
+        let imageA = UIImage(data: self.pngData()!)!
+        let imageB = UIImage(data: other.pngData()!)!
+        let dataA = imageA.pngData()!
+        let dataB = imageB.pngData()!
         return dataA == dataB
     }
 }
