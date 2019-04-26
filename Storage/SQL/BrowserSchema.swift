@@ -35,6 +35,7 @@ let TablePageMetadata = "page_metadata"
 let TableHighlights = "highlights"
 
 let TableRemoteDevices = "remote_devices" // Added in v29.
+let TableFaviconSiteURLs = "favicon_site_urls"
 
 let MatViewAwesomebarBookmarksWithFavicons = "matview_awesomebar_bookmarks_with_favicons"
 
@@ -95,6 +96,7 @@ private let AllTables: [String] = [
     TableSyncCommands,
     TableClients,
     TableTabs,
+    TableFaviconSiteURLs,
 
     MatViewAwesomebarBookmarksWithFavicons,
 ]
@@ -141,7 +143,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 39    // Bug 1539483.
+    static let DefaultVersion = 40    // Issue #4776.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -376,6 +378,15 @@ open class BrowserSchema: Schema {
             iconDate REAL,
             iconType INTEGER,
             iconWidth INTEGER
+        )
+        """
+
+    let faviconSiteURLsCreate = """
+        CREATE TABLE favicon_site_urls (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            site_url TEXT NOT NULL,
+            faviconID INTEGER NOT NULL REFERENCES favicons(id) ON DELETE CASCADE,
+            UNIQUE (site_url, faviconID)
         )
         """
 
@@ -878,6 +889,7 @@ open class BrowserSchema: Schema {
             clientsTableCreate,
             tabsTableCreate,
             historyFTSCreate,
+            faviconSiteURLsCreate,
 
             // "Materialized Views" (Tables)
             awesomebarBookmarksWithFaviconsCreate,
@@ -1395,6 +1407,15 @@ open class BrowserSchema: Schema {
                 "CREATE INDEX IF NOT EXISTS idx_bookmarksBuffer_keyword ON bookmarksBuffer (keyword)",
                 "CREATE INDEX IF NOT EXISTS idx_bookmarksLocal_keyword ON bookmarksLocal (keyword)",
                 "CREATE INDEX IF NOT EXISTS idx_bookmarksMirror_keyword ON bookmarksMirror (keyword)",
+                ]) {
+                return false
+            }
+        }
+
+        if from < 40 && to >= 40 {
+            // Create indices on the bookmarks tables for the `keyword` column.
+            if !self.run(db, queries: [
+                faviconSiteURLsCreate,
                 ]) {
                 return false
             }
