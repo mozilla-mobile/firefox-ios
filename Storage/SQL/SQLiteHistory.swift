@@ -184,6 +184,18 @@ open class SQLiteHistory {
         self.favicons = SQLiteFavicons(db: self.db)
         self.prefs = prefs
     }
+
+    public func getSites(forURLs urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
+        let inExpression = urls.joined(separator: "\",\"")
+        let sql = """
+        SELECT history.id AS historyID, history.url AS url, title, guid, iconID, iconURL, iconDate, iconType, iconWidth
+        FROM view_favicons_widest, history
+        WHERE history.id = siteID AND history.url IN (\"\(inExpression)\")
+        """
+
+        let args: Args = []
+        return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
+    }
 }
 
 private let topSitesQuery = "SELECT cached_top_sites.*, page_metadata.provider_name FROM cached_top_sites LEFT OUTER JOIN page_metadata ON cached_top_sites.url = page_metadata.site_url ORDER BY frecencies DESC LIMIT (?)"
@@ -536,9 +548,13 @@ extension SQLiteHistory: BrowserHistory {
 
         let markArgs: Args = [Date.nowNumber(), url]
         let markDeleted = "UPDATE history SET url = NULL, is_deleted = 1, title = '', should_upload = 1, local_modified = ? WHERE url = ?"
-        //return db.run([(sql: String, args: Args?)])
-        let command = [(sql: deleteVisits, args: visitArgs), (sql: markDeleted, args: markArgs), self.favicons.getCleanupFaviconsQuery()] as [(sql: String, args: Args?)]
-        return db.run(command)
+
+        return db.run([
+            (sql: deleteVisits, args: visitArgs),
+            (sql: markDeleted, args: markArgs),
+            favicons.getCleanupFaviconsQuery(),
+            favicons.getCleanupFaviconSiteURLsQuery()
+        ])
     }
 
     public func removeHistoryFromDate(_ date: Date) -> Success {
@@ -554,8 +570,12 @@ extension SQLiteHistory: BrowserHistory {
         let visitRemoval = "DELETE FROM visits WHERE visits.date > ?"
         let visitRemovalArgs: Args = [visitTimestamp]
 
-        let command = [(sql: historyRemoval, args: historyRemovalArgs), (sql: visitRemoval, args: visitRemovalArgs), self.favicons.getCleanupFaviconsQuery()] as [(sql: String, args: Args?)]
-        return db.run(command)
+        return db.run([
+            (sql: historyRemoval, args: historyRemovalArgs),
+            (sql: visitRemoval, args: visitRemovalArgs),
+            favicons.getCleanupFaviconsQuery(),
+            favicons.getCleanupFaviconSiteURLsQuery()
+        ])
     }
 
     // Note: clearing history isn't really a sane concept in the presence of Sync.
@@ -567,7 +587,8 @@ extension SQLiteHistory: BrowserHistory {
             ("DELETE FROM history", nil),
             ("DELETE FROM domains", nil),
             ("DELETE FROM page_metadata", nil),
-            self.favicons.getCleanupFaviconsQuery()
+            ("DELETE FROM favicon_site_urls", nil),
+            ("DELETE FROM favicons", nil),
             ])
             // We've probably deleted a lot of stuff. Vacuum now to recover the space.
             >>> effect({ self.db.vacuum() })
@@ -739,121 +760,6 @@ extension SQLiteHistory: BrowserHistory {
             """
 
         return db.runQueryConcurrently(sql, args: nil, factory: SQLiteHistory.iconHistoryColumnFactory)
-    }
-}
-
-extension SQLiteHistory: Favicons {
-    // These two getter functions are only exposed for testing purposes (and aren't part of the public interface).
-    func getFaviconsForURL(_ url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
-        let sql = """
-            SELECT iconID AS id, iconURL AS url, iconDate AS date, iconType AS type, iconWidth AS width
-            FROM view_favicons_widest, history
-            WHERE history.id = siteID AND history.url = ?
-            """
-
-        let args: Args = [url]
-        return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
-    }
-
-    func getFaviconsForBookmarkedURL(_ url: String) -> Deferred<Maybe<Cursor<Favicon?>>> {
-        let sql = """
-            SELECT
-                favicons.id AS id,
-                favicons.url AS url,
-                favicons.date AS date,
-                favicons.type AS type,
-                favicons.width AS width
-            FROM favicons, view_bookmarksLocal_on_mirror AS bm
-            WHERE bm.faviconID = favicons.id AND bm.bmkUri IS ?
-            """
-
-        let args: Args = [url]
-        return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconColumnFactory)
-    }
-
-    public func getSitesForURLs(_ urls: [String]) -> Deferred<Maybe<Cursor<Site?>>> {
-        let inExpression = urls.joined(separator: "\",\"")
-        let sql = """
-            SELECT history.id AS historyID, history.url AS url, title, guid, iconID, iconURL, iconDate, iconType, iconWidth
-            FROM view_favicons_widest, history
-            WHERE history.id = siteID AND history.url IN (\"\(inExpression)\")
-            """
-
-        let args: Args = []
-        return db.runQueryConcurrently(sql, args: args, factory: SQLiteHistory.iconHistoryColumnFactory)
-    }
-
-    public func clearAllFavicons() -> Success {
-        return db.transaction { conn -> Void in
-            try conn.executeChange("DELETE FROM favicon_sites")
-            try conn.executeChange("DELETE FROM favicons")
-        }
-    }
-
-    public func addFavicon(_ icon: Favicon) -> Deferred<Maybe<Int>> {
-        return self.favicons.insertOrUpdateFavicon(icon)
-    }
-
-    /**
-     * This method assumes that the site has already been recorded
-     * in the history table.
-     */
-    public func addFavicon(_ icon: Favicon, forSite site: Site) -> Deferred<Maybe<Int>> {
-        if Logger.logPII {
-            log.verbose("Adding favicon \(icon.url) for site \(site.url).")
-        }
-        func doChange(_ query: String, args: Args?) -> Deferred<Maybe<Int>> {
-            return db.withConnection { conn -> Int in
-                // Blind! We don't see failure here.
-                let id = self.favicons.insertOrUpdateFaviconInTransaction(icon, conn: conn)
-
-                // Now set up the mapping.
-                try conn.executeChange(query, withArgs: args)
-
-                // Try to update the favicon ID column in each bookmarks table. There can be
-                // multiple bookmarks with a particular URI, and a mirror bookmark can be
-                // locally changed, so either or both of these statements can update multiple rows.
-                if let id = id {
-                    icon.id = id
-
-                    try? conn.executeChange("UPDATE bookmarksLocal SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    try? conn.executeChange("UPDATE bookmarksMirror SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-
-                    return id
-                }
-
-                let err = DatabaseError(description: "Error adding favicon. ID = 0")
-                log.error("addFavicon(_:, forSite:) encountered an error: \(err.localizedDescription)")
-                throw err
-            }
-        }
-
-        let siteSubselect = "(SELECT id FROM history WHERE url = ?)"
-        let iconSubselect = "(SELECT id FROM favicons WHERE url = ?)"
-        let insertOrIgnore = "INSERT OR IGNORE INTO favicon_sites (siteID, faviconID) VALUES "
-        if let iconID = icon.id {
-            // Easy!
-            if let siteID = site.id {
-                // So easy!
-                let args: Args? = [siteID, iconID]
-                return doChange("\(insertOrIgnore) (?, ?)", args: args)
-            }
-
-            // Nearly easy.
-            let args: Args? = [site.url, iconID]
-            return doChange("\(insertOrIgnore) (\(siteSubselect), ?)", args: args)
-
-        }
-
-        // Sigh.
-        if let siteID = site.id {
-            let args: Args? = [siteID, icon.url]
-            return doChange("\(insertOrIgnore) (?, \(iconSubselect))", args: args)
-        }
-
-        // The worst.
-        let args: Args? = [site.url, icon.url]
-        return doChange("\(insertOrIgnore) (\(siteSubselect), \(iconSubselect))", args: args)
     }
 }
 
