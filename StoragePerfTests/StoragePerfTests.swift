@@ -27,7 +27,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
         history.clearHistory().succeeded()
         populateHistoryForFrecencyCalculations(history, siteCount: count)
         self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
-                history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 10, bookmarksLimit: 0).succeeded()
+                history.getFrecentHistory().getSites(matchingSearchQuery: nil, limit: 10).succeeded()
             self.stopMeasuring()
         }
     }
