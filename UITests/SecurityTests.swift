@@ -92,7 +92,7 @@ class SecurityTests: KIFTestCase {
         tester().tapWebViewElementWithAccessibilityLabel("URL spoof")
 
         // Wait for the window to open.
-        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "2", traits: UIAccessibilityTraitButton)
+        tester().waitForTappableView(withAccessibilityLabel: "Show Tabs", value: "2", traits: UIAccessibilityTraits.button)
         tester().waitForAnimationsToFinish()
 
         // Make sure the URL bar doesn't show the URL since it hasn't loaded.
@@ -110,7 +110,7 @@ class SecurityTests: KIFTestCase {
         tester().wait(forTimeInterval: 1)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         XCTAssert(webView.url!.absoluteString.starts(with: "blob:http://")) // webview internally has "blob:<rest of url>"
-        let bvc = UIApplication.shared.keyWindow!.rootViewController?.childViewControllers[0] as! BrowserViewController
+        let bvc = UIApplication.shared.keyWindow!.rootViewController?.children[0] as! BrowserViewController
         XCTAssertEqual(bvc.urlBar.locationView.urlTextField.text, "blob:") // only display "blob:"
     }
 

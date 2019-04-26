@@ -738,7 +738,7 @@ class LoginManagerTests: KIFTestCase {
 
         // Check that edit button has been disabled
         tester().wait(forTimeInterval: 1)
-        tester().waitForView(withAccessibilityLabel: "Edit", traits: UIAccessibilityTraitNotEnabled)
+        tester().waitForView(withAccessibilityLabel: "Edit", traits: UIAccessibilityTraits.notEnabled)
 
         closeLoginManager()
     }
