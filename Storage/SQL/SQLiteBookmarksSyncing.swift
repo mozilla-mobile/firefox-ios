@@ -966,7 +966,7 @@ extension SQLiteBookmarks {
 // MARK: - Applying merge operations.
 
 public extension SQLiteBookmarkBufferStorage {
-    public func applyBufferCompletionOp(_ op: BufferCompletionOp, itemSources: ItemSources) -> Success {
+    func applyBufferCompletionOp(_ op: BufferCompletionOp, itemSources: ItemSources) -> Success {
         log.debug("Marking buffer rows as applied.")
         if op.isNoOp {
             log.debug("Nothing to do.")
@@ -984,7 +984,7 @@ public extension SQLiteBookmarkBufferStorage {
         return self.db.run(queries)
     }
 
-    public func getChildrenGUIDsOf(_ guid: GUID) -> Deferred<Maybe<[GUID]>> {
+    func getChildrenGUIDsOf(_ guid: GUID) -> Deferred<Maybe<[GUID]>> {
         let sql = "SELECT child FROM bookmarksBufferStructure WHERE parent = ? ORDER BY idx ASC"
         let args: Args = [guid]
 

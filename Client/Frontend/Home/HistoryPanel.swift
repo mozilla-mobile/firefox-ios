@@ -566,7 +566,7 @@ class HistoryPanel: SiteTableViewController, HomePanel {
         return super.tableView(tableView, heightForHeaderInSection: section)
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 

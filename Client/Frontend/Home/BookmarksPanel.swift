@@ -173,7 +173,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         if source?.current.count == 0 && source?.current.guid == BookmarkRoots.MobileFolderGUID {
             if self.emptyStateOverlayView.superview == nil {
                 self.view.addSubview(self.emptyStateOverlayView)
-                self.view.bringSubview(toFront: self.emptyStateOverlayView)
+                self.view.bringSubviewToFront(self.emptyStateOverlayView)
                 self.emptyStateOverlayView.snp.makeConstraints { make -> Void in
                     make.edges.equalTo(self.tableView)
                 }
@@ -364,11 +364,11 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         }
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
-    private func editingStyleforRow(atIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    private func editingStyleforRow(atIndexPath indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         guard let source = source else {
             return .none
         }
@@ -392,7 +392,7 @@ class BookmarksPanel: SiteTableViewController, HomePanel {
         return source.current.itemIsEditableAtIndex(indexPath.row)
     }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return editingStyleforRow(atIndexPath: indexPath)
     }
 
@@ -507,7 +507,7 @@ extension BookmarksPanel: BookmarkFolderTableViewHeaderDelegate {
 
 class BookmarkFolderTableViewCell: TwoLineTableViewCell {
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         imageView?.image = UIImage(named: "bookmarkFolder")

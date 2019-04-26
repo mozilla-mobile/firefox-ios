@@ -29,7 +29,7 @@ class TwoLineTableViewCell: UITableViewCell, Themeable {
         return _detailTextLabel
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
 
         contentView.addSubview(_textLabel)

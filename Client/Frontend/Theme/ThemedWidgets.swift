@@ -6,7 +6,7 @@ import UIKit
 class ThemedTableViewCell: UITableViewCell, Themeable {
     var detailTextColor = UIColor.theme.tableView.disabledRowText
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         applyTheme()
     }
@@ -25,7 +25,7 @@ class ThemedTableViewCell: UITableViewCell, Themeable {
 }
 
 class ThemedTableViewController: UITableViewController, Themeable {
-    override init(style: UITableViewStyle = .grouped) {
+    override init(style: UITableView.Style = .grouped) {
         super.init(style: style)
     }
 

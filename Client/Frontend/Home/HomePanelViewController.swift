@@ -161,24 +161,24 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }
 
     fileprivate func hideCurrentPanel() {
-        if let panel = childViewControllers.first {
-            panel.willMove(toParentViewController: nil)
+        if let panel = children.first {
+            panel.willMove(toParent: nil)
             panel.beginAppearanceTransition(false, animated: false)
             panel.view.removeFromSuperview()
             panel.endAppearanceTransition()
-            panel.removeFromParentViewController()
+            panel.removeFromParent()
         }
     }
 
     fileprivate func showPanel(_ panel: UIViewController) {
-        addChildViewController(panel)
+        addChild(panel)
         panel.beginAppearanceTransition(true, animated: false)
         controllerContainerView.addSubview(panel.view)
         panel.endAppearanceTransition()
         panel.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        panel.didMove(toParentViewController: self)
+        panel.didMove(toParent: self)
     }
 
     @objc func tappedButton(_ sender: UIButton!) {
@@ -269,10 +269,10 @@ extension HomePanelViewController: Themeable {
             return true
         }
 
-        childViewControllers.forEach {
+        children.forEach {
             if !apply($0) {
                 // BookmarksPanel is nested in a UINavigationController, go one layer deeper
-                $0.childViewControllers.forEach { _ = apply($0) }
+                $0.children.forEach { _ = apply($0) }
             }
         }
 

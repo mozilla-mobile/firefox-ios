@@ -56,7 +56,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
         tableViewController.homePanelDelegate = homePanelDelegate
         tableViewController.recentlyClosedTabsPanel = self
 
-        self.addChildViewController(tableViewController)
+        self.addChild(tableViewController)
         self.view.addSubview(tableViewController.view)
         self.view.addSubview(historyBackButton)
         self.view.addSubview(recentlyClosedHeader)
@@ -78,7 +78,7 @@ class RecentlyClosedTabsPanel: UIViewController, HomePanel {
             make.left.right.bottom.equalTo(self.view)
         }
 
-        tableViewController.didMove(toParentViewController: self)
+        tableViewController.didMove(toParent: self)
     }
 
     @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {

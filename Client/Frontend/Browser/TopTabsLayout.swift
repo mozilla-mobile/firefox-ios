@@ -92,7 +92,7 @@ class TopTabsViewLayout: UICollectionViewFlowLayout {
 
         // Create attributes for the Tab Separator.
         for i in attributes {
-            guard i.representedElementKind != UICollectionElementKindSectionHeader && i.representedElementKind != UICollectionElementKindSectionFooter else {
+            guard i.representedElementKind != UICollectionView.elementKindSectionHeader && i.representedElementKind != UICollectionView.elementKindSectionFooter else {
                 i.zIndex = SeparatorZIndex
                 continue
             }

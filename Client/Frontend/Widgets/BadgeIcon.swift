@@ -73,7 +73,7 @@ class BadgeWithBackdrop {
             make.center.equalTo(button)
             make.size.equalTo(BadgeWithBackdrop.circleSize)
         }
-        button.superview?.sendSubview(toBack: backdrop)
+        button.superview?.sendSubviewToBack(backdrop)
     }
 
     func show(_ visible: Bool) {

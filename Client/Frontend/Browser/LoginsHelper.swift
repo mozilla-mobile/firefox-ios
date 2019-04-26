@@ -126,13 +126,13 @@ class LoginsHelper: TabContentScript {
             ranges.append(nsRange)
         }
 
-        var attributes = [NSAttributedStringKey: AnyObject]()
-        attributes[NSAttributedStringKey.font] = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
-        attributes[NSAttributedStringKey.foregroundColor] = UIColor.Photon.Grey60
+        var attributes = [NSAttributedString.Key: AnyObject]()
+        attributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
+        attributes[NSAttributedString.Key.foregroundColor] = UIColor.Photon.Grey60
         let attr = NSMutableAttributedString(string: string, attributes: attributes)
         let font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.medium)
         for range in ranges {
-            attr.addAttribute(NSAttributedStringKey.font, value: font, range: range)
+            attr.addAttribute(NSAttributedString.Key.font, value: font, range: range)
         }
         return attr
     }

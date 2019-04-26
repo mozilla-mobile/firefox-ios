@@ -82,7 +82,7 @@ extension Deferred {
         var result: T!
         group.enter()
         self.upon { result = $0; group.leave() }
-        group.wait(timeout: .distantFuture)
+        _ = group.wait(timeout: .distantFuture)
         return result
     }
 }

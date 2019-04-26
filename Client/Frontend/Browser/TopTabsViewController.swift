@@ -83,7 +83,7 @@ class TopTabsViewController: UIViewController {
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TopTabCell.Identifier)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
-        [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
+        [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
     }

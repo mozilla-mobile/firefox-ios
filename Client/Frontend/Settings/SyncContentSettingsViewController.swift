@@ -9,14 +9,14 @@ import Sync
 class ManageSetting: Setting {
     let profile: Profile
 
-    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "Manage" }
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
 
-        super.init(title: NSAttributedString(string: Strings.FxAManageAccount, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: Strings.FxAManageAccount, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -36,11 +36,11 @@ class ManageSetting: Setting {
 class DisconnectSetting: Setting {
     let settingsVC: SettingsTableViewController
     let profile: Profile
-    override var accessoryType: UITableViewCellAccessoryType { return .none }
+    override var accessoryType: UITableViewCell.AccessoryType { return .none }
     override var textAlignment: NSTextAlignment { return .center }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.general.destructiveRed])
+        return NSAttributedString(string: Strings.SettingsDisconnectSyncButton, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.general.destructiveRed])
     }
     init(settings: SettingsTableViewController) {
         self.settingsVC = settings
@@ -53,7 +53,7 @@ class DisconnectSetting: Setting {
         let alertController = UIAlertController(
             title: Strings.SettingsDisconnectSyncAlertTitle,
             message: Strings.SettingsDisconnectSyncAlertBody,
-            preferredStyle: UIAlertControllerStyle.alert)
+            preferredStyle: UIAlertController.Style.alert)
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsDisconnectCancelAction, style: .cancel) { (action) in
                 // Do nothing.

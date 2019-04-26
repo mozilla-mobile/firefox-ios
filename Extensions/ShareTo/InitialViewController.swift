@@ -44,7 +44,7 @@ class EmbeddedNavController {
         self.isSearchMode = isSearchMode
         navigationController = UINavigationController(rootViewController: rootViewController)
 
-        parent.addChildViewController(navigationController)
+        parent.addChild(navigationController)
         parent.view.addSubview(navigationController.view)
 
         let width = min(screenSizeOrientationIndependent().width * 0.90, CGFloat(UX.topViewWidth))
@@ -79,7 +79,7 @@ class EmbeddedNavController {
 
     deinit {
         navigationController.view.removeFromSuperview()
-        navigationController.removeFromParentViewController()
+        navigationController.removeFromParent()
     }
 }
 

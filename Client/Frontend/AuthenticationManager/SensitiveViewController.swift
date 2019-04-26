@@ -19,10 +19,10 @@ class SensitiveViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: .UIApplicationWillEnterForeground, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: .UIApplicationDidBecomeActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(blurContents), name: .UIApplicationWillResignActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(hideLogins), name: .UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: UIApplication.willEnterForegroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: UIApplication.didBecomeActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(blurContents), name: UIApplication.willResignActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(hideLogins), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
     }
 

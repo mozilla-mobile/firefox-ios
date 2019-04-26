@@ -10,7 +10,7 @@ import Shared
 private let log = Logger.syncLogger
 
 public extension LoginRecord {
-    public convenience init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
+    convenience init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
         let hostname: String
         if let _ = protectionSpace.`protocol` {
             hostname = protectionSpace.urlString()
@@ -30,15 +30,15 @@ public extension LoginRecord {
         ])
     }
 
-    public var credentials: URLCredential {
+    var credentials: URLCredential {
         return URLCredential(user: username ?? "", password: password, persistence: .forSession)
     }
 
-    public var protectionSpace: URLProtectionSpace {
+    var protectionSpace: URLProtectionSpace {
         return URLProtectionSpace.fromOrigin(hostname)
     }
 
-    public var hasMalformedHostname: Bool {
+    var hasMalformedHostname: Bool {
         let hostnameURL = hostname.asURL
         guard let _ = hostnameURL?.host else {
             return true
@@ -47,7 +47,7 @@ public extension LoginRecord {
         return false
     }
 
-    public var isValid: Maybe<()> {
+    var isValid: Maybe<()> {
         // Referenced from https://mxr.mozilla.org/mozilla-central/source/toolkit/components/passwordmgr/nsLoginManager.js?rev=f76692f0fcf8&mark=280-281#271
 
         // Logins with empty hostnames are not valid.
@@ -89,7 +89,7 @@ public class RustLogins {
     let queue: DispatchQueue
     let storage: LoginsStorage
 
-    public fileprivate(set) var isOpen: Bool = false
+    fileprivate(set) var isOpen: Bool = false
 
     private var didAttemptToMoveToBackup = false
 
