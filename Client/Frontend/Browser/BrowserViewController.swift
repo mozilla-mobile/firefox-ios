@@ -2466,3 +2466,34 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
     }
 }
 
+
+// MARK: - reopen last closed tab
+
+extension BrowserViewController {
+    
+    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+        homePanelDidRequestToRestoreClosedTab(motion)
+    }
+    
+    func homePanelDidRequestToRestoreClosedTab(_ motion: UIEventSubtype) {
+        guard motion == .motionShake, !topTabsVisible, !urlBar.inOverlayMode,
+            let lastClosedURL = profile.recentlyClosedTabs.tabs.first?.url,
+            let selectedTab = tabManager.selectedTab else { return }
+        
+        let alertTitleText = Strings.ReopenLastTabAlertTitle
+        let reopenButtonText = Strings.ReopenLastTabButtonText
+        let cancelButtonText = Strings.ReopenLastTabCancelText
+        
+        func reopenLastTab(_ action: UIAlertAction) {
+            let request = PrivilegedRequest(url: lastClosedURL) as URLRequest
+            let closedTab = tabManager.addTab(request, afterTab: selectedTab, isPrivate: false)
+            tabManager.selectTab(closedTab)
+        }
+        
+        let alert = AlertController(title: alertTitleText, message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: reopenButtonText, style: .default, handler: reopenLastTab), accessibilityIdentifier: "BrowserViewController.ReopenLastTabAlert.ReopenButton")
+        alert.addAction(UIAlertAction(title: cancelButtonText, style: .cancel, handler: nil), accessibilityIdentifier: "BrowserViewController.ReopenLastTabAlert.CancelButton")
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+}
