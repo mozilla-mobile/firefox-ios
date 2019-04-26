@@ -43,7 +43,7 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
 
     // `weak` usage here allows deferred queue to be the owner. The deferred is always filled and this set to nil,
     // this is defensive against any changes to queue (or cancellation) behaviour in future.
-    private weak var currentDbQuery: Cancellable?
+    private weak var currentDbQuery: CancellableDeferred<Maybe<Cursor<Site>>>?
 
     var query: String = "" {
         didSet {
@@ -60,14 +60,14 @@ class _SearchLoader<UnusedA, UnusedB>: Loader<Cursor<Site>, SearchViewController
             }
 
             let deferred = frecentHistory.getSites(whereURLContains: query, historyLimit: 100, bookmarksLimit: 5)
-            currentDbQuery = deferred as? Cancellable
+            currentDbQuery = deferred as? CancellableDeferred
 
             deferred.uponQueue(.main) { result in
                 defer {
                     self.currentDbQuery = nil
                 }
 
-                guard let deferred = deferred as? Cancellable, !deferred.cancelled else {
+                guard let deferred = deferred as? CancellableDeferred, !deferred.cancelled else {
                     return
                 }
 
