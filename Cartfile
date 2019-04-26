@@ -6,7 +6,7 @@ github "swisspol/GCDWebServer"              ~> 3.3
 github "kif-framework/KIF"                  "v3.7.5"
 github "adjust/ios_sdk"                     "v4.17.1"
 github "AgileBits/onepassword-app-extension"    "add-framework-support"
-github "garvankeeley/SwiftKeychainWrapper"       "master" # switch to mozilla-mobile once PR#1 lands there
+github "mozilla-mobile/SwiftKeychainWrapper"       "master" # switch to mozilla-mobile once PR#1 lands there
 github "DaveWoodCom/XCGLogger"              ~> 6.1
 github "cezheng/Fuzi"                       "master"
 github "SwiftyJSON/SwiftyJSON"              ~> 4.2
@@ -17,7 +17,7 @@ github "Leanplum/Leanplum-iOS-SDK"          ~> 2.4
 github "apple/swift-protobuf"               ~> 1.5
 
 # Use release version of application-services
-github "mozilla/application-services"       "v0.26.2"
+github "garvankeeley/application-services"      "0.27.0.1" # for xcode 10.2 compat use this fork temporarily 
 
 # Use interim binary version of application-services
 # binary "https://circleci.com/api/v1.1/project/github/mozilla/application-services/2862/artifacts/0/dist/mozilla.app-services.json" ~> 0.0.1-snapshot # mozilla/application-services@fb5c540e99133980911216055425688f22a27be2
