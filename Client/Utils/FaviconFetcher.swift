@@ -264,8 +264,8 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         guard let hash = url.baseDomain?.hashValue else {
             return UIColor.Photon.Grey50
         }
-        let index = abs(hash) % (UIConstants.DefaultColorStrings.count - 1)
-        let colorHex = UIConstants.DefaultColorStrings[index]
+        let index = abs(hash) % (DefaultFaviconBackgroundColors.count - 1)
+        let colorHex = DefaultFaviconBackgroundColors[index]
         return UIColor(colorString: colorHex)
     }
 
