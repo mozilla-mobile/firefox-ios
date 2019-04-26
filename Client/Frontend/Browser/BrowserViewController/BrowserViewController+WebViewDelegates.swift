@@ -205,14 +205,21 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if let tab = tabManager.selectedTab, isStoreURL(url) {
+        if isStoreURL(url) {
             decisionHandler(.cancel)
 
-            let alreadyShowingSnackbarOnThisTab = tab.bars.count > 0
-            if !alreadyShowingSnackbarOnThisTab {
-                TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url)
+            // Make sure to wait longer than delaySelectingNewPopupTab to ensure selectedTab is correct
+            DispatchQueue.main.asyncAfter(deadline: .now() + tabManager.delaySelectingNewPopupTab + 0.1) {
+                guard let tab = self.tabManager.selectedTab else { return }
+                if tab.bars.isEmpty { // i.e. no snackbars are showing
+                    TimerSnackBar.showAppStoreConfirmationBar(forTab: tab, appStoreURL: url) { _ in
+                        // If a new window was opened for this URL (it will have no history), close it.
+                        if tab.historyList.isEmpty {
+                            self.tabManager.removeTabAndUpdateSelectedIndex(tab)
+                        }
+                    }
+                }
             }
-
             return
         }
 

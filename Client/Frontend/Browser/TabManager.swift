@@ -39,7 +39,9 @@ class TabManager: NSObject {
     fileprivate let tabEventHandlers: [TabEventHandler]
     fileprivate let store: TabManagerStore
     fileprivate let profile: Profile
-    
+
+    let delaySelectingNewPopupTab: TimeInterval = 0.1
+
     func addDelegate(_ delegate: TabManagerDelegate) {
         assert(Thread.isMainThread)
         delegates.append(WeakTabManagerDelegate(value: delegate))
@@ -242,7 +244,7 @@ class TabManager: NSObject {
         // Wait momentarily before selecting the new tab, otherwise the parent tab
         // may be unable to set `window.location` on the popup immediately after
         // calling `window.open("")`.
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delaySelectingNewPopupTab) { 
             self.selectTab(popup)
         }
 

@@ -32,7 +32,7 @@ public extension LoginRecord {
     }
 
     public var credentials: URLCredential {
-        return URLCredential(user: username ?? "", password: password, persistence: .none)
+        return URLCredential(user: username ?? "", password: password, persistence: .forSession)
     }
 
     public var protectionSpace: URLProtectionSpace {
@@ -196,7 +196,7 @@ public class RustLogins {
     }
 
     public func reopenIfClosed() -> NSError? {
-        var error: NSError?  = nil
+        var error: NSError?
 
         queue.sync {
             guard !isOpen else { return }
@@ -208,7 +208,15 @@ public class RustLogins {
     }
 
     public func forceClose() -> NSError? {
-        var error: NSError? = nil
+        var error: NSError?
+
+        do {
+            try storage.interrupt()
+        } catch let err as NSError {
+            error = err
+
+            Sentry.shared.sendWithStacktrace(message: "Error interrupting Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+        }
 
         queue.sync {
             guard isOpen else { return }
@@ -223,8 +231,9 @@ public class RustLogins {
         let deferred = Success()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -252,8 +261,9 @@ public class RustLogins {
         let deferred = Deferred<Maybe<LoginRecord?>>()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -332,8 +342,9 @@ public class RustLogins {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -352,8 +363,9 @@ public class RustLogins {
         let deferred = Deferred<Maybe<String>>()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -379,8 +391,9 @@ public class RustLogins {
         let deferred = Success()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -403,8 +416,9 @@ public class RustLogins {
         let deferred = Deferred<Maybe<Bool>>()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -423,8 +437,9 @@ public class RustLogins {
         let deferred = Success()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -443,8 +458,9 @@ public class RustLogins {
         let deferred = Success()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 

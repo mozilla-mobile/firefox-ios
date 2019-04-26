@@ -276,6 +276,7 @@ open class BrowserProfile: Profile {
 
         if isNewProfile {
             log.info("New profile. Removing old account metadata.")
+            _ = keychain.removeAllKeys()
             self.removeAccountMetadata()
             self.syncManager.onNewProfile()
             self.removeExistingAuthenticationInfo()

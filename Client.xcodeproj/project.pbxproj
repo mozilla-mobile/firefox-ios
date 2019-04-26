@@ -503,6 +503,7 @@
 		D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA0B1FF5B1FA001D3A09 /* NavigationRouter.swift */; };
 		D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */; };
 		D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */; };
+		DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACDE995225E537900C8F37F /* VersionSettingTests.swift */; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
 		DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
 		DDA24A451FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
@@ -700,6 +701,10 @@
 		EBA31D7B1F79990C0055463D /* SyncTelemetryEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */; };
 		EBA31D7D1F79996E0055463D /* SyncTelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */; };
 		EBA31D861F799BE20055463D /* Telemetry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBA31D7E1F799BE20055463D /* Telemetry.framework */; };
+		EBA3B2C32268F16300728BDB /* PhotonActionSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3B2C22268F16300728BDB /* PhotonActionSheetCell.swift */; };
+		EBA3B2CD2268F27500728BDB /* PhotonActionSheetWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3B2CC2268F27500728BDB /* PhotonActionSheetWidgets.swift */; };
+		EBA3B2D02268F40C00728BDB /* SyncMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3B2CF2268F40C00728BDB /* SyncMenuButton.swift */; };
+		EBA3B2D22268F57E00728BDB /* BadgeIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA3B2D12268F57E00728BDB /* BadgeIcon.swift */; };
 		EBB6CA622140823900077CFA /* firefoxScheme.html in Resources */ = {isa = PBXBuildFile; fileRef = EBB6CA592140823900077CFA /* firefoxScheme.html */; };
 		EBB6CAA1214197DB00077CFA /* blobURL.html in Resources */ = {isa = PBXBuildFile; fileRef = EBB6CA98214197DA00077CFA /* blobURL.html */; };
 		EBB894FD219398E500EB91A0 /* disconnect-advertising.json in Resources */ = {isa = PBXBuildFile; fileRef = EBB894EC219398E500EB91A0 /* disconnect-advertising.json */; };
@@ -1666,6 +1671,7 @@
 		D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouterTests.swift; sourceTree = "<group>"; };
 		D8FDEB54220CFE970069A582 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ImageEffects.h"; path = "ThirdParty/Apple/UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "ThirdParty/Apple/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		DACDE995225E537900C8F37F /* VersionSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSettingTests.swift; sourceTree = "<group>"; };
 		DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabPrintPageRenderer.swift; sourceTree = "<group>"; };
 		DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DefaultSearchPrefs.swift; sourceTree = "<group>"; };
 		E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TPStatsBlocklistsTests.swift; sourceTree = "<group>"; };
@@ -1792,7 +1798,6 @@
 		E65075C11E37F956006961AC /* ExtensionUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUtils.swift; sourceTree = "<group>"; };
 		E653422C1C5944F90039DD9E /* BrowserPrompts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserPrompts.swift; sourceTree = "<group>"; };
 		E65607601C08B4E200534B02 /* SearchInputView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
-		E659A60A1EB7C1D300D7A6AD /* BuddyBuildSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BuddyBuildSDK.framework; sourceTree = "<group>"; };
 		E65D89171C8647420006EA35 /* AppAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppAuthenticator.swift; sourceTree = "<group>"; };
 		E660BDD81BB06521009AC090 /* TabsButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsButton.swift; sourceTree = "<group>"; };
 		E660BE051BB0666D009AC090 /* InnerStrokedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InnerStrokedView.swift; sourceTree = "<group>"; };
@@ -1864,6 +1869,10 @@
 		EBA31D7A1F79990C0055463D /* SyncTelemetryEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetryEvents.swift; sourceTree = "<group>"; };
 		EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncTelemetryUtils.swift; sourceTree = "<group>"; };
 		EBA31D7E1F799BE20055463D /* Telemetry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Telemetry.framework; path = Carthage/Build/iOS/Telemetry.framework; sourceTree = "<group>"; };
+		EBA3B2C22268F16300728BDB /* PhotonActionSheetCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetCell.swift; sourceTree = "<group>"; };
+		EBA3B2CC2268F27500728BDB /* PhotonActionSheetWidgets.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetWidgets.swift; sourceTree = "<group>"; };
+		EBA3B2CF2268F40C00728BDB /* SyncMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMenuButton.swift; sourceTree = "<group>"; };
+		EBA3B2D12268F57E00728BDB /* BadgeIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeIcon.swift; sourceTree = "<group>"; };
 		EBB6CA592140823900077CFA /* firefoxScheme.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = firefoxScheme.html; sourceTree = "<group>"; };
 		EBB6CA98214197DA00077CFA /* blobURL.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = blobURL.html; sourceTree = "<group>"; };
 		EBB894EC219398E500EB91A0 /* disconnect-advertising.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-advertising.json"; sourceTree = "<group>"; };
@@ -2308,7 +2317,6 @@
 			children = (
 				D8FDEB54220CFE970069A582 /* UIImage+ImageEffects.h */,
 				D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */,
-				E659A6091EB7C1D300D7A6AD /* BuddyBuild */,
 				28CE83CA1A1D1D5100576538 /* FxA.xcodeproj */,
 				D30EBB5A1C75503800105AE9 /* KIF.xcodeproj */,
 				288A2D7E1AB8B2AD0023ABC3 /* Result */,
@@ -2882,6 +2890,7 @@
 		D38A1BEB1A9FA2CA00F6A386 /* Widgets */ = {
 			isa = PBXGroup;
 			children = (
+				EBA3B2CE2268F3E700728BDB /* PhotonActionSheet */,
 				D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */,
 				E6927EBF1C7B6FB800D03F75 /* ErrorToast.swift */,
 				E660BE051BB0666D009AC090 /* InnerStrokedView.swift */,
@@ -2896,10 +2905,8 @@
 				C4E3984B1D21F2FD004E89BA /* TabTrayButtonExtensions.swift */,
 				59A68B1F857A8638598A63A0 /* TwoLineCell.swift */,
 				745DAB3E1CDAB09E00D44181 /* HistoryBackButton.swift */,
-				742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */,
-				D88FDA9E1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift */,
-				D88FDAAE1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift */,
 				D863C8E31F68BFC20058D95F /* GradientProgressBar.swift */,
+				EBA3B2D12268F57E00728BDB /* BadgeIcon.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -3183,15 +3190,6 @@
 			name = Delegates;
 			sourceTree = "<group>";
 		};
-		E659A6091EB7C1D300D7A6AD /* BuddyBuild */ = {
-			isa = PBXGroup;
-			children = (
-				E659A60A1EB7C1D300D7A6AD /* BuddyBuildSDK.framework */,
-			);
-			name = BuddyBuild;
-			path = ThirdParty/BuddyBuild;
-			sourceTree = "<group>";
-		};
 		E689C6FF1E0C716F008BAADB /* Entitlements */ = {
 			isa = PBXGroup;
 			children = (
@@ -3319,6 +3317,19 @@
 				EB9A179E20E6C1A200B12184 /* ThemedWidgets.swift */,
 			);
 			path = Theme;
+			sourceTree = "<group>";
+		};
+		EBA3B2CE2268F3E700728BDB /* PhotonActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				742A56381D80B54A00BDB803 /* PhotonActionSheet.swift */,
+				EBA3B2C22268F16300728BDB /* PhotonActionSheetCell.swift */,
+				EBA3B2CC2268F27500728BDB /* PhotonActionSheetWidgets.swift */,
+				D88FDA9E1F4E2B9200FD9709 /* PhotonActionSheetProtocol.swift */,
+				D88FDAAE1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift */,
+				EBA3B2CF2268F40C00728BDB /* SyncMenuButton.swift */,
+			);
+			path = PhotonActionSheet;
 			sourceTree = "<group>";
 		};
 		EBB894E9219398E500EB91A0 /* content-blocker-lib-ios */ = {
@@ -3479,6 +3490,7 @@
 				D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */,
 				63306D442110BAF000F25400 /* TabManagerStoreTests.swift */,
 				E1D8BC7921FF7A0000B100BD /* TPStatsBlocklistsTests.swift */,
+				DACDE995225E537900C8F37F /* VersionSettingTests.swift */,
 			);
 			path = ClientTests;
 			sourceTree = "<group>";
@@ -5109,6 +5121,7 @@
 				D3B6923F1B9F9A58004B87A4 /* FindInPageHelper.swift in Sources */,
 				EB9A179C20E69A7F00B12184 /* DarkTheme.swift in Sources */,
 				EB1C84BF212EFFBF001489DF /* BrowserViewController+ReaderMode.swift in Sources */,
+				EBA3B2CD2268F27500728BDB /* PhotonActionSheetWidgets.swift in Sources */,
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
@@ -5173,6 +5186,7 @@
 				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
+				EBA3B2C32268F16300728BDB /* PhotonActionSheetCell.swift in Sources */,
 				E689C7301E0C7617008BAADB /* NSAttributedStringExtensions.swift in Sources */,
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
@@ -5198,6 +5212,7 @@
 				2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */,
 				39DD030D1CD53E1900BC09B3 /* HomePageHelper.swift in Sources */,
 				C4F3B29A1CFCF93A00966259 /* ButtonToast.swift in Sources */,
+				EBA3B2D02268F40C00728BDB /* SyncMenuButton.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */,
 				D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */,
@@ -5289,6 +5304,7 @@
 				3BE7275D1CCFE8B60099189F /* CustomSearchHandler.swift in Sources */,
 				E692E3291C46E62D009D1240 /* AuthenticationSettingsViewController.swift in Sources */,
 				E663D5781BB341C4001EF30E /* ToggleButton.swift in Sources */,
+				EBA3B2D22268F57E00728BDB /* BadgeIcon.swift in Sources */,
 				E6327A641BF6438E008D12E0 /* DebugSettingsBundleOptions.swift in Sources */,
 				D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */,
 				EBB89506219398E500EB91A0 /* TabContentBlocker.swift in Sources */,
@@ -5319,6 +5335,7 @@
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */,
 				554867231DC3935A00183DAA /* HomePageTests.swift in Sources */,
+				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
 				3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */,
 				8DCD3BCD1ED5B7FA00446D38 /* FxADeepLinkingTests.swift in Sources */,
 				3943A81D1E9807C700D4F6DC /* FxAPushMessageTest.swift in Sources */,
@@ -5758,6 +5775,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/MozillaAppServices.framework",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -6480,7 +6501,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6606,6 +6626,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/MozillaAppServices.framework",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -7383,7 +7407,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7399,8 +7422,6 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
-					"-framework",
-					BuddyBuildSDK,
 					"-framework",
 					AssetsLibrary,
 					"-framework",
@@ -7516,6 +7537,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/MozillaAppServices.framework",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -7966,7 +7991,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8091,6 +8115,10 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/MozillaAppServices.framework",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.mozilla.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -8346,7 +8374,6 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
-					"$(PROJECT_DIR)/ThirdParty/BuddyBuild",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8362,8 +8389,6 @@
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
-					"-framework",
-					BuddyBuildSDK,
 					"-framework",
 					AssetsLibrary,
 					"-framework",
