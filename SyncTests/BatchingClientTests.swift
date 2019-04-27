@@ -42,7 +42,10 @@ private func assertLinesMatchRecords<T>(lines: [String], records: [Record<T>], s
 
     lines.enumerated().forEach { index, line in
         let record = records[index]
-        XCTAssertEqual(line, serializer(record))
+        let json = EnvelopeJSON(line)
+        XCTAssertEqual(line.count, serializer(record).count)
+        // Swift 4 dict equality
+        XCTAssert(record.payload.json.dictionary == json.asJSON()["payload"].dictionary)
     }
 }
 

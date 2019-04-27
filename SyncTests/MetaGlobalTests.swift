@@ -119,7 +119,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -139,7 +139,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -157,7 +157,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -176,7 +176,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -209,7 +209,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -235,7 +235,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -262,7 +262,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -281,7 +281,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -297,7 +297,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -332,7 +332,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -365,7 +365,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -398,7 +398,7 @@ class MetaGlobalTests: XCTestCase {
             thirdExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -429,7 +429,7 @@ class MetaGlobalTests: XCTestCase {
             fourthExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -468,7 +468,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -503,7 +503,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -537,7 +537,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -575,7 +575,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -620,7 +620,7 @@ class MetaGlobalTests: XCTestCase {
             thirdExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
