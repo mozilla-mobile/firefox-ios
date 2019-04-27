@@ -44,7 +44,7 @@ public final class SpinLock: ReadWriteLock {
     }
 
     deinit {
-        lock.deallocate(capacity: 1)
+        lock.deallocate()
     }
 
     public func withReadLock<T>(block: () -> T) -> T {
@@ -79,7 +79,7 @@ public final class CASSpinLock: ReadWriteLock {
     }
 
     deinit {
-        _state.deallocate(capacity: 1)
+        _state.deallocate()
     }
 
     public func withWriteLock<T>(block: () -> T) -> T {

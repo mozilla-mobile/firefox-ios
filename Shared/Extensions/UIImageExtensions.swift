@@ -78,7 +78,6 @@ extension UIImage {
     //    let image = UIImage(named: "fxLogo")!
     //    let data = UIImagePNGRepresentation(image)!
     //    assert(data != UIImagePNGRepresentation(UIImage(data: data)!))
-    @available(*, deprecated, message: "use only in testing code")
     public func isStrictlyEqual(to other: UIImage) -> Bool {
         // Must use same constructor for PNG metadata block to be the same.
         let imageA = UIImage(data: self.pngData()!)!
