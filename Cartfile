@@ -9,7 +9,7 @@ github "AgileBits/onepassword-app-extension"    "add-framework-support"
 github "mozilla-mobile/SwiftKeychainWrapper"       "master" # switch to mozilla-mobile once PR#1 lands there
 github "DaveWoodCom/XCGLogger"              ~> 6.1
 github "cezheng/Fuzi"                       "master"
-github "SwiftyJSON/SwiftyJSON"              ~> 4.2
+github "SwiftyJSON/SwiftyJSON"              ~> 4.3
 github "st3fan/EarlGrey"                    "master"
 github "mozilla-mobile/telemetry-ios"      ~> 1.1
 github "mozilla-mobile/MappaMundi"          "master"

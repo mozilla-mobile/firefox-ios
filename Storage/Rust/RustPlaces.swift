@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Deferred
 
 @_exported import MozillaAppServices
 
@@ -241,7 +240,7 @@ public class RustPlaces {
         return error
     }
 
-    public func sync(unlockInfo: SyncUnlockInfo) -> Success {
+    public func syncBookmarks(unlockInfo: SyncUnlockInfo) -> Success {
         let deferred = Success()
 
         writerQueue.async {

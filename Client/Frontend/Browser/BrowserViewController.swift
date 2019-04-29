@@ -672,9 +672,9 @@ class BrowserViewController: UIViewController {
             let firefoxHomeViewController = FirefoxHomeViewController(profile: profile)
             firefoxHomeViewController.homePanelDelegate = self
             self.firefoxHomeViewController = firefoxHomeViewController
-            addChildViewController(firefoxHomeViewController)
+            addChild(firefoxHomeViewController)
             view.addSubview(firefoxHomeViewController.view)
-            firefoxHomeViewController.didMove(toParentViewController: self)
+            firefoxHomeViewController.didMove(toParent: self)
         }
 
         firefoxHomeViewController?.applyTheme()
@@ -702,11 +702,11 @@ class BrowserViewController: UIViewController {
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
-            firefoxHomeViewController.willMove(toParentViewController: nil)
+            firefoxHomeViewController.willMove(toParent: nil)
             firefoxHomeViewController.view.removeFromSuperview()
             firefoxHomeViewController.removeFromParent()
             self.webViewContainer.accessibilityElementsHidden = false
-            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
 
             // Refresh the reading view toolbar since the article record may have changed
             if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {

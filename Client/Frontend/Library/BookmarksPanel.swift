@@ -31,7 +31,7 @@ private let LocalizedRootFolderStrings = [
 ]
 
 fileprivate class BookmarkFolderTableViewCell: TwoLineTableViewCell {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         imageView?.image = UIImage(named: "bookmarkFolder")
@@ -57,7 +57,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     var libraryPanelDelegate: LibraryPanelDelegate?
 
     let refreshControl = UIRefreshControl()
-    let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+    }()
 
     let bookmarkFolderGUID: GUID
 
@@ -289,11 +292,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         return true
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAtIndexPath indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if bookmarkNodes[safe: indexPath.row] is BookmarkSeparator {
             return .none
         }
@@ -331,10 +334,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
             return nil
         }
 
-        let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
-        // TODO: Determine how to pull in a favicon
-        // site.icon = bookmarkItem.favicon
-        return site
+        return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
