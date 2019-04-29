@@ -8,7 +8,7 @@ This branch (master)
 
 This branch is for mainline development that will ship in *v17.0*.
 
-This branch only works with Xcode 10.1 and supports iOS 11.0 and above
+This branch only works with Xcode 10.2.x and supports iOS 11.0 and above
 
 This branch is written in Swift 4.2
 
@@ -23,8 +23,6 @@ Want to contribute but don't know where to start? Here is a list of [issues that
 
 Building the code
 -----------------
-
-> __As of Oct 2018, this project requires Xcode 10.1__
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
 1. Install Carthage
