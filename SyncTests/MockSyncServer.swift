@@ -42,22 +42,22 @@ private struct SyncRequestSpec {
 
         let parts = request.path.components(separatedBy: "/").filter { !$0.isEmpty }
         let id: String?
-        let query = request.query as! [String: AnyObject]
-        let ids = optStringArray(x: query["ids"])
-        let newer = optTimestamp(x: query["newer"])
+        let query = request.query!
+        let ids = optStringArray(x: query["ids"] as AnyObject?)
+        let newer = optTimestamp(x: query["newer"] as AnyObject?)
         let full: Bool = query["full"] != nil
 
         let limit: Int?
-        if let lim = query["limit"] as? String {
+        if let lim = query["limit"] {
             limit = Int(lim)
         } else {
             limit = nil
         }
 
-        let offset = query["offset"] as? String
+        let offset = query["offset"]
 
         let sort: SortOption?
-        switch query["sort"] as? String ?? "" {
+        switch query["sort"] ?? "" {
         case "oldest":
             sort = SortOption.OldestFirst
         case "newest":
@@ -99,7 +99,7 @@ struct SyncDeleteRequestSpec {
     static func fromRequest(request: GCDWebServerRequest) -> SyncDeleteRequestSpec? {
         // Input is "/1.5/user{/storage{/collection{/id}}}".
         // That means we get four, five, or six path components here, the first being empty.
-        return SyncDeleteRequestSpec.fromPath(path: request.path, withQuery: request.query as! [NSString : AnyObject])
+        return SyncDeleteRequestSpec.fromPath(path: request.path, withQuery: request.query! as [NSString : AnyObject])
     }
 
     static func fromPath(path: String, withQuery query: [NSString: AnyObject]) -> SyncDeleteRequestSpec? {
@@ -325,9 +325,9 @@ class MockSyncServer {
             return MockSyncServer.withHeaders(response: response, lastModified: lastModified, records: ic.count)
         }
 
-        let matchPut: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest in
+        let matchPut: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest? in
             if method != "PUT" || !path.hasPrefix(basePath) {
-                XCTAssert(false)
+                return nil
             }
             return GCDWebServerDataRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
@@ -340,7 +340,7 @@ class MockSyncServer {
             guard let spec = SyncPutRequestSpec.fromRequest(request: request) else {
                 return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(statusCode: 400))
             }
-            var body = JSON(request.jsonObject)
+            var body = JSON(request.jsonObject!)
             body["modified"] = JSON(stringLiteral: millisecondsToDecimalSeconds(Date.now()))
             let record = EnvelopeJSON(body)
 
@@ -351,9 +351,9 @@ class MockSyncServer {
             return MockSyncServer.withHeaders(response: response)
         }
 
-        let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest in
+        let matchDelete: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest? in
             if method != "DELETE" || !path.hasPrefix(basePath) {
-                XCTAssert(false)
+                return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
@@ -396,9 +396,9 @@ class MockSyncServer {
             return MockSyncServer.withHeaders(response: GCDWebServerDataResponse(data: "{}".utf8EncodedData, contentType: "application/json"))
         }
 
-        let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest in
+        let match: GCDWebServerMatchBlock = { method, url, headers, path, query -> GCDWebServerRequest? in
             if method != "GET" || !path.hasPrefix(storagePath) {
-                XCTAssert(false)
+                return nil
             }
             return GCDWebServerRequest(method: method, url: url, headers: headers, path: path, query: query)
         }
