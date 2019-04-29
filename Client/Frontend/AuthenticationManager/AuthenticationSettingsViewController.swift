@@ -91,9 +91,9 @@ class RequirePasscodeSetting: Setting {
         return "PasscodeInterval"
     }
 
-    override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
 
-    override var style: UITableViewCellStyle { return .value1 }
+    override var style: UITableViewCell.CellStyle { return .value1 }
 
     override var status: NSAttributedString {
         // Only show the interval if we are enabled and have an interval set.
@@ -228,7 +228,7 @@ class AuthenticationSettingsViewController: SettingsTableViewController {
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .PasscodeDidRemove, object: nil)
         notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .PasscodeDidCreate, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: .UIApplicationDidBecomeActive, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(refreshSettings), name: UIApplication.didBecomeActiveNotification, object: nil)
 
         tableView.accessibilityIdentifier = "AuthenticationManager.settingsTableView"
     }

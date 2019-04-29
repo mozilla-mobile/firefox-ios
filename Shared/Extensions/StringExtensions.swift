@@ -42,7 +42,7 @@ public extension String {
         return self.replacingOccurrences(of: "|", with: "%7C")
     }
 
-    public var asURL: URL? {
+    var asURL: URL? {
         // Firefox and NSURL disagree about the valid contents of a URL.
         // Let's escape | for them.
         // We'd love to use one of the more sophisticated CFURL* or NSString.* functions, but
@@ -53,7 +53,7 @@ public extension String {
 
     /// Returns a new string made by removing the leading String characters contained
     /// in a given character set.
-    public func stringByTrimmingLeadingCharactersInSet(_ set: CharacterSet) -> String {
+    func stringByTrimmingLeadingCharactersInSet(_ set: CharacterSet) -> String {
         var trimmed = self
         while trimmed.rangeOfCharacter(from: set)?.lowerBound == trimmed.startIndex {
             trimmed.remove(at: trimmed.startIndex)
@@ -63,7 +63,7 @@ public extension String {
 
     /// Adds a newline at the closest space from the middle of a string.
     /// Example turning "Mark as Read" into "Mark as\n Read"
-    public func stringSplitWithNewline() -> String {
+    func stringSplitWithNewline() -> String {
         let mid = self.count / 2
 
         let arr: [Int] = self.indices.compactMap {
@@ -81,17 +81,17 @@ public extension String {
         return newString
     }
 
-    public static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
+    static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
         return bundle.path(forResource: name, ofType: type).flatMap {
             try? String(contentsOfFile: $0, encoding: encoding)
         }
     }
 
-    public func remove(_ string: String?) -> String {
+    func remove(_ string: String?) -> String {
         return self.replacingOccurrences(of: string ?? "", with: "")
     }
 
-    public func replaceFirstOccurrence(of original: String, with replacement: String) -> String {
+    func replaceFirstOccurrence(of original: String, with replacement: String) -> String {
         guard let range = self.range(of: original) else {
             return self
         }

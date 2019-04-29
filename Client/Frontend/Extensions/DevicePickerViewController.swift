@@ -355,7 +355,7 @@ class DevicePickerTableViewHeaderCell: UITableViewCell {
     static let CellIdentifier = "ClientPickerTableViewSectionHeader"
     let nameLabel = UILabel()
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addSubview(nameLabel)
         nameLabel.font = DevicePickerViewControllerUX.TableHeaderTextFont
@@ -399,7 +399,7 @@ class DevicePickerTableViewCell: UITableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         nameLabel = UILabel()
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(nameLabel)
@@ -429,7 +429,7 @@ class DevicePickerTableViewCell: UITableViewCell {
 class DevicePickerNoClientsTableViewCell: UITableViewCell {
     static let CellIdentifier = "ClientPickerNoClientsTableViewCell"
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupHelpView(contentView,
             introText: Strings.SendToNoDevicesFound,

@@ -480,7 +480,7 @@ open class BookmarkBasePayload: CleartextPayloadJSON, MirrorItemable {
         return fields.every { field in
             let val = self[field]
             // Yup, 404 is not found, so this means "boolean or nothing".
-            let valid = val.isBool() || val.isNull() || val.error?.code == 404
+            let valid = val.isBool() || val.isNull() || val.error?.errorCode == 404
             if !valid {
                 log.debug("Field \(field) is invalid: \(val).")
             }

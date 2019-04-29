@@ -77,18 +77,18 @@ class HomePageSettingViewController: SettingsTableViewController {
     class TopSitesSettings: Setting {
         let profile: Profile
 
-        override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+        override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
             let num = self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
             return NSAttributedString(string: String(format: Strings.TopSitesRowCount, num))
         }
 
         override var accessibilityIdentifier: String? { return "TopSitesRows" }
-        override var style: UITableViewCellStyle { return .value1 }
+        override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: Strings.ASTopSitesTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
+            super.init(title: NSAttributedString(string: Strings.ASTopSitesTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {

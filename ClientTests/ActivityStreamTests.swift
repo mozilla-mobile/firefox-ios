@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 import Shared
 import Storage
-import Deferred
 import SyncTelemetry
 
 class ActivityStreamTests: XCTestCase {

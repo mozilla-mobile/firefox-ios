@@ -48,7 +48,7 @@ fileprivate class DarkToolbarButtonColor: ToolbarButtonColor {
 
 fileprivate class DarkTabTrayColor: TabTrayColor {
     override var tabTitleText: UIColor { return defaultTextAndTint }
-    override var tabTitleBlur: UIBlurEffectStyle { return UIBlurEffectStyle.dark }
+    override var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.dark }
     override var background: UIColor { return UIColor.Photon.Grey90 }
     override var cellBackground: UIColor { return defaultBackground }
     override var toolbar: UIColor { return UIColor.Photon.Grey80 }

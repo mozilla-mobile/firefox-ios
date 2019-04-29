@@ -413,7 +413,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         guard let traits = currentTraits else {
             return 0
         }
-        let isLandscape = UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation)
+        let isLandscape = UIApplication.shared.statusBarOrientation.isLandscape
         if UIDevice.current.userInterfaceIdiom == .phone {
             if isLandscape {
                 return 8
@@ -424,7 +424,7 @@ class ASHorizontalScrollCellManager: NSObject, UICollectionViewDelegate, UIColle
         // On iPad
         // The number of items in a row is equal to the number of highlights in a row * 2
         var numItems = Int(ASPanelUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass])
-        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) || (traits.horizontalSizeClass == .compact && isLandscape) {
+        if UIApplication.shared.statusBarOrientation.isPortrait || (traits.horizontalSizeClass == .compact && isLandscape) {
             numItems = numItems - 1
         }
         return numItems * 2

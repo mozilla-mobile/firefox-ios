@@ -6,7 +6,6 @@ import UIKit
 import SnapKit
 import Shared
 import Storage
-import Deferred
 
 extension UIStackView {
     func addBackground(color: UIColor) {

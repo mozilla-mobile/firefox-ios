@@ -4,7 +4,6 @@
 
 import UIKit
 import Shared
-import Deferred
 import SwiftyJSON
 
 private let log = Logger.syncLogger

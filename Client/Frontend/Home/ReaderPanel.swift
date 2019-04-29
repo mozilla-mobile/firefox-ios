@@ -78,7 +78,7 @@ class ReadingListTableViewCell: UITableViewCell, Themeable {
     let titleLabel: UILabel!
     let hostnameLabel: UILabel!
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         readStatusImageView = UIImageView()
         titleLabel = UILabel()
         hostnameLabel = UILabel()
@@ -161,7 +161,7 @@ class ReadingListTableViewCell: UITableViewCell, Themeable {
             if !unread {
                 // mimic light gray visual dimming by "dimming" the speech by reducing pitch
                 let lowerPitchString = NSMutableAttributedString(string: string as String)
-                lowerPitchString.addAttribute(NSAttributedStringKey(rawValue: UIAccessibilitySpeechAttributePitch), value: NSNumber(value: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch as Float), range: NSRange(location: 0, length: lowerPitchString.length))
+                lowerPitchString.addAttribute(NSAttributedString.Key.accessibilitySpeechPitch, value: NSNumber(value: ReadingListTableViewCellUX.ReadAccessibilitySpeechPitch as Float), range: NSRange(location: 0, length: lowerPitchString.length))
                 label = NSAttributedString(attributedString: lowerPitchString)
             } else {
                 label = string as AnyObject
@@ -212,7 +212,7 @@ class ReadingListPanel: UITableViewController, HomePanel {
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "ReadingTable"
         tableView.estimatedRowHeight = ReadingListTableViewCellUX.RowHeight
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.separatorInset = .zero
         tableView.layoutMargins = .zero

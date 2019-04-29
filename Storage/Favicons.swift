@@ -4,7 +4,6 @@
 
 import Shared
 import UIKit
-import Deferred
 
 /* The base favicons protocol */
 public protocol Favicons {

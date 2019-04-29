@@ -4,7 +4,6 @@
 
 import Foundation
 import Alamofire
-import Deferred
 import Shared
 import SwiftyJSON
 
@@ -91,7 +90,7 @@ public class PushClient {
 }
 
 public extension PushClient {
-    public func register(_ apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
+    func register(_ apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
         //  POST /v1/{type}/{app_id}/registration
         let registerURL = endpointURL.appendingPathComponent("registration")!
 
@@ -124,7 +123,7 @@ public extension PushClient {
         }
     }
 
-    public func updateUAID(_ apnsToken: String, withRegistration creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
+    func updateUAID(_ apnsToken: String, withRegistration creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
         //  PUT /v1/{type}/{app_id}/registration/{uaid}
         let registerURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")!
         var mutableURLRequest = URLRequest(url: registerURL)
@@ -142,7 +141,7 @@ public extension PushClient {
         }
     }
 
-    public func unregister(_ creds: PushRegistration) -> Success {
+    func unregister(_ creds: PushRegistration) -> Success {
         //  DELETE /v1/{type}/{app_id}/registration/{uaid}
         let unregisterURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")
 
@@ -173,13 +172,16 @@ extension PushClient {
                         return deferred.fill(Maybe(failure: PushClientError.Local(PushClientUnknownError)))
                     }
 
-                    let json = JSON(data: data)
-
-                    if let remoteError = PushRemoteError.from(json: json) {
-                        return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
+                    do {
+                        let json = try JSON(data: data)
+                        if let remoteError = PushRemoteError.from(json: json) {
+                            return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
+                        }
+                        deferred.fill(Maybe(success: json))
+                    } catch {
+                        print(error)
+                        return deferred.fill(Maybe(failure: PushClientError.Local(error)))
                     }
-
-                    deferred.fill(Maybe(success: json))
                 }
         }
 

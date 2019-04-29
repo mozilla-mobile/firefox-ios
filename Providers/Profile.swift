@@ -13,7 +13,6 @@ import Storage
 import Sync
 import XCGLogger
 import SwiftKeychainWrapper
-import Deferred
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT
@@ -377,7 +376,7 @@ open class BrowserProfile: Profile {
     }
 
     deinit {
-        log.debug("Deiniting profile \(self.localName).")
+        log.debug("Deiniting profile \(self.localName()).")
         self.syncManager.endTimedSyncs()
     }
 

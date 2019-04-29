@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import Deferred
 
 open class IgnoredSiteError: MaybeErrorType {
     open var description: String {

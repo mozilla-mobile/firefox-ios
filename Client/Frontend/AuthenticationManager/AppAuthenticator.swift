@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import SwiftKeychainWrapper
 import LocalAuthentication
-import Deferred
 
 class AppAuthenticator {
     static func presentAuthenticationUsingInfo(_ authenticationInfo: AuthenticationKeychainInfo, touchIDReason: String, success: (() -> Void)?, cancel: (() -> Void)?, fallback: (() -> Void)?) {

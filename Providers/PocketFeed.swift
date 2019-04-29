@@ -5,7 +5,6 @@
 import Foundation
 import Alamofire
 import Shared
-import Deferred
 import Storage
 
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"

@@ -4,7 +4,6 @@
 
 import Foundation
 import XCGLogger
-import Deferred
 import Shared
 
 private let log = Logger.syncLogger

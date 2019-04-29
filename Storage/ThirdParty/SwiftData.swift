@@ -33,7 +33,6 @@
 // THE SOFTWARE.
 
 import UIKit
-import Deferred
 import Shared
 import XCGLogger
 

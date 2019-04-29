@@ -7,7 +7,6 @@ import SnapKit
 import Storage
 import Shared
 import SwiftKeychainWrapper
-import Deferred
 
 private struct LoginListUX {
     static let RowHeight: CGFloat = 58
@@ -145,7 +144,7 @@ class LoginListViewController: SensitiveViewController {
 
         let notificationCenter = NotificationCenter.default
         notificationCenter.addObserver(self, selector: #selector(remoteLoginsDidChange), name: .DataRemoteLoginChangesWereApplied, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
         setupDefaultNavButtons()
         view.addSubview(tableView)
@@ -393,7 +392,7 @@ extension LoginListViewController: UITableViewDelegate {
         return indexPath.section == LoginsSettingsSection ? 44 : LoginListUX.RowHeight
     }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    private func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
     }
 

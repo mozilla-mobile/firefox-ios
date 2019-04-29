@@ -67,7 +67,7 @@ class RemoteTabsPanel: UIViewController, HomePanel {
 
         view.backgroundColor = UIColor.theme.tableView.rowBackground
         tableViewController.tableView.backgroundColor = .clear
-        addChildViewController(tableViewController)
+        addChild(tableViewController)
         self.view.addSubview(tableViewController.view)
         self.view.addSubview(historyBackButton)
 
@@ -82,7 +82,7 @@ class RemoteTabsPanel: UIViewController, HomePanel {
             make.left.right.bottom.equalTo(self.view)
         }
 
-        tableViewController.didMove(toParentViewController: self)
+        tableViewController.didMove(toParent: self)
     }
 
     @objc func notificationReceived(_ notification: Notification) {
@@ -435,7 +435,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
     }
 
     override func updateConstraints() {
-        if UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
+        if UIApplication.shared.statusBarOrientation.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
             instructionsLabel.snp.remakeConstraints { make in
                 make.top.equalTo(titleLabel.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
                 make.width.equalTo(RemoteTabsPanelUX.EmptyStateInstructionsWidth)

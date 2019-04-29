@@ -63,7 +63,7 @@ class TabTrayController: UIViewController {
         searchBar.leftView = UIImageView(image: UIImage(named: "quickSearch"))
         searchBar.leftViewMode = .unlessEditing
         searchBar.textColor = UIColor.theme.tabTray.tabTitleText
-        searchBar.attributedPlaceholder = NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7)])
+        searchBar.attributedPlaceholder = NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7)])
         searchBar.clearButtonMode = .never
         searchBar.delegate = self
         searchBar.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
@@ -199,8 +199,8 @@ class TabTrayController: UIViewController {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
@@ -581,7 +581,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
         guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             self.removeByButtonOrSwipe(tab: tab, cell: tabCell)
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
         }
     }
 

@@ -229,7 +229,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         if groupedDownloadedFiles.isEmpty {
             if emptyStateOverlayView.superview == nil {
                 view.addSubview(emptyStateOverlayView)
-                view.bringSubview(toFront: emptyStateOverlayView)
+                view.bringSubviewToFront(emptyStateOverlayView)
                 emptyStateOverlayView.snp.makeConstraints { make in
                     make.edges.equalTo(self.tableView)
                 }
@@ -348,7 +348,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    private func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 

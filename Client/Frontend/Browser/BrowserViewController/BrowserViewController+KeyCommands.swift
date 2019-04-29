@@ -104,14 +104,14 @@ extension BrowserViewController {
 
     override var keyCommands: [UIKeyCommand]? {
         let searchLocationCommands = [
-            UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
         ]
         let overidesTextEditing = [
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .command, action: #selector(goBackKeyCommand)),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .command, action: #selector(goForwardKeyCommand)),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: .command, action: #selector(goBackKeyCommand)),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: .command, action: #selector(goForwardKeyCommand)),
         ]
         let tabNavigation = [
             UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(reloadTabKeyCommand), discoverabilityTitle: Strings.ReloadPageTitle),

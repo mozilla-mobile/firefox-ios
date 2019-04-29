@@ -17,7 +17,6 @@ import SDWebImage
 import SwiftyJSON
 import Telemetry
 import Sentry
-import Deferred
 
 private let KVOs: [KVOConstants] = [
     .estimatedProgress,
@@ -220,7 +219,7 @@ class BrowserViewController: UIViewController {
             if topTabsViewController == nil {
                 let topTabsViewController = TopTabsViewController(tabManager: tabManager)
                 topTabsViewController.delegate = self
-                addChildViewController(topTabsViewController)
+                addChild(topTabsViewController)
                 topTabsViewController.view.frame = topTabsContainer.frame
                 topTabsContainer.addSubview(topTabsViewController.view)
                 topTabsViewController.view.snp.makeConstraints { make in
@@ -238,7 +237,7 @@ class BrowserViewController: UIViewController {
                 make.height.equalTo(0)
             }
             topTabsViewController?.view.removeFromSuperview()
-            topTabsViewController?.removeFromParentViewController()
+            topTabsViewController?.removeFromParent()
             topTabsViewController = nil
         }
 
@@ -315,7 +314,7 @@ class BrowserViewController: UIViewController {
     @objc func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
-        UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions(), animations: {
+        UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions(), animations: {
             self.webViewContainer.alpha = 1
             self.urlBar.locationContainer.alpha = 1
             self.topTabsViewController?.switchForegroundStatus(isInForeground: true)
@@ -332,9 +331,9 @@ class BrowserViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification), name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackgroundNotification), name: UIApplication.didEnterBackgroundNotification, object: nil)
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         webViewContainerBackdrop = UIView()
@@ -684,9 +683,9 @@ class BrowserViewController: UIViewController {
             if let navController = TabbedHomePanelController(choice: panel, profile: profile) {
                 self.homePanelController = navController
                 navController.currentPanel?.homePanelDelegate = self
-                addChildViewController(navController)
+                addChild(navController)
                 view.addSubview(navController.view)
-                navController.currentPanel?.didMove(toParentViewController: self)
+                navController.currentPanel?.didMove(toParent: self)
             }
         }
 
@@ -703,7 +702,7 @@ class BrowserViewController: UIViewController {
         }, completion: { finished in
             if finished {
                 self.webViewContainer.accessibilityElementsHidden = true
-                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+                UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
             }
         })
         view.setNeedsUpdateConstraints()
@@ -715,11 +714,11 @@ class BrowserViewController: UIViewController {
             UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
                 controller.view.alpha = 0
             }, completion: { _ in
-                controller.willMove(toParentViewController: nil)
+                controller.willMove(toParent: nil)
                 controller.view.removeFromSuperview()
-                controller.removeFromParentViewController()
+                controller.removeFromParent()
                 self.webViewContainer.accessibilityElementsHidden = false
-                UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+                UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: UIAccessibility.Notification.screenChanged)
 
                 // Refresh the reading view toolbar since the article record may have changed
                 if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
@@ -799,7 +798,7 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        addChildViewController(searchController)
+        addChild(searchController)
         view.addSubview(searchController.view)
         searchController.view.snp.makeConstraints { make in
             make.top.equalTo(self.urlBar.snp.bottom)
@@ -808,14 +807,14 @@ class BrowserViewController: UIViewController {
 
         homePanelController?.view?.isHidden = true
 
-        searchController.didMove(toParentViewController: self)
+        searchController.didMove(toParent: self)
     }
 
     fileprivate func hideSearchController() {
         if let searchController = self.searchController {
-            searchController.willMove(toParentViewController: nil)
+            searchController.willMove(toParent: nil)
             searchController.view.removeFromSuperview()
-            searchController.removeFromParentViewController()
+            searchController.removeFromParent()
             homePanelController?.view?.isHidden = false
         }
     }
@@ -1140,12 +1139,12 @@ class BrowserViewController: UIViewController {
         }
 
         if tab === tabManager.selectedTab {
-            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
             // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
             // cursor land on the correct initial element, but if not followed by LayoutChanged,
             // VoiceOver will sometimes be stuck on the element, not allowing user to move
             // forward/backward. Strange, but LayoutChanged fixes that.
-            UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
         } else if let webView = tab.webView {
             // To Screenshot a tab that is hidden we must add the webView,
             // then wait enough time for the webview to render.
@@ -1334,7 +1333,7 @@ extension BrowserViewController: URLBarDelegate {
         guard let tab = tabManager.selectedTab,
                let url = tab.url?.displayURL
             else {
-                UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed."))
+                UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed."))
                 return false
         }
 
@@ -1342,10 +1341,10 @@ extension BrowserViewController: URLBarDelegate {
 
         switch result.value {
         case .success:
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
             // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
         case .failure(let error):
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Could not add page to Reading List. Maybe it’s already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: NSLocalizedString("Could not add page to Reading List. Maybe it’s already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
             print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
         }
         return true
@@ -1485,7 +1484,7 @@ extension BrowserViewController: URLBarDelegate {
         }
 
         if .blankPage == NewTabAccessors.getNewTabPage(profile.prefs) {
-            UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, nil)
+            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: UIAccessibility.Notification.screenChanged)
         } else {
             if let toast = clipboardBarDisplayHandler?.clipboardToast {
                 toast.removeFromSuperview()
@@ -2082,7 +2081,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
                     accessDenied.addAction(dismissAction)
                     let settingsAction = UIAlertAction(title: Strings.OpenSettingsString, style: .default ) { _ in
-                        UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:])
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
                     }
                     accessDenied.addAction(settingsAction)
                     self.present(accessDenied, animated: true, completion: nil)
@@ -2112,7 +2111,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 pasteboard.url = url as URL
                 let changeCount = pasteboard.changeCount
                 let application = UIApplication.shared
-                var taskId: UIBackgroundTaskIdentifier = 0
+                var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
                 taskId = application.beginBackgroundTask (expirationHandler: {
                     application.endBackgroundTask(taskId)
                 })
@@ -2156,7 +2155,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             }
         }
 
-        let cancelAction = UIAlertAction(title: Strings.CancelString, style: UIAlertActionStyle.cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Strings.CancelString, style: UIAlertAction.Style.cancel, handler: nil)
         actionSheetController.addAction(cancelAction)
         self.present(actionSheetController, animated: true, completion: nil)
     }
@@ -2471,11 +2470,11 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 
 extension BrowserViewController {
     
-    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         homePanelDidRequestToRestoreClosedTab(motion)
     }
     
-    func homePanelDidRequestToRestoreClosedTab(_ motion: UIEventSubtype) {
+    func homePanelDidRequestToRestoreClosedTab(_ motion: UIEvent.EventSubtype) {
         guard motion == .motionShake, !topTabsVisible, !urlBar.inOverlayMode,
             let lastClosedURL = profile.recentlyClosedTabs.tabs.first?.url,
             let selectedTab = tabManager.selectedTab else { return }

@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import Deferred
 import SwiftyJSON
 
 public struct SyncCommand: Equatable {

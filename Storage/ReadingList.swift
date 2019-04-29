@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Deferred
 
 func ReadingListNow() -> Timestamp {
     return Timestamp(Date.timeIntervalSinceReferenceDate * 1000.0)

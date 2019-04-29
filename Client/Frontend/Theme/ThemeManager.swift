@@ -36,7 +36,7 @@ class ThemeManager {
     }
 
     private init() {
-        NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: .UIScreenBrightnessDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
     }
 
     // UIViewControllers / UINavigationControllers need to have `preferredStatusBarStyle` and call this.

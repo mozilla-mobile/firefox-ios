@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import WebKit
-import Deferred
+import Shared
 
 enum BlocklistName: String {
     case advertising = "disconnect-advertising"

@@ -64,7 +64,7 @@ class LoginDetailViewController: SensitiveViewController {
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -187,7 +187,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
             deleteCell.textLabel?.textAlignment = .center
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
-            deleteCell.accessibilityTraits = UIAccessibilityTraitButton
+            deleteCell.accessibilityTraits = UIAccessibilityTraits.button
             deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
             return deleteCell
         }

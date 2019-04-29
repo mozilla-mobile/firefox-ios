@@ -118,12 +118,12 @@ public class PushSubscription: NSObject, NSCoding {
 }
 
 public extension PushSubscription {
-    public func aesgcm(payload: String, encryptionHeader: String, cryptoHeader: String) -> String? {
+    func aesgcm(payload: String, encryptionHeader: String, cryptoHeader: String) -> String? {
         let headers = PushCryptoHeaders(encryption: encryptionHeader, cryptoKey: cryptoHeader)
         return try? PushCrypto.sharedInstance.aesgcm(ciphertext: payload, withHeaders: headers, decryptWith: p256dhPrivateKey, authenticateWith: authKey)
     }
 
-    public func aes128gcm(payload: String) -> String? {
+    func aes128gcm(payload: String) -> String? {
         return try? PushCrypto.sharedInstance.aes128gcm(payload: payload, decryptWith: p256dhPrivateKey, authenticateWith: authKey)
     }
 }

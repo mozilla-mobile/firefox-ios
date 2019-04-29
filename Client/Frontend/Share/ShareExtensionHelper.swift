@@ -45,7 +45,7 @@ class ShareExtensionHelper: NSObject {
         // We would also hide View Later, if possible, but the exclusion list doesn't currently support
         // third-party activity types (rdar://19430419).
         activityViewController.excludedActivityTypes = [
-            UIActivityType.addToReadingList,
+            UIActivity.ActivityType.addToReadingList,
         ]
 
         // This needs to be ready by the time the share menu has been displayed and
@@ -81,7 +81,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
         return selectedURL
     }
 
-    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivityType?) -> Any? {
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         if let type = activityType, isPasswordManagerActivityType(type.rawValue) {
             return onePasswordExtensionItem
         } else {
@@ -91,7 +91,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
         }
     }
 
-    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivityType?) -> String {
+    func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
         if let type = activityType, isPasswordManagerActivityType(type.rawValue) {
             return browserFillIdentifier
         }

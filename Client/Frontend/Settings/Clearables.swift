@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import WebKit
-import Deferred
 import SDWebImage
 import CoreSpotlight
 

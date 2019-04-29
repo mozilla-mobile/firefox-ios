@@ -19,7 +19,7 @@ struct ReaderModeHandlers {
         // reader view interstitial page to find out when it can stop showing the 'Loading...' page and instead load
         // the readerized content.
         webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page-exists") { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
-            guard let stringURL = request?.query["url"] as? String,
+            guard let stringURL = request?.query?["url"],
                   let url = URL(string: stringURL) else {
                 return GCDWebServerResponse(statusCode: 500)
             }
@@ -30,7 +30,7 @@ struct ReaderModeHandlers {
 
         // Register the handler that accepts /reader-mode/page?url=http://www.example.com requests.
         webServer.registerHandlerForMethod("GET", module: "reader-mode", resource: "page") { (request: GCDWebServerRequest?) -> GCDWebServerResponse? in
-            if let url = request?.query["url"] as? String {
+            if let url = request?.query?["url"] {
                 if let url = URL(string: url), url.isWebPage() {
                     do {
                         let readabilityResult = try readerModeCache.get(url)

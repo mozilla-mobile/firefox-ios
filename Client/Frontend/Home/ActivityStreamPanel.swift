@@ -4,7 +4,6 @@
 
 import Shared
 import UIKit
-import Deferred
 import Storage
 import SDWebImage
 import XCGLogger
@@ -101,8 +100,8 @@ class ActivityStreamPanel: UICollectionViewController, HomePanel {
         super.viewDidLoad()
 
         Section.allValues.forEach { self.collectionView?.register(Section($0.rawValue).cellType, forCellWithReuseIdentifier: Section($0.rawValue).cellIdentifier) }
-        self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header")
-        self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer")
+        self.collectionView?.register(ASHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header")
+        self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer")
         collectionView?.keyboardDismissMode = .onDrag
 
         self.profile.panelDataObservers.activityStream.delegate = self
@@ -229,10 +228,10 @@ extension ActivityStreamPanel {
             switch self {
             case .pocket:
                 var numItems: CGFloat = ASPanelUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass]
-                if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+                if UIApplication.shared.statusBarOrientation.isPortrait {
                     numItems = numItems - 1
                 }
-                if traits.horizontalSizeClass == .compact && UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+                if traits.horizontalSizeClass == .compact && UIApplication.shared.statusBarOrientation.isLandscape {
                     numItems = numItems - 1
                 }
                 return numItems
@@ -291,8 +290,8 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
 
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
-            case UICollectionElementKindSectionHeader:
-                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
+        case UICollectionView.elementKindSectionHeader:
+                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Header", for: indexPath) as! ASHeaderView
                 view.iconView.isHidden = false
                 view.iconView.image = Section(indexPath.section).headerImage
                 let title = Section(indexPath.section).title
@@ -317,8 +316,8 @@ extension ActivityStreamPanel: UICollectionViewDelegateFlowLayout {
                     view.moreButton.isHidden = true
                     return view
             }
-            case UICollectionElementKindSectionFooter:
-                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
+        case UICollectionView.elementKindSectionFooter:
+                let view = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer", for: indexPath) as! ASFooterView
                 switch Section(indexPath.section) {
                 case .topSites, .pocket:
                     return view
@@ -405,10 +404,10 @@ extension ActivityStreamPanel {
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var numItems: CGFloat = ASPanelUX.numberOfItemsPerRowForSizeClassIpad[self.traitCollection.horizontalSizeClass]
-        if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+        if UIApplication.shared.statusBarOrientation.isPortrait {
             numItems = numItems - 1
         }
-        if self.traitCollection.horizontalSizeClass == .compact && UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+        if self.traitCollection.horizontalSizeClass == .compact && UIApplication.shared.statusBarOrientation.isLandscape {
             numItems = numItems - 1
         }
         switch Section(section) {
