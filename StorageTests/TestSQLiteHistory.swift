@@ -93,10 +93,10 @@ class BrowserSchemaV6: BaseHistoricalBrowserSchema {
         let type = 2 // "folder"
         let root = 0
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = Strings.BookmarksFolderTitleMobile
+        let titleMenu = Strings.BookmarksFolderTitleMenu
+        let titleToolbar = Strings.BookmarksFolderTitleToolbar
+        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
@@ -272,10 +272,10 @@ class BrowserSchemaV7: BaseHistoricalBrowserSchema {
         let type = 2 // "folder"
         let root = 0
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = Strings.BookmarksFolderTitleMobile
+        let titleMenu = Strings.BookmarksFolderTitleMenu
+        let titleToolbar = Strings.BookmarksFolderTitleToolbar
+        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
@@ -456,10 +456,10 @@ class BrowserSchemaV8: BaseHistoricalBrowserSchema {
         let type = 2 // "folder"
         let root = 0
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = Strings.BookmarksFolderTitleMobile
+        let titleMenu = Strings.BookmarksFolderTitleMenu
+        let titleToolbar = Strings.BookmarksFolderTitleToolbar
+        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
@@ -655,10 +655,10 @@ class BrowserSchemaV10: BaseHistoricalBrowserSchema {
         let type = 2 // "folder"
         let root = 0
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = Strings.BookmarksFolderTitleMobile
+        let titleMenu = Strings.BookmarksFolderTitleMenu
+        let titleToolbar = Strings.BookmarksFolderTitleToolbar
+        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,

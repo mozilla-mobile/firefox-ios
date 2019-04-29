@@ -1025,8 +1025,7 @@ open class BrowserProfile: Profile {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
                 }
 
-                // TODO: Do we need to limit this to just Bookmarks?
-                return self.profile.places.sync(unlockInfo: syncUnlockInfo).bind({ result in
+                return self.profile.places.syncBookmarks(unlockInfo: syncUnlockInfo).bind({ result in
                     guard result.isSuccess else {
                         return deferMaybe(SyncStatus.notStarted(.unknown))
                     }
@@ -1210,21 +1209,13 @@ open class BrowserProfile: Profile {
         }
 
         @discardableResult public func syncEverything(why: SyncReason) -> Success {
-            var synchronizers = [
+            let synchronizers = [
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
-                ("bookmarks", self.syncBookmarksWithDelegate), // TODO: Should we avoid doing this in background?
-                ("history", self.syncHistoryWithDelegate)
+                ("bookmarks", self.syncBookmarksWithDelegate),
+                ("history", self.syncHistoryWithDelegate),
+                ("logins", self.syncLoginsWithDelegate)
             ]
-
-            // Only Sync "logins" if we're not syncing in the background.
-            // Currently, the application-services implementation of Sync
-            // cannot let the database be closed while a pending Sync
-            // operation is in progress.
-            // https://bugzilla.mozilla.org/show_bug.cgi?id=1540256
-            if why != .backgrounded {
-                synchronizers.append(("logins", self.syncLoginsWithDelegate))
-            }
 
             return self.syncSeveral(why: why, synchronizers: synchronizers) >>> succeed
         }

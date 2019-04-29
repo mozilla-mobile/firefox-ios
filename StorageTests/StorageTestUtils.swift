@@ -70,61 +70,6 @@ extension BrowserDB {
 }
 
 extension BrowserDB {
-    func moveLocalToMirrorForTesting() {
-        // This is a risky process -- it's not the same logic that the real synchronizer uses
-        // (because I haven't written it yet), so it might end up lying. We do what we can.
-        let valueSQL = """
-            INSERT OR IGNORE INTO bookmarksMirror
-                (guid, type, date_added, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,
-                description, tags, keyword, folderName, queryId,
-                is_overridden, server_modified, faviconID)
-            SELECT
-                guid, type, date_added, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,
-                description, tags, keyword, folderName, queryId,
-                0 AS is_overridden, \(Date.now()) AS server_modified, faviconID
-            FROM bookmarksLocal
-            """
-
-        // Copy its mirror structure.
-        let structureSQL = "INSERT INTO bookmarksMirrorStructure SELECT * FROM bookmarksLocalStructure"
-
-        // Throw away the old.
-        let deleteLocalStructureSQL = "DELETE FROM bookmarksLocalStructure"
-        let deleteLocalSQL = "DELETE FROM bookmarksLocal"
-
-        self.run([
-            valueSQL,
-            structureSQL,
-            deleteLocalStructureSQL,
-            deleteLocalSQL,
-        ]).succeeded()
-    }
-
-    func moveBufferToMirrorForTesting() {
-        let valueSQL = """
-            INSERT OR IGNORE INTO bookmarksMirror
-                (guid, type, date_added, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,
-                description, tags, keyword, folderName, queryId, server_modified)
-            SELECT
-                guid, type, date_added, bmkUri, title, parentid, parentName, feedUri, siteUri, pos,
-                description, tags, keyword, folderName, queryId, server_modified
-            FROM bookmarksBuffer
-            """
-
-        let structureSQL = "INSERT INTO bookmarksMirrorStructure SELECT * FROM bookmarksBufferStructure"
-        let deleteBufferStructureSQL = "DELETE FROM bookmarksBufferStructure"
-        let deleteBufferSQL = "DELETE FROM bookmarksBuffer"
-
-        self.run([
-            valueSQL,
-            structureSQL,
-            deleteBufferStructureSQL,
-            deleteBufferSQL,
-        ]).succeeded()
-    }
-}
-
-extension BrowserDB {
     func getGUIDs(_ sql: String) -> [GUID] {
         func guidFactory(_ row: SDRow) -> GUID {
             return row[0] as! GUID
@@ -150,29 +95,5 @@ extension BrowserDB {
             }
             return dict
         })
-    }
-
-    func isLocallyDeleted(_ guid: GUID) -> Bool? {
-        let args: Args = [guid]
-        let cursor = self.runQuery("SELECT is_deleted FROM bookmarksLocal WHERE guid = ?", args: args, factory: { $0.getBoolean("is_deleted") }).value.successValue!
-        return cursor[0]
-    }
-
-    func isOverridden(_ guid: GUID) -> Bool? {
-        let args: Args = [guid]
-        let cursor = self.runQuery("SELECT is_overridden FROM bookmarksMirror WHERE guid = ?", args: args, factory: { $0.getBoolean("is_overridden") }).value.successValue!
-        return cursor[0]
-    }
-
-    func getChildrenOfFolder(_ folder: GUID) -> [GUID] {
-        let args: Args = [folder]
-        let sql = """
-            SELECT child
-            FROM view_bookmarksLocalStructure_on_mirror
-            WHERE parent = ?
-            ORDER BY idx ASC
-            """
-
-        return self.runQuery(sql, args: args, factory: { $0[0] as! GUID }).value.successValue!.asArray()
     }
 }

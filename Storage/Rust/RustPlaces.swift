@@ -241,7 +241,7 @@ public class RustPlaces {
         return error
     }
 
-    public func sync(unlockInfo: SyncUnlockInfo) -> Success {
+    public func syncBookmarks(unlockInfo: SyncUnlockInfo) -> Success {
         let deferred = Success()
 
         writerQueue.async {

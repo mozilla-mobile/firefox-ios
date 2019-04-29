@@ -57,7 +57,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     var libraryPanelDelegate: LibraryPanelDelegate?
 
     let refreshControl = UIRefreshControl()
-    let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+
+    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+    }()
 
     let bookmarkFolderGUID: GUID
 
@@ -331,10 +334,7 @@ extension BookmarksPanel: LibraryPanelContextMenu {
             return nil
         }
 
-        let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
-        // TODO: Determine how to pull in a favicon
-        // site.icon = bookmarkItem.favicon
-        return site
+        return Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
     }
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {

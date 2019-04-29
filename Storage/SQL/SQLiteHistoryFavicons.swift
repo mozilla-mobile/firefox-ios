@@ -124,21 +124,13 @@ extension SQLiteHistory: Favicons {
                 // Now set up the mapping.
                 try conn.executeChange(query, withArgs: args)
 
-                // Try to update the favicon ID column in each bookmarks table. There can be
-                // multiple bookmarks with a particular URI, and a mirror bookmark can be
-                // locally changed, so either or both of these statements can update multiple rows.
-                if let id = id {
-                    icon.id = id
-
-                    try? conn.executeChange("UPDATE bookmarksLocal SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-                    try? conn.executeChange("UPDATE bookmarksMirror SET faviconID = ? WHERE bmkUri = ?", withArgs: [id, site.url])
-
-                    return id
+                guard let faviconID = id else {
+                    let err = DatabaseError(description: "Error adding favicon. ID = 0")
+                    log.error("addFavicon(_:, forSite:) encountered an error: \(err.localizedDescription)")
+                    throw err
                 }
 
-                let err = DatabaseError(description: "Error adding favicon. ID = 0")
-                log.error("addFavicon(_:, forSite:) encountered an error: \(err.localizedDescription)")
-                throw err
+                return faviconID
             }
         }
 
