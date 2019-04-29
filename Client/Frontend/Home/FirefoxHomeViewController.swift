@@ -291,7 +291,7 @@ extension FirefoxHomeViewController {
         func numberOfItemsForRow(_ traits: UITraitCollection) -> CGFloat {
             switch self {
             case .pocket:
-                var numItems: CGFloat = ASPanelUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass]
+                var numItems: CGFloat = FirefoxHomeUX.numberOfItemsPerRowForSizeClassIpad[traits.horizontalSizeClass]
                 if UIApplication.shared.statusBarOrientation.isPortrait {
                     numItems = numItems - 1
                 }
@@ -467,7 +467,7 @@ extension FirefoxHomeViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        var numItems: CGFloat = ASPanelUX.numberOfItemsPerRowForSizeClassIpad[self.traitCollection.horizontalSizeClass]
+        var numItems: CGFloat = FirefoxHomeUX.numberOfItemsPerRowForSizeClassIpad[self.traitCollection.horizontalSizeClass]
         if UIApplication.shared.statusBarOrientation.isPortrait {
             numItems = numItems - 1
         }

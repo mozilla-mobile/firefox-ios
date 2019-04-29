@@ -208,9 +208,20 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
     }
 
     func configure(with site: Site) {
-        self.siteImageView.setFavicon(forSite: site) { (color, url) in
-            self.siteImageView.backgroundColor = color
-            self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheetUX.IconSize)
+        if let _ = site.icon {
+            self.siteImageView.setFavicon(forSite: site) { (color, url) in
+                self.siteImageView.backgroundColor = color
+                self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheetUX.IconSize)
+            }
+        } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {
+            profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
+                guard let image = result.successValue else {
+                    return
+                }
+
+                self.siteImageView.backgroundColor = .clear
+                self.siteImageView.image = image.createScaled(PhotonActionSheetUX.IconSize)
+            }
         }
         self.titleLabel.text = site.title.isEmpty ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain
