@@ -166,7 +166,7 @@ fileprivate class TestActions {
     static let LoadURLByPasting = "LoadURLByPasting"
 }
 
-private var isTablet: Bool {
+var isTablet: Bool {
     // There is more value in a variable having the same name,
     // so it can be used in both predicates and in code
     // than avoiding the duplication of one line of code.
