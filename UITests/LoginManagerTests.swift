@@ -190,15 +190,16 @@ class LoginManagerTests: KIFTestCase {
 
     func testListIndexView() {
         openLoginManager()
-
         // Swipe the index view to navigate to bottom section
         tester().waitForAnimationsToFinish()
         tester().waitForView(withAccessibilityLabel: "a0@email.com")
-        tester().swipeView(withAccessibilityIdentifier: "SAVED LOGINS", in: KIFSwipeDirection.down)
-        tester().waitForView(withAccessibilityLabel: "k0@email.com")
+        for _ in 1...6 {
+            EarlGrey.selectElement(with: grey_accessibilityID("Login List")).perform(grey_swipeFastInDirection(.up))
+        }
+        tester().waitForAnimationsToFinish()
+        tester().waitForView(withAccessibilityLabel: "k9@email.com")
         closeLoginManager()
     }
-
 
     func testDetailPasswordMenuOptions() {
         openLoginManager()
