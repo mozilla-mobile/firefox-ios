@@ -277,6 +277,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.isEditing = true
         showDeletion = editing
         UIView.performWithoutAnimation {
             self.navigationItem.rightBarButtonItem?.title = editing ? Strings.SettingsSearchDoneButton : Strings.SettingsSearchEditButton
@@ -285,7 +287,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         navigationItem.rightBarButtonItem?.action = editing ?
             #selector(finishEditing) : #selector(beginEditing)
         tableView.reloadData()
-        super.setEditing(editing, animated: animated)
     }
 }
 
