@@ -141,21 +141,31 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             return
         }
 
-        if bookmarkNode is BookmarkFolder {
-            // TODO: check whether the folder is empty (excluding separators). If it isn't
-            // then we must ask the user to confirm. Bug 1232810.
-            log.debug("Not deleting folder.")
+        func doDelete() {
+            // Perform the delete asynchronously even though we update the
+            // table view data source immediately for responsiveness.
+            _ = profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
+
+            tableView.beginUpdates()
+            bookmarkNodes.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .left)
+            tableView.endUpdates()
+        }
+
+        // If this node is a folder and it is not empty, we need
+        // to prompt the user before deleting.
+        if let bookmarkFolder = bookmarkNode as? BookmarkFolder,
+            !bookmarkFolder.childGUIDs.isEmpty {
+            let alertController = UIAlertController(title: Strings.BookmarksDeleteFolderWarningTitle, message: Strings.BookmarksDeleteFolderWarningDescription, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Strings.BookmarksDeleteFolderCancelButtonLabel, style: .cancel))
+            alertController.addAction(UIAlertAction(title: Strings.BookmarksDeleteFolderDeleteButtonLabel, style: .destructive) { (action) in
+                doDelete()
+            })
+            present(alertController, animated: true, completion: nil)
             return
         }
 
-        // Perform the delete asynchronously even though we update the
-        // table view data source immediately for responsiveness.
-        _ = profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
-
-        tableView.beginUpdates()
-        bookmarkNodes.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .left)
-        tableView.endUpdates()
+        doDelete()
     }
 
     @objc fileprivate func didLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
