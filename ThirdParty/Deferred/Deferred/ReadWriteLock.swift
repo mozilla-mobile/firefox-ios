@@ -37,7 +37,7 @@ public final class GCDReadWriteLock: ReadWriteLock {
 
 public class AtomicInt {
     private var mutex = pthread_mutex_t()
-    var value: Int32 = 0
+    private(set) var value: Int32 = 0
 
     init() {
         pthread_mutex_init(&mutex, nil)
@@ -70,8 +70,6 @@ public final class CASSpinLock: ReadWriteLock {
     }
 
     private let _state = AtomicInt()
-
-    public init() {}
 
     public func withWriteLock<T>(block: () -> T) -> T {
         // spin until we acquire write lock
