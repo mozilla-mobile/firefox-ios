@@ -216,6 +216,27 @@ class TabDisplayManager: NSObject {
         let eventValue = isTabTray ? UnifiedTelemetry.EventValue.tabTray : UnifiedTelemetry.EventValue.topTabs
         UnifiedTelemetry.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
+
+    // When using 'Close All', hide all the tabs so they don't animate their deletion individually
+    func hideDisplayedTabs() -> Success {
+        let deferred = Success()
+        for i in 0..<collectionView.numberOfItems(inSection: 0) {
+            guard let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) else { continue }
+            UIView.animate(withDuration: 0.2,
+                           animations: {
+                                cell.contentView.alpha = 0
+                                cell.alpha = 0 },
+                           completion: { _ in
+                                cell.contentView.alpha = 1
+                                cell.alpha = 1
+                                cell.isHidden = true
+                                if !deferred.isFilled {
+                                    deferred.fill(Maybe(success: ()))
+                                }
+            })
+        }
+        return deferred
+    }
 }
 
 extension TabDisplayManager: UICollectionViewDataSource {

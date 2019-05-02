@@ -476,19 +476,21 @@ extension TabTrayController {
     }
 
     func closeTabsForCurrentTray() {
-        tabManager.removeTabsWithUndoToast(tabDisplayManager.dataStore.compactMap { $0 })
-        if tabDisplayManager.isPrivate {
-            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-            if !emptyPrivateTabsView.isHidden {
-                // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
-                emptyPrivateTabsView.alpha = 0
-                UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseIn, animations: {
-                    self.emptyPrivateTabsView.alpha = 1
-                }, completion: nil)
+        tabDisplayManager.hideDisplayedTabs().uponQueue(.main) { _ in
+            self.tabManager.removeTabsWithUndoToast(self.tabDisplayManager.dataStore.compactMap { $0 })
+            if self.tabDisplayManager.isPrivate {
+                self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+                if !self.emptyPrivateTabsView.isHidden {
+                    // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
+                    self.emptyPrivateTabsView.alpha = 0
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.emptyPrivateTabsView.alpha = 1
+                    }, completion: nil)
+                }
+            } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
+                self.tabManager.selectTab(tab)
+                self.dismissTabTray()
             }
-        } else if tabManager.normalTabs.count == 1, let tab = tabManager.normalTabs.first {
-            tabManager.selectTab(tab)
-            dismissTabTray()
         }
     }
 
@@ -1172,6 +1174,7 @@ class TabCell: UICollectionViewCell {
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
+        isHidden = false
     }
 
     override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {
