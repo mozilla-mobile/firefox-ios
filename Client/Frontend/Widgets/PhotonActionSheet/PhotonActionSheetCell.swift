@@ -157,6 +157,10 @@ class PhotonActionSheetCell: UITableViewCell {
         stackView.addArrangedSubview(textStackView)
         contentView.addSubview(stackView)
 
+        statusIcon.snp.makeConstraints { make in
+            make.size.equalTo(PhotonActionSheetCellUX.StatusIconSize)
+        }
+
         let padding = PhotonActionSheetCell.Padding
         let topPadding = PhotonActionSheetCell.HorizontalPadding
         stackView.snp.makeConstraints { make in
