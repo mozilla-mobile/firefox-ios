@@ -96,8 +96,8 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
         return self.toJSON().description
     }
 
-    public var hashValue: Int {
-        return self.description.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(description)
     }
 }
 

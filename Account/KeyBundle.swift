@@ -138,8 +138,9 @@ open class KeyBundle: Hashable {
         return [self.encKey.base64EncodedString, self.hmacKey.base64EncodedString]
     }
 
-    open var hashValue: Int {
-        return "\(self.encKey.base64EncodedString) \(self.hmacKey.base64EncodedString)".hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(encKey.base64EncodedString)
+        hasher.combine(hmacKey.base64EncodedString)
     }
 
     public static func ==(lhs: KeyBundle, rhs: KeyBundle) -> Bool {
