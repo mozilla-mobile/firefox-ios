@@ -6,7 +6,6 @@
 import FxA
 import Shared
 import UIKit
-import Deferred
 
 import XCTest
 

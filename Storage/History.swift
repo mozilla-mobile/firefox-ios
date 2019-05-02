@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import Deferred
 
 open class IgnoredSiteError: MaybeErrorType {
     open var description: String {
@@ -43,7 +42,7 @@ public protocol BrowserHistory {
  * An interface for fast repeated frecency queries.
  */
 public protocol FrecentHistory {
-    func getSites(whereURLContains filter: String?, historyLimit limit: Int, bookmarksLimit: Int) -> Deferred<Maybe<Cursor<Site>>>
+    func getSites(matchingSearchQuery filter: String?, limit: Int) -> Deferred<Maybe<Cursor<Site>>>
     func updateTopSitesCacheQuery() -> (String, Args?)
 }
 

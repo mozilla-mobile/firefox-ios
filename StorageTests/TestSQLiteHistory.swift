@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 @testable import Storage
-import Deferred
 
 import XCTest
 
@@ -90,20 +89,20 @@ class BrowserSchemaV6: BaseHistoricalBrowserSchema {
     override var version: Int { return 6 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
-        let type = BookmarkNodeType.folder.rawValue
-        let root = BookmarkRoots.RootID
+        let type = 2 // "folder"
+        let root = 0
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = Strings.BookmarksFolderTitleMobile
+        let titleMenu = Strings.BookmarksFolderTitleMenu
+        let titleToolbar = Strings.BookmarksFolderTitleToolbar
+        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
-            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
-            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
-            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
-            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
+            1, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
+            2, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
+            3, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
+            4, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
         ]
 
         let sql = """
@@ -269,20 +268,20 @@ class BrowserSchemaV7: BaseHistoricalBrowserSchema {
     override var version: Int { return 7 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
-        let type = BookmarkNodeType.folder.rawValue
-        let root = BookmarkRoots.RootID
+        let type = 2 // "folder"
+        let root = 0
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = Strings.BookmarksFolderTitleMobile
+        let titleMenu = Strings.BookmarksFolderTitleMenu
+        let titleToolbar = Strings.BookmarksFolderTitleToolbar
+        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
-            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
-            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
-            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
-            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
+            1, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
+            2, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
+            3, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
+            4, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
         ]
 
         let sql = """
@@ -453,20 +452,20 @@ class BrowserSchemaV8: BaseHistoricalBrowserSchema {
     override var version: Int { return 8 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
-        let type = BookmarkNodeType.folder.rawValue
-        let root = BookmarkRoots.RootID
+        let type = 2 // "folder"
+        let root = 0
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = Strings.BookmarksFolderTitleMobile
+        let titleMenu = Strings.BookmarksFolderTitleMenu
+        let titleToolbar = Strings.BookmarksFolderTitleToolbar
+        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
-            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
-            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
-            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
-            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
+            1, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
+            2, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
+            3, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
+            4, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
         ]
 
         let sql = """
@@ -652,20 +651,20 @@ class BrowserSchemaV10: BaseHistoricalBrowserSchema {
     override var version: Int { return 10 }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
-        let type = BookmarkNodeType.folder.rawValue
-        let root = BookmarkRoots.RootID
+        let type = 2 // "folder"
+        let root = 0
 
-        let titleMobile = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-        let titleMenu = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-        let titleToolbar = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-        let titleUnsorted = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
+        let titleMobile = Strings.BookmarksFolderTitleMobile
+        let titleMenu = Strings.BookmarksFolderTitleMenu
+        let titleToolbar = Strings.BookmarksFolderTitleToolbar
+        let titleUnsorted = Strings.BookmarksFolderTitleUnsorted
 
         let args: Args = [
             root, BookmarkRoots.RootGUID, type, "Root", root,
-            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
-            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
-            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
-            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
+            1, BookmarkRoots.MobileFolderGUID, type, titleMobile, root,
+            2, BookmarkRoots.MenuFolderGUID, type, titleMenu, root,
+            3, BookmarkRoots.ToolbarFolderGUID, type, titleToolbar, root,
+            4, BookmarkRoots.UnfiledFolderGUID, type, titleUnsorted, root,
         ]
 
         let sql = """
@@ -981,7 +980,7 @@ class TestSQLiteHistory: XCTestCase {
             >>> { history.storeRemoteVisits([siteVisitBR1], forGUID: siteB.guid!) }
 
             >>> {
-                history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 3, bookmarksLimit: 0)
+                history.getFrecentHistory().getSites(matchingSearchQuery: nil, limit: 3)
                 >>== { (sites: Cursor) -> Success in
                     XCTAssertEqual(3, sites.count)
 
@@ -1069,7 +1068,7 @@ class TestSQLiteHistory: XCTestCase {
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
 
-        let site = Site(url: "http://www.example.com/test1.1", title: "title one")
+        let site = Site(url: "http://www.example.com/test1.4", title: "title one")
 
         // Insert something with an invalid domain ID. We have to manually do this since domains are usually hidden.
         let insertDeferred = db.withConnection { connection -> Void in
@@ -1170,7 +1169,6 @@ class TestSQLiteHistory: XCTestCase {
         let db = BrowserDB(filename: "testHistoryTable.db", schema: BrowserSchema(), files: files)
         let prefs = MockProfilePrefs()
         let history = SQLiteHistory(db: db, prefs: prefs)
-        let bookmarks = SQLiteBookmarks(db: db)
 
         let site1 = Site(url: "http://url1/", title: "title one")
         let site1Changed = Site(url: "http://url1/", title: "title one alt")
@@ -1189,7 +1187,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesByFrecency(_ f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
             return {
-                history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 10, bookmarksLimit: 0)
+                history.getFrecentHistory().getSites(matchingSearchQuery: nil, limit: 10)
                     >>== f
             }
         }
@@ -1203,7 +1201,7 @@ class TestSQLiteHistory: XCTestCase {
 
         func checkSitesWithFilter(_ filter: String, f: @escaping (Cursor<Site>) -> Success) -> () -> Success {
             return {
-                history.getFrecentHistory().getSites(whereURLContains: filter, historyLimit: 10, bookmarksLimit: 0)
+                history.getFrecentHistory().getSites(matchingSearchQuery: filter, limit: 10)
                 >>== f
             }
         }
@@ -1281,69 +1279,6 @@ class TestSQLiteHistory: XCTestCase {
                 XCTAssertEqual(0, sites.count)
                 return succeed()
             }
-            >>> done
-
-        waitForExpectations(timeout: 10.0) { error in
-            return
-        }
-    }
-
-    func testFaviconTable() {
-        let db = BrowserDB(filename: "testFaviconTable.db", schema: BrowserSchema(), files: files)
-        let prefs = MockProfilePrefs()
-        let history = SQLiteHistory(db: db, prefs: prefs)
-        let bookmarks = SQLiteBookmarks(db: db)
-
-        let expectation = self.expectation(description: "First.")
-        func done() -> Success {
-            expectation.fulfill()
-            return succeed()
-        }
-
-        func updateFavicon() -> Success {
-            let fav = Favicon(url: "http://url2/", date: Date())
-            fav.id = 1
-            let site = Site(url: "http://bookmarkedurl/", title: "My Bookmark")
-            return history.addFavicon(fav, forSite: site) >>> succeed
-        }
-
-        func checkFaviconForBookmarkIsNil() -> Success {
-            return bookmarks.bookmarksByURL("http://bookmarkedurl/".asURL!) >>== { results in
-                XCTAssertEqual(1, results.count)
-                XCTAssertNil(results[0]?.favicon)
-                return succeed()
-            }
-        }
-
-        func checkFaviconWasSetForBookmark() -> Success {
-            return history.getFaviconsForBookmarkedURL("http://bookmarkedurl/") >>== { results in
-                XCTAssertEqual(1, results.count)
-                if let actualFaviconURL = results[0]??.url {
-                    XCTAssertEqual("http://url2/", actualFaviconURL)
-                }
-                return succeed()
-            }
-        }
-
-        func removeBookmark() -> Success {
-            return bookmarks.testFactory.removeByURL("http://bookmarkedurl/")
-        }
-
-        func checkFaviconWasRemovedForBookmark() -> Success {
-            return history.getFaviconsForBookmarkedURL("http://bookmarkedurl/") >>== { results in
-                XCTAssertEqual(0, results.count)
-                return succeed()
-            }
-        }
-
-        history.clearAllFavicons()
-            >>> bookmarks.clearBookmarks
-            >>> { bookmarks.addToMobileBookmarks("http://bookmarkedurl/".asURL!, title: "Title", favicon: nil) }
-            >>> checkFaviconForBookmarkIsNil
-            >>> updateFavicon
-            >>> checkFaviconWasSetForBookmark
-            >>> removeBookmark
-            >>> checkFaviconWasRemovedForBookmark
             >>> done
 
         waitForExpectations(timeout: 10.0) { error in
@@ -1709,55 +1644,3 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
         XCTAssertTrue(history.addLocalVisit(local).value.isSuccess)
     }
 }
-
-class TestSQLiteHistoryFilterSplitting: XCTestCase {
-    let history: SQLiteHistory = {
-        let files = MockFiles()
-        let db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
-        let prefs = MockProfilePrefs()
-        return SQLiteHistory(db: db, prefs: prefs)
-    }()
-
-    func testWithSingleWord() {
-        let (fragment, args) = computeWhereFragmentWithFilter("foo", perWordFragment: "?", perWordArgs: { [$0] })
-        XCTAssertEqual(fragment, "?")
-        XCTAssert(stringArgsEqual(args, ["foo"]))
-    }
-
-    func testWithIdenticalWords() {
-        let (fragment, args) = computeWhereFragmentWithFilter("foo fo foo", perWordFragment: "?", perWordArgs: { [$0] })
-        XCTAssertEqual(fragment, "?")
-        XCTAssert(stringArgsEqual(args, ["foo"]))
-    }
-
-    func testWithDistinctWords() {
-        let (fragment, args) = computeWhereFragmentWithFilter("foo bar", perWordFragment: "?", perWordArgs: { [$0] })
-        XCTAssertEqual(fragment, "? AND ?")
-        XCTAssert(stringArgsEqual(args, ["foo", "bar"]))
-    }
-
-    func testWithDistinctWordsAndWhitespace() {
-        let (fragment, args) = computeWhereFragmentWithFilter("  foo    bar  ", perWordFragment: "?", perWordArgs: { [$0] })
-        XCTAssertEqual(fragment, "? AND ?")
-        XCTAssert(stringArgsEqual(args, ["foo", "bar"]))
-    }
-
-    func testWithSubstrings() {
-        let (fragment, args) = computeWhereFragmentWithFilter("foo bar foobar", perWordFragment: "?", perWordArgs: { [$0] })
-        XCTAssertEqual(fragment, "?")
-        XCTAssert(stringArgsEqual(args, ["foobar"]))
-    }
-
-    func testWithSubstringsAndIdenticalWords() {
-        let (fragment, args) = computeWhereFragmentWithFilter("foo bar foobar foobar", perWordFragment: "?", perWordArgs: { [$0] })
-        XCTAssertEqual(fragment, "?")
-        XCTAssert(stringArgsEqual(args, ["foobar"]))
-    }
-
-    fileprivate func stringArgsEqual(_ one: Args, _ other: Args) -> Bool {
-        return one.elementsEqual(other, by: { (oneElement: Any?, otherElement: Any?) -> Bool in
-            return (oneElement as! String) == (otherElement as! String)
-        })
-    }
-}
-

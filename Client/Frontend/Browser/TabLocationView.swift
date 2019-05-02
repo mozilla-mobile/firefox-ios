@@ -50,7 +50,7 @@ class TabLocationView: UIView {
             let wasHidden = lockImageView.isHidden
             lockImageView.isHidden = url?.scheme != "https"
             if wasHidden != lockImageView.isHidden {
-                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+                UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
@@ -76,11 +76,11 @@ class TabLocationView: UIView {
                 readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
                 separatorLine.isHidden = readerModeButton.isHidden
                 if wasHidden != readerModeButton.isHidden {
-                    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+                    UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
                     if !readerModeButton.isHidden {
                         // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, Strings.ReaderModeAvailableVoiceOverAnnouncement)
+                            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: Strings.ReaderModeAvailableVoiceOverAnnouncement)
                         }
                     }
                 }
@@ -93,7 +93,7 @@ class TabLocationView: UIView {
 
     lazy var placeholder: NSAttributedString = {
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
-        return NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey50])
+        return NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
     }()
 
     lazy var urlTextField: UITextField = {

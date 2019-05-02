@@ -47,7 +47,7 @@ class TableViewColor {
 
 class ActionMenuColor {
     var foreground: UIColor { return defaultTextAndTint }
-    var iPhoneBackgroundBlurStyle: UIBlurEffectStyle { return UIBlurEffectStyle.light }
+    var iPhoneBackgroundBlurStyle: UIBlurEffect.Style { return UIBlurEffect.Style.light }
     var iPhoneBackground: UIColor { return UIColor.theme.browser.background.withAlphaComponent(0.9) }
     var closeButtonBackground: UIColor { return defaultBackground }
 }
@@ -104,7 +104,7 @@ class LoadingBarColor {
 
 class TabTrayColor {
     var tabTitleText: UIColor { return UIColor.black }
-    var tabTitleBlur: UIBlurEffectStyle { return UIBlurEffectStyle.extraLight }
+    var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.extraLight }
     var background: UIColor { return UIColor.Photon.Grey80 }
     var cellBackground: UIColor { return defaultBackground }
     var toolbar: UIColor { return defaultBackground }

@@ -41,7 +41,7 @@ class BrowserTests: KIFTestCase {
             EarlGrey.selectElement(with: grey_accessibilityLabel("Share")).perform(grey_tap())
         } else {
             let matcher = grey_allOf([grey_accessibilityLabel("Cancel"),
-                                      grey_accessibilityTrait(UIAccessibilityTraitButton),
+                                      grey_accessibilityTrait(UIAccessibilityTraits.button),
                                       grey_sufficientlyVisible()])
             EarlGrey.selectElement(with: matcher).perform(grey_tap())
         }

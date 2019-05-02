@@ -94,7 +94,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchEngineScrollView.layer.shadowColor = SearchViewControllerUX.SearchEngineScrollViewBorderColor
         searchEngineScrollView.clipsToBounds = false
 
-        searchEngineScrollView.decelerationRate = UIScrollViewDecelerationRateFast
+        searchEngineScrollView.decelerationRate = UIScrollView.DecelerationRate.fast
         view.addSubview(searchEngineScrollView)
 
         searchEngineScrollViewContent.layer.backgroundColor = UIColor.clear.cgColor
@@ -439,7 +439,7 @@ extension SearchViewController {
         let initialSection = SearchListSection.bookmarksAndHistory.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
             let count = tableView(tableView, numberOfRowsInSection: initialSection)
-            if sender.input == UIKeyInputDownArrow, count > 0 {
+            if sender.input == UIKeyCommand.inputDownArrow, count > 0 {
                 let next = IndexPath(item: 0, section: initialSection)
                 self.tableView(tableView, didHighlightRowAt: next)
                 tableView.selectRow(at: next, animated: false, scrollPosition: .top)
@@ -451,7 +451,7 @@ extension SearchViewController {
         let nextItem: Int
         guard let input = sender.input else { return }
         switch input {
-        case UIKeyInputUpArrow:
+        case UIKeyCommand.inputUpArrow:
             // we're going down, we should check if we've reached the first item in this section.
             if current.item == 0 {
                 // We have, so check if we can decrement the section.
@@ -467,7 +467,7 @@ extension SearchViewController {
                 nextSection = current.section
                 nextItem = current.item - 1
             }
-        case UIKeyInputDownArrow:
+        case UIKeyCommand.inputDownArrow:
             let currentSectionItemsCount = tableView(tableView, numberOfRowsInSection: current.section)
             if current.item == currentSectionItemsCount - 1 {
                 if current.section == tableView.numberOfSections - 1 {
@@ -543,7 +543,7 @@ fileprivate class SuggestionCell: UITableViewCell {
     weak var delegate: SuggestionCellDelegate?
     let container = UIView()
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         isAccessibilityElement = false

@@ -22,6 +22,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
+    func hideImagesBadge(visible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -36,27 +37,6 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-}
-
-class ToolbarPrivateModeBadge: UIImageView {
-    let privateModeBadgeSize = CGFloat(16)
-    let privateModeBadgeOffset = CGFloat(10)
-
-    init() {
-        super.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    func layout(forTabsButton button: UIButton) {
-        snp.remakeConstraints { make in
-            make.size.equalTo(privateModeBadgeSize)
-            make.centerX.equalTo(button).offset(privateModeBadgeOffset)
-            make.centerY.equalTo(button).offset(-privateModeBadgeOffset)
-        }
-    }
 }
 
 @objcMembers
@@ -235,11 +215,8 @@ class TabToolbar: UIView {
     let stopReloadButton = ToolbarButton()
     let actionButtons: [Themeable & UIButton]
 
-    private let privateModeBadge = ToolbarPrivateModeBadge()
-    
-    func privateModeBadge(visible: Bool) {
-        privateModeBadge.isHidden = !visible
-    }
+    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", color: UIColor.Defaults.MobilePrivatePurple)
+    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menuBadge")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -252,14 +229,17 @@ class TabToolbar: UIView {
         addSubview(contentView)
         helper = TabToolbarHelper(toolbar: self)
         addButtons(actionButtons)
-        contentView.addSubview(privateModeBadge)
+
+        privateModeBadge.add(toParent: contentView)
+        hideImagesBadge.add(toParent: contentView)
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
 
     override func updateConstraints() {
-        privateModeBadge.layout(forTabsButton: tabsButton)
+        privateModeBadge.layout(onButton: tabsButton)
+        hideImagesBadge.layout(onButton: menuButton)
 
         contentView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
@@ -302,6 +282,14 @@ class TabToolbar: UIView {
 }
 
 extension TabToolbar: TabToolbarProtocol {
+    func privateModeBadge(visible: Bool) {
+        privateModeBadge.show(visible)
+    }
+
+    func hideImagesBadge(visible: Bool) {
+        hideImagesBadge.show(visible)
+    }
+
     func updateBackStatus(_ canGoBack: Bool) {
         backButton.isEnabled = canGoBack
     }
@@ -327,6 +315,9 @@ extension TabToolbar: Themeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
         helper?.setTheme(forButtons: actionButtons)
+
+        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        hideImagesBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 
     func applyUIMode(isPrivate: Bool) {

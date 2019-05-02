@@ -440,7 +440,7 @@ class SimplePageServer {
         let webServer: GCDWebServer = GCDWebServer()
 
         webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
-            let img = UIImagePNGRepresentation(UIImage(named: "goBack")!)
+            let img = UIImage(named: "goBack")!.pngData()!
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
@@ -453,7 +453,7 @@ class SimplePageServer {
         // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
         webServer.addHandler(forMethod: "GET", path: "/scrollablePage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("scrollablePage")
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int((request.query?["page"] as! String))!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
             return GCDWebServerDataResponse(html: pageData as String)
         }
@@ -461,7 +461,7 @@ class SimplePageServer {
         webServer.addHandler(forMethod: "GET", path: "/numberedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("numberedPage")
 
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int((request.query?["page"] as! String))!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
 
             return GCDWebServerDataResponse(html: pageData as String)
@@ -488,11 +488,11 @@ class SimplePageServer {
             let expectedAuth = "Basic dXNlcjpwYXNz"
 
             let response: GCDWebServerDataResponse
-            if request?.headers["Authorization"] as? String == expectedAuth && request?.query["logout"] == nil {
-                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")
+            if request?.headers["Authorization"] == expectedAuth && request?.query?["logout"] == nil {
+                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")!
             } else {
                 // Request credentials if the user isn't logged in.
-                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")
+                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")!
                 response.statusCode = 401
                 response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
             }
@@ -572,7 +572,7 @@ class SearchUtils {
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
     // Afterwards, we're still at the Search Settings sheet.
     static func selectDefaultSearchEngineName(_ tester: KIFUITestActor, engineName: String) {
-        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraitButton)
+        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraits.button)
         tester.waitForView(withAccessibilityLabel: "Default Search Engine")
         tester.tapView(withAccessibilityLabel: engineName)
         tester.waitForView(withAccessibilityLabel: "Search")

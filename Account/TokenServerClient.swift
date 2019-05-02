@@ -5,7 +5,6 @@
 import Alamofire
 import Shared
 import Foundation
-import Deferred
 import SwiftyJSON
 
 let TokenServerClientErrorDomain = "org.mozilla.token.error"

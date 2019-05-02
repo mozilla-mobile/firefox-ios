@@ -33,7 +33,6 @@
 // THE SOFTWARE.
 
 import UIKit
-import Deferred
 import Shared
 import XCGLogger
 
@@ -46,58 +45,18 @@ public class DBOperationCancelled : MaybeErrorType {
     }
 }
 
-class DeferredDBOperation<T>: Deferred<T>, Cancellable {
-    fileprivate var dispatchWorkItem: DispatchWorkItem?
-    private var _running = false
-    private var _cancelled = false
-
+class DeferredDBOperation<T>: CancellableDeferred<T> {
     fileprivate weak var connection: ConcreteSQLiteDBConnection?
 
-    func cancel() {
+    override func cancel() {
         objc_sync_enter(self)
         defer { objc_sync_exit(self) }
 
-        if _running {
+        if running {
             connection?.interrupt()
         }
 
-        let queue = OperationQueue.current?.underlyingQueue
-        queue?.suspend()
-        defer { queue?.resume() }
-
-        dispatchWorkItem?.cancel()
-        _cancelled = true
-    }
-
-    var cancelled: Bool {
-        objc_sync_enter(self)
-        defer { objc_sync_exit(self) }
-        return _cancelled
-    }
-
-    var running: Bool {
-        get {
-            objc_sync_enter(self)
-            defer { objc_sync_exit(self) }
-            return _running
-        }
-        set {
-            objc_sync_enter(self)
-            defer { objc_sync_exit(self) }
-            _running = newValue
-        }
-    }
-    
-    override func fill(_ value: T) {
-        defer {
-            dispatchWorkItem = nil
-        }
-
-        guard !cancelled else {
-            return
-        }
-
-        super.fill(value)
+        super.cancel()
     }
 }
 

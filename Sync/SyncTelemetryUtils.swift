@@ -8,7 +8,6 @@ import Account
 import Storage
 import SwiftyJSON
 import SyncTelemetry
-import Deferred
 
 fileprivate let log = Logger.syncLogger
 

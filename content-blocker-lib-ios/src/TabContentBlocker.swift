@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import WebKit
-import Deferred
 
 extension Notification.Name {
    public static let didChangeContentBlocking = Notification.Name("didChangeContentBlocking")

@@ -123,27 +123,25 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
 
     func open() {
         guard let passData = try? Data(contentsOf: url) else { return }
-        var error: NSError?
-        let pass = PKPass(data: passData, error: &error)
-        if let _ = error {
-            // display an error
-            let alertController = UIAlertController(
-                title: Strings.UnableToAddPassErrorTitle,
-                message: Strings.UnableToAddPassErrorMessage,
-                preferredStyle: .alert)
-            alertController.addAction(
-                UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) { (action) in
+
+        do {
+            let pass = try PKPass(data: passData)
+
+            let passLibrary = PKPassLibrary()
+            if passLibrary.containsPass(pass) {
+                UIApplication.shared.open(pass.passURL!, options: [:])
+            } else {
+                if let addController = PKAddPassesViewController(pass: pass) {
+                    browserViewController.present(addController, animated: true, completion: nil)
+                }
+            }
+        } catch {
+            let alertController = UIAlertController(title: Strings.UnableToAddPassErrorTitle, message: Strings.UnableToAddPassErrorMessage, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) { (action) in
                     // Do nothing.
-                })
+            })
             browserViewController.present(alertController, animated: true, completion: nil)
             return
-        }
-        let passLibrary = PKPassLibrary()
-        if passLibrary.containsPass(pass) {
-            UIApplication.shared.open(pass.passURL!, options: [:])
-        } else {
-            let addController = PKAddPassesViewController(pass: pass)
-            browserViewController.present(addController, animated: true, completion: nil)
         }
     }
 }

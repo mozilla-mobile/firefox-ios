@@ -208,13 +208,6 @@ class Action {
     static let SelectBing = "SelectBing"
 }
 
-private var isTablet: Bool {
-    // There is more value in a variable having the same name,
-    // so it can be used in both predicates and in code
-    // than avoiding the duplication of one line of code.
-    return UIDevice.current.userInterfaceIdiom == .pad
-}
-
 @objcMembers
 class FxUserState: MMUserState {
     required init() {
@@ -341,8 +334,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
         makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
-        screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab, if: "tablet == true") { userState in
-            userState.isPrivate = !userState.isPrivate
+
+        if isTablet {
+            screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab) { userState in
+                userState.isPrivate = !userState.isPrivate
+            }
         }
     }
 
@@ -453,8 +449,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(HomePanelsScreen) { screenState in
-        screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarHomePanel, if: "tablet == true") { userState in
-            userState.isPrivate = !userState.isPrivate
+        if isTablet {
+            screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarHomePanel) { userState in
+                userState.isPrivate = !userState.isPrivate
+            }
         }
 
         // Workaround to bug Bug 1417522
@@ -801,7 +799,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             for _ in 1...4 {
                 introScrollView.swipeLeft()
             }
-            app.buttons["Sign in to Firefox"].tap()
+            let turnOnSyncButton = app.buttons["turnOnSync.button"]
+            turnOnSyncButton.tap()
         }
         screenState.backAction = {
             introScrollView.swipeLeft()

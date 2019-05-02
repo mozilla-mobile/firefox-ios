@@ -88,7 +88,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = TodayUX.margin / 2
-        stackView.distribution = UIStackViewDistribution.fill
+        stackView.distribution = UIStackView.Distribution.fill
         stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
@@ -99,7 +99,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.spacing = 0
-        stackView.distribution = UIStackViewDistribution.fillEqually
+        stackView.distribution = UIStackView.Distribution.fillEqually
         let edge = self.view.frame.size.width * TodayUX.buttonsHorizontalMarginPercentage
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -191,7 +191,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 }
 
 extension UIButton {
-    func setBackgroundColor(_ color: UIColor, forState state: UIControlState) {
+    func setBackgroundColor(_ color: UIColor, forState state: UIControl.State) {
         let colorView = UIView(frame: CGRect(width: 1, height: 1))
         colorView.backgroundColor = color
 
@@ -239,7 +239,7 @@ class ImageButtonWithLabel: UIView {
         label.textColor = UIColor.white
     }
 
-    func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControlEvents) {
+    func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
         button.addTarget(target, action: action, for: events)
     }
 }
@@ -290,7 +290,7 @@ class ButtonWithSublabel: UIButton {
         }
     }
 
-    override func setTitle(_ text: String?, for state: UIControlState) {
+    override func setTitle(_ text: String?, for state: UIControl.State) {
         self.label.text = text
         super.setTitle(text, for: state)
     }

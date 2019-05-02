@@ -47,7 +47,7 @@ public struct ExtensionUtils {
         var textProviderFallback: NSItemProvider?
 
         for inputItem in inputItems {
-            guard let attachments = inputItem.attachments as? [NSItemProvider] else { continue }
+            guard let attachments = inputItem.attachments else { continue }
 
             for attachment in attachments {
                 if attachment.isUrl {

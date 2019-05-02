@@ -91,7 +91,7 @@ class TabsButton: UIButton {
         insideButton.addSubview(countLabel)
         addSubview(insideButton)
         isAccessibilityElement = true
-        accessibilityTraits |= UIAccessibilityTraitButton
+        accessibilityTraits.insert(.button)
     }
 
     override func updateConstraints() {
@@ -227,10 +227,8 @@ class TabsButton: UIButton {
 extension TabsButton: Themeable {
     func applyTheme() {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            titleBackgroundColor = UIColor.theme.topTabs.background
             textColor = UIColor.theme.topTabs.buttonTint
         } else {
-            titleBackgroundColor = UIColor.theme.browser.background
             textColor = UIColor.theme.browser.tint
         }
     }

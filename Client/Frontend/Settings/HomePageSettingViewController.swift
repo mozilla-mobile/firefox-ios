@@ -38,15 +38,6 @@ class HomePageSettingViewController: SettingsTableViewController {
             self.currentChoice = NewTabPage.topSites
             onFinished()
         })
-        let showBookmarks = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBookmarks), subtitle: nil, accessibilityIdentifier: "HomeAsBookmarks", isEnabled: {return self.currentChoice == NewTabPage.bookmarks}, onChanged: {
-            self.currentChoice = NewTabPage.bookmarks
-            onFinished()
-        })
-        let showHistory = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabHistory), subtitle: nil, accessibilityIdentifier: "HomeAsHistory", isEnabled: {return self.currentChoice == NewTabPage.history}, onChanged: {
-            self.currentChoice = NewTabPage.history
-            onFinished()
-        })
-
         let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
@@ -54,7 +45,7 @@ class HomePageSettingViewController: SettingsTableViewController {
         })
         showWebPage.textField.textAlignment = .natural
 
-        let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showBookmarks, showHistory, showWebPage])
+        let section = SettingSection(title: NSAttributedString(string: Strings.NewTabSectionName), footerTitle: NSAttributedString(string: Strings.NewTabSectionNameFooter), children: [showTopSites, showWebPage])
 
         let topsitesSection = SettingSection(title: NSAttributedString(string: Strings.SettingsTopSitesCustomizeTitle), footerTitle: NSAttributedString(string: Strings.SettingsTopSitesCustomizeFooter), children: [TopSitesSettings(settings: self)])
 
@@ -77,18 +68,18 @@ class HomePageSettingViewController: SettingsTableViewController {
     class TopSitesSettings: Setting {
         let profile: Profile
 
-        override var accessoryType: UITableViewCellAccessoryType { return .disclosureIndicator }
+        override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
         override var status: NSAttributedString {
             let num = self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
             return NSAttributedString(string: String(format: Strings.TopSitesRowCount, num))
         }
 
         override var accessibilityIdentifier: String? { return "TopSitesRows" }
-        override var style: UITableViewCellStyle { return .value1 }
+        override var style: UITableViewCell.CellStyle { return .value1 }
 
         init(settings: SettingsTableViewController) {
             self.profile = settings.profile
-            super.init(title: NSAttributedString(string: Strings.ASTopSitesTitle, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]))
+            super.init(title: NSAttributedString(string: Strings.ASTopSitesTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
         }
 
         override func onClick(_ navigationController: UINavigationController?) {

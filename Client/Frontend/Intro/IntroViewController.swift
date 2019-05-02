@@ -35,9 +35,9 @@ class IntroViewController: UIViewController {
     lazy fileprivate var startBrowsingButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor.clear
-        button.setTitle(Strings.StartBrowsingButtonTitle, for: UIControlState())
-        button.setTitleColor(IntroUX.StartBrowsingButtonColor, for: UIControlState())
-        button.addTarget(self, action: #selector(IntroViewController.startBrowsing), for: UIControlEvents.touchUpInside)
+        button.setTitle(Strings.StartBrowsingButtonTitle, for: UIControl.State())
+        button.setTitleColor(IntroUX.StartBrowsingButtonColor, for: UIControl.State())
+        button.addTarget(self, action: #selector(IntroViewController.startBrowsing), for: UIControl.Event.touchUpInside)
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
         button.isHidden = true
         return button
@@ -48,7 +48,7 @@ class IntroViewController: UIViewController {
         pc.pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.3)
         pc.currentPageIndicatorTintColor = UIColor.black
         pc.accessibilityIdentifier = "IntroViewController.pageControl"
-        pc.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControlEvents.valueChanged)
+        pc.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControl.Event.valueChanged)
         return pc
     }()
 
@@ -371,6 +371,7 @@ class CardView: UIView {
         button.setTitleColor(.white, for: [])
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         button.clipsToBounds = true
+        button.accessibilityIdentifier = "turnOnSync.button"
         return button
     }()
 

@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import XCGLogger
-import Deferred
 import SwiftyJSON
 
 private let CurrentSyncAuthStateCacheVersion = 1
