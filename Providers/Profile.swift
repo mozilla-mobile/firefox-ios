@@ -231,6 +231,12 @@ open class BrowserProfile: Profile {
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
+        // Migrate bookmarks from old browser.db to new Rust places.db only
+        // if this user is NOT signed into Sync (only migrates once if needed).
+        if !self.hasAccount() {
+            self.places.migrateBookmarksIfNeeded(fromBrowserDB: self.db)
+        }
+
         // Log SQLite compile_options.
         // db.sqliteCompileOptions() >>== { compileOptions in
         //     log.debug("SQLite compile_options:\n\(compileOptions.joined(separator: "\n"))")
@@ -874,8 +880,7 @@ open class BrowserProfile: Profile {
         func locallyResetCollection(_ collection: String) -> Success {
             switch collection {
             case "bookmarks":
-                // TODO: Do we need to limit this to just Bookmarks?
-                return self.profile.places.reset()
+                return self.profile.places.resetBookmarksMetadata()
             case "clients":
                 fallthrough
             case "tabs":
@@ -914,7 +919,7 @@ open class BrowserProfile: Profile {
                 profile.history.onRemovedAccount,
                 profile.remoteClientsAndTabs.onRemovedAccount,
                 profile.logins.reset,
-                profile.places.reset, // TODO: Do we need to limit this to just Bookmarks?
+                profile.places.resetBookmarksMetadata,
             ]
 
             let clearPrefs: () -> Success = {
