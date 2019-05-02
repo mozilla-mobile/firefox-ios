@@ -29,8 +29,6 @@ public class RustPlaces {
 
         self.writerQueue = DispatchQueue(label: "RustPlaces writer queue: \(databasePath)", attributes: [])
         self.readerQueue = DispatchQueue(label: "RustPlaces reader queue: \(databasePath)", attributes: [])
-
-        _ = reopenIfClosed()
     }
 
     private func open() -> NSError? {
@@ -120,6 +118,35 @@ public class RustPlaces {
         }
 
         return deferred
+    }
+
+    public func migrateBookmarksIfNeeded(fromBrowserDB browserDB: BrowserDB) {
+        // Since we use the existence of places.db as an indication that we've
+        // already migrated bookmarks, assert that places.db is not open here.
+        assert(!isOpen, "Shouldn't attempt to migrate bookmarks after opening Rust places.db")
+
+        // We only need to migrate bookmarks here if the old browser.db file
+        // already exists AND the new Rust places.db file does NOT exist yet.
+        // This is to ensure that we only ever run this migration ONCE. In
+        // addition, it is the caller's (Profile.swift) responsibility to NOT
+        // use this migration API for users signed into a Firefox Account.
+        // Those users will automatically get all their bookmarks on next Sync.
+        guard FileManager.default.fileExists(atPath: browserDB.databasePath),
+            !FileManager.default.fileExists(atPath: databasePath) else {
+            return
+        }
+
+        // Ensure that the old BrowserDB schema is up-to-date before migrating.
+        _ = browserDB.touch().value
+
+        // Open the Rust places.db now for the first time.
+        _ = reopenIfClosed()
+
+        do {
+            try api?.migrateBookmarksFromBrowserDb(path: browserDB.databasePath)
+        } catch let err as NSError {
+            Sentry.shared.sendWithStacktrace(message: "Error encountered while migrating bookmarks from BrowserDB", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
+        }
     }
 
     public func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNode?>> {
@@ -231,6 +258,8 @@ public class RustPlaces {
     public func forceClose() -> NSError? {
         var error: NSError? = nil
 
+        api?.interrupt()
+
         writerQueue.sync {
             guard isOpen else { return }
 
@@ -269,7 +298,7 @@ public class RustPlaces {
         return deferred
     }
 
-    public func reset() -> Success {
+    public func resetBookmarksMetadata() -> Success {
         let deferred = Success()
 
         writerQueue.async {
@@ -278,8 +307,12 @@ public class RustPlaces {
                 return
             }
 
-            // TODO: Call Rust API
-            deferred.fill(Maybe(success: ()))
+            do {
+                try self.api?.resetBookmarksMetadata()
+                deferred.fill(Maybe(success: ()))
+            } catch let error {
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
+            }
         }
 
         return deferred

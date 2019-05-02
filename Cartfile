@@ -16,7 +16,7 @@ github "mozilla-mobile/MappaMundi"          "master"
 github "Leanplum/Leanplum-iOS-SDK"          ~> 2.4
 
 # Use release version of application-services
-github "garvankeeley/application-services"      "0.27.0.1" # for xcode 10.2 compat use this fork temporarily
+github "justindarc/application-services"      "v0.27.2-prerelease1" # for Xcode 10.2.x compat use this fork temporarily
 
 # Use interim binary version of application-services
 # binary "https://circleci.com/api/v1.1/project/github/mozilla/application-services/2862/artifacts/0/dist/mozilla.app-services.json" ~> 0.0.1-snapshot # mozilla/application-services@fb5c540e99133980911216055425688f22a27be2

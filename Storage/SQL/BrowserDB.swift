@@ -13,6 +13,8 @@ public typealias Args = [Any?]
 open class BrowserDB {
     fileprivate let db: SwiftData
 
+    public let databasePath: String
+
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
     public static let MaxVariableNumber = 999
@@ -20,9 +22,9 @@ open class BrowserDB {
     public init(filename: String, schema: Schema, files: FileAccessor) {
         log.debug("Initializing BrowserDB: \(filename).")
 
-        let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
+        self.databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
-        self.db = SwiftData(filename: file, schema: schema, files: files)
+        self.db = SwiftData(filename: self.databasePath, schema: schema, files: files)
     }
 
     // Returns the SQLite version for debug purposes.
