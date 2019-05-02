@@ -9,7 +9,7 @@ import Storage
 
 private struct HomePanelViewControllerUX {
     // Height of the top panel switcher button toolbar.
-    static let ButtonContainerHeight: CGFloat = 40
+    static let ButtonContainerHeight: CGFloat = 50
 }
 
 protocol HomePanel: AnyObject, Themeable {
@@ -68,7 +68,7 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
     }()
 
     fileprivate var controllerContainerView = UIView()
-    fileprivate var buttons: [UIButton] = []
+    fileprivate var buttons: [LibraryPanelButton] = []
 
     fileprivate var buttonTintColor: UIColor?
     fileprivate var buttonSelectedTintColor: UIColor?
@@ -195,12 +195,13 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
 
     fileprivate func updateButtons() {
         for panel in panels {
-            let button = UIButton()
+            let button = LibraryPanelButton()
             button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
             if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
                 button.setImage(image, for: .normal)
             }
-            button.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 4, right: 0)
+
+            button.nameLabel.text = panel.accessibilityLabel
             button.accessibilityLabel = panel.accessibilityLabel
             button.accessibilityIdentifier = panel.accessibilityIdentifier
             buttons.append(button)
@@ -212,8 +213,10 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
         for (index, button) in self.buttons.enumerated() {
             if index == self.selectedPanel?.rawValue {
                 button.tintColor = self.buttonSelectedTintColor
+                button.nameLabel.textColor = self.buttonSelectedTintColor
             } else {
                 button.tintColor = self.buttonTintColor
+                button.nameLabel.textColor = self.buttonTintColor
             }
         }
     }
@@ -257,6 +260,30 @@ class HomePanelViewController: UIViewController, UITextFieldDelegate, HomePanelD
             return
         }
         return self.homePanel(didSelectURL: url, visitType: visitType)
+    }
+}
+
+class LibraryPanelButton: UIButton {
+    var nameLabel = UILabel()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
+        addSubview(nameLabel)
+        nameLabel.snp.makeConstraints { make in
+            make.bottom.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.7
+        nameLabel.numberOfLines = 2
+        nameLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
+        nameLabel.textAlignment = .center
+    }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
