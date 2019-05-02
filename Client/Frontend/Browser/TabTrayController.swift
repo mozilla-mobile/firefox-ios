@@ -476,7 +476,7 @@ extension TabTrayController {
     }
 
     func closeTabsForCurrentTray() {
-        tabDisplayManager.hideDisplayedTabs().uponQueue(.main) { _ in
+        tabDisplayManager.hideDisplayedTabs() {
             self.tabManager.removeTabsWithUndoToast(self.tabDisplayManager.dataStore.compactMap { $0 })
             if self.tabDisplayManager.isPrivate {
                 self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()

@@ -218,24 +218,27 @@ class TabDisplayManager: NSObject {
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
-    func hideDisplayedTabs() -> Success {
-        let deferred = Success()
+    func hideDisplayedTabs( completion: @escaping () -> Void) {
+
+        var cells = [UICollectionViewCell]()
         for i in 0..<collectionView.numberOfItems(inSection: 0) {
             guard let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) else { continue }
-            UIView.animate(withDuration: 0.2,
-                           animations: {
-                                cell.contentView.alpha = 0
-                                cell.alpha = 0 },
-                           completion: { _ in
-                                cell.contentView.alpha = 1
-                                cell.alpha = 1
-                                cell.isHidden = true
-                                if !deferred.isFilled {
-                                    deferred.fill(Maybe(success: ()))
-                                }
-            })
+            cells.append(cell)
         }
-        return deferred
+
+        UIView.animate(withDuration: 0.2,
+                       animations: {
+                            cells.forEach {
+                                $0.alpha = 0
+
+                            }
+                        }, completion: { _ in
+                            cells.forEach {
+                                $0.alpha = 1
+                                $0.isHidden = true
+                            }
+                            completion()
+                        })
     }
 }
 
