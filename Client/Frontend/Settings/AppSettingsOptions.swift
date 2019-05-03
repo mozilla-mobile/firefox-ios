@@ -10,8 +10,26 @@ import LocalAuthentication
 
 // This file contains all of the settings available in the main settings screen of the app.
 
-private var ShowDebugSettings: Bool = false
-private var DebugSettingsClickCount: Int = 0
+struct ShowDebugSettings {
+    typealias TableIsNeedToUpdate = Bool
+    
+    private(set) static var hidden = false
+    private(set) static var clickCount = 0
+    
+    public static func inverse() {
+        hidden = !hidden
+    }
+    
+    public static func click() -> TableIsNeedToUpdate {
+        clickCount += 1
+        if clickCount >= 5 {
+            clickCount = 0
+            inverse()
+            return true
+        }
+        return false
+    }
+}
 
 // For great debugging!
 class HiddenSetting: Setting {
@@ -23,7 +41,7 @@ class HiddenSetting: Setting {
     }
 
     override var hidden: Bool {
-        return !ShowDebugSettings
+        return !ShowDebugSettings.hidden
     }
 }
 
@@ -416,7 +434,7 @@ class AccountStatusSetting: WithAccountSetting {
 // For great debugging!
 class RequirePasswordDebugSetting: WithAccountSetting {
     override var hidden: Bool {
-        if !ShowDebugSettings {
+        if !ShowDebugSettings.hidden {
             return true
         }
         if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.needsPassword {
@@ -438,7 +456,7 @@ class RequirePasswordDebugSetting: WithAccountSetting {
 // For great debugging!
 class RequireUpgradeDebugSetting: WithAccountSetting {
     override var hidden: Bool {
-        if !ShowDebugSettings {
+        if !ShowDebugSettings.hidden {
             return true
         }
         if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.needsUpgrade {
@@ -460,7 +478,7 @@ class RequireUpgradeDebugSetting: WithAccountSetting {
 // For great debugging!
 class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
     override var hidden: Bool {
-        if !ShowDebugSettings {
+        if !ShowDebugSettings.hidden {
             return true
         }
         if let _ = profile.getAccount() {
@@ -547,7 +565,7 @@ class FeatureSwitchSetting: BoolSetting {
     }
 
     override var hidden: Bool {
-        return !ShowDebugSettings
+        return !ShowDebugSettings.hidden
     }
 
     override func displayBool(_ control: UISwitch) {
@@ -614,12 +632,6 @@ class VersionSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         copyAppVersionAndPresentAlert(by: navigationController)
-        DebugSettingsClickCount += 1
-        if DebugSettingsClickCount >= 5 {
-            DebugSettingsClickCount = 0
-            ShowDebugSettings = !ShowDebugSettings
-            settings.tableView.reloadData()
-        }
     }
     
     func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
@@ -944,7 +956,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "DebugStageSync" }
 
     override var hidden: Bool {
-        if !ShowDebugSettings {
+        if !ShowDebugSettings.hidden {
             return true
         }
         if let _ = profile.getAccount() {
@@ -1118,7 +1130,7 @@ class AdvanceAccountSetting: HiddenSetting {
     }
 
     override var hidden: Bool {
-        return !ShowDebugSettings || profile.hasAccount()
+        return !ShowDebugSettings.hidden || profile.hasAccount()
     }
 }
 

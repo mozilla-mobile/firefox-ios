@@ -136,15 +136,38 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
-        // Prevent the top border from showing for the General section.
-        if !profile.hasAccount() {
-            switch section {
-                case 1:
+        
+        switch section {
+            case 1:
+                // Prevent the top border from showing for the General section
+                if !profile.hasAccount() {
                     headerView.showTopBorder = false
-            default:
-                break
-            }
+                }
+            
+            case (tableView.numberOfSections - 1):
+                // MARK: - implement access handler for debug menu
+                guard !gestureRecognizerIsAlreadySetup(at: headerView) else { break }
+                headerView.accessibilityIdentifier = "AppSettingsTableViewController.Sections.About"
+                let handler = #selector(debugSettingsClickHandler(sender:))
+                let recognizer = UITapGestureRecognizer(target: self, action: handler)
+                headerView.addGestureRecognizer(recognizer)
+            
+            default: break
         }
+        
         return headerView
+    }
+    
+    func gestureRecognizerIsAlreadySetup(at view: UIView) -> Bool {
+        switch view.gestureRecognizers?.isEmpty {
+            case .some(let isEmpty) where isEmpty: return false
+            case .none: return false
+            default: return true
+        }
+    }
+    
+    @objc func debugSettingsClickHandler(sender: UITapGestureRecognizer) {
+        let tableIsNeedToUpdate = ShowDebugSettings.click()
+        if tableIsNeedToUpdate { tableView.reloadData() }
     }
 }
