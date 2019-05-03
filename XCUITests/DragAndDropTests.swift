@@ -256,7 +256,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
 
         let firstEntryOnList = app.tables["History List"].cells.element(boundBy:
             6).staticTexts[exampleDomainTitle]
@@ -276,7 +276,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         if skipPlatform { return }
 
         //navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"])
 
         let firstEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 0).staticTexts[exampleDomainTitle]
@@ -297,7 +297,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testTryDragAndDropHistoryToURLBar() {
         if skipPlatform { return }
 
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"].cells.staticTexts[twitterTitle])
 
         app.tables["History List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
@@ -312,7 +312,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testTryDragAndDropBookmarkToURLBar() {
         if skipPlatform { return }
 
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         app.tables["Bookmarks List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 
