@@ -413,7 +413,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
     // MARK: - Selector callbacks
 
-    @objc func onNotificationReceived(_ notification: Notification) {
+    func onNotificationReceived(_ notification: Notification) {
         switch notification.name {
         case .FirefoxAccountChanged, .PrivateDataClearedHistory:
             reloadData()
@@ -442,7 +442,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         }
     }
 
-    @objc func onLongPressGestureRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    func onLongPressGestureRecognized(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         guard longPressGestureRecognizer.state == .began else { return }
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard let indexPath = tableView.indexPathForRow(at: touchPoint) else { return }
@@ -452,7 +452,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         }
     }
 
-    @objc func onRefreshPulled() {
+    func onRefreshPulled() {
         refreshControl?.beginRefreshing()
         resyncHistory()
     }
