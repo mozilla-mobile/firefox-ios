@@ -53,6 +53,7 @@ fileprivate class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     }
 }
 
+@objcMembers
 class BookmarksPanel: SiteTableViewController, LibraryPanel {
     var libraryPanelDelegate: LibraryPanelDelegate?
 
