@@ -82,7 +82,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
 
         // Go to reading list and check that the item is there
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts[PDF_website["longUrlValue"]!]
         waitForExistence(savedToReadingList)
         XCTAssertTrue(savedToReadingList.exists)
@@ -116,7 +116,7 @@ class BrowsingPDFTests: BaseTestCase {
         navigator.openURL(PDF_website["url"]!)
         navigator.performAction(Action.BookmarkThreeDots)
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[PDF_website["bookmarkLabel"]!].exists)
     }

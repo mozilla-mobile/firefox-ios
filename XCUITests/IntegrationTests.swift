@@ -80,7 +80,7 @@ class IntegrationTests: BaseTestCase {
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"].cells.element(boundBy: 1).staticTexts["Example Domain"])
     }
 
@@ -137,7 +137,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced History
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells.staticTexts[historyItemSavedOnDesktop], timeout: 5)
     }
 
@@ -163,7 +163,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced Tabs
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.cells["HistoryPanel.syncedDevicesCell"], timeout: 5)
         app.cells["HistoryPanel.syncedDevicesCell"].tap()
         // Need to swipe to get the data on the screen on focus

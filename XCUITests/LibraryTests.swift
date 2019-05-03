@@ -15,7 +15,7 @@ class LibraryTestsIpad: IpadOnlyTestCase {
         navigator.nowAt(HomePanel_Library)
         waitForExistence(app.tables["Bookmarks List"])
         // Go to a different panel, like History
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         // Verify that next time Library opens in last visited panel
         navigator.goto(HomePanelsScreen)
         waitForExistence(app.buttons["TabToolbar.libraryButton"])
@@ -36,25 +36,25 @@ class LibraryTestsIphone: IphoneOnlyTestCase {
         
         // Check if clicking on Bookmark option shows bookmarks
         app.buttons["menu Bookmark"].tap()
-        navigator.nowAt(HomePanel_Bookmarks)
+        navigator.nowAt(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         navigator.goto(HomePanelsScreen)
         
         // Check if clicking on History option shows history
         app.buttons["menu panel History"].tap()
-        navigator.nowAt(HomePanel_History)
+        navigator.nowAt(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
         navigator.goto(HomePanelsScreen)
         
         // Check if clicking on Reading List option shows history
         app.buttons["menu panel ReadingList"].tap()
-        navigator.nowAt(HomePanel_ReadingList)
+        navigator.nowAt(LibraryPanel_ReadingList)
         waitForExistence(app.tables["ReadingTable"])
         navigator.goto(HomePanelsScreen)
         
         // Check if clicking on Downloads option shows history
         app.buttons["menu panel Downloads"].tap()
-        navigator.nowAt(HomePanel_Downloads)
+        navigator.nowAt(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
         navigator.goto(HomePanelsScreen)
     }

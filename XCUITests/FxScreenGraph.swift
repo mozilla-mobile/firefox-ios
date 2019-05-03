@@ -97,18 +97,18 @@ let allIntroPages = [
 let HomePanelsScreen = "HomePanels"
 let PrivateHomePanelsScreen = "PrivateHomePanels"
 let HomePanel_TopSites = "HomePanel.TopSites.0"
-let HomePanel_Bookmarks = "HomePanel.Bookmarks.1"
-let HomePanel_History = "HomePanel.History.2"
-let HomePanel_ReadingList = "HomePanel.ReadingList.3"
-let HomePanel_Downloads = "HomePanel.Downloads.4"
+let LibraryPanel_Bookmarks = "LibraryPanel.Bookmarks.1"
+let LibraryPanel_History = "LibraryPanel.History.2"
+let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
+let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
 
 let allHomePanels = [
     HomePanelsScreen,
     HomePanel_TopSites,
-    HomePanel_Bookmarks,
-    HomePanel_History,
-    HomePanel_ReadingList,
-    HomePanel_Downloads
+    LibraryPanel_Bookmarks,
+    LibraryPanel_History,
+    LibraryPanel_ReadingList,
+    LibraryPanel_Downloads
 ]
 
 class Action {
@@ -470,7 +470,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    map.addScreenState(HomePanel_Bookmarks) { screenState in
+    map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
         screenState.press(bookmarkCell, to: BookmarksPanelContextMenu)
         screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
@@ -481,7 +481,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.press(topSites.cells.matching(identifier: "TopSite").element(boundBy: 0), to: TopSitesPanelContextMenu)
     }
 
-    map.addScreenState(HomePanel_History) { screenState in
+    map.addScreenState(LibraryPanel_History) { screenState in
         screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
         screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
         screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
@@ -491,19 +491,19 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
     }
 
-    map.addScreenState(HomePanel_ReadingList) { screenState in
+    map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
         screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
-    map.addScreenState(HomePanel_Downloads) { screenState in
+    map.addScreenState(LibraryPanel_Downloads) { screenState in
         screenState.dismissOnUse = true
         screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["goBackFromRecentlyClosedHistory"], to: HomePanel_History)
+        screenState.tap(app.buttons["goBackFromRecentlyClosedHistory"], to: LibraryPanel_History)
     }
 
     map.addScreenState(HistoryPanelContextMenu) { screenState in
@@ -985,10 +985,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.dismissOnUse = true
         screenState.backAction = navigationControllerBackAction
 
-        screenState.tap(app.buttons["HomePanels.Bookmarks"], to: HomePanel_Bookmarks)
-        screenState.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
-        screenState.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
-        screenState.tap(app.buttons["HomePanels.Downloads"], to: HomePanel_Downloads)
+        screenState.tap(app.buttons["LibraryPanels.Bookmarks"], to: LibraryPanel_Bookmarks)
+        screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
+        screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: LibraryPanel_ReadingList)
+        screenState.tap(app.buttons["LibraryPanels.Downloads"], to: LibraryPanel_Downloads)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in

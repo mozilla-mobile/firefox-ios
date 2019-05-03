@@ -16,7 +16,7 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
         // Go to History screen
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
 
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
@@ -30,7 +30,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         navigator.openURL(url2)
         waitForValueContains(app.textFields["url"], value: "facebook")
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
         XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
@@ -218,7 +218,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         // This action to enable private mode is defined on HomePanel Screen that is why we need to open a new tab and be sure we are on that screen to use the correct action
         navigator.goto(NewTabScreen)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
         // History without counting Clear Recent History, Recently Closed and Synced devices
         let history = app.tables["History List"].cells.count - 3
@@ -237,7 +237,7 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         // Open website and check it does not appear under history once going back to regular mode
         navigator.openURL("http://example.com")
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
         // History without counting Clear Recent History, Recently Closed and Synced devices
         let history = app.tables["History List"].cells.count - 3
