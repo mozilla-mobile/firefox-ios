@@ -22,7 +22,7 @@ class DefaultSearchPrefsTests: XCTestCase {
         let canada = (lang: ["en-CA", "en"], region: "CA", resultList: ["google-b-m", "bing", "amazondotcom", "ddg", "twitter", "wikipedia"], resultDefault: "google-b-m")
         let russia = (lang: ["ru-RU", "ru"], region: "RU", resultList: ["google-b-m", "yandex-ru", "twitter", "wikipedia-ru"], resultDefault: "Яндекс")
         let taiwan = (lang: ["zh-TW", "zh"], region: "TW", resultList: ["google-b-m", "bing", "ddg", "wikipedia-zh-TW"], resultDefault: "google-b-m")
-        let china = (lang: ["zh-hans-CN", "zh-CN", "zh"], region: "CN", resultList: ["google-b-m", "baidu", "bing", "taobao", "wikipedia-zh-CN"], resultDefault: "百度")
+        let china = (lang: ["zh-hans-CN", "zh-CN", "zh"], region: "CN", resultList: ["google-b-m", "baidu", "bing", "wikipedia-zh-CN"], resultDefault: "百度")
         let germany = (lang: ["de-DE", "de"], region: "DE", resultList: ["google-b-m", "bing", "amazon-de", "ddg", "qwant", "twitter", "wikipedia-de"], resultDefault: "google-b-m")
         let southAfrica = (lang: ["en-SA", "en"], region: "SA", resultList: ["google-b-m", "bing", "amazondotcom", "ddg", "twitter", "wikipedia"], resultDefault: "google-b-m")
         let testLocales = [us, england, france, japan, canada, russia, taiwan, china, germany, southAfrica]
