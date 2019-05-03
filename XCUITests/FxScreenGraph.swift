@@ -985,10 +985,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.dismissOnUse = true
         screenState.backAction = navigationControllerBackAction
 
-        screenState.tap(app.buttons["HomePanels.Bookmarks"], to: HomePanel_Bookmarks)
-        screenState.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
-        screenState.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
-        screenState.tap(app.buttons["HomePanels.Downloads"], to: HomePanel_Downloads)
+        screenState.tap(app.buttons["LibraryPanels.Bookmarks"], to: HomePanel_Bookmarks)
+        screenState.tap(app.buttons["LibraryPanels.History"], to: HomePanel_History)
+        screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: HomePanel_ReadingList)
+        screenState.tap(app.buttons["LibraryPanels.Downloads"], to: HomePanel_Downloads)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
