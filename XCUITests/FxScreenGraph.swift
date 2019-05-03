@@ -54,6 +54,7 @@ let TranslationSettings = "TranslationSettings"
 let HomePanel_Library = "HomePanel_Library"
 let TranslatePageMenu = "TranslatePageMenu"
 let DontTranslatePageMenu = "DontTranslatePageMenu"
+let MobileBookmarks = "MobileBookmarks"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -206,6 +207,8 @@ class Action {
     static let DisableTranslation = "DisableTranlation"
     static let SelectGoogle = "SelectGoogle"
     static let SelectBing = "SelectBing"
+
+    static let ExitMobileBookmarksFolder = "ExitMobileBookmarksFolder"
 }
 
 @objcMembers
@@ -473,7 +476,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
         screenState.press(bookmarkCell, to: BookmarksPanelContextMenu)
+        screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
+    }
+
+    map.addScreenState(MobileBookmarks) { screenState in
+        let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
+        screenState.press(bookmarkCell, to: BookmarksPanelContextMenu)
+        screenState.gesture(forAction: Action.ExitMobileBookmarksFolder) { userState in
+            app.buttons["Done"].tap()
+        }
     }
 
     map.addScreenState(HomePanel_TopSites) { screenState in
