@@ -23,6 +23,7 @@ private class FetchInProgressError: MaybeErrorType {
     }
 }
 
+@objcMembers
 class HistoryPanel: SiteTableViewController, LibraryPanel {
     enum Section: Int {
         // Showing synced tabs, showing recently closed, and clearing recent history are action rows of this type.
