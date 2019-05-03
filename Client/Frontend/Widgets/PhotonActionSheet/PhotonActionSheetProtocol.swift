@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import Deferred
 
 protocol PhotonActionSheetProtocol {
     var tabManager: TabManager { get }
@@ -106,8 +105,7 @@ extension PhotonActionSheetProtocol {
             settingsTableViewController.settingsDelegate = vcDelegate
 
             let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
-            controller.popoverDelegate = vcDelegate
-            controller.modalPresentationStyle = .formSheet
+            controller.presentingModalViewControllerDelegate = vcDelegate
 
             // Wait to present VC in an async dispatch queue to prevent a case where dismissal
             // of this popover on iPad seems to block the presentation of the modal VC.
@@ -180,35 +178,33 @@ extension PhotonActionSheetProtocol {
         }
 
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { action in
-            //TODO: can all this logic go somewhere else?
             guard let url = tab.url?.displayURL else { return }
-            let absoluteString = url.absoluteString
-            self.profile.bookmarks.modelFactory >>== {
-                $0.removeByURL(absoluteString).uponQueue(.main) { res in
-                    if res.isSuccess {
-                        UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
-                        success(Strings.AppMenuRemoveBookmarkConfirmMessage)
-                    }
+
+            self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
+                if result.isSuccess {
+                    success(Strings.AppMenuRemoveBookmarkConfirmMessage)
                 }
             }
+
+            UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
         }
 
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { action in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
-            sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
+            sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
                 guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
                     return succeed()
                 }
 
                 return self.profile.history.addPinnedTopSite(site)
-                }.uponQueue(.main) { _ in }
+            }.uponQueue(.main) { _ in }
         }
 
         let removeTopSitesPin = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin") { action in
             guard let url = tab.url?.displayURL, let sql = self.profile.history as? SQLiteHistory else { return }
 
-            sql.getSitesForURLs([url.absoluteString]).bind { val -> Success in
+            sql.getSites(forURLs: [url.absoluteString]).bind { val -> Success in
                 guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
                     return succeed()
                 }
@@ -278,12 +274,7 @@ extension PhotonActionSheetProtocol {
     }
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
-        return self.profile.bookmarks.modelFactory.bind {
-            guard let factory = $0.successValue else {
-                return deferMaybe(false)
-            }
-            return factory.isBookmarked(url)
-        }
+        return profile.places.isBookmarked(url: url)
     }
 
     func fetchPinnedTopSiteStatus(for url: String) -> Deferred<Maybe<Bool>> {

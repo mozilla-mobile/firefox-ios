@@ -91,7 +91,7 @@ class TabsButton: UIButton {
         insideButton.addSubview(countLabel)
         addSubview(insideButton)
         isAccessibilityElement = true
-        accessibilityTraits |= UIAccessibilityTraitButton
+        accessibilityTraits.insert(.button)
     }
 
     override func updateConstraints() {

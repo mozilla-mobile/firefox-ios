@@ -50,7 +50,7 @@ class ThemeSettingsController: ThemedTableViewController {
         tableView.tableHeaderView = headerView
         headerView.titleLabel.text = Strings.DisplayThemeSectionHeader
 
-        NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: .UIScreenBrightnessDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
     }
 
     @objc func brightnessChanged() {

@@ -15,7 +15,10 @@ import XCTest
  */
 class ProfileTest: XCTestCase {
     func withTestProfile(_ callback: (_ profile: Client.Profile) -> Void) {
-        callback(MockProfile())
+        let profile = MockProfile(databasePrefix: "profile-test")
+        profile._reopen()
+        callback(profile)
+        profile._shutdown()
     }
 
     func testNewProfileClearsExistingAuthenticationInfo() {

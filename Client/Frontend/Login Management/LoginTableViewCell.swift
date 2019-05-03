@@ -105,7 +105,7 @@ class LoginTableViewCell: ThemedTableViewCell {
         }
 
         let attributes = [
-            NSAttributedStringKey.font: LoginTableViewCellUX.descriptionLabelFont
+            NSAttributedString.Key.font: LoginTableViewCellUX.descriptionLabelFont
         ]
 
         return descriptionText.size(withAttributes: attributes)
@@ -134,7 +134,7 @@ class LoginTableViewCell: ThemedTableViewCell {
         }
     }
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         selectionStyle = .none
 

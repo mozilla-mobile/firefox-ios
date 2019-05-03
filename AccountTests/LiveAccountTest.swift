@@ -6,7 +6,6 @@
 import Foundation
 import FxA
 import Shared
-import Deferred
 import SwiftyJSON
 
 import XCTest

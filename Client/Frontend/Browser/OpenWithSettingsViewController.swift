@@ -40,7 +40,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
 
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {

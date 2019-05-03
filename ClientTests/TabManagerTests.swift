@@ -7,7 +7,6 @@ import Shared
 import Storage
 import UIKit
 import WebKit
-import Deferred
 
 import XCTest
 
@@ -105,6 +104,7 @@ class TabManagerTests: XCTestCase {
     }
 
     override func tearDown() {
+        profile._shutdown()
         manager.removeDelegate(delegate)
         manager.removeAll()
 

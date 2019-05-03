@@ -60,8 +60,9 @@ open class Visit: Hashable {
     public let date: MicrosecondTimestamp
     public let type: VisitType
 
-    open var hashValue: Int {
-        return date.hashValue ^ type.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(date)
+        hasher.combine(type)
     }
 
     public init(date: MicrosecondTimestamp, type: VisitType = .unknown) {
@@ -94,8 +95,11 @@ open class SiteVisit: Visit {
     var id: Int?
     public let site: Site
 
-    open override var hashValue: Int {
-        return date.hashValue ^ type.hashValue ^ (id?.hashValue ?? 0) ^ (site.id ?? 0)
+    public override func hash(into hasher: inout Hasher) {
+        hasher.combine(date)
+        hasher.combine(type)
+        hasher.combine(id)
+        hasher.combine(site.id)
     }
 
     public init(site: Site, date: MicrosecondTimestamp, type: VisitType = .unknown) {

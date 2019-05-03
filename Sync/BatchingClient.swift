@@ -6,7 +6,6 @@ import Foundation
 import Alamofire
 import Shared
 import XCGLogger
-import Deferred
 
 open class SerializeRecordFailure<T: CleartextPayloadJSON>: MaybeErrorType, SyncPingFailureFormattable {
     public let record: Record<T>

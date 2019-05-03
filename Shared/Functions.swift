@@ -248,6 +248,6 @@ public func debounce(_ delay: TimeInterval, action:@escaping () -> Void) -> () -
             timer.invalidate()
         }
         timer = Timer(timeInterval: delay, target: callback, selector: #selector(Callback.go), userInfo: nil, repeats: false)
-        RunLoop.current.add(timer!, forMode: RunLoopMode.defaultRunLoopMode)
+        RunLoop.current.add(timer!, forMode: RunLoop.Mode.default)
     }
 }

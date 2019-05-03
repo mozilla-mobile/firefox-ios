@@ -6,7 +6,6 @@ import Alamofire
 import Shared
 import Foundation
 import FxA
-import Deferred
 import SwiftyJSON
 
 public let FxAClientErrorDomain = "org.mozilla.fxa.error"

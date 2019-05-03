@@ -7,7 +7,6 @@ import Alamofire
 import Shared
 import Account
 import XCGLogger
-import Deferred
 import SwiftyJSON
 
 private let log = Logger.syncLogger

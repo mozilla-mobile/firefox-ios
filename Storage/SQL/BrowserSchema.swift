@@ -6,11 +6,6 @@ import Foundation
 import Shared
 import XCGLogger
 
-let BookmarksFolderTitleMobile: String = NSLocalizedString("Mobile Bookmarks", tableName: "Storage", comment: "The title of the folder that contains mobile bookmarks. This should match bookmarks.folder.mobile.label on Android.")
-let BookmarksFolderTitleMenu: String = NSLocalizedString("Bookmarks Menu", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the menu. This should match bookmarks.folder.menu.label on Android.")
-let BookmarksFolderTitleToolbar: String = NSLocalizedString("Bookmarks Toolbar", tableName: "Storage", comment: "The name of the folder that contains desktop bookmarks in the toolbar. This should match bookmarks.folder.toolbar.label on Android.")
-let BookmarksFolderTitleUnsorted: String = NSLocalizedString("Unsorted Bookmarks", tableName: "Storage", comment: "The name of the folder that contains unsorted desktop bookmarks. This should match bookmarks.folder.unfiled.label on Android.")
-
 let _TableBookmarks = "bookmarks"                                      // Removed in v12. Kept for migration.
 let TableBookmarksMirror = "bookmarksMirror"                           // Added in v9.
 let TableBookmarksMirrorStructure = "bookmarksMirrorStructure"         // Added in v10.
@@ -40,6 +35,7 @@ let TablePageMetadata = "page_metadata"
 let TableHighlights = "highlights"
 
 let TableRemoteDevices = "remote_devices" // Added in v29.
+let TableFaviconSiteURLs = "favicon_site_urls"
 
 let MatViewAwesomebarBookmarksWithFavicons = "matview_awesomebar_bookmarks_with_favicons"
 
@@ -100,6 +96,7 @@ private let AllTables: [String] = [
     TableSyncCommands,
     TableClients,
     TableTabs,
+    TableFaviconSiteURLs,
 
     MatViewAwesomebarBookmarksWithFavicons,
 ]
@@ -146,7 +143,7 @@ private let log = Logger.syncLogger
  * We rely on SQLiteHistory having initialized the favicon table first.
  */
 open class BrowserSchema: Schema {
-    static let DefaultVersion = 39    // Bug 1539483.
+    static let DefaultVersion = 40    // Issue #4776.
 
     public var name: String { return "BROWSER" }
     public var version: Int { return BrowserSchema.DefaultVersion }
@@ -209,23 +206,29 @@ open class BrowserSchema: Schema {
     }
 
     func prepopulateRootFolders(_ db: SQLiteDBConnection) -> Bool {
-        let type = BookmarkNodeType.folder.rawValue
+        let type = 2 // "folder"
         let now = Date.nowNumber()
-        let status = SyncStatus.new.rawValue
+        let status = 2 // "new"
 
         let localArgs: Args = [
-            BookmarkRoots.RootID, BookmarkRoots.RootGUID, type, now, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.MobileID, BookmarkRoots.MobileFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.MenuID, BookmarkRoots.MenuFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.ToolbarID, BookmarkRoots.ToolbarFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
-            BookmarkRoots.UnfiledID, BookmarkRoots.UnfiledFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            0, BookmarkRoots.RootGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            1, BookmarkRoots.MobileFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            2, BookmarkRoots.MenuFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            3, BookmarkRoots.ToolbarFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
+            4, BookmarkRoots.UnfiledFolderGUID, type, now, BookmarkRoots.RootGUID, status, now,
         ]
 
         // Compute these args using the sequence in RootChildren, rather than hard-coding.
         var idx = 0
         var structureArgs = Args()
-        structureArgs.reserveCapacity(BookmarkRoots.RootChildren.count * 3)
-        BookmarkRoots.RootChildren.forEach { guid in
+        let rootChildren: [GUID] = [
+            BookmarkRoots.MenuFolderGUID,
+            BookmarkRoots.ToolbarFolderGUID,
+            BookmarkRoots.UnfiledFolderGUID,
+            BookmarkRoots.MobileFolderGUID,
+        ]
+        structureArgs.reserveCapacity(rootChildren.count * 3)
+        rootChildren.forEach { guid in
             structureArgs.append(BookmarkRoots.RootGUID)
             structureArgs.append(guid)
             structureArgs.append(idx)
@@ -239,11 +242,11 @@ open class BrowserSchema: Schema {
 
         let local =
             "INSERT INTO bookmarksLocal (id, guid, type, date_added, parentid, title, parentName, sync_status, local_modified) VALUES " +
-            Array(repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)", count: BookmarkRoots.RootChildren.count + 1).joined(separator: ", ")
+            Array(repeating: "(?, ?, ?, ?, ?, '', '', ?, ?)", count: rootChildren.count + 1).joined(separator: ", ")
 
         let structure =
             "INSERT INTO bookmarksLocalStructure (parent, child, idx) VALUES " +
-            Array(repeating: "(?, ?, ?)", count: BookmarkRoots.RootChildren.count).joined(separator: ", ")
+            Array(repeating: "(?, ?, ?)", count: rootChildren.count).joined(separator: ", ")
 
         return self.run(db, queries: [(local, localArgs), (structure, structureArgs)])
     }
@@ -375,6 +378,15 @@ open class BrowserSchema: Schema {
             iconDate REAL,
             iconType INTEGER,
             iconWidth INTEGER
+        )
+        """
+
+    let faviconSiteURLsCreate = """
+        CREATE TABLE favicon_site_urls (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            site_url TEXT NOT NULL,
+            faviconID INTEGER NOT NULL REFERENCES favicons(id) ON DELETE CASCADE,
+            UNIQUE (site_url, faviconID)
         )
         """
 
@@ -877,6 +889,7 @@ open class BrowserSchema: Schema {
             clientsTableCreate,
             tabsTableCreate,
             historyFTSCreate,
+            faviconSiteURLsCreate,
 
             // "Materialized Views" (Tables)
             awesomebarBookmarksWithFaviconsCreate,
@@ -1053,7 +1066,7 @@ open class BrowserSchema: Schema {
             // There should be nothing else in the table, and no structure.
             // Our old bookmarks table didn't have creation date, so we use the current timestamp.
             let modified = Date.now()
-            let status = SyncStatus.new.rawValue
+            let status = 2 // "new"
 
             // We don't specify a title, expecting it to be generated on the fly, because we're smarter than Android.
             // We also don't migrate the 'id' column; we'll generate new ones that won't conflict with our roots.
@@ -1394,6 +1407,15 @@ open class BrowserSchema: Schema {
                 "CREATE INDEX IF NOT EXISTS idx_bookmarksBuffer_keyword ON bookmarksBuffer (keyword)",
                 "CREATE INDEX IF NOT EXISTS idx_bookmarksLocal_keyword ON bookmarksLocal (keyword)",
                 "CREATE INDEX IF NOT EXISTS idx_bookmarksMirror_keyword ON bookmarksMirror (keyword)",
+                ]) {
+                return false
+            }
+        }
+
+        if from < 40 && to >= 40 {
+            // Create indices on the bookmarks tables for the `keyword` column.
+            if !self.run(db, queries: [
+                faviconSiteURLsCreate,
                 ]) {
                 return false
             }
