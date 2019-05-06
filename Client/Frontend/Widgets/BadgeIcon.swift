@@ -41,7 +41,7 @@ class BadgeWithBackdrop {
     let badge: ToolbarBadge
     let backdrop: UIView
     static let circleSize = CGFloat(40)
-    static let backdropAlpha = CGFloat(0.10)
+    static let backdropAlpha = CGFloat(0.15)
 
     static func makeCircle(color: UIColor?) -> UIView {
         let circle = UIView()
