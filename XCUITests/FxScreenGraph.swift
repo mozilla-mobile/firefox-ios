@@ -160,13 +160,9 @@ class Action {
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
     static let SelectNewTabAsFirefoxHomePage = "SelectNewTabAsFirefoxHomePage"
-    static let SelectNewTabAsBookmarksPage = "SelectNewTabAsBookmarksPage"
-    static let SelectNewTabAsHistoryPage = "SelectNewTabAsHistoryPage"
     static let SelectNewTabAsCustomURL = "SelectNewTabAsCustomURL"
 
     static let SelectHomeAsFirefoxHomePage = "SelectHomeAsFirefoxHomePage"
-    static let SelectHomeAsBookmarksPage = "SelectHomeAsBookmarksPage"
-    static let SelectHomeAsHistoryPage = "SelectHomeAsHistoryPage"
     static let SelectHomeAsCustomURL = "SelectHomeAsCustomURL"
     static let SelectTopSitesRows = "SelectTopSitesRows"
 
@@ -640,13 +636,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.SelectNewTabAsFirefoxHomePage) { UserState in
             table.cells["NewTabAsFirefoxHome"].tap()
         }
-        screenState.gesture(forAction: Action.SelectNewTabAsBookmarksPage) { UserState in
-            table.cells["NewTabAsBookmarks"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectNewTabAsHistoryPage) { UserState in
-            table.cells["NewTabAsHistory"].tap()
-        }
-
         screenState.gesture(forAction: Action.SelectNewTabAsCustomURL) { UserState in
             table.cells["NewTabAsCustomURL"].tap()
         }
@@ -655,15 +644,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(HomeSettings) { screenState in
-
         screenState.gesture(forAction: Action.SelectHomeAsFirefoxHomePage) { UserState in
             app.cells["HomeAsFirefoxHome"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectHomeAsBookmarksPage) { UserState in
-            app.cells["HomeAsBookmarks"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectHomeAsHistoryPage) { UserState in
-            app.cells["HomeAsHistory"].tap()
         }
 
         screenState.gesture(forAction: Action.SelectHomeAsCustomURL) { UserState in
