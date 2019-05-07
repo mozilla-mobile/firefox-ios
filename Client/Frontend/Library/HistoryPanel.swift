@@ -263,6 +263,10 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         }
 
         profile.history.removeHistoryForURL(site.url).uponQueue(.main) { result in
+            guard site == self.siteForIndexPath(indexPath) else {
+                self.reloadData()
+                return
+            }
             self.tableView.beginUpdates()
             self.groupedSites.remove(site)
             self.tableView.deleteRows(at: [indexPath], with: .right)
