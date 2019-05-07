@@ -146,7 +146,7 @@ class LibraryViewController: UIViewController {
 
             // If we're already on the selected panel and the user has
             // tapped for a second time, pop it to the root view controller.
-            if (newSelectedPanel == selectedPanel) {
+            if newSelectedPanel == selectedPanel {
                 let panel = self.panelDescriptors[safe: index]?.navigationController
                 panel?.popToRootViewController(animated: true)
             }
