@@ -116,7 +116,7 @@ class LibraryViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return ThemeManager.instance.currentName == .dark ? .lightContent : .default
     }
 
     fileprivate func hideCurrentPanel() {
