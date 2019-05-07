@@ -150,7 +150,6 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
 
 extension RecentlyClosedTabsPanel: Themeable {
     func applyTheme() {
-        //historyBackButton.applyTheme()
         tableViewController.tableView.reloadData()
     }
 }
