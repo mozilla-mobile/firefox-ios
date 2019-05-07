@@ -20,24 +20,7 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     let profile: Profile
 
-    fileprivate lazy var recentlyClosedHeader: UILabel = {
-        let headerLabel = UILabel()
-        headerLabel.text = Strings.RecentlyClosedTabsPanelTitle
-        headerLabel.textColor = UIColor.theme.tableView.headerTextDark
-        headerLabel.font = DynamicFontHelper.defaultHelper.DeviceFontHistoryPanel
-        headerLabel.textAlignment = .center
-        headerLabel.backgroundColor = UIColor.theme.tableView.headerBackground
-        return headerLabel
-    }()
-
     fileprivate lazy var tableViewController = RecentlyClosedTabsPanelSiteTableViewController(profile: profile)
-
-    fileprivate lazy var historyBackButton: HistoryBackButton = {
-        let button = HistoryBackButton()
-        button.accessibilityIdentifier = "goBackFromRecentlyClosedHistory"
-        button.addTarget(self, action: #selector(RecentlyClosedTabsPanel.historyBackButtonWasTapped), for: .touchUpInside)
-        return button
-    }()
 
     init(profile: Profile) {
         self.profile = profile
@@ -57,38 +40,17 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         tableViewController.recentlyClosedTabsPanel = self
 
         self.addChild(tableViewController)
-        self.view.addSubview(tableViewController.view)
-        self.view.addSubview(historyBackButton)
-        self.view.addSubview(recentlyClosedHeader)
-
-        historyBackButton.snp.makeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(50)
-            make.bottom.equalTo(recentlyClosedHeader.snp.top)
-        }
-
-        recentlyClosedHeader.snp.makeConstraints { make in
-            make.top.equalTo(historyBackButton.snp.bottom)
-            make.height.equalTo(20)
-            make.bottom.equalTo(tableViewController.view.snp.top).offset(-10)
-            make.left.right.equalTo(self.view)
-        }
-
-        tableViewController.view.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(self.view)
-        }
-
         tableViewController.didMove(toParent: self)
+
+        self.view.addSubview(tableViewController.view)
+        tableViewController.view.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
             self.dismiss(animated: true, completion: nil)
         }
     }
-
-    @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        _ = self.navigationController?.popViewController(animated: true)
-    }
-
 }
 
 class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
@@ -140,6 +102,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         guard let libraryPanelDelegate = libraryPanelDelegate else {
             log.warning("No site or no URL when selecting row.")
             return
@@ -187,7 +150,6 @@ extension RecentlyClosedTabsPanelSiteTableViewController: LibraryPanelContextMen
 
 extension RecentlyClosedTabsPanel: Themeable {
     func applyTheme() {
-        historyBackButton.applyTheme()
         tableViewController.tableView.reloadData()
     }
 }
