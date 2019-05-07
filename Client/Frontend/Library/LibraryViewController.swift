@@ -23,7 +23,7 @@ class LibraryViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
-        stackView.spacing = 14
+        stackView.spacing = 0
         stackView.clipsToBounds = true
         stackView.accessibilityNavigationStyle = .combined
         stackView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
@@ -239,7 +239,7 @@ class LibraryPanelButton: UIButton {
         }
         nameLabel.adjustsFontSizeToFitWidth = true
         nameLabel.minimumScaleFactor = 0.7
-        nameLabel.numberOfLines = 2
+        nameLabel.numberOfLines = 1
         nameLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         nameLabel.textAlignment = .center
     }
