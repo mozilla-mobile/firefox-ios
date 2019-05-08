@@ -499,7 +499,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["goBackFromRecentlyClosedHistory"], to: LibraryPanel_History)
+        screenState.tap(app.buttons["History"].firstMatch, to: LibraryPanel_History)
     }
 
     map.addScreenState(HistoryPanelContextMenu) { screenState in
