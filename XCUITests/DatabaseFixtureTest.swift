@@ -17,15 +17,14 @@ class DatabaseFixtureTest: BaseTestCase {
     }
 
     func testOneBookmark() {
-        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
     }
 
     func testBookmarksDatabaseFixture() {
         waitForTabsButton()
-        navigator.goto(HomePanel_Library)
-        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"], timeout: 15)
 
         let loaded = NSPredicate(format: "count == 1013")

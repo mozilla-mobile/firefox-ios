@@ -275,8 +275,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testDragAndDropBookmarkEntry() {
         if skipPlatform { return }
 
-        //navigator.goto(BrowserTabMenu)
-        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])
 
         let firstEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 0).staticTexts[exampleDomainTitle]
@@ -312,7 +311,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testTryDragAndDropBookmarkToURLBar() {
         if skipPlatform { return }
 
-        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         app.tables["Bookmarks List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 
