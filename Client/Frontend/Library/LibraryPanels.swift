@@ -53,6 +53,7 @@ class LibraryPanelDescriptor {
     }
 
     func setup() {
+        guard viewController == nil else { return }
         let viewController = makeViewController(profile)
         self.viewController = viewController
         navigationController = ThemedNavigationController(rootViewController: viewController)
