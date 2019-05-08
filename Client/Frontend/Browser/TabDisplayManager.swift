@@ -191,6 +191,7 @@ class TabDisplayManager: NSObject {
             collectionView.reloadItems(at: indexPaths)
         }
 
+        tabDisplayer?.focusSelectedTab()
     }
 
     // The user has tapped the close button or has swiped away the cell
