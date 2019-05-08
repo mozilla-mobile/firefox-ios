@@ -97,11 +97,12 @@ class LibraryViewController: UIViewController {
                 }
 
                 if index < panelDescriptors.count {
-                    let panel = self.panelDescriptors[index].viewController
-                    let navigationController = self.panelDescriptors[index].navigationController
-                    let accessibilityLabel = self.panelDescriptors[index].accessibilityLabel
-                    setupLibraryPanel(panel, accessibilityLabel: accessibilityLabel)
-                    self.showPanel(navigationController)
+                    panelDescriptors[index].setup()
+                    if let panel = self.panelDescriptors[index].viewController, let navigationController = self.panelDescriptors[index].navigationController {
+                        let accessibilityLabel = self.panelDescriptors[index].accessibilityLabel
+                        setupLibraryPanel(panel, accessibilityLabel: accessibilityLabel)
+                        self.showPanel(navigationController)
+                    }
                 }
             }
             self.updateButtonTints()
@@ -252,19 +253,9 @@ class LibraryPanelButton: UIButton {
 // MARK: UIAppearance
 extension LibraryViewController: Themeable {
     func applyTheme() {
-        func apply(_ vc: UIViewController) -> Bool {
-            guard let vc = vc as? Themeable else { return false }
-            vc.applyTheme()
-            return true
+        panelDescriptors.forEach { item in
+            (item.viewController as? Themeable)?.applyTheme()
         }
-
-        children.forEach {
-            if !apply($0) {
-                // LibraryPanels are nested in a UINavigationController, so go one layer deeper.
-                $0.children.forEach { _ = apply($0) }
-            }
-        }
-
         buttonContainerView.backgroundColor = UIColor.theme.homePanel.toolbarBackground
         view.backgroundColor = UIColor.theme.homePanel.toolbarBackground
         buttonTintColor = UIColor.theme.homePanel.toolbarTint
