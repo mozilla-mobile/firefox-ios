@@ -231,6 +231,12 @@ open class BrowserProfile: Profile {
         self.db = BrowserDB(filename: "browser.db", schema: BrowserSchema(), files: files)
         self.readingListDB = BrowserDB(filename: "ReadingList.db", schema: ReadingListSchema(), files: files)
 
+        if isNewProfile {
+            log.info("New profile. Removing old Keychain/Prefs data.")
+            KeychainWrapper.wipeKeychain()
+            prefs.clearAll()
+        }
+
         // Migrate bookmarks from old browser.db to new Rust places.db only
         // if this user is NOT signed into Sync (only migrates once if needed).
         if !self.hasAccount() {
@@ -277,15 +283,6 @@ open class BrowserProfile: Profile {
 
         notificationCenter.addObserver(self, selector: #selector(onLocationChange), name: .OnLocationChange, object: nil)
         notificationCenter.addObserver(self, selector: #selector(onPageMetadataFetched), name: .OnPageMetadataFetched, object: nil)
-
-        if isNewProfile {
-            log.info("New profile. Removing old account metadata.")
-            _ = keychain.removeAllKeys()
-            self.removeAccountMetadata()
-            self.syncManager.onNewProfile()
-            self.removeExistingAuthenticationInfo()
-            prefs.clearAll()
-        }
 
         // Always start by needing invalidation.
         // This is the same as self.history.setTopSitesNeedsInvalidation, but without the

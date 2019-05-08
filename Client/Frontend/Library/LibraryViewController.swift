@@ -23,7 +23,7 @@ class LibraryViewController: UIViewController {
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
-        stackView.spacing = 14
+        stackView.spacing = 0
         stackView.clipsToBounds = true
         stackView.accessibilityNavigationStyle = .combined
         stackView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
@@ -85,7 +85,6 @@ class LibraryViewController: UIViewController {
                 if index < buttons.count {
                     let currentButton = buttons[index]
                     currentButton.isSelected = false
-                    currentButton.isUserInteractionEnabled = true
                 }
             }
 
@@ -95,7 +94,6 @@ class LibraryViewController: UIViewController {
                 if index < buttons.count {
                     let newButton = buttons[index]
                     newButton.isSelected = true
-                    newButton.isUserInteractionEnabled = false
                 }
 
                 if index < panelDescriptors.count {
@@ -118,7 +116,7 @@ class LibraryViewController: UIViewController {
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        return ThemeManager.instance.currentName == .dark ? .lightContent : .default
     }
 
     fileprivate func hideCurrentPanel() {
@@ -144,7 +142,16 @@ class LibraryViewController: UIViewController {
 
     @objc func tappedButton(_ sender: UIButton!) {
         for (index, button) in buttons.enumerated() where button == sender {
-            selectedPanel = LibraryPanelType(rawValue: index)
+            let newSelectedPanel = LibraryPanelType(rawValue: index)
+
+            // If we're already on the selected panel and the user has
+            // tapped for a second time, pop it to the root view controller.
+            if newSelectedPanel == selectedPanel {
+                let panel = self.panelDescriptors[safe: index]?.navigationController
+                panel?.popToRootViewController(animated: true)
+            }
+
+            selectedPanel = newSelectedPanel
             if selectedPanel == .bookmarks {
                 UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .bookmarksPanel, value: .homePanelTabButton)
             } else if selectedPanel == .downloads {
@@ -232,7 +239,7 @@ class LibraryPanelButton: UIButton {
         }
         nameLabel.adjustsFontSizeToFitWidth = true
         nameLabel.minimumScaleFactor = 0.7
-        nameLabel.numberOfLines = 2
+        nameLabel.numberOfLines = 1
         nameLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         nameLabel.textAlignment = .center
     }
