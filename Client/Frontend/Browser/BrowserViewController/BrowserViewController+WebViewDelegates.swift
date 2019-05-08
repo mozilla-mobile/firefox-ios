@@ -153,12 +153,28 @@ extension BrowserViewController: WKNavigationDelegate {
         return false
     }
 
+    // Use for sms and mailto links, which do not show a confirmation before opening.
+    fileprivate func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> ()) {
+        let snackBar = TimerSnackBar(text: Strings.ExternalLinkGenericConfirmation + "\n\(url.absoluteString)", img: nil)
+        let ok = SnackButton(title: Strings.OKString, accessibilityIdentifier: "AppOpenExternal.button.ok") { bar in
+            tab.removeSnackbar(bar)
+            completion(true)
+        }
+        let cancel = SnackButton(title: Strings.CancelString, accessibilityIdentifier: "AppOpenExternal.button.cancel") { bar in
+            tab.removeSnackbar(bar)
+            completion(false)
+        }
+        snackBar.addButton(ok)
+        snackBar.addButton(cancel)
+        tab.addSnackbar(snackBar)
+    }
+
     // This is the place where we decide what to do with a new navigation action. There are a number of special schemes
     // and http(s) urls that need to be handled in a different way. All the logic for that is inside this delegate
     // method.
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        guard let url = navigationAction.request.url else {
+        guard let url = navigationAction.request.url, let tab = tabManager[webView] else {
             decisionHandler(.cancel)
             return
         }
@@ -176,8 +192,16 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // First special case are some schemes that are about Calling. We prompt the user to confirm this action. This
         // gives us the exact same behaviour as Safari.
-        if url.scheme == "tel" || url.scheme == "facetime" || url.scheme == "facetime-audio" {
-            UIApplication.shared.open(url, options: [:])
+        if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
+            if url.scheme == "sms" { // All the other types show a native prompt
+                showSnackbar(forExternalUrl: url, tab: tab) { isOk in
+                    guard isOk else { return }
+                    UIApplication.shared.open(url, options: [:])
+                }
+            } else {
+                UIApplication.shared.open(url, options: [:])
+            }
+
             decisionHandler(.cancel)
             return
         }
@@ -225,13 +249,18 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailScheme != "mailto" {
-                self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
-            } else {
-                UIApplication.shared.open(url, options: [:])
+            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
+                guard isOk else { return }
+
+                if let mailToMetadata = url.mailToMetadata(), let mailScheme = self.profile.prefs.stringForKey(PrefsKeys.KeyMailToOption), mailScheme != "mailto" {
+                    self.mailtoLinkHandler.launchMailClientForScheme(mailScheme, metadata: mailToMetadata, defaultMailtoURL: url)
+                } else {
+                    UIApplication.shared.open(url, options: [:])
+                }
+
+                LeanPlumClient.shared.track(event: .openedMailtoLink)
             }
 
-            LeanPlumClient.shared.track(event: .openedMailtoLink)
             decisionHandler(.cancel)
             return
         }
