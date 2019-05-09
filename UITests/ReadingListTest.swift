@@ -74,7 +74,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
 
         // Tap to open it
         EarlGrey.selectElement(with: grey_accessibilityLabel("localhost"))
@@ -87,12 +87,12 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it no longer appears in the reading list home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
         waitForEmptyReadingList()
 
         // Close the menu
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
@@ -112,7 +112,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel and make sure it marked as unread
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
 
         tester().waitForView(withAccessibilityLabel: "Readable page, unread, localhost")
         // Select to Read
@@ -124,8 +124,8 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.openLibraryMenu(tester())
 
         // Workaround bug 1508368
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
 
         // Make sure the article is marked as read
         EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
@@ -148,9 +148,9 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         // workaround only for iPad to bug not showing the panel ok until coming back
         if BrowserUtils.iPad() {
             tester().waitForAnimationsToFinish()
-            tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+            tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
             tester().waitForAnimationsToFinish()
-            tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+            tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
             tester().waitForAnimationsToFinish(withTimeout: 3)
         }
         waitForEmptyReadingList()
