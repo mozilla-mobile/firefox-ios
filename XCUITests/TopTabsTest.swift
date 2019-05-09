@@ -199,7 +199,7 @@ class TopTabsTest: BaseTestCase {
             app.cells["quick_action_new_tab"].tap()
             waitForTabsButton()
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-            app.collectionViews.cells["home"].firstMatch.tap()
+            app.collectionViews.cells["Home"].firstMatch.tap()
 
             // Close tab
             navigator.nowAt(HomePanelsScreen)
@@ -210,7 +210,7 @@ class TopTabsTest: BaseTestCase {
             checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
 
             // Go to Private Mode
-            app.collectionViews.cells["home"].firstMatch.tap()
+            app.collectionViews.cells["Home"].firstMatch.tap()
             navigator.nowAt(HomePanelsScreen)
             waitForExistence(app.buttons["Show Tabs"])
             app.buttons["Show Tabs"].press(forDuration: 1)
@@ -244,19 +244,19 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
-        closeTabTrayView(goBackToBrowserTab: "home")
+        closeTabTrayView(goBackToBrowserTab: "Home")
 
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        closeTabTrayView(goBackToBrowserTab: "home")
+        closeTabTrayView(goBackToBrowserTab: "Home")
 
         navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
         navigator.nowAt(NewTabScreen)
         waitForTabsButton()
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 1)
-        closeTabTrayView(goBackToBrowserTab: "home")
+        closeTabTrayView(goBackToBrowserTab: "Home")
     }
 
     // This test only runs for iPhone see bug 1409750
@@ -351,7 +351,7 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("3", numTab)
         // Remove one tab by tapping on 'x' button
-        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "home").element(boundBy: 1).buttons["Remove page — Open New Tab"].tap()
+        app.collectionViews["Top Tabs View"].children(matching: .cell).matching(identifier: "Home").element(boundBy: 1).buttons["Remove page — Open New Tab"].tap()
         waitForExistence(app.buttons["Show Tabs"])
         let numTabAfterRemovingThirdTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTabAfterRemovingThirdTab)
@@ -392,7 +392,7 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).swipeRight()
         app.collectionViews["Top Tabs View"].cells[urlLabel].buttons.element(boundBy: 0).tap()
         // Confirm the view did not scroll to the selected cell
-        XCTAssertEqual(app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).label, "home")
+        XCTAssertEqual(app.collectionViews["Top Tabs View"].cells.element(boundBy: lastCell).label, "Home")
         // Confirm the url bar still has selected cell value
         waitForValueContains(app.textFields["url"], value: urlValueLongExample)
     }

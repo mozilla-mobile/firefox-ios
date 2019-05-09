@@ -177,7 +177,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertFalse(app.staticTexts["apple"].exists)
 
         navigator.goto(TabTray)
-        app.collectionViews.cells["home"].tap()
+        app.collectionViews.cells["Home"].tap()
         waitForExistence(TopSiteCellgroup.cells["apple"])
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
