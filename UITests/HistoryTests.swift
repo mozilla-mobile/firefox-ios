@@ -43,7 +43,7 @@ class HistoryTests: KIFTestCase {
 
         // Check that both appear in the history home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
 
         // Wait until the dialog shows up
         let listAppeared = GREYCondition(name: "Wait the history list to appear", block: {
@@ -119,7 +119,7 @@ class HistoryTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         tester().waitForAnimationsToFinish()
-        tester().waitForView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().waitForView(withAccessibilityIdentifier: "LibraryPanels.History")
         tester().waitForView(withAccessibilityLabel: "Page 102")
 
         EarlGrey.selectElement(with: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.4, 0.4))
