@@ -40,6 +40,8 @@ class TabLocationView: UIView {
     var tapRecognizer: UITapGestureRecognizer!
     private var contentView: UIStackView!
 
+    fileprivate let menuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+
     @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
     }
@@ -226,6 +228,11 @@ class TabLocationView: UIView {
         let dragInteraction = UIDragInteraction(delegate: self)
         dragInteraction.allowsSimultaneousRecognitionDuringLift = true
         self.addInteraction(dragInteraction)
+
+        menuBadge.add(toParent: pageOptionsButton)
+        menuBadge.layout(onButton: pageOptionsButton)
+        menuBadge.show(true)
+        menuBadge.badge.tintBackground(color: .white)
     }
 
     required init(coder: NSCoder) {

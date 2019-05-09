@@ -237,6 +237,16 @@ class PhotonActionSheetCell: UITableViewCell {
             syncButton?.removeFromSuperview()
         }
 
+        if let name = action.badgeIconName, action.isEnabled, let parent = statusIcon.superview {
+            badgeOverlay = BadgeWithBackdrop(imageName: name)
+            badgeOverlay?.add(toParent: parent)
+            badgeOverlay?.layout(onButton: statusIcon)
+            badgeOverlay?.show(true)
+            // Custom dark theme tint needed here, it is overkill to create a '.theme' color just for this.
+            let color =  ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 1): UIColor.theme.actionMenu.closeButtonBackground
+            badgeOverlay?.badge.tintBackground(color: color)
+        }
+
         switch action.accessory {
         case .Text:
             disclosureLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
@@ -248,16 +258,6 @@ class PhotonActionSheetCell: UITableViewCell {
         case .Switch:
             toggleSwitch.setOn(action.isEnabled)
             stackView.addArrangedSubview(toggleSwitch.mainView)
-
-            if let name = action.badgeIconName, action.isEnabled, let parent = statusIcon.superview {
-                badgeOverlay = BadgeWithBackdrop(imageName: name)
-                badgeOverlay?.add(toParent: parent)
-                badgeOverlay?.layout(onButton: statusIcon)
-                badgeOverlay?.show(true)
-                // Custom dark theme tint needed here, it is overkill to create a '.theme' color just for this.
-                let color =  ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 1): UIColor.theme.actionMenu.closeButtonBackground
-                badgeOverlay?.badge.tintBackground(color: color)
-            }
         case .Sync:
             if let manager = syncManager {
                 let padding = PhotonActionSheetCell.Padding
