@@ -103,6 +103,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     override func applyTheme() {
         super.applyTheme()
+        if let current = navigationController?.visibleViewController as? Themeable, current !== self {
+            current.applyTheme()
+        }
     }
 
     override func reloadData() {
