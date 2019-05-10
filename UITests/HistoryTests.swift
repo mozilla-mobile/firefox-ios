@@ -122,7 +122,7 @@ class HistoryTests: KIFTestCase {
         tester().waitForView(withAccessibilityIdentifier: "LibraryPanels.History")
         tester().waitForView(withAccessibilityLabel: "Page 102")
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.4, 0.4))
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.6, 0.6))
         if !BrowserUtils.iPad() {
             EarlGrey.selectElement(with:grey_accessibilityLabel("Delete"))
                 .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
