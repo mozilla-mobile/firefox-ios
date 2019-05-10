@@ -33,16 +33,17 @@ class ReopenLastTabTests: KIFTestCase {
     
     
     func testReopenLastTab() {
-        openReadablePage()
-        tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
+        if !BrowserUtils.iPad() {
+            openReadablePage()
+            tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
         
-        openTabsController()
-        closeAllTabs()
-        EarlGrey.shakeDevice()
+            openTabsController()
+            closeAllTabs()
+            EarlGrey.shakeDevice()
         
-        reopenLastPage()
-        tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
-
+            reopenLastPage()
+            tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
+        }
     }
     
     func openReadablePage() {
