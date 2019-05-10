@@ -9,19 +9,10 @@ import Storage
  * A handler can be a plain old swift object. It does not need to extend any
  * other object, but can.
  *
- * Handlers should register for tab events with the `registerFor` method, and
- * cleanup with the `unregister` method.
- *
  * ```
  * class HandoffHandler {
- *     var tabObservers: TabObservers!
- *
  *     init() {
- *         tabObservers = registerFor(.didLoadFavicon, .didLoadPageMetadata)
- *     }
- *
- *     deinit {
- *         unregister(tabObservers)
+ *         register(self, forTabEvents: .didLoadFavicon, .didLoadPageMetadata)
  *     }
  * }
  * ```
@@ -58,7 +49,7 @@ import Storage
 // 4. a TabEvent, with whatever parameters are needed.
 //    i) a case to map the event to the event label (var label)
 //   ii) a case to map the event to the event handler (func handle:with:)
-protocol TabEventHandler {
+protocol TabEventHandler: AnyObject {
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?)
@@ -100,22 +91,11 @@ enum TabEvent {
     case didDeriveMetadata(DerivedMetadata)
 
     var label: TabEventLabel {
-        switch self {
-        case .didChangeURL:
-            return .didChangeURL
-        case .didLoadPageMetadata:
-            return .didLoadPageMetadata
-        case .didLoadFavicon:
-            return .didLoadFavicon
-        case .didGainFocus:
-            return .didGainFocus
-        case .didLoseFocus:
-            return .didLoseFocus
-        case .didClose:
-            return .didClose
-        case .didDeriveMetadata:
-            return .didDeriveMetadata
+        let str = "\(self)".components(separatedBy: "(")[0] // Will grab just the name from 'didChangeURL(...)'
+        guard let result = TabEventLabel(rawValue: str) else {
+            assert(false)
         }
+        return result
     }
 
     func handle(_ tab: Tab, with handler: TabEventHandler) {
@@ -147,12 +127,13 @@ extension TabEventLabel {
 }
 
 extension TabEvent {
-    func notification(for tab: Any) -> Notification {
+    func notification(for tab: Tab) -> Notification {
         return Notification(name: label.name, object: tab, userInfo: ["payload": self])
     }
 
     /// Use this method to post notifications to any concerned listeners.
-    static func post(_ event: TabEvent, for tab: Any) {
+    static func post(_ event: TabEvent, for tab: Tab) {
+        assert(Thread.isMainThread)
         center.post(event.notification(for: tab))
     }
 }
@@ -162,25 +143,37 @@ extension TabEvent {
 ////////////////////////////////////////////////////////////////////////////////////////
 private let center = NotificationCenter()
 
-typealias TabObservers = [NSObjectProtocol]
+private struct AssociatedKeys {
+    static var key = "observers"
+}
+
+private class ObserverWrapper: NSObject {
+    var observers = [NSObjectProtocol]()
+    deinit {
+        observers.forEach { observer in
+            center.removeObserver(observer)
+        }
+    }
+}
+
 extension TabEventHandler {
     /// Implementations of handles should use this method to register for events.
     /// `TabObservers` should be preserved for unregistering later.
-    func registerFor(_ tabEvents: TabEventLabel..., queue: OperationQueue? = nil) -> TabObservers {
-        return tabEvents.map { eventType in
-            center.addObserver(forName: eventType.name, object: nil, queue: queue) { notification in
+    func register(_ observer: AnyObject, forTabEvents events: TabEventLabel...) {
+        let wrapper = ObserverWrapper()
+        wrapper.observers = events.map { [weak self] eventType in
+            center.addObserver(forName: eventType.name, object: nil, queue: .main) { notification in
                 guard let tab = notification.object as? Tab,
                     let event = notification.userInfo?["payload"] as? TabEvent else {
                         return
                 }
-                event.handle(tab, with: self)
+
+                if let me = self {
+                    event.handle(tab, with: me)
+                }
             }
         }
-    }
 
-    func unregister(_ observers: TabObservers) {
-        observers.forEach { observer in
-            center.removeObserver(observer)
-        }
+        objc_setAssociatedObject(observer, &AssociatedKeys.key, wrapper, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 }
