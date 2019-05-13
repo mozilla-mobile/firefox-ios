@@ -55,7 +55,6 @@ class TabDisplayManager: NSObject {
 
     fileprivate let tabManager: TabManager
     fileprivate let collectionView: UICollectionView
-    private var tabObservers: TabObservers!
     fileprivate weak var tabDisplayer: TabDisplayer?
     private let tabReuseIdentifer: String
 
@@ -110,7 +109,7 @@ class TabDisplayManager: NSObject {
         super.init()
 
         tabManager.addDelegate(self)
-        self.tabObservers = registerFor(.didLoadFavicon, .didChangeURL, queue: .main)
+        register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
 
         tabsToDisplay.forEach {
             self.dataStore.insert($0)
@@ -204,12 +203,6 @@ class TabDisplayManager: NSObject {
             return
         }
         tabManager.removeTabAndUpdateSelectedIndex(tab)
-    }
-
-    // Once we are done with TabManager we need to call removeObservers to avoid a retain cycle with the observers
-    func removeObservers() {
-        unregister(tabObservers)
-        tabObservers = nil
     }
 
     private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
