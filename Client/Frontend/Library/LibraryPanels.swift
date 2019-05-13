@@ -40,14 +40,15 @@ class LibraryPanelDescriptor {
     fileprivate let profile: Profile
 
     let imageName: String
+    let activeImageName: String
     let accessibilityLabel: String
     let accessibilityIdentifier: String
 
     init(makeViewController: @escaping ((_ profile: Profile) -> UIViewController), profile: Profile, imageName: String, accessibilityLabel: String, accessibilityIdentifier: String) {
         self.makeViewController = makeViewController
         self.profile = profile
-
-        self.imageName = imageName
+        self.imageName = "panelIcon" + imageName
+        self.activeImageName = self.imageName + "-active"
         self.accessibilityLabel = accessibilityLabel
         self.accessibilityIdentifier = accessibilityIdentifier
     }
