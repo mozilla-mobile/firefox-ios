@@ -170,9 +170,7 @@ class TabLocationView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        register(self, forTabEvents: .didGainFocus)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(onDidChangeContentBlocking), name: .didChangeContentBlocking, object: nil)
+        register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
@@ -231,7 +229,6 @@ class TabLocationView: UIView {
 
         menuBadge.add(toParent: pageOptionsButton)
         menuBadge.layout(onButton: pageOptionsButton)
-        menuBadge.show(true)
         menuBadge.badge.tintBackground(color: .white)
     }
 
@@ -352,8 +349,7 @@ extension TabLocationView: Themeable {
 }
 
 extension TabLocationView: TabEventHandler {
-    @objc func onDidChangeContentBlocking(_ notification: Notification) {
-        guard let tab = notification.userInfo?.first?.value as? Tab else { return }
+    func tabDidChangeContentBlocking(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
     }
 
@@ -376,8 +372,8 @@ extension TabLocationView: TabEventHandler {
         updateBlockerStatus(forTab: tab)
     }
 
-    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
-        updateBlockerStatus(forTab: tab)
+    func tabDidToggleDesktopMode(_ tab: Tab) {
+        menuBadge.show(tab.desktopSite)
     }
 }
 
