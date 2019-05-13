@@ -560,17 +560,6 @@ class FeatureSwitchSetting: BoolSetting {
 
 }
 
-class EnableBookmarkMergingSetting: HiddenSetting {
-    override var title: NSAttributedString? {
-        // Not localized for now.
-        return NSAttributedString(string: "Enable Bidirectional Bookmark Sync ", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        AppConstants.shouldMergeBookmarks = true
-    }
-}
-
 class ForceCrashSetting: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: Force Crash", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
