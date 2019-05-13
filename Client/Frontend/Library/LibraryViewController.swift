@@ -166,7 +166,7 @@ class LibraryViewController: UIViewController {
         for panel in panelDescriptors {
             let button = LibraryPanelButton()
             button.addTarget(self, action: #selector(tappedButton), for: .touchUpInside)
-            if let image = UIImage.templateImageNamed("panelIcon\(panel.imageName)") {
+            if let image = UIImage.templateImageNamed(panel.imageName) {
                 button.setImage(image, for: .normal)
             }
 
@@ -180,12 +180,19 @@ class LibraryViewController: UIViewController {
 
     func updateButtonTints() {
         for (index, button) in self.buttons.enumerated() {
+            let image: String
             if index == self.selectedPanel?.rawValue {
                 button.tintColor = self.buttonSelectedTintColor
                 button.nameLabel.textColor = self.buttonSelectedTintColor
+                image = panelDescriptors[index].activeImageName
             } else {
                 button.tintColor = self.buttonTintColor
                 button.nameLabel.textColor = self.buttonTintColor
+                image = panelDescriptors[index].imageName
+            }
+
+            if let image = UIImage.templateImageNamed(image) {
+                button.setImage(image, for: .normal)
             }
         }
     }
