@@ -88,6 +88,9 @@ class SearchSettingsUITests: BaseTestCase {
         // Check to see we're not in editing state, edit is enable and done does not appear
         XCTAssertTrue(app.buttons["Edit"].isEnabled)
         waitForNoExistence(app.buttons["Done"])
+
+        //Make sure switches are there
+        XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 2)
     }
 
     func testDeletingLastCustomEngineExitsEditing() {
