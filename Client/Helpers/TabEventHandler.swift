@@ -81,6 +81,7 @@ enum TabEventLabel: String {
     case didDeriveMetadata
 }
 
+// Names of events must be unique!
 enum TabEvent {
     case didChangeURL(URL)
     case didLoadPageMetadata(PageMetadata)

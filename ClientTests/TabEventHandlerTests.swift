@@ -22,34 +22,6 @@ class TabEventHandlerTests: XCTestCase {
         TabEvent.post(.didLoseFocus, for: tab)
         XCTAssertFalse(handler.isFocused!)
     }
-
-    func testUnregistration() {
-        let tab = Tab(configuration: WKWebViewConfiguration())
-        let handler = DummyHandler()
-
-        XCTAssertNil(handler.isFocused)
-
-        TabEvent.post(.didGainFocus, for: tab)
-        XCTAssertTrue(handler.isFocused!)
-
-        handler.doUnregister()
-        TabEvent.post(.didLoseFocus, for: tab)
-        // The event didn't reach us, so we should still be focused.
-        XCTAssertTrue(handler.isFocused!)
-    }
-
-//    func testOnlyRegisteredForEvents() {
-//        let tab = Tab(configuration: WKWebViewConfiguration())
-//        let handler = DummyHandler()
-//        handler.doUnregister()
-//        let tabObservers = handler.registerFor(tabEvent: .didGainFocus)
-//        XCTAssertNil(handler.isFocused)
-//        TabEvent.post(.didGainFocus, for: tab)
-//        XCTAssertTrue(handler.isFocused!)
-//        TabEvent.post(.didLoseFocus, for: tab)
-//        XCTAssertTrue(handler.isFocused!)
-//        handler.unregister(tabObservers)
-//    }
 }
 
 
