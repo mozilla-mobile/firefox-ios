@@ -34,8 +34,6 @@ fileprivate class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        // UITableViewCell.imageview isn't respecting image insets. The workaround is to assign a blank image to the image view (as with no image, the image view will not be drawn),
-        // and then add the image as a subview with a specific frame.
         imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(CGSize(width: 20, height: 20))
         imageView?.contentMode = .center
 
