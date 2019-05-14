@@ -134,7 +134,6 @@ class TabTrayController: UIViewController {
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
-        tabDisplayManager.removeObservers()
         tabDisplayManager = nil
     }
 

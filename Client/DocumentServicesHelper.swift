@@ -45,8 +45,6 @@ struct DerivedMetadata: Codable {
 }
 
 class DocumentServicesHelper: TabEventHandler {
-    private var tabObservers: TabObservers!
-
     private lazy var singleThreadedQueue: OperationQueue = {
         var queue = OperationQueue()
         queue.name = "Document Services queue"
@@ -56,21 +54,19 @@ class DocumentServicesHelper: TabEventHandler {
     }()
 
     init() {
-        self.tabObservers = registerFor(.didLoadPageMetadata, queue: singleThreadedQueue)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didLoadPageMetadata)
     }
 
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
-        // New analyzers go here. We map through each one and reduce into one dictionary
-        let analyzers = [LanguageDetector()]
-        let dict = analyzers.map({ [$0.name: $0.analyse(metadata: metadata)] }).compactMap({$0}).reduce([:]) { $0.merging($1) { (current, _) in current } }
+        singleThreadedQueue.addOperation {
+            // New analyzers go here. We map through each one and reduce into one dictionary
+            let analyzers = [LanguageDetector()]
+            let dict = analyzers.map({ [$0.name: $0.analyse(metadata: metadata)] }).compactMap({$0}).reduce([:]) { $0.merging($1) { (current, _) in current } }
 
-        guard let derivedMetadata = DerivedMetadata.from(dict: dict) else { return }
-        DispatchQueue.global().async {
-            TabEvent.post(.didDeriveMetadata(derivedMetadata), for: tab)
+            guard let derivedMetadata = DerivedMetadata.from(dict: dict) else { return }
+            DispatchQueue.main.async {
+                TabEvent.post(.didDeriveMetadata(derivedMetadata), for: tab)
+            }
         }
     }
 }

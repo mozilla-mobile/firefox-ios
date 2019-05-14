@@ -38,9 +38,7 @@ func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
 }
 
 class TrackingProtectionTests: KIFTestCase, TabEventHandler {
-
     private var webRoot: String!
-    private var tabObservers: TabObservers!
     var stats = TPPageStats()
     var statsIncrement: XCTestExpectation?
     var statsZero: XCTestExpectation?

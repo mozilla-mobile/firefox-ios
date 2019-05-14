@@ -365,6 +365,9 @@
                   Identifier = "HistoryTests/testClearHistoryFromSettings()">
                </Test>
                <Test
+                  Identifier = "HistoryTests/testClearRecentHistory()">
+               </Test>
+               <Test
                   Identifier = "HistoryTests/testClearRecentlyClosedHistory()">
                </Test>
                <Test

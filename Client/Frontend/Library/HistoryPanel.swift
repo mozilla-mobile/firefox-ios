@@ -316,6 +316,13 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
         let alert = UIAlertController(title: Strings.ClearHistoryMenuTitle, message: nil, preferredStyle: .actionSheet)
 
+        // This will run on the iPad-only, and sets the alert to be centered with no arrow.
+        if let popoverController = alert.popoverPresentationController {
+            popoverController.sourceView = view
+            popoverController.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+
         [(Strings.ClearHistoryMenuOptionTheLastHour, 1),
          (Strings.ClearHistoryMenuOptionToday, 24),
          (Strings.ClearHistoryMenuOptionTodayAndYesterday, 48)].forEach {

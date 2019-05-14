@@ -98,7 +98,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let url2 = urls[1].url
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         tester().waitForView(withAccessibilityLabel: url1)
         tester().waitForView(withAccessibilityLabel: url2)
 
@@ -112,7 +112,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAbsenceOfView(withAccessibilityLabel: url2)
 
         // Going back to default panel, Bookmarks and closing it
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
@@ -126,9 +126,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         tester().waitForAnimationsToFinish()
         let historyListShown = GREYCondition(name: "Wait for history to appear", block: {
             var errorOrNil: NSError?
@@ -145,7 +145,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             .assert(grey_notNil(), error: &errorOrNil)
 
         // Close History (and so Library) panel
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
         BrowserUtils.closeLibraryMenu(tester())
     }
 

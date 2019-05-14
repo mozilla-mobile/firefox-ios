@@ -12,16 +12,8 @@ import WebKit
 private let log = Logger.browserLogger
 
 class MetadataParserHelper: TabEventHandler {
-    private var tabObservers: TabObservers!
-
     init() {
-        self.tabObservers = registerFor(
-            .didChangeURL,
-            queue: .main)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didChangeURL)
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {
@@ -58,18 +50,11 @@ class MetadataParserHelper: TabEventHandler {
 }
 
 class MediaImageLoader: TabEventHandler {
-    private var tabObservers: TabObservers!
     private let prefs: Prefs
 
     init(_ prefs: Prefs) {
         self.prefs = prefs
-        self.tabObservers = registerFor(
-            .didLoadPageMetadata,
-            queue: .main)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didLoadPageMetadata)
     }
 
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {

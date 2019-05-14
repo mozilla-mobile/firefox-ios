@@ -111,7 +111,7 @@ class IntroViewController: UIViewController {
         }
         scrollView.snp.makeConstraints { make in
             make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(startBrowsingButton.snp.top)
+            make.bottom.equalTo(pageControl.snp.top)
         }
 
         pageControl.snp.makeConstraints { make in

@@ -33,23 +33,31 @@ enum LibraryPanelType: Int {
  * Data for identifying and constructing a LibraryPanel.
  */
 class LibraryPanelDescriptor {
-    lazy var viewController: UIViewController = self.makeViewController(self.profile)
-    lazy var navigationController: UINavigationController = ThemedNavigationController(rootViewController: self.viewController)
+    var viewController: UIViewController?
+    var navigationController: UINavigationController?
 
     fileprivate let makeViewController: (_ profile: Profile) -> UIViewController
     fileprivate let profile: Profile
 
     let imageName: String
+    let activeImageName: String
     let accessibilityLabel: String
     let accessibilityIdentifier: String
 
     init(makeViewController: @escaping ((_ profile: Profile) -> UIViewController), profile: Profile, imageName: String, accessibilityLabel: String, accessibilityIdentifier: String) {
         self.makeViewController = makeViewController
         self.profile = profile
-
-        self.imageName = imageName
+        self.imageName = "panelIcon" + imageName
+        self.activeImageName = self.imageName + "-active"
         self.accessibilityLabel = accessibilityLabel
         self.accessibilityIdentifier = accessibilityIdentifier
+    }
+
+    func setup() {
+        guard viewController == nil else { return }
+        let viewController = makeViewController(profile)
+        self.viewController = viewController
+        navigationController = ThemedNavigationController(rootViewController: viewController)
     }
 }
 

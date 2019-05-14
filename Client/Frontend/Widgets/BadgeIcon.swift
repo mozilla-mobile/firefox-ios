@@ -17,6 +17,8 @@ class ToolbarBadge: UIView {
 
         addSubview(background)
         addSubview(badge)
+
+        [background, badge].forEach { $0.isUserInteractionEnabled = false }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -60,6 +62,7 @@ class BadgeWithBackdrop {
         backdrop = BadgeWithBackdrop.makeCircle(color: color)
         badge.isHidden = true
         backdrop.isHidden = true
+        backdrop.isUserInteractionEnabled = false
     }
 
     func add(toParent parent: UIView) {
