@@ -126,7 +126,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ExportBrowserDataSetting(settings: self),
                 ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
-                EnableBookmarkMergingSetting(settings: self),
                 ForceCrashSetting(settings: self),
                 SlowTheDatabase(settings: self)
             ])]
