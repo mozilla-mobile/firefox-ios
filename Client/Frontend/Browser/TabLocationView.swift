@@ -39,7 +39,6 @@ class TabLocationView: UIView {
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
     private var contentView: UIStackView!
-    private var tabObservers: TabObservers!
 
     @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
@@ -59,10 +58,6 @@ class TabLocationView: UIView {
             }
             setNeedsUpdateConstraints()
         }
-    }
-
-    deinit {
-        unregister(tabObservers)
     }
 
     var readerModeState: ReaderModeState {
@@ -173,7 +168,7 @@ class TabLocationView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.tabObservers = registerFor(.didGainFocus, queue: .main)
+        register(self, forTabEvents: .didGainFocus)
 
         NotificationCenter.default.addObserver(self, selector: #selector(onDidChangeContentBlocking), name: .didChangeContentBlocking, object: nil)
 

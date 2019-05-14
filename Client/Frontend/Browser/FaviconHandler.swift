@@ -10,15 +10,10 @@ import SDWebImage
 class FaviconHandler {
     static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
-    private var tabObservers: TabObservers!
     private let backgroundQueue = OperationQueue()
 
     init() {
-        self.tabObservers = registerFor(.didLoadPageMetadata, queue: backgroundQueue)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didLoadPageMetadata)
     }
 
     func loadFaviconURL(_ faviconURL: String, forTab tab: Tab) -> Deferred<Maybe<(Favicon, Data?)>> {
@@ -104,7 +99,8 @@ extension FaviconHandler: TabEventHandler {
             return
         }
 
-        loadFaviconURL(faviconURL, forTab: tab) >>== { (favicon, data) in
+        loadFaviconURL(faviconURL, forTab: tab).uponQueue(.main) { result in
+            guard let (favicon, data) = result.successValue else { return }
             TabEvent.post(.didLoadFavicon(favicon, with: data), for: tab)
         }
     }

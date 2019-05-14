@@ -34,7 +34,9 @@ fileprivate class BookmarkFolderTableViewCell: TwoLineTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        imageView?.image = UIImage(named: "bookmarkFolder")
+        imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(CGSize(width: 20, height: 20))
+        imageView?.contentMode = .center
+
         accessoryType = .disclosureIndicator
         separatorInset = .zero
     }
@@ -103,6 +105,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     override func applyTheme() {
         super.applyTheme()
+        if let current = navigationController?.visibleViewController as? Themeable, current !== self {
+            current.applyTheme()
+        }
     }
 
     override func reloadData() {

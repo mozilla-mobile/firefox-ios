@@ -9,18 +9,13 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 class TranslationToastHandler: TabEventHandler {
-    private var tabObservers: TabObservers!
     private let snackBarClassIdentifier = "translationPrompt"
 
     private let setting: TranslationServices
 
     init(_ prefs: Prefs) {
         self.setting = TranslationServices(prefs: prefs)
-        tabObservers = registerFor(.didDeriveMetadata, queue: .main)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didDeriveMetadata)
     }
 
     func tab(_ tab: Tab, didDeriveMetadata metadata: DerivedMetadata) {
