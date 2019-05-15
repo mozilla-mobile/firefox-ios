@@ -10,7 +10,7 @@ let domainSecondLogin = "test2@example.com"
 let testLoginPage = path(forTestPage: "test-password.html")
 let testSecondLoginPage = path(forTestPage: "test-password-2.html")
 let savedLoginEntry = "test@example.com, http://localhost:\(serverPort)"
-let urlLogin = "linkedin.com"
+let urlLogin = path(forTestPage: "empty-login-form.html")
 let mailLogin = "iosmztest@mailinator.com"
 //The following seem to be labels that change a lot and make the tests break; aka volatile. Let's keep them in one place.
 let loginsListURLLabel = "Website, \(domain)"
@@ -181,31 +181,44 @@ class SaveLoginTest: BaseTestCase {
     }
 
     // Smoketest
-    /* Disabling this test until a local website can be used to prevent from false failures
     func testSavedLoginAutofilled() {
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
-        app.webViews.links["Sign in"].tap()
-        waitForExistence(app.webViews.textFields["Email"])
-        app.webViews.textFields["Email"].tap()
-        app.webViews.textFields["Email"].typeText(mailLogin)
-
-        app.webViews.secureTextFields["Password"].tap()
-        app.webViews.secureTextFields["Password"].typeText("test15mz")
-
-        app.webViews.buttons["Sign in"].tap()
+        // Provided text fields are completely empty
+        waitForExistence(app.webViews.staticTexts["Username:"])
+        
+        // Fill in the username text box
+        app.webViews.textFields.element(boundBy: 0).tap()
+        app.webViews.textFields.element(boundBy: 0).typeText(mailLogin)
+        
+        // Fill in the password text box
+        app.webViews.secureTextFields.element(boundBy: 0).tap()
+        app.webViews.secureTextFields.element(boundBy: 0).typeText("test15mz")
+        
+        // Submit form and choose to save the logins
+        app.buttons["submit"].tap()
         app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
 
-        // Clear Data and go to linkedin, fields should be filled in
+        // Clear Data and go to test page, fields should be filled in
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
-        navigator.openNewURL(urlString: urlLogin)
+        
+        // Workaround for intermittent failure where URL bar text is selected and tabs button is hidden
+        if app.buttons["urlBar-cancel"].exists {
+            print(app.debugDescription)
+            app.textFields["address"].tap()
+            app.typeText(XCUIKeyboardKey.return.rawValue)
+        }
+        navigator.waitForExistence(app.buttons["TabToolbar.tabsButton"])
+        navigator.goto(HomePanelsScreen)
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        navigator.openURL(urlLogin)
         waitUntilPageLoad()
-        waitForExistence(app.webViews.textFields["Email"], timeout: 3)
-        let emailValue = app.webViews.textFields["Email"].value!
+        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)
+        let emailValue = app.webViews.textFields.element(boundBy: 0).value!
         XCTAssertEqual(emailValue as! String, mailLogin)
-        let passwordValue = app.webViews.secureTextFields["Password"].value!
+        let passwordValue =  app.webViews.secureTextFields.element(boundBy: 0).value!
         XCTAssertEqual(passwordValue as! String, "••••••••")
-    }*/
+    }
 }
