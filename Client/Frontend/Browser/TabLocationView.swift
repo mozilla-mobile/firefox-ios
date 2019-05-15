@@ -38,7 +38,7 @@ class TabLocationView: UIView {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
-    private var contentView: UIStackView!
+    var contentView: UIStackView!
 
     fileprivate let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
 
@@ -227,7 +227,7 @@ class TabLocationView: UIView {
         dragInteraction.allowsSimultaneousRecognitionDuringLift = true
         self.addInteraction(dragInteraction)
 
-        menuBadge.add(toParent: pageOptionsButton)
+        menuBadge.add(toParent: contentView)
         menuBadge.layout(onButton: pageOptionsButton)
         menuBadge.show(false)
     }

@@ -474,7 +474,7 @@ class URLBarView: UIView {
     }
 
     func transitionToOverlay(_ didCancel: Bool = false) {
-        locationView.pageOptionsButton.alpha = inOverlayMode ? 0 : 1
+        locationView.contentView.alpha = inOverlayMode ? 0 : 1
         cancelButton.alpha = inOverlayMode ? 1 : 0
         showQRScannerButton.alpha = inOverlayMode ? 1 : 0
         progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
