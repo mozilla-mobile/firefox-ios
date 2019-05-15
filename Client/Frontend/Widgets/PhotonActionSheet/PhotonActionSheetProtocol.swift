@@ -152,7 +152,10 @@ extension PhotonActionSheetProtocol {
 
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite", isEnabled: tab.desktopSite, badgeIconNamed: "menuBadge") { action in
-            tab.toggleDesktopSite()
+            if let url = tab.url {
+                tab.toggleDesktopSite()
+                Tab.DesktopSites.updateHosts(forUrl: url, isDesktopSite: tab.desktopSite)
+            }
         }
 
         let addReadingList = PhotonActionSheetItem(title: Strings.AppMenuAddToReadingListTitleString, iconString: "addToReadingList") { action in

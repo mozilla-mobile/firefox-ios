@@ -144,9 +144,12 @@ class Tab: NSObject {
     /// The last title shown by this tab. Used by the tab tray to show titles for zombie tabs.
     var lastTitle: String?
 
-    /// Whether or not the desktop site was requested with the last request, reload or navigation. Note that this property needs to
-    /// be managed by the web view's navigation delegate.
-    var desktopSite: Bool = false
+    /// Whether or not the desktop site was requested with the last request, reload or navigation.
+    var desktopSite: Bool = false {
+        didSet {
+            webView?.customUserAgent = desktopSite ? UserAgent.desktopUserAgent() : nil
+        }
+    }
 
     var readerModeAvailableOrActive: Bool {
         if let readerMode = self.getContentScript(name: "ReaderMode") as? ReaderMode {
@@ -684,6 +687,43 @@ class TabWebView: WKWebView, MenuHelperInterface {
     }
 }
 
+// Desktop site host list management.
+extension Tab {
+    // Store the list of hosts as an xcarchive for simplicity.
+    struct DesktopSites {
+        static let file: URL = {
+            let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            return root.appendingPathComponent("desktop-sites-set-of-strings.xcarchive")
+        } ()
+
+        static var hostList: Set<String> = {
+            if let hosts = NSKeyedUnarchiver.unarchiveObject(withFile: DesktopSites.file.path) as? Set<String> {
+                return hosts
+            }
+            return Set<String>()
+        } ()
+
+        // Will extract the host from the URL and enable or disable it as a desktop site, and write the file if needed.
+        static func updateHosts(forUrl url: URL, isDesktopSite: Bool) {
+            guard let host = url.host, !host.isEmpty else { return }
+
+            if isDesktopSite, !hostList.contains(host) {
+                hostList.insert(host)
+            } else if !isDesktopSite, hostList.contains(host) {
+                hostList.remove(host)
+            } else {
+                return
+            }
+
+            do {
+                let data = try NSKeyedArchiver.archivedData(withRootObject: hostList, requiringSecureCoding: false)
+                try data.write(to: DesktopSites.file)
+            } catch {
+                print("Couldn't write file: \(error)")
+            }
+        }
+    }
+}
 ///
 // Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
 //
