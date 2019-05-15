@@ -40,7 +40,7 @@ class TabLocationView: UIView {
     var tapRecognizer: UITapGestureRecognizer!
     private var contentView: UIStackView!
 
-    fileprivate let menuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
 
     @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
@@ -229,7 +229,7 @@ class TabLocationView: UIView {
 
         menuBadge.add(toParent: pageOptionsButton)
         menuBadge.layout(onButton: pageOptionsButton)
-        menuBadge.badge.tintBackground(color: .white)
+        menuBadge.show(false)
     }
 
     required init(coder: NSCoder) {
@@ -345,6 +345,9 @@ extension TabLocationView: Themeable {
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
         separatorLine.backgroundColor = UIColor.theme.textField.separator
+
+        let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
+        menuBadge.badge.tintBackground(color: color)
     }
 }
 
@@ -370,6 +373,7 @@ extension TabLocationView: TabEventHandler {
 
     func tabDidGainFocus(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
+        menuBadge.show(tab.desktopSite)
     }
 
     func tabDidToggleDesktopMode(_ tab: Tab) {

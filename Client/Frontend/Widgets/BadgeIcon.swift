@@ -5,20 +5,25 @@
 import UIKit
 
 class ToolbarBadge: UIView {
-    let badgeSize = CGFloat(16)
-    let badgeOffset = CGFloat(10)
-
+    private let badgeSize: CGFloat
+    private let badgeOffset = CGFloat(10)
     private let background: UIImageView
     private let badge: UIImageView
-    init(imageName: String) {
+
+    init(imageName: String, size: CGFloat) {
+        badgeSize = size
         background = UIImageView(image: UIImage(imageLiteralResourceName: "badge-mask"))
         badge = UIImageView(image: UIImage(imageLiteralResourceName: imageName))
         super.init(frame: CGRect(width: badgeSize, height: badgeSize))
-
         addSubview(background)
         addSubview(badge)
 
-        [background, badge].forEach { $0.isUserInteractionEnabled = false }
+        [background, badge].forEach {
+            $0.isUserInteractionEnabled = false
+            $0.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,14 +46,15 @@ class ToolbarBadge: UIView {
 // Puts a backdrop (i.e. dark highlight) circle on the badged button.
 class BadgeWithBackdrop {
     let badge: ToolbarBadge
-    let backdrop: UIView
-    static let circleSize = CGFloat(40)
+    var backdrop: UIView
+    private let backdropCircleSize: CGFloat
+    private let backdropCircleColor: UIColor?
     static let backdropAlpha = CGFloat(0.05)
 
-    static func makeCircle(color: UIColor?) -> UIView {
+    private static func makeCircle(color: UIColor?, size: CGFloat) -> UIView {
         let circle = UIView()
         circle.alpha = BadgeWithBackdrop.backdropAlpha
-        circle.layer.cornerRadius = circleSize / 2
+        circle.layer.cornerRadius = size / 2
         if let c = color {
             circle.backgroundColor = c
         } else {
@@ -57,10 +63,12 @@ class BadgeWithBackdrop {
         return circle
     }
 
-    init(imageName: String, color: UIColor? = nil) {
-        badge = ToolbarBadge(imageName: imageName)
-        backdrop = BadgeWithBackdrop.makeCircle(color: color)
+    init(imageName: String, backdropCircleColor: UIColor? = nil, backdropCircleSize: CGFloat = 40, badgeSize: CGFloat = 20) {
+        self.backdropCircleColor = backdropCircleColor
+        self.backdropCircleSize = backdropCircleSize
+        badge = ToolbarBadge(imageName: imageName, size: badgeSize)
         badge.isHidden = true
+        backdrop = BadgeWithBackdrop.makeCircle(color: backdropCircleColor, size: backdropCircleSize)
         backdrop.isHidden = true
         backdrop.isUserInteractionEnabled = false
     }
@@ -74,7 +82,7 @@ class BadgeWithBackdrop {
         badge.layout(onButton: button)
         backdrop.snp.makeConstraints { make in
             make.center.equalTo(button)
-            make.size.equalTo(BadgeWithBackdrop.circleSize)
+            make.size.equalTo(backdropCircleSize)
         }
         button.superview?.sendSubviewToBack(backdrop)
     }
