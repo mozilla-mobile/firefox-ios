@@ -270,8 +270,12 @@ extension BrowserViewController: WKNavigationDelegate {
 
         if ["http", "https", "data", "blob", "file"].contains(url.scheme) {
 
-            if navigationAction.targetFrame?.isMainFrame ?? navigationAction.sourceFrame.isMainFrame {
-                tab.desktopSite = Tab.DesktopSites.hostList.contains(url.host ?? "")
+            if let host = url.host, navigationAction.targetFrame?.isMainFrame ?? false {
+                tab.desktopSite = Tab.DesktopSites.hostList.contains(host)
+                if !tab.desktopSite, tab.isPrivate {
+                    // Private mode has an additional memory-only list to check.
+                    tab.desktopSite = Tab.DesktopSites.privateModeHostList.contains(host)
+                }
             }
 
             if navigationAction.navigationType == .linkActivated {

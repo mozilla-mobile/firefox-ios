@@ -691,6 +691,9 @@ class TabWebView: WKWebView, MenuHelperInterface {
 extension Tab {
     // Store the list of hosts as an xcarchive for simplicity.
     struct DesktopSites {
+        // Track these in-memory only
+        static var privateModeHostList = Set<String>()
+
         static let file: URL = {
             let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             return root.appendingPathComponent("desktop-sites-set-of-strings.xcarchive")
@@ -704,8 +707,18 @@ extension Tab {
         } ()
 
         // Will extract the host from the URL and enable or disable it as a desktop site, and write the file if needed.
-        static func updateHosts(forUrl url: URL, isDesktopSite: Bool) {
+        static func updateHosts(forUrl url: URL, isDesktopSite: Bool, isPrivate: Bool) {
             guard let host = url.host, !host.isEmpty else { return }
+
+            guard !isPrivate else {
+                if isDesktopSite, !hostList.contains(host), !DesktopSites.privateModeHostList.contains(host) {
+                    DesktopSites.privateModeHostList.insert(host)
+                } else if !isDesktopSite, (hostList.contains(host) || DesktopSites.privateModeHostList.contains(host)) {
+                    DesktopSites.privateModeHostList.remove(host)
+                    hostList.remove(host)
+                }
+                return
+            }
 
             if isDesktopSite, !hostList.contains(host) {
                 hostList.insert(host)

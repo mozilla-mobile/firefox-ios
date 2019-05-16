@@ -154,7 +154,7 @@ extension PhotonActionSheetProtocol {
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite", isEnabled: tab.desktopSite, badgeIconNamed: "menuBadge") { action in
             if let url = tab.url {
                 tab.toggleDesktopSite()
-                Tab.DesktopSites.updateHosts(forUrl: url, isDesktopSite: tab.desktopSite)
+                Tab.DesktopSites.updateHosts(forUrl: url, isDesktopSite: tab.desktopSite, isPrivate: tab.isPrivate)
             }
         }
 
