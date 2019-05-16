@@ -202,16 +202,8 @@ class SaveLoginTest: BaseTestCase {
         // Clear Data and go to test page, fields should be filled in
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.AcceptClearPrivateData)
-        navigator.goto(HomePanelsScreen)
         
-        // Workaround for intermittent failure where URL bar text is selected and tabs button is hidden
-        if app.buttons["urlBar-cancel"].exists {
-            print(app.debugDescription)
-            app.textFields["address"].tap()
-            app.typeText(XCUIKeyboardKey.return.rawValue)
-        }
-        navigator.waitForExistence(app.buttons["TabToolbar.tabsButton"])
-        navigator.goto(HomePanelsScreen)
+        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlLogin)
         waitUntilPageLoad()
