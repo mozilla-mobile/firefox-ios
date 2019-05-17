@@ -21,7 +21,7 @@ class DragAndDropTests: BaseTestCase {
         super.tearDown()
     }
 
-    // Tests disabled because the feature is off for master and 14.x
+    // // Smoketest
     func testRearrangeTabsTabTray() {
         openTwoWebsites()
         navigator.goto(TabTray)
