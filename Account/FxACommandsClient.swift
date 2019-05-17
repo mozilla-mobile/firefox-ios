@@ -46,7 +46,7 @@ public class FxACommandsClient {
 
         return account.marriedState() >>== { marriedState in
             let sessionToken = marriedState.sessionToken as NSData
-            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
+            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL, oauthEndpoint: self.account.configuration.oauthEndpointURL, profileEndpoint: self.account.configuration.profileEndpointURL)
             return client.invokeCommand(name: commandName, targetDeviceID: deviceID, payload: payload, withSessionToken: sessionToken)
         }
     }
@@ -97,7 +97,7 @@ public class FxACommandsClient {
     func fetchRemoteCommands(index: Int, limit: UInt? = nil) -> Deferred<Maybe<FxACommandsResponse>> {
         return account.marriedState() >>== { marriedState in
             let sessionToken = marriedState.sessionToken as NSData
-            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
+            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL, oauthEndpoint: self.account.configuration.oauthEndpointURL, profileEndpoint: self.account.configuration.profileEndpointURL)
             return client.commands(atIndex: index, limit: limit, withSessionToken: sessionToken)
         }
     }
@@ -105,7 +105,7 @@ public class FxACommandsClient {
     func handleCommands(_ commands: [FxACommand]) -> Deferred<Maybe<[FxACommandSendTabItem]>> {
         return account.marriedState() >>== { marriedState in
             let sessionToken = marriedState.sessionToken as NSData
-            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
+            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL, oauthEndpoint: self.account.configuration.oauthEndpointURL, profileEndpoint: self.account.configuration.profileEndpointURL)
             return client.devices(withSessionToken: sessionToken) >>== { response in
                 let devices = response.devices
 
