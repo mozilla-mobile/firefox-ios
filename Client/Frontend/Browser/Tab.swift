@@ -148,6 +148,10 @@ class Tab: NSObject {
     var desktopSite: Bool = false {
         didSet {
             webView?.customUserAgent = desktopSite ? UserAgent.desktopUserAgent() : nil
+
+            if desktopSite != oldValue {
+                TabEvent.post(.didToggleDesktopMode, for: self)
+            }
         }
     }
 
