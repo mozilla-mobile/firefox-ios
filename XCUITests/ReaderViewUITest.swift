@@ -35,15 +35,13 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReadingList() {
-        // Initially reading list is empty
-        navigator.goto(LibraryPanel_ReadingList)
+        // Navigate to reading list
+        app.buttons["menu panel ReadingList"].tap()
 
-        // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
-        XCTAssertFalse(app.buttons["LibraryPanels.ReadingList"].isEnabled)
-        XCTAssertTrue(app.buttons["LibraryPanels.Bookmarks"].isEnabled)
-
+        // Check to make sure the reading list is empty
         checkReadingListNumberOfItems(items: 0)
-
+        app.buttons["Done"].tap()
+        
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
