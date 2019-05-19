@@ -2266,11 +2266,7 @@ extension BrowserViewController {
         let inputAssistant = webContentView.inputAssistantItem
         let item = UIBarButtonItem(customView: customSearchEngineButton)
         customSearchBarButton = item
-        _ = Try(withTry: {
-            inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
-        }) { (exception) in
-            Sentry.shared.send(message: "Failed adding custom search button to input assistant", tag: .general, severity: .error, description: "\(exception ??? "nil")")
-        }
+        inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
     }
 
     @objc func addCustomSearchEngineForFocusedElement() {
@@ -2303,7 +2299,7 @@ extension BrowserViewController {
         let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
             self.customSearchEngineButton.tintColor = UIColor.Photon.Grey50
             self.customSearchEngineButton.isUserInteractionEnabled = false
-            SDWebImageManager.shared().loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+            SDWebImageManager.shared.loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
                 guard let image = image else {
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                     self.present(alert, animated: true, completion: nil)

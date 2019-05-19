@@ -14,7 +14,7 @@ import Shared
 class UIImageViewExtensionsTests: XCTestCase {
 
     override func setUp() {
-        SDWebImageDownloader.shared().urlCredential = WebServer.sharedInstance.credentials
+        SDWebImageDownloader.shared.config.urlCredential = WebServer.sharedInstance.credentials
     }
 
     func testsetIcon() {

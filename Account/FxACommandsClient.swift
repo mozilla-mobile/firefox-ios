@@ -285,7 +285,7 @@ open class FxACommandSendTab {
             // the message using aes128gcm.
             guard let publicKey = decryptedKey["publicKey"].string?.base64urlSafeDecodedData,
                 let authSecret = decryptedKey["authSecret"].string?.base64urlSafeDecodedData,
-                let result = (try? PushCrypto.sharedInstance.aes128gcm(plaintext: plaintext, encryptWith: publicKey, authenticateWith: authSecret).base64urlSafeEncodedString) as? String else {
+                let result = (try? PushCrypto.sharedInstance.aes128gcm(plaintext: plaintext, encryptWith: publicKey, authenticateWith: authSecret).base64urlSafeEncodedString) else {
                 return deferMaybe(FxACommandsClientError())
             }
 

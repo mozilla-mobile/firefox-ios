@@ -268,7 +268,7 @@ open class FirefoxAccount {
             }
 
             func downloadAvatar() {
-                SDWebImageManager.shared().loadImage(with: url, options: [.continueInBackground, .lowPriority], progress: nil) { (image, _, error, _, success, _) in
+                SDWebImageManager.shared.loadImage(with: url, options: [.continueInBackground, .lowPriority], progress: nil) { (image, _, error, _, success, _) in
                     if let error = error {
                         if (error as NSError).code == 404 || self.currentImageState == .failedCanRetry {
                             // Image is not found or failed to download a second time

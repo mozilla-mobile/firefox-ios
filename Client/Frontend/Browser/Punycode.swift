@@ -19,7 +19,7 @@ extension String {
     }
 
     fileprivate func toIndex(_ value: Character) -> Int {
-        return asciiPunycode.index(of: value)!
+        return asciiPunycode.firstIndex(of: value)!
     }
 
     fileprivate func adapt(_ delta: Int, numPoints: Int, firstTime: Bool) -> Int {
@@ -123,7 +123,7 @@ extension String {
         var n = initialN
         var bias = initialBias
         var pos = 0
-        if let ipos = input.index(of: delimiter) {
+        if let ipos = input.firstIndex(of: delimiter) {
             pos = ipos
             output.append(contentsOf: input[0 ..< pos])
             pos += 1

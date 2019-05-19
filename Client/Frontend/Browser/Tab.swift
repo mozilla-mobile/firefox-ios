@@ -483,7 +483,7 @@ class Tab: NSObject {
     }
 
     func removeSnackbar(_ bar: SnackBar) {
-        if let index = bars.index(of: bar) {
+        if let index = bars.firstIndex(of: bar) {
             bars.remove(at: index)
             tabDelegate?.tab(self, didRemoveSnackbar: bar)
         }

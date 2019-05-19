@@ -18,7 +18,7 @@ import EarlGrey
 import Foundation
 
 public func GREYAssert(_ expression: @autoclosure () -> Bool, reason: String) {
-    GREYAssert(expression, reason, details: "Expected expression to be true")
+    GREYAssert(expression(), reason, details: "Expected expression to be true")
 }
 
 public func GREYAssertTrue(_ expression: @autoclosure () -> Bool, reason: String) {

@@ -1435,7 +1435,7 @@ class TestSQLiteHistory: XCTestCase {
                 // make sure all other google guids are not in the topsites array
                 topSites.forEach {
                     let guid: String = $0!.guid! // type checking is hard
-                    XCTAssertNil(["abcgoogle", "abcgoogle1", "abcgoogleza"].index(of: guid))
+                    XCTAssertNil(["abcgoogle", "abcgoogle1", "abcgoogleza"].firstIndex(of: guid))
                 }
                 XCTAssertEqual(topSites.count, 20)
                 return succeed()

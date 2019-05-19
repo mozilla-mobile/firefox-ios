@@ -162,7 +162,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         }
     }
 
-    private func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == UITableViewCell.EditingStyle.delete, let record = siteRecords?[safe: indexPath.row] else {
             return
         }

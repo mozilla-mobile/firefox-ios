@@ -172,7 +172,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     func getFavicon(_ siteUrl: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
-        let manager = SDWebImageManager.shared()
+        let manager = SDWebImageManager.shared
         let site = Site(url: siteUrl.absoluteString, title: "")
 
         var fav = Favicon(url: url)
@@ -220,7 +220,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             } else {
                 return deferred.fill(Maybe(failure: FaviconError()))
             }
-            SDWebImageManager.shared().loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+            SDWebImageManager.shared.loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
                 if let image = image {
                     deferred.fill(Maybe(success: image))
                 } else {
