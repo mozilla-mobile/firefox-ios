@@ -1,7 +1,7 @@
 github "AgileBits/onepassword-app-extension" "bcc4cc97fed9a6e73fa204f2e61138e353cb3ef7"
 github "Alamofire/Alamofire" "4.8.2"
 github "DaveWoodCom/XCGLogger" "6.1.0"
-github "Leanplum/Leanplum-iOS-SDK" "2.4.1"
+github "Leanplum/Leanplum-iOS-SDK" "2.4.2"
 github "SnapKit/SnapKit" "4.2.0"
 github "SwiftyJSON/SwiftyJSON" "4.3.0"
 github "adjust/ios_sdk" "v4.17.1"
