@@ -319,4 +319,34 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         let urlBarValue = app.textFields["url"].value as? String
         XCTAssertEqual(urlBarValue, "Search or enter address")
     }
+    
+    // This test was added here to avoid duplicate code of the openTwoWebsites() function which is need for the workaround
+    // Test for tab history feature when longpressing on back button
+    func testTabHistory() {
+        if skipPlatform { return }
+        
+        openTabHistoryList()
+        let firtTabHistoryEntry = app.tables.staticTexts["The Book of Mozilla"]
+        let secondTabistoryEntry = app.tables.staticTexts["Firefox Home Page"]
+        XCTAssertTrue(firtTabHistoryEntry.exists)
+        XCTAssertTrue(secondTabistoryEntry.exists)
+        secondTabistoryEntry.tap()
+        XCTAssertFalse(firtTabHistoryEntry.exists)
+        XCTAssertFalse(secondTabistoryEntry.exists)
+    }
+    
+    // This function is a work around to open the tab history list (https://bugzilla.mozilla.org/show_bug.cgi?id=1467808#c1)
+    // The history list onbly becomes visible after changing a tabs position in Top Tabs
+    func openTabHistoryList() {
+        // Open two tabs
+        openTwoWebsites()
+        let backButton = app.buttons["URLBarView.backButton"]
+        waitForExistence(backButton)
+        backButton.press(forDuration: 3)
+        waitForExistence(backButton)
+        // Move the first tab in second position
+        dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        // The tab history will now open when longpressing on back button
+        backButton.press(forDuration: 3)
+    }
 }
