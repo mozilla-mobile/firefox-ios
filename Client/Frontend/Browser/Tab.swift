@@ -513,6 +513,7 @@ class Tab: NSObject {
     func toggleDesktopSite() {
         desktopSite = !desktopSite
         reload()
+        TabEvent.post(.didToggleDesktopMode, for: self)
     }
 
     func queueJavascriptAlertPrompt(_ alert: JSAlertInfo) {

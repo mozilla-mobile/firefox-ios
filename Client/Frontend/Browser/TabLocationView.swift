@@ -38,7 +38,9 @@ class TabLocationView: UIView {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
-    private var contentView: UIStackView!
+    var contentView: UIStackView!
+
+    fileprivate let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
 
     @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
@@ -168,9 +170,7 @@ class TabLocationView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        register(self, forTabEvents: .didGainFocus)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(onDidChangeContentBlocking), name: .didChangeContentBlocking, object: nil)
+        register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
@@ -226,6 +226,10 @@ class TabLocationView: UIView {
         let dragInteraction = UIDragInteraction(delegate: self)
         dragInteraction.allowsSimultaneousRecognitionDuringLift = true
         self.addInteraction(dragInteraction)
+
+        menuBadge.add(toParent: contentView)
+        menuBadge.layout(onButton: pageOptionsButton)
+        menuBadge.show(false)
     }
 
     required init(coder: NSCoder) {
@@ -341,12 +345,14 @@ extension TabLocationView: Themeable {
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
         separatorLine.backgroundColor = UIColor.theme.textField.separator
+
+        let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
+        menuBadge.badge.tintBackground(color: color)
     }
 }
 
 extension TabLocationView: TabEventHandler {
-    @objc func onDidChangeContentBlocking(_ notification: Notification) {
-        guard let tab = notification.userInfo?.first?.value as? Tab else { return }
+    func tabDidChangeContentBlocking(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
     }
 
@@ -367,10 +373,11 @@ extension TabLocationView: TabEventHandler {
 
     func tabDidGainFocus(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
+        menuBadge.show(tab.desktopSite)
     }
 
-    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
-        updateBlockerStatus(forTab: tab)
+    func tabDidToggleDesktopMode(_ tab: Tab) {
+        menuBadge.show(tab.desktopSite)
     }
 }
 

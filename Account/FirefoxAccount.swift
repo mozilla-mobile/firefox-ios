@@ -342,7 +342,7 @@ open class FirefoxAccount {
         guard let married = stateCache.value as? MarriedState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         return client.oauthAuthorize(withSessionToken: married.sessionToken as NSData, scope: FxAOAuthScope.OldSync).bind({ result in
             guard let oauthResponse = result.successValue else {
                 return deferMaybe(ScopedKeyError())
@@ -366,7 +366,7 @@ open class FirefoxAccount {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         return client.devices(withSessionToken: session.sessionToken as NSData) >>== { resp in
             return remoteDevices.replaceRemoteDevices(resp.devices)
         }
@@ -388,7 +388,7 @@ open class FirefoxAccount {
             return deferMaybe(cachedOAuthKeyID)
         }
         // Otherwise, request the scoped key data from the server.
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         return client.scopedKeyData(married.sessionToken as NSData, scope: scope).bind { response in
             guard let allScopedKeyData = response.successValue, let scopedKeyData = allScopedKeyData.find({ $0.scope == scope }), let kXCS = married.kXCS.hexDecodedData.base64urlSafeEncodedString else {
                 return deferMaybe(ScopedKeyError())
@@ -414,7 +414,7 @@ open class FirefoxAccount {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, reason: reason, withSessionToken: session.sessionToken as NSData) >>== { resp in
             guard resp.success else {
                 return deferMaybe(NotifyError())
@@ -430,7 +430,7 @@ open class FirefoxAccount {
         guard let ownDeviceId = self.deviceRegistration?.id else {
             return deferMaybe(FxAClientError.local(NSError()))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         return client.notifyAll(ownDeviceId: ownDeviceId, collectionsChanged: collections, reason: reason, withSessionToken: session.sessionToken as NSData) >>== { resp in
             guard resp.success else {
                 return deferMaybe(NotifyError())
@@ -462,7 +462,7 @@ open class FirefoxAccount {
             KeychainStore.shared.setDictionary(nil, forKey: oauthResponseKeychainKey)
         }
 
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL)
+        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
         return client.destroyDevice(ownDeviceId: ownDeviceId, withSessionToken: session.sessionToken as NSData) >>> succeed
     }
 

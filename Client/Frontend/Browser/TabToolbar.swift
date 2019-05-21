@@ -215,7 +215,7 @@ class TabToolbar: UIView {
     let stopReloadButton = ToolbarButton()
     let actionButtons: [Themeable & UIButton]
 
-    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", color: UIColor.Defaults.MobilePrivatePurple)
+    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menuBadge")
 
     var helper: TabToolbarHelper?

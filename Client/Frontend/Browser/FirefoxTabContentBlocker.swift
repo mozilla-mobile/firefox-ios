@@ -39,7 +39,7 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         didSet {
             guard let tab = tab as? Tab else { return }
             setupForTab()
-            NotificationCenter.default.post(name: .didChangeContentBlocking, object: nil, userInfo: ["tab": tab])
+            TabEvent.post(.didChangeContentBlocking, for: tab)
             tab.reload()
         }
     }
