@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Alamofire
 import Fuzi
 import SDWebImage
 import SwiftyJSON
@@ -15,20 +14,9 @@ public let DefaultFaviconBackgroundColors = ["2e761a", "399320", "40a624", "57bd
 
 private let log = Logger.syncLogger
 
-// Set up Alamofire for downloading web content for parsing.
+// Set up for downloading web content for parsing.
 // NOTE: We use the desktop UA to try and get hi-res icons.
-private var alamofire: SessionManager = {
-    var sessionManager: SessionManager!
-    DispatchQueue.main.sync {
-        let configuration = URLSessionConfiguration.default
-        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = UserAgent.desktopUserAgent()
-        configuration.httpAdditionalHeaders = defaultHeaders
-        configuration.timeoutIntervalForRequest = 5
-        sessionManager = SessionManager(configuration: configuration)
-    }
-    return sessionManager
-}()
+private var urlSession: URLSession = makeUrlSession(userAgent: UserAgent.desktopUserAgent(), isEphemeral: false, timeout: 5)
 
 // If all else fails, this is the default "default" icon.
 private var defaultFavicon: UIImage = {
@@ -318,14 +306,13 @@ extension SQLiteHistory: Favicons {
     fileprivate func getHTMLDocumentFromWebPage(url: URL) -> Deferred<Maybe<HTMLDocument>> {
         let deferred = CancellableDeferred<Maybe<HTMLDocument>>()
 
-        alamofire.request(url).response { response in
-            guard response.error == nil,
-                let data = response.data,
+        urlSession.dataTask(with: url) { (data, response, error) in
+            guard error == nil,
+                let data = data,
                 let document = try? HTMLDocument(data: data) else {
-                deferred.fill(Maybe(failure: FaviconLookupError(siteURL: url.absoluteString)))
-                return
+                    deferred.fill(Maybe(failure: FaviconLookupError(siteURL: url.absoluteString)))
+                    return
             }
-
             deferred.fill(Maybe(success: document))
         }
 

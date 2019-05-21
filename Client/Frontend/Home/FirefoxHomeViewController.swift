@@ -62,7 +62,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
 }
 
-protocol HomePanel: AnyObject, Themeable {
+protocol HomePanel: Themeable {
     var homePanelDelegate: HomePanelDelegate? { get set }
 }
 

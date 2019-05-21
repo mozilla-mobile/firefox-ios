@@ -60,7 +60,6 @@
 		285D3B901B4386520035FD22 /* SQLiteQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D3B8F1B4386520035FD22 /* SQLiteQueue.swift */; };
 		2868FA061ADF7B69000D9B1D /* Sync.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; };
 		287AC8661AF4776D00101515 /* TestSQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27D1ABB533A00877008 /* TestSQLiteHistory.swift */; };
-		288501DE1AC0F61D00E7F670 /* RequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */; };
 		2885023F1AC117A500E7F670 /* SyncStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2885023E1AC117A500E7F670 /* SyncStateMachine.swift */; };
 		288A2D9D1AB8B3260023ABC3 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		288A2DB51AB8B38D0023ABC3 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288A2DB31AB8B38D0023ABC3 /* Error.swift */; };
@@ -345,6 +344,7 @@
 		C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */; };
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		C8611CB01F71AEBA00C3DE7D /* NoImageModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */; };
+		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
 		C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1D222EDE4400E30E52 /* Accelerate.framework */; };
 		C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1F222EDED000E30E52 /* SafariServices.framework */; };
 		C8E18F21222EE0FD00E30E52 /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
@@ -1183,7 +1183,6 @@
 		285D3B671B4380B70035FD22 /* Queue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Queue.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		285D3B8F1B4386520035FD22 /* SQLiteQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteQueue.swift; sourceTree = "<group>"; };
 		28786E541AB0F5FA009EA9EF /* DeferredTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredTests.swift; sourceTree = "<group>"; };
-		288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestExtensions.swift; sourceTree = "<group>"; };
 		2885023E1AC117A500E7F670 /* SyncStateMachine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncStateMachine.swift; sourceTree = "<group>"; };
 		288A2D861AB8B3260023ABC3 /* Shared.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Shared.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		288A2DB31AB8B38D0023ABC3 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = ThirdParty/Result/Error.swift; sourceTree = "<group>"; };
@@ -1455,6 +1454,7 @@
 		C4F3B2991CFCF93A00966259 /* ButtonToast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ButtonToast.swift; sourceTree = "<group>"; };
 		C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewSwizzled.swift; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
+		C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		C8E18F1D222EDE4400E30E52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C8E18F1F222EDED000E30E52 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigationDelegate.html; sourceTree = "<group>"; };
@@ -2190,7 +2190,6 @@
 				2F3724E31ABF3C19007607FA /* StorageClient.swift */,
 				28E91E741B443AD5009DF274 /* SyncConstants.swift */,
 				2885023E1AC117A500E7F670 /* SyncStateMachine.swift */,
-				288501DD1AC0F61D00E7F670 /* RequestExtensions.swift */,
 			);
 			path = Sync;
 			sourceTree = "<group>";
@@ -2992,6 +2991,7 @@
 				E650758F1E37F7AB006961AC /* TimeConstants.swift */,
 				E65075901E37F7AB006961AC /* UserAgent.swift */,
 				E65075911E37F7AB006961AC /* WeakList.swift */,
+				C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -4551,7 +4551,6 @@
 				2F3724E51ABF3C19007607FA /* Info.swift in Sources */,
 				2827319C1ABC9C2F00AA1954 /* Record.swift in Sources */,
 				2827319B1ABC9C2F00AA1954 /* KeysPayload.swift in Sources */,
-				288501DE1AC0F61D00E7F670 /* RequestExtensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4637,6 +4636,7 @@
 				E650759C1E37F7AB006961AC /* DeferredUtils.swift in Sources */,
 				E65075941E37F7AB006961AC /* AppInfo.swift in Sources */,
 				D03DCD95211B63D000151ACA /* DateGroupedTableData.swift in Sources */,
+				C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */,
 				E65075A41E37F7AB006961AC /* NSCharacterSetExtensions.swift in Sources */,
 				EB912B9A22722B5F00DF585A /* Deferred.swift in Sources */,
 				E65075B71E37F7AB006961AC /* Logger.swift in Sources */,

@@ -10,7 +10,6 @@ import Shared
 import Storage
 import SnapKit
 import XCGLogger
-import Alamofire
 import Account
 import MobileCoreServices
 import SDWebImage
@@ -2122,16 +2121,22 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     application.endBackgroundTask(taskId)
                 })
 
-                Alamofire.request(url).validate(statusCode: 200..<300).response { response in
+                makeUrlSession(userAgent: UserAgent.fxaUserAgent, isEphemeral: false).dataTask(with: url) { (data, response, error) in
+                    guard let _ = validatedHTTPResponse(response, statusCode: 200..<300) else {
+                        application.endBackgroundTask(taskId)
+                        return
+                    }
+
                     // Only set the image onto the pasteboard if the pasteboard hasn't changed since
                     // fetching the image; otherwise, in low-bandwidth situations,
                     // we might be overwriting something that the user has subsequently added.
-                    if changeCount == pasteboard.changeCount, let imageData = response.data, response.error == nil {
+                    if changeCount == pasteboard.changeCount, let imageData = data, error == nil {
                         pasteboard.addImageWithData(imageData, forURL: url)
                     }
 
                     application.endBackgroundTask(taskId)
                 }
+
             }
             actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
 
@@ -2167,8 +2172,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
-        Alamofire.request(url).validate(statusCode: 200..<300).response { response in
-            if let data = response.data {
+        makeUrlSession(userAgent: UserAgent.fxaUserAgent, isEphemeral: false).dataTask(with: url) { (data, response, error) in
+            if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
                 success(data)
             }
         }
