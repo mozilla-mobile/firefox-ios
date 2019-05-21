@@ -2477,7 +2477,9 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
 extension BrowserViewController {
 
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        homePanelDidRequestToRestoreClosedTab(motion)
+        if AppConstants.MOZ_SHAKE_TO_RESTORE {
+                homePanelDidRequestToRestoreClosedTab(motion)
+        }
     }
 
     func homePanelDidRequestToRestoreClosedTab(_ motion: UIEvent.EventSubtype) {

@@ -94,7 +94,7 @@ enum TabEvent {
     var label: TabEventLabel {
         let str = "\(self)".components(separatedBy: "(")[0] // Will grab just the name from 'didChangeURL(...)'
         guard let result = TabEventLabel(rawValue: str) else {
-            assert(false)
+            fatalError("Bad tab event label.")
         }
         return result
     }
