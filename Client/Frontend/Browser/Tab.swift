@@ -714,14 +714,14 @@ extension Tab {
         static func updateHosts(forUrl url: URL, isDesktopSite: Bool, isPrivate: Bool) {
             guard let host = url.host, !host.isEmpty else { return }
 
-            guard !isPrivate else {
-                if isDesktopSite, !hostList.contains(host), !DesktopSites.privateModeHostList.contains(host) {
+            if isPrivate {
+                if isDesktopSite {
                     DesktopSites.privateModeHostList.insert(host)
-                } else if !isDesktopSite, (hostList.contains(host) || DesktopSites.privateModeHostList.contains(host)) {
+                    return
+                } else {
                     DesktopSites.privateModeHostList.remove(host)
-                    hostList.remove(host)
+                    // Continue to next section and try remove it from `hostList` also.
                 }
-                return
             }
 
             if isDesktopSite, !hostList.contains(host) {
@@ -729,9 +729,11 @@ extension Tab {
             } else if !isDesktopSite, hostList.contains(host) {
                 hostList.remove(host)
             } else {
+                // Don't save to disk, return early
                 return
             }
 
+            // At this point, saving to disk takes place.
             do {
                 let data = try NSKeyedArchiver.archivedData(withRootObject: hostList, requiringSecureCoding: false)
                 try data.write(to: DesktopSites.file)
