@@ -82,6 +82,6 @@ class MediaImageLoader: TabEventHandler {
     }
 
     fileprivate func cache(image: UIImage, forURL url: URL) {
-        SDImageCache.shared.storeImage(toMemory: image, forKey: url.absoluteString)
+        SDImageCache.shared.storeImageData(toDisk: image.sd_imageData(), forKey: url.absoluteString)
     }
 }
