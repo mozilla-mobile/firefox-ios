@@ -41,8 +41,8 @@ class HistoryClearable: Clearable {
 
     func clear() -> Success {
         return profile.history.clearHistory().bindQueue(.main) { success in
-            SDImageCache.shared().clearDisk()
-            SDImageCache.shared().clearMemory()
+            SDImageCache.shared.clearDisk()
+            SDImageCache.shared.clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)

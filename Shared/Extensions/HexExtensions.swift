@@ -43,7 +43,7 @@ extension Data {
     public var hexEncodedString: String {
         var result = String()
         result.reserveCapacity(count * 2)
-        withUnsafeBytes { (p: UnsafePointer<UInt8>) in
+        withUnsafeBytes { (p: UnsafeRawBufferPointer) in
             for i in 0..<count {
                 result.append(HexDigits[Int((p[i] & 0xf0) >> 4)])
                 result.append(HexDigits[Int(p[i] & 0x0f)])
@@ -56,7 +56,12 @@ extension Data {
         let length = Int(length)
         var data = Data(count: length)
         var result: Int32 = 0
-        data.withUnsafeMutableBytes { (p: UnsafeMutablePointer<UInt8>) in
+        data.withUnsafeMutableBytes { (p: UnsafeMutableRawBufferPointer) in
+            guard let p = p.bindMemory(to: UInt8.self).baseAddress else {
+                result = -1
+                return
+            }
+
             result = SecRandomCopyBytes(kSecRandomDefault, length, p)
         }
         return result == 0 ? data : nil

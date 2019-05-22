@@ -240,7 +240,7 @@ class DownloadQueue {
 
 extension DownloadQueue: DownloadDelegate {
     func download(_ download: Download, didCompleteWithError error: Error?) {
-        guard let error = error, let index = downloads.index(of: download) else {
+        guard let error = error, let index = downloads.firstIndex(of: download) else {
             return
         }
 
@@ -258,7 +258,7 @@ extension DownloadQueue: DownloadDelegate {
     }
 
     func download(_ download: Download, didFinishDownloadingTo location: URL) {
-        guard let index = downloads.index(of: download) else {
+        guard let index = downloads.firstIndex(of: download) else {
             return
         }
 

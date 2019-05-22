@@ -13,7 +13,10 @@ open class Bytes {
     open class func generateRandomBytes(_ len: UInt) -> Data {
         let len = Int(len)
         var data = Data(count: len)
-        data.withUnsafeMutableBytes { (p: UnsafeMutablePointer<UInt8>) in
+        data.withUnsafeMutableBytes { (p: UnsafeMutableRawBufferPointer) in
+            guard let p = p.bindMemory(to: UInt8.self).baseAddress else {
+                fatalError("Random byte generation failed.")
+            }
             if (SecRandomCopyBytes(kSecRandomDefault, len, p) != errSecSuccess) {
                 fatalError("Random byte generation failed.")
             }

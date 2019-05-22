@@ -95,8 +95,8 @@ class TestAppDelegate: AppDelegate {
         log.debug("Wiping everything for a clean start.")
 
         // Clear image cache
-        SDImageCache.shared().clearDisk()
-        SDImageCache.shared().clearMemory()
+        SDImageCache.shared.clearDisk()
+        SDImageCache.shared.clearMemory()
 
         // Clear the cookie/url cache
         URLCache.shared.removeAllCachedResponses()

@@ -1,16 +1,16 @@
 github "getsentry/sentry-cocoa"             ~> 4.2
 github "Alamofire/Alamofire"                ~> 4.8
-github "SnapKit/SnapKit"                    ~> 4.2
-github "rs/SDWebImage"                      ~> 4.1
+github "SnapKit/SnapKit"                    ~> 5.0
+github "SDWebImage/SDWebImage"              ~> 5.0
 github "swisspol/GCDWebServer"              ~> 3.3
-github "kif-framework/KIF"                  "v3.7.5"
-github "adjust/ios_sdk"                     "v4.17.1"
+github "kif-framework/KIF"                  "v3.7.7"
+github "adjust/ios_sdk"                     "v4.17.2"
 github "AgileBits/onepassword-app-extension"    "add-framework-support"
-github "mozilla-mobile/SwiftKeychainWrapper"       "master" # switch to mozilla-mobile once PR#1 lands there
-github "DaveWoodCom/XCGLogger"              ~> 6.1
-github "cezheng/Fuzi"                       "master"
-github "SwiftyJSON/SwiftyJSON"              ~> 4.3
-github "st3fan/EarlGrey"                    "master"
+github "jrendel/SwiftKeychainWrapper"       ~> 3.2.0
+github "DaveWoodCom/XCGLogger"              ~> 7.0
+github "cezheng/Fuzi"                       ~> 3.0
+github "SwiftyJSON/SwiftyJSON"              ~> 5.0
+github "google/EarlGrey"                    ~> 1.15
 github "mozilla-mobile/telemetry-ios"      ~> 1.1
 github "mozilla-mobile/MappaMundi"          "master"
 github "Leanplum/Leanplum-iOS-SDK"          ~> 2.4

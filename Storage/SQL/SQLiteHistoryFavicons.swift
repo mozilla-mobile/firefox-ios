@@ -206,7 +206,7 @@ extension SQLiteHistory: Favicons {
     fileprivate func downloadFaviconImage(faviconURL: URL) -> Deferred<Maybe<UIImage>> {
         let deferred = CancellableDeferred<Maybe<UIImage>>()
 
-        SDWebImageManager.shared().loadImage(with: faviconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+        SDWebImageManager.shared.loadImage(with: faviconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
             if let image = image {
                 deferred.fill(Maybe(success: image))
             } else {

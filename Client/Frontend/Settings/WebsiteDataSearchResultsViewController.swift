@@ -49,7 +49,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         return cell
     }
 
-    private func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == UITableViewCell.EditingStyle.delete, let record = filteredSiteRecords[safe: indexPath.row] else {
             return
         }

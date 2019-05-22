@@ -352,7 +352,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
-    private func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 

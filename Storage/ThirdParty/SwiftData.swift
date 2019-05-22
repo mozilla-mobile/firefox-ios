@@ -1294,7 +1294,7 @@ open class SDRow: Sequence {
     // the columns array passed into this Row to find the correct index.
     public subscript(key: String) -> Any? {
         get {
-            if let index = columnNames.index(of: key) {
+            if let index = columnNames.firstIndex(of: key) {
                 return getValue(index)
             }
             return nil

@@ -68,7 +68,7 @@ class QuickActions: NSObject {
                 icon: UIApplicationShortcutIcon(templateImageName: "quick_action_last_bookmark"),
                 userInfo: userData as [String : NSSecureCoding]
             )
-            if let index = (dynamicShortcutItems.index { $0.type == ShortcutType.openLastBookmark.type }) {
+            if let index = (dynamicShortcutItems.firstIndex { $0.type == ShortcutType.openLastBookmark.type }) {
                 dynamicShortcutItems[index] = openLastBookmarkShortcut
             } else {
                 dynamicShortcutItems.append(openLastBookmarkShortcut)
@@ -83,7 +83,7 @@ class QuickActions: NSObject {
 
     func removeDynamicApplicationShortcutItemOfType(_ type: ShortcutType, fromApplication application: UIApplication) {
         guard var dynamicShortcutItems = application.shortcutItems,
-            let index = (dynamicShortcutItems.index { $0.type == type.type }) else { return }
+            let index = (dynamicShortcutItems.firstIndex { $0.type == type.type }) else { return }
 
         dynamicShortcutItems.remove(at: index)
         application.shortcutItems = dynamicShortcutItems
