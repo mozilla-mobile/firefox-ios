@@ -50,7 +50,7 @@ public class DrawerViewController: UIViewController {
     // Only used in iPad layout.
     fileprivate var xPosition: CGFloat = 0 {
         didSet {
-            let maxX = view.frame.minX
+            let maxX = view.frame.maxX
 
             if xPosition < maxX - DrawerViewControllerUX.DrawerPadWidth {
                 xPosition = maxX - DrawerViewControllerUX.DrawerPadWidth
@@ -58,7 +58,7 @@ public class DrawerViewController: UIViewController {
                 xPosition = maxX
             }
 
-            backgroundOverlayView.alpha = (xPosition + DrawerViewControllerUX.DrawerPadWidth) / DrawerViewControllerUX.DrawerPadWidth / 2
+            backgroundOverlayView.alpha = (maxX - xPosition) / DrawerViewControllerUX.DrawerPadWidth / 2
             drawerViewLeftConstraint?.update(offset: xPosition)
             view.layoutIfNeeded()
         }
@@ -139,7 +139,7 @@ public class DrawerViewController: UIViewController {
         handleView.snp.remakeConstraints(constraintsForHandleView)
 
         if showingPadLayout {
-            xPosition = view.frame.minX - DrawerViewControllerUX.DrawerPadWidth
+            xPosition = view.frame.maxX
         } else {
             yPosition = view.frame.maxY
         }
@@ -248,7 +248,7 @@ public class DrawerViewController: UIViewController {
 
         UIView.animate(withDuration: 0.25) {
             if self.showingPadLayout {
-                self.xPosition = self.view.frame.minX
+                self.xPosition = self.view.frame.maxX - DrawerViewControllerUX.DrawerPadWidth
             } else {
                 self.yPosition = DrawerViewControllerUX.DrawerTopStop
             }
@@ -258,7 +258,7 @@ public class DrawerViewController: UIViewController {
     public func close() {
         UIView.animate(withDuration: 0.25, animations: {
             if self.showingPadLayout {
-                self.xPosition = self.view.frame.minX - DrawerViewControllerUX.DrawerPadWidth
+                self.xPosition = self.view.frame.maxX
             } else {
                 self.yPosition = self.view.frame.maxY
             }
