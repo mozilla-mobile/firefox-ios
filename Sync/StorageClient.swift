@@ -800,6 +800,7 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
                 let records = arr.compactMap(recordify)
                 let response = StorageResponse(value: records, response: httpResponse)
                 deferred.fill(Maybe(success: response))
+                return
             } catch {
                 log.warning("Couldn't parse JSON response. \(error)")
             }

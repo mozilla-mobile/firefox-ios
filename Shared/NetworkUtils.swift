@@ -54,21 +54,14 @@ public func jsonResponse(fromData data: Data?) throws -> JSON {
         throw JSONSerializeError.noData
     }
 
-    let o: Any?
     do {
-        try o = JSONSerialization.jsonObject(with: data, options: .allowFragments)
+        let json = try JSON(data: data)
+        if json.isError() {
+            throw JSONSerializeError.parseError
+        }
+        return json
     } catch {
-        throw JSONSerializeError.parseError
+        print(error)
+        throw(JSONSerializeError.parseError)
     }
-
-    guard let object = o else {
-        throw JSONSerializeError.noData
-    }
-
-    let json = JSON(object)
-    if json.isError() {
-        throw JSONSerializeError.parseError
-    }
-
-    return json
 }

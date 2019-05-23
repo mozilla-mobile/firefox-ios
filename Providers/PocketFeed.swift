@@ -101,7 +101,7 @@ class Pocket {
             self.cache(response: response, for: request, with: data)
 
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-            guard let j = json, let items = j?["recommendations"] as? Array<[String: Any]> else {
+            guard let items = json?["recommendations"] as? Array<[String: Any]> else {
                 return deferred.fill([])
             }
             return deferred.fill(PocketStory.parseJSON(list: items))
