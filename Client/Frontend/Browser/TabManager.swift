@@ -192,7 +192,7 @@ class TabManager: NSObject {
         }
 
         if let tab = tab {
-            _selectedIndex = tabs.index(of: tab) ?? -1
+            _selectedIndex = tabs.firstIndex(of: tab) ?? -1
         } else {
             _selectedIndex = -1
         }
@@ -296,14 +296,14 @@ class TabManager: NSObject {
             return
         }
 
-        let fromIndex = tabs.index(of: currentTabs[visibleFromIndex]) ?? tabs.count - 1
-        let toIndex = tabs.index(of: currentTabs[visibleToIndex]) ?? tabs.count - 1
+        let fromIndex = tabs.firstIndex(of: currentTabs[visibleFromIndex]) ?? tabs.count - 1
+        let toIndex = tabs.firstIndex(of: currentTabs[visibleToIndex]) ?? tabs.count - 1
 
         let previouslySelectedTab = selectedTab
 
         tabs.insert(tabs.remove(at: fromIndex), at: toIndex)
 
-        if let previouslySelectedTab = previouslySelectedTab, let previousSelectedIndex = tabs.index(of: previouslySelectedTab) {
+        if let previouslySelectedTab = previouslySelectedTab, let previousSelectedIndex = tabs.firstIndex(of: previouslySelectedTab) {
             _selectedIndex = previousSelectedIndex
         }
 
@@ -315,7 +315,7 @@ class TabManager: NSObject {
 
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
-        } else if let parent = parent, var insertIndex = tabs.index(of: parent) {
+        } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
             insertIndex += 1
             while insertIndex < tabs.count && tabs[insertIndex].isDescendentOf(parent) {
                 insertIndex += 1
@@ -384,7 +384,7 @@ class TabManager: NSObject {
     }
 
     func removeTabAndUpdateSelectedIndex(_ tab: Tab) {
-        guard let index = tabs.index(where: { $0 === tab }) else { return }
+        guard let index = tabs.firstIndex(where: { $0 === tab }) else { return }
         removeTab(tab, flushToDisk: true, notify: true)
         updateIndexAfterRemovalOf(tab, deletedIndex: index)
         hideNetworkActivitySpinner()
@@ -419,7 +419,7 @@ class TabManager: NSObject {
     fileprivate func removeTab(_ tab: Tab, flushToDisk: Bool, notify: Bool) {
         assert(Thread.isMainThread)
 
-        guard let removalIndex = tabs.index(where: { $0 === tab }) else {
+        guard let removalIndex = tabs.firstIndex(where: { $0 === tab }) else {
             Sentry.shared.sendWithStacktrace(message: "Could not find index of tab to remove", tag: .tabManager, severity: .fatal, description: "Tab count: \(count)")
             return
         }

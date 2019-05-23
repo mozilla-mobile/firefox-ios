@@ -57,7 +57,7 @@ open class WeakList<T: AnyObject>: Sequence {
     }
 
     open func index(of item: T) -> Int? {
-        return items.index { $0.value === item }
+        return items.firstIndex { $0.value === item }
     }
 
     open func makeIterator() -> AnyIterator<T> {

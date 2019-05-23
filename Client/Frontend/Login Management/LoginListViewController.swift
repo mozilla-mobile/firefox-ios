@@ -392,7 +392,7 @@ extension LoginListViewController: UITableViewDelegate {
         return indexPath.section == LoginsSettingsSection ? 44 : LoginListUX.RowHeight
     }
 
-    private func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .none
     }
 
@@ -482,7 +482,7 @@ fileprivate class ListSelectionController: NSObject {
 
     func deselectIndexPath(_ indexPath: IndexPath) {
         guard let foundSelectedPath = (selectedIndexPaths.filter { $0.row == indexPath.row && $0.section == indexPath.section }).first,
-              let indexToRemove = selectedIndexPaths.index(of: foundSelectedPath) else {
+              let indexToRemove = selectedIndexPaths.firstIndex(of: foundSelectedPath) else {
             return
         }
 

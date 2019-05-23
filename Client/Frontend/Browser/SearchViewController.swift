@@ -248,7 +248,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     @objc func didSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
-        guard let index = searchEngineScrollViewContent.subviews.index(of: sender) else {
+        guard let index = searchEngineScrollViewContent.subviews.firstIndex(of: sender) else {
             assertionFailure()
             return
         }

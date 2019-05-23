@@ -142,7 +142,7 @@ class SearchTests: XCTestCase {
             default:
                 XCTFail("Unexpected query: \(query)")
             }
-            return GCDWebServerDataResponse(jsonObject: [query, suggestions])
+            return GCDWebServerDataResponse(jsonObject: [query, suggestions as Any])
         }
 
         if !webServer.start(withPort: 0, bonjourName: nil) {

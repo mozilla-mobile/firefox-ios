@@ -66,16 +66,14 @@ class MediaImageLoader: TabEventHandler {
     }
 
     fileprivate func prepareCache(_ url: URL) {
-        let manager = SDWebImageManager.shared()
-        manager.cachedImageExists(for: url) { exists in
-            if !exists {
-                self.downloadAndCache(fromURL: url)
-            }
+        let manager = SDWebImageManager.shared
+        if manager.cacheKey(for: url) == nil {
+            self.downloadAndCache(fromURL: url)
         }
     }
 
     fileprivate func downloadAndCache(fromURL webUrl: URL) {
-        let manager = SDWebImageManager.shared()
+        let manager = SDWebImageManager.shared
         manager.loadImage(with: webUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
             if let image = image {
                 self.cache(image: image, forURL: webUrl)
@@ -84,6 +82,6 @@ class MediaImageLoader: TabEventHandler {
     }
 
     fileprivate func cache(image: UIImage, forURL url: URL) {
-        SDWebImageManager.shared().saveImage(toCache: image, for: url)
+        SDImageCache.shared.storeImageData(toDisk: image.sd_imageData(), forKey: url.absoluteString)
     }
 }

@@ -285,7 +285,7 @@ open class TokenKeysAndKeyPair: TokenAndKeys {
 
     open override func asJSON() -> JSON {
         var d = super.asJSON().dictionary!
-        d["keyPair"] = JSON(keyPair.jsonRepresentation())
+        d["keyPair"] = JSON(keyPair.jsonRepresentation() as Any)
         d["keyPairExpiresAt"] = JSON(NSNumber(value: keyPairExpiresAt))
         return JSON(d)
     }

@@ -256,7 +256,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 extension TabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
-        if tabsToDisplay.index(of: tab) != nil {
+        if tabsToDisplay.firstIndex(of: tab) != nil {
             tabManager.selectTab(tab)
         }
     }

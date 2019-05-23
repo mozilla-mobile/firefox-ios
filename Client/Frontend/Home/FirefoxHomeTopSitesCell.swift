@@ -79,7 +79,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         accessibilityIdentifier = "TopSite"
         contentView.addSubview(titleLabel)
         contentView.addSubview(faviconBG)
-        contentView.addSubview(imageView)
+        faviconBG.addSubview(imageView)
         contentView.addSubview(selectedOverlay)
 
         titleLabel.snp.makeConstraints { make in
@@ -91,8 +91,7 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 
         imageView.snp.makeConstraints { make in
             make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
-            make.centerX.equalTo(contentView)
-            make.centerY.equalTo(contentView).inset(-TopSiteCellUX.TitleHeight/2)
+            make.center.equalTo(faviconBG)
         }
 
         selectedOverlay.snp.makeConstraints { make in
