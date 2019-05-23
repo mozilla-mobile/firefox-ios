@@ -539,7 +539,7 @@ class BrowserViewController: UIViewController {
 
         if shouldShowWhatsNewTab() {
             // Only display if the SUMO topic has been configured in the Info.plist (present and not empty)
-            if let whatsNewTopic = AppInfo.whatsNewTopic, whatsNewTopic != "" {
+            if let whatsNewTopic = AppInfo.whatsNewTopic, !whatsNewTopic.isEmpty {
                 if let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                     self.openURLInNewTab(whatsNewURL, isPrivileged: false)
                     profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
@@ -2296,7 +2296,7 @@ extension BrowserViewController {
     }
 
     func addSearchEngine(_ searchQuery: String, favicon: Favicon) {
-        guard searchQuery != "",
+        guard !searchQuery.isEmpty,
             let iconURL = URL(string: favicon.url),
             let url = URL(string: searchQuery.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!),
             let shortName = url.domainURL.host else {
@@ -2475,7 +2475,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         }
     }
 }
-
 
 // MARK: - reopen last closed tab
 

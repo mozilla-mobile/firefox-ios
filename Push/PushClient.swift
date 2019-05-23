@@ -174,7 +174,6 @@ extension PushClient {
 
         }.resume()
 
-
         return deferred
     }
 }

@@ -25,7 +25,7 @@ private var defaultFavicon: UIImage = {
 
 // An in-memory cache of "default" favicons keyed by the
 // first character of a site's domain name.
-private var defaultFaviconImageCache = [String : UIImage]()
+private var defaultFaviconImageCache = [String: UIImage]()
 
 // Some of our top-sites domains exist in various
 // region-specific TLDs. This helps us resolve them.
