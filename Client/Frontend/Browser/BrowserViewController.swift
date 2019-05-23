@@ -1139,9 +1139,6 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
-
-        // Remember whether or not a desktop site was requested
-        tab.desktopSite = webView.customUserAgent?.isEmpty == false
     }
 }
 

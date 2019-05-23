@@ -55,6 +55,8 @@ let HomePanel_Library = "HomePanel_Library"
 let TranslatePageMenu = "TranslatePageMenu"
 let DontTranslatePageMenu = "DontTranslatePageMenu"
 let MobileBookmarks = "MobileBookmarks"
+let RequestDesktopSite = "RequestDesktopSite"
+let RequestMobileSite = "RequestMobileSite"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -959,6 +961,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     // make sure after the menu action, navigator.nowAt() is used to set the current state
     map.addScreenState(PageOptionsMenu) {screenState in
+        screenState.tap(app.tables["Context Menu"].cells["menu-RequestDesktopSite"], to: RequestDesktopSite)
         screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
@@ -974,6 +977,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(FindInPage) { screenState in
         screenState.tap(app.buttons["FindInPage.close"], to: BrowserTab)
     }
+
+    map.addScreenState(RequestDesktopSite) { _ in }
 
     map.addScreenState(HomePanel_Library) { screenState in
         screenState.dismissOnUse = true

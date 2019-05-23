@@ -224,6 +224,9 @@ class TabManager: NSObject {
     func willSwitchTabMode(leavingPBM: Bool) {
         recentlyClosedForUndo.removeAll()
 
+        // Clear every time entering/exiting this mode.
+        Tab.DesktopSites.privateModeHostList = Set<String>()
+
         if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
         }
