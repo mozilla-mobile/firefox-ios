@@ -38,19 +38,20 @@ public class DrawerView: UIView {
 public class DrawerViewController: UIViewController {
     public let childViewController: UIViewController
 
-    public var drawerView: DrawerView!
-    public var drawerViewTopConstraint: Constraint?
-    public var drawerViewLeftConstraint: Constraint?
+    public let drawerView = DrawerView()
 
     fileprivate(set) open var isOpen: Bool = false
 
-    fileprivate var backgroundOverlayView: UIView!
-    fileprivate var handleView: UIView!
+    fileprivate var drawerViewTopConstraint: Constraint?
+    fileprivate var drawerViewRightConstraint: Constraint?
+
+    fileprivate let backgroundOverlayView = UIView()
+    fileprivate let handleView = UIView()
 
     // Only used in iPad layout.
     fileprivate var xPosition: CGFloat = 0 {
         didSet {
-            let maxX = view.frame.maxX
+            let maxX = DrawerViewControllerUX.DrawerPadWidth
 
             if xPosition < maxX - DrawerViewControllerUX.DrawerPadWidth {
                 xPosition = maxX - DrawerViewControllerUX.DrawerPadWidth
@@ -58,8 +59,8 @@ public class DrawerViewController: UIViewController {
                 xPosition = maxX
             }
 
-            backgroundOverlayView.alpha = (maxX - xPosition) / DrawerViewControllerUX.DrawerPadWidth / 2
-            drawerViewLeftConstraint?.update(offset: xPosition)
+            backgroundOverlayView.alpha = (1 - (xPosition / maxX)) / 2
+            drawerViewRightConstraint?.update(offset: xPosition)
             view.layoutIfNeeded()
         }
     }
@@ -99,8 +100,6 @@ public class DrawerViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
 
-        let backgroundOverlayView = UIView()
-        self.backgroundOverlayView = backgroundOverlayView
         backgroundOverlayView.backgroundColor = .black
         backgroundOverlayView.alpha = 0
         view.addSubview(backgroundOverlayView)
@@ -108,16 +107,12 @@ public class DrawerViewController: UIViewController {
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didRecognizeTapGesture))
         backgroundOverlayView.addGestureRecognizer(tapGestureRecognizer)
 
-        let drawerView = DrawerView()
-        self.drawerView = drawerView
         drawerView.backgroundColor = UIColor.theme.tableView.headerBackground
         view.addSubview(drawerView)
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didRecognizePanGesture))
         drawerView.addGestureRecognizer(panGestureRecognizer)
 
-        let handleView = UIView()
-        self.handleView = handleView
         handleView.backgroundColor = .black
         handleView.alpha = DrawerViewControllerUX.HandleAlpha
         handleView.layer.cornerRadius = DrawerViewControllerUX.HandleHeight / 2
@@ -139,7 +134,7 @@ public class DrawerViewController: UIViewController {
         handleView.snp.remakeConstraints(constraintsForHandleView)
 
         if showingPadLayout {
-            xPosition = view.frame.maxX
+            xPosition = DrawerViewControllerUX.DrawerPadWidth
         } else {
             yPosition = view.frame.maxY
         }
@@ -164,12 +159,12 @@ public class DrawerViewController: UIViewController {
             make.width.equalTo(DrawerViewControllerUX.DrawerPadWidth)
             make.height.equalTo(view)
             drawerViewTopConstraint = make.top.equalTo(view).constraint
-            drawerViewLeftConstraint = make.left.equalTo(xPosition).constraint
+            drawerViewRightConstraint = make.right.equalTo(xPosition).constraint
         } else {
             make.width.equalTo(view)
             make.height.equalTo(view).offset(-DrawerViewControllerUX.DrawerTopStop)
             drawerViewTopConstraint = make.top.equalTo(yPosition).constraint
-            drawerViewLeftConstraint = make.left.equalTo(view).constraint
+            drawerViewRightConstraint = make.right.equalTo(view).constraint
         }
     }
 
@@ -248,7 +243,7 @@ public class DrawerViewController: UIViewController {
 
         UIView.animate(withDuration: 0.25) {
             if self.showingPadLayout {
-                self.xPosition = self.view.frame.maxX - DrawerViewControllerUX.DrawerPadWidth
+                self.xPosition = 0
             } else {
                 self.yPosition = DrawerViewControllerUX.DrawerTopStop
             }
@@ -258,7 +253,7 @@ public class DrawerViewController: UIViewController {
     public func close() {
         UIView.animate(withDuration: 0.25, animations: {
             if self.showingPadLayout {
-                self.xPosition = self.view.frame.maxX
+                self.xPosition = DrawerViewControllerUX.DrawerPadWidth
             } else {
                 self.yPosition = self.view.frame.maxY
             }
