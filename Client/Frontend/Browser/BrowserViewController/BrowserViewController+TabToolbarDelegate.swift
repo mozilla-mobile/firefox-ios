@@ -48,7 +48,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        showLibrary()
+        if let libraryDrawerViewController = self.libraryDrawerViewController, libraryDrawerViewController.isOpen {
+            libraryDrawerViewController.close()
+        } else {
+            showLibrary()
+        }
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
