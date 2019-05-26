@@ -187,6 +187,10 @@ class BrowserViewController: UIViewController {
         return newTraitCollection.verticalSizeClass == .regular && newTraitCollection.horizontalSizeClass == .regular
     }
 
+    func shouldScrollToTopButtonBeAccessibleForTraitCollection(_ newTraitCollection: UITraitCollection) -> Bool {
+        return newTraitCollection.verticalSizeClass == .compact && newTraitCollection.horizontalSizeClass == .compact
+    }
+
     func toggleSnackBarVisibility(show: Bool) {
         if show {
             UIView.animate(withDuration: 0.1, animations: { self.alertStackView.isHidden = false })
@@ -213,6 +217,7 @@ class BrowserViewController: UIViewController {
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
         urlBar.hideImagesBadge(visible: NoImageModeHelper.isActivated(profile.prefs))
+        urlBar.setScrollToTopButtonAccessibility(shouldScrollToTopButtonBeAccessibleForTraitCollection(newCollection)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         toolbar = nil
