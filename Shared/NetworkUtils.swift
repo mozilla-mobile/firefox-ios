@@ -61,7 +61,6 @@ public func jsonResponse(fromData data: Data?) throws -> JSON {
         }
         return json
     } catch {
-        print(error)
         throw(JSONSerializeError.parseError)
     }
 }

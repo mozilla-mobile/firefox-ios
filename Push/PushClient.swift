@@ -168,10 +168,8 @@ extension PushClient {
                 }
                 deferred.fill(Maybe(success: json))
             } catch {
-                print(error)
                 return deferred.fill(Maybe(failure: PushClientError.Local(error)))
             }
-
         }.resume()
 
         return deferred
