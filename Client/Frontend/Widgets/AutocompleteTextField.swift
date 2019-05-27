@@ -239,8 +239,8 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             clearButton.snp.makeConstraints { make in
                 make.height.centerY.equalToSuperview()
                 make.width.equalTo(40)
-                // Without this offset, the button moves 5 pixels when switching from UILabel mode to UITextField mode
-                make.right.equalToSuperview().offset(5)
+                // Without this offset, the button moves when switching from UILabel mode to UITextField mode
+                make.right.equalToSuperview().offset(5.5)
             }
         }
     }
