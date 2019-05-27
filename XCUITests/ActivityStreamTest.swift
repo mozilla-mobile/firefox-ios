@@ -258,7 +258,9 @@ class ActivityStreamTest: BaseTestCase {
 
         // Check that longtapping on the TopSite gives the option to remove it
         navigator.performAction(Action.ExitMobileBookmarksFolder)
-        navigator.nowAt(HomePanelsScreen)
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.performAction(Action.CloseBookmarkPanel)
+
         app.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!]
             .press(forDuration: 2)
         XCTAssertTrue(app.tables["Context Menu"].cells["Remove Bookmark"].exists)
@@ -282,7 +284,8 @@ class ActivityStreamTest: BaseTestCase {
 
         // Check that longtapping on the TopSite gives the option to remove it
         navigator.performAction(Action.ExitMobileBookmarksFolder)
-        navigator.nowAt(HomePanelsScreen)
+        navigator.goto(HomePanelsScreen)
+        waitForExistence(TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!])
         TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
 
         // Unbookmark it

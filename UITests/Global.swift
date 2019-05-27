@@ -423,7 +423,13 @@ class BrowserUtils {
     }
 
     class func closeLibraryMenu(_ tester: KIFUITestActor) {
-        tester.tapView(withAccessibilityLabel: "Done")
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.libraryButton"))
+                .perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityID("History"))
+                .perform(grey_swipeFastInDirection(GREYDirection.down))
+        }
         tester.waitForAnimationsToFinish()
     }
 }

@@ -45,8 +45,6 @@ class ReaderViewTest: BaseTestCase {
 
         // Check to make sure the reading list is empty
         checkReadingListNumberOfItems(items: 0)
-        app.buttons["Done"].tap()
-        navigator.nowAt(HomePanelsScreen)
         
         // Add item to reading list and check that it appears
         addContentToReaderView()

@@ -92,7 +92,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         waitForEmptyReadingList()
 
         // Close the menu
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
@@ -145,17 +145,10 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             .perform(grey_tap())
 
         // check the entry no longer exist
-        // workaround only for iPad to bug not showing the panel ok until coming back
-        if BrowserUtils.iPad() {
-            tester().waitForAnimationsToFinish()
-            tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
-            tester().waitForAnimationsToFinish()
-            tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
-            tester().waitForAnimationsToFinish(withTimeout: 3)
-        }
         waitForEmptyReadingList()
 
         // Close Reading (and so Library) panel
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
