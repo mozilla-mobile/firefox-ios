@@ -227,6 +227,9 @@
                   Identifier = "DragAndDropTestIpad/testTryDragAndDropHistoryToURLBar()">
                </Test>
                <Test
+                  Identifier = "DragAndDropTests/testRearrangeTabsTabTray()">
+               </Test>
+               <Test
                   Identifier = "FindInPageTests/testFindFromMenu()">
                </Test>
                <Test
