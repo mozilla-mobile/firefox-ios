@@ -306,14 +306,17 @@ extension SQLiteHistory: Favicons {
     fileprivate func getHTMLDocumentFromWebPage(url: URL) -> Deferred<Maybe<HTMLDocument>> {
         let deferred = CancellableDeferred<Maybe<HTMLDocument>>()
 
-        urlSession.dataTask(with: url) { (data, response, error) in
-            guard error == nil,
-                let data = data,
-                let document = try? HTMLDocument(data: data) else {
-                    deferred.fill(Maybe(failure: FaviconLookupError(siteURL: url.absoluteString)))
-                    return
+        // getHTMLDocumentFromWebPage can be called from getFaviconURLsFromWebPage, and that function is off-main. 
+        DispatchQueue.main.async {
+            urlSession.dataTask(with: url) { (data, response, error) in
+                guard error == nil,
+                    let data = data,
+                    let document = try? HTMLDocument(data: data) else {
+                        deferred.fill(Maybe(failure: FaviconLookupError(siteURL: url.absoluteString)))
+                        return
+                }
+                deferred.fill(Maybe(success: document))
             }
-            deferred.fill(Maybe(success: document))
         }
 
         return deferred
