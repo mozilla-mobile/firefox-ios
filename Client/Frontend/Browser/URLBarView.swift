@@ -123,6 +123,7 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
+        cancelButton.accessibilityLabel = Strings.BackTitle
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
@@ -132,6 +133,7 @@ class URLBarView: UIView {
         let button = InsetButton()
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
+        cancelButton.accessibilityLabel = Strings.ScanQRCodeViewTitle
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
