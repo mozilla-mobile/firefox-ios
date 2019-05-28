@@ -29,15 +29,15 @@ extension UIBarButtonItem {
     }
 
     public convenience init(title: String?, style: UIBarButtonItem.Style, closure: @escaping (UIBarButtonItem) -> ()) {
-        self.init(title: title, style: style, target: nil, action: nil)
+        self.init(title: title, style: style, target: nil, action: #selector(UIBarButtonItem.closureAction))
+        self.target = self
         targetClosure = closure
-        action = #selector(UIBarButtonItem.closureAction)
     }
 
     public convenience init(barButtonSystemItem systemItem: UIBarButtonItem.SystemItem, closure: @escaping (UIBarButtonItem) -> ()) {
-        self.init(barButtonSystemItem: systemItem, target: nil, action: nil)
+        self.init(barButtonSystemItem: systemItem, target: nil, action: #selector(UIBarButtonItem.closureAction))
+        self.target = self
         targetClosure = closure
-        action = #selector(UIBarButtonItem.closureAction)
     }
 
     @objc func closureAction() {

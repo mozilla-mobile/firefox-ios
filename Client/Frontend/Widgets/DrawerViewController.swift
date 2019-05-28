@@ -267,14 +267,10 @@ public class DrawerViewController: UIViewController {
 }
 
 extension DrawerViewController: UIGestureRecognizerDelegate {
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        let description = otherGestureRecognizer.description
-        return !description.starts(with: "<UIScrollViewPanGestureRecognizer:")
-    }
-
-    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        let description = otherGestureRecognizer.description
-        return !description.starts(with: "<_UISwipeActionPanGestureRecognizer:") &&
-            !description.starts(with: "<UIScrollViewPanGestureRecognizer:")
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        // Don't recognize touches for the pan gesture
+        // if they occurred on a `UITableView*` view.
+        let description = touch.view?.description ?? ""
+        return !description.starts(with: "<UITableView") && !description.starts(with: "<UITextField")
     }
 }

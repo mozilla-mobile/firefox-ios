@@ -54,9 +54,13 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         self.closeButton.setTitle(closeButtonTitle, for: .normal)
     }
 
-    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = Strings.CloseButtonTitle, style presentationStyle: UIModalPresentationStyle) {
+    init(title: String? = nil, actions: [[PhotonActionSheetItem]], closeButtonTitle: String = Strings.CloseButtonTitle, style presentationStyle: UIModalPresentationStyle? = nil) {
         self.actions = actions
-        self.style = presentationStyle == .popover ? .popover : .bottom
+        if let presentationStyle = presentationStyle {
+            self.style = presentationStyle == .popover ? .popover : .bottom
+        } else {
+            self.style = .centered
+        }
         super.init(nibName: nil, bundle: nil)
         self.title = title
         self.closeButton.setTitle(closeButtonTitle, for: .normal)
