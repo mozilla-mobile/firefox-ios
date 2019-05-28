@@ -501,8 +501,9 @@ open class Sync15StorageClient {
         }
 
         op(url) { (data, response, error) in
-            if let failure = self.getFailureInfo(response, error) as? Maybe<StorageResponse<T>> {
-                deferred.fill(failure)
+            if let failure = self.getFailureInfo(response, error) {
+                let result = Maybe<StorageResponse<T>>.failure(failure)
+                deferred.fill(result)
                 return
             }
 
@@ -537,8 +538,9 @@ open class Sync15StorageClient {
         }
 
         requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince) { (data, response, error) in
-            if let failure = self.getFailureInfo(response, error) as? Maybe<StorageResponse<T>> {
-                deferred.fill(failure)
+            if let failure = self.getFailureInfo(response, error) {
+                let result = Maybe<StorageResponse<T>>.failure(failure)
+                deferred.fill(result)
                 return
             }
 
@@ -725,6 +727,12 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         }
 
         client.requestGET(uriForRecord(guid)) { (data, response, error) in
+            if let failure = self.client.getFailureInfo(response, error) {
+                let result = Maybe<StorageResponse<Record<T>>>.failure(failure)
+                deferred.fill(result)
+                return
+            }
+
             do {
                 let json = try jsonResponse(fromData: data)
                 let envelope = EnvelopeJSON(json)
@@ -783,6 +791,12 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
 
         log.debug("Issuing GET with newer = \(since), offset = \(offset ??? "nil"), sort = \(sort ??? "nil").")
         client.requestGET(self.collectionURI.withQueryParams(params)) { (data, response, error) in
+            if let failure = self.client.getFailureInfo(response, error) {
+                let result = Maybe<StorageResponse<[Record<T>]>>.failure(failure)
+                deferred.fill(result)
+                return
+            }
+
             do {
                 log.verbose("Response is \(response?.debugDescription ?? "").")
                 let json = try jsonResponse(fromData: data)
