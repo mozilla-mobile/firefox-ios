@@ -98,7 +98,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return deferred
     }
 
-    lazy fileprivate var urlSession: URLSession = makeUrlSession(userAgent: FaviconFetcher.userAgent, isEphemeral: false, timeout: 5)
+    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: FaviconFetcher.userAgent, configuration: URLSessionConfiguration.default, timeout: 5)
 
     fileprivate func fetchDataForURL(_ url: URL) -> Deferred<Maybe<Data>> {
         let deferred = Deferred<Maybe<Data>>()

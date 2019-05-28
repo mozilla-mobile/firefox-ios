@@ -387,7 +387,7 @@ open class FxAClient10 {
         return FxAProfileResponse(email: email, uid: uid, avatarURL: avatarURL, displayName: displayName)
     }
 
-    lazy fileprivate var urlSession: URLSession = makeUrlSession(userAgent: UserAgent.fxaUserAgent, isEphemeral: true)
+    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral)
 
     open func login(_ emailUTF8: Data, quickStretchedPW: Data, getKeys: Bool) -> Deferred<Maybe<FxALoginResponse>> {
         let authPW = (quickStretchedPW as NSData).deriveHKDFSHA256Key(withSalt: Data(), contextInfo: FxAClient10.KW("authPW"), length: 32) as NSData

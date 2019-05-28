@@ -54,7 +54,7 @@ class Pocket {
         self.pocketGlobalFeed = endPoint
     }
 
-    lazy fileprivate var urlSession = makeUrlSession(userAgent: UserAgent.defaultClientUserAgent, isEphemeral: false)
+    lazy fileprivate var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private func findCachedResponse(for request: URLRequest) -> [String: Any]? {
         let cachedResponse = URLCache.shared.cachedResponse(for: request)

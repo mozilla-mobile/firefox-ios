@@ -16,7 +16,7 @@ private let log = Logger.syncLogger
 
 // Set up for downloading web content for parsing.
 // NOTE: We use the desktop UA to try and get hi-res icons.
-private var urlSession: URLSession = makeUrlSession(userAgent: UserAgent.desktopUserAgent(), isEphemeral: false, timeout: 5)
+private var urlSession: URLSession = makeURLSession(userAgent: UserAgent.desktopUserAgent(), configuration: URLSessionConfiguration.default, timeout: 5)
 
 // If all else fails, this is the default "default" icon.
 private var defaultFavicon: UIImage = {

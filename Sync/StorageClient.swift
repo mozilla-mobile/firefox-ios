@@ -414,7 +414,7 @@ open class Sync15StorageClient {
         return nil
     }
 
-    lazy fileprivate var urlSession: URLSession = makeUrlSession(userAgent: UserAgent.syncUserAgent, isEphemeral: true)
+    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: UserAgent.syncUserAgent, configuration: URLSessionConfiguration.ephemeral)
 
     typealias URLSessionCompletion = (Data?, URLResponse?, Error?) -> Void
 

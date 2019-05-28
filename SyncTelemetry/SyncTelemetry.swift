@@ -77,7 +77,7 @@ open class SyncTelemetry {
         request.addValue(Date().toRFC822String(), forHTTPHeaderField: "Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        makeUrlSession(userAgent: UserAgent.fxaUserAgent, isEphemeral: true).dataTask(with: request) { (_, response, error) in
+        makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral).dataTask(with: request) { (_, response, error) in
             let code = (response as? HTTPURLResponse)?.statusCode
             log.debug("Ping response: \(code ?? -1).")
         }

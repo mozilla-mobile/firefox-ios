@@ -2121,7 +2121,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     application.endBackgroundTask(taskId)
                 })
 
-                makeUrlSession(userAgent: UserAgent.fxaUserAgent, isEphemeral: false).dataTask(with: url) { (data, response, error) in
+                makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
                     guard let _ = validatedHTTPResponse(response, statusCode: 200..<300) else {
                         application.endBackgroundTask(taskId)
                         return
@@ -2172,7 +2172,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
-        makeUrlSession(userAgent: UserAgent.fxaUserAgent, isEphemeral: false).dataTask(with: url) { (data, response, error) in
+        makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
             if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
                 success(data)
             }

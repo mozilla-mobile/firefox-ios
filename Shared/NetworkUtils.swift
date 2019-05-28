@@ -6,8 +6,7 @@ import Foundation
 import Network
 import SwiftyJSON
 
-public func makeUrlSession(userAgent: String, isEphemeral: Bool, timeout: TimeInterval? = nil) -> URLSession {
-    let configuration = isEphemeral ? URLSessionConfiguration.ephemeral : URLSessionConfiguration.default
+public func makeURLSession(userAgent: String, configuration: URLSessionConfiguration, timeout: TimeInterval? = nil) -> URLSession {
     configuration.httpAdditionalHeaders = ["User-Agent": userAgent]
     if let t = timeout {
         configuration.timeoutIntervalForRequest = t
