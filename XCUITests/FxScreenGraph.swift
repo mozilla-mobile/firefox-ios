@@ -210,6 +210,7 @@ class Action {
     static let CloseBookmarkPanel = "CloseBookmarkPanel"
     static let CloseReadingListPanel = "CloseReadingListPanel"
     static let CloseHistoryListPanel = "CloseHistoryListPanel"
+    static let CloseDownloadsPanel = "CloseDownloadsPanel"
 }
 
 @objcMembers
@@ -530,7 +531,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(LibraryPanel_Downloads) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
+        let downloadsElement = app.navigationBars["Downloads"]
+        screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
+            if isTablet {
+                app.buttons["TabToolbar.libraryButton"].tap()
+            } else {
+                downloadsElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Downloads"])
+            }
+        }
     }
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
