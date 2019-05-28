@@ -245,6 +245,12 @@ class TabLocationView: UIView {
         }
     }
 
+    func overrideAccessibility(enabled: Bool) {
+        [lockImageView, urlTextField, readerModeButton, pageOptionsButton].forEach {
+            $0.isAccessibilityElement = enabled
+        }
+    }
+
     @objc func tapReaderModeButton() {
         delegate?.tabLocationViewDidTapReaderMode(self)
     }
