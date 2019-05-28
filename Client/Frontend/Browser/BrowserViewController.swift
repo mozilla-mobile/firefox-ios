@@ -38,6 +38,7 @@ private struct BrowserViewControllerUX {
 class BrowserViewController: UIViewController {
     var firefoxHomeViewController: FirefoxHomeViewController?
     var libraryViewController: LibraryViewController?
+    var libraryDrawerViewController: DrawerViewController?
     var webViewContainer: UIView!
     var urlBar: URLBarView!
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
@@ -194,6 +195,17 @@ class BrowserViewController: UIViewController {
         }
     }
 
+    fileprivate func constraintsForLibraryDrawerView(_ make: SnapKit.ConstraintMaker) {
+        guard libraryDrawerViewController?.view.superview != nil else { return }
+        if self.topTabsVisible {
+            make.top.equalTo(webViewContainer)
+        } else {
+            make.top.equalTo(view)
+        }
+
+        make.right.bottom.left.equalToSuperview()
+    }
+
     fileprivate func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
@@ -251,6 +263,8 @@ class BrowserViewController: UIViewController {
             navigationToolbar.updateForwardStatus(webView.canGoForward)
             navigationToolbar.updateReloadStatus(tab.loading)
         }
+
+        libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
     }
 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -739,18 +753,18 @@ class BrowserViewController: UIViewController {
 
         let libraryViewController = self.libraryViewController ?? LibraryViewController(profile: profile)
         libraryViewController.delegate = self
-
         self.libraryViewController = libraryViewController
 
         if panel != nil {
             libraryViewController.selectedPanel = panel
         }
 
-        // Wait to present VC in an async dispatch queue to prevent a case where dismissal
-        // of this popover on iPad seems to block the presentation of the modal VC.
-        DispatchQueue.main.async {
-            self.present(libraryViewController, animated: true, completion: nil)
-        }
+        let libraryDrawerViewController = self.libraryDrawerViewController ?? DrawerViewController(childViewController: libraryViewController)
+        self.libraryDrawerViewController = libraryDrawerViewController
+
+        addChild(libraryDrawerViewController)
+        view.addSubview(libraryDrawerViewController.view)
+        libraryDrawerViewController.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
     }
 
     fileprivate func createSearchControllerIfNeeded() {
@@ -1139,9 +1153,6 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
-
-        // Remember whether or not a desktop site was requested
-        tab.desktopSite = webView.customUserAgent?.isEmpty == false
     }
 }
 
@@ -2266,11 +2277,7 @@ extension BrowserViewController {
         let inputAssistant = webContentView.inputAssistantItem
         let item = UIBarButtonItem(customView: customSearchEngineButton)
         customSearchBarButton = item
-        _ = Try(withTry: {
-            inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
-        }) { (exception) in
-            Sentry.shared.send(message: "Failed adding custom search button to input assistant", tag: .general, severity: .error, description: "\(exception ??? "nil")")
-        }
+        inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
     }
 
     @objc func addCustomSearchEngineForFocusedElement() {
@@ -2303,7 +2310,7 @@ extension BrowserViewController {
         let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
             self.customSearchEngineButton.tintColor = UIColor.Photon.Grey50
             self.customSearchEngineButton.isUserInteractionEnabled = false
-            SDWebImageManager.shared().loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+            SDWebImageManager.shared.loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
                 guard let image = image else {
                     let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
                     self.present(alert, animated: true, completion: nil)

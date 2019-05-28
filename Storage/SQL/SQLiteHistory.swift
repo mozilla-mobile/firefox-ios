@@ -24,7 +24,7 @@ private var ignoredSchemes = ["about"]
 public func isIgnoredURL(_ url: URL) -> Bool {
     guard let scheme = url.scheme else { return false }
 
-    if let _ = ignoredSchemes.index(of: scheme) {
+    if let _ = ignoredSchemes.firstIndex(of: scheme) {
         return true
     }
 

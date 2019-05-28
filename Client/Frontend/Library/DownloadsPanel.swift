@@ -90,10 +90,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
-            self.dismiss(animated: true, completion: nil)
-        }
     }
 
     deinit {
@@ -352,7 +348,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         return groupedDownloadedFiles.numberOfItemsForSection(section)
     }
 
-    private func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // Intentionally blank. Required to use UITableViewRowActions
     }
 

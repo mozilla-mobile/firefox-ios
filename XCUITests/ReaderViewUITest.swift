@@ -35,15 +35,19 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReadingList() {
-        // Initially reading list is empty
+        // Navigate to reading list
+        navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
+        
+        // Check that ReadingList and Bookmarks button is enabled
+        XCTAssertFalse(app.buttons["LibraryPanels.Bookmarks"].isSelected)
+        XCTAssertTrue(app.buttons["LibraryPanels.ReadingList"].isSelected)
 
-        // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
-        XCTAssertFalse(app.buttons["LibraryPanels.ReadingList"].isEnabled)
-        XCTAssertTrue(app.buttons["LibraryPanels.Bookmarks"].isEnabled)
-
+        // Check to make sure the reading list is empty
         checkReadingListNumberOfItems(items: 0)
-
+        app.buttons["Done"].tap()
+        navigator.nowAt(HomePanelsScreen)
+        
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -59,14 +63,15 @@ class ReaderViewTest: BaseTestCase {
 
     func testAddToReadingListPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        // Initially reading list is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
-
-        // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
-        XCTAssertFalse(app.buttons["LibraryPanels.ReadingList"].isEnabled)
-        XCTAssertTrue(app.buttons["LibraryPanels.Bookmarks"].isEnabled)
+        
+        // Check that ReadingList and Bookmarks button is enabled
+        XCTAssertFalse(app.buttons["LibraryPanels.Bookmarks"].isSelected)
+        XCTAssertTrue(app.buttons["LibraryPanels.ReadingList"].isSelected)
+        
+        // Initially reading list is empty
         checkReadingListNumberOfItems(items: 0)
 
         // Add item to reading list and check that it appears

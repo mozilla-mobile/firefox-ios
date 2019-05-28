@@ -91,10 +91,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Bookmarks List"
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
-            self.dismiss(animated: true, completion: nil)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

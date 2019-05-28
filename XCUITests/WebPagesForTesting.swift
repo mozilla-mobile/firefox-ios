@@ -18,7 +18,7 @@ func registerHandlersForTestMethods(server: GCDWebServer) {
     }
 
     ["test-window-opener", "test-password", "test-password-submit", "test-password-2", "test-password-submit-2", "empty-login-form", "empty-login-form-submit", "test-example", "test-example-link", "test-mozilla-book", "test-mozilla-org",
-        "manifesto-en", "manifesto-es", "manifesto-zh-CN", "manifesto-ar"].forEach {
+        "manifesto-en", "manifesto-es", "manifesto-zh-CN", "manifesto-ar", "test-user-agent"].forEach {
         addHTMLFixture(name: $0, server: server)
     }
 }

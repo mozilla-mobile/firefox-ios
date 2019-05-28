@@ -51,6 +51,8 @@ struct UXSizeClasses {
                 return self.regular
             case .unspecified:
                 return self.unspecified
+            @unknown default:
+                fatalError()
         }
 
     }
@@ -62,7 +64,7 @@ protocol HomePanelDelegate: AnyObject {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType)
 }
 
-protocol HomePanel: AnyObject, Themeable {
+protocol HomePanel: Themeable {
     var homePanelDelegate: HomePanelDelegate? { get set }
 }
 
@@ -670,7 +672,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
     func defaultTopSites() -> [Site] {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
-        return suggested.filter({deleted.index(of: $0.url) == .none})
+        return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {

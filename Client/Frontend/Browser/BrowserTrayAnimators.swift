@@ -25,7 +25,7 @@ private extension TrayToBrowserAnimator {
 
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard let expandFromIndex = displayedTabs.index(of: selectedTab) else { return }
+        guard let expandFromIndex = displayedTabs.firstIndex(of: selectedTab) else { return }
 
         //Disable toolbar until animation completes
         tabTray.toolbar.isUserInteractionEnabled = false
@@ -123,7 +123,7 @@ private extension BrowserToTrayAnimator {
 
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard let scrollToIndex = displayedTabs.index(of: selectedTab) else { return }
+        guard let scrollToIndex = displayedTabs.firstIndex(of: selectedTab) else { return }
 
         //Disable toolbar until animation completes
         tabTray.toolbar.isUserInteractionEnabled = false

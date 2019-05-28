@@ -121,10 +121,6 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         updateSyncedDevicesCount().uponQueue(.main) { result in
             self.updateNumberOfSyncedDevices(self.currentSyncedDevicesCount)
         }
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
-            self.dismiss(animated: true, completion: nil)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

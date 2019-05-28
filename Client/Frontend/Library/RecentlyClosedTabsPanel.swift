@@ -46,10 +46,6 @@ class RecentlyClosedTabsPanel: UIViewController, LibraryPanel {
         tableViewController.view.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
-            self.dismiss(animated: true, completion: nil)
-        }
     }
 }
 
@@ -67,10 +63,6 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "Recently Closed Tabs List"
         self.recentlyClosedTabs = profile.recentlyClosedTabs.tabs
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
-            self.dismiss(animated: true, completion: nil)
-        }
     }
 
     @objc fileprivate func longPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
