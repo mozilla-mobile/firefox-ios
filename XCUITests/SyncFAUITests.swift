@@ -87,7 +87,7 @@ class SyncUITests: BaseTestCase {
 
     func testCreateAnAccountLink() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.links["Create an account"])
+        waitForExistence(app.webViews.links["Create an account"].firstMatch)
         navigator.goto(FxCreateAccount)
         waitForExistence(app.webViews.buttons["Create account"])
     }
