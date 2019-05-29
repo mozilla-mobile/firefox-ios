@@ -263,7 +263,7 @@ extension SQLiteHistory: Favicons {
             }
 
             deferred.fill(Maybe(success: faviconURL))
-        }.resume()
+        }
 
         return deferred
     }
