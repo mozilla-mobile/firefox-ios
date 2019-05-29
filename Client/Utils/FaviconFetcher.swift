@@ -4,6 +4,7 @@
 
 import Storage
 import Shared
+import Alamofire
 import XCGLogger
 import SDWebImage
 import Fuzi
@@ -98,20 +99,30 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return deferred
     }
 
-    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: FaviconFetcher.userAgent, configuration: URLSessionConfiguration.default, timeout: 5)
+    lazy fileprivate var alamofire: SessionManager = {
+        let configuration = URLSessionConfiguration.default
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = FaviconFetcher.userAgent
+        configuration.httpAdditionalHeaders = defaultHeaders
+        configuration.timeoutIntervalForRequest = 5
+        return SessionManager(configuration: configuration)
+    }()
 
     fileprivate func fetchDataForURL(_ url: URL) -> Deferred<Maybe<Data>> {
         let deferred = Deferred<Maybe<Data>>()
-        urlSession.dataTask(with: url) { (data, _, error) in
-            if let data = data {
-                deferred.fill(Maybe(success: data))
-                return
+        alamofire.request(url).response { response in
+            // Don't cancel requests just because our Manager is deallocated.
+            withExtendedLifetime(self.alamofire) {
+                if response.error == nil {
+                    if let data = response.data {
+                        deferred.fill(Maybe(success: data))
+                        return
+                    }
+                }
+                let errorDescription = (response.error as NSError?)?.description ?? "No content."
+                deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription)))
             }
-
-            let errorDescription = (error as NSError?)?.description ?? "No content."
-            deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription)))
-        }.resume()
-
+        }
         return deferred
     }
 

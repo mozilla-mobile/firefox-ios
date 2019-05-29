@@ -2,9 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Alamofire
 import Foundation
 import Shared
-import SwiftyJSON
 
 let SearchSuggestClientErrorDomain = "org.mozilla.firefox.SearchSuggestClient"
 let SearchSuggestClientErrorInvalidEngine = 0
@@ -18,10 +18,16 @@ let SearchSuggestClientErrorInvalidResponse = 1
  */
 class SearchSuggestClient {
     fileprivate let searchEngine: OpenSearchEngine
+    fileprivate weak var request: Request?
     fileprivate let userAgent: String
-    fileprivate var task: URLSessionTask?
 
-    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: self.userAgent, configuration: URLSessionConfiguration.ephemeral)
+    lazy fileprivate var alamofire: SessionManager = {
+        let configuration = URLSessionConfiguration.ephemeral
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = self.userAgent
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
+    }()
 
     init(searchEngine: OpenSearchEngine, userAgent: String) {
         self.searchEngine = searchEngine
@@ -36,43 +42,37 @@ class SearchSuggestClient {
             return
         }
 
-        task = urlSession.dataTask(with: url!) { (data, response, error) in
-            if let error = error {
-                callback(nil, error as NSError?)
-                return
-            }
+        request = alamofire.request(url!)
+            .validate(statusCode: 200..<300)
+            .responseJSON { response in
+                if let error = response.result.error {
+                    callback(nil, error as NSError?)
+                    return
+                }
 
-            guard let data = data, let _ = validatedHTTPResponse(response, statusCode: 200..<300) else {
-                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                callback(nil, error as NSError?)
-                return
-            }
+                // The response will be of the following format:
+                //    ["foobar",["foobar","foobar2000 mac","foobar skins",...]]
+                // That is, an array of at least two elements: the search term and an array of suggestions.
+                let array = response.result.value as? NSArray
+                if array?.count ?? 0 < 2 {
+                    let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
+                    callback(nil, error)
+                    return
+                }
 
-            let json = JSON(data)
-            let array = json.arrayObject
+                let suggestions = array?[1] as? [String]
+                if suggestions == nil {
+                    let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
+                    callback(nil, error)
+                    return
+                }
 
-            // The response will be of the following format:
-            //    ["foobar",["foobar","foobar2000 mac","foobar skins",...]]
-            // That is, an array of at least two elements: the search term and an array of suggestions.
-
-            if array?.count ?? 0 < 2 {
-                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                callback(nil, error)
-                return
-            }
-
-            guard let suggestions = array?[1] as? [String] else {
-                let error = NSError(domain: SearchSuggestClientErrorDomain, code: SearchSuggestClientErrorInvalidResponse, userInfo: nil)
-                callback(nil, error)
-                return
-            }
-
-            callback(suggestions, nil)
+                callback(suggestions!, nil)
         }
-        task?.resume()
+
     }
 
     func cancelPendingRequest() {
-        task?.cancel()
+        request?.cancel()
     }
 }

@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Alamofire
 import Fuzi
 import SDWebImage
 import SwiftyJSON
@@ -14,9 +15,20 @@ public let DefaultFaviconBackgroundColors = ["2e761a", "399320", "40a624", "57bd
 
 private let log = Logger.syncLogger
 
-// Set up for downloading web content for parsing.
+// Set up Alamofire for downloading web content for parsing.
 // NOTE: We use the desktop UA to try and get hi-res icons.
-private var urlSession: URLSession = makeURLSession(userAgent: UserAgent.desktopUserAgent(), configuration: URLSessionConfiguration.default, timeout: 5)
+private var alamofire: SessionManager = {
+    var sessionManager: SessionManager!
+    DispatchQueue.main.sync {
+        let configuration = URLSessionConfiguration.default
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = UserAgent.desktopUserAgent()
+        configuration.httpAdditionalHeaders = defaultHeaders
+        configuration.timeoutIntervalForRequest = 5
+        sessionManager = SessionManager(configuration: configuration)
+    }
+    return sessionManager
+}()
 
 // If all else fails, this is the default "default" icon.
 private var defaultFavicon: UIImage = {
@@ -25,7 +37,7 @@ private var defaultFavicon: UIImage = {
 
 // An in-memory cache of "default" favicons keyed by the
 // first character of a site's domain name.
-private var defaultFaviconImageCache = [String: UIImage]()
+private var defaultFaviconImageCache = [String : UIImage]()
 
 // Some of our top-sites domains exist in various
 // region-specific TLDs. This helps us resolve them.
@@ -306,17 +318,15 @@ extension SQLiteHistory: Favicons {
     fileprivate func getHTMLDocumentFromWebPage(url: URL) -> Deferred<Maybe<HTMLDocument>> {
         let deferred = CancellableDeferred<Maybe<HTMLDocument>>()
 
-        // getHTMLDocumentFromWebPage can be called from getFaviconURLsFromWebPage, and that function is off-main. 
-        DispatchQueue.main.async {
-            urlSession.dataTask(with: url) { (data, response, error) in
-                guard error == nil,
-                    let data = data,
-                    let document = try? HTMLDocument(data: data) else {
-                        deferred.fill(Maybe(failure: FaviconLookupError(siteURL: url.absoluteString)))
-                        return
-                }
-                deferred.fill(Maybe(success: document))
+        alamofire.request(url).response { response in
+            guard response.error == nil,
+                let data = response.data,
+                let document = try? HTMLDocument(data: data) else {
+                deferred.fill(Maybe(failure: FaviconLookupError(siteURL: url.absoluteString)))
+                return
             }
+
+            deferred.fill(Maybe(success: document))
         }
 
         return deferred

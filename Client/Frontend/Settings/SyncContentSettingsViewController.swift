@@ -25,7 +25,7 @@ class ManageSetting: Setting {
         if let account = profile.getAccount() {
             var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
             cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-            if let url = cs?.url {
+            if let url = try? cs?.asURL() {
                 viewController.url = url
             }
         }

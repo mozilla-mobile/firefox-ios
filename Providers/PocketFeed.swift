@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Alamofire
 import Shared
 import Storage
 
@@ -54,7 +55,14 @@ class Pocket {
         self.pocketGlobalFeed = endPoint
     }
 
-    lazy fileprivate var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
+    lazy fileprivate var alamofire: SessionManager = {
+        let ua = UserAgent.defaultClientUserAgent
+        let configuration = URLSessionConfiguration.default
+        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
+        defaultHeaders["User-Agent"] = ua
+        configuration.httpAdditionalHeaders = defaultHeaders
+        return SessionManager(configuration: configuration)
+    }()
 
     private func findCachedResponse(for request: URLRequest) -> [String: Any]? {
         let cachedResponse = URLCache.shared.cachedResponse(for: request)
@@ -93,19 +101,16 @@ class Pocket {
             return deferred
         }
 
-        urlSession.dataTask(with: request) { (data, response, error) in
-            guard let response = validatedHTTPResponse(response, contentType: "application/json"), let data = data else {
+        alamofire.request(request).validate(contentType: ["application/json"]).responseJSON { response in
+            guard response.error == nil, let result = response.result.value as? [String: Any] else {
                 return deferred.fill([])
             }
-
-            self.cache(response: response, for: request, with: data)
-
-            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-            guard let items = json?["recommendations"] as? Array<[String: Any]> else {
+            self.cache(response: response.response, for: request, with: response.data)
+            guard let items = result["recommendations"] as? Array<[String: Any]> else {
                 return deferred.fill([])
             }
             return deferred.fill(PocketStory.parseJSON(list: items))
-        }.resume()
+        }
 
         return deferred
     }
