@@ -1130,7 +1130,14 @@ class BrowserViewController: UIViewController {
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
-        if let webView = tab.webView {
+        if tab === tabManager.selectedTab {
+            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
+            // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
+            // cursor land on the correct initial element, but if not followed by LayoutChanged,
+            // VoiceOver will sometimes be stuck on the element, not allowing user to move
+            // forward/backward. Strange, but LayoutChanged fixes that.
+            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
+        } else if let webView = tab.webView {
             // To Screenshot a tab that is hidden we must add the webView,
             // then wait enough time for the webview to render.
             view.insertSubview(webView, at: 0)
