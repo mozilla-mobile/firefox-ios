@@ -1113,7 +1113,7 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if let url = webView.url {
+        if  tab !== tabManager.selectedTablet, url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
 
