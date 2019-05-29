@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Alamofire
 import Shared
 import Foundation
 import SwiftyJSON
@@ -135,14 +134,7 @@ open class TokenServerClient {
         return nil
     }
 
-    lazy fileprivate var alamofire: SessionManager = {
-        let ua = UserAgent.tokenServerClientUserAgent
-        let configuration = URLSessionConfiguration.ephemeral
-        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = ua
-        configuration.httpAdditionalHeaders = defaultHeaders
-        return SessionManager(configuration: configuration)
-    }()
+    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral)
 
     open func token(_ assertion: String, clientState: String? = nil) -> Deferred<Maybe<TokenServerToken>> {
         let deferred = Deferred<Maybe<TokenServerToken>>()
@@ -153,36 +145,35 @@ open class TokenServerClient {
             mutableURLRequest.setValue(clientState, forHTTPHeaderField: "X-Client-State")
         }
 
-        alamofire.request(mutableURLRequest)
-                 .validate(contentType: ["application/json"])
-                 .responseJSON { response in
+        urlSession.dataTask(with: mutableURLRequest) { (data, response, error) in
+            guard let response = validatedHTTPResponse(response, contentType: "application/json") else {
+                deferred.fill(Maybe(failure: TokenServerClientUnknownError))
+                return
+            }
 
-                    // Don't cancel requests just because our Manager is deallocated.
-                    withExtendedLifetime(self.alamofire) {
-                        if let error = response.result.error {
-                            deferred.fill(Maybe(failure: TokenServerError.local(error as NSError)))
-                            return
-                        }
+            if let error = error {
+                deferred.fill(Maybe(failure: TokenServerError.local(error as NSError)))
+                return
+            }
 
-                        if let data = response.result.value as AnyObject? { // Declaring the type quiets a Swift warning about inferring AnyObject.
-                            let json = JSON(data)
-                            let remoteTimestampHeader = response.response?.allHeaderFields["X-Timestamp"] as? String
+            guard let data = data, !data.isEmpty else {
+                deferred.fill(Maybe(failure: TokenServerClientUnknownError))
+                return
+            }
 
-                            if let remoteError = TokenServerClient.remoteError(fromJSON: json, statusCode: response.response!.statusCode,
-                                remoteTimestampHeader: remoteTimestampHeader) {
-                                    deferred.fill(Maybe(failure: remoteError))
-                                    return
-                            }
+            let json = JSON(data)
+            let remoteTimestampHeader = response.allHeaderFields["X-Timestamp"] as? String
+            if let remoteError = TokenServerClient.remoteError(fromJSON: json, statusCode: response.statusCode, remoteTimestampHeader: remoteTimestampHeader) {
+                deferred.fill(Maybe(failure: remoteError))
+                return
+            }
 
-                            if let token = TokenServerClient.token(fromJSON: json, remoteTimestampHeader: remoteTimestampHeader) {
-                                deferred.fill(Maybe(success: token))
-                                return
-                            }
-                        }
-
-                        deferred.fill(Maybe(failure: TokenServerClientUnknownError))
-                    }
-        }
+            if let token = TokenServerClient.token(fromJSON: json, remoteTimestampHeader: remoteTimestampHeader) {
+                deferred.fill(Maybe(success: token))
+                return
+            }
+            deferred.fill(Maybe(failure: TokenServerClientUnknownError))
+        }.resume()
         return deferred
     }
 }

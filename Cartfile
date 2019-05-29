@@ -1,5 +1,4 @@
 github "getsentry/sentry-cocoa"             ~> 4.2
-github "Alamofire/Alamofire"                ~> 4.8
 github "SnapKit/SnapKit"                    ~> 5.0
 github "SDWebImage/SDWebImage"              ~> 5.0
 github "swisspol/GCDWebServer"              ~> 3.3

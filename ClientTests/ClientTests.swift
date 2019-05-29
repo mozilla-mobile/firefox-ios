@@ -8,7 +8,6 @@ import XCTest
 import Shared
 import Storage
 import WebKit
-import Alamofire
 @testable import Client
 
 class ClientTests: XCTestCase {
@@ -57,17 +56,4 @@ class ClientTests: XCTestCase {
 
         XCTAssertTrue(compare(UserAgent.desktopUserAgent()), "Desktop user agent computes correctly.")
     }
-
-    fileprivate func hostIsValid(_ host: String) -> Bool {
-        let expectation = self.expectation(description: "Validate host for \(host)")
-        let request = URLRequest(url: URL(string: "http://\(host):\(AppInfo.webserverPort)/about/license")!)
-        var response: HTTPURLResponse?
-        Alamofire.request(request).authenticate(usingCredential: WebServer.sharedInstance.credentials).response { (res) -> Void in
-            response = res.response
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 100, handler: nil)
-        return response?.statusCode == 200
-    }
-
 }

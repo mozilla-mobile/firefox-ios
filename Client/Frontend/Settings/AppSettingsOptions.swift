@@ -384,13 +384,13 @@ class AccountStatusSetting: WithAccountSetting {
             case .needsVerification:
                 var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                if let url = try? cs?.asURL() {
+                if let url = cs?.url {
                     viewController.url = url
                 }
             case .needsPassword:
                 var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
                 cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                if let url = try? cs?.asURL() {
+                if let url = cs?.url {
                     viewController.url = url
                 }
             case .needsUpgrade:

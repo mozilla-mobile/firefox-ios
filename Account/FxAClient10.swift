@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Alamofire
 import Shared
 import Foundation
 import FxA
@@ -388,14 +387,7 @@ open class FxAClient10 {
         return FxAProfileResponse(email: email, uid: uid, avatarURL: avatarURL, displayName: displayName)
     }
 
-    lazy fileprivate var alamofire: SessionManager = {
-        let ua = UserAgent.fxaUserAgent
-        let configuration = URLSessionConfiguration.ephemeral
-        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = ua
-        configuration.httpAdditionalHeaders = defaultHeaders
-        return SessionManager(configuration: configuration)
-    }()
+    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral)
 
     open func login(_ emailUTF8: Data, quickStretchedPW: Data, getKeys: Bool) -> Deferred<Maybe<FxALoginResponse>> {
         let authPW = (quickStretchedPW as NSData).deriveHKDFSHA256Key(withSalt: Data(), contextInfo: FxAClient10.KW("authPW"), length: 32) as NSData
@@ -659,32 +651,35 @@ open class FxAClient10 {
 
     fileprivate func makeRequest<T>(_ request: URLRequest, responseHandler: @escaping (JSON) -> T?) -> Deferred<Maybe<T>> {
         let deferred = Deferred<Maybe<T>>()
+        urlSession.dataTask(with: request) { (data, response, error) in
+            guard let response = validatedHTTPResponse(response, contentType: "application/json") else {
+                deferred.fill(Maybe(failure: FxAClientError.local(FxAClientUnknownError)))
+                return
+            }
 
-        alamofire.request(request)
-            .validate(contentType: ["application/json"])
-            .responseJSON { response in
-                withExtendedLifetime(self.alamofire) {
-                    if let error = response.result.error {
-                        deferred.fill(Maybe(failure: FxAClientError.local(error as NSError)))
-                        return
-                    }
+            if let error = error {
+                deferred.fill(Maybe(failure: FxAClientError.local(error as NSError)))
+                return
+            }
 
-                    if let data = response.result.value {
-                        let json = JSON(data)
-                        if let remoteError = FxAClient10.remoteError(fromJSON: json, statusCode: response.response!.statusCode) {
-                            deferred.fill(Maybe(failure: FxAClientError.remote(remoteError)))
-                            return
-                        }
+            guard let data = data, !data.isEmpty else {
+                deferred.fill(Maybe(failure: FxAClientError.local(FxAClientUnknownError)))
+                return
+            }
 
-                        if let response = responseHandler(json) {
-                            deferred.fill(Maybe(success: response))
-                            return
-                        }
-                    }
+            let json = JSON(data)
+            if let remoteError = FxAClient10.remoteError(fromJSON: json, statusCode: response.statusCode) {
+                deferred.fill(Maybe(failure: FxAClientError.remote(remoteError)))
+                return
+            }
 
-                    deferred.fill(Maybe(failure: FxAClientError.local(FxAClientUnknownError)))
-                }
-        }
+            if let jsonResponse = responseHandler(json) {
+                deferred.fill(Maybe(success: jsonResponse))
+                return
+            }
+
+            deferred.fill(Maybe(failure: FxAClientError.local(FxAClientUnknownError)))
+        }.resume()
 
         return deferred
     }

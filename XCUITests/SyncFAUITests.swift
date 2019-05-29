@@ -170,15 +170,14 @@ class SyncUITests: BaseTestCase {
     }
 
     private func deleteInbox() {
-    // First Delete the inbox
-    let restUrl = URL(string: deleteEndPoint)
-    var request = URLRequest(url: restUrl!)
-    request.httpMethod = "DELETE"
+        // First Delete the inbox
+        let restUrl = URL(string: deleteEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.httpMethod = "DELETE"
 
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        print("Delete")
-    }
-    task.resume()
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            print("Delete")
+        }.resume()
     }
 
     private func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
@@ -199,14 +198,13 @@ class SyncUITests: BaseTestCase {
 
         request.httpBody = jsonData
         print("json \(jsonData!)")
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("error:", error)
                 return
             }
             done()
-        }
-        task.resume()
+        }.resume()
     }
 
     private func verifyAccount(done: @escaping () -> ()) {
@@ -215,7 +213,7 @@ class SyncUITests: BaseTestCase {
         var request = URLRequest(url: restUrl!)
         request.httpMethod = "GET"
 
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if(error != nil) {
                 print("Error: \(error ?? "Get Error" as! Error)")
             }
@@ -239,7 +237,6 @@ class SyncUITests: BaseTestCase {
             self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
                 done()
             }
-        }
-        task.resume()
+        }.resume()
     }
 }
