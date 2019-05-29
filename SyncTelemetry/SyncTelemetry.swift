@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Alamofire
 import Foundation
 import XCGLogger
 import SwiftyJSON
@@ -78,8 +77,9 @@ open class SyncTelemetry {
         request.addValue(Date().toRFC822String(), forHTTPHeaderField: "Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        SessionManager.default.request(request).response { response in
-            log.debug("Ping response: \(response.response?.statusCode ?? -1).")
+        makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral).dataTask(with: request) { (_, response, error) in
+            let code = (response as? HTTPURLResponse)?.statusCode
+            log.debug("Ping response: \(code ?? -1).")
         }
     }
 

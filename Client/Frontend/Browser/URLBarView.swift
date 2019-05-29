@@ -123,6 +123,7 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
+        cancelButton.accessibilityLabel = Strings.BackTitle
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
@@ -132,6 +133,7 @@ class URLBarView: UIView {
         let button = InsetButton()
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
+        cancelButton.accessibilityLabel = Strings.ScanQRCodeViewTitle
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
@@ -141,6 +143,9 @@ class URLBarView: UIView {
 
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
+        // This button interferes with accessibility of the URL bar as it partially overlays it, and keeps getting the VoiceOver focus instead of the URL bar.
+        // @TODO: figure out if there is an iOS standard way to do this that works with accessibility.
+        button.isAccessibilityElement = false
         button.addTarget(self, action: #selector(tappedScrollToTopArea), for: .touchUpInside)
         return button
     }()
@@ -503,6 +508,9 @@ class URLBarView: UIView {
     }
 
     func updateViewsForOverlayModeAndToolbarChanges() {
+        // This ensures these can't be selected as an accessibility element when in the overlay mode.
+        locationView.overrideAccessibility(enabled: !inOverlayMode)
+
         cancelButton.isHidden = !inOverlayMode
         showQRScannerButton.isHidden = !inOverlayMode
         progressBar.isHidden = inOverlayMode
@@ -790,24 +798,29 @@ class ToolbarTextField: AutocompleteTextField {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        // Since we're unable to change the tint color of the clear image, we need to iterate through the
-        // subviews, find the clear button, and tint it ourselves. Thanks to Mikael Hellman for the tip:
-        // http://stackoverflow.com/questions/27944781/how-to-change-the-tint-color-of-the-clear-button-on-a-uitextfield
-       for case let button as UIButton in subviews {
-            if let image = UIImage.templateImageNamed("topTabs-closeTabs") {
-                if tintedClearImage == nil {
-                    if let clearButtonTintColor = clearButtonTintColor {
-                        tintedClearImage = image.tinted(withColor: clearButtonTintColor)
-                    } else {
-                        tintedClearImage = image
-                    }
-                }
-
-                if button.imageView?.image != tintedClearImage {
-                    button.setImage(tintedClearImage, for: [])
-                }
+        guard let image = UIImage.templateImageNamed("topTabs-closeTabs") else { return }
+        if tintedClearImage == nil {
+            if let clearButtonTintColor = clearButtonTintColor {
+                tintedClearImage = image.tinted(withColor: clearButtonTintColor)
+            } else {
+                tintedClearImage = image
             }
         }
+        // Since we're unable to change the tint color of the clear image, we need to iterate through the
+        // subviews, find the clear button, and tint it ourselves.
+        // https://stackoverflow.com/questions/55046917/clear-button-on-text-field-not-accessible-with-voice-over-swift
+        if let clearButton = value(forKey: "_clearButton") as? UIButton {
+            clearButton.setImage(tintedClearImage, for: [])
+
+        }
+    }
+
+    // The default button size is 19x19, make this larger
+    override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
+        let r = super.clearButtonRect(forBounds: bounds)
+        let grow: CGFloat = 16
+        let r2 = CGRect(x: r.minX - grow/2, y:r.minY - grow/2, width: r.width + grow, height: r.height + grow)
+        return r2
     }
 }
 

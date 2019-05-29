@@ -87,7 +87,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             XCTAssertNotNil(tester()
                 .waitForView(withAccessibilityLabel: clearable.rawValue, value: switchValue, traits: UIAccessibilityTraits.none))
         }
-
         BrowserUtils.closeClearPrivateDataDialog()
     }
 
@@ -103,16 +102,12 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForView(withAccessibilityLabel: url2)
 
         BrowserUtils.closeLibraryMenu(tester())
-
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false)
-
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
         tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
         tester().waitForAbsenceOfView(withAccessibilityLabel: url2)
 
-        // Going back to default panel, Bookmarks and closing it
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
@@ -145,7 +140,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             .assert(grey_notNil(), error: &errorOrNil)
 
         // Close History (and so Library) panel
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
         BrowserUtils.closeLibraryMenu(tester())
     }
 

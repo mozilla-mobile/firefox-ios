@@ -10,7 +10,6 @@ import Shared
 import Storage
 import SnapKit
 import XCGLogger
-import Alamofire
 import Account
 import MobileCoreServices
 import SDWebImage
@@ -554,7 +553,7 @@ class BrowserViewController: UIViewController {
 
         if shouldShowWhatsNewTab() {
             // Only display if the SUMO topic has been configured in the Info.plist (present and not empty)
-            if let whatsNewTopic = AppInfo.whatsNewTopic, whatsNewTopic != "" {
+            if let whatsNewTopic = AppInfo.whatsNewTopic, !whatsNewTopic.isEmpty {
                 if let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                     self.openURLInNewTab(whatsNewURL, isPrivileged: false)
                     profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
@@ -2133,16 +2132,22 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     application.endBackgroundTask(taskId)
                 })
 
-                Alamofire.request(url).validate(statusCode: 200..<300).response { response in
+                makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
+                    guard let _ = validatedHTTPResponse(response, statusCode: 200..<300) else {
+                        application.endBackgroundTask(taskId)
+                        return
+                    }
+
                     // Only set the image onto the pasteboard if the pasteboard hasn't changed since
                     // fetching the image; otherwise, in low-bandwidth situations,
                     // we might be overwriting something that the user has subsequently added.
-                    if changeCount == pasteboard.changeCount, let imageData = response.data, response.error == nil {
+                    if changeCount == pasteboard.changeCount, let imageData = data, error == nil {
                         pasteboard.addImageWithData(imageData, forURL: url)
                     }
 
                     application.endBackgroundTask(taskId)
                 }
+
             }
             actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
 
@@ -2178,8 +2183,8 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     }
 
     fileprivate func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
-        Alamofire.request(url).validate(statusCode: 200..<300).response { response in
-            if let data = response.data {
+        makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.default).dataTask(with: url) { (data, response, error) in
+            if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
                 success(data)
             }
         }
@@ -2298,7 +2303,7 @@ extension BrowserViewController {
     }
 
     func addSearchEngine(_ searchQuery: String, favicon: Favicon) {
-        guard searchQuery != "",
+        guard !searchQuery.isEmpty,
             let iconURL = URL(string: favicon.url),
             let url = URL(string: searchQuery.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!),
             let shortName = url.domainURL.host else {
@@ -2477,7 +2482,6 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         }
     }
 }
-
 
 // MARK: - reopen last closed tab
 

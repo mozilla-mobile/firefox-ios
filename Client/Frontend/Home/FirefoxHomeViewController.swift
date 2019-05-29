@@ -121,7 +121,6 @@ extension HomePanelContextMenu {
     }
 }
 
-
 class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     weak var homePanelDelegate: HomePanelDelegate?
     fileprivate let profile: Profile

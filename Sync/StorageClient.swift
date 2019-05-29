@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Alamofire
 import Shared
 import Account
 import XCGLogger
@@ -362,105 +361,84 @@ open class Sync15StorageClient {
         }
     }
 
-    func errorWrap<T, U>(_ deferred: Deferred<Maybe<T>>, handler: @escaping (DataResponse<U>) -> Void) -> (DataResponse<U>) -> Void {
-        return { response in
-            log.verbose("Response is \(response.response ??? "nil").")
-
-            /**
-             * Returns true if handled.
-             */
-            func failFromResponse(_ HTTPResponse: HTTPURLResponse?) -> Bool {
-                guard let HTTPResponse = HTTPResponse else {
-                    // TODO: better error.
-                    log.error("No response")
-                    let result = Maybe<T>(failure: RecordParseError())
-                    deferred.fill(result)
-                    return true
-                }
-
-                log.debug("Status code: \(HTTPResponse.statusCode).")
-
-                let storageResponse = StorageResponse(value: HTTPResponse, metadata: ResponseMetadata(response: HTTPResponse))
-
-                self.updateBackoffFromResponse(storageResponse)
-
-                if HTTPResponse.statusCode >= 500 {
-                    log.debug("ServerError.")
-                    let result = Maybe<T>(failure: ServerError(storageResponse))
-                    deferred.fill(result)
-                    return true
-                }
-
-                if HTTPResponse.statusCode == 404 {
-                    log.debug("NotFound<\(T.self)>.")
-                    let result = Maybe<T>(failure: NotFound(storageResponse))
-                    deferred.fill(result)
-                    return true
-                }
-
-                if HTTPResponse.statusCode >= 400 {
-                    log.debug("BadRequestError.")
-                    let result = Maybe<T>(failure: BadRequestError(request: response.request, response: storageResponse))
-                    deferred.fill(result)
-                    return true
-                }
-
-                return false
+    func getFailureInfo(_ response: URLResponse?, _ error: Error?) -> MaybeErrorType? {
+        func failFromResponse(_ httpResponse: HTTPURLResponse?) -> MaybeErrorType? {
+            guard let httpResponse = httpResponse else {
+                // TODO: better error.
+                log.error("No response")
+                return RecordParseError()
             }
 
-            // Check for an error from the request processor.
-            if response.result.isFailure {
-                log.error("Response: \(response.response?.statusCode ?? 0). Got error \(response.result.error ??? "nil").")
+            log.debug("Status code: \(httpResponse.statusCode).")
+            let storageResponse = StorageResponse(value: httpResponse, metadata: ResponseMetadata(response: httpResponse))
+            self.updateBackoffFromResponse(storageResponse)
 
-                // If we got one, we don't want to hit the response nil case above and
-                // return a RecordParseError, because a RequestError is more fitting.
-                if let response = response.response {
-                    if failFromResponse(response) {
-                        log.error("This was a failure response. Filled specific error type.")
-                        return
-                    }
-                }
-
-                log.error("Filling generic RequestError.")
-                deferred.fill(Maybe<T>(failure: RequestError()))
-                return
+            if httpResponse.statusCode >= 500 {
+                log.debug("ServerError.")
+                return ServerError(storageResponse)
             }
 
-            if failFromResponse(response.response) {
-                return
+            if httpResponse.statusCode == 404 {
+                log.debug("NotFound")
+                return NotFound(storageResponse)
             }
 
-            handler(response)
+            if httpResponse.statusCode >= 400 {
+                log.debug("BadRequestError.")
+                let req = URLRequest(url: httpResponse.url!)
+                return BadRequestError(request: req, response: storageResponse)
+            }
+
+            return nil
         }
+
+        let httpResponse = response as? HTTPURLResponse
+        if error != nil {
+            log.error("Response: \(httpResponse?.statusCode ?? 0). Got error \(error ??? "nil").")
+
+            // If we got one, we don't want to hit the response nil case above and
+            // return a RecordParseError, because a RequestError is more fittinghttpResponse
+            if let httpResponse = httpResponse, let result = failFromResponse(httpResponse) {
+                log.error("This was a failure response. Filled specific error type.")
+                return result
+            }
+
+            log.error("Filling generic RequestError.")
+            return RequestError()
+        }
+
+        if let result = failFromResponse(httpResponse) {
+            return result
+        }
+
+        return nil
     }
 
-    lazy fileprivate var alamofire: SessionManager = {
-        let ua = UserAgent.syncUserAgent
-        let configuration = URLSessionConfiguration.ephemeral
-        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = ua
-        configuration.httpAdditionalHeaders = defaultHeaders
-        return SessionManager(configuration: configuration)
-    }()
+    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: UserAgent.syncUserAgent, configuration: URLSessionConfiguration.ephemeral)
 
-    func requestGET(_ url: URL) -> DataRequest {
+    typealias URLSessionCompletion = (Data?, URLResponse?, Error?) -> Void
+
+    func requestGET(_ url: URL, completion: @escaping URLSessionCompletion) {
         var req = URLRequest(url: url as URL)
         req.httpMethod = URLRequest.Method.get.rawValue
         req.setValue("application/json", forHTTPHeaderField: "Accept")
         let authorized: URLRequest = self.authorizer(req)
-        return alamofire.request(authorized)
-                        .validate(contentType: ["application/json"])
+        urlSession.dataTask(with: authorized) { (data, response, error) in
+            completion(data, response, error)
+        }.resume()
     }
 
-    func requestDELETE(_ url: URL) -> DataRequest {
+    func requestDELETE(_ url: URL, completion: @escaping URLSessionCompletion) {
         var req = URLRequest(url: url as URL)
         req.httpMethod = URLRequest.Method.delete.rawValue
         req.setValue("1", forHTTPHeaderField: "X-Confirm-Delete")
         let authorized: URLRequest = self.authorizer(req)
-        return alamofire.request(authorized)
+        urlSession.dataTask(with: authorized) { (data, response, error) in
+            completion(data, response, error)
+        }.resume()
     }
 
-    func requestWrite(_ url: URL, method: String, body: String, contentType: String, ifUnmodifiedSince: Timestamp?) -> Request {
+    func requestWrite(_ url: URL, method: String, body: String, contentType: String, ifUnmodifiedSince: Timestamp?, completion: @escaping URLSessionCompletion) {
         var req = URLRequest(url: url as URL)
         req.httpMethod = method
         req.setValue(contentType, forHTTPHeaderField: "Content-Type")
@@ -471,24 +449,26 @@ open class Sync15StorageClient {
 
         req.httpBody = body.data(using: .utf8)!
         let authorized: URLRequest = self.authorizer(req)
-        return alamofire.request(authorized)
+        urlSession.dataTask(with: authorized) { (data, response, error) in
+            completion(data, response, error)
+        }.resume()
     }
 
-    func requestPUT(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, method: URLRequest.Method.put.rawValue, body: body.stringify()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+    func requestPUT(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?, completion: @escaping URLSessionCompletion) {
+        requestWrite(url, method: URLRequest.Method.put.rawValue, body: body.stringify()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince, completion: completion)
     }
 
-    func requestPOST(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestWrite(url, method: URLRequest.Method.post.rawValue, body: body.stringify()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince)
+    func requestPOST(_ url: URL, body: JSON, ifUnmodifiedSince: Timestamp?, completion: @escaping URLSessionCompletion) {
+        requestWrite(url, method: URLRequest.Method.post.rawValue, body: body.stringify()!, contentType: "application/json;charset=utf-8", ifUnmodifiedSince: ifUnmodifiedSince, completion: completion)
     }
 
-    func requestPOST(_ url: URL, body: [String], ifUnmodifiedSince: Timestamp?) -> Request {
+    func requestPOST(_ url: URL, body: [String], ifUnmodifiedSince: Timestamp?, completion: @escaping URLSessionCompletion) {
         let content = body.joined(separator: "\n")
-        return self.requestWrite(url, method: URLRequest.Method.post.rawValue, body: content, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince)
+        requestWrite(url, method: URLRequest.Method.post.rawValue, body: content, contentType: "application/newlines", ifUnmodifiedSince: ifUnmodifiedSince, completion: completion)
     }
 
-    func requestPOST(_ url: URL, body: [JSON], ifUnmodifiedSince: Timestamp?) -> Request {
-        return self.requestPOST(url, body: body.map { $0.stringify()! }, ifUnmodifiedSince: ifUnmodifiedSince)
+    func requestPOST(_ url: URL, body: [JSON], ifUnmodifiedSince: Timestamp?, completion: @escaping URLSessionCompletion) {
+        requestPOST(url, body: body.map { $0.stringify()! }, ifUnmodifiedSince: ifUnmodifiedSince, completion: completion)
     }
 
     /**
@@ -503,7 +483,7 @@ open class Sync15StorageClient {
         return false
     }
 
-    fileprivate func doOp<T>(_ op: (URL) -> DataRequest, path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
+    fileprivate func doOp<T>(_ op: (URL, @escaping URLSessionCompletion) -> Void, path: String, f: @escaping (JSON) -> T?) -> Deferred<Maybe<StorageResponse<T>>> {
 
         let deferred = Deferred<Maybe<StorageResponse<T>>>(defaultQueue: self.resultQueue)
 
@@ -520,11 +500,17 @@ open class Sync15StorageClient {
 
         }
 
-        let req = op(url)
-        let handler = self.errorWrap(deferred) { (response: DataResponse<JSON>) in
-            if let json: JSON = response.result.value {
-                if let v = f(json) {
-                    let storageResponse = StorageResponse<T>(value: v, response: response.response!)
+        op(url) { (data, response, error) in
+            if let failure = self.getFailureInfo(response, error) {
+                let result = Maybe<StorageResponse<T>>.failure(failure)
+                deferred.fill(result)
+                return
+            }
+
+            if let data = data {
+                let json = JSON(data)
+                if let v = f(json), let response = response as? HTTPURLResponse {
+                    let storageResponse = StorageResponse<T>(value: v, response: response)
                     deferred.fill(Maybe(success: storageResponse))
                 } else {
                     deferred.fill(Maybe(failure: RecordParseError()))
@@ -535,7 +521,6 @@ open class Sync15StorageClient {
             deferred.fill(Maybe(failure: RecordParseError()))
         }
 
-        _ = req.responseParsedJSON(true, completionHandler: handler)
         return deferred
     }
 
@@ -552,11 +537,16 @@ open class Sync15StorageClient {
             return deferred
         }
 
-        let req = self.requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince) as! DataRequest
-        let handler = self.errorWrap(deferred) { (response: DataResponse<String>) in
-            if let data = response.result.value {
-                if let v = parser(data) {
-                    let storageResponse = StorageResponse<T>(value: v, response: response.response!)
+        requestPUT(URL, body: body, ifUnmodifiedSince: ifUnmodifiedSince) { (data, response, error) in
+            if let failure = self.getFailureInfo(response, error) {
+                let result = Maybe<StorageResponse<T>>.failure(failure)
+                deferred.fill(result)
+                return
+            }
+
+            if let data = data, let response = response as? HTTPURLResponse, let str = String(data: data, encoding: .utf8) {
+                if let v = parser(str) {
+                    let storageResponse = StorageResponse<T>(value: v, response: response)
                     deferred.fill(Maybe(success: storageResponse))
                 } else {
                     deferred.fill(Maybe(failure: RecordParseError()))
@@ -565,7 +555,7 @@ open class Sync15StorageClient {
             }
             deferred.fill(Maybe(failure: RecordParseError()))
         }
-        req.responseString(completionHandler: handler)
+
         return deferred
     }
 
@@ -695,18 +685,22 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
             requestURI = self.collectionURI
         }
 
-        let req = client.requestPOST(requestURI, body: lines, ifUnmodifiedSince: ifUnmodifiedSince) as! DataRequest
-        _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
-            if let json: JSON = response.result.value,
-               let result = POSTResult.fromJSON(json) {
-                let storageResponse = StorageResponse(value: result, response: response.response!)
-                deferred.fill(Maybe(success: storageResponse))
-                return
-            } else {
-                log.warning("Couldn't parse JSON response.")
+        client.requestPOST(requestURI, body: lines, ifUnmodifiedSince: ifUnmodifiedSince) { (data, response, error) in
+            do {
+                let json = try jsonResponse(fromData: data)
+                if let result = POSTResult.fromJSON(json), let response = response as? HTTPURLResponse {
+                    let storageResponse = StorageResponse(value: result, response: response)
+                    deferred.fill(Maybe(success: storageResponse))
+                    return
+                } else {
+                    log.warning("Couldn't parse JSON response.")
+                }
+            } catch {
+                log.warning("Couldn't parse JSON response. \(error)")
             }
+
             deferred.fill(Maybe(failure: RecordParseError()))
-        })
+        }
 
         return deferred
     }
@@ -732,24 +726,32 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
             return deferred
         }
 
-        let req = client.requestGET(uriForRecord(guid))
-        _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
+        client.requestGET(uriForRecord(guid)) { (data, response, error) in
+            if let failure = self.client.getFailureInfo(response, error) {
+                let result = Maybe<StorageResponse<Record<T>>>.failure(failure)
+                deferred.fill(result)
+                return
+            }
 
-            if let json: JSON = response.result.value {
+            do {
+                let json = try jsonResponse(fromData: data)
                 let envelope = EnvelopeJSON(json)
                 let record = Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
-                if let record = record {
-                    let storageResponse = StorageResponse(value: record, response: response.response!)
+                if let record = record, let response = response as? HTTPURLResponse {
+                    let storageResponse = StorageResponse(value: record, response: response)
                     deferred.fill(Maybe(success: storageResponse))
                     return
+                } else {
+                    log.warning("Couldn't parse JSON response.")
                 }
-            } else {
-                log.warning("Couldn't parse JSON response.")
+            } catch {
+                log.warning("Couldn't parse JSON response. \(error)")
+
             }
 
             deferred.fill(Maybe(failure: RecordParseError()))
-        })
-
+        }
+        
         return deferred
     }
 
@@ -788,32 +790,37 @@ open class Sync15CollectionClient<T: CleartextPayloadJSON> {
         }
 
         log.debug("Issuing GET with newer = \(since), offset = \(offset ??? "nil"), sort = \(sort ??? "nil").")
-        let req = client.requestGET(self.collectionURI.withQueryParams(params))
-
-        _ = req.responsePartialParsedJSON(queue: collectionQueue, completionHandler: self.client.errorWrap(deferred) { (response: DataResponse<JSON>) in
-
-            log.verbose("Response is \(response).")
-            guard let json: JSON = response.result.value else {
-                log.warning("Non-JSON response.")
-                deferred.fill(Maybe(failure: RecordParseError()))
+        client.requestGET(self.collectionURI.withQueryParams(params)) { (data, response, error) in
+            if let failure = self.client.getFailureInfo(response, error) {
+                let result = Maybe<StorageResponse<[Record<T>]>>.failure(failure)
+                deferred.fill(result)
                 return
             }
 
-            guard let arr = json.array else {
-                log.warning("Non-array response.")
-                deferred.fill(Maybe(failure: RecordParseError()))
+            do {
+                log.verbose("Response is \(response?.debugDescription ?? "").")
+                let json = try jsonResponse(fromData: data)
+                guard let arr = json.array, let httpResponse = response as? HTTPURLResponse else {
+                    log.warning("Non-array response.")
+                    deferred.fill(Maybe(failure: RecordParseError()))
+                    return
+                }
+
+                func recordify(_ json: JSON) -> Record<T>? {
+                    let envelope = EnvelopeJSON(json)
+                    return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
+                }
+
+                let records = arr.compactMap(recordify)
+                let response = StorageResponse(value: records, response: httpResponse)
+                deferred.fill(Maybe(success: response))
                 return
+            } catch {
+                log.warning("Couldn't parse JSON response. \(error)")
             }
 
-            func recordify(_ json: JSON) -> Record<T>? {
-                let envelope = EnvelopeJSON(json)
-                return Record<T>.fromEnvelope(envelope, payloadFactory: self.encrypter.factory)
-            }
-
-            let records = arr.compactMap(recordify)
-            let response = StorageResponse(value: records, response: response.response!)
-            deferred.fill(Maybe(success: response))
-        })
+            deferred.fill(Maybe(failure: RecordParseError()))
+        }
 
         return deferred
     }
