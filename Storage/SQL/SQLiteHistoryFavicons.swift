@@ -316,7 +316,7 @@ extension SQLiteHistory: Favicons {
                         return
                 }
                 deferred.fill(Maybe(success: document))
-            }
+            }.resume()
         }
 
         return deferred
