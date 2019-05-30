@@ -1636,6 +1636,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        libraryDrawerViewController?.close()
     }
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
