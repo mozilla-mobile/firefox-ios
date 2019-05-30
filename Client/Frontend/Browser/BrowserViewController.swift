@@ -1113,7 +1113,7 @@ class BrowserViewController: UIViewController {
             return
         }
 
-        if tab !== tabManager.selectedTab, let url = webView.url {
+        if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
 
@@ -1130,7 +1130,7 @@ class BrowserViewController: UIViewController {
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
-        if let webView = tab.webView {
+        if tab !== tabManager.selectedTab, let webView = tab.webView {
             // To Screenshot a tab that is hidden we must add the webView,
             // then wait enough time for the webview to render.
             view.insertSubview(webView, at: 0)
