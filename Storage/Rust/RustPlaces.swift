@@ -161,6 +161,12 @@ public class RustPlaces {
         }
     }
 
+    public func getRecentBookmarks() -> Deferred<Maybe<[BookmarkItem]>> {
+        return withReader { connection in
+            return try connection.getRecentBookmarks(limit: 20)
+        }
+    }
+
     public func getBookmarksWithURL(url: String) -> Deferred<Maybe<[BookmarkItem]>> {
         return withReader { connection in
             return try connection.getBookmarksWithURL(url: url)
