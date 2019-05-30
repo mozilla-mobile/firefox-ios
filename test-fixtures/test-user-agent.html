@@ -4,7 +4,7 @@
 
 <script>
     window.onload = () => {
-        let found = navigator.userAgent.indexOf("iPhone") > -1
+        let found = /iPhone|iPad/.exec(navigator.userAgent) != null
         if (found) {
             document.body.innerHTML = "MOBILE_UA"
         } else {

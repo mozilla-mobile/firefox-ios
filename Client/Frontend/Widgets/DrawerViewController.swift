@@ -111,6 +111,7 @@ public class DrawerViewController: UIViewController {
         view.addSubview(drawerView)
 
         let panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(didRecognizePanGesture))
+        panGestureRecognizer.delegate = self
         drawerView.addGestureRecognizer(panGestureRecognizer)
 
         handleView.backgroundColor = .black
@@ -262,5 +263,18 @@ public class DrawerViewController: UIViewController {
             self.view.removeFromSuperview()
             self.removeFromParent()
         }
+    }
+}
+
+extension DrawerViewController: UIGestureRecognizerDelegate {
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        let description = otherGestureRecognizer.description
+        return !description.starts(with: "<UIScrollViewPanGestureRecognizer:")
+    }
+
+    public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        let description = otherGestureRecognizer.description
+        return !description.starts(with: "<_UISwipeActionPanGestureRecognizer:") &&
+            !description.starts(with: "<UIScrollViewPanGestureRecognizer:")
     }
 }

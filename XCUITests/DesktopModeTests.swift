@@ -3,9 +3,11 @@
  file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
-class DesktopModeTests: BaseTestCase {
+class DesktopModeTests: IphoneOnlyTestCase {
 
     func testClearPrivateData() {
+        if skipPlatform { return }
+
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
@@ -28,6 +30,8 @@ class DesktopModeTests: BaseTestCase {
     }
 
     func testSameHostInMultipleTabs() {
+        if skipPlatform { return }
+
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
@@ -56,6 +60,8 @@ class DesktopModeTests: BaseTestCase {
     }
 
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
+        if skipPlatform { return }
+
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
@@ -84,6 +90,8 @@ class DesktopModeTests: BaseTestCase {
     }
 
     func testPrivateModeOnHasNoAffectOnNormalMode() {
+        if skipPlatform { return }
+
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
