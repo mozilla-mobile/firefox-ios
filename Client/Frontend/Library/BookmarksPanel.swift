@@ -67,6 +67,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     var bookmarkFolder: BookmarkFolder?
     var bookmarkNodes = [BookmarkNode]()
+    var recentBookmarks = [BookmarkNode]()
 
     init(profile: Profile, bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID) {
         self.bookmarkFolderGUID = bookmarkFolderGUID
@@ -117,13 +118,22 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 // TODO: Handle error case?
                 self.bookmarkFolder = nil
                 self.bookmarkNodes = []
-                self.tableView.reloadData()
+                self.recentBookmarks = []
                 return
             }
 
             self.bookmarkFolder = folder
             self.bookmarkNodes = folder.children ?? []
-            self.tableView.reloadData()
+
+            if folder.guid == BookmarkRoots.RootGUID {
+                self.profile.places.getRecentBookmarks(limit: 20).uponQueue(.main) { result in
+                    self.recentBookmarks = result.successValue ?? []
+                    self.tableView.reloadData()
+                }
+            } else {
+                self.recentBookmarks = []
+                self.tableView.reloadData()
+            }
         }
     }
 
@@ -206,11 +216,18 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bookmarkNodes.count
+        return section == 0 ? bookmarkNodes.count : recentBookmarks.count
+    }
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        if let folder = bookmarkFolder, folder.guid == BookmarkRoots.RootGUID {
+            return 2
+        }
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row] else {
+        guard let bookmarkNode = indexPath.section == 0 ? bookmarkNodes[safe: indexPath.row] : recentBookmarks[safe: indexPath.row] else {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
@@ -255,16 +272,22 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         if bookmarkNodes[safe: indexPath.row] is BookmarkSeparator {
             return BookmarksPanelUX.SeparatorRowHeight
         }
-
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
+        guard section > 0, recentBookmarks.count > 0 else {
+            return nil
+        }
+        return super.tableView(tableView, viewForHeaderInSection: section)
+    }
+
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return section == 0 ? nil : Strings.RecentlyBookmarkedTitle
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0
+        return section == 0 ? 0 : UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
