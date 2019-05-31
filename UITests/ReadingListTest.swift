@@ -123,10 +123,6 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         // Go back to the reading list panel
         BrowserUtils.openLibraryMenu(tester())
 
-        // Workaround bug 1508368
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
-
         // Make sure the article is marked as read
         EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
             .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
@@ -136,13 +132,22 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             .assert(grey_notNil())
 
         // Remove the list entry
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
-            .perform(grey_swipeSlowInDirectionWithStartPoint(GREYDirection.left, 0.1, 0.1))
+        // Workaround for iPad, the swipe gesture is not controlled and the Remove button
+        // is kept behing the Mark as read and so the test fails
+        if BrowserUtils.iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
+                .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
+                .perform(grey_longPress())
+            tester().longPressView(withAccessibilityIdentifier: "action_remove", duration: 1)
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
+                .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
+                .perform(grey_swipeSlowInDirectionWithStartPoint(GREYDirection.left, 0.1, 0.1))
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Remove"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
-            .perform(grey_tap())
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Remove"))
+                .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
+                .perform(grey_tap())
+        }
 
         // check the entry no longer exist
         waitForEmptyReadingList()
