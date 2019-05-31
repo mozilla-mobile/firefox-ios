@@ -638,7 +638,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
             app.webViews.buttons["Sign in"].tap()
         }
-        screenState.tap(app.webViews.links["Create an account"], to: FxCreateAccount)
+        screenState.tap(app.webViews.links["Create an account"].firstMatch, to: FxCreateAccount)
     }
 
     map.addScreenState(FxCreateAccount) { screenState in
