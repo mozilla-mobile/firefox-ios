@@ -75,6 +75,8 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
             closeButton.layer.shadowColor = backgroundColor?.cgColor
             if selectedTab {
                 drawShadow()
+            } else {
+                self.layer.shadowOpacity = 0
             }
         }
     }
