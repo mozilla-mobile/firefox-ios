@@ -323,6 +323,9 @@
                   Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">
                </Test>
                <Test
+                  Identifier = "ScreenGraphTest/testUserStateChanges()">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test
