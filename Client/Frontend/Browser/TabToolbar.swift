@@ -220,6 +220,7 @@ class TabToolbar: UIView {
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
+    private let lineView = UIView()
 
     fileprivate override init(frame: CGRect) {
         actionButtons = [backButton, forwardButton, stopReloadButton, tabsButton, menuButton]
@@ -233,8 +234,12 @@ class TabToolbar: UIView {
         privateModeBadge.add(toParent: contentView)
         hideImagesBadge.add(toParent: contentView)
 
+        addSubview(lineView)
+
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
+
+        lineView.backgroundColor = UIColor.black.withAlphaComponent(0.05)
     }
 
     override func updateConstraints() {
@@ -245,6 +250,12 @@ class TabToolbar: UIView {
             make.leading.trailing.top.equalTo(self)
             make.bottom.equalTo(self.safeArea.bottom)
         }
+
+        lineView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalTo(self)
+            make.height.equalTo(2)
+        }
+
         super.updateConstraints()
     }
 
@@ -264,20 +275,6 @@ class TabToolbar: UIView {
 
     func addButtons(_ buttons: [UIButton]) {
         buttons.forEach { contentView.addArrangedSubview($0) }
-    }
-
-    override func draw(_ rect: CGRect) {
-        if let context = UIGraphicsGetCurrentContext() {
-            drawLine(context, start: .zero, end: CGPoint(x: frame.width, y: 0))
-        }
-    }
-
-    fileprivate func drawLine(_ context: CGContext, start: CGPoint, end: CGPoint) {
-        context.setStrokeColor(UIColor.black.withAlphaComponent(0.05).cgColor)
-        context.setLineWidth(2)
-        context.move(to: CGPoint(x: start.x, y: start.y))
-        context.addLine(to: CGPoint(x: end.x, y: end.y))
-        context.strokePath()
     }
 }
 
