@@ -297,10 +297,14 @@ class BookmarkDetailPanel: SiteTableViewController {
         case BookmarkDetailFieldsRow.title.rawValue:
             cell.titleLabel.text = Strings.BookmarkDetailFieldTitle
             cell.textField.text = bookmarkItemOrFolderTitle
+            cell.textField.autocapitalizationType = .sentences
+            cell.textField.keyboardType = .default
             return cell
         case BookmarkDetailFieldsRow.url.rawValue:
             cell.titleLabel.text = Strings.BookmarkDetailFieldURL
             cell.textField.text = bookmarkItemURL
+            cell.textField.autocapitalizationType = .none
+            cell.textField.keyboardType = .URL
             return cell
         default:
             return super.tableView(tableView, cellForRowAt: indexPath) // Should not happen.
