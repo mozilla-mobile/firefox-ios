@@ -8,7 +8,7 @@ private let testingURL = "example.com"
 private let userName = "iosmztest"
 private let userPassword = "test15mz"
 private let historyItemSavedOnDesktop = "http://www.example.com/"
-private let loginEntry = "iosmztest, https://accounts.google.com"
+private let loginEntry = "https://accounts.google.com"
 private let tabOpenInDesktop = "http://example.com/"
 
 class IntegrationTests: BaseTestCase {
@@ -52,7 +52,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 10)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
     }
 
     func testFxASyncHistory () {
@@ -81,7 +81,7 @@ class IntegrationTests: BaseTestCase {
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.tables["Bookmarks List"].cells.element(boundBy: 1).staticTexts["Example Domain"])
+        waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
     }
 
     func testFxASyncTabs () {
@@ -152,7 +152,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 5)
-        XCTAssertTrue(app.tables.cells[loginEntry].exists, "The login saved on desktop is not synced")
+        XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
     }
 
     func testFxASyncTabsDesktop () {
