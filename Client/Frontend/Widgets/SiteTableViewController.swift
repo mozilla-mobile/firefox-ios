@@ -92,7 +92,6 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
         applyTheme()
-        reloadData()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -131,6 +130,12 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         // explicitly nil out its references to us to avoid crashes. Bug 1218826.
         tableView.dataSource = nil
         tableView.delegate = nil
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        reloadData()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
