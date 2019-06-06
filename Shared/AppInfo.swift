@@ -74,6 +74,11 @@ open class AppInfo {
         return baseBundleIdentifier
     }
 
+    // Return the bundle identifier of the content blocker extension.
+    public static var contentBlockerBundleIdentifier: String {
+        return baseBundleIdentifier + ".ContentBlocker"
+    }
+
     // Return the MozWhatsNewTopic key from the Info.plist
     public static var whatsNewTopic: String? {
         return Bundle.main.object(forInfoDictionaryKey: "MozWhatsNewTopic") as? String

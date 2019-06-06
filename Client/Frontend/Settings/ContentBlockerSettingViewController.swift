@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SafariServices
 
 class ContentBlockerSettingsTableView: SettingsTableViewController {
     // The first section header gets a More Info link
@@ -89,6 +90,15 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    public static func refreshContentBlocker() {
+        let identifier = AppInfo.contentBlockerBundleIdentifier
+        SFContentBlockerManager.reloadContentBlocker(withIdentifier: identifier) { error in
+            if let error = error {
+                NSLog("Failed to reload \(identifier): \(error.localizedDescription)")
+            }
+        }
+    }
+
     override func generateSettings() -> [SettingSection] {
         let normalBrowsing = BoolSetting(prefs: profile.prefs, prefKey: ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey, defaultValue: ContentBlockingConfig.Defaults.NormalBrowsing, attributedTitleText: NSAttributedString(string: Strings.TrackingProtectionOptionOnInNormalBrowsing)) { _ in
             TabContentBlocker.prefsChanged()
@@ -105,6 +115,7 @@ class ContentBlockerSettingViewController: ContentBlockerSettingsTableView {
                 self.currentBlockingStrength = option
                 self.prefs.setString(self.currentBlockingStrength.rawValue, forKey: ContentBlockingConfig.Prefs.StrengthKey)
                 TabContentBlocker.prefsChanged()
+                ContentBlockerSettingViewController.refreshContentBlocker()
                 self.tableView.reloadData()
                 LeanPlumClient.shared.track(event: .trackingProtectionSettings, withParameters: ["Strength option": option.rawValue])
                 UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: ContentBlockingConfig.Prefs.StrengthKey, extras: ["to": option.rawValue])
