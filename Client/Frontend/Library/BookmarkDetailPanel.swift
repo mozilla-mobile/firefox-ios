@@ -15,6 +15,8 @@ private let BookmarkDetailFolderCellIdentifier = "BookmarkDetailFolderCellIdenti
 private struct BookmarkDetailPanelUX {
     static let FieldRowHeight: CGFloat = 58
     static let FolderIconSize: CGFloat = 20
+    static let IndentationWidth: CGFloat = 20
+    static let MinIndentedContentWidth: CGFloat = 100
 }
 
 class BookmarkDetailPanelError: MaybeErrorType {
@@ -57,6 +59,10 @@ class BookmarkDetailPanel: SiteTableViewController {
     // Array of tuples containing all of the BookmarkFolders
     // along with their indentation depth.
     var bookmarkFolders: [(folder: BookmarkFolder, indent: Int)] = []
+
+    private lazy var maxIndentationLevel: Int = {
+        return Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
+    }()
 
     convenience init(profile: Profile, bookmarkNode: BookmarkNode, parentBookmarkFolder: BookmarkFolder) {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
@@ -156,7 +162,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                     // Otherwise, all non-root folder should increase the
                     // indentation by 1.
                     else {
-                        addFolder(childFolder, indent: indent + 1)
+                        addFolder(childFolder, indent: min(indent + 1, self.maxIndentationLevel))
                     }
                 }
             }
@@ -254,6 +260,7 @@ class BookmarkDetailPanel: SiteTableViewController {
 
             cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(CGSize(width: BookmarkDetailPanelUX.FolderIconSize, height: BookmarkDetailPanelUX.FolderIconSize))
             cell.imageView?.contentMode = .center
+            cell.indentationWidth = BookmarkDetailPanelUX.IndentationWidth
 
             if isFolderListExpanded {
                 guard let item = bookmarkFolders[safe: indexPath.row] else {
