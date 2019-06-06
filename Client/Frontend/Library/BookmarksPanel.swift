@@ -192,7 +192,15 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row] else {
+        let node: BookmarkNode?
+
+        if indexPath.section > 0 {
+            node = recentBookmarks[safe: indexPath.row]
+        } else {
+            node = bookmarkNodes[safe: indexPath.row]
+        }
+
+        guard let bookmarkNode = node else {
             return
         }
 
