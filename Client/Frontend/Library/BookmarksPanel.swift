@@ -194,7 +194,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.deselectRow(at: indexPath, animated: false)
         let node: BookmarkNode?
 
-        if let f = bookmarkFolder, f.guid == BookmarkRoots.RootGUID, indexPath.section > 0 {
+        if indexPath.section > 0 {
             node = recentBookmarks[safe: indexPath.row]
         } else {
             node = bookmarkNodes[safe: indexPath.row]
