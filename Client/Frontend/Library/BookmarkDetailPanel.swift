@@ -14,7 +14,7 @@ private let BookmarkDetailFolderCellIdentifier = "BookmarkDetailFolderCellIdenti
 
 private struct BookmarkDetailPanelUX {
     static let FieldRowHeight: CGFloat = 58
-    static let FolderIconSize: CGFloat = 20
+    static let FolderIconSize: CGSize = CGSize(width: 20, height: 20)
     static let IndentationWidth: CGFloat = 20
     static let MinIndentedContentWidth: CGFloat = 100
 }
@@ -114,15 +114,15 @@ class BookmarkDetailPanel: SiteTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, closure: { _ in
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel) { _ in
             self.navigationController?.popViewController(animated: true)
-        })
+        }
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, closure: { _ in
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save) { _ in
             self.save().uponQueue(.main) { _ in
                 self.navigationController?.popViewController(animated: true)
             }
-        })
+        }
     }
 
     override func applyTheme() {
@@ -258,7 +258,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                 return super.tableView(tableView, cellForRowAt: indexPath)
             }
 
-            cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(CGSize(width: BookmarkDetailPanelUX.FolderIconSize, height: BookmarkDetailPanelUX.FolderIconSize))
+            cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarkDetailPanelUX.FolderIconSize)
             cell.imageView?.contentMode = .center
             cell.indentationWidth = BookmarkDetailPanelUX.IndentationWidth
 

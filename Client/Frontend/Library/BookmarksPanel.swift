@@ -13,7 +13,7 @@ private let BookmarkNodeCellIdentifier = "BookmarkNodeCellIdentifier"
 private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
 
 private struct BookmarksPanelUX {
-    static let FolderIconSize: CGFloat = 20
+    static let FolderIconSize: CGSize = CGSize(width: 20, height: 20)
 }
 
 let LocalizedRootBookmarkFolderStrings = [
@@ -276,7 +276,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 cell.textLabel?.text = bookmarkFolder.title
             }
 
-            cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(CGSize(width: BookmarksPanelUX.FolderIconSize, height: BookmarksPanelUX.FolderIconSize))
+            cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize)
             cell.imageView?.contentMode = .center
             cell.accessoryType = .disclosureIndicator
             cell.editingAccessoryType = .disclosureIndicator
