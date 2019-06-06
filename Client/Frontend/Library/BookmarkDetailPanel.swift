@@ -14,7 +14,7 @@ private let BookmarkDetailFolderCellIdentifier = "BookmarkDetailFolderCellIdenti
 
 private struct BookmarkDetailPanelUX {
     static let FieldRowHeight: CGFloat = 58
-    static let FolderIconSize: CGSize = CGSize(width: 20, height: 20)
+    static let FolderIconSize = CGSize(width: 20, height: 20)
     static let IndentationWidth: CGFloat = 20
     static let MinIndentedContentWidth: CGFloat = 100
 }
@@ -58,9 +58,9 @@ class BookmarkDetailPanel: SiteTableViewController {
     // along with their indentation depth.
     var bookmarkFolders: [(folder: BookmarkFolder, indent: Int)] = []
 
-    private lazy var maxIndentationLevel: Int = {
+    private var maxIndentationLevel: Int {
         return Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
-    }()
+    }
 
     convenience init(profile: Profile, bookmarkNode: BookmarkNode, parentBookmarkFolder: BookmarkFolder) {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)

@@ -13,7 +13,7 @@ private let BookmarkNodeCellIdentifier = "BookmarkNodeCellIdentifier"
 private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
 
 private struct BookmarksPanelUX {
-    static let FolderIconSize: CGSize = CGSize(width: 20, height: 20)
+    static let FolderIconSize = CGSize(width: 20, height: 20)
 }
 
 let LocalizedRootBookmarkFolderStrings = [
