@@ -123,6 +123,14 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        DispatchQueue.main.async {
+            self.tableView.reloadSections(IndexSet(integer: BookmarkDetailSection.folder.rawValue), with: .automatic)
+        }
+    }
+
     override func applyTheme() {
         super.applyTheme()
 
@@ -160,7 +168,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                     // Otherwise, all non-root folder should increase the
                     // indentation by 1.
                     else {
-                        addFolder(childFolder, indent: min(indent + 1, self.maxIndentationLevel))
+                        addFolder(childFolder, indent: indent + 1)
                     }
                 }
             }
@@ -271,7 +279,7 @@ class BookmarkDetailPanel: SiteTableViewController {
                     cell.textLabel?.text = item.folder.title
                 }
 
-                cell.indentationLevel = item.indent
+                cell.indentationLevel = min(item.indent, maxIndentationLevel)
                 if item.folder.guid == parentBookmarkFolder.guid {
                     cell.accessoryType = .checkmark
                 } else {
