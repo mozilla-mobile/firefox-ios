@@ -24,11 +24,9 @@ class BookmarkDetailPanelError: MaybeErrorType {
 }
 
 class BookmarkDetailPanel: SiteTableViewController {
-    enum BookmarkDetailSection: Int {
+    enum BookmarkDetailSection: Int, CaseIterable {
         case fields
         case folder
-
-        static let count = 2
     }
 
     enum BookmarkDetailFieldsRow: Int {
@@ -227,7 +225,7 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return BookmarkDetailSection.count
+        return BookmarkDetailSection.allCases.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
