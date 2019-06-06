@@ -1056,7 +1056,7 @@ class BrowserViewController: UIViewController {
     }
 
     fileprivate func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
-        let helper = ShareExtensionHelper(url: url, tab: tab)
+        let helper = ShareExtensionHelper(url: url, file: nil, tab: tab)
 
         let controller = helper.createActivityViewController({ [unowned self] completed, _ in
             // After dismissing, check to see if there were any prompts we queued up

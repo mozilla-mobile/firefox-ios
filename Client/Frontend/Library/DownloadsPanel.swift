@@ -167,7 +167,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     private func shareDownloadedFile(_ downloadedFile: DownloadedFile, indexPath: IndexPath) {
-        let helper = ShareExtensionHelper(url: downloadedFile.path, tab: nil)
+        let helper = ShareExtensionHelper(url: downloadedFile.path, file: nil, tab: nil)
         let controller = helper.createActivityViewController { completed, activityType in
             print("Shared downloaded file: \(completed)")
         }
