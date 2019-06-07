@@ -6,6 +6,10 @@ import XCTest
 
 let url_1 = "test-example.html"
 let url_2 = ["url": "test-mozilla-org.html", "bookmarkLabel": "Internet for people, not profit — Mozilla"]
+let urlLabelExample_3 = "Example Domain"
+let url_3 = "localhost:\(serverPort)/test-fixture/test-example.html"
+let urlLabelExample_4 = "Example Login Page 2"
+let url_4 = "test-password-2.html"
 
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
@@ -96,6 +100,39 @@ class BookmarkingTests: BaseTestCase {
         //There should be a bookmark
         navigator.goto(MobileBookmarks)
         checkItemInBookmarkList()
+    }
+    
+    func testRecentBookmarks() {
+        // Verify that there are only 4 cells without recent bookmarks
+        navigator.goto(LibraryPanel_Bookmarks)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
+        
+        //Add a bookmark
+        navigator.openURL(url_3)
+        waitForTabsButton()
+        bookmark()
+        
+        // Check if it shows in recent bookmarks
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.otherElements["Recent Bookmarks"])
+        waitForExistence(app.staticTexts[urlLabelExample_3])
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 5)
+        
+        // Add another
+        navigator.openURL(path(forTestPage: url_4))
+        waitForTabsButton()
+        bookmark()
+        
+        // Check if it shows in recent bookmarks
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.otherElements["Recent Bookmarks"])
+        waitForExistence(app.staticTexts[urlLabelExample_4])
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 6)
+        
+        // Click a recent bookmark and make sure it navigates. Disabled because of issue 5038 not opening recent bookmarks when tapped
+        app.tables["Bookmarks List"].cells.element(boundBy: 5).tap()
+        waitForExistence(app.textFields["url"], timeout: 6)
+        waitForValueContains(app.textFields["url"], value: url_3)
     }
 
     // Smoketest
