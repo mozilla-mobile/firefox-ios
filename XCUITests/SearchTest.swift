@@ -38,7 +38,7 @@ class SearchTests: BaseTestCase {
         waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite])
 
         // Disable Search suggestion
-        app.buttons["goBack"].tap()
+        app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(HomePanelsScreen)
         suggestionsOnOff()
 
@@ -50,12 +50,12 @@ class SearchTests: BaseTestCase {
         waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
 
         // Verify that previous choice is remembered
-        app.buttons["goBack"].tap()
+        app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
         waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
-        app.buttons["goBack"].tap()
+        app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(HomePanelsScreen)
 
         // Reset suggestion button, set it to on
@@ -122,8 +122,9 @@ class SearchTests: BaseTestCase {
         app.textFields["address"].press(forDuration: 5)
         app.menuItems["Select All"].tap()
         app.menuItems["Copy"].tap()
-        waitForExistence(app.buttons["goBack"])
-        app.buttons["goBack"].tap()
+        waitForExistence(app.buttons["urlBar-cancel"])
+        app.buttons["urlBar-cancel"].tap()
+
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         app.textFields["address"].tap()

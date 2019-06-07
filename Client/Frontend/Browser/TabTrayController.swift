@@ -1160,6 +1160,10 @@ class TabCell: UICollectionViewCell {
         }
         if selected {
             setTabSelected(tab.isPrivate)
+        } else {
+            layer.shadowOffset = .zero
+            layer.shadowPath = nil
+            layer.shadowOpacity = 0
         }
         screenshotView.image = tab.screenshot
     }

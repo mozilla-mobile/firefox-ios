@@ -142,7 +142,6 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         } else {
             syncDetailText = ""
         }
-        reloadData()
     }
 
     // MARK: - Refreshing TableView

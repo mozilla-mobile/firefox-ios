@@ -1130,14 +1130,7 @@ class BrowserViewController: UIViewController {
             TabEvent.post(.didChangeURL(url), for: tab)
         }
 
-        if tab === tabManager.selectedTab {
-            UIAccessibility.post(notification: UIAccessibility.Notification.screenChanged, argument: nil)
-            // must be followed by LayoutChanged, as ScreenChanged will make VoiceOver
-            // cursor land on the correct initial element, but if not followed by LayoutChanged,
-            // VoiceOver will sometimes be stuck on the element, not allowing user to move
-            // forward/backward. Strange, but LayoutChanged fixes that.
-            UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
-        } else if let webView = tab.webView {
+        if tab !== tabManager.selectedTab, let webView = tab.webView {
             // To Screenshot a tab that is hidden we must add the webView,
             // then wait enough time for the webview to render.
             view.insertSubview(webView, at: 0)
@@ -1643,6 +1636,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
         guard let tab = tabManager.selectedTab else { return }
         finishEditingAndSubmit(url, visitType: visitType, forTab: tab)
+        libraryDrawerViewController?.close()
     }
 
     func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
@@ -2418,7 +2412,7 @@ extension BrowserViewController: TabTrayDelegate {
 // MARK: Browser Chrome Theming
 extension BrowserViewController: Themeable {
     func applyTheme() {
-        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController]
+        let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController]
         ui.forEach { $0?.applyTheme() }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
         setNeedsStatusBarAppearanceUpdate()

@@ -379,7 +379,16 @@ extension TabDisplayManager: TabEventHandler {
                 }
             }
 
-            self?.collectionView.reloadItems(at: items)
+            for item in items {
+                if let cell = self?.collectionView.cellForItem(at: item), let tab = self?.dataStore.at(item.row) {
+                    let isSelected = (item.row == index && tab == self?.tabManager.selectedTab)
+                    if let tabCell = cell as? TabCell {
+                        tabCell.configureWith(tab: tab, is: isSelected)
+                    } else if let tabCell = cell as? TopTabCell {
+                        tabCell.configureWith(tab: tab, isSelected: isSelected)
+                    }
+                }
+            }
         }
     }
 

@@ -24,7 +24,7 @@ class NavigationTest: BaseTestCase {
         // Check the url placeholder text and that the back and forward buttons are disabled
         XCTAssert(urlPlaceholder == defaultValuePlaceholder)
         if iPad() {
-            app.buttons["goBack"].tap()
+            app.buttons["urlBar-cancel"].tap()
             XCTAssertFalse(app.buttons["URLBarView.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["Forward"].isEnabled)
             app.textFields["url"].tap()
