@@ -121,6 +121,12 @@ class BookmarkDetailPanel: SiteTableViewController {
                 self.navigationController?.popViewController(animated: true)
             }
         }
+
+        if isNew, bookmarkNodeType == .bookmark {
+            bookmarkItemURL = "https://"
+        }
+
+        updateSaveButton()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -178,6 +184,15 @@ class BookmarkDetailPanel: SiteTableViewController {
             self.bookmarkFolders = bookmarkFolders
             self.tableView.reloadData()
         }
+    }
+
+    func updateSaveButton() {
+        guard bookmarkNodeType == .bookmark else {
+            return
+        }
+        
+        let url = URL(string: bookmarkItemURL ?? "")
+        navigationItem.rightBarButtonItem?.isEnabled = url?.schemeIsValid == true && url?.host != nil
     }
 
     func save() -> Success {
@@ -344,6 +359,7 @@ extension BookmarkDetailPanel: TextFieldTableViewCellDelegate {
             bookmarkItemOrFolderTitle = text
         case BookmarkDetailFieldsRow.url.rawValue:
             bookmarkItemURL = text
+            updateSaveButton()
         default:
             log.warning("Received didChangeText: for a cell with an IndexPath that should not exist.")
         }
