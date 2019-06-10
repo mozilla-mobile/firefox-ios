@@ -132,6 +132,10 @@ class BrowserViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var prefersStatusBarHidden: Bool {
+        return false
+    }
+
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == .phone {
             return .allButUpsideDown
