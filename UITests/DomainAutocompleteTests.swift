@@ -67,7 +67,7 @@ class DomainAutocompleteTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
         let textField2 = tester().waitForView(withAccessibilityLabel: "Address and Search") as! UITextField
         // Facebook word appears highlighted and so it is shown as facebook\u{7F} when extracting the value to compare
-        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField2 , prefix: "", completion: "facebook\u{7F}")
+        BrowserUtils.ensureAutocompletionResult(tester(), textField: textField2 , prefix: "facebook\u{7F}", completion: "")
     }
 
     // Bug https://bugzilla.mozilla.org/show_bug.cgi?id=1541832 scenario 1
