@@ -814,7 +814,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
         }
 
         let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
-            let helper = ShareExtensionHelper(url: siteURL, file: nil, tab: nil)
+            let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController({ (_, _) in })
             if UI_USER_INTERFACE_IDIOM() == .pad, let popoverController = controller.popoverPresentationController {
                 let cellRect = sourceView?.frame ?? .zero

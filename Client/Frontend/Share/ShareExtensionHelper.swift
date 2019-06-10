@@ -16,7 +16,7 @@ class ShareExtensionHelper: NSObject {
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
     fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
 
-    init(url: URL, file: URL?, tab: Tab?) {
+    init(url: URL, file: URL? = nil, tab: Tab?) {
         self.selectedURL = tab?.canonicalURL?.displayURL ?? url
         self.selectedTab = tab
         self.fileURL = file
