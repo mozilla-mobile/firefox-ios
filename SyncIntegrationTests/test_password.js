@@ -14,7 +14,7 @@ var phases = { "phase1": "profile1" };
 // expected tabs state
 var password_list = [{ 
     hostname: "https://accounts.google.com",
-    submitURL: "https://accounts.google.com/signin/challenge/sl/password",
+    submitURL: "https://accounts.google.com",
     realm: null,
     username: "iosmztest",
     password: "test15mz",
