@@ -449,8 +449,6 @@ class URLBarView: UIView {
                 self.setLocation(locationText, search: search)
             }
         } else {
-            // Copy the current URL to the editable text field, then activate it.
-            self.setLocation(locationText, search: search)
             DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
                 // Need to set location again so text could be immediately selected.
@@ -685,10 +683,6 @@ extension URLBarView: AutocompleteTextFieldDelegate {
 
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String) {
         delegate?.urlBar(self, didEnterText: text)
-    }
-
-    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField) {
-        autocompleteTextField.highlightAll()
     }
 
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool {

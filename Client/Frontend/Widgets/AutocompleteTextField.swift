@@ -13,7 +13,6 @@ protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String)
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
-    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
 }
@@ -24,7 +23,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
     private var autocompleteTextLabel: UILabel?
-    private var clearButton: UIButton?
     private var hideCursor: Bool = false
 
     private let copyShortcutKey = "c"
@@ -146,13 +144,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
     }
 
-    func highlightAll() {
-        let text = self.text
-        self.text = ""
-        setAutocompleteSuggestion(text ?? "")
-        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
-    }
-
     fileprivate func normalizeString(_ string: String) -> String {
         return string.lowercased().stringByTrimmingLeadingCharactersInSet(CharacterSet.whitespaces)
     }
@@ -175,7 +166,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     @objc @discardableResult fileprivate func removeCompletion() -> Bool {
         let hasActiveCompletion = isSelectionActive
         autocompleteTextLabel?.removeFromSuperview()
-        clearButton?.removeFromSuperview()
         autocompleteTextLabel = nil
         return hasActiveCompletion
     }
@@ -230,19 +220,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             hideCursor = true
             forceResetCursor()
         }
-
-        self.clearButton?.removeFromSuperview()
-        if text.isEmpty {
-            let clearButton = createClearButton()
-            self.clearButton = clearButton
-            addSubview(clearButton)
-            clearButton.snp.makeConstraints { make in
-                make.height.centerY.equalToSuperview()
-                make.width.equalTo(40)
-                // Without this offset, the button moves when switching from UILabel mode to UITextField mode
-                make.right.equalToSuperview().offset(5.5)
-            }
-        }
     }
 
     override func caretRect(for position: UITextPosition) -> CGRect {
@@ -265,19 +242,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         frame.size.height = self.frame.size.height - 1
         label.frame = frame
         return label
-    }
-
-    private func createClearButton() -> UIButton {
-        let button = UIButton()
-        button.setImage(UIImage.templateImageNamed("topTabs-closeTabs"), for: .normal)
-        button.tintColor = self.textColor
-        button.backgroundColor = backgroundColor
-        button.addTarget(self, action: #selector(clear), for: .touchUpInside)
-        return button
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        autocompleteDelegate?.autocompleteTextFieldDidBeginEditing(self)
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
