@@ -426,7 +426,11 @@ extension PhotonActionSheetProtocol {
 
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
-            tab.toggleDesktopSite()
+
+            if let url = tab.url {
+                tab.toggleDesktopSite()
+                Tab.DesktopSites.updateHosts(forUrl: url, isDesktopSite: tab.desktopSite, isPrivate: tab.isPrivate)
+            }
         }
 
         if let helper = tab.contentBlocker {
