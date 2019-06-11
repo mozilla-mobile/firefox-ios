@@ -204,6 +204,7 @@ class SearchTests: BaseTestCase {
         navigator.goto(URLBarOpen)
         app.typeText("foo bar")
         app.typeText(XCUIKeyboardKey.return.rawValue)
+        waitForExistence(app.textFields["url"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: "google")
     }
 }

@@ -22,6 +22,7 @@ class TopTabsTest: BaseTestCase {
         navigator.goto(TabTray)
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
+        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: "localhost")
         // The tabs counter shows the correct number
         let tabsOpen = app.buttons["Show Tabs"].value
@@ -29,7 +30,7 @@ class TopTabsTest: BaseTestCase {
 
         // The tab tray shows the correct tabs
         navigator.goto(TabTray)
-        waitForExistence(app.collectionViews.cells[urlLabel])
+        waitForExistence(app.collectionViews.cells[urlLabel], timeout: 5)
     }
 
     func testAddTabFromContext() {
@@ -140,6 +141,7 @@ class TopTabsTest: BaseTestCase {
 
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
+        waitForExistence(app.staticTexts["Private Browsing"], timeout: 5)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
         // New behaviour on v14, there is no Undo in Private mode
         waitForExistence(app.staticTexts["Private Browsing"])
@@ -189,7 +191,7 @@ class TopTabsTest: BaseTestCase {
     func testLongTapTabCounter() {
         if !iPad() {
             // Long tap on Tab Counter should show the correct options
-            waitForExistence(app.buttons["Show Tabs"])
+            waitForExistence(app.buttons["Show Tabs"], timeout: 5)
             app.buttons["Show Tabs"].press(forDuration: 1)
             waitForExistence(app.cells["quick_action_new_tab"])
             XCTAssertTrue(app.cells["quick_action_new_tab"].exists)
@@ -310,6 +312,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
+        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
         XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
         let numPrivTab = app.buttons["Show Tabs"].value as? String
@@ -332,6 +335,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed to the new open one and that the user is in private mode
         waitUntilPageLoad()
+        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
         XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
         navigator.goto(TabTray)
