@@ -352,6 +352,10 @@ class NavigationTest: BaseTestCase {
         app.textFields["url"].press(forDuration:3)
         app.tables.cells["menu-Copy-Link"].tap()
         app.textFields["url"].tap()
+        // Since the textField value appears all selected first time is clicked
+        // this workaround is necessary
+        app.textFields["address"].tap()
+        app.textFields["address"].tap()
         app.textFields["address"].press(forDuration: 2)
 
         //Ensure that long press on address bar brings up a menu with Select All, Select, Paste, and Paste & Go
