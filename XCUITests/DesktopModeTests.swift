@@ -3,7 +3,9 @@
  file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
-class DesktopModeTests: IphoneOnlyTestCase {
+
+// Tests for both platforms
+class DesktopModeTests: BaseTestCase {
     func testLongPressReload() {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
@@ -14,13 +16,15 @@ class DesktopModeTests: IphoneOnlyTestCase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
+}
 
+class DesktopModeTestsIphone: IphoneOnlyTestCase {
     func testClearPrivateData() {
         if skipPlatform { return }
 

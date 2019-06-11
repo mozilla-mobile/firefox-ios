@@ -961,12 +961,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
 
-        let rdsButton = app.tables["Context Menu"].cells.element(boundBy: 0)
+
+        var index = isTablet ? 1 : 0
+        let rdsButton = app.tables["Context Menu"].cells.element(boundBy: index)
         screenState.tap(rdsButton, forAction: Action.ToggleRequestDesktopSite) { userState in
             userState.requestDesktopSite = !userState.requestDesktopSite
         }
 
-        let trackingProtectionButton = app.tables["Context Menu"].cells.element(boundBy: 1)
+
+        index = isTablet ? 0 : 1
+        let trackingProtectionButton = app.tables["Context Menu"].cells.element(boundBy: index)
 
         screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled) { userState in
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled

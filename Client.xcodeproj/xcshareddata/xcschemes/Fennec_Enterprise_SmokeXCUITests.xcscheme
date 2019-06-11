@@ -308,6 +308,9 @@
                   Identifier = "DesktopModeTests">
                </Test>
                <Test
+                  Identifier = "DesktopModeTestsIphone">
+               </Test>
+               <Test
                   Identifier = "DisplaySettingTests">
                </Test>
                <Test
