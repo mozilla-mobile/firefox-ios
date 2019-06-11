@@ -207,10 +207,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             _ = profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
 
             tableView.beginUpdates()
-            if indexPath.section == BookmarksSection.bookmarks.rawValue {
-                bookmarkNodes.remove(at: indexPath.row)
-            } else {
+            if indexPath.section == BookmarksSection.recent.rawValue {
                 recentBookmarks.remove(at: indexPath.row)
+            } else {
+                bookmarkNodes.remove(at: indexPath.row)
             }
             tableView.deleteRows(at: [indexPath], with: .left)
             tableView.endUpdates()
