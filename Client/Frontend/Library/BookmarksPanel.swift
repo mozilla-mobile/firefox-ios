@@ -197,7 +197,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     fileprivate func deleteBookmarkNodeAtIndexPath(_ indexPath: IndexPath) {
-        guard let bookmarkNode = bookmarkNodes[safe: indexPath.row] else {
+        guard let bookmarkNode = indexPath.section == BookmarksSection.bookmarks.rawValue ? bookmarkNodes[safe: indexPath.row] : recentBookmarks[safe: indexPath.row] else {
             return
         }
 
@@ -207,7 +207,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             _ = profile.places.deleteBookmarkNode(guid: bookmarkNode.guid)
 
             tableView.beginUpdates()
-            bookmarkNodes.remove(at: indexPath.row)
+            if indexPath.section == BookmarksSection.recent.rawValue {
+                recentBookmarks.remove(at: indexPath.row)
+            } else {
+                bookmarkNodes.remove(at: indexPath.row)
+            }
             tableView.deleteRows(at: [indexPath], with: .left)
             tableView.endUpdates()
         }
@@ -395,7 +399,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Root folders cannot be edited.
         guard let bookmarkFolder = self.bookmarkFolder, bookmarkFolder.guid != BookmarkRoots.RootGUID else {
-            return false
+            // Allow delete of recent BMs
+            return indexPath.section == BookmarksSection.recent.rawValue
         }
 
         return true
