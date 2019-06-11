@@ -16,7 +16,7 @@ class DesktopModeTests: BaseTestCase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
-        navigator.performAction(Action.CloseTabFromTabTrayLongPressMenu)
+        navigator.performAction(Action.AcceptRemovingAllTabs)
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
