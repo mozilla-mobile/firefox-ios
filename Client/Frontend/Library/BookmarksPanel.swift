@@ -14,7 +14,7 @@ private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
 
 private struct BookmarksPanelUX {
     static let FolderIconSize = CGSize(width: 20, height: 20)
-    static let RowFlashDelayInMilliseconds = 400
+    static let RowFlashDelay: TimeInterval = 0.4
 }
 
 let LocalizedRootBookmarkFolderStrings = [
@@ -179,7 +179,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 self.flashLastRowOnNextReload = false
 
                 let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue)
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(BookmarksPanelUX.RowFlashDelayInMilliseconds)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + BookmarksPanelUX.RowFlashDelay) {
                     self.flashRow(at: lastIndexPath)
                 }
             }
@@ -228,15 +228,26 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         doDelete()
     }
 
+    fileprivate func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
+        return indexPath.section < numberOfSections(in: tableView) &&
+            indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
+    }
+
     func didAddBookmarkNode() {
         flashLastRowOnNextReload = true
     }
 
     func flashRow(at indexPath: IndexPath) {
+        guard indexPathIsValid(indexPath) else {
+            return
+        }
+
         tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(BookmarksPanelUX.RowFlashDelayInMilliseconds)) {
-            self.tableView.deselectRow(at: indexPath, animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + BookmarksPanelUX.RowFlashDelay) {
+            if self.indexPathIsValid(indexPath) {
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }
         }
     }
 
