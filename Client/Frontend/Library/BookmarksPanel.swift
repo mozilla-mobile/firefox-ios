@@ -233,11 +233,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
     }
 
-    func didAddBookmarkNode() {
-        flashLastRowOnNextReload = true
-    }
-
-    func flashRow(at indexPath: IndexPath) {
+    fileprivate func flashRow(at indexPath: IndexPath) {
         guard indexPathIsValid(indexPath) else {
             return
         }
@@ -249,6 +245,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 self.tableView.deselectRow(at: indexPath, animated: true)
             }
         }
+    }
+
+    func didAddBookmarkNode() {
+        flashLastRowOnNextReload = true
     }
 
     @objc fileprivate func didLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
