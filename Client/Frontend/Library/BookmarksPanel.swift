@@ -14,6 +14,7 @@ private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
 
 private struct BookmarksPanelUX {
     static let FolderIconSize = CGSize(width: 20, height: 20)
+    static let RowFlashDelay: TimeInterval = 0.4
 }
 
 let LocalizedRootBookmarkFolderStrings = [
@@ -32,6 +33,11 @@ fileprivate class SeparatorTableViewCell: OneLineTableViewCell {
 }
 
 class BookmarksPanel: SiteTableViewController, LibraryPanel {
+    enum BookmarksSection: Int, CaseIterable {
+        case bookmarks
+        case recent
+    }
+
     var libraryPanelDelegate: LibraryPanelDelegate?
 
     lazy var longPressRecognizer: UILongPressGestureRecognizer = {
@@ -47,6 +53,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     var bookmarkFolder: BookmarkFolder?
     var bookmarkNodes = [BookmarkNode]()
     var recentBookmarks = [BookmarkNode]()
+
+    fileprivate var flashLastRowOnNextReload = false
 
     init(profile: Profile, bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID) {
         self.bookmarkFolderGUID = bookmarkFolderGUID
@@ -105,17 +113,21 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             })
 
             let newSeparator = PhotonActionSheetItem(title: Strings.BookmarksNewSeparator, iconString: "nav-menu", handler: { action in
-                self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID) >>== { guid in
+                let centerVisibleRow = self.centerVisibleRow()
+
+                self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID, position: UInt32(centerVisibleRow)) >>== { guid in
                     self.profile.places.getBookmark(guid: guid).uponQueue(.main) { result in
                         guard let bookmarkNode = result.successValue, let bookmarkSeparator = bookmarkNode as? BookmarkSeparator else {
                             return
                         }
 
-                        let index = self.bookmarkNodes.count
+                        let indexPath = IndexPath(row: centerVisibleRow, section: BookmarksSection.bookmarks.rawValue)
                         self.tableView.beginUpdates()
-                        self.bookmarkNodes.append(bookmarkSeparator)
-                        self.tableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+                        self.bookmarkNodes.insert(bookmarkSeparator, at: centerVisibleRow)
+                        self.tableView.insertRows(at: [indexPath], with: .automatic)
                         self.tableView.endUpdates()
+
+                        self.flashRow(at: indexPath)
                     }
                 }
             })
@@ -162,7 +174,26 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 self.recentBookmarks = []
                 self.tableView.reloadData()
             }
+
+            if self.flashLastRowOnNextReload {
+                self.flashLastRowOnNextReload = false
+
+                let lastIndexPath = IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue)
+                DispatchQueue.main.asyncAfter(deadline: .now() + BookmarksPanelUX.RowFlashDelay) {
+                    self.flashRow(at: lastIndexPath)
+                }
+            }
         }
+    }
+
+    fileprivate func centerVisibleRow() -> Int {
+        let visibleCells = tableView.visibleCells
+        if let middleCell = visibleCells[safe: visibleCells.count / 2],
+            let middleIndexPath = tableView.indexPath(for: middleCell) {
+            return middleIndexPath.row
+        }
+
+        return bookmarkNodes.count
     }
 
     fileprivate func deleteBookmarkNodeAtIndexPath(_ indexPath: IndexPath) {
@@ -197,6 +228,29 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         doDelete()
     }
 
+    fileprivate func indexPathIsValid(_ indexPath: IndexPath) -> Bool {
+        return indexPath.section < numberOfSections(in: tableView) &&
+            indexPath.row < tableView(tableView, numberOfRowsInSection: indexPath.section)
+    }
+
+    fileprivate func flashRow(at indexPath: IndexPath) {
+        guard indexPathIsValid(indexPath) else {
+            return
+        }
+
+        tableView.selectRow(at: indexPath, animated: true, scrollPosition: .middle)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + BookmarksPanelUX.RowFlashDelay) {
+            if self.indexPathIsValid(indexPath) {
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }
+        }
+    }
+
+    func didAddBookmarkNode() {
+        flashLastRowOnNextReload = true
+    }
+
     @objc fileprivate func didLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard longPressGestureRecognizer.state == .began, let indexPath = tableView.indexPathForRow(at: touchPoint) else {
@@ -222,7 +276,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.deselectRow(at: indexPath, animated: false)
         let node: BookmarkNode?
 
-        if indexPath.section > 0 {
+        if indexPath.section == BookmarksSection.recent.rawValue {
             node = recentBookmarks[safe: indexPath.row]
         } else {
             node = bookmarkNodes[safe: indexPath.row]
@@ -233,7 +287,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         guard !tableView.isEditing else {
-            if let bookmarkFolder = self.bookmarkFolder {
+            if let bookmarkFolder = self.bookmarkFolder, !(bookmarkNode is BookmarkSeparator) {
                 let detailController = BookmarkDetailPanel(profile: profile, bookmarkNode: bookmarkNode, parentBookmarkFolder: bookmarkFolder)
                 navigationController?.pushViewController(detailController, animated: true)
             }
@@ -260,18 +314,19 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? bookmarkNodes.count : recentBookmarks.count
+        return section == BookmarksSection.recent.rawValue ? recentBookmarks.count : bookmarkNodes.count
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
         if let folder = bookmarkFolder, folder.guid == BookmarkRoots.RootGUID {
             return 2
         }
+
         return 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let bookmarkNode = indexPath.section == 0 ? bookmarkNodes[safe: indexPath.row] : recentBookmarks[safe: indexPath.row] else {
+        guard let bookmarkNode = indexPath.section == BookmarksSection.recent.rawValue ? recentBookmarks[safe: indexPath.row] : bookmarkNodes[safe: indexPath.row] else {
             return super.tableView(tableView, cellForRowAt: indexPath)
         }
 
@@ -322,18 +377,19 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section > 0, recentBookmarks.count > 0 else {
+        guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty else {
             return nil
         }
+
         return super.tableView(tableView, viewForHeaderInSection: section)
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? nil : Strings.RecentlyBookmarkedTitle
+        return section == BookmarksSection.recent.rawValue ? Strings.RecentlyBookmarkedTitle : nil
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? 0 : UITableView.automaticDimension
+        return section == BookmarksSection.recent.rawValue ? UITableView.automaticDimension : 0
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

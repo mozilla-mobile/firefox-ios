@@ -41,6 +41,14 @@ class BookmarkDetailPanel: SiteTableViewController {
     // Editable field(s) that all BookmarkNodes have.
     var parentBookmarkFolder: BookmarkFolder
 
+    // Sort position for the BookmarkItem. If editing, this
+    // value remains the same as it was prior to the edit
+    // unless the parent folder gets changed. In that case,
+    // and in the case of adding a new BookmarkItem, this
+    // value becomes `nil` which causes it to be re-positioned
+    // to the bottom of the parent folder upon saving.
+    var bookmarkItemPosition: UInt32?
+
     // Editable field(s) that only BookmarkItems and
     // BookmarkFolders have.
     var bookmarkItemOrFolderTitle: String?
@@ -64,6 +72,8 @@ class BookmarkDetailPanel: SiteTableViewController {
 
     convenience init(profile: Profile, bookmarkNode: BookmarkNode, parentBookmarkFolder: BookmarkFolder) {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
+
+        self.bookmarkItemPosition = bookmarkNode.position
 
         if let bookmarkItem = bookmarkNode as? BookmarkItem {
             self.bookmarkItemOrFolderTitle = bookmarkItem.title
@@ -119,6 +129,10 @@ class BookmarkDetailPanel: SiteTableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save) { _ in
             self.save().uponQueue(.main) { _ in
                 self.navigationController?.popViewController(animated: true)
+
+                if self.isNew, let bookmarksPanel = self.navigationController?.visibleViewController as? BookmarksPanel {
+                    bookmarksPanel.didAddBookmarkNode()
+                }
             }
         }
     }
@@ -205,9 +219,9 @@ class BookmarkDetailPanel: SiteTableViewController {
             }
 
             if bookmarkNodeType == .bookmark {
-                return profile.places.updateBookmarkNode(guid: bookmarkNodeGUID, parentGUID: parentBookmarkFolder.guid, title: bookmarkItemOrFolderTitle, url: bookmarkItemURL)
+                return profile.places.updateBookmarkNode(guid: bookmarkNodeGUID, parentGUID: parentBookmarkFolder.guid, position: bookmarkItemPosition, title: bookmarkItemOrFolderTitle, url: bookmarkItemURL)
             } else if bookmarkNodeType == .folder {
-                return profile.places.updateBookmarkNode(guid: bookmarkNodeGUID, parentGUID: parentBookmarkFolder.guid, title: bookmarkItemOrFolderTitle)
+                return profile.places.updateBookmarkNode(guid: bookmarkNodeGUID, parentGUID: parentBookmarkFolder.guid, position: bookmarkItemPosition, title: bookmarkItemOrFolderTitle)
             }
         }
 
@@ -223,8 +237,9 @@ class BookmarkDetailPanel: SiteTableViewController {
             return
         }
 
-        if isFolderListExpanded, let item = bookmarkFolders[safe: indexPath.row] {
+        if isFolderListExpanded, let item = bookmarkFolders[safe: indexPath.row], parentBookmarkFolder.guid != item.folder.guid {
             parentBookmarkFolder = item.folder
+            bookmarkItemPosition = nil
         }
 
         isFolderListExpanded = !isFolderListExpanded
@@ -262,6 +277,19 @@ class BookmarkDetailPanel: SiteTableViewController {
         guard indexPath.section == BookmarkDetailSection.fields.rawValue else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: BookmarkDetailFolderCellIdentifier, for: indexPath) as? OneLineTableViewCell else {
                 return super.tableView(tableView, cellForRowAt: indexPath)
+            }
+
+            // Disable folder selection when creating a new bookmark or folder.
+            if isNew {
+                cell.textLabel?.alpha = 0.5
+                cell.imageView?.alpha = 0.5
+                cell.selectionStyle = .none
+                cell.isUserInteractionEnabled = false
+            } else {
+                cell.textLabel?.alpha = 1.0
+                cell.imageView?.alpha = 1.0
+                cell.selectionStyle = .default
+                cell.isUserInteractionEnabled = true
             }
 
             cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarkDetailPanelUX.FolderIconSize)
