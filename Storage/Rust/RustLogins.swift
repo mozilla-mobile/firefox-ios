@@ -113,7 +113,7 @@ public class RustLogins {
                 // specified is not a valid database. This is an unrecoverable
                 // state unless we can move the existing file to a backup
                 // location and start over.
-                case .InvalidKey(let message):
+                case .invalidKey(let message):
                     log.error(message)
 
                     if !didAttemptToMoveToBackup {
@@ -121,7 +121,7 @@ public class RustLogins {
                         didAttemptToMoveToBackup = true
                         return open()
                     }
-                case .Panic(let message):
+                case .panic(let message):
                     Sentry.shared.sendWithStacktrace(message: "Panicked when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
                 default:
                     Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
@@ -182,7 +182,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -193,7 +193,7 @@ public class RustLogins {
             } catch let err as NSError {
                 if let loginsStoreError = err as? LoginsStoreError {
                     switch loginsStoreError {
-                    case .Panic(let message):
+                    case .panic(let message):
                         Sentry.shared.sendWithStacktrace(message: "Panicked when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
                     default:
                         Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
@@ -212,7 +212,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -293,7 +293,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -314,7 +314,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -342,7 +342,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -367,7 +367,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -388,7 +388,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
@@ -409,7 +409,7 @@ public class RustLogins {
 
         queue.async {
             guard self.isOpen else {
-                let error = LoginsStoreError.Unspecified(message: "Database is closed")
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
