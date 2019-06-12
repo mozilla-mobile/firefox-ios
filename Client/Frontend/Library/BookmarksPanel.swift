@@ -283,6 +283,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     @objc fileprivate func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
         navigationController?.popToRootViewController(animated: true)
     }
 
