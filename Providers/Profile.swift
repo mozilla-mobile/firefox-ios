@@ -264,6 +264,7 @@ open class BrowserProfile: Profile {
             case .warn:
                 log.warning(logString)
             case .error:
+                Sentry.shared.send(message: message, tag: .rustLog, severity: .error, extra: ["rust-tag": tag ?? "no-tag"])
                 log.error(logString)
             }
 
