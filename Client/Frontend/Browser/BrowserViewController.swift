@@ -2140,7 +2140,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
 
                     application.endBackgroundTask(taskId)
-                }
+                }.resume()
 
             }
             actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
@@ -2181,7 +2181,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
                 success(data)
             }
-        }
+        }.resume()
     }
 
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
