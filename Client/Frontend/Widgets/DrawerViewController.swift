@@ -255,8 +255,9 @@ public class DrawerViewController: UIViewController, Themeable {
         }
     }
 
-    public func close() {
-        UIView.animate(withDuration: 0.25, animations: {
+    public func close(immediately: Bool = false) {
+        let duration = immediately ? 0.0 : 0.25
+        UIView.animate(withDuration: duration, animations: {
             if self.showingPadLayout {
                 self.xPosition = DrawerViewControllerUX.DrawerPadWidth
             } else {

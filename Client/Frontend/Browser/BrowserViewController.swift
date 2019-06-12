@@ -1466,6 +1466,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
+        libraryDrawerViewController?.close()
         guard let profile = profile as? BrowserProfile else {
             return
         }
@@ -1717,6 +1718,8 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
+        libraryDrawerViewController?.close(immediately: true)
+
         // Reset the scroll position for the ActivityStreamPanel so that it
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
@@ -2433,15 +2436,18 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
+        libraryDrawerViewController?.close(immediately: true)
         urlBar.leaveOverlayMode(didCancel: true)
         self.urlBarDidPressTabs(urlBar)
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
+        libraryDrawerViewController?.close(immediately: true)
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
     }
 
     func topTabsDidTogglePrivateMode() {
+        libraryDrawerViewController?.close(immediately: true)
         guard let _ = tabManager.selectedTab else {
             return
         }
@@ -2449,6 +2455,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidChangeTab() {
+        libraryDrawerViewController?.close()
         urlBar.leaveOverlayMode(didCancel: true)
     }
 }

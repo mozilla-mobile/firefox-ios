@@ -456,7 +456,8 @@ extension BookmarksPanel: LibraryPanelContextMenu {
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        guard let bookmarkItem = bookmarkNodes[safe: indexPath.row] as? BookmarkItem else {
+        guard let bookmarkNode = indexPath.section == BookmarksSection.recent.rawValue ? recentBookmarks[safe: indexPath.row] : bookmarkNodes[safe: indexPath.row],
+            let bookmarkItem = bookmarkNode as? BookmarkItem else {
             return nil
         }
 
