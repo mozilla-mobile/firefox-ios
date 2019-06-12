@@ -11,16 +11,18 @@ private let log = Logger.browserLogger
 class ShareExtensionHelper: NSObject {
     fileprivate weak var selectedTab: Tab?
 
-    fileprivate let selectedURL: URL
+    fileprivate let selectedURL: URL // for non copy ones
+    fileprivate let fileURL: URL? // for copy type
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
     fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
 
-    init(url: URL, tab: Tab?) {
+    init(url: URL, file: URL? = nil, tab: Tab?) {
         self.selectedURL = tab?.canonicalURL?.displayURL ?? url
         self.selectedTab = tab
+        self.fileURL = file
     }
 
-    func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: String?) -> Void) -> UIActivityViewController {
+    func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
         var activityItems = [AnyObject]()
 
         let printInfo = UIPrintInfo(dictionary: nil)
@@ -55,7 +57,7 @@ class ShareExtensionHelper: NSObject {
 
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
-                completionHandler(completed, activityType.map { $0.rawValue })
+                completionHandler(completed, activityType)
                 return
             }
             // Bug 1392418 - When copying a url using the share extension there are 2 urls in the pasteboard.
@@ -64,13 +66,13 @@ class ShareExtensionHelper: NSObject {
                 UIPasteboard.general.urls = [url]
             }
 
-            if self.isPasswordManagerActivityType(activityType.map { $0.rawValue }) {
+            if self.isPasswordManager(activityType: activityType) {
                 if let logins = returnedItems {
                     self.fillPasswords(logins as [AnyObject])
                 }
             }
 
-            completionHandler(completed, activityType.map { $0.rawValue })
+            completionHandler(completed, activityType)
         }
         return activityViewController
     }
@@ -78,42 +80,52 @@ class ShareExtensionHelper: NSObject {
 
 extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return selectedURL
+        return fileURL ?? selectedURL
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        if let type = activityType, isPasswordManagerActivityType(type.rawValue) {
+        
+        if isPasswordManager(activityType: activityType) {
             return onePasswordExtensionItem
-        } else {
-            // Return the URL for the selected tab. If we are in reader view then decode
-            // it so that we copy the original and not the internal localhost one.
-            return selectedURL.isReaderModeURL ? selectedURL.decodeReaderModeURL : selectedURL
+        } else if isOpenByCopy(activityType: activityType) {
+            return fileURL ?? selectedURL
         }
+
+        // Return the URL for the selected tab. If we are in reader view then decode
+        // it so that we copy the original and not the internal localhost one.
+        return selectedURL.isReaderModeURL ? selectedURL.decodeReaderModeURL : selectedURL
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
-        if let type = activityType, isPasswordManagerActivityType(type.rawValue) {
+        if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
+        } else if isOpenByCopy(activityType: activityType) {
+            return fileURL != nil ? kUTTypeFileURL as String : kUTTypeURL as String
         }
+
         return activityType == nil ? browserFillIdentifier : kUTTypeURL as String
     }
-}
 
-private extension ShareExtensionHelper {
-
-    func isPasswordManagerActivityType(_ activityType: String?) -> Bool {
+    private func isPasswordManager(activityType: UIActivity.ActivityType?) -> Bool {
+        guard let activityType = activityType?.rawValue else { return false }
         // A 'password' substring covers the most cases, such as pwsafe and 1Password.
         // com.agilebits.onepassword-ios.extension
         // com.app77.ios.pwsafe2.find-login-action-password-actionExtension
         // If your extension's bundle identifier does not contain "password", simply submit a pull request by adding your bundle identifier.
-        return (activityType?.range(of: "password") != nil)
+        return (activityType.range(of: "password") != nil)
             || (activityType == "com.lastpass.ilastpass.LastPassExt")
             || (activityType == "in.sinew.Walletx.WalletxExt")
             || (activityType == "com.8bit.bitwarden.find-login-action-extension")
             || (activityType == "me.mssun.passforios.find-login-action-extension")
-
     }
 
+    private func isOpenByCopy(activityType: UIActivity.ActivityType?) -> Bool {
+        guard let activityType = activityType?.rawValue else { return false }
+        return activityType.lowercased().range(of: "remoteopeninapplication-bycopy") != nil
+    }
+}
+
+private extension ShareExtensionHelper {
     func findLoginExtensionItem() {
         guard let selectedWebView = selectedTab?.webView else {
             return

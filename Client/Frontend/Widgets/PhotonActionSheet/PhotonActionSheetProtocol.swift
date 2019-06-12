@@ -118,8 +118,8 @@ extension PhotonActionSheetProtocol {
         return items
     }
 
-    fileprivate func shareFileURL(_ url: URL, buttonView: UIView, presentableVC: PresentableVC) {
-        let helper = ShareExtensionHelper(url: url, tab: nil)
+    fileprivate func shareFileURL(url: URL, file: URL?, buttonView: UIView, presentableVC: PresentableVC) {
+        let helper = ShareExtensionHelper(url: url, file: file, tab: nil)
         let controller = helper.createActivityViewController { completed, activityType in
             print("Shared downloaded file: \(completed)")
         }
@@ -144,7 +144,7 @@ extension PhotonActionSheetProtocol {
             let shareFile = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { action in
                 guard let url = tab.url else { return }
 
-                self.shareFileURL(url, buttonView: buttonView, presentableVC: presentableVC)
+                self.shareFileURL(url: url, file: nil, buttonView: buttonView, presentableVC: presentableVC)
             }
 
             return [[shareFile]]
@@ -244,7 +244,7 @@ extension PhotonActionSheetProtocol {
                     // If we successfully got a temp file URL, share it like a downloaded file,
                     // otherwise present the ordinary share menu for the web URL.
                     if tempDocURL.isFileURL {
-                        self.shareFileURL(tempDocURL, buttonView: buttonView, presentableVC: presentableVC)
+                        self.shareFileURL(url: url, file: tempDocURL, buttonView: buttonView, presentableVC: presentableVC)
                     } else {
                         presentShareMenu(url, tab, buttonView, .up)
                     }
@@ -426,7 +426,11 @@ extension PhotonActionSheetProtocol {
 
         let toggleActionTitle = tab.desktopSite ? Strings.AppMenuViewMobileSiteTitleString : Strings.AppMenuViewDesktopSiteTitleString
         let toggleDesktopSite = PhotonActionSheetItem(title: toggleActionTitle, iconString: "menu-RequestDesktopSite") { action in
-            tab.toggleDesktopSite()
+
+            if let url = tab.url {
+                tab.toggleDesktopSite()
+                Tab.DesktopSites.updateHosts(forUrl: url, isDesktopSite: tab.desktopSite, isPrivate: tab.isPrivate)
+            }
         }
 
         if let helper = tab.contentBlocker {
