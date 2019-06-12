@@ -40,14 +40,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     var libraryPanelDelegate: LibraryPanelDelegate?
 
-    lazy var tableViewLongPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTableView))
-    }()
-
-    lazy var backButtonViewLongPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBackButtonView))
-    }()
-
     let bookmarkFolderGUID: GUID
 
     var editBarButtonItem: UIBarButtonItem!
@@ -81,6 +73,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTableView))
         tableView.addGestureRecognizer(tableViewLongPressRecognizer)
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.allowsSelectionDuringEditing = true
@@ -151,6 +144,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         super.viewDidAppear(animated)
 
         if let backButtonView = self.backButtonView() {
+            let backButtonViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBackButtonView))
             backButtonView.addGestureRecognizer(backButtonViewLongPressRecognizer)
         }
     }
@@ -199,9 +193,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     fileprivate func backButtonView() -> UIView? {
-        return navigationController?.navigationBar.subviews
-            .find({ $0.description.starts(with: "<_UINavigationBarContentView:") })?.subviews
-            .find({ $0.description.starts(with: "<_UIButtonBarButton:") })
+        let navigationBarContentView = navigationController?.navigationBar.subviews.find({ $0.description.starts(with: "<_UINavigationBarContentView:") })
+        return navigationBarContentView?.subviews.find({ $0.description.starts(with: "<_UIButtonBarButton:") })
     }
 
     fileprivate func centerVisibleRow() -> Int {
