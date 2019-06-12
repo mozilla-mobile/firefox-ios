@@ -593,7 +593,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             }
         } else {
             tableView.alwaysBounceVertical = true
-            emptyStateOverlayView.removeFromSuperview()
+            tableView.tableFooterView = nil
         }
     }
 
