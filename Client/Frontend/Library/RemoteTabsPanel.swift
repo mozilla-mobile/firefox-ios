@@ -375,6 +375,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         contentView.addSubview(instructionsLabel)
 
         signInButton.setTitle(Strings.FxASignInToSync, for: [])
+        signInButton.titleLabel?.textColor = .white
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
