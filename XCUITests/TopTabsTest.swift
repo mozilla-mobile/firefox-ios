@@ -23,7 +23,7 @@ class TopTabsTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
-        waitForValueContains(app.textFields["url"], value: "localhost")
+        //waitForValueContains(app.textFields["url"], value: "localhost")
         // The tabs counter shows the correct number
         let tabsOpen = app.buttons["Show Tabs"].value
         XCTAssertEqual("2", tabsOpen as? String)
@@ -312,7 +312,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed
         waitUntilPageLoad()
-        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
+        waitForExistence(app.textFields["url"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
         XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
         let numPrivTab = app.buttons["Show Tabs"].value as? String
@@ -328,14 +328,14 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
 
         app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
-        waitForExistence(app.sheets.buttons["Open in New Tab"])
+        waitForExistence(app.sheets.buttons["Open in New Tab"], timeout: 3)
         app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
         waitForExistence(app.buttons["Switch"], timeout: 5)
         app.buttons["Switch"].tap()
 
         // Check that the tab has changed to the new open one and that the user is in private mode
         waitUntilPageLoad()
-        waitForExistence(app.webViews.links["Mozilla"], timeout: 5)
+        waitForExistence(app.textFields["url"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: toastUrl["urlLabel"]!)
         XCTAssertTrue(app.staticTexts[toastUrl["link"]!].exists)
         navigator.goto(TabTray)

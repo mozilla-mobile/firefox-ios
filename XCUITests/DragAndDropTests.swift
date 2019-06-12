@@ -118,6 +118,7 @@ fileprivate extension BaseTestCase {
         let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
 
         if (dragAndDropTab) {
+            sleep(1)
             XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct")
             XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct")
         } else {
