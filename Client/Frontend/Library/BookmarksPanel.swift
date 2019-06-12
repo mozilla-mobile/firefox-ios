@@ -40,8 +40,12 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     var libraryPanelDelegate: LibraryPanelDelegate?
 
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+    lazy var tableViewLongPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTableView))
+    }()
+
+    lazy var backButtonViewLongPressRecognizer: UILongPressGestureRecognizer = {
+        return UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBackButtonView))
     }()
 
     let bookmarkFolderGUID: GUID
@@ -77,7 +81,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.addGestureRecognizer(longPressRecognizer)
+        tableView.addGestureRecognizer(tableViewLongPressRecognizer)
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.allowsSelectionDuringEditing = true
 
@@ -143,6 +147,14 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if let backButtonView = self.backButtonView() {
+            backButtonView.addGestureRecognizer(backButtonViewLongPressRecognizer)
+        }
+    }
+
     override func applyTheme() {
         super.applyTheme()
 
@@ -184,6 +196,12 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 }
             }
         }
+    }
+
+    fileprivate func backButtonView() -> UIView? {
+        return navigationController?.navigationBar.subviews
+            .find({ $0.description.starts(with: "<_UINavigationBarContentView:") })?.subviews
+            .find({ $0.description.starts(with: "<_UIButtonBarButton:") })
     }
 
     fileprivate func centerVisibleRow() -> Int {
@@ -255,13 +273,17 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         flashLastRowOnNextReload = true
     }
 
-    @objc fileprivate func didLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc fileprivate func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard longPressGestureRecognizer.state == .began, let indexPath = tableView.indexPathForRow(at: touchPoint) else {
             return
         }
 
         presentContextMenu(for: indexPath)
+    }
+
+    @objc fileprivate func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        navigationController?.popToRootViewController(animated: true)
     }
 
     @objc fileprivate func notificationReceived(_ notification: Notification) {
