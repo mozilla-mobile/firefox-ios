@@ -255,8 +255,10 @@ extension PhotonActionSheetProtocol {
         }
 
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _ in
-            UIPasteboard.general.url = tab.canonicalURL?.displayURL
-            success(Strings.AppMenuCopyURLConfirmMessage)
+            if let url = tab.canonicalURL?.displayURL {
+                UIPasteboard.general.url = url
+                success(Strings.AppMenuCopyURLConfirmMessage)
+            }
         }
 
         var mainActions = [sharePage]
