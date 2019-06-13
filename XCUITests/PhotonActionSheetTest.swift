@@ -97,7 +97,7 @@ class PhotonActionSheetTest: BaseTestCase {
             waitForExistence(app.buttons["Copy"])
         }
         fennecElement.tap()
-        waitForExistence(app.navigationBars["ShareTo.ShareView"])
+        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 5)
     }
 
     private func disableFennec() {
