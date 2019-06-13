@@ -109,26 +109,26 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
 
     func test11WebViewContextMenu() {
         // Link
-        navigator.openURL("\(testPageBase)/link.html")
+        navigator.openURL("http://wikipedia.org")
         navigator.goto(WebLinkContextMenu)
         snapshot("11WebViewContextMenu-01-link")
         navigator.back()
 
         // Image
-        navigator.openURL("\(testPageBase)/image.html")
+        navigator.openURL("http://wikipedia.org")
         navigator.goto(WebImageContextMenu)
         snapshot("11WebViewContextMenu-02-image")
         navigator.back()
 
         // Image inside Link
-        navigator.openURL("\(testPageBase)/imageWithLink.html")
+        navigator.openURL("http://wikipedia.org")
         navigator.goto(WebLinkContextMenu)
         snapshot("11WebViewContextMenu-03-imageWithLink")
         navigator.back()
     }
 
     func test12WebViewAuthenticationDialog() {
-        navigator.openURL("\(testPageBase)/basicauth/index.html", waitForLoading: false)
+        navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         navigator.goto(BasicAuthDialog)
         snapshot("12WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
         navigator.back()
@@ -153,39 +153,28 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         snapshot("13ContextMenuReloadButton-03", waitForLoadingIndicator: false)
     }
 
-    func test16PasscodeSettings() {
-        navigator.goto(SetPasscodeScreen)
-        snapshot("16SetPasscodeScreen-1-nopasscode")
-        userState.newPasscode = "111111"
-        navigator.performAction(Action.SetPasscodeTypeOnce)
-        snapshot("16SetPasscodeScreen-2-typepasscode")
-
-        userState.newPasscode = "111112"
-        navigator.performAction(Action.SetPasscodeTypeOnce)
-        snapshot("16SetPasscodeScreen-3-passcodesmustmatch")
-
-        userState.newPasscode = "111111"
-        navigator.performAction(Action.SetPasscode)
-        snapshot("16SetPasscodeScreen-3")
-
-        navigator.goto(PasscodeIntervalSettings)
-        snapshot("16PasscodeIntervalScreen-1")
-
-    }
-
-    func test17PasswordSnackbar() {
-        navigator.openURL("\(testPageBase)/password.html")
-        app.webViews.element(boundBy: 0).buttons["submit"].tap()
-        snapshot("17PasswordSnackbar-01")
-        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
-        // The password is pre-filled with a random value so second this this will cause the update prompt
-        navigator.openURL("\(testPageBase)/password.html")
-        app.webViews.element(boundBy: 0).buttons["submit"].tap()
-        snapshot("17PasswordSnackbar-02")
-    }
+//    func test16PasscodeSettings() {
+//        navigator.goto(SetPasscodeScreen)
+//        snapshot("16SetPasscodeScreen-1-nopasscode")
+//        userState.newPasscode = "111111"
+//        navigator.performAction(Action.SetPasscodeTypeOnce)
+//        snapshot("16SetPasscodeScreen-2-typepasscode")
+//
+//        userState.newPasscode = "111112"
+//        navigator.performAction(Action.SetPasscodeTypeOnce)
+//        snapshot("16SetPasscodeScreen-3-passcodesmustmatch")
+//
+//        userState.newPasscode = "111111"
+//        navigator.performAction(Action.SetPasscode)
+//        snapshot("16SetPasscodeScreen-3")
+//
+//        navigator.goto(PasscodeIntervalSettings)
+//        snapshot("16PasscodeIntervalScreen-1")
+//
+//    }
 
     func test18TopSitesMenu() {
-        navigator.openURL(loremIpsumURL)
+        navigator.goto(HomePanel_TopSites)
         navigator.goto(TopSitesPanelContextMenu)
         snapshot("18TopSitesMenu-01")
     }
@@ -212,46 +201,4 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         snapshot("21ReaderModeSettingsMenu-01")
     }
 
-    func test22ReadingListTableContextMenu() {
-        let app = XCUIApplication()
-        loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
-        app.buttons["TabLocationView.readerModeButton"].tap()
-        app.buttons["ReaderModeBarView.listStatusButton"].tap()
-        app.textFields["url"].tap()
-        app.buttons["HomePanels.ReadingList"].tap()
-        app.tables["ReadingTable"].cells.element(boundBy: 0).press(forDuration: 2.0)
-        snapshot("22ReadingListTableContextMenu-01")
-    }
-
-    func test23ReadingListTableRowMenu() {
-        let app = XCUIApplication()
-        loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
-        app.buttons["TabLocationView.readerModeButton"].tap()
-        app.buttons["ReaderModeBarView.listStatusButton"].tap()
-        app.textFields["url"].tap()
-        app.buttons["HomePanels.ReadingList"].tap()
-        app.tables["ReadingTable"].cells.element(boundBy: 0).swipeLeft()
-        snapshot("23ReadingListTableRowMenu-01")
-        app.tables["ReadingTable"].cells.element(boundBy: 0).buttons.element(boundBy: 1).tap()
-        app.tables["ReadingTable"].cells.element(boundBy: 0).swipeLeft()
-        snapshot("23ReadingListTableRowMenu-02")
-    }
-
-    func test24BookmarksListTableRowMenu() {
-        navigator.openURL(loremIpsumURL)
-        navigator.performAction(Action.Bookmark)
-        navigator.goto(HomePanel_Bookmarks)
-        app.tables["Bookmarks List"].cells.element(boundBy: 0).swipeLeft()
-        snapshot("24BookmarksListTableRowMenu-01")
-    }
-
-    func test25TranslationSnackbar() {
-        userState.localeIsExpectedDifferent = true
-        let lang = "ar" == Locale.autoupdatingCurrent.languageCode ? "zh-CN" : "ar"
-
-        navigator.openURL("https://mozilla.org/\(lang)/about/manifesto")
-        navigator.goto(TranslatePageMenu)
-
-        snapshot("25TranslationSnackbar-01")
-    }
 }
