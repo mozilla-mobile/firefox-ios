@@ -113,8 +113,6 @@
 		2FF8264919D3CAFF003ED08E /* NSData+SHA.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825E619D3CAFF003ED08E /* NSData+SHA.m */; };
 		2FF8264A19D3CAFF003ED08E /* NSData+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF825E719D3CAFF003ED08E /* NSData+Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FF8264B19D3CAFF003ED08E /* NSData+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825E819D3CAFF003ED08E /* NSData+Utils.m */; };
-		2FF8264C19D3CAFF003ED08E /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FF825E919D3CAFF003ED08E /* NSString+Utils.h */; };
-		2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */; };
 		E63320451EC2052100F2BC80 /* libcrypto.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA17FD019D3D32300F3D844 /* libcrypto.a */; };
 		E63320461EC2052100F2BC80 /* libssl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA17FD119D3D32300F3D844 /* libssl.a */; };
 /* End PBXBuildFile section */
@@ -242,8 +240,6 @@
 		2FF825E619D3CAFF003ED08E /* NSData+SHA.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+SHA.m"; sourceTree = "<group>"; };
 		2FF825E719D3CAFF003ED08E /* NSData+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Utils.h"; sourceTree = "<group>"; };
 		2FF825E819D3CAFF003ED08E /* NSData+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Utils.m"; sourceTree = "<group>"; };
-		2FF825E919D3CAFF003ED08E /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
-		2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
 		E6D69D091EC241C100B80600 /* opensslconf_ios_arm64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opensslconf_ios_arm64.h; sourceTree = "<group>"; };
 		E6D69D0A1EC241C100B80600 /* opensslconf_ios_armv7.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opensslconf_ios_armv7.h; sourceTree = "<group>"; };
 		E6D69D0B1EC241C100B80600 /* opensslconf_ios_armv7s.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = opensslconf_ios_armv7s.h; sourceTree = "<group>"; };
@@ -323,8 +319,6 @@
 				2FF825E619D3CAFF003ED08E /* NSData+SHA.m */,
 				2FF825E719D3CAFF003ED08E /* NSData+Utils.h */,
 				2FF825E819D3CAFF003ED08E /* NSData+Utils.m */,
-				2FF825E919D3CAFF003ED08E /* NSString+Utils.h */,
-				2FF825EA19D3CAFF003ED08E /* NSString+Utils.m */,
 				2FF824D419D3C6D8003ED08E /* KeyPair.h */,
 				2FF824D519D3C6D8003ED08E /* KeyPair.m */,
 				2FF824D619D3C6D8003ED08E /* PrivateKey.h */,
@@ -481,7 +475,6 @@
 				28F9520119D0F9FA00DCE892 /* FxA.h in Headers */,
 				2FA1801D19D3D32300F3D844 /* JSONWebTokenUtils.h in Headers */,
 				2FA1801A19D3D32300F3D844 /* x509.h in Headers */,
-				2FF8264C19D3CAFF003ED08E /* NSString+Utils.h in Headers */,
 				2FA17FE519D3D32300F3D844 /* dsa.h in Headers */,
 				2FA1801619D3D32300F3D844 /* txt_db.h in Headers */,
 				2FA17FD319D3D32300F3D844 /* asn1.h in Headers */,
@@ -672,7 +665,6 @@
 				0A80BCCF1EC538DD00926C6A /* decrypt.c in Sources */,
 				2FA1801E19D3D32300F3D844 /* JSONWebTokenUtils.m in Sources */,
 				2FF824E719D3C6D8003ED08E /* RSAKeyPair.m in Sources */,
-				2FF8264D19D3CAFF003ED08E /* NSString+Utils.m in Sources */,
 				0A80BCD21EC538DD00926C6A /* params.c in Sources */,
 				0A80BCCE1EC538DD00926C6A /* base64url.c in Sources */,
 				2FF825EC19D3CAFF003ED08E /* ASNUtils.m in Sources */,
