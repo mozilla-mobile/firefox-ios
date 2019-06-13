@@ -185,5 +185,7 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>UIStatusBarHidden</key>
+	<true/>
 </dict>
 </plist>
