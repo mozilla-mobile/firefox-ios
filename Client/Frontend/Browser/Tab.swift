@@ -118,6 +118,7 @@ class Tab: NSObject {
     var temporaryDocument: TemporaryDocument?
 
     fileprivate var _noImageMode = false
+    fileprivate var _nightMode = false
 
     /// Returns true if this tab's URL is known, and it's longer than we want to store.
     var urlIsTooLong: Bool {
@@ -131,11 +132,32 @@ class Tab: NSObject {
     var noImageMode: Bool {
         get { return _noImageMode }
         set {
-            if newValue == _noImageMode {
+            guard newValue != _noImageMode else {
                 return
             }
             _noImageMode = newValue
+
             contentBlocker?.noImageMode(enabled: _noImageMode)
+
+            UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: _nightMode, noImageMode: _noImageMode)
+        }
+    }
+
+    var nightMode: Bool {
+        get { return _nightMode }
+        set {
+            guard newValue != _nightMode else {
+                return
+            }
+            _nightMode = newValue
+
+            webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(_nightMode))")
+            // For WKWebView background color to take effect, isOpaque must be false,
+            // which is counter-intuitive. Default is true. The color is previously
+            // set to black in the WKWebView init.
+            webView?.isOpaque = !_nightMode
+
+            UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: _nightMode, noImageMode: _noImageMode)
         }
     }
 
@@ -169,7 +191,6 @@ class Tab: NSObject {
     weak var parent: Tab?
 
     fileprivate var contentScriptManager = TabContentScriptManager()
-    private(set) var userScriptManager: UserScriptManager?
 
     fileprivate let configuration: WKWebViewConfiguration
 
@@ -244,7 +265,7 @@ class Tab: NSObject {
 
             self.webView = webView
             self.webView?.addObserver(self, forKeyPath: KVOConstants.URL.rawValue, options: .new, context: nil)
-            self.userScriptManager = UserScriptManager(tab: self)
+            UserScriptManager.shared.injectUserScriptsIntoTab(self, nightMode: _nightMode, noImageMode: _noImageMode)
             tabDelegate?.tab?(self, didCreateWebView: webView)
         }
     }
@@ -554,13 +575,6 @@ class Tab: NSObject {
 
     func isDescendentOf(_ ancestor: Tab) -> Bool {
         return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
-    }
-
-    func setNightMode(_ enabled: Bool) {
-        webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(enabled))", completionHandler: nil)
-        // For WKWebView background color to take effect, isOpaque must be false, which is counter-intuitive. Default is true.
-        // The color is previously set to black in the webview init
-        webView?.isOpaque = !enabled
     }
 
     func injectUserScriptWith(fileName: String, type: String = "js", injectionTime: WKUserScriptInjectionTime = .atDocumentEnd, mainFrameOnly: Bool = true) {
