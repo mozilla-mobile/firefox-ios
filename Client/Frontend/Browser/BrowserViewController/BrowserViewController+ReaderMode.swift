@@ -155,6 +155,8 @@ extension BrowserViewController {
 
 extension BrowserViewController: ReaderModeBarViewDelegate {
     func readerModeBar(_ readerModeBar: ReaderModeBarView, didSelectButton buttonType: ReaderModeBarButtonType) {
+        libraryDrawerViewController?.close()
+
         switch buttonType {
         case .settings:
             if let readerMode = tabManager.selectedTab?.getContentScript(name: "ReaderMode") as? ReaderMode, readerMode.state == ReaderModeState.active {
