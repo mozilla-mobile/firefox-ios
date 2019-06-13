@@ -893,10 +893,6 @@ class BrowserViewController: UIViewController {
             if tab === tabManager.selectedTab {
                 navigationToolbar.updateReloadStatus(loading)
             }
-
-            if !loading {
-                runScriptsOnWebView(webView)
-            }
         case .URL:
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
@@ -928,15 +924,6 @@ class BrowserViewController: UIViewController {
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
-        }
-    }
-
-    fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
-        guard let url = webView.url, url.isWebPage(), !InternalURL.isValid(url: url) else {
-            return
-        }
-        if NoImageModeHelper.isActivated(profile.prefs) {
-            webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
         }
     }
 
@@ -1120,9 +1107,6 @@ class BrowserViewController: UIViewController {
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
-
-                // Re-run additional scripts in webView to extract updated favicons and metadata.
-                runScriptsOnWebView(webView)
 
                 webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
             }

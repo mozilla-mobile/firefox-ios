@@ -77,6 +77,6 @@ Object.defineProperty(window.__firefox__.NoImageMode, "setEnabled", {
   }
 });
 
-window.addEventListener("DOMContentLoaded", function (event) {
+window.addEventListener("DOMContentLoaded", function() {
   window.__firefox__.NoImageMode.setEnabled(window.__firefox__.NoImageMode.enabled);
 });
