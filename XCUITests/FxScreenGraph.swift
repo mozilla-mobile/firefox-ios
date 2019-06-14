@@ -55,6 +55,9 @@ let HomePanel_Library = "HomePanel_Library"
 let TranslatePageMenu = "TranslatePageMenu"
 let DontTranslatePageMenu = "DontTranslatePageMenu"
 let MobileBookmarks = "MobileBookmarks"
+let MobileBookmarksEdit = "MobileBookmarksEdit"
+let MobileBookmarksAdd = "MobileBookmarksAdd"
+let EnterNewBookmarkTitleAndUrl = "EnterNewBookmarkTitleAndUrl"
 let RequestDesktopSite = "RequestDesktopSite"
 let RequestMobileSite = "RequestMobileSite"
 
@@ -211,6 +214,13 @@ class Action {
     static let CloseReadingListPanel = "CloseReadingListPanel"
     static let CloseHistoryListPanel = "CloseHistoryListPanel"
     static let CloseDownloadsPanel = "CloseDownloadsPanel"
+
+    static let AddNewBookmark = "AddNewBookmark"
+    static let AddNewFolder = "AddNewFolder"
+    static let AddNewSeparator = "AddNewSeparator"
+    static let RemoveItemMobileBookmarks = "RemoveItemMobileBookmarks"
+    static let ConfirmRemoveItemMobileBookmarks = "ConfirmRemoveItemMobileBookmarks"
+    static let SaveCreatedBookmark = "SaveCreatedBookmark"
 }
 
 @objcMembers
@@ -493,6 +503,36 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let bookmarksButton = bookmarksMenuNavigationBar.buttons["Bookmarks"]
         screenState.gesture(forAction: Action.ExitMobileBookmarksFolder, transitionTo: LibraryPanel_Bookmarks) { userState in
                 bookmarksButton.tap()
+        }
+
+        screenState.tap(app.buttons["Edit"], to: MobileBookmarksEdit)
+    }
+
+    map.addScreenState(MobileBookmarksEdit) { screenState in
+        screenState.tap(app.buttons["Add"], to: MobileBookmarksAdd)
+        screenState.gesture(forAction: Action.RemoveItemMobileBookmarks) { userState in
+            app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
+        }
+        screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
+            app.buttons["Delete"].tap()
+        }
+    }
+
+    map.addScreenState(MobileBookmarksAdd) { screenState in
+        screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { userState in
+            app.tables.cells["action_bookmark"].tap()
+        }
+        screenState.gesture(forAction: Action.AddNewFolder) { userState in
+            app.tables.cells["bookmarkFolder"].tap()
+        }
+        screenState.gesture(forAction: Action.AddNewSeparator) { userState in
+            app.tables.cells["nav-menu"].tap()
+        }
+    }
+
+    map.addScreenState(EnterNewBookmarkTitleAndUrl) { screenState in
+        screenState.gesture(forAction: Action.SaveCreatedBookmark) { userState in
+            app.buttons["Save"].tap()
         }
     }
 
