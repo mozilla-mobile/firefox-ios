@@ -88,6 +88,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             self.tableView.setEditing(false, animated: true)
             self.navigationItem.leftBarButtonItem = nil
             self.navigationItem.rightBarButtonItem = self.editBarButtonItem
+            self.setupBackButtonGestureRecognizer()
         }
 
         self.newBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add) { _ in
@@ -143,10 +144,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if let backButtonView = self.backButtonView() {
-            let backButtonViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBackButtonView))
-            backButtonView.addGestureRecognizer(backButtonViewLongPressRecognizer)
-        }
+        setupBackButtonGestureRecognizer()
     }
 
     override func applyTheme() {
@@ -189,6 +187,13 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                     self.flashRow(at: lastIndexPath)
                 }
             }
+        }
+    }
+
+    fileprivate func setupBackButtonGestureRecognizer() {
+        if let backButtonView = self.backButtonView() {
+            let backButtonViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBackButtonView))
+            backButtonView.addGestureRecognizer(backButtonViewLongPressRecognizer)
         }
     }
 
