@@ -332,6 +332,9 @@
                   Identifier = "SearchTests/testSearchEngine()">
                </Test>
                <Test
+                  Identifier = "SearchTests/testSearchStartAfterTypingTwoWords()">
+               </Test>
+               <Test
                   Identifier = "SiteLoadTest">
                </Test>
                <Test

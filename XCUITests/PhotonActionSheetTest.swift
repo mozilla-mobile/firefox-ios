@@ -47,7 +47,7 @@ class PhotonActionSheetTest: BaseTestCase {
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
         pageObjectButtonCenter.press(forDuration: 1)
 
-        waitForExistence(app.buttons["Copy"])
+        waitForExistence(app.buttons["Copy"], timeout: 5)
     }
 
     func testSendToDeviceFromPageOptionsMenu() {
@@ -83,7 +83,7 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.openURL("example.com")
         navigator.goto(PageOptionsMenu)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        waitForExistence(app.buttons["Copy"])
+        waitForExistence(app.buttons["Copy"], timeout: 5)
         let countButtons = app.collectionViews.cells.collectionViews.buttons.count
         let fennecElement = app.collectionViews.cells.collectionViews.buttons.element(boundBy: 1)
         // If Fennec has not been configured there are 5 buttons, 6 if it is there already
@@ -97,7 +97,7 @@ class PhotonActionSheetTest: BaseTestCase {
             waitForExistence(app.buttons["Copy"])
         }
         fennecElement.tap()
-        waitForExistence(app.navigationBars["ShareTo.ShareView"])
+        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 5)
     }
 
     private func disableFennec() {

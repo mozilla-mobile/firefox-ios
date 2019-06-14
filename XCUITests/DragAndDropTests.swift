@@ -27,6 +27,7 @@ class DragAndDropTests: BaseTestCase {
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        waitForExistence(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 3)
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
@@ -117,6 +118,7 @@ fileprivate extension BaseTestCase {
         let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
 
         if (dragAndDropTab) {
+            sleep(1)
             XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct")
             XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct")
         } else {
