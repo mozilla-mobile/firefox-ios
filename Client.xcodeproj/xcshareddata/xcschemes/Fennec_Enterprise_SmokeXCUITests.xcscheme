@@ -288,7 +288,25 @@
                   Identifier = "BookmarkingTests/testAccessBookmarksFromContextMenu()">
                </Test>
                <Test
+                  Identifier = "BookmarkingTests/testAddBookmark()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testAddNewFolder()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testAddNewMarker()">
+               </Test>
+               <Test
                   Identifier = "BookmarkingTests/testBookmarkingUI()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testDeleteBookmarkContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testDeleteBookmarkSwiping()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testRecentBookmarks()">
                </Test>
                <Test
                   Identifier = "BrowsingPDFTests">
