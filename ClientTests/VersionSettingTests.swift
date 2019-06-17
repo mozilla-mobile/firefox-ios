@@ -14,7 +14,7 @@ class VersionSettingTests: XCTestCase {
         let versionSetting = VersionSetting(settings: settingsTable)
         
         // MARK: - when
-        versionSetting.onClick(navigationController)
+        versionSetting.onLongPress(navigationController)
         
         // MARK: - then
         let appVersionString = UIPasteboard.general.string
