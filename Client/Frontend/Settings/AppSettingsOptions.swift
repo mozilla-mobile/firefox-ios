@@ -1087,15 +1087,15 @@ class OpenWithSetting: Setting {
     }
 }
 
-class AdvanceAccountSetting: HiddenSetting {
+class AdvancedAccountSetting: HiddenSetting {
     let profile: Profile
 
     override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "AdvanceAccount.Setting" }
+    override var accessibilityIdentifier: String? { return "AdvancedAccount.Setting" }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsAdvanceAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: Strings.SettingsAdvancedAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override init(settings: SettingsTableViewController) {
@@ -1104,7 +1104,7 @@ class AdvanceAccountSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AdvanceAccountSettingViewController()
+        let viewController = AdvancedAccountSettingViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }

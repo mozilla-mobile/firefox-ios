@@ -74,7 +74,11 @@ public struct LatestDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public let settingsURL = URL(string: "https://latest.dev.lcip.org/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://latest.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+    public var sync15Configuration: Sync15Configuration {
+        get {
+            return StageSync15Configuration(prefs: self.prefs)
+        }
+    }
 
     public let pushConfiguration: PushConfiguration = FennecPushConfiguration()
 }
@@ -96,7 +100,11 @@ public struct StableDevFirefoxAccountConfiguration: FirefoxAccountConfiguration 
     public let settingsURL = URL(string: "https://stable.dev.lcip.org/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://stable.dev.lcip.org/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+    public var sync15Configuration: Sync15Configuration {
+        get {
+            return StageSync15Configuration(prefs: self.prefs)
+        }
+    }
 
     public let pushConfiguration: PushConfiguration = FennecPushConfiguration()
 }
@@ -118,7 +126,11 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
     public let settingsURL = URL(string: "https://accounts.stage.mozaws.net/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://accounts.stage.mozaws.net/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = StageSync15Configuration()
+    public var sync15Configuration: Sync15Configuration {
+        get {
+            return StageSync15Configuration(prefs: self.prefs)
+        }
+    }
 
     public var pushConfiguration: PushConfiguration {
         get {
@@ -151,7 +163,11 @@ public struct ProductionFirefoxAccountConfiguration: FirefoxAccountConfiguration
     public let settingsURL = URL(string: "https://accounts.firefox.com/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://accounts.firefox.com/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = ProductionSync15Configuration()
+    public var sync15Configuration: Sync15Configuration {
+        get {
+            return ProductionSync15Configuration(prefs: self.prefs)
+        }
+    }
 
     public let pushConfiguration: PushConfiguration = FirefoxPushConfiguration()
 }
@@ -247,7 +263,11 @@ public struct ChinaEditionFirefoxAccountConfiguration: FirefoxAccountConfigurati
     public let settingsURL = URL(string: "https://accounts.firefox.com.cn/settings?context=fx_ios_v1")!
     public let forceAuthURL = URL(string: "https://accounts.firefox.com.cn/force_auth?service=sync&context=fx_ios_v1")!
 
-    public let sync15Configuration: Sync15Configuration = ChinaEditionSync15Configuration()
+    public var sync15Configuration: Sync15Configuration {
+        get {
+            return ChinaEditionSync15Configuration(prefs: self.prefs)
+        }
+    }
 
     public let pushConfiguration: PushConfiguration = FirefoxPushConfiguration()
 }
@@ -256,16 +276,56 @@ public protocol Sync15Configuration {
     var tokenServerEndpointURL: URL { get }
 }
 
+// If the user specifies a custom Sync token server URI in the "Advanced Sync Settings"
+// menu (toggled via enabling the Debug menu), this will return a URL to override
+// whatever Sync token server they would otherwise get by default. They can also provide
+// an autoconfig URI that gives a full set of URLs to use for FxA/Sync and still also
+// provide a custom Sync token server URI to override that value with.
+fileprivate func overriddenCustomSyncTokenServerURI(prefs: Prefs?) -> URL? {
+    guard let prefs = prefs, prefs.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false, let customSyncTokenServerURIString = prefs.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) else {
+        return nil
+    }
+
+    return URL(string: customSyncTokenServerURIString)
+}
+
 public struct ChinaEditionSync15Configuration: Sync15Configuration {
-    public let tokenServerEndpointURL = URL(string: "https://sync.firefox.com.cn/token/1.0/sync/1.5")!
+    public init(prefs: Prefs? = nil) {
+        self.prefs = prefs
+    }
+
+    public var prefs: Prefs?
+
+    public var tokenServerEndpointURL: URL {
+        return overriddenCustomSyncTokenServerURI(prefs: prefs) ??
+            URL(string: "https://sync.firefox.com.cn/token/1.0/sync/1.5")!
+    }
 }
 
 public struct ProductionSync15Configuration: Sync15Configuration {
-    public let tokenServerEndpointURL = URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
+    public init(prefs: Prefs? = nil) {
+        self.prefs = prefs
+    }
+
+    public var prefs: Prefs?
+
+    public var tokenServerEndpointURL: URL {
+        return overriddenCustomSyncTokenServerURI(prefs: prefs) ??
+            URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
+    }
 }
 
 public struct StageSync15Configuration: Sync15Configuration {
-    public let tokenServerEndpointURL = URL(string: "https://token.stage.mozaws.net/1.0/sync/1.5")!
+    public init(prefs: Prefs? = nil) {
+        self.prefs = prefs
+    }
+
+    public var prefs: Prefs?
+
+    public var tokenServerEndpointURL: URL {
+        return overriddenCustomSyncTokenServerURI(prefs: prefs) ??
+            URL(string: "https://token.stage.mozaws.net/1.0/sync/1.5")!
+    }
 }
 
 public struct CustomSync15Configuration: Sync15Configuration {
@@ -276,11 +336,11 @@ public struct CustomSync15Configuration: Sync15Configuration {
     public var prefs: Prefs?
 
     public var tokenServerEndpointURL: URL {
-        get {
-            if let tokenServer = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncToken), let url = URL(string: tokenServer + "/1.0/sync/1.5") {
-                return url
-            }
-            return ProductionSync15Configuration().tokenServerEndpointURL
+        if let tokenServer = self.prefs?.stringForKey(PrefsKeys.KeyCustomSyncToken), let url = URL(string: tokenServer + "/1.0/sync/1.5") {
+            return overriddenCustomSyncTokenServerURI(prefs: prefs) ?? url
         }
+
+        return overriddenCustomSyncTokenServerURI(prefs: prefs) ??
+            ProductionSync15Configuration().tokenServerEndpointURL
     }
 }

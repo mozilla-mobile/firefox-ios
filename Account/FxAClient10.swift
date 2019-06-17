@@ -593,7 +593,7 @@ open class FxAClient10 {
             return deferMaybe(cachedOAuthResponse)
         }
 
-        let audience = getAudience(forURL: oauthURL)
+        let audience = TokenServerClient.getAudience(forURL: oauthURL)
         let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSign(with: keyPair.privateKey, certificate: certificate, audience: audience)
         let oauthAuthorizationURL = oauthURL.appendingPathComponent("/authorization")
         var mutableURLRequest = URLRequest(url: oauthAuthorizationURL)
@@ -638,14 +638,6 @@ open class FxAClient10 {
             mutableURLRequest.setValue("Bearer " + oauthResult.accessToken, forHTTPHeaderField: "Authorization")
 
             return self.makeRequest(mutableURLRequest, responseHandler: FxAClient10.profileResponse)
-        }
-    }
-
-    open func getAudience(forURL URL: URL) -> String {
-        if let port = URL.port {
-            return "\(URL.scheme!)://\(URL.host!):\(port)"
-        } else {
-            return "\(URL.scheme!)://\(URL.host!)"
         }
     }
 
