@@ -172,6 +172,84 @@ class BookmarkingTests: BaseTestCase {
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
     }
 
+    func testAddBookmark() {
+        addNewBookmark()
+        // Verify that clicking on bookmark opens the website
+        app.tables["Bookmarks List"].cells.element(boundBy: 0).tap()
+        waitForExistence(app.textFields["url"], timeout: 5)
+    }
+
+    func testAddNewFolder() {
+        navigator.goto(MobileBookmarks)
+        navigator.goto(MobileBookmarksAdd)
+        navigator.performAction(Action.AddNewFolder)
+        waitForExistence(app.navigationBars["New Folder"])
+        // XCTAssertFalse(app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
+        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).tap()
+        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).typeText("Test Folder")
+        app.buttons["Save"].tap()
+        app.buttons["Done"].tap()
+        checkItemsInBookmarksList(items: 1)
+        navigator.nowAt(MobileBookmarks)
+        // Now remove the folder
+        navigator.performAction(Action.RemoveItemMobileBookmarks)
+        waitForExistence(app.buttons["Delete"])
+        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
+        checkItemsInBookmarksList(items: 0)
+    }
+
+    func testAddNewMarker() {
+        navigator.goto(MobileBookmarks)
+        navigator.goto(MobileBookmarksAdd)
+        navigator.performAction(Action.AddNewSeparator)
+        app.buttons["Done"].tap()
+        checkItemsInBookmarksList(items: 1)
+
+        // Remove it
+        navigator.nowAt(MobileBookmarks)
+        navigator.performAction(Action.RemoveItemMobileBookmarks)
+        waitForExistence(app.buttons["Delete"])
+        navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
+        checkItemsInBookmarksList(items: 0)
+    }
+
+    func testDeleteBookmarkSwiping() {
+        addNewBookmark()
+        // Remove by swiping
+        app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
+        app.buttons["Delete"].tap()
+        checkItemsInBookmarksList(items: 0)
+    }
+
+    func testDeleteBookmarkContextMenu() {
+        addNewBookmark()
+        // Remove by long press and select option from context menu
+        app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
+        waitForExistence(app.tables["Context Menu"])
+        app.tables["Context Menu"].cells["action_bookmark_remove"].tap()
+        checkItemsInBookmarksList(items: 0)
+    }
+
+    private func addNewBookmark() {
+        navigator.goto(MobileBookmarksAdd)
+        navigator.performAction(Action.AddNewBookmark)
+        waitForExistence(app.navigationBars["New Bookmark"], timeout: 3)
+        // Enter the bookmarks details
+        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).tap()
+        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).typeText("BBC")
+
+        app.tables["SiteTable"].cells.textFields["https://"].tap()
+        app.tables["SiteTable"].cells.textFields["https://"].typeText("bbc.com")
+        navigator.performAction(Action.SaveCreatedBookmark)
+        app.buttons["Done"].tap()
+        checkItemsInBookmarksList(items: 1)
+    }
+
+    private func checkItemsInBookmarksList(items: Int) {
+        waitForExistence(app.tables["Bookmarks List"], timeout: 3)
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, items)
+    }
+
     private func typeOnSearchBar(text: String) {
         waitForExistence(app.textFields["address"])
         app.textFields["address"].typeText(text)
