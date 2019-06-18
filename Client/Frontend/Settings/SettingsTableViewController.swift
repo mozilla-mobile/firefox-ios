@@ -96,6 +96,9 @@ class Setting: NSObject {
     // Called when the pref is tapped.
     func onClick(_ navigationController: UINavigationController?) { return }
 
+    // Called when the pref is long-pressed.
+    func onLongPress(_ navigationController: UINavigationController?) { return }
+
     // Helper method to set up and push a SettingsContentViewController
     func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?) {
         if let url = self.url {
@@ -566,6 +569,9 @@ class SettingsTableViewController: ThemedTableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
+
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+        tableView.addGestureRecognizer(longPressGestureRecognizer)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -623,6 +629,18 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc func firefoxAccountDidChange() {
         self.tableView.reloadData()
+    }
+
+    @objc func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        let location = gestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else {
+            return
+        }
+
+        let section = settings[indexPath.section]
+        if let setting = section[indexPath.row], setting.enabled {
+            setting.onLongPress(navigationController)
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -705,6 +723,8 @@ class SettingsTableViewController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], setting.enabled {
             setting.onClick(navigationController)

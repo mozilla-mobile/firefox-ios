@@ -602,7 +602,6 @@ class VersionSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        copyAppVersionAndPresentAlert(by: navigationController)
         DebugSettingsClickCount += 1
         if DebugSettingsClickCount >= 5 {
             DebugSettingsClickCount = 0
@@ -610,7 +609,11 @@ class VersionSetting: Setting {
             settings.tableView.reloadData()
         }
     }
-    
+
+    override func onLongPress(_ navigationController: UINavigationController?) {
+        copyAppVersionAndPresentAlert(by: navigationController)
+    }
+
     func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
         let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
