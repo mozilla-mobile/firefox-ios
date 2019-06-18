@@ -553,24 +553,24 @@ open class BrowserProfile: Profile {
             return CustomFirefoxAccountConfiguration(prefs: self.prefs)
         }
         if prefs.boolForKey("useChinaSyncService") ?? BrowserProfile.isChinaEdition {
-            return ChinaEditionFirefoxAccountConfiguration()
+            return ChinaEditionFirefoxAccountConfiguration(prefs: self.prefs)
         }
         if prefs.boolForKey("useStageSyncService") ?? false {
-            return StageFirefoxAccountConfiguration()
+            return StageFirefoxAccountConfiguration(prefs: self.prefs)
         }
-        return ProductionFirefoxAccountConfiguration()
+        return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
     }
 
     fileprivate lazy var account: Account.FirefoxAccount? = {
-        let key = self.name + ".account"
-        self.keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
-        if let dictionary = self.keychain.object(forKey: key) as? [String: AnyObject] {
-            let account =  Account.FirefoxAccount.fromDictionary(dictionary)
+        let key = name + ".account"
+        keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
+        if let dictionary = keychain.object(forKey: key) as? [String: AnyObject] {
+            let account =  Account.FirefoxAccount.fromDictionary(dictionary, withPrefs: prefs)
 
             // Check to see if the account configuration set is a custom service
             // and update it to use the custom servers.
             if let configuration = account?.configuration as? CustomFirefoxAccountConfiguration {
-                account?.configuration = CustomFirefoxAccountConfiguration(prefs: self.prefs)
+                account?.configuration = CustomFirefoxAccountConfiguration(prefs: prefs)
             }
             account?.updateProfile()
 

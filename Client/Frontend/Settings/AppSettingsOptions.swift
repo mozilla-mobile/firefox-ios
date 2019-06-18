@@ -950,18 +950,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        // Derive the configuration we display from the profile. Currently, this could be either a custom
-        // FxA server or FxA stage servers.
-        let isOn = prefs.boolForKey(prefKey) ?? false
-        let isCustomSync = prefs.boolForKey(PrefsKeys.KeyUseCustomSyncService) ?? false
-
-        var configurationURL = ProductionFirefoxAccountConfiguration().authEndpointURL
-        if isCustomSync {
-            configurationURL = CustomFirefoxAccountConfiguration(prefs: profile.prefs).authEndpointURL
-        } else if isOn {
-            configurationURL = StageFirefoxAccountConfiguration().authEndpointURL
-        }
-
+        let configurationURL = profile.accountConfiguration.authEndpointURL
         return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 

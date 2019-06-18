@@ -22,7 +22,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     }
 
     func clearCustomAutoconfigPrefs() {
-        self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
+        self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomAccountAutoconfig)
         self.profile.prefs.setString("", forKey: PrefsKeys.KeyCustomSyncToken)
         self.profile.prefs.setString("", forKey: PrefsKeys.KeyCustomSyncProfile)
         self.profile.prefs.setString("", forKey: PrefsKeys.KeyCustomSyncOauth)
@@ -63,7 +63,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
                 return
             }
 
-            self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyUseCustomSyncService)
+            self.profile.prefs.setBool(true, forKey: PrefsKeys.KeyUseCustomAccountAutoconfig)
             self.profile.prefs.setString(customSyncToken, forKey: PrefsKeys.KeyCustomSyncToken)
             self.profile.prefs.setString(customSyncProfile, forKey: PrefsKeys.KeyCustomSyncProfile)
             self.profile.prefs.setString(customSyncOauth, forKey: PrefsKeys.KeyCustomSyncOauth)
@@ -100,7 +100,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     }
 
     func displayAutoconfigErrorAlert() {
-        self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
+        self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomAccountAutoconfig)
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
@@ -111,7 +111,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
     }
 
     func displayNoAutoconfigSetAlert() {
-        self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomSyncService)
+        self.profile.prefs.setBool(false, forKey: PrefsKeys.KeyUseCustomAccountAutoconfig)
         DispatchQueue.main.async {
             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
         }
@@ -214,7 +214,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
 class CustomAutoconfigEnableSetting: BoolSetting {
     init(prefs: Prefs, settingDidChange: ((Bool?) -> Void)? = nil) {
         super.init(
-            prefs: prefs, prefKey: PrefsKeys.KeyUseCustomSyncService, defaultValue: false,
+            prefs: prefs, prefKey: PrefsKeys.KeyUseCustomAccountAutoconfig, defaultValue: false,
             attributedTitleText: NSAttributedString(string: Strings.SettingsAdvancedAccountUseCustomAccountsServiceTitle),
             settingDidChange: settingDidChange
         )

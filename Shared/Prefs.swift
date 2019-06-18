@@ -35,7 +35,7 @@ public struct PrefsKeys {
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
 
-    public static let KeyUseCustomSyncService = "useCustomSyncService"
+    public static let KeyUseCustomAccountAutoconfig = "useCustomSyncService"
     public static let KeyCustomSyncToken = "customSyncTokenServer"
     public static let KeyCustomSyncProfile = "customSyncProfileServer"
     public static let KeyCustomSyncOauth = "customSyncOauthServer"

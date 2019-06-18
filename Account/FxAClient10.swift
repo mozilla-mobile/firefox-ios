@@ -169,10 +169,14 @@ open class FxAClient10 {
     let oauthURL: URL
     let profileURL: URL
 
-    public init(authEndpoint: URL? = nil, oauthEndpoint: URL? = nil, profileEndpoint: URL? = nil) {
-        self.authURL = authEndpoint ?? ProductionFirefoxAccountConfiguration().authEndpointURL as URL
-        self.oauthURL = oauthEndpoint ?? ProductionFirefoxAccountConfiguration().oauthEndpointURL as URL
-        self.profileURL = profileEndpoint ?? ProductionFirefoxAccountConfiguration().profileEndpointURL as URL
+    public init(authEndpoint: URL, oauthEndpoint: URL, profileEndpoint: URL) {
+        self.authURL = authEndpoint
+        self.oauthURL = oauthEndpoint
+        self.profileURL = profileEndpoint
+    }
+
+    public convenience init(configuration: FirefoxAccountConfiguration) {
+        self.init(authEndpoint: configuration.authEndpointURL, oauthEndpoint: configuration.oauthEndpointURL, profileEndpoint: configuration.profileEndpointURL)
     }
 
     open class func KW(_ kw: String) -> Data {

@@ -164,19 +164,19 @@ open class FirefoxAccount {
         return dict
     }
 
-    open class func fromDictionary(_ dictionary: [String: Any]) -> FirefoxAccount? {
+    open class func fromDictionary(_ dictionary: [String: Any], withPrefs prefs: Prefs) -> FirefoxAccount? {
         if let version = dictionary["version"] as? Int {
             // As of this writing, the current version, v2, is backward compatible with v1. The only
             // field added is pushRegistration, which is ok to be nil. If it is nil, then the app
             // will attempt registration when it starts up.
             if version <= AccountSchemaVersion {
-                return FirefoxAccount.fromDictionaryV1(dictionary)
+                return FirefoxAccount.fromDictionaryV1(dictionary, withPrefs: prefs)
             }
         }
         return nil
     }
 
-    fileprivate class func fromDictionaryV1(_ dictionary: [String: Any]) -> FirefoxAccount? {
+    fileprivate class func fromDictionaryV1(_ dictionary: [String: Any], withPrefs prefs: Prefs) -> FirefoxAccount? {
         var configurationLabel: FirefoxAccountConfigurationLabel?
         if let rawValue = dictionary["configurationLabel"] as? String {
             configurationLabel = FirefoxAccountConfigurationLabel(rawValue: rawValue)
@@ -190,7 +190,7 @@ open class FirefoxAccount {
                 let deviceName = dictionary["deviceName"] as? String ?? DeviceInfo.defaultClientName() // Upgrading clients may not have this key!
                 let stateCache = KeychainCache.fromBranch("account.state", withLabel: dictionary["stateKeyLabel"] as? String, withDefault: SeparatedState(), factory: state)
                 let account = FirefoxAccount(
-                    configuration: configurationLabel.toConfiguration(),
+                    configuration: configurationLabel.toConfiguration(prefs: prefs),
                     email: email, uid: uid,
                     deviceRegistration: deviceRegistration,
                     declinedEngines: declinedEngines,
@@ -323,7 +323,7 @@ open class FirefoxAccount {
             self.fxaProfile = FxAProfile(email: email, displayName: displayName, avatar: avatarURL)
         }
 
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+        let client = FxAClient10(configuration: configuration)
         client.getProfile(withSessionToken: married.sessionToken as NSData) >>== { result in
             self.fxaProfile = FxAProfile(email: result.email, displayName: result.displayName, avatar: result.avatarURL)
 
@@ -342,7 +342,7 @@ open class FirefoxAccount {
         guard let married = stateCache.value as? MarriedState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+        let client = FxAClient10(configuration: configuration)
         return client.oauthAuthorize(withSessionToken: married.sessionToken as NSData, scope: FxAOAuthScope.OldSync).bind({ result in
             guard let oauthResponse = result.successValue else {
                 return deferMaybe(ScopedKeyError())
@@ -366,7 +366,7 @@ open class FirefoxAccount {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+        let client = FxAClient10(configuration: configuration)
         return client.devices(withSessionToken: session.sessionToken as NSData) >>== { resp in
             return remoteDevices.replaceRemoteDevices(resp.devices)
         }
@@ -388,7 +388,7 @@ open class FirefoxAccount {
             return deferMaybe(cachedOAuthKeyID)
         }
         // Otherwise, request the scoped key data from the server.
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+        let client = FxAClient10(configuration: configuration)
         return client.scopedKeyData(married.sessionToken as NSData, scope: scope).bind { response in
             guard let allScopedKeyData = response.successValue, let scopedKeyData = allScopedKeyData.find({ $0.scope == scope }), let kXCS = married.kXCS.hexDecodedData.base64urlSafeEncodedString else {
                 return deferMaybe(ScopedKeyError())
@@ -414,7 +414,7 @@ open class FirefoxAccount {
         guard let session = stateCache.value as? TokenState else {
             return deferMaybe(NotATokenStateError(state: stateCache.value))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+        let client = FxAClient10(configuration: configuration)
         return client.notify(deviceIDs: deviceIDs, collectionsChanged: collections, reason: reason, withSessionToken: session.sessionToken as NSData) >>== { resp in
             guard resp.success else {
                 return deferMaybe(NotifyError())
@@ -430,7 +430,7 @@ open class FirefoxAccount {
         guard let ownDeviceId = self.deviceRegistration?.id else {
             return deferMaybe(FxAClientError.local(NSError()))
         }
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+        let client = FxAClient10(configuration: configuration)
         return client.notifyAll(ownDeviceId: ownDeviceId, collectionsChanged: collections, reason: reason, withSessionToken: session.sessionToken as NSData) >>== { resp in
             guard resp.success else {
                 return deferMaybe(NotifyError())
@@ -462,7 +462,7 @@ open class FirefoxAccount {
             KeychainStore.shared.setDictionary(nil, forKey: oauthResponseKeychainKey)
         }
 
-        let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+        let client = FxAClient10(configuration: configuration)
         return client.destroyDevice(ownDeviceId: ownDeviceId, withSessionToken: session.sessionToken as NSData) >>> succeed
     }
 
@@ -504,7 +504,7 @@ open class FirefoxAccount {
             registration = succeed()
         }
         let deferred: Deferred<FxAState> = registration.bind { _ in
-            let client = FxAClient10(authEndpoint: self.configuration.authEndpointURL, oauthEndpoint: self.configuration.oauthEndpointURL, profileEndpoint: self.configuration.profileEndpointURL)
+            let client = FxAClient10(configuration: self.configuration)
             let stateMachine = FxALoginStateMachine(client: client)
             let now = Date.now()
             return stateMachine.advance(fromState: cachedState, now: now).map { newState in

@@ -198,7 +198,9 @@ open class MockProfile: Client.Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
-    public let accountConfiguration: FirefoxAccountConfiguration = ProductionFirefoxAccountConfiguration()
+    public lazy var accountConfiguration: FirefoxAccountConfiguration = {
+        return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
+    }()
     var account: Account.FirefoxAccount?
 
     public func hasAccount() -> Bool {

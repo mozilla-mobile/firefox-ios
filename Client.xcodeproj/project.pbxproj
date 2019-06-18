@@ -406,6 +406,7 @@
 		D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */; };
 		D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0E89A2820910917001CE5C7 /* DownloadsPanel.swift */; };
 		D0EAE0E2228B3762001C875A /* DrawerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EAE0E1228B3762001C875A /* DrawerViewController.swift */; };
+		D0F19E4F22B96D3C00B41AD6 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
 		D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */; };
 		D0FCF8061FE4772D004A7995 /* AllFramesAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8031FE4772C004A7995 /* AllFramesAtDocumentEnd.js */; };
 		D0FCF8071FE4772D004A7995 /* MainFrameAtDocumentEnd.js in Resources */ = {isa = PBXBuildFile; fileRef = D0FCF8041FE4772D004A7995 /* MainFrameAtDocumentEnd.js */; };
@@ -4647,6 +4648,7 @@
 				39F99FE51E3A6F1700F353B4 /* PushConfiguration.swift in Sources */,
 				D32A350E1D6530D80066DAE9 /* FxADevice.swift in Sources */,
 				D047C55620E1640B001A3C07 /* KeyBundle.swift in Sources */,
+				D0F19E4F22B96D3C00B41AD6 /* NSUserDefaultsPrefs.swift in Sources */,
 				39F99FE61E3A6F1700F353B4 /* PushRegistration.swift in Sources */,
 				2F1A3DE11ABE3C90002F1E15 /* FxALoginStateMachine.swift in Sources */,
 				D3DBE6E51D6516FE00033FFF /* FxADeviceRegistration.swift in Sources */,
