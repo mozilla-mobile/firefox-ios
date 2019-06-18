@@ -10,6 +10,7 @@ private struct PasscodeUX {
     static let DigitSize: CGFloat = 30
     static let TopMargin: CGFloat = 80
     static let PasscodeFieldSize = CGSize(width: 160, height: 32)
+    static let PasscodeFieldVerticalOffset: CGFloat = 100
 }
 
 @objc protocol PasscodeInputViewDelegate: AnyObject {
@@ -164,7 +165,7 @@ class PasscodePane: UIView {
 
         codeInputView.snp.makeConstraints { make in
             codeViewCenterConstraint = make.centerX.equalTo(centerContainer).constraint
-            make.bottom.equalTo(centerContainer)
+            make.bottom.equalTo(centerContainer).offset(-PasscodeUX.PasscodeFieldVerticalOffset)
             make.size.equalTo(PasscodeUX.PasscodeFieldSize)
         }
         layoutIfNeeded()
