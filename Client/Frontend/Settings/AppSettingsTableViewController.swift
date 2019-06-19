@@ -127,7 +127,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
                 ForceCrashSetting(settings: self),
-                SlowTheDatabase(settings: self)
+                SlowTheDatabase(settings: self),
+                SentryIDSetting(settings: self),
             ])]
 
         return settings
