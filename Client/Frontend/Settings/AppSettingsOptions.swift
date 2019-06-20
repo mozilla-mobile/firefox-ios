@@ -580,6 +580,36 @@ class SlowTheDatabase: HiddenSetting {
     }
 }
 
+class SentryIDSetting: HiddenSetting {
+    let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash") ?? "0000000000000000000000000000000000000000"
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: \(deviceAppHash)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        copyAppDeviceIDAndPresentAlert(by: navigationController)
+    }
+
+    func copyAppDeviceIDAndPresentAlert(by navigationController: UINavigationController?) {
+        let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
+        let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+        getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
+        UIPasteboard.general.string = deviceAppHash
+        navigationController?.topViewController?.present(alert, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+
+    func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        guard let indexPath = tableView?.indexPathForSelectedRow else { return nil }
+        return tableView?.cellForRow(at: indexPath)
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
