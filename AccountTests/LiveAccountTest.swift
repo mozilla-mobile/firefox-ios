@@ -12,6 +12,12 @@ import XCTest
 
 // Note: All live account tests have been disabled. Please see https://bugzilla.mozilla.org/show_bug.cgi?id=1332028.
 
+// Production Server URLs
+// From https://accounts.firefox.com/.well-known/fxa-client-configuration
+private let ProductionAuthEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
+private let ProductionOAuthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
+private let ProductionProfileEndpointURL = URL(string: "https://profile.accounts.firefox.com/v1")!
+
 /*
  * A base test type for tests that need a live Firefox Account.
  */
@@ -74,7 +80,7 @@ open class LiveAccountTest: XCTestCase {
             let expectation = self.expectation(description: "withCertificate")
 
             let keyPair = RSAKeyPair.generate(withModulusSize: 1024)!
-            let client = FxAClient10()
+            let client = FxAClient10(authEndpoint: ProductionAuthEndpointURL, oauthEndpoint: ProductionOAuthEndpointURL, profileEndpoint: ProductionProfileEndpointURL)
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
             let sign: Deferred<Maybe<FxASignResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
@@ -113,7 +119,7 @@ open class LiveAccountTest: XCTestCase {
 
     // Internal helper.
     func account(_ email: String, password: String, deviceName: String, configuration: FirefoxAccountConfiguration) -> Deferred<Maybe<FirefoxAccount>> {
-        let client = FxAClient10(authEndpoint: configuration.authEndpointURL)
+        let client = FxAClient10(configuration: configuration)
         let emailUTF8 = email.utf8EncodedData
         let passwordUTF8 = password.utf8EncodedData
         let quickStretchedPW = FxAClient10.quickStretchPW(emailUTF8, password: passwordUTF8)
@@ -130,8 +136,9 @@ open class LiveAccountTest: XCTestCase {
 
     func getTestAccount() -> Deferred<Maybe<FirefoxAccount>> {
         // TODO: Use signedInUser.json here.  It's hard to include the same resource file in two Xcode targets.
+        let prefs = NSUserDefaultsPrefs(prefix: "profile")
         return self.account("998797987.sync@restmail.net", password: "998797987.sync@restmail.net", deviceName: "My iPhone",
-            configuration: ProductionFirefoxAccountConfiguration())
+                            configuration: ProductionFirefoxAccountConfiguration(prefs: prefs))
     }
 
     open func getAuthState(_ now: Timestamp) -> Deferred<Maybe<SyncAuthState>> {

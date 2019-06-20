@@ -32,7 +32,10 @@ public struct PrefsKeys {
     public static let ASBookmarkHighlightsVisible = "ASBookmarkHighlightsVisible"
     public static let ASLastInvalidation = "ASLastInvalidation"
 
-    public static let KeyUseCustomSyncService = "useCustomSyncService"
+    public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
+    public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
+
+    public static let KeyUseCustomAccountAutoconfig = "useCustomSyncService"
     public static let KeyCustomSyncToken = "customSyncTokenServer"
     public static let KeyCustomSyncProfile = "customSyncProfileServer"
     public static let KeyCustomSyncOauth = "customSyncOauthServer"

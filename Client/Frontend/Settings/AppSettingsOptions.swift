@@ -980,18 +980,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        // Derive the configuration we display from the profile. Currently, this could be either a custom
-        // FxA server or FxA stage servers.
-        let isOn = prefs.boolForKey(prefKey) ?? false
-        let isCustomSync = prefs.boolForKey(PrefsKeys.KeyUseCustomSyncService) ?? false
-
-        var configurationURL = ProductionFirefoxAccountConfiguration().authEndpointURL
-        if isCustomSync {
-            configurationURL = CustomFirefoxAccountConfiguration(prefs: profile.prefs).authEndpointURL
-        } else if isOn {
-            configurationURL = StageFirefoxAccountConfiguration().authEndpointURL
-        }
-
+        let configurationURL = profile.accountConfiguration.authEndpointURL
         return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 
@@ -1117,15 +1106,15 @@ class OpenWithSetting: Setting {
     }
 }
 
-class AdvanceAccountSetting: HiddenSetting {
+class AdvancedAccountSetting: HiddenSetting {
     let profile: Profile
 
     override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "AdvanceAccount.Setting" }
+    override var accessibilityIdentifier: String? { return "AdvancedAccount.Setting" }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsAdvanceAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: Strings.SettingsAdvancedAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override init(settings: SettingsTableViewController) {
@@ -1134,7 +1123,7 @@ class AdvanceAccountSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AdvanceAccountSettingViewController()
+        let viewController = AdvancedAccountSettingViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }

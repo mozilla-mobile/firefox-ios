@@ -303,49 +303,53 @@ extension Strings {
 // Custom account settings - These strings did not make it for the v10 l10n deadline so we have turned them into regular strings. These strings will come back localized in a next version.
 
 extension Strings {
-    // Settings.AdvanceAccount.SectionName
-    // Label used as an item in Settings. When touched it will open a dialog to setup advance Firefox account settings.
-    public static let SettingsAdvanceAccountSectionName = "Account Settings"
-
-    // Settings.AdvanceAccount.SectionFooter
+    // Settings.AdvancedAccount.AutoconfigSectionFooter
     // Details for using custom Firefox Account service.
-    public static let SettingsAdvanceAccountSectionFooter = "To use a custom Firefox Account and sync servers, specify the root Url of the Firefox Account site. This will download the configuration and setup this device to use the new service. After the new service has been set, you will need to create a new Firefox Account or login with an existing one."
+    public static let SettingsAdvancedAccountAutoconfigSectionFooter = "To use custom Firefox Account/Sync servers via autoconfig, specify the root URL of the custom Firefox Account site. This will download the configuration and setup this device to use the new service. After the new service has been set, you will need to create a new Firefox Account or login with an existing one."
 
-    // Settings.AdvanceAccount.SectionName
+    // Settings.AdvancedAccount.TokenServerSectionFooter
+    // Details for using custom Firefox Account service.
+    public static let SettingsAdvancedAccountTokenServerSectionFooter = "To override a custom Firefox Sync server, specify the URL of the custom Firefox Sync server. After the new server has been set, you will need to log-out and login again for the changes to take effect."
+
+    // Settings.AdvancedAccount.SectionName
     // Title displayed in header of the setting panel.
-    public static let SettingsAdvanceAccountTitle = "Advance Account Settings"
+    public static let SettingsAdvancedAccountTitle = "Advanced Sync Settings"
 
-    // Settings.AdvanceAccount.UrlPlaceholder
+    // Settings.AdvancedAccount.CustomAutoconfigURIPlaceholder
     // Title displayed in header of the setting panel.
-    public static let SettingsAdvanceAccountUrlPlaceholder = "Custom Account Url"
+    public static let SettingsAdvancedAccountCustomAutoconfigURIPlaceholder = "Custom Autoconfig URI"
 
-    // Settings.AdvanceAccount.UpdatedAlertMessage
+    // Settings.AdvancedAccount.ustomSyncTokenServerURIPlaceholder
+    // Title displayed in header of the setting panel.
+    public static let SettingsAdvancedAccountCustomSyncTokenServerURIPlaceholder = "Custom Sync Token Server URI"
+
+    // Settings.AdvancedAccount.UpdatedAlertMessage
     // Messaged displayed when sync service has been successfully set.
-    public static let SettingsAdvanceAccountUrlUpdatedAlertMessage = "Firefox account service updated. To begin using custom server, please log out and re-login."
+    public static let SettingsAdvancedAccountUrlUpdatedAlertMessage = "Firefox Account service updated. To begin using custom server, please log out and re-login."
 
-    // Settings.AdvanceAccount.UpdatedAlertOk
-    // Ok button on custom sync service updated alert
-    public static let SettingsAdvanceAccountUrlUpdatedAlertOk = "OK"
-
-    // Settings.AdvanceAccount.ErrorAlertTitle
+    // Settings.AdvancedAccount.ErrorAlertTitle
     // Error alert message title.
-    public static let SettingsAdvanceAccountUrlErrorAlertTitle = "Error"
+    public static let SettingsAdvancedAccountUrlErrorAlertTitle = "Error"
 
-    // Settings.AdvanceAccount.ErrorAlertMessage
+    // Settings.AdvancedAccount.ErrorAlertMessage
     // Messaged displayed when sync service has an error setting a custom sync url.
-    public static let SettingsAdvanceAccountUrlErrorAlertMessage = "There was an error while attempting to parse the url. Please make sure that it is a valid Firefox Account root url."
+    public static let SettingsAdvancedAccountUrlErrorAlertMessage = "There was an error while attempting to fetch the autoconfig. Please make sure that it is a valid Firefox Account root URL."
 
-    // Settings.AdvanceAccount.ErrorAlertOk
-    // Ok button on custom sync service error alert.
-    public static let SettingsAdvanceAccountUrlErrorAlertOk = "OK"
-
-    // Settings.AdvanceAccount.UseCustomAccountsServiceTitle
+    // Settings.AdvancedAccount.UseCustomAccountsServiceTitle
     // Toggle switch to use custom FxA server
-    public static let SettingsAdvanceAccountUseCustomAccountsServiceTitle = "Use Custom Account Service"
+    public static let SettingsAdvancedAccountUseCustomAccountsServiceTitle = "Use Custom Autoconfig"
 
-    // Settings.AdvanceAccount.UrlEmptyErrorAlertMessage
+    // Settings.AdvancedAccount.EmptyAutoconfigURIErrorAlertMessage
     // No custom service set.
-    public static let SettingsAdvanceAccountEmptyUrlErrorAlertMessage = "Please enter a custom account url before enabling."
+    public static let SettingsAdvancedAccountEmptyAutoconfigURIErrorAlertMessage = "Please enter a custom autoconfig URI before enabling."
+
+    // Settings.AdvancedAccount.UseCustomSyncTokenServerTitle
+    // Toggle switch to use custom FxA server
+    public static let SettingsAdvancedAccountUseCustomSyncTokenServerTitle = "Use Custom Sync Token Server"
+
+    // Settings.AdvancedAccount.EmptyTokenServerURIErrorAlertMessage
+    // No custom service set.
+    public static let SettingsAdvancedAccountEmptyTokenServerURIErrorAlertMessage = "Please enter a custom token server URI before enabling."
 }
 
 // Open With Settings

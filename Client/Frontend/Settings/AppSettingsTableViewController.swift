@@ -83,7 +83,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
-                AdvanceAccountSetting(settings: self),
+                AdvancedAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
