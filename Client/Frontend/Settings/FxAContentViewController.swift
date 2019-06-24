@@ -221,14 +221,18 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             return profileUrl
         }
 
-        // Only append `signin`, `entrypoint` and `utm_*` parameters. Note that you can't
-        // override the service and context params.
+        // Only append certain parameters. Note that you can't override the service and context params.
         var params = launchParams.query
         params.removeValue(forKey: "service")
         params.removeValue(forKey: "context")
-        let queryURL = params.filter { $0.key == "signin" || $0.key == "entrypoint" || $0.key.range(of: "utm_") != nil }.map({
+
+        params["action"] = "email"
+        // params["style"] = "trailhead" // adds Trailhead banners to the page, making it too long
+
+        let queryURL = params.filter { ["action", "style", "signin", "entrypoint"].contains($0.key) || $0.key.range(of: "utm_") != nil }.map({
             return "\($0.key)=\($0.value)"
         }).joined(separator: "&")
+
 
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
     }
