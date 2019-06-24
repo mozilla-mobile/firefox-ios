@@ -81,6 +81,9 @@ public class Sentry {
             Logger.browserLogger.error("Failed to initialize Sentry: \(error)")
         }
 
+        // Ignore SIGPIPE exceptions globally.
+        // https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly
+        signal(SIGPIPE, SIG_IGN)
     }
 
     public func crash() {
