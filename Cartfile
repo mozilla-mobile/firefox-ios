@@ -1,4 +1,4 @@
-github "getsentry/sentry-cocoa"             ~> 4.2
+github "garvankeeley/sentry-cocoa"  "gk-remove-sigpipe"
 github "SnapKit/SnapKit"                    ~> 5.0
 github "SDWebImage/SDWebImage"              ~> 5.0
 github "swisspol/GCDWebServer"              ~> 3.3
