@@ -57,7 +57,10 @@ class Authenticator {
                 return deferMaybe(nil)
             }
 
-            let logins = cursor.asArray()
+            let logins = cursor.compactMap {
+                // HTTP Auth must have nil formSubmitURL and a non-nil httpRealm.
+                return $0?.formSubmitURL == nil && $0?.httpRealm != nil ? $0 : nil
+            }
             var credentials: URLCredential?
 
             // It is possible that we might have duplicate entries since we match against host and scheme://host.
