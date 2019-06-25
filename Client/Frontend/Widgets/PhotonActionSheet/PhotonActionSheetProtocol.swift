@@ -166,10 +166,6 @@ extension PhotonActionSheetProtocol {
             success(Strings.AppMenuAddToReadingListConfirmMessage)
         }
 
-        let findInPageAction = PhotonActionSheetItem(title: Strings.AppMenuFindInPageTitleString, iconString: "menu-FindInPage") { action in
-            findInPage()
-        }
-
         let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString, iconString: "menu-Bookmark") { action in
             guard let url = tab.canonicalURL?.displayURL,
                 let bvc = presentableVC as? BrowserViewController else {
@@ -272,10 +268,20 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
         mainActions.append(contentsOf: [sendToDevice, copyURL])
 
-        return [mainActions, [findInPageAction, toggleDesktopSite, pinAction]]
+        let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
+        var commonActions = [toggleDesktopSite, pinAction]
+
+        // Disable find in page if document is pdf.
+        if tab.mimeType != MIMEType.PDF {
+            let findInPageAction = PhotonActionSheetItem(title: Strings.AppMenuFindInPageTitleString, iconString: "menu-FindInPage") { action in
+                findInPage()
+            }
+            commonActions.insert(findInPageAction, at: 0)
+        }
+
+        return [mainActions, commonActions]
     }
 
     func fetchBookmarkStatus(for url: String) -> Deferred<Maybe<Bool>> {
