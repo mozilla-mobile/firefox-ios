@@ -39,10 +39,11 @@ class IntegrationTests: BaseTestCase {
 
     private func signInFxAccounts() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 10)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATapOnContinueButton)
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
         sleep(3)
