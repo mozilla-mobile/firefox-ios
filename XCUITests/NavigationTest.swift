@@ -107,10 +107,23 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkFirefoxSyncScreenShown() {
-        waitForExistence(app.webViews.staticTexts["Sign in"])
-        XCTAssertTrue(app.webViews.textFields["Email"].exists)
-        XCTAssertTrue(app.webViews.secureTextFields["Password"].exists)
-        XCTAssertTrue(app.webViews.buttons["Sign in"].exists)
+        waitForExistence(app.navigationBars["Client.FxAContentView"])
+        if isTablet {
+            waitForExistence(app.textFields.element(boundBy: 1), timeout: 3)
+            let email = app.textFields.element(boundBy: 1)
+            // Verify the placeholdervalues here for the textFields
+            let mailPlaceholder = "Email"
+            let defaultMailPlaceholder = email.placeholderValue!
+            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        } else {
+            waitForExistence(app.textFields.element(boundBy: 0), timeout: 3)
+            let email = app.textFields.element(boundBy: 0)
+            XCTAssertTrue(email.exists) // the email field
+            // Verify the placeholdervalues here for the textFields
+            let mailPlaceholder = "Email"
+            let defaultMailPlaceholder = email.placeholderValue!
+            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        }
     }
 
     func testScrollsToTopWithMultipleTabs() {

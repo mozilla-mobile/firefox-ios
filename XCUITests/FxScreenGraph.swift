@@ -193,6 +193,7 @@ class Action {
     static let FxATypeEmail = "FxATypeEmail"
     static let FxATypePassword = "FxATypePassword"
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
+    static let FxATapOnContinueButton = "FxATapOnContinueButton"
 
     static let PinToTopSitesPAM = "PinToTopSitesPAM"
     static let CopyAddressPAM = "CopyAddressPAM"
@@ -668,15 +669,23 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
-            app.webViews.textFields["Email"].tap()
-            app.webViews.textFields["Email"].typeText(userState.fxaUsername!)
+            if isTablet {
+                app.textFields.element(boundBy: 1).tap()
+                app.textFields.element(boundBy: 1).typeText(userState.fxaUsername!)
+            } else {
+                app.textFields.element(boundBy: 0).tap()
+                app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
+            }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
-            app.webViews.secureTextFields["Password"].tap()
-            app.webViews.secureTextFields["Password"].typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 0).tap()
+            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+        }
+        screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
+            app.webViews.buttons["Continue"].tap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
-            app.webViews.buttons["Sign in"].tap()
+            app.webViews.buttons.element(boundBy: 0).tap()
         }
         screenState.tap(app.webViews.links["Create an account"].firstMatch, to: FxCreateAccount)
     }
