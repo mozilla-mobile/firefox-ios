@@ -117,6 +117,10 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
         navigator.performAction(Action.FxATypePassword)
+        // Workaround in case the keyboard is not dismissed
+        app.toolbars.buttons["Done"].tap()
+
+        waitForExistence(app.webViews.buttons["Continue"])
         navigator.performAction(Action.FxATapOnSignInButton)
         allowNotifications()
         // If the account is not verified need to verify it to access the menu

@@ -669,8 +669,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
-            app.textFields.element(boundBy: 0).tap()
-            app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
+            if isTablet {
+                app.textFields.element(boundBy: 1).tap()
+                app.textFields.element(boundBy: 1).typeText(userState.fxaUsername!)
+            } else {
+                app.textFields.element(boundBy: 0).tap()
+                app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
+            }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
             app.secureTextFields.element(boundBy: 0).tap()
