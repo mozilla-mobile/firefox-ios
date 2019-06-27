@@ -70,7 +70,6 @@ Object.defineProperty(window.__firefox__.NoImageMode, "setEnabled", {
         }
 
         var backgroundImage = style.backgroundImage;
-        style.backgroundImage = "none";
         style.backgroundImage = backgroundImage;
       });
     });
