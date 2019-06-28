@@ -227,7 +227,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         params.removeValue(forKey: "context")
 
         params["action"] = "email"
-        // params["style"] = "trailhead" // adds Trailhead banners to the page, making it too long
+        params["style"] = "trailhead" // adds Trailhead banners to the page
 
         let queryURL = params.filter { ["action", "style", "signin", "entrypoint"].contains($0.key) || $0.key.range(of: "utm_") != nil }.map({
             return "\($0.key)=\($0.value)"
