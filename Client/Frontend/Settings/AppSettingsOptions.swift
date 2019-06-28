@@ -41,7 +41,6 @@ class ConnectSetting: WithoutAccountSetting {
         let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
         let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
         viewController.delegate = self
-        viewController.url = settings.profile.accountConfiguration.signInURL
         navigationController?.pushViewController(viewController, animated: true)
     }
 
