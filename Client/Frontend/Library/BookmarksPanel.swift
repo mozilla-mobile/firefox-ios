@@ -11,6 +11,7 @@ private let log = Logger.browserLogger
 
 private let BookmarkNodeCellIdentifier = "BookmarkNodeCellIdentifier"
 private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
+private let BookmarkSectionHeaderIdentifier = "BookmarkSectionHeaderIdentifier"
 
 private struct BookmarksPanelUX {
     static let FolderIconSize = CGSize(width: 20, height: 20)
@@ -67,6 +68,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
         self.tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: BookmarkNodeCellIdentifier)
         self.tableView.register(SeparatorTableViewCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
+        self.tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: BookmarkSectionHeaderIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -406,19 +408,26 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty else {
+        guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty,
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
             return nil
         }
 
-        return super.tableView(tableView, viewForHeaderInSection: section)
+        headerView.titleLabel.text = Strings.RecentlyBookmarkedTitle.uppercased()
+
+        return headerView
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == BookmarksSection.recent.rawValue ? Strings.RecentlyBookmarkedTitle : nil
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? ThemedTableSectionHeaderFooterView else {
+            return
+        }
+
+        headerView.applyTheme()
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == BookmarksSection.recent.rawValue ? UITableView.automaticDimension : 0
+        return section == BookmarksSection.recent.rawValue && !recentBookmarks.isEmpty ? UITableView.automaticDimension : 0
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
