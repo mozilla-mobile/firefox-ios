@@ -269,19 +269,18 @@ extension BrowserViewController: WKNavigationDelegate {
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
         if ["http", "https", "data", "blob", "file"].contains(url.scheme) {
-
+            if navigationAction.navigationType == .linkActivated {
+                resetSpoofedUserAgentIfRequired(webView, newURL: url)
+            } else if navigationAction.navigationType == .backForward {
+                restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
+            }
+            
             if let host = url.host, navigationAction.targetFrame?.isMainFrame ?? false {
                 tab.desktopSite = Tab.DesktopSites.hostList.contains(host)
                 if !tab.desktopSite, tab.isPrivate {
                     // Private mode has an additional memory-only list to check.
                     tab.desktopSite = Tab.DesktopSites.privateModeHostList.contains(host)
                 }
-            }
-
-            if navigationAction.navigationType == .linkActivated {
-                resetSpoofedUserAgentIfRequired(webView, newURL: url)
-            } else if navigationAction.navigationType == .backForward {
-                restoreSpoofedUserAgentIfRequired(webView, newRequest: navigationAction.request)
             }
 
             pendingRequests[url.absoluteString] = navigationAction.request
