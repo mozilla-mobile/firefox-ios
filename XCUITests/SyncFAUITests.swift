@@ -75,8 +75,7 @@ class SyncUITests: BaseTestCase {
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePassword)
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitForExistence(app.staticTexts["Create a Firefox Account"], timeout: 10)
+        waitForExistence(app.secureTextFields["Repeat password"], timeout: 10)
     }
 
     func testCreateAnAccountLink() {
