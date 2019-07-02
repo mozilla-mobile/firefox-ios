@@ -52,6 +52,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     fileprivate var flashLastRowOnNextReload = false
 
+    fileprivate lazy var bookmarkFolderIconNormal = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey90)
+    fileprivate lazy var bookmarkFolderIconDark = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey10)
+
     init(profile: Profile, bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID) {
         self.bookmarkFolderGUID = bookmarkFolderGUID
 
@@ -365,7 +368,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 cell.textLabel?.text = bookmarkFolder.title
             }
 
-            cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize)
+            cell.imageView?.image = ThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
             cell.imageView?.contentMode = .center
             cell.accessoryType = .disclosureIndicator
             cell.editingAccessoryType = .disclosureIndicator
