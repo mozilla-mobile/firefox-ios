@@ -764,7 +764,9 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
             let offset = clamp(abs(scrollView.contentOffset.y), min: 0, max: TabTrayControllerUX.SearchBarHeight)
             searchHeightConstraint?.update(offset: offset)
-            scrollView.contentInset = UIEdgeInsets(top: offset, left: 0, bottom: 0, right: 0)
+            if scrollDirection == .down {
+                scrollView.contentInset = UIEdgeInsets(top: offset, left: 0, bottom: 0, right: 0)
+            }
         } else {
             self.hideSearch()
         }
