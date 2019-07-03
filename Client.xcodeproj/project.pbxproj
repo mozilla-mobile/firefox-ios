@@ -4474,6 +4474,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/MappaMundi.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/AStar.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
@@ -4503,6 +4504,7 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/MappaMundi.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/AStar.framework",
 			);
 			name = "Copy Carthage Frameworks";
 			outputPaths = (
