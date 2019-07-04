@@ -298,6 +298,7 @@ class BrowserViewController: UIViewController {
 
     @objc func appDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
+            self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
     }
@@ -309,6 +310,7 @@ class BrowserViewController: UIViewController {
    @objc  func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
+            self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
 
@@ -2144,16 +2146,20 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             actionSheetController.addAction(copyImageLinkAction, accessibilityIdentifier: "linkContextMenu.copyImageLink")
         }
 
-        // If we're showing an arrow popup, set the anchor to the long press location.
-        if let popoverPresentationController = actionSheetController.popoverPresentationController {
-            popoverPresentationController.sourceView = view
-            popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: touchSize)
-            popoverPresentationController.permittedArrowDirections = .any
-            popoverPresentationController.delegate = self
+        let setupPopover = { [unowned self] in
+            // If we're showing an arrow popup, set the anchor to the long press location.
+            if let popoverPresentationController = actionSheetController.popoverPresentationController {
+                popoverPresentationController.sourceView = self.view
+                popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: touchSize)
+                popoverPresentationController.permittedArrowDirections = .any
+                popoverPresentationController.delegate = self
+            }
         }
+        setupPopover()
 
         if actionSheetController.popoverPresentationController != nil {
             displayedPopoverController = actionSheetController
+            updateDisplayedPopoverProperties = setupPopover
         }
 
         if let dialogTitle = dialogTitle {
