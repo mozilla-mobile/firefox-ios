@@ -830,10 +830,6 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
-        if let webView = tab.webView {
-            resetSpoofedUserAgentIfRequired(webView, newURL: url)
-        }
-
         if let nav = tab.loadRequest(PrivilegedRequest(url: url) as URLRequest) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
@@ -1031,21 +1027,6 @@ class BrowserViewController: UIViewController {
         } else if urlBar.inOverlayMode {
             urlBar.didClickCancel()
         }
-    }
-
-    // MARK: User Agent Spoofing
-
-    func resetSpoofedUserAgentIfRequired(_ webView: WKWebView, newURL: URL) {
-        // Reset the UA when a different domain is being loaded
-        if webView.url?.host != newURL.host {
-            webView.customUserAgent = nil
-        }
-    }
-
-    func restoreSpoofedUserAgentIfRequired(_ webView: WKWebView, newRequest: URLRequest) {
-        // Restore any non-default UA from the request's header
-        let ua = newRequest.value(forHTTPHeaderField: "User-Agent")
-        webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
     }
 
     fileprivate func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {

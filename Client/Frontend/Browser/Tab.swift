@@ -450,8 +450,7 @@ class Tab: NSObject {
 
     func reload() {
         let userAgent: String? = desktopSite ? UserAgent.desktopUserAgent() : nil
-        if (userAgent ?? "") != webView?.customUserAgent,
-           let currentItem = webView?.backForwardList.currentItem {
+        if (userAgent ?? "") != webView?.customUserAgent, let currentItem = webView?.backForwardList.currentItem {
             webView?.customUserAgent = userAgent
 
             // Reload the initial URL to avoid UA specific redirection
