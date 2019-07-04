@@ -105,6 +105,7 @@ class BookmarkingTests: BaseTestCase {
     func testRecentBookmarks() {
         // Verify that there are only 4 cells without recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
+        waitForNoExistence(app.otherElements["RECENT BOOKMARKS"])
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
         
         //Add a bookmark
@@ -114,7 +115,7 @@ class BookmarkingTests: BaseTestCase {
         
         // Check if it shows in recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.otherElements["Recent Bookmarks"])
+        waitForExistence(app.otherElements["RECENT BOOKMARKS"])
         waitForExistence(app.staticTexts[urlLabelExample_3])
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 5)
         
@@ -125,7 +126,7 @@ class BookmarkingTests: BaseTestCase {
         
         // Check if it shows in recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.otherElements["Recent Bookmarks"])
+        waitForExistence(app.otherElements["RECENT BOOKMARKS"])
         waitForExistence(app.staticTexts[urlLabelExample_4])
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 6)
         
