@@ -767,10 +767,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func type(text: String) {
-        app.typeText(text)
-//        text.forEach { char in
-//            app.keys[String(char)].tap()
-//        }
+        text.forEach { char in
+            app.keys[String(char)].tap()
+        }
     }
 
     map.addScreenState(SetPasscodeScreen) { screenState in

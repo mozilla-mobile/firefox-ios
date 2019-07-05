@@ -153,25 +153,24 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         snapshot("13ContextMenuReloadButton-03", waitForLoadingIndicator: false)
     }
 
-//    func test16PasscodeSettings() {
-//        navigator.goto(SetPasscodeScreen)
-//        snapshot("16SetPasscodeScreen-1-nopasscode")
-//        userState.newPasscode = "111111"
-//        navigator.performAction(Action.SetPasscodeTypeOnce)
-//        snapshot("16SetPasscodeScreen-2-typepasscode")
-//
-//        userState.newPasscode = "111112"
-//        navigator.performAction(Action.SetPasscodeTypeOnce)
-//        snapshot("16SetPasscodeScreen-3-passcodesmustmatch")
-//
-//        userState.newPasscode = "111111"
-//        navigator.performAction(Action.SetPasscode)
-//        snapshot("16SetPasscodeScreen-3")
-//
-//        navigator.goto(PasscodeIntervalSettings)
-//        snapshot("16PasscodeIntervalScreen-1")
-//
-//    }
+    func test16PasscodeSettings() {
+        navigator.goto(SetPasscodeScreen)
+        snapshot("16SetPasscodeScreen-1-nopasscode")
+        userState.newPasscode = "111111"
+        navigator.performAction(Action.SetPasscodeTypeOnce)
+        snapshot("16SetPasscodeScreen-2-typepasscode")
+
+        userState.newPasscode = "111112"
+        navigator.performAction(Action.SetPasscodeTypeOnce)
+        snapshot("16SetPasscodeScreen-3-passcodesmustmatch")
+
+        userState.newPasscode = "111111"
+        navigator.performAction(Action.SetPasscode)
+        snapshot("16SetPasscodeScreen-3")
+
+        navigator.goto(PasscodeIntervalSettings)
+        snapshot("16PasscodeIntervalScreen-1")
+    }
 
     func test18TopSitesMenu() {
         navigator.goto(HomePanel_TopSites)
