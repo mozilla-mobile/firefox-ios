@@ -33,8 +33,8 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
     override init() {
         super.init()
 
-        server?.addHandler(forMethod: "GET", path: "/enabled-detector", request: GCDWebServerRequest.self) { [weak self] request -> GCDWebServerResponse? in
-            if let loadedBlockedPage = request?.query["blocked"] as? String, loadedBlockedPage == "1" {
+        server.addHandler(forMethod: "GET", path: "/enabled-detector", request: GCDWebServerRequest.self) { [weak self] request -> GCDWebServerResponse? in
+            if let loadedBlockedPage = request.query?["blocked"] as? String, loadedBlockedPage == "1" {
                 // Second page loaded, so we aren't blocked.
                 self?.enabled = false
                 return nil
@@ -46,12 +46,11 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
             return GCDWebServerDataResponse(html: "<html><head><meta http-equiv=\"refresh\" content=\"0; url=/enabled-detector?blocked=1\"></head></html>")
         }
 
-        server?.start(withPort: 0, bonjourName: nil)
+        server.start(withPort: 0, bonjourName: nil)
     }
 
     override func detectEnabled(_ parentView: UIView, callback: @escaping EnabledCallback) {
         guard self.svc == nil && self.callback == nil else { return }
-        guard let server = server else { return }
 
         enabled = true
         self.callback = callback
@@ -75,7 +74,7 @@ private class BlockerEnabledDetector9: BlockerEnabledDetector, SFSafariViewContr
     }
 
     deinit {
-        server?.stop()
+        server.stop()
     }
 }
 

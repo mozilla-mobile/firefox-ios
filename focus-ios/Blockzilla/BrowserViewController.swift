@@ -1219,8 +1219,6 @@ extension BrowserViewController: WebControllerDelegate {
 
     func webControllerURLDidChange(_ controller: WebController, url: URL) {
         showToolbars()
-        updateURLBar()
-        urlBar.url = url
     }
 
     func webController(_ controller: WebController, didFailNavigationWithError error: Error) {

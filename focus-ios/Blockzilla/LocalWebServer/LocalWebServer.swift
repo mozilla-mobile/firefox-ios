@@ -21,14 +21,14 @@ class LocalWebServer {
 
     func start() {
         LocalResources.forEach { resource in
-            let path = Bundle.main.path(forResource: resource, ofType: "html")
-            server?.addGETHandler(forPath: "/\(resource).html", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+            let path = Bundle.main.path(forResource: resource, ofType: "html")!
+            server.addGETHandler(forPath: "/\(resource).html", filePath: path, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
         }
 
-        let stylesPath = Bundle.main.path(forResource: "style", ofType: "css")
-        server?.addGETHandler(forPath: "/style.css", filePath: stylesPath, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
+        let stylesPath = Bundle.main.path(forResource: "style", ofType: "css")!
+        server.addGETHandler(forPath: "/style.css", filePath: stylesPath, isAttachment: false, cacheAge: UInt.max, allowRangeRequests: true)
 
-        server?.start(withPort: port, bonjourName: nil)
+        server.start(withPort: port, bonjourName: nil)
     }
 
     func URLForPath(_ path: String) -> URL! {
