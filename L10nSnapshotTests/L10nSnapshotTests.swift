@@ -199,5 +199,4 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         snapshot("21ReaderModeSettingsMenu-01")
     }
-
 }
