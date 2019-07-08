@@ -113,7 +113,7 @@ class RecentlyClosedTabsPanelSiteTableViewController: SiteTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return profile.recentlyClosedTabs.tabs.count
+        return self.recentlyClosedTabs.count
     }
 
 }
