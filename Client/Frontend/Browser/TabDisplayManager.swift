@@ -432,7 +432,7 @@ extension TabDisplayManager: TabManagerDelegate {
 
         updateWith(animationType: .addTab) { [weak self] in
             if let me = self {
-                let index = me.tabsToDisplay.firstIndex(of: tab) ?? me.tabsToDisplay.count
+                let index = me.tabsToDisplay.firstIndex(of: tab) ?? me.dataStore.count
                 me.dataStore.insert(tab, at: index)
                 me.collectionView.insertItems(at: [IndexPath(row: index, section: 0)])
             }
