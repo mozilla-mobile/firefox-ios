@@ -54,6 +54,9 @@
                <Test
                   Identifier = "L10nSnapshotTests/test14SetHompage()">
                </Test>
+               <Test
+                  Identifier = "ScreenGraphTest">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
