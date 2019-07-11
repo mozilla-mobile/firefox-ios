@@ -351,6 +351,9 @@
                   Identifier = "DragAndDropTests/testRearrangeTabsPrivateModeTabTray()">
                </Test>
                <Test
+                  Identifier = "DragAndDropTests/testRearrangeTabsTabTray()">
+               </Test>
+               <Test
                   Identifier = "DragAndDropTests/testRearrangeTabsTabTrayLandscape()">
                </Test>
                <Test
