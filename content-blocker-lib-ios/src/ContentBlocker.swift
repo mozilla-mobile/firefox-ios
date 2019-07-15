@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import WebKit
-import Deferred
+import Shared
 
 enum BlocklistName: String {
     case advertising = "disconnect-advertising"
@@ -252,7 +252,8 @@ extension ContentBlocker {
                 }
                 self.loadJsonFromBundle(forResource: filename) { jsonString in
                     var str = jsonString
-                    str.insert(contentsOf: self.whitelistAsJSON(), at: str.index(str.endIndex, offsetBy: -1))
+                    guard let range = str.range(of: "]", options: String.CompareOptions.backwards) else { return }
+                    str = str.replacingCharacters(in: range, with: self.whitelistAsJSON() + "]")
                     self.ruleStore.compileContentRuleList(forIdentifier: filename, encodedContentRuleList: str) { rule, error in
                         if let error = error {
                             print("Content blocker error: \(error)")

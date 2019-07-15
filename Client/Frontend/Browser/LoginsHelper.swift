@@ -7,7 +7,6 @@ import Shared
 import Storage
 import XCGLogger
 import WebKit
-import Deferred
 import SwiftyJSON
 
 private let log = Logger.browserLogger
@@ -35,7 +34,7 @@ class LoginsHelper: TabContentScript {
         return "loginsManagerMessageHandler"
     }
 
-    fileprivate func getPasswordOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
+    fileprivate func getOrigin(_ uriString: String, allowJS: Bool = false) -> String? {
         guard let uri = URL(string: uriString),
             let scheme = uri.scheme, !scheme.isEmpty,
             let host = uri.host else {
@@ -60,47 +59,38 @@ class LoginsHelper: TabContentScript {
         return realm
     }
 
-    func loginRecordFromScript(_ script: [String : Any], url: URL) -> LoginRecord? {
+    func loginRecordFromScript(_ script: [String: Any], url: URL) -> LoginRecord? {
         guard let username = script["username"] as? String,
-            let password = script["password"] as? String else {
-                return nil
-        }
-
-        guard let origin = getPasswordOrigin(url.absoluteString) else {
+            let password = script["password"] as? String,
+            let origin = getOrigin(url.absoluteString) else {
             return nil
         }
 
-        var dict: [String : Any] = [
+        var dict: [String: Any] = [
             "hostname": origin,
             "username": username,
             "password": password
         ]
 
-        if let formSubmit = script["formSubmitURL"] as? String {
-            dict["formSubmitURL"] = formSubmit
+        if let string = script["formSubmitURL"] as? String,
+            let formSubmitURL = getOrigin(string) {
+            dict["formSubmitURL"] = formSubmitURL
         }
 
         if let passwordField = script["passwordField"] as? String {
             dict["passwordField"] = passwordField
         }
 
-        if let userField = script["usernameField"] as? String {
-            dict["usernameField"] = userField
+        if let usernameField = script["usernameField"] as? String {
+            dict["usernameField"] = usernameField
         }
 
         return LoginRecord(fromJSONDict: dict)
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard var res = message.body as? [String: AnyObject] else { return }
-        guard let type = res["type"] as? String else { return }
-
-        // Check to see that we're in the foreground before trying to check the logins. We want to
-        // make sure we don't try accessing the logins database while we're backgrounded to avoid
-        // the system from terminating our app due to background disk access.
-        //
-        // See https://bugzilla.mozilla.org/show_bug.cgi?id=1307822 for details.
-        guard UIApplication.shared.applicationState == .active && !profile.isShutdown else {
+        guard let res = message.body as? [String: Any],
+            let type = res["type"] as? String else {
             return
         }
 
@@ -110,14 +100,9 @@ class LoginsHelper: TabContentScript {
             // Since responses go to the main frame, make sure we only listen for main frame requests
             // to avoid XSS attacks.
             if message.frameInfo.isMainFrame && type == "request" {
-                res["username"] = "" as AnyObject?
-                res["password"] = "" as AnyObject?
-                if let login = loginRecordFromScript(res, url: url),
-                   let requestId = res["requestId"] as? String {
-                    requestLogins(login, requestId: requestId)
-                }
+                requestLogins(res, url: url)
             } else if type == "submit" {
-                if self.profile.prefs.boolForKey("saveLogins") ?? true {
+                if profile.prefs.boolForKey("saveLogins") ?? true {
                     if let login = loginRecordFromScript(res, url: url) {
                         setCredentials(login)
                     }
@@ -141,13 +126,13 @@ class LoginsHelper: TabContentScript {
             ranges.append(nsRange)
         }
 
-        var attributes = [NSAttributedStringKey: AnyObject]()
-        attributes[NSAttributedStringKey.font] = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
-        attributes[NSAttributedStringKey.foregroundColor] = UIColor.Photon.Grey60
+        var attributes = [NSAttributedString.Key: AnyObject]()
+        attributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.regular)
+        attributes[NSAttributedString.Key.foregroundColor] = UIColor.Photon.Grey60
         let attr = NSMutableAttributedString(string: string, attributes: attributes)
-        let font: UIFont = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.medium)
+        let font = UIFont.systemFont(ofSize: 13, weight: UIFont.Weight.medium)
         for range in ranges {
-            attr.addAttribute(NSAttributedStringKey.font, value: font, range: range)
+            attr.addAttribute(NSAttributedString.Key.font, value: font, range: range)
         }
         return attr
     }
@@ -248,20 +233,43 @@ class LoginsHelper: TabContentScript {
         tab?.addSnackbar(snackBar!)
     }
 
-    fileprivate func requestLogins(_ login: LoginRecord, requestId: String) {
-        profile.logins.getLoginsForProtectionSpace(login.protectionSpace).uponQueue(.main) { res in
-            var jsonObj = [String: Any]()
-            if let cursor = res.successValue {
-                log.debug("Found \(cursor.count) logins.")
-                jsonObj["requestId"] = requestId
-                jsonObj["name"] = "RemoteLogins:loginsFound"
-                jsonObj["logins"] = cursor.map { $0!.toJSONDict() }
+    fileprivate func requestLogins(_ request: [String: Any], url: URL) {
+        guard let requestId = request["requestId"] as? String,
+            // Even though we don't currently use these two fields,
+            // verify that they were received as additional confirmation
+            // that this is a valid request from LoginsHelper.js.
+            let _ = request["formOrigin"] as? String,
+            let _ = request["actionOrigin"] as? String,
+
+            // We pass in the webview's URL and derive the origin here
+            // to workaround Bug 1194567.
+            let origin = getOrigin(url.absoluteString) else {
+            return
+        }
+
+        let protectionSpace = URLProtectionSpace.fromOrigin(origin)
+
+        profile.logins.getLoginsForProtectionSpace(protectionSpace).uponQueue(.main) { res in
+            guard let cursor = res.successValue else {
+                return
             }
 
-            let json = JSON(jsonObj)
-            let src = "window.__firefox__.logins.inject(\(json.stringify()!))"
-            self.tab?.webView?.evaluateJavaScript(src, completionHandler: { (obj, err) -> Void in
-            })
+            let logins: [[String: Any]] = cursor.compactMap { login in
+                // `requestLogins` is for webpage forms, not for HTTP Auth, and the latter has httpRealm != nil; filter those out.
+                return login?.httpRealm == nil ? login?.toJSONDict() : nil
+            }
+
+            log.debug("Found \(logins.count) logins.")
+
+            let dict: [String: Any] = [
+                "requestId": requestId,
+                "name": "RemoteLogins:loginsFound",
+                "logins": logins
+            ]
+
+            let json = JSON(dict)
+            let injectJavaScript = "window.__firefox__.logins.inject(\(json.stringify()!))"
+            self.tab?.webView?.evaluateJavaScript(injectJavaScript)
         }
     }
 }

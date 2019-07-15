@@ -29,6 +29,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         case changePassword = "change_password"
         case sessionStatus = "session_status"
         case signOut = "sign_out"
+        case deleteAccount = "delete_account"
     }
 
     weak var delegate: FxAContentViewControllerDelegate?
@@ -122,6 +123,13 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         injectData("message", content: ["status": "error"])
     }
 
+    // The user has deleted their Firefox Account. Disconnect them!
+    fileprivate func onDeleteAccount(_ data: JSON) {
+        FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: profile.hasAccount()])
+        dismiss(animated: true)
+    }
+
     // The user has signed in to a Firefox Account.  We're done!
     fileprivate func onLogin(_ data: JSON) {
         injectData("message", content: ["status": "login"])
@@ -180,6 +188,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
                 onSessionStatus(data)
             case .signOut:
                 onSignOut(data)
+            case .deleteAccount:
+                onDeleteAccount(data)
             }
         }
     }
@@ -211,14 +221,18 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             return profileUrl
         }
 
-        // Only append `signin`, `entrypoint` and `utm_*` parameters. Note that you can't
-        // override the service and context params.
+        // Only append certain parameters. Note that you can't override the service and context params.
         var params = launchParams.query
         params.removeValue(forKey: "service")
         params.removeValue(forKey: "context")
-        let queryURL = params.filter { $0.key == "signin" || $0.key == "entrypoint" || $0.key.range(of: "utm_") != nil }.map({
+
+        params["action"] = "email"
+        params["style"] = "trailhead" // adds Trailhead banners to the page
+
+        let queryURL = params.filter { ["action", "style", "signin", "entrypoint"].contains($0.key) || $0.key.range(of: "utm_") != nil }.map({
             return "\($0.key)=\($0.value)"
         }).joined(separator: "&")
+
 
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
     }

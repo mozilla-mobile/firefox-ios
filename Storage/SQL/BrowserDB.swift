@@ -4,7 +4,6 @@
 
 import Foundation
 import XCGLogger
-import Deferred
 import Shared
 
 private let log = Logger.syncLogger
@@ -14,6 +13,8 @@ public typealias Args = [Any?]
 open class BrowserDB {
     fileprivate let db: SwiftData
 
+    public let databasePath: String
+
     // SQLITE_MAX_VARIABLE_NUMBER = 999 by default. This controls how many ?s can
     // appear in a query string.
     public static let MaxVariableNumber = 999
@@ -21,9 +22,39 @@ open class BrowserDB {
     public init(filename: String, schema: Schema, files: FileAccessor) {
         log.debug("Initializing BrowserDB: \(filename).")
 
-        let file = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
+        self.databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory())).appendingPathComponent(filename).path
 
-        self.db = SwiftData(filename: file, schema: schema, files: files)
+        self.db = SwiftData(filename: self.databasePath, schema: schema, files: files)
+    }
+
+    // Returns the SQLite version for debug purposes.
+    public func sqliteVersion() -> Deferred<Maybe<String>> {
+        return withConnection { connection -> String in
+            let result = connection.executeQueryUnsafe("SELECT sqlite_version()", factory: { row -> String in
+                return row[0] as? String ?? ""
+            }, withArgs: nil)
+            return result.asArray().first ?? ""
+        }
+    }
+
+    // Returns the SQLite compile_options for debug purposes.
+    public func sqliteCompileOptions() -> Deferred<Maybe<[String]>> {
+        return withConnection { connection -> [String] in
+            let result = connection.executeQueryUnsafe("PRAGMA compile_options", factory: { row -> String in
+                return row[0] as? String ?? ""
+            }, withArgs: nil)
+            return result.asArray().filter({ !$0.isEmpty })
+        }
+    }
+
+    // Returns the SQLite secure_delete setting for debug purposes.
+    public func sqliteSecureDelete() -> Deferred<Maybe<Int>> {
+        return withConnection { connection -> Int in
+            let result = connection.executeQueryUnsafe("PRAGMA secure_delete", factory: { row -> Int in
+                return row[0] as? Int ?? 0
+            }, withArgs: nil)
+            return result.asArray().first ?? 0
+        }
     }
 
     // For testing purposes or other cases where we want to ensure that this `BrowserDB`

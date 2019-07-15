@@ -38,9 +38,7 @@ func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
 }
 
 class TrackingProtectionTests: KIFTestCase, TabEventHandler {
-
     private var webRoot: String!
-    private var tabObservers: TabObservers!
     var stats = TPPageStats()
     var statsIncrement: XCTestExpectation?
     var statsZero: XCTestExpectation?
@@ -72,13 +70,10 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         ContentBlocker.shared.clearWhitelist() { clear.fulfill() }
         waitForExpectations(timeout: 2, handler: nil)
 
-        NotificationCenter.default.addObserver(forName: .didChangeContentBlocking, object: nil, queue: nil) { arg in
-            let tab = arg.userInfo!.first!.value as! Tab
-            self.tabDidChangeContentBlockerStatus(tab)
-        }
+        register(self, forTabEvents: .didChangeContentBlocking)
     }
 
-    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
+    func tabDidChangeContentBlocking(_ tab: Tab) {
         stats = tab.contentBlocker!.stats
 
         if (stats.total == 0) {
@@ -116,8 +111,11 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
             let success = errorOrNil == nil
             return success
         }
-
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        if BrowserUtils.iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
         EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
 
         let success = menuAppeared.wait(withTimeout: 20)

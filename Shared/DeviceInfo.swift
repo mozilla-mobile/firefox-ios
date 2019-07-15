@@ -30,7 +30,7 @@ open class DeviceInfo {
     open class func defaultClientName() -> String {
         let format = NSLocalizedString("%@ on %@", tableName: "Shared", comment: "A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.")
 
-        if (ProcessInfo.processInfo.arguments.contains(LaunchArguments.DeviceName)) {
+        if ProcessInfo.processInfo.arguments.contains(LaunchArguments.DeviceName) {
             return String(format: format, AppInfo.displayName, "iOS")
         }
 

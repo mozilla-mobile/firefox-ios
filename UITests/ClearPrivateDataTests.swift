@@ -85,9 +85,8 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             (BrowserUtils.Clearable.History, "1")
         ].forEach { clearable, switchValue in
             XCTAssertNotNil(tester()
-            .waitForView(withAccessibilityLabel: clearable.rawValue, value: switchValue, traits: UIAccessibilityTraitNone))
+                .waitForView(withAccessibilityLabel: clearable.rawValue, value: switchValue, traits: UIAccessibilityTraits.none))
         }
-
         BrowserUtils.closeClearPrivateDataDialog()
     }
 
@@ -98,21 +97,17 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let url2 = urls[1].url
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         tester().waitForView(withAccessibilityLabel: url1)
         tester().waitForView(withAccessibilityLabel: url2)
 
         BrowserUtils.closeLibraryMenu(tester())
-
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false)
-
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
         tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
         tester().waitForAbsenceOfView(withAccessibilityLabel: url2)
 
-        // Going back to default panel, Bookmarks and closing it
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
@@ -126,9 +121,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         tester().waitForAnimationsToFinish()
         let historyListShown = GREYCondition(name: "Wait for history to appear", block: {
             var errorOrNil: NSError?
@@ -145,7 +140,6 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             .assert(grey_notNil(), error: &errorOrNil)
 
         // Close History (and so Library) panel
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
@@ -253,16 +247,16 @@ private class CachedPageServer {
 
     func start() -> String {
         let webServer = GCDWebServer()
-        webServer?.addHandler(forMethod: "GET", path: "/cachedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/cachedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             self.requests += 1
             return GCDWebServerDataResponse(html: "<html><head><title>Cached page</title></head><body>Cache test</body></html>")
         }
 
-        webServer?.start(withPort: 0, bonjourName: nil)
+        webServer.start(withPort: 0, bonjourName: nil)
 
         // We use 127.0.0.1 explicitly here, rather than localhost, in order to avoid our
         // history exclusion code (Bug 1188626).
-        let port = (webServer?.port)!
+        let port = (webServer.port)
         let webRoot = "http://127.0.0.1:\(port)"
         return webRoot
     }

@@ -30,7 +30,7 @@ class DynamicFontHelper: NSObject {
      * Starts monitoring the ContentSizeCategory chantes
      */
     func startObserving() {
-        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: .UIContentSizeCategoryDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
 
     deinit {
@@ -109,6 +109,11 @@ class DynamicFontHelper: NSObject {
     var MediumSizeBoldFontAS: UIFont {
         let size = min(deviceFontSize, 18)
         return UIFont.boldSystemFont(ofSize: size)
+    }
+
+    var SmallSizeHeavyWeightAS: UIFont {
+        let size = min(deviceFontSize, 16)
+        return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.heavy)
     }
 
     var SmallSizeRegularWeightAS: UIFont {

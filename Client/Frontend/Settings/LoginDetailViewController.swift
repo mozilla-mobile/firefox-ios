@@ -9,10 +9,10 @@ import SwiftKeychainWrapper
 
 enum InfoItem: Int {
     case websiteItem = 0
-    case usernameItem = 1
-    case passwordItem = 2
-    case lastModifiedSeparator = 3
-    case deleteItem = 4
+    case usernameItem
+    case passwordItem
+    case lastModifiedSeparator
+    case deleteItem
 
     var indexPath: IndexPath {
         return IndexPath(row: rawValue, section: 0)
@@ -22,14 +22,28 @@ enum InfoItem: Int {
 private struct LoginDetailUX {
     static let InfoRowHeight: CGFloat = 58
     static let DeleteRowHeight: CGFloat = 44
-    static let SeparatorHeight: CGFloat = 44
+    static let SeparatorHeight: CGFloat = 84
+}
+
+fileprivate class CenteredDetailCell: ThemedTableViewCell {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        var f = detailTextLabel?.frame ?? CGRect()
+        f.center = frame.center
+        detailTextLabel?.frame = f
+    }
 }
 
 class LoginDetailViewController: SensitiveViewController {
-
     fileprivate let profile: Profile
-
     fileprivate let tableView = UITableView()
+    fileprivate weak var websiteField: UITextField?
+    fileprivate weak var usernameField: UITextField?
+    fileprivate weak var passwordField: UITextField?
+    // Used to temporarily store a reference to the cell the user is showing the menu controller for
+    fileprivate var menuControllerCell: LoginTableViewCell?
+    fileprivate var deleteAlert: UIAlertController?
+    weak var settingsDelegate: SettingsDelegate?
 
     fileprivate var login: LoginRecord {
         didSet {
@@ -37,35 +51,20 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    fileprivate var editingInfo: Bool = false {
+    fileprivate var isEditingFieldData: Bool = false {
         didSet {
-            if editingInfo != oldValue {
+            if isEditingFieldData != oldValue {
                 tableView.reloadData()
             }
         }
     }
-
-    fileprivate let LoginCellIdentifier = "LoginCell"
-    fileprivate let DefaultCellIdentifier = "DefaultCellIdentifier"
-    fileprivate let SeparatorIdentifier = "SeparatorIdentifier"
-
-    // Used to temporarily store a reference to the cell the user is showing the menu controller for
-    fileprivate var menuControllerCell: LoginTableViewCell?
-
-    fileprivate weak var websiteField: UITextField?
-    fileprivate weak var usernameField: UITextField?
-    fileprivate weak var passwordField: UITextField?
-
-    fileprivate var deleteAlert: UIAlertController?
-
-    weak var settingsDelegate: SettingsDelegate?
 
     init(profile: Profile, login: LoginRecord) {
         self.login = login
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: .UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -76,10 +75,6 @@ class LoginDetailViewController: SensitiveViewController {
         super.viewDidLoad()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
-
-        tableView.register(LoginTableViewCell.self, forCellReuseIdentifier: LoginCellIdentifier)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: DefaultCellIdentifier)
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SeparatorIdentifier)
 
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -107,10 +102,6 @@ class LoginDetailViewController: SensitiveViewController {
         // Normally UITableViewControllers handle responding to content inset changes from keyboard events when editing
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)
-    }
-
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
 
     override func viewDidLayoutSubviews() {
@@ -144,64 +135,73 @@ extension LoginDetailViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InfoItem(rawValue: indexPath.row)! {
         case .usernameItem:
-            let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
+            let loginCell = cell(forIndexPath: indexPath)
+            loginCell.highlightedLabelTitle = NSLocalizedString("Username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
             loginCell.descriptionLabel.text = login.username
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
-            loginCell.editingDescription = editingInfo
+            loginCell.isEditingFieldData = isEditingFieldData
             usernameField = loginCell.descriptionLabel
             usernameField?.accessibilityIdentifier = "usernameField"
             return loginCell
 
         case .passwordItem:
-            let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
+            let loginCell = cell(forIndexPath: indexPath)
+            loginCell.highlightedLabelTitle = NSLocalizedString("Password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
             loginCell.descriptionLabel.text = login.password
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
-            loginCell.editingDescription = editingInfo
+            loginCell.isEditingFieldData = isEditingFieldData
             passwordField = loginCell.descriptionLabel
             passwordField?.accessibilityIdentifier = "passwordField"
             return loginCell
 
         case .websiteItem:
-            let loginCell = dequeueLoginCellForIndexPath(indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
+            let loginCell = cell(forIndexPath: indexPath)
+            loginCell.highlightedLabelTitle = NSLocalizedString("Website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
             loginCell.descriptionLabel.text = login.hostname
             websiteField = loginCell.descriptionLabel
             websiteField?.accessibilityIdentifier = "websiteField"
+            loginCell.isEditingFieldData = false
+            if isEditingFieldData {
+                loginCell.contentView.alpha = 0.5
+            }
             return loginCell
 
         case .lastModifiedSeparator:
-            let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let lastModified = NSLocalizedString("Last modified %@", tableName: "LoginManager", comment: "Footer label describing when the current login was last modified with the timestamp as the parameter.")
-            let formattedLabel = String(format: lastModified, Date.fromMicrosecondTimestamp(MicrosecondTimestamp(login.timePasswordChanged)).toRelativeTimeString())
+            let cell = CenteredDetailCell(style: .subtitle, reuseIdentifier: nil)
+            let created = NSLocalizedString("Created %@", tableName: "LoginManager", comment: "Label describing when the current login was created with the timestamp as the parameter.")
+            let lastModified = NSLocalizedString("Modified %@", tableName: "LoginManager", comment: "Label describing when the current login was last modified with the timestamp as the parameter.")
+
+            let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
+            let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
             // Setting only the detail text produces smaller text as desired, and it is centered.
-            cell.detailTextLabel?.text = formattedLabel
+            cell.detailTextLabel?.text = createdFormatted + "\n" + lastModifiedFormatted
+            cell.detailTextLabel?.numberOfLines = 2
+            cell.detailTextLabel?.textAlignment = .center
             cell.backgroundColor = view.backgroundColor
             return cell
 
         case .deleteItem:
-            let deleteCell = tableView.dequeueReusableCell(withIdentifier: DefaultCellIdentifier, for: indexPath)
+            let deleteCell = cell(forIndexPath: indexPath)
             deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
             deleteCell.textLabel?.textAlignment = .center
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
-            deleteCell.accessibilityTraits = UIAccessibilityTraitButton
+            deleteCell.accessibilityTraits = UIAccessibilityTraits.button
             deleteCell.backgroundColor = UIColor.theme.tableView.rowBackground
             return deleteCell
         }
     }
 
-    fileprivate func dequeueLoginCellForIndexPath(_ indexPath: IndexPath) -> LoginTableViewCell {
-        let loginCell = tableView.dequeueReusableCell(withIdentifier: LoginCellIdentifier, for: indexPath) as! LoginTableViewCell
+    fileprivate func cell(forIndexPath indexPath: IndexPath) -> LoginTableViewCell {
+        let loginCell = LoginTableViewCell()
         loginCell.selectionStyle = .none
         loginCell.delegate = self
         return loginCell
     }
 
     fileprivate func wrapFooter(_ footer: UITableViewHeaderFooterView, withCellFromTableView tableView: UITableView, atIndexPath indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: DefaultCellIdentifier, for: indexPath)
+        let cell = self.cell(forIndexPath: indexPath)
         cell.selectionStyle = .none
         cell.addSubview(footer)
         footer.snp.makeConstraints { make in
@@ -235,7 +235,7 @@ extension LoginDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath == InfoItem.deleteItem.indexPath {
             deleteLogin()
-        } else if !editingInfo {
+        } else if !isEditingFieldData {
             showMenuOnSingleTap(forIndexPath: indexPath)
         }
         tableView.deselectRow(at: indexPath, animated: true)
@@ -298,16 +298,14 @@ extension LoginDetailViewController {
     }
 
     @objc func edit() {
-        editingInfo = true
-
-        let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as! LoginTableViewCell
+        isEditingFieldData = true
+        guard let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as? LoginTableViewCell else { return }
         cell.descriptionLabel.becomeFirstResponder()
-
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
     }
 
     @objc func doneEditing() {
-        editingInfo = false
+        isEditingFieldData = false
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 
         defer {
@@ -315,23 +313,20 @@ extension LoginDetailViewController {
             tableView.reloadData()
         }
 
-        // We only care to update if we changed something
-        guard let username = usernameField?.text,
-                  let password = passwordField?.text, username != login.username || password != login.password else {
-            return
-        }
+        // Only update if user made changes
+        guard let username = usernameField?.text, let password = passwordField?.text else { return }
+        guard username != login.username || password != login.password else { return }
 
         // Keep a copy of the old data in case we fail and need to revert back
-        let oldPassword = login.password
-        let oldUsername = login.username
+        let oldInfo = (pass: login.password, user: login.username)
         login.password = password
         login.username = username
 
         if login.isValid.isSuccess {
             _ = profile.logins.update(login: login)
-        } else if let oldUsername = oldUsername {
-            login.password = oldPassword
-            login.username = oldUsername
+        } else {
+            login.password = oldInfo.pass
+            login.username = oldInfo.user
         }
     }
 }

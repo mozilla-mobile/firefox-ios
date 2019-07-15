@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 @testable import Storage
-import Deferred
 import SwiftyJSON
 
 import XCTest

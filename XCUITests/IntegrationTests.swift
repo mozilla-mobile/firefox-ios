@@ -8,7 +8,7 @@ private let testingURL = "example.com"
 private let userName = "iosmztest"
 private let userPassword = "test15mz"
 private let historyItemSavedOnDesktop = "http://www.example.com/"
-private let loginEntry = "iosmztest, https://accounts.google.com"
+private let loginEntry = "https://accounts.google.com"
 private let tabOpenInDesktop = "http://example.com/"
 
 class IntegrationTests: BaseTestCase {
@@ -39,10 +39,11 @@ class IntegrationTests: BaseTestCase {
 
     private func signInFxAccounts() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 10)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATapOnContinueButton)
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
         sleep(3)
@@ -52,7 +53,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 10)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
     }
 
     func testFxASyncHistory () {
@@ -80,8 +81,8 @@ class IntegrationTests: BaseTestCase {
 
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
-        navigator.goto(HomePanel_Bookmarks)
-        waitForExistence(app.tables["Bookmarks List"].cells.element(boundBy: 1).staticTexts["Example Domain"])
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
     }
 
     func testFxASyncTabs () {
@@ -96,7 +97,7 @@ class IntegrationTests: BaseTestCase {
         navigator.goto(SettingsScreen)
         app.tables.cells.element(boundBy: 0).tap()
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
-        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec on iOS")
+        XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (synctesting) on iOS")
 
         // Sync again just to make sure to sync after new name is shown
         app.buttons["Settings"].tap()
@@ -137,7 +138,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced History
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells.staticTexts[historyItemSavedOnDesktop], timeout: 5)
     }
 
@@ -152,7 +153,7 @@ class IntegrationTests: BaseTestCase {
         navigator.nowAt(SettingsScreen)
         navigator.goto(LoginsSettings)
         waitForExistence(app.tables["Login List"], timeout: 5)
-        XCTAssertTrue(app.tables.cells[loginEntry].exists, "The login saved on desktop is not synced")
+        XCTAssertTrue(app.tables.cells.staticTexts[loginEntry].exists, "The login saved on desktop is not synced")
     }
 
     func testFxASyncTabsDesktop () {
@@ -163,7 +164,7 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced Tabs
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.cells["HistoryPanel.syncedDevicesCell"], timeout: 5)
         app.cells["HistoryPanel.syncedDevicesCell"].tap()
         // Need to swipe to get the data on the screen on focus

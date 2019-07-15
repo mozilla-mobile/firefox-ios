@@ -18,6 +18,11 @@ class FxADeepLinkingTests: XCTestCase {
         self.vc = FxAContentViewController(profile: self.profile)
     }
 
+    override func tearDown() {
+        self.profile._shutdown()
+        super.tearDown()
+    }
+
     func testLaunchWithNilOptions() {
         let testUrl = self.vc.createFxAURLWith(nil, profile: self.profile)
         // Should use default urls for nil options
@@ -29,7 +34,11 @@ class FxADeepLinkingTests: XCTestCase {
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
         let testUrl = self.vc.createFxAURLWith(fxaOptions, profile: self.profile)
-        XCTAssertEqual(testUrl.getQuery(), expectUrl!.getQuery())
+        let dict = testUrl.getQuery()
+        let expected = expectUrl!.getQuery()
+        XCTAssertTrue(dict.contains { (key, value) -> Bool in
+            return expected[key] != nil
+        })
     }
 
     func testDoesntOverrideServiceContext() {
@@ -37,6 +46,10 @@ class FxADeepLinkingTests: XCTestCase {
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
         let testUrl = self.vc.createFxAURLWith(fxaOptions, profile: self.profile)
-        XCTAssertEqual(testUrl.getQuery(), expectUrl!.getQuery())
+        let dict = testUrl.getQuery()
+        let expected = expectUrl!.getQuery()
+        XCTAssertTrue(dict.contains { (key, value) -> Bool in
+            return expected[key] != nil
+        })
     }
 }

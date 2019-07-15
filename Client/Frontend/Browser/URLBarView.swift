@@ -15,7 +15,7 @@ private struct URLBarViewUX {
     static let ButtonHeight: CGFloat = 44
     static let LocationContentOffset: CGFloat = 8
     static let TextFieldCornerRadius: CGFloat = 8
-    static let TextFieldBorderWidth: CGFloat = 1
+    static let TextFieldBorderWidth: CGFloat = 0
     static let TextFieldBorderWidthSelected: CGFloat = 4
     static let ProgressBarHeight: CGFloat = 3
 
@@ -39,6 +39,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton)
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView)
+    func urlBar(_ urlBar: URLBarView, didRestoreText text: String)
     func urlBar(_ urlBar: URLBarView, didEnterText text: String)
     func urlBar(_ urlBar: URLBarView, didSubmitText text: String)
     // Returns either (search query, true) or (url, false).
@@ -93,7 +94,6 @@ class URLBarView: UIView {
         locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.translatesAutoresizingMaskIntoConstraints = false
         locationView.readerModeState = ReaderModeState.unavailable
-        locationView.backgroundColor = URLBarViewUX.TextFieldBorderColor
         locationView.delegate = self
         return locationView
     }()
@@ -123,6 +123,7 @@ class URLBarView: UIView {
         let cancelButton = InsetButton()
         cancelButton.setImage(UIImage.templateImageNamed("goBack"), for: .normal)
         cancelButton.accessibilityIdentifier = "urlBar-cancel"
+        cancelButton.accessibilityLabel = Strings.BackTitle
         cancelButton.addTarget(self, action: #selector(didClickCancel), for: .touchUpInside)
         cancelButton.alpha = 0
         return cancelButton
@@ -132,6 +133,7 @@ class URLBarView: UIView {
         let button = InsetButton()
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
+        cancelButton.accessibilityLabel = Strings.ScanQRCodeViewTitle
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
@@ -141,11 +143,16 @@ class URLBarView: UIView {
 
     fileprivate lazy var scrollToTopButton: UIButton = {
         let button = UIButton()
+        // This button interferes with accessibility of the URL bar as it partially overlays it, and keeps getting the VoiceOver focus instead of the URL bar.
+        // @TODO: figure out if there is an iOS standard way to do this that works with accessibility.
+        button.isAccessibilityElement = false
         button.addTarget(self, action: #selector(tappedScrollToTopArea), for: .touchUpInside)
         return button
     }()
 
     var menuButton = ToolbarButton()
+    var libraryButton = ToolbarButton()
+
     var bookmarkButton = ToolbarButton()
     var forwardButton = ToolbarButton()
     var stopReloadButton = ToolbarButton()
@@ -156,7 +163,7 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
+    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
 
     var currentURL: URL? {
         get {
@@ -173,13 +180,8 @@ class URLBarView: UIView {
         }
     }
 
-    private let privateModeBadge = ToolbarPrivateModeBadge()
-
-    func privateModeBadge(visible: Bool) {
-        if UIDevice.current.userInterfaceIdiom != .pad {
-            privateModeBadge.isHidden = !visible
-        }
-    }
+    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
+    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menuBadge")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -195,11 +197,12 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationView)
 
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         menuButton, forwardButton, backButton, stopReloadButton, locationContainer, privateModeBadge].forEach {
+         libraryButton, menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
             addSubview($0)
         }
 
-        privateModeBadge.isHidden = true
+        privateModeBadge.add(toParent: self)
+        hideImagesBadge.add(toParent: self)
 
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
@@ -254,6 +257,12 @@ class URLBarView: UIView {
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
+        libraryButton.snp.makeConstraints { make in
+            make.trailing.equalTo(self.menuButton.snp.leading)
+            make.centerY.equalTo(self)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
+        }
+
         menuButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.safeArea.trailing).offset(-URLBarViewUX.Padding)
             make.centerY.equalTo(self)
@@ -271,8 +280,9 @@ class URLBarView: UIView {
             make.centerY.equalTo(self.locationContainer)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
-
-        privateModeBadge.layout(forTabsButton: tabsButton)
+        
+        privateModeBadge.layout(onButton: tabsButton)
+        hideImagesBadge.layout(onButton: menuButton)
     }
 
     override func updateConstraints() {
@@ -299,7 +309,7 @@ class URLBarView: UIView {
                     // If we are showing a toolbar, show the text field next to the forward button
                     make.leading.equalTo(self.stopReloadButton.snp.trailing).offset(URLBarViewUX.Padding)
                     if self.topTabsIsShowing {
-                        make.trailing.equalTo(self.menuButton.snp.leading).offset(-URLBarViewUX.Padding)
+                        make.trailing.equalTo(self.libraryButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
                         make.trailing.equalTo(self.tabsButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
@@ -408,7 +418,7 @@ class URLBarView: UIView {
         if search {
             locationTextField?.text = text
             // Not notifying when empty agrees with AutocompleteTextField.textDidChange.
-            delegate?.urlBar(self, didEnterText: text)
+            delegate?.urlBar(self, didRestoreText: text)
         } else {
             locationTextField?.setTextWithoutSearching(text)
         }
@@ -422,6 +432,8 @@ class URLBarView: UIView {
         animateToOverlayState(overlayMode: true)
 
         delegate?.urlBarDidEnterOverlayMode(self)
+
+        applyTheme()
 
         // Bug 1193755 Workaround - Calling becomeFirstResponder before the animation happens
         // won't take the initial frame of the label into consideration, which makes the label
@@ -437,10 +449,11 @@ class URLBarView: UIView {
                 self.setLocation(locationText, search: search)
             }
         } else {
-            // Copy the current URL to the editable text field, then activate it.
-            self.setLocation(locationText, search: search)
             DispatchQueue.main.async {
                 self.locationTextField?.becomeFirstResponder()
+                // Need to set location again so text could be immediately selected.
+                self.setLocation(locationText, search: search)
+                self.locationTextField?.selectAll(nil)
             }
         }
     }
@@ -449,15 +462,17 @@ class URLBarView: UIView {
         locationTextField?.resignFirstResponder()
         animateToOverlayState(overlayMode: false, didCancel: cancel)
         delegate?.urlBarDidLeaveOverlayMode(self)
+        applyTheme()
     }
 
     func prepareOverlayAnimation() {
         // Make sure everything is showing during the transition (we'll hide it afterwards).
-        bringSubview(toFront: self.locationContainer)
+        bringSubviewToFront(self.locationContainer)
         cancelButton.isHidden = false
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false
         menuButton.isHidden = !toolbarIsShowing
+        libraryButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
         backButton.isHidden = !toolbarIsShowing
         tabsButton.isHidden = !toolbarIsShowing || topTabsIsShowing
@@ -465,18 +480,19 @@ class URLBarView: UIView {
     }
 
     func transitionToOverlay(_ didCancel: Bool = false) {
+        locationView.contentView.alpha = inOverlayMode ? 0 : 1
         cancelButton.alpha = inOverlayMode ? 1 : 0
         showQRScannerButton.alpha = inOverlayMode ? 1 : 0
         progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         tabsButton.alpha = inOverlayMode ? 0 : 1
         menuButton.alpha = inOverlayMode ? 0 : 1
+        libraryButton.alpha = inOverlayMode ? 0 : 1
         forwardButton.alpha = inOverlayMode ? 0 : 1
         backButton.alpha = inOverlayMode ? 0 : 1
         stopReloadButton.alpha = inOverlayMode ? 0 : 1
 
         let borderColor = inOverlayMode ? locationActiveBorderColor : locationBorderColor
         locationContainer.layer.borderColor = borderColor.cgColor
-        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
 
         if inOverlayMode {
             line.isHidden = inOverlayMode
@@ -493,17 +509,25 @@ class URLBarView: UIView {
     }
 
     func updateViewsForOverlayModeAndToolbarChanges() {
+        // This ensures these can't be selected as an accessibility element when in the overlay mode.
+        locationView.overrideAccessibility(enabled: !inOverlayMode)
+
         cancelButton.isHidden = !inOverlayMode
         showQRScannerButton.isHidden = !inOverlayMode
         progressBar.isHidden = inOverlayMode
         menuButton.isHidden = !toolbarIsShowing || inOverlayMode
+        libraryButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
         backButton.isHidden = !toolbarIsShowing || inOverlayMode
         tabsButton.isHidden = !toolbarIsShowing || inOverlayMode || topTabsIsShowing
         stopReloadButton.isHidden = !toolbarIsShowing || inOverlayMode
 
         // badge isHidden is tied to private mode on/off, use alpha to hide in this case
-        privateModeBadge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
+        [privateModeBadge, hideImagesBadge].forEach {
+            $0.badge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
+            $0.backdrop.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : BadgeWithBackdrop.backdropAlpha
+        }
+        
     }
 
     func animateToOverlayState(overlayMode overlay: Bool, didCancel cancel: Bool = false) {
@@ -539,6 +563,15 @@ class URLBarView: UIView {
 }
 
 extension URLBarView: TabToolbarProtocol {
+    func privateModeBadge(visible: Bool) {
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            privateModeBadge.show(visible)
+        }
+    }
+
+    func hideImagesBadge(visible: Bool) {
+        hideImagesBadge.show(visible)
+    }
 
     func updateBackStatus(_ canGoBack: Bool) {
         backButton.isEnabled = canGoBack
@@ -572,7 +605,7 @@ extension URLBarView: TabToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, menuButton, progressBar]
+                    return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, menuButton, progressBar]
                 } else {
                     return [locationView, progressBar]
                 }
@@ -652,10 +685,6 @@ extension URLBarView: AutocompleteTextFieldDelegate {
         delegate?.urlBar(self, didEnterText: text)
     }
 
-    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField) {
-        autocompleteTextField.highlightAll()
-    }
-
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool {
         delegate?.urlBar(self, didEnterText: "")
         return true
@@ -701,14 +730,20 @@ extension URLBarView: Themeable {
         line.backgroundColor = UIColor.theme.browser.urlBarDivider
 
         locationBorderColor = UIColor.theme.urlbar.border
-        locationView.backgroundColor = UIColor.theme.textField.background
+        locationView.backgroundColor = inOverlayMode ? UIColor.theme.textField.backgroundInOverlay : UIColor.theme.textField.background
         locationContainer.backgroundColor = UIColor.theme.textField.background
+
+        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        hideImagesBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 }
 
 extension URLBarView: PrivateModeUI {
     func applyUIMode(isPrivate: Bool) {
-        privateModeBadge(visible: isPrivate)
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            privateModeBadge.show(isPrivate)
+        }
+        
         locationActiveBorderColor = UIColor.theme.urlbar.activeBorder(isPrivate)
         progressBar.setGradientColors(startColor: UIColor.theme.loadingBar.start(isPrivate), endColor: UIColor.theme.loadingBar.end(isPrivate))
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)
@@ -760,30 +795,35 @@ class ToolbarTextField: AutocompleteTextField {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        // Since we're unable to change the tint color of the clear image, we need to iterate through the
-        // subviews, find the clear button, and tint it ourselves. Thanks to Mikael Hellman for the tip:
-        // http://stackoverflow.com/questions/27944781/how-to-change-the-tint-color-of-the-clear-button-on-a-uitextfield
-       for case let button as UIButton in subviews {
-            if let image = UIImage.templateImageNamed("topTabs-closeTabs") {
-                if tintedClearImage == nil {
-                    if let clearButtonTintColor = clearButtonTintColor {
-                        tintedClearImage = image.tinted(withColor: clearButtonTintColor)
-                    } else {
-                        tintedClearImage = image
-                    }
-                }
-
-                if button.imageView?.image != tintedClearImage {
-                    button.setImage(tintedClearImage, for: [])
-                }
+        guard let image = UIImage.templateImageNamed("topTabs-closeTabs") else { return }
+        if tintedClearImage == nil {
+            if let clearButtonTintColor = clearButtonTintColor {
+                tintedClearImage = image.tinted(withColor: clearButtonTintColor)
+            } else {
+                tintedClearImage = image
             }
         }
+        // Since we're unable to change the tint color of the clear image, we need to iterate through the
+        // subviews, find the clear button, and tint it ourselves.
+        // https://stackoverflow.com/questions/55046917/clear-button-on-text-field-not-accessible-with-voice-over-swift
+        if let clearButton = value(forKey: "_clearButton") as? UIButton {
+            clearButton.setImage(tintedClearImage, for: [])
+
+        }
+    }
+
+    // The default button size is 19x19, make this larger
+    override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
+        let r = super.clearButtonRect(forBounds: bounds)
+        let grow: CGFloat = 16
+        let r2 = CGRect(x: r.minX - grow/2, y:r.minY - grow/2, width: r.width + grow, height: r.height + grow)
+        return r2
     }
 }
 
 extension ToolbarTextField: Themeable {
     func applyTheme() {
-        backgroundColor = UIColor.theme.textField.background
+        backgroundColor = UIColor.theme.textField.backgroundInOverlay
         textColor = UIColor.theme.textField.textAndTint
         clearButtonTintColor = textColor
         tintColor = AutocompleteTextField.textSelectionColor.textFieldMode

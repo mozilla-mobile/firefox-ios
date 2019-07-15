@@ -24,7 +24,7 @@ class DownloadContentScript: TabContentScript {
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
             let browserViewController = appDelegate.browserViewController,
-            let dictionary = message.body as? [String : Any?],
+            let dictionary = message.body as? [String: Any?],
             var filename = dictionary["filename"] as? String,
             let mimeType = dictionary["mimeType"] as? String,
             let size = dictionary["size"] as? Int64,

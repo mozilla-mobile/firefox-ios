@@ -22,10 +22,13 @@ window.__firefox__.includeOnce("ContextMenu", function() {
 
     if (targetLink) {
       data.link = targetLink.href;
+      data.title = targetLink.textContent;
     }
 
     if (targetImage) {
       data.image = targetImage.src;
+      data.title = data.title || targetImage.title;
+      data.alt = targetImage.alt;
     }
 
     if (data.link || data.image) {

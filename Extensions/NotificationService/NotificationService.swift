@@ -52,7 +52,7 @@ class NotificationService: UNNotificationServiceExtension {
             // Rather than changing tabQueue, we manually nil it out here.
             self.display?.tabQueue = nil
 
-            profile?.shutdown()
+            profile?._shutdown()
         }
 
         guard let display = self.display else {
@@ -157,7 +157,7 @@ extension SyncDataDisplay {
 }
 
 extension SyncDataDisplay {
-    func displayNewSentTabNotification(tab: [String : String]) {
+    func displayNewSentTabNotification(tab: [String: String]) {
         if let urlString = tab["url"], let url = URL(string: urlString), url.isWebPage(), let title = tab["title"] {
             let tab = [
                 "title": title,

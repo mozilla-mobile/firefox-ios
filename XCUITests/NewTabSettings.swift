@@ -4,6 +4,7 @@
 
 import XCTest
 
+let websiteUrl = "www.mozilla.org"
 class NewTabSettingsTest: BaseTestCase {
     // Smoketest
     func testCheckNewTabSettingsByDefault() {
@@ -11,10 +12,7 @@ class NewTabSettingsTest: BaseTestCase {
         waitForExistence(app.navigationBars["New Tab"])
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
         XCTAssertTrue(app.tables.cells["Blank Page"].exists)
-        XCTAssertTrue(app.tables.cells["Bookmarks"].exists)
-        XCTAssertTrue(app.tables.cells["History"].exists)
         XCTAssertTrue(app.tables.cells["NewTabAsCustomURL"].exists)
-        //XCTAssertTrue(app.tables.switches["ASPocketStoriesVisible"].isEnabled)
     }
 
     // Smoketest
@@ -29,41 +27,22 @@ class NewTabSettingsTest: BaseTestCase {
         waitForNoExistence(app.collectionViews.cells["TopSitesCell"].collectionViews.cells["youtube"])
         waitForNoExistence(app.staticTexts["Highlights"])
     }
-
-    // Smoketest
-    func testChangeNewTabSettingsShowYourBookmarks() {
+    
+    func testChangeNewTabSettingsShowFirefoxHome() {
+        // Set to history page first since FF Home is default
         navigator.goto(NewTabSettings)
-        waitForExistence(app.navigationBars["New Tab"])
-        // Show Bookmarks panel without bookmarks
-        navigator.performAction(Action.SelectNewTabAsBookmarksPage)
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.otherElements.images["emptyBookmarks"])
-
-        // Add one bookmark and check the new tab screen
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
-        waitUntilPageLoad()
-        navigator.performAction(Action.Bookmark)
-        navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["The Book of Mozilla"])
-        waitForNoExistence(app.staticTexts["Highlights"])
-    }
-
-    // Smoketest
-    func testChangeNewTabSettingsShowYourHistory() {
+        waitForNoExistence(app.collectionViews.cells["TopSitesCell"])
+        
+        // Now check if it switches to FF Home
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
+        app.buttons["urlBar-cancel"].tap()
+        navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
-        waitForExistence(app.navigationBars["New Tab"])
-        // Show History Panel without history
-        navigator.performAction(Action.SelectNewTabAsHistoryPage)
+        navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForNoExistence(app.tables.otherElements.staticTexts["Today"])
-
-        // Add one history item and check the new tab screen
-        navigator.openURL("example.com")
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForTabsButton()
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.tables["History List"].cells.staticTexts["Example Domain"])
+        waitForExistence(app.collectionViews.cells["TopSitesCell"])
     }
 
     func testChangeNewTabSettingsShowCustomURL() {
@@ -82,5 +61,27 @@ class NewTabSettingsTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         waitForExistence(app.textFields["url"])
         waitForValueContains(app.textFields["url"], value: "mozilla")
+    }
+    
+    func testChangeNewTabSettingsLabel() {
+        //Go to New Tab settings and select Custom URL option
+        navigator.performAction(Action.SelectNewTabAsCustomURL)
+        navigator.nowAt(NewTabSettings)
+        //Enter a custom URL
+        app.textFields["NewTabAsCustomURLTextField"].typeText(websiteUrl)
+        waitForValueContains(app.textFields["NewTabAsCustomURLTextField"], value: "mozilla")
+        navigator.goto(SettingsScreen)
+        //Assert that the label showing up in Settings is equal to the URL entere (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD)
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Homepage")
+        //Switch to Blank page and check label
+        navigator.performAction(Action.SelectNewTabAsBlankPage)
+        navigator.nowAt(NewTabSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Blank Page")
+        //Switch to FXHome and check label
+        navigator.performAction(Action.SelectNewTabAsFirefoxHomePage)
+        navigator.nowAt(NewTabSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["NewTab"].label, "New Tab, Firefox Home")
     }
 }

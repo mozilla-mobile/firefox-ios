@@ -63,7 +63,7 @@ class TabTrayController: UIViewController {
         searchBar.leftView = UIImageView(image: UIImage(named: "quickSearch"))
         searchBar.leftViewMode = .unlessEditing
         searchBar.textColor = UIColor.theme.tabTray.tabTitleText
-        searchBar.attributedPlaceholder = NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7)])
+        searchBar.attributedPlaceholder = NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7)])
         searchBar.clearButtonMode = .never
         searchBar.delegate = self
         searchBar.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
@@ -134,7 +134,6 @@ class TabTrayController: UIViewController {
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
-        tabDisplayManager.removeObservers()
         tabDisplayManager = nil
     }
 
@@ -163,12 +162,9 @@ class TabTrayController: UIViewController {
         collectionView.backgroundColor = UIColor.theme.tabTray.background
         collectionView.keyboardDismissMode = .onDrag
 
-        // XXX: Bug 1485064 - Temporarily disable drag-and-drop in tabs tray
-        if LeanPlumClient.shared.enableDragDrop.boolValue() {
-             collectionView.dragInteractionEnabled = true
-             collectionView.dragDelegate = tabDisplayManager
-             collectionView.dropDelegate = tabDisplayManager
-         }
+        collectionView.dragInteractionEnabled = true
+        collectionView.dragDelegate = tabDisplayManager
+        collectionView.dropDelegate = tabDisplayManager
 
         searchBarHolder.addSubview(roundedSearchBarHolder)
         searchBarHolder.addSubview(searchBar)
@@ -181,7 +177,7 @@ class TabTrayController: UIViewController {
         view.addSubview(statusBarBG)
         statusBarBG.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self.view)
-            make.bottom.equalTo(self.topLayoutGuide.snp.bottom)
+            make.bottom.equalTo(self.view.safeArea.top)
         }
 
         view.insertSubview(emptyPrivateTabsView, aboveSubview: collectionView)
@@ -202,8 +198,8 @@ class TabTrayController: UIViewController {
 
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: .UIApplicationWillResignActive, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(dynamicFontChanged), name: .DynamicFontChanged, object: nil)
     }
 
@@ -226,7 +222,7 @@ class TabTrayController: UIViewController {
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
             make.bottom.equalTo(toolbar.snp.top)
-            make.top.equalTo(self.topLayoutGuide.snp.bottom)
+            make.top.equalTo(self.view.safeArea.top)
         }
 
         toolbar.snp.makeConstraints { make in
@@ -479,19 +475,21 @@ extension TabTrayController {
     }
 
     func closeTabsForCurrentTray() {
-        tabManager.removeTabsWithUndoToast(tabDisplayManager.dataStore.compactMap { $0 })
-        if tabDisplayManager.isPrivate {
-            emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
-            if !emptyPrivateTabsView.isHidden {
-                // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
-                emptyPrivateTabsView.alpha = 0
-                UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseIn, animations: {
-                    self.emptyPrivateTabsView.alpha = 1
-                }, completion: nil)
+        tabDisplayManager.hideDisplayedTabs() {
+            self.tabManager.removeTabsWithUndoToast(self.tabDisplayManager.dataStore.compactMap { $0 })
+            if self.tabDisplayManager.isPrivate {
+                self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+                if !self.emptyPrivateTabsView.isHidden {
+                    // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
+                    self.emptyPrivateTabsView.alpha = 0
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.emptyPrivateTabsView.alpha = 1
+                    }, completion: nil)
+                }
+            } else if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
+                self.tabManager.selectTab(tab)
+                self.dismissTabTray()
             }
-        } else if tabManager.normalTabs.count == 1, let tab = tabManager.normalTabs.first {
-            tabManager.selectTab(tab)
-            dismissTabTray()
         }
     }
 
@@ -584,7 +582,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
         guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             self.removeByButtonOrSwipe(tab: tab, cell: tabCell)
-            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
+            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: NSLocalizedString("Closing tab", comment: "Accessibility label (used by assistive technology) notifying the user that the tab is being closed."))
         }
     }
 
@@ -766,7 +764,9 @@ fileprivate class TabLayoutDelegate: NSObject, UICollectionViewDelegateFlowLayou
 
             let offset = clamp(abs(scrollView.contentOffset.y), min: 0, max: TabTrayControllerUX.SearchBarHeight)
             searchHeightConstraint?.update(offset: offset)
-            scrollView.contentInset = UIEdgeInsets(top: offset, left: 0, bottom: 0, right: 0)
+            if scrollDirection == .down {
+                scrollView.contentInset = UIEdgeInsets(top: offset, left: 0, bottom: 0, right: 0)
+            }
         } else {
             self.hideSearch()
         }
@@ -861,7 +861,8 @@ fileprivate class EmptyPrivateTabsView: UIView {
     }()
 
     fileprivate var iconImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "largePrivateMask"))
+        let imageView = UIImageView(image: UIImage.templateImageNamed("largePrivateMask"))
+        imageView.tintColor = UIColor.Photon.Grey60
         return imageView
     }()
 
@@ -883,7 +884,8 @@ fileprivate class EmptyPrivateTabsView: UIView {
         }
 
         iconImageView.snp.makeConstraints { make in
-            make.bottom.equalTo(titleLabel.snp.top).offset(-EmptyPrivateTabsViewUX.TextMargin)
+            make.bottom.equalTo(titleLabel.snp.top)
+            make.height.width.equalTo(120)
             make.centerX.equalTo(self)
         }
 
@@ -904,16 +906,16 @@ fileprivate class EmptyPrivateTabsView: UIView {
     }
 }
 
-extension TabTrayController: ClientPickerViewControllerDelegate {
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
-        if let item = clientPickerViewController.shareItem {
-            _ = self.profile.sendItem(item, toClients: clients)
+extension TabTrayController: DevicePickerViewControllerDelegate {
+    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
+        if let item = devicePickerViewController.shareItem {
+            _ = self.profile.sendItem(item, toDevices: devices)
         }
-        clientPickerViewController.dismiss(animated: true, completion: nil)
+        devicePickerViewController.dismiss(animated: true, completion: nil)
     }
 
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
-        clientPickerViewController.dismiss(animated: true, completion: nil)
+    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
+        devicePickerViewController.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -945,7 +947,7 @@ class TrayToolbar: UIView, Themeable, PrivateModeUI {
         return button
     }()
 
-    lazy var maskButton: PrivateModeButton = PrivateModeButton()
+    lazy var maskButton = PrivateModeButton()
     fileprivate let sideOffset: CGFloat = 32
 
     fileprivate override init(frame: CGRect) {
@@ -1160,6 +1162,10 @@ class TabCell: UICollectionViewCell {
         }
         if selected {
             setTabSelected(tab.isPrivate)
+        } else {
+            layer.shadowOffset = .zero
+            layer.shadowPath = nil
+            layer.shadowOpacity = 0
         }
         screenshotView.image = tab.screenshot
     }
@@ -1173,6 +1179,7 @@ class TabCell: UICollectionViewCell {
         layer.shadowOffset = .zero
         layer.shadowPath = nil
         layer.shadowOpacity = 0
+        isHidden = false
     }
 
     override func accessibilityScroll(_ direction: UIAccessibilityScrollDirection) -> Bool {

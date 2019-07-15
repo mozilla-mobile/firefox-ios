@@ -48,9 +48,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
-            BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
-                        titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
-            ]
+           ]
 
         if #available(iOS 12.0, *) {
             generalSettings.insert(SiriPageSetting(settings: self), at: 5)
@@ -86,7 +84,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
-                AdvanceAccountSetting(settings: self),
+                AdvancedAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
@@ -129,8 +127,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ExportBrowserDataSetting(settings: self),
                 ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
-                EnableBookmarkMergingSetting(settings: self),
-                ForceCrashSetting(settings: self)
+                ForceCrashSetting(settings: self),
+                SlowTheDatabase(settings: self),
+                SentryIDSetting(settings: self),
             ])]
 
         return settings

@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import Deferred
 import Shared
 
 /*

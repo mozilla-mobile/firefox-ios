@@ -14,8 +14,11 @@ import XCTest
  * A base test type for tests that need a profile.
  */
 class ProfileTest: XCTestCase {
-    func withTestProfile(_ callback: (_ profile: Profile) -> Void) {
-        callback(MockProfile())
+    func withTestProfile(_ callback: (_ profile: Client.Profile) -> Void) {
+        let profile = MockProfile(databasePrefix: "profile-test")
+        profile._reopen()
+        callback(profile)
+        profile._shutdown()
     }
 
     func testNewProfileClearsExistingAuthenticationInfo() {

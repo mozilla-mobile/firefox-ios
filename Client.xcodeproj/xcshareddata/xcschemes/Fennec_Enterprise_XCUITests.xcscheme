@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0940"
+   LastUpgradeVersion = "1020"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -167,21 +167,12 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Fennec_Enterprise"
+      buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = "en"
       region = "US"
       shouldUseLaunchSchemeArgsEnv = "NO">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "/usr/local/bin/carthage checkout">
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -234,6 +225,9 @@
                </Test>
                <Test
                   Identifier = "DragAndDropTestIpad/testTryDragAndDropHistoryToURLBar()">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests/testRearrangeTabsTabTray()">
                </Test>
                <Test
                   Identifier = "FindInPageTests/testFindFromMenu()">
@@ -329,16 +323,22 @@
                   Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">
                </Test>
                <Test
+                  Identifier = "ScreenGraphTest/testUserStateChanges()">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testDismissPromptPresence()">
                </Test>
                <Test
                   Identifier = "SearchTests/testSearchEngine()">
                </Test>
                <Test
+                  Identifier = "SearchTests/testSearchStartAfterTypingTwoWords()">
+               </Test>
+               <Test
                   Identifier = "SiteLoadTest">
                </Test>
                <Test
-                  Identifier = "SyncUITests/testAccountManagmentPage()">
+                  Identifier = "SyncUITests/testAccountManagementPage()">
                </Test>
                <Test
                   Identifier = "TabTraySearchTabsTests/testSearchTabs()">
@@ -411,7 +411,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Fennec_Enterprise"
+      buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "1"
@@ -441,7 +441,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Fennec_Enterprise"
+      buildConfiguration = "Fennec"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -458,10 +458,10 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Fennec_Enterprise">
+      buildConfiguration = "Fennec">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Fennec_Enterprise"
+      buildConfiguration = "Fennec"
       revealArchiveInOrganizer = "YES">
       <PreActions>
          <ExecutionAction

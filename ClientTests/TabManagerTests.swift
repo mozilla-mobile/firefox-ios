@@ -7,7 +7,6 @@ import Shared
 import Storage
 import UIKit
 import WebKit
-import Deferred
 
 import XCTest
 
@@ -105,6 +104,7 @@ class TabManagerTests: XCTestCase {
     }
 
     override func tearDown() {
+        profile._shutdown()
         manager.removeDelegate(delegate)
         manager.removeAll()
 
@@ -407,7 +407,7 @@ class TabManagerTests: XCTestCase {
 
         // manager should creat new tab and select it
         XCTAssertNotEqual(manager.selectedTab, tab1)
-        XCTAssertNotEqual(manager.selectedIndex, manager.tabs.index(of: tab1))
+        XCTAssertNotEqual(manager.selectedIndex, manager.tabs.firstIndex(of: tab1))
     }
 
     func testRemoveAllShouldRemoveAllTabs() {
@@ -416,8 +416,8 @@ class TabManagerTests: XCTestCase {
         let tab1 = manager.addTab()
 
         manager.removeAll()
-        XCTAssert(nil == manager.tabs.index(of: tab0))
-        XCTAssert(nil == manager.tabs.index(of: tab1))
+        XCTAssert(nil == manager.tabs.firstIndex(of: tab0))
+        XCTAssert(nil == manager.tabs.firstIndex(of: tab1))
     }
 
     // Private tabs and regular tabs are in the same tabs array.

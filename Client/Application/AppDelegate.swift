@@ -22,7 +22,7 @@ let AllowThirdPartyKeyboardsKey = "settings.allowThirdPartyKeyboards"
 private let InitialPingSentKey = "initialPingSent"
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestoration {
-    public static func viewController(withRestorationIdentifierPath identifierComponents: [Any], coder: NSCoder) -> UIViewController? {
+    public static func viewController(withRestorationIdentifierPath identifierComponents: [String], coder: NSCoder) -> UIViewController? {
         return nil
     }
 
@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var receivedURLs = [URL]()
     var unifiedTelemetry: UnifiedTelemetry?
 
-    @discardableResult func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
         // Determine if the application cleanly exited last time it was used. We default to true in
         // case we have never done this before. Then check if the "ApplicationCleanlyBackgrounded" user
@@ -72,13 +72,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // If the 'Save logs to Files app on next launch' toggle
         // is turned on in the Settings app, copy over old logs.
         if DebugSettingsBundleOptions.saveLogsToDocuments {
-            Logger.copyPreviousLogsToDocuments();
+            Logger.copyPreviousLogsToDocuments()
         }
 
         return startApplication(application, withLaunchOptions: launchOptions)
     }
 
-    @discardableResult fileprivate func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
+    func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
         log.info("startApplication begin")
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
@@ -115,7 +115,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if let clazz = NSClassFromString("WKCont" + "ent" + "View"), let swizzledMethod = class_getInstanceMethod(TabWebViewMenuHelper.self, #selector(TabWebViewMenuHelper.swizzledMenuHelperFindInPage)) {
             class_addMethod(clazz, MenuHelper.SelectorFindInPage, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
         }
-
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
 
@@ -160,19 +159,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
+        profile.cleanupHistoryIfNeeded()
+
         log.info("startApplication end")
         return true
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
-        self.profile?.shutdown()
+        profile?._shutdown()
 
         // Allow deinitializers to close our database connections.
-        self.profile = nil
-        self.tabManager = nil
-        self.browserViewController = nil
-        self.rootViewController = nil
+        profile = nil
+        tabManager = nil
+        browserViewController = nil
+        rootViewController = nil
     }
 
     /**
@@ -194,7 +195,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return p
     }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
@@ -203,11 +204,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         UNUserNotificationCenter.current().delegate = self
         SentTabAction.registerActions()
         UIScrollView.doBadSwizzleStuff()
-
-        #if BUDDYBUILD
-            print("Setting up BuddyBuild SDK")
-            BuddyBuildSDK.setup()
-        #endif
 
         window!.makeKeyAndVisible()
 
@@ -218,7 +214,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         // If a shortcut was launched, display its information and take the appropriate action
-        if let shortcutItem = launchOptions?[UIApplicationLaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
+        if let shortcutItem = launchOptions?[UIApplication.LaunchOptionsKey.shortcutItem] as? UIApplicationShortcutItem {
 
             QuickActions.sharedInstance.launchedShortcutItem = shortcutItem
             // This will block "performActionForShortcutItem:completionHandler" from being called.
@@ -233,7 +229,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return shouldPerformAdditionalDelegateHandling
     }
 
-    func application(_ application: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+    func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         guard let routerpath = NavigationPath(url: url) else {
             return false
         }
@@ -246,7 +242,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
             UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
         }
-
 
         DispatchQueue.main.async {
             NavigationPath.handle(nav: routerpath, with: self.browserViewController)
@@ -270,7 +265,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         defaults.synchronize()
 
         if let profile = self.profile {
-            profile.reopen()
+            profile._reopen()
 
             if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
                 FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
@@ -338,7 +333,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         profile.syncManager.applicationDidEnterBackground()
 
-        var taskId: UIBackgroundTaskIdentifier = 0
+        var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
         taskId = application.beginBackgroundTask (expirationHandler: {
             print("Running out of background time, but we have a profile shutdown pending.")
             self.shutdownProfileWhenNotActive(application)
@@ -351,7 +346,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 application.endBackgroundTask(taskId)
             }
         } else {
-            profile.shutdown()
+            profile._shutdown()
             application.endBackgroundTask(taskId)
         }
     }
@@ -362,7 +357,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             return
         }
 
-        profile?.shutdown()
+        profile?._shutdown()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
@@ -420,9 +415,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
         defaults.register(defaults: ["UserAgent": firefoxUA])
 
-        SDWebImageDownloader.shared().setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
+        SDWebImageDownloader.shared.setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
         //SDWebImage is setting accept headers that report we support webp. We don't
-        SDWebImageDownloader.shared().setValue("image/*;q=0.8", forHTTPHeaderField: "Accept")
+        SDWebImageDownloader.shared.setValue("image/*;q=0.8", forHTTPHeaderField: "Accept")
 
         // Record the user agent for use by search suggestion clients.
         SearchViewController.userAgent = firefoxUA
@@ -432,7 +427,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         FaviconFetcher.userAgent = UserAgent.desktopUserAgent()
     }
 
-    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([Any]?) -> Void) -> Bool {
+    func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if #available(iOS 12.0, *) {
             if userActivity.activityType == SiriShortcuts.activityType.openURL.rawValue {
                 browserViewController.openBlankNewTab(focusLocationField: false)
@@ -501,7 +496,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
 // MARK: - Root View Controller Animations
 extension AppDelegate: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationController.Operation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
         switch operation {
         case .push:
             return BrowserToTrayAnimator()
@@ -517,7 +512,7 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         // Dismiss the view controller and start the app up
         controller.dismiss(animated: true, completion: nil)
-        startApplication(application!, withLaunchOptions: self.launchOptions)
+        _ = startApplication(application!, withLaunchOptions: self.launchOptions)
     }
 }
 

@@ -106,6 +106,10 @@ open class UserAgent {
         return firefoxUA
     }
 
+    public static func isDesktop(ua: String) -> Bool {
+        return ua.lowercased().contains("intel mac")
+    }
+
     public static func desktopUserAgent() -> String {
         let userAgent = NSMutableString(string: defaultUserAgent())
 

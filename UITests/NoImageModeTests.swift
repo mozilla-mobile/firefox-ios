@@ -30,8 +30,11 @@ class NoImageModeTests: KIFTestCase {
 
     func testHideImage() {
         checkHiding(isOn: false)
-
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        if BrowserUtils.iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
         EarlGrey.selectElement(with: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
                                                        grey_accessibilityLabel("Hide Images")]))
             .perform(grey_tap())
@@ -40,7 +43,11 @@ class NoImageModeTests: KIFTestCase {
 
         checkHiding(isOn: true)
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        if BrowserUtils.iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
         EarlGrey.selectElement(with: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
                                                        grey_accessibilityLabel("Hide Images")]))
         .perform(grey_tap())

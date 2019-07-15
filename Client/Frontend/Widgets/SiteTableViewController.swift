@@ -75,6 +75,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 /**
  * Provides base shared functionality for site rows and headers.
  */
+@objcMembers
 class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Themeable {
     fileprivate let CellIdentifier = "CellIdentifier"
     fileprivate let HeaderIdentifier = "HeaderIdentifier"
@@ -91,7 +92,6 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         self.profile = profile
         super.init(nibName: nil, bundle: nil)
         applyTheme()
-        reloadData()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -132,7 +132,15 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = nil
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        reloadData()
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        tableView.setEditing(false, animated: false)
         coordinator.animate(alongsideTransition: { context in
             //The AS context menu does not behave correctly. Dismiss it when rotating.
             if let _ = self.presentedViewController as? PhotonActionSheet {
@@ -186,6 +194,11 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func applyTheme() {
+        navigationController?.navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
+        navigationController?.navigationBar.tintColor = UIColor.theme.general.controlTint
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextDark]
+        setNeedsStatusBarAppearanceUpdate()
+
         tableView.backgroundColor = UIColor.theme.tableView.rowBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
         if let rows = tableView.indexPathsForVisibleRows {

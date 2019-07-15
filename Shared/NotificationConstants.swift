@@ -34,6 +34,8 @@ extension Notification.Name {
     public static let ProfileDidFinishSyncing = Notification.Name("ProfileDidFinishSyncing")
 
     public static let DatabaseWasRecreated = Notification.Name("DatabaseWasRecreated")
+    public static let DatabaseWasClosed = Notification.Name("DatabaseWasClosed")
+    public static let DatabaseWasReopened = Notification.Name("DatabaseWasReopened")
 
     public static let PasscodeDidChange = Notification.Name("PasscodeDidChange")
 
@@ -44,8 +46,6 @@ extension Notification.Name {
     public static let DynamicFontChanged = Notification.Name("DynamicFontChanged")
 
     public static let UserInitiatedSyncManually = Notification.Name("UserInitiatedSyncManually")
-
-    public static let BookmarkBufferValidated = Notification.Name("BookmarkBufferValidated")
 
     public static let FaviconDidLoad = Notification.Name("FaviconDidLoad")
 

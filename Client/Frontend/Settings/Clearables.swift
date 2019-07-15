@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import WebKit
-import Deferred
 import SDWebImage
 import CoreSpotlight
 
@@ -41,9 +40,14 @@ class HistoryClearable: Clearable {
     }
 
     func clear() -> Success {
+
+        // Treat desktop sites as part of browsing history.
+        try? FileManager.default.removeItem(at: Tab.DesktopSites.file)
+        Tab.DesktopSites.hostList.removeAll()
+
         return profile.history.clearHistory().bindQueue(.main) { success in
-            SDImageCache.shared().clearDisk()
-            SDImageCache.shared().clearMemory()
+            SDImageCache.shared.clearDisk()
+            SDImageCache.shared.clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)

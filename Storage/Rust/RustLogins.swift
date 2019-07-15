@@ -4,14 +4,13 @@
 
 import Foundation
 import Shared
-import Deferred
 
-@_exported import Logins
+@_exported import MozillaAppServices
 
 private let log = Logger.syncLogger
 
 public extension LoginRecord {
-    public convenience init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
+    convenience init(credentials: URLCredential, protectionSpace: URLProtectionSpace) {
         let hostname: String
         if let _ = protectionSpace.`protocol` {
             hostname = protectionSpace.urlString()
@@ -31,26 +30,15 @@ public extension LoginRecord {
         ])
     }
 
-    public var credentials: URLCredential {
-        return URLCredential(user: username ?? "", password: password, persistence: .none)
+    var credentials: URLCredential {
+        return URLCredential(user: username ?? "", password: password, persistence: .forSession)
     }
 
-    public var protectionSpace: URLProtectionSpace {
-        // Break down the full url hostname into its scheme/protocol and host components
-        let hostnameURL = hostname.asURL
-        let host = hostnameURL?.host ?? hostname
-        let scheme = hostnameURL?.scheme ?? ""
-
-        // We should ignore any SSL or normal web ports in the URL.
-        var port = hostnameURL?.port ?? 0
-        if port == 443 || port == 80 {
-            port = 0
-        }
-
-        return URLProtectionSpace(host: host, port: port, protocol: scheme, realm: nil, authenticationMethod: nil)
+    var protectionSpace: URLProtectionSpace {
+        return URLProtectionSpace.fromOrigin(hostname)
     }
 
-    public var hasMalformedHostname: Bool {
+    var hasMalformedHostname: Bool {
         let hostnameURL = hostname.asURL
         guard let _ = hostnameURL?.host else {
             return true
@@ -59,7 +47,7 @@ public extension LoginRecord {
         return false
     }
 
-    public var isValid: Maybe<()> {
+    var isValid: Maybe<()> {
         // Referenced from https://mxr.mozilla.org/mozilla-central/source/toolkit/components/passwordmgr/nsLoginManager.js?rev=f76692f0fcf8&mark=280-281#271
 
         // Logins with empty hostnames are not valid.
@@ -101,7 +89,7 @@ public class RustLogins {
     let queue: DispatchQueue
     let storage: LoginsStorage
 
-    public fileprivate(set) var isOpen: Bool = false
+    fileprivate(set) var isOpen: Bool = false
 
     private var didAttemptToMoveToBackup = false
 
@@ -113,58 +101,9 @@ public class RustLogins {
         self.storage = LoginsStorage(databasePath: databasePath)
     }
 
-    private func moveDatabaseFileToBackupLocation() {
-        let databaseURL = URL(fileURLWithPath: databasePath)
-        let databaseContainingDirURL = databaseURL.deletingLastPathComponent()
-        let baseFilename = databaseURL.lastPathComponent
-
-        // Attempt to make a backup as long as the database file still exists.
-        guard FileManager.default.fileExists(atPath: databasePath) else {
-            // No backup was attempted since the database file did not exist.
-            Sentry.shared.sendWithStacktrace(message: "The Logins database was deleted while in use", tag: SentryTag.rustLogins)
-            return
-        }
-
-        Sentry.shared.sendWithStacktrace(message: "Unable to open Logins database", tag: SentryTag.rustLogins, severity: .warning, description: "Attempting to move '\(baseFilename)'")
-
-        // Note that a backup file might already exist! We append a counter to avoid this.
-        var bakCounter = 0
-        var bakBaseFilename: String
-        var bakDatabasePath: String
-        repeat {
-            bakCounter += 1
-            bakBaseFilename = "\(baseFilename).bak.\(bakCounter)"
-            bakDatabasePath = databaseContainingDirURL.appendingPathComponent(bakBaseFilename).path
-        } while FileManager.default.fileExists(atPath: bakDatabasePath)
-
-        do {
-            try FileManager.default.moveItem(atPath: bakDatabasePath, toPath: bakDatabasePath)
-
-            let shmBaseFilename = baseFilename + "-shm"
-            let walBaseFilename = baseFilename + "-wal"
-            log.debug("Moving \(shmBaseFilename) and \(walBaseFilename)…")
-
-            let shmDatabasePath = databaseContainingDirURL.appendingPathComponent(shmBaseFilename).path
-            if FileManager.default.fileExists(atPath: shmDatabasePath) {
-                log.debug("\(shmBaseFilename) exists.")
-                try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-shm")
-            }
-
-            let walDatabasePath = databaseContainingDirURL.appendingPathComponent(walBaseFilename).path
-            if FileManager.default.fileExists(atPath: walDatabasePath) {
-                log.debug("\(walBaseFilename) exists.")
-                try FileManager.default.moveItem(atPath: shmDatabasePath, toPath: "\(bakDatabasePath)-wal")
-            }
-
-            log.debug("Finished moving Logins database successfully.")
-        } catch let error as NSError {
-            Sentry.shared.sendWithStacktrace(message: "Unable to move Logins database to backup location", tag: SentryTag.rustLogins, severity: .error, description: "Attempted to move to '\(bakBaseFilename)'. \(error.localizedDescription)")
-        }
-    }
-
     private func open() -> NSError? {
         do {
-            try self.storage.unlock(withEncryptionKey: encryptionKey)
+            try storage.unlock(withEncryptionKey: encryptionKey)
             isOpen = true
             return nil
         } catch let err as NSError {
@@ -174,21 +113,21 @@ public class RustLogins {
                 // specified is not a valid database. This is an unrecoverable
                 // state unless we can move the existing file to a backup
                 // location and start over.
-                case .InvalidKey(let message):
+                case .invalidKey(let message):
                     log.error(message)
 
                     if !didAttemptToMoveToBackup {
-                        moveDatabaseFileToBackupLocation()
+                        RustShared.moveDatabaseFileToBackupLocation(databasePath: databasePath)
                         didAttemptToMoveToBackup = true
                         return open()
                     }
-                case .Panic(let message):
-                    Sentry.shared.sendWithStacktrace(message: "Panicked when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
+                case .panic(let message):
+                    Sentry.shared.sendWithStacktrace(message: "Panicked when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
                 default:
-                    Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
+                    Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
                 }
             } else {
-                Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
+                Sentry.shared.sendWithStacktrace(message: "Unknown error when opening Rust Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
             }
 
             return err
@@ -197,7 +136,7 @@ public class RustLogins {
 
     private func close() -> NSError? {
         do {
-            try self.storage.lock()
+            try storage.lock()
             isOpen = false
             return nil
         } catch let err as NSError {
@@ -206,24 +145,45 @@ public class RustLogins {
         }
     }
 
-    public func reopenIfClosed() {
-        if !isOpen {
-            _ = open()
+    public func reopenIfClosed() -> NSError? {
+        var error: NSError?
+
+        queue.sync {
+            guard !isOpen else { return }
+
+            error = open()
         }
+
+        return error
     }
 
-    public func forceClose() {
-        if isOpen {
-            _ = close()
+    public func forceClose() -> NSError? {
+        var error: NSError?
+
+        do {
+            try storage.interrupt()
+        } catch let err as NSError {
+            error = err
+
+            Sentry.shared.sendWithStacktrace(message: "Error interrupting Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
         }
+
+        queue.sync {
+            guard isOpen else { return }
+
+            error = close()
+        }
+
+        return error
     }
 
     public func sync(unlockInfo: SyncUnlockInfo) -> Success {
         let deferred = Success()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -233,7 +193,7 @@ public class RustLogins {
             } catch let err as NSError {
                 if let loginsStoreError = err as? LoginsStoreError {
                     switch loginsStoreError {
-                    case .Panic(let message):
+                    case .panic(let message):
                         Sentry.shared.sendWithStacktrace(message: "Panicked when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: message)
                     default:
                         Sentry.shared.sendWithStacktrace(message: "Unspecified or other error when syncing Logins database", tag: SentryTag.rustLogins, severity: .error, description: loginsStoreError.localizedDescription)
@@ -251,8 +211,9 @@ public class RustLogins {
         let deferred = Deferred<Maybe<LoginRecord?>>()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -277,14 +238,13 @@ public class RustLogins {
                 return deferMaybe(ArrayCursor(data: []))
             }
 
-            guard let query = query, !query.isEmpty else {
+            guard let query = query?.lowercased(), !query.isEmpty else {
                 return deferMaybe(ArrayCursor(data: records))
             }
 
             let filteredRecords = records.filter({
-                $0.hostname.contains(query) ||
-                ($0.username ?? "").contains(query) ||
-                $0.password.contains(query)
+                $0.hostname.lowercased().contains(query) ||
+                ($0.username?.lowercased() ?? "").contains(query)
             })
             return deferMaybe(ArrayCursor(data: filteredRecords))
         })
@@ -332,8 +292,9 @@ public class RustLogins {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -352,8 +313,9 @@ public class RustLogins {
         let deferred = Deferred<Maybe<String>>()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -372,15 +334,16 @@ public class RustLogins {
         login.timesUsed += 1
         login.timeLastUsed = Int64(Date.nowMicroseconds())
 
-        return self.update(login: login)
+        return update(login: login)
     }
 
     public func update(login: LoginRecord) -> Success {
         let deferred = Success()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -403,8 +366,9 @@ public class RustLogins {
         let deferred = Deferred<Maybe<Bool>>()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -423,8 +387,9 @@ public class RustLogins {
         let deferred = Success()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
@@ -439,17 +404,18 @@ public class RustLogins {
         return deferred
     }
 
-    public func wipe() -> Success {
+    public func wipeLocal() -> Success {
         let deferred = Success()
 
         queue.async {
-            if !self.isOpen, let error = self.open() {
-                deferred.fill(Maybe(failure: error))
+            guard self.isOpen else {
+                let error = LoginsStoreError.unspecified(message: "Database is closed")
+                deferred.fill(Maybe(failure: error as MaybeErrorType))
                 return
             }
 
             do {
-                try self.storage.wipe()
+                try self.storage.wipeLocal()
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 deferred.fill(Maybe(failure: err))

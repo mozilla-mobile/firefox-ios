@@ -219,7 +219,7 @@ class ReaderMode: TabContentScript {
     var delegate: ReaderModeDelegate?
 
     fileprivate weak var tab: Tab?
-    var state: ReaderModeState = ReaderModeState.unavailable
+    var state = ReaderModeState.unavailable
     fileprivate var originalURL: URL?
 
     class func name() -> String {

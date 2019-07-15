@@ -7,7 +7,6 @@ import Shared
 import SnapKit
 import Storage
 import SDWebImage
-import Deferred
 
 private let log = Logger.browserLogger
 
@@ -33,7 +32,7 @@ class CustomSearchViewController: SettingsTableViewController {
     fileprivate var urlString: String?
     fileprivate var engineTitle = ""
     fileprivate lazy var spinnerView: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let spinner = UIActivityIndicatorView(style: .gray)
         spinner.hidesWhenStopped = true
         return spinner
     }()
@@ -211,7 +210,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         textField.backgroundColor = UIColor.theme.tableView.rowBackground
         textField.textColor = UIColor.theme.tableView.rowText
         cell.isUserInteractionEnabled = true
-        cell.accessibilityTraits = UIAccessibilityTraitNone
+        cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
         cell.selectionStyle = .none
 

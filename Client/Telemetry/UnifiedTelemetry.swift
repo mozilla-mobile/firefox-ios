@@ -191,6 +191,7 @@ extension UnifiedTelemetry {
         case awesomebarResults = "awesomebar-results"
         case bookmarksPanel = "bookmarks-panel"
         case browser = "browser"
+        case contextMenu = "context-menu"
         case downloadCompleteToast = "download-complete-toast"
         case downloadsPanel = "downloads-panel"
         case homePanel = "home-panel"

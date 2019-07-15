@@ -74,7 +74,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
 
         // Tap to open it
         EarlGrey.selectElement(with: grey_accessibilityLabel("localhost"))
@@ -87,12 +87,12 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it no longer appears in the reading list home panel
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
         waitForEmptyReadingList()
 
         // Close the menu
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         BrowserUtils.closeLibraryMenu(tester())
     }
 
@@ -112,7 +112,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Check that it appears in the reading list home panel and make sure it marked as unread
         BrowserUtils.openLibraryMenu(tester())
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.ReadingList")
 
         tester().waitForView(withAccessibilityLabel: "Readable page, unread, localhost")
         // Select to Read
@@ -123,10 +123,6 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         // Go back to the reading list panel
         BrowserUtils.openLibraryMenu(tester())
 
-        // Workaround bug 1508368
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.Bookmarks")
-        tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
-
         // Make sure the article is marked as read
         EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
             .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
@@ -136,26 +132,28 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             .assert(grey_notNil())
 
         // Remove the list entry
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
-            .perform(grey_swipeSlowInDirectionWithStartPoint(GREYDirection.left, 0.1, 0.1))
+        // Workaround for iPad, the swipe gesture is not controlled and the Remove button
+        // is kept behing the Mark as read and so the test fails
+        if BrowserUtils.iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
+                .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
+                .perform(grey_longPress())
+            tester().longPressView(withAccessibilityIdentifier: "action_remove", duration: 1)
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
+                .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
+                .perform(grey_swipeSlowInDirectionWithStartPoint(GREYDirection.left, 0.1, 0.1))
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Remove"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
-            .perform(grey_tap())
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Remove"))
+                .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
+                .perform(grey_tap())
+        }
 
         // check the entry no longer exist
-        // workaround only for iPad to bug not showing the panel ok until coming back
-        if BrowserUtils.iPad() {
-            tester().waitForAnimationsToFinish()
-            tester().tapView(withAccessibilityIdentifier: "HomePanels.History")
-            tester().waitForAnimationsToFinish()
-            tester().tapView(withAccessibilityIdentifier: "HomePanels.ReadingList")
-            tester().waitForAnimationsToFinish(withTimeout: 3)
-        }
         waitForEmptyReadingList()
 
         // Close Reading (and so Library) panel
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         BrowserUtils.closeLibraryMenu(tester())
     }
 

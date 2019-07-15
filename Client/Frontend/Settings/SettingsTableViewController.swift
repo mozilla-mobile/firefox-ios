@@ -16,7 +16,7 @@ extension UILabel {
     func assign(attributed: NSAttributedString?) {
         guard let attributed = attributed else { return }
         let attribs = attributed.attributes(at: 0, effectiveRange: nil)
-        if attribs[NSAttributedStringKey.foregroundColor] == nil {
+        if attribs[NSAttributedString.Key.foregroundColor] == nil {
             // If the text color attribute isn't set, use the table view row text color.
             textColor = UIColor.theme.tableView.rowText
         } else {
@@ -50,9 +50,9 @@ class Setting: NSObject {
     // Whether or not to show this pref.
     var hidden: Bool { return false }
 
-    var style: UITableViewCellStyle { return .subtitle }
+    var style: UITableViewCell.CellStyle { return .subtitle }
 
-    var accessoryType: UITableViewCellAccessoryType { return .none }
+    var accessoryType: UITableViewCell.AccessoryType { return .none }
 
     var textAlignment: NSTextAlignment { return .natural }
 
@@ -83,7 +83,7 @@ class Setting: NSObject {
                 cell.accessibilityLabel = title
             }
         }
-        cell.accessibilityTraits = UIAccessibilityTraitButton
+        cell.accessibilityTraits = UIAccessibilityTraits.button
         cell.indentationWidth = 0
         cell.layoutMargins = .zero
         // So that the separator line goes all the way to the left edge.
@@ -95,6 +95,9 @@ class Setting: NSObject {
 
     // Called when the pref is tapped.
     func onClick(_ navigationController: UINavigationController?) { return }
+
+    // Called when the pref is long-pressed.
+    func onLongPress(_ navigationController: UINavigationController?) { return }
 
     // Helper method to set up and push a SettingsContentViewController
     func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?) {
@@ -183,9 +186,9 @@ class BoolSetting: Setting {
     convenience init(prefs: Prefs, prefKey: String? = nil, defaultValue: Bool, titleText: String, statusText: String? = nil, settingDidChange: ((Bool) -> Void)? = nil) {
         var statusTextAttributedString: NSAttributedString?
         if let statusTextString = statusText {
-            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.headerTextLight])
+            statusTextAttributedString = NSAttributedString(string: statusTextString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
         }
-        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
+        self.init(prefs: prefs, prefKey: prefKey, defaultValue: defaultValue, attributedTitleText: NSAttributedString(string: titleText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]), attributedStatusText: statusTextAttributedString, settingDidChange: settingDidChange)
     }
 
     override var status: NSAttributedString? {
@@ -298,7 +301,6 @@ class WebPageSetting: StringPrefSetting {
     }
 }
 
-
 protocol SettingValuePersister {
     func readPersistedValue() -> String?
     func writePersistedValue(value: String?)
@@ -335,7 +337,7 @@ class StringSetting: Setting, UITextFieldDelegate {
             textField.accessibilityIdentifier = id + "TextField"
         }
         if let placeholderColor = UIColor.theme.general.settingsTextPlaceholder {
-            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedStringKey.foregroundColor: placeholderColor])
+            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
         } else {
             textField.placeholder = placeholder
         }
@@ -346,7 +348,7 @@ class StringSetting: Setting, UITextFieldDelegate {
         textField.tintColor = UIColor.theme.tableView.rowActionAccessory
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         cell.isUserInteractionEnabled = true
-        cell.accessibilityTraits = UIAccessibilityTraitNone
+        cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
 
         textField.snp.makeConstraints { make in
@@ -462,7 +464,7 @@ class ButtonSetting: Setting {
             make.leading.equalTo(cell.contentView).offset(Padding)
         })
         cell.textLabel?.textAlignment = .center
-        cell.accessibilityTraits = UIAccessibilityTraitButton
+        cell.accessibilityTraits = UIAccessibilityTraits.button
         cell.selectionStyle = .none
     }
 
@@ -498,7 +500,7 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
         }
     }
 
-    override var accessoryType: UITableViewCellAccessoryType { return .none }
+    override var accessoryType: UITableViewCell.AccessoryType { return .none }
 
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags flags: FxALoginFlags) {
         // This method will get called twice: once when the user signs in, and once
@@ -567,6 +569,9 @@ class SettingsTableViewController: ThemedTableViewController {
         tableView.tableFooterView = UIView(frame: CGRect(width: view.frame.width, height: 30))
         tableView.estimatedRowHeight = 44
         tableView.estimatedSectionHeaderHeight = 44
+
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
+        tableView.addGestureRecognizer(longPressGestureRecognizer)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -624,6 +629,18 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc func firefoxAccountDidChange() {
         self.tableView.reloadData()
+    }
+
+    @objc func didLongPress(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        let location = gestureRecognizer.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: location), gestureRecognizer.state == .began else {
+            return
+        }
+
+        let section = settings[indexPath.section]
+        if let setting = section[indexPath.row], setting.enabled {
+            setting.onLongPress(navigationController)
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -686,7 +703,7 @@ class SettingsTableViewController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         let sectionSetting = settings[section]
         if let _ = sectionSetting.footerTitle?.string {
-            return UITableViewAutomaticDimension
+            return UITableView.automaticDimension
         }
         return 0
     }
@@ -702,10 +719,12 @@ class SettingsTableViewController: ThemedTableViewController {
             return height
         }
 
-        return UITableViewAutomaticDimension
+        return UITableView.automaticDimension
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
         let section = settings[indexPath.section]
         if let setting = section[indexPath.row], setting.enabled {
             setting.onClick(navigationController)
@@ -728,7 +747,7 @@ class SettingsTableViewController: ThemedTableViewController {
         guard let text = text else { return 0 }
 
         let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
-        let attrs = [NSAttributedStringKey.font: label.font as Any]
+        let attrs = [NSAttributedString.Key.font: label.font as Any]
         let boundingRect = NSString(string: text).boundingRect(with: size,
             options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height

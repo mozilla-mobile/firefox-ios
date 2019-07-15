@@ -14,21 +14,8 @@ private let browsingActivityType: String = "org.mozilla.ios.firefox.browsing"
 private let searchableIndex = CSSearchableIndex(name: "firefox")
 
 class UserActivityHandler {
-    private var tabObservers: TabObservers!
-
     init() {
-        self.tabObservers = registerFor(
-                                .didLoseFocus,
-                                .didGainFocus,
-                                .didChangeURL,
-                                .didLoadPageMetadata,
-                                // .didLoadFavicon, // TODO: Bug 1390294
-                                .didClose,
-                                queue: .main)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didClose, .didLoseFocus, .didGainFocus, .didChangeURL, .didLoadPageMetadata) // .didLoadFavicon, // TODO: Bug 1390294
     }
 
     class func clearSearchIndex(completionHandler: ((Error?) -> Void)? = nil) {

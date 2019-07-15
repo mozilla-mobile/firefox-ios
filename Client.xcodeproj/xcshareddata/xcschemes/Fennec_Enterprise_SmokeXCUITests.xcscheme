@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0940"
+   LastUpgradeVersion = "1020"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -167,7 +167,7 @@
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "Fennec_Enterprise"
+      buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = "en"
@@ -184,7 +184,8 @@
       </PreActions>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
@@ -287,7 +288,25 @@
                   Identifier = "BookmarkingTests/testAccessBookmarksFromContextMenu()">
                </Test>
                <Test
+                  Identifier = "BookmarkingTests/testAddBookmark()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testAddNewFolder()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testAddNewMarker()">
+               </Test>
+               <Test
                   Identifier = "BookmarkingTests/testBookmarkingUI()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testDeleteBookmarkContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testDeleteBookmarkSwiping()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testRecentBookmarks()">
                </Test>
                <Test
                   Identifier = "BrowsingPDFTests">
@@ -305,6 +324,12 @@
                   Identifier = "DatabaseFixtureTest">
                </Test>
                <Test
+                  Identifier = "DesktopModeTests">
+               </Test>
+               <Test
+                  Identifier = "DesktopModeTestsIphone">
+               </Test>
+               <Test
                   Identifier = "DisplaySettingTests">
                </Test>
                <Test
@@ -317,7 +342,16 @@
                   Identifier = "DragAndDropTestIpad">
                </Test>
                <Test
-                  Identifier = "DragAndDropTests">
+                  Identifier = "DragAndDropTests/testDragAndDropHomeTabTabsTray()">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests/testRearrangeMoreThan3TabsTabTray()">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests/testRearrangeTabsPrivateModeTabTray()">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests/testRearrangeTabsTabTrayLandscape()">
                </Test>
                <Test
                   Identifier = "FindInPageTests/testBarDissapearsWhenOpeningTabsTray()">
@@ -365,6 +399,9 @@
                   Identifier = "HistoryTests/testClearHistoryFromSettings()">
                </Test>
                <Test
+                  Identifier = "HistoryTests/testClearRecentHistory()">
+               </Test>
+               <Test
                   Identifier = "HistoryTests/testClearRecentlyClosedHistory()">
                </Test>
                <Test
@@ -402,6 +439,15 @@
                </Test>
                <Test
                   Identifier = "IntegrationTests/testFxASyncBookmark()">
+               </Test>
+               <Test
+                  Identifier = "LibraryTest">
+               </Test>
+               <Test
+                  Identifier = "LibraryTestsIpad">
+               </Test>
+               <Test
+                  Identifier = "LibraryTestsIphone">
                </Test>
                <Test
                   Identifier = "MailAppSettingsTests">
@@ -456,6 +502,12 @@
                </Test>
                <Test
                   Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
+               </Test>
+               <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsLabel()">
+               </Test>
+               <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowFirefoxHome()">
                </Test>
                <Test
                   Identifier = "NewTabSettingsTest/testToggleOffOnAdditionalContentBookmarks()">
@@ -531,6 +583,12 @@
                </Test>
                <Test
                   Identifier = "SaveLoginTest/testEditOneLoginEntry()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testLoginsListFromBrowserTabMenu()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testPasscodeLoginsListFromBrowserTabMenu()">
                </Test>
                <Test
                   Identifier = "SaveLoginTest/testSaveLogin()">
@@ -705,7 +763,7 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Fennec_Enterprise"
+      buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "1"
@@ -735,7 +793,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "Fennec_Enterprise"
+      buildConfiguration = "Fennec"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -752,10 +810,10 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Fennec_Enterprise">
+      buildConfiguration = "Fennec">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "Fennec_Enterprise"
+      buildConfiguration = "Fennec"
       revealArchiveInOrganizer = "YES">
       <PreActions>
          <ExecutionAction

@@ -2,7 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
+import CoreFoundation
+import Network
 
 /**
  Assertion for checking that the call is being made on the main thread.
@@ -12,6 +13,8 @@ import Foundation
 public func assertIsMainThread(_ message: String) {
     assert(Thread.isMainThread, message)
 }
+
+public var debugSimulateSlowDBOperations = false
 
 // Simple timer for manual profiling. Not for production use.
 // Prints only if timing is longer than a threshold (to reduce noisy output).

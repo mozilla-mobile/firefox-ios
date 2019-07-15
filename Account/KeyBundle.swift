@@ -46,7 +46,7 @@ open class KeyBundle: Hashable {
 
     fileprivate func _hmac(_ ciphertext: Data) -> (data: UnsafeMutablePointer<CUnsignedChar>, len: Int) {
         let hmacAlgorithm = CCHmacAlgorithm(kCCHmacAlgSHA256)
-        let digestLen: Int = Int(CC_SHA256_DIGEST_LENGTH)
+        let digestLen = Int(CC_SHA256_DIGEST_LENGTH)
         let result = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digestLen)
         CCHmac(hmacAlgorithm, hmacKey.getBytes(), hmacKey.count, ciphertext.getBytes(), ciphertext.count, result)
         return (result, digestLen)
@@ -113,7 +113,7 @@ open class KeyBundle: Hashable {
 
         let success: CCCryptorStatus =
             CCCrypt(op,
-                    CCHmacAlgorithm(kCCAlgorithmAES128),
+                    CCAlgorithm(kCCAlgorithmAES128), // Block size, *NOT* key size
                     CCOptions(kCCOptionPKCS7Padding),
                     encKey.getBytes(),
                     kCCKeySizeAES256,
@@ -138,8 +138,9 @@ open class KeyBundle: Hashable {
         return [self.encKey.base64EncodedString, self.hmacKey.base64EncodedString]
     }
 
-    open var hashValue: Int {
-        return "\(self.encKey.base64EncodedString) \(self.hmacKey.base64EncodedString)".hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(encKey.base64EncodedString)
+        hasher.combine(hmacKey.base64EncodedString)
     }
 
     public static func ==(lhs: KeyBundle, rhs: KeyBundle) -> Bool {

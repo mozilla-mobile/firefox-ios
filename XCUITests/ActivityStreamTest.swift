@@ -177,7 +177,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertFalse(app.staticTexts["apple"].exists)
 
         navigator.goto(TabTray)
-        app.collectionViews.cells["home"].tap()
+        app.collectionViews.cells["Home"].tap()
         waitForExistence(TopSiteCellgroup.cells["apple"])
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
@@ -252,19 +252,22 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Bookmark")
 
         // Check that it appears under Bookmarks menu
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
 
         // Check that longtapping on the TopSite gives the option to remove it
-        navigator.goto(HomePanelsScreen)
+        navigator.performAction(Action.ExitMobileBookmarksFolder)
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.performAction(Action.CloseBookmarkPanel)
+
         app.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!]
             .press(forDuration: 2)
         XCTAssertTrue(app.tables["Context Menu"].cells["Remove Bookmark"].exists)
 
         // Unbookmark it
         selectOptionFromContextMenu(option: "Remove Bookmark")
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
     }
 
@@ -276,16 +279,18 @@ class ActivityStreamTest: BaseTestCase {
 
         // Check that it appears under Bookmarks menu
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
         // Check that longtapping on the TopSite gives the option to remove it
+        navigator.performAction(Action.ExitMobileBookmarksFolder)
         navigator.goto(HomePanelsScreen)
+        waitForExistence(TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!])
         TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
 
         // Unbookmark it
         selectOptionFromContextMenu(option: "Remove Bookmark")
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
     }
 

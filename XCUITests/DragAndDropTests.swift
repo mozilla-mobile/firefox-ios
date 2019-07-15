@@ -7,7 +7,7 @@ import XCTest
 let firstWebsite = (url: path(forTestPage: "test-mozilla-org.html"), tabName: "Internet for people, not profit — Mozilla")
 let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
 let exampleWebsite = (url: path(forTestPage: "test-example.html"), tabName: "Example Domain")
-let homeTabName = "home"
+let homeTabName = "Home"
 let websiteWithSearchField = (url: "https://developer.mozilla.org/en-US/search", urlSearchField: "Search the docs")
 
 let exampleDomainTitle = "Example Domain"
@@ -21,12 +21,13 @@ class DragAndDropTests: BaseTestCase {
         super.tearDown()
     }
 
-    // Tests disabled because the feature is off for master and 14.x
+    // // Smoketest
     func testRearrangeTabsTabTray() {
         openTwoWebsites()
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        waitForExistence(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 3)
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
@@ -80,7 +81,7 @@ class DragAndDropTests: BaseTestCase {
         checkTabsOrder(dragAndDropTab: false, firstTab: homeTabName, secondTab: secondWebsite.tabName)
 
         // Drag and drop home tab from the first position to the second
-        dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        dragAndDrop(dragElement: app.collectionViews.cells["Home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName , secondTab: homeTabName)
     }
@@ -117,6 +118,7 @@ fileprivate extension BaseTestCase {
         let secondTabCell = app.collectionViews.cells.element(boundBy: 1).label
 
         if (dragAndDropTab) {
+            sleep(1)
             XCTAssertEqual(firstTabCell, firstTab, "first tab after is not correct")
             XCTAssertEqual(secondTabCell, secondTab, "second tab after is not correct")
         } else {
@@ -201,7 +203,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         waitForExistence(app.collectionViews.cells.element(boundBy: 1))
 
         // Drag and drop home tab from the second position to the first one
-        dragAndDrop(dragElement: app.collectionViews.cells["home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
+        dragAndDrop(dragElement: app.collectionViews.cells["Home"], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName , secondTab: homeTabName)
         // Check that focus is kept on last website open
@@ -256,7 +258,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
 
         // Drop a bookmark/history entry is only allowed on other apps. This test is to check that nothing happens within the app
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
 
         let firstEntryOnList = app.tables["History List"].cells.element(boundBy:
             6).staticTexts[exampleDomainTitle]
@@ -275,8 +277,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testDragAndDropBookmarkEntry() {
         if skipPlatform { return }
 
-        //navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])
 
         let firstEntryOnList = app.tables["Bookmarks List"].cells.element(boundBy: 0).staticTexts[exampleDomainTitle]
@@ -297,7 +298,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testTryDragAndDropHistoryToURLBar() {
         if skipPlatform { return }
 
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"].cells.staticTexts[twitterTitle])
 
         app.tables["History List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
@@ -312,7 +313,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testTryDragAndDropBookmarkToURLBar() {
         if skipPlatform { return }
 
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         app.tables["Bookmarks List"].cells.staticTexts[twitterTitle].press(forDuration: 1, thenDragTo: app.textFields["url"])
 

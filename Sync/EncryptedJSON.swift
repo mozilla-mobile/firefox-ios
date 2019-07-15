@@ -6,7 +6,6 @@ import Foundation
 import Account
 import Shared
 import FxA
-import Account
 import XCGLogger
 import SwiftyJSON
 

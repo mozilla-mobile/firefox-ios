@@ -35,20 +35,22 @@ class ReaderViewTest: BaseTestCase {
 
     // Smoketest
     func testAddToReadingList() {
-        // Initially reading list is empty
-        navigator.goto(HomePanel_ReadingList)
+        // Navigate to reading list
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_ReadingList)
+        
+        // Check that ReadingList and Bookmarks button is enabled
+        XCTAssertFalse(app.buttons["LibraryPanels.Bookmarks"].isSelected)
+        XCTAssertTrue(app.buttons["LibraryPanels.ReadingList"].isSelected)
 
-        // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
-        XCTAssertFalse(app.buttons["HomePanels.ReadingList"].isEnabled)
-        XCTAssertTrue(app.buttons["HomePanels.Bookmarks"].isEnabled)
-
+        // Check to make sure the reading list is empty
         checkReadingListNumberOfItems(items: 0)
-
+        
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_ReadingList)
-        waitForExistence(app.buttons["HomePanels.ReadingList"])
+        navigator.goto(LibraryPanel_ReadingList)
+        waitForExistence(app.buttons["LibraryPanels.ReadingList"])
 
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
@@ -59,21 +61,22 @@ class ReaderViewTest: BaseTestCase {
 
     func testAddToReadingListPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        // Initially reading list is empty
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_ReadingList)
-
-        // Check the button is selected (is disabled and the rest bookmarks and so are enabled)
-        XCTAssertFalse(app.buttons["HomePanels.ReadingList"].isEnabled)
-        XCTAssertTrue(app.buttons["HomePanels.Bookmarks"].isEnabled)
+        navigator.goto(LibraryPanel_ReadingList)
+        
+        // Check that ReadingList and Bookmarks button is enabled
+        XCTAssertFalse(app.buttons["LibraryPanels.Bookmarks"].isSelected)
+        XCTAssertTrue(app.buttons["LibraryPanels.ReadingList"].isSelected)
+        
+        // Initially reading list is empty
         checkReadingListNumberOfItems(items: 0)
 
         // Add item to reading list and check that it appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_ReadingList)
-        waitForExistence(app.buttons["HomePanels.ReadingList"])
+        navigator.goto(LibraryPanel_ReadingList)
+        waitForExistence(app.buttons["LibraryPanels.ReadingList"])
 
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
@@ -83,7 +86,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Check that it appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
     }
 
@@ -110,18 +113,18 @@ class ReaderViewTest: BaseTestCase {
 
         // Go to reader list view to check that there is not any item there
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_ReadingList)
-        waitForExistence(app.buttons["HomePanels.ReadingList"])
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
+        waitForExistence(app.buttons["LibraryPanels.ReadingList"])
+        navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 0)
     }
 
     func testMarkAsReadAndUnreadFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_ReadingList)
-        waitForExistence(app.buttons["HomePanels.ReadingList"])
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
+        waitForExistence(app.buttons["LibraryPanels.ReadingList"])
+        navigator.goto(LibraryPanel_ReadingList)
 
         // Check that there is one item
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
@@ -138,9 +141,9 @@ class ReaderViewTest: BaseTestCase {
     func testRemoveFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_ReadingList)
-        waitForExistence(app.buttons["HomePanels.ReadingList"])
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
+        waitForExistence(app.buttons["LibraryPanels.ReadingList"])
+        navigator.goto(LibraryPanel_ReadingList)
 
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
         savedToReadingList.swipeLeft()
@@ -156,7 +159,7 @@ class ReaderViewTest: BaseTestCase {
 
     func testAddToReadingListFromPageOptionsMenu() {
         // First time Reading list is empty
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 0)
 
         // Add item to Reading List from Page Options Menu
@@ -167,7 +170,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Now there should be an item on the list
         navigator.nowAt(BrowserTab)
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
     }
 
@@ -177,7 +180,7 @@ class ReaderViewTest: BaseTestCase {
 
         // Add item to Reading List
         addContentToReaderView()
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
 
         // Long tap on the item just saved
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]
@@ -196,7 +199,7 @@ class ReaderViewTest: BaseTestCase {
     func testRemoveSavedForReadingLongPress() {
         // Add item to Reading List
         addContentToReaderView()
-        navigator.goto(HomePanel_ReadingList)
+        navigator.goto(LibraryPanel_ReadingList)
 
         // Long tap on the item just saved and choose remove
         let savedToReadingList = app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"]

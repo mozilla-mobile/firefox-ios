@@ -33,7 +33,9 @@ class ThirdPartySearchTest: BaseTestCase {
         // Perform a search using a custom search engine
         tabTrayButton(forApp: app).tap()
         app.buttons["TabTrayController.addTabButton"].tap()
+        waitForExistence(app.textFields["url"], timeout: 3)
         app.textFields["url"].tap()
+        waitForExistence(app.buttons["urlBar-cancel"])
         app.typeText("window")
         app.scrollViews.otherElements.buttons["developer.mozilla.org search"].tap()
 
@@ -98,7 +100,9 @@ class ThirdPartySearchTest: BaseTestCase {
         let tabTrayButton = self.tabTrayButton(forApp: app)
         tabTrayButton.tap()
         app.buttons["TabTrayController.addTabButton"].tap()
+        waitForExistence(app.textFields["url"], timeout: 3)
         app.textFields["url"].tap()
+        waitForExistence(app.buttons["urlBar-cancel"])
         app.typeText("window")
 
         // For timing issue, we need a wait statement
@@ -119,8 +123,9 @@ class ThirdPartySearchTest: BaseTestCase {
         // Perform a search to check
         tabTrayButton.tap(force: true)
         app.buttons["TabTrayController.addTabButton"].tap()
-
+        waitForExistence(app.textFields["url"], timeout: 3)
         app.textFields["url"].tap()
+        waitForExistence(app.buttons["urlBar-cancel"])
         app.typeText("window")
         waitForNoExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)

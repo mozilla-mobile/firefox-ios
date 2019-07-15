@@ -32,8 +32,6 @@ class HomePageSettingsUITests: BaseTestCase {
     func testCheckHomeSettingsByDefault() {
         navigator.goto(HomeSettings)
         XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
-        XCTAssertTrue(app.tables.cells["Bookmarks"].exists)
-        XCTAssertTrue(app.tables.cells["History"].exists)
         XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
         waitForExistence(app.tables.cells["TopSitesRows"])
         XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: 2")
@@ -122,6 +120,21 @@ class HomePageSettingsUITests: BaseTestCase {
 
         XCTAssertEqual("Enter a webpage", value as! String)
     }*/
+    
+    func testSetFirefoxHomeAsHome() {
+        // Start by setting to History since FF Home is default
+        navigator.goto(HomeSettings)
+        enterWebPageAsHomepage(text: websiteUrl1)
+        navigator.performAction(Action.GoToHomePage)
+        waitForExistence(app.textFields["url"], timeout: 3)
+
+        // Now after setting History, make sure FF home is set
+        navigator.goto(SettingsScreen)
+        navigator.goto(NewTabSettings)
+        navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
+        navigator.performAction(Action.GoToHomePage)
+        waitForExistence(app.collectionViews.cells["TopSitesCell"])
+    }
 
     func testSetCustomURLAsHome() {
         navigator.goto(HomeSettings)
@@ -134,50 +147,6 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.performAction(Action.GoToHomePage)
         waitForExistence(app.textFields["url"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: "mozilla")
-    }
-
-    func testSetBookmarksAsHome() {
-        waitForTabsButton()
-        navigator.performAction(Action.SelectHomeAsBookmarksPage)
-        // Go to home to check that the changes are done, no bookmarks
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForTabsButton()
-        navigator.performAction(Action.GoToHomePage)
-        waitForExistence(app.tables["Bookmarks List"], timeout: 3)
-        // There are no bookmarks in the list
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 0)
-        // Go to home to check that the changes are done, one bookmark
-        navigator.openURL(path(forTestPage: exampleUrl))
-        waitUntilPageLoad()
-        navigator.performAction(Action.BookmarkThreeDots)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForTabsButton()
-        navigator.performAction(Action.GoToHomePage)
-        waitForExistence(app.tables["Bookmarks List"], timeout: 3)
-        // There is one bookmark in the list
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 1)
-    }
-
-    func testSetHistoryAsHome() {
-        waitForTabsButton()
-        navigator.performAction(Action.SelectHomeAsHistoryPage)
-        // Open new tab to check the changes are done
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForTabsButton()
-        navigator.performAction(Action.GoToHomePage)
-        waitForExistence(app.tables["History List"], timeout: 3)
-        // There are three cells for, clear recent history, recently closed and sync, no entries
-        XCTAssertEqual(app.tables["History List"].cells.count, 3)
-        // Go to home to check that the changes are done, one history
-        // Using local server does not work here, the item is not displayed
-        navigator.openURL("www.example.com")
-        waitUntilPageLoad()
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForTabsButton()
-        navigator.performAction(Action.GoToHomePage)
-        waitForExistence(app.tables["History List"], timeout: 3)
-        // There is one entry
-        XCTAssertEqual(app.tables["History List"].cells.count, 4)
     }
     
     func testTopSitesCustomNumberOfRows() {
@@ -208,6 +177,23 @@ class HomePageSettingsUITests: BaseTestCase {
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
         }
+    }
+    
+    func testChangeHomeSettingsLabel() {
+        //Go to New Tab settings and select Custom URL option
+        navigator.performAction(Action.SelectHomeAsCustomURL)
+        navigator.nowAt(HomeSettings)
+        //Enter a custom URL
+        enterWebPageAsHomepage(text: websiteUrl1)
+        waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
+        navigator.goto(SettingsScreen)
+        //Assert that the label showing up in Settings is equal to the URL entere (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD OF URL)
+        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Homepage")
+        //Switch to FXHome and check label
+        navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
+        navigator.nowAt(HomeSettings)
+        navigator.goto(SettingsScreen)
+        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Firefox Home")
     }
     //Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {

@@ -4,9 +4,7 @@
 
 import Storage
 import Shared
-import Alamofire
 import XCGLogger
-import Deferred
 import SDWebImage
 import Fuzi
 import SwiftyJSON
@@ -100,30 +98,20 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return deferred
     }
 
-    lazy fileprivate var alamofire: SessionManager = {
-        let configuration = URLSessionConfiguration.default
-        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = FaviconFetcher.userAgent
-        configuration.httpAdditionalHeaders = defaultHeaders
-        configuration.timeoutIntervalForRequest = 5
-        return SessionManager(configuration: configuration)
-    }()
+    lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: FaviconFetcher.userAgent, configuration: URLSessionConfiguration.default, timeout: 5)
 
     fileprivate func fetchDataForURL(_ url: URL) -> Deferred<Maybe<Data>> {
         let deferred = Deferred<Maybe<Data>>()
-        alamofire.request(url).response { response in
-            // Don't cancel requests just because our Manager is deallocated.
-            withExtendedLifetime(self.alamofire) {
-                if response.error == nil {
-                    if let data = response.data {
-                        deferred.fill(Maybe(success: data))
-                        return
-                    }
-                }
-                let errorDescription = (response.error as NSError?)?.description ?? "No content."
-                deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription)))
+        urlSession.dataTask(with: url) { (data, _, error) in
+            if let data = data {
+                deferred.fill(Maybe(success: data))
+                return
             }
-        }
+
+            let errorDescription = (error as NSError?)?.description ?? "No content."
+            deferred.fill(Maybe(failure: FaviconFetcherErrorType(description: errorDescription)))
+        }.resume()
+
         return deferred
     }
 
@@ -135,7 +123,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                 let root = try? HTMLDocument(data: data as Data) else {
                     return deferMaybe([])
             }
-            var reloadUrl: URL? = nil
+            var reloadUrl: URL?
             for meta in root.xpath("//head/meta") {
                 if let refresh = meta["http-equiv"], refresh == "Refresh",
                     let content = meta["content"],
@@ -173,7 +161,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     func getFavicon(_ siteUrl: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let url = icon.url
-        let manager = SDWebImageManager.shared()
+        let manager = SDWebImageManager.shared
         let site = Site(url: siteUrl.absoluteString, title: "")
 
         var fav = Favicon(url: url)
@@ -221,7 +209,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             } else {
                 return deferred.fill(Maybe(failure: FaviconError()))
             }
-            SDWebImageManager.shared().loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
+            SDWebImageManager.shared.loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
                 if let image = image {
                     deferred.fill(Maybe(success: image))
                 } else {
@@ -264,8 +252,8 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         guard let hash = url.baseDomain?.hashValue else {
             return UIColor.Photon.Grey50
         }
-        let index = abs(hash) % (UIConstants.DefaultColorStrings.count - 1)
-        let colorHex = UIConstants.DefaultColorStrings[index]
+        let index = abs(hash) % (DefaultFaviconBackgroundColors.count - 1)
+        let colorHex = DefaultFaviconBackgroundColors[index]
         return UIColor(colorString: colorHex)
     }
 

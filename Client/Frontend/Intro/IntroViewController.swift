@@ -35,9 +35,9 @@ class IntroViewController: UIViewController {
     lazy fileprivate var startBrowsingButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor.clear
-        button.setTitle(Strings.StartBrowsingButtonTitle, for: UIControlState())
-        button.setTitleColor(IntroUX.StartBrowsingButtonColor, for: UIControlState())
-        button.addTarget(self, action: #selector(IntroViewController.startBrowsing), for: UIControlEvents.touchUpInside)
+        button.setTitle(Strings.StartBrowsingButtonTitle, for: UIControl.State())
+        button.setTitleColor(IntroUX.StartBrowsingButtonColor, for: UIControl.State())
+        button.addTarget(self, action: #selector(IntroViewController.startBrowsing), for: UIControl.Event.touchUpInside)
         button.accessibilityIdentifier = "IntroViewController.startBrowsingButton"
         button.isHidden = true
         return button
@@ -48,7 +48,7 @@ class IntroViewController: UIViewController {
         pc.pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.3)
         pc.currentPageIndicatorTintColor = UIColor.black
         pc.accessibilityIdentifier = "IntroViewController.pageControl"
-        pc.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControlEvents.valueChanged)
+        pc.addTarget(self, action: #selector(IntroViewController.changePage), for: UIControl.Event.valueChanged)
         return pc
     }()
 
@@ -83,6 +83,7 @@ class IntroViewController: UIViewController {
     fileprivate var imagesBackgroundView = UIView()
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         syncViaLP()
 
         assert(cards.count > 1, "Intro is empty. At least 2 cards are required")
@@ -110,7 +111,7 @@ class IntroViewController: UIViewController {
         }
         scrollView.snp.makeConstraints { make in
             make.left.right.top.equalTo(self.view)
-            make.bottom.equalTo(startBrowsingButton.snp.top)
+            make.bottom.equalTo(pageControl.snp.top)
         }
 
         pageControl.snp.makeConstraints { make in
@@ -370,6 +371,7 @@ class CardView: UIView {
         button.setTitleColor(.white, for: [])
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         button.clipsToBounds = true
+        button.accessibilityIdentifier = "turnOnSync.button"
         return button
     }()
 
@@ -434,11 +436,8 @@ struct IntroCard: Codable {
 
     static func defaultCards() -> [IntroCard] {
         let welcome = IntroCard(title: Strings.CardTitleWelcome, text: Strings.CardTextWelcome, imageName: "tour-Welcome")
-        let search = IntroCard(title: Strings.CardTitleSearch, text: Strings.CardTextSearch, imageName: "tour-Search")
-        let privateBrowsing = IntroCard(title: Strings.CardTitlePrivate, text: Strings.CardTextPrivate, imageName: "tour-Private")
-        let mailTo = IntroCard(title: Strings.CardTitleMail, text: Strings.CardTextMail, imageName: "tour-Mail")
         let sync = IntroCard(title: Strings.CardTitleSync, text: Strings.CardTextSync, imageName: "tour-Sync", buttonText: Strings.SignInButtonTitle, buttonSelector: #selector(IntroViewController.login).description)
-        return [welcome, search, privateBrowsing, mailTo, sync]
+        return [welcome, sync]
     }
 
     /* Codable doesnt allow quick conversion to a dictonary */

@@ -5,7 +5,7 @@
 import Foundation
 
 public extension URLRequest {
-    public enum Method: String {
+    enum Method: String {
         case get = "GET"
         case post = "POST"
         case delete = "DELETE"

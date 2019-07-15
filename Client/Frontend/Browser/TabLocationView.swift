@@ -38,8 +38,9 @@ class TabLocationView: UIView {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
-    private var contentView: UIStackView!
-    private var tabObservers: TabObservers!
+    var contentView: UIStackView!
+
+    fileprivate let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
 
     @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
@@ -50,7 +51,7 @@ class TabLocationView: UIView {
             let wasHidden = lockImageView.isHidden
             lockImageView.isHidden = url?.scheme != "https"
             if wasHidden != lockImageView.isHidden {
-                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+                UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
@@ -59,10 +60,6 @@ class TabLocationView: UIView {
             }
             setNeedsUpdateConstraints()
         }
-    }
-
-    deinit {
-        unregister(tabObservers)
     }
 
     var readerModeState: ReaderModeState {
@@ -76,11 +73,11 @@ class TabLocationView: UIView {
                 readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
                 separatorLine.isHidden = readerModeButton.isHidden
                 if wasHidden != readerModeButton.isHidden {
-                    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+                    UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
                     if !readerModeButton.isHidden {
                         // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, Strings.ReaderModeAvailableVoiceOverAnnouncement)
+                            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: Strings.ReaderModeAvailableVoiceOverAnnouncement)
                         }
                     }
                 }
@@ -93,7 +90,7 @@ class TabLocationView: UIView {
 
     lazy var placeholder: NSAttributedString = {
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
-        return NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.Photon.Grey40])
+        return NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
     }()
 
     lazy var urlTextField: UITextField = {
@@ -173,9 +170,7 @@ class TabLocationView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.tabObservers = registerFor(.didGainFocus, queue: .main)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(onDidChangeContentBlocking), name: .didChangeContentBlocking, object: nil)
+        register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
 
         longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
         longPressRecognizer.delegate = self
@@ -231,6 +226,10 @@ class TabLocationView: UIView {
         let dragInteraction = UIDragInteraction(delegate: self)
         dragInteraction.allowsSimultaneousRecognitionDuringLift = true
         self.addInteraction(dragInteraction)
+
+        menuBadge.add(toParent: contentView)
+        menuBadge.layout(onButton: pageOptionsButton)
+        menuBadge.show(false)
     }
 
     required init(coder: NSCoder) {
@@ -243,6 +242,12 @@ class TabLocationView: UIView {
         }
         set {
             super.accessibilityElements = newValue
+        }
+    }
+
+    func overrideAccessibility(enabled: Bool) {
+        [lockImageView, urlTextField, readerModeButton, pageOptionsButton].forEach {
+            $0.isAccessibilityElement = enabled
         }
     }
 
@@ -346,12 +351,14 @@ extension TabLocationView: Themeable {
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
         separatorLine.backgroundColor = UIColor.theme.textField.separator
+
+        let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
+        menuBadge.badge.tintBackground(color: color)
     }
 }
 
 extension TabLocationView: TabEventHandler {
-    @objc func onDidChangeContentBlocking(_ notification: Notification) {
-        guard let tab = notification.userInfo?.first?.value as? Tab else { return }
+    func tabDidChangeContentBlocking(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
     }
 
@@ -372,10 +379,11 @@ extension TabLocationView: TabEventHandler {
 
     func tabDidGainFocus(_ tab: Tab) {
         updateBlockerStatus(forTab: tab)
+        menuBadge.show(tab.desktopSite)
     }
 
-    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
-        updateBlockerStatus(forTab: tab)
+    func tabDidToggleDesktopMode(_ tab: Tab) {
+        menuBadge.show(tab.desktopSite)
     }
 }
 
@@ -410,7 +418,7 @@ class ReaderModeButton: UIButton {
         }
     }
 
-    var _readerModeState: ReaderModeState = ReaderModeState.unavailable
+    var _readerModeState = ReaderModeState.unavailable
 
     var readerModeState: ReaderModeState {
         get {

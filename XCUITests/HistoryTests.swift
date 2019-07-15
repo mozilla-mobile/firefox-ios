@@ -28,14 +28,14 @@ class HistoryTests: BaseTestCase {
 
     func testEmptyHistoryListFirstTime() {
         // Go to History List from Top Sites and check it is empty
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
         XCTAssertTrue(app.tables.cells["HistoryPanel.recentlyClosedCell"].exists)
         XCTAssertTrue(app.tables.cells["HistoryPanel.syncedDevicesCell"].exists)
     }
 
     func testOpenSyncDevices() {
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         app.tables.cells["HistoryPanel.syncedDevicesCell"].tap()
         waitForExistence(app.tables.cells.staticTexts["Firefox Sync"])
         XCTAssertTrue(app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not appear")
@@ -43,7 +43,7 @@ class HistoryTests: BaseTestCase {
 
     func testClearHistoryFromSettings() {
         // Browse to have an item in history list
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"], timeout: 5)
         XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
 
@@ -51,7 +51,7 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
 
         // Back on History panel view check that there is not any item
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
         XCTAssertFalse(app.tables.cells.staticTexts[webpage["label"]!].exists)
     }
@@ -77,17 +77,17 @@ class HistoryTests: BaseTestCase {
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
 
         // Go to the default web site  and check whether the option is enabled
-        navigator.nowAt(HomePanel_History)
+        navigator.nowAt(LibraryPanel_History)
         navigator.goto(HomePanelsScreen)
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         navigator.goto(BrowserTabMenu)
         // Workaround to bug 1508368
-        navigator.goto(HomePanel_Bookmarks)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_Bookmarks)
+        navigator.goto(LibraryPanel_History)
         navigator.goto(HistoryRecentlyClosed)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
-        navigator.nowAt(HomePanel_History)
+        navigator.nowAt(LibraryPanel_History)
         navigator.goto(HomePanelsScreen)
 
         // Now go back to default website close it and check whether the option is enabled
@@ -217,14 +217,14 @@ class HistoryTests: BaseTestCase {
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
 
         // Now verify that on regular mode the recently closed list is empty too
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(NewTabScreen)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
         waitForNoExistence(app.tables["Recently Closed Tabs List"])
     }
@@ -244,7 +244,7 @@ class HistoryTests: BaseTestCase {
         }
         // Go to 'goolge.com' to create a recent history entry.
         navigator.openURL("google.com")
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         XCTAssertTrue(app.tables.cells.staticTexts["Google"].exists)
         navigator.performAction(Action.ClearRecentHistory)
         // Recent data will be removed after calling tapOnClearRecentHistoryOption(optionSelected: "Today").

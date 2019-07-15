@@ -25,7 +25,7 @@ class PagingPasscodeViewController: BasePasscodeViewController {
         panes.forEach { pager.addSubview($0) }
         pager.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self.view)
-            make.top.equalTo(self.topLayoutGuide.snp.bottom)
+            make.top.equalTo(self.view.safeArea.top)
         }
     }
 

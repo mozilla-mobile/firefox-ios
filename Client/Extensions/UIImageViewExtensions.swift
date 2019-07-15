@@ -9,7 +9,7 @@ import Shared
 
 public extension UIImageView {
 
-    public func setIcon(_ icon: Favicon?, forURL url: URL?, completed completion: ((UIColor, URL?) -> Void)? = nil ) {
+    func setIcon(_ icon: Favicon?, forURL url: URL?, completed completion: ((UIColor, URL?) -> Void)? = nil ) {
         func finish(filePath: String?, bgColor: UIColor) {
             if let filePath = filePath {
                 self.image = UIImage(contentsOfFile: filePath)
@@ -41,12 +41,7 @@ public extension UIImageView {
     * Fetch a background color for a specfic favicon UIImage. It uses the URL to store the UIColor in memory for subsequent requests.
     */
     private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor) -> Void)? = nil) {
-        guard let domain = url.baseDomain else {
-            self.backgroundColor = UIColor.Photon.Grey50
-            completionBlock?(UIColor.Photon.Grey50)
-            return
-        }
-
+        let domain = url.domainURL.absoluteString
         if let color = FaviconFetcher.colors[domain] {
             self.backgroundColor = color
             completionBlock?(color)
@@ -64,7 +59,7 @@ public extension UIImageView {
         }
     }
 
-    public func setFavicon(forSite site: Site, onCompletion completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
+    func setFavicon(forSite site: Site, onCompletion completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
         self.setIcon(site.icon, forURL: site.tileURL, completed: completionBlock)
     }
 

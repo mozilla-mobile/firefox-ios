@@ -4,7 +4,6 @@
 
 import Shared
 import UIKit
-import Deferred
 
 /// In-memory certificate store.
 open class CertStore {

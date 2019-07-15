@@ -18,7 +18,7 @@ import EarlGrey
 import Foundation
 
 public func GREYAssert(_ expression: @autoclosure () -> Bool, reason: String) {
-    GREYAssert(expression, reason, details: "Expected expression to be true")
+    GREYAssert(expression(), reason, details: "Expected expression to be true")
 }
 
 public func GREYAssertTrue(_ expression: @autoclosure () -> Bool, reason: String) {
@@ -135,6 +135,10 @@ open class EarlGrey: NSObject {
             return EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line)
                 .rotateDevice(to: orientation,
                               errorOrNil: errorOrNil)
+    }
+    
+    public static func shakeDevice(file: StaticString = #file, line: UInt = #line) {
+        EarlGreyImpl.invoked(fromFile: file.description, lineNumber: line).shakeDeviceWithError(nil)
     }
 }
 

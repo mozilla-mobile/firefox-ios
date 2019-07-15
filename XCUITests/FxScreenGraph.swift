@@ -54,6 +54,12 @@ let TranslationSettings = "TranslationSettings"
 let HomePanel_Library = "HomePanel_Library"
 let TranslatePageMenu = "TranslatePageMenu"
 let DontTranslatePageMenu = "DontTranslatePageMenu"
+let MobileBookmarks = "MobileBookmarks"
+let MobileBookmarksEdit = "MobileBookmarksEdit"
+let MobileBookmarksAdd = "MobileBookmarksAdd"
+let EnterNewBookmarkTitleAndUrl = "EnterNewBookmarkTitleAndUrl"
+let RequestDesktopSite = "RequestDesktopSite"
+let RequestMobileSite = "RequestMobileSite"
 
 // These are in the exact order they appear in the settings
 // screen. XCUIApplication loses them on small screens.
@@ -81,34 +87,26 @@ let BookmarksPanelContextMenu = "BookmarksPanelContextMenu"
 let SetPasscodeScreen = "SetPasscodeScreen"
 
 let Intro_Welcome = "Intro.Welcome"
-let Intro_Search = "Intro.Search"
-let Intro_Private = "Intro.Private"
-let Intro_Mail = "Intro.Mail"
 let Intro_Sync = "Intro.Sync"
 
 let allIntroPages = [
     Intro_Welcome,
-    Intro_Search,
-    Intro_Private,
-    Intro_Mail,
     Intro_Sync
 ]
 
 let HomePanelsScreen = "HomePanels"
 let PrivateHomePanelsScreen = "PrivateHomePanels"
 let HomePanel_TopSites = "HomePanel.TopSites.0"
-let HomePanel_Bookmarks = "HomePanel.Bookmarks.1"
-let HomePanel_History = "HomePanel.History.2"
-let HomePanel_ReadingList = "HomePanel.ReadingList.3"
-let HomePanel_Downloads = "HomePanel.Downloads.4"
+let LibraryPanel_Bookmarks = "LibraryPanel.Bookmarks.1"
+let LibraryPanel_History = "LibraryPanel.History.2"
+let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
+let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
 
 let allHomePanels = [
-    HomePanelsScreen,
-    HomePanel_TopSites,
-    HomePanel_Bookmarks,
-    HomePanel_History,
-    HomePanel_ReadingList,
-    HomePanel_Downloads
+    LibraryPanel_Bookmarks,
+    LibraryPanel_History,
+    LibraryPanel_ReadingList,
+    LibraryPanel_Downloads
 ]
 
 class Action {
@@ -160,13 +158,9 @@ class Action {
 
     static let SelectNewTabAsBlankPage = "SelectNewTabAsBlankPage"
     static let SelectNewTabAsFirefoxHomePage = "SelectNewTabAsFirefoxHomePage"
-    static let SelectNewTabAsBookmarksPage = "SelectNewTabAsBookmarksPage"
-    static let SelectNewTabAsHistoryPage = "SelectNewTabAsHistoryPage"
     static let SelectNewTabAsCustomURL = "SelectNewTabAsCustomURL"
 
     static let SelectHomeAsFirefoxHomePage = "SelectHomeAsFirefoxHomePage"
-    static let SelectHomeAsBookmarksPage = "SelectHomeAsBookmarksPage"
-    static let SelectHomeAsHistoryPage = "SelectHomeAsHistoryPage"
     static let SelectHomeAsCustomURL = "SelectHomeAsCustomURL"
     static let SelectTopSitesRows = "SelectTopSitesRows"
 
@@ -191,6 +185,7 @@ class Action {
     static let FxATypeEmail = "FxATypeEmail"
     static let FxATypePassword = "FxATypePassword"
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
+    static let FxATapOnContinueButton = "FxATapOnContinueButton"
 
     static let PinToTopSitesPAM = "PinToTopSitesPAM"
     static let CopyAddressPAM = "CopyAddressPAM"
@@ -206,13 +201,19 @@ class Action {
     static let DisableTranslation = "DisableTranlation"
     static let SelectGoogle = "SelectGoogle"
     static let SelectBing = "SelectBing"
-}
 
-private var isTablet: Bool {
-    // There is more value in a variable having the same name,
-    // so it can be used in both predicates and in code
-    // than avoiding the duplication of one line of code.
-    return UIDevice.current.userInterfaceIdiom == .pad
+    static let ExitMobileBookmarksFolder = "ExitMobileBookmarksFolder"
+    static let CloseBookmarkPanel = "CloseBookmarkPanel"
+    static let CloseReadingListPanel = "CloseReadingListPanel"
+    static let CloseHistoryListPanel = "CloseHistoryListPanel"
+    static let CloseDownloadsPanel = "CloseDownloadsPanel"
+
+    static let AddNewBookmark = "AddNewBookmark"
+    static let AddNewFolder = "AddNewFolder"
+    static let AddNewSeparator = "AddNewSeparator"
+    static let RemoveItemMobileBookmarks = "RemoveItemMobileBookmarks"
+    static let ConfirmRemoveItemMobileBookmarks = "ConfirmRemoveItemMobileBookmarks"
+    static let SaveCreatedBookmark = "SaveCreatedBookmark"
 }
 
 @objcMembers
@@ -341,8 +342,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
         makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
-        screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab, if: "tablet == true") { userState in
-            userState.isPrivate = !userState.isPrivate
+
+        if isTablet {
+            screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarNewTab) { userState in
+                userState.isPrivate = !userState.isPrivate
+            }
         }
     }
 
@@ -418,6 +422,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.noop(to: HomePanelsScreen)
+        screenState.noop(to: HomePanel_TopSites)
 
         screenState.backAction = {
             app.buttons["urlBar-cancel"].tap()
@@ -453,8 +458,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(HomePanelsScreen) { screenState in
-        screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarHomePanel, if: "tablet == true") { userState in
-            userState.isPrivate = !userState.isPrivate
+        if isTablet {
+            screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarHomePanel) { userState in
+                userState.isPrivate = !userState.isPrivate
+            }
         }
 
         // Workaround to bug Bug 1417522
@@ -472,53 +479,119 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    map.addScreenState(HomePanel_Bookmarks) { screenState in
+    map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
-        screenState.press(bookmarkCell, to: BookmarksPanelContextMenu)
-        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
+        let bookmarksElement = app.navigationBars["Bookmarks"].otherElements["Bookmarks"]
+        screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
+        screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
+            if isTablet {
+                app.buttons["TabToolbar.libraryButton"].tap()
+            } else {
+                bookmarksElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Bookmarks"])
+            }
+        }
+        
+        screenState.press(app.tables["Bookmarks List"].cells.element(boundBy: 4), to: BookmarksPanelContextMenu)
+
+    }
+
+    map.addScreenState(MobileBookmarks) { screenState in
+        let bookmarksMenuNavigationBar = app.navigationBars["Mobile Bookmarks"]
+        let bookmarksButton = bookmarksMenuNavigationBar.buttons["Bookmarks"]
+        screenState.gesture(forAction: Action.ExitMobileBookmarksFolder, transitionTo: LibraryPanel_Bookmarks) { userState in
+                bookmarksButton.tap()
+        }
+
+        screenState.tap(app.buttons["Edit"], to: MobileBookmarksEdit)
+    }
+
+    map.addScreenState(MobileBookmarksEdit) { screenState in
+        screenState.tap(app.buttons["Add"], to: MobileBookmarksAdd)
+        screenState.gesture(forAction: Action.RemoveItemMobileBookmarks) { userState in
+            app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
+        }
+        screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
+            app.buttons["Delete"].tap()
+        }
+    }
+
+    map.addScreenState(MobileBookmarksAdd) { screenState in
+        screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { userState in
+            app.tables.cells["action_bookmark"].tap()
+        }
+        screenState.gesture(forAction: Action.AddNewFolder) { userState in
+            app.tables.cells["bookmarkFolder"].tap()
+        }
+        screenState.gesture(forAction: Action.AddNewSeparator) { userState in
+            app.tables.cells["nav-menu"].tap()
+        }
+    }
+
+    map.addScreenState(EnterNewBookmarkTitleAndUrl) { screenState in
+        screenState.gesture(forAction: Action.SaveCreatedBookmark) { userState in
+            app.buttons["Save"].tap()
+        }
     }
 
     map.addScreenState(HomePanel_TopSites) { screenState in
         let topSites = app.cells["TopSitesCell"]
         screenState.press(topSites.cells.matching(identifier: "TopSite").element(boundBy: 0), to: TopSitesPanelContextMenu)
+
     }
 
-    map.addScreenState(HomePanel_History) { screenState in
-        screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
+    map.addScreenState(LibraryPanel_History) { screenState in
+        screenState.press(app.tables["History List"].cells.element(boundBy: 3), to: HistoryPanelContextMenu)
         screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
-        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
             app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
         }
-        screenState.backAction = navigationControllerBackAction
+        let historyListElement = app.navigationBars["History"]
+        screenState.gesture(forAction: Action.CloseHistoryListPanel, transitionTo: HomePanelsScreen) { userState in
+            if isTablet {
+                app.buttons["TabToolbar.libraryButton"].tap()
+            } else {
+                historyListElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.History"])
+            }
+        }
     }
 
-    map.addScreenState(HomePanel_ReadingList) { screenState in
+    map.addScreenState(LibraryPanel_ReadingList) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
+        let readingListElement = app.navigationBars["Reading list"]
+        screenState.gesture(forAction: Action.CloseReadingListPanel, transitionTo: HomePanelsScreen) { userState in
+            if isTablet {
+                app.buttons["TabToolbar.libraryButton"].tap()
+            } else {
+                readingListElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.ReadingList"])
+            }
+        }
     }
 
-    map.addScreenState(HomePanel_Downloads) { screenState in
+    map.addScreenState(LibraryPanel_Downloads) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
+        let downloadsElement = app.navigationBars["Downloads"]
+        screenState.gesture(forAction: Action.CloseDownloadsPanel, transitionTo: HomePanelsScreen) { userState in
+            if isTablet {
+                app.buttons["TabToolbar.libraryButton"].tap()
+            } else {
+                downloadsElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Downloads"])
+            }
+        }
     }
 
     map.addScreenState(HistoryRecentlyClosed) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["goBackFromRecentlyClosedHistory"], to: HomePanel_History)
+        screenState.tap(app.buttons["History"].firstMatch, to: LibraryPanel_History)
     }
 
     map.addScreenState(HistoryPanelContextMenu) { screenState in
         screenState.dismissOnUse = true
-        screenState.tap(app.buttons["Done"], to: HomePanelsScreen)
     }
-
-    map.addScreenState(TopSitesPanelContextMenu) { screenState in
-        screenState.dismissOnUse = true
-        screenState.backAction = dismissContextMenuAction
-    }
-
+    
     map.addScreenState(BookmarksPanelContextMenu) { screenState in
+        screenState.dismissOnUse = true
+    }
+    map.addScreenState(TopSitesPanelContextMenu) { screenState in
         screenState.dismissOnUse = true
         screenState.backAction = dismissContextMenuAction
     }
@@ -596,17 +669,25 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
-            app.webViews.textFields["Email"].tap()
-            app.webViews.textFields["Email"].typeText(userState.fxaUsername!)
+            if isTablet {
+                app.textFields.element(boundBy: 1).tap()
+                app.textFields.element(boundBy: 1).typeText(userState.fxaUsername!)
+            } else {
+                app.textFields.element(boundBy: 0).tap()
+                app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
+            }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
-            app.webViews.secureTextFields["Password"].tap()
-            app.webViews.secureTextFields["Password"].typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 0).tap()
+            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+        }
+        screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
+            app.webViews.buttons["Continue"].tap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
-            app.webViews.buttons["Sign in"].tap()
+            app.webViews.buttons.element(boundBy: 0).tap()
         }
-        screenState.tap(app.webViews.links["Create an account"], to: FxCreateAccount)
+        screenState.tap(app.webViews.links["Create an account"].firstMatch, to: FxCreateAccount)
     }
 
     map.addScreenState(FxCreateAccount) { screenState in
@@ -642,13 +723,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.SelectNewTabAsFirefoxHomePage) { UserState in
             table.cells["NewTabAsFirefoxHome"].tap()
         }
-        screenState.gesture(forAction: Action.SelectNewTabAsBookmarksPage) { UserState in
-            table.cells["NewTabAsBookmarks"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectNewTabAsHistoryPage) { UserState in
-            table.cells["NewTabAsHistory"].tap()
-        }
-
         screenState.gesture(forAction: Action.SelectNewTabAsCustomURL) { UserState in
             table.cells["NewTabAsCustomURL"].tap()
         }
@@ -657,15 +731,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(HomeSettings) { screenState in
-
         screenState.gesture(forAction: Action.SelectHomeAsFirefoxHomePage) { UserState in
             app.cells["HomeAsFirefoxHome"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectHomeAsBookmarksPage) { UserState in
-            app.cells["HomeAsBookmarks"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectHomeAsHistoryPage) { UserState in
-            app.cells["HomeAsHistory"].tap()
         }
 
         screenState.gesture(forAction: Action.SelectHomeAsCustomURL) { UserState in
@@ -701,7 +768,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     func type(text: String) {
         text.forEach { char in
-            app.keys["\(char)"].tap()
+            app.keys[String(char)].tap()
         }
     }
 
@@ -801,7 +868,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             for _ in 1...4 {
                 introScrollView.swipeLeft()
             }
-            app.buttons["Sign in to Firefox"].tap()
+            let turnOnSyncButton = app.buttons["turnOnSync.button"]
+            turnOnSyncButton.tap()
         }
         screenState.backAction = {
             introScrollView.swipeLeft()
@@ -942,12 +1010,16 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = cancelBackAction
         screenState.dismissOnUse = true
 
-        let rdsButton = app.tables["Context Menu"].cells.element(boundBy: 0)
+
+        var index = isTablet ? 1 : 0
+        let rdsButton = app.tables["Context Menu"].cells.element(boundBy: index)
         screenState.tap(rdsButton, forAction: Action.ToggleRequestDesktopSite) { userState in
             userState.requestDesktopSite = !userState.requestDesktopSite
         }
 
-        let trackingProtectionButton = app.tables["Context Menu"].cells.element(boundBy: 1)
+
+        index = isTablet ? 0 : 1
+        let trackingProtectionButton = app.tables["Context Menu"].cells.element(boundBy: index)
 
         screenState.tap(trackingProtectionButton, forAction: Action.ToggleTrackingProtectionPerTabEnabled) { userState in
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
@@ -966,6 +1038,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     // make sure after the menu action, navigator.nowAt() is used to set the current state
     map.addScreenState(PageOptionsMenu) {screenState in
+        screenState.tap(app.tables["Context Menu"].cells["menu-RequestDesktopSite"], to: RequestDesktopSite)
         screenState.tap(app.tables["Context Menu"].cells["menu-FindInPage"], to: FindInPage)
         screenState.tap(app.tables["Context Menu"].cells["menu-Bookmark"], forAction: Action.BookmarkThreeDots, Action.Bookmark)
         screenState.tap(app.tables.cells["action_pin"], forAction: Action.PinToTopSitesPAM)
@@ -982,20 +1055,22 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["FindInPage.close"], to: BrowserTab)
     }
 
+    map.addScreenState(RequestDesktopSite) { _ in }
+
     map.addScreenState(HomePanel_Library) { screenState in
         screenState.dismissOnUse = true
         screenState.backAction = navigationControllerBackAction
 
-        screenState.tap(app.buttons["HomePanels.Bookmarks"], to: HomePanel_Bookmarks)
-        screenState.tap(app.buttons["HomePanels.History"], to: HomePanel_History)
-        screenState.tap(app.buttons["HomePanels.ReadingList"], to: HomePanel_ReadingList)
-        screenState.tap(app.buttons["HomePanels.Downloads"], to: HomePanel_Downloads)
+        screenState.tap(app.buttons["LibraryPanels.Bookmarks"], to: LibraryPanel_Bookmarks)
+        screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
+        screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: LibraryPanel_ReadingList)
+        screenState.tap(app.buttons["LibraryPanels.Downloads"], to: LibraryPanel_Downloads)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.tap(app.tables.cells["menu-Settings"], to: SettingsScreen)
-
         screenState.tap(app.tables.cells["menu-sync"], to: FxASigninScreen, if: "fxaUsername == nil")
+        screenState.tap(app.tables.cells["key"], to: LoginsSettings)
         screenState.tap(app.tables.cells["menu-library"], to: HomePanel_Library)
         screenState.tap(app.tables.cells["placeholder-avatar"], to: FxAccountManagementPage)
 

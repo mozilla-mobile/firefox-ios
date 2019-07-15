@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import WebKit
-import Deferred
 import Shared
 
 struct ContentBlockingConfig {
@@ -40,7 +39,7 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         didSet {
             guard let tab = tab as? Tab else { return }
             setupForTab()
-            NotificationCenter.default.post(name: .didChangeContentBlocking, object: nil, userInfo: ["tab": tab])
+            TabEvent.post(.didChangeContentBlocking, for: tab)
             tab.reload()
         }
     }
@@ -83,6 +82,11 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 
     override func currentlyEnabledLists() -> [BlocklistName] {
         return BlocklistName.forStrictMode(isOn: blockingStrengthPref == .strict)
+    }
+
+    override func notifyContentBlockingChanged() {
+        guard let tab = tab as? Tab else { return }
+        TabEvent.post(.didChangeContentBlocking, for: tab)
     }
 
     func noImageMode(enabled: Bool) {

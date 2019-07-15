@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 @testable import Storage
-import Deferred
 import XCTest
 
 class MockFiles: FileAccessor {
@@ -27,7 +26,7 @@ class TestSQLiteHistoryFrecencyPerf: XCTestCase {
         history.clearHistory().succeeded()
         populateHistoryForFrecencyCalculations(history, siteCount: count)
         self.measureMetrics([XCTPerformanceMetric.wallClockTime], automaticallyStartMeasuring: true) {
-                history.getFrecentHistory().getSites(whereURLContains: nil, historyLimit: 10, bookmarksLimit: 0).succeeded()
+                history.getFrecentHistory().getSites(matchingSearchQuery: nil, limit: 10).succeeded()
             self.stopMeasuring()
         }
     }
@@ -53,7 +52,7 @@ class TestSQLiteHistoryRecommendationsPerf: XCTestCase {
         XCTAssertTrue(doCleanup2, "We should not need to perform clean-up")
 
         // Trigger the actual clean-up operation to happen and re-check.
-        let _ = db.run(history.cleanupOldHistory(numberOfRowsToPrune: 50)).value.successValue
+        _ = db.run(history.cleanupOldHistory(numberOfRowsToPrune: 50)).value.successValue
         let doCleanup3 = history.checkIfCleanupIsNeeded(maxHistoryRows: maxRows).value.successValue!
         XCTAssertFalse(doCleanup3, "We should not need to perform clean-up")
     }

@@ -4,18 +4,20 @@
 import UIKit
 
 class ThemedTableViewCell: UITableViewCell, Themeable {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    var detailTextColor = UIColor.theme.tableView.disabledRowText
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     func applyTheme() {
         textLabel?.textColor = UIColor.theme.tableView.rowText
-        detailTextLabel?.textColor = UIColor.theme.tableView.disabledRowText
+        detailTextLabel?.textColor = detailTextColor
 
         backgroundColor = UIColor.theme.tableView.rowBackground
         tintColor = UIColor.theme.general.controlTint
@@ -23,7 +25,7 @@ class ThemedTableViewCell: UITableViewCell, Themeable {
 }
 
 class ThemedTableViewController: UITableViewController, Themeable {
-    override init(style: UITableViewStyle = .grouped) {
+    override init(style: UITableView.Style = .grouped) {
         super.init(style: style)
     }
 
@@ -37,6 +39,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         applyTheme()
     }
 

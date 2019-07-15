@@ -33,11 +33,11 @@ class TopTabsHeaderFooter: UICollectionReusableView {
     func arrangeLine(_ kind: String) {
         line.snp.removeConstraints()
         switch kind {
-            case UICollectionElementKindSectionHeader:
+        case UICollectionView.elementKindSectionHeader:
                 line.snp.makeConstraints { make in
                     make.trailing.equalTo(self)
                 }
-            case UICollectionElementKindSectionFooter:
+        case UICollectionView.elementKindSectionFooter:
                 line.snp.makeConstraints { make in
                     make.leading.equalTo(self)
                 }
@@ -75,6 +75,8 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
             closeButton.layer.shadowColor = backgroundColor?.cgColor
             if selectedTab {
                 drawShadow()
+            } else {
+                self.layer.shadowOpacity = 0
             }
         }
     }

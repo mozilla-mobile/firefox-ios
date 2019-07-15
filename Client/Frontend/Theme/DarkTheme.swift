@@ -48,7 +48,7 @@ fileprivate class DarkToolbarButtonColor: ToolbarButtonColor {
 
 fileprivate class DarkTabTrayColor: TabTrayColor {
     override var tabTitleText: UIColor { return defaultTextAndTint }
-    override var tabTitleBlur: UIBlurEffectStyle { return UIBlurEffectStyle.dark }
+    override var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.dark }
     override var background: UIColor { return UIColor.Photon.Grey90 }
     override var cellBackground: UIColor { return defaultBackground }
     override var toolbar: UIColor { return UIColor.Photon.Grey80 }
@@ -98,7 +98,10 @@ fileprivate class DarkHomePanelColor: HomePanelColor {
     override var activityStreamCellDescription: UIColor { return UIColor.Photon.Grey30 }
 
     override var topSiteDomain: UIColor { return defaultTextAndTint }
-    
+    override var topSitesGradientStart:  UIColor { return UIColor(rgb: 0x29282d) }
+    override var topSitesGradientEnd:  UIColor { return UIColor(rgb: 0x212104) }
+    override var topSitesBackground: UIColor { return UIColor(rgb: 0x29282d) }
+
     override var downloadedFileIcon: UIColor { return UIColor.Photon.Grey30 }
 
     override var historyHeaderIconsBackground: UIColor { return UIColor.clear }

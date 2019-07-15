@@ -14,7 +14,7 @@ import Shared
 class UIImageViewExtensionsTests: XCTestCase {
 
     override func setUp() {
-        SDWebImageDownloader.shared().urlCredential = WebServer.sharedInstance.credentials
+        SDWebImageDownloader.shared.config.urlCredential = WebServer.sharedInstance.credentials
     }
 
     func testsetIcon() {
@@ -37,8 +37,8 @@ class UIImageViewExtensionsTests: XCTestCase {
     func testAsyncSetIcon() {
         let originalImage = UIImage(named: "fxLogo")!
 
-        WebServer.sharedInstance.registerHandlerForMethod("GET", module: "favicon", resource: "icon") { (request) -> GCDWebServerResponse! in
-            return GCDWebServerDataResponse(data: UIImagePNGRepresentation(originalImage), contentType: "image/png")
+        WebServer.sharedInstance.registerHandlerForMethod("GET", module: "favicon", resource: "icon") { (request) -> GCDWebServerResponse in
+            return GCDWebServerDataResponse(data: originalImage.pngData()!, contentType: "image/png")
         }
 
         let favImageView = UIImageView()

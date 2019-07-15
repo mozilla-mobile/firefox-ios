@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Deferred
 import Shared
 import SwiftyJSON
 
@@ -95,7 +94,7 @@ open class FxADeviceRegistrator {
             pushParams = nil
         }
 
-        let client = client ?? FxAClient10(authEndpoint: account.configuration.authEndpointURL, oauthEndpoint: account.configuration.oauthEndpointURL, profileEndpoint: account.configuration.profileEndpointURL)
+        let client = client ?? FxAClient10(configuration: account.configuration)
 
         let availableCommands = account.availableCommands()
 

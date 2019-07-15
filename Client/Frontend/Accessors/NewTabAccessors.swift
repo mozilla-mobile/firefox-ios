@@ -45,10 +45,6 @@ enum NewTabPage: String {
     case blankPage = "Blank"
     case homePage = "HomePage"
     case topSites = "TopSites"
-    case bookmarks = "Bookmarks"
-    case history = "History"
-    case readingList = "ReadingList"
-    case downloads = "Downloads"
 
     var settingTitle: String {
         switch self {
@@ -58,14 +54,6 @@ enum NewTabPage: String {
             return Strings.SettingsNewTabHomePage
         case .topSites:
             return Strings.SettingsNewTabTopSites
-        case .bookmarks:
-            return Strings.SettingsNewTabBookmarks
-        case .history:
-            return Strings.SettingsNewTabHistory
-        case .readingList:
-            return Strings.SettingsNewTabReadingList
-        case .downloads:
-            return Strings.DownloadsButtonTitle
         }
     }
 
@@ -73,12 +61,6 @@ enum NewTabPage: String {
         switch self {
         case .topSites:
             return HomePanelType.topSites
-        case .bookmarks:
-            return HomePanelType.bookmarks
-        case .history:
-            return HomePanelType.history
-        case .readingList:
-            return HomePanelType.readingList
         default:
             return nil
         }
@@ -97,18 +79,10 @@ enum NewTabPage: String {
         switch panelNumber {
         case "0":
             return NewTabPage.topSites
-        case "1":
-            return NewTabPage.bookmarks
-        case "2":
-            return NewTabPage.history
-        case "3":
-            return NewTabPage.readingList
-        case "4":
-            return NewTabPage.downloads
         default:
             return nil
         }
     }
 
-    static let allValues = [blankPage, topSites, bookmarks, history, readingList, homePage]
+    static let allValues = [blankPage, topSites, homePage]
 }

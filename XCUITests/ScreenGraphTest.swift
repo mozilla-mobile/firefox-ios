@@ -27,6 +27,7 @@ extension XCTestCase {
 }
 
 extension ScreenGraphTest {
+    // Temoporary disable since it is failing intermittently on BB
     func testUserStateChanges() {
         XCTAssertNil(navigator.userState.url, "Current url is empty")
 
@@ -35,7 +36,6 @@ extension ScreenGraphTest {
         // The UserState is mutated in BrowserTab.
         navigator.goto(BrowserTab)
         navigator.nowAt(BrowserTab)
-        wait(forElement: app.webViews.links["Mozilla"], timeout: 5)
         XCTAssertTrue(navigator.userState.url?.starts(with: "www.mozilla.org") ?? false, "Current url recorded by from the url bar is \(navigator.userState.url ?? "nil")")
     }
 
@@ -166,7 +166,7 @@ fileprivate class TestActions {
     static let LoadURLByPasting = "LoadURLByPasting"
 }
 
-private var isTablet: Bool {
+public var isTablet: Bool {
     // There is more value in a variable having the same name,
     // so it can be used in both predicates and in code
     // than avoiding the duplication of one line of code.

@@ -47,27 +47,36 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         showBackForwardList()
     }
 
+    func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        if let libraryDrawerViewController = self.libraryDrawerViewController, libraryDrawerViewController.isOpen {
+            libraryDrawerViewController.close()
+        } else {
+            showLibrary()
+        }
+    }
+
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        libraryDrawerViewController?.close(immediately: true)
         var actions: [[PhotonActionSheetItem]] = []
 
         let syncAction = syncMenuButton(showFxA: presentSignInViewController)
-        let viewLogins = PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
+        let isLoginsButtonShowing = LoginListViewController.shouldShowAppMenuShortcut(forPrefs: profile.prefs)
+        let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
+            PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _ in
             guard let navController = self.navigationController else { return }
             LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self).uponQueue(.main) { loginsVC in
                 guard let loginsVC = loginsVC else { return }
                 loginsVC.shownFromAppMenu = true
                 let navController = ThemedNavigationController(rootViewController: loginsVC)
-                navController.modalPresentationStyle = .formSheet
                 self.present(navController, animated: true)
             }
         }
 
-        if let sync = syncAction {
-            actions.append(sync + [viewLogins])
-        } else {
-            actions.append([viewLogins])
+        let optionalActions = [syncAction, viewLogins].compactMap { $0 }
+        if !optionalActions.isEmpty {
+            actions.append(optionalActions)
         }
 
         actions.append(getLibraryActions(vcDelegate: self))

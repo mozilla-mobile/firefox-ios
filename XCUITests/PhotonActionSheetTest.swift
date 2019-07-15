@@ -47,7 +47,7 @@ class PhotonActionSheetTest: BaseTestCase {
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
         pageObjectButtonCenter.press(forDuration: 1)
 
-        waitForExistence(app.buttons["Copy"])
+        waitForExistence(app.buttons["Copy"], timeout: 5)
     }
 
     func testSendToDeviceFromPageOptionsMenu() {
@@ -83,19 +83,21 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.openURL("example.com")
         navigator.goto(PageOptionsMenu)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        waitForExistence(app.buttons["Copy"])
-        let fennecElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["Fennec"]
-        if (!fennecElement.exists) {
+        waitForExistence(app.buttons["Copy"], timeout: 5)
+        let countButtons = app.collectionViews.cells.collectionViews.buttons.count
+        let fennecElement = app.collectionViews.cells.collectionViews.buttons.element(boundBy: 1)
+        // If Fennec has not been configured there are 5 buttons, 6 if it is there already
+        if (countButtons <= 6) {
             let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
             moreElement.tap()
-            waitForExistence(app.switches["Fennec"])
-            app.switches["Fennec"].tap()
+            waitForExistence(app.switches["Reminders"])
+            // Tap on Fennec switch
+            app.switches.element(boundBy: 1).tap()
             app.buttons["Done"].tap()
             waitForExistence(app.buttons["Copy"])
         }
         fennecElement.tap()
-
-        waitForExistence(app.navigationBars["ShareTo.ShareView"])
+        waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 5)
     }
 
     private func disableFennec() {
@@ -106,9 +108,11 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.buttons["Copy"])
         let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
         moreElement.tap()
-        app.switches["Fennec"].tap()
+        waitForExistence(app.switches["Reminders"])
+        // Tap on Fennec switch
+        app.switches.element(boundBy: 1).tap()
         app.buttons["Done"].tap()
-        waitForExistence(app.buttons["Copy"])
+        waitForExistence(app.buttons["Copy"], timeout: 3)
     }
 
     // Smoketest
@@ -128,6 +132,7 @@ class PhotonActionSheetTest: BaseTestCase {
         app.staticTexts["Send to Device"].tap()
         XCTAssertTrue(app.images["emptySync"].exists)
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
+        waitForExistence(app.navigationBars.buttons["Close"], timeout: 3)
         app.navigationBars.buttons["Close"].tap()
         disableFennec()
     }

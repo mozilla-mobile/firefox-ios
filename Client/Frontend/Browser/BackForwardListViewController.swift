@@ -99,7 +99,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             return internalUrl.extractedUrlParam?.absoluteString
         }
 
-        sql.getSitesForURLs(urls).uponQueue(.main) { result in
+        sql.getSites(forURLs: urls).uponQueue(.main) { result in
             guard let results = result.successValue else {
                 return
             }
@@ -122,7 +122,7 @@ class BackForwardListViewController: UIViewController, UITableViewDataSource, UI
             if internalUrl.isAboutHomeURL {
                 return true
             }
-            if let url = internalUrl.originalURLFromErrorPage, InternalURL.isValid(url: url){
+            if let url = internalUrl.originalURLFromErrorPage, InternalURL.isValid(url: url) {
                 return false
             }
             return true

@@ -33,9 +33,12 @@ class NoImageModeHelper: TabContentScript {
         return prefs.boolForKey(NoImageModePrefsKey.NoImageModeStatus) ?? false
     }
 
-    static func toggle(profile: Profile, tabManager: TabManager) {
-        let enabled = !isActivated(profile.prefs)
-        profile.prefs.setBool(enabled, forKey: PrefsKeys.KeyNoImageModeStatus)
-        tabManager.tabs.forEach { $0.noImageMode = enabled }        
+    static func toggle(isEnabled: Bool, profile: Profile, tabManager: TabManager) {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let bvc = appDelegate.browserViewController {
+            bvc.navigationToolbar.hideImagesBadge(visible: isEnabled)
+        }
+
+        profile.prefs.setBool(isEnabled, forKey: PrefsKeys.KeyNoImageModeStatus)
+        tabManager.tabs.forEach { $0.noImageMode = isEnabled }
     }
 }

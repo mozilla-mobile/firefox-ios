@@ -12,5 +12,8 @@ if AppConstants.IsRunningTest {
     appDelegate = AppDelegate.self
 }
 
-private let pointer = UnsafeMutableRawPointer(CommandLine.unsafeArgv).bindMemory(to: UnsafeMutablePointer<Int8>.self, capacity: Int(CommandLine.argc))
-UIApplicationMain(CommandLine.argc, pointer, NSStringFromClass(UIApplication.self), NSStringFromClass(appDelegate))
+// Ignore SIGPIPE exceptions globally
+// https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly
+signal(SIGPIPE, SIG_IGN)
+
+_ = UIApplicationMain(CommandLine.argc, CommandLine.unsafeArgv, NSStringFromClass(UIApplication.self), NSStringFromClass(appDelegate))

@@ -54,43 +54,52 @@ class DownloadTests: XCTestCase {
         let batcher = BatchingDownloader(collectionClient: bookmarksClient, basePrefs: prefs, collection: "clients")
 
         let ic1 = InfoCollections(collections: ["clients": ts1])
-        let fetch1 = batcher.go(ic1, limit: 1).value
-        XCTAssertEqual(fetch1.successValue, DownloadEndState.complete)
-        XCTAssertEqual(0, batcher.baseTimestamp)    // This isn't updated until after success.
-        let records1 = batcher.retrieve()
-        XCTAssertEqual(1, records1.count)
-        XCTAssertEqual(guid1, records1[0].id)
-        batcher.advance()
-        XCTAssertNotEqual(0, batcher.baseTimestamp)
 
-        // Fetching again yields nothing, because the collection hasn't
-        // changed.
-        XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.noNewData)
+        let ex = expectation(description: "batcher")
+        let fetch1 = batcher.go(ic1, limit: 1)
+        fetch1.upon() { result in
+            ex.fulfill()
 
-        // More records. Start again.
-        let _ = batcher.reset().value
+            // We are now off-main, and .value is safe to call from here on
 
-        let ic2 = InfoCollections(collections: ["clients": ts2])
-        server.storeRecords(records: [rec2], inCollection: "clients", now: ts2)
+            XCTAssertEqual(result.successValue, DownloadEndState.complete)
+            XCTAssertEqual(0, batcher.baseTimestamp)    // This isn't updated until after success.
+            let records1 = batcher.retrieve()
+            XCTAssertEqual(1, records1.count)
+            XCTAssertEqual(guid1, records1[0].id)
+            batcher.advance()
+            XCTAssertNotEqual(0, batcher.baseTimestamp)
 
-        let fetch2 = batcher.go(ic2, limit: 1).value
-        XCTAssertEqual(fetch2.successValue, DownloadEndState.incomplete)
-        let records2 = batcher.retrieve()
-        XCTAssertEqual(1, records2.count)
-        XCTAssertEqual(guid1, records2[0].id)
-        batcher.advance()
+            // Fetching again yields nothing, because the collection hasn't
+            // changed.
+            XCTAssertEqual(batcher.go(ic1, limit: 1).value.successValue, DownloadEndState.noNewData)
 
-        let fetch3 = batcher.go(ic2, limit: 1).value
-        XCTAssertEqual(fetch3.successValue, DownloadEndState.complete)
-        let records3 = batcher.retrieve()
-        XCTAssertEqual(1, records3.count)
-        XCTAssertEqual(guid2, records3[0].id)
-        batcher.advance()
+            // More records. Start again.
+            let _ = batcher.reset().value
 
-        let fetch4 = batcher.go(ic2, limit: 1).value
-        XCTAssertEqual(fetch4.successValue, DownloadEndState.noNewData)
-        let records4 = batcher.retrieve()
-        XCTAssertEqual(0, records4.count)
-        batcher.advance()
+            let ic2 = InfoCollections(collections: ["clients": ts2])
+            server.storeRecords(records: [rec2], inCollection: "clients", now: ts2)
+
+            let fetch2 = batcher.go(ic2, limit: 1).value
+            XCTAssertEqual(fetch2.successValue, DownloadEndState.incomplete)
+            let records2 = batcher.retrieve()
+            XCTAssertEqual(1, records2.count)
+            XCTAssertEqual(guid1, records2[0].id)
+            batcher.advance()
+
+            let fetch3 = batcher.go(ic2, limit: 1).value
+            XCTAssertEqual(fetch3.successValue, DownloadEndState.complete)
+            let records3 = batcher.retrieve()
+            XCTAssertEqual(1, records3.count)
+            XCTAssertEqual(guid2, records3[0].id)
+            batcher.advance()
+
+            let fetch4 = batcher.go(ic2, limit: 1).value
+            XCTAssertEqual(fetch4.successValue, DownloadEndState.noNewData)
+            let records4 = batcher.retrieve()
+            XCTAssertEqual(0, records4.count)
+            batcher.advance()
+        }
+        waitForExpectations(timeout: 10)
     }
 }

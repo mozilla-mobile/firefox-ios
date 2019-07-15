@@ -3,8 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Alamofire
-import Deferred
 import Shared
 import SwiftyJSON
 
@@ -75,14 +73,7 @@ public class PushClient {
     let endpointURL: NSURL
     let experimentalMode: Bool
 
-    lazy fileprivate var alamofire: SessionManager = {
-        let ua = UserAgent.fxaUserAgent
-        let configuration = URLSessionConfiguration.ephemeral
-        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = ua
-        configuration.httpAdditionalHeaders = defaultHeaders
-        return SessionManager(configuration: configuration)
-    }()
+    lazy fileprivate var urlSession = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral)
 
     public init(endpointURL: NSURL, experimentalMode: Bool = false) {
         self.endpointURL = endpointURL
@@ -91,7 +82,7 @@ public class PushClient {
 }
 
 public extension PushClient {
-    public func register(_ apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
+    func register(_ apnsToken: String) -> Deferred<Maybe<PushRegistration>> {
         //  POST /v1/{type}/{app_id}/registration
         let registerURL = endpointURL.appendingPathComponent("registration")!
 
@@ -124,7 +115,7 @@ public extension PushClient {
         }
     }
 
-    public func updateUAID(_ apnsToken: String, withRegistration creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
+    func updateUAID(_ apnsToken: String, withRegistration creds: PushRegistration) -> Deferred<Maybe<PushRegistration>> {
         //  PUT /v1/{type}/{app_id}/registration/{uaid}
         let registerURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")!
         var mutableURLRequest = URLRequest(url: registerURL)
@@ -137,11 +128,12 @@ public extension PushClient {
         mutableURLRequest.httpBody = JSON(parameters).stringify()?.utf8EncodedData
 
         return send(request: mutableURLRequest) >>== { json in
+            KeychainStore.shared.setString(apnsToken, forKey: "apnsToken")
             return deferMaybe(creds)
         }
     }
 
-    public func unregister(_ creds: PushRegistration) -> Success {
+    func unregister(_ creds: PushRegistration) -> Success {
         //  DELETE /v1/{type}/{app_id}/registration/{uaid}
         let unregisterURL = endpointURL.appendingPathComponent("registration/\(creds.uaid)")
 
@@ -158,29 +150,27 @@ extension PushClient {
     fileprivate func send(request: URLRequest) -> Deferred<Maybe<JSON>> {
         log.info("\(request.httpMethod!) \(request.url?.absoluteString ?? "nil")")
         let deferred = Deferred<Maybe<JSON>>()
-        alamofire.request(request)
-            .validate(contentType: ["application/json"])
-            .responseJSON { response in
-                // Don't cancel requests just because our client is deallocated.
-                withExtendedLifetime(self.alamofire) {
-                    let result = response.result
-                    if let error = result.error {
-                        return deferred.fill(Maybe(failure: PushClientError.Local(error)))
-                    }
+        urlSession.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                deferred.fill(Maybe(failure: PushClientError.Local(error)))
+                return
+            }
 
-                    guard let data = response.data else {
-                        return deferred.fill(Maybe(failure: PushClientError.Local(PushClientUnknownError)))
-                    }
+            guard let _ = validatedHTTPResponse(response, contentType: "application/json"), let data = data, !data.isEmpty else {
+                deferred.fill(Maybe(failure: PushClientError.Local(PushClientUnknownError)))
+                return
+            }
 
-                    let json = JSON(data: data)
-
-                    if let remoteError = PushRemoteError.from(json: json) {
-                        return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
-                    }
-
-                    deferred.fill(Maybe(success: json))
+            do {
+                let json = try JSON(data: data)
+                if let remoteError = PushRemoteError.from(json: json) {
+                    return deferred.fill(Maybe(failure: PushClientError.Remote(remoteError)))
                 }
-        }
+                deferred.fill(Maybe(success: json))
+            } catch {
+                return deferred.fill(Maybe(failure: PushClientError.Local(error)))
+            }
+        }.resume()
 
         return deferred
     }

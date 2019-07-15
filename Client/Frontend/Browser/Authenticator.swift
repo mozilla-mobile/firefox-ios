@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import Storage
-import Deferred
 
 private let CancelButtonTitle = NSLocalizedString("Cancel", comment: "Label for Cancel button")
 private let LogInButtonTitle  = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
@@ -58,8 +57,11 @@ class Authenticator {
                 return deferMaybe(nil)
             }
 
-            let logins = cursor.asArray()
-            var credentials: URLCredential? = nil
+            let logins = cursor.compactMap {
+                // HTTP Auth must have nil formSubmitURL and a non-nil httpRealm.
+                return $0?.formSubmitURL == nil && $0?.httpRealm != nil ? $0 : nil
+            }
+            var credentials: URLCredential?
 
             // It is possible that we might have duplicate entries since we match against host and scheme://host.
             // This is a side effect of https://bugzilla.mozilla.org/show_bug.cgi?id=1238103.

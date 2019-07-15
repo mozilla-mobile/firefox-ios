@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import WebKit
-import Deferred
 
 extension Notification.Name {
    public static let didChangeContentBlocking = Notification.Name("didChangeContentBlocking")
@@ -29,6 +28,8 @@ class TabContentBlocker {
         return []
     }
 
+    func notifyContentBlockingChanged() {}
+
     var status: BlockerStatus {
         guard isEnabled else {
             return .Disabled
@@ -47,7 +48,7 @@ class TabContentBlocker {
         didSet {
             guard let tab = self.tab else { return }
             if stats.total <= 1 {
-                NotificationCenter.default.post(name: .didChangeContentBlocking, object: nil, userInfo: ["tab": tab])
+                notifyContentBlockingChanged()
             }
         }
     }

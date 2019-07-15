@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import Storage
 
-class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControllerDelegate {
+class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
 
@@ -17,31 +17,31 @@ class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControll
             return instructionsViewController
         }
 
-        let clientPickerViewController = ClientPickerViewController()
-        clientPickerViewController.clientPickerDelegate = self
-        clientPickerViewController.profile = nil // This means the picker will open and close the default profile
-        return clientPickerViewController
+        let devicePickerViewController = DevicePickerViewController()
+        devicePickerViewController.pickerDelegate = self
+        devicePickerViewController.profile = nil // This means the picker will open and close the default profile
+        return devicePickerViewController
     }
 
     func finish() {
         delegate?.finish(afterDelay: 0)
     }
 
-    func clientPickerViewController(_ clientPickerViewController: ClientPickerViewController, didPickClients clients: [RemoteClient]) {
+    func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         guard let item = sharedItem else {
             return finish()
         }
 
         let profile = BrowserProfile(localName: "profile")
-        profile.sendItem(item, toClients: clients).uponQueue(.main) { _ in
-            profile.shutdown()
+        profile.sendItem(item, toDevices: devices).uponQueue(.main) { _ in
+            profile._shutdown()
             self.finish()
 
             addAppExtensionTelemetryEvent(forMethod: "send-to-device")
         }
     }
 
-    func clientPickerViewControllerDidCancel(_ clientPickerViewController: ClientPickerViewController) {
+    func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController) {
         finish()
     }
 
@@ -52,7 +52,7 @@ class SendToDevice: ClientPickerViewControllerDelegate, InstructionsViewControll
     private func hasAccount() -> Bool {
         let profile = BrowserProfile(localName: "profile")
         defer {
-            profile.shutdown()
+            profile._shutdown()
         }
         return profile.hasAccount()
     }

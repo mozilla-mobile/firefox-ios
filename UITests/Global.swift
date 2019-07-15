@@ -319,7 +319,11 @@ class BrowserUtils {
     class func openClearPrivateDataDialog(_ swipe: Bool) {
         let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
                                                  grey_accessibilityID("menu-Settings")])
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
 
         // Need this for simulator only
         if swipe {
@@ -419,7 +423,13 @@ class BrowserUtils {
     }
 
     class func closeLibraryMenu(_ tester: KIFUITestActor) {
-        tester.tapView(withAccessibilityLabel: "Done")
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.libraryButton"))
+                .perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityID("History"))
+                .perform(grey_swipeFastInDirection(GREYDirection.down))
+        }
         tester.waitForAnimationsToFinish()
     }
 }
@@ -436,7 +446,7 @@ class SimplePageServer {
         let webServer: GCDWebServer = GCDWebServer()
 
         webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
-            let img = UIImagePNGRepresentation(UIImage(named: "goBack")!)
+            let img = UIImage(named: "goBack")!.pngData()!
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
@@ -449,7 +459,7 @@ class SimplePageServer {
         // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
         webServer.addHandler(forMethod: "GET", path: "/scrollablePage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("scrollablePage")
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int((request.query?["page"] as! String))!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
             return GCDWebServerDataResponse(html: pageData as String)
         }
@@ -457,7 +467,7 @@ class SimplePageServer {
         webServer.addHandler(forMethod: "GET", path: "/numberedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("numberedPage")
 
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int((request.query?["page"] as! String))!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
 
             return GCDWebServerDataResponse(html: pageData as String)
@@ -484,11 +494,11 @@ class SimplePageServer {
             let expectedAuth = "Basic dXNlcjpwYXNz"
 
             let response: GCDWebServerDataResponse
-            if request?.headers["Authorization"] as? String == expectedAuth && request?.query["logout"] == nil {
-                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")
+            if request?.headers["Authorization"] == expectedAuth && request?.query?["logout"] == nil {
+                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")!
             } else {
                 // Request credentials if the user isn't logged in.
-                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")
+                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")!
                 response.statusCode = 401
                 response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
             }
@@ -552,7 +562,7 @@ class SimplePageServer {
 class SearchUtils {
     static func navigateToSearchSettings(_ tester: KIFUITestActor) {
         let engine = SearchUtils.getDefaultEngine().shortName
-        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.waitForAnimationsToFinish()
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.waitForView(withAccessibilityLabel: "Settings")
@@ -568,7 +578,7 @@ class SearchUtils {
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
     // Afterwards, we're still at the Search Settings sheet.
     static func selectDefaultSearchEngineName(_ tester: KIFUITestActor, engineName: String) {
-        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraitButton)
+        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraits.button)
         tester.waitForView(withAccessibilityLabel: "Default Search Engine")
         tester.tapView(withAccessibilityLabel: engineName)
         tester.waitForView(withAccessibilityLabel: "Search")
@@ -666,7 +676,7 @@ class PasscodeUtils {
 class HomePageUtils {
     static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.tapView(withAccessibilityIdentifier: "Homepage")
     }
