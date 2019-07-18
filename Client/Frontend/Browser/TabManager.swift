@@ -360,6 +360,9 @@ class TabManager: NSObject {
                 }
             }
         }
+
+         tab.nightMode = NightModeHelper.isActivated(profile.prefs)
+
         if flushToDisk {
         	storeChanges()
         }
