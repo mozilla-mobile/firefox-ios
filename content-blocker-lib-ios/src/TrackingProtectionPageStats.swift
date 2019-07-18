@@ -4,34 +4,28 @@
 import Shared
 
 struct TPPageStats {
-    let adCount: Int
-    let analyticCount: Int
-    let contentCount: Int
-    let socialCount: Int
+    var domains: [BlocklistCategory: Set<String>]
 
-    var total: Int { return adCount + socialCount + analyticCount + contentCount }
+    var total: Int {
+        var total = 0
+        domains.forEach { total += $0.1.count }
+        return total
+    }
 
     init() {
-        adCount = 0
-        analyticCount = 0
-        contentCount = 0
-        socialCount = 0
+        domains = [BlocklistCategory: Set<String>]();
     }
 
-    private init(adCount: Int, analyticCount: Int, contentCount: Int, socialCount: Int) {
-        self.adCount = adCount
-        self.analyticCount = analyticCount
-        self.contentCount = contentCount
-        self.socialCount = socialCount
-    }
-
-    func create(byAddingListItem listItem: BlocklistName) -> TPPageStats {
-        switch listItem {
-        case .advertising: return TPPageStats(adCount: adCount + 1, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount)
-        case .analytics: return TPPageStats(adCount: adCount, analyticCount: analyticCount + 1, contentCount: contentCount, socialCount: socialCount)
-        case .content: return TPPageStats(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount + 1, socialCount: socialCount)
-        case .social: return TPPageStats(adCount: adCount, analyticCount: analyticCount, contentCount: contentCount, socialCount: socialCount + 1)
+    private init(domains: [BlocklistCategory: Set<String>], blocklistName: BlocklistCategory, host: String) {
+        self.domains = domains
+        if self.domains[blocklistName] == nil {
+            self.domains[blocklistName] = Set<String>()
         }
+       self.domains[blocklistName]?.insert(host);
+    }
+
+    func create(matchingBlocklist blocklistName: BlocklistCategory, host: String) -> TPPageStats {
+        return TPPageStats(domains: domains, blocklistName: blocklistName, host: host)
     }
 }
 
@@ -41,8 +35,8 @@ class TPStatsBlocklistChecker {
     // Initialized async, is non-nil when ready to be used.
     private var blockLists: TPStatsBlocklists?
 
-    func isBlocked(url: URL, enabledBlocklists: [BlocklistName]) -> Deferred<BlocklistName?> {
-        let deferred = Deferred<BlocklistName?>()
+    func isBlocked(url: URL) -> Deferred<BlocklistCategory?> {
+        let deferred = Deferred<BlocklistCategory?>()
 
         guard let blockLists = blockLists, let host = url.host, !host.isEmpty else {
             // TP Stats init isn't complete yet
@@ -54,8 +48,8 @@ class TPStatsBlocklistChecker {
         let whitelistRegex = ContentBlocker.shared.whitelistedDomains.domainRegex
 
         DispatchQueue.global().async {
-            // Return true in the Defered if the blocked url is in a list that is enabled.
-            deferred.fill(blockLists.urlIsInList(url, whitelistedDomains: whitelistRegex).flatMap { return enabledBlocklists.contains($0) ? $0 : nil })
+            // Return true in the Deferred if the domain could potentially be blocked
+            deferred.fill(blockLists.urlIsInList(url, whitelistedDomains: whitelistRegex))
         }
         return deferred
     }
@@ -96,9 +90,9 @@ class TPStatsBlocklists {
         let loadType: LoadType
         let resourceType: ResourceType
         let domainExceptions: [String]?
-        let list: BlocklistName
+        let list: BlocklistCategory
 
-        init(regex: String, loadType: LoadType, resourceType: ResourceType, domainExceptions: [String]?, list: BlocklistName) {
+        init(regex: String, loadType: LoadType, resourceType: ResourceType, domainExceptions: [String]?, list: BlocklistCategory) {
             self.regex = regex
             self.loadType = loadType
             self.resourceType = resourceType
@@ -123,10 +117,19 @@ class TPStatsBlocklists {
         // All rules have this prefix on the domain to match.
         let standardPrefix = "^https?://([^/]+\\.)?"
 
-        for blockList in BlocklistName.all {
+        // Use the strict list of files, as it is the complete list of rules,
+        // keeping in mind the stats can't distinguish block vs cookie-block,
+        // only that an url did or didn't match.
+        for blockListFile in [
+            BlocklistFileName.advertisingURLs,
+            BlocklistFileName.analyticsURLs,
+            BlocklistFileName.socialURLs,
+            BlocklistFileName.cryptomining,
+            BlocklistFileName.fingerprinting,
+            ] {
             let list: [[String: AnyObject]]
             do {
-                guard let path = Bundle.main.path(forResource: blockList.filename, ofType: "json") else {
+                guard let path = Bundle.main.path(forResource: blockListFile.filename, ofType: "json") else {
                     assertionFailure("Blocklists: bad file path.")
                     return
                 }
@@ -174,13 +177,14 @@ class TPStatsBlocklists {
                 let resourceTypes = trigger["resource-type"] as? [String] ?? []
                 let resourceType = resourceTypes.contains("font") ? ResourceType.font : .all
 
-                let rule = Rule(regex: filter, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: blockList)
+                let category = BlocklistCategory.fromFile(blockListFile)
+                let rule = Rule(regex: filter, loadType: loadType, resourceType: resourceType, domainExceptions: domainExceptionsRegex, list: category)
                 blockRules[baseDomain] = (blockRules[baseDomain] ?? []) + [rule]
             }
         }
     }
 
-    func urlIsInList(_ url: URL, whitelistedDomains: [String]) -> BlocklistName? {
+    func urlIsInList(_ url: URL, whitelistedDomains: [String]) -> BlocklistCategory? {
         let resourceString = url.absoluteString
 
         guard let baseDomain = url.baseDomain, let rules = blockRules[baseDomain] else {
