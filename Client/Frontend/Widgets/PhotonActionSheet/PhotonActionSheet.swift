@@ -174,6 +174,17 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         applyTheme()
     }
 
+    // Nested tableview rows get additional height
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let section = actions[safe: indexPath.section], let action = section[safe: indexPath.row] {
+            if let custom = action.customHeight {
+                return custom(action)
+            }
+        }
+
+        return PhotonActionSheetUX.RowHeight
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var frameHeight: CGFloat
@@ -237,7 +248,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var action = actions[indexPath.section][indexPath.row]
-        guard let handler = action.handler else {
+        guard let handler = action.tapHandler else {
             self.dismiss(nil)
             return
         }
