@@ -55,9 +55,7 @@ class TabLocationView: UIView {
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
-            if url == nil {
-                trackingProtectionButton.isHidden = true
-            }
+            trackingProtectionButton.isHidden = lockImageView.isHidden
             setNeedsUpdateConstraints()
         }
     }
@@ -128,7 +126,6 @@ class TabLocationView: UIView {
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.tintColor = UIColor.Photon.Grey50
         trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
-        trackingProtectionButton.isHidden = true
         return trackingProtectionButton
     }()
 
@@ -366,14 +363,10 @@ extension TabLocationView: TabEventHandler {
         assertIsMainThread("UI changes must be on the main thread")
         guard let blocker = tab.contentBlocker else { return }
         switch blocker.status {
-        case .Blocking:
+        case .Blocking, .Disabled, .NoBlockedURLs:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
-            self.trackingProtectionButton.isHidden = false
-        case .Disabled, .NoBlockedURLs:
-            self.trackingProtectionButton.isHidden = true
         case .Whitelisted:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
-            self.trackingProtectionButton.isHidden = false
         }
     }
 
