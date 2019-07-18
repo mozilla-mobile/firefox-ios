@@ -159,11 +159,15 @@ class SyncNowSetting: WithAccountSetting {
     override var hidden: Bool { return !enabled }
 
     override var enabled: Bool {
-        if !DeviceInfo.hasConnectivity() {
-            return false
-        }
+        get {
+            if !DeviceInfo.hasConnectivity() {
+                return false
+            }
 
-        return profile.hasSyncableAccount()
+            return profile.hasSyncableAccount()
+        }
+        set {
+        }
     }
 
     fileprivate lazy var troubleshootButton: UIButton = {

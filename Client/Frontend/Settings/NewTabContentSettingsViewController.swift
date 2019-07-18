@@ -33,11 +33,11 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "NewTabAsFirefoxHome", isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "NewTabAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
             self.currentChoice = NewTabPage.topSites
             onFinished()
         })
-        let showBlankPage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBlankPage), subtitle: nil, accessibilityIdentifier: "NewTabAsBlankPage", isEnabled: {return self.currentChoice == NewTabPage.blankPage}, onChanged: {
+        let showBlankPage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBlankPage), subtitle: nil, accessibilityIdentifier: "NewTabAsBlankPage", isChecked: {return self.currentChoice == NewTabPage.blankPage}, onChecked: {
             self.currentChoice = NewTabPage.blankPage
             onFinished()
         })
