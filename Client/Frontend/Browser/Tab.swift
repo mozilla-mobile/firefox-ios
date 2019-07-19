@@ -720,7 +720,7 @@ extension Tab {
 
         // Will extract the host from the URL and enable or disable it as a desktop site, and write the file if needed.
         static func updateHosts(forUrl url: URL, isDesktopSite: Bool, isPrivate: Bool) {
-            guard let host = url.host, !host.isEmpty else { return }
+            guard let host = url.normalizedHost, !host.isEmpty else { return }
 
             if isPrivate {
                 if isDesktopSite {
