@@ -360,6 +360,9 @@ class TabManager: NSObject {
                 }
             }
         }
+
+        tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
+
         if flushToDisk {
         	storeChanges()
         }
