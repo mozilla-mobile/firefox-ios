@@ -52,9 +52,10 @@ def add_entry_to_blocklist(blocklist, entities, name, property_, resources):
             prop.pop(0)
         props = [".".join(prop)]
     for res in resources:
-        if len(res) < 3:
-            print("")
-        blocklist.append(create_blocklist_entry(res, related_domains))
+        if len(res) > 2:
+            blocklist.append(create_blocklist_entry(res, related_domains))
+        else:
+            print("Found invalid resource.")
 
 def generate_blacklists(blacklist, entitylist):
     # Generating the categorical lists requires some manual tweaking to the
@@ -129,6 +130,7 @@ def format_one_rule_per_line(files):
 
 
 import sys
+import os
 
 def help():
     print("Specify `block` or `block-cookies` as arg.")
@@ -145,6 +147,9 @@ if __name__ == "__main__":
         exit(1)
     blacklist = '../Carthage/Checkouts/shavar-prod-lists/disconnect-blacklist.json'
     entitylist =  '../Carthage/Checkouts/shavar-prod-lists/disconnect-entitylist.json'
+
+    if not os.path.exists("Lists"):
+        os.mkdir("Lists")
 
     generate_blacklists(blacklist, entitylist)
 
