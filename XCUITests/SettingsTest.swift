@@ -18,8 +18,11 @@ class SettingsTest: BaseTestCase {
 
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "support.mozilla.org")
-        waitForExistence(app.webViews.staticTexts["Firefox for iOS"])
-        XCTAssertTrue(app.webViews.staticTexts["Firefox for iOS"].exists)
+        if iPad() {
+            waitForExistence(app.webViews.staticTexts["Firefox for iOS Support"])
+        } else {
+            waitForExistence(app.webViews.staticTexts["Firefox for iOS"])
+        }
         let numTabs = app.buttons["Show Tabs"].value
         XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
     }
