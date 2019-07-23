@@ -9,19 +9,19 @@ pipeline {
     }
     stages {
         stage('checkout') {
-            when { branch 'master' }
+            // when { branch 'master' }
             steps {
                 checkout scm
             }
         }
         stage('bootstrap') {
-            when { branch 'master' }
+            // when { branch 'master' }
             steps {
                 sh './bootstrap.sh'
             }
         }
         stage('test') {
-            when { branch 'master' }
+            // when { branch 'master' }
             steps {
                 dir('SyncIntegrationTests') {
                     sh 'pipenv install'
