@@ -82,7 +82,7 @@ class IntegrationTests: BaseTestCase {
         // Wait for initial sync to complete
         waitForInitialSyncComplete()
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"])
+        waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 5)
     }
 
     func testFxASyncTabs () {
@@ -96,7 +96,7 @@ class IntegrationTests: BaseTestCase {
         // This is only to check that the device's name changed
         navigator.goto(SettingsScreen)
         app.tables.cells.element(boundBy: 0).tap()
-        waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"])
+        waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
         XCTAssertEqual(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"].value! as! String, "Fennec (synctesting) on iOS")
 
         // Sync again just to make sure to sync after new name is shown
@@ -169,7 +169,7 @@ class IntegrationTests: BaseTestCase {
         app.cells["HistoryPanel.syncedDevicesCell"].tap()
         // Need to swipe to get the data on the screen on focus
         app.swipeDown()
-        waitForExistence(app.tables.otherElements["profile1"], timeout: 5)
+        waitForExistence(app.tables.otherElements["profile1"], timeout: 10)
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
     }
 }
