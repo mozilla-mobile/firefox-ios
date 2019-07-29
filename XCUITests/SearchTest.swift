@@ -202,9 +202,10 @@ class SearchTests: BaseTestCase {
     // Bug https://bugzilla.mozilla.org/show_bug.cgi?id=1541832 scenario 4
     func testSearchStartAfterTypingTwoWords() {
         navigator.goto(URLBarOpen)
+        waitForExistence(app.textFields["url"], timeout: 10)
         app.typeText("foo bar")
         app.typeText(XCUIKeyboardKey.return.rawValue)
-        waitForExistence(app.textFields["url"], timeout: 5)
+        waitForExistence(app.textFields["url"], timeout: 10)
         waitForValueContains(app.textFields["url"], value: "google")
     }
 }

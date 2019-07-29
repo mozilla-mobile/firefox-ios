@@ -27,7 +27,7 @@ class DragAndDropTests: BaseTestCase {
         navigator.goto(TabTray)
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
-        waitForExistence(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 3)
+        waitForExistence(app.collectionViews.cells["Internet for people, not profit — Mozilla"], timeout: 10)
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
     }
 
