@@ -85,7 +85,7 @@ class TestAppDelegate: AppDelegate {
             resetApplication()
         }
 
-        try? FileManager.default.removeItem(at: Tab.DesktopSites.file)
+        Tab.DesktopSites.clear()
 
         return super.application(application, willFinishLaunchingWithOptions: launchOptions)
     }

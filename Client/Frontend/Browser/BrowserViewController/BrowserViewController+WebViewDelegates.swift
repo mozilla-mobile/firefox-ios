@@ -269,11 +269,12 @@ extension BrowserViewController: WKNavigationDelegate {
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
         if ["http", "https", "data", "blob", "file"].contains(url.scheme) {
-            if let host = url.normalizedHost, navigationAction.targetFrame?.isMainFrame ?? false {
-                tab.desktopSite = Tab.DesktopSites.hostList.contains(host)
+
+            if navigationAction.targetFrame?.isMainFrame ?? false {
+                tab.desktopSite = Tab.DesktopSites.contains(url: url, isPrivate: false)
                 if !tab.desktopSite, tab.isPrivate {
                     // Private mode has an additional memory-only list to check.
-                    tab.desktopSite = Tab.DesktopSites.privateModeHostList.contains(host)
+                    tab.desktopSite = Tab.DesktopSites.contains(url: url, isPrivate: true)
                 }
 
                 let requestUA = navigationAction.request.value(forHTTPHeaderField: "User-Agent") ?? ""
