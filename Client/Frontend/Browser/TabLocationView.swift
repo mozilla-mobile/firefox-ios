@@ -126,6 +126,7 @@ class TabLocationView: UIView {
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.tintColor = UIColor.Photon.Grey50
         trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
+        trackingProtectionButton.accessibilityIdentifier = "TabLocationView.trackingProtectionButton"
         return trackingProtectionButton
     }()
 
@@ -233,9 +234,11 @@ class TabLocationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private lazy var _accessibilityElements = [urlTextField, readerModeButton, pageOptionsButton, trackingProtectionButton]
+
     override var accessibilityElements: [Any]? {
         get {
-            return [lockImageView, urlTextField, readerModeButton, pageOptionsButton].filter { !$0.isHidden }
+            return _accessibilityElements.filter { !$0.isHidden }
         }
         set {
             super.accessibilityElements = newValue
@@ -243,7 +246,7 @@ class TabLocationView: UIView {
     }
 
     func overrideAccessibility(enabled: Bool) {
-        [lockImageView, urlTextField, readerModeButton, pageOptionsButton].forEach {
+        _accessibilityElements.forEach {
             $0.isAccessibilityElement = enabled
         }
     }
