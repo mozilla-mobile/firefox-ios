@@ -23,8 +23,6 @@ class CollapsedURLTest: BaseTestCase {
         loadWebPage("http://localhost:6573/licenses.html\n")
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
 
-        // Swipe up to show the collapsed URL view - use internal website
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "http://localhost:6573/licenses.html")
         // Wait for the website to load
         waitforExistence(element: app.webViews.otherElements["Licenses"])
         let webView = app.webViews.children(matching: .other).element

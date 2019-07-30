@@ -778,27 +778,17 @@ class URLBar: UIView {
     }
 
     private func setTextToURL(displayFullUrl: Bool = false) {
-        var fullUrl: String?
-        var truncatedURL: String?
-        var displayText: String?
+        guard let url = url else { return }
 
-        if let url = url {
-            // Strip the username/password to prevent domain spoofing.
-            var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
-            components?.user = nil
-            components?.password = nil
-            fullUrl = components?.url?.absoluteString
-            truncatedURL = components?.host
-
-            if let stackValue = SearchHistoryUtils.pullSearchFromStack(), !stackValue.isUrl {
-                displayText = stackValue
-            } else {
-                displayText = truncatedURL
-            }
-
-            urlText.text = displayFullUrl ? fullUrl : displayText
-            truncatedUrlText.text = truncatedURL
-        }
+        // Strip the username/password to prevent domain spoofing.
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        components?.user = nil
+        components?.password = nil
+        let fullUrl = components?.url?.absoluteString
+        let truncatedURL = components?.host
+        let displayText = truncatedURL
+        urlText.text = displayFullUrl ? fullUrl : displayText
+        truncatedUrlText.text = truncatedURL
     }
 
     private func activateConstraints(_ activate: Bool, shownConstraints: [Constraint]?, hiddenConstraints: [Constraint]?) {

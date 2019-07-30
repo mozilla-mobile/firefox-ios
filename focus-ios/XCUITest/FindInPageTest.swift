@@ -1,10 +1,6 @@
-//
-//  FindInPageTest.swift
-//  XCUITest
-//
-//  Created by Sawyer Blatz on 6/5/18.
-//  Copyright © 2018 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import XCTest
 
@@ -24,7 +20,6 @@ class FindInPageTest: BaseTestCase {
         // Navigate to website
         loadWebPage("http://localhost:6573/licenses.html\n")
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-        waitForValueContains(element: searchOrEnterAddressTextField, value: "http://localhost:6573/licenses.html")
 
         // Activate the find in page bar
         app.textFields["Search or enter address"].tap()
