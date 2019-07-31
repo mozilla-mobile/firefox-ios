@@ -55,6 +55,9 @@ let HomePanel_Library = "HomePanel_Library"
 let TranslatePageMenu = "TranslatePageMenu"
 let DontTranslatePageMenu = "DontTranslatePageMenu"
 let MobileBookmarks = "MobileBookmarks"
+let MobileBookmarksEdit = "MobileBookmarksEdit"
+let MobileBookmarksAdd = "MobileBookmarksAdd"
+let EnterNewBookmarkTitleAndUrl = "EnterNewBookmarkTitleAndUrl"
 let RequestDesktopSite = "RequestDesktopSite"
 let RequestMobileSite = "RequestMobileSite"
 
@@ -84,16 +87,10 @@ let BookmarksPanelContextMenu = "BookmarksPanelContextMenu"
 let SetPasscodeScreen = "SetPasscodeScreen"
 
 let Intro_Welcome = "Intro.Welcome"
-let Intro_Search = "Intro.Search"
-let Intro_Private = "Intro.Private"
-let Intro_Mail = "Intro.Mail"
 let Intro_Sync = "Intro.Sync"
 
 let allIntroPages = [
     Intro_Welcome,
-    Intro_Search,
-    Intro_Private,
-    Intro_Mail,
     Intro_Sync
 ]
 
@@ -106,8 +103,6 @@ let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
 let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
 
 let allHomePanels = [
-    HomePanelsScreen,
-    HomePanel_TopSites,
     LibraryPanel_Bookmarks,
     LibraryPanel_History,
     LibraryPanel_ReadingList,
@@ -190,6 +185,7 @@ class Action {
     static let FxATypeEmail = "FxATypeEmail"
     static let FxATypePassword = "FxATypePassword"
     static let FxATapOnSignInButton = "FxATapOnSignInButton"
+    static let FxATapOnContinueButton = "FxATapOnContinueButton"
 
     static let PinToTopSitesPAM = "PinToTopSitesPAM"
     static let CopyAddressPAM = "CopyAddressPAM"
@@ -211,6 +207,13 @@ class Action {
     static let CloseReadingListPanel = "CloseReadingListPanel"
     static let CloseHistoryListPanel = "CloseHistoryListPanel"
     static let CloseDownloadsPanel = "CloseDownloadsPanel"
+
+    static let AddNewBookmark = "AddNewBookmark"
+    static let AddNewFolder = "AddNewFolder"
+    static let AddNewSeparator = "AddNewSeparator"
+    static let RemoveItemMobileBookmarks = "RemoveItemMobileBookmarks"
+    static let ConfirmRemoveItemMobileBookmarks = "ConfirmRemoveItemMobileBookmarks"
+    static let SaveCreatedBookmark = "SaveCreatedBookmark"
 }
 
 @objcMembers
@@ -419,6 +422,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.noop(to: HomePanelsScreen)
+        screenState.noop(to: HomePanel_TopSites)
 
         screenState.backAction = {
             app.buttons["urlBar-cancel"].tap()
@@ -486,6 +490,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 bookmarksElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Bookmarks"])
             }
         }
+        
+        screenState.press(app.tables["Bookmarks List"].cells.element(boundBy: 4), to: BookmarksPanelContextMenu)
+
     }
 
     map.addScreenState(MobileBookmarks) { screenState in
@@ -494,15 +501,46 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.ExitMobileBookmarksFolder, transitionTo: LibraryPanel_Bookmarks) { userState in
                 bookmarksButton.tap()
         }
+
+        screenState.tap(app.buttons["Edit"], to: MobileBookmarksEdit)
+    }
+
+    map.addScreenState(MobileBookmarksEdit) { screenState in
+        screenState.tap(app.buttons["Add"], to: MobileBookmarksAdd)
+        screenState.gesture(forAction: Action.RemoveItemMobileBookmarks) { userState in
+            app.tables["Bookmarks List"].buttons.element(boundBy: 0).tap()
+        }
+        screenState.gesture(forAction: Action.ConfirmRemoveItemMobileBookmarks) { userState in
+            app.buttons["Delete"].tap()
+        }
+    }
+
+    map.addScreenState(MobileBookmarksAdd) { screenState in
+        screenState.gesture(forAction: Action.AddNewBookmark, transitionTo: EnterNewBookmarkTitleAndUrl) { userState in
+            app.tables.cells["action_bookmark"].tap()
+        }
+        screenState.gesture(forAction: Action.AddNewFolder) { userState in
+            app.tables.cells["bookmarkFolder"].tap()
+        }
+        screenState.gesture(forAction: Action.AddNewSeparator) { userState in
+            app.tables.cells["nav-menu"].tap()
+        }
+    }
+
+    map.addScreenState(EnterNewBookmarkTitleAndUrl) { screenState in
+        screenState.gesture(forAction: Action.SaveCreatedBookmark) { userState in
+            app.buttons["Save"].tap()
+        }
     }
 
     map.addScreenState(HomePanel_TopSites) { screenState in
         let topSites = app.cells["TopSitesCell"]
         screenState.press(topSites.cells.matching(identifier: "TopSite").element(boundBy: 0), to: TopSitesPanelContextMenu)
+
     }
 
     map.addScreenState(LibraryPanel_History) { screenState in
-        screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
+        screenState.press(app.tables["History List"].cells.element(boundBy: 3), to: HistoryPanelContextMenu)
         screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
             app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
@@ -549,7 +587,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(HistoryPanelContextMenu) { screenState in
         screenState.dismissOnUse = true
     }
-
+    
+    map.addScreenState(BookmarksPanelContextMenu) { screenState in
+        screenState.dismissOnUse = true
+    }
     map.addScreenState(TopSitesPanelContextMenu) { screenState in
         screenState.dismissOnUse = true
         screenState.backAction = dismissContextMenuAction
@@ -628,15 +669,23 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
-            app.webViews.textFields["Email"].tap()
-            app.webViews.textFields["Email"].typeText(userState.fxaUsername!)
+            if isTablet {
+                app.textFields.element(boundBy: 1).tap()
+                app.textFields.element(boundBy: 1).typeText(userState.fxaUsername!)
+            } else {
+                app.textFields.element(boundBy: 0).tap()
+                app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
+            }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
-            app.webViews.secureTextFields["Password"].tap()
-            app.webViews.secureTextFields["Password"].typeText(userState.fxaPassword!)
+            app.secureTextFields.element(boundBy: 0).tap()
+            app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+        }
+        screenState.gesture(forAction: Action.FxATapOnContinueButton) { userState in
+            app.webViews.buttons["Continue"].tap()
         }
         screenState.gesture(forAction: Action.FxATapOnSignInButton) { userState in
-            app.webViews.buttons["Sign in"].tap()
+            app.webViews.buttons.element(boundBy: 0).tap()
         }
         screenState.tap(app.webViews.links["Create an account"].firstMatch, to: FxCreateAccount)
     }
@@ -719,7 +768,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     func type(text: String) {
         text.forEach { char in
-            app.keys["\(char)"].tap()
+            app.keys[String(char)].tap()
         }
     }
 

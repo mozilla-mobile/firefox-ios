@@ -11,6 +11,7 @@ private let log = Logger.browserLogger
 
 private let BookmarkNodeCellIdentifier = "BookmarkNodeCellIdentifier"
 private let BookmarkSeparatorCellIdentifier = "BookmarkSeparatorCellIdentifier"
+private let BookmarkSectionHeaderIdentifier = "BookmarkSectionHeaderIdentifier"
 
 private struct BookmarksPanelUX {
     static let FolderIconSize = CGSize(width: 20, height: 20)
@@ -40,10 +41,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     var libraryPanelDelegate: LibraryPanelDelegate?
 
-    lazy var longPressRecognizer: UILongPressGestureRecognizer = {
-        return UILongPressGestureRecognizer(target: self, action: #selector(didLongPress))
-    }()
-
     let bookmarkFolderGUID: GUID
 
     var editBarButtonItem: UIBarButtonItem!
@@ -55,6 +52,9 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     var recentBookmarks = [BookmarkNode]()
 
     fileprivate var flashLastRowOnNextReload = false
+
+    fileprivate lazy var bookmarkFolderIconNormal = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey90)
+    fileprivate lazy var bookmarkFolderIconDark = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey10)
 
     init(profile: Profile, bookmarkFolderGUID: GUID = BookmarkRoots.RootGUID) {
         self.bookmarkFolderGUID = bookmarkFolderGUID
@@ -68,6 +68,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
         self.tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: BookmarkNodeCellIdentifier)
         self.tableView.register(SeparatorTableViewCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
+        self.tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: BookmarkSectionHeaderIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,7 +78,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.addGestureRecognizer(longPressRecognizer)
+        let tableViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTableView))
+        tableView.addGestureRecognizer(tableViewLongPressRecognizer)
         tableView.accessibilityIdentifier = "Bookmarks List"
         tableView.allowsSelectionDuringEditing = true
 
@@ -91,6 +93,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             self.tableView.setEditing(false, animated: true)
             self.navigationItem.leftBarButtonItem = nil
             self.navigationItem.rightBarButtonItem = self.editBarButtonItem
+            self.setupBackButtonGestureRecognizer()
         }
 
         self.newBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add) { _ in
@@ -143,6 +146,12 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        setupBackButtonGestureRecognizer()
+    }
+
     override func applyTheme() {
         super.applyTheme()
 
@@ -184,6 +193,18 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 }
             }
         }
+    }
+
+    fileprivate func setupBackButtonGestureRecognizer() {
+        if let backButtonView = self.backButtonView() {
+            let backButtonViewLongPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBackButtonView))
+            backButtonView.addGestureRecognizer(backButtonViewLongPressRecognizer)
+        }
+    }
+
+    fileprivate func backButtonView() -> UIView? {
+        let navigationBarContentView = navigationController?.navigationBar.subviews.find({ $0.description.starts(with: "<_UINavigationBarContentView:") })
+        return navigationBarContentView?.subviews.find({ $0.description.starts(with: "<_UIButtonBarButton:") })
     }
 
     fileprivate func centerVisibleRow() -> Int {
@@ -255,13 +276,19 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         flashLastRowOnNextReload = true
     }
 
-    @objc fileprivate func didLongPress(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+    @objc fileprivate func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
         let touchPoint = longPressGestureRecognizer.location(in: tableView)
         guard longPressGestureRecognizer.state == .began, let indexPath = tableView.indexPathForRow(at: touchPoint) else {
             return
         }
 
         presentContextMenu(for: indexPath)
+    }
+
+    @objc fileprivate func didLongPressBackButtonView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+        navigationController?.popToRootViewController(animated: true)
     }
 
     @objc fileprivate func notificationReceived(_ notification: Notification) {
@@ -343,7 +370,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 cell.textLabel?.text = bookmarkFolder.title
             }
 
-            cell.imageView?.image = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize)
+            cell.imageView?.image = ThemeManager.instance.currentName == .dark ? bookmarkFolderIconDark : bookmarkFolderIconNormal
             cell.imageView?.contentMode = .center
             cell.accessoryType = .disclosureIndicator
             cell.editingAccessoryType = .disclosureIndicator
@@ -381,19 +408,26 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty else {
+        guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty,
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
             return nil
         }
 
-        return super.tableView(tableView, viewForHeaderInSection: section)
+        headerView.titleLabel.text = Strings.RecentlyBookmarkedTitle.uppercased()
+
+        return headerView
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == BookmarksSection.recent.rawValue ? Strings.RecentlyBookmarkedTitle : nil
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        guard let headerView = view as? ThemedTableSectionHeaderFooterView else {
+            return
+        }
+
+        headerView.applyTheme()
     }
 
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == BookmarksSection.recent.rawValue ? UITableView.automaticDimension : 0
+        return section == BookmarksSection.recent.rawValue && !recentBookmarks.isEmpty ? UITableView.automaticDimension : 0
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -456,7 +490,8 @@ extension BookmarksPanel: LibraryPanelContextMenu {
     }
 
     func getSiteDetails(for indexPath: IndexPath) -> Site? {
-        guard let bookmarkItem = bookmarkNodes[safe: indexPath.row] as? BookmarkItem else {
+        guard let bookmarkNode = indexPath.section == BookmarksSection.recent.rawValue ? recentBookmarks[safe: indexPath.row] : bookmarkNodes[safe: indexPath.row],
+            let bookmarkItem = bookmarkNode as? BookmarkItem else {
             return nil
         }
 

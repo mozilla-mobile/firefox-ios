@@ -41,7 +41,6 @@ class ConnectSetting: WithoutAccountSetting {
         let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
         let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
         viewController.delegate = self
-        viewController.url = settings.profile.accountConfiguration.signInURL
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -580,6 +579,36 @@ class SlowTheDatabase: HiddenSetting {
     }
 }
 
+class SentryIDSetting: HiddenSetting {
+    let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash") ?? "0000000000000000000000000000000000000000"
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: \(deviceAppHash)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        copyAppDeviceIDAndPresentAlert(by: navigationController)
+    }
+
+    func copyAppDeviceIDAndPresentAlert(by navigationController: UINavigationController?) {
+        let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
+        let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+        getSelectedCell(by: navigationController)?.setSelected(false, animated: true)
+        UIPasteboard.general.string = deviceAppHash
+        navigationController?.topViewController?.present(alert, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+
+    func getSelectedCell(by navigationController: UINavigationController?) -> UITableViewCell? {
+        let controller = navigationController?.topViewController
+        let tableView = (controller as? AppSettingsTableViewController)?.tableView
+        guard let indexPath = tableView?.indexPathForSelectedRow else { return nil }
+        return tableView?.cellForRow(at: indexPath)
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
@@ -602,7 +631,6 @@ class VersionSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        copyAppVersionAndPresentAlert(by: navigationController)
         DebugSettingsClickCount += 1
         if DebugSettingsClickCount >= 5 {
             DebugSettingsClickCount = 0
@@ -610,7 +638,11 @@ class VersionSetting: Setting {
             settings.tableView.reloadData()
         }
     }
-    
+
+    override func onLongPress(_ navigationController: UINavigationController?) {
+        copyAppVersionAndPresentAlert(by: navigationController)
+    }
+
     func copyAppVersionAndPresentAlert(by navigationController: UINavigationController?) {
         let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
@@ -947,18 +979,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        // Derive the configuration we display from the profile. Currently, this could be either a custom
-        // FxA server or FxA stage servers.
-        let isOn = prefs.boolForKey(prefKey) ?? false
-        let isCustomSync = prefs.boolForKey(PrefsKeys.KeyUseCustomSyncService) ?? false
-
-        var configurationURL = ProductionFirefoxAccountConfiguration().authEndpointURL
-        if isCustomSync {
-            configurationURL = CustomFirefoxAccountConfiguration(prefs: profile.prefs).authEndpointURL
-        } else if isOn {
-            configurationURL = StageFirefoxAccountConfiguration().authEndpointURL
-        }
-
+        let configurationURL = profile.accountConfiguration.authEndpointURL
         return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 
@@ -1084,15 +1105,15 @@ class OpenWithSetting: Setting {
     }
 }
 
-class AdvanceAccountSetting: HiddenSetting {
+class AdvancedAccountSetting: HiddenSetting {
     let profile: Profile
 
     override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
 
-    override var accessibilityIdentifier: String? { return "AdvanceAccount.Setting" }
+    override var accessibilityIdentifier: String? { return "AdvancedAccount.Setting" }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: Strings.SettingsAdvanceAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: Strings.SettingsAdvancedAccountTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override init(settings: SettingsTableViewController) {
@@ -1101,7 +1122,7 @@ class AdvanceAccountSetting: HiddenSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = AdvanceAccountSettingViewController()
+        let viewController = AdvancedAccountSettingViewController()
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }

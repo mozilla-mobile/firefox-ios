@@ -360,6 +360,10 @@ class TabManager: NSObject {
                 }
             }
         }
+
+        tab.nightMode = NightModeHelper.isActivated(profile.prefs)
+        tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
+
         if flushToDisk {
         	storeChanges()
         }
@@ -621,11 +625,6 @@ extension TabManager: WKNavigationDelegate {
     // Do not excute JS at this point that requires running prior to DOM parsing.
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = self[webView] else { return }
-        let isNightMode = NightModeAccessors.isNightMode(profile.prefs)
-        tab.setNightMode(isNightMode)
-
-        let isNoImageMode = profile.prefs.boolForKey(PrefsKeys.KeyNoImageModeStatus) ?? false
-        tab.noImageMode = isNoImageMode
 
         if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
             webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))")

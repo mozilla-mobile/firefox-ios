@@ -84,6 +84,11 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         return BlocklistName.forStrictMode(isOn: blockingStrengthPref == .strict)
     }
 
+    override func notifyContentBlockingChanged() {
+        guard let tab = tab as? Tab else { return }
+        TabEvent.post(.didChangeContentBlocking, for: tab)
+    }
+
     func noImageMode(enabled: Bool) {
         guard let tab = tab else { return }
         ContentBlocker.shared.noImageMode(enabled: enabled, forTab: tab)

@@ -94,7 +94,7 @@ open class FxADeviceRegistrator {
             pushParams = nil
         }
 
-        let client = client ?? FxAClient10(authEndpoint: account.configuration.authEndpointURL, oauthEndpoint: account.configuration.oauthEndpointURL, profileEndpoint: account.configuration.profileEndpointURL)
+        let client = client ?? FxAClient10(configuration: account.configuration)
 
         let availableCommands = account.availableCommands()
 

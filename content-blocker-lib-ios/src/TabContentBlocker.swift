@@ -28,6 +28,8 @@ class TabContentBlocker {
         return []
     }
 
+    func notifyContentBlockingChanged() {}
+
     var status: BlockerStatus {
         guard isEnabled else {
             return .Disabled
@@ -46,7 +48,7 @@ class TabContentBlocker {
         didSet {
             guard let tab = self.tab else { return }
             if stats.total <= 1 {
-                NotificationCenter.default.post(name: .didChangeContentBlocking, object: nil, userInfo: ["tab": tab])
+                notifyContentBlockingChanged()
             }
         }
     }

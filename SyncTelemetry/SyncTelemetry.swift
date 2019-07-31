@@ -80,7 +80,7 @@ open class SyncTelemetry {
         makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral).dataTask(with: request) { (_, response, error) in
             let code = (response as? HTTPURLResponse)?.statusCode
             log.debug("Ping response: \(code ?? -1).")
-        }
+        }.resume()
     }
 
     private static func commonPingFormat(forType type: TelemetryDocType) -> [String: Any] {

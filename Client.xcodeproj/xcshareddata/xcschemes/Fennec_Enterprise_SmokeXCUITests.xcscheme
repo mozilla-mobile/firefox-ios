@@ -184,7 +184,8 @@
       </PreActions>
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
@@ -287,7 +288,25 @@
                   Identifier = "BookmarkingTests/testAccessBookmarksFromContextMenu()">
                </Test>
                <Test
+                  Identifier = "BookmarkingTests/testAddBookmark()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testAddNewFolder()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testAddNewMarker()">
+               </Test>
+               <Test
                   Identifier = "BookmarkingTests/testBookmarkingUI()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testDeleteBookmarkContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testDeleteBookmarkSwiping()">
+               </Test>
+               <Test
+                  Identifier = "BookmarkingTests/testRecentBookmarks()">
                </Test>
                <Test
                   Identifier = "BrowsingPDFTests">
@@ -330,6 +349,9 @@
                </Test>
                <Test
                   Identifier = "DragAndDropTests/testRearrangeTabsPrivateModeTabTray()">
+               </Test>
+               <Test
+                  Identifier = "DragAndDropTests/testRearrangeTabsTabTray()">
                </Test>
                <Test
                   Identifier = "DragAndDropTests/testRearrangeTabsTabTrayLandscape()">

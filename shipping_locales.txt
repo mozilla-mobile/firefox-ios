@@ -26,10 +26,12 @@ es-CL
 es-MX
 eu
 fa
+fi
 fr
 ga-IE
 gd
 gl
+gu-IN
 he
 hi-IN
 hr

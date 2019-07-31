@@ -227,9 +227,6 @@
                   Identifier = "DragAndDropTestIpad/testTryDragAndDropHistoryToURLBar()">
                </Test>
                <Test
-                  Identifier = "DragAndDropTests/testRearrangeTabsTabTray()">
-               </Test>
-               <Test
                   Identifier = "FindInPageTests/testFindFromMenu()">
                </Test>
                <Test
@@ -330,6 +327,9 @@
                </Test>
                <Test
                   Identifier = "SearchTests/testSearchEngine()">
+               </Test>
+               <Test
+                  Identifier = "SearchTests/testSearchStartAfterTypingTwoWords()">
                </Test>
                <Test
                   Identifier = "SiteLoadTest">

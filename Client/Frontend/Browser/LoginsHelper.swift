@@ -254,12 +254,17 @@ class LoginsHelper: TabContentScript {
                 return
             }
 
-            log.debug("Found \(cursor.count) logins.")
+            let logins: [[String: Any]] = cursor.compactMap { login in
+                // `requestLogins` is for webpage forms, not for HTTP Auth, and the latter has httpRealm != nil; filter those out.
+                return login?.httpRealm == nil ? login?.toJSONDict() : nil
+            }
+
+            log.debug("Found \(logins.count) logins.")
 
             let dict: [String: Any] = [
                 "requestId": requestId,
                 "name": "RemoteLogins:loginsFound",
-                "logins": cursor.compactMap({ $0?.toJSONDict() })
+                "logins": logins
             ]
 
             let json = JSON(dict)

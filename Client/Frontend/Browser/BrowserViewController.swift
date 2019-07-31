@@ -43,7 +43,7 @@ class BrowserViewController: UIViewController {
     var clipboardBarDisplayHandler: ClipboardBarDisplayHandler?
     var readerModeBar: ReaderModeBarView?
     var readerModeCache: ReaderModeCache
-    var statusBarOverlay: UIView!
+    var statusBarOverlay: UIView = UIView()
     fileprivate(set) var toolbar: TabToolbar?
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
@@ -130,6 +130,10 @@ class BrowserViewController: UIViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override var prefersStatusBarHidden: Bool {
+        return false
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
@@ -294,6 +298,7 @@ class BrowserViewController: UIViewController {
 
     @objc func appDidEnterBackgroundNotification() {
         displayedPopoverController?.dismiss(animated: false) {
+            self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
     }
@@ -305,6 +310,7 @@ class BrowserViewController: UIViewController {
    @objc  func appWillResignActiveNotification() {
         // Dismiss any popovers that might be visible
         displayedPopoverController?.dismiss(animated: false) {
+            self.updateDisplayedPopoverProperties = nil
             self.displayedPopoverController = nil
         }
 
@@ -824,10 +830,6 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
-        if let webView = tab.webView {
-            resetSpoofedUserAgentIfRequired(webView, newURL: url)
-        }
-
         if let nav = tab.loadRequest(PrivilegedRequest(url: url) as URLRequest) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
@@ -889,10 +891,6 @@ class BrowserViewController: UIViewController {
             if tab === tabManager.selectedTab {
                 navigationToolbar.updateReloadStatus(loading)
             }
-
-            if !loading {
-                runScriptsOnWebView(webView)
-            }
         case .URL:
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
@@ -924,15 +922,6 @@ class BrowserViewController: UIViewController {
             navigationToolbar.updateForwardStatus(canGoForward)
         default:
             assertionFailure("Unhandled KVO key: \(keyPath ?? "nil")")
-        }
-    }
-
-    fileprivate func runScriptsOnWebView(_ webView: WKWebView) {
-        guard let url = webView.url, url.isWebPage(), !InternalURL.isValid(url: url) else {
-            return
-        }
-        if NoImageModeHelper.isActivated(profile.prefs) {
-            webView.evaluateJavaScript("__firefox__.NoImageMode.setEnabled(true)", completionHandler: nil)
         }
     }
 
@@ -1040,21 +1029,6 @@ class BrowserViewController: UIViewController {
         }
     }
 
-    // MARK: User Agent Spoofing
-
-    func resetSpoofedUserAgentIfRequired(_ webView: WKWebView, newURL: URL) {
-        // Reset the UA when a different domain is being loaded
-        if webView.url?.host != newURL.host {
-            webView.customUserAgent = nil
-        }
-    }
-
-    func restoreSpoofedUserAgentIfRequired(_ webView: WKWebView, newRequest: URLRequest) {
-        // Restore any non-default UA from the request's header
-        let ua = newRequest.value(forHTTPHeaderField: "User-Agent")
-        webView.customUserAgent = ua != UserAgent.defaultUserAgent() ? ua : nil
-    }
-
     fileprivate func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
 
@@ -1116,9 +1090,6 @@ class BrowserViewController: UIViewController {
         if let url = webView.url {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
-
-                // Re-run additional scripts in webView to extract updated favicons and metadata.
-                runScriptsOnWebView(webView)
 
                 webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
             }
@@ -1295,6 +1266,8 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidPressReaderMode(_ urlBar: URLBarView) {
+        libraryDrawerViewController?.close()
+
         guard let tab = tabManager.selectedTab, let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode else {
             return
         }
@@ -1466,6 +1439,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidEnterOverlayMode(_ urlBar: URLBarView) {
+        libraryDrawerViewController?.close()
         guard let profile = profile as? BrowserProfile else {
             return
         }
@@ -1717,6 +1691,8 @@ extension BrowserViewController: SearchViewControllerDelegate {
 
 extension BrowserViewController: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
+        libraryDrawerViewController?.close(immediately: true)
+
         // Reset the scroll position for the ActivityStreamPanel so that it
         // is always presented scrolled to the top when switching tabs.
         if !isRestoring, selected != previous,
@@ -2140,7 +2116,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                     }
 
                     application.endBackgroundTask(taskId)
-                }
+                }.resume()
 
             }
             actionSheetController.addAction(copyAction, accessibilityIdentifier: "linkContextMenu.copyImage")
@@ -2151,16 +2127,20 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             actionSheetController.addAction(copyImageLinkAction, accessibilityIdentifier: "linkContextMenu.copyImageLink")
         }
 
-        // If we're showing an arrow popup, set the anchor to the long press location.
-        if let popoverPresentationController = actionSheetController.popoverPresentationController {
-            popoverPresentationController.sourceView = view
-            popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: touchSize)
-            popoverPresentationController.permittedArrowDirections = .any
-            popoverPresentationController.delegate = self
+        let setupPopover = { [unowned self] in
+            // If we're showing an arrow popup, set the anchor to the long press location.
+            if let popoverPresentationController = actionSheetController.popoverPresentationController {
+                popoverPresentationController.sourceView = self.view
+                popoverPresentationController.sourceRect = CGRect(origin: touchPoint, size: touchSize)
+                popoverPresentationController.permittedArrowDirections = .any
+                popoverPresentationController.delegate = self
+            }
         }
+        setupPopover()
 
         if actionSheetController.popoverPresentationController != nil {
             displayedPopoverController = actionSheetController
+            updateDisplayedPopoverProperties = setupPopover
         }
 
         if let dialogTitle = dialogTitle {
@@ -2181,7 +2161,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             if let _ = validatedHTTPResponse(response, statusCode: 200..<300), let data = data {
                 success(data)
             }
-        }
+        }.resume()
     }
 
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer) {
@@ -2412,6 +2392,7 @@ extension BrowserViewController: TabTrayDelegate {
 // MARK: Browser Chrome Theming
 extension BrowserViewController: Themeable {
     func applyTheme() {
+        guard self.isViewLoaded else { return }
         let ui: [Themeable?] = [urlBar, toolbar, readerModeBar, topTabsViewController, firefoxHomeViewController, searchController, libraryViewController, libraryDrawerViewController]
         ui.forEach { $0?.applyTheme() }
         statusBarOverlay.backgroundColor = shouldShowTopTabsForTraitCollection(traitCollection) ? UIColor.Photon.Grey80 : urlBar.backgroundColor
@@ -2433,15 +2414,18 @@ extension BrowserViewController: JSPromptAlertControllerDelegate {
 
 extension BrowserViewController: TopTabsDelegate {
     func topTabsDidPressTabs() {
+        libraryDrawerViewController?.close(immediately: true)
         urlBar.leaveOverlayMode(didCancel: true)
         self.urlBarDidPressTabs(urlBar)
     }
 
     func topTabsDidPressNewTab(_ isPrivate: Bool) {
+        libraryDrawerViewController?.close(immediately: true)
         openBlankNewTab(focusLocationField: false, isPrivate: isPrivate)
     }
 
     func topTabsDidTogglePrivateMode() {
+        libraryDrawerViewController?.close(immediately: true)
         guard let _ = tabManager.selectedTab else {
             return
         }
@@ -2449,6 +2433,7 @@ extension BrowserViewController: TopTabsDelegate {
     }
 
     func topTabsDidChangeTab() {
+        libraryDrawerViewController?.close()
         urlBar.leaveOverlayMode(didCancel: true)
     }
 }

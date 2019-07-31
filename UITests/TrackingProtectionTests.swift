@@ -70,13 +70,10 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         ContentBlocker.shared.clearWhitelist() { clear.fulfill() }
         waitForExpectations(timeout: 2, handler: nil)
 
-        NotificationCenter.default.addObserver(forName: .didChangeContentBlocking, object: nil, queue: nil) { arg in
-            let tab = arg.userInfo!.first!.value as! Tab
-            self.tabDidChangeContentBlockerStatus(tab)
-        }
+        register(self, forTabEvents: .didChangeContentBlocking)
     }
 
-    func tabDidChangeContentBlockerStatus(_ tab: Tab) {
+    func tabDidChangeContentBlocking(_ tab: Tab) {
         stats = tab.contentBlocker!.stats
 
         if (stats.total == 0) {

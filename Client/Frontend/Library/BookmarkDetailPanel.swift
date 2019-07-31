@@ -143,6 +143,15 @@ class BookmarkDetailPanel: SiteTableViewController {
         updateSaveButton()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // Focus the keyboard on the first text field.
+        if let firstTextFieldCell = tableView.visibleCells.first(where: { $0 is TextFieldTableViewCell }) as? TextFieldTableViewCell {
+            firstTextFieldCell.textField.becomeFirstResponder()
+        }
+    }
+
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
 

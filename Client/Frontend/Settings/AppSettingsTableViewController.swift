@@ -83,7 +83,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
-                AdvanceAccountSetting(settings: self),
+                AdvancedAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
@@ -127,7 +127,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
                 ForceCrashSetting(settings: self),
-                SlowTheDatabase(settings: self)
+                SlowTheDatabase(settings: self),
+                SentryIDSetting(settings: self),
             ])]
 
         return settings

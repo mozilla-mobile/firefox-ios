@@ -82,17 +82,17 @@ extension TokenServerError: MaybeErrorType {
 }
 
 open class TokenServerClient {
-    let URL: URL
+    let url: URL
 
-    public init(URL: URL? = nil) {
-        self.URL = URL ?? ProductionSync15Configuration().tokenServerEndpointURL
+    public init(url: URL) {
+        self.url = url
     }
 
-    open class func getAudience(forURL URL: URL) -> String {
-        if let port = URL.port {
-            return "\(URL.scheme!)://\(URL.host!):\(port)"
+    open class func getAudience(forURL url: URL) -> String {
+        if let port = url.port {
+            return "\(url.scheme!)://\(url.host!):\(port)"
         } else {
-            return "\(URL.scheme!)://\(URL.host!)"
+            return "\(url.scheme!)://\(url.host!)"
         }
     }
 
@@ -139,7 +139,7 @@ open class TokenServerClient {
     open func token(_ assertion: String, clientState: String? = nil) -> Deferred<Maybe<TokenServerToken>> {
         let deferred = Deferred<Maybe<TokenServerToken>>()
 
-        var mutableURLRequest = URLRequest(url: URL)
+        var mutableURLRequest = URLRequest(url: url)
         mutableURLRequest.setValue("BrowserID " + assertion, forHTTPHeaderField: "Authorization")
         if let clientState = clientState {
             mutableURLRequest.setValue(clientState, forHTTPHeaderField: "X-Client-State")
