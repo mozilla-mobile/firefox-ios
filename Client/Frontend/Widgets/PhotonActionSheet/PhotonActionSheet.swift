@@ -141,10 +141,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         // Apply or remove the background blur effect
         if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
-            if (!UIAccessibility.isReduceTransparencyEnabled) {
-                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
-            } else {
+            if (UIAccessibility.isReduceTransparencyEnabled) {
+                // Remove the visual effect and the background alpha
                 visualEffectView.effect = nil
+                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
+            } else {
+                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
             }
         }
 
