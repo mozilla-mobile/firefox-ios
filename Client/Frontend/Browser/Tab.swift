@@ -706,36 +706,46 @@ extension Tab {
         // Track these in-memory only
         static var privateModeHostList = Set<String>()
 
-        static let file: URL = {
+        private static let file: URL = {
             let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             return root.appendingPathComponent("desktop-sites-set-of-strings.xcarchive")
         } ()
 
-        static var hostList: Set<String> = {
+        private static var baseDomainList: Set<String> = {
             if let hosts = NSKeyedUnarchiver.unarchiveObject(withFile: DesktopSites.file.path) as? Set<String> {
                 return hosts
             }
             return Set<String>()
         } ()
 
+        static func clear() {
+            try? FileManager.default.removeItem(at: Tab.DesktopSites.file)
+            baseDomainList.removeAll()
+        }
+
+        static func contains(url: URL, isPrivate: Bool) -> Bool {
+            guard let baseDomain = url.baseDomain else { return false }
+            return isPrivate ? privateModeHostList.contains(baseDomain) : baseDomainList.contains(baseDomain)
+        }
+
         // Will extract the host from the URL and enable or disable it as a desktop site, and write the file if needed.
-        static func updateHosts(forUrl url: URL, isDesktopSite: Bool, isPrivate: Bool) {
-            guard let host = url.host, !host.isEmpty else { return }
+        static func updateDomainList(forUrl url: URL, isDesktopSite: Bool, isPrivate: Bool) {
+            guard let baseDomain = url.baseDomain, !baseDomain.isEmpty else { return }
 
             if isPrivate {
                 if isDesktopSite {
-                    DesktopSites.privateModeHostList.insert(host)
+                    DesktopSites.privateModeHostList.insert(baseDomain)
                     return
                 } else {
-                    DesktopSites.privateModeHostList.remove(host)
+                    DesktopSites.privateModeHostList.remove(baseDomain)
                     // Continue to next section and try remove it from `hostList` also.
                 }
             }
 
-            if isDesktopSite, !hostList.contains(host) {
-                hostList.insert(host)
-            } else if !isDesktopSite, hostList.contains(host) {
-                hostList.remove(host)
+            if isDesktopSite, !baseDomainList.contains(baseDomain) {
+                baseDomainList.insert(baseDomain)
+            } else if !isDesktopSite, baseDomainList.contains(baseDomain) {
+                baseDomainList.remove(baseDomain)
             } else {
                 // Don't save to disk, return early
                 return
@@ -743,7 +753,7 @@ extension Tab {
 
             // At this point, saving to disk takes place.
             do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: hostList, requiringSecureCoding: false)
+                let data = try NSKeyedArchiver.archivedData(withRootObject: baseDomainList, requiringSecureCoding: false)
                 try data.write(to: DesktopSites.file)
             } catch {
                 print("Couldn't write file: \(error)")
