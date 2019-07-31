@@ -52,6 +52,7 @@ import Storage
 protocol TabEventHandler: AnyObject {
     func tab(_ tab: Tab, didChangeURL url: URL)
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata)
+    func tabMetadataNotAvailable(_ tab: Tab)
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?)
     func tabDidGainFocus(_ tab: Tab)
     func tabDidLoseFocus(_ tab: Tab)
@@ -66,6 +67,7 @@ protocol TabEventHandler: AnyObject {
 extension TabEventHandler {
     func tab(_ tab: Tab, didChangeURL url: URL) {}
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {}
+    func tabMetadataNotAvailable(_ tab: Tab) {}
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {}
     func tabDidGainFocus(_ tab: Tab) {}
     func tabDidLoseFocus(_ tab: Tab) {}
@@ -78,6 +80,7 @@ extension TabEventHandler {
 enum TabEventLabel: String {
     case didChangeURL
     case didLoadPageMetadata
+    case pageMetadataNotAvailable
     case didLoadFavicon
     case didGainFocus
     case didLoseFocus
@@ -91,6 +94,7 @@ enum TabEventLabel: String {
 enum TabEvent {
     case didChangeURL(URL)
     case didLoadPageMetadata(PageMetadata)
+    case pageMetadataNotAvailable
     case didLoadFavicon(Favicon?, with: Data?)
     case didGainFocus
     case didLoseFocus
@@ -113,6 +117,8 @@ enum TabEvent {
             handler.tab(tab, didChangeURL: url)
         case .didLoadPageMetadata(let metadata):
             handler.tab(tab, didLoadPageMetadata: metadata)
+        case .pageMetadataNotAvailable:
+            handler.tabMetadataNotAvailable(tab)
         case .didLoadFavicon(let favicon, let data):
             handler.tab(tab, didLoadFavicon: favicon, with: data)
         case .didGainFocus:

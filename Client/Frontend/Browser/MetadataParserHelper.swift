@@ -21,6 +21,7 @@ class MetadataParserHelper: TabEventHandler {
         // as possible.
         guard let webView = tab.webView,
             let url = webView.url, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
+                TabEvent.post(.pageMetadataNotAvailable, for: tab)
             return
         }
 
@@ -33,6 +34,7 @@ class MetadataParserHelper: TabEventHandler {
                 let pageURL = tab.url?.displayURL,
                 let pageMetadata = PageMetadata.fromDictionary(dict) else {
                     log.debug("Page contains no metadata!")
+                    TabEvent.post(.pageMetadataNotAvailable, for: tab)
                     return
             }
 

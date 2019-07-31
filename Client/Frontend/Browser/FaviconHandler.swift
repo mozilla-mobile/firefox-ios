@@ -13,7 +13,7 @@ class FaviconHandler {
     private let backgroundQueue = OperationQueue()
 
     init() {
-        register(self, forTabEvents: .didLoadPageMetadata)
+        register(self, forTabEvents: .didLoadPageMetadata, .pageMetadataNotAvailable)
     }
 
     func loadFaviconURL(_ faviconURL: String, forTab tab: Tab) -> Deferred<Maybe<(Favicon, Data?)>> {
@@ -103,6 +103,9 @@ extension FaviconHandler: TabEventHandler {
             guard let (favicon, data) = result.successValue else { return }
             TabEvent.post(.didLoadFavicon(favicon, with: data), for: tab)
         }
+    }
+    func tabMetadataNotAvailable(_ tab: Tab) {
+        tab.favicons.removeAll(keepingCapacity: false)
     }
 }
 
