@@ -104,7 +104,7 @@ extension FaviconHandler: TabEventHandler {
             TabEvent.post(.didLoadFavicon(favicon, with: data), for: tab)
         }
     }
-    func tabMedatadaNotAvailable(_ tab: Tab) {
+    func tabMetadataNotAvailable(_ tab: Tab) {
         tab.favicons.removeAll(keepingCapacity: false)
     }
 }
