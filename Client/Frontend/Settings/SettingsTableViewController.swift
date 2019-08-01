@@ -27,7 +27,7 @@ extension UILabel {
 
 // A base setting class that shows a title. You probably want to subclass this, not use it directly.
 class Setting: NSObject {
-    var _title: NSAttributedString?
+    fileprivate var _title: NSAttributedString?
     fileprivate var _footerTitle: NSAttributedString?
     fileprivate var _cellHeight: CGFloat?
     fileprivate var _image: UIImage?

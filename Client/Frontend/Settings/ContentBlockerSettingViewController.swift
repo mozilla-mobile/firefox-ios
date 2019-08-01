@@ -125,7 +125,7 @@ class TPAccessoryInfo: ThemedTableViewController {
                 cell.imageView?.image = UIImage(imageLiteralResourceName: "tp-contenttracker")
                 cell.textLabel?.text = Strings.TPContentBlocked
             } else {
-                cell.textLabel?.text = "Websites may load outside ads, videos, and other content that contains hidden trackers. Blocking this can make websites load faster, but some buttons, forms, and login fields, might not work."
+                cell.textLabel?.text = Strings.TPCategoryDescriptionContentTrackers
             }
         }
         cell.imageView?.tintColor = UIColor.theme.tableView.rowText
@@ -212,7 +212,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         }
 
         // TODO: Get a dedicated string for this.
-        let title = NSLocalizedString("More Info…", tableName: "SendAnonymousUsageData", comment: "Re-using more info label from 'anonymous usage data' item for showing a 'More Info' link on the Tracking Protection settings screen.")
+        let title = Strings.TPMoreInfo
 
         var attributes = [NSAttributedString.Key: AnyObject]()
         attributes[NSAttributedString.Key.font] = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.regular)

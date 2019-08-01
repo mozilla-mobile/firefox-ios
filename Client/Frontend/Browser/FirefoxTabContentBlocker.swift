@@ -46,15 +46,11 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         if let enabled = isUserEnabled {
             return enabled
         }
-        guard let tab = tab as? Tab else { return false }
-        return tab.isPrivate ? isEnabledInPrivateBrowsing : isEnabledInNormalBrowsing
+
+        return isEnabledInPref
     }
 
-    var isEnabledInNormalBrowsing: Bool {
-        return userPrefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
-    }
-
-    var isEnabledInPrivateBrowsing: Bool {
+    var isEnabledInPref: Bool {
         return userPrefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
@@ -103,8 +99,7 @@ extension FirefoxTabContentBlocker {
 
     static func isTrackingProtectionEnabled(tabManager: TabManager) -> Bool {
         guard let blocker = tabManager.selectedTab?.contentBlocker else { return false }
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        return isPrivate ? blocker.isEnabledInPrivateBrowsing : blocker.isEnabledInNormalBrowsing
+        return blocker.isEnabledInPref
     }
 
     static func toggleTrackingProtectionEnabled(prefs: Prefs, tabManager: TabManager) {

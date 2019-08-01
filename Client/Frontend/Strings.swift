@@ -638,6 +638,10 @@ extension Strings {
     public static let TPCategoryDescriptionCrossSite = NSLocalizedString("Menu.TrackingProtectionDescription.CrossSite", value: "These cookies follow you from site to site to gather data about what you do online.", comment: "Description of cross-site trackers.")
     public static let TPCategoryDescriptionCryptominers = NSLocalizedString("Menu.TrackingProtectionDescription.Cryptominers", value: "Cryptominers secretly use your system's computing power to mine digital money.", comment: "Description of cryptominers.")
     public static let TPCategoryDescriptionFingerprinters = NSLocalizedString("Menu.TrackingProtectionDescription.Fingerprinters", value:  "The settings on your browser and computer are unique. Fingerprinters collect a variety of these unique settings to create a profile of you, which can be used to track you as you browse.", comment: "Description of fingerprinters.")
+    public static let TPCategoryDescriptionContentTrackers = NSLocalizedString("Menu.TrackingProtectionDescription.ContentTrackers", value: "Websites may load outside ads, videos, and other content that contains hidden trackers. Blocking this can make websites load faster, but some buttons, forms, and login fields, might not work.", comment: "Description of content trackers.")
+
+    public static let TPMoreInfo = NSLocalizedString("Settings.TrackingProtection.MoreInfo", value: "More Info…", comment: "'More Info' link on the Tracking Protection settings screen.")
+
 }
 
 // Location bar long press menu
