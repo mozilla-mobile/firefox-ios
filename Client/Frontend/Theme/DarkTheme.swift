@@ -22,10 +22,10 @@ fileprivate class DarkTableViewColor: TableViewColor {
 }
 
 fileprivate class DarkActionMenuColor: ActionMenuColor {
-    override var foreground: UIColor { return defaultTextAndTint }
-    override var iPhoneBackground: UIColor { return UIColor.Photon.Grey90.withAlphaComponent(0.9) }
+    override var foreground: UIColor { return UIColor.Photon.White100 }
+    override var iPhoneBackgroundBlurStyle: UIBlurEffect.Style { return UIBlurEffect.Style.dark }
+    override var iPhoneBackground: UIColor { return defaultBackground.withAlphaComponent(0.9) }
     override var closeButtonBackground: UIColor { return defaultBackground }
-
 }
 
 fileprivate class DarkURLBarColor: URLBarColor {

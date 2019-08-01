@@ -124,6 +124,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reduceTransparencyChanged), name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
+    }
+
+    @objc func reduceTransparencyChanged() {
+        // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
+        applyTheme()
     }
 
     func applyTheme() {
@@ -131,6 +137,17 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
         } else {
             tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
+        }
+
+        // Apply or remove the background blur effect
+        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
+            if (UIAccessibility.isReduceTransparencyEnabled) {
+                // Remove the visual effect and the background alpha
+                visualEffectView.effect = nil
+                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
+            } else {
+                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
+            }
         }
 
         tintColor = UIColor.theme.actionMenu.foreground

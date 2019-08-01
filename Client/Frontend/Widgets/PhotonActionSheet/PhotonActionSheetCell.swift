@@ -174,14 +174,14 @@ class PhotonActionSheetCell: UITableViewCell {
 
     func configure(with action: PhotonActionSheetItem, syncManager: SyncManager? = nil) {
         titleLabel.text = action.title
-        titleLabel.textColor = self.tintColor
+        titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
 
         subtitleLabel.text = action.text
-        subtitleLabel.textColor = self.tintColor
+        subtitleLabel.textColor = UIColor.theme.tableView.rowText
         subtitleLabel.isHidden = action.text == nil
         titleLabel.font  = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
         accessibilityIdentifier = action.iconString
