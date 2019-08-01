@@ -55,9 +55,7 @@ class TabLocationView: UIView {
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
-            if url == nil {
-                trackingProtectionButton.isHidden = true
-            }
+            trackingProtectionButton.isHidden = lockImageView.isHidden
             setNeedsUpdateConstraints()
         }
     }
@@ -128,7 +126,7 @@ class TabLocationView: UIView {
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.tintColor = UIColor.Photon.Grey50
         trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
-        trackingProtectionButton.isHidden = true
+        trackingProtectionButton.accessibilityIdentifier = "TabLocationView.trackingProtectionButton"
         return trackingProtectionButton
     }()
 
@@ -236,9 +234,11 @@ class TabLocationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    private lazy var _accessibilityElements = [urlTextField, readerModeButton, pageOptionsButton, trackingProtectionButton]
+
     override var accessibilityElements: [Any]? {
         get {
-            return [lockImageView, urlTextField, readerModeButton, pageOptionsButton].filter { !$0.isHidden }
+            return _accessibilityElements.filter { !$0.isHidden }
         }
         set {
             super.accessibilityElements = newValue
@@ -246,7 +246,7 @@ class TabLocationView: UIView {
     }
 
     func overrideAccessibility(enabled: Bool) {
-        [lockImageView, urlTextField, readerModeButton, pageOptionsButton].forEach {
+        _accessibilityElements.forEach {
             $0.isAccessibilityElement = enabled
         }
     }
@@ -366,14 +366,10 @@ extension TabLocationView: TabEventHandler {
         assertIsMainThread("UI changes must be on the main thread")
         guard let blocker = tab.contentBlocker else { return }
         switch blocker.status {
-        case .Blocking:
+        case .Blocking, .Disabled, .NoBlockedURLs:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
-            self.trackingProtectionButton.isHidden = false
-        case .Disabled, .NoBlockedURLs:
-            self.trackingProtectionButton.isHidden = true
         case .Whitelisted:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
-            self.trackingProtectionButton.isHidden = false
         }
     }
 

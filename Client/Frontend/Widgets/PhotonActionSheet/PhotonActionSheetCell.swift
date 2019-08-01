@@ -183,10 +183,11 @@ class PhotonActionSheetCell: UITableViewCell {
         subtitleLabel.text = action.text
         subtitleLabel.textColor = UIColor.theme.tableView.rowText
         subtitleLabel.isHidden = action.text == nil
-        titleLabel.font  = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        subtitleLabel.numberOfLines = 0
+        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
         accessibilityIdentifier = action.iconString
         accessibilityLabel = action.title
-        selectionStyle = action.handler != nil ? .default : .none
+        selectionStyle = action.tapHandler != nil ? .default : .none
 
         if let iconName = action.iconString {
             switch action.iconType {
@@ -279,5 +280,7 @@ class PhotonActionSheetCell: UITableViewCell {
         default:
             break // Do nothing. The rest are not supported yet.
         }
+
+        action.customRender?(titleLabel, contentView)
     }
 }

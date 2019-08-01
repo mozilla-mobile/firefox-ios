@@ -34,7 +34,7 @@ class HomePageSettingViewController: SettingsTableViewController {
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
             self.currentChoice = NewTabPage.topSites
             onFinished()
         })
@@ -110,7 +110,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
 
         let createSetting: (Int32) -> CheckmarkSetting = { num in
-            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"), subtitle: nil, isEnabled: { return num == self.numberOfRows }, onChanged: {
+            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"), subtitle: nil, isChecked: { return num == self.numberOfRows }, onChecked: {
                 self.numberOfRows = num
                 self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
                 self.tableView.reloadData()

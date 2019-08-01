@@ -9,16 +9,18 @@ from __future__ import print_function
 import json
 import urlparse
 
-categories = ("Advertising", "Analytics", "Social", "Content")
+# the list of files written out
+files = []
+base_dir = "../Carthage/Checkouts/shavar-prod-lists"
 
-# The block action is too restrictive for some domains and breaks sites. 
-# As a compromise, block cookies only for these.
-block_cookies_only = ("omtrdc.net")
+block_cookies_mode = False
 
 def output_filename(category):
-    return "Lists/disconnect-{0}.json".format(category.lower())
+    action = "block-cookies" if block_cookies_mode else "block"
+    return "Lists/disconnect-{0}-{1}.json".format(action ,category.lower())
 
 def url_filter(resource):
+    # Match any char except a slash with: [^/]
     return "^https?://([^/]+\\.)?" + resource.replace(".", "\\.")
 
 
@@ -26,47 +28,36 @@ def unless_domain(properties):
     return ["*" + domain for domain in properties]
 
 
-def create_blocklist_entry(resource, properties):
-    action = "block-cookies" if (resource in block_cookies_only) else "block"
-    return {"trigger": {"url-filter": url_filter(resource),
-                        "load-type": ["third-party"],
-                        "unless-domain": unless_domain(properties)},
+def create_blocklist_entry(resource, related_domains):
+    action = "block-cookies" if block_cookies_mode else "block"
+
+    result = {"trigger": {"url-filter": url_filter(resource),
+                        "load-type": ["third-party"]},
             "action": {"type": action }}
 
-
-def generate_entity_list(path="shavar-prod-lists/disconnect-entitylist.json"):
-    with open(path) as fp:
-        entitylist = json.load(fp)
-
-        blocklist = []
-
-        for name, value in entitylist.items():
-            for resource in value['resources']:
-                entry = create_blocklist_entry(resource, value['properties'])
-                blocklist.append(entry)
-
-        f = open('Lists/disconnect.json', 'w')
-        out = json.dumps(blocklist, indent=0,
-                         separators=(',', ':')).replace('\n', '')
-        f.write(out)
-
-        # Human-readable output.
-        # print json.dumps(blocklist, indent=2)
+    # remove this property from the list of related domains
+    related_domains = filter(lambda a: a not in resource, related_domains)
+    if len(related_domains) > 0:
+        result["trigger"]["unless-domain"] = unless_domain(related_domains)
+    return result
 
 def add_entry_to_blocklist(blocklist, entities, name, property_, resources):
-    if property_ == "dnt":
-        return # we don't handle dnt entries yet
+    if not (property_.startswith("http") or property_.startswith("www")):
+        return # 'dnt', 'session-replay', 'performance' are keys that are ignored
     if name in entities:
-        props = entities[name]["properties"]
+        related_domains = entities[name]["properties"]
     else:
         prop = urlparse.urlparse(property_).netloc.split(".")
         if prop[0] == "www":
             prop.pop(0)
         props = [".".join(prop)]
     for res in resources:
-        blocklist.append(create_blocklist_entry(res, props))
+        if len(res) > 2:
+            blocklist.append(create_blocklist_entry(res, related_domains))
+        else:
+            print("Found invalid resource.")
 
-def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json", entitylist="shavar-prod-lists/disconnect-entitylist.json"):
+def generate_blacklists(blacklist, entitylist):
     # Generating the categorical lists requires some manual tweaking to the
     # data at the moment.
 
@@ -90,7 +81,7 @@ def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json",
         entities = json.load(fp)
 
     # Change the Google entries for the respective categories
-    with open("shavar-prod-lists/google_mapping.json") as fp:
+    with open(base_dir + "/google_mapping.json") as fp:
         tweaks = json.load(fp)["categories"]
         for category in ("Advertising", "Analytics", "Social"):
             cat = categories[category]
@@ -120,14 +111,16 @@ def generate_blacklists(blacklist="shavar-prod-lists/disconnect-blacklist.json",
         print("{cat} blacklist has {count} entries."
               .format(cat=category, count=len(blocklist)))
 
-        with open(output_filename(category), "w") as fp:
+        out_file = output_filename(category)
+        files.append(out_file)
+        with open(out_file, "w") as fp:
             out = json.dumps(blocklist, indent=0,
                              separators=(',', ':')).replace('\n', '')
             fp.write(out)
 
-def format_one_rule_per_line():
-    for category in categories:
-        name = output_filename(category)
+
+def format_one_rule_per_line(files):
+    for name in files:
         file = open(name)
         line = file.read()
         file.close()
@@ -136,9 +129,29 @@ def format_one_rule_per_line():
             fp.write(line)
 
 
+import sys
+import os
+
+def help():
+    print("Specify `block` or `block-cookies` as arg.")
+
+
 if __name__ == "__main__":
-    # generate_entity_list()
-    generate_blacklists()
+    if len(sys.argv) < 2:
+        help()
+        exit(1)
+
+    block_cookies_mode = sys.argv[1] == 'block-cookies'
+    if not block_cookies_mode and sys.argv[1] != 'block':
+        help()
+        exit(1)
+    blacklist = '../Carthage/Checkouts/shavar-prod-lists/disconnect-blacklist.json'
+    entitylist =  '../Carthage/Checkouts/shavar-prod-lists/disconnect-entitylist.json'
+
+    if not os.path.exists("Lists"):
+        os.mkdir("Lists")
+
+    generate_blacklists(blacklist, entitylist)
 
     # format as one action per-line, which is easier to read and diff
-    format_one_rule_per_line()
+    format_one_rule_per_line(files)

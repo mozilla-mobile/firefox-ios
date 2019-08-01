@@ -5,20 +5,49 @@
 import WebKit
 import Shared
 
-enum BlocklistName: String {
-    case advertising = "disconnect-advertising"
-    case analytics = "disconnect-analytics"
-    case content = "disconnect-content"
-    case social = "disconnect-social"
+enum BlocklistCategory: CaseIterable {
+    case advertising
+    case analytics
+    case social
+    case cryptomining
+    case fingerprinting
+
+    static func fromFile(_ file: BlocklistFileName) -> BlocklistCategory {
+        switch file {
+        case .advertisingURLs, .advertisingCookies:
+            return .advertising
+        case .analyticsURLs, .analyticsCookies:
+            return .analytics
+        case .socialURLs, .socialCookies:
+            return .social
+        case .cryptomining:
+            return .cryptomining
+        case .fingerprinting:
+            return .fingerprinting
+        }
+    }
+}
+
+enum BlocklistFileName: String, CaseIterable {
+    case advertisingURLs = "disconnect-block-advertising"
+    case analyticsURLs = "disconnect-block-analytics"
+    case socialURLs = "disconnect-block-social"
+
+    case cryptomining = "disconnect-block-cryptomining"
+    case fingerprinting = "disconnect-block-fingerprinting"
+
+    case advertisingCookies = "disconnect-block-cookies-advertising"
+    case analyticsCookies = "disconnect-block-cookies-analytics"
+    //case contentCookies = "disconnect-block-cookies-content"
+    case socialCookies = "disconnect-block-cookies-social"
 
     var filename: String { return self.rawValue }
 
-    static var all: [BlocklistName] { return [.advertising, .analytics, .content, .social] }
-    static var basic: [BlocklistName] { return [.advertising, .analytics, .social] }
-    static var strict: [BlocklistName] { return [.content] }
+    static var basic: [BlocklistFileName] { return [.advertisingCookies, .analyticsCookies, .socialCookies, .cryptomining, .fingerprinting] }
+    static var strict: [BlocklistFileName] { return [.advertisingURLs, .analyticsURLs, .socialURLs, cryptomining, fingerprinting] }
 
-    static func forStrictMode(isOn: Bool) -> [BlocklistName] {
-        return BlocklistName.basic + (isOn ? BlocklistName.strict : [])
+    static func listsForMode(strict: Bool) -> [BlocklistFileName] {
+        return strict ? BlocklistFileName.strict : BlocklistFileName.basic
     }
 }
 
@@ -76,7 +105,7 @@ class ContentBlocker {
     }
 
     // Function to install or remove TP for a tab
-    func setupTrackingProtection(forTab tab: ContentBlockerTab, isEnabled: Bool, rules: [BlocklistName]) {
+    func setupTrackingProtection(forTab tab: ContentBlockerTab, isEnabled: Bool, rules: [BlocklistFileName]) {
         removeTrackingProtection(forTab: tab)
 
         if !isEnabled {
@@ -157,7 +186,7 @@ extension ContentBlocker {
     }
 
     private func dateOfMostRecentBlockerFile() -> Date? {
-        let blocklists = BlocklistName.all
+        let blocklists = BlocklistFileName.allCases
 
         return blocklists.reduce(Date(timeIntervalSince1970: 0)) { result, list in
             guard let path = Bundle.main.path(forResource: list.filename, ofType: "json") else { return result }
@@ -216,7 +245,7 @@ extension ContentBlocker {
                 return
             }
 
-            let blocklists = BlocklistName.all.map { $0.filename }
+            let blocklists = BlocklistFileName.allCases.map { $0.filename }
             for contentRuleIdentifier in available {
                 if !blocklists.contains(where: { $0 == contentRuleIdentifier }) {
                     noMatchingIdentifierFoundForRule = true
@@ -242,7 +271,7 @@ extension ContentBlocker {
     }
 
     func compileListsNotInStore(completion: @escaping () -> Void) {
-        let blocklists = BlocklistName.all.map { $0.filename }
+        let blocklists = BlocklistFileName.allCases.map { $0.filename }
         let deferreds: [Deferred<Void>] = blocklists.map { filename in
             let result = Deferred<Void>()
             ruleStore.lookUpContentRuleList(forIdentifier: filename) { contentRuleList, error in

@@ -8,7 +8,6 @@ import UIKit
 
 struct SettingsUX {
     static let TableViewHeaderFooterHeight = CGFloat(44)
-
 }
 
 extension UILabel {
@@ -58,7 +57,10 @@ class Setting: NSObject {
 
     var image: UIImage? { return _image }
 
-    fileprivate(set) var enabled: Bool = true
+    var enabled: Bool = true
+
+    func accessoryButtonTapped() { onAccessoryButtonTapped?() }
+    var onAccessoryButtonTapped: (() -> Void)?
 
     // Called when the cell is setup. Call if you need the default behaviour.
     func onConfigureCell(_ cell: UITableViewCell) {
@@ -399,34 +401,60 @@ class StringSetting: Setting, UITextFieldDelegate {
     }
 }
 
+enum CheckmarkSettingStyle {
+    case leftSide
+    case rightSide
+}
+
 class CheckmarkSetting: Setting {
-    let onChanged: () -> Void
-    let isEnabled: () -> Bool
+    let onChecked: () -> Void
+    let isChecked: () -> Bool
     private let subtitle: NSAttributedString?
+    let checkmarkStyle: CheckmarkSettingStyle
 
     override var status: NSAttributedString? {
         return subtitle
     }
 
-    init(title: NSAttributedString, subtitle: NSAttributedString?, accessibilityIdentifier: String? = nil, isEnabled: @escaping () -> Bool, onChanged: @escaping () -> Void) {
+    init(title: NSAttributedString, style: CheckmarkSettingStyle = .rightSide, subtitle: NSAttributedString?, accessibilityIdentifier: String? = nil, isChecked: @escaping () -> Bool, onChecked: @escaping () -> Void) {
         self.subtitle = subtitle
-        self.onChanged = onChanged
-        self.isEnabled = isEnabled
+        self.onChecked = onChecked
+        self.isChecked = isChecked
+        self.checkmarkStyle = style
         super.init(title: title)
         self.accessibilityIdentifier = accessibilityIdentifier
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        cell.accessoryType = .checkmark
-        cell.tintColor = isEnabled() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
+
+        if checkmarkStyle == .rightSide {
+            cell.accessoryType = .checkmark
+            cell.tintColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
+        } else {
+            cell.accessoryType = .detailButton
+            cell.tintColor = UIColor.theme.tableView.rowActionAccessory // Sets accessory color only
+
+            let checkColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
+            let result = NSMutableAttributedString()
+            result.append(NSAttributedString(string: "\u{2713} ", attributes: [NSAttributedString.Key.foregroundColor: checkColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20)]))
+            if let str = title?.string {
+                result.append(NSAttributedString(string: str, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+            }
+            cell.textLabel?.assign(attributed: result)
+        }
+
+        if !enabled {
+            cell.subviews.forEach { $0.alpha = 0.5 }
+        }
+
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
         // Force editing to end for any focused text fields so they can finish up validation first.
         navigationController?.view.endEditing(true)
-        if !isEnabled() {
-            onChanged()
+        if !isChecked() {
+            onChecked()
         }
     }
 }
@@ -685,10 +713,10 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionSetting = settings[section]
-        guard let sectionFooter = sectionSetting.footerTitle?.string,
-            let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
-                return nil
+        guard let sectionFooter = sectionSetting.footerTitle?.string else {
+            return nil
         }
+        let footerView = ThemedTableSectionHeaderFooterView()
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
         footerView.showBottomBorder = false
@@ -751,5 +779,12 @@ class SettingsTableViewController: ThemedTableViewController {
         let boundingRect = NSString(string: text).boundingRect(with: size,
             options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
         return boundingRect.height
+    }
+
+    override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let section = settings[indexPath.section]
+        if let setting = section[indexPath.row] {
+            setting.accessoryButtonTapped()
+        }
     }
 }

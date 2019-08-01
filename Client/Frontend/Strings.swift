@@ -580,38 +580,68 @@ extension Strings {
 // ContentBlocker/TrackingProtection strings
 extension Strings {
     public static let SettingsTrackingProtectionSectionName = NSLocalizedString("Settings.TrackingProtection.SectionName", value: "Tracking Protection", comment: "Row in top-level of settings that gets tapped to show the tracking protection settings detail view.")
-    public static let TrackingProtectionOptionOnInPrivateBrowsing = NSLocalizedString("Settings.TrackingProtectionOption.OnInPrivateBrowsingLabel", value: "Private Browsing Mode", comment: "Settings option to specify that Tracking Protection is on only in Private Browsing mode.")
-    public static let TrackingProtectionOptionOnInNormalBrowsing = NSLocalizedString("Settings.TrackingProtectionOption.OnInNormalBrowsingLabel", value: "Normal Browsing Mode", comment: "Settings option to specify that Tracking Protection is on only in Private Browsing mode.")
-    public static let TrackingProtectionOptionOnOffHeader = NSLocalizedString("Settings.TrackingProtectionOption.EnabledStateHeaderLabel", value: "Enable", comment: "Description label shown at the top of tracking protection options screen.")
+
+    public static let TrackingProtectionEnableTitle = NSLocalizedString("Settings.TrackingProtectionOption.OnInNormalBrowsingLabel", value: "Enhanced Tracking Protection", comment: "Settings option to specify that Tracking Protection is on")
+
     public static let TrackingProtectionOptionOnOffFooter = NSLocalizedString("Settings.TrackingProtectionOption.EnabledStateFooterLabel", value: "Tracking is the collection of your browsing data across multiple websites.", comment: "Description label shown on tracking protection options screen.")
-    public static let TrackingProtectionOptionBlockListsTitle = NSLocalizedString("Settings.TrackingProtection.BlockListsTitle", value: "Block Lists", comment: "Title for tracking protection options section where Basic/Strict block list can be selected")
+    public static let TrackingProtectionOptionProtectionLevelTitle = NSLocalizedString("Settings.TrackingProtection.ProtectionLevelTitle", value: "Protection Level", comment: "Title for tracking protection options section where level can be selected.")
     public static let TrackingProtectionOptionBlockListsHeader = NSLocalizedString("Settings.TrackingProtection.BlockListsHeader", value: "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Header description for tracking protection options section where Basic/Strict block list can be selected")
-    public static let TrackingProtectionOptionBlockListTypeBasic = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasic", value: "Basic (Recommended)", comment: "Tracking protection settings option for using the basic blocklist.")
-    public static let TrackingProtectionOptionBlockListTypeBasicDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasicDescription", value: "Allows some trackers so websites function properly.", comment: "Tracking protection settings option description for using the basic blocklist.")
-    public static let TrackingProtectionOptionBlockListTypeStrict = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrict", value: "Strict", comment: "Tracking protection settings option for using the strict blocklist.")
-    public static let TrackingProtectionOptionBlockListTypeStrictDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrictDescription", value: "Blocks known trackers. Some websites may not function properly.", comment: "Tracking protection settings option description for using the strict blocklist.")
+    public static let TrackingProtectionOptionBlockListLevelStandard = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasic", value: "Standard (default)", comment: "Tracking protection settings option for using the basic blocklist.")
+   // public static let TrackingProtectionOptionBlockListLevelStandardDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasicDescription", value: "Allows some trackers so websites function properly.", comment: "Tracking protection settings option description for using the basic blocklist.")
+    public static let TrackingProtectionOptionBlockListLevelStrict = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrict", value: "Strict", comment: "Tracking protection settings option for using the strict blocklist.")
+   // public static let TrackingProtectionOptionBlockListLevelStrictDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrictDescription", value: "Blocks known trackers. Some websites may not function properly.", comment: "Tracking protection settings option description for using the strict blocklist.")
     public static let TrackingProtectionReloadWithout = NSLocalizedString("Menu.ReloadWithoutTrackingProtection.Title", value: "Reload Without Tracking Protection", comment: "Label for the button, displayed in the menu, used to reload the current website without Tracking Protection")
     public static let TrackingProtectionReloadWith = NSLocalizedString("Menu.ReloadWithTrackingProtection.Title", value: "Reload With Tracking Protection", comment: "Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled")
+
+    public static let TrackingProtectionProtectionStrictInfoFooter = NSLocalizedString("Settings.TrackingProtection.StrictLevelInfoFooter", value: "Blocking trackers could impact the functionality of some websites.", comment: "Additional information about the strict level setting")
 }
 
 // Tracking Protection menu
 extension Strings {
-    public static let TPMenuTitle = NSLocalizedString("Menu.TrackingProtection.Title", value: "Tracking Protection", comment: "Label for the button, displayed in the menu, used to get more info about Tracking Protection")
     public static let TPBlockingDescription = NSLocalizedString("Menu.TrackingProtectionBlocking.Description", value: "Firefox is blocking parts of the page that may track your browsing.", comment: "Description of the Tracking protection menu when TP is blocking parts of the page")
     public static let TPNoBlockingDescription = NSLocalizedString("Menu.TrackingProtectionNoBlocking.Description", value: "No tracking elements detected on this page.", comment: "The description of the Tracking Protection menu item when no scripts are blocked but tracking protection is enabled.")
     public static let TPBlockingDisabledDescription = NSLocalizedString("Menu.TrackingProtectionBlockingDisabled.Description", value: "Block online trackers", comment: "The description of the Tracking Protection menu item when tracking is enabled")
     public static let TPBlockingMoreInfo = NSLocalizedString("Menu.TrackingProtectionMoreInfo.Description", value: "Learn more about how Tracking Protection blocks online trackers that collect your browsing data across multiple websites.", comment: "more info about what tracking protection is about")
     public static let EnableTPBlocking = NSLocalizedString("Menu.TrackingProtectionEnable.Title", value: "Enable Tracking Protection", comment: "A button to enable tracking protection inside the menu.")
-    public static let TrackingProtectionEnabledConfirmed = NSLocalizedString("Menu.TrackingProtectionEnabled.Title", value: "Tracking Protection is now on for this site.", comment: "The confirmation toast once tracking protection has been enabled")
-    public static let TrackingProtectionDisabledConfirmed = NSLocalizedString("Menu.TrackingProtectionDisabled.Title", value: "Tracking Protection is now off for this site.", comment: "The confirmation toast once tracking protection has been disabled")
-    public static let TrackingProtectionDisableTitle = NSLocalizedString("Menu.TrackingProtectionDisable.Title", value: "Disable for this site", comment: "The button that disabled TP for a site.")
-    public static let TrackingProtectionTotalBlocked = NSLocalizedString("Menu.TrackingProtectionTotalBlocked.Title", value: "Total trackers blocked", comment: "The title that shows the total number of scripts blocked")
-    public static let TrackingProtectionAdsBlocked = NSLocalizedString("Menu.TrackingProtectionAdsBlocked.Title", value: "Ad trackers", comment: "The title that shows the number of Analytics scripts blocked")
-    public static let TrackingProtectionAnalyticsBlocked = NSLocalizedString("Menu.TrackingProtectionAnalyticsBlocked.Title", value: "Analytic trackers", comment: "The title that shows the number of Analytics scripts blocked")
-    public static let TrackingProtectionSocialBlocked = NSLocalizedString("Menu.TrackingProtectionSocialBlocked.Title", value: "Social trackers", comment: "The title that shows the number of social scripts blocked")
-    public static let TrackingProtectionContentBlocked = NSLocalizedString("Menu.TrackingProtectionContentBlocked.Title", value: "Content trackers", comment: "The title that shows the number of content scripts blocked")
-    public static let TrackingProtectionWhiteListOn = NSLocalizedString("Menu.TrackingProtectionOption.WhiteListOnDescription", value: "The site includes elements that may track your browsing. You have disabled protection.", comment: "label for the menu item to show when the website is whitelisted from blocking trackers.")
-    public static let TrackingProtectionWhiteListRemove = NSLocalizedString("Menu.TrackingProtectionWhitelistRemove.Title", value: "Enable for this site", comment: "label for the menu item that lets you remove a website from the tracking protection whitelist")
+    public static let TPEnabledConfirmed = NSLocalizedString("Menu.TrackingProtectionEnabled.Title", value: "Tracking Protection is now on for this site.", comment: "The confirmation toast once tracking protection has been enabled")
+    public static let TPDisabledConfirmed = NSLocalizedString("Menu.TrackingProtectionDisabled.Title", value: "Tracking Protection is now off for this site.", comment: "The confirmation toast once tracking protection has been disabled")
+    public static let TPDisableTitle = NSLocalizedString("Menu.TrackingProtectionDisable.Title", value: "Disable for this site", comment: "The button that disabled TP for a site.")
+
+    // TP Page menu title
+    public static let TPPageMenuTitle = NSLocalizedString("Menu.TrackingProtection.TitlePrefix", value: "Protections for %@", comment: "Title on tracking protection menu showing the domain.")
+    public static let TPPageMenuNoTrackersBlocked = NSLocalizedString("Menu.TrackingProtection.NoTrackersBlocked", value: "No trackers blocked for this site.", comment: "Message in menu when no trackers blocked.")
+    public static let TPPageMenuBlockedTitle = NSLocalizedString("Menu.TrackingProtection.BlockedTitle", value: "Blocked", comment: "Title on tracking protection menu for blocked items.")
+
+    // Category Titles
+    public static let TPCryptominersBlocked = NSLocalizedString("Menu.TrackingProtectionCryptominersBlocked.Title", value: "Cryptominers", comment: "The title that shows the number of cryptomining scripts blocked")
+    public static let TPFingerprintersBlocked = NSLocalizedString("Menu.TrackingProtectionFingerprintersBlocked.Title", value: "Fingerprinters", comment: "The title that shows the number of fingerprinting scripts blocked")
+    public static let TPCrossSiteCookiesBlocked = NSLocalizedString("Menu.TrackingProtectionCrossSiteCookies.Title", value: "Cross-Site Tracking Cookies", comment: "The title that shows the number of cross-site cookies blocked")
+    public static let TPCrossSiteBlocked = NSLocalizedString("Menu.TrackingProtectionCrossSiteCookies.Title", value: "Cross-Site Trackers", comment: "The title that shows the number of cross-site URLs blocked")
+    public static let TPSocialBlocked = NSLocalizedString("Menu.TrackingProtectionSocialBlocked.Title", value: "Social Trackers", comment: "The title that shows the number of social URLs blocked")
+    public static let TPContentBlocked = NSLocalizedString("Menu.TrackingProtectionContentBlocked.Title", value: "Tracking content", comment: "The title that shows the number of content cookies blocked")
+
+    // Shortcut on bottom of TP page menu to get to settings.
+    public static let TPProtectionSettings = NSLocalizedString("Menu.TrackingProtection.ProtectionSettings.Title", value: "Protection Settings", comment: "The title for tracking protection settings")
+
+    public static let TPListTitle = NSLocalizedString("Menu.TrackingProtectionListTitle", value: "Blocked %@", comment: "Title for list of domains blocked by category.")
+
+    public static let TPWhiteListOn = NSLocalizedString("Menu.TrackingProtectionOption.WhiteListOnDescription", value: "The site includes elements that may track your browsing. You have disabled protection.", comment: "label for the menu item to show when the website is whitelisted from blocking trackers.")
+    public static let TPWhiteListRemove = NSLocalizedString("Menu.TrackingProtectionWhitelistRemove.Title", value: "Enable for this site", comment: "label for the menu item that lets you remove a website from the tracking protection whitelist")
+
+    // Settings info
+    public static let TPAccessoryInfoTitleStrict = NSLocalizedString("Settings.TrackingProtection.Info.StrictTitle", value: "Offers stronger protection, but may cause some sites to break.", comment: "Explanation of strict mode.")
+    public static let TPAccessoryInfoTitleBasic = NSLocalizedString("Settings.TrackingProtection.Info.BasicTitle", value: "Balanced for protection and performance.", comment: "Explanation of basic mode.")
+    public static let TPAccessoryInfoBlocksTitle = NSLocalizedString("Settings.TrackingProtection.Info.BlocksTitle", value: "BLOCKS", comment: "Title on info view.")
+
+    // Category descriptions
+    public static let TPCategoryDescriptionSocial = NSLocalizedString("Menu.TrackingProtectionDescription.SocialNetworks", value: "Social networks place trackers on other websites to build a more complete and targeted profile of you.", comment: "Description of social network trackers.")
+    public static let TPCategoryDescriptionCrossSite = NSLocalizedString("Menu.TrackingProtectionDescription.CrossSite", value: "These cookies follow you from site to site to gather data about what you do online.", comment: "Description of cross-site trackers.")
+    public static let TPCategoryDescriptionCryptominers = NSLocalizedString("Menu.TrackingProtectionDescription.Cryptominers", value: "Cryptominers secretly use your system's computing power to mine digital money.", comment: "Description of cryptominers.")
+    public static let TPCategoryDescriptionFingerprinters = NSLocalizedString("Menu.TrackingProtectionDescription.Fingerprinters", value:  "The settings on your browser and computer are unique. Fingerprinters collect a variety of these unique settings to create a profile of you, which can be used to track you as you browse.", comment: "Description of fingerprinters.")
+    public static let TPCategoryDescriptionContentTrackers = NSLocalizedString("Menu.TrackingProtectionDescription.ContentTrackers", value: "Websites may load outside ads, videos, and other content that contains hidden trackers. Blocking this can make websites load faster, but some buttons, forms, and login fields, might not work.", comment: "Description of content trackers.")
+
+    public static let TPMoreInfo = NSLocalizedString("Settings.TrackingProtection.MoreInfo", value: "More Info…", comment: "'More Info' link on the Tracking Protection settings screen.")
+
 }
 
 // Location bar long press menu

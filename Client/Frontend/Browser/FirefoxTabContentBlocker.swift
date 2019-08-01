@@ -8,13 +8,11 @@ import Shared
 struct ContentBlockingConfig {
     struct Prefs {
         static let StrengthKey = "prefkey.trackingprotection.strength"
-        static let NormalBrowsingEnabledKey = "prefkey.trackingprotection.normalbrowsing"
-        static let PrivateBrowsingEnabledKey = "prefkey.trackingprotection.privatebrowsing"
+        static let EnabledKey = "prefkey.trackingprotection.normalbrowsing"
     }
 
     struct Defaults {
         static let NormalBrowsing = !BrowserProfile.isChinaEdition
-        static let PrivateBrowsing = !BrowserProfile.isChinaEdition
     }
 }
 
@@ -48,16 +46,12 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         if let enabled = isUserEnabled {
             return enabled
         }
-        guard let tab = tab as? Tab else { return false }
-        return tab.isPrivate ? isEnabledInPrivateBrowsing : isEnabledInNormalBrowsing
+
+        return isEnabledInPref
     }
 
-    var isEnabledInNormalBrowsing: Bool {
-        return userPrefs.boolForKey(ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
-    }
-
-    var isEnabledInPrivateBrowsing: Bool {
-        return userPrefs.boolForKey(ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey) ?? ContentBlockingConfig.Defaults.PrivateBrowsing
+    var isEnabledInPref: Bool {
+        return userPrefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
     var blockingStrengthPref: BlockingStrength {
@@ -72,7 +66,7 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 
     func setupForTab() {
         guard let tab = tab else { return }
-        let rules = BlocklistName.forStrictMode(isOn: blockingStrengthPref == .strict)
+        let rules = BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
         ContentBlocker.shared.setupTrackingProtection(forTab: tab, isEnabled: isEnabled, rules: rules)
     }
 
@@ -80,8 +74,8 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
         setupForTab()
     }
 
-    override func currentlyEnabledLists() -> [BlocklistName] {
-        return BlocklistName.forStrictMode(isOn: blockingStrengthPref == .strict)
+    override func currentlyEnabledLists() -> [BlocklistFileName] {
+        return BlocklistFileName.listsForMode(strict: blockingStrengthPref == .strict)
     }
 
     override func notifyContentBlockingChanged() {
@@ -98,16 +92,14 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 // Static methods to access user prefs for tracking protection
 extension FirefoxTabContentBlocker {
     static func setTrackingProtection(enabled: Bool, prefs: Prefs, tabManager: TabManager) {
-        guard let isPrivate = tabManager.selectedTab?.isPrivate else { return }
-        let key = isPrivate ? ContentBlockingConfig.Prefs.PrivateBrowsingEnabledKey : ContentBlockingConfig.Prefs.NormalBrowsingEnabledKey
+        let key = ContentBlockingConfig.Prefs.EnabledKey
         prefs.setBool(enabled, forKey: key)
         ContentBlocker.shared.prefsChanged()
     }
 
     static func isTrackingProtectionEnabled(tabManager: TabManager) -> Bool {
         guard let blocker = tabManager.selectedTab?.contentBlocker else { return false }
-        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        return isPrivate ? blocker.isEnabledInPrivateBrowsing : blocker.isEnabledInNormalBrowsing
+        return blocker.isEnabledInPref
     }
 
     static func toggleTrackingProtectionEnabled(prefs: Prefs, tabManager: TabManager) {

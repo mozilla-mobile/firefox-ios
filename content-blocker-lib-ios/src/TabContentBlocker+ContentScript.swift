@@ -26,11 +26,9 @@ extension TabContentBlocker {
         components.scheme = "http"
         guard let url = components.url else { return }
 
-        let enabledLists = currentlyEnabledLists()
-
-        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledBlocklists: enabledLists).uponQueue(.main) { listItem in
+        TPStatsBlocklistChecker.shared.isBlocked(url: url).uponQueue(.main) { listItem in
             if let listItem = listItem {
-                self.stats = self.stats.create(byAddingListItem: listItem)
+                self.stats = self.stats.create(matchingBlocklist: listItem, host: url.host ?? "")
             }
         }
     }

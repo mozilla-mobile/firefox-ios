@@ -24,7 +24,7 @@ class TabContentBlocker {
 
     @objc func notifiedTabSetupRequired() {}
 
-    func currentlyEnabledLists() -> [BlocklistName] {
+    func currentlyEnabledLists() -> [BlocklistFileName] {
         return []
     }
 
@@ -46,7 +46,7 @@ class TabContentBlocker {
 
     var stats: TPPageStats = TPPageStats() {
         didSet {
-            guard let tab = self.tab else { return }
+            guard let _ = self.tab else { return }
             if stats.total <= 1 {
                 notifyContentBlockingChanged()
             }

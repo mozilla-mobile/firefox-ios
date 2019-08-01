@@ -1249,11 +1249,13 @@ extension BrowserViewController: URLBarDelegate {
         presentActivityViewController(url, tab: tab, sourceView: button, sourceRect: button.bounds, arrowDirection: .up)
     }
 
-    func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton) {
+    func urlBarDidTapShield(_ urlBar: URLBarView) {
         if let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
-            guard !trackingProtectionMenu.isEmpty else { return }
-            self.presentSheetWith(actions: trackingProtectionMenu, on: self, from: urlBar)
+            
+            let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
+
+            self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar)
         }
     }
 
@@ -1330,12 +1332,7 @@ extension BrowserViewController: URLBarDelegate {
         let urlActions = self.getLongPressLocationBarActions(with: urlBar)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
-        if let tab = self.tabManager.selectedTab {
-            let trackingProtectionMenu = self.getTrackingMenu(for: tab, presentingOn: urlBar)
-            self.presentSheetWith(actions: [urlActions, trackingProtectionMenu], on: self, from: urlBar)
-        } else {
-            self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
-        }
+        self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
     }
 
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView) {
