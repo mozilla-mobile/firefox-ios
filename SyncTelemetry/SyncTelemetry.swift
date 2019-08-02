@@ -11,6 +11,10 @@ private let log = Logger.browserLogger
 private let ServerURL = "https://incoming.telemetry.mozilla.org".asURL!
 private let AppName = "Fennec"
 
+public protocol SyncTelemetryPing {
+    var payload: JSON { get }
+}
+
 public enum TelemetryDocType: String {
     case core = "core"
     case sync = "sync"
@@ -115,6 +119,3 @@ open class SyncTelemetry {
     }
 }
 
-public protocol SyncTelemetryPing {
-    var payload: JSON { get }
-}

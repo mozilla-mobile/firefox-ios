@@ -35,6 +35,7 @@
 import UIKit
 import Shared
 import XCGLogger
+import SQLite3
 
 private let DatabaseBusyTimeout: Int32 = 3 * 1000
 private let log = Logger.syncLogger
@@ -1150,12 +1151,12 @@ open class ConcreteSQLiteDBConnection: SQLiteDBConnection {
             logger.error("----")
 
             // Write open file handles.
-            let openDescriptors = FSUtils.openFileDescriptors()
-            logger.error("Open file descriptors: ")
-            for (k, v) in openDescriptors {
-                logger.error("  \(k): \(v)")
-            }
-            logger.error("----")
+//            let openDescriptors = FSUtils.openFileDescriptors()
+//            logger.error("Open file descriptors: ")
+//            for (k, v) in openDescriptors {
+//                logger.error("  \(k): \(v)")
+//            }
+//            logger.error("----")
 
             SwiftData.corruptionLogsWritten.insert(dbFilename)
         }

@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import FxA
 import SwiftyJSON
+import CommonCrypto
 
 public let KeyLength = 32
 

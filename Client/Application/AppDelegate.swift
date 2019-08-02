@@ -10,7 +10,6 @@ import MessageUI
 import SDWebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
-import SyncTelemetry
 
 import CoreSpotlight
 import UserNotifications

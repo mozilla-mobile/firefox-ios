@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import Storage
+
 import SwiftyJSON
 
 open class HistoryPayload: CleartextPayloadJSON {

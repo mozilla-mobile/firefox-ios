@@ -5,6 +5,7 @@
 import Foundation
 import Shared
 import XCGLogger
+import SQLite3
 
 let _TableBookmarks = "bookmarks"                                      // Removed in v12. Kept for migration.
 let TableBookmarksMirror = "bookmarksMirror"                           // Added in v9.

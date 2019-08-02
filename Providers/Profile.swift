@@ -561,10 +561,22 @@ open class BrowserProfile: Profile {
         return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
     }
 
+    fileprivate func object(forKey key: String, with keychainWrapper: KeychainWrapper) -> NSCoding? {
+        guard let keychainData = keychainWrapper.data(forKey: key, withAccessibility: nil) else {
+            return nil
+        }
+
+        do {
+            return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(keychainData) as? NSCoding
+        } catch {
+            return nil
+        }
+    }
+
     fileprivate lazy var account: FirefoxAccount? = {
         let key = name + ".account"
         keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
-        if let dictionary = keychain.object(forKey: key) as? [String: AnyObject] {
+        if let dictionary = object(forKey: key, with: keychain) as? [String: AnyObject] {
             let account =  FirefoxAccount.fromDictionary(dictionary, withPrefs: prefs)
 
             // Check to see if the account configuration set is a custom service

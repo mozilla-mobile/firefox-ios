@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Storage
 import XCGLogger
 import SwiftKeychainWrapper
 import SwiftyJSON

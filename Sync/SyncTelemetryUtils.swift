@@ -3,11 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Shared
-
-import Storage
 import SwiftyJSON
 import SyncTelemetry
+import Shared
 
 fileprivate let log = Logger.syncLogger
 

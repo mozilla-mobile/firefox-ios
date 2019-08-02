@@ -7,7 +7,6 @@ import XCTest
 @testable import Client
 import Shared
 import Storage
-import SyncTelemetry
 
 class FirefoxHomeTests: XCTestCase {
     var profile: MockProfile!

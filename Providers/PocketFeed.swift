@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Storage
 
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
 private let PocketGlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
