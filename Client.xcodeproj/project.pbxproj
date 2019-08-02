@@ -418,6 +418,94 @@
 		C8F41BC022F4B3F600469DFE /* ReadWriteLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB912B9022722A7800DF585A /* ReadWriteLock.swift */; platformFilter = ios; };
 		C8F41BC122F4B3F600469DFE /* LockProtected.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB912B9122722A7800DF585A /* LockProtected.swift */; platformFilter = ios; };
 		C8F41BC222F4B3F600469DFE /* Deferred.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB912B8E22722A7800DF585A /* Deferred.swift */; platformFilter = ios; };
+<<<<<<< HEAD
+=======
+		C8F41BC422F4B4E300469DFE /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F41BC322F4B4E300469DFE /* effective_tld_names.swift */; };
+		C8F41BC522F4B56100469DFE /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F41BC322F4B4E300469DFE /* effective_tld_names.swift */; };
+		C8F41BD322F4B7C700469DFE /* FirefoxAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436221ABB8436008031D1 /* FirefoxAccount.swift */; };
+		C8F41BD422F4B7C700469DFE /* FirefoxAccountConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436231ABB8436008031D1 /* FirefoxAccountConfiguration.swift */; };
+		C8F41BD522F4B7C700469DFE /* FxAClient10.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436251ABB8436008031D1 /* FxAClient10.swift */; };
+		C8F41BD622F4B7C700469DFE /* FxACommandsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE847E20E3F500006A1282 /* FxACommandsClient.swift */; };
+		C8F41BD722F4B7C700469DFE /* FxADevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D32A350D1D6530D80066DAE9 /* FxADevice.swift */; };
+		C8F41BD822F4B7C700469DFE /* FxADeviceRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DBE6E41D6516FE00033FFF /* FxADeviceRegistration.swift */; };
+		C8F41BD922F4B7C700469DFE /* FxALoginStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1A3DE01ABE3C90002F1E15 /* FxALoginStateMachine.swift */; };
+		C8F41BDA22F4B7C700469DFE /* FxAState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FFC4D1A1ABE3C360081D675 /* FxAState.swift */; };
+		C8F41BDB22F4B7C700469DFE /* HawkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436271ABB8436008031D1 /* HawkHelper.swift */; };
+		C8F41BDC22F4B7C700469DFE /* KeyBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D047C55520E1640B001A3C07 /* KeyBundle.swift */; };
+		C8F41BDD22F4B7C700469DFE /* SyncAuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDBCF601ABFC9DE00AFF7F0 /* SyncAuthState.swift */; };
+		C8F41BDE22F4B7C700469DFE /* TokenServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA436281ABB8436008031D1 /* TokenServerClient.swift */; };
+		C8F41BDF22F4B7C700469DFE /* photon-colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C49854D206173C800893DAE /* photon-colors.swift */; };
+		C8F41BE122F4B7C700469DFE /* PocketFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B61CD481F2A74EF00D38DE1 /* PocketFeed.swift */; };
+		C8F41BE222F4B7C700469DFE /* SyncStatusResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */; };
+		C8F41BE422F4B7C700469DFE /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BD19A661A25309B0084FBA7 /* NSUserDefaultsPrefs.swift */; };
+		C8F41BE522F4B7C700469DFE /* PushRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F99FDB1E3A6DE300F353B4 /* PushRegistration.swift */; };
+		C8F41BE622F4B7C700469DFE /* Storage-Bridging-Header.h in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE33D1ABB5F1800877008 /* Storage-Bridging-Header.h */; };
+		C8F41BEF22F4B7C700469DFE /* SyncQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BF5A1E91B41640500EA9DD8 /* SyncQueue.swift */; };
+		C8F41BF022F4B7C700469DFE /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
+		C8F41BF122F4B7C700469DFE /* RustPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05434D8225BAA6200FDE4EF /* RustPlaces.swift */; };
+		C8F41BF222F4B7C700469DFE /* RustLogins.swift in Sources */ = {isa = PBXBuildFile; fileRef = D057B2AA220103BC000614E0 /* RustLogins.swift */; };
+		C8F41BF322F4B7C700469DFE /* RustShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05434E2225BBC4100FDE4EF /* RustShared.swift */; };
+		C8F41BFC22F4B7C700469DFE /* SwiftData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25B1ABB531100877008 /* SwiftData.swift */; };
+		C8F41BFD22F4B7C700469DFE /* ClientsSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2894C1681AE89DDC00F1F92F /* ClientsSynchronizer.swift */; };
+		C8F41C0522F4B82900469DFE /* FileAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2431ABB531100877008 /* FileAccessor.swift */; };
+		C8F41C0622F4B82900469DFE /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2441ABB531100877008 /* History.swift */; };
+		C8F41C0722F4B82900469DFE /* Metadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0531D94247300ECF1FB /* Metadata.swift */; };
+		C8F41C0822F4B82900469DFE /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D3B671B4380B70035FD22 /* Queue.swift */; };
+		C8F41C0922F4B82900469DFE /* PageMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6FF6AC91D873CFF0070C294 /* PageMetadata.swift */; };
+		C8F41C0A22F4B82900469DFE /* ReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D076971E206AC60900FACFD8 /* ReadingList.swift */; };
+		C8F41C0B22F4B82900469DFE /* RemoteTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2471ABB531100877008 /* RemoteTabs.swift */; };
+		C8F41C0C22F4B82900469DFE /* Sharing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2829D39F1C2F0AD400DCF931 /* Sharing.swift */; };
+		C8F41C0D22F4B82900469DFE /* Site.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2481ABB531100877008 /* Site.swift */; };
+		C8F41C0E22F4B82900469DFE /* SuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B54BD181B698B7C004C822C /* SuggestedSites.swift */; };
+		C8F41C0F22F4B82900469DFE /* Syncable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28B62ACD1BC745E7004A585A /* Syncable.swift */; };
+		C8F41C1422F4B83000469DFE /* CertStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D37DE2821CA2047500A5EC69 /* CertStore.swift */; };
+		C8F41C1522F4B83000469DFE /* Clients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C4AB711AD42D4300D9ACE3 /* Clients.swift */; };
+		C8F41C1622F4B83000469DFE /* Cursor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2411ABB531100877008 /* Cursor.swift */; };
+		C8F41C1722F4B83000469DFE /* DatabaseError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28302E3F1AF0747800521E2E /* DatabaseError.swift */; };
+		C8F41C1822F4B83000469DFE /* DefaultSuggestedSites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 394CF6CE1BAA493C00906917 /* DefaultSuggestedSites.swift */; };
+		C8F41C1922F4B83000469DFE /* DiskImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBA1B7425570007AFE6 /* DiskImageStore.swift */; };
+		C8F41C1A22F4B83000469DFE /* ExtensionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075C11E37F956006961AC /* ExtensionUtils.swift */; };
+		C8F41C1B22F4B83000469DFE /* Favicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2421ABB531100877008 /* Favicons.swift */; };
+		C8F41C1C22F4B83300469DFE /* RecentlyClosedTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74B195431CF503FC007F36EF /* RecentlyClosedTabs.swift */; };
+		C8F41C2222F4B84000469DFE /* BrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE24B1ABB531100877008 /* BrowserDB.swift */; };
+		C8F41C2322F4B84000469DFE /* BrowserSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 282915E51AF1A7920006EEB5 /* BrowserSchema.swift */; };
+		C8F41C2422F4B84000469DFE /* ReadingListSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07696F720697F9C00FACFD8 /* ReadingListSchema.swift */; };
+		C8F41C2522F4B84000469DFE /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D018F93D1F44A7190098F8CA /* Schema.swift */; };
+		C8F41C2622F4B84000469DFE /* SQLiteFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0131B4C1F3CF7D8000CDE86 /* SQLiteFavicons.swift */; };
+		C8F41C2722F4B84000469DFE /* SQLiteHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2551ABB531100877008 /* SQLiteHistory.swift */; };
+		C8F41C2822F4B84000469DFE /* SQLiteHistoryFactories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318FB6EA1DB5600D0004E40F /* SQLiteHistoryFactories.swift */; };
+		C8F41C2922F4B84000469DFE /* SQLiteHistoryFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A627632270C682006AFA2E /* SQLiteHistoryFavicons.swift */; };
+		C8F41C2A22F4B84000469DFE /* SQLiteHistoryRecommendations.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6F368281D7F594F008CDD67 /* SQLiteHistoryRecommendations.swift */; };
+		C8F41C2B22F4B84000469DFE /* SQLiteMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E677F0441D9423FB00ECF1FB /* SQLiteMetadata.swift */; };
+		C8F41C2C22F4B84000469DFE /* SQLiteQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 285D3B8F1B4386520035FD22 /* SQLiteQueue.swift */; };
+		C8F41C2D22F4B84000469DFE /* SQLiteReadingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0769742206C19E800FACFD8 /* SQLiteReadingList.swift */; };
+		C8F41C2E22F4B84000469DFE /* SQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2581ABB531100877008 /* SQLiteRemoteClientsAndTabs.swift */; };
+		C8F41C2F22F4B85100469DFE /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28A17B661BEC727500BC14ED /* Downloader.swift */; };
+		C8F41C3022F4B85100469DFE /* HistorySynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2894C1421AE89D8900F1F92F /* HistorySynchronizer.swift */; };
+		C8F41C3122F4B85100469DFE /* IndependentRecordSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02281B262E0A003948B2 /* IndependentRecordSynchronizer.swift */; };
+		C8F41C3222F4B85100469DFE /* Synchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3724E41ABF3C19007607FA /* Synchronizer.swift */; };
+		C8F41C3322F4B85100469DFE /* TabsSynchronizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2894C1651AE89DD200F1F92F /* TabsSynchronizer.swift */; };
+		C8F41C3422F4B85C00469DFE /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3724E21ABF3C19007607FA /* Info.swift */; };
+		C8F41C3522F4B85C00469DFE /* SyncMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BF1A1D1D3200576538 /* SyncMeta.swift */; };
+		C8F41C3622F4B85C00469DFE /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E23C111AC5A5EE00F5AC85 /* State.swift */; };
+		C8F41C3722F4B86100469DFE /* EnvelopeJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B361AC0F0DD009C0B1D /* EnvelopeJSON.swift */; };
+		C8F41C3822F4B86100469DFE /* EncryptedJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B191AC0F074009C0B1D /* EncryptedJSON.swift */; };
+		C8F41C3922F4B86100469DFE /* CleartextPayloadJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28926B391AC0F128009C0B1D /* CleartextPayloadJSON.swift */; };
+		C8F41C3A22F4B86100469DFE /* KeysPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BD1A1D1D3200576538 /* KeysPayload.swift */; };
+		C8F41C3B22F4B86100469DFE /* ClientPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BB1A1D1D3200576538 /* ClientPayload.swift */; };
+		C8F41C3C22F4B86100469DFE /* HistoryPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2894C16B1AE89FD500F1F92F /* HistoryPayload.swift */; };
+		C8F41C3D22F4B86100469DFE /* LoginPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28ED02011B26123E003948B2 /* LoginPayload.swift */; };
+		C8F41C3E22F4B86100469DFE /* TabsPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2853C5401AD84C6800C4F31D /* TabsPayload.swift */; };
+		C8F41C3F22F4B86100469DFE /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BE1A1D1D3200576538 /* Record.swift */; };
+		C8F41C4022F4B86800469DFE /* SyncTelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA31D7C1F79996E0055463D /* SyncTelemetryUtils.swift */; };
+		C8F41C4122F4B86800469DFE /* BatchingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67D57021D527449003917B1 /* BatchingClient.swift */; };
+		C8F41C4222F4B86800469DFE /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BE845420E1660F006A1282 /* Keys.swift */; };
+		C8F41C4322F4B86800469DFE /* StorageClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F3724E31ABF3C19007607FA /* StorageClient.swift */; };
+		C8F41C4422F4B86800469DFE /* SyncConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28E91E741B443AD5009DF274 /* SyncConstants.swift */; };
+		C8F41C4522F4B86800469DFE /* SyncStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2885023E1AC117A500E7F670 /* SyncStateMachine.swift */; };
+		C8F41C4622F4B8C600469DFE /* PushConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39F99FDA1E3A6DE300F353B4 /* PushConfiguration.swift */; };
+		C8F41C4722F4B8E500469DFE /* PushCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 395C8F201E796AD600A68E8C /* PushCrypto.swift */; };
+>>>>>>> add storagestatic
 		C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */; };
 		C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
@@ -1176,6 +1264,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C8F41BC822F4B73F00469DFE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E6B09CD31C74EEDB00C63FA1 /* Copy Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1542,6 +1639,9 @@
 		C8E18F1F222EDED000E30E52 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
 		C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigationDelegate.html; sourceTree = "<group>"; };
 		C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationDelegateTests.swift; sourceTree = "<group>"; };
+		C8F41BC322F4B4E300469DFE /* effective_tld_names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = effective_tld_names.swift; sourceTree = "<group>"; };
+		C8F41BCA22F4B73F00469DFE /* libStorageStatic.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libStorageStatic.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C8F41BCC22F4B74000469DFE /* StorageStatic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageStatic.swift; sourceTree = "<group>"; };
 		C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+WebViewDelegates.swift"; sourceTree = "<group>"; };
 		C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+KeyCommands.swift"; sourceTree = "<group>"; };
 		CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDevices.swift; sourceTree = "<group>"; };
@@ -2094,6 +2194,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C83CA94F22F4B0E7004911A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C8F41BC722F4B73F00469DFE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2731,6 +2838,14 @@
 				C83CA95422F4B0E7004911A4 /* SharedStatic.swift */,
 			);
 			path = SharedStatic;
+			sourceTree = "<group>";
+		};
+		C8F41BCB22F4B74000469DFE /* StorageStatic */ = {
+			isa = PBXGroup;
+			children = (
+				C8F41BCC22F4B74000469DFE /* StorageStatic.swift */,
+			);
+			path = StorageStatic;
 			sourceTree = "<group>";
 		};
 		C8F457A61F1FD75A000CB895 /* BrowserViewController */ = {
@@ -3390,6 +3505,7 @@
 				EBB894E9219398E500EB91A0 /* content-blocker-lib-ios */,
 				F8708D1E1A0970990051AB07 /* Extensions */,
 				C83CA95322F4B0E7004911A4 /* SharedStatic */,
+				C8F41BCB22F4B74000469DFE /* StorageStatic */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 				D34DC84C1A16C40C00D49B7B /* Providers */,
@@ -3435,6 +3551,7 @@
 				E69DB07D1E97DEA9008A67E6 /* SyncTelemetryTests.xctest */,
 				397848DB1ED86605004C0C0B /* NotificationService.appex */,
 				C83CA95222F4B0E7004911A4 /* libSharedStatic.a */,
+				C8F41BCA22F4B73F00469DFE /* libStorageStatic.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3968,6 +4085,23 @@
 			productReference = C83CA95222F4B0E7004911A4 /* libSharedStatic.a */;
 			productType = "com.apple.product-type.library.static";
 		};
+		C8F41BC922F4B73F00469DFE /* StorageStatic */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C8F41BCE22F4B74000469DFE /* Build configuration list for PBXNativeTarget "StorageStatic" */;
+			buildPhases = (
+				C8F41BC622F4B73F00469DFE /* Sources */,
+				C8F41BC722F4B73F00469DFE /* Frameworks */,
+				C8F41BC822F4B73F00469DFE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = StorageStatic;
+			productName = StorageStatic;
+			productReference = C8F41BCA22F4B73F00469DFE /* libStorageStatic.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		D39FA15E1A83E0EC00EE869C /* UITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D39FA1671A83E0EC00EE869C /* Build configuration list for PBXNativeTarget "UITests" */;
@@ -4210,6 +4344,9 @@
 						DevelopmentTeam = 43AQ936H96;
 						ProvisioningStyle = Automatic;
 					};
+					C8F41BC922F4B73F00469DFE = {
+						CreatedOnToolsVersion = 11.0;
+					};
 					D39FA15E1A83E0EC00EE869C = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 43AQ936H96;
@@ -4324,6 +4461,7 @@
 				3B43E3CF1D95C48D00BBA9DB /* StoragePerfTests */,
 				E69DB07C1E97DEA9008A67E6 /* SyncTelemetryTests */,
 				C83CA95122F4B0E7004911A4 /* SharedStatic */,
+				C8F41BC922F4B73F00469DFE /* StorageStatic */,
 			);
 		};
 /* End PBXProject section */
@@ -5054,6 +5192,96 @@
 				C8F41BC122F4B3F600469DFE /* LockProtected.swift in Sources */,
 				C83CA97C22F4B19B004911A4 /* FeatureSwitch.swift in Sources */,
 				C83CA96622F4B166004911A4 /* DateGroupedTableData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C8F41BC622F4B73F00469DFE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C8F41BD322F4B7C700469DFE /* FirefoxAccount.swift in Sources */,
+				C8F41BD422F4B7C700469DFE /* FirefoxAccountConfiguration.swift in Sources */,
+				C8F41C3322F4B85100469DFE /* TabsSynchronizer.swift in Sources */,
+				C8F41BD522F4B7C700469DFE /* FxAClient10.swift in Sources */,
+				C8F41BD622F4B7C700469DFE /* FxACommandsClient.swift in Sources */,
+				C8F41BD722F4B7C700469DFE /* FxADevice.swift in Sources */,
+				C8F41C2922F4B84000469DFE /* SQLiteHistoryFavicons.swift in Sources */,
+				C8F41BD822F4B7C700469DFE /* FxADeviceRegistration.swift in Sources */,
+				C8F41C1422F4B83000469DFE /* CertStore.swift in Sources */,
+				C8F41BD922F4B7C700469DFE /* FxALoginStateMachine.swift in Sources */,
+				C8F41C2C22F4B84000469DFE /* SQLiteQueue.swift in Sources */,
+				C8F41BDA22F4B7C700469DFE /* FxAState.swift in Sources */,
+				C8F41BDB22F4B7C700469DFE /* HawkHelper.swift in Sources */,
+				C8F41BDC22F4B7C700469DFE /* KeyBundle.swift in Sources */,
+				C8F41C1822F4B83000469DFE /* DefaultSuggestedSites.swift in Sources */,
+				C8F41C2522F4B84000469DFE /* Schema.swift in Sources */,
+				C8F41C4622F4B8C600469DFE /* PushConfiguration.swift in Sources */,
+				C8F41C3E22F4B86100469DFE /* TabsPayload.swift in Sources */,
+				C8F41C0D22F4B82900469DFE /* Site.swift in Sources */,
+				C8F41C3722F4B86100469DFE /* EnvelopeJSON.swift in Sources */,
+				C8F41BDD22F4B7C700469DFE /* SyncAuthState.swift in Sources */,
+				C8F41C2822F4B84000469DFE /* SQLiteHistoryFactories.swift in Sources */,
+				C8F41C2722F4B84000469DFE /* SQLiteHistory.swift in Sources */,
+				C8F41BDE22F4B7C700469DFE /* TokenServerClient.swift in Sources */,
+				C8F41C4522F4B86800469DFE /* SyncStateMachine.swift in Sources */,
+				C8F41C3422F4B85C00469DFE /* Info.swift in Sources */,
+				C8F41C4122F4B86800469DFE /* BatchingClient.swift in Sources */,
+				C8F41BDF22F4B7C700469DFE /* photon-colors.swift in Sources */,
+				C8F41C2622F4B84000469DFE /* SQLiteFavicons.swift in Sources */,
+				C8F41BE122F4B7C700469DFE /* PocketFeed.swift in Sources */,
+				C8F41C1A22F4B83000469DFE /* ExtensionUtils.swift in Sources */,
+				C8F41BE222F4B7C700469DFE /* SyncStatusResolver.swift in Sources */,
+				C8F41C2222F4B84000469DFE /* BrowserDB.swift in Sources */,
+				C8F41C0522F4B82900469DFE /* FileAccessor.swift in Sources */,
+				C8F41C2F22F4B85100469DFE /* Downloader.swift in Sources */,
+				C8F41C2422F4B84000469DFE /* ReadingListSchema.swift in Sources */,
+				C8F41BE422F4B7C700469DFE /* NSUserDefaultsPrefs.swift in Sources */,
+				C8F41BE522F4B7C700469DFE /* PushRegistration.swift in Sources */,
+				C8F41C4422F4B86800469DFE /* SyncConstants.swift in Sources */,
+				C8F41BE622F4B7C700469DFE /* Storage-Bridging-Header.h in Sources */,
+				C8F41C3C22F4B86100469DFE /* HistoryPayload.swift in Sources */,
+				C8F41C3F22F4B86100469DFE /* Record.swift in Sources */,
+				C8F41C2D22F4B84000469DFE /* SQLiteReadingList.swift in Sources */,
+				C8F41C3922F4B86100469DFE /* CleartextPayloadJSON.swift in Sources */,
+				C8F41C1622F4B83000469DFE /* Cursor.swift in Sources */,
+				C8F41C0F22F4B82900469DFE /* Syncable.swift in Sources */,
+				C8F41C2E22F4B84000469DFE /* SQLiteRemoteClientsAndTabs.swift in Sources */,
+				C8F41C0922F4B82900469DFE /* PageMetadata.swift in Sources */,
+				C8F41BEF22F4B7C700469DFE /* SyncQueue.swift in Sources */,
+				C8F41C3122F4B85100469DFE /* IndependentRecordSynchronizer.swift in Sources */,
+				C8F41C4322F4B86800469DFE /* StorageClient.swift in Sources */,
+				C8F41C4222F4B86800469DFE /* Keys.swift in Sources */,
+				C8F41C1522F4B83000469DFE /* Clients.swift in Sources */,
+				C8F41BF022F4B7C700469DFE /* Visit.swift in Sources */,
+				C8F41C3822F4B86100469DFE /* EncryptedJSON.swift in Sources */,
+				C8F41C0822F4B82900469DFE /* Queue.swift in Sources */,
+				C8F41C0C22F4B82900469DFE /* Sharing.swift in Sources */,
+				C8F41C3A22F4B86100469DFE /* KeysPayload.swift in Sources */,
+				C8F41C3622F4B85C00469DFE /* State.swift in Sources */,
+				C8F41BF122F4B7C700469DFE /* RustPlaces.swift in Sources */,
+				C8F41C0722F4B82900469DFE /* Metadata.swift in Sources */,
+				C8F41C1922F4B83000469DFE /* DiskImageStore.swift in Sources */,
+				C8F41C0E22F4B82900469DFE /* SuggestedSites.swift in Sources */,
+				C8F41C1C22F4B83300469DFE /* RecentlyClosedTabs.swift in Sources */,
+				C8F41C2B22F4B84000469DFE /* SQLiteMetadata.swift in Sources */,
+				C8F41C2A22F4B84000469DFE /* SQLiteHistoryRecommendations.swift in Sources */,
+				C8F41BF222F4B7C700469DFE /* RustLogins.swift in Sources */,
+				C8F41C3522F4B85C00469DFE /* SyncMeta.swift in Sources */,
+				C8F41BF322F4B7C700469DFE /* RustShared.swift in Sources */,
+				C8F41C1B22F4B83000469DFE /* Favicons.swift in Sources */,
+				C8F41C2322F4B84000469DFE /* BrowserSchema.swift in Sources */,
+				C8F41C0B22F4B82900469DFE /* RemoteTabs.swift in Sources */,
+				C8F41C3B22F4B86100469DFE /* ClientPayload.swift in Sources */,
+				C8F41C3022F4B85100469DFE /* HistorySynchronizer.swift in Sources */,
+				C8F41C0A22F4B82900469DFE /* ReadingList.swift in Sources */,
+				C8F41C4722F4B8E500469DFE /* PushCrypto.swift in Sources */,
+				C8F41C3222F4B85100469DFE /* Synchronizer.swift in Sources */,
+				C8F41C3D22F4B86100469DFE /* LoginPayload.swift in Sources */,
+				C8F41C0622F4B82900469DFE /* History.swift in Sources */,
+				C8F41C4022F4B86800469DFE /* SyncTelemetryUtils.swift in Sources */,
+				C8F41BFC22F4B7C700469DFE /* SwiftData.swift in Sources */,
+				C8F41BFD22F4B7C700469DFE /* ClientsSynchronizer.swift in Sources */,
+				C8F41C1722F4B83000469DFE /* DatabaseError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6627,6 +6855,256 @@
 			name = Firefox;
 		};
 		C83CA95A22F4B0E7004911A4 /* FirefoxBeta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = FirefoxBeta;
+		};
+		C8F41BCF22F4B74000469DFE /* Fennec */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Fennec;
+		};
+		C8F41BD022F4B74000469DFE /* Fennec_Enterprise */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Fennec_Enterprise;
+		};
+		C8F41BD122F4B74000469DFE /* Firefox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 43AQ936H96;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Firefox;
+		};
+		C8F41BD222F4B74000469DFE /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -9070,6 +9548,17 @@
 				C83CA95822F4B0E7004911A4 /* Fennec_Enterprise */,
 				C83CA95922F4B0E7004911A4 /* Firefox */,
 				C83CA95A22F4B0E7004911A4 /* FirefoxBeta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Fennec;
+		};
+		C8F41BCE22F4B74000469DFE /* Build configuration list for PBXNativeTarget "StorageStatic" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C8F41BCF22F4B74000469DFE /* Fennec */,
+				C8F41BD022F4B74000469DFE /* Fennec_Enterprise */,
+				C8F41BD122F4B74000469DFE /* Firefox */,
+				C8F41BD222F4B74000469DFE /* FirefoxBeta */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Fennec;
