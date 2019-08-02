@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 let ETLD_NAMES_LIST = ["ac",
+=======
+let TLD_SUFFIX_LIST = ["ac",
+>>>>>>> add ETLD list as a swift string
 "com.ac",
 "edu.ac",
 "gov.ac",
