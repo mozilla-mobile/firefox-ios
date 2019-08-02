@@ -159,8 +159,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
 
-        profile.cleanupHistoryIfNeeded()
-
         log.info("startApplication end")
         return true
     }
@@ -275,13 +273,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             setUpWebServer(profile)
         }
-
-        // We could load these here, but then we have to futz with the tab counter
-        // and making NSURLRequests.
-        browserViewController.loadQueuedTabs(receivedURLs: receivedURLs)
-        receivedURLs.removeAll()
-        application.applicationIconBadgeNumber = 0
-
+        
         // Resume file downloads.
         browserViewController.downloadQueue.resumeAll()
 
@@ -295,9 +287,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
+
+        // Delay DB access during startup for perf reasons.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // We could load these here, but then we have to futz with the tab counter
+            // and making NSURLRequests.
+            self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
+            self.receivedURLs.removeAll()
+            application.applicationIconBadgeNumber = 0
+        }
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        profile?.cleanupHistoryIfNeeded()
+
         //
         // At this point we are happy to mark the app as CleanlyBackgrounded. If a crash happens in background
         // sync then that crash will still be reported. But we won't bother the user with the Restore Tabs
