@@ -176,8 +176,8 @@ class Action {
     static let ClearRecentHistory = "ClearRecentHistory"
 
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
-    static let ToggleTrackingProtectionSettingOnNormalMode = "ToggleTrackingProtectionSettingAlwaysOn"
-    static let ToggleTrackingProtectionSettingOnPrivateMode = "ToggleTrackingProtectionSettingPrivateOnly"
+    static let OpenSettingsFromTPMenu = "OpenSettingsFromTPMenu"
+    static let SwitchETP = "SwitchETP"
 
     static let CloseTab = "CloseTab"
     static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
@@ -364,15 +364,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             menu.cells["menu-Paste"].firstMatch.tap()
         }
 
-        // Different possition for iphone and ipad
-        screenState.gesture(forAction: Action.TrackingProtectionContextMenu, transitionTo: TrackingProtectionContextMenuDetails) { userState in
-            if isTablet {
-                app.tables["Context Menu"].cells.element(boundBy: 0).tap()
-            } else {
-                app.tables["Context Menu"].cells.element(boundBy: 3).tap()
-            }
-        }
-
         screenState.backAction = {
             if isTablet {
                 // There is no Cancel option in iPad.
@@ -392,6 +383,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.DisableTrackingProtectionperSite) { userState in
             app.tables.cells["menu-TrackingProtection-Off"].tap()
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
+        }
+        screenState.gesture(forAction: Action.OpenSettingsFromTPMenu) { userState in
+            app.cells["settings"].tap()
         }
 
         screenState.backAction = {
@@ -881,12 +875,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(TrackingProtectionSettings) { screenState in
         screenState.backAction = navigationControllerBackAction
 
-        screenState.tap(app.toggles["Normal Browsing Mode"], forAction: Action.ToggleTrackingProtectionSettingOnNormalMode) { userState in
+        screenState.tap(app.switches["prefkey.trackingprotection.normalbrowsing"], forAction: Action.SwitchETP) { userState in
             userState.trackingProtectionSettingOnNormalMode = !userState.trackingProtectionSettingOnNormalMode
-        }
-
-        screenState.tap(app.toggles["Private Browsing Mode"], forAction: Action.ToggleTrackingProtectionSettingOnPrivateMode) { userState in
-            userState.trackingProtectionSettingOnPrivateMode = !userState.trackingProtectionSettingOnPrivateMode
         }
     }
 
@@ -955,6 +945,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         makeURLBarAvailable(screenState)
         screenState.tap(app.buttons["TabLocationView.pageOptionsButton"], to: PageOptionsMenu)
         screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+
+        screenState.tap(app.buttons["TabLocationView.trackingProtectionButton"], to: TrackingProtectionContextMenuDetails)
 
         makeToolBarAvailable(screenState)
         let link = app.webViews.element(boundBy: 0).links.element(boundBy: 0)

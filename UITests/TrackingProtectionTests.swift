@@ -154,12 +154,15 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
         openTPSetting()
         EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(true))
+        // Lets enable Strict mode to block the image this is fixed:
+        // https://github.com/mozilla-mobile/firefox-ios/pull/5274#issuecomment-516111508
+        EarlGrey.selectElement(with: grey_accessibilityID("Settings.TrackingProtectionOption.BlockListStrict")).perform(grey_tap())
+        
         closeTPSetting()
 
         // Now with the TP enabled, the image should be blocked
         checkTrackingProtection(isBlocking: true)
         openTPSetting()
-        EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
         closeTPSetting()
     }
 
