@@ -45,7 +45,7 @@ class TPStatsBlocklistsTests: XCTestCase {
     func testURLInList() {
         blocklists.load()
         
-        func blocklist(_ urlString: String, _ whitelistedDomains: [String] = []) -> BlocklistName? {
+        func blocklist(_ urlString: String, _ whitelistedDomains: [String] = []) -> BlocklistCategory? {
             let whitelistedRegexs = whitelistedDomains.compactMap { (domain) -> String? in
                 return wildcardContentBlockerDomainToRegex(domain: domain)
             }
@@ -56,21 +56,13 @@ class TPStatsBlocklistsTests: XCTestCase {
         XCTAssertEqual(blocklist("https://www.firefox.com"), nil)
         XCTAssertEqual(blocklist("https://2leep.com/track"), .advertising)
         XCTAssertEqual(blocklist("https://sub.2leep.com/ad"), .advertising)
-        XCTAssertEqual(blocklist("https://admeld.com"), nil)
+        XCTAssertEqual(blocklist("https://admeld.com"), .advertising)
         XCTAssertEqual(blocklist("https://admeld.com/popup"), .advertising)
-        XCTAssertEqual(blocklist("https://sub.admeld.com"), nil)
+        XCTAssertEqual(blocklist("https://sub.admeld.com"), .advertising)
         XCTAssertEqual(blocklist("https://subadmeld.com"), nil)
-
-        XCTAssertEqual(blocklist("https://aolanswers.com"), .content)
-        XCTAssertEqual(blocklist("https://sub.aolanswers.com"), .content)
-        XCTAssertEqual(blocklist("https://aolanswers.com/track"), .content)
-        XCTAssertEqual(blocklist("https://aol.com.aolanswers.com"), .content)
         XCTAssertEqual(blocklist("https://aol.com.aolanswers.com", ["ers.com"]), nil)
-        XCTAssertEqual(blocklist("https://games.com.aolanswers.com"), .content)
-        XCTAssertEqual(blocklist("https://bluesky.com.aolanswers.com"), .content)
-
         XCTAssertEqual(blocklist("https://sub.xiti.com/track"), .analytics)
-        XCTAssertEqual(blocklist("https://backtype.com"), .social)
-        XCTAssertEqual(blocklist("https://backtype.com", ["*firefox.com", "*e.com"]), nil)
+        XCTAssertEqual(blocklist("https://atlassolutions.com"), .social)
+        XCTAssertEqual(blocklist("https://atlassolutions.com", ["*solutions.com"]), nil)
     }
 }
