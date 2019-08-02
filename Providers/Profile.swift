@@ -7,10 +7,10 @@
 // application (i.e. App Extensions). Introducing new dependencies here
 // may have unintended negative consequences for App Extensions such as
 // increased startup times which may lead to termination by the OS.
-import Account
+
 import Shared
 import Storage
-import Sync
+
 import XCGLogger
 import SwiftKeychainWrapper
 
@@ -47,7 +47,7 @@ public protocol SyncManager {
     func applicationDidBecomeActive()
 
     func onNewProfile()
-    @discardableResult func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success
+    @discardableResult func onRemovedAccount(_ account: FirefoxAccount?) -> Success
     @discardableResult func onAddedAccount() -> Success
 }
 
@@ -133,9 +133,9 @@ protocol Profile: AnyObject {
     // Do we have an account that (as far as we know) is in a syncable state?
     func hasSyncableAccount() -> Bool
 
-    func getAccount() -> Account.FirefoxAccount?
+    func getAccount() -> FirefoxAccount?
     func removeAccount()
-    func setAccount(_ account: Account.FirefoxAccount)
+    func setAccount(_ account: FirefoxAccount)
     func flushAccount()
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
@@ -561,11 +561,11 @@ open class BrowserProfile: Profile {
         return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
     }
 
-    fileprivate lazy var account: Account.FirefoxAccount? = {
+    fileprivate lazy var account: FirefoxAccount? = {
         let key = name + ".account"
         keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
         if let dictionary = keychain.object(forKey: key) as? [String: AnyObject] {
-            let account =  Account.FirefoxAccount.fromDictionary(dictionary, withPrefs: prefs)
+            let account =  FirefoxAccount.fromDictionary(dictionary, withPrefs: prefs)
 
             // Check to see if the account configuration set is a custom service
             // and update it to use the custom servers.
@@ -587,7 +587,7 @@ open class BrowserProfile: Profile {
         return account?.actionNeeded == FxAActionNeeded.none
     }
 
-    func getAccount() -> Account.FirefoxAccount? {
+    func getAccount() -> FirefoxAccount? {
         return account
     }
 
@@ -613,7 +613,7 @@ open class BrowserProfile: Profile {
         self.syncManager.onRemovedAccount(old)
     }
 
-    func setAccount(_ account: Account.FirefoxAccount) {
+    func setAccount(_ account: FirefoxAccount) {
         self.account = account
 
         flushAccount()
@@ -909,7 +909,7 @@ open class BrowserProfile: Profile {
             SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
         }
 
-        public func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
+        public func onRemovedAccount(_ account: FirefoxAccount?) -> Success {
             let profile = self.profile
 
             // Run these in order, because they might write to the same DB!
@@ -1138,7 +1138,7 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func engineEnablementChangesForAccount(account: Account.FirefoxAccount, profile: Profile) -> [String: Bool]? {
+        func engineEnablementChangesForAccount(account: FirefoxAccount, profile: Profile) -> [String: Bool]? {
             var enginesEnablements: [String: Bool] = [:]
             // We just created the account, the user went through the Choose What to Sync screen on FxA.
             if let declined = account.declinedEngines {
@@ -1162,7 +1162,7 @@ open class BrowserProfile: Profile {
 
         // This SHOULD NOT be called directly: use syncSeveral instead.
         fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
-                                  account: Account.FirefoxAccount,
+                                  account: FirefoxAccount,
                                   statsSession: SyncOperationStatsSession, why: SyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
             var authState = account.syncAuthState

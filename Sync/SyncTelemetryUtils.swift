@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import Account
+
 import Storage
 import SwiftyJSON
 import SyncTelemetry
@@ -244,7 +244,7 @@ public struct SyncPing: SyncTelemetryPing {
     public private(set) var payload: JSON
 
     public static func from(result: SyncOperationResult,
-                            account: Account.FirefoxAccount,
+                            account: FirefoxAccount,
                             remoteClientsAndTabs: RemoteClientsAndTabs,
                             prefs: Prefs,
                             why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {

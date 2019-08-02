@@ -4,7 +4,7 @@
 
 import UIKit
 import Shared
-import Account
+
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {

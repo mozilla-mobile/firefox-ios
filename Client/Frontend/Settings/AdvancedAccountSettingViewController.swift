@@ -6,7 +6,7 @@ import UIKit
 import Shared
 import SnapKit
 import FxA
-import Account
+
 
 class AdvancedAccountSettingViewController: SettingsTableViewController {
     fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"

@@ -4,10 +4,10 @@
 
 @testable import Client
 import Foundation
-import Account
+
 import Shared
 import Storage
-import Sync
+
 import XCTest
 
 open class MockSyncManager: SyncManager {
@@ -49,7 +49,7 @@ open class MockSyncManager: SyncManager {
     open func onAddedAccount() -> Success {
         return succeed()
     }
-    open func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
+    open func onRemovedAccount(_ account: FirefoxAccount?) -> Success {
         return succeed()
     }
 
@@ -201,7 +201,7 @@ open class MockProfile: Client.Profile {
     public lazy var accountConfiguration: FirefoxAccountConfiguration = {
         return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
     }()
-    var account: Account.FirefoxAccount?
+    var account: FirefoxAccount?
 
     public func hasAccount() -> Bool {
         return account != nil
@@ -211,11 +211,11 @@ open class MockProfile: Client.Profile {
         return account?.actionNeeded == FxAActionNeeded.none
     }
 
-    public func getAccount() -> Account.FirefoxAccount? {
+    public func getAccount() -> FirefoxAccount? {
         return account
     }
 
-    public func setAccount(_ account: Account.FirefoxAccount) {
+    public func setAccount(_ account: FirefoxAccount) {
         self.account = account
         self.syncManager.onAddedAccount()
     }

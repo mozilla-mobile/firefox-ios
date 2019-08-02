@@ -11,7 +11,7 @@ import SDWebImage
 import SwiftKeychainWrapper
 import LocalAuthentication
 import SyncTelemetry
-import Sync
+
 import CoreSpotlight
 import UserNotifications
 

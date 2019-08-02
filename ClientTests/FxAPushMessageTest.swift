@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-@testable import Account
+@testable 
 @testable import Client
 import Foundation
 import FxA
@@ -57,7 +57,7 @@ class FxAPushMessageTest: XCTestCase {
 
         let profile = MockProfile()
 
-        let account = Account.FirefoxAccount(
+        let account = FirefoxAccount(
             configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(prefs: profile.prefs),
             email: "testtest@test.com",
             uid: "uid",
@@ -84,7 +84,7 @@ class FxAPushMessageTest: XCTestCase {
     }
 
     func createHandler(_ profile: Profile = MockProfile()) -> FxAPushMessageHandler {
-        let account = Account.FirefoxAccount(
+        let account = FirefoxAccount(
             configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(prefs: profile.prefs),
             email: "testtest@test.com",
             uid: "uid",

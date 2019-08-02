@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import Sync
+import Storage
 
 class ManageSetting: Setting {
     let profile: Profile

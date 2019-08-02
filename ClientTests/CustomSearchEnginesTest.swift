@@ -5,7 +5,7 @@
 @testable import Client
 import Shared
 import Storage
-import Sync
+
 import UIKit
 
 import XCTest

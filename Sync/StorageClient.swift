@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import Account
+
 import XCGLogger
 import SwiftyJSON
 

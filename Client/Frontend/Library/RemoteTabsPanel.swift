@@ -3,11 +3,11 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Account
+
 import Shared
 import SnapKit
 import Storage
-import Sync
+
 import XCGLogger
 
 private let log = Logger.browserLogger

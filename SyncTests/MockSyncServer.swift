@@ -6,7 +6,7 @@ import Foundation
 import Shared
 import GCDWebServers
 import SwiftyJSON
-@testable import Sync
+
 
 import XCTest
 
