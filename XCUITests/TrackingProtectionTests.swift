@@ -43,8 +43,7 @@ class TrackingProtectionTests: BaseTestCase {
         // Tap on shield to verify that TP is off
         navigator.goto(TrackingProtectionContextMenuDetails)
         XCTAssertEqual(app.cells["menu-TrackingProtection"].label , "Enable Tracking Protection")
-        app.buttons["PhotonMenu.close"].tap()
-        navigator.nowAt(BrowserTab)
+        navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
