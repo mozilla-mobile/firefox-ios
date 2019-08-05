@@ -138,7 +138,7 @@ class SyncUITests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.cells["menu-TrackingProtection"])
+        waitForExistence(app.tables.cells["menu-library"])
         // Tap on the sync name option
         navigator.goto(FxAccountManagementPage)
         waitForExistence(app.navigationBars["Firefox Account"])
