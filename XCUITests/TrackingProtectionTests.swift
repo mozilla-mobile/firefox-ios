@@ -7,7 +7,7 @@ import XCTest
 let blockedElementsString = "Firefox is blocking parts of the page that may track your browsing."
 let tpIsDisabledViaToggleString = "Block online trackers"
 let tpIsDisabledString = "The site includes elements that may track your browsing. You have disabled protection."
-let noTrackingElementsString = "No tracking elements detected on this page."
+let noTrackingElementsString = "No trackers blocked for this site."
 
 let websiteWithBlockedElements = "twitter.com"
 let websiteWithoutBlockedElements = "wikipedia.com"
@@ -20,7 +20,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(BrowserTab)
         navigator.openNewURL(urlString: websiteWithBlockedElements)
         waitUntilPageLoad()
-        navigator.performAction(Action.TrackingProtectionContextMenu)
+        navigator.goto(TrackingProtectionContextMenuDetails)
         if (app.tables.cells["menu-TrackingProtection"].exists) {
             app.tables.cells["menu-TrackingProtection"].tap()
         }
@@ -30,35 +30,29 @@ class TrackingProtectionTests: BaseTestCase {
     func testTrackingProtection() {
         navigator.goto(TrackingProtectionSettings)
 
-        // Make sure TP is enabled by default
+        // Make sure ETP is enabled by default
         XCTAssertTrue(app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
-        XCTAssertTrue(app.switches["prefkey.trackingprotection.privatebrowsing"].isEnabled)
 
-        // Turn off TP in normal Browsing
-        app.switches["prefkey.trackingprotection.normalbrowsing"].tap()
+        // Turn off ETP
+        navigator.performAction(Action.SwitchETP)
 
-        navigator.goto(BrowserTabMenu)
+        // Verify it is turned off
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
 
-        // Make sure its actually off
-        XCTAssertTrue(app.cells["Tracking Protection"].images["disabled"].exists)
+        // Tap on shield to verify that TP is off
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        XCTAssertEqual(app.cells["menu-TrackingProtection"].label , "Enable Tracking Protection")
+        navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(NewTabScreen)
-        navigator.goto(BrowserTabMenu)
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
 
-        XCTAssertTrue(app.cells["Tracking Protection"].images["enabled"].exists, "Tracking Protection should be switch on in PBM")
-
-        // Turn off PBM
-        navigator.performAction(Action.ToggleTrackingProtection)
-
-        navigator.toggleOn(!userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.goto(NewTabScreen)
-        navigator.goto(TrackingProtectionSettings)
-
-        // Make sure TP is off in both browsing modes.
-        XCTAssertEqual(app.switches["prefkey.trackingprotection.normalbrowsing"].value as! String, "0")
-        XCTAssertEqual(app.switches["prefkey.trackingprotection.privatebrowsing"].value as! String, "0")
+        // Make sure TP is off also in PMB
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        XCTAssertEqual(app.cells["menu-TrackingProtection"].label , "Enable Tracking Protection")
     }
 
     private func disableTrackingProtectionForSite() {
@@ -67,91 +61,74 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Disable TP for this site
         navigator.performAction(Action.DisableTrackingProtectionperSite)
-        waitUntilPageLoad()
     }
 
     private func checkTrackingProtectionDisabledForSite() {
         navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarLongPressMenu)
+        waitUntilPageLoad()
+        navigator.goto(TrackingProtectionContextMenuDetails)
 
-        waitForExistence(app.tables.cells["menu-TrackingProtection-Off"])
-        XCTAssertTrue(app.tables.cells["menu-TrackingProtection-Off"].staticTexts[tpIsDisabledString].exists, "TP menu is wrong when blocking elements")
+        waitForExistence(app.tables.cells["menu-TrackingProtection"])
+        if isTablet {
+            // There is no Cancel option in iPad.
+            app.otherElements["PopoverDismissRegion"].tap()
+        } else {
+            app.buttons["PhotonMenu.close"].tap()
+        }
     }
 
     private func checkTrackingProtectionEnabledForSite() {
         navigator.nowAt(BrowserTab)
-        navigator.goto(URLBarLongPressMenu)
-        waitForExistence(app.tables.cells["menu-TrackingProtection"])
-        XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[blockedElementsString].exists, "TP menu is wrong when blocking elements")
-    }
-
-    func testTrackingProtectionToggle() {
-        navigator.goto(BrowserTabMenu)
-        // Check that TP is enabled by default
-        XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].images["enabled"].exists, "Tracking Protection is not enabled by default")
-
-        // Go to a website with/without blocked elements ADAPT THE MESSAGE TO ASSERT
-        navigator.openURL(websiteWithBlockedElements)
-        waitUntilPageLoad()
-        navigator.goto(URLBarLongPressMenu)
-
-        waitForExistence(app.tables.cells["menu-TrackingProtection"])
-        XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[blockedElementsString].exists, "TP menu is wrong when blocking elements")
-
-        // Now disable TP from Brwoser Tab menu
-        navigator.performAction(Action.ToggleTrackingProtection)
-        navigator.goto(BrowserTab)
-
-        // Reload and check the website (or go to a different one? what would be best option???)
-        app.buttons["Reload"].tap()
-        waitUntilPageLoad()
-
-        navigator.goto(URLBarLongPressMenu)
-        XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[tpIsDisabledViaToggleString].exists, "TP menu is wrong when blocking elements")
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        waitForExistence(app.tables.cells["menu-TrackingProtection-Off"])
+        if isTablet {
+            // There is no Cancel option in iPad.
+            app.otherElements["PopoverDismissRegion"].tap()
+        } else {
+            app.buttons["PhotonMenu.close"].tap()
+        }
     }
 
     func testMenuWhenThereAreBlockedElements() {
         // Open website which has trackers blocked
         navigator.openURL(websiteWithBlockedElements)
         waitUntilPageLoad()
-        navigator.performAction(Action.TrackingProtectionContextMenu)
+        // Open ETP menu
+        navigator.goto(TrackingProtectionContextMenuDetails)
 
-        // Verify that all elements for TP menu are shown
+        // Verify that all elements for ETP menu are shown
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.cells["Total trackers blocked"].exists, "TP menu with elements blocked is not right")
-        XCTAssertTrue(app.tables.cells["Ad trackers"].exists, "TP menu with elements blocked is not right")
-        XCTAssertTrue(app.tables.cells["Analytic trackers"].exists, "TP menu with elements blocked is not right")
-        XCTAssertTrue(app.tables.cells["Social trackers"].exists, "TP menu with elements blocked is not right")
-        XCTAssertTrue(app.tables.cells["Content trackers"].exists, "TP menu with elements blocked is not right")
-        XCTAssertTrue(app.tables.cells["menu-TrackingProtection-Off"].exists, "TP menu with elements blocked is not right")
+        // SHOULD WE TAP ON SOCIAL TRACKER?? TO VERIFY ITS OPTIONS???!!!
+        XCTAssertTrue(app.tables.cells["tp-socialtracker"].exists, "ETP menu with elements blocked is not right")
+        XCTAssertTrue(app.tables.cells["settings"].exists, "Settings option does not appear")
     }
 
     func testMenuWhenThereAreNotBlockedElements() {
         navigator.openURL(websiteWithoutBlockedElements)
         waitUntilPageLoad()
-        navigator.goto(URLBarLongPressMenu)
-        waitForExistence(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString])
-        XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString].exists, "TP menu is wrong when blocking elements")
+
+        // Open ETP menu
+        navigator.goto(TrackingProtectionContextMenuDetails)
+
+        // BUG?? IT ALSO SHOW DISABLE FOR THIS SITE EVEN THOUGH THERE ARE NO TRACKERS waitForExistence(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString])
+        waitForExistence(app.tables["Context Menu"])
+        XCTAssertTrue(app.tables.cells.staticTexts[noTrackingElementsString].exists, "TP menu is wrong when there are not blocking elements")
     }
 
     // Smoketest
     func testEnableDisableTPforSite() {
         disableTrackingProtectionForSite()
-
+        waitUntilPageLoad()
         // Now at browser tab check TP is disabled for this site
         checkTrackingProtectionDisabledForSite()
 
         // Enable TP again and check it in Browser tab
+        navigator.nowAt(BrowserTab)
         navigator.performAction(Action.EnableTrackingProtectionperSite)
         waitUntilPageLoad()
 
         checkTrackingProtectionEnabledForSite()
-    }
-
-    func testTPMenuHomePanel() {
-        navigator.goto(URLBarLongPressMenu)
-        waitForExistence(app.tables.cells["menu-TrackingProtection"])
-        XCTAssertTrue(app.tables.cells["menu-TrackingProtection"].staticTexts[noTrackingElementsString].exists, "TP incorrectly shown when no blocking elements")
+        navigator.nowAt(BrowserTab)
     }
 
     func testDisableForSiteDoesNotDisableForOthersSameTab() {
@@ -163,6 +140,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         checkTrackingProtectionEnabledForSite()
+        navigator.nowAt(BrowserTab)
     }
 
     func testDisableForSiteDoesNotDisableForOthersDifferentTab() {
@@ -172,6 +150,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
 
         checkTrackingProtectionEnabledForSite()
+        navigator.nowAt(BrowserTab)
     }
 
     func testDisableforSiteIsKeptAfterBrowsing() {
@@ -181,21 +160,66 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openNewURL(urlString: differentWebsite)
         waitUntilPageLoad()
         checkTrackingProtectionEnabledForSite()
+        navigator.nowAt(BrowserTab)
 
         navigator.openNewURL(urlString: websiteWithBlockedElements)
         waitUntilPageLoad()
         checkTrackingProtectionDisabledForSite()
+        navigator.nowAt(BrowserTab)
     }
 
     func testDisablingTPforOneSiteDoesNotChangeGeneralTPOption() {
         disableTrackingProtectionForSite()
         navigator.nowAt(BrowserTab)
 
-        navigator.goto(BrowserTabMenu)
-        XCTAssertTrue(app.cells["Tracking Protection"].images["enabled"].exists, "Tracking Protection should be switched on in PBM")
-
-        navigator.goto(BrowserTab)
         navigator.goto(TrackingProtectionSettings)
         XCTAssertTrue(app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
+    }
+
+    func testOpenSettingsFromTPcontextMenu() {
+        // Open website which has trackers blocked
+        navigator.openURL(websiteWithBlockedElements)
+        waitUntilPageLoad()
+        // Open ETP menu
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        navigator.performAction(Action.OpenSettingsFromTPMenu)
+        navigator.nowAt(TrackingProtectionSettings)
+        // Turn off ETP
+        navigator.performAction(Action.SwitchETP)
+        // Go back to the site
+        app.buttons["Done"].tap()
+        waitUntilPageLoad()
+        checkTrackingProtectionDisabledForSite()
+        navigator.nowAt(BrowserTab)
+    }
+
+    func testBasicMoreInfo() {
+        navigator.goto(TrackingProtectionSettings)
+        // See Basic mode info
+        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
+        XCTAssertTrue(app.navigationBars["Client.TPAccessoryInfo"].exists)
+        XCTAssertTrue(app.cells.images["tp-socialtracker"].exists)
+        XCTAssertTrue(app.cells.images["tp-cookie"].exists)
+        XCTAssertTrue(app.cells.images["tp-cryptominer"].exists)
+        XCTAssertTrue(app.cells.images["tp-fingerprinter"].exists)
+        XCTAssertFalse(app.cells.images["tp-contenttracker"].exists)
+
+        // Go back to TP settings
+        app.buttons["Tracking Protection"].tap()
+
+        // See Strict mode info
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
+        XCTAssertTrue(app.cells.images["tp-contenttracker"].exists)
+
+        // Go back to TP settings
+        app.buttons["Tracking Protection"].tap()
+    }
+
+    func testMoreInfoAboutBlockedElements() {
+        navigator.openURL(websiteWithBlockedElements)
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        app.cells["tp-socialtracker"].tap()
+        XCTAssertTrue(app.tables.cells.count > 0)
+        app.cells["goBack"].tap()
     }
 }
