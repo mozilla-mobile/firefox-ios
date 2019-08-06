@@ -72,6 +72,9 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 
     @objc override func notifiedTabSetupRequired() {
         setupForTab()
+        if let tab = tab as? Tab {
+            TabEvent.post(.didChangeContentBlocking, for: tab)
+        }
     }
 
     override func currentlyEnabledLists() -> [BlocklistFileName] {

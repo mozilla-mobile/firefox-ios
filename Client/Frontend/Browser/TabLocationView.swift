@@ -185,7 +185,7 @@ class TabLocationView: UIView {
         }
         // The lock and TP icons have custom spacing.
         // TODO: Once we cut ios10 support we can use UIstackview.setCustomSpacing
-        let iconStack = UIStackView(arrangedSubviews: [spaceView, lockImageView, trackingProtectionButton])
+        let iconStack = UIStackView(arrangedSubviews: [spaceView, trackingProtectionButton, lockImageView])
         iconStack.spacing = TabLocationViewUX.Spacing / 2
 
         let subviews = [iconStack, urlTextField, readerModeButton, separatorLine, pageOptionsButton]
@@ -366,9 +366,9 @@ extension TabLocationView: TabEventHandler {
         assertIsMainThread("UI changes must be on the main thread")
         guard let blocker = tab.contentBlocker else { return }
         switch blocker.status {
-        case .Blocking, .Disabled, .NoBlockedURLs:
+        case .Blocking, .NoBlockedURLs:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
-        case .Whitelisted:
+        case .Whitelisted, .Disabled:
             self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
         }
     }

@@ -119,6 +119,9 @@ extension PhotonActionSheetProtocol {
         info.customRender = { (label, contentView) in
             label.numberOfLines = 2
         }
+        info.customHeight = { _ in
+            return 56
+        }
 
         var actions = [[info], [list], [back]]
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -139,7 +142,7 @@ extension PhotonActionSheetProtocol {
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         }
         blockedtitle.customHeight = { _ in
-            return PhotonActionSheetUX.RowHeight - 15
+            return PhotonActionSheetUX.RowHeight - 10
         }
 
         let xsitecookies = PhotonActionSheetItem(title: Strings.TPCrossSiteCookiesBlocked, iconString: "tp-cookie", accessory: .Disclosure) { action in
@@ -163,7 +166,7 @@ extension PhotonActionSheetProtocol {
             self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.cryptomining])
         }
 
-        let addToWhitelist = PhotonActionSheetItem(title: Strings.TPDisableTitle, iconString: "menu-TrackingProtection-Off") { _ in
+        let addToWhitelist = PhotonActionSheetItem(title: Strings.TPDisableTitle, accessory: .Switch) { _ in
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
             ContentBlocker.shared.whitelist(enable: true, url: currentURL) {
                 tab.reload()

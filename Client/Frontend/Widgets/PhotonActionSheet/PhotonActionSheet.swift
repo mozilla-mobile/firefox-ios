@@ -174,19 +174,21 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
-        tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
-        tableView.estimatedSectionFooterHeight = PhotonActionSheetUX.HeaderFooterHeight
-        // When the menu style is centered the header is much bigger than default. Set a larger estimated height to make sure autolayout sizes the view correctly
-        tableView.estimatedSectionHeaderHeight = (style == .centered) ? PhotonActionSheetUX.RowHeight : PhotonActionSheetUX.HeaderFooterHeight
+
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         tableView.separatorStyle = .none
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
-        let footer = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
-        tableView.tableHeaderView = footer
-        tableView.tableFooterView = footer.clone()
+
+        tableView.tableFooterView = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
+
+        // Section headers are separator rows
+        tableView.sectionHeaderHeight = PhotonActionSheetUX.SeparatorRowHeight
+
+        // UITableView has a large default footer height, remove this extra space
+        tableView.sectionFooterHeight = 1
 
         applyTheme()
     }
@@ -317,15 +319,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         // A header height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
-        view?.snp.makeConstraints { make in
-            make.height.equalTo(1)
-        }
-        return view
-    }
-
-    // A footer height of at least 1 is required to make sure the default footer size isnt used when laying out with AutoLayout
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
         view?.snp.makeConstraints { make in
             make.height.equalTo(1)

@@ -13,7 +13,7 @@ struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
     static let Padding: CGFloat = 10
     static let HeaderFooterHeight: CGFloat = 20
-    static let RowHeight: CGFloat = 50
+    static let RowHeight: CGFloat = 44
     static let BorderWidth: CGFloat = 0.5
     static let BorderColor = UIColor.Photon.Grey30
     static let CornerRadius: CGFloat = 10
@@ -24,6 +24,7 @@ struct PhotonActionSheetUX {
     static let CellName = "PhotonActionSheetCell"
     static let CloseButtonHeight: CGFloat  = 56
     static let TablePadding: CGFloat = 6
+    static let SeparatorRowHeight: CGFloat = 13
 }
 
 public enum PresentationStyle {
