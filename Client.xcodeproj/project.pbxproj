@@ -342,6 +342,7 @@
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		C8611CB01F71AEBA00C3DE7D /* NoImageModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */; };
 		C892DA0D22D39A980080F1F7 /* TrackingProtectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */; };
+		C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */; };
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
 		C8E18F1E222EDE4500E30E52 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1D222EDE4400E30E52 /* Accelerate.framework */; };
 		C8E18F20222EDED000E30E52 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8E18F1F222EDED000E30E52 /* SafariServices.framework */; };
@@ -595,7 +596,6 @@
 		E650759B1E37F7AB006961AC /* CrashSimulator.m in Sources */ = {isa = PBXBuildFile; fileRef = E650756B1E37F7AB006961AC /* CrashSimulator.m */; };
 		E650759C1E37F7AB006961AC /* DeferredUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650756C1E37F7AB006961AC /* DeferredUtils.swift */; };
 		E650759D1E37F7AB006961AC /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650756D1E37F7AB006961AC /* DeviceInfo.swift */; };
-		E650759E1E37F7AB006961AC /* effective_tld_names.dat in Resources */ = {isa = PBXBuildFile; fileRef = E650756E1E37F7AB006961AC /* effective_tld_names.dat */; };
 		E65075A01E37F7AB006961AC /* ArrayExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075711E37F7AB006961AC /* ArrayExtensions.swift */; };
 		E65075A11E37F7AB006961AC /* HashExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075721E37F7AB006961AC /* HashExtensions.swift */; };
 		E65075A21E37F7AB006961AC /* HexExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075731E37F7AB006961AC /* HexExtensions.swift */; };
@@ -1465,6 +1465,7 @@
 		C8399D9422DE5E6200EFA5CA /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-block-social.json"; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
 		C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionMenu.swift; sourceTree = "<group>"; };
+		C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = effective_tld_names.swift; sourceTree = "<group>"; };
 		C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		C8E18F1D222EDE4400E30E52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C8E18F1F222EDED000E30E52 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
@@ -1707,7 +1708,6 @@
 		E650756B1E37F7AB006961AC /* CrashSimulator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrashSimulator.m; sourceTree = "<group>"; };
 		E650756C1E37F7AB006961AC /* DeferredUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeferredUtils.swift; sourceTree = "<group>"; };
 		E650756D1E37F7AB006961AC /* DeviceInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
-		E650756E1E37F7AB006961AC /* effective_tld_names.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = effective_tld_names.dat; sourceTree = "<group>"; };
 		E65075711E37F7AB006961AC /* ArrayExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayExtensions.swift; sourceTree = "<group>"; };
 		E65075721E37F7AB006961AC /* HashExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HashExtensions.swift; sourceTree = "<group>"; };
 		E65075731E37F7AB006961AC /* HexExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexExtensions.swift; sourceTree = "<group>"; };
@@ -2972,6 +2972,7 @@
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */,
 				D35210E01CB2F16600FC5DCB /* Strings.swift */,
 				E650756F1E37F7AB006961AC /* Extensions */,
 				E4E0BB161AFBC9E4008D6260 /* Supporting Files */,
@@ -2989,7 +2990,6 @@
 				D03DCD94211B63D000151ACA /* DateGroupedTableData.swift */,
 				E650756C1E37F7AB006961AC /* DeferredUtils.swift */,
 				E650756D1E37F7AB006961AC /* DeviceInfo.swift */,
-				E650756E1E37F7AB006961AC /* effective_tld_names.dat */,
 				3964B0991EA8F06F00F2EEF4 /* FeatureSwitch.swift */,
 				E65075811E37F7AB006961AC /* FSUtils.h */,
 				E65075821E37F7AB006961AC /* FSUtils.m */,
@@ -4255,7 +4255,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E650759E1E37F7AB006961AC /* effective_tld_names.dat in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4645,6 +4644,7 @@
 				E65075C01E37F7AB006961AC /* WeakList.swift in Sources */,
 				E65075AE1E37F7AB006961AC /* UIImageExtensions.swift in Sources */,
 				E65075A71E37F7AB006961AC /* ScannerExtensions.swift in Sources */,
+				C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */,
 				E65075A21E37F7AB006961AC /* HexExtensions.swift in Sources */,
 				288A2DB61AB8B38D0023ABC3 /* Result.swift in Sources */,
 				EB912B9B22722B6300DF585A /* ReadWriteLock.swift in Sources */,
