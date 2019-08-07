@@ -299,7 +299,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return section == 0 ? PhotonActionSheetUX.TitleHeaderSectionHeight : PhotonActionSheetUX.SeparatorRowHeight
+        if section == 0 {
+            return (site != nil || title != nil) ? PhotonActionSheetUX.TitleHeaderSectionHeight : 6
+        }
+
+        return PhotonActionSheetUX.SeparatorRowHeight
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

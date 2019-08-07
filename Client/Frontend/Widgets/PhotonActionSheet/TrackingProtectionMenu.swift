@@ -214,7 +214,7 @@ extension PhotonActionSheetProtocol {
 
         if items[0].count == 1 {
             // no items were blocked
-            var noblockeditems = PhotonActionSheetItem(title: Strings.TPPageMenuNoTrackersBlocked, accessory: .Text, bold: true)
+            let noblockeditems = PhotonActionSheetItem(title: Strings.TPPageMenuNoTrackersBlocked, accessory: .Text, bold: true)
             items = [[noblockeditems]]
         }
 
