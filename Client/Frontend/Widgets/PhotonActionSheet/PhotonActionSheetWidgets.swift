@@ -25,6 +25,7 @@ struct PhotonActionSheetUX {
     static let CloseButtonHeight: CGFloat  = 56
     static let TablePadding: CGFloat = 6
     static let SeparatorRowHeight: CGFloat = 13
+    static let TitleHeaderSectionHeight: CGFloat = 32
 }
 
 public enum PresentationStyle {

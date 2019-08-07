@@ -184,9 +184,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         tableView.tableFooterView = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
 
-        // Section headers are separator rows
-        tableView.sectionHeaderHeight = PhotonActionSheetUX.SeparatorRowHeight
-
         // UITableView has a large default footer height, remove this extra space
         tableView.sectionFooterHeight = 1
 
@@ -298,6 +295,11 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let syncManager = action.accessory == .Sync ? self.syncManager : nil
         cell.configure(with: action, syncManager: syncManager)
         return cell
+    }
+
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return section == 0 ? PhotonActionSheetUX.TitleHeaderSectionHeight : PhotonActionSheetUX.SeparatorRowHeight
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
