@@ -281,7 +281,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             self.dismiss(nil)
         }
 
-        return handler(action)
+        return handler(action, self.tableView(tableView, cellForRowAt: indexPath))
     }
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {

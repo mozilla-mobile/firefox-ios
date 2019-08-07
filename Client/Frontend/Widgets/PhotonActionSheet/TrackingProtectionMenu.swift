@@ -51,24 +51,24 @@ extension PhotonActionSheetProtocol {
         case .Disabled:
             return menuActionsForTrackingProtectionDisabled(for: tab)
         case .Whitelisted:
-            return menuActionsForWhitelistedSite(for: tab)
+            return menuActionsForTrackingProtectionEnabled(for: tab, isWhitelisted: true)
         }
     }
 
 
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlocking, iconString: "menu-TrackingProtection") { _ in
+        let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _,_ in
             // When TP is off for the tab tapping enable in this menu should turn it back on for the Tab.
-            if let blocker = tab.contentBlocker, blocker.isUserEnabled == false {
-                blocker.isUserEnabled = true
-            } else {
+//            if let blocker = tab.contentBlocker, blocker.isUserEnabled == false {
+//                blocker.isUserEnabled = true
+//            } else {
                 FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs, tabManager: self.tabManager)
-            }
+//            }
             tab.reload()
         }
 
-        var moreInfo = PhotonActionSheetItem(title: "", text: Strings.TPBlockingMoreInfo, iconString: "menu-Info") { _ in
+        var moreInfo = PhotonActionSheetItem(title: "", text: Strings.TPBlockingMoreInfo, iconString: "menu-Info") { _, _ in
             let url = SupportUtils.URLForTopic("tracking-protection-ios")!
             tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
         }
@@ -110,7 +110,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight * 5
         }
 
-        let back = PhotonActionSheetItem(title: "Back", iconString: "goBack") { _ in
+        let back = PhotonActionSheetItem(title: "Back", iconString: "goBack") { _, _ in
             guard let urlbar = (self as? BrowserViewController)?.urlBar else { return }
             (self as? BrowserViewController)?.urlBarDidTapShield(urlbar)
         }
@@ -132,7 +132,7 @@ extension PhotonActionSheetProtocol {
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForTrackingProtectionEnabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
+    private func menuActionsForTrackingProtectionEnabled(for tab: Tab, isWhitelisted: Bool = false) -> [[PhotonActionSheetItem]] {
         guard let blocker = tab.contentBlocker, let currentURL = tab.url else {
             return []
         }
@@ -145,34 +145,44 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight - 10
         }
 
-        let xsitecookies = PhotonActionSheetItem(title: Strings.TPCrossSiteCookiesBlocked, iconString: "tp-cookie", accessory: .Disclosure) { action in
+        let xsitecookies = PhotonActionSheetItem(title: Strings.TPCrossSiteCookiesBlocked, iconString: "tp-cookie", accessory: .Disclosure) { action, _ in
             let title = String.localizedStringWithFormat(Strings.TPListTitle, action.title)
             let desc = Strings.TPCategoryDescriptionCrossSite
             self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.advertising, BlocklistCategory.analytics])
         }
-        let social = PhotonActionSheetItem(title: Strings.TPSocialBlocked, iconString: "tp-socialtracker", accessory: .Disclosure) { action in
+        let social = PhotonActionSheetItem(title: Strings.TPSocialBlocked, iconString: "tp-socialtracker", accessory: .Disclosure) { action,  _ in
             let title = String.localizedStringWithFormat(Strings.TPListTitle, action.title)
             let desc = Strings.TPCategoryDescriptionSocial
             self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.social])
         }
-        let fingerprinters = PhotonActionSheetItem(title: Strings.TPFingerprintersBlocked, iconString: "tp-fingerprinter", accessory: .Disclosure) { action in
+        let fingerprinters = PhotonActionSheetItem(title: Strings.TPFingerprintersBlocked, iconString: "tp-fingerprinter", accessory: .Disclosure) { action, _ in
             let title = String.localizedStringWithFormat(Strings.TPListTitle, action.title)
             let desc = Strings.TPCategoryDescriptionFingerprinters
             self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.fingerprinting])
         }
-        let cryptomining = PhotonActionSheetItem(title: Strings.TPCryptominersBlocked, iconString: "tp-cryptominer", accessory: .Disclosure) { action in
+        let cryptomining = PhotonActionSheetItem(title: Strings.TPCryptominersBlocked, iconString: "tp-cryptominer", accessory: .Disclosure) { action, _ in
             let title = String.localizedStringWithFormat(Strings.TPListTitle, action.title)
             let desc = Strings.TPCategoryDescriptionCryptominers
             self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.cryptomining])
         }
 
-        let addToWhitelist = PhotonActionSheetItem(title: Strings.TPDisableTitle, accessory: .Switch) { _ in
-            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
-            ContentBlocker.shared.whitelist(enable: true, url: currentURL) {
+        var addToWhitelist = PhotonActionSheetItem(title: Strings.TPBlockingSiteEnabled, isEnabled: !isWhitelisted, accessory: .Switch) { _, cell in
+           UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
+            ContentBlocker.shared.whitelist(enable: tab.contentBlocker?.status != .Whitelisted, url: currentURL) {
                 tab.reload()
+                // trigger a call to customRender
+                cell.backgroundView?.setNeedsDisplay()
             }
         }
-        let settings = PhotonActionSheetItem(title: Strings.TPProtectionSettings, iconString: "settings") { _ in
+        addToWhitelist.customRender = { title, _ in
+            if tab.contentBlocker?.status == .Whitelisted {
+                title.text = Strings.TPBlockingSiteDisabled
+            } else {
+                title.text = Strings.TPBlockingSiteEnabled
+            }
+        }
+
+        let settings = PhotonActionSheetItem(title: Strings.TPProtectionSettings, iconString: "settings") { _, _ in
             let settingsTableViewController = AppSettingsTableViewController()
             settingsTableViewController.profile = self.profile
             settingsTableViewController.tabManager = self.tabManager
@@ -235,7 +245,7 @@ extension PhotonActionSheetProtocol {
             return []
         }
 
-        let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TPWhiteListRemove, iconString: "menu-TrackingProtection") { _ in
+        let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TPWhiteListRemove, iconString: "menu-TrackingProtection") { _, _ in
             ContentBlocker.shared.whitelist(enable: false, url: currentURL) {
                 tab.reload()
             }

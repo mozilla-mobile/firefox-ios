@@ -67,7 +67,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var tabCount: String?
-    public fileprivate(set) var tapHandler: ((PhotonActionSheetItem) -> Void)?
+    public fileprivate(set) var tapHandler: ((PhotonActionSheetItem, UITableViewCell) -> Void)?
     public fileprivate(set) var badgeIconName: String?
 
     // Enable title customization beyond what the interface provides,
@@ -76,7 +76,7 @@ public struct PhotonActionSheetItem {
     // Enable height customization
     public var customHeight: ((PhotonActionSheetItem) -> CGFloat)?
 
-    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil, handler: ((PhotonActionSheetItem, UITableViewCell) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconURL = iconURL
