@@ -616,14 +616,14 @@ extension Strings {
     public static let TPCryptominersBlocked = NSLocalizedString("Menu.TrackingProtectionCryptominersBlocked.Title", value: "Cryptominers", comment: "The title that shows the number of cryptomining scripts blocked")
     public static let TPFingerprintersBlocked = NSLocalizedString("Menu.TrackingProtectionFingerprintersBlocked.Title", value: "Fingerprinters", comment: "The title that shows the number of fingerprinting scripts blocked")
     public static let TPCrossSiteCookiesBlocked = NSLocalizedString("Menu.TrackingProtectionCrossSiteCookies.Title", value: "Cross-Site Tracking Cookies", comment: "The title that shows the number of cross-site cookies blocked")
-    public static let TPCrossSiteBlocked = NSLocalizedString("Menu.TrackingProtectionCrossSiteCookies.Title", value: "Cross-Site Trackers", comment: "The title that shows the number of cross-site URLs blocked")
+    public static let TPCrossSiteBlocked = NSLocalizedString("Menu.TrackingProtectionCrossSiteTrackers.Title", value: "Cross-Site Trackers", comment: "The title that shows the number of cross-site URLs blocked")
     public static let TPSocialBlocked = NSLocalizedString("Menu.TrackingProtectionBlockedSocial.Title", value: "Social Trackers", comment: "The title that shows the number of social URLs blocked")
-    public static let TPContentBlocked = NSLocalizedString("Menu.TrackingProtectionContentBlocked.Title", value: "Tracking content", comment: "The title that shows the number of content cookies blocked")
+    public static let TPContentBlocked = NSLocalizedString("Menu.TrackingProtectionBlockedContent.Title", value: "Tracking content", comment: "The title that shows the number of content cookies blocked")
 
     // Shortcut on bottom of TP page menu to get to settings.
     public static let TPProtectionSettings = NSLocalizedString("Menu.TrackingProtection.ProtectionSettings.Title", value: "Protection Settings", comment: "The title for tracking protection settings")
 
-    public static let TPListTitle = NSLocalizedString("Menu.TrackingProtectionListTitle", value: "Blocked %@", comment: "Title for list of domains blocked by category.")
+    public static let TPListTitle = NSLocalizedString("Menu.TrackingProtectionListTitle", value: "Blocked %@", comment: "Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners`")
 
     public static let TPWhiteListOn = NSLocalizedString("Menu.TrackingProtectionOption.WhiteListOnDescription", value: "The site includes elements that may track your browsing. You have disabled protection.", comment: "label for the menu item to show when the website is whitelisted from blocking trackers.")
     public static let TPWhiteListRemove = NSLocalizedString("Menu.TrackingProtectionWhitelistRemove.Title", value: "Enable for this site", comment: "label for the menu item that lets you remove a website from the tracking protection whitelist")
@@ -631,7 +631,7 @@ extension Strings {
     // Settings info
     public static let TPAccessoryInfoTitleStrict = NSLocalizedString("Settings.TrackingProtection.Info.StrictTitle", value: "Offers stronger protection, but may cause some sites to break.", comment: "Explanation of strict mode.")
     public static let TPAccessoryInfoTitleBasic = NSLocalizedString("Settings.TrackingProtection.Info.BasicTitle", value: "Balanced for protection and performance.", comment: "Explanation of basic mode.")
-    public static let TPAccessoryInfoBlocksTitle = NSLocalizedString("Settings.TrackingProtection.Info.BlocksTitle", value: "BLOCKS", comment: "Title on info view.")
+    public static let TPAccessoryInfoBlocksTitle = NSLocalizedString("Settings.TrackingProtection.Info.BlocksTitle", value: "BLOCKS", comment: "The Title on info view which shows a list of all blocked websites")
 
     // Category descriptions
     public static let TPCategoryDescriptionSocial = NSLocalizedString("Menu.TrackingProtectionDescription.SocialNetworks", value: "Social networks place trackers on other websites to build a more complete and targeted profile of you.", comment: "Description of social network trackers.")
