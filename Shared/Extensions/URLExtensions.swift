@@ -25,10 +25,8 @@ private struct ETLDEntry: CustomStringConvertible {
 private typealias TLDEntryMap = [String: ETLDEntry]
 
 private func loadEntries() -> TLDEntryMap? {
-    let lines = ETLD_NAMES_LIST.split(separator: "\n")
     var entries = TLDEntryMap()
-    for line in lines where !line.isEmpty {
-        let line = "\(line)" // Convert slice to string
+    for line in ETLD_NAMES_LIST where !line.isEmpty {
         let entry = ETLDEntry(entry: line)
         let key: String
         if entry.isWild {
@@ -43,7 +41,6 @@ private func loadEntries() -> TLDEntryMap? {
         entries[key] = entry
     }
     return entries
-
 }
 
 private var etldEntries: TLDEntryMap? = {
