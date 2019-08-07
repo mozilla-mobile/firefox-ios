@@ -117,10 +117,10 @@ extension PhotonActionSheetProtocol {
 
         var info = PhotonActionSheetItem(title: description, accessory: .None)
         info.customRender = { (label, contentView) in
-            label.numberOfLines = 2
+            label.numberOfLines = 0
         }
         info.customHeight = { _ in
-            return 56
+            return UITableView.automaticDimension
         }
 
         var actions = [[info], [list], [back]]

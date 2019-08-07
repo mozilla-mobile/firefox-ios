@@ -11,7 +11,7 @@ import Shared
 
 struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
-    static let Padding: CGFloat = 10
+    static let Padding: CGFloat = 6
     static let HeaderFooterHeight: CGFloat = 20
     static let RowHeight: CGFloat = 44
     static let BorderWidth: CGFloat = 0.5
