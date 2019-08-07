@@ -15,6 +15,15 @@ extension BlockingStrength {
         }
     }
 
+    var settingSubtitle: String {
+        switch self {
+        case .basic:
+            return Strings.TPAccessoryInfoTitleBasic
+        case .strict:
+            return Strings.TPAccessoryInfoTitleStrict
+        }
+    }
+
     static func accessibilityId(for strength: BlockingStrength) -> String {
         switch strength {
         case .basic:
@@ -43,28 +52,21 @@ class TPAccessoryInfo: ThemedTableViewController {
     }
 
     func headerView() -> UIView {
-        let stack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 80))
+        let stack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 10))
         stack.axis = .vertical
-
-        let label = UILabel()
-        label.text = isStrictMode ? Strings.TPAccessoryInfoTitleStrict : Strings.TPAccessoryInfoTitleBasic
-        label.numberOfLines = 0
-        label.font = DynamicFontHelper.defaultHelper.DefaultMediumFont
-        label.textColor = UIColor.theme.tableView.headerTextLight
 
         let header = UILabel()
         header.text = Strings.TPAccessoryInfoBlocksTitle
         header.font = DynamicFontHelper.defaultHelper.DefaultMediumBoldFont
         header.textColor = UIColor.theme.tableView.headerTextLight
 
-        stack.addArrangedSubview(label)
         stack.addArrangedSubview(UIView())
         stack.addArrangedSubview(header)
 
         stack.layoutMargins = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
         stack.isLayoutMarginsRelativeArrangement = true
 
-        let topStack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 80))
+        let topStack = UIStackView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 40))
         topStack.axis = .vertical
         let sep = UIView()
         topStack.addArrangedSubview(stack)
@@ -135,6 +137,8 @@ class TPAccessoryInfo: ThemedTableViewController {
         cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.numberOfLines = 0
         cell.backgroundColor = .clear
+        cell.textLabel?.textColor = UIColor.theme.tableView.rowDetailText
+        cell.selectionStyle = .none
         return cell
     }
 }
@@ -161,7 +165,7 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         let strengthSetting: [CheckmarkSetting] = BlockingStrength.allOptions.map { option in
             let id = BlockingStrength.accessibilityId(for: option)
-            let setting = CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), style: .leftSide, subtitle: nil, accessibilityIdentifier: id, isChecked: {
+            let setting = CheckmarkSetting(title: NSAttributedString(string: option.settingTitle), style: .leftSide, subtitle: NSAttributedString(string: option.settingSubtitle), accessibilityIdentifier: id, isChecked: {
                 return option == self.currentBlockingStrength
             }, onChecked: {
                 self.currentBlockingStrength = option
