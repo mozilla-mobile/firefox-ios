@@ -367,8 +367,8 @@ extension TabLocationView: Themeable {
         pageOptionsButton.selectedTintColor = UIColor.theme.urlbar.pageOptionsSelected
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
-        separatorLineForPageOptions.backgroundColor = UIColor.theme.textField.separator
-        separatorLineForTP.backgroundColor = UIColor.theme.textField.separator
+        separatorLineForPageOptions.backgroundColor = UIColor.Photon.Grey40
+        separatorLineForTP.backgroundColor = separatorLineForPageOptions.backgroundColor
 
         let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
         menuBadge.badge.tintBackground(color: color)
