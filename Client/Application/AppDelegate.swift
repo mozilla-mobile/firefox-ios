@@ -148,18 +148,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         adjustIntegration = AdjustIntegration(profile: profile)
 
-        if LeanPlumClient.shouldEnable(profile: profile) {
-            LeanPlumClient.shared.setup(profile: profile)
-            LeanPlumClient.shared.set(enabled: true)
-        }
-
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
 
         let fxaLoginHelper = FxALoginHelper.sharedInstance
         fxaLoginHelper.application(application, didLoadProfile: profile)
-
-        profile.cleanupHistoryIfNeeded()
 
         log.info("startApplication end")
         return true
@@ -275,13 +268,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             setUpWebServer(profile)
         }
-
-        // We could load these here, but then we have to futz with the tab counter
-        // and making NSURLRequests.
-        browserViewController.loadQueuedTabs(receivedURLs: receivedURLs)
-        receivedURLs.removeAll()
-        application.applicationIconBadgeNumber = 0
-
+        
         // Resume file downloads.
         browserViewController.downloadQueue.resumeAll()
 
@@ -295,6 +282,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
+
+        // Delay these operations until after UIKit/UIApp init is complete
+        // - LeanPlum does heavy disk access during init, delay this
+        // - loadQueuedTabs accesses the DB and shows up as a hot path in profiling
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            // We could load these here, but then we have to futz with the tab counter
+            // and making NSURLRequests.
+            self.browserViewController.loadQueuedTabs(receivedURLs: self.receivedURLs)
+            self.receivedURLs.removeAll()
+            application.applicationIconBadgeNumber = 0
+
+            if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
+                LeanPlumClient.shared.setup(profile: profile)
+                LeanPlumClient.shared.set(enabled: true)
+            }
+        }
+
+        // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+            self.profile?.cleanupHistoryIfNeeded()
+        }
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
