@@ -62,12 +62,7 @@ extension PhotonActionSheetProtocol {
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
         let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
-            // When TP is off for the tab tapping enable in this menu should turn it back on for the Tab.
-//            if let blocker = tab.contentBlocker, blocker.isUserEnabled == false {
-//                blocker.isUserEnabled = true
-//            } else {
-                FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs, tabManager: self.tabManager)
-//            }
+            FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs)
             tab.reload()
         }
 
