@@ -113,7 +113,6 @@ class TabLocationView: UIView {
 
     fileprivate lazy var lockImageView: UIImageView = {
         let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
-        lockImageView.tintColor = UIColor.Photon.Green60
         lockImageView.isAccessibilityElement = true
         lockImageView.contentMode = .center
         lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
@@ -370,6 +369,8 @@ extension TabLocationView: Themeable {
         separatorLineForPageOptions.backgroundColor = UIColor.Photon.Grey40
         separatorLineForTP.backgroundColor = separatorLineForPageOptions.backgroundColor
 
+        lockImageView.tintColor = pageOptionsButton.tintColor
+
         let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
         menuBadge.badge.tintBackground(color: color)
     }
@@ -385,7 +386,7 @@ extension TabLocationView: TabEventHandler {
         guard let blocker = tab.contentBlocker else { return }
         switch blocker.status {
         case .Blocking:
-            trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+            trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: "tracking-protection-active-block"), for: .normal)
         case .NoBlockedURLs:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
         case .Whitelisted:
