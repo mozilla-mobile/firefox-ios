@@ -1,3 +1,7 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 import Shared
 
 public struct NestedTableView {
@@ -55,10 +59,9 @@ extension PhotonActionSheetProtocol {
         }
     }
 
-
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _,_ in
+        let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
             // When TP is off for the tab tapping enable in this menu should turn it back on for the Tab.
 //            if let blocker = tab.contentBlocker, blocker.isUserEnabled == false {
 //                blocker.isUserEnabled = true
