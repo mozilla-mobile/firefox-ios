@@ -69,7 +69,7 @@ class TabLocationView: UIView {
                 let wasHidden = readerModeButton.isHidden
                 self.readerModeButton.readerModeState = newReaderModeState
                 readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
-                separatorLine.isHidden = readerModeButton.isHidden
+                separatorLineForPageOptions.isHidden = readerModeButton.isHidden
                 if wasHidden != readerModeButton.isHidden {
                     UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
                     if !readerModeButton.isHidden {
@@ -158,7 +158,8 @@ class TabLocationView: UIView {
         return pageOptionsButton
     }()
 
-    lazy var separatorLine: UIView = {
+    // A vertical separator next to the page options button. Only shows when reader mode button shows
+    lazy var separatorLineForPageOptions: UIView = {
         let line = UIView()
         line.layer.cornerRadius = 2
         line.isHidden = true
@@ -188,7 +189,7 @@ class TabLocationView: UIView {
         let iconStack = UIStackView(arrangedSubviews: [spaceView, trackingProtectionButton, lockImageView])
         iconStack.spacing = TabLocationViewUX.Spacing / 2
 
-        let subviews = [iconStack, urlTextField, readerModeButton, separatorLine, pageOptionsButton]
+        let subviews = [iconStack, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -210,7 +211,7 @@ class TabLocationView: UIView {
         pageOptionsButton.snp.makeConstraints { make in
             make.size.equalTo(TabLocationViewUX.ButtonSize)
         }
-        separatorLine.snp.makeConstraints { make in
+        separatorLineForPageOptions.snp.makeConstraints { make in
             make.width.equalTo(1)
             make.height.equalTo(26)
         }
@@ -350,7 +351,7 @@ extension TabLocationView: Themeable {
         pageOptionsButton.selectedTintColor = UIColor.theme.urlbar.pageOptionsSelected
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
-        separatorLine.backgroundColor = UIColor.theme.textField.separator
+        separatorLineForPageOptions.backgroundColor = UIColor.theme.textField.separator
 
         let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
         menuBadge.badge.tintBackground(color: color)
