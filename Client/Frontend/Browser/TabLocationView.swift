@@ -69,7 +69,6 @@ class TabLocationView: UIView {
                 let wasHidden = readerModeButton.isHidden
                 self.readerModeButton.readerModeState = newReaderModeState
                 readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
-                separatorLineForPageOptions.isHidden = readerModeButton.isHidden
                 if wasHidden != readerModeButton.isHidden {
                     UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
                     if !readerModeButton.isHidden {
@@ -175,7 +174,7 @@ class TabLocationView: UIView {
         return line
     }
 
-    // A vertical separator next to the page options button. Only shows when reader mode button shows
+    // A vertical separator next to the page options button.
     lazy var separatorLineForPageOptions: UIView = makeSeparator()
 
     lazy var separatorLineForTP: UIView = makeSeparator()
@@ -199,7 +198,6 @@ class TabLocationView: UIView {
             make.width.equalTo(10)
         }
 
-        separatorLineForPageOptions.isHidden = true
         let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
