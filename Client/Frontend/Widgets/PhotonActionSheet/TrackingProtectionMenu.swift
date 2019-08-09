@@ -91,10 +91,12 @@ extension PhotonActionSheetProtocol {
 
         var list = PhotonActionSheetItem(title: "")
         list.customRender = { _, contentView in
+            if contentView.viewWithTag(999) != nil { return }
             let tv = UITableView(frame: .zero, style: .plain)
             tv.dataSource = nestedTableViewDomainList?.dataSource
             tv.delegate = nestedTableViewDomainList?.dataSource
             tv.allowsSelection = false
+            tv.tag = 999
             contentView.addSubview(tv)
             tv.snp.makeConstraints { make in
                 make.edges.equalTo(contentView)
