@@ -28,7 +28,11 @@ class TopTabsTest: BaseTestCase {
         XCTAssertEqual("2", tabsOpen as? String)
 
         // The tab tray shows the correct tabs
-        navigator.goto(TabTray)
+        if isTablet {
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            navigator.goto(TabTray)
+        }
         waitForExistence(app.collectionViews.cells[urlLabel], timeout: 5)
     }
 
@@ -99,6 +103,7 @@ class TopTabsTest: BaseTestCase {
 
     private func openNtabsFromTabTray(numTabs: Int) {
         for _ in 1...numTabs {
+            waitForTabsButton()
             navigator.performAction(Action.OpenNewTabFromTabTray)
         }
     }
@@ -110,9 +115,10 @@ class TopTabsTest: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
+        waitForTabsButton()
         navigator.performAction(Action.OpenNewTabFromTabTray)
         if !iPad() {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
+            waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 15)
         }
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 

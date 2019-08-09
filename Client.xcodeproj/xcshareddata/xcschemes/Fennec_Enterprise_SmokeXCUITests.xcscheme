@@ -714,6 +714,9 @@
                   Identifier = "TopTabsTestIphone/testCloseTabFromLongPressTabsButton()">
                </Test>
                <Test
+                  Identifier = "TrackingProtectionTests/testBasicMoreInfo()">
+               </Test>
+               <Test
                   Identifier = "TrackingProtectionTests/testDisableForSiteDoesNotDisableForOthersDifferentTab()">
                </Test>
                <Test
@@ -730,6 +733,12 @@
                </Test>
                <Test
                   Identifier = "TrackingProtectionTests/testMenuWhenThereAreNotBlockedElements()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testMoreInfoAboutBlockedElements()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testOpenSettingsFromTPcontextMenu()">
                </Test>
                <Test
                   Identifier = "TrackingProtectionTests/testTPMenuHomePanel()">
