@@ -122,12 +122,15 @@ class TabLocationView: UIView {
         // Disable showing the button if the feature is off in the prefs
         override var isHidden: Bool {
             didSet {
+                separatorLine?.isHidden = isHidden
                 guard !isHidden, let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile else { return }
                 if !FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs) {
                     isHidden = true
                 }
             }
         }
+
+        var separatorLine: UIView?
     }
 
     lazy var trackingProtectionButton: TrackingProtectionButton = {
@@ -197,6 +200,9 @@ class TabLocationView: UIView {
         space10px.snp.makeConstraints { make in
             make.width.equalTo(10)
         }
+
+        // Link these so they hide/show in-sync.
+        trackingProtectionButton.separatorLine = separatorLineForTP
 
         let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
