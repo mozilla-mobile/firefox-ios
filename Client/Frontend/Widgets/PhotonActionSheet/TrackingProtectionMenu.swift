@@ -179,6 +179,7 @@ extension PhotonActionSheetProtocol {
                 title.text = Strings.TPBlockingSiteEnabled
             }
         }
+        addToWhitelist.accessibilityId = "tp.add-to-whitelist"
 
         let settings = PhotonActionSheetItem(title: Strings.TPProtectionSettings, iconString: "settings") { _, _ in
             let settingsTableViewController = AppSettingsTableViewController()
