@@ -121,12 +121,9 @@ extension PhotonActionSheetProtocol {
             return UITableView.automaticDimension
         }
 
-        var actions = [[info], [list], [back]]
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            actions = actions.reversed()
-        }
+        let actions = UIDevice.current.userInterfaceIdiom == .pad ? [[back], [info], [list]] : [[info], [list], [back]]
 
-        self.presentSheetWith(title: title, actions: actions, on: bvc, from: urlbar)
+        self.presentSheetWith(title: title, actions: actions, on: bvc, from: urlbar, autoreverseActions: false)
     }
 
     @available(iOS 11.0, *)
@@ -227,14 +224,7 @@ extension PhotonActionSheetProtocol {
             items = [[noblockeditems]]
         }
 
-       // var items: [[PhotonActionSheetItem]] = [[blockedtitle]]
         items = [[addToWhitelist]] + items + [[settings]]
-        // iPad shows items reversed by default, we don't want this behaviour
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            items = items.reversed()
-            items[1] = items[1].reversed()
-            items[2] = items[2].reversed()
-        }
         return items
     }
 
