@@ -142,25 +142,21 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight - 10
         }
 
-        let xsitecookies = PhotonActionSheetItem(title: Strings.TPCrossSiteCookiesBlocked, iconString: "tp-cookie", accessory: .Disclosure) { action, _ in
-            let title = String.localizedStringWithFormat(Strings.TPListTitle, action.title)
+        let xsitecookies = PhotonActionSheetItem(title: Strings.TPListTitle_CrossSiteCookies, iconString: "tp-cookie", accessory: .Disclosure) { action, _ in
             let desc = Strings.TPCategoryDescriptionCrossSite
-            self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.advertising, BlocklistCategory.analytics])
+            self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.advertising, BlocklistCategory.analytics])
         }
-        let social = PhotonActionSheetItem(title: Strings.TPSocialBlocked, iconString: "tp-socialtracker", accessory: .Disclosure) { action,  _ in
-            let title = String.localizedStringWithFormat(Strings.TPListTitle, action.title)
+        let social = PhotonActionSheetItem(title: Strings.TPListTitle_Social, iconString: "tp-socialtracker", accessory: .Disclosure) { action,  _ in
             let desc = Strings.TPCategoryDescriptionSocial
-            self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.social])
+            self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.social])
         }
-        let fingerprinters = PhotonActionSheetItem(title: Strings.TPFingerprintersBlocked, iconString: "tp-fingerprinter", accessory: .Disclosure) { action, _ in
-            let title = String.localizedStringWithFormat(Strings.TPListTitle, action.title)
+        let fingerprinters = PhotonActionSheetItem(title: Strings.TPListTitle_Fingerprinters, iconString: "tp-fingerprinter", accessory: .Disclosure) { action, _ in
             let desc = Strings.TPCategoryDescriptionFingerprinters
-            self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.fingerprinting])
+            self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.fingerprinting])
         }
-        let cryptomining = PhotonActionSheetItem(title: Strings.TPCryptominersBlocked, iconString: "tp-cryptominer", accessory: .Disclosure) { action, _ in
-            let title = String.localizedStringWithFormat(Strings.TPListTitle, action.title)
+        let cryptomining = PhotonActionSheetItem(title: Strings.TPListTitle_Cryptominer, iconString: "tp-cryptominer", accessory: .Disclosure) { action, _ in
             let desc = Strings.TPCategoryDescriptionCryptominers
-            self.showDomainTable(title: title, description: desc, blocker: blocker, categories: [BlocklistCategory.cryptomining])
+            self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.cryptomining])
         }
 
         var addToWhitelist = PhotonActionSheetItem(title: Strings.TPBlockingSiteEnabled, isEnabled: !isWhitelisted, accessory: .Switch) { _, cell in
