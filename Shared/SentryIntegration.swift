@@ -64,7 +64,6 @@ public class Sentry {
             // be used for both the main application and the app extensions.
             if let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier), defaults.string(forKey: SentryDeviceAppHashKey) == nil {
                 defaults.set(Bytes.generateRandomBytes(DeviceAppHashLength).hexEncodedString, forKey: SentryDeviceAppHashKey)
-                defaults.synchronize()
             }
 
             // For all outgoing reports, override the default device identifier with our own random
