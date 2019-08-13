@@ -28,11 +28,7 @@ class TopTabsTest: BaseTestCase {
         XCTAssertEqual("2", tabsOpen as? String)
 
         // The tab tray shows the correct tabs
-        if isTablet {
-            app.buttons["TopTabsViewController.tabsButton"].tap()
-        } else {
-            navigator.goto(TabTray)
-        }
+        navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[urlLabel], timeout: 5)
     }
 
