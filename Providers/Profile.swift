@@ -576,6 +576,7 @@ open class BrowserProfile: Profile {
     fileprivate lazy var account: FirefoxAccount? = {
         let key = name + ".account"
         keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
+        NSKeyedUnarchiver.setClass(FxADeviceRegistration.self, forClassName: "Account.FxADeviceRegistration")
         if let dictionary = object(forKey: key, with: keychain) as? [String: AnyObject] {
             let account =  FirefoxAccount.fromDictionary(dictionary, withPrefs: prefs)
 
