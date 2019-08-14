@@ -393,6 +393,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.buttons["PhotonMenu.close"].tap()
             }
         }
+
+        screenState.backAction = {
+            if isTablet {
+                // There is no Cancel option in iPad.
+                app.otherElements["PopoverDismissRegion"].tap()
+            } else {
+                app.buttons["PhotonMenu.close"].tap()
+            }
+        }
     }
 
     // URLBarOpen is dismissOnUse, which ScreenGraph interprets as "now we've done this action, then go back to the one before it"
