@@ -116,7 +116,7 @@ extension PhotonActionSheetProtocol {
     }
 
     fileprivate func shareFileURL(url: URL, file: URL?, buttonView: UIView, presentableVC: PresentableVC) {
-        let helper = ShareExtensionHelper(url: url, file: file, tab: nil)
+        let helper = ShareExtensionHelper(url: url, file: file, tab: tabManager.selectedTab)
         let controller = helper.createActivityViewController { completed, activityType in
             print("Shared downloaded file: \(completed)")
         }
