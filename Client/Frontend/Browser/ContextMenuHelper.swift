@@ -57,31 +57,25 @@ class ContextMenuHelper: NSObject, UIGestureRecognizerDelegate {
         }
     }
 
+    @available(iOS, obsoleted: 13.0)
     private func replaceWebViewLongPress() {
-        if #available(iOS 13.0, *) {
-            return
-        } else {
-            // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
-            // See also https://bugs.webkit.org/show_bug.cgi?id=193366
+        // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
+        // See also https://bugs.webkit.org/show_bug.cgi?id=193366
 
-            nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:")
+        nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:")
 
-            if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
-                nativeLongPressRecognizer.removeTarget(nil, action: nil)
-                nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
-            }
+        if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
+            nativeLongPressRecognizer.removeTarget(nil, action: nil)
+            nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
         }
     }
 
-    func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UILongPressGestureRecognizer? {
-        if #available(iOS 13.0, *) {
-            return nil
-        } else {
-            let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: {
-                (($0 as? UILongPressGestureRecognizer) != nil) && $0.description.contains(descriptionFragment)
-            })
-            return result as? UILongPressGestureRecognizer
-        }
+    @available(iOS, obsoleted: 13.0)
+    private func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UILongPressGestureRecognizer? {
+        let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: {
+            (($0 as? UILongPressGestureRecognizer) != nil) && $0.description.contains(descriptionFragment)
+        })
+        return result as? UILongPressGestureRecognizer
     }
 
     @objc func longPressGestureDetected(_ sender: UIGestureRecognizer) {
