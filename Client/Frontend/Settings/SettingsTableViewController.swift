@@ -432,12 +432,20 @@ class CheckmarkSetting: Setting {
             cell.accessoryType = .checkmark
             cell.tintColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         } else {
+            cell.indentationWidth = 42
+            cell.indentationLevel = 1
+
             cell.accessoryType = .detailButton
             cell.tintColor = UIColor.theme.tableView.rowActionAccessory // Sets accessory color only
 
             let checkColor = isChecked() ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
+            let check = UILabel(frame: CGRect(x: 20, y: 10, width: 24, height: 20))
+            cell.contentView.addSubview(check)
+            check.text = "\u{2713}"
+            check.font = UIFont.systemFont(ofSize: 20)
+            check.textColor = checkColor
+
             let result = NSMutableAttributedString()
-            result.append(NSAttributedString(string: "\u{2713} ", attributes: [NSAttributedString.Key.foregroundColor: checkColor, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20)]))
             if let str = title?.string {
                 result.append(NSAttributedString(string: str, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
             }
@@ -447,7 +455,6 @@ class CheckmarkSetting: Setting {
         if !enabled {
             cell.subviews.forEach { $0.alpha = 0.5 }
         }
-
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

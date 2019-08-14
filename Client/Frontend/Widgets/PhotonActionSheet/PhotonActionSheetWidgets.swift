@@ -11,9 +11,9 @@ import Shared
 
 struct PhotonActionSheetUX {
     static let MaxWidth: CGFloat = 414
-    static let Padding: CGFloat = 10
+    static let Padding: CGFloat = 6
     static let HeaderFooterHeight: CGFloat = 20
-    static let RowHeight: CGFloat = 50
+    static let RowHeight: CGFloat = 44
     static let BorderWidth: CGFloat = 0.5
     static let BorderColor = UIColor.Photon.Grey30
     static let CornerRadius: CGFloat = 10
@@ -24,6 +24,8 @@ struct PhotonActionSheetUX {
     static let CellName = "PhotonActionSheetCell"
     static let CloseButtonHeight: CGFloat  = 56
     static let TablePadding: CGFloat = 6
+    static let SeparatorRowHeight: CGFloat = 13
+    static let TitleHeaderSectionHeight: CGFloat = 40
 }
 
 public enum PresentationStyle {
@@ -65,7 +67,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var accessoryText: String?
     public fileprivate(set) var bold: Bool = false
     public fileprivate(set) var tabCount: String?
-    public fileprivate(set) var tapHandler: ((PhotonActionSheetItem) -> Void)?
+    public fileprivate(set) var tapHandler: ((PhotonActionSheetItem, UITableViewCell) -> Void)?
     public fileprivate(set) var badgeIconName: String?
 
     // Enable title customization beyond what the interface provides,
@@ -74,7 +76,10 @@ public struct PhotonActionSheetItem {
     // Enable height customization
     public var customHeight: ((PhotonActionSheetItem) -> CGFloat)?
 
-    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil, handler: ((PhotonActionSheetItem) -> Void)? = nil) {
+    // Normally the icon name is used, but if there is no icon, this is used.
+    public var accessibilityId: String?
+
+    init(title: String, text: String? = nil, iconString: String? = nil, iconURL: URL? = nil, iconType: PhotonActionSheetIconType = .Image, iconAlignment: IconAlignment = .left, isEnabled: Bool = false, accessory: PhotonActionSheetCellAccessoryType = .None, accessoryText: String? = nil, badgeIconNamed: String? = nil, bold: Bool? = false, tabCount: String? = nil, handler: ((PhotonActionSheetItem, UITableViewCell) -> Void)? = nil) {
         self.title = title
         self.iconString = iconString
         self.iconURL = iconURL

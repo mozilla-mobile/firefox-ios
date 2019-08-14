@@ -97,7 +97,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         self.newBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add) { _ in
-            let newBookmark = PhotonActionSheetItem(title: Strings.BookmarksNewBookmark, iconString: "action_bookmark", handler: { action in
+            let newBookmark = PhotonActionSheetItem(title: Strings.BookmarksNewBookmark, iconString: "action_bookmark", handler: { _, _ in
                 guard let bookmarkFolder = self.bookmarkFolder else {
                     return
                 }
@@ -106,7 +106,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 self.navigationController?.pushViewController(detailController, animated: true)
             })
 
-            let newFolder = PhotonActionSheetItem(title: Strings.BookmarksNewFolder, iconString: "bookmarkFolder", handler: { action in
+            let newFolder = PhotonActionSheetItem(title: Strings.BookmarksNewFolder, iconString: "bookmarkFolder", handler: { _, _ in
                 guard let bookmarkFolder = self.bookmarkFolder else {
                     return
                 }
@@ -115,7 +115,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 self.navigationController?.pushViewController(detailController, animated: true)
             })
 
-            let newSeparator = PhotonActionSheetItem(title: Strings.BookmarksNewSeparator, iconString: "nav-menu", handler: { action in
+            let newSeparator = PhotonActionSheetItem(title: Strings.BookmarksNewSeparator, iconString: "nav-menu", handler: { _, _ in
                 let centerVisibleRow = self.centerVisibleRow()
 
                 self.profile.places.createSeparator(parentGUID: self.bookmarkFolderGUID, position: UInt32(centerVisibleRow)) >>== { guid in
@@ -503,12 +503,12 @@ extension BookmarksPanel: LibraryPanelContextMenu {
             return nil
         }
 
-        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { _, _ in
             _ = self.profile.history.addPinnedTopSite(site)
         })
         actions.append(pinTopSite)
 
-        let removeAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
+        let removeAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
             self.deleteBookmarkNodeAtIndexPath(indexPath)
             UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .bookmarksPanel, extras: ["gesture": "long-press"])
         })

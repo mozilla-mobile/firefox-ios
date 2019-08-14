@@ -28,7 +28,7 @@ private struct TabLocationViewUX {
     static let BaseURLFontColor = UIColor.Photon.Grey50
     static let Spacing: CGFloat = 8
     static let StatusIconSize: CGFloat = 18
-    static let TPIconSize: CGFloat = 24
+    static let TPIconSize: CGFloat = 44
     static let ReaderModeButtonWidth: CGFloat = 34
     static let ButtonSize: CGFloat = 44
     static let URLBarPadding = 4
@@ -69,7 +69,6 @@ class TabLocationView: UIView {
                 let wasHidden = readerModeButton.isHidden
                 self.readerModeButton.readerModeState = newReaderModeState
                 readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
-                separatorLine.isHidden = readerModeButton.isHidden
                 if wasHidden != readerModeButton.isHidden {
                     UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
                     if !readerModeButton.isHidden {
@@ -113,15 +112,29 @@ class TabLocationView: UIView {
 
     fileprivate lazy var lockImageView: UIImageView = {
         let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
-        lockImageView.tintColor = UIColor.Photon.Green60
         lockImageView.isAccessibilityElement = true
         lockImageView.contentMode = .center
         lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
         return lockImageView
     }()
 
-    lazy var trackingProtectionButton: UIButton = {
-        let trackingProtectionButton = UIButton()
+    class TrackingProtectionButton: UIButton {
+        // Disable showing the button if the feature is off in the prefs
+        override var isHidden: Bool {
+            didSet {
+                separatorLine?.isHidden = isHidden
+                guard !isHidden, let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile else { return }
+                if !FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs) {
+                    isHidden = true
+                }
+            }
+        }
+
+        var separatorLine: UIView?
+    }
+
+    lazy var trackingProtectionButton: TrackingProtectionButton = {
+        let trackingProtectionButton = TrackingProtectionButton()
         trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
         trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
         trackingProtectionButton.tintColor = UIColor.Photon.Grey50
@@ -158,12 +171,16 @@ class TabLocationView: UIView {
         return pageOptionsButton
     }()
 
-    lazy var separatorLine: UIView = {
+    private func makeSeparator() -> UIView {
         let line = UIView()
         line.layer.cornerRadius = 2
-        line.isHidden = true
         return line
-    }()
+    }
+
+    // A vertical separator next to the page options button.
+    lazy var separatorLineForPageOptions: UIView = makeSeparator()
+
+    lazy var separatorLineForTP: UIView = makeSeparator()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -179,16 +196,15 @@ class TabLocationView: UIView {
         addGestureRecognizer(longPressRecognizer)
         addGestureRecognizer(tapRecognizer)
 
-        let spaceView = UIView()
-        spaceView.snp.makeConstraints { make in
-            make.width.equalTo(TabLocationViewUX.Spacing)
+        let space10px = UIView()
+        space10px.snp.makeConstraints { make in
+            make.width.equalTo(10)
         }
-        // The lock and TP icons have custom spacing.
-        // TODO: Once we cut ios10 support we can use UIstackview.setCustomSpacing
-        let iconStack = UIStackView(arrangedSubviews: [spaceView, lockImageView, trackingProtectionButton])
-        iconStack.spacing = TabLocationViewUX.Spacing / 2
 
-        let subviews = [iconStack, urlTextField, readerModeButton, separatorLine, pageOptionsButton]
+        // Link these so they hide/show in-sync.
+        trackingProtectionButton.separatorLine = separatorLineForTP
+
+        let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -206,11 +222,15 @@ class TabLocationView: UIView {
             make.width.equalTo(TabLocationViewUX.TPIconSize)
             make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
+        separatorLineForTP.snp.makeConstraints { make in
+            make.width.equalTo(1)
+            make.height.equalTo(26)
+        }
 
         pageOptionsButton.snp.makeConstraints { make in
             make.size.equalTo(TabLocationViewUX.ButtonSize)
         }
-        separatorLine.snp.makeConstraints { make in
+        separatorLineForPageOptions.snp.makeConstraints { make in
             make.width.equalTo(1)
             make.height.equalTo(26)
         }
@@ -350,7 +370,10 @@ extension TabLocationView: Themeable {
         pageOptionsButton.selectedTintColor = UIColor.theme.urlbar.pageOptionsSelected
         pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
-        separatorLine.backgroundColor = UIColor.theme.textField.separator
+        separatorLineForPageOptions.backgroundColor = UIColor.Photon.Grey40
+        separatorLineForTP.backgroundColor = separatorLineForPageOptions.backgroundColor
+
+        lockImageView.tintColor = pageOptionsButton.tintColor
 
         let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
         menuBadge.badge.tintBackground(color: color)
@@ -366,10 +389,14 @@ extension TabLocationView: TabEventHandler {
         assertIsMainThread("UI changes must be on the main thread")
         guard let blocker = tab.contentBlocker else { return }
         switch blocker.status {
-        case .Blocking, .Disabled, .NoBlockedURLs:
-            self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+        case .Blocking:
+            trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: "tracking-protection-active-block"), for: .normal)
+        case .NoBlockedURLs:
+            trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
         case .Whitelisted:
-            self.trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
+            trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
+        case .Disabled:
+            trackingProtectionButton.isHidden = true
         }
     }
 

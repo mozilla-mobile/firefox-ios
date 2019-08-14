@@ -72,6 +72,9 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 
     @objc override func notifiedTabSetupRequired() {
         setupForTab()
+        if let tab = tab as? Tab {
+            TabEvent.post(.didChangeContentBlocking, for: tab)
+        }
     }
 
     override func currentlyEnabledLists() -> [BlocklistFileName] {
@@ -91,19 +94,18 @@ class FirefoxTabContentBlocker: TabContentBlocker, TabContentScript {
 
 // Static methods to access user prefs for tracking protection
 extension FirefoxTabContentBlocker {
-    static func setTrackingProtection(enabled: Bool, prefs: Prefs, tabManager: TabManager) {
+    static func setTrackingProtection(enabled: Bool, prefs: Prefs) {
         let key = ContentBlockingConfig.Prefs.EnabledKey
         prefs.setBool(enabled, forKey: key)
         ContentBlocker.shared.prefsChanged()
     }
 
-    static func isTrackingProtectionEnabled(tabManager: TabManager) -> Bool {
-        guard let blocker = tabManager.selectedTab?.contentBlocker else { return false }
-        return blocker.isEnabledInPref
+    static func isTrackingProtectionEnabled(prefs: Prefs) -> Bool {
+        return prefs.boolForKey(ContentBlockingConfig.Prefs.EnabledKey) ?? ContentBlockingConfig.Defaults.NormalBrowsing
     }
 
-    static func toggleTrackingProtectionEnabled(prefs: Prefs, tabManager: TabManager) {
-        let isEnabled = FirefoxTabContentBlocker.isTrackingProtectionEnabled(tabManager: tabManager)
-        setTrackingProtection(enabled: !isEnabled, prefs: prefs, tabManager: tabManager)
+    static func toggleTrackingProtectionEnabled(prefs: Prefs) {
+        let isEnabled = FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: prefs)
+        setTrackingProtection(enabled: !isEnabled, prefs: prefs)
     }
 }
