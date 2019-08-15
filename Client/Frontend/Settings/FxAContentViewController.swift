@@ -133,7 +133,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     // The user has signed in to a Firefox Account.  We're done!
     fileprivate func onLogin(_ data: JSON) {
         injectData("message", content: ["status": "login"])
-        print(data)
 
         let app = UIApplication.shared
         let helper = FxALoginHelper.sharedInstance
