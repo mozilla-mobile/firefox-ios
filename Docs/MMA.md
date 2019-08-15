@@ -197,6 +197,13 @@ Save password and login from door hanger
 }
 ~~~~
 
+Signed up for FxA
+~~~~
+{
+  "event": "E_User_Signed_Up_For_FxA"
+}
+~~~~
+
 Deep Links
 ----------
 Deep links are actions that can point Firefox to open certain pages or load features such as `show bookmark list` or

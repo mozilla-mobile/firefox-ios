@@ -139,11 +139,12 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         helper.delegate = self
         helper.application(app, didReceiveAccountJSON: data)
 
-        if profile.hasAccount() {
-            LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+        if let engines = data["offeredSyncEngines"].array, engines.count > 0 {
+            LeanPlumClient.shared.track(event: .signsUpFxa)
+        } else {
+            LeanPlumClient.shared.track(event: .signsInFxa)
         }
-
-        LeanPlumClient.shared.track(event: .signsInFxa)
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
     }
 
     @objc fileprivate func userDidVerify(_ notification: Notification) {
