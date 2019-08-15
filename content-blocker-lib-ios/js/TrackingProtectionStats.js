@@ -95,7 +95,6 @@ function install() {
         mutationObserver.disconnect();
 
         originalXHROpen = originalXHRSend = originalImageSrc = mutationObserver = null;
-        console.log("disabled ETP")
       }
       return;
     }
