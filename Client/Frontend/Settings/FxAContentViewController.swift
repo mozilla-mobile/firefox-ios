@@ -140,10 +140,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         helper.application(app, didReceiveAccountJSON: data)
 
         if let engines = data["offeredSyncEngines"].array, engines.count > 0 {
-            print("new signup")
             LeanPlumClient.shared.track(event: .signsUpFxa)
         } else {
-            print("new signin")
             LeanPlumClient.shared.track(event: .signsInFxa)
         }
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
