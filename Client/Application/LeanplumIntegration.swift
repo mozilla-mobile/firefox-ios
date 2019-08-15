@@ -56,6 +56,7 @@ enum LPEvent: String {
     case downloadedPocket = "E_User_Downloaded_Pocket"
     case userSharedWebpage = "E_User_Tapped_Share_Button"
     case signsInFxa = "E_User_Signed_In_To_FxA"
+    case signsUpFxa = "E_User_Signed_Up_For_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
     case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
