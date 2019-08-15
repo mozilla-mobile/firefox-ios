@@ -9,28 +9,25 @@ if (webkit.messageHandlers.trackingProtectionStats) {
 }
 
 function install() {
+  let _enabled = true
+
   Object.defineProperty(window.__firefox__, "TrackingProtectionStats", {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: { enabled: false }
+    value: {}
   });
-
+  
   Object.defineProperty(window.__firefox__.TrackingProtectionStats, "setEnabled", {
     enumerable: false,
     configurable: false,
     writable: false,
     value: function(enabled, securityToken) {
-      if (securityToken !== SECURITY_TOKEN) {
+      if (securityToken !== SECURITY_TOKEN || enabled === _enabled) {
         return;
       }
 
-      if (enabled === window.__firefox__.TrackingProtectionStats.enabled) {
-        return;
-      }
-
-      window.__firefox__.TrackingProtectionStats.enabled = enabled;
-
+      _enabled = enabled;
       injectStatsTracking(enabled);
     }
   })
@@ -39,6 +36,8 @@ function install() {
   let sendUrlsTimeout = null;
 
   function sendMessage(url) {
+    if (!_enabled) { return }
+    
     try { 
       let mainDocHost = document.location.host;
       let u = new URL(url);
@@ -92,10 +91,11 @@ function install() {
         XMLHttpRequest.prototype.open = originalXHROpen;
         XMLHttpRequest.prototype.send = originalXHRSend;
         window.fetch = originalFetch;
-        Image.prototype.src = originalImageSrc;
+        // Image.prototype.src = originalImageSrc; // doesn't work to reset
         mutationObserver.disconnect();
 
         originalXHROpen = originalXHRSend = originalImageSrc = mutationObserver = null;
+        console.log("disabled ETP")
       }
       return;
     }
@@ -195,8 +195,5 @@ function install() {
     });
   }
 
-  // Default to on because there is a delay in being able to enable/disable
-  // from native, and we don't want to miss events
-  window.__firefox__.TrackingProtectionStats.enabled = true;
   injectStatsTracking(true);
 }
