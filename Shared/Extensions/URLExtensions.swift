@@ -26,7 +26,7 @@ private typealias TLDEntryMap = [String: ETLDEntry]
 
 private func loadEntries() -> TLDEntryMap? {
     var entries = TLDEntryMap()
-    for line in ETLD_NAMES_LIST where !line.isEmpty {
+    for line in ETLD_NAMES_LIST where !line.isEmpty && !line.hasPrefix("//") {
         let entry = ETLDEntry(entry: line)
         let key: String
         if entry.isWild {
