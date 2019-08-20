@@ -11,8 +11,8 @@ extension TabContentBlocker {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard isEnabled,
-            let body = message.body as? [String: String],
-            let urlString = body["url"],
+            let body = message.body as? [String: [String]],
+            let urls = body["urls"],
             let mainDocumentUrl = tab?.currentURL() else {
             return
         }
@@ -22,13 +22,17 @@ extension TabContentBlocker {
             clearPageStats()
             return
         }
-        guard var components = URLComponents(string: urlString) else { return }
-        components.scheme = "http"
-        guard let url = components.url else { return }
 
-        TPStatsBlocklistChecker.shared.isBlocked(url: url).uponQueue(.main) { listItem in
-            if let listItem = listItem {
-                self.stats = self.stats.create(matchingBlocklist: listItem, host: url.host ?? "")
+        // The JS sends the urls in batches for better performance. Iterate the batch and check the urls.
+        for urlString in urls {
+            guard var components = URLComponents(string: urlString) else { return }
+            components.scheme = "http"
+            guard let url = components.url else { return }
+
+            TPStatsBlocklistChecker.shared.isBlocked(url: url, mainDocumentURL: mainDocumentUrl).uponQueue(.main) { listItem in
+                if let listItem = listItem {
+                    self.stats = self.stats.create(matchingBlocklist: listItem, host: url.host ?? "")
+                }
             }
         }
     }
