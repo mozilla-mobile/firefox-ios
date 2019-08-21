@@ -193,6 +193,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.sectionFooterHeight = 1
 
         applyTheme()
+
+        DispatchQueue.main.async {
+            // Pick up the correct/final tableview.contentsize in order to set the height.
+            // Without async dispatch, the contentsize is wrong.
+            self.view.setNeedsLayout()
+        }
     }
 
     // Nested tableview rows get additional height
@@ -304,7 +310,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if section == 0 {
-            return (site != nil || title != nil) ? PhotonActionSheetUX.TitleHeaderSectionHeight : 6
+            if site != nil {
+                return PhotonActionSheetUX.TitleHeaderSectionHeightWithSite
+            } else if title != nil {
+                return PhotonActionSheetUX.TitleHeaderSectionHeight
+            }
+            return 6
         }
 
         return PhotonActionSheetUX.SeparatorRowHeight
