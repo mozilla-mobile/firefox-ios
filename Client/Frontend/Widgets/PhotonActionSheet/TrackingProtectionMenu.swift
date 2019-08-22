@@ -4,9 +4,11 @@
 
 import Shared
 
-public struct NestedTableView {
+public struct NestedTableViewDelegate {
     var dataSource: UITableViewDataSource & UITableViewDelegate
 }
+
+fileprivate var nestedTableView: UITableView?
 
 class NestedTableDataSource: NSObject, UITableViewDataSource, UITableViewDelegate {
     var data = [String]()
@@ -34,7 +36,7 @@ class NestedTableDataSource: NSObject, UITableViewDataSource, UITableViewDelegat
     }
 }
 
-fileprivate var nestedTableViewDomainList: NestedTableView?
+fileprivate var nestedTableViewDomainList: NestedTableViewDelegate?
 
 extension PhotonActionSheetProtocol {
     @available(iOS 11.0, *)
@@ -87,23 +89,25 @@ extension PhotonActionSheetProtocol {
             data += Array(stats.domains[category] ?? Set<String>())
         }
 
-        nestedTableViewDomainList = NestedTableView(dataSource: NestedTableDataSource(data: data))
+        nestedTableViewDomainList = NestedTableViewDelegate(dataSource: NestedTableDataSource(data: data))
 
         var list = PhotonActionSheetItem(title: "")
         list.customRender = { _, contentView in
-            if contentView.viewWithTag(999) != nil { return }
+            if nestedTableView != nil {
+                nestedTableView?.removeFromSuperview()
+            }
             let tv = UITableView(frame: .zero, style: .plain)
             tv.dataSource = nestedTableViewDomainList?.dataSource
             tv.delegate = nestedTableViewDomainList?.dataSource
             tv.allowsSelection = false
-            tv.tag = 999
+            tv.backgroundColor = .clear
+            tv.separatorStyle = .none
+
             contentView.addSubview(tv)
             tv.snp.makeConstraints { make in
                 make.edges.equalTo(contentView)
             }
-
-            tv.backgroundColor = .clear
-            tv.separatorStyle = .none
+            nestedTableView = tv
         }
 
         list.customHeight = { _ in
