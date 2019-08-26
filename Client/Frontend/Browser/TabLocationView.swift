@@ -204,6 +204,8 @@ class TabLocationView: UIView {
         // Link these so they hide/show in-sync.
         trackingProtectionButton.separatorLine = separatorLineForTP
 
+        pageOptionsButton.separatorLine = separatorLineForPageOptions
+
         let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill

@@ -162,6 +162,9 @@ class ToolbarButton: UIButton {
     var unselectedTintColor: UIColor!
     var disabledTintColor = UIColor.Photon.Grey50
 
+    // Optionally can associate a separator line that hide/shows along with the button
+    weak var separatorLine: UIView?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         adjustsImageWhenHighlighted = false
@@ -192,6 +195,11 @@ class ToolbarButton: UIButton {
         }
     }
 
+    override var isHidden: Bool {
+        didSet {
+            separatorLine?.isHidden = isHidden
+        }
+    }
 }
 
 extension ToolbarButton: Themeable {
