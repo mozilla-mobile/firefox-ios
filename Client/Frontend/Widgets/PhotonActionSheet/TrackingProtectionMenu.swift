@@ -223,7 +223,10 @@ extension PhotonActionSheetProtocol {
         if items[0].count == 1 {
             // no items were blocked
             let noblockeditems = PhotonActionSheetItem(title: Strings.TPPageMenuNoTrackersBlocked, accessory: .Text, bold: true)
-            items = [[noblockeditems]]
+            let space = PhotonActionSheetItem(title: " ")
+
+            items = [[noblockeditems, space]]
+
         }
 
         items = [[addToWhitelist]] + items + [[settings]]
