@@ -325,11 +325,15 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        if let helper = tab.contentBlocker {
-            let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled {
+            let isWhitelisted = helper.status == .Whitelisted
+
+            let title = !isWhitelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { _, _ in
-                helper.isUserEnabled = !helper.isEnabled
+                ContentBlocker.shared.whitelist(enable: !isWhitelisted, url: url) {
+                    tab.reload()
+                }
             }
             return [toggleDesktopSite, toggleTP]
         } else {
