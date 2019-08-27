@@ -55,7 +55,8 @@ class TabLocationView: UIView {
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
-            trackingProtectionButton.isHidden = lockImageView.isHidden
+
+            trackingProtectionButton.isHidden = !["https", "http"].contains(url?.scheme ?? "")
             setNeedsUpdateConstraints()
         }
     }
