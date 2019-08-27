@@ -61,6 +61,9 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     var isFolderListExpanded = false
+    
+    // Position at which a new node will be inserted
+    var nodeInsertionIndex: Int?
 
     // Array of tuples containing all of the BookmarkFolders
     // along with their indentation depth.
@@ -70,9 +73,10 @@ class BookmarkDetailPanel: SiteTableViewController {
         return Int(floor((view.frame.width - BookmarkDetailPanelUX.MinIndentedContentWidth) / BookmarkDetailPanelUX.IndentationWidth))
     }
 
-    convenience init(profile: Profile, bookmarkNode: BookmarkNode, parentBookmarkFolder: BookmarkFolder) {
+    convenience init(profile: Profile, bookmarkNode: BookmarkNode, parentBookmarkFolder: BookmarkFolder, nodeInsertionIndex: Int? = nil) {
         self.init(profile: profile, bookmarkNodeGUID: bookmarkNode.guid, bookmarkNodeType: bookmarkNode.type, parentBookmarkFolder: parentBookmarkFolder)
 
+        self.nodeInsertionIndex = nodeInsertionIndex
         self.bookmarkItemPosition = bookmarkNode.position
 
         if let bookmarkItem = bookmarkNode as? BookmarkItem {
@@ -87,9 +91,10 @@ class BookmarkDetailPanel: SiteTableViewController {
         }
     }
 
-    convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolder) {
+    convenience init(profile: Profile, withNewBookmarkNodeType bookmarkNodeType: BookmarkNodeType, parentBookmarkFolder: BookmarkFolder, nodeInsertionIndex: Int? = nil) {
         self.init(profile: profile, bookmarkNodeGUID: nil, bookmarkNodeType: bookmarkNodeType, parentBookmarkFolder: parentBookmarkFolder)
 
+        self.nodeInsertionIndex = nodeInsertionIndex
         if bookmarkNodeType == .bookmark {
             self.bookmarkItemOrFolderTitle = ""
             self.bookmarkItemURL = ""
@@ -233,7 +238,12 @@ class BookmarkDetailPanel: SiteTableViewController {
                     return deferMaybe(BookmarkDetailPanelError())
                 }
 
-                return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid, title: bookmarkItemOrFolderTitle).bind({ result in
+                //here 'nil' means the node will be inserted in the end of the list
+                var position: UInt32? = nil
+                if let newNodePosition = nodeInsertionIndex {
+                    position = UInt32(newNodePosition)
+                }
+                return profile.places.createFolder(parentGUID: parentBookmarkFolder.guid, title: bookmarkItemOrFolderTitle, position: position).bind({ result in
                     return result.isFailure ? deferMaybe(BookmarkDetailPanelError()) : succeed()
                 })
             }
