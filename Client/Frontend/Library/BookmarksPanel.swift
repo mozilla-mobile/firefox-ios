@@ -55,7 +55,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     var bookmarkNodes = [BookmarkNode]()
     var recentBookmarks = [BookmarkNode]()
 
-    fileprivate var flashRowOnNextReload = false
     fileprivate var indexPathToFlashOnReload: IndexPath? = nil
 
     fileprivate lazy var bookmarkFolderIconNormal = UIImage(named: "bookmarkFolder")?.createScaled(BookmarksPanelUX.FolderIconSize).tinted(withColor: UIColor.Photon.Grey90)
@@ -119,7 +118,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 }
                 
                 self.indexPathToFlashOnReload = IndexPath(row: NewNodeInsertionIndex.folder.rawValue, section: BookmarksSection.bookmarks.rawValue)
-                let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .folder, parentBookmarkFolder: bookmarkFolder, nodeInsertionIndex: NewNodeInsertionIndex.folder.rawValue)
+                let detailController = BookmarkDetailPanel(profile: self.profile, withNewBookmarkNodeType: .folder, parentBookmarkFolder: bookmarkFolder, nodeInsertionIndex: UInt32(NewNodeInsertionIndex.folder.rawValue))
                 self.navigationController?.pushViewController(detailController, animated: true)
             })
 
@@ -191,13 +190,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 self.recentBookmarks = []
                 self.tableView.reloadData()
             }
-
-            if self.flashRowOnNextReload {
-                self.flashRowOnNextReload = false
-
+            
+            if let indexPath = self.indexPathToFlashOnReload {
+                self.indexPathToFlashOnReload = nil
                 DispatchQueue.main.asyncAfter(deadline: .now() + BookmarksPanelUX.RowFlashDelay) {
-                    self.flashRow(at: self.indexPathToFlashOnReload ??
-                        IndexPath(row: self.bookmarkNodes.count - 1, section: BookmarksSection.bookmarks.rawValue))
+                    self.flashRow(at: indexPath)
                 }
             }
         }
@@ -278,10 +275,6 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 self.tableView.deselectRow(at: indexPath, animated: true)
             }
         }
-    }
-
-    func didAddBookmarkNode() {
-        flashRowOnNextReload = true
     }
 
     @objc fileprivate func didLongPressTableView(_ longPressGestureRecognizer: UILongPressGestureRecognizer) {
