@@ -119,8 +119,7 @@ class Action {
     static let SetURLByPasting = "SetURLByPasting"
 
     static let TrackingProtectionContextMenu = "TrackingProtectionContextMenu"
-    static let EnableTrackingProtectionperSite = "EnableTrackingProtectionperSite"
-    static let DisableTrackingProtectionperSite = "DisableTrackingProtectionperSite"
+    static let TrackingProtectionperSiteToggle = "TrackingProtectionperSiteToggle"
 
     static let ReloadURL = "ReloadURL"
 
@@ -178,6 +177,7 @@ class Action {
     static let ToggleTrackingProtectionPerTabEnabled = "ToggleTrackingProtectionPerTabEnabled"
     static let OpenSettingsFromTPMenu = "OpenSettingsFromTPMenu"
     static let SwitchETP = "SwitchETP"
+    static let CloseTPContextMenu = "CloseTPContextMenu"
 
     static let CloseTab = "CloseTab"
     static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
@@ -376,16 +376,22 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(TrackingProtectionContextMenuDetails) { screenState in
-        screenState.gesture(forAction: Action.EnableTrackingProtectionperSite) { userState in
-                app.tables.cells["menu-TrackingProtection"].tap()
-                userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
-            }
-        screenState.gesture(forAction: Action.DisableTrackingProtectionperSite) { userState in
-            app.tables.cells["menu-TrackingProtection-Off"].tap()
+        screenState.gesture(forAction: Action.TrackingProtectionperSiteToggle) { userState in
+            app.tables.cells["tp.add-to-whitelist"].tap()
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
+
         screenState.gesture(forAction: Action.OpenSettingsFromTPMenu) { userState in
             app.cells["settings"].tap()
+        }
+
+        screenState.gesture(forAction: Action.CloseTPContextMenu) { userState in
+            if isTablet {
+                // There is no Cancel option in iPad.
+                app.otherElements["PopoverDismissRegion"].tap()
+            } else {
+                app.buttons["PhotonMenu.close"].tap()
+            }
         }
 
         screenState.backAction = {
