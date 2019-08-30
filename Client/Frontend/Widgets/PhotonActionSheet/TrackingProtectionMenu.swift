@@ -129,7 +129,7 @@ extension PhotonActionSheetProtocol {
 
         let actions = UIDevice.current.userInterfaceIdiom == .pad ? [[back], [info], [list]] : [[info], [list], [back]]
 
-        self.presentSheetWith(title: title, actions: actions, on: bvc, from: urlbar, autoreverseActions: false)
+        self.presentSheetWith(title: title, actions: actions, on: bvc, from: urlbar)
     }
 
     @available(iOS 11.0, *)
