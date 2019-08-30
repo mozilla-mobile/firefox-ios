@@ -2453,7 +2453,9 @@ extension BrowserViewController: DevicePickerViewControllerDelegate, Instruction
         }
         profile.sendItem(shareItem, toDevices: devices).uponQueue(.main) { _ in
             self.popToBVC()
-            SimpleToast().showAlertWithText(Strings.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                SimpleToast().showAlertWithText(Strings.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+            }
         }
     }
 }
