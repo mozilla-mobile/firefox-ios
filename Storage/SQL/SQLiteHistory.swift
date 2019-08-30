@@ -398,12 +398,12 @@ extension SQLiteHistory: BrowserHistory {
     }
 
     public func removeFromPinnedTopSites(_ site: Site) -> Success {
-        guard let host = (site.url as String).asURL?.normalizedHost else {
+       guard let guid = site.guid, let host = (site.url as String).asURL?.normalizedHost else {
             return deferMaybe(DatabaseError(description: "Invalid url for site \(site.url)"))
         }
 
         //do a fuzzy delete so dupes can be removed
-        let query: (String, Args?) = ("DELETE FROM pinned_top_sites where domain = ?", [host])
+       let query: (String, Args?) = ("DELETE FROM pinned_top_sites where guid = ?", [guid])
         return db.run([query]) >>== {
             return self.db.run([("UPDATE domains SET showOnTopSites = 1 WHERE domain = ?", [host])])
         }
