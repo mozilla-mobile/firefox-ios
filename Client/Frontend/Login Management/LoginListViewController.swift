@@ -380,7 +380,9 @@ extension LoginListViewController: UITableViewDelegate {
             return nil
         }
         headerView.titleLabel.text = Strings.LoginsListTitle
-        headerView.showTopBorder = false
+        // not using a grouped table: show header borders
+        headerView.showTopBorder = true
+        headerView.showBottomBorder = true
         headerView.applyTheme()
         return headerView
     }
@@ -555,12 +557,10 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     @objc func numberOfSections(in tableView: UITableView) -> Int {
         if  loginRecordSections.isEmpty {
             tableView.backgroundView = emptyStateView
-            tableView.separatorStyle = .none
             return 1
         }
 
         tableView.backgroundView = nil
-        tableView.separatorStyle = .singleLine
         // Add one section for the settings section.
         return loginRecordSections.count + 1
     }

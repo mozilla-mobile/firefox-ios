@@ -78,7 +78,7 @@ class TPAccessoryInfo: ThemedTableViewController {
 
         sep.backgroundColor = UIColor.theme.tableView.separator
         sep.snp.makeConstraints { make in
-            make.height.equalTo(1)
+            make.height.equalTo(0.5)
             make.width.equalToSuperview()
         }
         return topStack
@@ -155,7 +155,6 @@ class ContentBlockerSettingViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.SettingsTrackingProtectionSectionName
-        hasSectionSeparatorLine = false
     }
 
     required init?(coder aDecoder: NSCoder) {

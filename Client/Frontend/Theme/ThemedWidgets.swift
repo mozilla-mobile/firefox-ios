@@ -70,13 +70,13 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
         }
     }
 
-    var showTopBorder: Bool = true {
+    var showTopBorder: Bool = false {
         didSet {
             topBorder.isHidden = !showTopBorder
         }
     }
 
-    var showBottomBorder: Bool = true {
+    var showBottomBorder: Bool = false {
         didSet {
             bottomBorder.isHidden = !showBottomBorder
         }
@@ -91,7 +91,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
 
     fileprivate lazy var topBorder: UIView = {
         let topBorder = UIView()
-       return topBorder
+        return topBorder
     }()
 
     fileprivate lazy var bottomBorder: UIView = {
@@ -104,6 +104,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
         addSubview(titleLabel)
         addSubview(topBorder)
         addSubview(bottomBorder)
+        setDefaultBordersValues()
         setupInitialConstraints()
         applyTheme()
     }
@@ -127,16 +128,20 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
 
         topBorder.snp.makeConstraints { make in
             make.top.left.right.equalTo(self)
-            make.height.equalTo(0.5)
+            make.height.equalTo(0.25)
         }
 
         remakeTitleAlignmentConstraints()
     }
 
+    func setDefaultBordersValues() {
+        showTopBorder = false
+        showBottomBorder = false
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
-        showTopBorder = true
-        showBottomBorder = true
+        setDefaultBordersValues()
         titleLabel.text = nil
         titleAlignment = .bottom
 

@@ -16,7 +16,6 @@ class HomePageSettingViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.AppMenuOpenHomePageTitleString
-        hasSectionSeparatorLine = false
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -100,7 +99,6 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
         super.init(style: .grouped)
         self.title = Strings.AppMenuTopSitesTitleString
-        hasSectionSeparatorLine = false
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -94,11 +94,6 @@ class LoginDetailViewController: SensitiveViewController {
         // Add empty footer view to prevent seperators from being drawn past the last item.
         tableView.tableFooterView = UIView()
 
-        // Add a line on top of the table view so when the user pulls down it looks 'correct'.
-        let topLine = UIView(frame: CGRect(width: tableView.frame.width, height: 0.5))
-        topLine.backgroundColor = UIColor.theme.tableView.separator
-        tableView.tableHeaderView = topLine
-
         // Normally UITableViewControllers handle responding to content inset changes from keyboard events when editing
         // but since we don't use the tableView's editing flag for editing we handle this ourselves.
         KeyboardHelper.defaultHelper.addDelegate(self)

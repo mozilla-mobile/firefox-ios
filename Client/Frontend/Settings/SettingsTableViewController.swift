@@ -587,8 +587,6 @@ class SettingsTableViewController: ThemedTableViewController {
     var profile: Profile!
     var tabManager: TabManager!
 
-    var hasSectionSeparatorLine = true
-
     /// Used to calculate cell heights.
     fileprivate lazy var dummyToggleCell: UITableViewCell = {
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "dummyCell")
@@ -707,12 +705,6 @@ class SettingsTableViewController: ThemedTableViewController {
         if let sectionTitle = sectionSetting.title?.string {
             headerView.titleLabel.text = sectionTitle.uppercased()
         }
-        // Hide the top border for the top section to avoid having a double line at the top
-        if section == 0 || !hasSectionSeparatorLine {
-            headerView.showTopBorder = false
-        } else {
-            headerView.showTopBorder = true
-        }
 
         headerView.applyTheme()
         return headerView
@@ -726,7 +718,6 @@ class SettingsTableViewController: ThemedTableViewController {
         let footerView = ThemedTableSectionHeaderFooterView()
         footerView.titleLabel.text = sectionFooter
         footerView.titleAlignment = .top
-        footerView.showBottomBorder = false
         footerView.applyTheme()
         return footerView
     }

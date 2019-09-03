@@ -218,7 +218,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             return nil
         }
 
-        footerView.showBottomBorder = false
         footerView.applyTheme()
         return footerView
     }

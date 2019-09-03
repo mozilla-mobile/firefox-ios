@@ -29,7 +29,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
         view.addSubview(tableView)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.showBottomBorder = false
+        footer.showTopBorder = true
         tableView.tableFooterView = footer
 
         tableView.snp.makeConstraints { make in
@@ -64,6 +64,8 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         headerView?.titleLabel.text = Strings.SettingsWebsiteDataTitle
+        headerView?.showTopBorder = section != 0
+        headerView?.showBottomBorder = true
         return headerView
     }
 
