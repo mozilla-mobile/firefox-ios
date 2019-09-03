@@ -149,7 +149,10 @@ class BookmarkingTests: BaseTestCase {
 
          //Clear text and enter new url
         waitForTabsButton()
-        navigator.performAction(Action.OpenNewTabFromTabTray)
+//        navigator.performAction(Action.OpenNewTabFromTabTray)
+        app.buttons["TopTabsViewController.tabsButton"].tap()
+        waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 5)
+        app.buttons["TabTrayController.addTabButton"].tap()
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "http://www.olx.ro")
 
