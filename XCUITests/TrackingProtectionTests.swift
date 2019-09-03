@@ -85,11 +85,11 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Verify that all elements for ETP menu are shown
         waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.cells["tp-socialtracker"].exists, "ETP menu with elements blocked is not right")
+        XCTAssertTrue(app.tables.cells["tp-cookie"].exists, "ETP menu with elements blocked is not right")
         XCTAssertTrue(app.tables.cells["settings"].exists, "Settings option does not appear")
 
         // Tap on social trackers
-        app.cells["tp-socialtracker"].tap()
+        app.cells["tp-cookie"].tap()
         XCTAssertTrue(app.tables.cells.count > 0)
         app.cells["goBack"].tap()
     }
