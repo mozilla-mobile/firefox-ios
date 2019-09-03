@@ -391,11 +391,13 @@ extension TabLocationView: TabEventHandler {
     private func updateBlockerStatus(forTab tab: Tab) {
         assertIsMainThread("UI changes must be on the main thread")
         guard let blocker = tab.contentBlocker else { return }
+        trackingProtectionButton.alpha = 1.0
         switch blocker.status {
         case .Blocking:
             trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: "tracking-protection-active-block"), for: .normal)
         case .NoBlockedURLs:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+            trackingProtectionButton.alpha = 0.5
         case .Whitelisted:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
         case .Disabled:
