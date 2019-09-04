@@ -11,7 +11,7 @@ import XCTest
 class TabEventHandlerTests: XCTestCase {
 
     func testEventDelivery() {
-        let tab = Tab(configuration: WKWebViewConfiguration())
+        let tab = Tab(bvc: BrowserViewController.foregroundBVC(), configuration: WKWebViewConfiguration())
         let handler = DummyHandler()
 
         XCTAssertNil(handler.isFocused)
