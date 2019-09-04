@@ -191,10 +191,13 @@ class Tab: NSObject {
     /// tab instance, queue it for later until we become foregrounded.
     fileprivate var alertQueue = [JSAlertInfo]()
 
-    init(configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
+    weak var browserViewController:BrowserViewController?
+
+    init(bvc: BrowserViewController, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
         self.nightMode = false
         self.noImageMode = false
+        self.browserViewController = bvc
         super.init()
         self.isPrivate = isPrivate
 

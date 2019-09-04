@@ -39,7 +39,7 @@ class ReadabilityOperation: Operation {
 
         DispatchQueue.main.async(execute: { () -> Void in
             let configuration = WKWebViewConfiguration()
-            self.tab = Tab(configuration: configuration)
+            self.tab = Tab(bvc: BrowserViewController.foregroundBVC(), configuration: configuration)
             self.tab.createWebview()
             self.tab.navigationDelegate = self
 
