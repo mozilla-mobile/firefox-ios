@@ -31,7 +31,7 @@ open class Favicon: Identifiable {
 // cursor results, perhaps as a tuple.
 open class Site: Identifiable {
     open var id: Int?
-    var guid: String?
+    open var guid: String?
 
     open var tileURL: URL {
         return URL(string: url)?.domainURL ?? URL(string: "about:blank")!
@@ -49,7 +49,7 @@ open class Site: Identifiable {
         self.init(url: url, title: title, bookmarked: false, guid: nil)
     }
 
-    public init(url: String, title: String, bookmarked: Bool?, guid: String? = nil) {
+    public init(url: String, title: String, bookmarked: Bool?, guid: String?) {
         self.url = url
         self.title = title
         self.bookmarked = bookmarked

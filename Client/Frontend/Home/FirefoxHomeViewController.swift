@@ -578,9 +578,8 @@ extension FirefoxHomeViewController: DataObserverDelegate {
                 return succeed()
             }
 
-            // How sites are merged together. We compare against the url's base domain. example m.youtube.com is compared against `youtube.com`
             let unionOnURL = { (site: Site) -> String in
-                return URL(string: site.url)?.normalizedHost ?? ""
+                return URL(string: site.url)?.normalizedHostAndPath ?? ""
             }
 
             // Fetch the default sites
@@ -1116,7 +1115,7 @@ open class PinnedSite: Site {
     let isPinnedSite = true
 
     init(site: Site) {
-        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
+        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked, guid: site.guid)
         self.icon = site.icon
         self.metadata = site.metadata
     }

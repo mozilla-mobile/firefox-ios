@@ -19,8 +19,7 @@ extension SQLiteHistory {
         let iB = row["is_bookmarked"] as? Int
         let isBookmarked: Bool? = (iB == nil) ? nil : (iB! != 0)
 
-        let site = Site(url: url, title: title, bookmarked: isBookmarked)
-        site.guid = guid
+        let site = Site(url: url, title: title, bookmarked: isBookmarked, guid: guid)
         site.id = id
 
         // Find the most recent visit, regardless of which column it might be in.
