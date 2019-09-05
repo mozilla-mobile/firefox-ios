@@ -215,7 +215,12 @@ class BrowserViewController: UIViewController {
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
-        urlBar.appMenuBadge(visible: NoImageModeHelper.isActivated(profile.prefs))
+
+        let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
+        let showWhatsNew = shouldShowWhatsNewTab()
+        let showMenuBadge = hideImagesOn || showWhatsNew
+        
+        urlBar.appMenuBadge(setVisible: showMenuBadge)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         toolbar = nil
@@ -226,7 +231,7 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
-            toolbar?.appMenuBadge(visible: NoImageModeHelper.isActivated(profile.prefs))
+            toolbar?.appMenuBadge(setVisible: showMenuBadge)
             updateTabCountUsingTabManager(self.tabManager)
         }
 

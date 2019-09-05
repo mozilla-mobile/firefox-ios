@@ -22,7 +22,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
-    func appMenuBadge(visible: Bool)
+    func appMenuBadge(setVisible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -294,9 +294,8 @@ extension TabToolbar: TabToolbarProtocol {
         privateModeBadge.show(visible)
     }
 
-    func appMenuBadge(visible: Bool) {
-        // profile.prefs.setBool(isEnabled, forKey: PrefsKeys.KeyNoImageModeStatus)
-        appMenuBadge.show(visible)
+    func appMenuBadge(setVisible: Bool) {
+        appMenuBadge.show(setVisible)
     }
 
     func updateBackStatus(_ canGoBack: Bool) {

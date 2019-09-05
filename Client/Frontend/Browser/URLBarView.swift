@@ -569,9 +569,8 @@ extension URLBarView: TabToolbarProtocol {
         }
     }
 
-    func appMenuBadge(visible: Bool) {
-        // profile.prefs.setBool(isEnabled, forKey: PrefsKeys.KeyNoImageModeStatus)
-        appMenuBadge.show(visible)
+    func appMenuBadge(setVisible: Bool) {
+        appMenuBadge.show(setVisible)
     }
 
     func updateBackStatus(_ canGoBack: Bool) {
