@@ -56,6 +56,19 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
     }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        var whatsNewAction: PhotonActionSheetItem? = nil
+        if shouldShowWhatsNew() {
+            // Set the version number of the app, so the What's new will stop showing
+            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            updateToolbarStateForTraitCollection(view.traitCollection)
+
+            whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: true, badgeIconNamed: "menuBadge") { _, _ in
+                if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
+                    self.openURLInNewTab(whatsNewURL, isPrivileged: false)
+                }
+            }
+        }
+
         // ensure that any keyboards or spinners are dismissed before presenting the menu
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         libraryDrawerViewController?.close(immediately: true)
@@ -81,6 +94,13 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
         actions.append(getLibraryActions(vcDelegate: self))
         actions.append(getOtherPanelActions(vcDelegate: self))
+
+        if let whatsNewAction = whatsNewAction, var lastGroup = actions.last, lastGroup.count > 1 {
+            lastGroup.insert(whatsNewAction, at: lastGroup.count - 1)
+            actions.removeLast()
+            actions.append(lastGroup)
+        }
+
         // force a modal if the menu is being displayed in compact split screen
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
         presentSheetWith(actions: actions, on: self, from: button, suppressPopover: shouldSuppress)
