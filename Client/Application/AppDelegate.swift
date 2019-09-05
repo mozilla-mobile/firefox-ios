@@ -38,8 +38,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     weak var application: UIApplication?
     var launchOptions: [AnyHashable: Any]?
 
-    let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-
     var receivedURLs = [URL]()
     var unifiedTelemetry: UnifiedTelemetry?
 
