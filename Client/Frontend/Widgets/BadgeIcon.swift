@@ -34,7 +34,7 @@ class ToolbarBadge: UIView {
         snp.remakeConstraints { make in
             make.size.equalTo(badgeSize)
             make.centerX.equalTo(button).offset(badgeOffset)
-            make.centerY.equalTo(button).offset(-badgeOffset)
+            make.centerY.equalTo(button).offset(badgeOffset)
         }
     }
 
