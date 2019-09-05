@@ -225,7 +225,7 @@ extension PhotonActionSheetProtocol {
             devicePickerViewController.profileNeedsShutdown = false
             let navigationController = UINavigationController(rootViewController: devicePickerViewController)
             navigationController.modalPresentationStyle = .formSheet
-            bvc.present(navigationController, animated: true, completion: nil)
+            bvc.present(navigationController, animated: true, completion: {success(Strings.AppMenuTabSentConfirmMessage)})
         }
 
         let sharePage = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { _, _ in
