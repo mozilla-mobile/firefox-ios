@@ -711,9 +711,7 @@ class ShowIntroductionSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.browserViewController.presentIntroViewController(true)
-            }
+            BrowserViewController.foregroundBVC().presentIntroViewController(true)
         })
     }
 }
@@ -831,8 +829,8 @@ class LoginsSetting: Setting {
     override func onClick(_: UINavigationController?) {
         deselectRow()
         
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let navController = navigationController else { return }
-        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: appDelegate.browserViewController).uponQueue(.main) { loginsVC in
+        guard let navController = navigationController else { return }
+        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC()).uponQueue(.main) { loginsVC in
             guard let loginsVC = loginsVC else { return }
             LeanPlumClient.shared.track(event: .openedLogins)
             navController.pushViewController(loginsVC, animated: true)

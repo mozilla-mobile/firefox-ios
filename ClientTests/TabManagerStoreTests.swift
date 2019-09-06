@@ -38,7 +38,7 @@ class TabManagerStoreTests: XCTestCase {
 
     // Without session data, a Tab can't become a SavedTab and get archived
     func addTabWithSessionData(isPrivate: Bool = false) {
-        let tab = Tab(configuration: configuration, isPrivate: isPrivate)
+        let tab = Tab(bvc: BrowserViewController.foregroundBVC(), configuration: configuration, isPrivate: isPrivate)
         tab.url = URL(string: "http://yahoo.com")!
         manager.configureTab(tab, request: URLRequest(url: tab.url!), flushToDisk: false, zombie: false)
         tab.sessionData = SessionData(currentPage: 0, urls: [tab.url!], lastUsedTime: Date.now())
