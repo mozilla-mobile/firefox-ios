@@ -86,6 +86,7 @@ class SyncDataDisplay {
         self.notificationContent = content
         self.sentTabs = []
         self.tabQueue = tabQueue
+        Sentry.shared.setup(sendUsageData: true)
     }
 
     func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
@@ -143,7 +144,7 @@ extension SyncDataDisplay {
 
     func displayAccountVerifiedNotification() {
         #if MOZ_CHANNEL_BETA
-        presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
+            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
             return
         #endif
         presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
@@ -152,6 +153,7 @@ extension SyncDataDisplay {
     func displayUnknownMessageNotification(debugInfo: String) {
         #if MOZ_CHANNEL_BETA
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
+            Sentry.shared.send(message: "SentTab error: \(debugInfo)")
             return
         #endif
         // if, by any change we haven't dealt with the message, then perhaps we
@@ -250,6 +252,7 @@ extension SyncDataDisplay {
             title = Strings.SentTab_NoTabArrivingNotification_title
             #if MOZ_CHANNEL_BETA
                 body = "DEBUG: Sent Tabs with no tab"
+                Sentry.shared.send(message: "SentTab error: no tab")
             #else
                 body = Strings.SentTab_NoTabArrivingNotification_body
             #endif
