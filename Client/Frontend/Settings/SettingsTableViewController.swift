@@ -358,8 +358,10 @@ class StringSetting: Setting, UITextFieldDelegate {
             make.trailing.equalTo(cell.contentView).offset(-Padding)
             make.leading.equalTo(cell.contentView).offset(Padding)
         }
-        textField.text = self.persister.readPersistedValue() ?? defaultValue
-        textFieldDidChange(textField)
+        if let value = self.persister.readPersistedValue() {
+            textField.text = value
+            textFieldDidChange(textField)
+        }
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
