@@ -19,10 +19,9 @@ extension PhotonActionSheetProtocol {
     typealias IsPrivateTab = Bool
     typealias URLOpenAction = (URL?, IsPrivateTab) -> Void
 
-    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = Strings.CloseButtonTitle, suppressPopover: Bool = false, autoreverseActions: Bool = true) {
+    func presentSheetWith(title: String? = nil, actions: [[PhotonActionSheetItem]], on viewController: PresentableVC, from view: UIView, closeButtonTitle: String = Strings.CloseButtonTitle, suppressPopover: Bool = false) {
         let style: UIModalPresentationStyle = (UIDevice.current.userInterfaceIdiom == .pad && !suppressPopover) ? .popover : .overCurrentContext
         let sheet = PhotonActionSheet(title: title, actions: actions, closeButtonTitle: closeButtonTitle, style: style)
-        sheet.autoreverseActions = autoreverseActions
         sheet.modalPresentationStyle = style
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
         if let account = profile.getAccount(), account.actionNeeded == .none {
@@ -326,11 +325,15 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        if let helper = tab.contentBlocker {
-            let title = helper.isEnabled ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled {
+            let isWhitelisted = helper.status == .Whitelisted
+
+            let title = !isWhitelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { _, _ in
-                helper.isUserEnabled = !helper.isEnabled
+                ContentBlocker.shared.whitelist(enable: !isWhitelisted, url: url) {
+                    tab.reload()
+                }
             }
             return [toggleDesktopSite, toggleTP]
         } else {

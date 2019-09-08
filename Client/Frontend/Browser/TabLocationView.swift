@@ -55,7 +55,8 @@ class TabLocationView: UIView {
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
-            trackingProtectionButton.isHidden = lockImageView.isHidden
+
+            trackingProtectionButton.isHidden = !["https", "http"].contains(url?.scheme ?? "")
             setNeedsUpdateConstraints()
         }
     }
@@ -203,6 +204,8 @@ class TabLocationView: UIView {
 
         // Link these so they hide/show in-sync.
         trackingProtectionButton.separatorLine = separatorLineForTP
+
+        pageOptionsButton.separatorLine = separatorLineForPageOptions
 
         let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
@@ -388,11 +391,13 @@ extension TabLocationView: TabEventHandler {
     private func updateBlockerStatus(forTab tab: Tab) {
         assertIsMainThread("UI changes must be on the main thread")
         guard let blocker = tab.contentBlocker else { return }
+        trackingProtectionButton.alpha = 1.0
         switch blocker.status {
         case .Blocking:
             trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: "tracking-protection-active-block"), for: .normal)
         case .NoBlockedURLs:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+            trackingProtectionButton.alpha = 0.5
         case .Whitelisted:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
         case .Disabled:

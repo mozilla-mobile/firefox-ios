@@ -20,9 +20,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
     private var heightConstraint: Constraint?
     var tableView = UITableView(frame: .zero, style: .grouped)
 
-    // Using a popover (ipad), reverse the order of the actions
-    var autoreverseActions = true
-
     lazy var tapRecognizer: UITapGestureRecognizer = {
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(dismiss))
@@ -108,9 +105,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         if style == .popover {
-            if autoreverseActions {
-                self.actions = actions.map({ $0.reversed() }).reversed()
-            }
             tableView.snp.makeConstraints { make in
                 make.edges.equalTo(self.view)
             }
