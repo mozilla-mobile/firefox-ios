@@ -57,15 +57,16 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         var whatsNewAction: PhotonActionSheetItem? = nil
-        if shouldShowWhatsNew() {
+        let showBadgeForWhatsNew = shouldShowWhatsNew()
+        if showBadgeForWhatsNew {
             // Set the version number of the app, so the What's new will stop showing
             profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            // Redraw the toolbar so the badge hides from the appMenu button.
             updateToolbarStateForTraitCollection(view.traitCollection)
-
-            whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: true, badgeIconNamed: "menuBadge") { _, _ in
-                if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
-                    self.openURLInNewTab(whatsNewURL, isPrivileged: false)
-                }
+        }
+        whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew, badgeIconNamed: "menuBadge") { _, _ in
+            if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
+                self.openURLInNewTab(whatsNewURL, isPrivileged: false)
             }
         }
 
