@@ -114,7 +114,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight * 5
         }
 
-        let back = PhotonActionSheetItem(title: "Back", iconString: "goBack") { _, _ in
+        let back = PhotonActionSheetItem(title: Strings.BackTitle, iconString: "goBack") { _, _ in
             guard let urlbar = (self as? BrowserViewController)?.urlBar else { return }
             (self as? BrowserViewController)?.urlBarDidTapShield(urlbar)
         }
