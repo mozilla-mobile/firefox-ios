@@ -17,9 +17,9 @@ class ToolbarBadge: UIView {
         super.init(frame: CGRect(width: badgeSize, height: badgeSize))
         addSubview(background)
         addSubview(badge)
+        isUserInteractionEnabled = false
 
         [background, badge].forEach {
-            $0.isUserInteractionEnabled = false
             $0.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
