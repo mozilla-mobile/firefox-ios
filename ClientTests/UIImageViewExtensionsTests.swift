@@ -62,9 +62,9 @@ class UIImageViewExtensionsTests: XCTestCase {
         favImageView.setIcon(Favicon(url: gFavURL!.absoluteString), forURL: gURL)
 
         let expect = expectation(description: "UIImageView async load")
-        let time = Int64(2 * Double(NSEC_PER_SEC))
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
-           XCTAssert(correctImage.isStrictlyEqual(to: favImageView.image!), "The correct default favicon should be applied to the UIImageView")
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+           XCTAssert(correctImage.size.width * correctImage.scale == favImageView.image!.size.width * favImageView.image!.scale, "The correct default favicon should be applied to the UIImageView")
             expect.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
@@ -81,10 +81,10 @@ class UIImageViewExtensionsTests: XCTestCase {
         favImageView.setIcon(Favicon(url: gFavURL!.absoluteString), forURL: gURL)
 
         let expect = expectation(description: "UIImageView async load")
-        let time = Int64(2 * Double(NSEC_PER_SEC))
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             XCTAssertEqual(favImageView.backgroundColor, defaultItem.color)
-            XCTAssert(correctImage.isStrictlyEqual(to: favImageView.image!), "The correct default favicon should be applied to the UIImageView")
+            XCTAssert(correctImage.size.width * correctImage.scale == favImageView.image!.size.width * favImageView.image!.scale, "The correct default favicon should be applied to the UIImageView")
             expect.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
