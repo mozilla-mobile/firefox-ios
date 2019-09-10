@@ -35,7 +35,7 @@ class UIImageViewExtensionsTests: XCTestCase {
     }
 
     func testAsyncSetIcon() {
-        let originalImage = UIImage(named: "fxLogo")!
+        let originalImage = UIImage(named: "bookmark")!
 
         WebServer.sharedInstance.registerHandlerForMethod("GET", module: "favicon", resource: "icon") { (request) -> GCDWebServerResponse in
             return GCDWebServerDataResponse(data: originalImage.pngData()!, contentType: "image/png")
@@ -45,9 +45,8 @@ class UIImageViewExtensionsTests: XCTestCase {
         favImageView.setIcon(Favicon(url: "http://localhost:\(AppInfo.webserverPort)/favicon/icon"), forURL: URL(string: "http://localhost:\(AppInfo.webserverPort)"))
 
         let expect = expectation(description: "UIImageView async load")
-        let time = Int64(2 * Double(NSEC_PER_SEC))
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(time) / Double(NSEC_PER_SEC)) {
-            XCTAssert(originalImage.isStrictlyEqual(to: favImageView.image!), "The correct favicon should be applied to the UIImageView")
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.0) {
+            XCTAssert(originalImage.size.width * originalImage.scale == favImageView.image!.size.width * favImageView.image!.scale, "The correct favicon should be applied to the UIImageView")
             expect.fulfill()
         }
         waitForExpectations(timeout: 5, handler: nil)
