@@ -414,6 +414,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         }
 
         headerView.titleLabel.text = Strings.RecentlyBookmarkedTitle.uppercased()
+        headerView.showTopBorder = true
+        headerView.showBottomBorder = true
 
         return headerView
     }

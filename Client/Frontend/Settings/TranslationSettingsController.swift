@@ -37,8 +37,6 @@ class TranslationSettingsController: ThemedTableViewController {
 
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        headerView.showTopBorder = false
-        headerView.showBottomBorder = true
         tableView.tableHeaderView = headerView
         headerView.titleLabel.text = Strings.SettingTranslateSnackBarSectionHeader
     }

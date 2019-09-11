@@ -119,7 +119,6 @@ class SyncContentSettingsViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.FxASettingsTitle
-        hasSectionSeparatorLine = false
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -199,11 +199,9 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
         headerView.titleLabel.text = sectionSetting.title?.string
 
         switch section {
-        // Hide the bottom border for the FxA custom server notes.
         case 1, 3:
             headerView.titleAlignment = .top
             headerView.titleLabel.numberOfLines = 0
-            headerView.showBottomBorder = false
         default:
             return super.tableView(tableView, viewForHeaderInSection: section)
         }

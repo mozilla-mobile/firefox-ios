@@ -43,7 +43,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.showBottomBorder = false
+        footer.showTopBorder = true
         tableView.tableFooterView = footer
 
         view.addSubview(tableView)
@@ -177,7 +177,21 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         headerView?.titleLabel.text = section == Section.sites.rawValue ? Strings.SettingsWebsiteDataTitle : nil
-        headerView?.showBottomBorder = false
+
+        headerView?.showTopBorder = true
+        headerView?.showBottomBorder = true
+
+        // top section: no top border (this is a plain table)
+        guard let section = Section(rawValue: section) else { return headerView }
+        if section == .sites {
+            headerView?.showTopBorder = false
+
+            // no records: no bottom border (would make 2 with the one from the clear button)
+            let emptyRecords = siteRecords?.isEmpty ?? true
+            if emptyRecords {
+                headerView?.showBottomBorder = false
+            }
+        }
         return headerView
     }
 
@@ -195,7 +209,8 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        footerView?.showBottomBorder = false
+        footerView?.showTopBorder = true
+        footerView?.showBottomBorder = true
         return footerView
     }
 
