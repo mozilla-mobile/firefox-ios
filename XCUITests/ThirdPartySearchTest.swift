@@ -4,6 +4,7 @@
 
 import XCTest
 
+let mozDeveloperWebsite = "https://developer.mozilla.org/en-US"
 class ThirdPartySearchTest: BaseTestCase {
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
         if iPad() {
@@ -16,7 +17,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
     func testCustomSearchEngines() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
         if iPad() {
             let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
             searchTheDocsSearchField.tap()
@@ -48,7 +49,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
     func testCustomSearchEngineAsDefault() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
 
         if iPad() {
             let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
@@ -82,7 +83,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
     func testCustomSearchEngineDeletion() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
 
         if iPad() {
             let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]

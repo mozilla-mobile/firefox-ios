@@ -8,7 +8,7 @@ let firstWebsite = (url: path(forTestPage: "test-mozilla-org.html"), tabName: "I
 let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
 let exampleWebsite = (url: path(forTestPage: "test-example.html"), tabName: "Example Domain")
 let homeTabName = "Home"
-let websiteWithSearchField = (url: "https://developer.mozilla.org/en-US/search", urlSearchField: "Search the docs")
+let websiteWithSearchField = (url: "https://developer.mozilla.org/en-US/", urlSearchField: "Search MDN")
 
 let exampleDomainTitle = "Example Domain"
 let twitterTitle = "Twitter"
@@ -243,10 +243,10 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testDragAddressBarIntoSearchBox() {
         if skipPlatform { return }
 
-        navigator.openURL("developer.mozilla.org/en-US/search")
+        navigator.openURL("developer.mozilla.org/en-US")
         waitUntilPageLoad()
         // Check the text in the search field before dragging and dropping the url text field
-        XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField.urlSearchField].placeholderValue, "Search the docs")
+        XCTAssertEqual(app.webViews.searchFields[websiteWithSearchField.urlSearchField].placeholderValue, "Search MDN")
         // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
         app.textFields["url"].press(forDuration: 1, thenDragTo: app.webViews.searchFields[websiteWithSearchField.urlSearchField])
         // Verify that the text in the search field is the same as the text in the url text field
