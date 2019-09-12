@@ -35,8 +35,6 @@ def create_blocklist_entry(resource, related_domains):
                         "load-type": ["third-party"]},
             "action": {"type": action }}
 
-    # remove this property from the list of related domains
-    related_domains = filter(lambda a: a not in resource, related_domains)
     if len(related_domains) > 0:
         result["trigger"]["unless-domain"] = unless_domain(related_domains)
     return result
