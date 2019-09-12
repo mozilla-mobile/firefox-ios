@@ -86,11 +86,9 @@ class ContentBlocker {
         TPStatsBlocklistChecker.shared.startup()
 
         removeOldListsByDateFromStore() {
-            self.removeOldListsByNameFromStore() {
-                self.compileListsNotInStore {
-                    self.setupCompleted = true
-                    NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
-                }
+            self.compileListsNotInStore {
+                self.setupCompleted = true
+                NotificationCenter.default.post(name: .contentBlockerTabSetupRequired, object: nil)
             }
         }
     }
@@ -219,15 +217,16 @@ extension ContentBlocker {
     // If any blocker files are newer than the date saved in prefs,
     // remove all the content blockers and reload them.
     func removeOldListsByDateFromStore(completion: @escaping () -> Void) {
-
-            guard let fileDate = dateOfMostRecentBlockerFile() else {
+        guard let fileDate = dateOfMostRecentBlockerFile() else {
             completion()
             return
         }
 
         guard let prefsNewestDate = UserDefaults.standard.object(forKey: "blocker-file-date") as? Date else {
             UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
-            completion()
+            removeAllRulesInStore() {
+                completion()
+            }
             return
         }
 
@@ -240,40 +239,6 @@ extension ContentBlocker {
 
         removeAllRulesInStore() {
             completion()
-        }
-    }
-
-    func removeOldListsByNameFromStore(completion: @escaping () -> Void) {
-        var noMatchingIdentifierFoundForRule = false
-
-        ruleStore.getAvailableContentRuleListIdentifiers { available in
-            guard let available = available else {
-                completion()
-                return
-            }
-
-            let blocklists = BlocklistFileName.allCases.map { $0.filename }
-            for contentRuleIdentifier in available {
-                if !blocklists.contains(where: { $0 == contentRuleIdentifier }) {
-                    noMatchingIdentifierFoundForRule = true
-                    break
-                }
-            }
-
-            guard let fileDate = self.dateOfMostRecentBlockerFile(), let prefsNewestDate = UserDefaults.standard.object(forKey: "blocker-file-date") as? Date else {
-                completion()
-                return
-            }
-
-            if fileDate <= prefsNewestDate && !noMatchingIdentifierFoundForRule {
-                completion()
-                return
-            }
-
-            UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
-            self.removeAllRulesInStore {
-                completion()
-            }
         }
     }
 
