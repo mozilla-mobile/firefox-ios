@@ -211,9 +211,10 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         navigator.openNewURL(urlString: "mozilla.org")
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
+        snapshot("22TrackingProtectionBlockedElements-01")
         // Tap on the block element to get more details
         app.cells.element(boundBy: 2).tap()
-        snapshot("22TrackingProtectionBlockedElements-01")
+        snapshot("22TrackingProtectionBlockedElements-02")
     }
 
     func test23SettingsETP() {
