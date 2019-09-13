@@ -4,10 +4,12 @@
 
 import XCTest
 
+let mozDeveloperWebsite = "https://developer.mozilla.org/en-US"
+let searchFieldPlaceholder = "Search MDN"
 class ThirdPartySearchTest: BaseTestCase {
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
         if iPad() {
-            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
+            let searchTheDocsSearchField = app.webViews.searchFields[searchFieldPlaceholder]
             searchTheDocsSearchField.typeText("\r")
         } else {
             app.buttons["Done"].tap()
@@ -16,11 +18,13 @@ class ThirdPartySearchTest: BaseTestCase {
 
     func testCustomSearchEngines() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
         if iPad() {
-            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
+            let searchTheDocsSearchField = app.webViews.searchFields[searchFieldPlaceholder]
             searchTheDocsSearchField.tap()
-            app.keyboards.buttons["Search"].tap()
+            // Workaround due to issue #5442
+            app.buttons["Reload"].tap()
+            waitUntilPageLoad()
             searchTheDocsSearchField.tap()
         } else {
             app.webViews.searchFields.element(boundBy: 0).tap()
@@ -43,17 +47,19 @@ class ThirdPartySearchTest: BaseTestCase {
         if url.hasPrefix("https://") == false {
             url = "https://\(url)"
         }
-        XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
     func testCustomSearchEngineAsDefault() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
 
         if iPad() {
-            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
+            let searchTheDocsSearchField = app.webViews.searchFields[searchFieldPlaceholder]
             searchTheDocsSearchField.tap()
-            app.keyboards.buttons["Search"].tap()
+            // Workaround due to issue #5442
+            app.buttons["Reload"].tap()
+            waitUntilPageLoad()
             searchTheDocsSearchField.tap()
         } else {
             app.webViews.searchFields.element(boundBy: 0).tap()
@@ -82,12 +88,14 @@ class ThirdPartySearchTest: BaseTestCase {
 
     func testCustomSearchEngineDeletion() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
 
         if iPad() {
-            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
+            let searchTheDocsSearchField = app.webViews.searchFields[searchFieldPlaceholder]
             searchTheDocsSearchField.tap()
-            app.keyboards.buttons["Search"].tap()
+            // Workaround due to issue #5442
+            app.buttons["Reload"].tap()
+            waitUntilPageLoad()
             searchTheDocsSearchField.tap()
         } else {
             app.webViews.searchFields.element(boundBy: 0).tap()
