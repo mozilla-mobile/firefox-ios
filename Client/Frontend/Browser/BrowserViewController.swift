@@ -209,13 +209,19 @@ class BrowserViewController: UIViewController {
         make.right.bottom.left.equalToSuperview()
     }
 
-    fileprivate func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
+    func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
-        urlBar.hideImagesBadge(visible: NoImageModeHelper.isActivated(profile.prefs))
+
+        let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
+        let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
+
+        let showMenuBadge = hideImagesOn || showWhatsNew
+        
+        urlBar.appMenuBadge(setVisible: showMenuBadge)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         toolbar = nil
@@ -226,7 +232,7 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
-            toolbar?.hideImagesBadge(visible: NoImageModeHelper.isActivated(profile.prefs))
+            toolbar?.appMenuBadge(setVisible: showMenuBadge)
             updateTabCountUsingTabManager(self.tabManager)
         }
 
@@ -557,16 +563,6 @@ class BrowserViewController: UIViewController {
 
         super.viewDidAppear(animated)
 
-        if shouldShowWhatsNewTab() {
-            // Only display if the SUMO topic has been configured in the Info.plist (present and not empty)
-            if let whatsNewTopic = AppInfo.whatsNewTopic, !whatsNewTopic.isEmpty {
-                if let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
-                    self.openURLInNewTab(whatsNewURL, isPrivileged: false)
-                    profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
-                }
-            }
-        }
-
         if let toast = self.pendingToast {
             self.pendingToast = nil
             show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
@@ -579,7 +575,7 @@ class BrowserViewController: UIViewController {
     // that value, we compare it to the major version of the running app. If it is different then this is an
     // upgrade, downgrades are not possible, so we can show the What's New page.
 
-    fileprivate func shouldShowWhatsNewTab() -> Bool {
+    func shouldShowWhatsNew() -> Bool {
         guard let latestMajorAppVersion = profile.prefs.stringForKey(LatestAppVersionProfileKey)?.components(separatedBy: ".").first else {
             return false // Clean install, never show What's New
         }

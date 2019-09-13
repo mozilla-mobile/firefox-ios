@@ -34,7 +34,7 @@ class NoImageModeHelper: TabContentScript {
     }
 
     static func toggle(isEnabled: Bool, profile: Profile, tabManager: TabManager) {
-        BrowserViewController.foregroundBVC().navigationToolbar.hideImagesBadge(visible: isEnabled)
+        BrowserViewController.foregroundBVC().navigationToolbar.appMenuBadge(setVisible: isEnabled)
 
         profile.prefs.setBool(isEnabled, forKey: PrefsKeys.KeyNoImageModeStatus)
         tabManager.tabs.forEach { $0.noImageMode = isEnabled }

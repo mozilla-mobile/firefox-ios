@@ -22,7 +22,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
-    func hideImagesBadge(visible: Bool)
+    func appMenuBadge(setVisible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -224,7 +224,7 @@ class TabToolbar: UIView {
     let actionButtons: [Themeable & UIButton]
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
-    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -239,7 +239,7 @@ class TabToolbar: UIView {
         addButtons(actionButtons)
 
         privateModeBadge.add(toParent: contentView)
-        hideImagesBadge.add(toParent: contentView)
+        appMenuBadge.add(toParent: contentView)
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
@@ -247,7 +247,7 @@ class TabToolbar: UIView {
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
-        hideImagesBadge.layout(onButton: menuButton)
+        appMenuBadge.layout(onButton: menuButton)
 
         contentView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
@@ -294,8 +294,8 @@ extension TabToolbar: TabToolbarProtocol {
         privateModeBadge.show(visible)
     }
 
-    func hideImagesBadge(visible: Bool) {
-        hideImagesBadge.show(visible)
+    func appMenuBadge(setVisible: Bool) {
+        appMenuBadge.show(setVisible)
     }
 
     func updateBackStatus(_ canGoBack: Bool) {
@@ -325,7 +325,7 @@ extension TabToolbar: Themeable, PrivateModeUI {
         helper?.setTheme(forButtons: actionButtons)
 
         privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        hideImagesBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 
     func applyUIMode(isPrivate: Bool) {
