@@ -36,7 +36,7 @@ class NoImageModeTests: KIFTestCase {
             EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
         }
         EarlGrey.selectElement(with: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
-                                                       grey_accessibilityLabel("Hide Images")]))
+                                                       grey_accessibilityLabel("Block Images")]))
             .perform(grey_tap())
         //Need to tap out of the browser tab menu to dismiss it (there is close button in iphone but not ipad)
         EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
@@ -49,7 +49,7 @@ class NoImageModeTests: KIFTestCase {
             EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
         }
         EarlGrey.selectElement(with: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
-                                                       grey_accessibilityLabel("Hide Images")]))
+                                                       grey_accessibilityLabel("Block Images")]))
         .perform(grey_tap())
         EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
     }
