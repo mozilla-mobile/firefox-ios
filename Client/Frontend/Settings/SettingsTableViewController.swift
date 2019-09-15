@@ -269,7 +269,10 @@ class StringPrefSetting: StringSetting {
 }
 
 class WebPageSetting: StringPrefSetting {
-    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingDidChange: ((String?) -> Void)? = nil) {
+    let isChecked: () -> Bool
+
+    init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, isChecked: @escaping () -> Bool = { return false }, settingDidChange: ((String?) -> Void)? = nil) {
+        self.isChecked = isChecked
         super.init(prefs: prefs,
                    prefKey: prefKey,
                    defaultValue: defaultValue,
@@ -291,7 +294,7 @@ class WebPageSetting: StringPrefSetting {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        cell.accessoryType = .checkmark
+        cell.accessoryType = isChecked() ? .checkmark : .none
         textField.textAlignment = .left
     }
 
