@@ -135,7 +135,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test13ReloadButtonContextMenu() {
-        navigator.toggleOn(userState.trackingProtectionSettingOnNormalMode == true, withAction: Action.ToggleTrackingProtectionSettingOnNormalMode)
+        navigator.toggleOn(userState.trackingProtectionSettingOnNormalMode == true, withAction: Action.SwitchETP)
         navigator.goto(BrowserTab)
 
         navigator.openURL(loremIpsumURL)
@@ -193,10 +193,39 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test21ReaderModeSettingsMenu() {
-        let app = XCUIApplication()
         loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
         app.buttons["TabLocationView.readerModeButton"].tap()
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         snapshot("21ReaderModeSettingsMenu-01")
+    }
+
+    func test22ETPperSite() {
+        // Website without blocked elements
+        navigator.openURL(loremIpsumURL)
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        snapshot("22TrackingProtectionEnabledPerSite-01")
+        navigator.performAction(Action.TrackingProtectionperSiteToggle)
+        snapshot("22TrackingProtectionDisabledPerSite-02")
+
+        // Website with blocked elements
+        navigator.openNewURL(urlString: "mozilla.org")
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        snapshot("22TrackingProtectionBlockedElements-01")
+        // Tap on the block element to get more details
+        app.cells.element(boundBy: 2).tap()
+        snapshot("22TrackingProtectionBlockedElements-02")
+    }
+
+    func test23SettingsETP() {
+        navigator.goto(TrackingProtectionSettings)
+        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
+        snapshot("23TrackingProtectionBasicMoreInfo-01")
+        // Go back to TP settings
+        app.buttons["Tracking Protection"].tap()
+
+        // See Strict mode info
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
+        snapshot("23TrackingProtectionStrictMoreInfo-02")
     }
 }
