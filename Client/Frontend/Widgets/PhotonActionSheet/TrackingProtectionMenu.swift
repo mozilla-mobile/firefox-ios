@@ -229,6 +229,7 @@ extension PhotonActionSheetProtocol {
                 l.textAlignment = .center
                 l.textColor = UIColor.theme.tableView.headerTextLight
                 l.text = Strings.TPPageMenuNoTrackersBlocked
+                l.accessibilityIdentifier = "tp.no-trackers-blocked"
                 contentView.addSubview(l)
                 l.snp.makeConstraints { make in
                     make.center.equalToSuperview()
