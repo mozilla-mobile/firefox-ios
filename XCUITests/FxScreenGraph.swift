@@ -354,7 +354,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(URLBarLongPressMenu) { screenState in
         let menu = app.tables["Context Menu"].firstMatch
-        //screenState.onEnterWaitFor(element: menu)
 
         screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
@@ -492,9 +491,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 bookmarksElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.Bookmarks"])
             }
         }
-        
-        screenState.press(app.tables["Bookmarks List"].cells.element(boundBy: 4), to: BookmarksPanelContextMenu)
 
+        screenState.press(app.tables["Bookmarks List"].cells.element(boundBy: 4), to: BookmarksPanelContextMenu)
     }
 
     map.addScreenState(MobileBookmarks) { screenState in
@@ -503,7 +501,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.ExitMobileBookmarksFolder, transitionTo: LibraryPanel_Bookmarks) { userState in
                 bookmarksButton.tap()
         }
-
         screenState.tap(app.buttons["Edit"], to: MobileBookmarksEdit)
     }
 
@@ -927,7 +924,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
-
         screenState.tap(app.textFields["url"], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
             app.textFields["url"].press(forDuration: 1.0)
@@ -1078,14 +1074,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.nightMode = !userState.nightMode
         }
 
-        screenState.tap(app.tables.cells["menu-TrackingProtection"], forAction: Action.ToggleTrackingProtection, transitionTo: BrowserTabMenu) { userState in
-            if userState.isPrivate {
-                userState.trackingProtectionSettingOnPrivateMode = !userState.trackingProtectionSettingOnPrivateMode
-            } else {
-                userState.trackingProtectionSettingOnNormalMode = !userState.trackingProtectionSettingOnNormalMode
-            }
-        }
-
         screenState.tap(app.tables.cells["menu-Home"], forAction: Action.GoToHomePage) { userState in
         }
         screenState.tap(app.tables.cells["whatsnew"], forAction: Action.OpenWhatsNewPage) { userState in
@@ -1139,7 +1127,6 @@ extension MMNavigator where T == FxUserState {
             }
             self.goto(TabTray)
             self.goto(HomePanelsScreen)
-
         }
     }
 
