@@ -610,7 +610,7 @@ extension Strings {
 
     // TP Page menu title
     public static let TPPageMenuTitle = NSLocalizedString("Menu.TrackingProtection.TitlePrefix", value: "Protections for %@", comment: "Title on tracking protection menu showing the domain. eg. Protections for mozilla.org")
-    public static let TPPageMenuNoTrackersBlocked = NSLocalizedString("Menu.TrackingProtection.NoTrackersBlocked", value: "No trackers blocked for this site.", comment: "Message in menu when no trackers blocked.")
+    public static let TPPageMenuNoTrackersBlocked = NSLocalizedString("Menu.TrackingProtection.NoTrackersBlockedTitle", value: "No trackers known to Firefox were detected on this page.", comment: "Message in menu when no trackers blocked.")
     public static let TPPageMenuBlockedTitle = NSLocalizedString("Menu.TrackingProtection.BlockedTitle", value: "Blocked", comment: "Title on tracking protection menu for blocked items.")
 
     // Category Titles

@@ -222,11 +222,24 @@ extension PhotonActionSheetProtocol {
 
         if items[0].count == 1 {
             // no items were blocked
-            let noblockeditems = PhotonActionSheetItem(title: Strings.TPPageMenuNoTrackersBlocked, accessory: .Text, bold: true)
-            let space = PhotonActionSheetItem(title: " ")
+            var noblockeditems = PhotonActionSheetItem(title: "", accessory: .Text)
+            noblockeditems.customRender = { title, contentView in
+                let l = UILabel()
+                l.numberOfLines = 0
+                l.textAlignment = .center
+                l.textColor = UIColor.theme.tableView.headerTextLight
+                l.text = Strings.TPPageMenuNoTrackersBlocked
+                contentView.addSubview(l)
+                l.snp.makeConstraints { make in
+                    make.center.equalToSuperview()
+                    make.width.equalToSuperview().inset(40)
+                }
+            }
+            noblockeditems.customHeight = { _ in
+                return 180
+            }
 
-            items = [[noblockeditems, space]]
-
+            items = [[noblockeditems]]
         }
 
         items = [[addToWhitelist]] + items + [[settings]]
