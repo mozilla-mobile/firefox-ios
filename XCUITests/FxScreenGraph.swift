@@ -214,6 +214,8 @@ class Action {
     static let RemoveItemMobileBookmarks = "RemoveItemMobileBookmarks"
     static let ConfirmRemoveItemMobileBookmarks = "ConfirmRemoveItemMobileBookmarks"
     static let SaveCreatedBookmark = "SaveCreatedBookmark"
+
+    static let OpenWhatsNewPage = "OpenWhatsNewPage"
 }
 
 @objcMembers
@@ -1085,6 +1087,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.tap(app.tables.cells["menu-Home"], forAction: Action.GoToHomePage) { userState in
+        }
+        screenState.tap(app.tables.cells["whatsnew"], forAction: Action.OpenWhatsNewPage) { userState in
         }
 
         screenState.dismissOnUse = true
