@@ -398,6 +398,10 @@ class Tab: NSObject {
             return Strings.AppMenuOpenHomePageTitleString
         }
 
+        if let url = self.url, !InternalURL.isValid(url: url), let shownUrl = url.displayURL?.absoluteString {
+            return shownUrl
+        }
+
         guard let lastTitle = lastTitle, !lastTitle.isEmpty else {
             return self.url?.displayURL?.absoluteString ??  ""
         }
