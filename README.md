@@ -3,12 +3,6 @@ Firefox for iOS [![codebeat badge](https://codebeat.co/badges/67e58b6d-bc89-4f22
 
 Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id989804926).
 
-We're Hiring! 
--------------
-
-We are looking for a Mobile Engineer to help work on this project and others at Mozilla. Apply online and come work on one of the largest open source swift projects on Github 
-[https://careers.mozilla.org/position/gh/1763657/](https://careers.mozilla.org/position/gh/1763657/)
-
 This branch (master)
 -----------
 
