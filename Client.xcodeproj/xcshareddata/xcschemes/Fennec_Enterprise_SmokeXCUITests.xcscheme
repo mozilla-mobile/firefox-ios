@@ -749,6 +749,9 @@
                <Test
                   Identifier = "TranslationSnackBarTest">
                </Test>
+               <Test
+                  Identifier = "WhatsNewTest">
+               </Test>
             </SkippedTests>
          </TestableReference>
       </Testables>
