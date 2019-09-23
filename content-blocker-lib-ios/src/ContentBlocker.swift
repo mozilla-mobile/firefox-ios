@@ -253,24 +253,18 @@ extension ContentBlocker {
             }
 
             let blocklists = BlocklistFileName.allCases.map { $0.filename }
-            for contentRuleIdentifier in available {
-                if !blocklists.contains(where: { $0 == contentRuleIdentifier }) {
+            for listOnDisk in blocklists {
+                // If any file from the list on disk is not installed, remove all the rules and re-install them
+                if !available.contains(where: { $0 == listOnDisk}) {
                     noMatchingIdentifierFoundForRule = true
                     break
                 }
             }
-
-            guard let fileDate = self.dateOfMostRecentBlockerFile(), let prefsNewestDate = UserDefaults.standard.object(forKey: "blocker-file-date") as? Date else {
+            if !noMatchingIdentifierFoundForRule {
                 completion()
                 return
             }
 
-            if fileDate <= prefsNewestDate && !noMatchingIdentifierFoundForRule {
-                completion()
-                return
-            }
-
-            UserDefaults.standard.set(fileDate, forKey: "blocker-file-date")
             self.removeAllRulesInStore {
                 completion()
             }
