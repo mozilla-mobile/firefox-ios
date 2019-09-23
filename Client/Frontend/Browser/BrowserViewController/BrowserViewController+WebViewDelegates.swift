@@ -216,7 +216,13 @@ extension BrowserViewController: WKNavigationDelegate {
         if url.scheme == "javascript", navigationAction.request.isPrivileged {
             decisionHandler(.cancel)
             if let javaScriptString = url.absoluteString.replaceFirstOccurrence(of: "javascript:", with: "").removingPercentEncoding {
-                webView.evaluateJavaScript(javaScriptString)
+                // iOS keyboards do automatic fancy quoting, replace with regular quotes.
+                // These open/end characters appear the same in the editor, but they are not.
+                var js = javaScriptString.replacingOccurrences(of: "‘", with: "'") // open single quote
+                    .replacingOccurrences(of: "’", with: "'") // end single quote
+                    .replacingOccurrences(of: "“", with: "'") // open quote
+                    .replacingOccurrences(of: "”", with: "'") // end quote
+                webView.evaluateJavaScript(js)
             }
             return
         }
