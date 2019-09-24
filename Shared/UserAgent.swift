@@ -2,8 +2,29 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import AVFoundation
+import WebKit
 import UIKit
+
+private extension WKWebView {
+    func evaluate(script: String, completion: @escaping (Any?, Error?) -> Void) {
+        var finished = false
+
+        evaluateJavaScript(script) { (result, error) in
+            if error == nil {
+                if result != nil {
+                    completion(result, nil)
+                }
+            } else {
+                completion(nil, error)
+            }
+            finished = true
+        }
+
+        while !finished {
+            RunLoop.current.run(mode: RunLoop.Mode.default, before: Date.distantFuture)
+        }
+    }
+}
 
 open class UserAgent {
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
@@ -65,7 +86,8 @@ open class UserAgent {
             return firefoxUA
         }
 
-        let webView = UIWebView()
+        let webView = WKWebView()
+        webView.loadHTMLString("<html></html>", baseURL: nil)
 
         let appVersion = AppInfo.appVersion
         let buildNumber = AppInfo.buildNumber
@@ -74,7 +96,15 @@ open class UserAgent {
         defaults.set(appVersion, forKey: "LastFirefoxVersionNumber")
         defaults.set(buildNumber, forKey: "LastFirefoxBuildNumber")
 
-        let userAgent = webView.stringByEvaluatingJavaScript(from: "navigator.userAgent")!
+        var userAgent = ""
+        // Synchronously get the UA, note this is called only once after install and then cached
+        webView.evaluate(script: "navigator.userAgent") { (object, error) in
+            if let ua = object as? String {
+                userAgent = ua
+            } else {
+                print("Failed to get user agent.")
+            }
+        }
 
         // Extract the WebKit version and use it as the Safari version.
         let webKitVersionRegex = try! NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: [])

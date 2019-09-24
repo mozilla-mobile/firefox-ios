@@ -66,7 +66,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        reloadData()
+        (navigationController as? ThemedNavigationController)?.applyTheme()
     }
 
     override func viewDidLoad() {
@@ -83,8 +83,6 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: "TwoLineTableViewCell")
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
-        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
-        tableView.separatorColor = UIColor.theme.tableView.separator
         tableView.accessibilityIdentifier = "DownloadsTable"
         tableView.cellLayoutMarginsFollowReadableWidth = false
 
@@ -388,6 +386,9 @@ extension DownloadsPanel: Themeable {
         emptyStateOverlayView.removeFromSuperview()
         emptyStateOverlayView = createEmptyStateOverlayView()
         updateEmptyPanelState()
+
+        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableView.separatorColor = UIColor.theme.tableView.separator
 
         tableView.reloadData()
     }
