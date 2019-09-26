@@ -1,11 +1,8 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 let ETLD_NAMES_LIST = [
-   "// This Source Code Form is subject to the terms of the Mozilla Public",
-   "// License, v. 2.0. If a copy of the MPL was not distributed with this",
-   "// file, You can obtain one at http://mozilla.org/MPL/2.0/.",
-
-   "// ===BEGIN ICANN DOMAINS===",
-
-   "// ac : http://en.wikipedia.org/wiki/.ac",
    "ac",
    "com.ac",
    "edu.ac",
@@ -13,13 +10,8 @@ let ETLD_NAMES_LIST = [
    "net.ac",
    "mil.ac",
    "org.ac",
-
-   "// ad : http://en.wikipedia.org/wiki/.ad",
    "ad",
    "nom.ad",
-
-   "// ae : http://en.wikipedia.org/wiki/.ae",
-   "// see also: 'Domain Name Eligibility Policy' at http://www.aeda.ae/eng/aepolicy.php",
    "ae",
    "co.ae",
    "net.ae",
@@ -28,8 +20,6 @@ let ETLD_NAMES_LIST = [
    "ac.ae",
    "gov.ae",
    "mil.ae",
-
-   "// aero : see http://www.information.aero/index.php?id=66",
    "aero",
    "accident-investigation.aero",
    "accident-prevention.aero",
@@ -120,31 +110,23 @@ let ETLD_NAMES_LIST = [
    "union.aero",
    "workinggroup.aero",
    "works.aero",
-
-   "// af : http://www.nic.af/help.jsp",
    "af",
    "gov.af",
    "com.af",
    "org.af",
    "net.af",
    "edu.af",
-
-   "// ag : http://www.nic.ag/prices.htm",
    "ag",
    "com.ag",
    "org.ag",
    "net.ag",
    "co.ag",
    "nom.ag",
-
-   "// ai : http://nic.com.ai/",
    "ai",
    "off.ai",
    "com.ai",
    "net.ai",
    "org.ai",
-
-   "// al : http://www.ert.gov.al/ert_alb/faq_det.html?Id=31",
    "al",
    "com.al",
    "edu.al",
@@ -152,19 +134,12 @@ let ETLD_NAMES_LIST = [
    "mil.al",
    "net.al",
    "org.al",
-
-   "// am : http://en.wikipedia.org/wiki/.am",
    "am",
-
-   "// an : http://www.una.an/an_domreg/default.asp",
    "an",
    "com.an",
    "net.an",
    "org.an",
    "edu.an",
-
-   "// ao : http://en.wikipedia.org/wiki/.ao",
-   "// http://www.dns.ao/REGISTR.DOC",
    "ao",
    "ed.ao",
    "gv.ao",
@@ -172,11 +147,7 @@ let ETLD_NAMES_LIST = [
    "co.ao",
    "pb.ao",
    "it.ao",
-
-   "// aq : http://en.wikipedia.org/wiki/.aq",
    "aq",
-
-   "// ar : https://nic.ar/normativa-vigente.xhtml",
    "ar",
    "com.ar",
    "edu.ar",
@@ -187,9 +158,6 @@ let ETLD_NAMES_LIST = [
    "net.ar",
    "org.ar",
    "tur.ar",
-
-   "// arpa : http://en.wikipedia.org/wiki/.arpa",
-   "// Confirmed by registry <iana-questions@icann.org> 2008-06-18",
    "arpa",
    "e164.arpa",
    "in-addr.arpa",
@@ -197,26 +165,15 @@ let ETLD_NAMES_LIST = [
    "iris.arpa",
    "uri.arpa",
    "urn.arpa",
-
-   "// as : http://en.wikipedia.org/wiki/.as",
    "as",
    "gov.as",
-
-   "// asia : http://en.wikipedia.org/wiki/.asia",
    "asia",
-
-   "// at : http://en.wikipedia.org/wiki/.at",
-   "// Confirmed by registry <it@nic.at> 2008-06-17",
    "at",
    "ac.at",
    "co.at",
    "gv.at",
    "or.at",
-
-   "// au : http://en.wikipedia.org/wiki/.au",
-   "// http://www.auda.org.au/",
    "au",
-   "// 2LDs",
    "com.au",
    "net.au",
    "org.au",
@@ -224,11 +181,9 @@ let ETLD_NAMES_LIST = [
    "gov.au",
    "asn.au",
    "id.au",
-   "// Historic 2LDs (closed to new registration, but sites still exist)",
    "info.au",
    "conf.au",
    "oz.au",
-   "// CGDNs - http://www.cgdn.org.au/",
    "act.au",
    "nsw.au",
    "nt.au",
@@ -237,7 +192,6 @@ let ETLD_NAMES_LIST = [
    "tas.au",
    "vic.au",
    "wa.au",
-   "// 3LDs",
    "act.edu.au",
    "nsw.edu.au",
    "nt.edu.au",
@@ -246,23 +200,14 @@ let ETLD_NAMES_LIST = [
    "tas.edu.au",
    "vic.edu.au",
    "wa.edu.au",
-   "// act.gov.au  Bug 984824 - Removed at request of Greg Tankard",
-   "// nsw.gov.au  Bug 547985 - Removed at request of <Shae.Donelan@services.nsw.gov.au>",
-   "// nt.gov.au  Bug 940478 - Removed at request of Greg Connors <Greg.Connors@nt.gov.au>",
    "qld.gov.au",
    "sa.gov.au",
    "tas.gov.au",
    "vic.gov.au",
    "wa.gov.au",
-
-   "// aw : http://en.wikipedia.org/wiki/.aw",
    "aw",
    "com.aw",
-
-   "// ax : http://en.wikipedia.org/wiki/.ax",
    "ax",
-
-   "// az : http://en.wikipedia.org/wiki/.az",
    "az",
    "com.az",
    "net.az",
@@ -276,8 +221,6 @@ let ETLD_NAMES_LIST = [
    "name.az",
    "pro.az",
    "biz.az",
-
-   "// ba : http://en.wikipedia.org/wiki/.ba",
    "ba",
    "org.ba",
    "net.ba",
@@ -289,8 +232,6 @@ let ETLD_NAMES_LIST = [
    "co.ba",
    "com.ba",
    "rs.ba",
-
-   "// bb : http://en.wikipedia.org/wiki/.bb",
    "bb",
    "biz.bb",
    "co.bb",
@@ -302,21 +243,11 @@ let ETLD_NAMES_LIST = [
    "org.bb",
    "store.bb",
    "tv.bb",
-
-   "// bd : http://en.wikipedia.org/wiki/.bd",
    "*.bd",
-
-   "// be : http://en.wikipedia.org/wiki/.be",
-   "// Confirmed by registry <tech@dns.be> 2008-06-08",
    "be",
    "ac.be",
-
-   "// bf : http://en.wikipedia.org/wiki/.bf",
    "bf",
    "gov.bf",
-
-   "// bg : http://en.wikipedia.org/wiki/.bg",
-   "// https://www.register.bg/user/static/rules/en/index.html",
    "bg",
    "a.bg",
    "b.bg",
@@ -354,45 +285,30 @@ let ETLD_NAMES_LIST = [
    "7.bg",
    "8.bg",
    "9.bg",
-
-   "// bh : http://en.wikipedia.org/wiki/.bh",
    "bh",
    "com.bh",
    "edu.bh",
    "net.bh",
    "org.bh",
    "gov.bh",
-
-   "// bi : http://en.wikipedia.org/wiki/.bi",
-   "// http://whois.nic.bi/",
    "bi",
    "co.bi",
    "com.bi",
    "edu.bi",
    "or.bi",
    "org.bi",
-
-   "// biz : http://en.wikipedia.org/wiki/.biz",
    "biz",
-
-   "// bj : http://en.wikipedia.org/wiki/.bj",
    "bj",
    "asso.bj",
    "barreau.bj",
    "gouv.bj",
-
-   "// bm : http://www.bermudanic.bm/dnr-text.txt",
    "bm",
    "com.bm",
    "edu.bm",
    "gov.bm",
    "net.bm",
    "org.bm",
-
-   "// bn : http://en.wikipedia.org/wiki/.bn",
    "*.bn",
-
-   "// bo : http://www.nic.bo/",
    "bo",
    "com.bo",
    "edu.bo",
@@ -403,9 +319,6 @@ let ETLD_NAMES_LIST = [
    "net.bo",
    "mil.bo",
    "tv.bo",
-
-   "// br : http://registro.br/dominio/categoria.html",
-   "// Submitted by registry <fneves@registro.br> 2014-08-11",
    "br",
    "adm.br",
    "adv.br",
@@ -477,60 +390,34 @@ let ETLD_NAMES_LIST = [
    "vlog.br",
    "wiki.br",
    "zlg.br",
-
-   "// bs : http://www.nic.bs/rules.html",
    "bs",
    "com.bs",
    "net.bs",
    "org.bs",
    "edu.bs",
    "gov.bs",
-
-   "// bt : http://en.wikipedia.org/wiki/.bt",
    "bt",
    "com.bt",
    "edu.bt",
    "gov.bt",
    "net.bt",
    "org.bt",
-
-   "// bv : No registrations at this time.",
-   "// Submitted by registry <jarle@uninett.no> 2006-06-16",
    "bv",
-
-   "// bw : http://en.wikipedia.org/wiki/.bw",
-   "// http://www.gobin.info/domainname/bw.doc",
-   "// list of other 2nd level tlds ?",
    "bw",
    "co.bw",
    "org.bw",
-
-   "// by : http://en.wikipedia.org/wiki/.by",
-   "// http://tld.by/rules_2006_en.html",
-   "// list of other 2nd level tlds ?",
    "by",
    "gov.by",
    "mil.by",
-   "// Official information does not indicate that com.by is a reserved",
-   "// second-level domain, but it's being used as one (see www.google.com.by and",
-   "// www.yahoo.com.by, for example), so we list it here for safety's sake.",
    "com.by",
-
-   "// http://hoster.by/",
    "of.by",
-
-   "// bz : http://en.wikipedia.org/wiki/.bz",
-   "// http://www.belizenic.bz/",
    "bz",
    "com.bz",
    "net.bz",
    "org.bz",
    "edu.bz",
    "gov.bz",
-
-   "// ca : http://en.wikipedia.org/wiki/.ca",
    "ca",
-   "// ca geographical names",
    "ab.ca",
    "bc.ca",
    "mb.ca",
@@ -545,32 +432,14 @@ let ETLD_NAMES_LIST = [
    "qc.ca",
    "sk.ca",
    "yk.ca",
-   "// gc.ca: http://en.wikipedia.org/wiki/.gc.ca",
-   "// see also: http://registry.gc.ca/en/SubdomainFAQ",
    "gc.ca",
-
-   "// cat : http://en.wikipedia.org/wiki/.cat",
    "cat",
-
-   "// cc : http://en.wikipedia.org/wiki/.cc",
    "cc",
-
-   "// cd : http://en.wikipedia.org/wiki/.cd",
-   "// see also: https://www.nic.cd/domain/insertDomain_2.jsp?act=1",
    "cd",
    "gov.cd",
-
-   "// cf : http://en.wikipedia.org/wiki/.cf",
    "cf",
-
-   "// cg : http://en.wikipedia.org/wiki/.cg",
    "cg",
-
-   "// ch : http://en.wikipedia.org/wiki/.ch",
    "ch",
-
-   "// ci : http://en.wikipedia.org/wiki/.ci",
-   "// http://www.nic.ci/index.php?page=charte",
    "ci",
    "org.ci",
    "or.ci",
@@ -587,27 +456,18 @@ let ETLD_NAMES_LIST = [
    "presse.ci",
    "md.ci",
    "gouv.ci",
-
-   "// ck : http://en.wikipedia.org/wiki/.ck",
    "*.ck",
    "!www.ck",
-
-   "// cl : http://en.wikipedia.org/wiki/.cl",
    "cl",
    "gov.cl",
    "gob.cl",
    "co.cl",
    "mil.cl",
-
-   "// cm : http://en.wikipedia.org/wiki/.cm plus bug 981927",
    "cm",
    "co.cm",
    "com.cm",
    "gov.cm",
    "net.cm",
-
-   "// cn : http://en.wikipedia.org/wiki/.cn",
-   "// Submitted by registry <tanyaling@cnnic.cn> 2008-06-11",
    "cn",
    "ac.cn",
    "com.cn",
@@ -619,7 +479,6 @@ let ETLD_NAMES_LIST = [
    "公司.cn",
    "网络.cn",
    "網絡.cn",
-   "// cn geographic names",
    "ah.cn",
    "bj.cn",
    "cq.cn",
@@ -654,9 +513,6 @@ let ETLD_NAMES_LIST = [
    "hk.cn",
    "mo.cn",
    "tw.cn",
-
-   "// co : http://en.wikipedia.org/wiki/.co",
-   "// Submitted by registry <tecnico@uniandes.edu.co> 2008-06-11",
    "co",
    "arts.co",
    "com.co",
@@ -671,14 +527,8 @@ let ETLD_NAMES_LIST = [
    "org.co",
    "rec.co",
    "web.co",
-
-   "// com : http://en.wikipedia.org/wiki/.com",
    "com",
-
-   "// coop : http://en.wikipedia.org/wiki/.coop",
    "coop",
-
-   "// cr : http://www.nic.cr/niccr_publico/showRegistroDominiosScreen.do",
    "cr",
    "ac.cr",
    "co.cr",
@@ -687,8 +537,6 @@ let ETLD_NAMES_LIST = [
    "go.cr",
    "or.cr",
    "sa.cr",
-
-   "// cu : http://en.wikipedia.org/wiki/.cu",
    "cu",
    "com.cu",
    "edu.cu",
@@ -696,50 +544,25 @@ let ETLD_NAMES_LIST = [
    "net.cu",
    "gov.cu",
    "inf.cu",
-
-   "// cv : http://en.wikipedia.org/wiki/.cv",
    "cv",
-
-   "// cw : http://www.una.cw/cw_registry/",
-   "// Confirmed by registry <registry@una.net> 2013-03-26",
    "cw",
    "com.cw",
    "edu.cw",
    "net.cw",
    "org.cw",
-
-   "// cx : http://en.wikipedia.org/wiki/.cx",
-   "// list of other 2nd level tlds ?",
    "cx",
    "gov.cx",
-
-   "// cy : http://en.wikipedia.org/wiki/.cy",
    "*.cy",
-
-   "// cz : http://en.wikipedia.org/wiki/.cz",
    "cz",
-
-   "// de : http://en.wikipedia.org/wiki/.de",
-   "// Confirmed by registry <ops@denic.de> (with technical",
-   "// reservations) 2008-07-01",
    "de",
-
-   "// dj : http://en.wikipedia.org/wiki/.dj",
    "dj",
-
-   "// dk : http://en.wikipedia.org/wiki/.dk",
-   "// Confirmed by registry <robert@dk-hostmaster.dk> 2008-06-17",
    "dk",
-
-   "// dm : http://en.wikipedia.org/wiki/.dm",
    "dm",
    "com.dm",
    "net.dm",
    "org.dm",
    "edu.dm",
    "gov.dm",
-
-   "// do : http://en.wikipedia.org/wiki/.do",
    "do",
    "art.do",
    "com.do",
@@ -751,8 +574,6 @@ let ETLD_NAMES_LIST = [
    "org.do",
    "sld.do",
    "web.do",
-
-   "// dz : http://en.wikipedia.org/wiki/.dz",
    "dz",
    "com.dz",
    "org.dz",
@@ -762,9 +583,6 @@ let ETLD_NAMES_LIST = [
    "asso.dz",
    "pol.dz",
    "art.dz",
-
-   "// ec : http://www.nic.ec/reg/paso1.asp",
-   "// Submitted by registry <vabboud@nic.ec> 2008-07-04",
    "ec",
    "com.ec",
    "info.ec",
@@ -778,11 +596,7 @@ let ETLD_NAMES_LIST = [
    "gov.ec",
    "gob.ec",
    "mil.ec",
-
-   "// edu : http://en.wikipedia.org/wiki/.edu",
    "edu",
-
-   "// ee : http://www.eenet.ee/EENet/dom_reeglid.html#lisa_B",
    "ee",
    "edu.ee",
    "gov.ee",
@@ -794,8 +608,6 @@ let ETLD_NAMES_LIST = [
    "aip.ee",
    "org.ee",
    "fie.ee",
-
-   "// eg : http://en.wikipedia.org/wiki/.eg",
    "eg",
    "com.eg",
    "edu.eg",
@@ -806,19 +618,13 @@ let ETLD_NAMES_LIST = [
    "net.eg",
    "org.eg",
    "sci.eg",
-
-   "// er : http://en.wikipedia.org/wiki/.er",
    "*.er",
-
-   "// es : https://www.nic.es/site_ingles/ingles/dominios/index.html",
    "es",
    "com.es",
    "nom.es",
    "org.es",
    "gob.es",
    "edu.es",
-
-   "// et : http://en.wikipedia.org/wiki/.et",
    "et",
    "com.et",
    "gov.et",
@@ -828,33 +634,13 @@ let ETLD_NAMES_LIST = [
    "name.et",
    "info.et",
    "net.et",
-
-   "// eu : http://en.wikipedia.org/wiki/.eu",
    "eu",
-
-   "// fi : http://en.wikipedia.org/wiki/.fi",
    "fi",
-   "// aland.fi : http://en.wikipedia.org/wiki/.ax",
-   "// This domain is being phased out in favor of .ax. As there are still many",
-   "// domains under aland.fi, we still keep it on the list until aland.fi is",
-   "// completely removed.",
-   "// TODO: Check for updates (expected to be phased out around Q1/2009)",
    "aland.fi",
-
-   "// fj : http://en.wikipedia.org/wiki/.fj",
    "*.fj",
-
-   "// fk : http://en.wikipedia.org/wiki/.fk",
    "*.fk",
-
-   "// fm : http://en.wikipedia.org/wiki/.fm",
    "fm",
-
-   "// fo : http://en.wikipedia.org/wiki/.fo",
    "fo",
-
-   "// fr : http://www.afnic.fr/",
-   "// domaines descriptifs : http://www.afnic.fr/obtenir/chartes/nommage-fr/annexe-descriptifs",
    "fr",
    "com.fr",
    "asso.fr",
@@ -862,7 +648,6 @@ let ETLD_NAMES_LIST = [
    "prd.fr",
    "presse.fr",
    "tm.fr",
-   "// domaines sectoriels : http://www.afnic.fr/obtenir/chartes/nommage-fr/annexe-sectoriels",
    "aeroport.fr",
    "assedic.fr",
    "avocat.fr",
@@ -880,18 +665,9 @@ let ETLD_NAMES_LIST = [
    "pharmacien.fr",
    "port.fr",
    "veterinaire.fr",
-
-   "// ga : http://en.wikipedia.org/wiki/.ga",
    "ga",
-
-   "// gb : This registry is effectively dormant",
-   "// Submitted by registry <Damien.Shaw@ja.net> 2008-06-12",
    "gb",
-
-   "// gd : http://en.wikipedia.org/wiki/.gd",
    "gd",
-
-   "// ge : http://www.nic.net.ge/policy_en.pdf",
    "ge",
    "com.ge",
    "edu.ge",
@@ -900,29 +676,17 @@ let ETLD_NAMES_LIST = [
    "mil.ge",
    "net.ge",
    "pvt.ge",
-
-   "// gf : http://en.wikipedia.org/wiki/.gf",
    "gf",
-
-   "// gg : http://www.channelisles.net/register-domains/",
-   "// Confirmed by registry <nigel@channelisles.net> 2013-11-28",
    "gg",
    "co.gg",
    "net.gg",
    "org.gg",
-
-   "// gh : http://en.wikipedia.org/wiki/.gh",
-   "// see also: http://www.nic.gh/reg_now.php",
-   "// Although domains directly at second level are not possible at the moment,",
-   "// they have been possible for some time and may come back.",
    "gh",
    "com.gh",
    "edu.gh",
    "gov.gh",
    "org.gh",
    "mil.gh",
-
-   "// gi : http://www.nic.gi/rules.html",
    "gi",
    "com.gi",
    "ltd.gi",
@@ -930,21 +694,13 @@ let ETLD_NAMES_LIST = [
    "mod.gi",
    "edu.gi",
    "org.gi",
-
-   "// gl : http://en.wikipedia.org/wiki/.gl",
-   "// http://nic.gl",
    "gl",
    "co.gl",
    "com.gl",
    "edu.gl",
    "net.gl",
    "org.gl",
-
-   "// gm : http://www.nic.gm/htmlpages%5Cgm-policy.htm",
    "gm",
-
-   "// gn : http://psg.com/dns/gn/gn.txt",
-   "// Submitted by registry <randy@psg.com> 2008-06-17",
    "gn",
    "ac.gn",
    "com.gn",
@@ -952,11 +708,7 @@ let ETLD_NAMES_LIST = [
    "gov.gn",
    "org.gn",
    "net.gn",
-
-   "// gov : http://en.wikipedia.org/wiki/.gov",
    "gov",
-
-   "// gp : http://www.nic.gp/index.php?lang=en",
    "gp",
    "com.gp",
    "net.gp",
@@ -964,23 +716,14 @@ let ETLD_NAMES_LIST = [
    "edu.gp",
    "org.gp",
    "asso.gp",
-
-   "// gq : http://en.wikipedia.org/wiki/.gq",
    "gq",
-
-   "// gr : https://grweb.ics.forth.gr/english/1617-B-2005.html",
-   "// Submitted by registry <segred@ics.forth.gr> 2008-06-09",
    "gr",
    "com.gr",
    "edu.gr",
    "net.gr",
    "org.gr",
    "gov.gr",
-
-   "// gs : http://en.wikipedia.org/wiki/.gs",
    "gs",
-
-   "// gt : http://www.gt/politicas_de_registro.html",
    "gt",
    "com.gt",
    "edu.gt",
@@ -989,22 +732,12 @@ let ETLD_NAMES_LIST = [
    "mil.gt",
    "net.gt",
    "org.gt",
-
-   "// gu : http://gadao.gov.gu/registration.txt",
    "*.gu",
-
-   "// gw : http://en.wikipedia.org/wiki/.gw",
    "gw",
-
-   "// gy : http://en.wikipedia.org/wiki/.gy",
-   "// http://registry.gy/",
    "gy",
    "co.gy",
    "com.gy",
    "net.gy",
-
-   "// hk : https://www.hkdnr.hk",
-   "// Submitted by registry <hk.tech@hkirc.hk> 2008-06-11",
    "hk",
    "com.hk",
    "edu.hk",
@@ -1027,11 +760,7 @@ let ETLD_NAMES_LIST = [
    "组织.hk",
    "組織.hk",
    "組织.hk",
-
-   "// hm : http://en.wikipedia.org/wiki/.hm",
    "hm",
-
-   "// hn : http://www.nic.hn/politicas/ps02,,05.html",
    "hn",
    "com.hn",
    "edu.hn",
@@ -1039,15 +768,11 @@ let ETLD_NAMES_LIST = [
    "net.hn",
    "mil.hn",
    "gob.hn",
-
-   "// hr : http://www.dns.hr/documents/pdf/HRTLD-regulations.pdf",
    "hr",
    "iz.hr",
    "from.hr",
    "name.hr",
    "com.hr",
-
-   "// ht : http://www.nic.ht/info/charte.cfm",
    "ht",
    "com.ht",
    "shop.ht",
@@ -1066,9 +791,6 @@ let ETLD_NAMES_LIST = [
    "rel.ht",
    "gouv.ht",
    "perso.ht",
-
-   "// hu : http://www.domain.hu/domain/English/sld.html",
-   "// Confirmed by registry <pasztor@iszt.hu> 2008-06-12",
    "hu",
    "co.hu",
    "info.hu",
@@ -1101,8 +823,6 @@ let ETLD_NAMES_LIST = [
    "tozsde.hu",
    "utazas.hu",
    "video.hu",
-
-   "// id : https://register.pandi.or.id/",
    "id",
    "ac.id",
    "biz.id",
@@ -1115,16 +835,9 @@ let ETLD_NAMES_LIST = [
    "or.id",
    "sch.id",
    "web.id",
-
-   "// ie : http://en.wikipedia.org/wiki/.ie",
    "ie",
    "gov.ie",
-
-   "// il : http://en.wikipedia.org/wiki/.il",
    "*.il",
-
-   "// im : https://www.nic.im/",
-   "// Submitted by registry <info@nic.im> 2013-11-15",
    "im",
    "ac.im",
    "co.im",
@@ -1135,11 +848,6 @@ let ETLD_NAMES_LIST = [
    "plc.co.im",
    "tt.im",
    "tv.im",
-
-   "// in : http://en.wikipedia.org/wiki/.in",
-   "// see also: https://registry.in/Policies",
-   "// Please note, that nic.in is not an offical eTLD, but used by most",
-   "// government institutions.",
    "in",
    "co.in",
    "firm.in",
@@ -1153,21 +861,11 @@ let ETLD_NAMES_LIST = [
    "res.in",
    "gov.in",
    "mil.in",
-
-   "// info : http://en.wikipedia.org/wiki/.info",
    "info",
-
-   "// int : http://en.wikipedia.org/wiki/.int",
-   "// Confirmed by registry <iana-questions@icann.org> 2008-06-18",
    "int",
    "eu.int",
-
-   "// io : http://www.nic.io/rules.html",
-   "// list of other 2nd level tlds ?",
    "io",
    "com.io",
-
-   "// iq : http://www.cmc.iq/english/iq/iqregister1.htm",
    "iq",
    "gov.iq",
    "edu.iq",
@@ -1175,10 +873,6 @@ let ETLD_NAMES_LIST = [
    "com.iq",
    "org.iq",
    "net.iq",
-
-   "// ir : http://www.nic.ir/Terms_and_Conditions_ir,_Appendix_1_Domain_Rules",
-   "// Also see http://www.nic.ir/Internationalized_Domain_Names",
-   "// Two <iran>.ir entries added at request of <tech-team@nic.ir>, 2010-04-16",
    "ir",
    "ac.ir",
    "co.ir",
@@ -1187,13 +881,8 @@ let ETLD_NAMES_LIST = [
    "net.ir",
    "org.ir",
    "sch.ir",
-   "// xn--mgba3a4f16a.ir (<iran>.ir, Persian YEH)",
    "ایران.ir",
-   "// xn--mgba3a4fra.ir (<iran>.ir, Arabic YEH)",
    "ايران.ir",
-
-   "// is : http://www.isnic.is/domain/rules.php",
-   "// Confirmed by registry <marius@isgate.is> 2008-12-06",
    "is",
    "net.is",
    "com.is",
@@ -1201,16 +890,9 @@ let ETLD_NAMES_LIST = [
    "gov.is",
    "org.is",
    "int.is",
-
-   "// it : http://en.wikipedia.org/wiki/.it",
    "it",
    "gov.it",
    "edu.it",
-   "// Reserved geo-names:",
-   "// http://www.nic.it/documenti/regolamenti-e-linee-guida/regolamento-assegnazione-versione-6.0.pdf",
-   "// There is also a list of reserved geo-names corresponding to Italian municipalities",
-   "// http://www.nic.it/documenti/appendice-c.pdf, but it is not included here.",
-   "// Regions",
    "abr.it",
    "abruzzo.it",
    "aosta-valley.it",
@@ -1302,7 +984,6 @@ let ETLD_NAMES_LIST = [
    "vda.it",
    "ven.it",
    "veneto.it",
-   "// Provinces",
    "ag.it",
    "agrigento.it",
    "al.it",
@@ -1578,18 +1259,11 @@ let ETLD_NAMES_LIST = [
    "vs.it",
    "vt.it",
    "vv.it",
-
-   "// je : http://www.channelisles.net/register-domains/",
-   "// Confirmed by registry <nigel@channelisles.net> 2013-11-28",
    "je",
    "co.je",
    "net.je",
    "org.je",
-
-   "// jm : http://www.com.jm/register.html",
    "*.jm",
-
-   "// jo : http://www.dns.jo/Registration_policy.aspx",
    "jo",
    "com.jo",
    "org.jo",
@@ -1599,15 +1273,8 @@ let ETLD_NAMES_LIST = [
    "gov.jo",
    "mil.jo",
    "name.jo",
-
-   "// jobs : http://en.wikipedia.org/wiki/.jobs",
    "jobs",
-
-   "// jp : http://en.wikipedia.org/wiki/.jp",
-   "// http://jprs.co.jp/en/jpdomain.html",
-   "// Submitted by registry <info@jprs.jp> 2014-10-30",
    "jp",
-   "// jp organizational type names",
    "ac.jp",
    "ad.jp",
    "co.jp",
@@ -1617,7 +1284,6 @@ let ETLD_NAMES_LIST = [
    "lg.jp",
    "ne.jp",
    "or.jp",
-   "// jp prefecture type names",
    "aichi.jp",
    "akita.jp",
    "aomori.jp",
@@ -1712,8 +1378,6 @@ let ETLD_NAMES_LIST = [
    "高知.jp",
    "鳥取.jp",
    "鹿児島.jp",
-   "// jp geographic type names",
-   "// http://jprs.jp/doc/rule/saisoku-1.html",
    "*.kawasaki.jp",
    "*.kitakyushu.jp",
    "*.kobe.jp",
@@ -1728,7 +1392,6 @@ let ETLD_NAMES_LIST = [
    "!city.sapporo.jp",
    "!city.sendai.jp",
    "!city.yokohama.jp",
-   "// 4th level registration",
    "aisai.aichi.jp",
    "ama.aichi.jp",
    "anjo.aichi.jp",
@@ -3406,11 +3069,7 @@ let ETLD_NAMES_LIST = [
    "uenohara.yamanashi.jp",
    "yamanakako.yamanashi.jp",
    "yamanashi.yamanashi.jp",
-
-   "// ke : http://www.kenic.or.ke/index.php?option=com_content&task=view&id=117&Itemid=145",
    "*.ke",
-
-   "// kg : http://www.domain.kg/dmn_n.html",
    "kg",
    "org.kg",
    "net.kg",
@@ -3418,11 +3077,7 @@ let ETLD_NAMES_LIST = [
    "edu.kg",
    "gov.kg",
    "mil.kg",
-
-   "// kh : http://www.mptc.gov.kh/dns_registration.htm",
    "*.kh",
-
-   "// ki : http://www.ki/dns/index.html",
    "ki",
    "edu.ki",
    "biz.ki",
@@ -3431,9 +3086,6 @@ let ETLD_NAMES_LIST = [
    "gov.ki",
    "info.ki",
    "com.ki",
-
-   "// km : http://en.wikipedia.org/wiki/.km",
-   "// http://www.domaine.km/documents/charte.doc",
    "km",
    "org.km",
    "nom.km",
@@ -3444,8 +3096,6 @@ let ETLD_NAMES_LIST = [
    "mil.km",
    "ass.km",
    "com.km",
-   "// These are only mentioned as proposed suggestions at domaine.km, but",
-   "// http://en.wikipedia.org/wiki/.km says they're available for registration:",
    "coop.km",
    "asso.km",
    "presse.km",
@@ -3454,16 +3104,11 @@ let ETLD_NAMES_LIST = [
    "pharmaciens.km",
    "veterinaire.km",
    "gouv.km",
-
-   "// kn : http://en.wikipedia.org/wiki/.kn",
-   "// http://www.dot.kn/domainRules.html",
    "kn",
    "net.kn",
    "org.kn",
    "edu.kn",
    "gov.kn",
-
-   "// kp : http://www.kcce.kp/en_index.php",
    "kp",
    "com.kp",
    "edu.kp",
@@ -3471,9 +3116,6 @@ let ETLD_NAMES_LIST = [
    "org.kp",
    "rep.kp",
    "tra.kp",
-
-   "// kr : http://en.wikipedia.org/wiki/.kr",
-   "// see also: http://domain.nida.or.kr/eng/registration.jsp",
    "kr",
    "ac.kr",
    "co.kr",
@@ -3488,7 +3130,6 @@ let ETLD_NAMES_LIST = [
    "pe.kr",
    "re.kr",
    "sc.kr",
-   "// kr geographical names",
    "busan.kr",
    "chungbuk.kr",
    "chungnam.kr",
@@ -3505,21 +3146,13 @@ let ETLD_NAMES_LIST = [
    "jeonnam.kr",
    "seoul.kr",
    "ulsan.kr",
-
-   "// kw : http://en.wikipedia.org/wiki/.kw",
    "*.kw",
-
-   "// ky : http://www.icta.ky/da_ky_reg_dom.php",
-   "// Confirmed by registry <kysupport@perimeterusa.com> 2008-06-17",
    "ky",
    "edu.ky",
    "gov.ky",
    "com.ky",
    "org.ky",
    "net.ky",
-
-   "// kz : http://en.wikipedia.org/wiki/.kz",
-   "// see also: http://www.nic.kz/rules/index.jsp",
    "kz",
    "org.kz",
    "edu.kz",
@@ -3527,9 +3160,6 @@ let ETLD_NAMES_LIST = [
    "gov.kz",
    "mil.kz",
    "com.kz",
-
-   "// la : http://en.wikipedia.org/wiki/.la",
-   "// Submitted by registry <gavin.brown@nic.la> 2008-06-10",
    "la",
    "int.la",
    "net.la",
@@ -3539,18 +3169,12 @@ let ETLD_NAMES_LIST = [
    "per.la",
    "com.la",
    "org.la",
-
-   "// lb : http://en.wikipedia.org/wiki/.lb",
-   "// Submitted by registry <randy@psg.com> 2008-06-17",
    "lb",
    "com.lb",
    "edu.lb",
    "gov.lb",
    "net.lb",
    "org.lb",
-
-   "// lc : http://en.wikipedia.org/wiki/.lc",
-   "// see also: http://www.nic.lc/rules.htm",
    "lc",
    "com.lc",
    "net.lc",
@@ -3558,11 +3182,7 @@ let ETLD_NAMES_LIST = [
    "org.lc",
    "edu.lc",
    "gov.lc",
-
-   "// li : http://en.wikipedia.org/wiki/.li",
    "li",
-
-   "// lk : http://www.nic.lk/seclevpr.html",
    "lk",
    "gov.lk",
    "sch.lk",
@@ -3579,30 +3199,18 @@ let ETLD_NAMES_LIST = [
    "grp.lk",
    "hotel.lk",
    "ac.lk",
-
-   "// lr : http://psg.com/dns/lr/lr.txt",
-   "// Submitted by registry <randy@psg.com> 2008-06-17",
    "lr",
    "com.lr",
    "edu.lr",
    "gov.lr",
    "org.lr",
    "net.lr",
-
-   "// ls : http://en.wikipedia.org/wiki/.ls",
    "ls",
    "co.ls",
    "org.ls",
-
-   "// lt : http://en.wikipedia.org/wiki/.lt",
    "lt",
-   "// gov.lt : http://www.gov.lt/index_en.php",
    "gov.lt",
-
-   "// lu : http://www.dns.lu/en/",
    "lu",
-
-   "// lv : http://www.nic.lv/DNS/En/generic.php",
    "lv",
    "com.lv",
    "edu.lv",
@@ -3613,8 +3221,6 @@ let ETLD_NAMES_LIST = [
    "net.lv",
    "asn.lv",
    "conf.lv",
-
-   "// ly : http://www.nic.ly/regulations.php",
    "ly",
    "com.ly",
    "net.ly",
@@ -3625,9 +3231,6 @@ let ETLD_NAMES_LIST = [
    "med.ly",
    "org.ly",
    "id.ly",
-
-   "// ma : http://en.wikipedia.org/wiki/.ma",
-   "// http://www.anrt.ma/fr/admin/download/upload/file_fr782.pdf",
    "ma",
    "co.ma",
    "net.ma",
@@ -3635,16 +3238,10 @@ let ETLD_NAMES_LIST = [
    "org.ma",
    "ac.ma",
    "press.ma",
-
-   "// mc : http://www.nic.mc/",
    "mc",
    "tm.mc",
    "asso.mc",
-
-   "// md : http://en.wikipedia.org/wiki/.md",
    "md",
-
-   "// me : http://en.wikipedia.org/wiki/.me",
    "me",
    "co.me",
    "net.me",
@@ -3654,8 +3251,6 @@ let ETLD_NAMES_LIST = [
    "gov.me",
    "its.me",
    "priv.me",
-
-   "// mg : http://www.nic.mg/tarif.htm",
    "mg",
    "org.mg",
    "nom.mg",
@@ -3665,15 +3260,8 @@ let ETLD_NAMES_LIST = [
    "edu.mg",
    "mil.mg",
    "com.mg",
-
-   "// mh : http://en.wikipedia.org/wiki/.mh",
    "mh",
-
-   "// mil : http://en.wikipedia.org/wiki/.mil",
    "mil",
-
-   "// mk : http://en.wikipedia.org/wiki/.mk",
-   "// see also: http://dns.marnet.net.mk/postapka.php",
    "mk",
    "com.mk",
    "org.mk",
@@ -3682,9 +3270,6 @@ let ETLD_NAMES_LIST = [
    "gov.mk",
    "inf.mk",
    "name.mk",
-
-   "// ml : http://www.gobin.info/domainname/ml-template.doc",
-   "// see also: http://en.wikipedia.org/wiki/.ml",
    "ml",
    "com.ml",
    "edu.ml",
@@ -3693,55 +3278,33 @@ let ETLD_NAMES_LIST = [
    "net.ml",
    "org.ml",
    "presse.ml",
-
-   "// mm : http://en.wikipedia.org/wiki/.mm",
    "*.mm",
-
-   "// mn : http://en.wikipedia.org/wiki/.mn",
    "mn",
    "gov.mn",
    "edu.mn",
    "org.mn",
-
-   "// mo : http://www.monic.net.mo/",
    "mo",
    "com.mo",
    "net.mo",
    "org.mo",
    "edu.mo",
    "gov.mo",
-
-   "// mobi : http://en.wikipedia.org/wiki/.mobi",
    "mobi",
-
-   "// mp : http://www.dot.mp/",
-   "// Confirmed by registry <dcamacho@saipan.com> 2008-06-17",
    "mp",
-
-   "// mq : http://en.wikipedia.org/wiki/.mq",
    "mq",
-
-   "// mr : http://en.wikipedia.org/wiki/.mr",
    "mr",
    "gov.mr",
-
-   "// ms : http://www.nic.ms/pdf/MS_Domain_Name_Rules.pdf",
    "ms",
    "com.ms",
    "edu.ms",
    "gov.ms",
    "net.ms",
    "org.ms",
-
-   "// mt : https://www.nic.org.mt/go/policy",
-   "// Submitted by registry <help@nic.org.mt> 2013-11-19",
    "mt",
    "com.mt",
    "edu.mt",
    "net.mt",
    "org.mt",
-
-   "// mu : http://en.wikipedia.org/wiki/.mu",
    "mu",
    "com.mu",
    "net.mu",
@@ -3750,9 +3313,6 @@ let ETLD_NAMES_LIST = [
    "ac.mu",
    "co.mu",
    "or.mu",
-
-   "// museum : http://about.museum/naming/",
-   "// http://index.museum/",
    "museum",
    "academy.museum",
    "agriculture.museum",
@@ -4302,9 +3862,6 @@ let ETLD_NAMES_LIST = [
    "zoology.museum",
    "ירושלים.museum",
    "иком.museum",
-
-   "// mv : http://en.wikipedia.org/wiki/.mv",
-   "// 'mv' included because, contra Wikipedia, google.mv exists.",
    "mv",
    "aero.mv",
    "biz.mv",
@@ -4320,8 +3877,6 @@ let ETLD_NAMES_LIST = [
    "net.mv",
    "org.mv",
    "pro.mv",
-
-   "// mw : http://www.registrar.mw/",
    "mw",
    "ac.mw",
    "biz.mw",
@@ -4334,17 +3889,12 @@ let ETLD_NAMES_LIST = [
    "museum.mw",
    "net.mw",
    "org.mw",
-
-   "// mx : http://www.nic.mx/",
-   "// Submitted by registry <farias@nic.mx> 2008-06-19",
    "mx",
    "com.mx",
    "org.mx",
    "gob.mx",
    "edu.mx",
    "net.mx",
-
-   "// my : http://www.mynic.net.my/",
    "my",
    "com.my",
    "net.my",
@@ -4353,13 +3903,8 @@ let ETLD_NAMES_LIST = [
    "edu.my",
    "mil.my",
    "name.my",
-
-   "// mz : http://www.gobin.info/domainname/mz-template.doc",
    "*.mz",
    "!teledata.mz",
-
-   "// na : http://www.na-nic.com.na/",
-   "// http://www.info.na/domain/",
    "na",
    "info.na",
    "pro.na",
@@ -4378,21 +3923,11 @@ let ETLD_NAMES_LIST = [
    "co.na",
    "com.na",
    "org.na",
-
-   "// name : has 2nd-level tlds, but there's no list of them",
    "name",
-
-   "// nc : http://www.cctld.nc/",
    "nc",
    "asso.nc",
-
-   "// ne : http://en.wikipedia.org/wiki/.ne",
    "ne",
-
-   "// net : http://en.wikipedia.org/wiki/.net",
    "net",
-
-   "// nf : http://en.wikipedia.org/wiki/.nf",
    "nf",
    "com.nf",
    "net.nf",
@@ -4404,8 +3939,6 @@ let ETLD_NAMES_LIST = [
    "info.nf",
    "other.nf",
    "store.nf",
-
-   "// ng : http://psg.com/dns/ng/",
    "ng",
    "com.ng",
    "edu.ng",
@@ -4416,25 +3949,10 @@ let ETLD_NAMES_LIST = [
    "gov.ng",
    "mil.ng",
    "mobi.ng",
-
-   "// ni : http://www.nic.ni/dominios.htm",
    "*.ni",
-
-   "// nl : http://en.wikipedia.org/wiki/.nl",
-   "//      https://www.sidn.nl/",
-   "//      ccTLD for the Netherlands",
    "nl",
-
-   "// BV.nl will be a registry for dutch BV's (besloten vennootschap)",
    "bv.nl",
-
-   "// no : http://www.norid.no/regelverk/index.en.html",
-   "// The Norwegian registry has declined to notify us of updates. The web pages",
-   "// referenced below are the official source of the data. There is also an",
-   "// announce mailing list:",
-   "// https://postlister.uninett.no/sympa/info/norid-diskusjon",
    "no",
-   "// Norid generic domains : http://www.norid.no/regelverk/vedlegg-c.en.html",
    "fhs.no",
    "vgs.no",
    "fylkesbibl.no",
@@ -4442,14 +3960,11 @@ let ETLD_NAMES_LIST = [
    "museum.no",
    "idrett.no",
    "priv.no",
-   "// Non-Norid generic domains : http://www.norid.no/regelverk/vedlegg-d.en.html",
    "mil.no",
    "stat.no",
    "dep.no",
    "kommune.no",
    "herad.no",
-   "// no geographical names : http://www.norid.no/regelverk/vedlegg-b.en.html",
-   "// counties",
    "aa.no",
    "ah.no",
    "bu.no",
@@ -4471,7 +3986,6 @@ let ETLD_NAMES_LIST = [
    "tr.no",
    "va.no",
    "vf.no",
-   "// primary and lower secondary schools per county",
    "gs.aa.no",
    "gs.ah.no",
    "gs.bu.no",
@@ -4493,7 +4007,6 @@ let ETLD_NAMES_LIST = [
    "gs.tr.no",
    "gs.va.no",
    "gs.vf.no",
-   "// cities",
    "akrehamn.no",
    "åkrehamn.no",
    "algard.no",
@@ -4545,7 +4058,6 @@ let ETLD_NAMES_LIST = [
    "tananger.no",
    "tranby.no",
    "vossevangen.no",
-   "// communities",
    "afjord.no",
    "åfjord.no",
    "agdenes.no",
@@ -5194,12 +4706,7 @@ let ETLD_NAMES_LIST = [
    "våler.østfold.no",
    "valer.hedmark.no",
    "våler.hedmark.no",
-
-   "// np : http://www.mos.com.np/register.html",
    "*.np",
-
-   "// nr : http://cenpac.net.nr/dns/index.html",
-   "// Confirmed by registry <technician@cenpac.net.nr> 2008-06-17",
    "nr",
    "biz.nr",
    "info.nr",
@@ -5208,12 +4715,7 @@ let ETLD_NAMES_LIST = [
    "org.nr",
    "net.nr",
    "com.nr",
-
-   "// nu : http://en.wikipedia.org/wiki/.nu",
    "nu",
-
-   "// nz : http://en.wikipedia.org/wiki/.nz",
-   "// Confirmed by registry <jay@nzrs.net.nz> 2014-05-19",
    "nz",
    "ac.nz",
    "co.nz",
@@ -5231,8 +4733,6 @@ let ETLD_NAMES_LIST = [
    "org.nz",
    "parliament.nz",
    "school.nz",
-
-   "// om : http://en.wikipedia.org/wiki/.om",
    "om",
    "co.om",
    "com.om",
@@ -5243,13 +4743,7 @@ let ETLD_NAMES_LIST = [
    "net.om",
    "org.om",
    "pro.om",
-
-   "// org : http://en.wikipedia.org/wiki/.org",
    "org",
-
-   "// pa : http://www.nic.pa/",
-   "// Some additional second level 'domains' resolve directly as hostnames, such as",
-   "// pannet.pa, so we add a rule for 'pa'.",
    "pa",
    "ac.pa",
    "gob.pa",
@@ -5262,8 +4756,6 @@ let ETLD_NAMES_LIST = [
    "abo.pa",
    "med.pa",
    "nom.pa",
-
-   "// pe : https://www.nic.pe/InformeFinalComision.pdf",
    "pe",
    "edu.pe",
    "gob.pe",
@@ -5272,18 +4764,11 @@ let ETLD_NAMES_LIST = [
    "org.pe",
    "com.pe",
    "net.pe",
-
-   "// pf : http://www.gobin.info/domainname/formulaire-pf.pdf",
    "pf",
    "com.pf",
    "org.pf",
    "edu.pf",
-
-   "// pg : http://en.wikipedia.org/wiki/.pg",
    "*.pg",
-
-   "// ph : http://www.domains.ph/FAQ2.asp",
-   "// Submitted by registry <jed@email.com.ph> 2008-06-13",
    "ph",
    "com.ph",
    "net.ph",
@@ -5293,8 +4778,6 @@ let ETLD_NAMES_LIST = [
    "ngo.ph",
    "mil.ph",
    "i.ph",
-
-   "// pk : http://pk5.pknic.net.pk/pk5/msgNamepk.PK",
    "pk",
    "com.pk",
    "net.pk",
@@ -5310,14 +4793,10 @@ let ETLD_NAMES_LIST = [
    "gop.pk",
    "gos.pk",
    "info.pk",
-
-   "// pl http://www.dns.pl/english/index.html",
-   "// updated by .PL registry on 2015-04-28",
    "pl",
    "com.pl",
    "net.pl",
    "org.pl",
-   "// pl functional domains (http://www.dns.pl/english/index.html)",
    "aid.pl",
    "agro.pl",
    "atm.pl",
@@ -5348,7 +4827,6 @@ let ETLD_NAMES_LIST = [
    "tourism.pl",
    "travel.pl",
    "turystyka.pl",
-   "// Government domains",
    "gov.pl",
    "ap.gov.pl",
    "ic.gov.pl",
@@ -5397,7 +4875,6 @@ let ETLD_NAMES_LIST = [
    "wuoz.gov.pl",
    "konsulat.gov.pl",
    "oirm.gov.pl",
-   "// pl regional domains (http://www.dns.pl/english/index.html)",
    "augustow.pl",
    "babia-gora.pl",
    "bedzin.pl",
@@ -5517,22 +4994,14 @@ let ETLD_NAMES_LIST = [
    "zarow.pl",
    "zgora.pl",
    "zgorzelec.pl",
-
-   "// pm : http://www.afnic.fr/medias/documents/AFNIC-naming-policy2012.pdf",
    "pm",
-
-   "// pn : http://www.government.pn/PnRegistry/policies.htm",
    "pn",
    "gov.pn",
    "co.pn",
    "org.pn",
    "edu.pn",
    "net.pn",
-
-   "// post : http://en.wikipedia.org/wiki/.post",
    "post",
-
-   "// pr : http://www.nic.pr/index.asp?f=1",
    "pr",
    "com.pr",
    "net.pr",
@@ -5544,12 +5013,9 @@ let ETLD_NAMES_LIST = [
    "biz.pr",
    "info.pr",
    "name.pr",
-   "// these aren't mentioned on nic.pr, but on http://en.wikipedia.org/wiki/.pr",
    "est.pr",
    "prof.pr",
    "ac.pr",
-
-   "// pro : http://www.nic.pro/support_faq.htm",
    "pro",
    "aca.pro",
    "bar.pro",
@@ -5558,9 +5024,6 @@ let ETLD_NAMES_LIST = [
    "law.pro",
    "med.pro",
    "eng.pro",
-
-   "// ps : http://en.wikipedia.org/wiki/.ps",
-   "// http://www.nic.ps/registration/policy.html#reg",
    "ps",
    "edu.ps",
    "gov.ps",
@@ -5569,8 +5032,6 @@ let ETLD_NAMES_LIST = [
    "com.ps",
    "org.ps",
    "net.ps",
-
-   "// pt : http://online.dns.pt/dns/start_dns",
    "pt",
    "net.pt",
    "gov.pt",
@@ -5580,8 +5041,6 @@ let ETLD_NAMES_LIST = [
    "publ.pt",
    "com.pt",
    "nome.pt",
-
-   "// pw : http://en.wikipedia.org/wiki/.pw",
    "pw",
    "co.pw",
    "ne.pw",
@@ -5589,9 +5048,6 @@ let ETLD_NAMES_LIST = [
    "ed.pw",
    "go.pw",
    "belau.pw",
-
-   "// py : http://www.nic.py/pautas.html#seccion_9",
-   "// Confirmed by registry 2012-10-03",
    "py",
    "com.py",
    "coop.py",
@@ -5600,8 +5056,6 @@ let ETLD_NAMES_LIST = [
    "mil.py",
    "net.py",
    "org.py",
-
-   "// qa : http://domains.qa/en/",
    "qa",
    "com.qa",
    "edu.qa",
@@ -5611,14 +5065,10 @@ let ETLD_NAMES_LIST = [
    "net.qa",
    "org.qa",
    "sch.qa",
-
-   "// re : http://www.afnic.re/obtenir/chartes/nommage-re/annexe-descriptifs",
    "re",
    "com.re",
    "asso.re",
    "nom.re",
-
-   "// ro : http://www.rotld.ro/",
    "ro",
    "com.ro",
    "org.ro",
@@ -5631,8 +5081,6 @@ let ETLD_NAMES_LIST = [
    "firm.ro",
    "store.ro",
    "www.ro",
-
-   "// rs : http://en.wikipedia.org/wiki/.rs",
    "rs",
    "co.rs",
    "org.rs",
@@ -5640,9 +5088,6 @@ let ETLD_NAMES_LIST = [
    "ac.rs",
    "gov.rs",
    "in.rs",
-
-   "// ru : http://www.cctld.ru/ru/docs/aktiv_8.php",
-   "// Industry domains",
    "ru",
    "ac.ru",
    "com.ru",
@@ -5651,7 +5096,6 @@ let ETLD_NAMES_LIST = [
    "net.ru",
    "org.ru",
    "pp.ru",
-   "// Geographical domains",
    "adygeya.ru",
    "altai.ru",
    "amur.ru",
@@ -5701,7 +5145,6 @@ let ETLD_NAMES_LIST = [
    "mari-el.ru",
    "marine.ru",
    "mordovia.ru",
-   "// mosreg.ru  Bug 1090800 - removed at request of Aleksey Konstantinov <konstantinovav@mosreg.ru>",
    "msk.ru",
    "murmansk.ru",
    "nalchik.ru",
@@ -5753,7 +5196,6 @@ let ETLD_NAMES_LIST = [
    "yaroslavl.ru",
    "yekaterinburg.ru",
    "yuzhno-sakhalinsk.ru",
-   "// More geographical domains",
    "amursk.ru",
    "baikal.ru",
    "cmw.ru",
@@ -5775,13 +5217,9 @@ let ETLD_NAMES_LIST = [
    "syzran.ru",
    "vdonsk.ru",
    "zgrad.ru",
-   "// State domains",
    "gov.ru",
    "mil.ru",
-   "// Technical domains",
    "test.ru",
-
-   "// rw : http://www.nic.rw/cgi-bin/policy.pl",
    "rw",
    "gov.rw",
    "net.rw",
@@ -5792,8 +5230,6 @@ let ETLD_NAMES_LIST = [
    "int.rw",
    "mil.rw",
    "gouv.rw",
-
-   "// sa : http://www.nic.net.sa/",
    "sa",
    "com.sa",
    "net.sa",
@@ -5803,26 +5239,18 @@ let ETLD_NAMES_LIST = [
    "pub.sa",
    "edu.sa",
    "sch.sa",
-
-   "// sb : http://www.sbnic.net.sb/",
-   "// Submitted by registry <lee.humphries@telekom.com.sb> 2008-06-08",
    "sb",
    "com.sb",
    "edu.sb",
    "gov.sb",
    "net.sb",
    "org.sb",
-
-   "// sc : http://www.nic.sc/",
    "sc",
    "com.sc",
    "gov.sc",
    "net.sc",
    "org.sc",
    "edu.sc",
-
-   "// sd : http://www.isoc.sd/sudanic.isoc.sd/billing_pricing.htm",
-   "// Submitted by registry <admin@isoc.sd> 2008-06-17",
    "sd",
    "com.sd",
    "net.sd",
@@ -5832,9 +5260,6 @@ let ETLD_NAMES_LIST = [
    "tv.sd",
    "gov.sd",
    "info.sd",
-
-   "// se : http://en.wikipedia.org/wiki/.se",
-   "// Submitted by registry <patrik.wallstrom@iis.se> 2014-03-18",
    "se",
    "a.se",
    "ac.se",
@@ -5875,8 +5300,6 @@ let ETLD_NAMES_LIST = [
    "x.se",
    "y.se",
    "z.se",
-
-   "// sg : http://www.nic.net.sg/page/registration-policies-procedures-and-guidelines",
    "sg",
    "com.sg",
    "net.sg",
@@ -5884,39 +5307,22 @@ let ETLD_NAMES_LIST = [
    "gov.sg",
    "edu.sg",
    "per.sg",
-
-   "// sh : http://www.nic.sh/registrar.html",
    "sh",
    "com.sh",
    "net.sh",
    "gov.sh",
    "org.sh",
    "mil.sh",
-
-   "// si : http://en.wikipedia.org/wiki/.si",
    "si",
-
-   "// sj : No registrations at this time.",
-   "// Submitted by registry <jarle@uninett.no> 2008-06-16",
    "sj",
-
-   "// sk : http://en.wikipedia.org/wiki/.sk",
-   "// list of 2nd level domains ?",
    "sk",
-
-   "// sl : http://www.nic.sl",
-   "// Submitted by registry <adam@neoip.com> 2008-06-12",
    "sl",
    "com.sl",
    "net.sl",
    "edu.sl",
    "gov.sl",
    "org.sl",
-
-   "// sm : http://en.wikipedia.org/wiki/.sm",
    "sm",
-
-   "// sn : http://en.wikipedia.org/wiki/.sn",
    "sn",
    "art.sn",
    "com.sn",
@@ -5925,17 +5331,11 @@ let ETLD_NAMES_LIST = [
    "org.sn",
    "perso.sn",
    "univ.sn",
-
-   "// so : http://www.soregistry.com/",
    "so",
    "com.so",
    "net.so",
    "org.so",
-
-   "// sr : http://en.wikipedia.org/wiki/.sr",
    "sr",
-
-   "// st : http://www.nic.st/html/policyrules/",
    "st",
    "co.st",
    "com.st",
@@ -5949,8 +5349,6 @@ let ETLD_NAMES_LIST = [
    "principe.st",
    "saotome.st",
    "store.st",
-
-   "// su : http://en.wikipedia.org/wiki/.su",
    "su",
    "adygeya.su",
    "arkhangelsk.su",
@@ -5984,22 +5382,14 @@ let ETLD_NAMES_LIST = [
    "vladikavkaz.su",
    "vladimir.su",
    "vologda.su",
-
-   "// sv : http://www.svnet.org.sv/niveldos.pdf",
    "sv",
    "com.sv",
    "edu.sv",
    "gob.sv",
    "org.sv",
    "red.sv",
-
-   "// sx : http://en.wikipedia.org/wiki/.sx",
-   "// Confirmed by registry <jcvignes@openregistry.com> 2012-05-31",
    "sx",
    "gov.sx",
-
-   "// sy : http://en.wikipedia.org/wiki/.sy",
-   "// see also: http://www.gobin.info/domainname/sy.doc",
    "sy",
    "edu.sy",
    "gov.sy",
@@ -6007,33 +5397,15 @@ let ETLD_NAMES_LIST = [
    "mil.sy",
    "com.sy",
    "org.sy",
-
-   "// sz : http://en.wikipedia.org/wiki/.sz",
-   "// http://www.sispa.org.sz/",
    "sz",
    "co.sz",
    "ac.sz",
    "org.sz",
-
-   "// tc : http://en.wikipedia.org/wiki/.tc",
    "tc",
-
-   "// td : http://en.wikipedia.org/wiki/.td",
    "td",
-
-   "// tel: http://en.wikipedia.org/wiki/.tel",
-   "// http://www.telnic.org/",
    "tel",
-
-   "// tf : http://en.wikipedia.org/wiki/.tf",
    "tf",
-
-   "// tg : http://en.wikipedia.org/wiki/.tg",
-   "// http://www.nic.tg/",
    "tg",
-
-   "// th : http://en.wikipedia.org/wiki/.th",
-   "// Submitted by registry <krit@thains.co.th> 2008-06-17",
    "th",
    "ac.th",
    "co.th",
@@ -6042,8 +5414,6 @@ let ETLD_NAMES_LIST = [
    "mi.th",
    "net.th",
    "or.th",
-
-   "// tj : http://www.nic.tj/policy.html",
    "tj",
    "ac.tj",
    "biz.tj",
@@ -6060,15 +5430,9 @@ let ETLD_NAMES_LIST = [
    "org.tj",
    "test.tj",
    "web.tj",
-
-   "// tk : http://en.wikipedia.org/wiki/.tk",
    "tk",
-
-   "// tl : http://en.wikipedia.org/wiki/.tl",
    "tl",
    "gov.tl",
-
-   "// tm : http://www.nic.tm/local.html",
    "tm",
    "com.tm",
    "co.tm",
@@ -6078,9 +5442,6 @@ let ETLD_NAMES_LIST = [
    "gov.tm",
    "mil.tm",
    "edu.tm",
-
-   "// tn : http://en.wikipedia.org/wiki/.tn",
-   "// http://whois.ati.tn/",
    "tn",
    "com.tn",
    "ens.tn",
@@ -6102,9 +5463,6 @@ let ETLD_NAMES_LIST = [
    "agrinet.tn",
    "defense.tn",
    "turen.tn",
-
-   "// to : http://en.wikipedia.org/wiki/.to",
-   "// Submitted by registry <egullich@colo.to> 2008-06-17",
    "to",
    "com.to",
    "gov.to",
@@ -6112,14 +5470,7 @@ let ETLD_NAMES_LIST = [
    "org.to",
    "edu.to",
    "mil.to",
-
-   "// tp : No registrations at this time.",
-   "// Submitted by Ryan Sleevi <ryan.sleevi@gmail.com> 2014-01-03",
    "tp",
-
-   "// subTLDs: https://www.nic.tr/forms/eng/policies.pdf",
-   "//     and: https://www.nic.tr/forms/politikalar.pdf",
-   "// Submitted by <mehmetgurevin@gmail.com> 2014-07-19",
    "tr",
    "com.tr",
    "info.tr",
@@ -6141,17 +5492,9 @@ let ETLD_NAMES_LIST = [
    "k12.tr",
    "edu.tr",
    "kep.tr",
-
-   "// Used by Northern Cyprus",
    "nc.tr",
-
-   "// Used by government agencies of Northern Cyprus",
    "gov.nc.tr",
-
-   "// travel : http://en.wikipedia.org/wiki/.travel",
    "travel",
-
-   "// tt : http://www.nic.tt/",
    "tt",
    "co.tt",
    "com.tt",
@@ -6170,13 +5513,7 @@ let ETLD_NAMES_LIST = [
    "name.tt",
    "gov.tt",
    "edu.tt",
-
-   "// tv : http://en.wikipedia.org/wiki/.tv",
-   "// Not listing any 2LDs as reserved since none seem to exist in practice,",
-   "// Wikipedia notwithstanding.",
    "tv",
-
-   "// tw : http://en.wikipedia.org/wiki/.tw",
    "tw",
    "edu.tw",
    "gov.tw",
@@ -6191,9 +5528,6 @@ let ETLD_NAMES_LIST = [
    "網路.tw",
    "組織.tw",
    "商業.tw",
-
-   "// tz : http://www.tznic.or.tz/index.php/domains",
-   "// Confirmed by registry <manager@tznic.or.tz> 2013-01-22",
    "tz",
    "ac.tz",
    "co.tz",
@@ -6207,19 +5541,13 @@ let ETLD_NAMES_LIST = [
    "or.tz",
    "sc.tz",
    "tv.tz",
-
-   "// ua : https://hostmaster.ua/policy/?ua",
-   "// Submitted by registry <dk@cctld.ua> 2012-04-27",
    "ua",
-   "// ua 2LD",
    "com.ua",
    "edu.ua",
    "gov.ua",
    "in.ua",
    "net.ua",
    "org.ua",
-   "// ua geographic names",
-   "// https://hostmaster.ua/2ld/",
    "cherkassy.ua",
    "cherkasy.ua",
    "chernigov.ua",
@@ -6290,12 +5618,8 @@ let ETLD_NAMES_LIST = [
    "zhytomyr.ua",
    "zp.ua",
    "zt.ua",
-
-   "// Private registries in .ua",
    "co.ua",
    "pp.ua",
-
-   "// ug : https://www.registry.co.ug/",
    "ug",
    "co.ug",
    "or.ug",
@@ -6305,9 +5629,6 @@ let ETLD_NAMES_LIST = [
    "ne.ug",
    "com.ug",
    "org.ug",
-
-   "// uk : http://en.wikipedia.org/wiki/.uk",
-   "// Submitted by registry <Michael.Daly@nominet.org.uk>",
    "uk",
    "ac.uk",
    "co.uk",
@@ -6320,15 +5641,12 @@ let ETLD_NAMES_LIST = [
    "plc.uk",
    "police.uk",
    "*.sch.uk",
-
-   "// us : http://en.wikipedia.org/wiki/.us",
    "us",
    "dni.us",
    "fed.us",
    "isa.us",
    "kids.us",
    "nsn.us",
-   "// us geographic names",
    "ak.us",
    "al.us",
    "ar.us",
@@ -6384,12 +5702,6 @@ let ETLD_NAMES_LIST = [
    "wi.us",
    "wv.us",
    "wy.us",
-   "// The registrar notes several more specific domains available in each state,",
-   "// such as state.*.us, dst.*.us, etc., but resolution of these is somewhat",
-   "// haphazard; in some states these domains resolve as addresses, while in others",
-   "// only subdomains are available, or even nothing at all. We include the",
-   "// most common ones where it's clear that different sites are different",
-   "// entities.",
    "k12.ak.us",
    "k12.al.us",
    "k12.ar.us",
@@ -6403,7 +5715,6 @@ let ETLD_NAMES_LIST = [
    "k12.fl.us",
    "k12.ga.us",
    "k12.gu.us",
-   "// k12.hi.us  Bug 614565 - Hawaii has a state-wide DOE login",
    "k12.ia.us",
    "k12.id.us",
    "k12.il.us",
@@ -6420,7 +5731,6 @@ let ETLD_NAMES_LIST = [
    "k12.ms.us",
    "k12.mt.us",
    "k12.nc.us",
-   "// k12.nd.us  Bug 1028347 - Removed at request of Travis Rosso <trossow@nd.gov>",
    "k12.ne.us",
    "k12.nh.us",
    "k12.nj.us",
@@ -6434,7 +5744,6 @@ let ETLD_NAMES_LIST = [
    "k12.pr.us",
    "k12.ri.us",
    "k12.sc.us",
-   "// k12.sd.us  Bug 934131 - Removed at request of James Booze <James.Booze@k12.sd.us>",
    "k12.tn.us",
    "k12.tx.us",
    "k12.ut.us",
@@ -6443,7 +5752,6 @@ let ETLD_NAMES_LIST = [
    "k12.va.us",
    "k12.wa.us",
    "k12.wi.us",
-   "// k12.wv.us  Bug 947705 - Removed at request of Verne Britton <verne@wvnet.edu>",
    "k12.wy.us",
    "cc.ak.us",
    "cc.al.us",
@@ -6553,17 +5861,10 @@ let ETLD_NAMES_LIST = [
    "lib.va.us",
    "lib.wa.us",
    "lib.wi.us",
-   "// lib.wv.us  Bug 941670 - Removed at request of Larry W Arnold <arnold@wvlc.lib.wv.us>",
    "lib.wy.us",
-   "// k12.ma.us contains school districts in Massachusetts. The 4LDs are",
-   "//  managed indepedently except for private (PVT), charter (CHTR) and",
-   "//  parochial (PAROCH) schools.  Those are delegated dorectly to the",
-   "//  5LD operators.   <k12-ma-hostmaster _ at _ rsuc.gweep.net>",
    "pvt.k12.ma.us",
    "chtr.k12.ma.us",
    "paroch.k12.ma.us",
-
-   "// uy : http://www.nic.org.uy/",
    "uy",
    "com.uy",
    "edu.uy",
@@ -6571,19 +5872,12 @@ let ETLD_NAMES_LIST = [
    "mil.uy",
    "net.uy",
    "org.uy",
-
-   "// uz : http://www.reg.uz/",
    "uz",
    "co.uz",
    "com.uz",
    "net.uz",
    "org.uz",
-
-   "// va : http://en.wikipedia.org/wiki/.va",
    "va",
-
-   "// vc : http://en.wikipedia.org/wiki/.vc",
-   "// Submitted by registry <kshah@ca.afilias.info> 2008-06-13",
    "vc",
    "com.vc",
    "net.vc",
@@ -6591,10 +5885,6 @@ let ETLD_NAMES_LIST = [
    "gov.vc",
    "mil.vc",
    "edu.vc",
-
-   "// ve : https://registro.nic.ve/",
-   "// Confirmed by registry 2012-10-04",
-   "// Updated 2014-05-20 - Bug 940478",
    "ve",
    "arts.ve",
    "co.ve",
@@ -6613,22 +5903,13 @@ let ETLD_NAMES_LIST = [
    "store.ve",
    "tec.ve",
    "web.ve",
-
-   "// vg : http://en.wikipedia.org/wiki/.vg",
    "vg",
-
-   "// vi : http://www.nic.vi/newdomainform.htm",
-   "// http://www.nic.vi/Domain_Rules/body_domain_rules.html indicates some other",
-   "// TLDs are 'reserved', such as edu.vi and gov.vi, but doesn't actually say they",
-   "// are available for registration (which they do not seem to be).",
    "vi",
    "co.vi",
    "com.vi",
    "k12.vi",
    "net.vi",
    "org.vi",
-
-   "// vn : https://www.dot.vn/vnnic/vnnic/domainregistration.jsp",
    "vn",
    "com.vn",
    "net.vn",
@@ -6642,173 +5923,55 @@ let ETLD_NAMES_LIST = [
    "name.vn",
    "pro.vn",
    "health.vn",
-
-   "// vu : http://en.wikipedia.org/wiki/.vu",
-   "// http://www.vunic.vu/",
    "vu",
    "com.vu",
    "edu.vu",
    "net.vu",
    "org.vu",
-
-   "// wf : http://www.afnic.fr/medias/documents/AFNIC-naming-policy2012.pdf",
    "wf",
-
-   "// ws : http://en.wikipedia.org/wiki/.ws",
-   "// http://samoanic.ws/index.dhtml",
    "ws",
    "com.ws",
    "net.ws",
    "org.ws",
    "gov.ws",
    "edu.ws",
-
-   "// yt : http://www.afnic.fr/medias/documents/AFNIC-naming-policy2012.pdf",
    "yt",
-
-   "// IDN ccTLDs",
-   "// When submitting patches, please maintain a sort by ISO 3166 ccTLD, then",
-   "// U-label, and follow this format:",
-   "// // A-Label ('<Latin renderings>', <language name>[, variant info]) : <ISO 3166 ccTLD>",
-   "// // [sponsoring org]",
-   "// U-Label",
-
-   "// xn--mgbaam7a8h ('Emerat', Arabic) : AE",
-   "// http://nic.ae/english/arabicdomain/rules.jsp",
    "امارات",
-
-   "// xn--y9a3aq ('hye', Armenian) : AM",
-   "// ISOC AM (operated by .am Registry)",
    "հայ",
-
-   "// xn--54b7fta0cc ('Bangla', Bangla) : BD",
    "বাংলা",
-
-   "// xn--90ais ('bel', Belarusian/Russian Cyrillic) : BY",
-   "// Operated by .by registry",
    "бел",
-
-   "// xn--fiqs8s ('Zhongguo/China', Chinese, Simplified) : CN",
-   "// CNNIC",
-   "// http://cnnic.cn/html/Dir/2005/10/11/3218.htm",
    "中国",
-
-   "// xn--fiqz9s ('Zhongguo/China', Chinese, Traditional) : CN",
-   "// CNNIC",
-   "// http://cnnic.cn/html/Dir/2005/10/11/3218.htm",
    "中國",
-
-   "// xn--lgbbat1ad8j ('Algeria/Al Jazair', Arabic) : DZ",
    "الجزائر",
-
-   "// xn--wgbh1c ('Egypt/Masr', Arabic) : EG",
-   "// http://www.dotmasr.eg/",
    "مصر",
-
-   "// xn--node ('ge', Georgian Mkhedruli) : GE",
    "გე",
-
-   "// xn--qxam ('el', Greek) : GR",
-   "// Hellenic Ministry of Infrastructure, Transport, and Networks",
    "ελ",
-
-   "// xn--j6w193g ('Hong Kong', Chinese) : HK",
-   "// https://www2.hkirc.hk/register/rules.jsp",
    "香港",
-
-   "// xn--h2brj9c ('Bharat', Devanagari) : IN",
-   "// India",
    "भारत",
-
-   "// xn--mgbbh1a71e ('Bharat', Arabic) : IN",
-   "// India",
    "بھارت",
-
-   "// xn--fpcrj9c3d ('Bharat', Telugu) : IN",
-   "// India",
    "భారత్",
-
-   "// xn--gecrj9c ('Bharat', Gujarati) : IN",
-   "// India",
    "ભારત",
-
-   "// xn--s9brj9c ('Bharat', Gurmukhi) : IN",
-   "// India",
    "ਭਾਰਤ",
-
-   "// xn--45brj9c ('Bharat', Bengali) : IN",
-   "// India",
    "ভারত",
-
-   "// xn--xkc2dl3a5ee0h ('India', Tamil) : IN",
-   "// India",
    "இந்தியா",
-
-   "// xn--mgba3a4f16a ('Iran', Persian) : IR",
    "ایران",
-
-   "// xn--mgba3a4fra ('Iran', Arabic) : IR",
    "ايران",
-
-   "// xn--mgbtx2b ('Iraq', Arabic) : IQ",
-   "// Communications and Media Commission",
    "عراق",
-
-   "// xn--mgbayh7gpa ('al-Ordon', Arabic) : JO",
-   "// National Information Technology Center (NITC)",
-   "// Royal Scientific Society, Al-Jubeiha",
    "الاردن",
-
-   "// xn--3e0b707e ('Republic of Korea', Hangul) : KR",
    "한국",
-
-   "// xn--80ao21a ('Kaz', Kazakh) : KZ",
    "қаз",
-
-   "// xn--fzc2c9e2c ('Lanka', Sinhalese-Sinhala) : LK",
-   "// http://nic.lk",
    "ලංකා",
-
-   "// xn--xkc2al3hye2a ('Ilangai', Tamil) : LK",
-   "// http://nic.lk",
    "இலங்கை",
-
-   "// xn--mgbc0a9azcg ('Morocco/al-Maghrib', Arabic) : MA",
    "المغرب",
-
-   "// xn--d1alf ('mkd', Macedonian) : MK",
-   "// MARnet",
    "мкд",
-
-   "// xn--l1acc ('mon', Mongolian) : MN",
    "мон",
-
-   "// xn--mix891f ('Macao', Chinese, Traditional) : MO",
-   "// MONIC / HNET Asia (Registry Operator for .mo)",
    "澳門",
-
-   "// xn--mix082f ('Macao', Chinese, Simplified) : MO",
    "澳门",
-
-   "// xn--mgbx4cd0ab ('Malaysia', Malay) : MY",
    "مليسيا",
-
-   "// xn--mgb9awbf ('Oman', Arabic) : OM",
    "عمان",
-
-   "// xn--mgbai9azgqp6j ('Pakistan', Urdu/Arabic) : PK",
    "پاکستان",
-
-   "// xn--mgbai9a5eva00b ('Pakistan', Urdu/Arabic, variant) : PK",
    "پاكستان",
-
-   "// xn--ygbi2ammx ('Falasteen', Arabic) : PS",
-   "// The Palestinian National Internet Naming Authority (PNINA)",
-   "// http://www.pnina.ps",
    "فلسطين",
-
-   "// xn--90a3ac ('srb', Cyrillic) : RS",
-   "// http://www.rnids.rs/en/the-.срб-domain",
    "срб",
    "пр.срб",
    "орг.срб",
@@ -6816,2855 +5979,949 @@ let ETLD_NAMES_LIST = [
    "од.срб",
    "упр.срб",
    "ак.срб",
-
-   "// xn--p1ai ('rf', Russian-Cyrillic) : RU",
-   "// http://www.cctld.ru/en/docs/rulesrf.php",
    "рф",
-
-   "// xn--wgbl6a ('Qatar', Arabic) : QA",
-   "// http://www.ict.gov.qa/",
    "قطر",
-
-   "// xn--mgberp4a5d4ar ('AlSaudiah', Arabic) : SA",
-   "// http://www.nic.net.sa/",
    "السعودية",
-
-   "// xn--mgberp4a5d4a87g ('AlSaudiah', Arabic, variant)  : SA",
    "السعودیة",
-
-   "// xn--mgbqly7c0a67fbc ('AlSaudiah', Arabic, variant) : SA",
    "السعودیۃ",
-
-   "// xn--mgbqly7cvafr ('AlSaudiah', Arabic, variant) : SA",
    "السعوديه",
-
-   "// xn--mgbpl2fh ('sudan', Arabic) : SD",
-   "// Operated by .sd registry",
    "سودان",
-
-   "// xn--yfro4i67o Singapore ('Singapore', Chinese) : SG",
    "新加坡",
-
-   "// xn--clchc0ea0b2g2a9gcd ('Singapore', Tamil) : SG",
    "சிங்கப்பூர்",
-
-   "// xn--ogbpf8fl ('Syria', Arabic) : SY",
    "سورية",
-
-   "// xn--mgbtf8fl ('Syria', Arabic, variant) : SY",
    "سوريا",
-
-   "// xn--o3cw4h ('Thai', Thai) : TH",
-   "// http://www.thnic.co.th",
    "ไทย",
-
-   "// xn--pgbs0dh ('Tunisia', Arabic) : TN",
-   "// http://nic.tn",
    "تونس",
-
-   "// xn--kpry57d ('Taiwan', Chinese, Traditional) : TW",
-   "// http://www.twnic.net/english/dn/dn_07a.htm",
    "台灣",
-
-   "// xn--kprw13d ('Taiwan', Chinese, Simplified) : TW",
-   "// http://www.twnic.net/english/dn/dn_07a.htm",
    "台湾",
-
-   "// xn--nnx388a ('Taiwan', Chinese, variant) : TW",
    "臺灣",
-
-   "// xn--j1amh ('ukr', Cyrillic) : UA",
    "укр",
-
-   "// xn--mgb2ddes ('AlYemen', Arabic) : YE",
    "اليمن",
-
-   "// xxx : http://icmregistry.com",
    "xxx",
-
-   "// ye : http://www.y.net.ye/services/domain_name.htm",
    "*.ye",
-
-   "// za : http://www.zadna.org.za/slds.html",
    "*.za",
-
-   "// zm : http://en.wikipedia.org/wiki/.zm",
    "*.zm",
-
-   "// zw : http://en.wikipedia.org/wiki/.zw",
    "*.zw",
-
-
-   "// List of new gTLDs imported from https://newgtlds.icann.org/newgtlds.csv on 2015-05-06T09:31:08Z",
-
-   "// aaa : 2015-02-26 American Automobile Association, Inc.",
    "aaa",
-
-   "// abb : 2014-10-24 ABB Ltd",
    "abb",
-
-   "// abbott : 2014-07-24 Abbott Laboratories, Inc.",
    "abbott",
-
-   "// abogado : 2014-04-24 Top Level Domain Holdings Limited",
    "abogado",
-
-   "// academy : 2013-11-07 Half Oaks, LLC",
    "academy",
-
-   "// accenture : 2014-08-15 Accenture plc",
    "accenture",
-
-   "// accountant : 2014-11-20 dot Accountant Limited",
    "accountant",
-
-   "// accountants : 2014-03-20 Knob Town, LLC",
    "accountants",
-
-   "// aco : 2015-01-08 ACO Severin Ahlmann GmbH & Co. KG",
    "aco",
-
-   "// active : 2014-05-01 The Active Network, Inc",
    "active",
-
-   "// actor : 2013-12-12 United TLD Holdco Ltd.",
    "actor",
-
-   "// ads : 2014-12-04 Charleston Road Registry Inc.",
    "ads",
-
-   "// adult : 2014-10-16 ICM Registry AD LLC",
    "adult",
-
-   "// aeg : 2015-03-19 Aktiebolaget Electrolux",
    "aeg",
-
-   "// afl : 2014-10-02 Australian Football League",
    "afl",
-
-   "// africa : 2014-03-24 ZA Central Registry NPC trading as Registry.Africa",
    "africa",
-
-   "// africamagic : 2015-03-05 Electronic Media Network (Pty) Ltd",
    "africamagic",
-
-   "// agakhan : 2015-04-23 Fondation Aga Khan (Aga Khan Foundation)",
    "agakhan",
-
-   "// agency : 2013-11-14 Steel Falls, LLC",
    "agency",
-
-   "// aig : 2014-12-18 American International Group, Inc.",
    "aig",
-
-   "// airforce : 2014-03-06 United TLD Holdco Ltd.",
    "airforce",
-
-   "// airtel : 2014-10-24 Bharti Airtel Limited",
    "airtel",
-
-   "// akdn : 2015-04-23 Fondation Aga Khan (Aga Khan Foundation)",
    "akdn",
-
-   "// alibaba : 2015-01-15 Alibaba Group Holding Limited",
    "alibaba",
-
-   "// alipay : 2015-01-15 Alibaba Group Holding Limited",
    "alipay",
-
-   "// allfinanz : 2014-07-03 Allfinanz Deutsche Vermögensberatung Aktiengesellschaft",
    "allfinanz",
-
-   "// alsace : 2014-07-02 REGION D ALSACE",
    "alsace",
-
-   "// amsterdam : 2014-07-24 Gemeente Amsterdam",
    "amsterdam",
-
-   "// analytics : 2014-12-18 Campus IP LLC",
    "analytics",
-
-   "// android : 2014-08-07 Charleston Road Registry Inc.",
    "android",
-
-   "// anquan : 2015-01-08 QIHOO 360 TECHNOLOGY CO. LTD.",
    "anquan",
-
-   "// apartments : 2014-12-11 June Maple, LLC",
    "apartments",
-
-   "// aquarelle : 2014-07-24 Aquarelle.com",
    "aquarelle",
-
-   "// aramco : 2014-11-20 Aramco Services Company",
    "aramco",
-
-   "// archi : 2014-02-06 STARTING DOT LIMITED",
    "archi",
-
-   "// army : 2014-03-06 United TLD Holdco Ltd.",
    "army",
-
-   "// arte : 2014-12-11 Association Relative à la Télévision Européenne G.E.I.E.",
    "arte",
-
-   "// associates : 2014-03-06 Baxter Hill, LLC",
    "associates",
-
-   "// attorney : 2014-03-20",
    "attorney",
-
-   "// auction : 2014-03-20",
    "auction",
-
-   "// audio : 2014-03-20 Uniregistry, Corp.",
    "audio",
-
-   "// author : 2014-12-18 Amazon EU S.à r.l.",
    "author",
-
-   "// auto : 2014-11-13 Uniregistry, Corp.",
    "auto",
-
-   "// autos : 2014-01-09 DERAutos, LLC",
    "autos",
-
-   "// avianca : 2015-01-08 Aerovias del Continente Americano S.A. Avianca",
    "avianca",
-
-   "// axa : 2013-12-19 AXA SA",
    "axa",
-
-   "// azure : 2014-12-18 Microsoft Corporation",
    "azure",
-
-   "// baby : 2015-04-09 Johnson & Johnson Services, Inc.",
    "baby",
-
-   "// baidu : 2015-01-08 Baidu, Inc.",
    "baidu",
-
-   "// band : 2014-06-12",
    "band",
-
-   "// bank : 2014-09-25 fTLD Registry Services LLC",
    "bank",
-
-   "// bar : 2013-12-12 Punto 2012 Sociedad Anonima Promotora de Inversion de Capital Variable",
    "bar",
-
-   "// barcelona : 2014-07-24 Municipi de Barcelona",
    "barcelona",
-
-   "// barclaycard : 2014-11-20 Barclays Bank PLC",
    "barclaycard",
-
-   "// barclays : 2014-11-20 Barclays Bank PLC",
    "barclays",
-
-   "// bargains : 2013-11-14 Half Hallow, LLC",
    "bargains",
-
-   "// bauhaus : 2014-04-17 Werkhaus GmbH",
    "bauhaus",
-
-   "// bayern : 2014-01-23 Bayern Connect GmbH",
    "bayern",
-
-   "// bbc : 2014-12-18 British Broadcasting Corporation",
    "bbc",
-
-   "// bbva : 2014-10-02 BANCO BILBAO VIZCAYA ARGENTARIA, S.A.",
    "bbva",
-
-   "// bcg : 2015-04-02 The Boston Consulting Group, Inc.",
    "bcg",
-
-   "// bcn : 2014-07-24 Municipi de Barcelona",
    "bcn",
-
-   "// beer : 2014-01-09 Top Level Domain Holdings Limited",
    "beer",
-
-   "// bentley : 2014-12-18 Bentley Motors Limited",
    "bentley",
-
-   "// berlin : 2013-10-31 dotBERLIN GmbH & Co. KG",
    "berlin",
-
-   "// best : 2013-12-19 BestTLD Pty Ltd",
    "best",
-
-   "// bharti : 2014-01-09 Bharti Enterprises (Holding) Private Limited",
    "bharti",
-
-   "// bible : 2014-06-19 American Bible Society",
    "bible",
-
-   "// bid : 2013-12-19 dot Bid Limited",
    "bid",
-
-   "// bike : 2013-08-27 Grand Hollow, LLC",
    "bike",
-
-   "// bing : 2014-12-18 Microsoft Corporation",
    "bing",
-
-   "// bingo : 2014-12-04 Sand Cedar, LLC",
    "bingo",
-
-   "// bio : 2014-03-06 STARTING DOT LIMITED",
    "bio",
-
-   "// black : 2014-01-16 Afilias Limited",
    "black",
-
-   "// blackfriday : 2014-01-16 Uniregistry, Corp.",
    "blackfriday",
-
-   "// bloomberg : 2014-07-17 Bloomberg IP Holdings LLC",
    "bloomberg",
-
-   "// blue : 2013-11-07 Afilias Limited",
    "blue",
-
-   "// bms : 2014-10-30 Bristol-Myers Squibb Company",
    "bms",
-
-   "// bmw : 2014-01-09 Bayerische Motoren Werke Aktiengesellschaft",
    "bmw",
-
-   "// bnl : 2014-07-24 Banca Nazionale del Lavoro",
    "bnl",
-
-   "// bnpparibas : 2014-05-29 BNP Paribas",
    "bnpparibas",
-
-   "// boats : 2014-12-04 DERBoats, LLC",
    "boats",
-
-   "// bom : 2014-10-16 Núcleo de Informação e Coordenação do Ponto BR - NIC.br",
    "bom",
-
-   "// bond : 2014-06-05 Bond University Limited",
    "bond",
-
-   "// boo : 2014-01-30 Charleston Road Registry Inc.",
    "boo",
-
-   "// boots : 2015-01-08 THE BOOTS COMPANY PLC",
    "boots",
-
-   "// bot : 2014-12-18 Amazon EU S.à r.l.",
    "bot",
-
-   "// boutique : 2013-11-14 Over Galley, LLC",
    "boutique",
-
-   "// bradesco : 2014-12-18 Banco Bradesco S.A.",
    "bradesco",
-
-   "// bridgestone : 2014-12-18 Bridgestone Corporation",
    "bridgestone",
-
-   "// broadway : 2014-12-22 Celebrate Broadway, Inc.",
    "broadway",
-
-   "// broker : 2014-12-11 IG Group Holdings PLC",
    "broker",
-
-   "// brother : 2015-01-29 Brother Industries, Ltd.",
    "brother",
-
-   "// brussels : 2014-02-06 DNS.be vzw",
    "brussels",
-
-   "// budapest : 2013-11-21 Top Level Domain Holdings Limited",
    "budapest",
-
-   "// build : 2013-11-07 Plan Bee LLC",
    "build",
-
-   "// builders : 2013-11-07 Atomic Madison, LLC",
    "builders",
-
-   "// business : 2013-11-07 Spring Cross, LLC",
    "business",
-
-   "// buy : 2014-12-18 Amazon EU S.à r.l.",
    "buy",
-
-   "// buzz : 2013-10-02 DOTSTRATEGY CO.",
    "buzz",
-
-   "// bzh : 2014-02-27 Association www.bzh",
    "bzh",
-
-   "// cab : 2013-10-24 Half Sunset, LLC",
    "cab",
-
-   "// cafe : 2015-02-11 Pioneer Canyon, LLC",
    "cafe",
-
-   "// cal : 2014-07-24 Charleston Road Registry Inc.",
    "cal",
-
-   "// call : 2014-12-18 Amazon EU S.à r.l.",
    "call",
-
-   "// camera : 2013-08-27 Atomic Maple, LLC",
    "camera",
-
-   "// camp : 2013-11-07 Delta Dynamite, LLC",
    "camp",
-
-   "// cancerresearch : 2014-05-15 Australian Cancer Research Foundation",
    "cancerresearch",
-
-   "// canon : 2014-09-12 Canon Inc.",
    "canon",
-
-   "// capetown : 2014-03-24 ZA Central Registry NPC trading as ZA Central Registry",
    "capetown",
-
-   "// capital : 2014-03-06 Delta Mill, LLC",
    "capital",
-
-   "// car : 2015-01-22 Charleston Road Registry Inc.",
    "car",
-
-   "// caravan : 2013-12-12 Caravan International, Inc.",
    "caravan",
-
-   "// cards : 2013-12-05 Foggy Hollow, LLC",
    "cards",
-
-   "// care : 2014-03-06 Goose Cross",
    "care",
-
-   "// career : 2013-10-09 dotCareer LLC",
    "career",
-
-   "// careers : 2013-10-02 Wild Corner, LLC",
    "careers",
-
-   "// cars : 2014-11-13 Uniregistry, Corp.",
    "cars",
-
-   "// cartier : 2014-06-23 Richemont DNS Inc.",
    "cartier",
-
-   "// casa : 2013-11-21 Top Level Domain Holdings Limited",
    "casa",
-
-   "// cash : 2014-03-06 Delta Lake, LLC",
    "cash",
-
-   "// casino : 2014-12-18 Binky Sky, LLC",
    "casino",
-
-   "// catering : 2013-12-05 New Falls. LLC",
    "catering",
-
-   "// cba : 2014-06-26 COMMONWEALTH BANK OF AUSTRALIA",
    "cba",
-
-   "// cbn : 2014-08-22 The Christian Broadcasting Network, Inc.",
    "cbn",
-
-   "// ceb : 2015-04-09 The Corporate Executive Board Company",
    "ceb",
-
-   "// center : 2013-11-07 Tin Mill, LLC",
    "center",
-
-   "// ceo : 2013-11-07 CEOTLD Pty Ltd",
    "ceo",
-
-   "// cern : 2014-06-05 European Organization for Nuclear Research ('CERN')",
    "cern",
-
-   "// cfa : 2014-08-28 CFA Institute",
    "cfa",
-
-   "// cfd : 2014-12-11 IG Group Holdings PLC",
    "cfd",
-
-   "// chanel : 2015-04-09 Chanel International B.V.",
    "chanel",
-
-   "// channel : 2014-05-08 Charleston Road Registry Inc.",
    "channel",
-
-   "// chase : 2015-04-30 JPMorgan Chase & Co.",
    "chase",
-
-   "// chat : 2014-12-04 Sand Fields, LLC",
    "chat",
-
-   "// cheap : 2013-11-14 Sand Cover, LLC",
    "cheap",
-
-   "// chloe : 2014-10-16 Richemont DNS Inc.",
    "chloe",
-
-   "// christmas : 2013-11-21 Uniregistry, Corp.",
    "christmas",
-
-   "// chrome : 2014-07-24 Charleston Road Registry Inc.",
    "chrome",
-
-   "// church : 2014-02-06 Holly Fields, LLC",
    "church",
-
-   "// cipriani : 2015-02-19 Hotel Cipriani Srl",
    "cipriani",
-
-   "// circle : 2014-12-18 Amazon EU S.à r.l.",
    "circle",
-
-   "// cisco : 2014-12-22 Cisco Technology, Inc.",
    "cisco",
-
-   "// citic : 2014-01-09 CITIC Group Corporation",
    "citic",
-
-   "// city : 2014-05-29 Snow Sky, LLC",
    "city",
-
-   "// cityeats : 2014-12-11 Lifestyle Domain Holdings, Inc.",
    "cityeats",
-
-   "// claims : 2014-03-20 Black Corner, LLC",
    "claims",
-
-   "// cleaning : 2013-12-05 Fox Shadow, LLC",
    "cleaning",
-
-   "// click : 2014-06-05 Uniregistry, Corp.",
    "click",
-
-   "// clinic : 2014-03-20 Goose Park, LLC",
    "clinic",
-
-   "// clothing : 2013-08-27 Steel Lake, LLC",
    "clothing",
-
-   "// cloud : 2015-04-16 ARUBA S.p.A.",
    "cloud",
-
-   "// club : 2013-11-08 .CLUB DOMAINS, LLC",
    "club",
-
-   "// coach : 2014-10-09 Koko Island, LLC",
    "coach",
-
-   "// codes : 2013-10-31 Puff Willow, LLC",
    "codes",
-
-   "// coffee : 2013-10-17 Trixy Cover, LLC",
    "coffee",
-
-   "// college : 2014-01-16 XYZ.COM LLC",
    "college",
-
-   "// cologne : 2014-02-05 NetCologne Gesellschaft für Telekommunikation mbH",
    "cologne",
-
-   "// commbank : 2014-06-26 COMMONWEALTH BANK OF AUSTRALIA",
    "commbank",
-
-   "// community : 2013-12-05 Fox Orchard, LLC",
    "community",
-
-   "// company : 2013-11-07 Silver Avenue, LLC",
    "company",
-
-   "// computer : 2013-10-24 Pine Mill, LLC",
    "computer",
-
-   "// comsec : 2015-01-08 VeriSign, Inc.",
    "comsec",
-
-   "// condos : 2013-12-05 Pine House, LLC",
    "condos",
-
-   "// construction : 2013-09-16 Fox Dynamite, LLC",
    "construction",
-
-   "// consulting : 2013-12-05",
    "consulting",
-
-   "// contact : 2015-01-08 Top Level Spectrum, Inc.",
    "contact",
-
-   "// contractors : 2013-09-10 Magic Woods, LLC",
    "contractors",
-
-   "// cooking : 2013-11-21 Top Level Domain Holdings Limited",
    "cooking",
-
-   "// cool : 2013-11-14 Koko Lake, LLC",
    "cool",
-
-   "// corsica : 2014-09-25 Collectivité Territoriale de Corse",
    "corsica",
-
-   "// country : 2013-12-19 Top Level Domain Holdings Limited",
    "country",
-
-   "// coupon : 2015-02-26 Amazon EU S.à r.l.",
    "coupon",
-
-   "// coupons : 2015-03-26 Black Island, LLC",
    "coupons",
-
-   "// courses : 2014-12-04 OPEN UNIVERSITIES AUSTRALIA PTY LTD",
    "courses",
-
-   "// credit : 2014-03-20 Snow Shadow, LLC",
    "credit",
-
-   "// creditcard : 2014-03-20 Binky Frostbite, LLC",
    "creditcard",
-
-   "// creditunion : 2015-01-22 CUNA Performance Resources, LLC",
    "creditunion",
-
-   "// cricket : 2014-10-09 dot Cricket Limited",
    "cricket",
-
-   "// crown : 2014-10-24 Crown Equipment Corporation",
    "crown",
-
-   "// crs : 2014-04-03 Federated Co-operatives Limited",
    "crs",
-
-   "// cruises : 2013-12-05 Spring Way, LLC",
    "cruises",
-
-   "// csc : 2014-09-25 Alliance-One Services, Inc.",
    "csc",
-
-   "// cuisinella : 2014-04-03 SALM S.A.S.",
    "cuisinella",
-
-   "// cymru : 2014-05-08 Nominet UK",
    "cymru",
-
-   "// cyou : 2015-01-22 Beijing Gamease Age Digital Technology Co., Ltd.",
    "cyou",
-
-   "// dabur : 2014-02-06 Dabur India Limited",
    "dabur",
-
-   "// dad : 2014-01-23 Charleston Road Registry Inc.",
    "dad",
-
-   "// dance : 2013-10-24 United TLD Holdco Ltd.",
    "dance",
-
-   "// date : 2014-11-20 dot Date Limited",
    "date",
-
-   "// dating : 2013-12-05 Pine Fest, LLC",
    "dating",
-
-   "// datsun : 2014-03-27 NISSAN MOTOR CO., LTD.",
    "datsun",
-
-   "// day : 2014-01-30 Charleston Road Registry Inc.",
    "day",
-
-   "// dclk : 2014-11-20 Charleston Road Registry Inc.",
    "dclk",
-
-   "// dealer : 2014-12-22 Dealer Dot Com, Inc.",
    "dealer",
-
-   "// deals : 2014-05-22 Sand Sunset, LLC",
    "deals",
-
-   "// degree : 2014-03-06",
    "degree",
-
-   "// delivery : 2014-09-11 Steel Station, LLC",
    "delivery",
-
-   "// dell : 2014-10-24 Dell Inc.",
    "dell",
-
-   "// delta : 2015-02-19 Delta Air Lines, Inc.",
    "delta",
-
-   "// democrat : 2013-10-24 United TLD Holdco Ltd.",
    "democrat",
-
-   "// dental : 2014-03-20 Tin Birch, LLC",
    "dental",
-
-   "// dentist : 2014-03-20",
    "dentist",
-
-   "// desi : 2013-11-14 Desi Networks LLC",
    "desi",
-
-   "// design : 2014-11-07 Top Level Design, LLC",
    "design",
-
-   "// dev : 2014-10-16 Charleston Road Registry Inc.",
    "dev",
-
-   "// diamonds : 2013-09-22 John Edge, LLC",
    "diamonds",
-
-   "// diet : 2014-06-26 Uniregistry, Corp.",
    "diet",
-
-   "// digital : 2014-03-06 Dash Park, LLC",
    "digital",
-
-   "// direct : 2014-04-10 Half Trail, LLC",
    "direct",
-
-   "// directory : 2013-09-20 Extra Madison, LLC",
    "directory",
-
-   "// discount : 2014-03-06 Holly Hill, LLC",
    "discount",
-
-   "// dnp : 2013-12-13 Dai Nippon Printing Co., Ltd.",
    "dnp",
-
-   "// docs : 2014-10-16 Charleston Road Registry Inc.",
    "docs",
-
-   "// dog : 2014-12-04 Koko Mill, LLC",
    "dog",
-
-   "// doha : 2014-09-18 Communications Regulatory Authority (CRA)",
    "doha",
-
-   "// domains : 2013-10-17 Sugar Cross, LLC",
    "domains",
-
-   "// doosan : 2014-04-03 Doosan Corporation",
    "doosan",
-
-   "// download : 2014-11-20 dot Support Limited",
    "download",
-
-   "// drive : 2015-03-05 Charleston Road Registry Inc.",
    "drive",
-
-   "// dstv : 2015-03-12 MultiChoice (Proprietary) Limited",
    "dstv",
-
-   "// dubai : 2015-01-01 Dubai Smart Government Department",
    "dubai",
-
-   "// durban : 2014-03-24 ZA Central Registry NPC trading as ZA Central Registry",
    "durban",
-
-   "// dvag : 2014-06-23 Deutsche Vermögensberatung Aktiengesellschaft DVAG",
    "dvag",
-
-   "// earth : 2014-12-04 Interlink Co., Ltd.",
    "earth",
-
-   "// eat : 2014-01-23 Charleston Road Registry Inc.",
    "eat",
-
-   "// edeka : 2014-12-18 EDEKA Verband kaufmännischer Genossenschaften e.V.",
    "edeka",
-
-   "// education : 2013-11-07 Brice Way, LLC",
    "education",
-
-   "// email : 2013-10-31 Spring Madison, LLC",
    "email",
-
-   "// emerck : 2014-04-03 Merck KGaA",
    "emerck",
-
-   "// energy : 2014-09-11 Binky Birch, LLC",
    "energy",
-
-   "// engineer : 2014-03-06 United TLD Holdco Ltd.",
    "engineer",
-
-   "// engineering : 2014-03-06 Romeo Canyon",
    "engineering",
-
-   "// enterprises : 2013-09-20 Snow Oaks, LLC",
    "enterprises",
-
-   "// epson : 2014-12-04 Seiko Epson Corporation",
    "epson",
-
-   "// equipment : 2013-08-27 Corn Station, LLC",
    "equipment",
-
-   "// erni : 2014-04-03 ERNI Group Holding AG",
    "erni",
-
-   "// esq : 2014-05-08 Charleston Road Registry Inc.",
    "esq",
-
-   "// estate : 2013-08-27 Trixy Park, LLC",
    "estate",
-
-   "// eurovision : 2014-04-24 European Broadcasting Union (EBU)",
    "eurovision",
-
-   "// eus : 2013-12-12 Puntueus Fundazioa",
    "eus",
-
-   "// events : 2013-12-05 Pioneer Maple, LLC",
    "events",
-
-   "// everbank : 2014-05-15 EverBank",
    "everbank",
-
-   "// exchange : 2014-03-06 Spring Falls, LLC",
    "exchange",
-
-   "// expert : 2013-11-21 Magic Pass, LLC",
    "expert",
-
-   "// exposed : 2013-12-05 Victor Beach, LLC",
    "exposed",
-
-   "// express : 2015-02-11 Sea Sunset, LLC",
    "express",
-
-   "// fage : 2014-12-18 Fage International S.A.",
    "fage",
-
-   "// fail : 2014-03-06 Atomic Pipe, LLC",
    "fail",
-
-   "// fairwinds : 2014-11-13 FairWinds Partners, LLC",
    "fairwinds",
-
-   "// faith : 2014-11-20 dot Faith Limited",
    "faith",
-
-   "// family : 2015-04-02 Bitter Galley, LLC",
    "family",
-
-   "// fan : 2014-03-06",
    "fan",
-
-   "// fans : 2014-11-07 Asiamix Digital Limited",
    "fans",
-
-   "// farm : 2013-11-07 Just Maple, LLC",
    "farm",
-
-   "// fashion : 2014-07-03 Top Level Domain Holdings Limited",
    "fashion",
-
-   "// fast : 2014-12-18 Amazon EU S.à r.l.",
    "fast",
-
-   "// feedback : 2013-12-19 Top Level Spectrum, Inc.",
    "feedback",
-
-   "// ferrero : 2014-12-18 Ferrero Trading Lux S.A.",
    "ferrero",
-
-   "// film : 2015-01-08 Motion Picture Domain Registry Pty Ltd",
    "film",
-
-   "// final : 2014-10-16 Núcleo de Informação e Coordenação do Ponto BR - NIC.br",
    "final",
-
-   "// finance : 2014-03-20 Cotton Cypress, LLC",
    "finance",
-
-   "// financial : 2014-03-06 Just Cover, LLC",
    "financial",
-
-   "// firestone : 2014-12-18 Bridgestone Corporation",
    "firestone",
-
-   "// firmdale : 2014-03-27 Firmdale Holdings Limited",
    "firmdale",
-
-   "// fish : 2013-12-12 Fox Woods, LLC",
    "fish",
-
-   "// fishing : 2013-11-21 Top Level Domain Holdings Limited",
    "fishing",
-
-   "// fit : 2014-11-07 Top Level Domain Holdings Limited",
    "fit",
-
-   "// fitness : 2014-03-06 Brice Orchard, LLC",
    "fitness",
-
-   "// flickr : 2015-04-02 Yahoo! Domain Services Inc.",
    "flickr",
-
-   "// flights : 2013-12-05 Fox Station, LLC",
    "flights",
-
-   "// florist : 2013-11-07 Half Cypress, LLC",
    "florist",
-
-   "// flowers : 2014-10-09 Uniregistry, Corp.",
    "flowers",
-
-   "// flsmidth : 2014-07-24 FLSmidth A/S",
    "flsmidth",
-
-   "// fly : 2014-05-08 Charleston Road Registry Inc.",
    "fly",
-
-   "// foo : 2014-01-23 Charleston Road Registry Inc.",
    "foo",
-
-   "// football : 2014-12-18 Foggy Farms, LLC",
    "football",
-
-   "// ford : 2014-11-13 Ford Motor Company",
    "ford",
-
-   "// forex : 2014-12-11 IG Group Holdings PLC",
    "forex",
-
-   "// forsale : 2014-05-22",
    "forsale",
-
-   "// forum : 2015-04-02 Fegistry, LLC",
    "forum",
-
-   "// foundation : 2013-12-05 John Dale, LLC",
    "foundation",
-
-   "// frl : 2014-05-15 FRLregistry B.V.",
    "frl",
-
-   "// frogans : 2013-12-19 OP3FT",
    "frogans",
-
-   "// frontier : 2015-02-05 Frontier Communications Corporation",
    "frontier",
-
-   "// fund : 2014-03-20 John Castle, LLC",
    "fund",
-
-   "// furniture : 2014-03-20 Lone Fields, LLC",
    "furniture",
-
-   "// futbol : 2013-09-20",
    "futbol",
-
-   "// fyi : 2015-04-02 Silver Tigers, LLC",
    "fyi",
-
-   "// gal : 2013-11-07 Asociación puntoGAL",
    "gal",
-
-   "// gallery : 2013-09-13 Sugar House, LLC",
    "gallery",
-
-   "// gallup : 2015-02-19 Gallup, Inc.",
    "gallup",
-
-   "// garden : 2014-06-26 Top Level Domain Holdings Limited",
    "garden",
-
-   "// gbiz : 2014-07-17 Charleston Road Registry Inc.",
    "gbiz",
-
-   "// gdn : 2014-07-31 Joint Stock Company 'Navigation-information systems'",
    "gdn",
-
-   "// gea : 2014-12-04 GEA Group Aktiengesellschaft",
    "gea",
-
-   "// gent : 2014-01-23 COMBELL GROUP NV/SA",
    "gent",
-
-   "// genting : 2015-03-12 Resorts World Inc Pte. Ltd.",
    "genting",
-
-   "// ggee : 2014-01-09 GMO Internet, Inc.",
    "ggee",
-
-   "// gift : 2013-10-17 Uniregistry, Corp.",
    "gift",
-
-   "// gifts : 2014-07-03 Goose Sky, LLC",
    "gifts",
-
-   "// gives : 2014-03-06 United TLD Holdco Ltd.",
    "gives",
-
-   "// giving : 2014-11-13 Giving Limited",
    "giving",
-
-   "// glass : 2013-11-07 Black Cover, LLC",
    "glass",
-
-   "// gle : 2014-07-24 Charleston Road Registry Inc.",
    "gle",
-
-   "// global : 2014-04-17 Dot GLOBAL AS",
    "global",
-
-   "// globo : 2013-12-19 Globo Comunicação e Participações S.A",
    "globo",
-
-   "// gmail : 2014-05-01 Charleston Road Registry Inc.",
    "gmail",
-
-   "// gmo : 2014-01-09 GMO Internet, Inc.",
    "gmo",
-
-   "// gmx : 2014-04-24 1&1 Mail & Media GmbH",
    "gmx",
-
-   "// gold : 2015-01-22 June Edge, LLC",
    "gold",
-
-   "// goldpoint : 2014-11-20 YODOBASHI CAMERA CO.,LTD.",
    "goldpoint",
-
-   "// golf : 2014-12-18 Lone falls, LLC",
    "golf",
-
-   "// goo : 2014-12-18 NTT Resonant Inc.",
    "goo",
-
-   "// goog : 2014-11-20 Charleston Road Registry Inc.",
    "goog",
-
-   "// google : 2014-07-24 Charleston Road Registry Inc.",
    "google",
-
-   "// gop : 2014-01-16 Republican State Leadership Committee, Inc.",
    "gop",
-
-   "// got : 2014-12-18 Amazon EU S.à r.l.",
    "got",
-
-   "// gotv : 2015-03-12 MultiChoice (Proprietary) Limited",
    "gotv",
-
-   "// graphics : 2013-09-13 Over Madison, LLC",
    "graphics",
-
-   "// gratis : 2014-03-20 Pioneer Tigers, LLC",
    "gratis",
-
-   "// green : 2014-05-08 Afilias Limited",
    "green",
-
-   "// gripe : 2014-03-06 Corn Sunset, LLC",
    "gripe",
-
-   "// group : 2014-08-15 Romeo Town, LLC",
    "group",
-
-   "// gucci : 2014-11-13 Guccio Gucci S.p.a.",
    "gucci",
-
-   "// guge : 2014-08-28 Charleston Road Registry Inc.",
    "guge",
-
-   "// guide : 2013-09-13 Snow Moon, LLC",
    "guide",
-
-   "// guitars : 2013-11-14 Uniregistry, Corp.",
    "guitars",
-
-   "// guru : 2013-08-27 Pioneer Cypress, LLC",
    "guru",
-
-   "// hamburg : 2014-02-20 Hamburg Top-Level-Domain GmbH",
    "hamburg",
-
-   "// hangout : 2014-11-13 Charleston Road Registry Inc.",
    "hangout",
-
-   "// haus : 2013-12-05",
    "haus",
-
-   "// hdfcbank : 2015-02-12 HDFC Bank Limited",
    "hdfcbank",
-
-   "// health : 2015-02-11 DotHealth, LLC",
    "health",
-
-   "// healthcare : 2014-06-12 Silver Glen, LLC",
    "healthcare",
-
-   "// help : 2014-06-26 Uniregistry, Corp.",
    "help",
-
-   "// helsinki : 2015-02-05 City of Helsinki",
    "helsinki",
-
-   "// here : 2014-02-06 Charleston Road Registry Inc.",
    "here",
-
-   "// hermes : 2014-07-10 HERMES INTERNATIONAL",
    "hermes",
-
-   "// hiphop : 2014-03-06 Uniregistry, Corp.",
    "hiphop",
-
-   "// hitachi : 2014-10-31 Hitachi, Ltd.",
    "hitachi",
-
-   "// hiv : 2014-03-13 dotHIV gemeinnuetziger e.V.",
    "hiv",
-
-   "// hockey : 2015-03-19 Half Willow, LLC",
    "hockey",
-
-   "// holdings : 2013-08-27 John Madison, LLC",
    "holdings",
-
-   "// holiday : 2013-11-07 Goose Woods, LLC",
    "holiday",
-
-   "// homedepot : 2015-04-02 Homer TLC, Inc.",
    "homedepot",
-
-   "// homes : 2014-01-09 DERHomes, LLC",
    "homes",
-
-   "// honda : 2014-12-18 Honda Motor Co., Ltd.",
    "honda",
-
-   "// horse : 2013-11-21 Top Level Domain Holdings Limited",
    "horse",
-
-   "// host : 2014-04-17 DotHost Inc.",
    "host",
-
-   "// hosting : 2014-05-29 Uniregistry, Corp.",
    "hosting",
-
-   "// hoteles : 2015-03-05 Travel Reservations SRL",
    "hoteles",
-
-   "// hotmail : 2014-12-18 Microsoft Corporation",
    "hotmail",
-
-   "// house : 2013-11-07 Sugar Park, LLC",
    "house",
-
-   "// how : 2014-01-23 Charleston Road Registry Inc.",
    "how",
-
-   "// hsbc : 2014-10-24 HSBC Holdings PLC",
    "hsbc",
-
-   "// htc : 2015-04-02 HTC corporation",
    "htc",
-
-   "// ibm : 2014-07-31 International Business Machines Corporation",
    "ibm",
-
-   "// icbc : 2015-02-19 Industrial and Commercial Bank of China Limited",
    "icbc",
-
-   "// ice : 2014-10-30 IntercontinentalExchange, Inc.",
    "ice",
-
-   "// icu : 2015-01-08 One.com A/S",
    "icu",
-
-   "// ifm : 2014-01-30 ifm electronic gmbh",
    "ifm",
-
-   "// iinet : 2014-07-03 Connect West Pty. Ltd.",
    "iinet",
-
-   "// immo : 2014-07-10 Auburn Bloom, LLC",
    "immo",
-
-   "// immobilien : 2013-11-07 United TLD Holdco Ltd.",
    "immobilien",
-
-   "// industries : 2013-12-05 Outer House, LLC",
    "industries",
-
-   "// infiniti : 2014-03-27 NISSAN MOTOR CO., LTD.",
    "infiniti",
-
-   "// ing : 2014-01-23 Charleston Road Registry Inc.",
    "ing",
-
-   "// ink : 2013-12-05 Top Level Design, LLC",
    "ink",
-
-   "// institute : 2013-11-07 Outer Maple, LLC",
    "institute",
-
-   "// insurance : 2015-02-19 fTLD Registry Services LLC",
    "insurance",
-
-   "// insure : 2014-03-20 Pioneer Willow, LLC",
    "insure",
-
-   "// international : 2013-11-07 Wild Way, LLC",
    "international",
-
-   "// investments : 2014-03-20 Holly Glen, LLC",
    "investments",
-
-   "// ipiranga : 2014-08-28 Ipiranga Produtos de Petroleo S.A.",
    "ipiranga",
-
-   "// irish : 2014-08-07 Dot-Irish LLC",
    "irish",
-
-   "// iselect : 2015-02-11 iSelect Ltd",
    "iselect",
-
-   "// ist : 2014-08-28 Istanbul Metropolitan Municipality",
    "ist",
-
-   "// istanbul : 2014-08-28 Istanbul Metropolitan Municipality",
    "istanbul",
-
-   "// itau : 2014-10-02 Itau Unibanco Holding S.A.",
    "itau",
-
-   "// iwc : 2014-06-23 Richemont DNS Inc.",
    "iwc",
-
-   "// jaguar : 2014-11-13 Jaguar Land Rover Ltd",
    "jaguar",
-
-   "// java : 2014-06-19 Oracle Corporation",
    "java",
-
-   "// jcb : 2014-11-20 JCB Co., Ltd.",
    "jcb",
-
-   "// jcp : 2015-04-23 JCP Media, Inc.",
    "jcp",
-
-   "// jetzt : 2014-01-09 New TLD Company AB",
    "jetzt",
-
-   "// jewelry : 2015-03-05 Wild Bloom, LLC",
    "jewelry",
-
-   "// jio : 2015-04-02 Affinity Names, Inc.",
    "jio",
-
-   "// jlc : 2014-12-04 Richemont DNS Inc.",
    "jlc",
-
-   "// jll : 2015-04-02 Jones Lang LaSalle Incorporated",
    "jll",
-
-   "// jmp : 2015-03-26 Matrix IP LLC",
    "jmp",
-
-   "// joburg : 2014-03-24 ZA Central Registry NPC trading as ZA Central Registry",
    "joburg",
-
-   "// jot : 2014-12-18 Amazon EU S.à r.l.",
    "jot",
-
-   "// joy : 2014-12-18 Amazon EU S.à r.l.",
    "joy",
-
-   "// jpmorgan : 2015-04-30 JPMorgan Chase & Co.",
    "jpmorgan",
-
-   "// jprs : 2014-09-18 Japan Registry Services Co., Ltd.",
    "jprs",
-
-   "// juegos : 2014-03-20 Uniregistry, Corp.",
    "juegos",
-
-   "// kaufen : 2013-11-07 United TLD Holdco Ltd.",
    "kaufen",
-
-   "// kddi : 2014-09-12 KDDI CORPORATION",
    "kddi",
-
-   "// kerryhotels : 2015-04-30 Kerry Trading Co. Limited",
    "kerryhotels",
-
-   "// kerrylogistics : 2015-04-09 Kerry Trading Co. Limited",
    "kerrylogistics",
-
-   "// kerryproperties : 2015-04-09 Kerry Trading Co. Limited",
    "kerryproperties",
-
-   "// kfh : 2014-12-04 Kuwait Finance House",
    "kfh",
-
-   "// kim : 2013-09-23 Afilias Limited",
    "kim",
-
-   "// kinder : 2014-11-07 Ferrero Trading Lux S.A.",
    "kinder",
-
-   "// kitchen : 2013-09-20 Just Goodbye, LLC",
    "kitchen",
-
-   "// kiwi : 2013-09-20 DOT KIWI LIMITED",
    "kiwi",
-
-   "// koeln : 2014-01-09 NetCologne Gesellschaft für Telekommunikation mbH",
    "koeln",
-
-   "// komatsu : 2015-01-08 Komatsu Ltd.",
    "komatsu",
-
-   "// kpmg : 2015-04-23 KPMG International Cooperative (KPMG International Genossenschaft)",
    "kpmg",
-
-   "// kpn : 2015-01-08 Koninklijke KPN N.V.",
    "kpn",
-
-   "// krd : 2013-12-05 KRG Department of Information Technology",
    "krd",
-
-   "// kred : 2013-12-19 KredTLD Pty Ltd",
    "kred",
-
-   "// kuokgroup : 2015-04-09 Kerry Trading Co. Limited",
    "kuokgroup",
-
-   "// kyknet : 2015-03-05 Electronic Media Network (Pty) Ltd",
    "kyknet",
-
-   "// kyoto : 2014-11-07 Academic Institution: Kyoto Jyoho Gakuen",
    "kyoto",
-
-   "// lacaixa : 2014-01-09 CAIXA D'ESTALVIS I PENSIONS DE BARCELONA",
    "lacaixa",
-
-   "// lancaster : 2015-02-12 LANCASTER",
    "lancaster",
-
-   "// land : 2013-09-10 Pine Moon, LLC",
    "land",
-
-   "// landrover : 2014-11-13 Jaguar Land Rover Ltd",
    "landrover",
-
-   "// lasalle : 2015-04-02 Jones Lang LaSalle Incorporated",
    "lasalle",
-
-   "// lat : 2014-10-16 ECOM-LAC Federaciòn de Latinoamèrica y el Caribe para Internet y el Comercio Electrònico",
    "lat",
-
-   "// latrobe : 2014-06-16 La Trobe University",
    "latrobe",
-
-   "// law : 2015-01-22 Minds + Machines Group Limited",
    "law",
-
-   "// lawyer : 2014-03-20",
    "lawyer",
-
-   "// lds : 2014-03-20 IRI Domain Management, LLC ('Applicant')",
    "lds",
-
-   "// lease : 2014-03-06 Victor Trail, LLC",
    "lease",
-
-   "// leclerc : 2014-08-07 A.C.D. LEC Association des Centres Distributeurs Edouard Leclerc",
    "leclerc",
-
-   "// legal : 2014-10-16 Blue Falls, LLC",
    "legal",
-
-   "// lexus : 2015-04-23 TOYOTA MOTOR CORPORATION",
    "lexus",
-
-   "// lgbt : 2014-05-08 Afilias Limited",
    "lgbt",
-
-   "// liaison : 2014-10-02 Liaison Technologies, Incorporated",
    "liaison",
-
-   "// lidl : 2014-09-18 Schwarz Domains und Services GmbH & Co. KG",
    "lidl",
-
-   "// life : 2014-02-06 Trixy Oaks, LLC",
    "life",
-
-   "// lifeinsurance : 2015-01-15 American Council of Life Insurers",
    "lifeinsurance",
-
-   "// lifestyle : 2014-12-11 Lifestyle Domain Holdings, Inc.",
    "lifestyle",
-
-   "// lighting : 2013-08-27 John McCook, LLC",
    "lighting",
-
-   "// like : 2014-12-18 Amazon EU S.à r.l.",
    "like",
-
-   "// limited : 2014-03-06 Big Fest, LLC",
    "limited",
-
-   "// limo : 2013-10-17 Hidden Frostbite, LLC",
    "limo",
-
-   "// lincoln : 2014-11-13 Ford Motor Company",
    "lincoln",
-
-   "// linde : 2014-12-04 Linde Aktiengesellschaft",
    "linde",
-
-   "// link : 2013-11-14 Uniregistry, Corp.",
    "link",
-
-   "// live : 2014-12-04 Half Woods, LLC",
    "live",
-
-   "// lixil : 2015-03-19 LIXIL Group Corporation",
    "lixil",
-
-   "// loan : 2014-11-20 dot Loan Limited",
    "loan",
-
-   "// loans : 2014-03-20 June Woods, LLC",
    "loans",
-
-   "// lol : 2015-01-30 Uniregistry, Corp.",
    "lol",
-
-   "// london : 2013-11-14 Dot London Domains Limited",
    "london",
-
-   "// lotte : 2014-11-07 Lotte Holdings Co., Ltd.",
    "lotte",
-
-   "// lotto : 2014-04-10 Afilias Limited",
    "lotto",
-
-   "// love : 2014-12-22 Merchant Law Group LLP",
    "love",
-
-   "// ltd : 2014-09-25 Over Corner, LLC",
    "ltd",
-
-   "// ltda : 2014-04-17 DOMAIN ROBOT SERVICOS DE HOSPEDAGEM NA INTERNET LTDA",
    "ltda",
-
-   "// lupin : 2014-11-07 LUPIN LIMITED",
    "lupin",
-
-   "// luxe : 2014-01-09 Top Level Domain Holdings Limited",
    "luxe",
-
-   "// luxury : 2013-10-17 Luxury Partners, LLC",
    "luxury",
-
-   "// madrid : 2014-05-01 Comunidad de Madrid",
    "madrid",
-
-   "// maif : 2014-10-02 Mutuelle Assurance Instituteur France (MAIF)",
    "maif",
-
-   "// maison : 2013-12-05 Victor Frostbite, LLC",
    "maison",
-
-   "// makeup : 2015-01-15 L'Oréal",
    "makeup",
-
-   "// man : 2014-12-04 MAN SE",
    "man",
-
-   "// management : 2013-11-07 John Goodbye, LLC",
    "management",
-
-   "// mango : 2013-10-24 PUNTO FA S.L.",
    "mango",
-
-   "// market : 2014-03-06",
    "market",
-
-   "// marketing : 2013-11-07 Fern Pass, LLC",
    "marketing",
-
-   "// markets : 2014-12-11 IG Group Holdings PLC",
    "markets",
-
-   "// marriott : 2014-10-09 Marriott Worldwide Corporation",
    "marriott",
-
-   "// mba : 2015-04-02 Lone Hollow, LLC",
    "mba",
-
-   "// media : 2014-03-06 Grand Glen, LLC",
    "media",
-
-   "// meet : 2014-01-16",
    "meet",
-
-   "// melbourne : 2014-05-29 The Crown in right of the State of Victoria, represented by its Department of State Development, Business and Innovation",
    "melbourne",
-
-   "// meme : 2014-01-30 Charleston Road Registry Inc.",
    "meme",
-
-   "// memorial : 2014-10-16 Dog Beach, LLC",
    "memorial",
-
-   "// men : 2015-02-26 Exclusive Registry Limited",
    "men",
-
-   "// menu : 2013-09-11 Wedding TLD2, LLC",
    "menu",
-
-   "// meo : 2014-11-07 PT Comunicacoes S.A.",
    "meo",
-
-   "// miami : 2013-12-19 Top Level Domain Holdings Limited",
    "miami",
-
-   "// microsoft : 2014-12-18 Microsoft Corporation",
    "microsoft",
-
-   "// mini : 2014-01-09 Bayerische Motoren Werke Aktiengesellschaft",
    "mini",
-
-   "// mls : 2015-04-23 The Canadian Real Estate Association",
    "mls",
-
-   "// mma : 2014-11-07 MMA IARD",
    "mma",
-
-   "// mnet : 2015-03-05 Electronic Media Network (Pty) Ltd",
    "mnet",
-
-   "// mobily : 2014-12-18 GreenTech Consultancy Company W.L.L.",
    "mobily",
-
-   "// moda : 2013-11-07 United TLD Holdco Ltd.",
    "moda",
-
-   "// moe : 2013-11-13 Interlink Co., Ltd.",
    "moe",
-
-   "// moi : 2014-12-18 Amazon EU S.à r.l.",
    "moi",
-
-   "// mom : 2015-04-16 Uniregistry, Corp.",
    "mom",
-
-   "// monash : 2013-09-30 Monash University",
    "monash",
-
-   "// money : 2014-10-16 Outer McCook, LLC",
    "money",
-
-   "// montblanc : 2014-06-23 Richemont DNS Inc.",
    "montblanc",
-
-   "// mormon : 2013-12-05 IRI Domain Management, LLC ('Applicant')",
    "mormon",
-
-   "// mortgage : 2014-03-20",
    "mortgage",
-
-   "// moscow : 2013-12-19 Foundation for Assistance for Internet Technologies and Infrastructure Development (FAITID)",
    "moscow",
-
-   "// motorcycles : 2014-01-09 DERMotorcycles, LLC",
    "motorcycles",
-
-   "// mov : 2014-01-30 Charleston Road Registry Inc.",
    "mov",
-
-   "// movie : 2015-02-05 New Frostbite, LLC",
    "movie",
-
-   "// movistar : 2014-10-16 Telefónica S.A.",
    "movistar",
-
-   "// mtn : 2014-12-04 MTN Dubai Limited",
    "mtn",
-
-   "// mtpc : 2014-11-20 Mitsubishi Tanabe Pharma Corporation",
    "mtpc",
-
-   "// mtr : 2015-03-12 MTR Corporation Limited",
    "mtr",
-
-   "// multichoice : 2015-03-12 MultiChoice (Proprietary) Limited",
    "multichoice",
-
-   "// mutual : 2015-04-02 Northwestern Mutual MU TLD Registry, LLC",
    "mutual",
-
-   "// mzansimagic : 2015-03-05 Electronic Media Network (Pty) Ltd",
    "mzansimagic",
-
-   "// nadex : 2014-12-11 IG Group Holdings PLC",
    "nadex",
-
-   "// nagoya : 2013-10-24 GMO Registry, Inc.",
    "nagoya",
-
-   "// naspers : 2015-02-12 Intelprop (Proprietary) Limited",
    "naspers",
-
-   "// natura : 2015-03-12 NATURA COSMÉTICOS S.A.",
    "natura",
-
-   "// navy : 2014-03-06 United TLD Holdco Ltd.",
    "navy",
-
-   "// nec : 2015-01-08 NEC Corporation",
    "nec",
-
-   "// netbank : 2014-06-26 COMMONWEALTH BANK OF AUSTRALIA",
    "netbank",
-
-   "// network : 2013-11-14 Trixy Manor, LLC",
    "network",
-
-   "// neustar : 2013-12-05 NeuStar, Inc.",
    "neustar",
-
-   "// new : 2014-01-30 Charleston Road Registry Inc.",
    "new",
-
-   "// news : 2014-12-18",
    "news",
-
-   "// nexus : 2014-07-24 Charleston Road Registry Inc.",
    "nexus",
-
-   "// ngo : 2014-03-06 Public Interest Registry",
    "ngo",
-
-   "// nhk : 2014-02-13 Japan Broadcasting Corporation (NHK)",
    "nhk",
-
-   "// nico : 2014-12-04 DWANGO Co., Ltd.",
    "nico",
-
-   "// ninja : 2013-11-07 United TLD Holdco Ltd.",
    "ninja",
-
-   "// nissan : 2014-03-27 NISSAN MOTOR CO., LTD.",
    "nissan",
-
-   "// nokia : 2015-01-08 Nokia Corporation",
    "nokia",
-
-   "// norton : 2014-12-04 Symantec Corporation",
    "norton",
-
-   "// nowruz : 2014-09-04 Asia Green IT System Bilgisayar San. ve Tic. Ltd. Sti.",
    "nowruz",
-
-   "// nra : 2014-05-22 NRA Holdings Company, INC.",
    "nra",
-
-   "// nrw : 2013-11-21 Minds + Machines GmbH",
    "nrw",
-
-   "// ntt : 2014-10-31 NIPPON TELEGRAPH AND TELEPHONE CORPORATION",
    "ntt",
-
-   "// nyc : 2014-01-23 The City of New York by and through the New York City Department of Information Technology & Telecommunications",
    "nyc",
-
-   "// obi : 2014-09-25 OBI Group Holding SE & Co. KGaA",
    "obi",
-
-   "// observer : 2015-04-30 Guardian News and Media Limited",
    "observer",
-
-   "// office : 2015-03-12 Microsoft Corporation",
    "office",
-
-   "// okinawa : 2013-12-05 BusinessRalliart Inc.",
    "okinawa",
-
-   "// omega : 2015-01-08 The Swatch Group Ltd",
    "omega",
-
-   "// one : 2014-11-07 One.com A/S",
    "one",
-
-   "// ong : 2014-03-06 Public Interest Registry",
    "ong",
-
-   "// onl : 2013-09-16 I-Registry Ltd.",
    "onl",
-
-   "// online : 2015-01-15 DotOnline Inc.",
    "online",
-
-   "// ooo : 2014-01-09 INFIBEAM INCORPORATION LIMITED",
    "ooo",
-
-   "// oracle : 2014-06-19 Oracle Corporation",
    "oracle",
-
-   "// orange : 2015-03-12 Orange Brand Services Limited",
    "orange",
-
-   "// organic : 2014-03-27 Afilias Limited",
    "organic",
-
-   "// orientexpress : 2015-02-05 Belmond Ltd.",
    "orientexpress",
-
-   "// osaka : 2014-09-04 Interlink Co., Ltd.",
    "osaka",
-
-   "// otsuka : 2013-10-11 Otsuka Holdings Co., Ltd.",
    "otsuka",
-
-   "// ovh : 2014-01-16 OVH SAS",
    "ovh",
-
-   "// page : 2014-12-04 Charleston Road Registry Inc.",
    "page",
-
-   "// pamperedchef : 2015-02-05 The Pampered Chef, Ltd.",
    "pamperedchef",
-
-   "// panerai : 2014-11-07 Richemont DNS Inc.",
    "panerai",
-
-   "// paris : 2014-01-30 City of Paris",
    "paris",
-
-   "// pars : 2014-09-04 Asia Green IT System Bilgisayar San. ve Tic. Ltd. Sti.",
    "pars",
-
-   "// partners : 2013-12-05 Magic Glen, LLC",
    "partners",
-
-   "// parts : 2013-12-05 Sea Goodbye, LLC",
    "parts",
-
-   "// party : 2014-09-11 Blue Sky Registry Limited",
    "party",
-
-   "// passagens : 2015-03-05 Travel Reservations SRL",
    "passagens",
-
-   "// payu : 2015-02-12 MIH PayU B.V.",
    "payu",
-
-   "// pharmacy : 2014-06-19 National Association of Boards of Pharmacy",
    "pharmacy",
-
-   "// philips : 2014-11-07 Koninklijke Philips N.V.",
    "philips",
-
-   "// photo : 2013-11-14 Uniregistry, Corp.",
    "photo",
-
-   "// photography : 2013-09-20 Sugar Glen, LLC",
    "photography",
-
-   "// photos : 2013-10-17 Sea Corner, LLC",
    "photos",
-
-   "// physio : 2014-05-01 PhysBiz Pty Ltd",
    "physio",
-
-   "// piaget : 2014-10-16 Richemont DNS Inc.",
    "piaget",
-
-   "// pics : 2013-11-14 Uniregistry, Corp.",
    "pics",
-
-   "// pictet : 2014-06-26 Pictet Europe S.A.",
    "pictet",
-
-   "// pictures : 2014-03-06 Foggy Sky, LLC",
    "pictures",
-
-   "// pid : 2015-01-08 Top Level Spectrum, Inc.",
    "pid",
-
-   "// pin : 2014-12-18 Amazon EU S.à r.l.",
    "pin",
-
-   "// pink : 2013-10-01 Afilias Limited",
    "pink",
-
-   "// pizza : 2014-06-26 Foggy Moon, LLC",
    "pizza",
-
-   "// place : 2014-04-24 Snow Galley, LLC",
    "place",
-
-   "// play : 2015-03-05 Charleston Road Registry Inc.",
    "play",
-
-   "// plumbing : 2013-09-10 Spring Tigers, LLC",
    "plumbing",
-
-   "// plus : 2015-02-05 Sugar Mill, LLC",
    "plus",
-
-   "// pohl : 2014-06-23 Deutsche Vermögensberatung Aktiengesellschaft DVAG",
    "pohl",
-
-   "// poker : 2014-07-03 Afilias Domains No. 5 Limited",
    "poker",
-
-   "// porn : 2014-10-16 ICM Registry PN LLC",
    "porn",
-
-   "// praxi : 2013-12-05 Praxi S.p.A.",
    "praxi",
-
-   "// press : 2014-04-03 DotPress Inc.",
    "press",
-
-   "// prod : 2014-01-23 Charleston Road Registry Inc.",
    "prod",
-
-   "// productions : 2013-12-05 Magic Birch, LLC",
    "productions",
-
-   "// prof : 2014-07-24 Charleston Road Registry Inc.",
    "prof",
-
-   "// promo : 2014-12-18 Play.PROMO Oy",
    "promo",
-
-   "// properties : 2013-12-05 Big Pass, LLC",
    "properties",
-
-   "// property : 2014-05-22 Uniregistry, Corp.",
    "property",
-
-   "// protection : 2015-04-23 Symantec Corporation",
    "protection",
-
-   "// pub : 2013-12-12 United TLD Holdco Ltd.",
    "pub",
-
-   "// qpon : 2013-11-14 dotCOOL, Inc.",
    "qpon",
-
-   "// quebec : 2013-12-19 PointQuébec Inc",
    "quebec",
-
-   "// quest : 2015-03-26 Quest ION Limited",
    "quest",
-
-   "// racing : 2014-12-04 Premier Registry Limited",
    "racing",
-
-   "// read : 2014-12-18 Amazon EU S.à r.l.",
    "read",
-
-   "// realtor : 2014-05-29 Real Estate Domains LLC",
    "realtor",
-
-   "// realty : 2015-03-19 Fegistry, LLC",
    "realty",
-
-   "// recipes : 2013-10-17 Grand Island, LLC",
    "recipes",
-
-   "// red : 2013-11-07 Afilias Limited",
    "red",
-
-   "// redstone : 2014-10-31 Redstone Haute Couture Co., Ltd.",
    "redstone",
-
-   "// redumbrella : 2015-03-26 Travelers TLD, LLC",
    "redumbrella",
-
-   "// rehab : 2014-03-06 United TLD Holdco Ltd.",
    "rehab",
-
-   "// reise : 2014-03-13 dotreise GmbH",
    "reise",
-
-   "// reisen : 2014-03-06 New Cypress, LLC",
    "reisen",
-
-   "// reit : 2014-09-04 National Association of Real Estate Investment Trusts, Inc.",
    "reit",
-
-   "// reliance : 2015-04-02 Reliance Industries Limited",
    "reliance",
-
-   "// ren : 2013-12-12 Beijing Qianxiang Wangjing Technology Development Co., Ltd.",
    "ren",
-
-   "// rent : 2014-12-04 DERRent, LLC",
    "rent",
-
-   "// rentals : 2013-12-05 Big Hollow,LLC",
    "rentals",
-
-   "// repair : 2013-11-07 Lone Sunset, LLC",
    "repair",
-
-   "// report : 2013-12-05 Binky Glen, LLC",
    "report",
-
-   "// republican : 2014-03-20 United TLD Holdco Ltd.",
    "republican",
-
-   "// rest : 2013-12-19 Punto 2012 Sociedad Anonima Promotora de Inversion de Capital Variable",
    "rest",
-
-   "// restaurant : 2014-07-03 Snow Avenue, LLC",
    "restaurant",
-
-   "// review : 2014-11-20 dot Review Limited",
    "review",
-
-   "// reviews : 2013-09-13",
    "reviews",
-
-   "// rich : 2013-11-21 I-Registry Ltd.",
    "rich",
-
-   "// ricoh : 2014-11-20 Ricoh Company, Ltd.",
    "ricoh",
-
-   "// ril : 2015-04-02 Reliance Industries Limited",
    "ril",
-
-   "// rio : 2014-02-27 Empresa Municipal de Informática SA - IPLANRIO",
    "rio",
-
-   "// rip : 2014-07-10 United TLD Holdco Ltd.",
    "rip",
-
-   "// rocher : 2014-12-18 Ferrero Trading Lux S.A.",
    "rocher",
-
-   "// rocks : 2013-11-14",
    "rocks",
-
-   "// rodeo : 2013-12-19 Top Level Domain Holdings Limited",
    "rodeo",
-
-   "// room : 2014-12-18 Amazon EU S.à r.l.",
    "room",
-
-   "// rsvp : 2014-05-08 Charleston Road Registry Inc.",
    "rsvp",
-
-   "// ruhr : 2013-10-02 regiodot GmbH & Co. KG",
    "ruhr",
-
-   "// run : 2015-03-19 Snow Park, LLC",
    "run",
-
-   "// rwe : 2015-04-02 RWE AG",
    "rwe",
-
-   "// ryukyu : 2014-01-09 BusinessRalliart Inc.",
    "ryukyu",
-
-   "// saarland : 2013-12-12 dotSaarland GmbH",
    "saarland",
-
-   "// safe : 2014-12-18 Amazon EU S.à r.l.",
    "safe",
-
-   "// safety : 2015-01-08 Safety Registry Services, LLC.",
    "safety",
-
-   "// sakura : 2014-12-18 SAKURA Internet Inc.",
    "sakura",
-
-   "// sale : 2014-10-16",
    "sale",
-
-   "// salon : 2014-12-11 Outer Orchard, LLC",
    "salon",
-
-   "// samsung : 2014-04-03 SAMSUNG SDS CO., LTD",
    "samsung",
-
-   "// sandvik : 2014-11-13 Sandvik AB",
    "sandvik",
-
-   "// sandvikcoromant : 2014-11-07 Sandvik AB",
    "sandvikcoromant",
-
-   "// sanofi : 2014-10-09 Sanofi",
    "sanofi",
-
-   "// sap : 2014-03-27 SAP AG",
    "sap",
-
-   "// sapo : 2014-11-07 PT Comunicacoes S.A.",
    "sapo",
-
-   "// sarl : 2014-07-03 Delta Orchard, LLC",
    "sarl",
-
-   "// sas : 2015-04-02 Research IP LLC",
    "sas",
-
-   "// saxo : 2014-10-31 Saxo Bank A/S",
    "saxo",
-
-   "// sbi : 2015-03-12 STATE BANK OF INDIA",
    "sbi",
-
-   "// sbs : 2014-11-07 SPECIAL BROADCASTING SERVICE CORPORATION",
    "sbs",
-
-   "// sca : 2014-03-13 SVENSKA CELLULOSA AKTIEBOLAGET SCA (publ)",
    "sca",
-
-   "// scb : 2014-02-20 The Siam Commercial Bank Public Company Limited ('SCB')",
    "scb",
-
-   "// schmidt : 2014-04-03 SALM S.A.S.",
    "schmidt",
-
-   "// scholarships : 2014-04-24 Scholarships.com, LLC",
    "scholarships",
-
-   "// school : 2014-12-18 Little Galley, LLC",
    "school",
-
-   "// schule : 2014-03-06 Outer Moon, LLC",
    "schule",
-
-   "// schwarz : 2014-09-18 Schwarz Domains und Services GmbH & Co. KG",
    "schwarz",
-
-   "// science : 2014-09-11 dot Science Limited",
    "science",
-
-   "// scor : 2014-10-31 SCOR SE",
    "scor",
-
-   "// scot : 2014-01-23 Dot Scot Registry Limited",
    "scot",
-
-   "// seat : 2014-05-22 SEAT, S.A. (Sociedad Unipersonal)",
    "seat",
-
-   "// seek : 2014-12-04 Seek Limited",
    "seek",
-
-   "// sener : 2014-10-24 Sener Ingeniería y Sistemas, S.A.",
    "sener",
-
-   "// services : 2014-02-27 Fox Castle, LLC",
    "services",
-
-   "// sew : 2014-07-17 SEW-EURODRIVE GmbH & Co KG",
    "sew",
-
-   "// sex : 2014-11-13 ICM Registry SX LLC",
    "sex",
-
-   "// sexy : 2013-09-11 Uniregistry, Corp.",
    "sexy",
-
-   "// sharp : 2014-05-01 Sharp Corporation",
    "sharp",
-
-   "// shaw : 2015-04-23 Shaw Cablesystems G.P.",
    "shaw",
-
-   "// shia : 2014-09-04 Asia Green IT System Bilgisayar San. ve Tic. Ltd. Sti.",
    "shia",
-
-   "// shiksha : 2013-11-14 Afilias Limited",
    "shiksha",
-
-   "// shoes : 2013-10-02 Binky Galley, LLC",
    "shoes",
-
-   "// shouji : 2015-01-08 QIHOO 360 TECHNOLOGY CO. LTD.",
    "shouji",
-
-   "// show : 2015-03-05 Snow Beach, LLC",
    "show",
-
-   "// shriram : 2014-01-23 Shriram Capital Ltd.",
    "shriram",
-
-   "// sina : 2015-03-12 Sina Corporation",
    "sina",
-
-   "// singles : 2013-08-27 Fern Madison, LLC",
    "singles",
-
-   "// site : 2015-01-15 DotSite Inc.",
    "site",
-
-   "// ski : 2015-04-09 STARTING DOT LIMITED",
    "ski",
-
-   "// skin : 2015-01-15 L'Oréal",
    "skin",
-
-   "// sky : 2014-06-19 Sky IP International Ltd, a company incorporated in England and Wales, operating via its registered Swiss branch",
    "sky",
-
-   "// skype : 2014-12-18 Microsoft Corporation",
    "skype",
-
-   "// smile : 2014-12-18 Amazon EU S.à r.l.",
    "smile",
-
-   "// sncf : 2015-02-19 Société Nationale des Chemins de fer Francais S N C F",
    "sncf",
-
-   "// soccer : 2015-03-26 Foggy Shadow, LLC",
    "soccer",
-
-   "// social : 2013-11-07 United TLD Holdco Ltd.",
    "social",
-
-   "// software : 2014-03-20",
    "software",
-
-   "// sohu : 2013-12-19 Sohu.com Limited",
    "sohu",
-
-   "// solar : 2013-11-07 Ruby Town, LLC",
    "solar",
-
-   "// solutions : 2013-11-07 Silver Cover, LLC",
    "solutions",
-
-   "// song : 2015-02-26 Amazon EU S.à r.l.",
    "song",
-
-   "// sony : 2015-01-08 Sony Corporation",
    "sony",
-
-   "// soy : 2014-01-23 Charleston Road Registry Inc.",
    "soy",
-
-   "// space : 2014-04-03 DotSpace Inc.",
    "space",
-
-   "// spiegel : 2014-02-05 SPIEGEL-Verlag Rudolf Augstein GmbH & Co. KG",
    "spiegel",
-
-   "// spot : 2015-02-26 Amazon EU S.à r.l.",
    "spot",
-
-   "// spreadbetting : 2014-12-11 IG Group Holdings PLC",
    "spreadbetting",
-
-   "// stada : 2014-11-13 STADA Arzneimittel AG",
    "stada",
-
-   "// star : 2015-01-08 Star India Private Limited",
    "star",
-
-   "// starhub : 2015-02-05 StarHub Limited",
    "starhub",
-
-   "// statebank : 2015-03-12 STATE BANK OF INDIA",
    "statebank",
-
-   "// statoil : 2014-12-04 Statoil ASA",
    "statoil",
-
-   "// stc : 2014-10-09 Saudi Telecom Company",
    "stc",
-
-   "// stcgroup : 2014-10-09 Saudi Telecom Company",
    "stcgroup",
-
-   "// stockholm : 2014-12-18 Stockholms kommun",
    "stockholm",
-
-   "// storage : 2014-12-22 Self Storage Company LLC",
    "storage",
-
-   "// store : 2015-04-09 DotStore Inc.",
    "store",
-
-   "// studio : 2015-02-11 Spring Goodbye, LLC",
    "studio",
-
-   "// study : 2014-12-11 OPEN UNIVERSITIES AUSTRALIA PTY LTD",
    "study",
-
-   "// style : 2014-12-04 Binky Moon, LLC",
    "style",
-
-   "// sucks : 2014-12-22 Vox Populi Registry Inc.",
    "sucks",
-
-   "// supersport : 2015-03-05 SuperSport International Holdings Proprietary Limited",
    "supersport",
-
-   "// supplies : 2013-12-19 Atomic Fields, LLC",
    "supplies",
-
-   "// supply : 2013-12-19 Half Falls, LLC",
    "supply",
-
-   "// support : 2013-10-24 Grand Orchard, LLC",
    "support",
-
-   "// surf : 2014-01-09 Top Level Domain Holdings Limited",
    "surf",
-
-   "// surgery : 2014-03-20 Tin Avenue, LLC",
    "surgery",
-
-   "// suzuki : 2014-02-20 SUZUKI MOTOR CORPORATION",
    "suzuki",
-
-   "// swatch : 2015-01-08 The Swatch Group Ltd",
    "swatch",
-
-   "// swiss : 2014-10-16 Swiss Confederation",
    "swiss",
-
-   "// sydney : 2014-09-18 State of New South Wales, Department of Premier and Cabinet",
    "sydney",
-
-   "// symantec : 2014-12-04 Symantec Corporation",
    "symantec",
-
-   "// systems : 2013-11-07 Dash Cypress, LLC",
    "systems",
-
-   "// tab : 2014-12-04 Tabcorp Holdings Limited",
    "tab",
-
-   "// taipei : 2014-07-10 Taipei City Government",
    "taipei",
-
-   "// talk : 2015-04-09 Amazon EU S.à r.l.",
    "talk",
-
-   "// taobao : 2015-01-15 Alibaba Group Holding Limited",
    "taobao",
-
-   "// tatamotors : 2015-03-12 Tata Motors Ltd",
    "tatamotors",
-
-   "// tatar : 2014-04-24 Limited Liability Company 'Coordination Center of Regional Domain of Tatarstan Republic'",
    "tatar",
-
-   "// tattoo : 2013-08-30 Uniregistry, Corp.",
    "tattoo",
-
-   "// tax : 2014-03-20 Storm Orchard, LLC",
    "tax",
-
-   "// taxi : 2015-03-19 Pine Falls, LLC",
    "taxi",
-
-   "// tci : 2014-09-12 Asia Green IT System Bilgisayar San. ve Tic. Ltd. Sti.",
    "tci",
-
-   "// team : 2015-03-05 Atomic Lake, LLC",
    "team",
-
-   "// tech : 2015-01-30 Dot Tech LLC",
    "tech",
-
-   "// technology : 2013-09-13 Auburn Falls",
    "technology",
-
-   "// telecity : 2015-02-19 TelecityGroup International Limited",
    "telecity",
-
-   "// telefonica : 2014-10-16 Telefónica S.A.",
    "telefonica",
-
-   "// temasek : 2014-08-07 Temasek Holdings (Private) Limited",
    "temasek",
-
-   "// tennis : 2014-12-04 Cotton Bloom, LLC",
    "tennis",
-
-   "// thd : 2015-04-02 Homer TLC, Inc.",
    "thd",
-
-   "// theater : 2015-03-19 Blue Tigers, LLC",
    "theater",
-
-   "// theguardian : 2015-04-30 Guardian News and Media Limited",
    "theguardian",
-
-   "// tickets : 2015-02-05 Accent Media Limited",
    "tickets",
-
-   "// tienda : 2013-11-14 Victor Manor, LLC",
    "tienda",
-
-   "// tiffany : 2015-01-30 Tiffany and Company",
    "tiffany",
-
-   "// tips : 2013-09-20 Corn Willow, LLC",
    "tips",
-
-   "// tires : 2014-11-07 Dog Edge, LLC",
    "tires",
-
-   "// tirol : 2014-04-24 punkt Tirol GmbH",
    "tirol",
-
-   "// tmall : 2015-01-15 Alibaba Group Holding Limited",
    "tmall",
-
-   "// today : 2013-09-20 Pearl Woods, LLC",
    "today",
-
-   "// tokyo : 2013-11-13 GMO Registry, Inc.",
    "tokyo",
-
-   "// tools : 2013-11-21 Pioneer North, LLC",
    "tools",
-
-   "// top : 2014-03-20 Jiangsu Bangning Science & Technology Co.,Ltd.",
    "top",
-
-   "// toray : 2014-12-18 Toray Industries, Inc.",
    "toray",
-
-   "// toshiba : 2014-04-10 TOSHIBA Corporation",
    "toshiba",
-
-   "// tours : 2015-01-22 Sugar Station, LLC",
    "tours",
-
-   "// town : 2014-03-06 Koko Moon, LLC",
    "town",
-
-   "// toyota : 2015-04-23 TOYOTA MOTOR CORPORATION",
    "toyota",
-
-   "// toys : 2014-03-06 Pioneer Orchard, LLC",
    "toys",
-
-   "// trade : 2014-01-23 Elite Registry Limited",
    "trade",
-
-   "// trading : 2014-12-11 IG Group Holdings PLC",
    "trading",
-
-   "// training : 2013-11-07 Wild Willow, LLC",
    "training",
-
-   "// travelers : 2015-03-26 Travelers TLD, LLC",
    "travelers",
-
-   "// travelersinsurance : 2015-03-26 Travelers TLD, LLC",
    "travelersinsurance",
-
-   "// trust : 2014-10-16",
    "trust",
-
-   "// trv : 2015-03-26 Travelers TLD, LLC",
    "trv",
-
-   "// tui : 2014-07-03 TUI AG",
    "tui",
-
-   "// tunes : 2015-02-26 Amazon EU S.à r.l.",
    "tunes",
-
-   "// tushu : 2014-12-18 Amazon EU S.à r.l.",
    "tushu",
-
-   "// tvs : 2015-02-19 T V SUNDRAM IYENGAR  & SONS LIMITED",
    "tvs",
-
-   "// ubs : 2014-12-11 UBS AG",
    "ubs",
-
-   "// university : 2014-03-06 Little Station, LLC",
    "university",
-
-   "// uno : 2013-09-11 Dot Latin LLC",
    "uno",
-
-   "// uol : 2014-05-01 UBN INTERNET LTDA.",
    "uol",
-
-   "// vacations : 2013-12-05 Atomic Tigers, LLC",
    "vacations",
-
-   "// vana : 2014-12-11 Lifestyle Domain Holdings, Inc.",
    "vana",
-
-   "// vegas : 2014-01-16 Dot Vegas, Inc.",
    "vegas",
-
-   "// ventures : 2013-08-27 Binky Lake, LLC",
    "ventures",
-
-   "// versicherung : 2014-03-20 dotversicherung-registry GmbH",
    "versicherung",
-
-   "// vet : 2014-03-06",
    "vet",
-
-   "// viajes : 2013-10-17 Black Madison, LLC",
    "viajes",
-
-   "// video : 2014-10-16",
    "video",
-
-   "// viking : 2015-04-02 Viking River Cruises (Bermuda) Ltd.",
    "viking",
-
-   "// villas : 2013-12-05 New Sky, LLC",
    "villas",
-
-   "// vip : 2015-01-22 Minds + Machines Group Limited",
    "vip",
-
-   "// virgin : 2014-09-25 Virgin Enterprises Limited",
    "virgin",
-
-   "// vision : 2013-12-05 Koko Station, LLC",
    "vision",
-
-   "// vista : 2014-09-18 Vistaprint Limited",
    "vista",
-
-   "// vistaprint : 2014-09-18 Vistaprint Limited",
    "vistaprint",
-
-   "// viva : 2014-11-07 Saudi Telecom Company",
    "viva",
-
-   "// vlaanderen : 2014-02-06 DNS.be vzw",
    "vlaanderen",
-
-   "// vodka : 2013-12-19 Top Level Domain Holdings Limited",
    "vodka",
-
-   "// vote : 2013-11-21 Monolith Registry LLC",
    "vote",
-
-   "// voting : 2013-11-13 Valuetainment Corp.",
    "voting",
-
-   "// voto : 2013-11-21 Monolith Registry LLC",
    "voto",
-
-   "// voyage : 2013-08-27 Ruby House, LLC",
    "voyage",
-
-   "// vuelos : 2015-03-05 Travel Reservations SRL",
    "vuelos",
-
-   "// wales : 2014-05-08 Nominet UK",
    "wales",
-
-   "// walter : 2014-11-13 Sandvik AB",
    "walter",
-
-   "// wang : 2013-10-24 Zodiac Leo Limited",
    "wang",
-
-   "// wanggou : 2014-12-18 Amazon EU S.à r.l.",
    "wanggou",
-
-   "// watch : 2013-11-14 Sand Shadow, LLC",
    "watch",
-
-   "// watches : 2014-12-22 Richemont DNS Inc.",
    "watches",
-
-   "// weather : 2015-01-08 The Weather Channel, LLC",
    "weather",
-
-   "// weatherchannel : 2015-03-12 The Weather Channel, LLC",
    "weatherchannel",
-
-   "// webcam : 2014-01-23 dot Webcam Limited",
    "webcam",
-
-   "// website : 2014-04-03 DotWebsite Inc.",
    "website",
-
-   "// wed : 2013-10-01 Atgron, Inc.",
    "wed",
-
-   "// wedding : 2014-04-24 Top Level Domain Holdings Limited",
    "wedding",
-
-   "// weibo : 2015-03-05 Sina Corporation",
    "weibo",
-
-   "// weir : 2015-01-29 Weir Group IP Limited",
    "weir",
-
-   "// whoswho : 2014-02-20 Who's Who Registry",
    "whoswho",
-
-   "// wien : 2013-10-28 punkt.wien GmbH",
    "wien",
-
-   "// wiki : 2013-11-07 Top Level Design, LLC",
    "wiki",
-
-   "// williamhill : 2014-03-13 William Hill Organization Limited",
    "williamhill",
-
-   "// win : 2014-11-20 First Registry Limited",
    "win",
-
-   "// windows : 2014-12-18 Microsoft Corporation",
    "windows",
-
-   "// wme : 2014-02-13 William Morris Endeavor Entertainment, LLC",
    "wme",
-
-   "// work : 2013-12-19 Top Level Domain Holdings Limited",
    "work",
-
-   "// works : 2013-11-14 Little Dynamite, LLC",
    "works",
-
-   "// world : 2014-06-12 Bitter Fields, LLC",
    "world",
-
-   "// wtc : 2013-12-19 World Trade Centers Association, Inc.",
    "wtc",
-
-   "// wtf : 2014-03-06 Hidden Way, LLC",
    "wtf",
-
-   "// xbox : 2014-12-18 Microsoft Corporation",
    "xbox",
-
-   "// xerox : 2014-10-24 Xerox DNHC LLC",
    "xerox",
-
-   "// xihuan : 2015-01-08 QIHOO 360 TECHNOLOGY CO. LTD.",
    "xihuan",
-
-   "// xin : 2014-12-11 Elegant Leader Limited",
    "xin",
-
-   "// xn--11b4c3d : 2015-01-15 VeriSign Sarl",
    "कॉम",
-
-   "// xn--1ck2e1b : 2015-02-26 Amazon EU S.à r.l.",
    "セール",
-
-   "// xn--1qqw23a : 2014-01-09 Guangzhou YU Wei Information Technology Co., Ltd.",
    "佛山",
-
-   "// xn--30rr7y : 2014-06-12 Excellent First Limited",
    "慈善",
-
-   "// xn--3bst00m : 2013-09-13 Eagle Horizon Limited",
    "集团",
-
-   "// xn--3ds443g : 2013-09-08 TLD REGISTRY LIMITED",
    "在线",
-
-   "// xn--3pxu8k : 2015-01-15 VeriSign Sarl",
    "点看",
-
-   "// xn--42c2d9a : 2015-01-15 VeriSign Sarl",
    "คอม",
-
-   "// xn--45q11c : 2013-11-21 Zodiac Scorpio Limited",
    "八卦",
-
-   "// xn--4gbrim : 2013-10-04 Suhub Electronic Establishment",
    "موقع",
-
-   "// xn--55qw42g : 2013-11-08 China Organizational Name Administration Center",
    "公益",
-
-   "// xn--55qx5d : 2013-11-14 Computer Network Information Center of Chinese Academy of Sciences （China Internet Network Information Center）",
    "公司",
-
-   "// xn--5tzm5g : 2014-12-22 Global Website TLD Asia Limited",
    "网站",
-
-   "// xn--6frz82g : 2013-09-23 Afilias Limited",
    "移动",
-
-   "// xn--6qq986b3xl : 2013-09-13 Tycoon Treasure Limited",
    "我爱你",
-
-   "// xn--80adxhks : 2013-12-19 Foundation for Assistance for Internet Technologies and Infrastructure Development (FAITID)",
    "москва",
-
-   "// xn--80asehdb : 2013-07-14 CORE Association",
    "онлайн",
-
-   "// xn--80aswg : 2013-07-14 CORE Association",
    "сайт",
-
-   "// xn--8y0a063a : 2015-03-26 China United Network Communications Corporation Limited",
    "联通",
-
-   "// xn--9dbq2a : 2015-01-15 VeriSign Sarl",
    "קום",
-
-   "// xn--9et52u : 2014-06-12 RISE VICTORY LIMITED",
    "时尚",
-
-   "// xn--9krt00a : 2015-03-12 Sina Corporation",
    "微博",
-
-   "// xn--b4w605ferd : 2014-08-07 Temasek Holdings (Private) Limited",
    "淡马锡",
-
-   "// xn--bck1b9a5dre4c : 2015-02-26 Amazon EU S.à r.l.",
    "ファッション",
-
-   "// xn--c1avg : 2013-11-14 Public Interest Registry",
    "орг",
-
-   "// xn--c2br7g : 2015-01-15 VeriSign Sarl",
    "नेट",
-
-   "// xn--cck2b3b : 2015-02-26 Amazon EU S.à r.l.",
    "ストア",
-
-   "// xn--cg4bki : 2013-09-27 SAMSUNG SDS CO., LTD",
    "삼성",
-
-   "// xn--czr694b : 2014-01-16 HU YI GLOBAL INFORMATION RESOURCES (HOLDING) COMPANY.HONGKONG LIMITED",
    "商标",
-
-   "// xn--czrs0t : 2013-12-19 Wild Island, LLC",
    "商店",
-
-   "// xn--czru2d : 2013-11-21 Zodiac Capricorn Limited",
    "商城",
-
-   "// xn--d1acj3b : 2013-11-20 The Foundation for Network Initiatives “The Smart Internet”",
    "дети",
-
-   "// xn--eckvdtc9d : 2014-12-18 Amazon EU S.à r.l.",
    "ポイント",
-
-   "// xn--efvy88h : 2014-08-22 Xinhua News Agency Guangdong Branch 新华通讯社广东分社",
    "新闻",
-
-   "// xn--estv75g : 2015-02-19 Industrial and Commercial Bank of China Limited",
    "工行",
-
-   "// xn--fct429k : 2015-04-09 Amazon EU S.à r.l.",
    "家電",
-
-   "// xn--fhbei : 2015-01-15 VeriSign Sarl",
    "كوم",
-
-   "// xn--fiq228c5hs : 2013-09-08 TLD REGISTRY LIMITED",
    "中文网",
-
-   "// xn--fiq64b : 2013-10-14 CITIC Group Corporation",
    "中信",
-
-   "// xn--fjq720a : 2014-05-22 Will Bloom, LLC",
    "娱乐",
-
-   "// xn--flw351e : 2014-07-31 Charleston Road Registry Inc.",
    "谷歌",
-
-   "// xn--g2xx48c : 2015-01-30 Minds + Machines Group Limited",
    "购物",
-
-   "// xn--gckr3f0f : 2015-02-26 Amazon EU S.à r.l.",
    "クラウド",
-
-   "// xn--hxt814e : 2014-05-15 Zodiac Libra Limited",
    "网店",
-
-   "// xn--i1b6b1a6a2e : 2013-11-14 Public Interest Registry",
    "संगठन",
-
-   "// xn--imr513n : 2014-12-11 HU YI GLOBAL INFORMATION RESOURCES (HOLDING) COMPANY. HONGKONG LIMITED",
    "餐厅",
-
-   "// xn--io0a7i : 2013-11-14 Computer Network Information Center of Chinese Academy of Sciences （China Internet Network Information Center）",
    "网络",
-
-   "// xn--j1aef : 2015-01-15 VeriSign Sarl",
    "ком",
-
-   "// xn--jlq61u9w7b : 2015-01-08 Nokia Corporation",
    "诺基亚",
-
-   "// xn--jvr189m : 2015-02-26 Amazon EU S.à r.l.",
    "食品",
-
-   "// xn--kcrx77d1x4a : 2014-11-07 Koninklijke Philips N.V.",
    "飞利浦",
-
-   "// xn--kpu716f : 2014-12-22 Richemont DNS Inc.",
    "手表",
-
-   "// xn--kput3i : 2014-02-13 Beijing RITT-Net Technology Development Co., Ltd",
    "手机",
-
-   "// xn--mgba3a3ejt : 2014-11-20 Aramco Services Company",
    "ارامكو",
-
-   "// xn--mgbab2bd : 2013-10-31 CORE Association",
    "بازار",
-
-   "// xn--mgbb9fbpob : 2014-12-18 GreenTech Consultancy Company W.L.L.",
    "موبايلي",
-
-   "// xn--mgbt3dhd : 2014-09-04 Asia Green IT System Bilgisayar San. ve Tic. Ltd. Sti.",
    "همراه",
-
-   "// xn--mk1bu44c : 2015-01-15 VeriSign Sarl",
    "닷컴",
-
-   "// xn--mxtq1m : 2014-03-06 Net-Chinese Co., Ltd.",
    "政府",
-
-   "// xn--ngbc5azd : 2013-07-13 International Domain Registry Pty. Ltd.",
    "شبكة",
-
-   "// xn--ngbe9e0a : 2014-12-04 Kuwait Finance House",
    "بيتك",
-
-   "// xn--nqv7f : 2013-11-14 Public Interest Registry",
    "机构",
-
-   "// xn--nqv7fs00ema : 2013-11-14 Public Interest Registry",
    "组织机构",
-
-   "// xn--nyqy26a : 2014-11-07 Stable Tone Limited",
    "健康",
-
-   "// xn--p1acf : 2013-12-12 Rusnames Limited",
    "рус",
-
-   "// xn--pbt977c : 2014-12-22 Richemont DNS Inc.",
    "珠宝",
-
-   "// xn--pssy2u : 2015-01-15 VeriSign Sarl",
    "大拿",
-
-   "// xn--q9jyb4c : 2013-09-17 Charleston Road Registry Inc.",
    "みんな",
-
-   "// xn--qcka1pmc : 2014-07-31 Charleston Road Registry Inc.",
    "グーグル",
-
-   "// xn--rhqv96g : 2013-09-11 Stable Tone Limited",
    "世界",
-
-   "// xn--rovu88b : 2015-02-26 Amazon EU S.à r.l.",
    "書籍",
-
-   "// xn--ses554g : 2014-01-16",
    "网址",
-
-   "// xn--t60b56a : 2015-01-15 VeriSign Sarl",
    "닷넷",
-
-   "// xn--tckwe : 2015-01-15 VeriSign Sarl",
    "コム",
-
-   "// xn--unup4y : 2013-07-14 Spring Fields, LLC",
    "游戏",
-
-   "// xn--vermgensberater-ctb : 2014-06-23 Deutsche Vermögensberatung Aktiengesellschaft DVAG",
    "vermögensberater",
-
-   "// xn--vermgensberatung-pwb : 2014-06-23 Deutsche Vermögensberatung Aktiengesellschaft DVAG",
    "vermögensberatung",
-
-   "// xn--vhquv : 2013-08-27 Dash McCook, LLC",
    "企业",
-
-   "// xn--vuq861b : 2014-10-16 Beijing Tele-info Network Technology Co., Ltd.",
    "信息",
-
-   "// xn--w4r85el8fhu5dnra : 2015-04-30 Kerry Trading Co. Limited",
    "嘉里大酒店",
-
-   "// xn--xhq521b : 2013-11-14 Guangzhou YU Wei Information Technology Co., Ltd.",
    "广东",
-
-   "// xn--zfr164b : 2013-11-08 China Organizational Name Administration Center",
    "政务",
-
-   "// xyz : 2013-12-05 XYZ.COM LLC",
    "xyz",
-
-   "// yachts : 2014-01-09 DERYachts, LLC",
    "yachts",
-
-   "// yahoo : 2015-04-02 Yahoo! Domain Services Inc.",
    "yahoo",
-
-   "// yamaxun : 2014-12-18 Amazon EU S.à r.l.",
    "yamaxun",
-
-   "// yandex : 2014-04-10 YANDEX, LLC",
    "yandex",
-
-   "// yodobashi : 2014-11-20 YODOBASHI CAMERA CO.,LTD.",
    "yodobashi",
-
-   "// yoga : 2014-05-29 Top Level Domain Holdings Limited",
    "yoga",
-
-   "// yokohama : 2013-12-12 GMO Registry, Inc.",
    "yokohama",
-
-   "// you : 2015-04-09 Amazon EU S.à r.l.",
    "you",
-
-   "// youtube : 2014-05-01 Charleston Road Registry Inc.",
    "youtube",
-
-   "// yun : 2015-01-08 QIHOO 360 TECHNOLOGY CO. LTD.",
    "yun",
-
-   "// zara : 2014-11-07 Industria de Diseño Textil, S.A. (INDITEX, S.A.)",
    "zara",
-
-   "// zero : 2014-12-18 Amazon EU S.à r.l.",
    "zero",
-
-   "// zip : 2014-05-08 Charleston Road Registry Inc.",
    "zip",
-
-   "// zone : 2013-11-14 Outer Falls, LLC",
    "zone",
-
-   "// zuerich : 2014-11-07 Kanton Zürich (Canton of Zurich)",
    "zuerich",
-
-
-   "// ===END ICANN DOMAINS===",
-   "// ===BEGIN PRIVATE DOMAINS===",
-   "// (Note: these are in alphabetical order by company name)",
-
-   "// Amazon CloudFront : https://aws.amazon.com/cloudfront/",
-   "// Submitted by Donavan Miller <donavanm@amazon.com> 2013-03-22",
    "cloudfront.net",
-
-   "// Amazon Elastic Compute Cloud: https://aws.amazon.com/ec2/",
-   "// Submitted by Osman Surkatty <osmans@amazon.com> 2014-12-16",
    "ap-northeast-1.compute.amazonaws.com",
    "ap-southeast-1.compute.amazonaws.com",
    "ap-southeast-2.compute.amazonaws.com",
@@ -9681,17 +6938,8 @@ let ETLD_NAMES_LIST = [
    "us-west-2.compute.amazonaws.com",
    "z-1.compute-1.amazonaws.com",
    "z-2.compute-1.amazonaws.com",
-
-   "// Amazon Elastic Beanstalk : https://aws.amazon.com/elasticbeanstalk/",
-   "// Submitted by Adam Stein <astein@amazon.com> 2013-04-02",
    "elasticbeanstalk.com",
-
-   "// Amazon Elastic Load Balancing : https://aws.amazon.com/elasticloadbalancing/",
-   "// Submitted by Scott Vidmar <svidmar@amazon.com> 2013-03-27",
    "elb.amazonaws.com",
-
-   "// Amazon S3 : https://aws.amazon.com/s3/",
-   "// Submitted by Courtney Eckhardt <coec@amazon.com> 2013-03-22",
    "s3.amazonaws.com",
    "s3-us-west-2.amazonaws.com",
    "s3-us-west-1.amazonaws.com",
@@ -9711,13 +6959,7 @@ let ETLD_NAMES_LIST = [
    "s3-website-ap-northeast-1.amazonaws.com",
    "s3-website-sa-east-1.amazonaws.com",
    "s3-website-us-gov-west-1.amazonaws.com",
-
-   "// BetaInABox",
-   "// Submitted by adrian@betainabox.com 2012-09-13",
    "betainabox.com",
-
-   "// CentralNic : http://www.centralnic.com/names/domains",
-   "// Submitted by registry <gavin.brown@centralnic.com> 2012-09-27",
    "ae.org",
    "ar.com",
    "br.com",
@@ -9746,55 +6988,20 @@ let ETLD_NAMES_LIST = [
    "uy.com",
    "za.bz",
    "za.com",
-
-   "// Africa.com Web Solutions Ltd : https://registry.africa.com",
-   "// Submitted by Gavin Brown <gavin.brown@centralnic.com> 2014-02-04",
    "africa.com",
-
-   "// iDOT Services Limited : http://www.domain.gr.com",
-   "// Submitted by Gavin Brown <gavin.brown@centralnic.com> 2014-02-04",
    "gr.com",
-
-   "// Radix FZC : http://domains.in.net",
-   "// Submitted by Gavin Brown <gavin.brown@centralnic.com> 2014-02-04",
    "in.net",
-
-   "// US REGISTRY LLC : http://us.org",
-   "// Submitted by Gavin Brown <gavin.brown@centralnic.com> 2014-02-04",
    "us.org",
-
-   "// co.com Registry, LLC : https://registry.co.com",
-   "// Submitted by Gavin Brown <gavin.brown@centralnic.com> 2014-02-04",
    "co.com",
-
-   "// c.la : http://www.c.la/",
    "c.la",
-
-   "// cloudControl : https://www.cloudcontrol.com/",
-   "// Submitted by Tobias Wilken <tw@cloudcontrol.com> 2013-07-23",
    "cloudcontrolled.com",
    "cloudcontrolapp.com",
-
-   "// co.ca : http://registry.co.ca/",
    "co.ca",
-
-   "// CoDNS B.V.",
    "co.nl",
    "co.no",
-
-   "// Commerce Guys, SAS",
-   "// Submitted by Damien Tournoud <damien@commerceguys.com> 2015-01-22",
    "*.platform.sh",
-
-   "// Cupcake : https://cupcake.io/",
-   "// Submitted by Jonathan Rudenberg <jonathan@cupcake.io> 2013-10-08",
    "cupcake.is",
-
-   "// DreamHost : http://www.dreamhost.com/",
-   "// Submitted by Andrew Farmer <andrew.farmer@dreamhost.com> 2012-10-02",
    "dreamhosters.com",
-
-   "// DynDNS.com : http://www.dyndns.com/services/dns/dyndns/",
    "dyndns-at-home.com",
    "dyndns-at-work.com",
    "dyndns-blog.com",
@@ -10074,10 +7281,6 @@ let ETLD_NAMES_LIST = [
    "webhop.org",
    "worse-than.tv",
    "writesthisblog.com",
-
-   "// EU.org https://eu.org/",
-   "// Submitted by Pierre Beyssac <hostmaster@eu.org> 2015-04-17",
-
    "eu.org",
    "al.eu.org",
    "asso.eu.org",
@@ -10134,38 +7337,17 @@ let ETLD_NAMES_LIST = [
    "tr.eu.org",
    "uk.eu.org",
    "us.eu.org",
-
-   "// Fastly Inc. http://www.fastly.com/",
-   "// Submitted by Vladimir Vuksan <vladimir@fastly.com> 2013-05-31",
    "a.ssl.fastly.net",
    "b.ssl.fastly.net",
    "global.ssl.fastly.net",
    "a.prod.fastly.net",
    "global.prod.fastly.net",
-
-   "// Firebase, Inc.",
-   "// Submitted by Chris Raynor <chris@firebase.com> 2014-01-21",
    "firebaseapp.com",
-
-   "// Flynn : https://flynn.io",
-   "// Submitted by Jonathan Rudenberg <jonathan@flynn.io> 2014-07-12",
    "flynnhub.com",
-
-   "// GDS : https://www.gov.uk/service-manual/operations/operating-servicegovuk-subdomains",
-   "// Submitted by David Illsley <david.illsley@digital.cabinet-office.gov.uk> 2014-08-28",
    "service.gov.uk",
-
-   "// GitHub, Inc.",
-   "// Submitted by Ben Toews <btoews@github.com> 2014-02-06",
    "github.io",
    "githubusercontent.com",
-
-   "// GlobeHosting, Inc.",
-   "// Submitted by Zoltan Egresi <egresi@globehosting.com> 2013-07-12",
    "ro.com",
-
-   "// Google, Inc.",
-   "// Submitted by Eduardo Vela <evn@google.com> 2014-12-19",
    "appspot.com",
    "blogspot.ae",
    "blogspot.be",
@@ -10215,99 +7397,43 @@ let ETLD_NAMES_LIST = [
    "googlecode.com",
    "pagespeedmobilizer.com",
    "withgoogle.com",
-
-   "// Heroku : https://www.heroku.com/",
-   "// Submitted by Tom Maher <tmaher@heroku.com> 2013-05-02",
    "herokuapp.com",
    "herokussl.com",
-
-   "// iki.fi",
-   "// Submitted by Hannu Aronsson <haa@iki.fi> 2009-11-05",
    "iki.fi",
-
-   "// info.at : http://www.info.at/",
    "biz.at",
    "info.at",
-
-   "// Michau Enterprises Limited : http://www.co.pl/",
    "co.pl",
-
-   "// Microsoft : http://microsoft.com",
-   "// Submitted by Barry Dorrans <bdorrans@microsoft.com> 2014-01-24",
    "azurewebsites.net",
    "azure-mobile.net",
    "cloudapp.net",
-
-   "// Neustar Inc.",
-   "// Submitted by Trung Tran <Trung.Tran@neustar.biz> 2015-04-23",
    "4u.com",
-
-   "// NFSN, Inc. : https://www.NearlyFreeSpeech.NET/",
-   "// Submitted by Jeff Wheelhouse <support@nearlyfreespeech.net> 2014-02-02",
    "nfshost.com",
-
-   "// NYC.mn : http://www.information.nyc.mn",
-   "// Submitted by Matthew Brown <mattbrown@nyc.mn> 2013-03-11",
    "nyc.mn",
-
-   "// One Fold Media : http://www.onefoldmedia.com/",
-   "// Submitted by Eddie Jones <eddie@onefoldmedia.com> 2014-06-10",
    "nid.io",
-
-   "// Opera Software, A.S.A.",
-   "// Submitted by Yngve Pettersen <yngve@opera.com> 2009-11-26",
    "operaunite.com",
-
-   "// OutSystems",
-   "// Submitted by Duarte Santos <domain-admin@outsystemscloud.com> 2014-03-11",
    "outsystemscloud.com",
-
-   "// .pl domains (grandfathered)",
    "art.pl",
    "gliwice.pl",
    "krakow.pl",
    "poznan.pl",
    "wroc.pl",
    "zakopane.pl",
-
-   "// priv.at : http://www.nic.priv.at/",
-   "// Submitted by registry <lendl@nic.at> 2008-06-09",
    "priv.at",
-
-   "// Red Hat, Inc. OpenShift : https://openshift.redhat.com/",
-   "// Submitted by Tim Kramer <tkramer@rhcloud.com> 2012-10-24",
    "rhcloud.com",
-
-   "// SinaAppEngine : http://sae.sina.com.cn/",
-   "// Submitted by SinaAppEngine <saesupport@sinacloud.com> 2015-02-02",
    "sinaapp.com",
    "vipsinaapp.com",
    "1kapp.com",
-
-   "// TASK geographical domains (www.task.gda.pl/uslugi/dns)",
    "gda.pl",
    "gdansk.pl",
    "gdynia.pl",
    "med.pl",
    "sopot.pl",
-
-   "// UDR Limited : http://www.udr.hk.com",
-   "// Submitted by registry <hostmaster@udr.hk.com> 2014-11-07",
    "hk.com",
    "hk.org",
    "ltd.hk",
    "inc.hk",
-
-   "// Yola : https://www.yola.com/",
-   "// Submitted by Stefano Rivera <stefano@yola.com> 2014-07-09",
    "yolasite.com",
-
-   "// ZaNiC : http://www.za.net/",
-   "// Submitted by registry <hostmaster@nic.za.net> 2009-10-03",
    "za.net",
    "za.org",
-
-   "// ===END PRIVATE DOMAINS===",
-
 ]
 
