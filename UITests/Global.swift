@@ -515,6 +515,7 @@ class SimplePageServer {
                         tester.onload = imageFound;
                         tester.onerror = imageNotFound;
                         tester.src = URL;
+                        document.body.appendChild(tester);
                     }
 
                     function imageFound() {

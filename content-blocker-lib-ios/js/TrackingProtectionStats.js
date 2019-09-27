@@ -169,6 +169,10 @@ function install() {
             sendMessage(node.src);
             return;
           }
+          if (node.tagName === "IMG" && node.src) {
+            sendMessage(node.src);
+            return;
+          }
 
           // `<iframe src="*">` elements where [src] is not "about:blank".
           if (node.tagName === "IFRAME" && node.src) {

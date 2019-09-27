@@ -28,7 +28,6 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
 
         let onFinished = {
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
-            self.prefs.removeObjectForKey(HomePageConstants.NewTabCustomUrlPrefKey)
             self.tableView.reloadData()
         }
 
@@ -40,7 +39,7 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
             self.currentChoice = NewTabPage.blankPage
             onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: HomePageConstants.NewTabCustomUrlPrefKey, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "NewTabAsCustomURL", settingDidChange: { (string) in
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: HomePageConstants.NewTabCustomUrlPrefKey, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "NewTabAsCustomURL", isChecked: {return !showTopSites.isChecked() && !showBlankPage.isChecked()}, settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
             self.tableView.reloadData()

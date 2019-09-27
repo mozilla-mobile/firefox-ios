@@ -230,7 +230,7 @@ class CustomSyncTokenServerEnableSetting: BoolSetting {
 }
 
 class CustomURLSetting: WebPageSetting {
-    override init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingDidChange: ((String?) -> Void)? = nil) {
+    override init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, isChecked: @escaping () -> Bool = { return false }, settingDidChange: ((String?) -> Void)? = nil) {
         super.init(prefs: prefs,
                    prefKey: prefKey,
                    defaultValue: defaultValue,

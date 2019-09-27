@@ -327,7 +327,13 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             }
             alert.addAction(action)
         }
-
+        alert.addAction(UIAlertAction(title: Strings.ClearHistoryMenuOptionEverything, style: .destructive, handler: { _ in
+            let types = WKWebsiteDataStore.allWebsiteDataTypes()
+            WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast, completionHandler: {})
+            self.profile.history.clearHistory().uponQueue(.main) { _ in
+                self.reloadData()
+            }
+        }))
         let cancelAction = UIAlertAction(title: Strings.CancelString, style: .cancel)
         alert.addAction(cancelAction)
         present(alert, animated: true)

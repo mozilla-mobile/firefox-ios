@@ -28,7 +28,6 @@ class HomePageSettingViewController: SettingsTableViewController {
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
 
         let onFinished = {
-            self.prefs.removeObjectForKey(PrefsKeys.HomeButtonHomePageURL)
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         }
@@ -37,7 +36,7 @@ class HomePageSettingViewController: SettingsTableViewController {
             self.currentChoice = NewTabPage.topSites
             onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", settingDidChange: { (string) in
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
