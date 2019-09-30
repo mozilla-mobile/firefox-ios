@@ -7,7 +7,6 @@ import Shared
 
 class TranslationSettingsController: ThemedTableViewController {
     struct UX {
-        static var rowHeight: CGFloat = 70
         static var footerFontSize: CGFloat = 12
     }
 
@@ -124,10 +123,6 @@ class TranslationSettingsController: ThemedTableViewController {
             return setting.list.count
         }
         return 0
-    }
-
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.section == Section.translationOnOff.rawValue ? UX.rowHeight : super.tableView(tableView, heightForRowAt: indexPath)
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
