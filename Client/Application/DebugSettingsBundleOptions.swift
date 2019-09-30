@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-
+//命名：Options
 struct DebugSettingsBundleOptions {
 
     /// Save logs to `~/Documents` folder

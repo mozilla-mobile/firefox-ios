@@ -19,8 +19,10 @@ open class NSUserDefaultsPrefs: Prefs {
         self.userDefaults = userDefaults
     }
 
+    //构造方法
     init(prefix: String) {
         self.prefixWithDot = prefix + (prefix.hasSuffix(".") ? "" : ".")
+        //
         self.userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
     }
 
@@ -31,6 +33,7 @@ open class NSUserDefaultsPrefs: Prefs {
 
     // Preferences are qualified by the profile's local name.
     // Connecting a profile to a Firefox Account, or changing to another, won't alter this.
+    //获取key
     fileprivate func qualifyKey(_ key: String) -> String {
         return self.prefixWithDot + key
     }
@@ -73,6 +76,7 @@ open class NSUserDefaultsPrefs: Prefs {
         setObject(NSNumber(value: value as Bool), forKey: defaultName)
     }
 
+    //获取值
     open func boolForKey(_ defaultName: String) -> Bool? {
         // boolForKey just returns false if the key doesn't exist. We need to
         // distinguish between false and non-existent keys, so use objectForKey

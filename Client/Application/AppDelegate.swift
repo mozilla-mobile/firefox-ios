@@ -14,7 +14,7 @@ import SyncTelemetry
 import Sync
 import CoreSpotlight
 import UserNotifications
-
+//日志
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"

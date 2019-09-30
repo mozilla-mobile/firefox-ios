@@ -8,6 +8,7 @@ import XCGLogger
 public struct Logger {}
 
 // MARK: - Singleton Logger Instances
+//日志
 public extension Logger {
     static let logPII = false
 
@@ -36,6 +37,7 @@ public extension Logger {
         return value
     }()
 
+    //日志copy
     static func copyPreviousLogsToDocuments() {
         if let defaultLogDirectoryPath = logFileDirectoryPath(inDocuments: false),
             let documentsLogDirectoryPath = logFileDirectoryPath(inDocuments: true),
@@ -55,6 +57,7 @@ public extension Logger {
 
     :returns: Directory path where log files are stored
     */
+    //日志存放路径
     static func logFileDirectoryPath(inDocuments: Bool) -> String? {
         let searchPathDirectory: FileManager.SearchPathDirectory = inDocuments ? .documentDirectory : .cachesDirectory
         if let targetDirectory = NSSearchPathForDirectoriesInDomains(searchPathDirectory, .userDomainMask, true).first {

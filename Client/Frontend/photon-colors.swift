@@ -7,6 +7,7 @@
 import UIKit
 
 extension UIColor {
+    //颜色
     struct Photon {
         static let Magenta50 = UIColor(rgb: 0xff1ad9)
         static let Magenta60 = UIColor(rgb: 0xed00b5)

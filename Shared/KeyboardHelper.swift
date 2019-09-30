@@ -49,6 +49,7 @@ public protocol KeyboardHelperDelegate: AnyObject {
 /**
  * Convenience class for observing keyboard state.
  */
+//键盘
 open class KeyboardHelper: NSObject {
     open var currentState: KeyboardState?
 

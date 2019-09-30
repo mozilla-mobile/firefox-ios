@@ -44,6 +44,7 @@ public struct PrefsDefaults {
     public static let ChineseNewTabDefault = "HomePage"
 }
 
+//协议
 public protocol Prefs {
     func getBranchPrefix() -> String
     func branch(_ branch: String) -> Prefs
