@@ -454,15 +454,6 @@ class Tab: NSObject {
     }
 
     func reload() {
-        let userAgent: String? = desktopSite ? UserAgent.desktopUserAgent() : nil
-        if (userAgent ?? "") != webView?.customUserAgent, let currentItem = webView?.backForwardList.currentItem {
-            webView?.customUserAgent = userAgent
-
-            // Reload the initial URL to avoid UA specific redirection
-            loadRequest(PrivilegedRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60) as URLRequest)
-            return
-        }
-
         if let _ = webView?.reloadFromOrigin() {
             print("reloaded zombified tab from origin")
             return
