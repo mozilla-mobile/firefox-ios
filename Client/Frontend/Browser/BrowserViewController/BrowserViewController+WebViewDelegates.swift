@@ -271,26 +271,8 @@ extension BrowserViewController: WKNavigationDelegate {
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
         if ["http", "https", "data", "blob", "file"].contains(url.scheme) {
-
             if navigationAction.targetFrame?.isMainFrame ?? false {
-                tab.desktopSite = Tab.DesktopSites.contains(url: url, isPrivate: false)
-                if !tab.desktopSite, tab.isPrivate {
-                    // Private mode has an additional memory-only list to check.
-                    tab.desktopSite = Tab.DesktopSites.contains(url: url, isPrivate: true)
-                }
-
-                let requestUA = navigationAction.request.value(forHTTPHeaderField: "User-Agent") ?? ""
-                if UserAgent.isDesktop(ua: requestUA) != tab.desktopSite {
-                    let _url: URL
-                    // if the url has 'm.' or 'mobile.' in it, remove it.
-                    if url.normalizedHost != url.host, let scheme = url.scheme, let fullpath = url.normalizedHostAndPath {
-                        let desktopUrl = scheme + "://" + fullpath
-                        _url = URL(string: desktopUrl) ??  url
-                    } else {
-                        _url = url
-                    }
-                    webView.load(URLRequest(url: _url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60) as URLRequest)
-                }
+                tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url)
             }
 
             pendingRequests[url.absoluteString] = navigationAction.request
