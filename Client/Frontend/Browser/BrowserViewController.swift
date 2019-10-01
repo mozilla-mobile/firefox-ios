@@ -1891,6 +1891,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
             if topTabsVisible {
                 introViewController.preferredContentSize = CGSize(width: IntroUX.Width, height: IntroUX.Height)
                 introViewController.modalPresentationStyle = .formSheet
+            } else {
+                introViewController.modalPresentationStyle = .fullScreen
             }
             present(introViewController, animated: animated) {
                 // On first run (and forced) open up the homepage in the background.
@@ -1947,6 +1949,12 @@ extension BrowserViewController: IntroViewControllerDelegate {
         vcToPresent.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
         themedNavigationController.navigationBar.isTranslucent = false
+        if topTabsVisible {
+            themedNavigationController.preferredContentSize = CGSize(width: IntroUX.Width, height: IntroUX.Height)
+            themedNavigationController.modalPresentationStyle = .formSheet
+        } else {
+            themedNavigationController.modalPresentationStyle = .fullScreen
+        }
         self.present(themedNavigationController, animated: true, completion: nil)
     }
 
