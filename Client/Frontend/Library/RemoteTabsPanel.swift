@@ -156,6 +156,8 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         view.textLabel?.text = client.name
         view.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
 
+        view.showBorder(for: .top, section != 0)
+
         /*
         * A note on timestamps.
         * We have access to two timestamps here: the timestamp of the remote client record,
@@ -503,6 +505,8 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         tableView.tableFooterView = UIView() // prevent extra empty rows at end
         tableView.delegate = nil
         tableView.dataSource = nil
+
+        tableView.separatorColor = UIColor.theme.tableView.separator
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -628,6 +632,7 @@ extension RemoteTabsTableViewController: LibraryPanelContextMenu {
 extension RemoteTabsPanel: Themeable {
     func applyTheme() {
         historyBackButton.applyTheme()
+        tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
         tableViewController.tableView.reloadData()
         tableViewController.refreshTabs()
     }
