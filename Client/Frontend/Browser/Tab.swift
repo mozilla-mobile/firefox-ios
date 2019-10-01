@@ -44,7 +44,6 @@ protocol URLChangeDelegate {
 
 struct TabState {
     var isPrivate: Bool = false
-    var desktopSite: Bool = false
     var url: URL?
     var title: String?
     var favicon: Favicon?
@@ -64,7 +63,7 @@ class Tab: NSObject {
     }
 
     var tabState: TabState {
-        return TabState(isPrivate: _isPrivate, desktopSite: desktopSite, url: url, title: displayTitle, favicon: displayFavicon)
+        return TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
     }
 
     // PageMetadata is derived from the page content itself, and as such lags behind the
@@ -160,11 +159,10 @@ class Tab: NSObject {
     var lastTitle: String?
 
     /// Whether or not the desktop site was requested with the last request, reload or navigation.
-    var desktopSite: Bool = false {
+    var changedUserAgent: Bool = false {
         didSet {
-            webView?.customUserAgent = desktopSite ? UserAgent.desktopUserAgent() : nil
-
-            if desktopSite != oldValue {
+            webView?.customUserAgent = changedUserAgent ? UserAgent.oppositeUserAgent() : nil
+            if changedUserAgent != oldValue {
                 TabEvent.post(.didToggleDesktopMode, for: self)
             }
         }
@@ -456,15 +454,6 @@ class Tab: NSObject {
     }
 
     func reload() {
-        let userAgent: String? = desktopSite ? UserAgent.desktopUserAgent() : nil
-        if (userAgent ?? "") != webView?.customUserAgent, let currentItem = webView?.backForwardList.currentItem {
-            webView?.customUserAgent = userAgent
-
-            // Reload the initial URL to avoid UA specific redirection
-            loadRequest(PrivilegedRequest(url: currentItem.initialURL, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60) as URLRequest)
-            return
-        }
-
         if let _ = webView?.reloadFromOrigin() {
             print("reloaded zombified tab from origin")
             return
@@ -539,8 +528,8 @@ class Tab: NSObject {
         }
     }
 
-    func toggleDesktopSite() {
-        desktopSite = !desktopSite
+    func toggleChangeUserAgent() {
+        changedUserAgent = !changedUserAgent
         reload()
         TabEvent.post(.didToggleDesktopMode, for: self)
     }
@@ -706,68 +695,6 @@ class TabWebView: WKWebView, MenuHelperInterface {
     }
 }
 
-// Desktop site host list management.
-extension Tab {
-    // Store the list of hosts as an xcarchive for simplicity.
-    struct DesktopSites {
-        // Track these in-memory only
-        static var privateModeHostList = Set<String>()
-
-        private static let file: URL = {
-            let root = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-            return root.appendingPathComponent("desktop-sites-set-of-strings.xcarchive")
-        } ()
-
-        private static var baseDomainList: Set<String> = {
-            if let hosts = NSKeyedUnarchiver.unarchiveObject(withFile: DesktopSites.file.path) as? Set<String> {
-                return hosts
-            }
-            return Set<String>()
-        } ()
-
-        static func clear() {
-            try? FileManager.default.removeItem(at: Tab.DesktopSites.file)
-            baseDomainList.removeAll()
-        }
-
-        static func contains(url: URL, isPrivate: Bool) -> Bool {
-            guard let baseDomain = url.baseDomain else { return false }
-            return isPrivate ? privateModeHostList.contains(baseDomain) : baseDomainList.contains(baseDomain)
-        }
-
-        // Will extract the host from the URL and enable or disable it as a desktop site, and write the file if needed.
-        static func updateDomainList(forUrl url: URL, isDesktopSite: Bool, isPrivate: Bool) {
-            guard let baseDomain = url.baseDomain, !baseDomain.isEmpty else { return }
-
-            if isPrivate {
-                if isDesktopSite {
-                    DesktopSites.privateModeHostList.insert(baseDomain)
-                    return
-                } else {
-                    DesktopSites.privateModeHostList.remove(baseDomain)
-                    // Continue to next section and try remove it from `hostList` also.
-                }
-            }
-
-            if isDesktopSite, !baseDomainList.contains(baseDomain) {
-                baseDomainList.insert(baseDomain)
-            } else if !isDesktopSite, baseDomainList.contains(baseDomain) {
-                baseDomainList.remove(baseDomain)
-            } else {
-                // Don't save to disk, return early
-                return
-            }
-
-            // At this point, saving to disk takes place.
-            do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: baseDomainList, requiringSecureCoding: false)
-                try data.write(to: DesktopSites.file)
-            } catch {
-                print("Couldn't write file: \(error)")
-            }
-        }
-    }
-}
 ///
 // Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
 //

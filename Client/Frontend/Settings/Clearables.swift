@@ -42,7 +42,7 @@ class HistoryClearable: Clearable {
     func clear() -> Success {
 
         // Treat desktop sites as part of browsing history.
-        Tab.DesktopSites.clear()
+        Tab.ChangeUserAgent.clear()
 
         return profile.history.clearHistory().bindQueue(.main) { success in
             SDImageCache.shared.clearDisk()
