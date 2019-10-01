@@ -46,6 +46,9 @@ DerivedData
 /fastlane/scripts
 /fastlane/templates
 
+# content blocking lists
+content-blocker-lib-ios/Lists/*
+
 #python environment
 python-env/
 
