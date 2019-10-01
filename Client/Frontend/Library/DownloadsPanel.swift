@@ -390,6 +390,6 @@ extension DownloadsPanel: Themeable {
         tableView.backgroundColor = UIColor.theme.tableView.rowBackground
         tableView.separatorColor = UIColor.theme.tableView.separator
 
-        tableView.reloadData()
+        reloadData()
     }
 }

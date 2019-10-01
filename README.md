@@ -6,11 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (master)
 -----------
 
-This branch is for mainline development that will ship in *v17.0*.
-
-This branch only works with Xcode 10.2.x and supports iOS 11.0 and above
-
-This branch is written in Swift 4.2
+This branch only works with Xcode 11 and supports iOS 11.0 and above
 
 Please make sure you aim your pull requests in the right direction.
 

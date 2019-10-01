@@ -85,7 +85,7 @@ class TestAppDelegate: AppDelegate {
             resetApplication()
         }
 
-        Tab.DesktopSites.clear()
+        Tab.ChangeUserAgent.clear()
 
         return super.application(application, willFinishLaunchingWithOptions: launchOptions)
     }

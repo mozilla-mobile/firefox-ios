@@ -225,7 +225,7 @@ class TabManager: NSObject {
         recentlyClosedForUndo.removeAll()
 
         // Clear every time entering/exiting this mode.
-        Tab.DesktopSites.privateModeHostList = Set<String>()
+        Tab.ChangeUserAgent.privateModeHostList = Set<String>()
 
         if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()

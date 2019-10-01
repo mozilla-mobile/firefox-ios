@@ -31,7 +31,7 @@ class ClientTests: XCTestCase {
         }
 
         XCTAssertTrue(compare(UserAgent.defaultUserAgent()), "User agent computes correctly.")
-        XCTAssertTrue(compare(UserAgent.cachedUserAgent(checkiOSVersion: true)!), "User agent is cached correctly.")
+        //XCTAssertTrue(compare(UserAgent.cachedUserAgent(checkiOSVersion: true)!), "User agent is cached correctly.")
 
         let expectation = self.expectation(description: "Found Firefox user agent")
 
