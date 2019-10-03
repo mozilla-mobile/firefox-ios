@@ -18,12 +18,6 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.dismissFirstRunUI()
     }
 
-    func enterUrl(url: String) {
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
-    }
-
     func waitForReadingList() {
         let readingList = GREYCondition(name: "wait until Reading List Add btn appears", block: {
             var errorOrNil: NSError?
@@ -57,7 +51,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     func testReadingList() {
         // Load a page
         let url1 = "\(webRoot!)/readablePage.html"
-        enterUrl(url: url1)
+        BrowserUtils.enterUrlAddressBar(typeUrl: url1)
         tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
 
         // Add it to the reading list
@@ -69,7 +63,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
 
         // Open a new page
         let url2 = "\(webRoot!)/numberedPage.html?page=1"
-        enterUrl(url: url2)
+        BrowserUtils.enterUrlAddressBar(typeUrl: url2)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         // Check that it appears in the reading list home panel
@@ -99,8 +93,7 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     func testReadingListAutoMarkAsRead() {
         // Load a page
         let url1 = "\(webRoot!)/readablePage.html"
-
-        enterUrl(url: url1)
+        BrowserUtils.enterUrlAddressBar(typeUrl: url1)
         tester().waitForWebViewElementWithAccessibilityLabel("Readable Page")
 
         // Add it to the reading list
@@ -143,9 +136,8 @@ class ReadingListTests: KIFTestCase, UITextFieldDelegate {
             EarlGrey.selectElement(with: grey_accessibilityLabel("Readable page"))
                 .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
                 .perform(grey_swipeSlowInDirectionWithStartPoint(GREYDirection.left, 0.1, 0.1))
-
+            tester().waitForAnimationsToFinish()
             EarlGrey.selectElement(with: grey_accessibilityLabel("Remove"))
-                .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
                 .perform(grey_tap())
         }
 

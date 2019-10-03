@@ -19,10 +19,8 @@ class HistoryTests: KIFTestCase {
     func addHistoryItemPage(_ pageNo: Int) -> String {
         // Load a page
         let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
 
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: url)
         tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
         return url
     }
@@ -125,7 +123,6 @@ class HistoryTests: KIFTestCase {
         EarlGrey.selectElement(with: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.6, 0.6))
         if !BrowserUtils.iPad() {
             EarlGrey.selectElement(with:grey_accessibilityLabel("Delete"))
-                .inRoot(grey_kindOfClass(NSClassFromString("UISwipeActionStandardButton")!))
                 .perform(grey_tap())
         }
 

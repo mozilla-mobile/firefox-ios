@@ -89,7 +89,9 @@ class IntroViewController: UIViewController {
         imagePage2.contentMode = .center
 
         let signUp = UIButton()
+        signUp.accessibilityIdentifier = "signUpOnboardingButton"
         let signIn = UIButton()
+        signIn.accessibilityIdentifier = "signInOnboardingButton"
 
         [heading, subtitlePage1, subtitlePage2, signUp, signIn, nextButton, startBrowsingButton].forEach {
             bottomHolder.addSubview($0)
@@ -154,6 +156,7 @@ class IntroViewController: UIViewController {
 
         nextButton.setTitle(Strings.IntroNextButtonTitle, for: .normal)
         nextButton.addTarget(self, action: #selector(nextTapped), for: .touchUpInside)
+        nextButton.accessibilityIdentifier = "nextOnboardingButton"
 
         [nextButton, startBrowsingButton].forEach {
             $0.setTitleColor(buttonBlue, for: .normal)
@@ -170,6 +173,7 @@ class IntroViewController: UIViewController {
         startBrowsingButton.setTitle(Strings.StartBrowsingButtonTitle, for: .normal)
         startBrowsingButton.isHidden = true
         startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
+        startBrowsingButton.accessibilityIdentifier = "startBrowsingOnboardingButton"
 
         // Add 'X' to upper right
         let closeButton = UIButton()
