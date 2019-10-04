@@ -36,12 +36,12 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     let profile: Profile
 
-    init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
+    init(profile: Profile, fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
         self.profile = profile
 
         super.init(backgroundColor: UIColor.Photon.Grey20, title: NSAttributedString(string: "Firefox Accounts"))
 
-        self.url = self.createFxAURLWith(fxaOptions, profile: profile)
+        self.url = self.createFxAURLWith(fxaOptions, profile: profile, isSignUpFlow: isSignUpFlow)
 
         NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
@@ -213,8 +213,13 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // Configure the FxA signin url based on any passed options.
-    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile) -> URL {
-        let profileUrl = profile.accountConfiguration.signInURL
+    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile, isSignUpFlow: Bool) -> URL {
+        var profileUrl = profile.accountConfiguration.signInURL
+
+        if isSignUpFlow {
+            let s = profileUrl.absoluteString.replaceFirstOccurrence(of: "signin", with: "signup")
+            profileUrl = URL(string: s)!
+        }
 
         guard let launchParams = fxaOptions else {
             return profileUrl
@@ -225,7 +230,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         params.removeValue(forKey: "service")
         params.removeValue(forKey: "context")
 
-        params["action"] = "email"
+        if !isSignUpFlow {
+            params["action"] = "email"
+        }
         params["style"] = "trailhead" // adds Trailhead banners to the page
 
         let queryURL = params.filter { ["action", "style", "signin", "entrypoint"].contains($0.key) || $0.key.range(of: "utm_") != nil }.map({

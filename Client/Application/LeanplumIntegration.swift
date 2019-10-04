@@ -41,6 +41,7 @@ enum LPEvent: String {
     case openedApp = "E_Opened_App"
     case dismissedOnboarding = "E_Dismissed_Onboarding"
     case dismissedOnboardingShowLogin = "E_Dismissed_Onboarding_Showed_Login"
+    case dismissedOnboardingShowSignUp = "E_Dismissed_Onboarding_Showed_SignUpFlow"
     case openedLogins = "Opened Login Manager"
     case openedBookmark = "E_Opened_Bookmark"
     case openedNewTab = "E_Opened_New_Tab"
@@ -103,7 +104,7 @@ class LeanPlumClient {
     private var useFxAPrePush = LPVar.define("useFxAPrePush", with: false)
     var enablePocketVideo = LPVar.define("pocketVideo", with: false)
 
-    var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
+   // var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
