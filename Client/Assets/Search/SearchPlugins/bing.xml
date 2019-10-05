@@ -1,0 +1,20 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Bing</ShortName>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAnFBMVEUAAAAAg3MAgnMAgnMAgnMAinUAg3QAgnL///9HpJn+/v4Ti3z5/Pz3+/p2u7NBopYIhXbZ7Omo1M8ologZjn8NiHny+fju9vXn8/Lg7+3S6ObJ5OG83tmYzcZwubBisqhesKZYraIjk4UekILD4d212tax2NOs1tGj0cyfz8mRycKJxb18vrZotatSqp80m48wmoyz2tWCwbk5nZHbCDEiAAAAB3RSTlMA8si8ZBhlc+JuAAAAAWhJREFUaN7t2sduwzAQRVE1542pLkvu3Y57S/L//xYFDmDI3PIBKbwbaXcWIkYAMU5d4Lkg5HqB81XLBy2/VQM+iPmO8wJqgeOBmue4oOY6IGcBC1jAAhb4C8AwWeERARBR63OIexygLtosMgA8oK67W4EJ1LVhAQtYwAL/A0imJRdIRY1nFRFAXj/j7SWjAcn9tbdPSUAYyXf9w5UBoJBH+WlpHkil0WhaGgaQSzM1nldGgUS0YqNAGOmCUQAFG+i8kgHgViguACwnMRcAyjcuEE4UFZj2qN+gnVNP0XJDPabVMZbnlEFg3het9c0YcB2J1mABGALme6UP0vcMxgAlWtsVYAzQG6YAEeidASIQHUIwgXEHIAKDC2AMWAzkqe4pg0EAWdJtzIVdCRgD9OE/+gCMA48ffX8GUAAgHYpExwr3CAAwK5pH89dcClrAAhawgAV+CMBeGuCvPQSgFrBXT/jLM/T1n0/iKAf6ixZVFwAAAABJRU5ErkJggg==</Image>
+<Url type="application/x-suggestions+json" template="https://www.bing.com/osjson.aspx">
+  <Param name="query" value="{searchTerms}"/>
+  <Param name="language" value="{moz:locale}"/>
+</Url>
+<!-- this is effectively x-moz-phonesearch, but search service expects a text/html entry -->
+<Url type="text/html" method="GET" template="https://www.bing.com/search">
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="pc" value="MOZW"/>
+  <Param name="form" value="MOZWSB"/>
+</Url>
+<!-- tablet search not supported -->
+<SearchForm>http://www.bing.com</SearchForm>
+</SearchPlugin>

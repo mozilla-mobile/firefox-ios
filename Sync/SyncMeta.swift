@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Account
 import Shared
 import SwiftyJSON
 
@@ -109,7 +110,7 @@ public struct MetaGlobal: Equatable {
 
     // TODO: make a whole record JSON for this.
     public func asPayload() -> CleartextPayloadJSON {
-        let json: JSON = JSON([
+        let json = JSON([
             "syncID": self.syncID,
             "storageVersion": self.storageVersion,
             "engines": enginesPayload().dictionaryObject as Any,

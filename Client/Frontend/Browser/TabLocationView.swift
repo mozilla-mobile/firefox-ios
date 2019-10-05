@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 import SnapKit
@@ -14,47 +13,36 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
+    func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
     func tabLocationViewDidLongPressPageOptions(_ tabLocationVIew: TabLocationView)
-    
+    func tabLocationViewDidBeginDragInteraction(_ tabLocationView: TabLocationView)
+
     /// - returns: whether the long-press was handled by the delegate; i.e. return `false` when the conditions for even starting handling long-press were not satisfied
     @discardableResult func tabLocationViewDidLongPressReaderMode(_ tabLocationView: TabLocationView) -> Bool
     func tabLocationViewLocationAccessibilityActions(_ tabLocationView: TabLocationView) -> [UIAccessibilityCustomAction]?
 }
 
-struct TabLocationViewUX {
+private struct TabLocationViewUX {
     static let HostFontColor = UIColor.black
-    static let BaseURLFontColor = UIColor.gray
-    static let LocationContentInset = 8
+    static let BaseURLFontColor = UIColor.Photon.Grey50
+    static let Spacing: CGFloat = 8
+    static let StatusIconSize: CGFloat = 18
+    static let TPIconSize: CGFloat = 44
+    static let ReaderModeButtonWidth: CGFloat = 34
+    static let ButtonSize: CGFloat = 44
     static let URLBarPadding = 4
-
-    static let Themes: [String: Theme] = {
-        var themes = [String: Theme]()
-        var theme = Theme()
-        theme.URLFontColor = UIColor.lightGray
-        theme.textColor = UIColor(rgb: 0xf9f9fa)
-        theme.highlightButtonColor = UIConstants.PrivateModePurple
-        theme.buttonTintColor = UIColor(rgb: 0xADADb0)
-        theme.backgroundColor = UIColor(rgb: 0x636369)
-        themes[Theme.PrivateMode] = theme
-
-        theme = Theme()
-        theme.textColor = UIColor(rgb: 0x27)
-        theme.highlightButtonColor = UIColor(rgb: 0x00A2FE)
-        theme.buttonTintColor = UIColor(rgb: 0x737373)
-        theme.backgroundColor = .white
-        themes[Theme.NormalMode] = theme
-
-        return themes
-    }()
 }
 
 class TabLocationView: UIView {
     var delegate: TabLocationViewDelegate?
     var longPressRecognizer: UILongPressGestureRecognizer!
     var tapRecognizer: UITapGestureRecognizer!
+    var contentView: UIStackView!
 
-    dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
+    fileprivate let menuBadge = BadgeWithBackdrop(imageName: "menuBadge", backdropCircleSize: 32)
+
+    @objc dynamic var baseURLFontColor: UIColor = TabLocationViewUX.BaseURLFontColor {
         didSet { updateTextWithURL() }
     }
 
@@ -63,10 +51,12 @@ class TabLocationView: UIView {
             let wasHidden = lockImageView.isHidden
             lockImageView.isHidden = url?.scheme != "https"
             if wasHidden != lockImageView.isHidden {
-                UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+                UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
             }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
+
+            trackingProtectionButton.isHidden = !["https", "http"].contains(url?.scheme ?? "")
             setNeedsUpdateConstraints()
         }
     }
@@ -80,24 +70,17 @@ class TabLocationView: UIView {
                 let wasHidden = readerModeButton.isHidden
                 self.readerModeButton.readerModeState = newReaderModeState
                 readerModeButton.isHidden = (newReaderModeState == ReaderModeState.unavailable)
-                separatorLine.isHidden = readerModeButton.isHidden
                 if wasHidden != readerModeButton.isHidden {
-                    UIAccessibilityPostNotification(UIAccessibilityLayoutChangedNotification, nil)
+                    UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
                     if !readerModeButton.isHidden {
                         // Delay the Reader Mode accessibility announcement briefly to prevent interruptions.
                         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-                            UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, Strings.ReaderModeAvailableVoiceOverAnnouncement)
+                            UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: Strings.ReaderModeAvailableVoiceOverAnnouncement)
                         }
                     }
                 }
                 UIView.animate(withDuration: 0.1, animations: { () -> Void in
-                    if newReaderModeState == ReaderModeState.unavailable {
-                        self.readerModeButton.alpha = 0.0
-                    } else {
-                        self.readerModeButton.alpha = 1.0
-                    }
-                    self.setNeedsUpdateConstraints()
-                    self.layoutIfNeeded()
+                    self.readerModeButton.alpha = newReaderModeState == .unavailable ? 0 : 1
                 })
             }
         }
@@ -105,173 +88,225 @@ class TabLocationView: UIView {
 
     lazy var placeholder: NSAttributedString = {
         let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
-        return NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.gray])
+        return NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
     }()
 
     lazy var urlTextField: UITextField = {
         let urlTextField = DisplayTextField()
 
-        self.longPressRecognizer.delegate = self
-        urlTextField.addGestureRecognizer(self.longPressRecognizer)
-        self.tapRecognizer.delegate = self
-        urlTextField.addGestureRecognizer(self.tapRecognizer)
-
         // Prevent the field from compressing the toolbar buttons on the 4S in landscape.
-        urlTextField.setContentCompressionResistancePriority(250, for: UILayoutConstraintAxis.horizontal)
+        urlTextField.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 250), for: .horizontal)
         urlTextField.attributedPlaceholder = self.placeholder
         urlTextField.accessibilityIdentifier = "url"
         urlTextField.accessibilityActionsSource = self
         urlTextField.font = UIConstants.DefaultChromeFont
         urlTextField.backgroundColor = .clear
+
+        // Remove the default drop interaction from the URL text field so that our
+        // custom drop interaction on the BVC can accept dropped URLs.
+        if let dropInteraction = urlTextField.textDropInteraction {
+            urlTextField.removeInteraction(dropInteraction)
+        }
+
         return urlTextField
     }()
 
     fileprivate lazy var lockImageView: UIImageView = {
         let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
-        lockImageView.isHidden = true
-        lockImageView.tintColor = UIColor(rgb: 0x16DA00)
         lockImageView.isAccessibilityElement = true
-        lockImageView.contentMode = UIViewContentMode.center
+        lockImageView.contentMode = .center
         lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
         return lockImageView
     }()
 
+    class TrackingProtectionButton: UIButton {
+        // Disable showing the button if the feature is off in the prefs
+        override var isHidden: Bool {
+            didSet {
+                separatorLine?.isHidden = isHidden
+                guard !isHidden, let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile else { return }
+                if !FirefoxTabContentBlocker.isTrackingProtectionEnabled(prefs: profile.prefs) {
+                    isHidden = true
+                }
+            }
+        }
+
+        var separatorLine: UIView?
+    }
+
+    lazy var trackingProtectionButton: TrackingProtectionButton = {
+        let trackingProtectionButton = TrackingProtectionButton()
+        trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+        trackingProtectionButton.addTarget(self, action: #selector(didPressTPShieldButton(_:)), for: .touchUpInside)
+        trackingProtectionButton.tintColor = UIColor.Photon.Grey50
+        trackingProtectionButton.imageView?.contentMode = .scaleAspectFill
+        trackingProtectionButton.accessibilityIdentifier = "TabLocationView.trackingProtectionButton"
+        return trackingProtectionButton
+    }()
+
     fileprivate lazy var readerModeButton: ReaderModeButton = {
-        let readerModeButton = ReaderModeButton(frame: CGRect.zero)
-        readerModeButton.isHidden = true
-        readerModeButton.addTarget(self, action: #selector(TabLocationView.SELtapReaderModeButton), for: .touchUpInside)
-        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressReaderModeButton(_:))))
+        let readerModeButton = ReaderModeButton(frame: .zero)
+        readerModeButton.addTarget(self, action: #selector(tapReaderModeButton), for: .touchUpInside)
+        readerModeButton.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(longPressReaderModeButton)))
         readerModeButton.isAccessibilityElement = true
-        readerModeButton.imageView?.contentMode = UIViewContentMode.scaleAspectFit
+        readerModeButton.isHidden = true
+        readerModeButton.imageView?.contentMode = .scaleAspectFit
+        readerModeButton.contentHorizontalAlignment = .left
         readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
         readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(TabLocationView.SELreaderModeCustomAction))]
+        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(readerModeCustomAction))]
         return readerModeButton
     }()
-    
+
     lazy var pageOptionsButton: ToolbarButton = {
-        let pageOptionsButton = ToolbarButton(frame: CGRect.zero)
+        let pageOptionsButton = ToolbarButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
-        pageOptionsButton.isHidden = true
-        pageOptionsButton.addTarget(self, action: #selector(TabLocationView.SELDidPressPageOptionsButton), for: .touchUpInside)
+        pageOptionsButton.addTarget(self, action: #selector(didPressPageOptionsButton), for: .touchUpInside)
         pageOptionsButton.isAccessibilityElement = true
-        pageOptionsButton.imageView?.contentMode = .center
+        pageOptionsButton.isHidden = true
+        pageOptionsButton.imageView?.contentMode = .left
         pageOptionsButton.accessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
         pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELDidLongPressPageOptionsButton))
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressPageOptionsButton))
         pageOptionsButton.addGestureRecognizer(longPressGesture)
         return pageOptionsButton
     }()
-    
-    lazy var separatorLine: UIView = {
+
+    private func makeSeparator() -> UIView {
         let line = UIView()
         line.layer.cornerRadius = 2
-        line.backgroundColor = UIColor(rgb: 0xE5E5E5)
-        line.isHidden = true
         return line
-    }()
+    }
+
+    // A vertical separator next to the page options button.
+    lazy var separatorLineForPageOptions: UIView = makeSeparator()
+
+    lazy var separatorLineForTP: UIView = makeSeparator()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(TabLocationView.SELlongPressLocation(_:)))
-        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(TabLocationView.SELtapLocation(_:)))
+        register(self, forTabEvents: .didGainFocus, .didToggleDesktopMode, .didChangeContentBlocking)
 
-        addSubview(urlTextField)
-        addSubview(lockImageView)
-        addSubview(readerModeButton)
-        addSubview(pageOptionsButton)
-        addSubview(separatorLine)
+        longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressLocation))
+        longPressRecognizer.delegate = self
+
+        tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapLocation))
+        tapRecognizer.delegate = self
+
+        addGestureRecognizer(longPressRecognizer)
+        addGestureRecognizer(tapRecognizer)
+
+        let space10px = UIView()
+        space10px.snp.makeConstraints { make in
+            make.width.equalTo(10)
+        }
+
+        // Link these so they hide/show in-sync.
+        trackingProtectionButton.separatorLine = separatorLineForTP
+
+        pageOptionsButton.separatorLine = separatorLineForPageOptions
+
+        let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
+        contentView = UIStackView(arrangedSubviews: subviews)
+        contentView.distribution = .fill
+        contentView.alignment = .center
+        addSubview(contentView)
+
+        contentView.snp.makeConstraints { make in
+            make.edges.equalTo(self)
+        }
 
         lockImageView.snp.makeConstraints { make in
-            make.size.equalTo(24)
-            make.centerY.equalTo(self)
-            make.leading.equalTo(self).offset(9)
+            make.width.equalTo(TabLocationViewUX.StatusIconSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
+        }
+        trackingProtectionButton.snp.makeConstraints { make in
+            make.width.equalTo(TabLocationViewUX.TPIconSize)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
+        }
+        separatorLineForTP.snp.makeConstraints { make in
+            make.width.equalTo(1)
+            make.height.equalTo(26)
         }
 
         pageOptionsButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.trailing.equalTo(self)
-            make.width.equalTo(44)
-            make.height.equalTo(self)
+            make.size.equalTo(TabLocationViewUX.ButtonSize)
         }
-        
-        separatorLine.snp.makeConstraints { make in
+        separatorLineForPageOptions.snp.makeConstraints { make in
             make.width.equalTo(1)
             make.height.equalTo(26)
-            make.trailing.equalTo(pageOptionsButton.snp.leading)
-            make.centerY.equalTo(self)
         }
-        
         readerModeButton.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.trailing.equalTo(separatorLine.snp.leading).offset(-9)
-            make.size.equalTo(24)
+            make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
+
+        // Setup UIDragInteraction to handle dragging the location
+        // bar for dropping its URL into other apps.
+        let dragInteraction = UIDragInteraction(delegate: self)
+        dragInteraction.allowsSimultaneousRecognitionDuringLift = true
+        self.addInteraction(dragInteraction)
+
+        menuBadge.add(toParent: contentView)
+        menuBadge.layout(onButton: pageOptionsButton)
+        menuBadge.show(false)
     }
+
+    required init(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private lazy var _accessibilityElements = [urlTextField, readerModeButton, pageOptionsButton, trackingProtectionButton]
 
     override var accessibilityElements: [Any]? {
         get {
-            return [lockImageView, urlTextField, readerModeButton, pageOptionsButton].filter { !$0.isHidden }
+            return _accessibilityElements.filter { !$0.isHidden }
         }
         set {
             super.accessibilityElements = newValue
         }
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func updateConstraints() {
-        urlTextField.snp.remakeConstraints { make in
-            make.top.bottom.equalTo(self)
-
-            if lockImageView.isHidden {
-                make.leading.equalTo(self).offset(TabLocationViewUX.LocationContentInset)
-            } else {
-                make.leading.equalTo(self.lockImageView.snp.trailing).offset(TabLocationViewUX.URLBarPadding)
-            }
-
-            if readerModeButton.isHidden {
-                make.trailing.equalTo(self.pageOptionsButton.snp.leading).offset(-TabLocationViewUX.URLBarPadding)
-            } else {
-                make.trailing.equalTo(self.readerModeButton.snp.leading).offset(-TabLocationViewUX.URLBarPadding)
-            }
+    func overrideAccessibility(enabled: Bool) {
+        _accessibilityElements.forEach {
+            $0.isAccessibilityElement = enabled
         }
-
-        super.updateConstraints()
     }
 
-    func SELtapReaderModeButton() {
+    @objc func tapReaderModeButton() {
         delegate?.tabLocationViewDidTapReaderMode(self)
     }
 
-    func SELlongPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began {
+    @objc func longPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
+        if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressReaderMode(self)
         }
     }
-    
-    func SELDidPressPageOptionsButton(_ button: UIButton) {
+
+    @objc func didPressPageOptionsButton(_ button: UIButton) {
         delegate?.tabLocationViewDidTapPageOptions(self, from: button)
     }
-    
-    func SELDidLongPressPageOptionsButton(_ recognizer: UILongPressGestureRecognizer) {
+
+    @objc func didLongPressPageOptionsButton(_ recognizer: UILongPressGestureRecognizer) {
         delegate?.tabLocationViewDidLongPressPageOptions(self)
     }
 
-    func SELlongPressLocation(_ recognizer: UITapGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.began {
+    @objc func longPressLocation(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .began {
             delegate?.tabLocationViewDidLongPressLocation(self)
         }
     }
 
-    func SELtapLocation(_ recognizer: UITapGestureRecognizer) {
+    @objc func tapLocation(_ recognizer: UITapGestureRecognizer) {
         delegate?.tabLocationViewDidTapLocation(self)
     }
 
-    func SELreaderModeCustomAction() -> Bool {
+    @objc func didPressTPShieldButton(_ button: UIButton) {
+        delegate?.tabLocationViewDidTapShield(self)
+    }
+
+    @objc func readerModeCustomAction() -> Bool {
         return delegate?.tabLocationViewDidLongPressReaderMode(self) ?? false
     }
 
@@ -290,12 +325,32 @@ class TabLocationView: UIView {
 
 extension TabLocationView: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        // When long pressing a button make sure the textfield's long press gesture is not triggered
+        return !(otherGestureRecognizer.view is UIButton)
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        // If the longPressRecognizer is active, fail all other recognizers to avoid conflicts.
-        return gestureRecognizer == longPressRecognizer
+        // If the longPressRecognizer is active, fail the tap recognizer to avoid conflicts.
+        return gestureRecognizer == longPressRecognizer && otherGestureRecognizer == tapRecognizer
+    }
+}
+
+@available(iOS 11.0, *)
+extension TabLocationView: UIDragInteractionDelegate {
+    func dragInteraction(_ interaction: UIDragInteraction, itemsForBeginning session: UIDragSession) -> [UIDragItem] {
+        // Ensure we actually have a URL in the location bar and that the URL is not local.
+        guard let url = self.url, !InternalURL.isValid(url: url), let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .locationBar)
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
+    }
+
+    func dragInteraction(_ interaction: UIDragInteraction, sessionWillBegin session: UIDragSession) {
+        delegate?.tabLocationViewDidBeginDragInteraction(self)
     }
 }
 
@@ -309,21 +364,54 @@ extension TabLocationView: AccessibilityActionsSource {
 }
 
 extension TabLocationView: Themeable {
-    func applyTheme(_ themeName: String) {
-        guard let theme = TabLocationViewUX.Themes[themeName] else {
-            log.error("Unable to apply unknown theme \(themeName)")
-            return
-        }
-        let isPrivate = themeName == Theme.PrivateMode
-        backgroundColor = theme.backgroundColor
-        urlTextField.textColor = theme.textColor
-        readerModeButton.selectedTintColor = theme.highlightButtonColor
-        readerModeButton.unselectedTintColor = theme.buttonTintColor
-        pageOptionsButton.selectedTintColor = theme.highlightButtonColor
-
-        pageOptionsButton.unselectedTintColor = isPrivate ? UIColor(rgb: 0xD2d2d4) : UIColor(rgb: 0x272727)
+    func applyTheme() {
+        backgroundColor = UIColor.theme.textField.background
+        urlTextField.textColor = UIColor.theme.textField.textAndTint
+        readerModeButton.selectedTintColor = UIColor.theme.urlbar.readerModeButtonSelected
+        readerModeButton.unselectedTintColor = UIColor.theme.urlbar.readerModeButtonUnselected
+        
+        pageOptionsButton.selectedTintColor = UIColor.theme.urlbar.pageOptionsSelected
+        pageOptionsButton.unselectedTintColor = UIColor.theme.urlbar.pageOptionsUnselected
         pageOptionsButton.tintColor = pageOptionsButton.unselectedTintColor
-        separatorLine.backgroundColor = isPrivate ? UIColor(rgb: 0x3f3f43) : UIColor(rgb: 0xE5E5E5)
+        separatorLineForPageOptions.backgroundColor = UIColor.Photon.Grey40
+        separatorLineForTP.backgroundColor = separatorLineForPageOptions.backgroundColor
+
+        lockImageView.tintColor = pageOptionsButton.tintColor
+
+        let color = ThemeManager.instance.currentName == .dark ? UIColor(white: 0.3, alpha: 0.6): UIColor.theme.textField.background
+        menuBadge.badge.tintBackground(color: color)
+    }
+}
+
+extension TabLocationView: TabEventHandler {
+    func tabDidChangeContentBlocking(_ tab: Tab) {
+        updateBlockerStatus(forTab: tab)
+    }
+
+    private func updateBlockerStatus(forTab tab: Tab) {
+        assertIsMainThread("UI changes must be on the main thread")
+        guard let blocker = tab.contentBlocker else { return }
+        trackingProtectionButton.alpha = 1.0
+        switch blocker.status {
+        case .Blocking:
+            trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: "tracking-protection-active-block"), for: .normal)
+        case .NoBlockedURLs:
+            trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
+            trackingProtectionButton.alpha = 0.5
+        case .Whitelisted:
+            trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
+        case .Disabled:
+            trackingProtectionButton.isHidden = true
+        }
+    }
+
+    func tabDidGainFocus(_ tab: Tab) {
+        updateBlockerStatus(forTab: tab)
+        menuBadge.show(tab.changedUserAgent)
+    }
+
+    func tabDidToggleDesktopMode(_ tab: Tab) {
+        menuBadge.show(tab.changedUserAgent)
     }
 }
 
@@ -335,11 +423,11 @@ class ReaderModeButton: UIButton {
         adjustsImageWhenHighlighted = false
         setImage(UIImage.templateImageNamed("reader"), for: .normal)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override var isSelected: Bool {
         didSet {
             self.tintColor = (isHighlighted || isSelected) ? selectedTintColor : unselectedTintColor
@@ -357,9 +445,9 @@ class ReaderModeButton: UIButton {
             self.imageView?.tintColor = self.tintColor
         }
     }
-    
-    var _readerModeState: ReaderModeState = ReaderModeState.unavailable
-    
+
+    var _readerModeState = ReaderModeState.unavailable
+
     var readerModeState: ReaderModeState {
         get {
             return _readerModeState
@@ -395,5 +483,9 @@ private class DisplayTextField: UITextField {
 
     fileprivate override var canBecomeFirstResponder: Bool {
         return false
+    }
+
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.insetBy(dx: TabLocationViewUX.Spacing, dy: 0)
     }
 }

@@ -35,16 +35,14 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         tableView.accessibilityIdentifier = "AuthenticationManager.passcodeIntervalTableView"
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
-        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
-        let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
-        headerView.showTopBorder = false
-        headerView.showBottomBorder = true
+        let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
+        let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
+        headerView.showBorder(for: .bottom, true)
 
-        let footerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
-        footerView.showTopBorder = true
-        footerView.showBottomBorder = false
+        let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
+        footerView.showBorder(for: .top, true)
 
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
@@ -62,6 +60,7 @@ class RequirePasscodeIntervalViewController: UITableViewController {
         let intervalTitle = NSAttributedString.tableRowTitle(option.settingTitle, enabled: true)
         cell.textLabel?.attributedText = intervalTitle
         cell.accessoryType = authenticationInfo?.requiredPasscodeInterval == option ? .checkmark : .none
+        cell.backgroundColor = UIColor.theme.tableView.rowBackground
         return cell
     }
 

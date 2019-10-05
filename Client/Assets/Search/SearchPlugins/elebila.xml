@@ -1,0 +1,15 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Elebila</ShortName>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image height="16" width="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAASFBMVEX6+voAAAD6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr6+vr1VbutNXuGkExHTSiMQmuelI4Zvo6SAAAAEXRSTlPhAPAV/NvEvLIDZldAJa6Qin6NnvEAAAGOSURBVGje7drpasMwEARgKc7Z9BpP3b7/m5YGzCYdxNCQLTk0v3f4IDaSTFRq3T2tkZLyNtRa6rBGWhbPtezWSMzipeyRmm3ZIjXLskJuSsFJOtCBDgAdOBPgHCAF4DiHKQDHCDvgBCLtLcoCAunAvQA8igFsR4HDyxgh6QHttAGOErIJ+E4AMathA3CdAGRWpxXwnQBkVqcV8J02wDke0E4boD4hMqYV8B0F9Cc2gO0ogNN8GsB0FOAZAB8LGHma0QCmI4DEA5pHBAgFfMcAuoEo4DsKUNJ4KX0nAKlPH3MmwAPauX8AU8x6QDsewBSzHtCOBzD9BB7QjgU0HmjEb5ke8IJu+l+/Dp0NwHQUiOmjmJOd6QjQCD2gnX8/Ouq0B3zHH9/NM/Ad/QBprOwCuI4COs6YFMB1FIjovtEGtHMFX5kduH7gINw2EGtzEhDhhQEwGwCzATAR0LX5Ag/ZLpw39P9BB47SgQ78PemXBvKvPeyRmtdSN8hIXD2pQ4YQl2cO1382S2Rk9T7U+g3L7mclyX4h2wAAAABJRU5ErkJggg==</Image>
+  <Url type="text/html" template="http://elebila.elhuyar.eus/search/">
+    <Param name="opensearch" value="on" />
+    <Param name="lang" value="eu" />
+    <Param name="bilatu" value="{searchTerms}" />
+  </Url>
+  <SearchForm>http://elebila.elhuyar.eus</SearchForm>
+</SearchPlugin>

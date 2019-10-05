@@ -1,0 +1,16 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Gule sider mobil</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAYFBMVEX/zDMAAAD/zDP/zDP/zDP/zDP/zDP/zDP/zDP/zDP/zDP/zDP/zDP/zDP/zDP/zDP/zDMAAADhtC3MoylpVBVmUhQyKAkGBQH7yTHwwDDesix1XhdNPQ9NPg5BMwzPpikazJPsAAAAEHRSTlPhAMQV27ID8u28jWZXQCWuasw+GwAAANhJREFUaN7t2ssOgjAQheEpinfxUEDu+P5vaXTV1gVBmETJ+deTfOlqkmbEmN05gkpy2hgjZhNBrcPVyC6CYvtELlAtlhi6yRa6icCLAAECAAECBIAVAf3drasQVHXeQD8ZSP0sgmwwQIAAAQJ/CZSpW1kjqA4GJgM2c2vwUeMN2NkL51F4ZYtvtDz1ygkQIECAwDeAbQun1s4GxsWFF87iKzNsbOkTIECAwCqBakjdBvzchxQBAgQIECCwZPpHAzF00z7cuIk5QrF9on488z7/UXrE9nX+8wScyz9pRUX+FgAAAABJRU5ErkJggg==</Image>
+<Url type="text/html" method="GET" template="http://m.gulesider.no/companyResult.jsp">
+  <Param name="search_word" value="{searchTerms}"/>
+  <Param name="offset" value="0"/>
+  <Param name="index" value="ypwpgeo" />
+  <Param name="cmpid" value="fre_partner_fire_gssbtop"/>
+</Url>
+<SearchForm>http://m.gulesider.no/</SearchForm>
+</SearchPlugin>

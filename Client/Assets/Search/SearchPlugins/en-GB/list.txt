@@ -1,8 +1,0 @@
-amazon-en-GB
-bing
-duckduckgo
-google
-qwant
-twitter
-wikipedia
-yahoo-en-GB

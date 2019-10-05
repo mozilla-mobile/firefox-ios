@@ -2,9 +2,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Deferred
 import Shared
 import SwiftyJSON
+
+private let log = Logger.syncLogger
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
@@ -72,6 +73,8 @@ extension FxAPushMessageHandler {
 
         let result: PushMessageResult
         switch command {
+        case .commandReceived:
+            result = handleCommandReceived(json["data"])
         case .deviceConnected:
             result = handleDeviceConnected(json["data"])
         case .deviceDisconnected:
@@ -115,6 +118,28 @@ extension FxAPushMessageHandler {
 
 /// An extension to handle each of the messages.
 extension FxAPushMessageHandler {
+    func handleCommandReceived(_ data: JSON?) -> PushMessageResult {
+        log.info("[FxA Commands] Push notification received: \(data?.stringify() ?? "nil")")
+
+        guard let index = data?["index"].int,
+            let account = profile.getAccount() else {
+            log.error("[FxA Commands] Push notification JSON is missing required 'index' value")
+            return messageIncomplete(.commandReceived)
+        }
+
+        return account.commandsClient.consumeRemoteCommand(index: index) >>== { items in
+            guard let item = items.first else {
+                log.error("[FxA Commands] Unable to consume remote command for index \(index)")
+                return self.messageIncomplete(.commandReceived)
+            }
+
+            let message = PushMessage.commandReceived(tab: ["title": item.title, "url": item.url])
+            return deferMaybe(message)
+        }
+    }
+}
+
+extension FxAPushMessageHandler {
     func handleDeviceConnected(_ data: JSON?) -> PushMessageResult {
         guard let deviceName = data?["deviceName"].string else {
             return messageIncomplete(.deviceConnected)
@@ -131,7 +156,7 @@ extension FxAPushMessageHandler {
         }
 
         if let ourDeviceId = self.getOurDeviceId(), deviceId == ourDeviceId {
-            // We can't disconnect the device from the account until we have 
+            // We can't disconnect the device from the account until we have
             // access to the application, so we'll handle this properly in the AppDelegate,
             // by calling the FxALoginHelper.applicationDidDisonnect(application).
             profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
@@ -146,7 +171,7 @@ extension FxAPushMessageHandler {
 
         let clients = profile.remoteClientsAndTabs
         let getClient = clients.getClient(fxaDeviceId: deviceId)
-        
+
         return getClient >>== { device in
             let message = PushMessage.deviceDisconnected(device?.name)
             if let id = device?.guid {
@@ -211,6 +236,7 @@ fileprivate extension FxAPushMessageHandler {
 }
 
 enum PushMessageType: String {
+    case commandReceived = "fxaccounts:command_received"
     case deviceConnected = "fxaccounts:device_connected"
     case deviceDisconnected = "fxaccounts:device_disconnected"
     case profileUpdated = "fxaccounts:profile_updated"
@@ -223,6 +249,7 @@ enum PushMessageType: String {
 }
 
 enum PushMessage: Equatable {
+    case commandReceived(tab: [String : String])
     case deviceConnected(String)
     case deviceDisconnected(String?)
     case profileUpdated
@@ -236,6 +263,8 @@ enum PushMessage: Equatable {
 
     var messageType: PushMessageType {
         switch self {
+        case .commandReceived(_):
+            return .commandReceived
         case .deviceConnected(_):
             return .deviceConnected
         case .deviceDisconnected(_):
@@ -261,6 +290,8 @@ enum PushMessage: Equatable {
         }
 
         switch (lhs, rhs) {
+        case (.commandReceived(let lIndex), .commandReceived(let rIndex)):
+            return lIndex == rIndex
         case (.deviceConnected(let lName), .deviceConnected(let rName)):
             return lName == rName
         case (.collectionChanged(let lList), .collectionChanged(let rList)):

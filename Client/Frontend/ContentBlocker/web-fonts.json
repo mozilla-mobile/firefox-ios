@@ -1,4 +1,0 @@
-[{
-  "action": { "type": "block" },
-  "trigger": { "url-filter": ".*", "resource-type": ["font"] }
-}]

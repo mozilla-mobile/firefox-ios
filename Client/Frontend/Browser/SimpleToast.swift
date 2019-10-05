@@ -8,15 +8,15 @@ import Shared
 struct SimpleToastUX {
     static let ToastHeight = BottomToolbarHeight
     static let ToastAnimationDuration = 0.5
-    static let ToastDefaultColor = UIColor(red: 10 / 255, green: 132 / 255, blue: 255.0 / 255, alpha: 1)
+    static let ToastDefaultColor = UIColor.Photon.Blue40
     static let ToastFont = UIFont.systemFont(ofSize: 15)
     static let ToastDismissAfter = DispatchTimeInterval.milliseconds(4500) // 4.5 seconds.
     static let ToastDelayBefore = DispatchTimeInterval.milliseconds(0) // 0 seconds
+    static let ToastPrivateModeDelayBefore = DispatchTimeInterval.milliseconds(750)
     static let BottomToolbarHeight = CGFloat(45)
 }
 
 struct SimpleToast {
-
     func showAlertWithText(_ text: String, bottomContainer: UIView) {
         let toast = self.createView()
         toast.text = text
@@ -32,7 +32,7 @@ struct SimpleToast {
 
     fileprivate func createView() -> UILabel {
         let toast = UILabel()
-        toast.textColor = UIColor.white
+        toast.textColor = UIColor.Photon.White100
         toast.backgroundColor = SimpleToastUX.ToastDefaultColor
         toast.font = SimpleToastUX.ToastFont
         toast.textAlignment = .center

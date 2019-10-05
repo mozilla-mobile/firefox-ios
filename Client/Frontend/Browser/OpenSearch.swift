@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 import Fuzi
@@ -91,10 +90,10 @@ class OpenSearchEngine: NSObject, NSCoding {
      * check that the URL host contains the name of the search engine somewhere inside it
      **/
     fileprivate func isSearchURLForEngine(_ url: URL?) -> Bool {
-        guard let urlHost = url?.hostSLD,
+        guard let urlHost = url?.shortDisplayString,
             let queryEndIndex = searchTemplate.range(of: "?")?.lowerBound,
-            let templateURL = URL(string: searchTemplate.substring(to: queryEndIndex)) else { return false }
-        return urlHost == templateURL.hostSLD
+            let templateURL = URL(string: String(searchTemplate[..<queryEndIndex])) else { return false }
+        return urlHost == templateURL.shortDisplayString
     }
 
     /**
@@ -121,10 +120,10 @@ class OpenSearchEngine: NSObject, NSCoding {
     }
 
     fileprivate func getURLFromTemplate(_ searchTemplate: String, query: String) -> URL? {
-        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.SearchTermsAllowedCharacterSet()) {
+        if let escapedQuery = query.addingPercentEncoding(withAllowedCharacters: .SearchTermsAllowed) {
             // Escape the search template as well in case it contains not-safe characters like symbols
             let templateAllowedSet = NSMutableCharacterSet()
-            templateAllowedSet.formUnion(with: CharacterSet.URLAllowedCharacterSet())
+            templateAllowedSet.formUnion(with: .URLAllowed)
 
             // Allow brackets since we use them in our template as our insertion point
             templateAllowedSet.formUnion(with: CharacterSet(charactersIn: "{}"))
@@ -132,8 +131,8 @@ class OpenSearchEngine: NSObject, NSCoding {
             if let encodedSearchTemplate = searchTemplate.addingPercentEncoding(withAllowedCharacters: templateAllowedSet as CharacterSet) {
                 let localeString = Locale.current.identifier
                 let urlString = encodedSearchTemplate
-                    .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: String.CompareOptions.literal, range: nil)
-                    .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: String.CompareOptions.literal, range: nil)
+                    .replacingOccurrences(of: SearchTermComponent, with: escapedQuery, options: .literal, range: nil)
+                    .replacingOccurrences(of: LocaleTermComponent, with: localeString, options: .literal, range: nil)
                 return URL(string: urlString)
             }
         }

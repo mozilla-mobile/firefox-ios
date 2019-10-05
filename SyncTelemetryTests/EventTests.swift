@@ -10,11 +10,11 @@ import Shared
 class EventTests: XCTestCase {
     func testPickling() {
         let mockTimestamp = Date.now()
-        XCTAssertEqual(String(data: basicEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8),
+        XCTAssertEqual(String(data: basicEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8)!,
                        basicEventString(timestamp: mockTimestamp))
-        XCTAssertEqual(String(data: basicWithValueEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8),
+        XCTAssertEqual(String(data: basicWithValueEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8)!,
                        basicWithValueString(timestamp: mockTimestamp))
-        XCTAssertEqual(String(data: extraEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8),
+        XCTAssertEqual(String(data: extraEvent(timestamp: mockTimestamp).pickle()!, encoding: .utf8)!,
                        extraEventString(timestamp: mockTimestamp))
     }
 
@@ -71,7 +71,7 @@ extension EventTests {
     }
 
     fileprivate func extraEventString(timestamp: Timestamp) -> String {
-        return "[\(timestamp),\"test\",\"pickling\",\"this\",\"value\",{\"flowID\":\"testFlowID\",\"numIDs\":\"12\"}]"
+        return "[\(timestamp),\"test\",\"pickling\",\"this\",\"value\",{\"flowID\":\"testFlowID\"}]"
     }
 
     fileprivate func basicEvent(timestamp: Timestamp) -> Event {
@@ -83,7 +83,7 @@ extension EventTests {
     }
 
     fileprivate func extraEvent(timestamp: Timestamp) -> Event {
-        let extra = ["flowID": "testFlowID", "numIDs": "12"]
+        let extra = ["flowID": "testFlowID"]
         return Event(timestamp: timestamp, category: "test", method: "pickling", object: "this", value: "value", extra: extra)
     }
 }

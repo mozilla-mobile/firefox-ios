@@ -3,8 +3,8 @@
 <head>
 <script>
   var json = '{"history":["javascript:alert(\'Local page loaded\')"],"currentPage":-1}';
-  var sessionURL = 'http://localhost:6571/about/sessionrestore?history=' + escape(json);
-  var errorURL = 'http://localhost:6571/errors/error.html?url=nttps://mozilla.com/';
+  var sessionURL = 'internal://local/sessionrestore?history=' + escape(json);
+  var errorURL = 'internal://local/errorpage?url=https://mozilla.com/';
 
   function newTabExploit() {
     var win = window.open("http://1.2.3.4.5");

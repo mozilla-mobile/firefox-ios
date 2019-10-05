@@ -14,8 +14,8 @@ public protocol JSONLiteralConvertible {
 }
 
 open class KeychainCache<T: JSONLiteralConvertible> {
-    open let branch: String
-    open let label: String
+    public let branch: String
+    public let label: String
 
     open var value: T? {
         didSet {
@@ -56,7 +56,7 @@ open class KeychainCache<T: JSONLiteralConvertible> {
         log.info("Storing \(self.branch) in Keychain with label \(self.branch).\(self.label).")
         // TODO: PII logging.
         if let value = value,
-            let jsonString = value.asJSON().stringValue() {
+            let jsonString = value.asJSON().stringify() {
             KeychainWrapper.sharedAppContainerKeychain.set(jsonString, forKey: "\(branch).\(label)", withAccessibility: .afterFirstUnlock)
         } else {
             KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "\(branch).\(label)")

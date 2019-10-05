@@ -7,22 +7,21 @@ import Shared
 import SnapKit
 import Storage
 import SDWebImage
-import Deferred
 
 private let log = Logger.browserLogger
 
 class CustomSearchError: MaybeErrorType {
-    
+
     enum Reason {
         case DuplicateEngine, FormInput
     }
-    
+
     var reason: Reason!
-    
+
     internal var description: String {
         return "Search Engine Not Added"
     }
-    
+
     init(_ reason: Reason) {
         self.reason = reason
     }
@@ -33,7 +32,7 @@ class CustomSearchViewController: SettingsTableViewController {
     fileprivate var urlString: String?
     fileprivate var engineTitle = ""
     fileprivate lazy var spinnerView: UIActivityIndicatorView = {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+        let spinner = UIActivityIndicatorView(style: .gray)
         spinner.hidesWhenStopped = true
         return spinner
     }()
@@ -46,30 +45,30 @@ class CustomSearchViewController: SettingsTableViewController {
             make.center.equalTo(self.view.snp.center)
         }
     }
-    
+
     var successCallback: (() -> Void)?
 
     fileprivate func addSearchEngine(_ searchQuery: String, title: String) {
         spinnerView.startAnimating()
-        
+
         let trimmedQuery = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedTitle = title.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        createEngine(forQuery: trimmedQuery, andName: trimmedTitle).uponQueue(DispatchQueue.main) { result in
+
+        createEngine(forQuery: trimmedQuery, andName: trimmedTitle).uponQueue(.main) { result in
             self.spinnerView.stopAnimating()
             guard let engine = result.successValue else {
                 let alert: UIAlertController
                 let error = result.failureValue as? CustomSearchError
-                
+
                 alert = (error?.reason == .DuplicateEngine) ?
                     ThirdPartySearchAlerts.duplicateCustomEngine() : ThirdPartySearchAlerts.incorrectCustomEngineForm()
-                
+
                 self.navigationItem.rightBarButtonItem?.isEnabled = true
                 self.present(alert, animated: true, completion: nil)
                 return
             }
             self.profile.searchEngines.addSearchEngine(engine)
-            
+
             CATransaction.begin() // Use transaction to call callback after animation has been completed
             CATransaction.setCompletionBlock(self.successCallback)
             _ = self.navigationController?.popViewController(animated: true)
@@ -80,18 +79,18 @@ class CustomSearchViewController: SettingsTableViewController {
     func createEngine(forQuery query: String, andName name: String) -> Deferred<Maybe<OpenSearchEngine>> {
         let deferred = Deferred<Maybe<OpenSearchEngine>>()
         guard let template = getSearchTemplate(withString: query),
-            let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!), url.isWebPage() else {
+            let url = URL(string: template.addingPercentEncoding(withAllowedCharacters: .urlFragmentAllowed)!), url.isWebPage() else {
                 deferred.fill(Maybe(failure: CustomSearchError(.FormInput)))
                 return deferred
         }
-        
+
         // ensure we haven't already stored this template
         guard engineExists(name: name, template: template) == false else {
             deferred.fill(Maybe(failure: CustomSearchError(.DuplicateEngine)))
             return deferred
         }
-        
-        FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(DispatchQueue.main) { result in
+
+        FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(.main) { result in
             let image = result.successValue ?? FaviconFetcher.getDefaultFavicon(url)
             let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
 
@@ -102,7 +101,7 @@ class CustomSearchViewController: SettingsTableViewController {
         }
         return deferred
     }
-    
+
     private func engineExists(name: String, template: String) -> Bool {
         return profile.searchEngines.orderedEngines.contains { (engine) -> Bool in
             return engine.shortName == name || engine.searchTemplate == template
@@ -150,16 +149,16 @@ class CustomSearchViewController: SettingsTableViewController {
 
         let settings: [SettingSection] = [
             SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineTitleLabel), children: [titleField]),
-            SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineURLLabel), footerTitle: NSAttributedString(string: "http://youtube.com/search?q=%s"), children: [urlField])
+            SettingSection(title: NSAttributedString(string: Strings.SettingsAddCustomEngineURLLabel), footerTitle: NSAttributedString(string: "https://youtube.com/search?q=%s"), children: [urlField])
         ]
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine(_:)))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(self.addCustomSearchEngine))
         self.navigationItem.rightBarButtonItem?.accessibilityIdentifier = "customEngineSaveButton"
 
         return settings
     }
 
-    func addCustomSearchEngine(_ nav: UINavigationController?) {
+    @objc func addCustomSearchEngine(_ nav: UINavigationController?) {
         self.view.endEditing(true)
         navigationItem.rightBarButtonItem?.isEnabled = false
         if let url = self.urlString {
@@ -199,17 +198,19 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
 
         placeholderLabel.adjustsFontSizeToFitWidth = true
-        placeholderLabel.textColor = UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
+        placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder ?? UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
         placeholderLabel.text = placeholder
-        placeholderLabel.frame = CGRect(x: 0, y: 0, width: textField.frame.width, height: TextLabelHeight)
+        placeholderLabel.frame = CGRect(width: textField.frame.width, height: TextLabelHeight)
         textField.font = placeholderLabel.font
 
         textField.textContainer.lineFragmentPadding = 0
         textField.keyboardType = .URL
         textField.autocorrectionType = .no
         textField.delegate = self
+        textField.backgroundColor = UIColor.theme.tableView.rowBackground
+        textField.textColor = UIColor.theme.tableView.rowText
         cell.isUserInteractionEnabled = true
-        cell.accessibilityTraits = UIAccessibilityTraitNone
+        cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
         cell.selectionStyle = .none
 
@@ -241,7 +242,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
         placeholderLabel.isHidden = textField.text != ""
         settingDidChange?(textView.text)
-        let color = isValid(textField.text) ? UIConstants.TableViewRowTextColor : UIConstants.DestructiveRed
+        let color = isValid(textField.text) ? UIColor.theme.tableView.rowText : UIColor.theme.general.destructiveRed
         textField.textColor = color
     }
 

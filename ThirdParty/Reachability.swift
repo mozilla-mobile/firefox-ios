@@ -24,9 +24,6 @@
 import Foundation
 import SystemConfiguration
 
-
-let ReachabilityStatusChangedNotification = "ReachabilityStatusChangedNotification"
-
 enum ReachabilityType: CustomStringConvertible {
     case wwan
     case wiFi
@@ -85,7 +82,7 @@ open class Reach {
         SCNetworkReachabilitySetCallback(reachability, { (_, flags, _) in
             let status = ReachabilityStatus(reachabilityFlags: flags)
 
-            NotificationCenter.default.post(name: Notification.Name(rawValue: ReachabilityStatusChangedNotification),
+            NotificationCenter.default.post(name: .ReachabilityStatusChanged,
                 object: nil,
                 userInfo: ["Status": status.description])
 

@@ -70,7 +70,12 @@ class SyncCommandsTests: XCTestCase {
             "command": "displayURI",
             "args": [shareItem.url, "abcdefghijkl", shareItem.title ?? ""]
         ]
-        XCTAssertEqual(JSON(object: jsonObj).stringValue(), syncCommand.value)
+
+        let j = JSON(parseJSON: syncCommand.value)
+
+        XCTAssertEqual(j.dictionary!["command"]?.stringValue, jsonObj["command"] as! String)
+        XCTAssert(j.dictionary!["args"]!.arrayObject as! [String] == jsonObj["args"] as! [String])
+        XCTAssertEqual(j.dictionary!.keys.count, jsonObj.keys.count)
     }
 
     func testInsertWithNoURLOrTitle() {
@@ -81,12 +86,12 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, $0.successValue!)
 
             let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            
+
             let commandCursor = commandCursorDeferred.value.successValue!
-            
+
             XCTAssertNotNil(commandCursor[0])
             XCTAssertEqual(3, commandCursor[0]!)
             e.fulfill()
@@ -104,7 +109,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(3, $0.successValue!)
 
             let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
 
@@ -127,7 +132,7 @@ class SyncCommandsTests: XCTestCase {
             XCTAssertEqual(12, $0.successValue!)
 
             let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands)"
+                let select = "SELECT count(*) FROM commands"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
 
@@ -180,7 +185,7 @@ class SyncCommandsTests: XCTestCase {
             a.fulfill()
 
             let commandCursorDeferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
+                let select = "SELECT count(*) FROM commands WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
 
@@ -192,10 +197,10 @@ class SyncCommandsTests: XCTestCase {
 
             client = self.clients[1]
             let commandCursor2Deferred = self.db.withConnection { connection -> Cursor<Int> in
-                let select = "SELECT COUNT(*) FROM \(TableSyncCommands) WHERE client_guid = '\(client.guid!)'"
+                let select = "SELECT count(*) FROM commands WHERE client_guid = '\(client.guid!)'"
                 return connection.executeQuery(select, factory: IntFactory, withArgs: nil)
             }
-            
+
             let commandCursor2 = commandCursor2Deferred.value.successValue!
 
             XCTAssertNotNil(commandCursor2[0])
@@ -231,7 +236,7 @@ class SyncCommandsTests: XCTestCase {
                 b.fulfill()
             })
         }
-        
+
         self.waitForExpectations(timeout: 5, handler: nil)
     }
 }

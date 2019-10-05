@@ -11,7 +11,8 @@ class L10nIntroSnapshotTests: L10nBaseSnapshotTests {
 
     func testIntro() {
         var num = 1
-        navigator.visitNodes(allIntroPages) { screenName in
+        allIntroPages.forEach { screenName in
+            navigator.goto(screenName)
             snapshot("Intro-\(num)-\(screenName)")
             num += 1
         }

@@ -9,17 +9,14 @@ import Shared
 struct NightModePrefsKey {
     static let NightModeButtonIsInMenu = PrefsKeys.KeyNightModeButtonIsInMenu
     static let NightModeStatus = PrefsKeys.KeyNightModeStatus
+    static let NightModeEnabledDarkTheme = PrefsKeys.KeyNightModeEnabledDarkTheme
 }
 
-class NightModeHelper: TabHelper {
+class NightModeHelper: TabContentScript {
     fileprivate weak var tab: Tab?
 
     required init(tab: Tab) {
         self.tab = tab
-        if let path = Bundle.main.path(forResource: "NightModeHelper", ofType: "js"), let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-            let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentStart, forMainFrameOnly: true)
-            tab.webView!.configuration.userContentController.addUserScript(userScript)
-        }
     }
 
     static func name() -> String {
@@ -38,12 +35,20 @@ class NightModeHelper: TabHelper {
         let isActive = prefs.boolForKey(NightModePrefsKey.NightModeStatus) ?? false
         setNightMode(prefs, tabManager: tabManager, enabled: !isActive)
     }
-    
+
     static func setNightMode(_ prefs: Prefs, tabManager: TabManager, enabled: Bool) {
         prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeStatus)
         for tab in tabManager.tabs {
-            tab.setNightMode(enabled)
+            tab.nightMode = enabled
         }
+    }
+
+    static func setEnabledDarkTheme(_ prefs: Prefs, darkTheme enabled: Bool) {
+        prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeEnabledDarkTheme)
+    }
+
+    static func hasEnabledDarkTheme(_ prefs: Prefs) -> Bool {
+        return prefs.boolForKey(NightModePrefsKey.NightModeEnabledDarkTheme) ?? false
     }
 
     static func isActivated(_ prefs: Prefs) -> Bool {

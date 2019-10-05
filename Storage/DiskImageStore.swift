@@ -2,10 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 import UIKit
-import Deferred
 import XCGLogger
 
 private var log = XCGLogger.default
@@ -69,7 +67,7 @@ open class DiskImageStore {
             }
 
             let imageURL = URL(fileURLWithPath: self.filesDir).appendingPathComponent(key)
-            if let data = UIImageJPEGRepresentation(image, self.quality) {
+            if let data = image.jpegData(compressionQuality: self.quality) {
                 do {
                     try data.write(to: imageURL, options: .noFileProtection)
                     self.keys.insert(key)

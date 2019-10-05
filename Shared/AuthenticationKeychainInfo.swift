@@ -104,7 +104,7 @@ public extension AuthenticationKeychainInfo {
     }
 
     func recordValidation() {
-        // Save the timestamp to remember the last time we successfully 
+        // Save the timestamp to remember the last time we successfully
         // validated and clear out the failed attempts counter.
         self.lastPasscodeValidationInterval = SystemUtils.systemUptime()
         resetLockoutState()
@@ -127,7 +127,7 @@ public extension AuthenticationKeychainInfo {
         guard let lockOutInterval = self.lockOutInterval else {
             return false
         }
-        
+
         if SystemUtils.systemUptime() < lockOutInterval {
             // Unlock and require passcode input
             resetLockoutState()

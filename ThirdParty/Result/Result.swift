@@ -7,25 +7,22 @@
 //
 
 import Foundation
-//import Box
 
 public enum Maybe<T> {
     case failure(MaybeErrorType)
-
-    // TODO: Get rid of Box hack at some point after 6.3
-    case success(Box<T>)
+    case success(T)
 
     public init(failure: MaybeErrorType) {
         self = .failure(failure)
     }
 
     public init(success: T) {
-        self = .success(Box(success))
+        self = .success(success)
     }
 
     public var successValue: T? {
         switch self {
-        case let .success(success): return success.value
+        case let .success(success): return success
         case .failure: return nil
         }
     }
@@ -54,14 +51,14 @@ public enum Maybe<T> {
     public func map<U>(_ f: (T) -> U) -> Maybe<U> {
         switch self {
         case let .failure(error): return .failure(error)
-        case let .success(value): return .success(Box(f(value.value)))
+        case let .success(value): return .success(f(value))
         }
     }
 
     public func bind<U>(_ f: (T) -> Maybe<U>) -> Maybe<U> {
         switch self {
         case let .failure(error): return .failure(error)
-        case let .success(value): return f(value.value)
+        case let .success(value): return f(value)
         }
     }
 }
@@ -70,7 +67,7 @@ extension Maybe: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .failure(error): return "Result.Failure(\(error))"
-        case let .success(value): return "Result.Success(\(value.value))"
+        case let .success(value): return "Result.Success(\(value))"
         }
     }
 }

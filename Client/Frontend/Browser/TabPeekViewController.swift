@@ -5,12 +5,11 @@
 import UIKit
 import Shared
 import Storage
-import ReadingList
 import WebKit
 
-protocol TabPeekDelegate: class {
+protocol TabPeekDelegate: AnyObject {
     func tabPeekDidAddBookmark(_ tab: Tab)
-    @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListClientRecord?
+    @discardableResult func tabPeekDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabPeekRequestsPresentationOf(_ viewController: UIViewController)
     func tabPeekDidCloseTab(_ tab: Tab)
 }
@@ -18,14 +17,13 @@ protocol TabPeekDelegate: class {
 class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     fileprivate static let PreviewActionAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
-    fileprivate static let PreviewActionAddToReadingList = NSLocalizedString("Add to Reading List", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Reading List")
     fileprivate static let PreviewActionCopyURL = NSLocalizedString("Copy URL", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
     fileprivate static let PreviewActionCloseTab = NSLocalizedString("Close Tab", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
 
     weak var tab: Tab?
 
     fileprivate weak var delegate: TabPeekDelegate?
-    fileprivate var clientPicker: UINavigationController?
+    fileprivate var fxaDevicePicker: UINavigationController?
     fileprivate var isBookmarked: Bool = false
     fileprivate var isInReadingList: Bool = false
     fileprivate var hasRemoteClients: Bool = false
@@ -33,49 +31,81 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     fileprivate var screenShot: UIImageView?
     fileprivate var previewAccessibilityLabel: String!
+    fileprivate var webView: WKWebView?
 
     // Preview action items.
+    override var previewActionItems: [UIPreviewActionItem] {
+        get {
+            return previewActions
+        }
+    }
+
     lazy var previewActions: [UIPreviewActionItem] = {
         var actions = [UIPreviewActionItem]()
 
         let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
         if !self.ignoreURL && !urlIsTooLongToSave {
-            if !self.isInReadingList {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToReadingList, style: .default) { previewAction, viewController in
-                    guard let tab = self.tab else { return }
-                    _ = self.delegate?.tabPeekDidAddToReadingList(tab)
-                })
-            }
-
             if !self.isBookmarked {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .default) { previewAction, viewController in
-                    guard let tab = self.tab else { return }
-                    self.delegate?.tabPeekDidAddBookmark(tab)
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionAddToBookmarks, style: .default) { [weak self] previewAction, viewController in
+                    guard let wself = self, let tab = wself.tab else { return }
+                    wself.delegate?.tabPeekDidAddBookmark(tab)
                     })
             }
             if self.hasRemoteClients {
-                actions.append(UIPreviewAction(title: Strings.SendToDeviceTitle, style: .default) { previewAction, viewController in
-                    guard let clientPicker = self.clientPicker else { return }
-                    self.delegate?.tabPeekRequestsPresentationOf(clientPicker)
+                actions.append(UIPreviewAction(title: Strings.SendToDeviceTitle, style: .default) { [weak self] previewAction, viewController in
+                    guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
+                    wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
                     })
             }
             // only add the copy URL action if we don't already have 3 items in our list
             // as we are only allowed 4 in total and we always want to display close tab
             if actions.count < 3 {
-                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .default) { previewAction, viewController in
-                    guard let url = self.tab?.canonicalURL else { return }
+                actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCopyURL, style: .default) {[weak self] previewAction, viewController in
+                    guard let wself = self, let url = wself.tab?.canonicalURL else { return }
                     UIPasteboard.general.url = url
-                    SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
+                    SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
                 })
             }
         }
-        actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .destructive) { previewAction, viewController in
-            guard let tab = self.tab else { return }
-            self.delegate?.tabPeekDidCloseTab(tab)
+        actions.append(UIPreviewAction(title: TabPeekViewController.PreviewActionCloseTab, style: .destructive) { [weak self] previewAction, viewController in
+            guard let wself = self, let tab = wself.tab else { return }
+            wself.delegate?.tabPeekDidCloseTab(tab)
             })
 
         return actions
     }()
+
+    @available(iOS 13, *)
+    func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
+        var actions = [UIAction]()
+
+        let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
+        if !self.ignoreURL && !urlIsTooLongToSave {
+            if !self.isBookmarked {
+                actions.append(UIAction(__title: TabPeekViewController.PreviewActionAddToBookmarks, image: UIImage.templateImageNamed("menu-Bookmark"), identifier: nil) { [weak self] _ in
+                    guard let wself = self, let tab = wself.tab else { return }
+                    wself.delegate?.tabPeekDidAddBookmark(tab)
+                    })
+            }
+            if self.hasRemoteClients {
+                actions.append(UIAction(__title: Strings.SendToDeviceTitle, image: UIImage.templateImageNamed("menu-Send"), identifier: nil) { [weak self] _ in
+                    guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
+                    wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
+                    })
+            }
+            actions.append(UIAction(__title: TabPeekViewController.PreviewActionCopyURL, image: UIImage.templateImageNamed("menu-Copy-Link"), identifier: nil) {[weak self] _ in
+                guard let wself = self, let url = wself.tab?.canonicalURL else { return }
+                UIPasteboard.general.url = url
+                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
+            })
+        }
+        actions.append(UIAction(__title: TabPeekViewController.PreviewActionCloseTab, image: UIImage.templateImageNamed("menu-CloseTabs"), identifier: nil) { [weak self] _ in
+            guard let wself = self, let tab = wself.tab else { return }
+            wself.delegate?.tabPeekDidCloseTab(tab)
+            })
+
+        return UIMenu(title: "", children: actions)
+    }
 
     init(tab: Tab, delegate: TabPeekDelegate?) {
         self.tab = tab
@@ -85,6 +115,12 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        webView?.navigationDelegate = nil
+        self.webView = nil
     }
 
     override func viewDidLoad() {
@@ -115,7 +151,7 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         guard let webView = webView, let url = webView.url, !isIgnoredURL(url) else { return }
         let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
         clonedWebView.allowsLinkPreview = false
-        webView.accessibilityLabel = previewAccessibilityLabel
+        clonedWebView.accessibilityLabel = previewAccessibilityLabel
         self.view.addSubview(clonedWebView)
 
         clonedWebView.snp.makeConstraints { make in
@@ -123,47 +159,45 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         }
 
         clonedWebView.navigationDelegate = self
-
+        self.webView = clonedWebView
         clonedWebView.load(URLRequest(url: url))
     }
 
-    func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: ClientPickerViewControllerDelegate) {
+    func setState(withProfile browserProfile: BrowserProfile, clientPickerDelegate: DevicePickerViewControllerDelegate) {
         assert(Thread.current.isMainThread)
 
         guard let tab = self.tab else {
             return
         }
 
-        guard let displayURL = tab.url?.absoluteString, displayURL.characters.count > 0 else {
+        guard let displayURL = tab.url?.absoluteString, !displayURL.isEmpty else {
             return
         }
 
-        let mainQueue = DispatchQueue.main
-        browserProfile.bookmarks.modelFactory >>== {
-            $0.isBookmarked(displayURL).uponQueue(mainQueue) {
-                self.isBookmarked = $0.successValue ?? false
-            }
+        browserProfile.places.isBookmarked(url: displayURL) >>== { isBookmarked in
+            self.isBookmarked = isBookmarked
         }
 
-        browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(mainQueue) {
+        browserProfile.remoteClientsAndTabs.getClientGUIDs().uponQueue(.main) {
             guard let clientGUIDs = $0.successValue else {
                 return
             }
 
             self.hasRemoteClients = !clientGUIDs.isEmpty
-            let clientPickerController = ClientPickerViewController()
-            clientPickerController.clientPickerDelegate = clientPickerDelegate
+            let clientPickerController = DevicePickerViewController()
+            clientPickerController.pickerDelegate = clientPickerDelegate
             clientPickerController.profile = browserProfile
+            clientPickerController.profileNeedsShutdown = false
             if let url = tab.url?.absoluteString {
                 clientPickerController.shareItem = ShareItem(url: url, title: tab.title, favicon: nil)
             }
 
-            self.clientPicker = UINavigationController(rootViewController: clientPickerController)
+            self.fxaDevicePicker = UINavigationController(rootViewController: clientPickerController)
         }
 
-        let result = browserProfile.readingList?.getRecordWithURL(displayURL).successValue!
+        let result = browserProfile.readingList.getRecordWithURL(displayURL).value.successValue
 
-        self.isInReadingList = (result?.url.characters.count ?? 0) > 0
+        self.isInReadingList = !(result?.url.isEmpty ?? true)
         self.ignoreURL = isIgnoredURL(displayURL)
     }
 

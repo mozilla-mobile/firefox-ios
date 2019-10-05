@@ -45,11 +45,11 @@ public class PushRegistration: NSObject, NSCoding {
     }
 
     public static func from(json: JSON) -> PushRegistration? {
-        guard let endpointString = json["endpoint"].stringValue(),
+        guard let endpointString = json["endpoint"].string,
               let endpoint = URL(string: endpointString),
-              let secret = json["secret"].stringValue(),
-              let uaid = json["uaid"].stringValue(),
-              let channelID = json["channelID"].stringValue() else {
+              let secret = json["secret"].string,
+              let uaid = json["uaid"].string,
+              let channelID = json["channelID"].string else {
             return nil
         }
         guard let defaultSubscription = try? PushSubscription(channelID: channelID, endpoint: endpoint) else {
@@ -60,7 +60,7 @@ public class PushRegistration: NSObject, NSCoding {
 }
 
 fileprivate let defaultSubscriptionID = "defaultSubscription"
-/// Small NSCodable class for persisting a channel subscription. 
+/// Small NSCodable class for persisting a channel subscription.
 /// We use NSCoder because we expect it to be stored in the profile.
 public class PushSubscription: NSObject, NSCoding {
     let channelID: String
@@ -118,12 +118,12 @@ public class PushSubscription: NSObject, NSCoding {
 }
 
 public extension PushSubscription {
-    public func aesgcm(payload: String, encryptionHeader: String, cryptoHeader: String) -> String? {
+    func aesgcm(payload: String, encryptionHeader: String, cryptoHeader: String) -> String? {
         let headers = PushCryptoHeaders(encryption: encryptionHeader, cryptoKey: cryptoHeader)
         return try? PushCrypto.sharedInstance.aesgcm(ciphertext: payload, withHeaders: headers, decryptWith: p256dhPrivateKey, authenticateWith: authKey)
     }
 
-    public func aes128gcm(payload: String) -> String? {
+    func aes128gcm(payload: String) -> String? {
         return try? PushCrypto.sharedInstance.aes128gcm(payload: payload, decryptWith: p256dhPrivateKey, authenticateWith: authKey)
     }
 }

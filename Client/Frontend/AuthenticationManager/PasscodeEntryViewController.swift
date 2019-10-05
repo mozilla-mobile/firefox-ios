@@ -7,35 +7,30 @@ import SnapKit
 import Shared
 import SwiftKeychainWrapper
 
-/// Delegate available for PasscodeEntryViewController consumers to be notified of the validation of a passcode.
-@objc protocol PasscodeEntryDelegate: class {
-    func passcodeValidationDidSucceed()
-    @objc optional func userDidCancelValidation()
-}
-
 /// Presented to the to user when asking for their passcode to validate entry into a part of the app.
 class PasscodeEntryViewController: BasePasscodeViewController {
-    weak var delegate: PasscodeEntryDelegate?
+    fileprivate let passcodeCompletion: ((Bool) -> Void)
     fileprivate var passcodePane: PasscodePane
-    
-    override init() {
+
+    init(passcodeCompletion: @escaping ((Bool) -> Void)) {
+        self.passcodeCompletion = passcodeCompletion
         let authInfo = KeychainWrapper.sharedAppContainerKeychain.authenticationInfo()
-        passcodePane = PasscodePane(title:nil, passcodeSize:authInfo?.passcode?.count ?? 6)
-        
+        passcodePane = PasscodePane(title: nil, passcodeSize: authInfo?.passcode?.count ?? 6)
+
         super.init()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = AuthenticationStrings.enterPasscodeTitle
         view.addSubview(passcodePane)
         passcodePane.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(self.view)
-            make.top.equalTo(self.topLayoutGuide.snp.bottom)
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
     }
 
@@ -54,7 +49,7 @@ class PasscodeEntryViewController: BasePasscodeViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         if authenticationInfo?.isLocked() ?? false {
             passcodePane.codeInputView.isUserInteractionEnabled = false
             passcodePane.codeInputView.resignFirstResponder()
@@ -69,8 +64,8 @@ class PasscodeEntryViewController: BasePasscodeViewController {
     }
 
     override func dismissAnimated() {
-        delegate?.userDidCancelValidation?()
         super.dismissAnimated()
+        passcodeCompletion(false)
     }
 }
 
@@ -79,7 +74,7 @@ extension PasscodeEntryViewController: PasscodeInputViewDelegate {
         if let passcode = authenticationInfo?.passcode, passcode == code {
             authenticationInfo?.recordValidation()
             KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(authenticationInfo)
-            delegate?.passcodeValidationDidSucceed()
+            passcodeCompletion(true)
         } else {
             passcodePane.shakePasscode()
             failIncorrectPasscode(inputView)

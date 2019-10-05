@@ -8,19 +8,13 @@ import Storage
 struct SiteTableViewControllerUX {
     static let HeaderHeight = CGFloat(32)
     static let RowHeight = CGFloat(44)
-    static let HeaderBorderColor = UIColor(rgb: 0xCFD5D9).withAlphaComponent(0.8)
-    static let HeaderTextColor = UIAccessibilityDarkerSystemColorsEnabled() ? UIColor.black : UIColor(rgb: 0x232323)
-    static let HeaderBackgroundColor = UIColor(rgb: 0xf7f8f7)
-    static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFontWeightMedium)
+    static let HeaderFont = UIFont.systemFont(ofSize: 12, weight: UIFont.Weight.medium)
     static let HeaderTextMargin = CGFloat(16)
 }
 
-class SiteTableViewHeader: UITableViewHeaderFooterView {
-    // I can't get drawRect to play nicely with the glass background. As a fallback
-    // we just use views for the top and bottom borders.
-    let topBorder = UIView()
-    let bottomBorder = UIView()
+class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
     let titleLabel = UILabel()
+    fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
         return titleLabel
@@ -28,29 +22,12 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-
-        topBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        bottomBorder.backgroundColor = SiteTableViewControllerUX.HeaderBorderColor
-        contentView.backgroundColor = SiteTableViewControllerUX.HeaderBackgroundColor
-
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
-        titleLabel.textColor = SiteTableViewControllerUX.HeaderTextColor
-        titleLabel.textAlignment = .left
 
-        addSubview(topBorder)
-        addSubview(bottomBorder)
         contentView.addSubview(titleLabel)
 
-        topBorder.snp.makeConstraints { make in
-            make.left.right.equalTo(self)
-            make.top.equalTo(self).offset(-0.5)
-            make.height.equalTo(0.5)
-        }
-
-        bottomBorder.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(self)
-            make.height.equalTo(0.5)
-        }
+        bordersHelper.initBorders(view: self)
+        setDefaultBordersValues()
 
         // A table view will initialize the header with CGSizeZero before applying the actual size. Hence, the label's constraints
         // must not impose a minimum width on the content view.
@@ -61,26 +38,61 @@ class SiteTableViewHeader: UITableViewHeaderFooterView {
             make.right.lessThanOrEqualTo(contentView) // Fallback for when the right space constraint breaks
             make.centerY.equalTo(contentView)
         }
+
+        applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        setDefaultBordersValues()
+        applyTheme()
+    }
+
+    func applyTheme() {
+        titleLabel.textColor = UIColor.theme.tableView.headerTextDark
+        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        bordersHelper.applyTheme()
+    }
+
+    func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {
+        bordersHelper.showBorder(for: location, show)
+    }
+
+    func setDefaultBordersValues() {
+        bordersHelper.showBorder(for: .top, true)
+        bordersHelper.showBorder(for: .bottom, true)
     }
 }
 
 /**
  * Provides base shared functionality for site rows and headers.
  */
-class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+@objcMembers
+class SiteTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, Themeable {
     fileprivate let CellIdentifier = "CellIdentifier"
     fileprivate let HeaderIdentifier = "HeaderIdentifier"
-    var profile: Profile! {
-        didSet {
-            reloadData()
-        }
-    }
+    let profile: Profile
+
     var data: Cursor<Site> = Cursor<Site>(status: .success, msg: "No data set")
     var tableView = UITableView()
+
+    private override init(nibName: String?, bundle: Bundle?) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    init(profile: Profile) {
+        self.profile = profile
+        super.init(nibName: nil, bundle: nil)
+        applyTheme()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,15 +107,18 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.dataSource = self
         tableView.register(SiteTableViewCell.self, forCellReuseIdentifier: CellIdentifier)
         tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: HeaderIdentifier)
-        tableView.layoutMargins = UIEdgeInsets.zero
-        tableView.keyboardDismissMode = UIScrollViewKeyboardDismissMode.onDrag
-        tableView.backgroundColor = UIConstants.PanelBackgroundColor
-        tableView.separatorColor = UIConstants.SeparatorColor
+        tableView.layoutMargins = .zero
+        tableView.keyboardDismissMode = .onDrag
+
         tableView.accessibilityIdentifier = "SiteTable"
         tableView.cellLayoutMarginsFollowReadableWidth = false
 
         // Set an empty footer to prevent empty cells from appearing in the list.
         tableView.tableFooterView = UIView()
+
+        if let _ = self as? HomePanelContextMenu {
+            tableView.dragDelegate = self
+        }
     }
 
     deinit {
@@ -113,7 +128,15 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = nil
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        reloadData()
+    }
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        tableView.setEditing(false, animated: false)
         coordinator.animate(alongsideTransition: { context in
             //The AS context menu does not behave correctly. Dismiss it when rotating.
             if let _ = self.presentedViewController as? PhotonActionSheet {
@@ -137,13 +160,21 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CellIdentifier, for: indexPath)
         if self.tableView(tableView, hasFullWidthSeparatorForRowAtIndexPath: indexPath) {
-            cell.separatorInset = UIEdgeInsets.zero
+            cell.separatorInset = .zero
         }
+        cell.textLabel?.textColor = UIColor.theme.tableView.rowText
         return cell
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderIdentifier)
+    }
+
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        if let header = view as? UITableViewHeaderFooterView {
+            header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
+            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -156,5 +187,38 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
         return false
+    }
+
+    func applyTheme() {
+        navigationController?.navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
+        navigationController?.navigationBar.tintColor = UIColor.theme.general.controlTint
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextDark]
+        setNeedsStatusBarAppearanceUpdate()
+
+        tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableView.separatorColor = UIColor.theme.tableView.separator
+        if let rows = tableView.indexPathsForVisibleRows {
+            tableView.reloadRows(at: rows, with: .none)
+            tableView.reloadSections(IndexSet(rows.map { $0.section }), with: .none)
+        }
+    }
+}
+
+@available(iOS 11.0, *)
+extension SiteTableViewController: UITableViewDragDelegate {
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        guard let homePanelVC = self as? HomePanelContextMenu, let site = homePanelVC.getSiteDetails(for: indexPath), let url = URL(string: site.url), let itemProvider = NSItemProvider(contentsOf: url) else {
+            return []
+        }
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .url, value: .homePanel)
+
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = site
+        return [dragItem]
+    }
+
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        presentedViewController?.dismiss(animated: true)
     }
 }

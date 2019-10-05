@@ -16,10 +16,9 @@ class ClipBoardTests: BaseTestCase {
     //Copy url from the browser
     func copyUrl() {
         navigator.goto(URLBarOpen)
+        waitForExistence(app.textFields["address"])
         app.textFields["address"].press(forDuration: 3)
-        waitforExistence(app.menuItems["Select All"])
-        app.menuItems["Select All"].tap()
-        waitforExistence(app.menuItems["Copy"])
+        waitForExistence(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
         app.typeText("\r")
         navigator.nowAt(BrowserTab)
@@ -39,7 +38,7 @@ class ClipBoardTests: BaseTestCase {
 
     // This test is disabled in release, but can still run on master
     func testClipboard() {
-        navigator.openURL(urlString: url)
+        navigator.openURL(url)
         waitUntilPageLoad()
         checkUrl()
         copyUrl()
@@ -50,5 +49,22 @@ class ClipBoardTests: BaseTestCase {
         app.textFields["address"].press(forDuration: 3)
         app.menuItems["Paste"].tap()
         waitForValueContains(app.textFields["address"], value: "www.example.com")
+    }
+
+    // Smoketest
+    func testClipboardPasteAndGo() {
+        navigator.openURL(url)
+        waitUntilPageLoad()
+        navigator.goto(PageOptionsMenu)
+        print(app.debugDescription)
+        navigator.performAction(Action.CopyAddressPAM)
+
+        checkCopiedUrl()
+        navigator.createNewTab()
+        app.textFields["url"].press(forDuration: 3)
+        waitForExistence(app.tables["Context Menu"])
+        app.cells["menu-PasteAndGo"].tap()
+        waitForExistence(app.textFields["url"])
+        waitForValueContains(app.textFields["url"], value: "www.example.com")
     }
 }

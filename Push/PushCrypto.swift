@@ -11,7 +11,7 @@ import FxA
 /// and one with a String based one.
 class PushCrypto {
     // Stateless, we provide a singleton for convenience.
-    open static var sharedInstance = PushCrypto()
+    public static var sharedInstance = PushCrypto()
 }
 
 // AES128GCM
@@ -51,7 +51,7 @@ extension PushCrypto {
         return Data(bytes: plaintext, count: plaintextLen)
     }
 
-    func aes128gcm(plaintext: String, encryptWith rawRecvPubKey: String, authenticateWith authSecret: String, rs: Int, padLen: Int) throws -> String {
+    func aes128gcm(plaintext: String, encryptWith rawRecvPubKey: String, authenticateWith authSecret: String, rs: Int = 4096, padLen: Int = 0) throws -> String {
         guard let rawRecvPubKey = rawRecvPubKey.base64urlSafeDecodedData,
             let authSecret = authSecret.base64urlSafeDecodedData else {
                 throw PushCryptoError.base64DecodeError
@@ -71,7 +71,7 @@ extension PushCrypto {
         return payload
     }
 
-    func aes128gcm(plaintext: Data, encryptWith rawRecvPubKey: Data, authenticateWith authSecret: Data, rs rsInt: Int, padLen: Int) throws -> Data {
+    func aes128gcm(plaintext: Data, encryptWith rawRecvPubKey: Data, authenticateWith authSecret: Data, rs rsInt: Int = 4096, padLen: Int = 0) throws -> Data {
         let rs = UInt32(rsInt)
 
         // rs needs to be >= 18.
@@ -300,14 +300,14 @@ extension String {
     var base64urlSafeDecodedData: Data? {
         // We call this method twice: once with the last two args as nil, 0 – this gets us the length
         // of the decoded string.
-        let length = ece_base64url_decode(self, self.characters.count, ECE_BASE64URL_REJECT_PADDING, nil, 0)
+        let length = ece_base64url_decode(self, self.count, ECE_BASE64URL_REJECT_PADDING, nil, 0)
         guard length > 0 else {
             return nil
         }
 
         // The second time, we actually decode, and copy it into a made to measure byte array.
         var bytes = [UInt8](repeating: 0, count: length)
-        let checkLength = ece_base64url_decode(self, self.characters.count, ECE_BASE64URL_REJECT_PADDING, &bytes, length)
+        let checkLength = ece_base64url_decode(self, self.count, ECE_BASE64URL_REJECT_PADDING, &bytes, length)
         guard checkLength == length else {
             return nil
         }

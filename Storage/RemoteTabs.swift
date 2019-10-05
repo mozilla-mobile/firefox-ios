@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import Deferred
 
 public struct ClientAndTabs: Equatable, CustomStringConvertible {
     public let client: RemoteClient
@@ -39,8 +38,7 @@ public protocol RemoteClientsAndTabs: SyncCommands {
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getClient(guid: GUID) -> Deferred<Maybe<RemoteClient?>>
     func getClient(fxaDeviceId: String) -> Deferred<Maybe<RemoteClient?>>
-    @available(*, deprecated, message: "use getClient(guid:) instead")
-    func getClientWithId(_ clientID: GUID) -> Deferred<Maybe<RemoteClient?>>
+    func getRemoteDevices() -> Deferred<Maybe<[RemoteDevice]>>
     func getClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
     func getTabsForClientWithGUID(_ guid: GUID?) -> Deferred<Maybe<[RemoteTab]>>
     func insertOrUpdateClient(_ client: RemoteClient) -> Deferred<Maybe<Int>>
@@ -62,21 +60,15 @@ public struct RemoteTab: Equatable {
     public let icon: Foundation.URL?
 
     public static func shouldIncludeURL(_ url: Foundation.URL) -> Bool {
-        let scheme = url.scheme
-        if scheme == "about" {
-            return false
-        }
-        if scheme == "javascript" {
+        if let _ = InternalURL(url) {
             return false
         }
 
-        if let hostname = url.host?.lowercased() {
-            if hostname == "localhost" {
-                return false
-            }
-            return true
+        if url.scheme == "javascript" {
+            return false
         }
-        return false
+
+        return url.host != nil
     }
 
     public init(clientGUID: String?, URL: Foundation.URL, title: String, history: [Foundation.URL], lastUsed: Timestamp, icon: Foundation.URL?) {

@@ -6,7 +6,6 @@
 import Foundation
 import FxA
 import Shared
-import Deferred
 
 import XCTest
 
@@ -29,6 +28,11 @@ class MockFxALoginClient: FxALoginClient {
         let response = FxASignResponse(certificate: "certificate")
         return Deferred(value: Maybe(success: response))
     }
+
+    func scopedKeyData(_ sessionToken: NSData, scope: String) -> Deferred<Maybe<[FxAScopedKeyDataResponse]>> {
+        let response = [FxAScopedKeyDataResponse(scope: scope, identifier: scope, keyRotationSecret: "0000000000000000000000000000000000000000000000000000000000000000", keyRotationTimestamp: 1510726317123)]
+        return Deferred(value: Maybe(success: response))
+    }
 }
 
 // A mock client that fails locally (i.e., cannot connect to the network).
@@ -39,6 +43,11 @@ class MockFxALoginClientWithoutNetwork: MockFxALoginClient {
     }
 
     override func sign(_ sessionToken: Data, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
+        // Fail!
+        return Deferred(value: Maybe(failure: FxAClientError.local(NSError(domain: NSURLErrorDomain, code: -1000, userInfo: nil))))
+    }
+
+    override func scopedKeyData(_ sessionToken: NSData, scope: String) -> Deferred<Maybe<[FxAScopedKeyDataResponse]>> {
         // Fail!
         return Deferred(value: Maybe(failure: FxAClientError.local(NSError(domain: NSURLErrorDomain, code: -1000, userInfo: nil))))
     }
@@ -55,6 +64,11 @@ class MockFxALoginClientAfterPasswordChange: MockFxALoginClient {
         let response = FxAClientError.remote(RemoteError(code: 401, errno: 103, error: "Bad auth", message: "Bad auth message", info: "Bad auth info"))
         return Deferred(value: Maybe(failure: response))
     }
+
+    override func scopedKeyData(_ sessionToken: NSData, scope: String) -> Deferred<Maybe<[FxAScopedKeyDataResponse]>> {
+        let response = FxAClientError.remote(RemoteError(code: 401, errno: 103, error: "Bad auth", message: "Bad auth message", info: "Bad auth info"))
+        return Deferred(value: Maybe(failure: response))
+    }
 }
 
 // A mock client that responds to keys with 400/104 (needs verification responses).
@@ -64,11 +78,23 @@ class MockFxALoginClientBeforeVerification: MockFxALoginClient {
             error: "Unverified", message: "Unverified message", info: "Unverified info"))
         return Deferred(value: Maybe(failure: response))
     }
+
+    override func scopedKeyData(_ sessionToken: NSData, scope: String) -> Deferred<Maybe<[FxAScopedKeyDataResponse]>> {
+        let response = FxAClientError.remote(RemoteError(code: 400, errno: 104,
+            error: "Unverified", message: "Unverified message", info: "Unverified info"))
+        return Deferred(value: Maybe(failure: response))
+    }
 }
 
 // A mock client that responds to sign with 503/999 (unknown server error).
 class MockFxALoginClientDuringOutage: MockFxALoginClient {
     override func sign(_ sessionToken: Data, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>> {
+        let response = FxAClientError.remote(RemoteError(code: 503, errno: 999,
+            error: "Unknown", message: "Unknown error", info: "Unknown err info"))
+        return Deferred(value: Maybe(failure: response))
+    }
+
+    override func scopedKeyData(_ sessionToken: NSData, scope: String) -> Deferred<Maybe<[FxAScopedKeyDataResponse]>> {
         let response = FxAClientError.remote(RemoteError(code: 503, errno: 999,
             error: "Unknown", message: "Unknown error", info: "Unknown err info"))
         return Deferred(value: Maybe(failure: response))
@@ -135,10 +161,8 @@ class FxALoginStateMachineTests: XCTestCase {
             stateMachine.advance(fromState: engagedState, now: 0).upon { newState in
                 XCTAssertEqual(newState.label.rawValue, FxAStateLabel.married.rawValue)
                 if let newState = newState as? MarriedState {
-                    // We get kA from the client directly.
-                    XCTAssertEqual(newState.kA.hexEncodedString, client.kA.hexEncodedString)
-                    // We unwrap kB by XORing.  The result is KeyLength (32) 0s.
-                    XCTAssertEqual(newState.kB.hexEncodedString, "0000000000000000000000000000000000000000000000000000000000000000")
+                    XCTAssertEqual(newState.kSync.hexEncodedString, "ec830aefab7dc43c66fb56acc16ed3b723f090ae6f50d6e610b55f4675dcbefba1351b80de8cbeff3c368949c34e8f5520ec7f1d4fa24a0970b437684259f946")
+                    XCTAssertEqual(newState.kXCS, "66687aadf862bd776c8fc18b8e9f8e20")
                 }
                 e.fulfill()
             }

@@ -65,7 +65,7 @@ class TestBrowserDB: XCTestCase {
         let remaining = results[0]!
 
         // This one's title has been truncated to 4096 chars.
-        XCTAssertEqual(remaining.1.characters.count, 4096)
+        XCTAssertEqual(remaining.1.count, 4096)
         XCTAssertEqual(remaining.1.utf8.count, 4096)
         XCTAssertTrue(remaining.1.hasPrefix("abcdefghijkl"))
         XCTAssertEqual(remaining.0, "http://example.com/short")
@@ -90,7 +90,7 @@ class TestBrowserDB: XCTestCase {
 
         let center = NotificationCenter.default
         let listener = MockListener()
-        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated(_:)), name: NotificationDatabaseWasRecreated, object: nil)
+        center.addObserver(listener, selector: #selector(MockListener.onDatabaseWasRecreated), name: .DatabaseWasRecreated, object: nil)
         defer { center.removeObserver(listener) }
 
         // It'll still fail, but it moved our old DB.
@@ -120,5 +120,67 @@ class TestBrowserDB: XCTestCase {
 
         // The right notification was issued.
         XCTAssertEqual("foo.db", (listener.notification?.object as? String))
+    }
+
+    func testConcurrentQueries() {
+        let expectation = self.expectation(description: "Got all DB results")
+
+        var db = BrowserDB(filename: "foo.db", schema: BrowserSchema(), files: self.files)
+        db.run("CREATE TABLE foo (id INTEGER PRIMARY KEY AUTOINCREMENT, bar TEXT)").succeeded() // Just so we have writes in the WAL.
+
+        _ = db.withConnection { connection -> Void in
+            for i in 0..<1000 {
+                let args: Args = ["bar \(i)"]
+                try connection.executeChange("INSERT INTO foo (bar) VALUES (?)", withArgs: args)
+            }
+        }
+
+        func fooBarFactory(_ row: SDRow) -> [String : Any] {
+            var result: [String : Any] = [:]
+            result["id"] = row["id"]
+            result["bar"] = row["bar"]
+            return result
+        }
+
+        let longQuery = db.runQuery("SELECT * FROM (SELECT * FROM (SELECT * FROM foo WHERE bar LIKE ?) WHERE bar LIKE ?) WHERE bar LIKE ?", args: ["%b%", "%a%", "%r%"], factory: fooBarFactory)
+        let shortConcurrentQuery = db.runQueryConcurrently("SELECT * FROM foo LIMIT 1", args: nil, factory: fooBarFactory)
+
+        var isLongQueryDone = false
+        var isShortConcurrentQueryDone = false
+
+        var longQueryRuntimeDuration: Timestamp = 0
+        var shortConcurrentQueryRuntimeDuration: Timestamp = 0
+
+        let longQueryStartTimestamp = Date.now()
+        let longQueryResult = longQuery.bind { result -> Deferred<Maybe<[[String : Any]]>> in
+            if let results = result.successValue?.asArray() {
+                isLongQueryDone = true
+                longQueryRuntimeDuration = Date.now() - longQueryStartTimestamp
+                XCTAssertTrue(isShortConcurrentQueryDone)
+                return deferMaybe(results)
+            }
+
+            return deferMaybe(DatabaseError(description: "Unable to execute long-running query"))
+        }
+
+        let shortConcurrentQueryStartTimestamp = Date.now()
+        let shortConcurrentQueryResult = shortConcurrentQuery.bind { result -> Deferred<Maybe<[[String : Any]]>> in
+            if let results = result.successValue?.asArray() {
+                isShortConcurrentQueryDone = true
+                shortConcurrentQueryRuntimeDuration = Date.now() - shortConcurrentQueryStartTimestamp
+                XCTAssertFalse(isLongQueryDone)
+                return deferMaybe(results)
+            }
+
+            return deferMaybe(DatabaseError(description: "Unable to execute concurrent short-running query"))
+        }
+
+        _ = all([longQueryResult, shortConcurrentQueryResult]).bind { results -> Success in
+            XCTAssert(longQueryRuntimeDuration > shortConcurrentQueryRuntimeDuration, "Long query runtime duration should be greater than short concurrent query runtime duration")
+            expectation.fulfill()
+            return succeed()
+        }
+
+        waitForExpectations(timeout: 10, handler: nil)
     }
 }

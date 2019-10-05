@@ -12,7 +12,7 @@ private struct PrintedPageUX {
 
 class TabPrintPageRenderer: UIPrintPageRenderer {
     fileprivate weak var tab: Tab?
-    let textAttributes = [NSFontAttributeName: PrintedPageUX.PageTextFont]
+    let textAttributes = [NSAttributedString.Key.font: PrintedPageUX.PageTextFont]
     let dateString: String
 
     required init(tab: Tab) {
@@ -36,7 +36,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
 
     override func drawFooterForPage(at pageIndex: Int, in headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(top: headerRect.minY, left: PrintedPageUX.PageInsets, bottom: paperRect.maxY - headerRect.maxY, right: PrintedPageUX.PageInsets)
-        let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
+        let headerRect = paperRect.inset(by: headerInsets)
 
         // url on left
         self.drawTextAtPoint(tab!.url?.displayURL?.absoluteString ?? "", rect: headerRect, onLeft: true)
@@ -48,7 +48,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
 
     override func drawHeaderForPage(at pageIndex: Int, in headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(top: headerRect.minY, left: PrintedPageUX.PageInsets, bottom: paperRect.maxY - headerRect.maxY, right: PrintedPageUX.PageInsets)
-        let headerRect = UIEdgeInsetsInsetRect(paperRect, headerInsets)
+        let headerRect =  paperRect.inset(by: headerInsets)
 
         // page title on left
         self.drawTextAtPoint(tab!.displayTitle, rect: headerRect, onLeft: true)
@@ -58,7 +58,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
     }
 
     func drawTextAtPoint(_ text: String, rect: CGRect, onLeft: Bool) {
-        let size = text.size(attributes: textAttributes)
+        let size = text.size(withAttributes: textAttributes)
         let x, y: CGFloat
         if onLeft {
             x = rect.minX
@@ -69,5 +69,5 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
         }
         text.draw(at: CGPoint(x: x, y: y), withAttributes: textAttributes)
     }
-    
+
 }

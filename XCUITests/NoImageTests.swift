@@ -8,42 +8,30 @@ let NoImageButtonIdentifier = "menu-NoImageMode"
 let ContextMenuIdentifier = "Context Menu"
 
 class NoImageTests: BaseTestCase {
-    private func showImages() {
-        navigator.goto(BrowserTabMenu)
-        app.tables[ContextMenuIdentifier].cells[NoImageButtonIdentifier].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
-    private func hideImages() {
-        navigator.goto(BrowserTabMenu)
-        app.tables.cells[NoImageButtonIdentifier].tap()
-        navigator.nowAt(BrowserTab)
-    }
 
     private func checkShowImages() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
-        navigator.goto(BrowserTab)
+        waitForExistence(app.tables.cells[NoImageButtonIdentifier])
+        XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["enabled"].exists)
     }
 
     private func checkHideImages() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells[NoImageButtonIdentifier])
-        navigator.goto(BrowserTab)
+        waitForExistence(app.tables.cells[NoImageButtonIdentifier])
+        XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["disabled"].exists)
     }
 
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly
+    // Since it is tested in UI let's disable. Keeping here just in case it needs to be re-enabled
     func testImageOnOff() {
         // Go to a webpage, and select no images or hide images, check it's hidden or not
         navigator.openNewURL(urlString: "www.google.com")
         waitUntilPageLoad()
 
         // Select hide images, and check the UI is updated
-        hideImages()
+        navigator.performAction(Action.ToggleNoImageMode)
         checkShowImages()
 
         // Select show images, and check the UI is updated
-        showImages()
+        navigator.performAction(Action.ToggleNoImageMode)
         checkHideImages()
     }
 }

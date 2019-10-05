@@ -30,20 +30,22 @@ class FirefoxAccountTests: XCTestCase {
             "pushRegistration": PushRegistration(uaid: "bogus-device-uaid", secret: "secret", subscription: ogPushSub),
         ]
 
+        let prefs = NSUserDefaultsPrefs(prefix: "profile")
         let account1 = FirefoxAccount(
-                configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
+            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(prefs: prefs),
                 email: d["email"] as! String,
                 uid: d["uid"] as! String,
                 deviceRegistration: (d["deviceRegistration"] as! FxADeviceRegistration),
                 declinedEngines: nil,
                 stateKeyLabel: Bytes.generateGUID(),
-                state: SeparatedState())
+                state: SeparatedState(),
+                deviceName: "my iphone")
 
         account1.pushRegistration = d["pushRegistration"] as? PushRegistration
 
         let d1 = account1.dictionary()
 
-        let account2 = FirefoxAccount.fromDictionary(d1)
+        let account2 = FirefoxAccount.fromDictionary(d1, withPrefs: prefs)
         XCTAssertNotNil(account2)
         let d2 = account2!.dictionary()
 

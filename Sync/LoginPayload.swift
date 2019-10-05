@@ -54,7 +54,7 @@ open class LoginPayload: CleartextPayloadJSON {
         if !LoginPayload.OptionalStringFields.every({ field in
             let val = self[field]
             // Yup, 404 is not found, so this means "string or nothing".
-            let valid = val.isString() || val.isNull() || val.error?.code == 404
+            let valid = val.isString() || val.isNull() || val.error?.errorCode == 404
             if !valid {
                 log.debug("Field \(field) is invalid: \(val)")
             }
@@ -67,7 +67,7 @@ open class LoginPayload: CleartextPayloadJSON {
             let val = self[field]
             // Yup, 404 is not found, so this means "number or nothing".
             // We only check for number because we're including timestamps as NSNumbers.
-            let valid = val.isNumber() || val.isNull() || val.error?.code == 404
+            let valid = val.isNumber() || val.isNull() || val.error?.errorCode == 404
             if !valid {
                 log.debug("Field \(field) is invalid: \(val)")
             }

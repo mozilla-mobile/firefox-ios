@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 chruby 2.3.1
-bundle install  
-bundle exec danger --fail-on-errors=false  
+bundle install
+bundle exec danger --fail-on-errors=false
 
 #
 # Add our Adjust keys to the build depending on the scheme. We use the sandbox for beta so
@@ -20,22 +20,14 @@ elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
 fi
 
 #
-# Enable File Sharing on all builds except release
-#
-
-if [ "$BUDDYBUILD_SCHEME" != "Firefox" ]; then
-  /usr/libexec/PlistBuddy -c "Add UIFileSharingEnabled bool true" "Client/Info.plist"
-fi
-
-#
 # Leanplum is included only for the Firefox and FirefoxBeta builds.
 #
 
 if [ "$BUDDYBUILD_SCHEME" = "Firefox" ] || [ "$BUDDYBUILD_SCHEME" = "FirefoxBeta" ]; then
   echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
   /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID" "Client/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set LeanplumEnvironment production" "Client/Info.plist"
-  /usr/libexec/PlistBuddy -c "Set LeanplumKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set LeanplumProductionKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+  /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
 fi
 
 echo "Setting up Pocket Stories API Key"
@@ -50,11 +42,11 @@ fi
 #
 
 if [ "$BUDDYBUILD_SCHEME" == FirefoxBeta ]; then
-  echo "Setting SentryDSN to $SENTRY_DSN_BETA"
-  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA" "Client/Info.plist"
+  echo "Setting SentryDSN to $SENTRY_DSN_BETA_180"
+  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA_180" "Client/Info.plist"
 elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
-  echo "Setting SentryDSN to $SENTRY_DSN_RELEASE"
-  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_RELEASE" "Client/Info.plist"
+  echo "Setting SentryDSN to $SENTRY_DSN_RELEASE_180"
+  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_RELEASE_180" "Client/Info.plist"
 fi
 
 #
@@ -62,4 +54,3 @@ fi
 #
 
 agvtool new-version -all "$BUDDYBUILD_BUILD_NUMBER"
-

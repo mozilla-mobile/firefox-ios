@@ -1,7 +1,0 @@
-amazon-in
-bing
-eBay-in
-google
-wikipedia-te
-wiktionary-te
-yahoo-in

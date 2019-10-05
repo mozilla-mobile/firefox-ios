@@ -2,31 +2,37 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import UIKit
 import Shared
 import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
-    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
+    var showContentBlockerSetting = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         navigationItem.title = NSLocalizedString("Settings", comment: "Title in the settings view controller title bar")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
-            style: UIBarButtonItemStyle.done,
-            target: navigationController, action: #selector((navigationController as! SettingsNavigationController).SELdone))
-        navigationItem.leftBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
+            style: .done,
+            target: navigationController, action: #selector((navigationController as! ThemedNavigationController).done))
+        navigationItem.rightBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
 
         tableView.accessibilityIdentifier = "AppSettingsTableViewController.tableView"
-        
+
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            profile.getAccount()?.updateProfile()
+        profile.getAccount()?.updateProfile()
+
+        if showContentBlockerSetting {
+            let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            navigationController?.pushViewController(viewController, animated: false)
+            // Add a done button from this view
+            viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
         }
     }
 
@@ -46,16 +52,23 @@ class AppSettingsTableViewController: SettingsTableViewController {
         var generalSettings: [Setting] = [
             SearchSetting(settings: self),
             NewTabPageSetting(settings: self),
-            HomePageSetting(settings: self),
+            HomeSetting(settings: self),
             OpenWithSetting(settings: self),
+            ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
-            BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
-                        titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
-            ]        
-        
+           ]
+
+        if #available(iOS 12.0, *) {
+            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        }
+
+        if AppConstants.MOZ_DOCUMENT_SERVICES {
+            generalSettings.insert(TranslationSetting(settings: self), at: 6)
+        }
+
         let accountChinaSyncSetting: [Setting]
-        if !profile.isChinaEdition {
+        if !BrowserProfile.isChinaEdition {
             accountChinaSyncSetting = []
         } else {
             accountChinaSyncSetting = [
@@ -67,32 +80,26 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // setting on iPad. When more options are added that work on both device types, this logic can
         // be changed.
 
-        if AppConstants.MOZ_CLIPBOARD_BAR {
-            generalSettings += [
-                BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
-                            titleText: Strings.SettingsOfferClipboardBarTitle,
-                            statusText: Strings.SettingsOfferClipboardBarStatus)
-            ]
-        }
+        generalSettings += [
+            BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
+                        titleText: Strings.SettingsOfferClipboardBarTitle,
+                        statusText: Strings.SettingsOfferClipboardBarStatus)
+        ]
 
-        var accountSectionTitle: NSAttributedString?
-        if AppConstants.MOZ_SHOW_FXA_AVATAR {
-            accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
-        }
+        let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
 
         let footerText = !profile.hasAccount() ? NSAttributedString(string: Strings.FxASyncUsageDetails) : nil
         settings += [
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
-                AdvanceAccountSetting(settings: self),
+                AdvancedAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
-                SyncNowSetting(settings: self),
-                SyncSetting(settings: self)
+                SyncNowSetting(settings: self)
             ] + accountChinaSyncSetting + accountDebugSettings)]
 
-        settings += [ SettingSection(title: NSAttributedString(string: NSLocalizedString("General", comment: "General settings section title")), children: generalSettings)]
+        settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
 
         var privacySettings = [Setting]()
         privacySettings.append(LoginsSetting(settings: self, delegate: settingsDelegate))
@@ -108,9 +115,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
         ]
 
-        if #available(iOS 11, *) {
-            privacySettings.append(ContentBlockerSetting(settings: self))
-        }
+        privacySettings.append(ContentBlockerSetting(settings: self))
 
         privacySettings += [
             PrivacyPolicySetting()
@@ -129,45 +134,18 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),
                 ExportBrowserDataSetting(settings: self),
+                ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
-                EnableBookmarkMergingSetting(settings: self),
-                ForceCrashSetting(settings: self)
+                ForceCrashSetting(settings: self),
+                SlowTheDatabase(settings: self),
+                SentryIDSetting(settings: self),
             ])]
-    
-            if profile.hasAccount() {
-                settings += [SettingSection(title: nil, footerTitle: NSAttributedString(string: ""), children: [DisconnectSetting(settings: self)])]
-            }
 
         return settings
     }
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! SettingsTableSectionHeaderFooterView
-        // Prevent the top border from showing for the General section.
-        if !profile.hasAccount() {
-            switch section {
-                case 1:
-                    headerView.showTopBorder = false
-            default:
-                break
-            }
-        }
+        let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
         return headerView
-    }
-}
-
-extension AppSettingsTableViewController {
-    func navigateToLoginsList() {
-        let viewController = LoginListViewController(profile: profile)
-        viewController.settingsDelegate = settingsDelegate
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
-extension AppSettingsTableViewController: PasscodeEntryDelegate {
-    @objc func passcodeValidationDidSucceed() {
-        navigationController?.dismiss(animated: true) {
-            self.navigateToLoginsList()
-        }
     }
 }

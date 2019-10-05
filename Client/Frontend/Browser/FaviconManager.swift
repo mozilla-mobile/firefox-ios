@@ -10,12 +10,11 @@ import SDWebImage
 import Deferred
 import Sync
 
-class FaviconManager: TabHelper {
-    static let FaviconDidLoad = "FaviconManagerFaviconDidLoad"
-    
+class FaviconManager: TabContentScript {
+
     let profile: Profile!
     weak var tab: Tab?
-    
+
     static let maximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
     init(tab: Tab, profile: Profile) {
@@ -23,8 +22,8 @@ class FaviconManager: TabHelper {
         self.tab = tab
 
         if let path = Bundle.main.path(forResource: "Favicons", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
+            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
+                let userScript = WKUserScript(source: source, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
                 tab.webView!.configuration.userContentController.addUserScript(userScript)
             }
         }
@@ -37,7 +36,7 @@ class FaviconManager: TabHelper {
     func scriptMessageHandlerName() -> String? {
         return "faviconsMessageHandler"
     }
-    
+
     fileprivate func loadFavicons(_ tab: Tab, profile: Profile, favicons: [Favicon]) -> Deferred<[Maybe<Favicon>]> {
         var deferreds: [() -> Deferred<Maybe<Favicon>>]
         deferreds = favicons.map { favicon in
@@ -53,7 +52,7 @@ class FaviconManager: TabHelper {
         }
         return all(deferreds.map({$0()}))
     }
-    
+
     func getFavicon(_ tab: Tab, iconUrl: URL, currentURL: URL, icon: Favicon, profile: Profile) -> Deferred<Maybe<Favicon>> {
         let deferred = Deferred<Maybe<Favicon>>()
         let manager = SDWebImageManager.shared()
@@ -61,8 +60,10 @@ class FaviconManager: TabHelper {
         let url = currentURL.absoluteString
         let site = Site(url: url, title: "")
 
+        weak var tab = tab
+
         func loadImageCompleted(_ img: UIImage?, _ url: URL?) {
-            guard let img = img, let urlString = url?.absoluteString else {
+            guard let tab = tab, let img = img, let urlString = url?.absoluteString else {
                 deferred.fill(Maybe(failure: FaviconError()))
                 return
             }
@@ -85,7 +86,7 @@ class FaviconManager: TabHelper {
             }
         }
 
-        var fetch: SDWebImageOperation? = nil
+        var fetch: SDWebImageOperation?
         fetch = manager.loadImage(with: iconUrl, options: SDWebImageOptions(options),
                                   progress: { (receivedSize, expectedSize, _) in
                                     if receivedSize > FaviconManager.maximumFaviconSize || expectedSize > FaviconManager.maximumFaviconSize {
@@ -110,7 +111,7 @@ class FaviconManager: TabHelper {
                     }
                 }
             }
-            loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(DispatchQueue.main) { result in
+            loadFavicons(tab, profile: profile, favicons: favicons).uponQueue(.main) { result in
                 let results = result.flatMap({ $0.successValue })
                 let faviconsReadOnly = favicons
                 if results.count == 1 && faviconsReadOnly[0].type == .guess {
@@ -118,7 +119,7 @@ class FaviconManager: TabHelper {
                     self.noFaviconAvailable(tab, atURL: currentURL as URL)
                 }
 
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: FaviconManager.FaviconDidLoad), object: tab)
+                NotificationCenter.default.post(name: .FaviconDidLoad, object: tab)
             }
         }
     }

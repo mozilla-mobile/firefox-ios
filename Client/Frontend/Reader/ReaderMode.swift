@@ -12,6 +12,7 @@ let ReaderModeProfileKeyStyle = "readermode.style"
 enum ReaderModeMessageType: String {
     case stateChange = "ReaderModeStateChange"
     case pageEvent = "ReaderPageEvent"
+    case contentParsed = "ReaderContentParsed"
 }
 
 enum ReaderPageEvent: String {
@@ -68,20 +69,20 @@ enum ReaderModeFontSize: Int {
 
     static var defaultSize: ReaderModeFontSize {
         switch UIApplication.shared.preferredContentSizeCategory {
-        case UIContentSizeCategory.extraSmall:
+        case .extraSmall:
             return .size1
-        case UIContentSizeCategory.small:
+        case .small:
+            return .size2
+        case .medium:
             return .size3
-        case UIContentSizeCategory.medium:
+        case .large:
             return .size5
-        case UIContentSizeCategory.large:
+        case .extraLarge:
             return .size7
-        case UIContentSizeCategory.extraLarge:
+        case .extraExtraLarge:
             return .size9
-        case UIContentSizeCategory.extraExtraLarge:
-            return .size11
-        case UIContentSizeCategory.extraExtraExtraLarge:
-            return .size13
+        case .extraExtraExtraLarge:
+            return .size12
         default:
             return .size5
         }
@@ -103,7 +104,7 @@ struct ReaderModeStyle {
 
     /// Encode the style to a JSON dictionary that can be passed to ReaderMode.js
     func encode() -> String {
-        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).stringValue() ?? ""
+        return JSON(["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]).stringify() ?? ""
     }
 
     /// Encode the style to a dictionary that can be stored in the profile
@@ -201,7 +202,7 @@ struct ReadabilityResult {
     /// Encode to a JSON encoded string
     func encode() -> String {
         let dict: [String: Any] = self.encode()
-        return JSON(object: dict).stringValue()!
+        return JSON(dict).stringify()!
     }
 }
 
@@ -209,15 +210,16 @@ struct ReadabilityResult {
 protocol ReaderModeDelegate {
     func readerMode(_ readerMode: ReaderMode, didChangeReaderModeState state: ReaderModeState, forTab tab: Tab)
     func readerMode(_ readerMode: ReaderMode, didDisplayReaderizedContentForTab tab: Tab)
+    func readerMode(_ readerMode: ReaderMode, didParseReadabilityResult readabilityResult: ReadabilityResult, forTab tab: Tab)
 }
 
 let ReaderModeNamespace = "window.__firefox__.reader"
 
-class ReaderMode: TabHelper {
+class ReaderMode: TabContentScript {
     var delegate: ReaderModeDelegate?
 
     fileprivate weak var tab: Tab?
-    var state: ReaderModeState = ReaderModeState.unavailable
+    var state = ReaderModeState.unavailable
     fileprivate var originalURL: URL?
 
     class func name() -> String {
@@ -226,22 +228,6 @@ class ReaderMode: TabHelper {
 
     required init(tab: Tab) {
         self.tab = tab
-
-        // This is a WKUserScript at the moment because webView.evaluateJavaScript() fails with an unspecified error. Possibly script size related.
-        if let path = Bundle.main.path(forResource: "Readability", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
-                tab.webView!.configuration.userContentController.addUserScript(userScript)
-            }
-        }
-
-        // This is executed after a page has been loaded. It executes Readability and then fires a script message to let us know if the page is compatible with reader mode.
-        if let path = Bundle.main.path(forResource: "ReaderMode", ofType: "js") {
-            if let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String {
-                let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: true)
-                tab.webView!.configuration.userContentController.addUserScript(userScript)
-            }
-        }
     }
 
     func scriptMessageHandlerName() -> String? {
@@ -265,20 +251,29 @@ class ReaderMode: TabHelper {
         delegate?.readerMode(self, didChangeReaderModeState: state, forTab: tab)
     }
 
+    fileprivate func handleReaderContentParsed(_ readabilityResult: ReadabilityResult) {
+        guard let tab = tab else {
+            return
+        }
+        delegate?.readerMode(self, didParseReadabilityResult: readabilityResult, forTab: tab)
+    }
+
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let msg = message.body as? Dictionary<String, String> {
-            if let messageType = ReaderModeMessageType(rawValue: msg["Type"] ?? "") {
+        if let msg = message.body as? Dictionary<String, Any> {
+            if let messageType = ReaderModeMessageType(rawValue: msg["Type"] as? String ?? "") {
                 switch messageType {
                     case .pageEvent:
-                        if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] ?? "Invalid") {
+                        if let readerPageEvent = ReaderPageEvent(rawValue: msg["Value"] as? String ?? "Invalid") {
                             handleReaderPageEvent(readerPageEvent)
                         }
-                        break
                     case .stateChange:
-                        if let readerModeState = ReaderModeState(rawValue: msg["Value"] ?? "Invalid") {
+                        if let readerModeState = ReaderModeState(rawValue: msg["Value"] as? String ?? "Invalid") {
                             handleReaderModeStateChange(readerModeState)
                         }
-                        break
+                    case .contentParsed:
+                        if let readabilityResult = ReadabilityResult(object: msg["Value"] as AnyObject?) {
+                            handleReaderContentParsed(readabilityResult)
+                        }
                 }
             }
         }

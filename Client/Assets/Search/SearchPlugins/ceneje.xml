@@ -1,0 +1,15 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>m.Ceneje.si</ShortName>
+<Description>Mobilni iskalnik Ceneje.si</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image height="16" width="16" type="image/x-icon">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAnFBMVEX6qxgAAAD6qxj6qxj6qxj6qxj////7wFL+6sX9/f391Yz7+/v6+fn4+Pjs7Ozv7+/8y2/w7/Do6Oj19fXz8/Py8vLn5ubk5OTi4uL7u0P/+vH65sH5vU/2ukz7v1D29fXy8fH14bzw3Lfq1rL704n80H36tTT6sCb+9eL93qT3z4X8xWDz7uTz693yyoH3tz/+79Tt49H95bfvx37SQQ9XAAAABXRSTlPvAJ8gMC39vXwAAAHiSURBVGje7drpasJAFIbhE+1kc4vdo0laTd1bu93/vXWkH1UIhszUr1SY9+/AeRAimQkjntduiaIkrbbniXchipZceNIWRUyPbylqLRFFDfOJOcABDnCAAxzggN8D81yXZVlRFEFdqSWQvtzf9geP171uJ4r8uhIrIB0NKoC5IDXz/QpgIUjN/ApgI8jx+RXASpCj8yuAnSDH5lcAS0GOzDcEIDQFMN9/LsvpdDIZ68K6ngfotSHgo1A1q7xHOQu4RSxg2kc0YIAyEjC5QTTgCrGAcQ/RgC4qWEAHnQ6Yz+LkAIjQyYDNSK++LRQKIxScCFjo+brVD+CjUwEB1s8XmGPZGohQFUArXzdKGQBKwnCVKmugg8aqNnugi2hAD9GABzRhAdeIBgzRlAX0EQ24RCULuEMl+xe8x3U96dbr9Xb7+eKjtCGQ+A2Kok63d3Uz7F/eDQ02vxAMAZPtOwQzwOgAAsEIMDtCQTABDA+BEAwA02MshOYA5ifLZWwAQGgCJPu9QGwAqDSoqyiKTJfnOY5m8Q4IiZ9zZjvgQyECsFjutxoMQAvJbK7Q//jiZdksTBQiAN9P90YhBhAf/BsowObg1UYBVBCnCp3pU+QABzjgzwGyIPSLG/SrJ/TLM/TrP1+lfdf1LcQ9IwAAAABJRU5ErkJggg==</Image>
+<Url type="text/html" method="GET" template="http://www.ceneje.si/search_new.aspx">
+  <Param name="q" value="{searchTerms}" />
+  <Param name="FF-SearchBox" value="1" />
+</Url>
+<SearchForm>http://ceneje.si</SearchForm>
+</SearchPlugin>

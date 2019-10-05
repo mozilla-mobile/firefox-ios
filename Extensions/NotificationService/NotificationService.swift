@@ -2,6 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import Account
 import Shared
 import Storage
 import Sync
@@ -45,20 +46,23 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     func didFinish(_ what: PushMessage? = nil, with error: PushMessageError? = nil) {
-        profile?.shutdown()
+        defer {
+            // We cannot use tabqueue after the profile has shutdown;
+            // however, we can't use weak references, because TabQueue isn't a class.
+            // Rather than changing tabQueue, we manually nil it out here.
+            self.display?.tabQueue = nil
+
+            profile?._shutdown()
+        }
 
         guard let display = self.display else {
             return
         }
 
-        // We cannot use tabqueue after the profile has shutdown;
-        // however, we can't use weak references, because TabQueue isn't a class.
-        // Rather than changing tabQueue, we manually nil it out here.
-        display.tabQueue = nil
         display.messageDelivered = false
-        display.displayNotification(what, with: error)
+        display.displayNotification(what, profile: profile, with: error)
         if !display.messageDelivered {
-            display.displayUnknownMessageNotification()
+            display.displayUnknownMessageNotification(debugInfo: "Not delivered")
         }
     }
 
@@ -82,14 +86,17 @@ class SyncDataDisplay {
         self.notificationContent = content
         self.sentTabs = []
         self.tabQueue = tabQueue
+        Sentry.shared.setup(sendUsageData: true)
     }
 
-    func displayNotification(_ message: PushMessage? = nil, with error: PushMessageError? = nil) {
+    func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
-            return displayUnknownMessageNotification()
+            return displayUnknownMessageNotification(debugInfo: "Error \(error?.description ?? "")")
         }
 
         switch message {
+        case .commandReceived(let tab):
+            displayNewSentTabNotification(tab: tab)
         case .accountVerified:
             displayAccountVerifiedNotification()
         case .deviceConnected(let deviceName):
@@ -100,12 +107,12 @@ class SyncDataDisplay {
             displayThisDeviceDisconnectedNotification()
         case .collectionChanged(let collections):
             if collections.contains("clients") {
-                displaySentTabNotification()
+                displayOldSentTabNotification()
             } else {
-                displayUnknownMessageNotification()
+                displayUnknownMessageNotification(debugInfo: "collection changed")
             }
         default:
-            displayUnknownMessageNotification()
+            displayUnknownMessageNotification(debugInfo: "Unknown: \(message)")
             break
         }
     }
@@ -136,14 +143,23 @@ extension SyncDataDisplay {
     }
 
     func displayAccountVerifiedNotification() {
+        #if MOZ_CHANNEL_BETA
+            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
+            return
+        #endif
         presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
     }
 
-    func displayUnknownMessageNotification() {
+    func displayUnknownMessageNotification(debugInfo: String) {
+        #if MOZ_CHANNEL_BETA
+            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
+            Sentry.shared.send(message: "SentTab error: \(debugInfo)")
+            return
+        #endif
         // if, by any change we haven't dealt with the message, then perhaps we
         // can recycle it as a sent tab message.
         if sentTabs.count > 0 {
-            displaySentTabNotification()
+            displayOldSentTabNotification()
         } else {
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
         }
@@ -151,7 +167,28 @@ extension SyncDataDisplay {
 }
 
 extension SyncDataDisplay {
-    func displaySentTabNotification() {
+    func displayNewSentTabNotification(tab: [String: String]) {
+        if let urlString = tab["url"], let url = URL(string: urlString), url.isWebPage(), let title = tab["title"] {
+            let tab = [
+                "title": title,
+                "url": url.absoluteString,
+                "displayURL": url.absoluteDisplayExternalString,
+                "deviceName": nil
+            ] as NSDictionary
+
+            notificationContent.userInfo["sentTabs"] = [tab] as NSArray
+
+            // Add tab to the queue.
+            let item = ShareItem(url: urlString, title: title, favicon: nil)
+            _ = tabQueue?.addToQueue(item).value // Force synchronous.
+
+            presentNotification(title: Strings.SentTab_TabArrivingNotification_NoDevice_title, body: url.absoluteDisplayExternalString)
+        }
+    }
+}
+
+extension SyncDataDisplay {
+    func displayOldSentTabNotification() {
         // We will need to be more precise about calling these SentTab alerts
         // once we are a) detecting different types of notifications and b) adding actions.
         // For now, we need to add them so we can handle zero-tab sent-tab-notifications.
@@ -161,7 +198,7 @@ extension SyncDataDisplay {
 
         // Add the tabs we've found to userInfo, so that the AppDelegate
         // doesn't have to do it again.
-        let serializedTabs = sentTabs.flatMap { t -> NSDictionary? in
+        let serializedTabs = sentTabs.compactMap { t -> NSDictionary? in
             return [
                 "title": t.title,
                 "url": t.url.absoluteString,
@@ -213,9 +250,14 @@ extension SyncDataDisplay {
 
         if tabs.count == 0 {
             title = Strings.SentTab_NoTabArrivingNotification_title
-            body = Strings.SentTab_NoTabArrivingNotification_body
+            #if MOZ_CHANNEL_BETA
+                body = "DEBUG: Sent Tabs with no tab"
+                Sentry.shared.send(message: "SentTab error: no tab")
+            #else
+                body = Strings.SentTab_NoTabArrivingNotification_body
+            #endif
         } else {
-            let deviceNames = Set(tabs.flatMap { $0["deviceName"] as? String })
+            let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {
                 title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
             } else {
@@ -262,7 +304,7 @@ extension SyncDataDisplay: SyncDelegate {
             sentTabs.append(SentTab(url: url, title: title, deviceName: deviceName))
 
             let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
-            _ = tabQueue?.addToQueue(item)
+            _ = tabQueue?.addToQueue(item).value // Force synchronous.
         }
     }
 }

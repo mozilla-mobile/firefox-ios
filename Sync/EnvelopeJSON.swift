@@ -53,8 +53,8 @@ open class EnvelopeJSON {
         return 0
     }
 
-    open func toString() -> String {
-        return self.json.stringValue()!
+    open func stringify() -> String {
+        return self.json.stringify()!
     }
 
     open func withModified(_ now: Timestamp) -> EnvelopeJSON {

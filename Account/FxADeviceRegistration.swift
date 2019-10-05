@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Deferred
 import Shared
 import SwiftyJSON
 
@@ -67,7 +66,7 @@ open class FxADeviceRegistration: NSObject, NSCoding {
     }
 
     open func toJSON() -> JSON {
-        return JSON(object: [
+        return JSON([
             "id": id,
             "version": version,
             "lastRegistered": lastRegistered,
@@ -76,43 +75,60 @@ open class FxADeviceRegistration: NSObject, NSCoding {
 }
 
 open class FxADeviceRegistrator {
-    open static func registerOrUpdateDevice(_ account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
-        // If we've already registered, the registration version is up-to-date, *and* we've (re-)registered
-        // within the last week, do nothing. We re-register weekly as a sanity check.
-        if let registration = account.deviceRegistration, registration.version == DeviceRegistrationVersion &&
-            Date.now() < registration.lastRegistered + OneWeekInMilliseconds {
-                return deferMaybe(FxADeviceRegistrationResult.alreadyRegistered)
+    public static func registerOrUpdateDevice(_ account: FirefoxAccount, sessionToken: NSData, client: FxAClient10? = nil) -> Deferred<Maybe<FxADeviceRegistrationResult>> {
+        // If we've already registered, the registration version is up-to-date,
+        // we've (re-)registered within the last week, *and* we have send-tab keys,
+        // do nothing. We re-register weekly as a sanity check.
+        if let registration = account.deviceRegistration,
+            registration.version == DeviceRegistrationVersion,
+            Date.now() < registration.lastRegistered + OneWeekInMilliseconds,
+            account.commandsClient.sendTab.sendTabKeysCache.value != nil {
+                return deferMaybe(.alreadyRegistered)
         }
 
         let pushParams: FxADevicePushParams?
-        if AppConstants.MOZ_FXA_PUSH, let pushRegistration = account.pushRegistration {
+        if let pushRegistration = account.pushRegistration {
             let subscription = pushRegistration.defaultSubscription
             pushParams = FxADevicePushParams(callback: subscription.endpoint.absoluteString, publicKey: subscription.p256dhPublicKey, authKey: subscription.authKey)
         } else {
             pushParams = nil
         }
 
-        let client = client ?? FxAClient10(authEndpoint: account.configuration.authEndpointURL, oauthEndpoint: account.configuration.oauthEndpointURL, profileEndpoint: account.configuration.profileEndpointURL)
-        let name = DeviceInfo.defaultClientName()
+        let client = client ?? FxAClient10(configuration: account.configuration)
+
+        let availableCommands = account.availableCommands()
+
         let device: FxADevice
         let registrationResult: FxADeviceRegistrationResult
+
         if let registration = account.deviceRegistration {
-            device = FxADevice.forUpdate(name, id: registration.id, push: pushParams)
-            registrationResult = FxADeviceRegistrationResult.updated
+            device = FxADevice.forUpdate(account.deviceName, id: registration.id, availableCommands: availableCommands, push: pushParams)
+            registrationResult = .updated
         } else {
-            device = FxADevice.forRegister(name, type: "mobile", push: pushParams)
-            registrationResult = FxADeviceRegistrationResult.registered
+            device = FxADevice.forRegister(account.deviceName, type: "mobile", availableCommands: availableCommands, push: pushParams)
+            registrationResult = .registered
         }
 
         let registeredDevice = client.registerOrUpdate(device: device, withSessionToken: sessionToken)
         let registration: Deferred<Maybe<FxADeviceRegistration>> = registeredDevice.bind { result in
             if let device = result.successValue {
-                return deferMaybe(FxADeviceRegistration(id: device.id!, version: DeviceRegistrationVersion, lastRegistered: Date.now()))
+                // If the device has the `FxACommandSendTab` command already, then use
+                // a valid timestamp. Otherwise, reset to `0` so that we initialize the
+                // `availableCommands` the next time we register (resetting the timestamp
+                // will force re-registration the next time around).
+                let lastRegistered: Timestamp
+                if let _ = availableCommands[FxACommandSendTab.Name].string {
+                    lastRegistered = Date.now()
+                } else {
+                    lastRegistered = 0
+                }
+
+                return deferMaybe(FxADeviceRegistration(id: device.id!, version: DeviceRegistrationVersion, lastRegistered: lastRegistered))
             }
 
             // Recover from the error -- if we can.
             if let error = result.failureValue as? FxAClientError,
-               case .remote(let remoteError) = error {
+                case .remote(let remoteError) = error {
                 switch remoteError.code {
                 case FxAccountRemoteError.DeviceSessionConflict:
                     return recoverFromDeviceSessionConflict(account, client: client, sessionToken: sessionToken)
@@ -132,7 +148,7 @@ open class FxADeviceRegistrator {
         return registration.bind { result in
             switch result {
             case .success(let registration):
-                account.deviceRegistration = registration.value
+                account.deviceRegistration = registration
                 return deferMaybe(registrationResult)
             case .failure(let error):
                 log.error("Device registration failed: \(error.description)")

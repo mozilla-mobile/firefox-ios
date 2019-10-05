@@ -85,7 +85,7 @@ extension KIFUITestActor {
                 }
                 return false
             }
-            
+
             return (element == nil) ? KIFTestStepResult.wait : KIFTestStepResult.success
         }
 
@@ -197,8 +197,8 @@ extension KIFUITestActor {
             if result as! String == "undefined" {
                 let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
-                let source = try! NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
-                webView.evaluateJavaScript(source as String, completionHandler: nil)
+                let source = try! String(contentsOfFile: path, encoding: .utf8)
+                webView.evaluateJavaScript(source, completionHandler: nil)
             }
             stepResult = KIFTestStepResult.success
         }
@@ -220,100 +220,92 @@ class BrowserUtils {
         case Cache = "Cache"
         case OfflineData = "Offline Website Data"
         case Cookies = "Cookies"
+        case TrackingProtection = "Tracking Protection"
     }
-    internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
-    
-    /// Close all tabs to restore the browser to startup state.
-    class func resetToAboutHome(_ tester: KIFUITestActor) {
-        
-        do {
-            try tester.tryFindingTappableView(withAccessibilityLabel: "Cancel")
-            tester.tapView(withAccessibilityLabel: "Cancel")
-        } catch _ {
-        }
-        do {
-            try tester.tryFindingTappableView(withAccessibilityLabel: "Show Tabs")
-            tester.tapView(withAccessibilityLabel: "Show Tabs")
-        } catch _ {
-        
-        }
-        let tabsView = tester.waitForView(withAccessibilityLabel: "Tabs Tray").subviews.first as! UICollectionView
+    internal static let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies, Clearable.TrackingProtection])
 
-        // Switch to Private Mode if we're not in it already.
-        do {
-            try tester.tryFindingTappableView(withAccessibilityLabel: "Private Mode", value: "Off", traits: UIAccessibilityTraitButton)
-            tester.tapView(withAccessibilityLabel: "Private Mode")
-        } catch _ {}
+    class func resetToAboutHome() {
+        var error: NSError?
+        // If there is a popup dialog, close. Otherwise, ignore the error and continue
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Cancel")).perform(grey_tap(), error: &error)
+        error = nil
 
-        // Clear all private tabs.
-        while tabsView.numberOfItems(inSection: 0) > 0 {
-            let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0))!
-            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
-            tester.waitForAbsenceOfView(withAccessibilityLabel: cell.accessibilityLabel)
-        }
-        tester.tapView(withAccessibilityLabel: "Private Mode")
-
-        while tabsView.numberOfItems(inSection: 0) > 1 {
-            let oldCount = tabsView.numberOfItems(inSection: 0)
-            let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0))!
-            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
-            tester.waitForAnimationsToFinish()
-            XCTAssertEqual(oldCount-1, tabsView.numberOfItems(inSection: 0))
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TopTabsViewController.tabsButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.tabsButton")).perform(grey_tap())
         }
 
-        // When the last tab is closed, the tabs tray will automatically be closed
-        // since a new about:home tab will be selected.
-        if let cell = tabsView.cellForItem(at: IndexPath(item: 0, section: 0)) {
-            tester.swipeView(withAccessibilityLabel: cell.accessibilityLabel, in: KIFSwipeDirection.left)
-            tester.waitForTappableView(withAccessibilityLabel: "Show Tabs")
+        let goPrivateModeBtn = grey_allOf([grey_accessibilityID("TabTrayController.maskButton"), grey_accessibilityValue("Off")])
+        let goNormalModeBtn = grey_allOf([grey_accessibilityID("TabTrayController.maskButton"), grey_accessibilityValue("On")])
+        let closeAllBtn = grey_allOf([grey_accessibilityID("TabTrayController.deleteButton.closeAll"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])
+        // Clear all Private and normal tabs
+        EarlGrey.selectElement(with: goPrivateModeBtn).assert(grey_notNil(), error: &error)
+
+        if (error == nil) { /* in normal mode now, go to Private mode  */
+            EarlGrey.selectElement(with: goPrivateModeBtn).perform(grey_tap())
         }
+        EarlGrey.selectElement(with: grey_accessibilityID("TabTrayController.removeTabsButton")).perform(grey_tap())
+        EarlGrey.selectElement(with: closeAllBtn).perform(grey_tap())
+
+        /* go to Normal mode */
+        EarlGrey.selectElement(with: goNormalModeBtn).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("TabTrayController.removeTabsButton")).perform(grey_tap())
+        EarlGrey.selectElement(with: closeAllBtn).perform(grey_tap())
+
+        let topsiteAppeared = GREYCondition(name: "Wait for the topsite view", block: {
+            var errorOrNil: NSError?
+            let matcher = grey_allOf([grey_accessibilityLabel("Show Tabs"),
+                                      grey_sufficientlyVisible()])
+            EarlGrey.selectElement(with: matcher)
+                .assert(grey_notNil(), error: &errorOrNil)
+            let success = errorOrNil == nil
+            return success
+        }).wait(withTimeout: 10)
+
+        GREYAssertTrue(topsiteAppeared, reason: "Failed to return to topsite view")
     }
-    
-    //If it is a first run, first run window should be gone
-    class func dismissFirstRunUI(_ tester: KIFUITestActor) {
-        do {
-            try tester.tryFindingView(withAccessibilityLabel: "Intro Tour Carousel")
-            tester.swipeView(withAccessibilityLabel: "Intro Tour Carousel", in: KIFSwipeDirection.left)
-            tester.waitForTappableView(withAccessibilityLabel: "Start Browsing")
-            tester.tapView(withAccessibilityLabel: "Start Browsing")
-        } catch {
-            //First run dialog did not appear
-        }
+
+    class func configEarlGrey() {
+        GREYConfiguration.sharedInstance().setValue(2, forConfigKey: kGREYConfigKeyCALayerMaxAnimationDuration)
+        GREYConfiguration.sharedInstance().setValue(false, forConfigKey: kGREYConfigKeyActionConstraintsEnabled)
+        GREYConfiguration.sharedInstance().setValue(2, forConfigKey: kGREYConfigKeyDelayedPerformMaxTrackableDuration)
+        GREYConfiguration.sharedInstance().setValue(100, forConfigKey: kGREYConfigKeyInteractionTimeoutDuration)
+        GREYConfiguration.sharedInstance().setValue(["."], forConfigKey: kGREYConfigKeyURLBlacklistRegex)
     }
-	
+
 	class func dismissFirstRunUI() {
 		var error: NSError?
-        
+
 		let matcher = grey_allOf([
 			grey_accessibilityID("IntroViewController.scrollView"), grey_sufficientlyVisible()])
-		
-        EarlGrey.select(elementWithMatcher: matcher).assert(grey_notNil(), error: &error)
-		
+
+        EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &error)
+
 		if error == nil {
-            EarlGrey.select(elementWithMatcher: matcher).perform(grey_swipeFastInDirection(GREYDirection.left))
+            EarlGrey.selectElement(with: matcher).perform(grey_swipeFastInDirection(GREYDirection.left))
             let buttonMatcher = grey_allOf([
                 grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
-            
-            EarlGrey.select(elementWithMatcher: buttonMatcher).assert(grey_notNil(), error: &error)
-        
+
+            EarlGrey.selectElement(with: buttonMatcher).assert(grey_notNil(), error: &error)
+
             if error == nil {
-                EarlGrey.select(elementWithMatcher: buttonMatcher).perform(grey_tap())
+                EarlGrey.selectElement(with: buttonMatcher).perform(grey_tap())
             }
 		}
 	}
-    
+
     class func iPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
     }
 
     /// Injects a URL and title into the browser's history database.
     class func addHistoryEntry(_ title: String, url: URL) {
-        let notificationCenter = NotificationCenter.default
-        var info = [AnyHashable: Any]()
-        info["url"] = url
-        info["title"] = title
-        info["visitType"] = VisitType.link.rawValue
-        notificationCenter.post(name: Notification.Name(rawValue: "OnLocationChange"), object: self, userInfo: info)
+        let info: [AnyHashable: Any] = [
+            "url": url,
+            "title": title,
+            "visitType": VisitType.link.rawValue]
+        NotificationCenter.default.post(name: .OnLocationChange, object: self, userInfo: info)
     }
 
     fileprivate class func clearHistoryItemAtIndex(_ index: IndexPath, tester: KIFUITestActor) {
@@ -322,61 +314,73 @@ class BrowserUtils {
             tester.tapView(withAccessibilityLabel: "Remove")
         }
     }
-    class func openClearPrivateDataDialog(_ swipe: Bool, tester: KIFUITestActor) {
-        tester.tapView(withAccessibilityLabel: "Menu")
-        
+
+
+    class func openClearPrivateDataDialog(_ swipe: Bool) {
+        let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
+                                                 grey_accessibilityID("menu-Settings")])
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
+
         // Need this for simulator only
         if swipe {
-            tester.swipeView(withAccessibilityLabel: "Set Homepage", in: KIFSwipeDirection.left)
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Set Homepage"))
+                .perform(grey_swipeFastInDirection(GREYDirection.left))
         }
-        tester.tapView(withAccessibilityLabel: "Settings")
-        tester.tapView(withAccessibilityLabel: "Clear Private Data")
-    }
-    
-    class func closeClearPrivateDataDialog(_ tester: KIFUITestActor) {
-        tester.tapView(withAccessibilityLabel: "Settings")
-        tester.tapView(withAccessibilityLabel: "Done")
-    }
-    
-    fileprivate class func acceptClearPrivateData(_ tester: KIFUITestActor) {
-        tester.waitForView(withAccessibilityLabel: "OK")
-        tester.tapView(withAccessibilityLabel: "OK")
-        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
-    }
-    
-    fileprivate class func cancelClearPrivateData(_ tester: KIFUITestActor) {
-        tester.waitForView(withAccessibilityLabel: "Clear")
-        tester.tapView(withAccessibilityLabel: "Cancel")
-        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
+        EarlGrey.selectElement(with: settings_button).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("ClearPrivateData"))
+            .using(searchAction: grey_scrollInDirection(.down, 200),
+                   onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
+            .assert(grey_notNil())
+        EarlGrey.selectElement(with: grey_accessibilityID("ClearPrivateData")).perform(grey_tap())
     }
 
-    class func clearPrivateData(_ clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false, tester: KIFUITestActor) {
-        let AllClearables = Set([Clearable.History, Clearable.Cache, Clearable.OfflineData, Clearable.Cookies])
-    
-        openClearPrivateDataDialog(swipe!, tester: tester)
-        
-        // Disable all items that we don't want to clear.
-        for clearable in AllClearables {
-            // If we don't wait here, setOn:forSwitchWithAccessibilityLabel tries to use the UITableViewCell
-            // instead of the UISwitch. KIF bug?
-            tester.waitForView(withAccessibilityLabel: clearable.rawValue)
-//            tester.setOn(clearables!.contains(clearable), forSwitchWithAccessibilityLabel: clearable.rawValue)
-            let switchControl = grey_allOf([grey_accessibilityLabel(clearable.rawValue),
-                                           grey_kindOfClass(UISwitch.self)])
-            EarlGrey.select(elementWithMatcher: switchControl).perform(grey_turnSwitchOn(clearables!.contains(clearable)))
-        }
-        
-        
-        
-        tester.waitForView(withAccessibilityLabel: "Clear Private Data")
-        tester.tapView(withAccessibilityLabel: "Clear Private Data", traits: UIAccessibilityTraitButton)
-        acceptClearPrivateData(tester)
-        
-        closeClearPrivateDataDialog(tester)
+    class func closeClearPrivateDataDialog() {
+        let back_button = grey_allOf([grey_accessibilityLabel("Settings"),
+                                      grey_kindOfClass(NSClassFromString("_UIButtonBarButton")!)])
+
+        EarlGrey.selectElement(with: back_button).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
+            .perform(grey_tap())
     }
-    
+
+    fileprivate class func acceptClearPrivateData() {
+        EarlGrey.selectElement(with: grey_allOf([grey_accessibilityLabel("OK"), grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)])).perform(grey_tap())
+    }
+
+    fileprivate class func cancelClearPrivateData() {
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Cancel")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("Clear Private Data")).perform(grey_tap())
+    }
+
+    class func clearPrivateData(_ clearables: Set<Clearable>? = AllClearables, swipe: Bool? = false) {
+        openClearPrivateDataDialog(swipe!)
+
+        // Disable all items that we don't want to clear.
+
+        for clearable in AllClearables {
+            let switchControl = grey_allOf([grey_accessibilityLabel(clearable.rawValue),
+                                            grey_kindOfClass(UISwitch.self)])
+            let clearablePresent = GREYCondition(name: "Wait for URL field", block: {
+                var errorOrNil: NSError?
+                EarlGrey.selectElement(with: switchControl)
+                    .assert(grey_notNil(), error: &errorOrNil)
+                return errorOrNil == nil
+            }).wait(withTimeout: 10)
+            GREYAssertTrue(clearablePresent, reason: "Failed to find clearable")
+            EarlGrey.selectElement(with: switchControl).perform(grey_turnSwitchOn(clearables!.contains(clearable)))
+        }
+
+        EarlGrey.selectElement(with: grey_accessibilityID("ClearPrivateData")).perform(grey_tap())
+        acceptClearPrivateData()
+        closeClearPrivateDataDialog()
+    }
+
     class func clearHistoryItems(_ tester: KIFUITestActor, numberOfTests: Int = -1) {
-        resetToAboutHome(tester)
+        resetToAboutHome()
         tester.tapView(withAccessibilityLabel: "History")
 
         let historyTable = tester.waitForView(withAccessibilityIdentifier: "History List") as! UITableView
@@ -399,7 +403,7 @@ class BrowserUtils {
         // searches are async (and debounced), so we have to wait for the results to appear.
         tester.waitForViewWithAccessibilityValue(prefix + completion)
 
-        let autocompleteFieldlabel = textField.subviews.filter { $0.accessibilityIdentifier == "autocomplete" }.first as? UILabel
+        let autocompleteFieldlabel = textField.subviews.first { $0.accessibilityIdentifier == "autocomplete" } as? UILabel
 
         if completion == "" {
             XCTAssertTrue(autocompleteFieldlabel == nil, "The autocomplete was empty but the label still exists.")
@@ -408,55 +412,75 @@ class BrowserUtils {
 
         XCTAssertTrue(autocompleteFieldlabel != nil, "The autocomplete was not found")
         XCTAssertEqual(completion, autocompleteFieldlabel!.text, "Expected prefix matches actual prefix")
+    }
 
+    class func openLibraryMenu(_ tester: KIFUITestActor) {
+        tester.waitForAnimationsToFinish()
+        tester.waitForView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.waitForAnimationsToFinish()
+        tester.tapView(withAccessibilityIdentifier: "menu-library")
+    }
+
+    class func closeLibraryMenu(_ tester: KIFUITestActor) {
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.libraryButton"))
+                .perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityID("History"))
+                .perform(grey_swipeFastInDirection(GREYDirection.down))
+        }
+        tester.waitForAnimationsToFinish()
     }
 }
 
 class SimplePageServer {
     class func getPageData(_ name: String, ext: String = "html") -> String {
         let pageDataPath = Bundle(for: self).path(forResource: name, ofType: ext)!
-        return (try! NSString(contentsOfFile: pageDataPath, encoding: String.Encoding.utf8.rawValue)) as String
+        return try! String(contentsOfFile: pageDataPath, encoding: .utf8)
     }
+
+    static var useLocalhostInsteadOfIP = false
 
     class func start() -> String {
         let webServer: GCDWebServer = GCDWebServer()
 
-        webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
-            let img = UIImagePNGRepresentation(UIImage(named: "goBack")!)
+        webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
+            let img = UIImage(named: "goBack")!.pngData()!
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
-        for page in ["findPage", "noTitle", "readablePage", "JSPrompt"] {
-            webServer.addHandler(forMethod: "GET", path: "/\(page).html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        for page in ["findPage", "noTitle", "readablePage", "JSPrompt", "blobURL", "firefoxScheme"] {
+            webServer.addHandler(forMethod: "GET", path: "/\(page).html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
                 return GCDWebServerDataResponse(html: self.getPageData(page))
             }
         }
 
         // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
-        webServer.addHandler(forMethod: "GET", path: "/scrollablePage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/scrollablePage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("scrollablePage")
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int((request.query?["page"] as! String))!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
             return GCDWebServerDataResponse(html: pageData as String)
         }
 
-        webServer.addHandler(forMethod: "GET", path: "/numberedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/numberedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("numberedPage")
 
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int((request.query?["page"] as! String))!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
 
             return GCDWebServerDataResponse(html: pageData as String)
         }
 
-        webServer.addHandler(forMethod: "GET", path: "/readerContent.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse! in
+        webServer.addHandler(forMethod: "GET", path: "/readerContent.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             return GCDWebServerDataResponse(html: self.getPageData("readerContent"))
         }
 
         webServer.addHandler(forMethod: "GET", path: "/loginForm.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("loginForm"))
         }
-        
+
         webServer.addHandler(forMethod: "GET", path: "/navigationDelegate.html", request: GCDWebServerRequest.self) { _ in
             return GCDWebServerDataResponse(html: self.getPageData("navigationDelegate"))
         }
@@ -470,11 +494,11 @@ class SimplePageServer {
             let expectedAuth = "Basic dXNlcjpwYXNz"
 
             let response: GCDWebServerDataResponse
-            if request?.headers["Authorization"] as? String == expectedAuth && request?.query["logout"] == nil {
-                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")
+            if request?.headers["Authorization"] == expectedAuth && request?.query?["logout"] == nil {
+                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")!
             } else {
                 // Request credentials if the user isn't logged in.
-                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")
+                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")!
                 response.statusCode = 401
                 response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
             }
@@ -491,6 +515,7 @@ class SimplePageServer {
                         tester.onload = imageFound;
                         tester.onerror = imageNotFound;
                         tester.src = URL;
+                        document.body.appendChild(tester);
                     }
 
                     function imageFound() {
@@ -502,7 +527,9 @@ class SimplePageServer {
                     }
 
                     window.onload = function(e) {
-                        testImage('\(imageURL)');
+                        // Disabling TP stats reporting using JS execution on the wkwebview happens async;
+                        // setTimeout(1 sec) is plenty of delay to ensure the JS has executed.
+                        setTimeout(() => { testImage('\(imageURL)'); }, 1000);
                     }
                 </script></head>
             <body>TEST IMAGE BLOCKING</body></html>
@@ -527,7 +554,8 @@ class SimplePageServer {
 
         // We use 127.0.0.1 explicitly here, rather than localhost, in order to avoid our
         // history exclusion code (Bug 1188626).
-        let webRoot = "http://127.0.0.1:\(webServer.port)"
+
+        let webRoot = "http://\(useLocalhostInsteadOfIP ? "localhost" : "127.0.0.1"):\(webServer.port)"
         return webRoot
     }
 }
@@ -535,7 +563,7 @@ class SimplePageServer {
 class SearchUtils {
     static func navigateToSearchSettings(_ tester: KIFUITestActor) {
         let engine = SearchUtils.getDefaultEngine().shortName
-        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.waitForAnimationsToFinish()
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.waitForView(withAccessibilityLabel: "Settings")
@@ -551,7 +579,7 @@ class SearchUtils {
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
     // Afterwards, we're still at the Search Settings sheet.
     static func selectDefaultSearchEngineName(_ tester: KIFUITestActor, engineName: String) {
-        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraitButton)
+        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraits.button)
         tester.waitForView(withAccessibilityLabel: "Default Search Engine")
         tester.tapView(withAccessibilityLabel: engineName)
         tester.waitForView(withAccessibilityLabel: "Search")
@@ -639,23 +667,23 @@ class PasscodeUtils {
     }
 
     static func enterPasscode(_ tester: KIFUITestActor, digits: String) {
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.startIndex]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 1)]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 2)]))
-        tester.tapView(withAccessibilityLabel: String(digits.characters[digits.characters.index(digits.startIndex, offsetBy: 3)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.startIndex]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 1)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 2)]))
+        tester.tapView(withAccessibilityLabel: String(digits[digits.index(digits.startIndex, offsetBy: 3)]))
     }
 }
 
 class HomePageUtils {
     static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.tapView(withAccessibilityIdentifier: "Homepage")
     }
 
     static func homePageSetting(_ tester: KIFUITestActor) -> String? {
-        let view = tester.waitForView(withAccessibilityIdentifier: "HomePageSettingTextField")
+        let view = tester.waitForView(withAccessibilityIdentifier: "HomeAsCustomURLTextField")
         guard let textField = view as? UITextField else {
             XCTFail("View is not a textField: view is \(String(describing: view))")
             return nil

@@ -6,8 +6,6 @@ import Foundation
 import SwiftKeychainWrapper
 import Shared
 
-let NotificationPasscodeDidRemove   = "NotificationPasscodeDidRemove"
-
 /// Displayed to the user when removing a passcode.
 class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputViewDelegate {
     override init() {
@@ -17,7 +15,7 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
             PasscodePane(title: AuthenticationStrings.enterPasscode, passcodeSize: authenticationInfo?.passcode?.count ?? 6),
         ]
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -50,7 +48,6 @@ class RemovePasscodeViewController: PagingPasscodeViewController, PasscodeInputV
 
     fileprivate func removePasscode() {
         KeychainWrapper.sharedAppContainerKeychain.setAuthenticationInfo(nil)
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.post(name: Notification.Name(rawValue: NotificationPasscodeDidRemove), object: nil)
+        NotificationCenter.default.post(name: .PasscodeDidRemove, object: nil)
     }
 }

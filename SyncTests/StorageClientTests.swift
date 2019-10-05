@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Account
 import Shared
 @testable import Sync
 
@@ -20,8 +21,8 @@ func massivify(record: Record<CleartextPayloadJSON>) -> JSON? {
 class StorageClientTests: XCTestCase {
     func testPartialJSON() {
         let body = "0"
-        let o: Any? = try! JSONSerialization.jsonObject(with: body.data(using: String.Encoding.utf8)!, options: JSONSerialization.ReadingOptions.allowFragments)
-        XCTAssertTrue(JSON(object: o!).isInt())
+        let o: Any? = try! JSONSerialization.jsonObject(with: body.data(using: .utf8)!, options: .allowFragments)
+        XCTAssertTrue(JSON(o!).isInt())
     }
 
     func testPOSTResult() {
@@ -101,7 +102,7 @@ class StorageClientTests: XCTestCase {
 
         let storageClient = Sync15StorageClient(serverURI: "http://example.com/".asURL!, authorizer: identity, workQueue: DispatchQueue.main, resultQueue: DispatchQueue.main, backoff: MockBackoffStorage())
         let collectionClient = storageClient.clientForCollection("foo", encrypter: RecordEncrypter<CleartextPayloadJSON>(serializer: massivify, factory: { CleartextPayloadJSON($0) }))
-        let result = synchronizer.uploadRecords([rA], lastTimestamp: Date.now(), storageClient: collectionClient, onUpload: { _ in deferMaybe(Date.now()) })
+        let result = synchronizer.uploadRecords([rA], lastTimestamp: Date.now(), storageClient: collectionClient, onUpload: { _, _  in deferMaybe(Date.now()) })
 
         XCTAssertTrue(result.value.failureValue is RecordTooLargeError)
     }

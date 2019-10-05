@@ -1,7 +1,0 @@
-be.wikipedia.org
-bing
-google:hidden
-google-nocodes
-tut.by
-yahoo
-yandex.by

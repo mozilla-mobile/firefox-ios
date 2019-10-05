@@ -1,0 +1,16 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Amazon.fr</ShortName>
+<InputEncoding>ISO-8859-1</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAABaFBMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAD/////mQACAgH7+/uEhIT9mACFhYX9/f0JCQkFBQWwagBtQgAJBQANDQ36lgDr6+vj4+O7u7u3t7dDQ0M9PT0oKCgbGxvVgADGdwCqZgBYNQBCKAAkFgAcEQARCgDw8PDS0tKysrKtra2Xl5eSkpJtbW1dXV1aWlpLS0tHR0c5OTkzMzMuLi4qKirrjQDniwDehgC7cACZXACKUwBjOwBPLwA8JAAsGwAgEwD19fXn5+fZ2dnPz8/Ly8vHx8ekpKSdnZ2JiYl/f394eHggICD7lwD2lADRfgDPfACeXwCETwBdOAA4IgA0IAAWDgDd3d3W1ta/v7+oqKiPj497e3twcHBpaWljY2NWVlYUFBTsjgDiiADZgwDAcwC3bgCmYwCPVgB2RwBnPgBKLQAMCADt7e1fX19SUlIWFhYSEhLwkADujwCRVwB8SwB6SgBSMgAPCQBOQY7nAAAABnRSTlMA8si8ZBgxEvPEAAADLklEQVRo3u2aZ1MiMRiA0dO8WeWkd6miNEVF6c3ee++ent3r9e/fgm6iggJuMjfO7PMxs+wTkrcEJiqRluYmxIGm5hZVidZ3iBvvWkUBj/dTg7g+iCstqmbElWZVE+JKkwpxRhEoAkWgCBTBfxBoNVpEYCz41hexbbUBfBoPtQ8KzAUOm/huyui+kanAaYWn9HxmKBgwQxUizAT2NqjKHCNBZw9UZ2SejcAGzzHNROAAgqU92n8wDgSzwEIwBRLvNUhEmKGGGAOBQCJoRhqaJIIvDARDJPBJah0SQS8DgWbnPkjDZGiQCGaZRJEw7+ibnZ5yVn4paOdTrofptqO3JdAOH89O28ZHO7gIBtsnSEliL9AeBYDAQeAYA+ApmOsAroJ9oHQErFORMNs8sAPBfPC13CCYCjRbIGE1kjxgKOgDiQkNl1KxAxJ2aSjGUqAhEWShhwyWAlqag2Ssl4yF5QuOQSJU5RQQlC+ge2wlxxhakyzyBVF6VpTO1SGgDMgW2OFpA56DBwS0cgUfaB1qi5aOwXvwiD3ZeRAAyvautaInxOQKeuFl+uUKjKNQwcQuSMzIr6YDFd0gqDGO3W/LIYt+cPRk3SMCQvMWEBnpZ9PR7GNAmXTcZZsZwDJEzmaFnF6vv/HXFnQJVXt+NDhS7mfbYTLn2GTIKX0oHcd3eGoKXK7ccwnR6TSiqmQWsMRiTUFxGbt9qDGuvfmC/7Z7PY3x99p7YLjAeClrQK+gG+Ozejb5So3xj0wRNULxt6cbFTFerSuKfEmMsVr35xbVx6beLT6/gdYwvqkvTA2XaixiSum7aq9LNlV6OOlDaAUnhXrzYH0Z3+HK5PzoOfze9HJ5KgsZA0LCCdY3kGjej1gicb66lvcLj1ZlY23Vc4rv0RWQSA4nDI1kspAtKSjquMud0ul05+6lU9PD8YsCKqMzrTdaKnweE65B4meXtBmm7Ctq0aY+9YLjJO0TaGTkX1ns/npXlhZwBXHdVZ68XfYPEMPG9aXHnYwvYvViwnW28stL4peJgFJ9zm/qb01FgJAiUASKACFFUAH3SwPcrz1wv7jB++oJ/8sz3K///AMH5R5E/GGrogAAAABJRU5ErkJggg==</Image>
+<Url type="text/html" method="GET" template="https://www.amazon.fr/exec/obidos/external-search/" resultdomain="amazon.fr">
+  <Param name="field-keywords" value="{searchTerms}"/>
+  <Param name="mode" value="blended"/>
+  <Param name="tag" value="firefox-fr-21"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<SearchForm>https://www.amazon.fr/</SearchForm>
+</SearchPlugin>

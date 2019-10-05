@@ -6,7 +6,6 @@ import Foundation
 import Shared
 import Storage
 import XCGLogger
-import Deferred
 import SwiftyJSON
 
 private let log = Logger.syncLogger
@@ -37,10 +36,10 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
         let tabsJSON = JSON([
             "id": guid,
             "clientName": self.scratchpad.clientName,
-            "tabs": tabs.flatMap { $0.toDictionary() }
+            "tabs": tabs.compactMap { $0.toDictionary() }
         ])
         if Logger.logPII {
-            log.verbose("Sending tabs JSON \(tabsJSON.stringValue() ?? "nil")")
+            log.verbose("Sending tabs JSON \(tabsJSON.stringify() ?? "nil")")
         }
         let payload = TabsPayload(tabsJSON)
         return Record(id: guid, payload: payload, ttl: ThreeWeeksInSeconds)
@@ -181,7 +180,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
      * This is a dedicated resetting interface that does both tabs and clients at the
      * same time.
      */
-    open static func resetClientsAndTabsWithStorage(_ storage: ResettableSyncStorage, basePrefs: Prefs) -> Success {
+    public static func resetClientsAndTabsWithStorage(_ storage: ResettableSyncStorage, basePrefs: Prefs) -> Success {
         let clientPrefs = BaseCollectionSynchronizer.prefsForCollection("clients", withBasePrefs: basePrefs)
         let tabsPrefs = BaseCollectionSynchronizer.prefsForCollection("tabs", withBasePrefs: basePrefs)
         clientPrefs.removeObjectForKey("lastFetched")
@@ -192,7 +191,7 @@ open class TabsSynchronizer: TimestampedSingleCollectionSynchronizer, Synchroniz
 
 extension RemoteTab {
     public func toDictionary() -> Dictionary<String, Any>? {
-        let tabHistory = history.flatMap { $0.absoluteString }
+        let tabHistory = history.compactMap { $0.absoluteString }
         if tabHistory.isEmpty {
             return nil
         }

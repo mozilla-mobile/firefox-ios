@@ -35,16 +35,22 @@
 
         if (_n == NULL || _e == NULL || _d == NULL) {
             BN_free(_e);
+            BN_free(_n);
+            BN_free(_d);
             return nil;
         }
 
         if (BN_set_word(_e, RSA_F4) != 1) {
             BN_free(_e);
+            BN_free(_n);
+            BN_free(_d);
             return nil;
         }
 
         if (RSA_set0_key(_rsa, _n, _e, _d) != 1) {
             BN_free(_e);
+            BN_free(_n);
+            BN_free(_d);
             return nil;
         }
         // Maybe there is some secret communication between a Java KeyPair where the Private Key can discover e from the associated Public Key?
@@ -145,10 +151,14 @@
         BIGNUM *_e = BN_dup([e bigNumValue]);
 
         if (_n == NULL || _e == NULL) {
+            BN_free(_n);
+            BN_free(_e);
             return nil;
         }
         _rsa = RSA_new();
         if (RSA_set0_key(_rsa, _n, _e, NULL) != 1) {
+            BN_free(_n);
+            BN_free(_e);
             return nil;
         }
     }
@@ -232,6 +242,7 @@
     BN_set_word(exp, RSA_F4);
     if (!RSA_generate_key_ex(rsa, modulusSize, exp, NULL)) {
         RSA_free(rsa);
+        BN_free(exp);
         return nil;
     }
     BIGNUM *n, *e, *d;
@@ -239,6 +250,7 @@
 
     if (n == NULL || e == NULL || d == NULL) {
         RSA_free(rsa);
+        BN_free(exp);
         return nil;
     }
 

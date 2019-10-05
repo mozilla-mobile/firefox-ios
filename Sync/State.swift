@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Account
 import Shared
 import XCGLogger
 import SwiftKeychainWrapper
@@ -95,8 +96,8 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
         return self.toJSON().description
     }
 
-    public var hashValue: Int {
-        return self.description.hashValue
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(description)
     }
 }
 
@@ -496,7 +497,7 @@ open class Scratchpad {
         }()
 
         if let localCommands: [String] = prefs.stringArrayForKey(PrefLocalCommands) {
-            b.localCommands = Set(localCommands.flatMap({LocalCommand.fromJSON(JSON(parseJSON: $0))}))
+            b.localCommands = Set(localCommands.compactMap({LocalCommand.fromJSON(JSON(parseJSON: $0))}))
         }
 
         if let engineConfigurationString = prefs.stringForKey(PrefEngineConfiguration) {
@@ -554,7 +555,7 @@ open class Scratchpad {
         prefs.setInt(1, forKey: PrefVersion)
         if let global = global {
             prefs.setLong(global.timestamp, forKey: PrefGlobalTS)
-            prefs.setString(global.value.asPayload().json.stringValue()!, forKey: PrefGlobal)
+            prefs.setString(global.value.asPayload().json.stringify()!, forKey: PrefGlobal)
         } else {
             prefs.removeObjectForKey(PrefGlobal)
             prefs.removeObjectForKey(PrefGlobalTS)
@@ -563,7 +564,7 @@ open class Scratchpad {
         // We store the meat of your keys in the Keychain, using a random identifier that we persist in prefs.
         prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
         if let keys = self.keys,
-            let payload = keys.value.asPayload().json.stringValue() {
+            let payload = keys.value.asPayload().json.stringify() {
             let label = "keys." + self.keyLabel
             log.debug("Storing keys in Keychain with label \(label).")
             prefs.setString(self.keyLabel, forKey: PrefKeyLabel)
@@ -583,11 +584,11 @@ open class Scratchpad {
 
         prefs.setString(fxaDeviceId, forKey: PrefDeviceID)
 
-        let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().stringValue()!})
+        let localCommands: [String] = Array(self.localCommands).map({$0.toJSON().stringify()!})
         prefs.setObject(localCommands, forKey: PrefLocalCommands)
 
         if let engineConfiguration = self.engineConfiguration {
-            prefs.setString(engineConfiguration.toJSON().stringValue()!, forKey: PrefEngineConfiguration)
+            prefs.setString(engineConfiguration.toJSON().stringify()!, forKey: PrefEngineConfiguration)
         } else {
             prefs.removeObjectForKey(PrefEngineConfiguration)
         }

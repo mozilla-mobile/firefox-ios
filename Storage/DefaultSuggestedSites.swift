@@ -5,7 +5,7 @@
 import Foundation
 
 open class DefaultSuggestedSites {
-    open static let urlMap = [
+    public static let urlMap = [
         "https://www.amazon.com/": [
             "as": "https://www.amazon.in",
             "cy": "https://www.amazon.co.uk",
@@ -33,7 +33,7 @@ open class DefaultSuggestedSites {
         ]
     ]
 
-    open static let sites = [
+    public static let sites = [
         "default": [
             SuggestedSiteData(
                 url: "https://m.facebook.com/",

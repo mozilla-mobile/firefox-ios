@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Foundation
 import Shared
 import SnapKit
 import UIKit
@@ -24,9 +23,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     var isLoaded: Bool = false {
         didSet {
             if isLoaded {
-                UIView.transition(from: interstitialView, to: webView,
+                UIView.transition(from: interstitialView, to: settingsWebView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.transitionCrossDissolve,
+                    options: .transitionCrossDissolve,
                     completion: { finished in
                         self.interstitialView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
@@ -41,7 +40,7 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
                 interstitialErrorView.isHidden = false
                 UIView.transition(from: interstitialSpinnerView, to: interstitialErrorView,
                     duration: 0.5,
-                    options: UIViewAnimationOptions.transitionCrossDissolve,
+                    options: .transitionCrossDissolve,
                     completion: { finished in
                         self.interstitialSpinnerView.removeFromSuperview()
                         self.interstitialSpinnerView.stopAnimating()
@@ -56,22 +55,22 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     fileprivate var interstitialErrorView: UILabel!
 
     // The web view that displays content.
-    var webView: WKWebView!
+    var settingsWebView: WKWebView!
 
     fileprivate func startLoading(_ timeout: Double = DefaultTimeoutTimeInterval) {
         if self.isLoaded {
             return
         }
         if timeout > 0 {
-            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(SettingsContentViewController.SELdidTimeOut), userInfo: nil, repeats: false)
+            self.timer = Timer.scheduledTimer(timeInterval: timeout, target: self, selector: #selector(didTimeOut), userInfo: nil, repeats: false)
         } else {
             self.timer = nil
         }
-        self.webView.load(URLRequest(url: url))
+        self.settingsWebView.load(PrivilegedRequest(url: url) as URLRequest)
         self.interstitialSpinnerView.startAnimating()
     }
 
-    init(backgroundColor: UIColor = UIColor.white, title: NSAttributedString? = nil) {
+    init(backgroundColor: UIColor = UIColor.Photon.White100, title: NSAttributedString? = nil) {
         interstitialBackgroundColor = backgroundColor
         settingsTitle = title
         super.init(nibName: nil, bundle: nil)
@@ -88,9 +87,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
 
-        self.webView = makeWebView()
-        view.addSubview(webView)
-        self.webView.snp.remakeConstraints { make in
+        self.settingsWebView = makeWebView()
+        view.addSubview(settingsWebView)
+        self.settingsWebView.snp.remakeConstraints { make in
             make.edges.equalTo(self.view)
         }
 
@@ -108,9 +107,9 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
     }
 
     func makeWebView() -> WKWebView {
-        let config = WKWebViewConfiguration()
+        let config = TabManager.makeWebViewConfig(isPrivate: true, blockPopups: true)
         let webView = WKWebView(
-            frame: CGRect(x: 0, y: 0, width: 1, height: 1),
+            frame: CGRect(width: 1, height: 1),
             configuration: config
         )
         webView.allowsLinkPreview = false
@@ -124,14 +123,14 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         // Keeping the background constant prevents a pop of mismatched color.
         view.backgroundColor = interstitialBackgroundColor
 
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+        let spinner = UIActivityIndicatorView(style: .gray)
         view.addSubview(spinner)
 
         let error = UILabel()
         if let _ = settingsTitle {
             error.text = TODOPageLoadErrorString
-            error.textColor = UIColor.red // Firefox Orange!
-            error.textAlignment = NSTextAlignment.center
+            error.textColor = UIColor.theme.tableView.errorText
+            error.textAlignment = .center
         }
         error.isHidden = true
         view.addSubview(error)
@@ -152,26 +151,17 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         return (view, spinner, error)
     }
 
-    func SELdidTimeOut() {
+    @objc func didTimeOut() {
         self.timer = nil
         self.isError = true
     }
 
-    func webView(_ webView: WKWebView, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        // If this is a request to our local web server, use our private credentials.
-        if challenge.protectionSpace.host == "localhost" && challenge.protectionSpace.port == Int(WebServer.sharedInstance.server.port) {
-            completionHandler(.useCredential, WebServer.sharedInstance.credentials)
-            return
-        }
-        completionHandler(URLSession.AuthChallengeDisposition.performDefaultHandling, nil)
-    }
-
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        SELdidTimeOut()
+        didTimeOut()
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        SELdidTimeOut()
+        didTimeOut()
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {

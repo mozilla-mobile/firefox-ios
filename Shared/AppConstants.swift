@@ -10,9 +10,19 @@ public enum AppBuildChannel: String {
     case developer = "developer"
 }
 
+public enum KVOConstants: String {
+    case loading = "loading"
+    case estimatedProgress = "estimatedProgress"
+    case URL = "URL"
+    case title = "title"
+    case canGoBack = "canGoBack"
+    case canGoForward = "canGoForward"
+    case contentSize = "contentSize"
+}
+
 public struct AppConstants {
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
-    
+
     public static let FxAiOSClientId = "1b1a3e44c54fbb58"
 
     /// Build Channel.
@@ -40,44 +50,6 @@ public struct AppConstants {
 
     public static let PrefSendUsageData = "settings.sendUsageData"
 
-    /// Whether we just mirror (false) or actively do a full bookmark merge and upload (true).
-    public static var shouldMergeBookmarks = false
-
-    /// Should we try to sync (no merging) the Mobile Folder (if shouldMergeBookmarks is false).
-    public static let MOZ_SIMPLE_BOOKMARKS_SYNCING: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    /// Should we send a repair request to other clients when the bookmarks buffer validation fails.
-    public static let MOZ_BOOKMARKS_REPAIR_REQUEST: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    /// Flag indicating if we are running in Debug mode or not.
-    public static let isDebug: Bool = {
-        #if MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return false
-        #endif
-    }()
-
     /// Enables support for International Domain Names (IDN)
     /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
     public static let MOZ_PUNYCODE: Bool = {
@@ -91,108 +63,17 @@ public struct AppConstants {
             return true
         #endif
     }()
-    
-    ///  Enables/disables deep linking form fill for FxA
-    public static let MOZ_FXA_DEEP_LINK_FORM_FILL: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    /// Toggles reporting our ad-hoc bookmark sync ping
-    public static let MOZ_ADHOC_SYNC_REPORTING: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return false
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    /// Toggles the ability to add a custom search engine
-    public static let MOZ_CUSTOM_SEARCH_ENGINE: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    ///  Enables/disables push notificatuibs for FxA
-    public static let MOZ_FXA_PUSH: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    ///  Toggle the feature that shows the blue 'Open copied link' banner
-    public static let MOZ_CLIPBOARD_BAR: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
-    ///  Toggle pocket stories feature
-    public static let MOZ_POCKET_STORIES: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
 
     /// Toggle the use of Leanplum.
     public static let MOZ_ENABLE_LEANPLUM: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return false
-        #endif
-    }()
-    
-    ///  Toggle the feature that shows updated FxA preferences cell
-    public static let MOZ_SHOW_FXA_AVATAR: Bool = {
-        #if MOZ_CHANNEL_RELEASE
             return true
         #elseif MOZ_CHANNEL_BETA
             return true
         #elseif MOZ_CHANNEL_FENNEC
             return true
         #else
-            return true
+            return false
         #endif
     }()
 
@@ -204,17 +85,44 @@ public struct AppConstants {
 
     /// The maximum length of a bookmark description stored by Firefox. Shared with Places on desktop.
     public static let DB_DESCRIPTION_LENGTH_MAX = 1024
-    
+
     ///  Toggle FxA Leanplum A/B test for prompting push permissions
     public static let MOZ_FXA_LEANPLUM_AB_PUSH_TEST: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return false
+            return true
         #elseif MOZ_CHANNEL_BETA
-            return false
+            return true
         #elseif MOZ_CHANNEL_FENNEC
-            return false
+            return true
         #else
             return false
         #endif
     }()
+
+    ///  Toggle use of Document Services — initially language detection.
+    public static let MOZ_DOCUMENT_SERVICES: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+        return false
+        #elseif MOZ_CHANNEL_BETA
+        return true
+        #elseif MOZ_CHANNEL_FENNEC
+        return true
+        #else
+        return true
+        #endif
+    }()
+    
+    /// Put it behind a feature flag as the strings didn't land in time
+    public static let MOZ_SHAKE_TO_RESTORE: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+        return false
+        #elseif MOZ_CHANNEL_BETA
+        return true
+        #elseif MOZ_CHANNEL_FENNEC
+        return true
+        #else
+        return true
+        #endif
+    }()
+
 }

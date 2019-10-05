@@ -7,7 +7,7 @@ import UIKit
 /// A transparent view with a rectangular border with rounded corners, stroked
 /// with a semi-transparent white border.
 class InnerStrokedView: UIView {
-    var color = UIColor.white.withAlphaComponent(0.2) {
+    var color = UIColor.Photon.White100.withAlphaComponent(0.2) {
         didSet {
             setNeedsDisplay()
         }

@@ -3,9 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Deferred
 
-private let DefaultDispatchQueue = DispatchQueue.global(qos: DispatchQoS.default.qosClass)
+public let DefaultDispatchQueue = DispatchQueue.global(qos: DispatchQoS.default.qosClass)
 
 public func asyncReducer<T, U>(_ initialValue: T, combine: @escaping (T, U) -> Deferred<Maybe<T>>) -> AsyncReducer<T, U> {
     return AsyncReducer(initialValue: initialValue, combine: combine)
@@ -34,7 +33,7 @@ open class AsyncReducer<T, U> {
     private let combine: Combine
 
     private let initialValueDeferred: Deferred<Maybe<T>>
-    open let terminal: Deferred<Maybe<T>> = Deferred()
+    public let terminal: Deferred<Maybe<T>> = Deferred()
 
     private var queuedItems: [U] = []
 
@@ -60,7 +59,7 @@ open class AsyncReducer<T, U> {
         self.initialValueDeferred = initialValue
     }
 
-    // This is always protected by a lock, so we don't need to 
+    // This is always protected by a lock, so we don't need to
     // take another one.
     fileprivate func ensureStarted() {
         if self.isStarted {
@@ -94,7 +93,7 @@ open class AsyncReducer<T, U> {
                 return
             }
 
-            let combineItem = deferDispatchAsync(dispatchQueue) { _ in
+            let combineItem = deferDispatchAsync(dispatchQueue) {
                 return self.combine(accumulator, item)
             }
 

@@ -1,0 +1,17 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>విక్షనరీ (te)</ShortName>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAA21BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAD////Z2dnm5uYSEhJCQkJjY2PJycn6+vq4uLhOTk79/f0GBgbg4OBra2tbW1sEBAQeHh729va/v7/u7u4pKSkPDw/d3d2BgYFQUFAjIyMYGBjq6uq0tLSrq6umpqadnZ2Xl5eSkpKNjY1wcHBWVlZGRkY7Ozs1NTUwMDAKCgrDw8OxsbGIiIh6enpoaGhLS0tAQEA3NzcsLCwrKysICAjw8PDW1tbS0tJ0dHTo6Ojj4+PPz898fHxiYmLx8fG6urqhoaFlZWXTVXa3AAAABnRSTlMA8si8ZBgxEvPEAAACy0lEQVRo3u2aa1fiMBCGAXUiiLW2tFguAsr9orBcFBDwsrf//4t2kqbN0d2DS5Pshz15P0BmQvtMMsmclpMU6jiTBg1KZ45TVCdHoE1HJwjQeH8k4PyAVh2nMqBVmVQatCqdAs0yAAMwAAMwAAP414B8pCIzh/m8DYfpMc81+COARKoxc0LI9kBAh3Bl9wPCwC8IOT8Q0CNcp5+MICmg+ymg5Nm2XWskBaxqtr142wfIOsJMAAgzvReQkwecGYAB/AYoLsurOgitV6vyMgdCjSXaEoCpZVmlovDPLVQbhAK0hwkAASGvrKoSlCf8t9SurmO7buF1lQSAB89jceVusENEnCtRwOW9GBGaPxLk4H3Ip05k2YSp8K57IAXoi4hFzW/GKX7CGpmTAtxfYk+fG85pCHDH3OGh8QUkAPyet9y4Q1pQwiHdcUcLO7/KAaCNPc+8Z4btxTl+7EK7kiXkqigJGBDUMF68WacjpmWBzQAkAcUr7JrGzSYS46VPWX1ZAExIVJc8NuN1ShyxulElxCpLA65JNNEtbGBhokmYUXvE0NKAh6haVF4ImfDnkwtWqLBxLQMQS4W0OemNp/YGf+tv6YKVB0CTV4spv1+DFqSzcA9ufAWAeVgt/NeoKgV0asJd0QMFgLJFVyP76sRpD8LldaYC4G/Z1irgpx2nvVShu8IdqwBAl3aOm2FqUZVnuhM8lnslgBpbqK4onLc0CS06IlmAqPpkgymYc8cObfeGjkgNAALCdFUXZZupCYoAM0IlysLYDR2eKsBjGLEoCy1mf2soAYiIR7HjJ7MvQAVAROyuxd5jgII6wMCtVl96wva/o2NTVwcAx/edDw7HB0mA+qfrDyEpfwl82hVQRUioUR+v7v7ViziX6hdxLjspoKcZIEbg/qd/SDEZgAEYAIABGIABaJD2QwPajz1oP7ih++iJ/sMz2o///ALGfwB3vnCGuQAAAABJRU5ErkJggg==</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://te.wiktionary.org/w/api.php">
+  <Param name="action" value="opensearch"/>
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="namespace" value="0"/>
+</Url>
+<Url type="text/html" method="get" template="https://te.wiktionary.org/wiki/ప్రత్యేక:అన్వేషణ">
+  <Param name="search" value="{searchTerms}"/>
+</Url>
+<SearchForm>https://te.wiktionary.org/wiki/ప్రత్యేక:అన్వేషణ</SearchForm>
+</SearchPlugin>

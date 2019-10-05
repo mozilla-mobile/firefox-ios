@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-import Deferred
 import SwiftyJSON
 
 public struct SyncCommand: Equatable {
@@ -42,7 +41,7 @@ public struct SyncCommand: Equatable {
             "command": "displayURI",
             "args": [shareItem.url, sender, shareItem.title ?? ""]
         ]
-        return SyncCommand(value: JSON(object: jsonObj).stringValue()!)
+        return SyncCommand(value: JSON(jsonObj).stringify()!)
     }
 
     public func withClientGUID(_ clientGUID: String?) -> SyncCommand {

@@ -1,0 +1,17 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Heuréka</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAQlBMVEX19fUAAAD19fX19fX19fX19fX/egT27eb+ghP9kTH9mUD6uH325tf41rn7qF75x5v+iSL33sj4z6r7sG38oE/5v4wVt/ymAAAABXRSTlPvAJ8gMC39vXwAAAKOSURBVGje7ZrdjqsgFIW1HQERgQK+/6ueTqMuBKKBQnImcd1Z0/11/6xtbOj6/vnohibqHs++7/ofhK+P+Om7Zzc01Dv8Y2iqR9cNTYX4rXQDbsANuAF/DSDmtyiuawLE4jRZNUpF6wLoMpJATtUD0ImRhLSqBFAIHyLmCgDKyYns14AXI6caaSkA8S8Ir0JAHF9LNdNfLyzO/5iJEkAcn5tD40e/SqUAqhE+mhfj3SwFuD3EkqB72U1lALNXOTXulngSBQAUiKXmZCa+eAlgIquSdg1201wAYGGBYzrE8wFqG8Lk7t7ohqELmQB+lrzbsttTsbkAepa72bxN92nVeQBUyJzNl/HGVeQA8D22Fd1yK0ILuM86WS9UDgAtcFhKqx8Qkgl/2qZMAL4GnKYHCyyHhvNMwHGG/JoswfxO3wNgusWzwOsI0HkAAcDBuK/dAjac2W8yQN21ggVWqRoAFIbAAlV6oMJCoN2bbBlAo9J+HFggdIwsM9qYfgIs/tIqM9qEFRO3AVj0eM4EzPhhcRteic2dt03hLUbjrGzCMC4bIBO15WCGCahsAHZm+CAw0aMH0GsAxBMdpQu3wr9myDMDgDZfTDgdkUA2ACmAEMdHAgUADL6kyfsjfJEDgNTpW4Zh8EUuAKO6S4qgQxz31FAAiPePM3QvvuIE0kMRAG2ERjm95cKXcnkBKH6JBSEfANkMQh4A01JIAOBC1JYRALiUkIks9CRGn1AGwGA64otJEw6ZLARA82L5R5NarXtOAKBI1wQAqhGmuoCYwCoDYgKtC4gJQ10ACHjwtACAMA9QFQAI8tfaZoBqAYCY8dz8n/8cvwEf3YAbcAMaqPmxh+YHN5ofPWl+eKb58Z9/o3DCvuyhQrcAAAAASUVORK5CYII=</Image>
+<Url type="application/x-suggestions+json" method="GET" template="http://www.heureka.cz/direct/firefox/autocompleter.php">
+	<Param name="query" value="{searchTerms}"/>
+</Url>
+<Url type="text/html" method="GET" template="http://www.heureka.cz/" resultdomain="heureka.cz">
+	<Param name="h[fraze]" value="{searchTerms}"/>
+	<Param name="utm_source" value="firefox-search"/>
+</Url>
+<SearchForm>http://www.heureka.cz/</SearchForm>
+</SearchPlugin>

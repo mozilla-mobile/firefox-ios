@@ -3,10 +3,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
+import Account
 import Storage
 @testable import Sync
 import XCGLogger
-import Deferred
 
 import XCTest
 import SwiftyJSON
@@ -120,7 +120,7 @@ extension MockSyncableHistory: SyncableHistory {
                         log.debug("Local modified: \(existingLocal.localModified ??? "nil"); remote: \(modified).")
 
                         // Should always be a value if marked as changed.
-                        if existingLocal.localModified! > modified {
+                        if let localModified = existingLocal.localModified, localModified > modified {
                             // Nothing to do: it's marked as changed.
                             log.debug("Discarding remote non-visit changes!")
                             self.places[place.guid]?.serverModified = modified
@@ -218,9 +218,9 @@ class HistorySynchronizerTests: XCTestCase {
         let payload = HistoryPayload(json)
         let record = Record<HistoryPayload>(id: id, payload: payload, modified: modified, sortindex: sortindex, ttl: ttl)
         let k = KeyBundle.random()
-        let s = k.serializer({ (x: HistoryPayload) -> JSON in x.json })
+        let s = keysPayloadSerializer(keyBundle: k, { (x: HistoryPayload) -> JSON in x.json })
         let converter = { (x: JSON) -> HistoryPayload in HistoryPayload(x) }
-        let f = k.factory(converter)
+        let f = keysPayloadFactory(keyBundle: k, converter)
         let serialized = s(record)!
         let envelope = EnvelopeJSON(serialized)
 

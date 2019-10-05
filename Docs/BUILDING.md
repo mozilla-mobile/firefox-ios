@@ -111,8 +111,19 @@ We would love a Pull Request for a smarter Xcode project configuration or even a
 Random notes
 ------------
 
-Updating SQLCipher.
+## Updating SQLCipher.
 
-As of bug https://bugzilla.mozilla.org/show_bug.cgi?id=1182620 we do not run the SQLCipher 'amalgamation' phase anymore. Instead we have simply included generated copies of `sqlite3.c`, `sqlite3.h` and `sqlite3ext.h` in the project. This works around problems where the amalgamation phase did not work for production builds. It also speeds up things.
+As of [Bug 1182620](https://bugzilla.mozilla.org/show_bug.cgi?id=1182620) we do not run the SQLCipher 'amalgamation' phase anymore. Instead we have simply included generated copies of `sqlite3.c`, `sqlite3.h` and `sqlite3ext.h` in the project. This works around problems where the amalgamation phase did not work for production builds. It also speeds up things.
 
 To update to a newer version of SQLCipher: check out the original SQLCipher project and build it. Do not copy the project or anything in the Firefox project. Just follow their instructions. Then copy the above three `.c` and `.h` files back into the Firefox project. Also update the `README`, `VERION` and `CHANGELOG` files from the original distribution so that we know what version we have included.
+
+Building involves:
+
+```
+$ brew install openssl              # Or upgrade.
+$ ./configure --enable-tempstore=yes \
+CFLAGS="-I/usr/local/Cellar/openssl/1.0.2n/include -DSQLITE_HAS_CODEC" \
+LDFLAGS="-lcrypto"
+$ make
+$ cp sqlite3{.c,.h,ext.h} README.md VERSION CHANGELOG.md ~/path/to/firefox-ios/ThirdParty/sqlcipher
+```

@@ -20,12 +20,12 @@ let ONE_YEAR_IN_SECONDS = 365 * 24 * 60 * 60
  * Deletedness is a property of the payload.
  */
 open class Record<T: CleartextPayloadJSON> {
-    open let id: String
-    open let payload: T
+    public let id: String
+    public let payload: T
 
-    open let modified: Timestamp
-    open let sortindex: Int
-    open let ttl: Int?              // Seconds. Can be null, which means 'don't expire'.
+    public let modified: Timestamp
+    public let sortindex: Int
+    public let ttl: Int?              // Seconds. Can be null, which means 'don't expire'.
 
     // This is a hook for decryption.
     // Right now it only parses the string. In subclasses, it'll parse the

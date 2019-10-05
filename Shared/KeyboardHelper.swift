@@ -3,24 +3,23 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-import Foundation
 
 /**
  * The keyboard state at the time of notification.
  */
 public struct KeyboardState {
     public let animationDuration: Double
-    public let animationCurve: UIViewAnimationCurve
+    public let animationCurve: UIView.AnimationCurve
     private let userInfo: [AnyHashable: Any]
 
     fileprivate init(_ userInfo: [AnyHashable: Any]) {
         self.userInfo = userInfo
-        animationDuration = userInfo[UIKeyboardAnimationDurationUserInfoKey] as! Double
+        animationDuration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as! Double
         // HACK: UIViewAnimationCurve doesn't expose the keyboard animation used (curveValue = 7),
         // so UIViewAnimationCurve(rawValue: curveValue) returns nil. As a workaround, get a
         // reference to an EaseIn curve, then change the underlying pointer data with that ref.
-        var curve = UIViewAnimationCurve.easeIn
-        if let curveValue = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? Int {
+        var curve = UIView.AnimationCurve.easeIn
+        if let curveValue = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? Int {
             NSNumber(value: curveValue as Int).getValue(&curve)
         }
         self.animationCurve = curve
@@ -31,7 +30,7 @@ public struct KeyboardState {
     /// on iPad the overlap may be partial or if an external keyboard is attached, the intersection
     /// height will be zero. (Even if the height of the *invisible* keyboard will look normal!)
     public func intersectionHeightForView(_ view: UIView) -> CGFloat {
-        if let keyboardFrameValue = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue {
+        if let keyboardFrameValue = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardFrame = keyboardFrameValue.cgRectValue
             let convertedKeyboardFrame = view.convert(keyboardFrame, from: nil)
             let intersection = convertedKeyboardFrame.intersection(view.bounds)
@@ -41,7 +40,7 @@ public struct KeyboardState {
     }
 }
 
-public protocol KeyboardHelperDelegate: class {
+public protocol KeyboardHelperDelegate: AnyObject {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardDidShowWithState state: KeyboardState)
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState)
@@ -66,9 +65,9 @@ open class KeyboardHelper: NSObject {
      * Starts monitoring the keyboard state.
      */
     open func startObserving() {
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardDidShow(_:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(KeyboardHelper.SELkeyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow), name: UIResponder.keyboardDidShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     deinit {
@@ -89,7 +88,7 @@ open class KeyboardHelper: NSObject {
         delegates.append(WeakKeyboardDelegate(delegate))
     }
 
-    func SELkeyboardWillShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -98,7 +97,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    func SELkeyboardDidShow(_ notification: Notification) {
+    @objc func keyboardDidShow(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {
@@ -107,7 +106,7 @@ open class KeyboardHelper: NSObject {
         }
     }
 
-    func SELkeyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         if let userInfo = notification.userInfo {
             currentState = KeyboardState(userInfo)
             for weakDelegate in delegates {

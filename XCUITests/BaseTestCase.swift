@@ -2,30 +2,56 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import MappaMundi
 import XCTest
 
+let serverPort = Int.random(in: 1025..<65000)
+
+func path(forTestPage page: String) -> String {
+    return "http://localhost:\(serverPort)/test-fixture/\(page)"
+}
+
 class BaseTestCase: XCTestCase {
-    var navigator: Navigator<FxUserState>!
-    var app: XCUIApplication!
+    var navigator: MMNavigator<FxUserState>!
+    let app =  XCUIApplication()
     var userState: FxUserState!
 
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-        app = XCUIApplication()
-        app.terminate()
-        restart(app, args: [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew])
+    // leave empty for non-specific tests
+    var specificForPlatform: UIUserInterfaceIdiom?
+
+    // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
+    // or, use restart() to re-launch with custom args.
+    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)"]
+
+    func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
         userState = navigator.userState
     }
 
+    func setUpApp() {
+        app.launchArguments = [LaunchArguments.Test] + launchArguments
+        app.launch()
+    }
+
+    override func setUp() {
+        super.setUp()
+        continueAfterFailure = false
+        setUpApp()
+        setUpScreenGraph()
+    }
+
     override func tearDown() {
-        XCUIApplication().terminate()
+        app.terminate()
         super.tearDown()
     }
 
+    var skipPlatform: Bool {
+        guard let platform = specificForPlatform else { return false }
+        return UIDevice.current.userInterfaceIdiom != platform
+    }
+
     func restart(_ app: XCUIApplication, args: [String] = []) {
-        XCUIDevice.shared().press(.home)
+        XCUIDevice.shared.press(.home)
         var launchArguments = [LaunchArguments.Test]
         args.forEach { arg in
             launchArguments.append(arg)
@@ -44,11 +70,11 @@ class BaseTestCase: XCTestCase {
         }
     }
 
-    func waitforExistence(_ element: XCUIElement, file: String = #file, line: UInt = #line) {
-        waitFor(element, with: "exists == true", file: file, line: line)
+    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
 
-    func waitforNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+    func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
         waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
 
@@ -62,7 +88,7 @@ class BaseTestCase: XCTestCase {
         let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
         if result != .completed {
             let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
-            self.recordFailure(withDescription: message, inFile: file, atLine: line, expected: false)
+            self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
         }
     }
 
@@ -70,7 +96,7 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         UIPasteboard.general.string = url
         app.textFields["url"].press(forDuration: 2.0)
-        app.sheets.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
@@ -94,7 +120,38 @@ class BaseTestCase: XCTestCase {
         let app = XCUIApplication()
         let progressIndicator = app.progressIndicators.element(boundBy: 0)
 
-        waitforNoExistence(progressIndicator, timeoutValue: 20.0)
+        waitForNoExistence(progressIndicator, timeoutValue: 20.0)
+    }
+
+    func waitForTabsButton() {
+        if iPad() {
+        waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
+        } else {
+            // iPhone sim tabs button is called differently when in portrait or landscape
+            if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
+                waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 15)
+            } else {
+                waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 15)
+            }
+        }
+    }
+}
+
+class IpadOnlyTestCase: BaseTestCase {
+    override func setUp() {
+        specificForPlatform = .pad
+        if iPad() {
+            super.setUp()
+        }
+    }
+}
+
+class IphoneOnlyTestCase: BaseTestCase {
+    override func setUp() {
+        specificForPlatform = .phone
+        if !iPad() {
+            super.setUp()
+        }
     }
 }
 

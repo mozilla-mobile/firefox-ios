@@ -32,9 +32,14 @@ private struct AdjustSettings {
 
 class AdjustIntegration: NSObject {
     let profile: Profile
-    
+
     init(profile: Profile) {
         self.profile = profile
+
+        super.init()
+
+        // Move the "AdjustAttribution.json" file from the documents directory to the caches directory.
+        migratePathComponentInDocumentsDirectory(AdjustAttributionFileName, to: .cachesDirectory)
     }
 
     /// Return an ADJConfig object if Adjust has been enabled. It is determined from the values in
@@ -96,28 +101,28 @@ class AdjustIntegration: NSObject {
     /// Return the path to the `AdjustAttribution.json` file. Throws an `NSError` if we could not build the path.
 
     fileprivate func getAttributionPath() throws -> String {
-        guard let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        guard let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
             throw NSError(domain: AdjustIntegrationErrorDomain, code: -1,
                 userInfo: [NSLocalizedDescriptionKey: "Could not build \(AdjustAttributionFileName) path"])
         }
-        
+
         return url.appendingPathComponent(AdjustAttributionFileName).path
     }
 
     /// Return true if Adjust should be enabled. If the user has disabled the Send Anonymous Usage Data then we immediately
     /// return false. Otherwise we only do one ping, which means we only enable it if we have not seen the attributiond
     /// data yet.
-    
+
     fileprivate func shouldEnable() throws -> Bool {
         if profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true {
             return true
         }
         return try hasAttribution() == false
     }
-    
+
     /// Return true if retention (session) tracking should be enabled. This follows the Send Anonymous Usage Data
     /// setting.
-    
+
     fileprivate func shouldTrackRetention() -> Bool {
         return profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
     }
@@ -159,10 +164,12 @@ extension AdjustIntegration: AdjustDelegate {
     ///
     /// Here we also disable Adjust based on the Send Anonymous Usage Data setting.
 
-    func adjustAttributionChanged(_ attribution: ADJAttribution!) {
+    func adjustAttributionChanged(_ attribution: ADJAttribution?) {
         do {
-            Logger.browserLogger.info("Adjust - Saving attribution info to disk")
-            try saveAttribution(attribution)
+            if let attribution = attribution {
+                Logger.browserLogger.info("Adjust - Saving attribution info to disk")
+                try saveAttribution(attribution)
+            }
         } catch let error {
             Logger.browserLogger.error("Adjust - Failed to save attribution: \(error)")
         }
@@ -178,18 +185,38 @@ extension AdjustIntegration: AdjustDelegate {
 
     /// This is called from the Settings screen. The settings screen will remember the choice in the
     /// profile and then use this method to disable or enable Adjust.
-    
+
     static func setEnabled(_ enabled: Bool) {
         Adjust.setEnabled(enabled)
     }
-    
+
     /// Store the deeplink url from Adjust SDK. Per Adjust documentation, any interstitial view launched could interfere
     /// with launching the deeplink. We let the interstial view decide what to do with deeplink.
     /// Ref: https://github.com/adjust/ios_sdk#deferred-deep-linking-scenario
-    
-    func adjustDeeplinkResponse(_ deeplink: URL!) -> Bool {
-        profile.prefs.setString("\(deeplink)", forKey: "AdjustDeeplinkKey")
+    func adjustDeeplinkResponse(_ deeplink: URL?) -> Bool {
+        if let link = deeplink {
+            profile.prefs.setString("\(link)", forKey: "AdjustDeeplinkKey")
+        }
         return true
     }
 
+    private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
+        guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(pathComponent).path, FileManager.default.fileExists(atPath: oldPath) else {
+            return
+        }
+
+        print("Migrating \(pathComponent) from ~/Documents to \(destinationSearchPath)")
+        guard let newPath = try? FileManager.default.url(for: destinationSearchPath, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(pathComponent).path else {
+            print("Unable to get destination path \(destinationSearchPath) to move \(pathComponent)")
+            return
+        }
+
+        do {
+            try FileManager.default.moveItem(atPath: oldPath, toPath: newPath)
+
+            print("Migrated \(pathComponent) to \(destinationSearchPath) successfully")
+        } catch let error as NSError {
+            print("Unable to move \(pathComponent) to \(destinationSearchPath): \(error.localizedDescription)")
+        }
+    }
 }

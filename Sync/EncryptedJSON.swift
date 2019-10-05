@@ -3,9 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Account
 import Shared
 import FxA
-import Account
 import XCGLogger
 import SwiftyJSON
 

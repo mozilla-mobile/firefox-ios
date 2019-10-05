@@ -1,0 +1,15 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Vatera.hu</ShortName>
+  <Language>hu</Language>
+  <OutputEncoding>ISO-8859-2</OutputEncoding>
+  <InputEncoding>ISO-8859-2</InputEncoding>
+  <Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAA3lBMVEUAAAD5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn/WgD59/b/WwH/XAP/XwD/XAD/Xgb59vX/YAD59fP7zrb+div59/X66d/+aRf/ZRL9kVX+dy3+cyj+cCL/Ygz638/7y7D8oG7/YAj58+/57uf65tr9l2H57+r64tX62sj7xqn8tY/8s4v8r4X8rIH8qHr9jE79iUj+gT3+fTb+ejL+bBz62MX707370br7w6X7waD9g0D58e366+P7t5L8pXX9nWj9lV39hUT63Mv61cD7vZv7u5j9m2X+fzgxJ++FAAAACnRSTlMAwwbS+W9sG8/zKHP4TgAABJlJREFUaN61mutS2zAQhR3KpV1Lli0ncaAJt1ASINxyKVBKaaFAef8XalrobLLr+Ezx+Pxj8PJZK8mf5SEIgqXV2jJVkOXa6lIwzdp7qizv16b3/44qzLulYJUqzWpQo0pTC5ap0iwHVHFmAUYGl+O64hEABLhIA+oihJJf53MBhlrDTrvJabc7v/p4DIZ2xk1RNyCjAZ4uXermk55CgKHWuiiL0/v8EXzqxN1kJlHXTTyBeHpyiUg8oEwDpoRfaRTOxtrkgiDioxNVcXebfA7A01Ec2nmAOyWPOvQ5ngdEbkREuSP4pq/9Cjv0RdxVGPHMqWX6MU3mr423tlGPeqqv0cUCgKFrZ+d7FLrbQoChfsfJUU/qCwH7G6JHSXoOpqBhw7nYyH3nvy8BdK56tL5PpgjwXVRYG15RJgA8Y7dOraPrAoCh+kR1qHPDFQqwvaV6dFe4hh4iawXgBxU9Tb/KG4o/f+MCDTiVuyyMd8gvBGR04qwtKFAZqRva/FQwAk+HCRry/7Y0EDVjNWlNnjQ1xwM5YBt/EVcHouRMbUzLy06ZbKiXdQsALq21YuOciZKCjRmlH0lEAvbaTnTVjb0gLH60WPdEXgBk0a7qUfdw0STcqQ5tHABARjtWraNjASh4vA+JCIygv6l6dC9qCgR1TF4BJKGnFLh1MDcEVqy80m79zAHg+8qVgqEbqYKEZSkAqLN5UsjoasrWsgQAFqfaPVoFTssSAvLFOd3/XqtgDGTJALw/e6Qvu0hUh1iWClAsTsfPYL7sxEWFsmQAfkaGcYMB7KakQJYCAJ/yu6LU/LkIm4MBQJyuvTdf7OkWu08DWJyRFVK4lMXnQJYCAMV5Rl6cCoAsBQCK89nM3p6n65h/q2WpAUCcUdwVj7G7NALbXQCAOO2LFPg0tCk7JGQpAVicQ2KCoR15KhCyhOdkFifLcBawC2SpAEicNnKPZHiETbkKWHsAoMWpe+zz5yiDAC3O/FXi6Uw96MQqUwAszjA+Iv9KN3qfjAi1CJ9Oe2T+7fRuHAFZKgAWp+v0ybzQj9UbXXIBAHoIj+qP2AZlL0a6FypItCw1AIvzVQqGDsSvLMsSAIA4J3+lYOgJyhIDyLM41VuJnp7mHhoBECcvFVaBlCUGYHGOXj9/SFlaLUsMyPR7yd9PI7zJpSwxQItTP3DqeSroUU5wi8yz0+cLTw0rO8SyBAAszo19VgWUJQY8yNOUjR/pZuLQyRIDWJz6bz2EamYeyb9tDvK6UT/J6dvbAPnzeTRMwclSA/AHOU78vB6HokMD8hiAxMnTHFq9+wwGAHFy5M8Jf1rFAHyW14nSEzKEAVicHCHLwxIAeeLUidzYlwLsr6seCVny16S3tIjFyVFHn6wEgD/VcvThrQxAvEFogDh+QoDOvSuchAZlpQCZfIuTnwD6JUfg6WdXA1iWP2QBAOCvx+rsbd4M4I8eic1Pwq8TZQAH3dQuGMHL2yoCwAw2bJwXG41aZQCc1kMjL1eH/M5eAgAayCkBMAtDpQHlU/U/DXyo/t8eVqjSrFT/ryfBWoWEd2vBNEsrFc1DbWV6/78B75KyRqivJp0AAAAASUVORK5CYII=</Image>
+  <Url type="text/html" method="GET" template="http://m.vatera.hu/page/advanced_search/action/advancedSearch/">
+    <Param name="q" value="{searchTerms}" />
+  </Url>
+  <SearchForm>http://m.vatera.hu/</SearchForm>
+</SearchPlugin>

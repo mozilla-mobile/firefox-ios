@@ -1,0 +1,16 @@
+<html>
+<head>
+<script>
+function openPopup() {
+  var w = window.open("", "myWindow");
+  w.document.write("<p>This is 'myWindow' <a href=''>link-created-by-parent</a></p>");
+}
+document.addEventListener("DOMContentLoaded", function() {
+ openPopup(); 
+});
+</script>
+
+</head>
+<body>
+</body>
+</html>

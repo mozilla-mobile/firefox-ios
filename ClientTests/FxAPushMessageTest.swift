@@ -57,14 +57,15 @@ class FxAPushMessageTest: XCTestCase {
 
         let profile = MockProfile()
 
-        let account = FirefoxAccount(
-            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
+        let account = Account.FirefoxAccount(
+            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(prefs: profile.prefs),
             email: "testtest@test.com",
             uid: "uid",
             deviceRegistration: nil,
             declinedEngines: nil,
             stateKeyLabel: "xxx",
-            state: SeparatedState())
+            state: SeparatedState(),
+            deviceName: "My iPhone")
 
         let registration = PushRegistration(uaid: "uaid", secret: "secret", subscription: subscription)
 
@@ -83,14 +84,15 @@ class FxAPushMessageTest: XCTestCase {
     }
 
     func createHandler(_ profile: Profile = MockProfile()) -> FxAPushMessageHandler {
-        let account = FirefoxAccount(
-            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
+        let account = Account.FirefoxAccount(
+            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(prefs: profile.prefs),
             email: "testtest@test.com",
             uid: "uid",
             deviceRegistration: nil,
             declinedEngines: nil,
             stateKeyLabel: "xxx",
-            state: SeparatedState())
+            state: SeparatedState(),
+            deviceName: "My iPhone")
 
         profile.setAccount(account)
 
@@ -150,6 +152,6 @@ class FxAPushMessageTest: XCTestCase {
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 10)
-        
+
     }
 }

@@ -25,6 +25,12 @@ fileprivate let rfc822DateFormatter: DateFormatter = {
     return dateFormatter
 }()
 
+extension TimeInterval {
+    public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> TimeInterval {
+        return Double(microsecondTimestamp) / 1000000
+    }
+}
+
 extension Timestamp {
     public static func uptimeInMilliseconds() -> Timestamp {
         return Timestamp(DispatchTime.now().uptimeNanoseconds) / 1000000
@@ -34,6 +40,10 @@ extension Timestamp {
 extension Date {
     public static func now() -> Timestamp {
         return UInt64(1000 * Date().timeIntervalSince1970)
+    }
+
+    public func toMicrosecondTimestamp() -> MicrosecondTimestamp {
+        return UInt64(1_000_000 * timeIntervalSince1970)
     }
 
     public static func nowNumber() -> NSNumber {
@@ -52,29 +62,25 @@ extension Date {
         return Date(timeIntervalSince1970: Double(microsecondTimestamp) / 1000000)
     }
 
-    public func toRelativeTimeString() -> String {
+    public func toRelativeTimeString(dateStyle: DateFormatter.Style = .short, timeStyle: DateFormatter.Style = .short) -> String {
         let now = Date()
 
-        let units: NSCalendar.Unit = [NSCalendar.Unit.second, NSCalendar.Unit.minute, NSCalendar.Unit.day, NSCalendar.Unit.weekOfYear, NSCalendar.Unit.month, NSCalendar.Unit.year, NSCalendar.Unit.hour]
+        let units: Set<Calendar.Component> = [.second, .minute, .day, .weekOfYear, .month, .year, .hour]
+        let components = Calendar.current.dateComponents(units, from: self, to: now)
 
-        let components = (Calendar.current as NSCalendar).components(units,
-            from: self,
-            to: now,
-            options: [])
-        
-        if components.year! > 0 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+        if components.year ?? 0 > 0 {
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: dateStyle, timeStyle: timeStyle))
         }
 
         if components.month == 1 {
             return String(format: NSLocalizedString("more than a month ago", comment: "Relative date for dates older than a month and less than two months."))
         }
 
-        if components.month! > 1 {
-            return String(format: DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.short, timeStyle: DateFormatter.Style.short))
+        if components.month ?? 0 > 1 {
+            return String(format: DateFormatter.localizedString(from: self, dateStyle: dateStyle, timeStyle: timeStyle))
         }
 
-        if components.weekOfYear! > 0 {
+        if components.weekOfYear ?? 0 > 0 {
             return String(format: NSLocalizedString("more than a week ago", comment: "Description for a date more than a week ago, but less than a month ago."))
         }
 
@@ -82,12 +88,14 @@ extension Date {
             return String(format: NSLocalizedString("yesterday", comment: "Relative date for yesterday."))
         }
 
-        if components.day! > 1 {
+        if components.day ?? 0 > 1 {
             return String(format: NSLocalizedString("this week", comment: "Relative date for date in past week."), String(describing: components.day))
         }
 
-        if components.hour! > 0 || components.minute! > 0 {
-            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: DateFormatter.Style.none, timeStyle: DateFormatter.Style.short)
+        if components.hour ?? 0 > 0 || components.minute ?? 0 > 0 {
+            // Can't have no time specified for this formatting case.
+            let timeStyle = timeStyle != .none ? timeStyle : .short
+            let absoluteTime = DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: timeStyle)
             let format = NSLocalizedString("today at %@", comment: "Relative date for date older than a minute.")
             return String(format: format, absoluteTime)
         }
@@ -100,7 +108,7 @@ extension Date {
     }
 }
 
-let MaxTimestampAsDouble: Double = Double(UInt64.max)
+let MaxTimestampAsDouble = Double(UInt64.max)
 
 /** This is just like decimalSecondsStringToTimestamp, but it looks for values that seem to be
  *  milliseconds and fixes them. That's necessary because Firefox for iOS <= 7.3 uploaded millis
@@ -167,6 +175,6 @@ public func decimalSecondsStringToTimestamp(_ input: String) -> Timestamp? {
 }
 
 public func millisecondsToDecimalSeconds(_ input: Timestamp) -> String {
-    let val: Double = Double(input) / 1000
+    let val = Double(input) / 1000
     return String(format: "%.2F", val)
 }

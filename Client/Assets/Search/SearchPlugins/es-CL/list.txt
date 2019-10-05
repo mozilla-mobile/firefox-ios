@@ -1,7 +1,0 @@
-bing
-drae
-google
-mercadolibre-cl
-twitter
-wikipedia-es
-yahoo-cl

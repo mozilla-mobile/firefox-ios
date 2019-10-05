@@ -2,10 +2,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+import MappaMundi
 import XCTest
 
 class ScreenGraphTest: XCTestCase {
-    var navigator: Navigator<TestUserState>!
+    var navigator: MMNavigator<TestUserState>!
     var app: XCUIApplication!
 
     override func setUp() {
@@ -17,7 +18,16 @@ class ScreenGraphTest: XCTestCase {
     }
 }
 
+extension XCTestCase {
+    func wait(forElement element: XCUIElement, timeout: TimeInterval) {
+        let predicate = NSPredicate(format: "exists == 1")
+        expectation(for: predicate, evaluatedWith: element)
+        waitForExpectations(timeout: timeout)
+    }
+}
+
 extension ScreenGraphTest {
+    // Temoporary disable since it is failing intermittently on BB
     func testUserStateChanges() {
         XCTAssertNil(navigator.userState.url, "Current url is empty")
 
@@ -25,7 +35,7 @@ extension ScreenGraphTest {
         navigator.performAction(TestActions.LoadURLByTyping)
         // The UserState is mutated in BrowserTab.
         navigator.goto(BrowserTab)
-
+        navigator.nowAt(BrowserTab)
         XCTAssertTrue(navigator.userState.url?.starts(with: "www.mozilla.org") ?? false, "Current url recorded by from the url bar is \(navigator.userState.url ?? "nil")")
     }
 
@@ -43,6 +53,7 @@ extension ScreenGraphTest {
         // Switch night mode on, by toggling.
         navigator.performAction(TestActions.ToggleNightMode)
         XCTAssertTrue(navigator.userState.nightMode)
+        navigator.back()
         XCTAssertEqual(navigator.screenState, BrowserTab)
 
         // Nothing should happen here, because night mode is already on.
@@ -53,6 +64,7 @@ extension ScreenGraphTest {
         // Switch night mode off.
         navigator.toggleOff(navigator.userState.nightMode, withAction: TestActions.ToggleNightMode)
         XCTAssertFalse(navigator.userState.nightMode)
+        navigator.back()
         XCTAssertEqual(navigator.screenState, BrowserTab)
     }
 
@@ -129,7 +141,9 @@ extension ScreenGraphTest {
 
 
 private let defaultURL = "https://example.com"
-class TestUserState: UserState {
+
+@objcMembers
+class TestUserState: MMUserState {
     required init() {
         super.init()
         initialScreenState = FirstRun
@@ -152,8 +166,15 @@ fileprivate class TestActions {
     static let LoadURLByPasting = "LoadURLByPasting"
 }
 
-fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> ScreenGraph<TestUserState> {
-    let map = ScreenGraph(for: test, with: TestUserState.self)
+public var isTablet: Bool {
+    // There is more value in a variable having the same name,
+    // so it can be used in both predicates and in code
+    // than avoiding the duplication of one line of code.
+    return UIDevice.current.userInterfaceIdiom == .pad
+}
+
+fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScreenGraph<TestUserState> {
+    let map = MMScreenGraph(for: test, with: TestUserState.self)
 
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab)
@@ -164,8 +185,8 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.dismissOnUse = true
         // Would like to use app.otherElements.deviceStatusBars.networkLoadingIndicators.element
         // but this means exposing some of SnapshotHelper to another target.
-        screenState.onEnterWaitFor("exists != true",
-                                   element: app.progressIndicators.element(boundBy: 0))
+        // screenState.onEnterWaitFor("exists != true",
+                                   // element: app.progressIndicators.element(boundBy: 0))
         screenState.noop(to: BrowserTab)
     }
 
@@ -180,7 +201,7 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
             app.textFields["url"].press(forDuration: 1.0)
-            app.sheets.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+            app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
         }
     }
 
@@ -198,12 +219,17 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
         screenState.onEnterWaitFor(element: app.tables["Context Menu"])
         screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
 
-        screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode) { userState in
+        screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
         }
 
         screenState.backAction = {
-            app.buttons["PhotonMenu.cancel"].tap()
+            if isTablet {
+                // There is no Cancel option in iPad.
+                app.otherElements["PopoverDismissRegion"].tap()
+            } else {
+                app.buttons["PhotonMenu.close"].tap()
+            }
         }
     }
 

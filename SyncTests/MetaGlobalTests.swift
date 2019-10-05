@@ -8,7 +8,6 @@ import Shared
 import Storage
 @testable import Sync
 import XCGLogger
-import Deferred
 
 import XCTest
 import SwiftyJSON
@@ -16,18 +15,20 @@ import SwiftyJSON
 private let log = Logger.syncLogger
 
 class MockSyncAuthState: SyncAuthState {
+    var clientName: String?
+
     var enginesEnablements: [String : Bool]?
 
     let serverRoot: String
-    let kB: Data
+    let kSync: Data
 
     var deviceID: String? {
         return "mock_device_id"
     }
 
-    init(serverRoot: String, kB: Data) {
+    init(serverRoot: String, kSync: Data) {
         self.serverRoot = serverRoot
-        self.kB = kB
+        self.kSync = kSync
     }
 
     func invalidate() {
@@ -36,41 +37,42 @@ class MockSyncAuthState: SyncAuthState {
     func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
         let token = TokenServerToken(id: "id", key: "key", api_endpoint: serverRoot, uid: UInt64(0), hashedFxAUID: "",
             durationInSeconds: UInt64(5 * 60), remoteTimestamp: Timestamp(now - 1))
-        return deferMaybe((token, self.kB))
+        return deferMaybe((token, self.kSync))
     }
 }
 
 class MetaGlobalTests: XCTestCase {
     var server: MockSyncServer!
     var serverRoot: String!
-    var kB: Data!
+    var kSync: Data!
     var syncPrefs: Prefs!
     var authState: SyncAuthState!
     var stateMachine: SyncStateMachine!
 
     override func setUp() {
-        kB = Data.randomOfLength(32)!
+        kSync = Data.randomOfLength(64)!
         server = MockSyncServer(username: "1234567")
         server.start()
         serverRoot = server.baseURL
         syncPrefs = MockProfilePrefs()
-        authState = MockSyncAuthState(serverRoot: serverRoot, kB: kB)
+        authState = MockSyncAuthState(serverRoot: serverRoot, kSync: kSync)
         stateMachine = SyncStateMachine(prefs: syncPrefs)
     }
 
     func storeMetaGlobal(metaGlobal: MetaGlobal) {
-        let envelope = EnvelopeJSON(JSON(object: [
+        let envelope = EnvelopeJSON(JSON([
             "id": "global",
             "collection": "meta",
-            "payload": metaGlobal.asPayload().json.stringValue()!,
+            "payload": metaGlobal.asPayload().json.stringify()!,
             "modified": Double(Date.now())/1000]))
         server.storeRecords(records: [envelope], inCollection: "meta")
     }
 
     func storeCryptoKeys(keys: Keys) {
-        let keyBundle = KeyBundle.fromKB(kB)
-        let record = Record(id: "keys", payload: keys.asPayload())
-        let envelope = EnvelopeJSON(keyBundle.serializer({ $0.json })(record)!)
+        let keyBundle = KeyBundle.fromKSync(kSync)
+        let record = Record(id: "keys", payload: keys.asPayload()) as Record<CleartextPayloadJSON>
+        let serializer = keysPayloadSerializer(keyBundle: keyBundle, { $0.json })
+        let envelope = EnvelopeJSON(serializer(record)!)
         server.storeRecords(records: [envelope], inCollection: "crypto")
     }
 
@@ -95,13 +97,13 @@ class MetaGlobalTests: XCTestCase {
         guard let engineConfiguration = ready.scratchpad.engineConfiguration else {
             return
         }
-        XCTAssertEqual(engineConfiguration.enabled.sorted(), ["addons", "bookmarks", "clients", "forms", "history", "passwords", "prefs", "tabs"])
+        XCTAssertEqual(engineConfiguration.enabled.sorted(), ["addons", "addresses", "bookmarks", "clients", "creditcards", "forms", "history", "passwords", "prefs", "tabs"])
         XCTAssertEqual(engineConfiguration.declined, [])
 
         // Basic verifications.
         XCTAssertEqual(ready.collectionKeys.defaultBundle.encKey.count, 32)
         if let clients = ready.scratchpad.global?.value.engines["clients"] {
-            XCTAssertTrue(clients.syncID.characters.count == 12)
+            XCTAssertTrue(clients.syncID.count == 12)
         }
     }
 
@@ -117,7 +119,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -137,7 +139,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -155,7 +157,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -174,7 +176,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -207,7 +209,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -233,13 +235,13 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
 
     func testFailingOptimisticStateMachine() {
-        // We test only the optimistic state machine, knowing it will need to go through 
+        // We test only the optimistic state machine, knowing it will need to go through
         // needsFreshMetaGlobal, and fail.
         let metaGlobal = MetaGlobal(syncID: "id", storageVersion: 5, engines: [String: EngineMeta](), declined: [])
         let cryptoKeys = Keys.random()
@@ -260,7 +262,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -279,7 +281,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -295,7 +297,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -330,7 +332,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -363,7 +365,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -396,7 +398,7 @@ class MetaGlobalTests: XCTestCase {
             thirdExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -427,7 +429,7 @@ class MetaGlobalTests: XCTestCase {
             fourthExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -466,7 +468,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -501,7 +503,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }
@@ -535,7 +537,7 @@ class MetaGlobalTests: XCTestCase {
             expectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -573,7 +575,7 @@ class MetaGlobalTests: XCTestCase {
             secondExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
 
@@ -618,7 +620,7 @@ class MetaGlobalTests: XCTestCase {
             thirdExpectation.fulfill()
         }
 
-        waitForExpectations(timeout: 2000) { (error) in
+        waitForExpectations(timeout: 25) { (error) in
             XCTAssertNil(error, "Error: \(error ??? "nil")")
         }
     }

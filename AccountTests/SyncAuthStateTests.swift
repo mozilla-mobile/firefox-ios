@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 @testable import Account
-import Foundation
 import FxA
 import Shared
 import UIKit
@@ -16,7 +15,7 @@ class SyncAuthStateTests: LiveAccountTest {
         syncAuthState(Date.now()).upon { result in
             if let (token, forKey) = result.successValue {
                 let uidString = NSNumber(value: token.uid).stringValue
-                XCTAssertTrue(token.api_endpoint.endsWith(uidString))
+                XCTAssertTrue(token.api_endpoint.hasSuffix(uidString))
                 XCTAssertNotNil(forKey)
             } else {
                 if let error = result.failureValue as? AccountError {

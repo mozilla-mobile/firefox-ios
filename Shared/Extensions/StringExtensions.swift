@@ -5,30 +5,6 @@
 import Foundation
 
 public extension String {
-    public func startsWith(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        if let range = self.range(of: other,
-                options: NSString.CompareOptions.anchored) {
-            return range.lowerBound == self.startIndex
-        }
-        return false
-    }
-
-    public func endsWith(_ other: String) -> Bool {
-        // rangeOfString returns nil if other is empty, destroying the analogy with (ordered) sets.
-        if other.isEmpty {
-            return true
-        }
-        if let range = self.range(of: other,
-                options: [NSString.CompareOptions.anchored, NSString.CompareOptions.backwards]) {
-            return range.upperBound == self.endIndex
-        }
-        return false
-    }
-
     func escape() -> String? {
         // We can't guaruntee that strings have a valid string encoding, as this is an entry point for tainted data,
         // we should be very careful about forcefully dereferencing optional types.
@@ -53,20 +29,20 @@ public extension String {
     :returns: A String with `maxLength` characters or less
     */
     func ellipsize(maxLength: Int) -> String {
-        if (maxLength >= 2) && (self.characters.count > maxLength) {
-            let index1 = self.characters.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
-            let index2 = self.characters.index(self.endIndex, offsetBy: maxLength / -2)
+        if (maxLength >= 2) && (self.count > maxLength) {
+            let index1 = self.index(self.startIndex, offsetBy: (maxLength + 1) / 2) // `+ 1` has the same effect as an int ceil
+            let index2 = self.index(self.endIndex, offsetBy: maxLength / -2)
 
-            return self.substring(to: index1) + "…\u{2060}" + self.substring(from: index2)
+            return String(self[..<index1]) + "…\u{2060}" + String(self[index2...])
         }
         return self
     }
 
     private var stringWithAdditionalEscaping: String {
-        return self.replacingOccurrences(of: "|", with: "%7C", options: NSString.CompareOptions(), range: nil)
+        return self.replacingOccurrences(of: "|", with: "%7C")
     }
 
-    public var asURL: URL? {
+    var asURL: URL? {
         // Firefox and NSURL disagree about the valid contents of a URL.
         // Let's escape | for them.
         // We'd love to use one of the more sophisticated CFURL* or NSString.* functions, but
@@ -77,7 +53,7 @@ public extension String {
 
     /// Returns a new string made by removing the leading String characters contained
     /// in a given character set.
-    public func stringByTrimmingLeadingCharactersInSet(_ set: CharacterSet) -> String {
+    func stringByTrimmingLeadingCharactersInSet(_ set: CharacterSet) -> String {
         var trimmed = self
         while trimmed.rangeOfCharacter(from: set)?.lowerBound == trimmed.startIndex {
             trimmed.remove(at: trimmed.startIndex)
@@ -87,11 +63,11 @@ public extension String {
 
     /// Adds a newline at the closest space from the middle of a string.
     /// Example turning "Mark as Read" into "Mark as\n Read"
-    public func stringSplitWithNewline() -> String {
-        let mid = self.characters.count/2
+    func stringSplitWithNewline() -> String {
+        let mid = self.count / 2
 
-        let arr: [Int] = self.characters.indices.flatMap {
-            if self.characters[$0] == " " {
+        let arr: [Int] = self.indices.compactMap {
+            if self[$0] == " " {
                 return self.distance(from: startIndex, to: $0)
             }
 
@@ -101,7 +77,25 @@ public extension String {
             return self
         }
         var newString = self
-        newString.insert("\n", at: newString.characters.index(newString.characters.startIndex, offsetBy: closest.element))
+        newString.insert("\n", at: newString.index(newString.startIndex, offsetBy: closest.element))
         return newString
+    }
+
+    static func contentsOfFileWithResourceName(_ name: String, ofType type: String, fromBundle bundle: Bundle, encoding: String.Encoding, error: NSErrorPointer) -> String? {
+        return bundle.path(forResource: name, ofType: type).flatMap {
+            try? String(contentsOfFile: $0, encoding: encoding)
+        }
+    }
+
+    func remove(_ string: String?) -> String {
+        return self.replacingOccurrences(of: string ?? "", with: "")
+    }
+
+    func replaceFirstOccurrence(of original: String, with replacement: String) -> String {
+        guard let range = self.range(of: original) else {
+            return self
+        }
+
+        return self.replacingCharacters(in: range, with: replacement)
     }
 }

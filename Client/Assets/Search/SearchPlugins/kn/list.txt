@@ -1,7 +1,0 @@
-amazon-in
-bing
-google
-twitter
-wikipedia-kn
-wiktionary-kn
-yahoo-in

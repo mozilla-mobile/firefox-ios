@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Cốc Cốc</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAABR1BMVEUAAABCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkJCQkL///9EQ0JxcXGioqJJSUmVlZVSUlL6+vr4+PjQ0NCurq50dHRMTEz19fXz8/Ph4eFjY2NaWlpGRkbr6+u6urp3d3dsbGxWVlbOzs7KysrDw8OIiIh+fn5dXV3v7+/c3NzNzc2rq6ufn5+SkpKLi4uCgoJPT09ORj/o6Ojl5eXk5OTe3t62traysrKoqKiOjo6FhYV6enphYWFDR0P8/Py9vb2ZmZlnZ2dbn1lERERWST7DcCnt7e3q6urY2NjT09OlpaWcnJyRkZFgsl1OcE1HV0d2VDjtfyHZ2dnHx8e0tLReqVtdpVpUhVJRelBNa0xLZEpJXUlGUUZFTUWQXTOTXzKmZS+4bCvMcyj1giBYklZIWkheTD1iTjxpUDutaC7beSXlfCPkViG/AAAACnRSTlMA0AbHbvQb+ctv7zaD6QAAA4dJREFUaN7szUkNADAQA7HZo60U/oCLIr+YgIHeOTI4sw1wSzZ1oUtG1ayslpHV8GT1kFmCBAkSJEiQ4LNDJj0JA1EAvr8ptaBTNKwBZZPNCihbFQpVQ2Q7sMkO7v7/s68lQ3oy08Qj36HJ1+17bw6BQ+AQ+IfAW3sKttB1e4HXgQp26G2XtgLz9rQ77AA/a11YbBT+wLgzGwxnwI3yrSy2usAfeFG1kQpdlfuEPnr9paA0uQPQ6cJEa4+Bl/d1s/nV73MFYpSWcQdNG024NkjTZAgEZfWzWX3yBGJ+QsgzzIGTFL5ecMLueDgCoRwJFwmJACc14ir5jQJwBipS+kjI4AW4cEuSA6p4+Svgq4i0FWywT8pFmnIIzKItKqJZiaWTNO1lVq/RYoYtgC2aLKFZA5VHYpCTTZPOTHuqmpaJm5aoW2YOEJMbt2HesCnHojmD88I0V9FnCWQIo4xGmZx60ERmLnn//wS7l8BCLM4sgIXQNbNL3z7gucNxI3Ipj2N4IYIPw2U5hWvkfSAbr2Zl6YGQ+BXsCGAtGazcGjtAo4CTiHL2HK0EcGJYMHqPJu4Dv+yWy27CMBRE954E02AVCCVAlPCuSsSzLwEVEpTCCvj/X+k4TpMK+gFdhIXtAcyZub5GoQo0Ljor1RYTYGHpUpLQFntjjHVQ6o2zXgK4j4MrNZCjOKkJvrNa9Birg1JhCmDGWnZ83CB/unslAVy33wtwztQ8sSokDb0X6O62iwBkPWIDe7O6Z6no1vvjWn1lagA0zUpxdQGOt4DKb5cM6ZoVwwdlRq5f/y8AjUyF6Y3sA61n5rkF0MSj+XHb7soSYGthDfSXXeApVrZt+0nXA9XY0B3fqx+YeJM4c8odYCy18vlZCqBVFOtCFjh3xALoMXQ054YHsWaE9kaUF6A/A7BotV9j8xE+tXwaWkUsqKeDSU/XlTQ9pwArAFByKxwDS0RjzlvX4bjm0Z1Aw26J4yWtogManXBY0uVRz+6W4465GIHYMXQ3pQAhQ5hXWKZ6mCXqENdBJWqenUWzmtzEjlZFI+B2tXotGdUjOwVwS1hFJegYIYufDrzGh1HWKKigGqb3OKYWZg6mQ9+oWsODcypKo/zhZAm3EP2D56IckANyQA7IATnge6MWjFowasGoBaMWjDALaLxogJXmyx5ovnCD5ktPaL54BgiYODlos/yHgxPofgBW/KmBGJMMcgAAAABJRU5ErkJggg==</Image>
+<Url type="application/x-suggestions+json" method="GET"
+     template="https://coccoc.com/composer/autocomplete">
+  <Param name="of"  value="b" />
+  <Param name="q" value="{searchTerms}"/>
+  <Param name="s" value="ff"/>
+</Url>
+<Url type="text/html" method="GET" template="https://coccoc.com/search" resultdomain="coccoc.com">
+  <Param name="query" value="{searchTerms}"/>
+  <Param name="s" value="ff"/>
+  <Param name="utm_source" value="ffmobile"/>
+</Url>
+</SearchPlugin>

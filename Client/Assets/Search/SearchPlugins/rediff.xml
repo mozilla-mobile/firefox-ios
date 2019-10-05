@@ -1,0 +1,14 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Rediff</ShortName>
+<InputEncoding>windows-1252</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAilBMVEUAAADeACneACneACneACneACneACneACneACneACneACn+/f3////dACDlM1T+//7eACrbABr+/P3xmardACjfACrdAB7rY3zdACTym6v+/f/lNlbiIEPkLkz98fP0sLvraoPhEDXdABr+9vj50dr4zNTyobDvgZXnRWDZABT64+jvlKTpXnLnPF3nOOq3AAAACnRSTlMA0gbC+W9sG8bzJdSJ+wAAAhVJREFUaN7tmgtvmzAQgN1A0u6w8UFsl0ceTd/d4///vR1jhLjypAk4rdX8RUGxke7zhXOMHIQQq02SAgNpslkJ4voK2Li6pvEzxifDSmyAlY1IgJVEpMBKKoCZKIiCKPgQAvQaiBAEpwoMWq8FaC7bw2mLZmoGiBbHlkVyjNghI0sfJwmwKu4LnwovzlbW9b3K2kmCaldvL6jrbb2rhvDq3p5OL/WvEz+UmSRwrXxP64wxgKCK9vbxcNB9712BkwQql2XmIXOHgKZy++OD1ETfe1vAYgJF4dX+Wco+NofAuW8PMiszJoErXh+1pm6WDBq9f3s99N8OTwZNeyxp+CWTgPhKhdNkbBloelF8LkH5+1iyCEa4BUQU/IVAy5FFZ/IQWj9vB45L/lyXmZRPT3f7PHfjGtfm+QnMQl+RfvleOaWcArCGoCM4pyprF5poevdmEMz5fqMPTBZcKoO8Gztc3L8gdgcyLLbgwB+Ign8lMPTGGQLdVc4AzWSZO/BAQDRzBOPyEs7AkmKOQHophK+BwVkCreWZTIcEFuYIunX+TFiAn7tMo+BdleqgwDBngDirTBstB7qKXbxMdZONgmAGaOZNNG9RLoPXAD9yFUVBFERBFPwHguCmIIRZcFszDMPGrAfD1rIHw+Y43/b+Z/uDIgrAJwqiYIIgBVa+iBtg5UasgZU1+6Mn7A/PEKt1Aiwkaxr/TwMygHG6Hh5qAAAAAElFTkSuQmCC</Image>
+<Url type="text/html" method="GET" template="http://search.rediff.com/dirsrch/default.asp">
+	<Param name="MT" value="{searchTerms}"/>
+	<Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<SearchForm>http://search.rediff.com/</SearchForm>
+</SearchPlugin>

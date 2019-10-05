@@ -4,7 +4,7 @@
 
 import WebKit
 
-protocol ContextMenuHelperDelegate: class {
+protocol ContextMenuHelperDelegate: AnyObject {
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didLongPressElements elements: ContextMenuHelper.Elements, gestureRecognizer: UIGestureRecognizer)
     func contextMenuHelper(_ contextMenuHelper: ContextMenuHelper, didCancelGestureRecognizer: UIGestureRecognizer)
 }
@@ -13,6 +13,8 @@ class ContextMenuHelper: NSObject {
     struct Elements {
         let link: URL?
         let image: URL?
+        let title: String?
+        let alt: String?
     }
 
     fileprivate weak var tab: Tab?
@@ -20,45 +22,67 @@ class ContextMenuHelper: NSObject {
     weak var delegate: ContextMenuHelperDelegate?
 
     fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
-    fileprivate var elements: Elements?
+
+    lazy var gestureRecognizer: UILongPressGestureRecognizer = {
+        let g = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressGestureDetected))
+        g.delegate = self
+        return g
+    }()
+
+    fileprivate(set) var elements: Elements?
 
     required init(tab: Tab) {
         super.init()
-
         self.tab = tab
+    }
+}
 
-        guard let path = Bundle.main.path(forResource: "ContextMenu", ofType: "js"),
-                let source = try? NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue) as String,
-                let webView = tab.webView else {
-            return
+@available(iOS, obsoleted: 13.0)
+extension ContextMenuHelper: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+
+    // BVC KVO events for all changes on the webview will call this. 
+    // It is called frequently during a page load (particularly on progress changes and URL changes).
+    // As of iOS 12, WKContentView gesture setup is async, but it has been called by the time
+    // the webview is ready to load an URL. After this has happened, we can override the gesture.
+    func replaceGestureHandlerIfNeeded() {
+        DispatchQueue.main.async {
+            if self.gestureRecognizerWithDescriptionFragment("ContextMenuHelper") == nil {
+                self.replaceWebViewLongPress()
+            }
         }
+    }
 
-        let userScript = WKUserScript(source: source, injectionTime: WKUserScriptInjectionTime.atDocumentEnd, forMainFrameOnly: false)
-        webView.configuration.userContentController.addUserScript(userScript)
+    private func replaceWebViewLongPress() {
+        // WebKit installs gesture handlers async. If `replaceWebViewLongPress` is called after a wkwebview in most cases a small delay is sufficient
+        // See also https://bugs.webkit.org/show_bug.cgi?id=193366
 
-        nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:") as? UILongPressGestureRecognizer
+        nativeHighlightLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_highlightLongPressRecognized:")
 
-        if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") as? UILongPressGestureRecognizer {
+        if let nativeLongPressRecognizer = gestureRecognizerWithDescriptionFragment("action=_longPressRecognized:") {
             nativeLongPressRecognizer.removeTarget(nil, action: nil)
-            nativeLongPressRecognizer.addTarget(self, action: #selector(longPressGestureDetected(_:)))
+            nativeLongPressRecognizer.addTarget(self, action: #selector(self.longPressGestureDetected))
         }
     }
 
-    func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UIGestureRecognizer? {
-        return tab?.webView?.scrollView.subviews.flatMap({ $0.gestureRecognizers }).joined().first(where: { $0.description.contains(descriptionFragment) })
+    private func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UILongPressGestureRecognizer? {
+        let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: {
+            (($0 as? UILongPressGestureRecognizer) != nil) && $0.description.contains(descriptionFragment)
+        })
+        return result as? UILongPressGestureRecognizer
     }
 
-    func longPressGestureDetected(_ sender: UIGestureRecognizer) {
+    @objc func longPressGestureDetected(_ sender: UIGestureRecognizer) {
         if sender.state == .cancelled {
             delegate?.contextMenuHelper(self, didCancelGestureRecognizer: sender)
             return
         }
 
-        guard sender.state == .began, let elements = self.elements else {
+        guard sender.state == .began else {
             return
         }
-
-        delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: sender)
 
         // To prevent the tapped link from proceeding with navigation, "cancel" the native WKWebView
         // `_highlightLongPressRecognizer`. This preserves the original behavior as seen here:
@@ -69,11 +93,15 @@ class ContextMenuHelper: NSObject {
             nativeHighlightLongPressRecognizer.isEnabled = true
         }
 
-        self.elements = nil
+        if let elements = self.elements {
+            delegate?.contextMenuHelper(self, didLongPressElements: elements, gestureRecognizer: sender)
+
+            self.elements = nil
+        }
     }
 }
 
-extension ContextMenuHelper: TabHelper {
+extension ContextMenuHelper: TabContentScript {
     class func name() -> String {
         return "ContextMenuHelper"
     }
@@ -89,18 +117,20 @@ extension ContextMenuHelper: TabHelper {
 
         var linkURL: URL?
         if let urlString = data["link"] as? String,
-                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowed) {
             linkURL = URL(string: escapedURLString)
         }
 
         var imageURL: URL?
         if let urlString = data["image"] as? String,
-                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.URLAllowedCharacterSet()) {
+                let escapedURLString = urlString.addingPercentEncoding(withAllowedCharacters: .URLAllowed) {
             imageURL = URL(string: escapedURLString)
         }
 
         if linkURL != nil || imageURL != nil {
-            elements = Elements(link: linkURL, image: imageURL)
+            let title = data["title"] as? String
+            let alt = data["alt"] as? String
+            elements = Elements(link: linkURL, image: imageURL, title: title, alt: alt)
         } else {
             elements = nil
         }

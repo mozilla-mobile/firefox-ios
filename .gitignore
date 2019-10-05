@@ -46,6 +46,9 @@ DerivedData
 /fastlane/scripts
 /fastlane/templates
 
+# content blocking lists
+content-blocker-lib-ios/Lists/*
+
 #python environment
 python-env/
 
@@ -69,9 +72,14 @@ signedInUser.json
 # Generated config file
 MozBuildID.xcconfig
 
-# Python.
+# Python
+__pycache__
+.pytest_cache
 *.pyc
 
 # SQLite
 *.db-shm
 *.db-wal
+
+# Node.js
+node_modules

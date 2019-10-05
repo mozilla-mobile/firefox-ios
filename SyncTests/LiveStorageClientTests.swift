@@ -6,7 +6,6 @@ import Account
 import Foundation
 import FxA
 import Shared
-import Deferred
 @testable import Sync
 
 import XCTest
@@ -19,7 +18,7 @@ private class KeyFetchError: MaybeErrorType {
 }
 
 class LiveStorageClientTests: LiveAccountTest {
-    func getKeys(kB: Data, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
+    func getKeys(kSync: Data, token: TokenServerToken) -> Deferred<Maybe<Record<KeysPayload>>> {
         let endpoint = token.api_endpoint
         XCTAssertTrue(endpoint.range(of: "services.mozilla.com") != nil, "We got a Sync server.")
 
@@ -27,12 +26,12 @@ class LiveStorageClientTests: LiveAccountTest {
         let authorizer: Authorizer = {
             (r: URLRequest) -> URLRequest in
             var request = r
-            let helper = HawkHelper(id: token.id, key: token.key.data(using: String.Encoding.utf8, allowLossyConversion: false)!)
+            let helper = HawkHelper(id: token.id, key: token.key.data(using: .utf8, allowLossyConversion: false)!)
             request.addValue(helper.getAuthorizationValueFor(r), forHTTPHeaderField: "Authorization")
             return request
         }
 
-        let keyBundle: KeyBundle = KeyBundle.fromKB(kB as Data)
+        let keyBundle: KeyBundle = KeyBundle.fromKSync(kSync)
         let encoder = RecordEncoder<KeysPayload>(decode: { KeysPayload($0) }, encode: { $0.json })
         let encrypter = Keys(defaultBundle: keyBundle).encrypter("crypto", encoder: encoder)
 
@@ -62,7 +61,7 @@ class LiveStorageClientTests: LiveAccountTest {
 
         let keysPayload: Deferred<Maybe<Record<KeysPayload>>> = authState.bind { tokenResult in
             if let (token, forKey) = tokenResult.successValue {
-                return self.getKeys(kB: forKey, token: token)
+                return self.getKeys(kSync: forKey, token: token)
             }
             XCTAssertEqual(tokenResult.failureValue!.description, "")
             return Deferred(value: Maybe(failure: KeyFetchError()))
@@ -74,7 +73,7 @@ class LiveStorageClientTests: LiveAccountTest {
                 XCTAssert(rec.id == "keys", "GUID is correct.")
                 XCTAssert(rec.modified > 1000, "modified is sane.")
                 let payload: KeysPayload = rec.payload as KeysPayload
-                print("Body: \(payload.json.stringValue() ?? "nil")", terminator: "\n")
+                print("Body: \(payload.json.stringify() ?? "nil")", terminator: "\n")
                 XCTAssert(rec.id == "keys", "GUID inside is correct.")
                 if let keys = payload.defaultKeys {
                     // Extracting the token like this is not great, but...
@@ -117,7 +116,7 @@ class LiveStorageClientTests: LiveAccountTest {
                 XCTAssertTrue(ready.collectionKeys.defaultBundle.encKey.count == 32)
                 XCTAssertTrue(ready.scratchpad.global != nil)
                 if let clients = ready.scratchpad.global?.value.engines["clients"] {
-                    XCTAssertTrue(clients.syncID.characters.count == 12)
+                    XCTAssertTrue(clients.syncID.count == 12)
                 }
             }
             XCTAssertTrue(result.isSuccess)

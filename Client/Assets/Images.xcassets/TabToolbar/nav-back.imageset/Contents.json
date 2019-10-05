@@ -2,22 +2,19 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "back.png",
-      "scale" : "1x"
+      "filename" : "back.pdf",
+      "language-direction" : "left-to-right"
     },
     {
       "idiom" : "universal",
-      "filename" : "back@2x.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "filename" : "back@3x.png",
-      "scale" : "3x"
+      "language-direction" : "right-to-left"
     }
   ],
   "info" : {
     "version" : 1,
     "author" : "xcode"
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
   }
 }

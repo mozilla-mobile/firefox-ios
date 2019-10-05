@@ -16,8 +16,8 @@ struct TodayStrings {
     static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
 }
 
-struct TodayUX {
-    static let privateBrowsingColor = UIColor(rgb: 0xCE6EFC)
+private struct TodayUX {
+    static let privateBrowsingColor = UIColor(rgb: 0xcf68ff)
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
     static let linkTextSize: CGFloat = 10.0
     static let labelTextSize: CGFloat = 14.0
@@ -25,7 +25,6 @@ struct TodayUX {
     static let copyLinkImageWidth: CGFloat = 23
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
-    static let iOS9LeftMargin: CGFloat = 40
 }
 
 @objc (TodayViewController)
@@ -69,7 +68,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     fileprivate lazy var openCopiedLinkButton: ButtonWithSublabel = {
         let button = ButtonWithSublabel()
-        
+
         button.setTitle(TodayStrings.GoToCopiedLinkLabel, for: .normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
 
@@ -89,18 +88,18 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = TodayUX.margin / 2
-        stackView.distribution = UIStackViewDistribution.fill
+        stackView.distribution = UIStackView.Distribution.fill
         stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
         stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
-    
+
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.spacing = 0
-        stackView.distribution = UIStackViewDistribution.fillEqually
+        stackView.distribution = UIStackView.Distribution.fillEqually
         let edge = self.view.frame.size.width * TodayUX.buttonsHorizontalMarginPercentage
         stackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
         stackView.isLayoutMarginsRelativeArrangement = true
@@ -149,7 +148,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
-        return UIEdgeInsets.zero
+        return .zero
     }
 
     func updateCopiedLink() {
@@ -169,7 +168,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     // MARK: Button behaviour
     @objc func onPressNewTab(_ view: UIView) {
-        openContainingApp()
+        openContainingApp("?private=false")
     }
 
     @objc func onPressNewPrivateTab(_ view: UIView) {
@@ -192,8 +191,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 }
 
 extension UIButton {
-    func setBackgroundColor(_ color: UIColor, forState state: UIControlState) {
-        let colorView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 1))
+    func setBackgroundColor(_ color: UIColor, forState state: UIControl.State) {
+        let colorView = UIView(frame: CGRect(width: 1, height: 1))
         colorView.backgroundColor = color
 
         UIGraphicsBeginImageContext(colorView.bounds.size)
@@ -240,21 +239,21 @@ class ImageButtonWithLabel: UIView {
         label.textColor = UIColor.white
     }
 
-    func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControlEvents) {
+    func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
         button.addTarget(target, action: action, for: events)
     }
 }
 
 class ButtonWithSublabel: UIButton {
-    lazy var subtitleLabel: UILabel = UILabel()
-    lazy var label: UILabel = UILabel()
+    lazy var subtitleLabel = UILabel()
+    lazy var label = UILabel()
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     convenience init() {
-        self.init(frame: CGRect.zero)
+        self.init(frame: .zero)
     }
 
     override init(frame: CGRect) {
@@ -291,7 +290,7 @@ class ButtonWithSublabel: UIButton {
         }
     }
 
-    override func setTitle(_ text: String?, for state: UIControlState) {
+    override func setTitle(_ text: String?, for state: UIControl.State) {
         self.label.text = text
         super.setTitle(text, for: state)
     }

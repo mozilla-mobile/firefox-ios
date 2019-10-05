@@ -25,4 +25,18 @@ if [ ! -z "$XCS_BOT_ID"  ]; then
   CARTHAGE_VERBOSE="--verbose"
 fi
 
-carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds 
+carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
+
+# Install Node.js dependencies and build user scripts
+
+npm install
+npm run build
+
+
+cd content-blocker-lib-ios
+./build-disconnect.py block
+./build-disconnect.py block-cookies
+rm -f Lists/disconnect-block-content.json 
+rm -f Lists/disconnect-block-cookies-cryptomining.json
+rm -f Lists/disconnect-block-cookies-fingerprinting.json
+cd ..

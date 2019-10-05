@@ -1,0 +1,23 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Wikipedia (ro)</ShortName>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAA51BMVEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD////7+/vl5eWxsbH9/f3Ly8tzc3P39/fe3t5cXFzz8/Pt7e3i4uI3NzcaGhoHBwcFBQX5+fnIyMhTU1MXFxcMDAzx8fHX19fFxcXCwsK7u7u1tbWenp6WlpZ8fHxXV1ctLS319fXn5+fV1dWsrKySkpJnZ2cgICDv7+/p6eng4ODQ0NC9vb24uLikpKSPj4+JiYmCgoJiYmJCQkI7OzsyMjIpKSkQEBCoqKigoKCdnZ14eHhubm5PT09LS0tERETk5OTb29unp6c0NDQkJCQOGD7BAAAAB3RSTlMA8si8ZBhlc+JuAAAAAw1JREFUaN7tmtluIjEQRYEhUxd6YYew7xAggRAgCQmB7Ov8//eM3Zg2nXkJvUjz4POAVEbyQXaVy0gOMaKRMAVAOBINcY5+UWD8OmKCIOaXhlDoNwVKNBShQImEwhQo4RAFjBIogRIogRIogRIoQWCCYXqaHJVaWrtl1IfpYp3GiczFqLHQ5kY9m0l0qVM8Txrs+8ZomkhSKpbOzlraolSP15o/EtxoU9gk2iZVujM7HnVe6eUhKaL4aYrWXWMXfd7+dIlScWxpbsjibQiLPm255sH5jYjKOoCEecge5LcTxqokuItZv5F2DID0iR21ALwctslfunNCurKEBRJkgBTZdIDOoVl0CU7FjgsZHpsi+gNoJGlisDlUkC+C8SQHejzOiqCLgXRTNYazw+vg8tsaHZ+DMd7ZlyR5Qix/uOAEgGOhlzy+EPLMMUmyOHVTyQ0wDBlXB2Dw1FzreCZJGfhyIyiDs/qWSEkiarNPxxaX3J1FWcCRLJXidtFW7MO5lmV3AhMMPS8HHsH4oBJmtEcHF+ROUEgD2E/AiVXO98AtSaoJmC4F1AUjXZAD97Bo0R491ApuBRNdVq/FGhz9hPaI48p9w1mI6rVpi1qQ9FmRuRe8iTPaJgfOi6NaTr20zDoYJUfOM2aOHM15EYwBOKbQwHm14wcY5FYgTzi5CHewMPZytO9aIHuj3MY53sF5s3M0S94EFV5bdiLeshQdgdGwc9T0IJC1VROHs4EHSgHY1XKflaFXQQ6y2MpIVIiSYDStgRLOvN/sDDCSImmv7cxaWVuu5z0LxJKU+Y1M9LE4GHOrsWnkXUDx3a5mRR8zRXFsisj5IeiBc0cmPkRxZMBY0BIGeRLIYmJ8smnLDmVuiL5ngWxksUd5JhVqYEzxTv4I1tiSc9Y38OSTgOZwnki0GYhe55Pg1VqjCUnORLf2SWAVb5fIeYPRJ/4JnoFa1THSATTyT3BcQ++f+8DKRwGN299Hltr/+zdWCZRACZRACZSAlEAJDifwRwPBP3uIUqBEg356EvzjmcCf//wFVbAkwfl+5CMAAAAASUVORK5CYII=</Image>
+<Url type="application/x-suggestions+json" method="GET" template="https://ro.wikipedia.org/w/api.php">
+  <Param name="action" value="opensearch"/>
+  <Param name="search" value="{searchTerms}"/>
+</Url>
+<Url type="text/html" method="GET" template="https://ro.wikipedia.org/wiki/Special:Căutare">
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<!-- Search activity -->
+<Url type="text/html" method="GET" rel="mobile" template="https://ro.m.wikipedia.org/wiki/Special:Căutare">
+  <Param name="search" value="{searchTerms}"/>
+  <Param name="sourceid" value="Mozilla-search"/>
+</Url>
+<SearchForm>https://ro.wikipedia.org/wiki/Special:Căutare</SearchForm>
+</SearchPlugin>

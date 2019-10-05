@@ -2,9 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Deferred
-// Haskell, baby.
-
 // Monadic bind/flatMap operator for Deferred.
 precedencegroup MonadicBindPrecedence {
     associativity: left
@@ -133,6 +130,15 @@ public func effect<T, U>(_ f: @escaping (T) -> U) -> (T) -> Deferred<Maybe<T>> {
     return { t in
         _ = f(t)
         return deferMaybe(t)
+    }
+}
+// Prevents "Cannot convert call result type '(_) -> Deferred<Maybe<_>>' to expected type '() -> Deferred<Maybe<Void>>"
+// SE-0029 introduced this behavour
+// https://github.com/apple/swift-evolution/blob/master/proposals/0029-remove-implicit-tuple-splat.md
+public func effect(_ f: @escaping (Swift.Void) -> Void) -> (() -> Success) {
+    return {
+        f(())
+        return succeed()
     }
 }
 

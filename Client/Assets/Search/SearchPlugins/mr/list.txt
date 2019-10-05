@@ -1,7 +1,0 @@
-amazon-in
-bing
-eBay-in
-google
-rediff
-wikipedia-mr
-yahoo-in

@@ -41,7 +41,7 @@ class MenuTests: KIFTestCase {
         let url1 = "\(webRoot)/noTitle.html"
         tester().clearTextFromAndThenEnterTextIntoCurrentFirstResponder("\(url1)\n")
         tester().waitForWebViewElementWithAccessibilityLabel("This page has no title")
-        
+
         tester().tapViewWithAccessibilityLabel("Menu")
         tester().tapViewWithAccessibilityLabel("Settings")
         // this is the done button on the settings panel

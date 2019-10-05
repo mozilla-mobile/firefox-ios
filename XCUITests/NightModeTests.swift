@@ -4,44 +4,31 @@
 
 import XCTest
 class NightModeTests: BaseTestCase {
-    private func nightModeOff() {
-        navigator.goto(BrowserTabMenu)
-        app.tables.cells["Disable Night Mode"].tap()
-        navigator.nowAt(BrowserTab)
-    }
-
-    private func nightModeOn() {
-        navigator.goto(BrowserTabMenu)
-        app.tables.cells["Enable Night Mode"].tap()
-        navigator.nowAt(BrowserTab)
-    }
 
     private func checkNightModeOn() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells["Disable Night Mode"])
-        navigator.goto(BrowserTab)
+        waitForExistence(app.tables.cells["menu-NightMode"])
+        XCTAssertTrue(app.tables.cells.images["enabled"].exists)
     }
 
     private func checkNightModeOff() {
-        navigator.goto(BrowserTabMenu)
-        waitforExistence(app.tables.cells["Enable Night Mode"])
-        navigator.goto(BrowserTab)
+        waitForExistence(app.tables.cells["menu-NightMode"])
+        XCTAssertTrue(app.tables.cells.images["disabled"].exists)
     }
 
     func testNightModeUI() {
-        let url1 = "www.google.com"
+        let url1 = "test-example.html"
 
         // Go to a webpage, and select night mode on and off, check it's applied or not
-        navigator.openNewURL(urlString: url1)
+        navigator.openURL(path(forTestPage: url1))
 
         //turn on the night mode
-        nightModeOn()
+        navigator.performAction(Action.ToggleNightMode)
 
         //checking night mode on or off
         checkNightModeOn()
 
         //turn off the night mode
-        nightModeOff()
+        navigator.performAction(Action.ToggleNightMode)
 
         //checking night mode on or off
         checkNightModeOff()

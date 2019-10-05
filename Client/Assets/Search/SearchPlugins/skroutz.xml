@@ -1,0 +1,15 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+<ShortName>Skroutz</ShortName>
+<Description>Ενσωματωμένη Αναζήτηση στο www.skroutz.gr</Description>
+<InputEncoding>UTF-8</InputEncoding>
+<Image width="16" height="16">data:image/png;base64,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</Image>
+<SearchForm>http://www.skroutz.gr/</SearchForm>
+<Url type="text/html" method="GET" template="http://www.skroutz.gr/search">
+  <Param name="keyphrase" value="{searchTerms}"/>
+  <Param name="browser" value="ffmob"/>
+</Url>
+</SearchPlugin>

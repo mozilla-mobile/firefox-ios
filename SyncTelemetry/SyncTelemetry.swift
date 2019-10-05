@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-import Alamofire
 import Foundation
 import XCGLogger
 import SwiftyJSON
@@ -50,19 +49,19 @@ open class SyncTelemetry {
         var request = URLRequest(url: url)
 
         log.debug("Ping URL: \(url)")
-        log.debug("Ping payload: \(ping.payload.stringValue() ?? "")")
+        log.debug("Ping payload: \(ping.payload.stringify() ?? "")")
 
         // Don't add the common ping format for the mobile core ping.
         let pingString: String?
         if docType != .core {
             var json = JSON(commonPingFormat(forType: docType))
             json["payload"] = ping.payload
-            pingString = json.stringValue()
+            pingString = json.stringify()
         } else {
-            pingString = ping.payload.stringValue()
+            pingString = ping.payload.stringify()
         }
 
-        guard let body = pingString?.data(using: String.Encoding.utf8) else {
+        guard let body = pingString?.data(using: .utf8) else {
             log.error("Invalid data!")
             assertionFailure()
             return
@@ -78,14 +77,17 @@ open class SyncTelemetry {
         request.addValue(Date().toRFC822String(), forHTTPHeaderField: "Date")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        SessionManager.default.request(request).response { response in
-            log.debug("Ping response: \(response.response?.statusCode ?? -1).")
-        }
+        makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral).dataTask(with: request) { (_, response, error) in
+            let code = (response as? HTTPURLResponse)?.statusCode
+            log.debug("Ping response: \(code ?? -1).")
+        }.resume()
     }
 
     private static func commonPingFormat(forType type: TelemetryDocType) -> [String: Any] {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
         let date = formatter.string(from: NSDate() as Date)
         let displayVersion =  [
             AppInfo.appVersion,

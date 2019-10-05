@@ -55,9 +55,9 @@ extension UIColor {
         let fg = compareColor.cgColor.components
         let threshold: CGFloat = 0.25
 
-        if fabs(bg[0] - fg[0]) > threshold || fabs(bg[1] - fg[1]) > threshold || fabs(bg[2] - fg[2]) > threshold {
-            if fabs(bg[0] - bg[1]) < 0.03 && fabs(bg[0] - bg[2]) < 0.03 {
-                if fabs(fg[0] - fg[1]) < 0.03 && fabs(fg[0] - fg[2]) < 0.03 {
+        if abs(bg[0] - fg[0]) > threshold || abs(bg[1] - fg[1]) > threshold || abs(bg[2] - fg[2]) > threshold {
+            if abs(bg[0] - bg[1]) < 0.03 && abs(bg[0] - bg[2]) < 0.03 {
+                if abs(fg[0] - fg[1]) < 0.03 && abs(fg[0] - fg[2]) < 0.03 {
                     return false
                 }
             }
@@ -102,7 +102,7 @@ extension UIImage {
         defer {
             UIGraphicsEndImageContext()
         }
-        self.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        self.draw(in: CGRect(width: newSize.width, height: newSize.height))
         guard let result = UIGraphicsGetImageFromCurrentImageContext() else {
             fatalError("UIImageColors.resizeForUIImageColors failed: UIGraphicsGetImageFromCurrentImageContext returned nil")
         }
@@ -117,7 +117,7 @@ extension UIImage {
      - parameter scaleDownSize:     Downscale size of image for sampling, if `CGSize.zero` is provided, the sample image is rescaled to a width of 250px and the aspect ratio height.
      - parameter completionHandler: `UIImageColors` for this image.
      */
-    public func getColors(scaleDownSize: CGSize = CGSize.zero, completionHandler: @escaping (UIImageColors) -> Void) {
+    public func getColors(scaleDownSize: CGSize = .zero, completionHandler: @escaping (UIImageColors) -> Void) {
         DispatchQueue.global().async {
             let result = self.getColors(scaleDownSize: scaleDownSize)
 
@@ -135,11 +135,11 @@ extension UIImage {
 
      - returns: `UIImageColors` for this image.
      */
-    public func getColors(scaleDownSize: CGSize = CGSize.zero) -> UIImageColors {
+    public func getColors(scaleDownSize: CGSize = .zero) -> UIImageColors {
 
         var scaleDownSize = scaleDownSize
 
-        if scaleDownSize == CGSize.zero {
+        if scaleDownSize == .zero {
             let ratio = self.size.width/self.size.height
             let r_width: CGFloat = 250
             scaleDownSize = CGSize(width: r_width, height: r_width/ratio)
@@ -158,11 +158,11 @@ extension UIImage {
         let sortedColorComparator: Comparator = { (main, other) -> ComparisonResult in
             let m = main as! PCCountedColor, o = other as! PCCountedColor
             if m.count < o.count {
-                return ComparisonResult.orderedDescending
+                return .orderedDescending
             } else if m.count == o.count {
-                return ComparisonResult.orderedSame
+                return .orderedSame
             } else {
-                return ComparisonResult.orderedAscending
+                return .orderedAscending
             }
         }
 

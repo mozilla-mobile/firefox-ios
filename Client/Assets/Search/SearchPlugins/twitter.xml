@@ -1,0 +1,13 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<SearchPlugin xmlns="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Twitter</ShortName>
+  <Image width="16" height="16">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAAAhFBMVEUAAABVre5VrO5VrO9XrfBVtfRVrO7///79/v7i8fz4+/7F4/mHxPNaru5vufBYre70+f6TyvR0u/Gu1/fU6vp7v/JmtO9isu/a7fvQ6Pq73vibzvWWzPTo9PzK5fm22/eBwfLv9/3A4PiMx/N4vfFfse/6/f6j0vVqtvDr9f2m1Paf0PWvOgGJAAAABnRSTlMA8si8ZBgxEvPEAAACUUlEQVRo3u3aW3OiQBCGYTXJ18AM54MiInjW5P//v9WkSt2VNtNk52K3eC+8Yx5hmrLKmtG518kYFhpPXkeX3l5grZe3MyBZXy6cnw+s9jqawGqT0RhWG49guQEYgAEYgAEYgB8BYaJjnfi4ZAHQKqJLntrgWjE1B0I8K8no1myLz47zOjQGivKZsPHoPqcCprFy6B3GQEoKbAv6MzVzzp9uaAyEK6IGTPmeOvMSGAMBnVt3PyX/xKzfAoU2BDRdKjtn8ECd1XmyKKPAEKjoM7frplfdgOsRORqGwAd9ta8ed4DYBFOkr9dkwcN8cTkHGAPJ3WXNDveticnbwBzwo/srmyNuldz6OQQAmt9vXm2uA7VkgBoiIHj4gir+2o05A5wEALdOVM7fF4oBXCHguyRrJgJ2QLKSAaUISGeL6VF2D3MOYN/kSAYcRIAmcVoE+HsxUIgALElYDRmwlQJrIQAlBDZSYHciSZ4vBRCIXjQFMYDAFQBtDwB+6pFhLiTArekhc4yAqg8wLdfrbGUE1GEfABmZFqMXkMt2QA5gTkY5275AqIyAFH0BhEuTB+T3B+A3305RdIQBwLddPiecFmYAXxE3POLEEABcQcauv8BfAD48wfpiwK9cfn9b/BRI0ojY3AA9gekOYZG0lYqIz0l99AWC29SwuTkgBm7lM3pazUynYA+02hNXFoeQAEy7qvM23JTfW/lPpk4z724sZ/NFAaAfwCtBruNYt9tv1v73/lIbgAEYgAEYgP8LsH1owPqxB+sHN2wfPbF/eMb68Z9fS1ft8jKJv6QAAAAASUVORK5CYII=</Image>
+  <Url type="text/html" method="GET" template="https://mobile.twitter.com/search/">
+    <Param name="q" value="{searchTerms}"/>
+  </Url>
+  <InputEncoding>UTF-8</InputEncoding>
+  <SearchForm>https://mobile.twitter.com/search</SearchForm>
+</SearchPlugin>

@@ -187,11 +187,17 @@
 #pragma mark Getters and Setters
 
 - (NSString *)stringValue {
-	return [NSString stringWithCString:BN_bn2dec([self bigNumber]) encoding:NSASCIIStringEncoding];
+    char *cStr = BN_bn2dec([self bigNumber]);
+    NSString *str = [NSString stringWithCString:cStr encoding:NSASCIIStringEncoding];
+    OPENSSL_free(cStr);
+    return str;
 }
 
 - (NSString *)hexStringValue {
-	return [[NSString stringWithCString:BN_bn2hex([self bigNumber]) encoding:NSASCIIStringEncoding] lowercaseString];
+    char *cStr = BN_bn2hex([self bigNumber]);
+	NSString *str = [[NSString stringWithCString:cStr encoding:NSASCIIStringEncoding] lowercaseString];
+    OPENSSL_free(cStr);
+    return str;
 }
 
 - (NSData *)dataValue

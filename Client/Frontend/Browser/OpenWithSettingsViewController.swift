@@ -5,18 +5,16 @@
 import Foundation
 import Shared
 
-class OpenWithSettingsViewController: UITableViewController {
+class OpenWithSettingsViewController: ThemedTableViewController {
     typealias MailtoProviderEntry = (name: String, scheme: String, enabled: Bool)
     var mailProviderSource = [MailtoProviderEntry]()
 
     fileprivate let prefs: Prefs
     fileprivate var currentChoice: String = "mailto"
 
-    fileprivate let BasicCheckmarkCell = "BasicCheckmarkCell"
-
     init(prefs: Prefs) {
         self.prefs = prefs
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,23 +27,15 @@ class OpenWithSettingsViewController: UITableViewController {
 
         tableView.accessibilityIdentifier = "OpenWithPage.Setting.Options"
 
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: BasicCheckmarkCell)
-        tableView.backgroundColor = UIConstants.TableViewHeaderBackgroundColor
-
-        let headerFooterFrame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.view.frame.width, height: UIConstants.TableViewHeaderFooterHeight))
-        let headerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
+        let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
+        let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
-        headerView.showTopBorder = false
-        headerView.showBottomBorder = true
-
-        let footerView = SettingsTableSectionHeaderFooterView(frame: headerFooterFrame)
-        footerView.showTopBorder = true
-        footerView.showBottomBorder = false
+        let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
 
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
 
-        NotificationCenter.default.addObserver(self, selector: #selector(OpenWithSettingsViewController.appDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -58,7 +48,7 @@ class OpenWithSettingsViewController: UITableViewController {
         self.prefs.setString(currentChoice, forKey: PrefsKeys.KeyMailToOption)
     }
 
-    func appDidBecomeActive() {
+    @objc func appDidBecomeActive() {
         reloadMailProviderSource()
         updateCurrentChoice()
         tableView.reloadData()
@@ -73,7 +63,7 @@ class OpenWithSettingsViewController: UITableViewController {
                 }
             })
         }
-        
+
         if !previousChoiceAvailable {
             self.prefs.setString(mailProviderSource[0].scheme, forKey: PrefsKeys.KeyMailToOption)
         }
@@ -101,8 +91,7 @@ class OpenWithSettingsViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: BasicCheckmarkCell, for: indexPath)
-
+        let cell = ThemedTableViewCell()
         let option = mailProviderSource[indexPath.row]
 
         cell.textLabel?.attributedText = NSAttributedString.tableRowTitle(option.name, enabled: option.enabled)
