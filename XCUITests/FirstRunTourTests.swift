@@ -13,9 +13,8 @@ class FirstRunTourTests: BaseTestCase {
         // Complet the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
         waitForExistence(app.scrollViews["IntroViewController.scrollView"])
-        waitForExistence(app.staticTexts["Thanks for choosing Firefox!"])
+        waitForExistence(app.staticTexts["Welcome to Firefox"])
         XCTAssertFalse(app.buttons["IntroViewController.startBrowsingButton"].exists)
-        XCTAssertTrue(app.images["tour-Welcome"].exists)
         XCTAssertTrue(app.pageIndicators["IntroViewController.pageControl"].exists)
         XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 1 of 2")
 
@@ -23,7 +22,6 @@ class FirstRunTourTests: BaseTestCase {
         app.scrollViews["IntroViewController.scrollView"].swipeLeft()
         waitForExistence(app.pageIndicators["IntroViewController.pageControl"])
         XCTAssertTrue(app.buttons["IntroViewController.startBrowsingButton"].exists)
-        XCTAssertTrue(app.images["tour-Sync"].exists)
         XCTAssertTrue(app.buttons["turnOnSync.button"].exists)
         XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 2 of 2")
     }
@@ -53,6 +51,6 @@ class FirstRunTourTests: BaseTestCase {
         tapStartBrowsingButton()
         navigator.goto(ShowTourInSettings)
         waitForExistence(app.scrollViews["IntroViewController.scrollView"])
-        waitForExistence(app.staticTexts["Thanks for choosing Firefox!"])
+        waitForExistence(app.staticTexts["Welcome to Firefox"])
     }
 }

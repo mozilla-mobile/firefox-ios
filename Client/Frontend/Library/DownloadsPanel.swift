@@ -9,6 +9,7 @@ import Storage
 private struct DownloadsPanelUX {
     static let WelcomeScreenPadding: CGFloat = 15
     static let WelcomeScreenItemWidth = 170
+    static let HeaderHeight: CGFloat = 28
 }
 
 struct DownloadedFile: Equatable {
@@ -81,6 +82,7 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TwoLineTableViewCell.self, forCellReuseIdentifier: "TwoLineTableViewCell")
+        tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: "SiteTableViewHeader")
         tableView.layoutMargins = .zero
         tableView.keyboardDismissMode = .onDrag
         tableView.accessibilityIdentifier = "DownloadsTable"
@@ -290,23 +292,42 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
 
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return 0 }
+
+        return DownloadsPanelUX.HeaderHeight
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard groupedDownloadedFiles.numberOfItemsForSection(section) > 0 else { return nil }
+
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "SiteTableViewHeader") as? SiteTableViewHeader
 
         switch section {
         case 0:
-            return Strings.TableDateSectionTitleToday
+            header?.textLabel?.text = Strings.TableDateSectionTitleToday
         case 1:
-            return Strings.TableDateSectionTitleYesterday
+            header?.textLabel?.text = Strings.TableDateSectionTitleYesterday
         case 2:
-            return Strings.TableDateSectionTitleLastWeek
+            header?.textLabel?.text = Strings.TableDateSectionTitleLastWeek
         case 3:
-            return Strings.TableDateSectionTitleLastMonth
+            header?.textLabel?.text = Strings.TableDateSectionTitleLastMonth
         default:
             assertionFailure("Invalid Downloads section \(section)")
         }
 
-        return nil
+        header?.showBorder(for: .top, !isFirstSection(section))
+
+        return header
+    }
+
+    func isFirstSection(_ section: Int) -> Bool {
+        for i in 0..<section {
+            if groupedDownloadedFiles.numberOfItemsForSection(i) > 0 {
+                return false
+            }
+        }
+        return true
     }
 
     func configureDownloadedFile(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
