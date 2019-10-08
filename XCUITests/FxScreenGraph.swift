@@ -482,7 +482,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
-        let bookmarksElement = app.navigationBars["Bookmarks"].otherElements["Bookmarks"]
+        let bookmarksElement = app.navigationBars["Bookmarks"].staticTexts["Bookmarks"]
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
