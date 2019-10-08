@@ -90,6 +90,10 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
         // Don't allow overscrolling.
         webView.scrollView.bounces = false
+
+        // This is not shown full-screen, use mobile UA
+        webView.customUserAgent = UserAgent.mobileUserAgent()
+
         return webView
     }
 
