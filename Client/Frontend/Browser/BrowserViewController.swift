@@ -1889,7 +1889,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             introViewController.delegate = self
             // On iPad we present it modally in a controller
             if topTabsVisible {
-                introViewController.preferredContentSize = CGSize(width: IntroUX.Width, height: IntroUX.Height)
+                introViewController.preferredContentSize = CGSize(width: IntroViewController.preferredSize.width, height: IntroViewController.preferredSize.height)
                 introViewController.modalPresentationStyle = .formSheet
             } else {
                 introViewController.modalPresentationStyle = .fullScreen
@@ -1916,7 +1916,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         self.presentSignInViewController(fxaParams)
     }
 
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, requestToLogin: Bool) {
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, showLoginFlow: FxALoginFlow?) {
         self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 
         introViewController.dismiss(animated: true) {
@@ -1924,17 +1924,17 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
 
-            if requestToLogin {
+            if let flow = showLoginFlow {
                 let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
-                self.presentSignInViewController(fxaParams)
+                self.presentSignInViewController(fxaParams, isSignUpFlow: flow == .signUpFlow)
             }
         }
     }
 
-    func getSignInViewController(_ fxaOptions: FxALaunchParams? = nil) -> UIViewController {
+    func getSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         guard profile.hasAccount(), let status = profile.getAccount()?.actionNeeded, status == .none else {
-            let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions)
+            let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions, isSignUpFlow: isSignUpFlow)
             signInVC.delegate = self
             return signInVC
         }
@@ -1944,13 +1944,13 @@ extension BrowserViewController: IntroViewControllerDelegate {
         return settingsTableViewController
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil) {
-        let vcToPresent = getSignInViewController(fxaOptions)
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
+        let vcToPresent = getSignInViewController(fxaOptions, isSignUpFlow: isSignUpFlow)
         vcToPresent.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
         themedNavigationController.navigationBar.isTranslucent = false
         if topTabsVisible {
-            themedNavigationController.preferredContentSize = CGSize(width: IntroUX.Width, height: IntroUX.Height)
+            themedNavigationController.preferredContentSize = CGSize(width: IntroViewController.preferredSize.width, height: IntroViewController.preferredSize.height)
             themedNavigationController.modalPresentationStyle = .formSheet
         } else {
             themedNavigationController.modalPresentationStyle = .fullScreen
