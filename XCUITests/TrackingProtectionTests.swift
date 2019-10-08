@@ -202,18 +202,18 @@ class TrackingProtectionTests: BaseTestCase {
         // See Basic mode info
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
         XCTAssertTrue(app.navigationBars["Client.TPAccessoryInfo"].exists)
-        XCTAssertTrue(app.cells.images["tp-socialtracker"].exists)
-        XCTAssertTrue(app.cells.images["tp-cookie"].exists)
-        XCTAssertTrue(app.cells.images["tp-cryptominer"].exists)
-        XCTAssertTrue(app.cells.images["tp-fingerprinter"].exists)
-        XCTAssertFalse(app.cells.images["tp-contenttracker"].exists)
+        XCTAssertTrue(app.cells.staticTexts["Social Trackers"].exists)
+        XCTAssertTrue(app.cells.staticTexts["Cross-Site Trackers"].exists)
+        XCTAssertTrue(app.cells.staticTexts["Fingerprinters"].exists)
+        XCTAssertTrue(app.cells.staticTexts["Cryptominers"].exists)
+        XCTAssertFalse(app.cells.staticTexts["Tracking content"].exists)
 
         // Go back to TP settings
         app.buttons["Tracking Protection"].tap()
 
         // See Strict mode info
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
-        XCTAssertTrue(app.cells.images["tp-contenttracker"].exists)
+        XCTAssertTrue(app.cells.staticTexts["Tracking content"].exists)
 
         // Go back to TP settings
         app.buttons["Tracking Protection"].tap()

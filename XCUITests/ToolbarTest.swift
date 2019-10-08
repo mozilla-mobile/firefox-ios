@@ -97,7 +97,7 @@ class ToolbarTests: BaseTestCase {
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
     }
-
+    /* Disable until issue is fixed
     //Check that after scrolling on a page, the URL bar is hidden. Tapping one on the status bar will reveal the URL bar, tapping again on the status will scroll to the top
     func testRevealToolbarWhenTappingOnStatusbar(){
         //Workaround when testing on iPhone. If the orientation is in landscape on iPhone the tests will fail.
@@ -121,5 +121,5 @@ class ToolbarTests: BaseTestCase {
         let topElement = app.webViews.otherElements["Internet for people, not profit — Mozilla"].children(matching: .other).matching(identifier: "navigation").element(boundBy: 0).staticTexts["Mozilla"]
         waitForExistence(topElement, timeout: 10)
         XCTAssertTrue(topElement.isHittable)
-    }
+    }*/
 }
