@@ -381,8 +381,8 @@ extension LoginListViewController: UITableViewDelegate {
         }
         headerView.titleLabel.text = Strings.LoginsListTitle
         // not using a grouped table: show header borders
-        headerView.showTopBorder = true
-        headerView.showBottomBorder = true
+        headerView.showBorder(for: .top, true)
+        headerView.showBorder(for: .bottom, true)
         headerView.applyTheme()
         return headerView
     }

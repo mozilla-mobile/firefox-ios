@@ -184,6 +184,9 @@ extension UnifiedTelemetry {
         case url = "url"
         case searchText = "searchText"
         case whatsNew = "whats-new"
+        case dismissedOnboarding = "dismissed-onboarding"
+        case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
+        case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
     }
 
     public enum EventValue: String {

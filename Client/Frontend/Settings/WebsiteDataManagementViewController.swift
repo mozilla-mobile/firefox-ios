@@ -43,7 +43,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.showTopBorder = true
+        footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
         view.addSubview(tableView)
@@ -178,18 +178,18 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         headerView?.titleLabel.text = section == Section.sites.rawValue ? Strings.SettingsWebsiteDataTitle : nil
 
-        headerView?.showTopBorder = true
-        headerView?.showBottomBorder = true
+        headerView?.showBorder(for: .top, true)
+        headerView?.showBorder(for: .bottom, true)
 
         // top section: no top border (this is a plain table)
         guard let section = Section(rawValue: section) else { return headerView }
         if section == .sites {
-            headerView?.showTopBorder = false
+            headerView?.showBorder(for: .top, false)
 
             // no records: no bottom border (would make 2 with the one from the clear button)
             let emptyRecords = siteRecords?.isEmpty ?? true
             if emptyRecords {
-                headerView?.showBottomBorder = false
+                headerView?.showBorder(for: .bottom, false)
             }
         }
         return headerView
@@ -209,8 +209,8 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        footerView?.showTopBorder = true
-        footerView?.showBottomBorder = true
+        footerView?.showBorder(for: .top, true)
+        footerView?.showBorder(for: .bottom, true)
         return footerView
     }
 

@@ -106,7 +106,8 @@ class PhotonActionSheetCell: UITableViewCell {
 
     lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(named: "menu-Disclosure")
+        disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate)
+        disclosureIndicator.tintColor = UIColor.theme.tableView.rowDetailText
         return disclosureIndicator
     }()
 
