@@ -213,20 +213,20 @@ class IntroViewController: UIViewController {
     @objc func startBrowsing() {
         delegate?.introViewControllerDidFinish(self, showLoginFlow: nil)
         LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": String(currentPage)])
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": currentPage])
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": "\(currentPage)"])
     }
 
     @objc func showEmailLoginFlow() {
         delegate?.introViewControllerDidFinish(self, showLoginFlow: .emailFlow)
         LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": String(currentPage)])
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingEmailLogin, extras: ["slide-num": currentPage])
-        }
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingEmailLogin, extras: ["slide-num": "\(currentPage)"])
+    }
 
     @objc func showSignUpFlow() {
         delegate?.introViewControllerDidFinish(self, showLoginFlow: .signUpFlow)
         LeanPlumClient.shared.track(event: .dismissedOnboardingShowSignUp, withParameters: ["dismissedOnSlide": String(currentPage)])
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": currentPage])
-        }
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": "\(currentPage)"])
+    }
 }
 
 // UIViewController setup
