@@ -8,7 +8,6 @@ import EarlGrey
 
 class DomainAutocompleteTests: KIFTestCase {
     override func setUp() {
-
         super.setUp()
         BrowserUtils.configEarlGrey()
         BrowserUtils.dismissFirstRunUI()
@@ -58,7 +57,7 @@ class DomainAutocompleteTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
 
         // Tap on Go to perform a search
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Go")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityLabel("go")).perform(grey_tap())
         tester().waitForAnimationsToFinish()
         tester().wait(forTimeInterval: 1)
 
@@ -88,7 +87,9 @@ class DomainAutocompleteTests: KIFTestCase {
 
         // Remove the completion part and the the foo chars one by one
         for _ in 1...4 {
-            EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\u{0008}"))
+            EarlGrey.selectElement(with: grey_accessibilityID("address"))
+                .inRoot(grey_kindOfClass(UITextField.self))
+                .perform(grey_typeText("\u{0008}"))
         }
         tester().waitForAnimationsToFinish()
         tester().enterText(intoCurrentFirstResponder: "f")
@@ -108,7 +109,7 @@ class DomainAutocompleteTests: KIFTestCase {
 
     override func tearDown() {
         super.tearDown()
-        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("urlBar-cancel")).perform(grey_tap())
         BrowserUtils.resetToAboutHome()
         BrowserUtils.clearPrivateData()
     }

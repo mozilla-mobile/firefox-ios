@@ -8,9 +8,7 @@ import EarlGrey
 @testable import Client
 
 func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
-    EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-    EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
-    EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+    BrowserUtils.enterUrlAddressBar(typeUrl: url)
 
     let dialogAppeared = GREYCondition(name: "Wait for JS dialog") {
         var errorOrNil: NSError?

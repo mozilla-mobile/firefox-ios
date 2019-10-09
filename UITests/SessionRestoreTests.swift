@@ -36,12 +36,7 @@ class SessionRestoreTests: KIFTestCase {
         // After triggering the restore, the session should look like this:
         //   about:home, page1, *page2*, page3
         // where page2 is active.
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .perform(grey_replaceText(restoreURL!.absoluteString))
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: restoreURL!.absoluteString)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         EarlGrey.selectElement(with: grey_accessibilityLabel("Back"))
             .perform(grey_tap())

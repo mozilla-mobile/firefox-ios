@@ -26,7 +26,7 @@ class AuthenticationTests: KIFTestCase {
      */
     func testAuthentication() {
         loadAuthPage()
-
+        tester().wait(forTimeInterval: 3)
         // Make sure that 3 invalid credentials result in authentication failure.
         enterCredentials(usernameValue: "Username", passwordValue: "Password", username: "foo", password: "bar")
         enterCredentials(usernameValue: "foo", passwordValue: "•••", username: "foo2", password: "bar2")
@@ -73,20 +73,16 @@ class AuthenticationTests: KIFTestCase {
         // but that's not currently supported. We assume the username and password fields are empty.
         enterCredentials(usernameValue: "Username", passwordValue: "Password", username: "user", password: "pass")
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
-
     }
 
     fileprivate func loadAuthPage() {
         tester().wait(forTimeInterval: 3)
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText("\(webRoot!)/auth.html"))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: "\(webRoot!)/auth.html")
     }
 
     fileprivate func logOut() {
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText("\(webRoot!)/auth.html?logout=1"))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: "\(webRoot!)/auth.html?logout=1")
+
         // Wait until the dialog shows up
 		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: {
 			var errorOrNil: NSError?
