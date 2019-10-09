@@ -1129,6 +1129,7 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
     }
 
     func didScanQRCodeWithText(_ text: String) {
+        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeText)
         let content = TextContentDetector.detectTextContent(text)
         switch content {
         case .some(.link(let url)):
@@ -1139,7 +1140,6 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
         default:
             guard let tab = tabManager.selectedTab else { return }
             submitSearchText(text, forTab: tab)
-            UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeText)
         }
     }
 }
