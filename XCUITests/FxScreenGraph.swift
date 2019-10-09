@@ -482,7 +482,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
-        let bookmarksElement = app.navigationBars["Bookmarks"].otherElements["Bookmarks"]
+        let bookmarksElement = app.navigationBars["Bookmarks"].staticTexts["Bookmarks"]
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
@@ -704,7 +704,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
         // The swipeDown() is a workaround for an intermitent issue that the search filed is not always in view.
         screenState.gesture(forAction: Action.TapOnFilterWebsites) { userState in
-            app.swipeDown()
             app.searchFields["Filter Sites"].tap()
         }
         screenState.gesture(forAction: Action.ShowMoreWebsiteDataEntries) { userState in
