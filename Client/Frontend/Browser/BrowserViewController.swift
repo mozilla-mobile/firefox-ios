@@ -1129,9 +1129,18 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
     }
 
     func didScanQRCodeWithText(_ text: String) {
-        guard let tab = tabManager.selectedTab else { return }
-        submitSearchText(text, forTab: tab)
         UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeText)
+        let content = TextContentDetector.detectTextContent(text)
+        switch content {
+        case .some(.link(let url)):
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        case .some(.phoneNumber(let phoneNumber)):
+            let url = URL(string: "tel:\(phoneNumber)")!
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        default:
+            guard let tab = tabManager.selectedTab else { return }
+            submitSearchText(text, forTab: tab)
+        }
     }
 }
 
