@@ -17,18 +17,11 @@ class SecurityTests: KIFTestCase {
         super.setUp()
     }
 
-    func enterUrl(url: String) {
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .perform(grey_replaceText(url))
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .perform(grey_typeText("\n"))
-    }
-
     override func beforeEach() {
         let testURL = "\(webRoot!)/localhostLoad.html"
-        enterUrl(url: testURL)
+        //enterUrl(url: testURL)
+        BrowserUtils.enterUrlAddressBar(typeUrl: testURL)
+
         tester().waitForView(withAccessibilityLabel: "Web content")
         tester().waitForWebViewElementWithAccessibilityLabel("Session exploit")
     }
@@ -100,13 +93,14 @@ class SecurityTests: KIFTestCase {
 
         // Since the newly opened tab doesn't have a URL/title we can't find its accessibility
         // element to close it in teardown. Workaround: load another page first.
-        enterUrl(url: webRoot!)
+        BrowserUtils.enterUrlAddressBar(typeUrl: webRoot!)
     }
 
     // For blob URLs, just show "blob:" to the user (see bug 1446227)
     func testBlobUrlShownAsSchemeOnly() {
         let url = "\(webRoot!)/blobURL.html"
-        enterUrl(url: url) // script that will load a blob url
+        // script that will load a blob url
+        BrowserUtils.enterUrlAddressBar(typeUrl: url)
         tester().wait(forTimeInterval: 1)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         XCTAssert(webView.url!.absoluteString.starts(with: "blob:http://")) // webview internally has "blob:<rest of url>"
@@ -117,7 +111,7 @@ class SecurityTests: KIFTestCase {
     // Web pages can't have firefox: urls, these should be used external to the app only (see bug 1447853)
     func testFirefoxSchemeBlockedOnWebpages() {
         let url = "\(webRoot!)/firefoxScheme.html"
-        enterUrl(url: url)
+        BrowserUtils.enterUrlAddressBar(typeUrl: url)
         tester().tapWebViewElementWithAccessibilityLabel("go")
 
         tester().wait(forTimeInterval: 1)

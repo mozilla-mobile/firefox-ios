@@ -261,6 +261,6 @@ class AuthenticationTest: BaseTestCase {
         // Enter login, since the interval is reset, it will ask for password again
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.navigationBars["Enter Passcode"])
-        navigator.performAction(Action.DisablePasscode)
+        navigator.performAction(Action.UnlockLoginsSettings)
     }
 }
