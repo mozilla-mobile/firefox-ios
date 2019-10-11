@@ -290,8 +290,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
 
         app.webViews.links.staticTexts[toastUrl["link"]!].press(forDuration: 1)
-        waitForExistence(app.sheets.buttons["Open in New Tab"])
-        app.sheets.buttons["Open in New Tab"].press(forDuration: 1)
+        waitForExistence(app.buttons["Open in New Tab"])
+        app.buttons["Open in New Tab"].press(forDuration: 1)
         waitForExistence(app.buttons["Switch"])
         app.buttons["Switch"].tap()
 
@@ -310,8 +310,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
         waitForExistence(app.webViews.links[toastUrl["link"]!])
         app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
-        waitForExistence(app.sheets.buttons["Open in New Private Tab"])
-        app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
+        waitForExistence(app.buttons["Open in New Private Tab"])
+        app.buttons["Open in New Private Tab"].press(forDuration: 1)
         waitForExistence(app.buttons["Switch"])
         app.buttons["Switch"].tap()
 
@@ -334,8 +334,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
 
         app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
-        waitForExistence(app.sheets.buttons["Open in New Tab"], timeout: 3)
-        app.sheets.buttons["Open in New Private Tab"].press(forDuration: 1)
+        waitForExistence(app.buttons["Open in New Tab"], timeout: 3)
+        app.buttons["Open in New Private Tab"].press(forDuration: 1)
         waitForExistence(app.buttons["Switch"], timeout: 5)
         app.buttons["Switch"].tap()
 

@@ -205,7 +205,7 @@ class SearchTests: BaseTestCase {
         waitForExistence(app.textFields["url"], timeout: 10)
         app.typeText("foo bar")
         app.typeText(XCUIKeyboardKey.return.rawValue)
-        waitForExistence(app.textFields["url"], timeout: 10)
+        waitForExistence(app.textFields["url"], timeout: 20)
         waitForValueContains(app.textFields["url"], value: "google")
     }
 }

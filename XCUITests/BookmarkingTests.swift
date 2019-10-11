@@ -14,7 +14,7 @@ let url_4 = "test-password-2.html"
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
         navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Bookmark This Page"])
+        waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 5)
         app.tables.cells["Bookmark This Page"].tap()
         navigator.nowAt(BrowserTab)
     }
@@ -138,6 +138,7 @@ class BookmarkingTests: BaseTestCase {
 
     // Smoketest
     func testBookmarksAwesomeBar() {
+        navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.ebay")
         waitForExistence(app.tables["SiteTable"])
@@ -252,7 +253,7 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func typeOnSearchBar(text: String) {
-        waitForExistence(app.textFields["address"])
+        waitForExistence(app.textFields["url"], timeout: 5)
         app.textFields["address"].typeText(text)
     }
 }

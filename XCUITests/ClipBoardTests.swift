@@ -56,7 +56,6 @@ class ClipBoardTests: BaseTestCase {
         navigator.openURL(url)
         waitUntilPageLoad()
         navigator.goto(PageOptionsMenu)
-        print(app.debugDescription)
         navigator.performAction(Action.CopyAddressPAM)
 
         checkCopiedUrl()

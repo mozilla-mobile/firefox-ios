@@ -17,7 +17,7 @@ class DisplaySettingTests: BaseTestCase {
 
     func testCheckDisplaySettingsDefault() {
         navigator.goto(DisplaySettings)
-        waitForExistence(app.navigationBars["Display"])
+        waitForExistence(app.navigationBars["Theme"])
         XCTAssertTrue(app.tables["DisplayTheme.Setting.Options"].exists)
         let switchValue = app.switches["DisplaySwitchValue"].value!
         XCTAssertEqual(switchValue as! String, "0")

@@ -185,7 +185,7 @@
       <Testables>
          <TestableReference
             skipped = "NO"
-            parallelizable = "YES">
+            parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
@@ -726,6 +726,12 @@
                   Identifier = "TrackingProtectionTests/testDisablingTPforOneSiteDoesNotChangeGeneralTPOption()">
                </Test>
                <Test
+                  Identifier = "TrackingProtectionTests/testOpenSettingsFromTPcontextMenu()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testBasicMoreInfo()">
+               </Test>
+               <Test
                   Identifier = "TrackingProtectionTests/testMenuWhenThereAreBlockedElements()">
                </Test>
                <Test
@@ -739,6 +745,9 @@
                </Test>
                <Test
                   Identifier = "TranslationSnackBarTest">
+               </Test>
+               <Test
+                  Identifier = "WhatsNewTest">
                </Test>
             </SkippedTests>
          </TestableReference>

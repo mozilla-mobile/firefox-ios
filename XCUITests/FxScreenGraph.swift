@@ -1090,7 +1090,7 @@ extension MMNavigator where T == FxUserState {
         if isTablet {
             waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
         } else {
-            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
+            waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 10)
         }
         self.goto(TabTray)
         createNewTab()
