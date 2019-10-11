@@ -23,6 +23,7 @@ class DownloadFilesTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft()
+        waitForExistence(app.tables.cells.buttons["Delete"], timeout: 3)
         app.tables.cells.buttons["Delete"].tap()
     }
 

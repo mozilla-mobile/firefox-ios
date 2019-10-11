@@ -291,7 +291,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
     }
 
-    let introScrollView = app.scrollViews["IntroViewController.scrollView"]
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab, if: "showIntro == false && showWhatsNew == true")
         screenState.noop(to: NewTabScreen, if: "showIntro == false && showWhatsNew == false")
@@ -752,7 +751,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func select(rows: Int) {
-        app.staticTexts[String(rows)].tap()
+        app.staticTexts[String(rows)].firstMatch.tap()
     }
 
     map.addScreenState(PasscodeSettings) { screenState in
@@ -862,17 +861,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(ShowTourInSettings) { screenState in
         screenState.gesture(to: Intro_FxASignin) {
-            let introScrollView = app.scrollViews["IntroViewController.scrollView"]
-            for _ in 1...4 {
-                introScrollView.swipeLeft()
-            }
-            let turnOnSyncButton = app.buttons["turnOnSync.button"]
+            let turnOnSyncButton = app.buttons["signInOnboardingButton"]
             turnOnSyncButton.tap()
-        }
-        screenState.backAction = {
-            introScrollView.swipeLeft()
-            let startBrowsingButton = app.buttons["IntroViewController.startBrowsingButton"]
-            startBrowsingButton.tap()
         }
     }
 

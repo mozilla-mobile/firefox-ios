@@ -306,6 +306,8 @@ class ActivityStreamTest: BaseTestCase {
         //}
     }
 
+    // Disable #5554
+    /*
     func testTopSitesShareNewTopSite() {
         navigator.goto(HomePanelsScreen)
         let topSiteCells = TopSiteCellgroup.cells
@@ -318,7 +320,7 @@ class ActivityStreamTest: BaseTestCase {
         //if !iPad() {
         //    app.buttons["Cancel"].tap()
         //}
-    }
+    }*/
 
     private func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)

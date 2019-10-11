@@ -12,29 +12,25 @@ class FirstRunTourTests: BaseTestCase {
     func testFirstRunTour() {
         // Complet the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-        waitForExistence(app.scrollViews["IntroViewController.scrollView"])
+
         waitForExistence(app.staticTexts["Welcome to Firefox"])
-        XCTAssertFalse(app.buttons["IntroViewController.startBrowsingButton"].exists)
-        XCTAssertTrue(app.pageIndicators["IntroViewController.pageControl"].exists)
-        XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 1 of 2")
+        XCTAssertTrue(app.buttons["nextOnboardingButton"].exists)
+        XCTAssertTrue(app.buttons["signInOnboardingButton"].exists)
+        XCTAssertTrue(app.buttons["signUpOnboardingButton"].exists)
 
         // Swipe to the second screen
-        app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        waitForExistence(app.pageIndicators["IntroViewController.pageControl"])
-        XCTAssertTrue(app.buttons["IntroViewController.startBrowsingButton"].exists)
-        XCTAssertTrue(app.buttons["turnOnSync.button"].exists)
-        XCTAssertEqual(app.pageIndicators["IntroViewController.pageControl"].value as? String, "page 2 of 2")
+        app.buttons.staticTexts["Next"].tap()
+        XCTAssertTrue(app.buttons["startBrowsingOnboardingButton"].exists)
+        XCTAssertTrue(app.buttons["signInOnboardingButton"].exists)
+        XCTAssertTrue(app.buttons["signUpOnboardingButton"].exists)
     }
 
-    private func goToNextScreen(swipe: Int) {
-        for _ in 1...swipe {
-            app.scrollViews["IntroViewController.scrollView"].swipeLeft()
-        }
+    private func goToNextScreen() {
+        app.buttons["nextOnboardingButton"].tap()
     }
 
     private func tapStartBrowsingButton() {
-        waitForExistence(app.buttons["IntroViewController.startBrowsingButton"])
-        app.buttons["IntroViewController.startBrowsingButton"].tap()
+        app.buttons["startBrowsingOnboardingButton"].tap()
         // User starts in HomePanelScreen with the default Top Sites
         let topSites = app.collectionViews.cells["TopSitesCell"]
         waitForExistence(topSites)
@@ -42,15 +38,14 @@ class FirstRunTourTests: BaseTestCase {
     
     func testStartBrowsingFromSecondScreen() {
         navigator.goto(FirstRun)
-        goToNextScreen(swipe: 1)
+        goToNextScreen()
         tapStartBrowsingButton()
     }
     
     func testShowTourFromSettings() {
-        goToNextScreen(swipe: 1)
+        goToNextScreen()
         tapStartBrowsingButton()
         navigator.goto(ShowTourInSettings)
-        waitForExistence(app.scrollViews["IntroViewController.scrollView"])
         waitForExistence(app.staticTexts["Welcome to Firefox"])
     }
 }

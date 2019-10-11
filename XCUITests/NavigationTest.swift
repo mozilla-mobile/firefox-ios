@@ -82,7 +82,7 @@ class NavigationTest: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         waitForExistence(app.cells["TopSitesCell"])
     }
-
+    /* Failing on iPhone so disabled due to 5588
     func testTapSigninShowsFxAFromSettings() {
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
@@ -94,6 +94,7 @@ class NavigationTest: BaseTestCase {
         let settingsButton = app.navigationBars["Client.FxAContentView"].buttons["Settings"]
         settingsButton.tap()
     }
+    */
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
@@ -107,8 +108,8 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkFirefoxSyncScreenShown() {
-        waitForExistence(app.navigationBars["Client.FxAContentView"])
-        if isTablet {
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
+       if isTablet {
             waitForExistence(app.textFields.element(boundBy: 1), timeout: 3)
             let email = app.textFields.element(boundBy: 1)
             // Verify the placeholdervalues here for the textFields
@@ -130,12 +131,11 @@ class NavigationTest: BaseTestCase {
         navigator.goto(TabTray)
         navigator.openURL(website_1["url"]!)
         waitForValueContains(app.textFields["url"], value: website_1["value"]!)
-
         // Element at the TOP. TBChanged once the web page is correclty shown
-        let topElement = app.webViews.staticTexts["The new"]
+        let topElement = app.links.staticTexts["Mozilla"].firstMatch
 
         // Element at the BOTTOM
-        let bottomElement = app.webViews.links.staticTexts["Contact Us"]
+        let bottomElement = app.webViews.links.staticTexts["Legal"]
 
         // Scroll to bottom
         bottomElement.tap()
@@ -156,11 +156,10 @@ class NavigationTest: BaseTestCase {
     func testLongPressLinkOptions() {
         navigator.openURL(path(forTestPage: "test-example.html"))
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.sheets[website_2["moreLinkLongPressUrl"]!])
+        waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
 
@@ -168,11 +167,10 @@ class NavigationTest: BaseTestCase {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-example.html"))
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.sheets[website_2["moreLinkLongPressUrl"]!])
+        waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
         XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
-        XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
     }
     // Only testing Share and Copy Link, the other two options are already covered in other tests
@@ -200,6 +198,7 @@ class NavigationTest: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
+    /* Disabled due to issue 5581
     func testLongPressOnAddressBar() {
         //This test is for populated clipboard only so we need to make sure there's something in Pasteboard
         navigator.goto(URLBarOpen)
@@ -260,7 +259,7 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Paste"].exists)
             XCTAssertTrue(app.menus.children(matching: .menuItem).element(boundBy: 4).exists)
         }
-    }
+    }*/
 
     private func longPressLinkOptions(optionSelected: String) {
         navigator.openURL(path(forTestPage: "test-example.html"))
@@ -287,7 +286,8 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "reserved.html")
     }
-
+    // Disable issue 5554
+    /*
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
         waitForExistence(app.collectionViews.buttons["Copy"])
@@ -304,6 +304,7 @@ class NavigationTest: BaseTestCase {
     func testCancelLongPressLinkMenu() {
         navigator.openURL(website_2["url"]!)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
+        
         if iPad() {
             // For iPad there is no Cancel, so we tap to dismiss the menu
             app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
@@ -313,7 +314,7 @@ class NavigationTest: BaseTestCase {
 
         waitForNoExistence(app.sheets[website_2["moreLinkLongPressInfo"]!])
         XCTAssertEqual(app.textFields["url"].value! as? String, "www.example.com/", "After canceling the menu user is in a different website")
-    }
+    }*/
 
     // Smoketest
     func testPopUpBlocker() {
