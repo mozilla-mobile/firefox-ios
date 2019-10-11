@@ -8,7 +8,7 @@ let firstWebsite = (url: path(forTestPage: "test-mozilla-org.html"), tabName: "I
 let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
 let exampleWebsite = (url: path(forTestPage: "test-example.html"), tabName: "Example Domain")
 let homeTabName = "Home"
-let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
+let websiteWithSearchField = path(forTestPage: "search-example.html")
 
 let exampleDomainTitle = "Example Domain"
 let twitterTitle = "Twitter"
@@ -243,7 +243,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     func testDragAddressBarIntoSearchBox() {
         if skipPlatform { return }
 
-        navigator.openURL("developer.mozilla.org/en-US")
+        navigator.openURL(websiteWithSearchField)
         waitUntilPageLoad()
         // Check the text in the search field before dragging and dropping the url text field
         waitForValueContains(app.webViews.searchFields.element(boundBy: 0), value: "Search")
