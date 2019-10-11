@@ -75,7 +75,7 @@ extension PhotonActionSheetProtocol {
         return items
     }
 
-    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?) -> Void) -> PhotonActionSheetItem? {
+    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ isSignUpFlow: Bool) -> Void) -> PhotonActionSheetItem? {
         profile.getAccount()?.updateProfile()
         let account = profile.getAccount()
 
@@ -105,7 +105,7 @@ extension PhotonActionSheetProtocol {
 
         let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
-            showFxA(fxaParams)
+            showFxA(fxaParams, false)
         }
 
         guard let title = title(), let iconString = imageName() else { return nil }

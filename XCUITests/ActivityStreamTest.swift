@@ -300,9 +300,10 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it
         selectOptionFromContextMenu(option: "Share")
-        if !iPad() {
-            app.buttons["Cancel"].tap()
-        }
+        // Comenting out until share sheet can be managed with automated tests issue #5477
+        //if !iPad() {
+        //    app.buttons["Cancel"].tap()
+        //}
     }
 
     func testTopSitesShareNewTopSite() {
@@ -313,9 +314,10 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it....
         selectOptionFromContextMenu(option: "Share")
-        if !iPad() {
-            app.buttons["Cancel"].tap()
-        }
+        // Comenting out until share sheet can be managed with automated tests issue #5477
+        //if !iPad() {
+        //    app.buttons["Cancel"].tap()
+        //}
     }
 
     private func selectOptionFromContextMenu(option: String) {

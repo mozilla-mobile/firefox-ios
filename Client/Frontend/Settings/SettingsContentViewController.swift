@@ -114,6 +114,10 @@ class SettingsContentViewController: UIViewController, WKNavigationDelegate {
         )
         webView.allowsLinkPreview = false
         webView.navigationDelegate = self
+
+        // This is not shown full-screen, use mobile UA
+        webView.customUserAgent = UserAgent.mobileUserAgent()
+
         return webView
     }
 

@@ -102,8 +102,8 @@ extension BrowserViewController: WKUIDelegate {
         completionHandler(UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { (suggested) -> UIMenu? in
             guard let url = elementInfo.linkURL, let currentTab = self.tabManager.selectedTab,
                 let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper,
-                let elements = contextHelper.elements, let isPrivate = currentTab.isPrivate else { return nil }
-
+                let elements = contextHelper.elements else { return nil }
+            let isPrivate = currentTab.isPrivate
             let addTab = { (rURL: URL, isPrivate: Bool) in
                 let tab = self.tabManager.addTab(URLRequest(url: rURL as URL), afterTab: currentTab, isPrivate: isPrivate)
                 LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "Long Press Context Menu"])

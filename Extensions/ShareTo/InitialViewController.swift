@@ -91,7 +91,11 @@ class InitialViewController: UIViewController {
     override func viewDidLoad() {
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.0, alpha: UX.alphaForFullscreenOverlay)
+        if #available(iOS 13, *) {
+            view.backgroundColor = .clear
+        } else {
+            view.backgroundColor = UIColor(white: 0.0, alpha: UX.alphaForFullscreenOverlay)
+        }
         view.alpha = 0
 
         getShareItem().uponQueue(.main) { shareItem in
