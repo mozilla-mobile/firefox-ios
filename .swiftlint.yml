@@ -101,3 +101,4 @@ file_header:
 line_length: 1000
 
 reporter: "json" # reporter type (xcode, json, csv, checkstyle)
+last line ios
