@@ -119,7 +119,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         let widgetView: UIView!
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
-        let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+        if #available(iOS 13, *) {
+            let vibrancyEffect = UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label)
+        } else {
+            let vibrancyEffect = UIVibrancyEffect.widgetPrimary()
+        }
+        let effectView = UIVisualEffectView(effect: vibrancyEffect)
         self.view.addSubview(effectView)
         effectView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
