@@ -25,6 +25,7 @@ private struct TodayUX {
     static let copyLinkImageWidth: CGFloat = 23
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
+    static let assetCatalogprivateBrowsingColorName = "privateBrowsingColor"
 }
 
 @objc (TodayViewController)
@@ -44,7 +45,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         let label = imageButton.label
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
-
+        
+        if #available(iOSApplicationExtension 13.0, *) {
+            label.tintColor = .label
+            button.tintColor = .label
+        }
+        
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -55,12 +61,18 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
 
         let button = imageButton.button
-        button.setImage(UIImage(named: "new_private_tab_button_normal"), for: .normal)
-        button.setImage(UIImage(named: "new_private_tab_button_highlight"), for: .highlighted)
-
+        button.setImage(UIImage(named: "new_private_tab_button_normal")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(named: "new_private_tab_button_highlight")?.withRenderingMode(.alwaysTemplate), for: .highlighted)
+        
         let label = imageButton.label
-        label.tintColor = TodayUX.privateBrowsingColor
-        label.textColor = TodayUX.privateBrowsingColor
+        
+        if #available(iOSApplicationExtension 13.0, *) {
+            label.tintColor = UIColor(named: TodayUX.assetCatalogprivateBrowsingColorName)
+            button.tintColor = UIColor(named: TodayUX.assetCatalogprivateBrowsingColorName)
+        } else {
+            label.tintColor = TodayUX.privateBrowsingColor
+            button.tintColor = TodayUX.privateBrowsingColor
+        }
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
         imageButton.sizeToFit()
         return imageButton
@@ -80,9 +92,20 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
+        
+        if #available(iOSApplicationExtension 13.0, *) {
+            button.label.tintColor = .label
+            button.subtitleLabel.tintColor = .secondaryLabel
+            button.tintColor = .label
+        } else {
+            button.label.textColor = .darkText
+            button.subtitleLabel.textColor = .lightGray
+            button.tintColor = .darkText
+        }
+        
         return button
     }()
-
+    
     fileprivate lazy var widgetStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -119,7 +142,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         let widgetView: UIView!
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
-        let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+        let effectView: UIVisualEffectView!
+        
+        if #available(iOSApplicationExtension 13.0, *) {
+            let blurrEffect = UIBlurEffect(style: .systemThinMaterial)
+            effectView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: blurrEffect, style: .label))
+        } else {
+             effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+        }
+        
         self.view.addSubview(effectView)
         effectView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
@@ -236,7 +267,6 @@ class ImageButtonWithLabel: UIView {
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
-        label.textColor = UIColor.white
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
@@ -269,7 +299,6 @@ class ButtonWithSublabel: UIButton {
 
         let imageView = self.imageView!
         let subtitleLabel = self.subtitleLabel
-        subtitleLabel.textColor = UIColor.lightGray
         self.addSubview(subtitleLabel)
 
         imageView.snp.makeConstraints { make in
