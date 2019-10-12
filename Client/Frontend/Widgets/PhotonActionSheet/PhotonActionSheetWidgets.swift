@@ -237,6 +237,9 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
         }
         self.titleLabel.text = site.title.isEmpty ? site.url : site.title
         self.descriptionLabel.text = site.tileURL.baseDomain
+        self.titleLabel.textColor = ThemeManager.instance.current.actionMenu.foreground
+        self.descriptionLabel.textColor = ThemeManager.instance.current.actionMenu.foreground
+        
     }
 }
 
