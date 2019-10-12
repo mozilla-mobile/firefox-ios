@@ -160,9 +160,13 @@ class HomePageSettingsUITests: BaseTestCase {
             //Test each of the custom row options from 1-4
             for n in 1...4 {
                 userState.numTopSitesRows = n
-                navigator.performAction(Action.SelectTopSitesRows)
-                XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: " + String(n))
-                navigator.performAction(Action.GoToHomePage)
+                // Workaround for new Xcode11/iOS13
+                navigator.goto(HomeSettings)
+                app.tables.cells.element(boundBy: 2).tap()
+                waitForExistence(app.cells.staticTexts["1"], timeout: 3)
+                app.tables.cells.element(boundBy: n-1).tap()
+                navigator.goto(NewTabScreen)
+                app.buttons["Done"].tap()
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
         } else {

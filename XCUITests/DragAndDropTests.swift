@@ -178,7 +178,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         // Check that focus is kept on last website open
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
     }
-
+    /*Disabled due to 5561
     func testDragDropToInvalidArea() {
         if skipPlatform { return }
 
@@ -191,7 +191,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         checkTabsOrder(dragAndDropTab: false, firstTab: firstWebsite.tabName, secondTab: secondWebsite.tabName)
         // Check that focus on the website does not change either
         XCTAssert(secondWebsite.url.contains(app.textFields["url"].value! as! String), "The tab has not been dropped correctly")
-    }
+    }*/
 
     func testDragAndDropHomeTab() {
         if skipPlatform { return }

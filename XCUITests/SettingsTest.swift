@@ -29,6 +29,6 @@ class SettingsTest: BaseTestCase {
 
     func testOpenSiriOption() {
         navigator.performAction(Action.OpenSiriFromSettings)
-        waitForExistence(app.buttons["Start recording"], timeout: 5)
+        waitForExistence(app.buttons["Add to Siri"], timeout: 5)
     }
 }

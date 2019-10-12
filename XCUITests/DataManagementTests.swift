@@ -24,6 +24,7 @@ class DataManagementTests: BaseTestCase {
             navigator.openURL(website)
         }
         navigator.goto(WebsiteDataSettings)
+        waitForExistence(app.searchFields["Filter Sites"])
         navigator.performAction(Action.TapOnFilterWebsites)
         app.typeText("youtube")
         waitForExistence(app.tables["Search results"])

@@ -29,7 +29,8 @@ class PhotonActionSheetTest: BaseTestCase {
         cell.press(forDuration: 2)
         waitForExistence(app.cells["action_pin"])
     }
-
+    // Disable issue #5554
+    /*
     func testShareOptionIsShown() {
         navigator.browserPerformAction(.shareOption)
 
@@ -48,15 +49,16 @@ class PhotonActionSheetTest: BaseTestCase {
         pageObjectButtonCenter.press(forDuration: 1)
 
         waitForExistence(app.buttons["Copy"], timeout: 10)
-    }
+    }*/
 
     func testSendToDeviceFromPageOptionsMenu() {
         // User not logged in
         navigator.browserPerformAction(.sendToDeviceOption)
-        waitForExistence(app.images["emptySync"])
+        waitForExistence(app.navigationBars["Client.InstructionsView"])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
-
+    // Disable issue #5554
+    /*
     // Test disabled due to new implementation Bug 1449708 - new share sheet
     func testSendToDeviceFromShareOption() {
         // Open and Wait to see the Share options sheet
@@ -77,7 +79,7 @@ class PhotonActionSheetTest: BaseTestCase {
         // User not logged in
         waitForExistence(app.images["emptySync"])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
-    }
+    }*/
 
     private func openNewShareSheet() {
         navigator.openURL("example.com")
@@ -114,7 +116,8 @@ class PhotonActionSheetTest: BaseTestCase {
         app.buttons["Done"].tap()
         waitForExistence(app.buttons["Copy"], timeout: 3)
     }
-
+    // Disable issue #5554
+    /*
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
@@ -144,5 +147,5 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.textFields["url"])
         waitForValueContains(app.textFields["url"], value:"example.com/")
         disableFennec()
-    }
+    }*/
 }

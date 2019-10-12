@@ -291,7 +291,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         app.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.25)).tap()
     }
 
-    let introScrollView = app.scrollViews["IntroViewController.scrollView"]
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab, if: "showIntro == false && showWhatsNew == true")
         screenState.noop(to: NewTabScreen, if: "showIntro == false && showWhatsNew == false")
@@ -482,7 +481,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(LibraryPanel_Bookmarks) { screenState in
         let bookmarkCell = app.tables["Bookmarks List"].cells.element(boundBy: 0)
-        let bookmarksElement = app.navigationBars["Bookmarks"].otherElements["Bookmarks"]
+        let bookmarksElement = app.navigationBars["Bookmarks"].staticTexts["Bookmarks"]
         screenState.tap(app.cells.staticTexts["Mobile Bookmarks"], to: MobileBookmarks)
         screenState.gesture(forAction: Action.CloseBookmarkPanel, transitionTo: HomePanelsScreen) { userState in
             if isTablet {
@@ -704,7 +703,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
         // The swipeDown() is a workaround for an intermitent issue that the search filed is not always in view.
         screenState.gesture(forAction: Action.TapOnFilterWebsites) { userState in
-            app.swipeDown()
             app.searchFields["Filter Sites"].tap()
         }
         screenState.gesture(forAction: Action.ShowMoreWebsiteDataEntries) { userState in
@@ -753,7 +751,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     func select(rows: Int) {
-        app.staticTexts[String(rows)].tap()
+        app.staticTexts[String(rows)].firstMatch.tap()
     }
 
     map.addScreenState(PasscodeSettings) { screenState in
@@ -863,17 +861,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(ShowTourInSettings) { screenState in
         screenState.gesture(to: Intro_FxASignin) {
-            let introScrollView = app.scrollViews["IntroViewController.scrollView"]
-            for _ in 1...4 {
-                introScrollView.swipeLeft()
-            }
-            let turnOnSyncButton = app.buttons["turnOnSync.button"]
+            let turnOnSyncButton = app.buttons["signInOnboardingButton"]
             turnOnSyncButton.tap()
-        }
-        screenState.backAction = {
-            introScrollView.swipeLeft()
-            let startBrowsingButton = app.buttons["IntroViewController.startBrowsingButton"]
-            startBrowsingButton.tap()
         }
     }
 
