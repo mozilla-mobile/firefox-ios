@@ -237,6 +237,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
             UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
         }
+        
+        if let profile = self.profile {
+            profile._reopen()
+
+            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+            }
+
+            profile.syncManager.applicationDidBecomeActive()
+
+            setUpWebServer(profile)
+        }
 
         DispatchQueue.main.async {
             NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC())
@@ -258,18 +270,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         let defaults = UserDefaults()
         defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
 
-        if let profile = self.profile {
-            profile._reopen()
-
-            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
-                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
-            }
-
-            profile.syncManager.applicationDidBecomeActive()
-
-            setUpWebServer(profile)
-        }
-        
         // Resume file downloads.
         // TODO: iOS 13 needs to iterate all the BVCs.
         BrowserViewController.foregroundBVC().downloadQueue.resumeAll()
