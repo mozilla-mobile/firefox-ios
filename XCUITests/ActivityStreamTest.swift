@@ -191,8 +191,6 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in New Tab")
-        waitUntilPageLoad()
-
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
