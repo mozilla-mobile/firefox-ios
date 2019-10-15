@@ -100,9 +100,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.alignment = .fill
         stackView.spacing = 0
         stackView.distribution = UIStackView.Distribution.fillEqually
-        let edge = self.view.frame.size.width * TodayUX.buttonsHorizontalMarginPercentage
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
-        stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
 
