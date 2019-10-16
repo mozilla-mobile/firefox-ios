@@ -1029,6 +1029,8 @@ class BrowserViewController: UIViewController {
         let helper = ShareExtensionHelper(url: url, tab: tab)
 
         let controller = helper.createActivityViewController({ [unowned self] completed, _ in
+            SimpleToast().showAlertWithText(Strings.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
 
