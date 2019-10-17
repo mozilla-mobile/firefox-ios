@@ -155,6 +155,13 @@ extension BrowserViewController: WKUIDelegate {
                 UIPasteboard.general.url = url
             })
 
+            actions.append(UIAction(title: Strings.ContextMenuShareLink, image: UIImage.templateImageNamed("action_share"), identifier: UIAction.Identifier("linkContextMenu.share")) { _ in
+                guard let tab = self.tabManager[webView], let helper = tab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper else { return }
+                // This is only used on ipad for positioning the popover. On iPhone it is an action sheet.
+                let p = webView.convert(helper.touchPoint, to: self.view)
+                self.presentActivityViewController(url as URL, sourceView: self.view, sourceRect: CGRect(origin: p, size: CGSize(width: 10, height: 10)), arrowDirection: .unknown)
+            })
+
             if let url = elements.image {
                 let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
                 actions.append(UIAction(title: Strings.ContextMenuSaveImage, identifier: UIAction.Identifier("linkContextMenu.saveImage")) { _ in
