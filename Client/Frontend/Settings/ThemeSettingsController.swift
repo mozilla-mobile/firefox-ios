@@ -20,6 +20,8 @@ class ThemeSettingsController: ThemedTableViewController {
         case lightDarkPicker
     }
 
+    fileprivate let SectionHeaderIdentifier = "SectionHeaderIdentifier"
+
     // A non-interactable slider is underlaid to show the current screen brightness indicator
     private var slider: (control: UISlider, deviceBrightnessIndicator: UISlider)?
 
@@ -56,10 +58,7 @@ class ThemeSettingsController: ThemedTableViewController {
         tableView.accessibilityIdentifier = "DisplayTheme.Setting.Options"
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
 
-        let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
-        let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        tableView.tableHeaderView = headerView
-        headerView.titleLabel.text = Strings.DisplayThemeSectionHeader
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier)
 
         NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
     }
@@ -68,6 +67,24 @@ class ThemeSettingsController: ThemedTableViewController {
         guard ThemeManager.instance.automaticBrightnessIsOn else { return }
         ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
         applyTheme()
+    }
+
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
+        let section = Section(rawValue: section) ?? .automaticOnOff
+        headerView.titleLabel.text = {
+            switch section {
+            case .systemTheme:
+                return Strings.SystemThemeSectionHeader
+            case .automaticOnOff:
+                return Strings.ThemeSwitchModeSectionHeader
+            case .lightDarkPicker:
+                return Strings.ThemePickerSectionHeader
+            }
+        }()
+        headerView.titleLabel.text = headerView.titleLabel.text?.uppercased()
+
+        return headerView
     }
 
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
