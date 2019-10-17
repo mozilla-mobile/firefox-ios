@@ -10,6 +10,8 @@ protocol ContextMenuHelperDelegate: AnyObject {
 }
 
 class ContextMenuHelper: NSObject {
+    var touchPoint = CGPoint()
+
     struct Elements {
         let link: URL?
         let image: URL?
@@ -113,6 +115,10 @@ extension ContextMenuHelper: TabContentScript {
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = message.body as? [String: AnyObject] else {
             return
+        }
+
+        if let x = data["touchX"] as? Double, let y = data["touchY"] as? Double {
+            touchPoint = CGPoint(x: x, y: y)
         }
 
         var linkURL: URL?
