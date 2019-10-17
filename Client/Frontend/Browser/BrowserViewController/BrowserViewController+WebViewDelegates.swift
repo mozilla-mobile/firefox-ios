@@ -355,13 +355,14 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        if url.scheme == "javascript", navigationAction.request.isPrivileged {
-            decisionHandler(.cancel)
-            if let javaScriptString = url.absoluteString.replaceFirstOccurrence(of: "javascript:", with: "").removingPercentEncoding {
-                webView.evaluateJavaScript(javaScriptString)
-            }
-            return
-        }
+        // Disabled due to https://bugzilla.mozilla.org/show_bug.cgi?id=1588928
+        //        if url.scheme == "javascript", navigationAction.request.isPrivileged {
+        //            decisionHandler(.cancel)
+        //            if let javaScriptString = url.absoluteString.replaceFirstOccurrence(of: "javascript:", with: "").removingPercentEncoding {
+        //                webView.evaluateJavaScript(javaScriptString)
+        //            }
+        //            return
+        //        }
 
         // Second special case are a set of URLs that look like regular http links, but should be handed over to iOS
         // instead of being loaded in the webview. Note that there is no point in calling canOpenURL() here, because
