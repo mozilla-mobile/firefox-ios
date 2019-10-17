@@ -4,6 +4,7 @@
 import Foundation
 
 enum ThemeManagerPrefs: String {
+    case systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
     case automaticSwitchIsOn = "prefKeyAutomaticSwitchOnOff"
     case automaticSliderValue = "prefKeyAutomaticSliderValue"
     case themeName = "prefKeyThemeName"
@@ -32,6 +33,12 @@ class ThemeManager {
     var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue) {
         didSet {
             UserDefaults.standard.set(automaticBrightnessIsOn, forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue)
+        }
+    }
+
+    var systemThemeIsOn: Bool = UserDefaults.standard.bool(forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue) {
+        didSet {
+            UserDefaults.standard.set(systemThemeIsOn, forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue)
         }
     }
 
