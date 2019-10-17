@@ -16,7 +16,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     enum Section: Int {
         case systemTheme
-        case automaticOnOff
+        case automaticBrightness
         case lightDarkPicker
     }
 
@@ -71,15 +71,15 @@ class ThemeSettingsController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier) as! ThemedTableSectionHeaderFooterView
-        let section = Section(rawValue: section) ?? .automaticOnOff
+        let section = Section(rawValue: section) ?? .automaticBrightness
         headerView.titleLabel.text = {
             switch section {
             case .systemTheme:
                 return Strings.SystemThemeSectionHeader
-            case .automaticOnOff:
+            case .automaticBrightness:
                 return Strings.ThemeSwitchModeSectionHeader
             case .lightDarkPicker:
-                return Strings.ThemePickerSectionHeader
+                return isAutoBrightnessOn ? Strings.DisplayThemeBrightnessThresholdSectionHeader : Strings.ThemePickerSectionHeader
             }
         }()
         headerView.titleLabel.text = headerView.titleLabel.text?.uppercased()
@@ -118,7 +118,7 @@ class ThemeSettingsController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         guard isAutoBrightnessOn && section == Section.lightDarkPicker.rawValue else {
-            return section == Section.automaticOnOff.rawValue ? UX.spaceBetweenTableSections : 1
+            return section == Section.automaticBrightness.rawValue ? UX.spaceBetweenTableSections : 1
         }
         // When auto is on, make footer arbitrarily large enough to handle large block of text.
         return 120
@@ -165,7 +165,7 @@ class ThemeSettingsController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: nil)
         cell.selectionStyle = .none
-        let section = Section(rawValue: indexPath.section) ?? .automaticOnOff
+        let section = Section(rawValue: indexPath.section) ?? .automaticBrightness
         switch section {
         case .systemTheme:
             cell.textLabel?.text = Strings.SystemThemeSectionSwitchTitle
@@ -177,22 +177,19 @@ class ThemeSettingsController: ThemedTableViewController {
             control.addTarget(self, action: #selector(systemThemeSwitchValueChanged), for: .valueChanged)
             control.isOn = ThemeManager.instance.systemThemeIsOn
             cell.accessoryView = control
-        case .automaticOnOff:
+        case .automaticBrightness:
             if indexPath.row == 0 {
                 cell.textLabel?.text = Strings.DisplayThemeManualSwitchTitle
                 cell.detailTextLabel?.text = Strings.DisplayThemeManualSwitchSubtitle
-                cell.detailTextLabel?.numberOfLines = 2
-                cell.detailTextLabel?.minimumScaleFactor = 0.5
-                cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
             } else {
                 cell.textLabel?.text = Strings.DisplayThemeAutomaticSwitchTitle
                 cell.detailTextLabel?.text = Strings.DisplayThemeAutomaticSwitchSubtitle
-                cell.detailTextLabel?.numberOfLines = 2
-                cell.detailTextLabel?.minimumScaleFactor = 0.5
-                cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
             }
-            if (indexPath.row == 0 && isAutoBrightnessOn == false) ||
-                (indexPath.row == 1 && isAutoBrightnessOn == true) {
+            cell.detailTextLabel?.numberOfLines = 2
+            cell.detailTextLabel?.minimumScaleFactor = 0.5
+            cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
+            if (indexPath.row == 0 && !isAutoBrightnessOn) ||
+                (indexPath.row == 1 && isAutoBrightnessOn) {
                 cell.accessoryType = .checkmark
                 tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             } else {
@@ -248,7 +245,7 @@ class ThemeSettingsController: ThemedTableViewController {
             } else {
                 return 0
             }
-        case Section.automaticOnOff.rawValue:
+        case Section.automaticBrightness.rawValue:
             return 2
         case Section.lightDarkPicker.rawValue:
             return isAutoBrightnessOn ? 1 : 2
@@ -258,11 +255,11 @@ class ThemeSettingsController: ThemedTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == Section.automaticOnOff.rawValue {
+        if indexPath.section == Section.automaticBrightness.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
-            ThemeManager.instance.automaticBrightnessIsOn = indexPath.row == 0 ? false : true
+            ThemeManager.instance.automaticBrightnessIsOn = indexPath.row != 0
             tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
-            tableView.reloadSections(IndexSet(integer: Section.automaticOnOff.rawValue), with: .none)
+            tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             ThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
