@@ -222,19 +222,19 @@ public struct ResponseMetadata {
     public let retryAfterMilliseconds: UInt64?
 
     public init(response: HTTPURLResponse) {
+        self.init(status: response.statusCode, headers: response.allHeaderFields)
+    }
+
+    init(status: Int, headers: [AnyHashable: Any]) {
         // Work around bug https://bugs.swift.org/browse/SR-2429
         // response.allHeaderFields is case sensitive in versions newer than swift 2.
         // This is a 3 year old bug that has not been fixed.
         // Lowercase all of the header keys so we can index the headers map without
         // worrying about case.
-        let headers = Dictionary(uniqueKeysWithValues: response.allHeaderFields.map {
+        let headers = Dictionary(uniqueKeysWithValues: headers.map {
             (String(describing: $0.key).lowercased(), String(describing: $0.value))
         })
 
-        self.init(status: response.statusCode, headers: headers)
-    }
-
-    init(status: Int, headers: [AnyHashable: Any]) {
         self.status = status
         alert = headers["x-weave-alert"] as? String
         nextOffset = headers["x-weave-next-offset"] as? String
