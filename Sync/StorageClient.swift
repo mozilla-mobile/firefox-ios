@@ -222,20 +222,29 @@ public struct ResponseMetadata {
     public let retryAfterMilliseconds: UInt64?
 
     public init(response: HTTPURLResponse) {
-        self.init(status: response.statusCode, headers: response.allHeaderFields)
+        // Work around bug https://bugs.swift.org/browse/SR-2429
+        // response.allHeaderFields is case sensitive in versions newer than swift 2.
+        // This is a 3 year old bug that has not been fixed.
+        // Lowercase all of the header keys so we can index the headers map without
+        // worrying about case.
+        let headers = Dictionary(uniqueKeysWithValues: response.allHeaderFields.map {
+            (String(describing: $0.key).lowercased(), String(describing: $0.value))
+        })
+
+        self.init(status: response.statusCode, headers: headers)
     }
 
     init(status: Int, headers: [AnyHashable: Any]) {
         self.status = status
-        alert = headers["X-Weave-Alert"] as? String
-        nextOffset = headers["X-Weave-Next-Offset"] as? String
-        records = optionalUIntegerHeader(headers["X-Weave-Records"] as AnyObject?)
-        quotaRemaining = optionalIntegerHeader(headers["X-Weave-Quota-Remaining"] as AnyObject?)
-        timestampMilliseconds = optionalSecondsHeader(headers["X-Weave-Timestamp"] as AnyObject?) ?? 0
-        lastModifiedMilliseconds = optionalSecondsHeader(headers["X-Last-Modified"] as AnyObject?)
-        backoffMilliseconds = optionalSecondsHeader(headers["X-Weave-Backoff"] as AnyObject?) ??
-                              optionalSecondsHeader(headers["X-Backoff"] as AnyObject?)
-        retryAfterMilliseconds = optionalSecondsHeader(headers["Retry-After"] as AnyObject?)
+        alert = headers["x-weave-alert"] as? String
+        nextOffset = headers["x-weave-next-offset"] as? String
+        records = optionalUIntegerHeader(headers["x-weave-records"] as AnyObject?)
+        quotaRemaining = optionalIntegerHeader(headers["x-weave-quota-remaining"] as AnyObject?)
+        timestampMilliseconds = optionalSecondsHeader(headers["x-weave-timestamp"] as AnyObject?) ?? 0
+        lastModifiedMilliseconds = optionalSecondsHeader(headers["x-last-modified"] as AnyObject?)
+        backoffMilliseconds = optionalSecondsHeader(headers["x-weave-backoff"] as AnyObject?) ??
+                              optionalSecondsHeader(headers["x-backoff"] as AnyObject?)
+        retryAfterMilliseconds = optionalSecondsHeader(headers["retry-after"] as AnyObject?)
     }
 }
 
