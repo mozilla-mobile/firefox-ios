@@ -1028,8 +1028,35 @@ class BrowserViewController: UIViewController {
     fileprivate func presentActivityViewController(_ url: URL, tab: Tab? = nil, sourceView: UIView?, sourceRect: CGRect, arrowDirection: UIPopoverArrowDirection) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
 
-        let controller = helper.createActivityViewController({ [unowned self] completed, _ in
-            SimpleToast().showAlertWithText(Strings.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+        let controller = helper.createActivityViewController({ [unowned self] completed, activityType in
+
+            // Note: the only share activities I can test on the simulator are the
+            // Reminders app and the Firefox share app
+            print("****ActivityType is: \(activityType)")
+            print("****completed is: \(completed)")
+            if let activityType = activityType,
+                completed {
+                if activityType.rawValue.hasPrefix("org.mozilla.ios") {
+                    // If we're sharing to Firefox, we need to find a way to recognize when we've completed
+                    // a send/share for the different types of Firefox shares
+                    // For example, Cancel, Add To Reading List, and Send to Device all have different numbers of screens
+                    // before a Tab is successfully sent/shared, but they ALL return completed = true for the
+                    // "org.mozilla.ios.Fennec.ShareTo" activityType even if the user cancels out early.
+                    print("*******Definitely Firefox share activity here!")
+
+                    // Presumably, we would uncomment the Toast code below once we solve this probleme of the
+                    // Firefox share activity, somehow
+                    //SimpleToast().showAlertWithText(Strings.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+                } else {
+                    // sending a notification here will work presumably for everything else
+                    // EXCEPT for the Reminders app, which has a bug with the "completed" flag
+                    // (ie it marks the activity as completed even if the user cancels out):
+                    // https://forums.developer.apple.com/thread/77776
+
+                    print("*******It's NOT Firefox sharing")
+                    SimpleToast().showAlertWithText(Strings.AppMenuTabSentConfirmMessage, bottomContainer: self.webViewContainer)
+                }
+            }
 
             // After dismissing, check to see if there were any prompts we queued up
             self.showQueuedAlertIfAvailable()
