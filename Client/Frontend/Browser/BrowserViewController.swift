@@ -1113,6 +1113,17 @@ class BrowserViewController: UIViewController {
             }
         }
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if #available(iOS 13.0, *) {
+            if (ThemeManager.instance.systemThemeIsOn) {
+                let userInterfaceStyle = traitCollection.userInterfaceStyle
+                ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+            }
+        }
+    }
 }
 
 extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
