@@ -43,6 +43,13 @@ class ThemeManager {
     var statusBarStyle: UIStatusBarStyle {
         // On iPad the dark and normal theme both have a dark tab bar
         guard UIDevice.current.userInterfaceIdiom == .phone else { return .lightContent }
+
+        if #available(iOS 13.0, *) {
+            if UIScreen.main.traitCollection.userInterfaceStyle == .dark && currentName == .normal {
+                return .darkContent
+            }
+        }
+
         return currentName == .dark ? .lightContent : .default
     }
 
