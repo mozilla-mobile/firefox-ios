@@ -36,6 +36,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     let profile: Profile
 
+    private var helpBrowser: WKWebView?
+
     init(profile: Profile, fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
         self.profile = profile
 
@@ -93,6 +95,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
         // This is not shown full-screen, use mobile UA
         webView.customUserAgent = UserAgent.mobileUserAgent()
+
+        webView.navigationDelegate = self
+        webView.uiDelegate = self
 
         return webView
     }
@@ -163,6 +168,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         DispatchQueue.main.async {
             self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
         }
+
+        helpBrowser?.removeFromSuperview()
+        helpBrowser = nil
     }
 
     // The content server page is ready to be shown.
@@ -245,6 +253,50 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
 
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
+    }
+
+    override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let hideLongpress = "document.body.style.webkitTouchCallout='none';"
+        webView.evaluateJavaScript(hideLongpress)
+        guard webView !== helpBrowser else {
+            let isSecure = webView.hasOnlySecureContent
+            navigationItem.title = (isSecure ? "🔒 " : "") + (webView.url?.host ?? "")
+            return
+        }
+
+        navigationItem.title = nil
+    }
+}
+
+extension FxAContentViewController: WKUIDelegate {
+    // Blank target links (support  links) will create a 2nd webview to browse.
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        guard helpBrowser == nil else {
+            return nil
+        }
+        let f = webView.frame
+        let wv = WKWebView(frame: CGRect(width: f.width, height: f.height), configuration: configuration)
+        helpBrowser?.load(navigationAction.request)
+        webView.addSubview(wv)
+        helpBrowser = wv
+        helpBrowser?.navigationDelegate = self
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+
+        return helpBrowser
+    }
+
+    @objc func closeHelpBrowser() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.helpBrowser?.alpha = 0
+        }, completion: {_ in
+            self.helpBrowser?.removeFromSuperview()
+            self.helpBrowser = nil
+        })
+
+        navigationItem.title = nil
+        self.navigationItem.leftBarButtonItem = nil
+        self.navigationItem.hidesBackButton = false
     }
 }
 
