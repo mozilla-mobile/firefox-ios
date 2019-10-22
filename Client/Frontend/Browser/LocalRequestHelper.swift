@@ -16,11 +16,12 @@ class LocalRequestHelper: TabContentScript {
 
         let params = message.body as! [String: String]
 
-        if params["type"] == "load",
-           let urlString = params["url"],
-           let url = URL(string: urlString) {
-            _ = message.webView?.load(PrivilegedRequest(url: url) as URLRequest)
-        } else if params["type"] == "reload" {
+        guard let token = params["securitytoken"], token == UserScriptManager.securityToken else {
+            print("Missing required security token.")
+            return
+        }
+
+        if params["type"] == "reload" {
             // If this is triggered by session restore pages, the url to reload is a nested url argument.
             if let _url = internalUrl.extractedUrlParam, let nested = InternalURL(_url), let url = nested.extractedUrlParam {
                 message.webView?.replaceLocation(with: url)
