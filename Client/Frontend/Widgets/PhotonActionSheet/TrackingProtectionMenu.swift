@@ -70,7 +70,7 @@ extension PhotonActionSheetProtocol {
 
         var moreInfo = PhotonActionSheetItem(title: "", text: Strings.TPBlockingMoreInfo, iconString: "menu-Info") { _, _ in
             let url = SupportUtils.URLForTopic("tracking-protection-ios")!
-            tab.loadRequest(PrivilegedRequest(url: url) as URLRequest)
+            tab.loadRequest(URLRequest(url: url))
         }
         moreInfo.customHeight = { _ in
             return PhotonActionSheetUX.RowHeight + 20

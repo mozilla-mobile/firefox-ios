@@ -67,7 +67,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew, badgeIconNamed: "menuBadge") { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
                 UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .whatsNew)
-                self.openURLInNewTab(whatsNewURL, isPrivileged: false)
+                self.openURLInNewTab(whatsNewURL)
             }
         }
 

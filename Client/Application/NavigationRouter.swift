@@ -135,14 +135,14 @@ enum NavigationPath {
         case .history: bvc.showLibrary(panel: .history)
         case .readingList: bvc.showLibrary(panel: .readingList)
         case .downloads: bvc.showLibrary(panel: .downloads)
-        case .topSites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl, isPrivileged: true)
+        case .topSites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl)
         case .newPrivateTab: bvc.openBlankNewTab(focusLocationField: false, isPrivate: true)
         }
     }
 
     private static func handleURL(url: URL?, isPrivate: Bool, with bvc: BrowserViewController) {
         if let newURL = url {
-            bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
+            bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
