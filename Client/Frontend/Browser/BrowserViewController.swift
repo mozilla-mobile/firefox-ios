@@ -441,6 +441,13 @@ class BrowserViewController: UIViewController {
         // links into the view from other apps.
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
+
+        if #available(iOS 13.0, *) {
+            if (ThemeManager.instance.systemThemeIsOn) {
+                let userInterfaceStyle = traitCollection.userInterfaceStyle
+                ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+            }
+        }
     }
 
     fileprivate func setupConstraints() {

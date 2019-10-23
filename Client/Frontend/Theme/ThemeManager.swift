@@ -36,13 +36,16 @@ class ThemeManager {
         }
     }
 
-    var systemThemeIsOn: Bool = UserDefaults.standard.bool(forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue) {
+    var systemThemeIsOn: Bool {
         didSet {
             UserDefaults.standard.set(systemThemeIsOn, forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue)
         }
     }
 
     private init() {
+        UserDefaults.standard.register(defaults: [ThemeManagerPrefs.systemThemeIsOn.rawValue: true])
+        systemThemeIsOn = UserDefaults.standard.bool(forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue)
+
         NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
     }
 
