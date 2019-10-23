@@ -442,10 +442,12 @@ class BrowserViewController: UIViewController {
         let dropInteraction = UIDropInteraction(delegate: self)
         view.addInteraction(dropInteraction)
 
-        if #available(iOS 13.0, *) {
-            if (ThemeManager.instance.systemThemeIsOn) {
-                let userInterfaceStyle = traitCollection.userInterfaceStyle
-                ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+        if !NightModeHelper.isActivated(profile.prefs) {
+            if #available(iOS 13.0, *) {
+                if (ThemeManager.instance.systemThemeIsOn) {
+                    let userInterfaceStyle = traitCollection.userInterfaceStyle
+                    ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+                }
             }
         }
     }
