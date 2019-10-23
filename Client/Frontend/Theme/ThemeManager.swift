@@ -48,8 +48,6 @@ class ThemeManager {
 
     // UIViewControllers / UINavigationControllers need to have `preferredStatusBarStyle` and call this.
     var statusBarStyle: UIStatusBarStyle {
-        // On iPad the dark and normal theme both have a dark tab bar
-        guard UIDevice.current.userInterfaceIdiom == .phone else { return .lightContent }
         return currentName == .dark ? .lightContent : .default
     }
 
