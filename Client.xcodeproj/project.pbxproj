@@ -364,7 +364,6 @@
 		D0148A02220C8C93008A6EEF /* RustLoginsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0148A01220C8C93008A6EEF /* RustLoginsTests.swift */; };
 		D0152245229855A8009DE753 /* OneLineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0152244229855A8009DE753 /* OneLineCell.swift */; };
 		D018F93E1F44A71A0098F8CA /* Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = D018F93D1F44A7190098F8CA /* Schema.swift */; };
-		D02816C21ECA5E2A00240CAA /* HistoryStateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */; };
 		D02818611EF056C800240CAA /* SentryIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02818601EF056C800240CAA /* SentryIntegration.swift */; };
 		D029A04920A62DB0001DB72F /* TemporaryDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = D029A04820A62DB0001DB72F /* TemporaryDocument.swift */; };
 		D03DCD95211B63D000151ACA /* DateGroupedTableData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DCD94211B63D000151ACA /* DateGroupedTableData.swift */; };
@@ -1492,7 +1491,6 @@
 		D0148A01220C8C93008A6EEF /* RustLoginsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustLoginsTests.swift; sourceTree = "<group>"; };
 		D0152244229855A8009DE753 /* OneLineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OneLineCell.swift; sourceTree = "<group>"; };
 		D018F93D1F44A7190098F8CA /* Schema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Schema.swift; sourceTree = "<group>"; };
-		D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryStateHelper.swift; sourceTree = "<group>"; };
 		D02818601EF056C800240CAA /* SentryIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentryIntegration.swift; sourceTree = "<group>"; };
 		D029A04820A62DB0001DB72F /* TemporaryDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemporaryDocument.swift; sourceTree = "<group>"; };
 		D03DCD94211B63D000151ACA /* DateGroupedTableData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateGroupedTableData.swift; sourceTree = "<group>"; };
@@ -1529,7 +1527,6 @@
 		D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NightModeHelper.js; sourceTree = "<group>"; };
 		D0C95DF9200EAE5E00E4E51C /* NoImageModeHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = NoImageModeHelper.js; sourceTree = "<group>"; };
 		D0C95E03200FCA8800E4E51C /* ReaderMode.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = ReaderMode.js; sourceTree = "<group>"; };
-		D0C95E05200FCB5600E4E51C /* HistoryStateHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = HistoryStateHelper.js; sourceTree = "<group>"; };
 		D0C95E0D200FD3B200E4E51C /* PrintHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrintHelper.swift; sourceTree = "<group>"; };
 		D0C95E33200FDB3200E4E51C /* MetadataHelper.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = MetadataHelper.js; sourceTree = "<group>"; };
 		D0C95E35200FDC5400E4E51C /* MetadataParserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetadataParserHelper.swift; sourceTree = "<group>"; };
@@ -2757,7 +2754,6 @@
 		D0FCF7EC1FE44DBD004A7995 /* AtDocumentStart */ = {
 			isa = PBXGroup;
 			children = (
-				D0C95E05200FCB5600E4E51C /* HistoryStateHelper.js */,
 				D0C95DF7200EAE3000E4E51C /* NightModeHelper.js */,
 				D0C95DF9200EAE5E00E4E51C /* NoImageModeHelper.js */,
 				D0C95E03200FCA8800E4E51C /* ReaderMode.js */,
@@ -2906,7 +2902,6 @@
 				EBB8950B2193994A00EB91A0 /* FirefoxTabContentBlocker.swift */,
 				39F4C1092045DB2E00746155 /* FocusHelper.swift */,
 				D0E55C4E1FB4FD23006DC274 /* FormPostHelper.swift */,
-				D02816C11ECA5E2A00240CAA /* HistoryStateHelper.swift */,
 				39DD030C1CD53E1900BC09B3 /* HomePageHelper.swift */,
 				D3C3696D1CC6B78800348A61 /* LocalRequestHelper.swift */,
 				0BB5B30A1AC0AD1F0052877D /* LoginsHelper.swift */,
@@ -5116,7 +5111,6 @@
 				E660BDD91BB06521009AC090 /* TabsButton.swift in Sources */,
 				63306D3921103EAE00F25400 /* SavedTab.swift in Sources */,
 				2F44FCCB1A9E972E00FD20CC /* SearchEnginePicker.swift in Sources */,
-				D02816C21ECA5E2A00240CAA /* HistoryStateHelper.swift in Sources */,
 				E68E7ACB1CAC1D4500FDCA76 /* PagingPasscodeViewController.swift in Sources */,
 				D04D1B92209790B60074B35F /* Toast.swift in Sources */,
 				D34DC8531A16C40C00D49B7B /* Profile.swift in Sources */,
