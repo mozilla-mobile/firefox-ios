@@ -1141,7 +1141,11 @@ class ThemeSetting: Setting {
     override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
 
     override var status: NSAttributedString {
-        if ThemeManager.instance.automaticBrightnessIsOn {
+        if ThemeManager.instance.systemThemeIsOn {
+            return NSAttributedString(string: Strings.SystemThemeSectionHeader)
+        } else if !ThemeManager.instance.automaticBrightnessIsOn {
+            return NSAttributedString(string: Strings.DisplayThemeManualStatusLabel)
+        } else if ThemeManager.instance.automaticBrightnessIsOn {
             return NSAttributedString(string: Strings.DisplayThemeAutomaticStatusLabel)
         }
         return NSAttributedString(string: "")

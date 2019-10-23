@@ -110,6 +110,7 @@ class URLBarView: UIView {
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
         tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
+        tabsButton.inTopTabs = false
         return tabsButton
     }()
 

@@ -167,6 +167,12 @@ public class RustPlaces {
         }
     }
 
+    public func getBookmarkURLForKeyword(keyword: String) -> Deferred<Maybe<String?>> {
+        return withReader { connection in
+            return try connection.getBookmarkURLForKeyword(keyword: keyword)
+        }
+    }
+
     public func getBookmarksWithURL(url: String) -> Deferred<Maybe<[BookmarkItem]>> {
         return withReader { connection in
             return try connection.getBookmarksWithURL(url: url)

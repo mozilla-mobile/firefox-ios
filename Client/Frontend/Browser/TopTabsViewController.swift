@@ -51,6 +51,7 @@ class TopTabsViewController: UIViewController {
         tabsButton.semanticContentAttribute = .forceLeftToRight
         tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
+        tabsButton.inTopTabs = true
         return tabsButton
     }()
 
