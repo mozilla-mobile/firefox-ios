@@ -190,9 +190,9 @@ class Action {
     static let PinToTopSitesPAM = "PinToTopSitesPAM"
     static let CopyAddressPAM = "CopyAddressPAM"
 
-    static let SelectDarkMode = "SelectDarkMode"
-    static let SelectLightMode = "SelectLightMode"
     static let SelectAutomatically = "SelectAutomatically"
+    static let SelectManually = "SelectManually"
+    static let SystemThemeSwitch = "SystemThemeSwitch"
 
     static let SelectTranslateThisPage = "SelectTranslateThisPage"
     static let SelectDontTranslateThisPage = "SelectDontTranslateThisPage"
@@ -617,14 +617,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(DisplaySettings) { screenState in
-        screenState.gesture(forAction: Action.SelectDarkMode) { userState in
-            app.cells.staticTexts["Dark"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectLightMode) { userState in
-            app.cells.staticTexts["Light"].tap()
-        }
         screenState.gesture(forAction: Action.SelectAutomatically) { userState in
-            app.switches["DisplaySwitchValue"].tap()
+            app.cells.staticTexts["Automatically"].tap()
+        }
+        screenState.gesture(forAction: Action.SelectManually) { userState in
+            app.cells.staticTexts["Manually"].tap()
+        }
+        screenState.gesture(forAction: Action.SystemThemeSwitch) { userState in
+            app.switches["SystemThemeSwitchValue"].tap()
         }
         screenState.backAction = navigationControllerBackAction
     }
