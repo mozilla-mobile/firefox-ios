@@ -841,7 +841,7 @@ class BrowserViewController: UIViewController {
         urlBar.currentURL = url
         urlBar.leaveOverlayMode()
 
-        if let nav = tab.loadRequest(PrivilegedRequest(url: url) as URLRequest) {
+        if let nav = tab.loadRequest(URLRequest(url: url)) {
             self.recordNavigationInTab(tab, navigation: nav, visitType: visitType)
         }
     }
@@ -973,22 +973,22 @@ class BrowserViewController: UIViewController {
         topTabsViewController?.applyUIMode(isPrivate: isPrivate)
     }
 
-    func switchToTabForURLOrOpen(_ url: URL, isPrivate: Bool = false, isPrivileged: Bool) {
+    func switchToTabForURLOrOpen(_ url: URL, isPrivate: Bool = false) {
         popToBVC()
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
         } else {
-            openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: isPrivileged)
+            openURLInNewTab(url, isPrivate: isPrivate)
         }
     }
 
-    func openURLInNewTab(_ url: URL?, isPrivate: Bool = false, isPrivileged: Bool) {
+    func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) {
         if let selectedTab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(selectedTab)
         }
         let request: URLRequest?
         if let url = url {
-            request = isPrivileged ? PrivilegedRequest(url: url) as URLRequest : URLRequest(url: url)
+            request = URLRequest(url: url)
         } else {
             request = nil
         }
@@ -1012,7 +1012,7 @@ class BrowserViewController: UIViewController {
 
     func openBlankNewTab(focusLocationField: Bool, isPrivate: Bool = false, searchFor searchText: String? = nil) {
         popToBVC()
-        openURLInNewTab(nil, isPrivate: isPrivate, isPrivileged: true)
+        openURLInNewTab(nil, isPrivate: isPrivate)
         let freshTab = tabManager.selectedTab
         if focusLocationField {
             focusLocationTextField(forTab: freshTab, setSearchText: searchText)
@@ -1023,7 +1023,7 @@ class BrowserViewController: UIViewController {
         popToBVC()
         let engine = profile.searchEngines.defaultEngine
         if let searchURL = engine.searchURLForQuery(text) {
-            openURLInNewTab(searchURL, isPrivate: isPrivate, isPrivileged: true)
+            openURLInNewTab(searchURL, isPrivate: isPrivate)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
             print("Error handling URL entry: \"\(text)\".")
@@ -1176,7 +1176,7 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        self.openURLInNewTab(url, isPrivate: isPrivate, isPrivileged: false)
+        self.openURLInNewTab(url, isPrivate: isPrivate)
     }
 }
 
@@ -1630,7 +1630,7 @@ extension BrowserViewController: LibraryPanelDelegate {
     }
 
     func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        let tab = self.tabManager.addTab(PrivilegedRequest(url: url) as URLRequest, afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+        let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
         // If we are showing toptabs a user can just use the top tab bar
         // If in overlay mode switching doesnt correctly dismiss the homepanels
         guard !topTabsVisible, !self.urlBar.inOverlayMode else {
@@ -1657,7 +1657,7 @@ extension BrowserViewController: HomePanelDelegate {
     }
 
     func homePanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        let tab = self.tabManager.addTab(PrivilegedRequest(url: url) as URLRequest, afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
+        let tab = self.tabManager.addTab(URLRequest(url: url), afterTab: self.tabManager.selectedTab, isPrivate: isPrivate)
         // If we are showing toptabs a user can just use the top tab bar
         // If in overlay mode switching doesnt correctly dismiss the homepanels
         guard !topTabsVisible, !self.urlBar.inOverlayMode else {
@@ -2487,7 +2487,7 @@ extension BrowserViewController {
         let cancelButtonText = Strings.ReopenLastTabCancelText
 
         func reopenLastTab(_ action: UIAlertAction) {
-            let request = PrivilegedRequest(url: lastClosedURL) as URLRequest
+            let request = URLRequest(url: lastClosedURL)
             let closedTab = tabManager.addTab(request, afterTab: selectedTab, isPrivate: false)
             tabManager.selectTab(closedTab)
         }

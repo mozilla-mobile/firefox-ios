@@ -463,11 +463,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             // it is recommended that links contain the `deep_link` query parameter. This link will also
             // be url encoded.
             if let deepLink = query["deep_link"]?.removingPercentEncoding, let url = URL(string: deepLink) {
-                bvc.switchToTabForURLOrOpen(url, isPrivileged: true)
+                bvc.switchToTabForURLOrOpen(url)
                 return true
             }
 
-            bvc.switchToTabForURLOrOpen(url, isPrivileged: true)
+            bvc.switchToTabForURLOrOpen(url)
             return true
         }
 
@@ -477,7 +477,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             if let userInfo = userActivity.userInfo,
                 let urlString = userInfo[CSSearchableItemActivityIdentifier] as? String,
                 let url = URL(string: urlString) {
-                bvc.switchToTabForURLOrOpen(url, isPrivileged: true)
+                bvc.switchToTabForURLOrOpen(url)
                 return true
             }
         }
@@ -643,7 +643,7 @@ class AppSyncDelegate: SyncDelegate {
     open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         DispatchQueue.main.sync {
             if app.applicationState == .active {
-                BrowserViewController.foregroundBVC().switchToTabForURLOrOpen(url, isPrivileged: false)
+                BrowserViewController.foregroundBVC().switchToTabForURLOrOpen(url)
                 return
             }
 
