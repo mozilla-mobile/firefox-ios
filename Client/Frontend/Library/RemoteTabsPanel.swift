@@ -516,11 +516,16 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         // logged in, remove any existing control.
         if profile.hasSyncableAccount() && refreshControl == nil {
             addRefreshControl()
-        } else if !profile.hasSyncableAccount() && refreshControl != nil {
-            removeRefreshControl()
         }
 
         onRefreshPulled()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if refreshControl != nil {
+            removeRefreshControl()
+        }
     }
 
     // MARK: - Refreshing TableView
