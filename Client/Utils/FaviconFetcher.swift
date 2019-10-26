@@ -28,7 +28,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     static let ExpirationTime = TimeInterval(60*60*24*7) // Only check for icons once a week
     fileprivate static var characterToFaviconCache = [String: UIImage]()
     static var defaultFavicon: UIImage = {
-        return UIImage(named: "defaultFavicon")!
+        return UIImage(named: "splash")!
     }()
 
     static var colors: [String: UIColor] = [:] //An in-Memory data store that stores background colors domains. Stored using url.baseDomain.
