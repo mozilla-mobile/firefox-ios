@@ -7,8 +7,8 @@ import WebKit
 import Shared
 import EarlGrey
 import SwiftyJSON
+@testable import Client
 
-/// This test should be disabled since session restore does not seem to work
 class SessionRestoreTests: KIFTestCase {
     fileprivate var webRoot: String!
 
@@ -30,7 +30,7 @@ class SessionRestoreTests: KIFTestCase {
         let json = JSON(jsonDict)
         let escapedJSON = json.stringify()?.addingPercentEncoding(withAllowedCharacters: .URLAllowed)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
-        let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?history=\(escapedJSON!)")
+        let restoreURL = PrivilegedRequest(url: URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?history=\(escapedJSON!)")!).url
 
         // Enter the restore URL and verify the back/forward history.
         // After triggering the restore, the session should look like this:
