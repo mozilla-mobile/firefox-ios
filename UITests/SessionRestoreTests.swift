@@ -9,7 +9,6 @@ import EarlGrey
 import SwiftyJSON
 @testable import Client
 
-/// This test should be disabled since session restore does not seem to work
 class SessionRestoreTests: KIFTestCase {
     fileprivate var webRoot: String!
 
