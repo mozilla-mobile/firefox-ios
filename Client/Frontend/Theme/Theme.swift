@@ -43,6 +43,7 @@ class TableViewColor {
     var syncText: UIColor { return defaultTextAndTint }
     var errorText: UIColor { return UIColor.Photon.Red50 }
     var warningText: UIColor { return UIColor.Photon.Orange50 }
+    var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 }
 }
 
 class ActionMenuColor {

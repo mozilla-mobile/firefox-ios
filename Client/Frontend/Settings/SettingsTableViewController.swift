@@ -53,6 +53,8 @@ class Setting: NSObject {
 
     var accessoryType: UITableViewCell.AccessoryType { return .none }
 
+    var accessoryView: UIImageView? { return nil }
+
     var textAlignment: NSTextAlignment { return .natural }
 
     var image: UIImage? { return _image }
@@ -72,7 +74,7 @@ class Setting: NSObject {
         cell.textLabel?.numberOfLines = 1
         cell.textLabel?.lineBreakMode = .byTruncatingTail
         cell.accessoryType = accessoryType
-        cell.accessoryView = nil
+        cell.accessoryView = accessoryView
         cell.selectionStyle = enabled ? .default : .none
         cell.accessibilityIdentifier = accessibilityIdentifier
         cell.imageView?.image = _image
