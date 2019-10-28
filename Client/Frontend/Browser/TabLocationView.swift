@@ -101,6 +101,7 @@ class TabLocationView: UIView {
         urlTextField.accessibilityActionsSource = self
         urlTextField.font = UIConstants.DefaultChromeFont
         urlTextField.backgroundColor = .clear
+        urlTextField.accessibilityLabel = "Address Bar"
 
         // Remove the default drop interaction from the URL text field so that our
         // custom drop interaction on the BVC can accept dropped URLs.
