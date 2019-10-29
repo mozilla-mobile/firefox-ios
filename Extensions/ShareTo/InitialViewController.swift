@@ -93,6 +93,17 @@ class InitialViewController: UIViewController {
         super.viewDidLoad()
         if #available(iOS 13, *) {
             view.backgroundColor = .clear
+
+            // iPad drop shadow removal hack!
+            var view = parent?.view
+            while view != nil, view!.classForCoder.description() != "UITransitionView" {
+                view = view?.superview
+            }
+            if let view = view {
+                // For reasons unknown, if the alpha is < 1.0, the drop shadow is not shown
+                view.alpha = 0.99
+            }
+
         } else {
             view.backgroundColor = UIColor(white: 0.0, alpha: UX.alphaForFullscreenOverlay)
         }
