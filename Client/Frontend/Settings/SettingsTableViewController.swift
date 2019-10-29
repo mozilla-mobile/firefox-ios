@@ -90,6 +90,12 @@ class Setting: NSObject {
         cell.accessibilityTraits = UIAccessibilityTraits.button
         cell.indentationWidth = 0
         cell.layoutMargins = .zero
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        backgroundView.bounds = cell.bounds
+        cell.selectedBackgroundView = backgroundView
+        
         // So that the separator line goes all the way to the left edge.
         cell.separatorInset = .zero
         if let cell = cell as? ThemedTableViewCell {

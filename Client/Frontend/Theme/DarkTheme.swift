@@ -20,6 +20,7 @@ fileprivate class DarkTableViewColor: TableViewColor {
     override var headerTextDark: UIColor { return UIColor.Photon.Grey30 }
     override var syncText: UIColor { return defaultTextAndTint }
     override var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 }
+    override var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightDark }
 }
 
 fileprivate class DarkActionMenuColor: ActionMenuColor {
