@@ -116,9 +116,9 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
         if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
             app.buttons["TopTabsViewController.tabsButton"].tap()
-            waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 5)
+            waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 10)
             app.buttons["TabTrayController.addTabButton"].tap()
         }
         else {
@@ -148,9 +148,9 @@ class TopTabsTest: BaseTestCase {
         waitForTabsButton()
 
         if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
             app.buttons["TopTabsViewController.tabsButton"].tap()
-            waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 5)
+            waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 10)
             app.buttons["TabTrayController.addTabButton"].tap()
         }
         else {
