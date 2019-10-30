@@ -345,6 +345,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         profile.syncManager.applicationDidEnterBackground()
 
+        // Create an expiring background task. This allows plenty of time for db locks to be released
+        // async. Otherwise we are getting crashes due to db locks not released yet.
         var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
         taskId = application.beginBackgroundTask (expirationHandler: {
             print("Running out of background time, but we have a profile shutdown pending.")
@@ -355,11 +357,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         if profile.hasSyncableAccount() {
             profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
-                application.endBackgroundTask(taskId)
             }
         } else {
             profile._shutdown()
-            application.endBackgroundTask(taskId)
         }
     }
 
