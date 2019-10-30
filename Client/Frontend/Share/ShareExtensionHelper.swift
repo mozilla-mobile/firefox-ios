@@ -11,24 +11,23 @@ private let log = Logger.browserLogger
 class ShareExtensionHelper: NSObject {
     fileprivate weak var selectedTab: Tab?
 
-    fileprivate let selectedURL: URL // for non copy ones
-    fileprivate let fileURL: URL? // for copy type
+    fileprivate let url: URL
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
     fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
 
-    init(url: URL, file: URL? = nil, tab: Tab?) {
-        self.selectedURL = tab?.canonicalURL?.displayURL ?? url
+    fileprivate func isFile(url: URL) -> Bool { url.scheme == "file" }
+
+    // Can be a file:// or http(s):// url
+    init(url: URL, tab: Tab?) {
+        self.url = url
         self.selectedTab = tab
-        self.fileURL = file
     }
 
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
         var activityItems = [AnyObject]()
 
         let printInfo = UIPrintInfo(dictionary: nil)
-
-        let absoluteString = selectedTab?.url?.absoluteString ?? selectedURL.absoluteString
-        printInfo.jobName = absoluteString
+        printInfo.jobName = (url.absoluteString as NSString).lastPathComponent
         printInfo.outputType = .general
         activityItems.append(printInfo)
 
@@ -80,7 +79,7 @@ class ShareExtensionHelper: NSObject {
 
 extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return fileURL ?? selectedURL
+        return url
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
@@ -88,19 +87,19 @@ extension ShareExtensionHelper: UIActivityItemSource {
         if isPasswordManager(activityType: activityType) {
             return onePasswordExtensionItem
         } else if isOpenByCopy(activityType: activityType) {
-            return fileURL ?? selectedURL
+            return url
         }
 
         // Return the URL for the selected tab. If we are in reader view then decode
         // it so that we copy the original and not the internal localhost one.
-        return selectedURL.isReaderModeURL ? selectedURL.decodeReaderModeURL : selectedURL
+        return url.isReaderModeURL ? url.decodeReaderModeURL : url
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
         if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
         } else if isOpenByCopy(activityType: activityType) {
-            return fileURL != nil ? kUTTypeFileURL as String : kUTTypeURL as String
+            return isFile(url: url) ? kUTTypeFileURL as String : kUTTypeURL as String
         }
 
         return activityType == nil ? browserFillIdentifier : kUTTypeURL as String
