@@ -29,7 +29,7 @@ class TopTabsTest: BaseTestCase {
 
         // The tab tray shows the correct tabs
         if iPad() {
-            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 5)
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
             app.buttons["TopTabsViewController.tabsButton"].tap()
         } else {
             navigator.goto(TabTray)
