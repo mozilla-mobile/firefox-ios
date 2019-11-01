@@ -221,6 +221,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
+        if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
+            LeanPlumClient.shared.setup(profile: profile)
+            LeanPlumClient.shared.set(enabled: true)
+        }
+
         return shouldPerformAdditionalDelegateHandling
     }
 
@@ -286,12 +291,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
-
-        // - LeanPlum does heavy disk access during init, but crashes if delayed
-        if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
-            LeanPlumClient.shared.setup(profile: profile)
-            LeanPlumClient.shared.set(enabled: true)
-        }
 
         // Delay these operations until after UIKit/UIApp init is complete
         // - loadQueuedTabs accesses the DB and shows up as a hot path in profiling
