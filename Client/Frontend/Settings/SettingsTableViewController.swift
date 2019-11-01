@@ -53,6 +53,8 @@ class Setting: NSObject {
 
     var accessoryType: UITableViewCell.AccessoryType { return .none }
 
+    var accessoryView: UIImageView? { return nil }
+
     var textAlignment: NSTextAlignment { return .natural }
 
     var image: UIImage? { return _image }
@@ -72,7 +74,7 @@ class Setting: NSObject {
         cell.textLabel?.numberOfLines = 1
         cell.textLabel?.lineBreakMode = .byTruncatingTail
         cell.accessoryType = accessoryType
-        cell.accessoryView = nil
+        cell.accessoryView = accessoryView
         cell.selectionStyle = enabled ? .default : .none
         cell.accessibilityIdentifier = accessibilityIdentifier
         cell.imageView?.image = _image
@@ -88,6 +90,12 @@ class Setting: NSObject {
         cell.accessibilityTraits = UIAccessibilityTraits.button
         cell.indentationWidth = 0
         cell.layoutMargins = .zero
+        
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = UIColor.theme.tableView.selectedBackground
+        backgroundView.bounds = cell.bounds
+        cell.selectedBackgroundView = backgroundView
+        
         // So that the separator line goes all the way to the left edge.
         cell.separatorInset = .zero
         if let cell = cell as? ThemedTableViewCell {
