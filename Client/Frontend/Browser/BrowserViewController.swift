@@ -1331,7 +1331,7 @@ extension BrowserViewController: URLBarDelegate {
         switch result.value {
         case .success:
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action."))
-            // TODO: https://bugzilla.mozilla.org/show_bug.cgi?id=1158503 provide some form of 'this has been added' visual feedback?
+            SimpleToast().showAlertWithText(Strings.ShareAddToReadingListDone, bottomContainer: self.webViewContainer)
         case .failure(let error):
             UIAccessibility.post(notification: UIAccessibility.Notification.announcement, argument: NSLocalizedString("Could not add page to Reading List. Maybe it’s already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures."))
             print("readingList.createRecordWithURL(url: \"\(url.absoluteString)\", ...) failed with error: \(error)")
