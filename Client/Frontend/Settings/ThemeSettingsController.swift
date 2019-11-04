@@ -266,7 +266,6 @@ class ThemeSettingsController: ThemedTableViewController {
             tableView.reloadSections(IndexSet(integer: Section.lightDarkPicker.rawValue), with: .automatic)
             tableView.reloadSections(IndexSet(integer: Section.automaticBrightness.rawValue), with: .none)
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .setting, value: indexPath.row == 0 ? .themeModeManually : .themeModeAutomatically)
-        
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             ThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
