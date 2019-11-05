@@ -151,6 +151,50 @@ extension PhotonActionSheetProtocol {
             }
         }
 
+        let xrToggleDebug = PhotonActionSheetItem(title: "WebXR Debug", iconString: "menu-Info") { _, _ in
+            guard let bvc = presentableVC as? BrowserViewController,
+                let tab = bvc.tabManager.selectedTab
+                else {
+                return
+            }
+            if tab.stateController.state.showMode != .urlDebug {
+                tab.stateController.setShowMode(ShowMode.urlDebug)
+            } else {
+                tab.stateController.setShowMode(ShowMode.url)
+            }
+        }
+
+        let xrSwitchCamera = PhotonActionSheetItem(title: "Switch Camera", iconString: "menu-sync") { _, _ in
+            guard let bvc = presentableVC as? BrowserViewController,
+                let tab = bvc.tabManager.selectedTab
+                else {
+                return
+            }
+            tab.arkController?.switchCameraButtonTapped(tab.stateController.state)
+        }
+        
+        let xrResetTracking = PhotonActionSheetItem(title: "Reset Tracking", iconString: "menu-sync") { _, _ in
+            guard let bvc = presentableVC as? BrowserViewController,
+                let tab = bvc.tabManager.selectedTab
+                else {
+                return
+            }
+            tab.messageController?.showMessageAboutResetTracking({ option in
+                let state = tab.stateController.state
+                switch option {
+                    case .resetTracking:
+                        tab.arkController?.runSessionResettingTrackingAndRemovingAnchors(with: state)
+                    case .removeExistingAnchors:
+                        tab.arkController?.runSessionRemovingAnchors(with: state)
+                    case .saveWorldMap:
+                        tab.arkController?.saveWorldMap()
+                    case .loadSavedWorldMap:
+                        tab.arkController?.loadSavedMap()
+                }
+            })
+        }
+        
+        
         var mainActions = [sharePage]
 
         // Disable bookmarking and reading list if the URL is too long.
@@ -162,7 +206,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        mainActions.append(contentsOf: [sendToDevice, copyURL])
+        mainActions.append(contentsOf: [sendToDevice, copyURL, xrToggleDebug, xrSwitchCamera, xrResetTracking])
 
         let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
         var commonActions = [toggleDesktopSite, pinAction]

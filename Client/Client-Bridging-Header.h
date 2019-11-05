@@ -12,4 +12,6 @@
 #import "Shared-Bridging-Header.h"
 #import "Storage-Bridging-Header.h"
 
+#import "XRShaderTypes.h"
+
 #endif
