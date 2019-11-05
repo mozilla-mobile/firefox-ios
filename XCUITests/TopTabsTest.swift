@@ -28,7 +28,12 @@ class TopTabsTest: BaseTestCase {
         XCTAssertEqual("2", tabsOpen as? String)
 
         // The tab tray shows the correct tabs
-        navigator.goto(TabTray)
+        if iPad() {
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+        } else {
+            navigator.goto(TabTray)
+        }
         waitForExistence(app.collectionViews.cells[urlLabel], timeout: 5)
     }
 
@@ -110,10 +115,17 @@ class TopTabsTest: BaseTestCase {
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.nowAt(BrowserTab)
-        navigator.performAction(Action.OpenNewTabFromTabTray)
-        if !iPad() {
+        if iPad() {
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+            waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 10)
+            app.buttons["TabTrayController.addTabButton"].tap()
+        }
+        else {
+            navigator.performAction(Action.OpenNewTabFromTabTray)
             waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
         }
+
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs, undo it and check that the number of tabs is correct
@@ -134,8 +146,18 @@ class TopTabsTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
         waitForTabsButton()
-        openNtabsFromTabTray(numTabs: 1)
-        waitForTabsButton()
+
+        if iPad() {
+            waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
+            app.buttons["TopTabsViewController.tabsButton"].tap()
+            waitForExistence(app.buttons["TabTrayController.addTabButton"], timeout: 10)
+            app.buttons["TabTrayController.addTabButton"].tap()
+        }
+        else {
+            navigator.performAction(Action.OpenNewTabFromTabTray)
+            waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
+        }
+
         checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
 
         // Close all tabs, undo it and check that the number of tabs is correct
