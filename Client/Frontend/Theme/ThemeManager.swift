@@ -33,6 +33,7 @@ class ThemeManager {
     var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue) {
         didSet {
             UserDefaults.standard.set(automaticBrightnessIsOn, forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue)
+            updateCurrentThemeBasedOnScreenBrightness()
         }
     }
 
