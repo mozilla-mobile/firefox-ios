@@ -1,7 +1,9 @@
 ---
-name: "Release checklist"
+name: Release checklist
 about: Keep track of the release activities
-title: 'vXX.X Release Checklist'
+title: vXX.X Release Checklist
+labels: ''
+assignees: ''
 
 ---
 
