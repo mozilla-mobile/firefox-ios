@@ -349,16 +349,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
         taskId = application.beginBackgroundTask (expirationHandler: {
             print("Running out of background time, but we have a profile shutdown pending.")
-            self.shutdownProfileWhenNotActive(application)
+            // Do not try to forceClose the db, it will lock the main thread and app will get killed
             application.endBackgroundTask(taskId)
         })
 
         if profile.hasSyncableAccount() {
             profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
+                application.endBackgroundTask(taskId)
             }
         } else {
             profile._shutdown()
+            application.endBackgroundTask(taskId)
         }
     }
 
