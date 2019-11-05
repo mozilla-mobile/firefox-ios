@@ -128,7 +128,11 @@ class ThemeSettingsController: ThemedTableViewController {
         ThemeManager.instance.systemThemeIsOn = control.isOn
         if #available(iOS 13.0, *) {
             let userInterfaceStyle = traitCollection.userInterfaceStyle
-            ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+            if control.isOn {
+                ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+            } else if ThemeManager.instance.automaticBrightnessIsOn {
+                ThemeManager.instance.updateCurrentThemeBasedOnScreenBrightness()
+            }
         }
         // Switch animation must begin prior to scheduling table view update animation (or the switch will be auto-synchronized to the slower tableview animation and makes the switch behaviour feel slow and non-standard).
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -263,7 +267,7 @@ class ThemeSettingsController: ThemedTableViewController {
         } else if indexPath.section == Section.lightDarkPicker.rawValue {
             tableView.cellForRow(at: indexPath)?.accessoryType = .checkmark
             ThemeManager.instance.current = indexPath.row == 0 ? NormalTheme() : DarkTheme()
-            applyTheme()
         }
+        applyTheme()
     }
 }
