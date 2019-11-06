@@ -90,12 +90,6 @@ class UnifiedTelemetry {
             self.crashedLastLaunch = false
 
             outputDict["settings"] = settings
-            
-            var userInterfaceStyle = "unknown" // unknown implies that device is on pre-iOS 13
-            if #available(iOS 13.0, *) {
-                userInterfaceStyle = UITraitCollection.current.userInterfaceStyle.rawValue
-            }
-            outputDict["systemTheme"] = userInterfaceStyle
 
             return outputDict
         }
@@ -216,11 +210,6 @@ extension UnifiedTelemetry {
         case shareMenu = "share-menu"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
-        case systemThemeSwitch = "system-theme-switch"
-        case themeModeManually = "theme-manually"
-        case themeModeAutomatically = "theme-automatically"
-        case themeLight = "theme-light"
-        case themeDark = "theme-dark"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any?]? = nil) {
