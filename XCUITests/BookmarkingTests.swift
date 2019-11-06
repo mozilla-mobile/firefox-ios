@@ -14,7 +14,7 @@ let url_4 = "test-password-2.html"
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
         navigator.goto(PageOptionsMenu)
-        waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 5)
+        waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 15)
         app.tables.cells["Bookmark This Page"].tap()
         navigator.nowAt(BrowserTab)
     }
@@ -165,6 +165,7 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         // Now the site should be suggested
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)

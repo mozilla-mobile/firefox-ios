@@ -349,16 +349,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
         taskId = application.beginBackgroundTask (expirationHandler: {
             print("Running out of background time, but we have a profile shutdown pending.")
-            self.shutdownProfileWhenNotActive(application)
+            // Do not try to forceClose the db, it will lock the main thread and app will get killed
             application.endBackgroundTask(taskId)
         })
 
         if profile.hasSyncableAccount() {
             profile.syncManager.syncEverything(why: .backgrounded).uponQueue(.main) { _ in
                 self.shutdownProfileWhenNotActive(application)
+                application.endBackgroundTask(taskId)
             }
         } else {
             profile._shutdown()
+            application.endBackgroundTask(taskId)
         }
     }
 
@@ -423,8 +425,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Set the UA for WKWebView (via defaults), the favicon fetcher, and the image loader.
         // This only needs to be done once per runtime. Note that we use defaults here that are
         // readable from extensions, so they can just use the cached identifier.
-        let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-        defaults.register(defaults: ["UserAgent": firefoxUA])
 
         SDWebImageDownloader.shared.setValue(firefoxUA, forHTTPHeaderField: "User-Agent")
         //SDWebImage is setting accept headers that report we support webp. We don't
