@@ -93,7 +93,7 @@ class UnifiedTelemetry {
             
             var userInterfaceStyle = "unknown" // unknown implies that device is on pre-iOS 13
             if #available(iOS 13.0, *) {
-                userInterfaceStyle = UITraitCollection.current.userInterfaceStyle.rawValue
+                userInterfaceStyle = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
             }
             outputDict["systemTheme"] = userInterfaceStyle
 
