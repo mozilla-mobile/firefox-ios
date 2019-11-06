@@ -74,6 +74,11 @@ class TabManager: NSObject {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         }
 
+        // Append FxiOS/version Mobile/version Safari/version to the built-in user agent
+        configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.appVersion) " +
+            (UserAgent.isDesktop(ua: UserAgent.defaultUserAgent()) ? "" : "\(UserAgent.uaBitMobile) ") +
+        "\(UserAgent.uaBitSafari)"
+
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
     }
