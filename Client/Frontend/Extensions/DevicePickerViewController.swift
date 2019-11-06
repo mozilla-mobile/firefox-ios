@@ -19,7 +19,6 @@ private struct DevicePickerViewControllerUX {
     static let TableHeaderTextColor = UIColor.Photon.Grey50
     static let TableHeaderTextPaddingLeft = CGFloat(20)
 
-    static let DeviceRowTintColor = UIColor.Photon.Green60
     static let DeviceRowHeight = CGFloat(50)
     static let DeviceRowTextFont = UIFont.systemFont(ofSize: 16)
     static let DeviceRowTextPaddingLeft = CGFloat(72)
@@ -395,7 +394,7 @@ class DevicePickerTableViewCell: UITableViewCell {
 
     var clientType = ClientType.Mobile {
         didSet {
-            self.imageView?.image = UIImage(named: clientType.rawValue)
+            self.imageView?.image = UIImage.templateImageNamed(clientType.rawValue)
         }
     }
 
@@ -406,7 +405,11 @@ class DevicePickerTableViewCell: UITableViewCell {
         nameLabel.font = DevicePickerViewControllerUX.DeviceRowTextFont
         nameLabel.numberOfLines = 2
         nameLabel.lineBreakMode = .byWordWrapping
-        self.tintColor = DevicePickerViewControllerUX.DeviceRowTintColor
+        if #available(iOS 13.0, *) {
+            self.tintColor = UIColor.label
+        } else {
+            self.tintColor = UIColor.gray
+        }
         self.preservesSuperviewLayoutMargins = false
         self.selectionStyle = .none
     }
