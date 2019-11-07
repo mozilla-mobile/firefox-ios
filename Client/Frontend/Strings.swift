@@ -141,6 +141,8 @@ extension Strings {
 // Downloads Panel
 extension Strings {
     public static let DownloadsPanelEmptyStateTitle = NSLocalizedString("DownloadsPanel.EmptyState.Title", value: "Downloaded files will show up here.", comment: "Title for the Downloads Panel empty state.")
+    public static let DownloadsPanelDeleteTitle = NSLocalizedString("DownloadsPanel.Delete.Title", value: "Delete", comment: "Action button for deleting downloaded files in the Downloads panel.")
+    public static let DownloadsPanelShareTitle = NSLocalizedString("DownloadsPanel.Share.Title", value: "Share", comment: "Action button for sharing downloaded files in the Downloads panel.")
 }
 
 // History Panel
