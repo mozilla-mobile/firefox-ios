@@ -379,8 +379,9 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 case .libraryShortcuts:
                     view.title = title
                     view.moreButton.isHidden = false
-                    view.moreButton.setTitle("See All", for: .normal)
-                    view.moreButton.addTarget(self, action: #selector(showHistoryPanel), for: .touchUpInside)
+                    view.moreButton.setTitle(Strings.AppMenuLibrarySeeAllTitleString, for: .normal)
+                    view.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
+                    view.moreButton.accessibilityIdentifier = "libraryMoreButton"
                     view.titleLabel.accessibilityIdentifier = "libraryTitle"
                     return view
             }
@@ -571,10 +572,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
 
     @objc func showMorePocketStories() {
         showSiteWithURLHandler(Pocket.MoreStoriesURL)
-    }
-
-    @objc func showHistoryPanel() {
-        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
     }
 
     func getTopSites() -> Success {
@@ -985,6 +982,7 @@ class ASHeaderView: UICollectionReusableView {
         super.prepareForReuse()
         moreButton.isHidden = true
         moreButton.setTitle(nil, for: .normal)
+        moreButton.accessibilityIdentifier = nil;
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
         iconView.isHidden = true
