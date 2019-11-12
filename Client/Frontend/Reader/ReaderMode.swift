@@ -162,7 +162,7 @@ struct ReaderModeStyle {
             return nil
         }
 
-        self.theme = theme!
+        self.theme = theme ?? ReaderModeTheme.preferredTheme()
         self.fontType = fontType
         self.fontSize = fontSize!
     }
