@@ -277,7 +277,7 @@ class TabTrayController: UIViewController {
 
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
 
-        tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
+        tabManager.willSwitchTabMode(leavingPBM: !tabDisplayManager.isPrivate)
 
         if tabDisplayManager.isPrivate, privateTabsAreEmpty() {
             UIView.animate(withDuration: 0.2) {
