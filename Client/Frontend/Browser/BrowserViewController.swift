@@ -2410,6 +2410,11 @@ extension BrowserViewController: Themeable {
 
         let tabs = tabManager.tabs
         tabs.forEach { $0.applyTheme() }
+
+        if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode {
+            let theme = ReaderModeTheme(rawValue: ThemeManager.instance.currentName.rawValue) ?? .light
+            readerMode.style = ReaderModeStyle(theme: theme.preferredTheme, fontType: readerMode.style.fontType, fontSize: readerMode.style.fontSize)
+        }
     }
 }
 

@@ -31,6 +31,36 @@ enum ReaderModeTheme: String {
     case sepia = "sepia"
 }
 
+extension ReaderModeTheme {
+    var preferredTheme: ReaderModeTheme {
+        let theme = ReaderModeTheme(rawValue: ThemeManager.instance.currentName.rawValue) ?? .light
+
+        if isThemeSystemCompatible {
+            return theme
+        }
+
+        return theme.isThemeDark ? .dark : .light
+    }
+
+    private var isThemeSystemCompatible: Bool {
+        switch self {
+        case .sepia:
+            return false
+        default:
+            return true
+        }
+    }
+
+    private var isThemeDark: Bool {
+        switch self {
+        case .sepia, .light:
+            return false
+        case .dark:
+            return true
+        }
+    }
+}
+
 enum ReaderModeFontType: String {
     case serif = "serif"
     case sansSerif = "sans-serif"
@@ -134,7 +164,7 @@ struct ReaderModeStyle {
             return nil
         }
 
-        self.theme = theme!
+        self.theme = theme?.preferredTheme ?? .light
         self.fontType = fontType!
         self.fontSize = fontSize!
     }
