@@ -275,10 +275,10 @@ class TabTrayController: UIViewController {
             fromView = emptyPrivateTabsView
         }
 
+        tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
+        
         tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
-
-        tabManager.willSwitchTabMode(leavingPBM: !tabDisplayManager.isPrivate)
-
+        
         if tabDisplayManager.isPrivate, privateTabsAreEmpty() {
             UIView.animate(withDuration: 0.2) {
                 self.searchBarHolder.alpha = 0
