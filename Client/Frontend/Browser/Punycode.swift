@@ -117,7 +117,7 @@ extension String {
     }
 
     fileprivate func decode(_ punycode: String) -> String {
-        var input = Array(punycode)
+        let input = Array(punycode)
         var output = [Character]()
         var i = 0
         var n = initialN
