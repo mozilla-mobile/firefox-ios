@@ -194,6 +194,14 @@ extension PhotonActionSheetProtocol {
             })
         }
         
+        let xrStopAR = PhotonActionSheetItem(title: "Stop AR", iconString: "menu-CloseTabs") { _, _ in
+            guard let bvc = presentableVC as? BrowserViewController,
+                let tab = bvc.tabManager.selectedTab
+                else {
+                return
+            }
+            tab.webController?.onStopAR?()
+        }
         
         var mainActions = [sharePage]
 
@@ -206,7 +214,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        mainActions.append(contentsOf: [sendToDevice, copyURL, xrToggleDebug, xrSwitchCamera, xrResetTracking])
+        mainActions.append(contentsOf: [sendToDevice, copyURL, xrToggleDebug, xrSwitchCamera, xrResetTracking, xrStopAR])
 
         let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
         var commonActions = [toggleDesktopSite, pinAction]
