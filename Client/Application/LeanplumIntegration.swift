@@ -81,8 +81,11 @@ struct MozillaAppSchemes {
     static let pocket = "pocket"
 }
 
-private let supportedLocales = ["en_US", "de_DE", "en_GB", "en_CA", "en_AU", "zh_TW", "en_HK", "en_SG",
-                        "fr_FR", "it_IT", "id_ID", "id_ID", "pt_BR", "pl_PL", "ru_RU", "es_ES", "es_MX"]
+private func isLocaleSupported() -> Bool {
+    guard let code = Locale.current.languageCode else { return false }
+    let supportedLocalePrefixes = ["en", "de", "zh", "fr", "it", "id", "pt", "pl", "ru", "es"]
+    return supportedLocalePrefixes.contains(code)
+}
 
 private struct LPSettings {
     var appId: String
@@ -139,7 +142,7 @@ class LeanPlumClient {
     }
 
     fileprivate func start() {
-        guard let settings = getSettings(), supportedLocales.contains(Locale.current.identifier), !Leanplum.hasStarted() else {
+        guard let settings = getSettings(), isLocaleSupported(), !Leanplum.hasStarted() else {
             enabled = false
             log.error("LeanplumIntegration - Could not be started")
             return
