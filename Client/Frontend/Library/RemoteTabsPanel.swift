@@ -40,11 +40,6 @@ private let RemoteTabIdentifier = "RemoteTab"
 class RemoteTabsPanel: UIViewController, LibraryPanel {
     weak var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()
-    fileprivate lazy var historyBackButton: HistoryBackButton = {
-        let button = HistoryBackButton()
-        button.addTarget(self, action: #selector(historyBackButtonWasTapped), for: .touchUpInside)
-        return button
-    }()
 
     let profile: Profile
 
@@ -69,17 +64,9 @@ class RemoteTabsPanel: UIViewController, LibraryPanel {
         tableViewController.tableView.backgroundColor = .clear
         addChild(tableViewController)
         self.view.addSubview(tableViewController.view)
-        self.view.addSubview(historyBackButton)
-
-        historyBackButton.snp.makeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(50)
-            make.bottom.equalTo(tableViewController.view.snp.top)
-        }
 
         tableViewController.view.snp.makeConstraints { make in
-            make.top.equalTo(historyBackButton.snp.bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.top.left.right.bottom.equalTo(self.view)
         }
 
         tableViewController.didMove(toParent: self)
@@ -97,10 +84,6 @@ class RemoteTabsPanel: UIViewController, LibraryPanel {
             log.warning("Received unexpected notification \(notification.name)")
             break
         }
-    }
-
-    @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -507,6 +490,8 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         tableView.dataSource = nil
 
         tableView.separatorColor = UIColor.theme.tableView.separator
+
+        tableView.accessibilityIdentifier = "Synced Tabs"
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -636,7 +621,6 @@ extension RemoteTabsTableViewController: LibraryPanelContextMenu {
 
 extension RemoteTabsPanel: Themeable {
     func applyTheme() {
-        historyBackButton.applyTheme()
         tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
         tableViewController.tableView.reloadData()
         tableViewController.refreshTabs()
