@@ -203,6 +203,13 @@ extension PhotonActionSheetProtocol {
             tab.webController?.onStopAR?()
         }
         
+        let xrReenterFullscreen = PhotonActionSheetItem(title: "Enter Fullscreen", iconString: "menu-sync") { _, _ in
+            guard let bvc = presentableVC as? BrowserViewController else {
+                return
+            }
+            bvc.scrollController.hideToolbars(animated: true)
+        }
+        
         var mainActions = [sharePage]
 
         // Disable bookmarking and reading list if the URL is too long.
@@ -214,7 +221,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        mainActions.append(contentsOf: [sendToDevice, copyURL, xrToggleDebug, xrSwitchCamera, xrResetTracking, xrStopAR])
+        mainActions.append(contentsOf: [sendToDevice, copyURL, xrToggleDebug, xrSwitchCamera, xrResetTracking, xrStopAR, xrReenterFullscreen])
 
         let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
         var commonActions = [toggleDesktopSite, pinAction]
