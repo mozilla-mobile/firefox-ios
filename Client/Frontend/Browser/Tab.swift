@@ -684,6 +684,7 @@ class Tab: NSObject {
                 }
 
                 blockSelf?.webController?.lastXRVisitedURL = blockSelf?.webController?.webView?.url?.absoluteString ?? ""
+                blockSelf?.browserViewController?.scrollController.hideToolbars(animated: true)
             } else {
                 blockSelf?.stateController.setShowMode(.nothing)
 //                blockSelf?.webController?.barView?.permissionLevelButton?.buttonImage = nil
@@ -700,6 +701,7 @@ class Tab: NSObject {
                         blockSelf?.timerSessionRunningInBackground = nil
                     })
                 }
+                blockSelf?.browserViewController?.scrollController.showToolbars(animated: true)
             }
             blockSelf?.updateConstraints()
 //            blockSelf?.cancelAllScheduledMessages()

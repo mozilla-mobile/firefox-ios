@@ -81,6 +81,8 @@ class TabScrollingController: NSObject {
     fileprivate var lastContentOffset: CGFloat = 0
     fileprivate var scrollDirection: ScrollDirection = .down
     fileprivate var toolbarState: ToolbarState = .visible
+    
+    fileprivate var xr: Bool? { return tab?.stateController.state.webXR }
 
     override init() {
         super.init()
@@ -122,7 +124,7 @@ class TabScrollingController: NSObject {
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "contentSize" {
-            if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing {
+            if !checkScrollHeightIsLargeEnoughForScrolling() && !toolbarsShowing && !(xr ?? false) {
                 showToolbars(animated: true, completion: nil)
             }
         }
