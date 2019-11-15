@@ -9,6 +9,9 @@ open class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"
     public static let uaBitMobile = "Mobile/15E148"
 
+    // For iPad, we need to append this to the default UA for google.com to show correct page
+    public static let uaBitGoogleIpad = "Version/7.0.3"
+
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {

@@ -188,7 +188,7 @@ public class RustLogins {
             }
 
             do {
-                try self.storage.sync(unlockInfo: unlockInfo)
+                try _ = self.storage.sync(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let loginsStoreError = err as? LoginsStoreError {
