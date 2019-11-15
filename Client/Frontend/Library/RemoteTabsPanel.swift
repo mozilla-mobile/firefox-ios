@@ -360,7 +360,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         contentView.addSubview(instructionsLabel)
 
         signInButton.setTitle(Strings.FxASignInToSync, for: [])
-        signInButton.titleLabel?.textColor = .white
+        signInButton.setTitleColor(UIColor.Photon.White100, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
@@ -404,7 +404,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
-        signInButton.setTitleColor(UIColor.theme.tableView.headerTextDark, for: [])
         backgroundColor = UIColor.theme.homePanel.panelBackground
     }
 
