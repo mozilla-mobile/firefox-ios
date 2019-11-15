@@ -308,15 +308,8 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
             }
         }
 
-        // Ensure we actually have a URL for the tab being dragged and that the URL is not local.
-        // If not, just create an empty `NSItemProvider` so we can create a drag item with the
-        // `Tab` so that it can at still be re-ordered.
-        var itemProvider: NSItemProvider
-        if let url = url, !InternalURL.isValid(url: url) {
-            itemProvider = NSItemProvider(contentsOf: url) ?? NSItemProvider()
-        } else {
-            itemProvider = NSItemProvider()
-        }
+        // Don't store the URL in the item as dragging a tab near the screen edge will prompt to open Safari with the URL
+        let itemProvider = NSItemProvider()
 
         recordEventAndBreadcrumb(object: .tab, method: .drag)
 

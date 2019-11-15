@@ -101,12 +101,14 @@ let LibraryPanel_Bookmarks = "LibraryPanel.Bookmarks.1"
 let LibraryPanel_History = "LibraryPanel.History.2"
 let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
 let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
+let LibraryPanel_SyncedTabs = "LibraryPanel.SyncedTabs.5"
 
 let allHomePanels = [
     LibraryPanel_Bookmarks,
     LibraryPanel_History,
     LibraryPanel_ReadingList,
-    LibraryPanel_Downloads
+    LibraryPanel_Downloads,
+    LibraryPanel_SyncedTabs
 ]
 
 class Action {
@@ -207,6 +209,7 @@ class Action {
     static let CloseReadingListPanel = "CloseReadingListPanel"
     static let CloseHistoryListPanel = "CloseHistoryListPanel"
     static let CloseDownloadsPanel = "CloseDownloadsPanel"
+    static let CloseSyncedTabsPanel = "CloseSyncedTabsPanel"
 
     static let AddNewBookmark = "AddNewBookmark"
     static let AddNewFolder = "AddNewFolder"
@@ -549,6 +552,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
                 historyListElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.History"])
+            }
+        }
+    }
+
+    map.addScreenState(LibraryPanel_SyncedTabs) { screenState in
+        screenState.dismissOnUse = true
+        let syncedTabsElement = app.navigationBars["Synced Tabs"]
+        screenState.gesture(forAction: Action.CloseSyncedTabsPanel, transitionTo: HomePanelsScreen) { userState in
+            if isTablet {
+                app.buttons["TabToolbar.libraryButton"].tap()
+            } else {
+                syncedTabsElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.SyncedTabs"])
             }
         }
     }
@@ -1043,9 +1058,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
 
         screenState.tap(app.buttons["LibraryPanels.Bookmarks"], to: LibraryPanel_Bookmarks)
-        screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
+//        screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
         screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: LibraryPanel_ReadingList)
         screenState.tap(app.buttons["LibraryPanels.Downloads"], to: LibraryPanel_Downloads)
+        screenState.tap(app.buttons["LibraryPanels.SyncedTabs"], to: LibraryPanel_SyncedTabs)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in

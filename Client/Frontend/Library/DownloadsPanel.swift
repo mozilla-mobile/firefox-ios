@@ -372,8 +372,8 @@ class DownloadsPanel: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteTitle = NSLocalizedString("Delete", tableName: "DownloadsPanel", comment: "Action button for deleting downloaded files in the Downloads panel.")
-        let shareTitle = NSLocalizedString("Share", tableName: "DownloadsPanel", comment: "Action button for sharing downloaded files in the Downloads panel.")
+        let deleteTitle = Strings.DownloadsPanelDeleteTitle
+        let shareTitle = Strings.DownloadsPanelShareTitle
         let delete = UITableViewRowAction(style: .destructive, title: deleteTitle, handler: { (action, indexPath) in
             if let downloadedFile = self.downloadedFileForIndexPath(indexPath) {
                 if self.deleteDownloadedFile(downloadedFile) {
