@@ -467,6 +467,10 @@ class Tab: NSObject {
     }
 
     @discardableResult func loadRequest(_ request: URLRequest) -> WKNavigation? {
+        if browserViewController?.webViewContainer.subviews.count ?? 1 > 1 {
+            browserViewController?.webViewContainer.subviews[0].removeFromSuperview()
+        }
+        
         if let webView = webView {
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url, let syncedReaderModeURL = url.decodeReaderModeURL, let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
@@ -489,6 +493,10 @@ class Tab: NSObject {
     }
 
     func reload() {
+        if browserViewController?.webViewContainer.subviews.count ?? 1 > 1 {
+            browserViewController?.webViewContainer.subviews[0].removeFromSuperview()
+        }
+        
         if let _ = webView?.reloadFromOrigin() {
             print("reloaded zombified tab from origin")
             return
