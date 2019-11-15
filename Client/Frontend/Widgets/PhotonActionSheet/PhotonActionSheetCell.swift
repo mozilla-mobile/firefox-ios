@@ -195,7 +195,7 @@ class PhotonActionSheetCell: UITableViewCell {
             case .Image:
                 let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
                 statusIcon.image = image
-                statusIcon.tintColor = self.tintColor
+                statusIcon.tintColor = action.iconTint ?? self.tintColor
             case .URL:
                 let image = UIImage(named: iconName)?.createScaled(PhotonActionSheetUX.IconSize)
                 statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
