@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import UIKit
 import SwiftyJSON
 
 private let log = Logger.syncLogger
@@ -105,7 +106,7 @@ open class FxADeviceRegistrator {
             device = FxADevice.forUpdate(account.deviceName, id: registration.id, availableCommands: availableCommands, push: pushParams)
             registrationResult = .updated
         } else {
-            device = FxADevice.forRegister(account.deviceName, type: "mobile", availableCommands: availableCommands, push: pushParams)
+            device = FxADevice.forRegister(account.deviceName, type: UIDevice.current.model.lowercased().contains("ipad") ? "tablet" : "mobile", availableCommands: availableCommands, push: pushParams)
             registrationResult = .registered
         }
 
