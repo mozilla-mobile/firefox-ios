@@ -455,10 +455,16 @@ class Tab: NSObject {
     }
 
     func goBack() {
+        if browserViewController?.webViewContainer.subviews.count ?? 1 > 1 {
+            browserViewController?.webViewContainer.subviews[0].removeFromSuperview()
+        }
         _ = webView?.goBack()
     }
 
     func goForward() {
+        if browserViewController?.webViewContainer.subviews.count ?? 1 > 1 {
+            browserViewController?.webViewContainer.subviews[0].removeFromSuperview()
+        }
         _ = webView?.goForward()
     }
 
