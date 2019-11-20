@@ -98,13 +98,12 @@ class NavigationTest: BaseTestCase {
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
-        navigator.goto(LibraryPanel_History)
-        XCTAssertTrue(app.tables["History List"].staticTexts["Synced Devices"].isEnabled)
-        app.tables["History List"].staticTexts["Synced Devices"].tap()
+        navigator.goto(LibraryPanel_SyncedTabs)
+
         app.tables.buttons["Sign in to Sync"].tap()
         checkFirefoxSyncScreenShown()
         app.navigationBars["Client.FxAContentView"].buttons["Done"].tap()
-        navigator.nowAt(LibraryPanel_History)
+        navigator.nowAt(LibraryPanel_SyncedTabs)
     }
 
     private func checkFirefoxSyncScreenShown() {
