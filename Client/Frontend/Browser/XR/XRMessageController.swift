@@ -149,7 +149,7 @@ class MessageController: NSObject, UITableViewDelegate, UITableViewDataSource {
         didShowMessage?()
     }
 
-    func showMessageAboutResetTracking(_ responseBlock: @escaping (ResetTrackingOption) -> Void) {
+    func showMessageAboutResetTracking(_ buttonView: UIView, _ responseBlock: @escaping (ResetTrackingOption) -> Void) {
         let popup = UIAlertController(title: "Reset Tracking",
                                       message: "Please select one of the options below",
                                       preferredStyle: .actionSheet)
@@ -176,6 +176,9 @@ class MessageController: NSObject, UITableViewDelegate, UITableViewDataSource {
 
         let cancelButton = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         popup.addAction(cancelButton)
+        
+        popup.popoverPresentationController?.sourceView = buttonView
+        popup.popoverPresentationController?.sourceRect = CGRect(x: buttonView.bounds.midX, y: buttonView.bounds.maxY, width: 0, height: 0)
 
         viewController?.present(popup, animated: true)
     }

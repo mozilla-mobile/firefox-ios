@@ -179,7 +179,7 @@ extension PhotonActionSheetProtocol {
                 else {
                 return
             }
-            tab.messageController?.showMessageAboutResetTracking({ option in
+            tab.messageController?.showMessageAboutResetTracking(buttonView, { option in
                 let state = tab.stateController.state
                 switch option {
                     case .resetTracking:

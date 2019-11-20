@@ -1069,19 +1069,19 @@ class Tab: NSObject {
 
         webController?.onResetTrackingButtonTapped = {
 
-            blockSelf?.messageController?.showMessageAboutResetTracking({ option in
-                guard let state = blockSelf?.stateController.state else { return }
-                switch option {
-                    case .resetTracking:
-                        blockSelf?.arkController?.runSessionResettingTrackingAndRemovingAnchors(with: state)
-                    case .removeExistingAnchors:
-                        blockSelf?.arkController?.runSessionRemovingAnchors(with: state)
-                    case .saveWorldMap:
-                        blockSelf?.arkController?.saveWorldMap()
-                    case .loadSavedWorldMap:
-                        blockSelf?.arkController?.loadSavedMap()
-                }
-            })
+//            blockSelf?.messageController?.showMessageAboutResetTracking({ option in
+//                guard let state = blockSelf?.stateController.state else { return }
+//                switch option {
+//                    case .resetTracking:
+//                        blockSelf?.arkController?.runSessionResettingTrackingAndRemovingAnchors(with: state)
+//                    case .removeExistingAnchors:
+//                        blockSelf?.arkController?.runSessionRemovingAnchors(with: state)
+//                    case .saveWorldMap:
+//                        blockSelf?.arkController?.saveWorldMap()
+//                    case .loadSavedWorldMap:
+//                        blockSelf?.arkController?.loadSavedMap()
+//                }
+//            })
         }
 
         webController?.onStartSendingComputerVisionData = {
