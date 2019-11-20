@@ -444,6 +444,7 @@ extension TabTrayController: UITextFieldDelegate {
     func clearSearch() {
         tabDisplayManager.searchedTabs = nil
         searchBar.text = ""
+        // Use evenIfHidden to workaround a refresh bug (#4969)
         tabDisplayManager.refreshStore(evenIfHidden: true)
     }
 }
