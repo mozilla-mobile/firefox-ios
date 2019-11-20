@@ -197,7 +197,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test21ReaderModeSettingsMenu() {
-        loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
+        loadWebPage(url: "en.m.wikipedia.org/wiki/Main_Page")
         app.buttons["TabLocationView.readerModeButton"].tap()
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         snapshot("21ReaderModeSettingsMenu-01")
