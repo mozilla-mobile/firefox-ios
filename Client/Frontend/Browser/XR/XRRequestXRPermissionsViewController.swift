@@ -26,5 +26,12 @@ class RequestXRPermissionsViewController: UIViewController {
         cancelButton.layer.borderColor = UIColor.lightGray.cgColor
         confirmButton.layer.borderWidth = 0.5
         confirmButton.layer.borderColor = UIColor.lightGray.cgColor
+        
+        cancelButton.clipsToBounds = true
+        cancelButton.layer.cornerRadius = 12
+        cancelButton.layer.maskedCorners = [.layerMinXMaxYCorner]
+        confirmButton.clipsToBounds = true
+        confirmButton.layer.cornerRadius = 12
+        confirmButton.layer.maskedCorners = [.layerMaxXMaxYCorner]
     }
 }
