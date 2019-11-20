@@ -4,8 +4,8 @@
 
 import XCTest
 
-let testPageBase = "http://wopr.norad.org/~sarentz/fxios/testpages"
-let loremIpsumURL = "\(testPageBase)/index.html"
+let testPageBase = "http://www.example.com"
+let loremIpsumURL = "\(testPageBase)"
 
 class L10nSnapshotTests: L10nBaseSnapshotTests {
     func test02DefaultTopSites() {
@@ -108,22 +108,26 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test11WebViewContextMenu() {
+        // Drag the context menu up to show all the options
+        func drag() {
+            let window = XCUIApplication().windows.element(boundBy: 0)
+            let start = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
+            let finish = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.01, thenDragTo: finish)
+        }
+
         // Link
         navigator.openURL("http://wikipedia.org")
         navigator.goto(WebLinkContextMenu)
+        drag()
         snapshot("11WebViewContextMenu-01-link")
         navigator.back()
 
         // Image
         navigator.openURL("http://wikipedia.org")
         navigator.goto(WebImageContextMenu)
+        drag()
         snapshot("11WebViewContextMenu-02-image")
-        navigator.back()
-
-        // Image inside Link
-        navigator.openURL("http://wikipedia.org")
-        navigator.goto(WebLinkContextMenu)
-        snapshot("11WebViewContextMenu-03-imageWithLink")
         navigator.back()
     }
 
