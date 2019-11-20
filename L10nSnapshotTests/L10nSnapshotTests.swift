@@ -55,13 +55,13 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     // From here on it is fine to load pages
 
     func test07AddSearchProvider() {
-        navigator.openURL("\(testPageBase)/addSearchProvider.html")
-        app.webViews.element(boundBy: 0).buttons["focus"].tap()
+        navigator.openURL("www.duckduckgo.com")
+        app.webViews.textFields.element(boundBy: 0).tap()
         snapshot("07AddSearchProvider-01", waitForLoadingIndicator: false)
         app.buttons["BrowserViewController.customSearchEngineButton"].tap()
         snapshot("07AddSearchProvider-02", waitForLoadingIndicator: false)
 
-        let alert = XCUIApplication().alerts.element(boundBy: 0)
+        let alert = app.alerts.element(boundBy: 0)
         expectation(for: NSPredicate(format: "exists == 1"), evaluatedWith: alert, handler: nil)
         waitForExpectations(timeout: 3, handler: nil)
         alert.buttons.element(boundBy: 0).tap()
