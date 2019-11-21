@@ -303,22 +303,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     // Add the intro screens.
     var i = 0
     let introLast = allIntroPages.count - 1
-    let introPager = app.scrollViews["IntroViewController.scrollView"]
     for intro in allIntroPages {
         let prev = i == 0 ? nil : allIntroPages[i - 1]
         let next = i == introLast ? nil : allIntroPages[i + 1]
 
         map.addScreenState(intro) { screenState in
-            if let prev = prev {
-                screenState.swipeRight(introPager, to: prev)
-            }
-
             if let next = next {
-                screenState.swipeLeft(introPager, to: next)
-            }
-
-            if i > 0 {
-                let startBrowsingButton = app.buttons["IntroViewController.startBrowsingButton"]
+                screenState.tap(app.buttons["nextOnboardingButton"], to: next)
+            }  else {
+                let startBrowsingButton = app.buttons["startBrowsingOnboardingButton"]
                 screenState.tap(startBrowsingButton, to: BrowserTab)
             }
         }
