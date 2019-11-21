@@ -240,6 +240,7 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
     }
 
     // This test drags the address bar and since it is not possible to drop it on another app, lets do it in a search box
+    /* Disable since the drag and drop is not working fine in this scenario on simulator
     func testDragAddressBarIntoSearchBox() {
         if skipPlatform { return }
 
@@ -249,9 +250,10 @@ class DragAndDropTestIpad: IpadOnlyTestCase {
         waitForValueContains(app.webViews.searchFields.element(boundBy: 0), value: "Search")
         // DragAndDrop the url for only one second so that the TP menu is not shown and the search box is not covered
         app.textFields["url"].press(forDuration: 1, thenDragTo: app.webViews.searchFields.element(boundBy: 0))
+
         // Verify that the text in the search field is the same as the text in the url text field
         XCTAssertEqual(app.webViews.searchFields.element(boundBy: 0).value as? String, websiteWithSearchField)
-    }
+    }*/
 
     func testDragAndDropHistoryEntry() {
         if skipPlatform { return }
