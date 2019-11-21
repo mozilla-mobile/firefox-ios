@@ -319,7 +319,8 @@ open class MarriedState: TokenKeysAndKeyPair {
     }
 
     func isCertificateExpired(_ now: Timestamp) -> Bool {
-        return certificateExpiresAt < now
+        // Without the 5 min early expiration, the certificate may be too close to expiring, and expire by the time it gets used.
+        return certificateExpiresAt < now - (5 * OneMinuteInMilliseconds)
     }
 
     func withoutKeyPair() -> CohabitingBeforeKeyPairState {
