@@ -4,7 +4,7 @@
 
 import XCTest
 
-let blockedElementsString = "Firefox is blocking parts of the page that may track your browsing."
+let blockedElementsString = "XRViewer is blocking parts of the page that may track your browsing."
 let tpIsDisabledViaToggleString = "Block online trackers"
 let tpIsDisabledString = "The site includes elements that may track your browsing. You have disabled protection."
 let noTrackingElementsString = "tp.no-trackers-blocked"

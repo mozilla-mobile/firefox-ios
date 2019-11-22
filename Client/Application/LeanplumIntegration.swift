@@ -28,7 +28,7 @@ private struct LPMessage {
 
     // These defaults are not localized and will be overridden through Leanplum
     static let DefaultAskToAskTitle = "Firefox Sync Requires Push"
-    static let DefaultAskToAskMessage = "Firefox will stay in sync faster with Push Notifications enabled."
+    static let DefaultAskToAskMessage = "XRViewer will stay in sync faster with Push Notifications enabled."
     static let DefaultOkButtonText = "Enable Push"
     static let DefaultLaterButtonText = "Don’t Enable"
 }

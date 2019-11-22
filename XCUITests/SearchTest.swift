@@ -191,8 +191,8 @@ class SearchTests: BaseTestCase {
             waitForExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
             app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
         }
-        waitForExistence(app.menuItems["Search with Firefox"])
-        app.menuItems["Search with Firefox"].tap()
+        waitForExistence(app.menuItems["Search with XRViewer"])
+        app.menuItems["Search with XRViewer"].tap()
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "google")
         // Now there should be two tabs open
