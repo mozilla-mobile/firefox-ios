@@ -460,6 +460,12 @@ class Tab: NSObject {
     }
 
     func reload() {
+        // If the current page is an error page, and the reload button is tapped, load the original URL
+        if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
+            webView?.evaluateJavaScript("location.replace('\(page)')", completionHandler: nil)
+            return
+        }
+        
         if let _ = webView?.reloadFromOrigin() {
             print("reloaded zombified tab from origin")
             return
