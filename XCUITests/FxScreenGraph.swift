@@ -915,11 +915,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = cancelBackAction
     }
 
-    let lastButtonIsCancel = {
-        let lastIndex = app.sheets.element(boundBy: 0).buttons.count - 1
-        app.sheets.element(boundBy: 0).buttons.element(boundBy: lastIndex).tap()
-    }
-
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.textFields["url"], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
@@ -1015,14 +1010,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    map.addScreenState(WebImageContextMenu) { screenState in
-        screenState.dismissOnUse = true
-        screenState.backAction = lastButtonIsCancel
-    }
-
-    map.addScreenState(WebLinkContextMenu) { screenState in
-        screenState.dismissOnUse = true
-        screenState.backAction = lastButtonIsCancel
+    [WebImageContextMenu, WebLinkContextMenu].forEach { item in
+        map.addScreenState(item) { screenState in
+            screenState.dismissOnUse = true
+            screenState.backAction = {
+                let window = XCUIApplication().windows.element(boundBy: 0)
+                window.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+            }
+        }
     }
 
     // make sure after the menu action, navigator.nowAt() is used to set the current state

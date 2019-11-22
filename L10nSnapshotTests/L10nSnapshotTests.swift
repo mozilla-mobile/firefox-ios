@@ -4,8 +4,8 @@
 
 import XCTest
 
-let testPageBase = "http://wopr.norad.org/~sarentz/fxios/testpages"
-let loremIpsumURL = "\(testPageBase)/index.html"
+let testPageBase = "http://www.example.com"
+let loremIpsumURL = "\(testPageBase)"
 
 class L10nSnapshotTests: L10nBaseSnapshotTests {
     func test02DefaultTopSites() {
@@ -44,24 +44,30 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test06PanelsEmptyState() {
-        var i = 0
-        allHomePanels.forEach { nodeName in
-            navigator.goto(nodeName)
-            snapshot("06PanelsEmptyState-\(i)-\(nodeName)")
-            i += 1
+        let libraryPanels = [
+            "LibraryPanels.History",
+            "LibraryPanels.ReadingList",
+            "LibraryPanels.Downloads",
+            "LibraryPanels.SyncedTabs"
+        ]
+        navigator.goto(LibraryPanel_Bookmarks)
+        snapshot("06PanelsEmptyState-LibraryPanels.Bookmarks")
+        libraryPanels.forEach { panel in
+            app.buttons[panel].tap()
+            snapshot("06PanelsEmptyState-\(panel)")
         }
     }
 
     // From here on it is fine to load pages
 
     func test07AddSearchProvider() {
-        navigator.openURL("\(testPageBase)/addSearchProvider.html")
-        app.webViews.element(boundBy: 0).buttons["focus"].tap()
+        navigator.openURL("www.duckduckgo.com")
+        app.webViews.textFields.element(boundBy: 0).tap()
         snapshot("07AddSearchProvider-01", waitForLoadingIndicator: false)
         app.buttons["BrowserViewController.customSearchEngineButton"].tap()
         snapshot("07AddSearchProvider-02", waitForLoadingIndicator: false)
 
-        let alert = XCUIApplication().alerts.element(boundBy: 0)
+        let alert = app.alerts.element(boundBy: 0)
         expectation(for: NSPredicate(format: "exists == 1"), evaluatedWith: alert, handler: nil)
         waitForExpectations(timeout: 3, handler: nil)
         alert.buttons.element(boundBy: 0).tap()
@@ -108,22 +114,26 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test11WebViewContextMenu() {
+        // Drag the context menu up to show all the options
+        func drag() {
+            let window = XCUIApplication().windows.element(boundBy: 0)
+            let start = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
+            let finish = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.01, thenDragTo: finish)
+        }
+
         // Link
         navigator.openURL("http://wikipedia.org")
         navigator.goto(WebLinkContextMenu)
+        drag()
         snapshot("11WebViewContextMenu-01-link")
         navigator.back()
 
         // Image
         navigator.openURL("http://wikipedia.org")
         navigator.goto(WebImageContextMenu)
+        drag()
         snapshot("11WebViewContextMenu-02-image")
-        navigator.back()
-
-        // Image inside Link
-        navigator.openURL("http://wikipedia.org")
-        navigator.goto(WebLinkContextMenu)
-        snapshot("11WebViewContextMenu-03-imageWithLink")
         navigator.back()
     }
 
@@ -193,7 +203,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test21ReaderModeSettingsMenu() {
-        loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
+        loadWebPage(url: "en.m.wikipedia.org/wiki/Main_Page")
         app.buttons["TabLocationView.readerModeButton"].tap()
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         snapshot("21ReaderModeSettingsMenu-01")
