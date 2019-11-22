@@ -255,6 +255,15 @@ class ErrorPageHelper {
             return
         }
 
+        var queryItems = [
+            URLQueryItem(name: InternalURL.Param.url.rawValue, value: url.absoluteString),
+            URLQueryItem(name: "code", value: String(error.code)),
+            URLQueryItem(name: "domain", value: error.domain),
+            URLQueryItem(name: "description", value: error.localizedDescription),
+            // 'timestamp' is used for the js reload logic
+            URLQueryItem(name: "timestamp", value: "\(Int(Date().timeIntervalSince1970 * 1000))")
+        ]
+
         // When an error page is reloaded, the js on the page checks if >2s have passed since the error page was initially loaded, and if so, it reloads the original url for the page. If that original page immediately errors out again, we don't want to push another error page on history stack. This will detect this case, and clear the timestamp to ensure the error page doesn't try to reload.
         if let internalUrl = InternalURL(webViewUrl), internalUrl.originalURLFromErrorPage == url {
             webView.evaluateJavaScript("""
@@ -266,15 +275,6 @@ class ErrorPageHelper {
             """)
             return
         }
-
-        var queryItems = [
-            URLQueryItem(name: InternalURL.Param.url.rawValue, value: url.absoluteString),
-            URLQueryItem(name: "code", value: String(error.code)),
-            URLQueryItem(name: "domain", value: error.domain),
-            URLQueryItem(name: "description", value: error.localizedDescription),
-            // 'timestamp' is used for the js reload logic
-            URLQueryItem(name: "timestamp", value: "\(Int(Date().timeIntervalSince1970 * 1000))")
-        ]
 
         // If this is an invalid certificate, show a certificate error allowing the
         // user to go back or continue. The certificate itself is encoded and added as
