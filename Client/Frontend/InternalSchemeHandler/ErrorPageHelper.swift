@@ -273,6 +273,12 @@ class ErrorPageHelper {
                    location.replace(url.toString());
                 })();
             """)
+
+            components.queryItems = queryItems
+            if let urlWithQuery = components.url {
+                webView.load(PrivilegedRequest(url: urlWithQuery) as URLRequest)
+            }
+            
             return
         }
 
