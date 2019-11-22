@@ -44,11 +44,17 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test06PanelsEmptyState() {
-        var i = 0
-        allHomePanels.forEach { nodeName in
-            navigator.goto(nodeName)
-            snapshot("06PanelsEmptyState-\(i)-\(nodeName)")
-            i += 1
+        let libraryPanels = [
+            "LibraryPanels.History",
+            "LibraryPanels.ReadingList",
+            "LibraryPanels.Downloads",
+            "LibraryPanels.SyncedTabs"
+        ]
+        navigator.goto(LibraryPanel_Bookmarks)
+        snapshot("06PanelsEmptyState-LibraryPanels.Bookmarks")
+        libraryPanels.forEach { panel in
+            app.buttons[panel].tap()
+            snapshot("06PanelsEmptyState-\(panel)")
         }
     }
 
