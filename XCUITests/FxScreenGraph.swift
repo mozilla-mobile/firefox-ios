@@ -534,7 +534,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(LibraryPanel_History) { screenState in
-        screenState.press(app.tables["History List"].cells.element(boundBy: 3), to: HistoryPanelContextMenu)
+        screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
         screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
             app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
