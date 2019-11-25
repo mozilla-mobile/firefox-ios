@@ -346,11 +346,7 @@ class Tab: NSObject {
     }
 
     func removeAllBrowsingData(completionHandler: @escaping () -> Void = {}) {
-        let dataTypes = Set([WKWebsiteDataTypeCookies,
-                             WKWebsiteDataTypeLocalStorage,
-                             WKWebsiteDataTypeSessionStorage,
-                             WKWebsiteDataTypeWebSQLDatabases,
-                             WKWebsiteDataTypeIndexedDBDatabases])
+        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
 
         webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
                                                      modifiedSince: Date.distantPast,
