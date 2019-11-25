@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import Foundation
 
-protocol Themeable {
+protocol Themeable:  AnyObject {
     func applyTheme()
 }
 
@@ -43,12 +43,14 @@ class TableViewColor {
     var syncText: UIColor { return defaultTextAndTint }
     var errorText: UIColor { return UIColor.Photon.Red50 }
     var warningText: UIColor { return UIColor.Photon.Orange50 }
+    var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 }
+    var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightLight }
 }
 
 class ActionMenuColor {
     var foreground: UIColor { return defaultTextAndTint }
-    var iPhoneBackgroundBlurStyle: UIBlurEffectStyle { return UIBlurEffectStyle.light }
-    var iPhoneBackground: UIColor { return UIColor.theme.browser.background.withAlphaComponent(0.9) }
+    var iPhoneBackgroundBlurStyle: UIBlurEffect.Style { return UIBlurEffect.Style.light }
+    var iPhoneBackground: UIColor { return defaultBackground.withAlphaComponent(0.9) }
     var closeButtonBackground: UIColor { return defaultBackground }
 }
 
@@ -104,7 +106,7 @@ class LoadingBarColor {
 
 class TabTrayColor {
     var tabTitleText: UIColor { return UIColor.black }
-    var tabTitleBlur: UIBlurEffectStyle { return UIBlurEffectStyle.extraLight }
+    var tabTitleBlur: UIBlurEffect.Style { return UIBlurEffect.Style.extraLight }
     var background: UIColor { return UIColor.Photon.Grey80 }
     var cellBackground: UIColor { return defaultBackground }
     var toolbar: UIColor { return defaultBackground }
@@ -137,9 +139,10 @@ class TopTabsColor {
 }
 
 class TextFieldColor {
-    var background: UIColor { return .white }
+    var background: UIColor { return UIColor.Photon.Grey25 }
+    var backgroundInOverlay: UIColor { return UIColor.Photon.Grey25 }
     var textAndTint: UIColor { return defaultTextAndTint }
-    var separator: UIColor { return defaultSeparator }
+    var separator: UIColor { return .white }
 }
 
 class HomePanelColor {
@@ -163,6 +166,9 @@ class HomePanelColor {
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
     var topSiteDomain: UIColor { return UIColor.black }
+    var topSitesGradientStart:  UIColor { return UIColor.white }
+    var topSitesGradientEnd:  UIColor { return UIColor(rgb: 0xf8f8f8) }
+    var topSitesBackground: UIColor { return UIColor.white }
 
     var activityStreamHeaderText: UIColor { return UIColor.Photon.Grey50 }
     var activityStreamCellTitle: UIColor { return UIColor.black }

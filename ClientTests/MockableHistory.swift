@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import Deferred
 import Shared
 
 /*
@@ -17,6 +16,7 @@ class MockableHistory: BrowserHistory, SyncableHistory, ResettableSyncStorage {
     func getTopSitesWithLimit(_ limit: Int) -> Deferred<Maybe<Cursor<Site>>> { fatalError() }
     func addLocalVisit(_ visit: SiteVisit) -> Success { fatalError() }
     func clearHistory() -> Success { fatalError() }
+    func removeHistoryFromDate(_ date: Date) -> Success { fatalError() }
     func removeHistoryForURL(_ url: String) -> Success { fatalError() }
     func removeSiteFromTopSites(_ site: Site) -> Success { fatalError() }
     func removeHostFromTopSites(_ host: String) -> Success { fatalError() }

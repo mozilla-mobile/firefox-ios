@@ -90,10 +90,10 @@ class OpenSearchEngine: NSObject, NSCoding {
      * check that the URL host contains the name of the search engine somewhere inside it
      **/
     fileprivate func isSearchURLForEngine(_ url: URL?) -> Bool {
-        guard let urlHost = url?.hostSLD,
+        guard let urlHost = url?.shortDisplayString,
             let queryEndIndex = searchTemplate.range(of: "?")?.lowerBound,
             let templateURL = URL(string: String(searchTemplate[..<queryEndIndex])) else { return false }
-        return urlHost == templateURL.hostSLD
+        return urlHost == templateURL.shortDisplayString
     }
 
     /**

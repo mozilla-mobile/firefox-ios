@@ -17,8 +17,7 @@ extension Notification.Name {
 
     // Fired when the user finishes navigating to a page and the location has changed
     public static let OnLocationChange = Notification.Name("OnLocationChange")
-    public static let DidRestoreSession = Notification.Name("DidRestoreSession")
-
+  
     // MARK: Notification UserInfo Keys
     public static let UserInfoKeyHasSyncableAccount = Notification.Name("UserInfoKeyHasSyncableAccount")
 
@@ -35,6 +34,8 @@ extension Notification.Name {
     public static let ProfileDidFinishSyncing = Notification.Name("ProfileDidFinishSyncing")
 
     public static let DatabaseWasRecreated = Notification.Name("DatabaseWasRecreated")
+    public static let DatabaseWasClosed = Notification.Name("DatabaseWasClosed")
+    public static let DatabaseWasReopened = Notification.Name("DatabaseWasReopened")
 
     public static let PasscodeDidChange = Notification.Name("PasscodeDidChange")
 
@@ -46,13 +47,9 @@ extension Notification.Name {
 
     public static let UserInitiatedSyncManually = Notification.Name("UserInitiatedSyncManually")
 
-    public static let BookmarkBufferValidated = Notification.Name("BookmarkBufferValidated")
-
     public static let FaviconDidLoad = Notification.Name("FaviconDidLoad")
 
     public static let ReachabilityStatusChanged = Notification.Name("ReachabilityStatusChanged")
-
-    public static let ContentBlockerTabSetupRequired = Notification.Name("ContentBlockerTabSetupRequired")
 
     public static let HomePanelPrefsChanged = Notification.Name("HomePanelPrefsChanged")
 

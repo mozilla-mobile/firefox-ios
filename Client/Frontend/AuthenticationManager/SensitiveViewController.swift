@@ -19,10 +19,10 @@ class SensitiveViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: .UIApplicationWillEnterForeground, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: .UIApplicationDidBecomeActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(blurContents), name: .UIApplicationWillResignActive, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(hideLogins), name: .UIApplicationDidEnterBackground, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: UIApplication.willEnterForegroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: UIApplication.didBecomeActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(blurContents), name: UIApplication.willResignActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(hideLogins), name: UIApplication.didEnterBackgroundNotification, object: nil)
 
     }
 
@@ -51,13 +51,27 @@ class SensitiveViewController: UIViewController {
                 self.removeBackgroundedBlur()
             },
             cancel: {
+                self.view.alpha = 0
                 self.promptingForTouchID = false
                 self.authState = .notAuthenticating
-                _ = self.navigationController?.popToRootViewController(animated: true)
+                _ = self.navigationController?.popToRootViewController(animated: false)
+                self.dismiss(animated: false)
             },
             fallback: {
                 self.promptingForTouchID = false
-                AppAuthenticator.presentPasscodeAuthentication(self.navigationController, delegate: self)
+                AppAuthenticator.presentPasscodeAuthentication(self.navigationController).uponQueue(.main) { isOk in
+                    if isOk {
+                        self.removeBackgroundedBlur()
+                        self.navigationController?.dismiss(animated: true, completion: nil)
+                        self.authState = .notAuthenticating
+                    } else {
+                        // On cancel, the login list can appear for a split-second, set the view to transparent to avoid this.
+                        self.view.alpha = 0
+                        _ = self.navigationController?.popToRootViewController(animated: false)
+                        self.dismiss(animated: false)
+                        self.authState = .notAuthenticating
+                    }
+                }
             }
         )
         authState = .presenting
@@ -92,20 +106,6 @@ class SensitiveViewController: UIViewController {
         view.layoutIfNeeded()
 
         return blurView
-    }
-}
-
-// MARK: - PasscodeEntryDelegate
-extension SensitiveViewController: PasscodeEntryDelegate {
-    func passcodeValidationDidSucceed() {
-        removeBackgroundedBlur()
-        self.navigationController?.dismiss(animated: true, completion: nil)
-        self.authState = .notAuthenticating
-    }
-
-    func userDidCancelValidation() {
-        _ = self.navigationController?.popToRootViewController(animated: false)
-        self.authState = .notAuthenticating
     }
 }
 

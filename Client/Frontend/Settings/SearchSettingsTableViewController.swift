@@ -168,9 +168,9 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     // Don't show delete button on the left.
-    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         if indexPath.section == SectionDefault || indexPath.item + 1 == model.orderedEngines.count {
-            return UITableViewCellEditingStyle.none
+            return UITableViewCell.EditingStyle.none
         }
 
         let index = indexPath.item + 1
@@ -183,11 +183,21 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         return false
     }
 
-    // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
         if cell.isEditing {
-            for v in cell.subviews where v.frame.width == 1.0 {
+            for v in cell.subviews where v.classForCoder.description() == "_UITableCellVerticalSeparator" {
                 v.backgroundColor = UIColor.clear
+            }
+        }
+        
+        // Change re-order control tint color to match app theme
+        for subViewA in cell.subviews where subViewA.classForCoder.description() == "UITableViewCellReorderControl" {
+            for subViewB in subViewA.subviews {
+                if let imageView = subViewB as? UIImageView {
+                    imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+                    imageView.tintColor = UIColor.theme.tableView.accessoryViewTint
+                }
             }
         }
     }
@@ -218,7 +228,6 @@ class SearchSettingsTableViewController: ThemedTableViewController {
             return nil
         }
 
-        footerView.showBottomBorder = false
         footerView.applyTheme()
         return footerView
     }
@@ -262,7 +271,7 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         return proposedDestinationIndexPath
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let index = indexPath.item + 1
             let engine = model.orderedEngines[index]
@@ -277,6 +286,8 @@ class SearchSettingsTableViewController: ThemedTableViewController {
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.isEditing = true
         showDeletion = editing
         UIView.performWithoutAnimation {
             self.navigationItem.rightBarButtonItem?.title = editing ? Strings.SettingsSearchDoneButton : Strings.SettingsSearchEditButton

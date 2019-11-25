@@ -4,8 +4,8 @@
 
 import XCTest
 
-let testPageBase = "http://wopr.norad.org/~sarentz/fxios/testpages"
-let loremIpsumURL = "\(testPageBase)/index.html"
+let testPageBase = "http://www.example.com"
+let loremIpsumURL = "\(testPageBase)"
 
 class L10nSnapshotTests: L10nBaseSnapshotTests {
     func test02DefaultTopSites() {
@@ -44,24 +44,30 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test06PanelsEmptyState() {
-        var i = 0
-        allHomePanels.forEach { nodeName in
-            navigator.goto(nodeName)
-            snapshot("06PanelsEmptyState-\(i)-\(nodeName)")
-            i += 1
+        let libraryPanels = [
+            "LibraryPanels.History",
+            "LibraryPanels.ReadingList",
+            "LibraryPanels.Downloads",
+            "LibraryPanels.SyncedTabs"
+        ]
+        navigator.goto(LibraryPanel_Bookmarks)
+        snapshot("06PanelsEmptyState-LibraryPanels.Bookmarks")
+        libraryPanels.forEach { panel in
+            app.buttons[panel].tap()
+            snapshot("06PanelsEmptyState-\(panel)")
         }
     }
 
     // From here on it is fine to load pages
 
     func test07AddSearchProvider() {
-        navigator.openURL("\(testPageBase)/addSearchProvider.html")
-        app.webViews.element(boundBy: 0).buttons["focus"].tap()
+        navigator.openURL("www.duckduckgo.com")
+        app.webViews.textFields.element(boundBy: 0).tap()
         snapshot("07AddSearchProvider-01", waitForLoadingIndicator: false)
         app.buttons["BrowserViewController.customSearchEngineButton"].tap()
         snapshot("07AddSearchProvider-02", waitForLoadingIndicator: false)
 
-        let alert = XCUIApplication().alerts.element(boundBy: 0)
+        let alert = app.alerts.element(boundBy: 0)
         expectation(for: NSPredicate(format: "exists == 1"), evaluatedWith: alert, handler: nil)
         waitForExpectations(timeout: 3, handler: nil)
         alert.buttons.element(boundBy: 0).tap()
@@ -108,34 +114,38 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test11WebViewContextMenu() {
+        // Drag the context menu up to show all the options
+        func drag() {
+            let window = XCUIApplication().windows.element(boundBy: 0)
+            let start = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
+            let finish = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.01, thenDragTo: finish)
+        }
+
         // Link
-        navigator.openURL("\(testPageBase)/link.html")
+        navigator.openURL("http://wikipedia.org")
         navigator.goto(WebLinkContextMenu)
+        drag()
         snapshot("11WebViewContextMenu-01-link")
         navigator.back()
 
         // Image
-        navigator.openURL("\(testPageBase)/image.html")
+        navigator.openURL("http://wikipedia.org")
         navigator.goto(WebImageContextMenu)
+        drag()
         snapshot("11WebViewContextMenu-02-image")
-        navigator.back()
-
-        // Image inside Link
-        navigator.openURL("\(testPageBase)/imageWithLink.html")
-        navigator.goto(WebLinkContextMenu)
-        snapshot("11WebViewContextMenu-03-imageWithLink")
         navigator.back()
     }
 
     func test12WebViewAuthenticationDialog() {
-        navigator.openURL("\(testPageBase)/basicauth/index.html", waitForLoading: false)
+        navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         navigator.goto(BasicAuthDialog)
         snapshot("12WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
         navigator.back()
     }
 
     func test13ReloadButtonContextMenu() {
-        navigator.toggleOn(userState.trackingProtectionSettingOnNormalMode == true, withAction: Action.ToggleTrackingProtectionSettingOnNormalMode)
+        navigator.toggleOn(userState.trackingProtectionSettingOnNormalMode == true, withAction: Action.SwitchETP)
         navigator.goto(BrowserTab)
 
         navigator.openURL(loremIpsumURL)
@@ -170,22 +180,10 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
 
         navigator.goto(PasscodeIntervalSettings)
         snapshot("16PasscodeIntervalScreen-1")
-
-    }
-
-    func test17PasswordSnackbar() {
-        navigator.openURL("\(testPageBase)/password.html")
-        app.webViews.element(boundBy: 0).buttons["submit"].tap()
-        snapshot("17PasswordSnackbar-01")
-        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
-        // The password is pre-filled with a random value so second this this will cause the update prompt
-        navigator.openURL("\(testPageBase)/password.html")
-        app.webViews.element(boundBy: 0).buttons["submit"].tap()
-        snapshot("17PasswordSnackbar-02")
     }
 
     func test18TopSitesMenu() {
-        navigator.openURL(loremIpsumURL)
+        navigator.goto(HomePanel_TopSites)
         navigator.goto(TopSitesPanelContextMenu)
         snapshot("18TopSitesMenu-01")
     }
@@ -205,43 +203,39 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test21ReaderModeSettingsMenu() {
-        let app = XCUIApplication()
-        loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
+        loadWebPage(url: "en.m.wikipedia.org/wiki/Main_Page")
         app.buttons["TabLocationView.readerModeButton"].tap()
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         snapshot("21ReaderModeSettingsMenu-01")
     }
 
-    func test22ReadingListTableContextMenu() {
-        let app = XCUIApplication()
-        loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
-        app.buttons["TabLocationView.readerModeButton"].tap()
-        app.buttons["ReaderModeBarView.listStatusButton"].tap()
-        app.textFields["url"].tap()
-        app.buttons["HomePanels.ReadingList"].tap()
-        app.tables["ReadingTable"].cells.element(boundBy: 0).press(forDuration: 2.0)
-        snapshot("22ReadingListTableContextMenu-01")
-    }
-
-    func test23ReadingListTableRowMenu() {
-        let app = XCUIApplication()
-        loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
-        app.buttons["TabLocationView.readerModeButton"].tap()
-        app.buttons["ReaderModeBarView.listStatusButton"].tap()
-        app.textFields["url"].tap()
-        app.buttons["HomePanels.ReadingList"].tap()
-        app.tables["ReadingTable"].cells.element(boundBy: 0).swipeLeft()
-        snapshot("23ReadingListTableRowMenu-01")
-        app.tables["ReadingTable"].cells.element(boundBy: 0).buttons.element(boundBy: 1).tap()
-        app.tables["ReadingTable"].cells.element(boundBy: 0).swipeLeft()
-        snapshot("23ReadingListTableRowMenu-02")
-    }
-
-    func test24BookmarksListTableRowMenu() {
+    func test22ETPperSite() {
+        // Website without blocked elements
         navigator.openURL(loremIpsumURL)
-        navigator.performAction(Action.Bookmark)
-        navigator.goto(HomePanel_Bookmarks)
-        app.tables["Bookmarks List"].cells.element(boundBy: 0).swipeLeft()
-        snapshot("24BookmarksListTableRowMenu-01")
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        snapshot("22TrackingProtectionEnabledPerSite-01")
+        navigator.performAction(Action.TrackingProtectionperSiteToggle)
+        snapshot("22TrackingProtectionDisabledPerSite-02")
+
+        // Website with blocked elements
+        navigator.openNewURL(urlString: "mozilla.org")
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        navigator.goto(TrackingProtectionContextMenuDetails)
+        snapshot("22TrackingProtectionBlockedElements-01")
+        // Tap on the block element to get more details
+        app.cells.element(boundBy: 2).tap()
+        snapshot("22TrackingProtectionBlockedElements-02")
+    }
+
+    func test23SettingsETP() {
+        navigator.goto(TrackingProtectionSettings)
+        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
+        snapshot("23TrackingProtectionBasicMoreInfo-01")
+        // Go back to TP settings
+        app.buttons["Tracking Protection"].tap()
+
+        // See Strict mode info
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
+        snapshot("23TrackingProtectionStrictMoreInfo-02")
     }
 }

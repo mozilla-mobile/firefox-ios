@@ -13,7 +13,6 @@ protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String)
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
-    func autocompleteTextFieldDidBeginEditing(_ autocompleteTextField: AutocompleteTextField)
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
     func autocompletePasteAndGo(_ autocompleteTextField: AutocompleteTextField)
 }
@@ -24,7 +23,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     // The textfields "text" property only contains the entered text, while this label holds the autocomplete text
     // This makes sure that the autocomplete doesnt mess with keyboard suggestions provided by third party keyboards.
     private var autocompleteTextLabel: UILabel?
-    private var clearButton: UIButton?
     private var hideCursor: Bool = false
 
     private let copyShortcutKey = "c"
@@ -82,9 +80,9 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     override var keyCommands: [UIKeyCommand]? {
         return [
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(self.handleKeyCommand(sender:))),
             UIKeyCommand(input: copyShortcutKey, modifierFlags: .command, action: #selector(self.handleKeyCommand(sender:)))
         ]
     }
@@ -94,7 +92,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             return
         }
         switch input {
-        case UIKeyInputLeftArrow:
+        case UIKeyCommand.inputLeftArrow:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
             if isSelectionActive {
                 applyCompletion()
@@ -112,7 +110,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
-        case UIKeyInputRightArrow:
+        case UIKeyCommand.inputRightArrow:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-right-arrow"])
             if isSelectionActive {
                 applyCompletion()
@@ -130,7 +128,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
-        case UIKeyInputEscape:
+        case UIKeyCommand.inputEscape:
             UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-cancel"])
             autocompleteDelegate?.autocompleteTextFieldDidCancel(self)
         case copyShortcutKey:
@@ -144,13 +142,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         default:
             break
         }
-    }
-
-    func highlightAll() {
-        let text = self.text
-        self.text = ""
-        setAutocompleteSuggestion(text ?? "")
-        selectedTextRange = textRange(from: endOfDocument, to: endOfDocument)
     }
 
     fileprivate func normalizeString(_ string: String) -> String {
@@ -175,15 +166,29 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
     @objc @discardableResult fileprivate func removeCompletion() -> Bool {
         let hasActiveCompletion = isSelectionActive
         autocompleteTextLabel?.removeFromSuperview()
-        clearButton?.removeFromSuperview()
         autocompleteTextLabel = nil
         return hasActiveCompletion
+    }
+
+    @objc fileprivate func clear() {
+        text = ""
+        removeCompletion()
+        autocompleteDelegate?.autocompleteTextField(self, didEnterText: "")
     }
 
     // `shouldChangeCharactersInRange` is called before the text changes, and textDidChange is called after.
     // Since the text has changed, remove the completion here, and textDidChange will fire the callback to
     // get the new autocompletion.
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // This happens when you begin typing overtop the old highlighted
+        // text immediately after focusing the text field. We need to trigger
+        // a `didEnterText` that looks like a `clear()` so that the SearchLoader
+        // can reset itself since it will only lookup results if the new text is
+        // longer than the previous text.
+        if lastReplacement == nil {
+            autocompleteDelegate?.autocompleteTextField(self, didEnterText: "")
+        }
+
         lastReplacement = string
         return true
     }
@@ -206,7 +211,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         let autocompleteText = NSMutableAttributedString(string: suggestionText)
 
         let color = AutocompleteTextField.textSelectionColor.labelMode
-        autocompleteText.addAttribute(NSAttributedStringKey.backgroundColor, value: color, range: NSRange(location: 0, length: suggestionText.count))
+        autocompleteText.addAttribute(NSAttributedString.Key.backgroundColor, value: color, range: NSRange(location: 0, length: suggestionText.count))
 
         autocompleteTextLabel?.removeFromSuperview() // should be nil. But just in case
         autocompleteTextLabel = createAutocompleteLabelWith(autocompleteText)
@@ -214,19 +219,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
             addSubview(l)
             hideCursor = true
             forceResetCursor()
-        }
-
-        self.clearButton?.removeFromSuperview()
-        if text.isEmpty {
-            let clearButton = createClearButton()
-            self.clearButton = clearButton
-            addSubview(clearButton)
-            clearButton.snp.makeConstraints { make in
-                make.height.centerY.equalToSuperview()
-                make.width.equalTo(40)
-                // Without this offset, the button moves 5 pixels when switching from UILabel mode to UITextField mode
-                make.right.equalToSuperview().offset(5)
-            }
         }
     }
 
@@ -250,19 +242,6 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         frame.size.height = self.frame.size.height - 1
         label.frame = frame
         return label
-    }
-
-    private func createClearButton() -> UIButton {
-        let button = UIButton()
-        button.setImage(UIImage.templateImageNamed("topTabs-closeTabs"), for: .normal)
-        button.tintColor = self.textColor
-        button.backgroundColor = backgroundColor
-        button.addTarget(self, action: #selector(removeCompletion), for: .touchUpInside)
-        return button
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        autocompleteDelegate?.autocompleteTextFieldDidBeginEditing(self)
     }
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -332,6 +311,14 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 }
 
 extension AutocompleteTextField: MenuHelperInterface {
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == MenuHelper.SelectorPasteAndGo {
+            return UIPasteboard.general.hasStrings
+        }
+
+        return super.canPerformAction(action, withSender: sender)
+    }
+
     @objc func menuHelperPasteAndGo() {
         autocompleteDelegate?.autocompletePasteAndGo(self)
     }

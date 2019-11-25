@@ -9,7 +9,8 @@ private struct PasscodeUX {
     static let TitleVerticalSpacing: CGFloat = 32
     static let DigitSize: CGFloat = 30
     static let TopMargin: CGFloat = 80
-    static let PasscodeFieldSize: CGSize = CGSize(width: 160, height: 32)
+    static let PasscodeFieldSize = CGSize(width: 160, height: 32)
+    static let PasscodeFieldVerticalOffset: CGFloat = 100
 }
 
 @objc protocol PasscodeInputViewDelegate: AnyObject {
@@ -31,11 +32,11 @@ class PasscodeInputView: UIView, UIKeyInput {
     fileprivate var inputtedCode: String = ""
 
     fileprivate var blankDigitString: NSAttributedString {
-        return NSAttributedString(string: "\(blankCharacter)", attributes: [NSAttributedStringKey.font: digitFont])
+        return NSAttributedString(string: "\(blankCharacter)", attributes: [NSAttributedString.Key.font: digitFont])
     }
 
     fileprivate var filledDigitString: NSAttributedString {
-        return NSAttributedString(string: "\(filledCharacter)", attributes: [NSAttributedStringKey.font: digitFont])
+        return NSAttributedString(string: "\(filledCharacter)", attributes: [NSAttributedString.Key.font: digitFont])
     }
 
     @objc var keyboardType: UIKeyboardType = .numberPad
@@ -164,12 +165,12 @@ class PasscodePane: UIView {
 
         codeInputView.snp.makeConstraints { make in
             codeViewCenterConstraint = make.centerX.equalTo(centerContainer).constraint
-            make.bottom.equalTo(centerContainer)
+            make.bottom.equalTo(centerContainer).offset(-PasscodeUX.PasscodeFieldVerticalOffset)
             make.size.equalTo(PasscodeUX.PasscodeFieldSize)
         }
         layoutIfNeeded()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: .UIKeyboardWillHide, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
 
     func shakePasscode() {
@@ -189,7 +190,7 @@ class PasscodePane: UIView {
     }
 
     @objc func keyboardWillShow(_ sender: Notification) {
-        guard let keyboardFrame = (sender.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue else {
+        guard let keyboardFrame = (sender.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue else {
             return
         }
 

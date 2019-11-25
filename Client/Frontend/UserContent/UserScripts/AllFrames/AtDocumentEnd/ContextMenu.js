@@ -20,12 +20,18 @@ window.__firefox__.includeOnce("ContextMenu", function() {
 
     var data = {};
 
+    data.touchX = evt.changedTouches[0].pageX - window.scrollX;
+    data.touchY = evt.changedTouches[0].pageY - window.scrollY;
+
     if (targetLink) {
       data.link = targetLink.href;
+      data.title = targetLink.textContent;
     }
 
     if (targetImage) {
       data.image = targetImage.src;
+      data.title = data.title || targetImage.title;
+      data.alt = targetImage.alt;
     }
 
     if (data.link || data.image) {

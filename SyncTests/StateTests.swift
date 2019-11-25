@@ -27,7 +27,27 @@ func compareScratchpads(tuple: (lhs: Scratchpad, rhs: Scratchpad)) {
     }
 
     XCTAssertTrue(tuple.lhs.global == tuple.rhs.global)
-    XCTAssertEqual(tuple.lhs.localCommands, tuple.rhs.localCommands)
+
+    // Equal charCounts of JSON data is sufficiently high probability of equality
+    func charCount(_ s: String) -> [Character: Int] {
+        var counts = [Character: Int]()
+        s.forEach { c in
+            if let x = counts[c] { counts[c] = x + 1 } else { counts[c] = 1 }
+        }
+        return counts
+    }
+
+    var lhsCounts = [Character: Int]()
+    tuple.lhs.localCommands.forEach {
+        lhsCounts.merge(charCount($0.description)) { (a, b) in a + b }
+    }
+
+    var rhsCounts = [Character: Int]()
+    tuple.rhs.localCommands.forEach {
+        rhsCounts.merge(charCount($0.description)) { (a, b) in a + b }
+    }
+
+    XCTAssertTrue(lhsCounts == rhsCounts)
     XCTAssertEqual(tuple.lhs.engineConfiguration, tuple.rhs.engineConfiguration)
 }
 

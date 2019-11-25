@@ -19,7 +19,7 @@ open class HawkHelper {
 
     // Produce a HAWK value suitable for an "Authorization: value" header, timestamped now.
     open func getAuthorizationValueFor(_ request: URLRequest) -> String {
-        let timestampInSeconds: Int64 = Int64(Date().timeIntervalSince1970)
+        let timestampInSeconds = Int64(Date().timeIntervalSince1970)
         return getAuthorizationValueFor(request, at: timestampInSeconds)
     }
 
@@ -120,7 +120,7 @@ open class HawkHelper {
 
     class func getBaseContentTypeFor(_ contentType: String?) -> String {
         if let contentType = contentType {
-            if let index = contentType.index(of: ";") {
+            if let index = contentType.firstIndex(of: ";") {
                 return String(contentType[..<index]).trimmingCharacters(in: .whitespaces)
             } else {
                 return contentType.trimmingCharacters(in: .whitespaces)

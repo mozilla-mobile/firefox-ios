@@ -285,7 +285,7 @@ open class TokenKeysAndKeyPair: TokenAndKeys {
 
     open override func asJSON() -> JSON {
         var d = super.asJSON().dictionary!
-        d["keyPair"] = JSON(keyPair.jsonRepresentation())
+        d["keyPair"] = JSON(keyPair.jsonRepresentation() as Any)
         d["keyPairExpiresAt"] = JSON(NSNumber(value: keyPairExpiresAt))
         return JSON(d)
     }
@@ -319,7 +319,9 @@ open class MarriedState: TokenKeysAndKeyPair {
     }
 
     func isCertificateExpired(_ now: Timestamp) -> Bool {
-        return certificateExpiresAt < now
+        // Without the 5 min early expiration, the certificate may be too close to expiring, and expire by the time it gets used.
+        let t = now < (5 * OneMinuteInMilliseconds) ? 0 : now - (5 * OneMinuteInMilliseconds)
+        return certificateExpiresAt < t
     }
 
     func withoutKeyPair() -> CohabitingBeforeKeyPairState {

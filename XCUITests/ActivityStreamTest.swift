@@ -97,9 +97,7 @@ class ActivityStreamTest: BaseTestCase {
 
         // Open a new page and wait for the completion
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText(newTopSite["url"]!)
-        app.textFields["address"].typeText("\r")
+        navigator.openURL(newTopSite["url"]!)
         waitUntilPageLoad()
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -179,7 +177,7 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertFalse(app.staticTexts["apple"].exists)
 
         navigator.goto(TabTray)
-        app.collectionViews.cells["home"].tap()
+        app.collectionViews.cells["Home"].tap()
         waitForExistence(TopSiteCellgroup.cells["apple"])
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
@@ -193,8 +191,6 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in New Tab")
-        waitUntilPageLoad()
-
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
@@ -254,19 +250,22 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Bookmark")
 
         // Check that it appears under Bookmarks menu
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
 
         // Check that longtapping on the TopSite gives the option to remove it
-        navigator.goto(HomePanelsScreen)
+        navigator.performAction(Action.ExitMobileBookmarksFolder)
+        navigator.nowAt(LibraryPanel_Bookmarks)
+        navigator.performAction(Action.CloseBookmarkPanel)
+
         app.cells["TopSitesCell"].cells[defaultTopSite["topSiteLabel"]!]
             .press(forDuration: 2)
         XCTAssertTrue(app.tables["Context Menu"].cells["Remove Bookmark"].exists)
 
         // Unbookmark it
         selectOptionFromContextMenu(option: "Remove Bookmark")
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
     }
 
@@ -278,16 +277,18 @@ class ActivityStreamTest: BaseTestCase {
 
         // Check that it appears under Bookmarks menu
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
         // Check that longtapping on the TopSite gives the option to remove it
+        navigator.performAction(Action.ExitMobileBookmarksFolder)
         navigator.goto(HomePanelsScreen)
+        waitForExistence(TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!])
         TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!].press(forDuration: 1)
 
         // Unbookmark it
         selectOptionFromContextMenu(option: "Remove Bookmark")
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(LibraryPanel_Bookmarks)
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
     }
 
@@ -297,11 +298,14 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it
         selectOptionFromContextMenu(option: "Share")
-        if !iPad() {
-            app.buttons["Cancel"].tap()
-        }
+        // Comenting out until share sheet can be managed with automated tests issue #5477
+        //if !iPad() {
+        //    app.buttons["Cancel"].tap()
+        //}
     }
 
+    // Disable #5554
+    /*
     func testTopSitesShareNewTopSite() {
         navigator.goto(HomePanelsScreen)
         let topSiteCells = TopSiteCellgroup.cells
@@ -310,10 +314,11 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it....
         selectOptionFromContextMenu(option: "Share")
-        if !iPad() {
-            app.buttons["Cancel"].tap()
-        }
-    }
+        // Comenting out until share sheet can be managed with automated tests issue #5477
+        //if !iPad() {
+        //    app.buttons["Cancel"].tap()
+        //}
+    }*/
 
     private func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)
@@ -325,20 +330,6 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssertTrue(app.cells["TopSitesCell"].exists)
         let numberOfTopSites = TopSiteCellgroup.cells.matching(identifier: "TopSite").count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not correct")
-    }
-
-    func testActivityStreamPages() {
-        let pagecontrolButton = app.cells["TopSitesCell"].buttons["pageControl"]
-        waitForExistence(pagecontrolButton, timeout: 5)
-        XCTAssert(pagecontrolButton.exists, "The Page Control button must exist")
-        let topSiteCells = TopSiteCellgroup.cells
-        // Lets just check that the button appears or not, tapping on it to go to second screen
-        // is causing regressions lately. Disabling so far that check. Once it stable it will be
-        // added again
-        topSiteCells.element(boundBy: 1).press(forDuration: 1)
-        app.tables["Context Menu"].cells["Remove"].tap()
-        waitForNoExistence(pagecontrolButton)
-        XCTAssertFalse(pagecontrolButton.exists, "The Page Control button should disappear after an item is deleted.")
     }
 
     func testContextMenuInLandscape() {

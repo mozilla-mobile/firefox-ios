@@ -10,6 +10,7 @@ protocol TabToolbarProtocol: AnyObject {
     var tabToolbarDelegate: TabToolbarDelegate? { get set }
     var tabsButton: TabsButton { get }
     var menuButton: ToolbarButton { get }
+    var libraryButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
     var stopReloadButton: ToolbarButton { get }
@@ -21,6 +22,8 @@ protocol TabToolbarProtocol: AnyObject {
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
+    func appMenuBadge(setVisible: Bool)
+    func warningMenuBadge(setVisible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -32,29 +35,9 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidLongPressReload(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressStop(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-}
-
-class ToolbarPrivateModeBadge: UIImageView {
-    let privateModeBadgeSize = CGFloat(16)
-    let privateModeBadgeOffset = CGFloat(10)
-
-    init() {
-        super.init(image: UIImage(imageLiteralResourceName: "privateModeBadge"))
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    func layout(forTabsButton button: UIButton) {
-        snp.remakeConstraints { make in
-            make.size.equalTo(privateModeBadgeSize)
-            make.centerX.equalTo(button).offset(privateModeBadgeOffset)
-            make.centerY.equalTo(button).offset(-privateModeBadgeOffset)
-        }
-    }
 }
 
 @objcMembers
@@ -111,6 +94,12 @@ open class TabToolbarHelper: NSObject {
         toolbar.menuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
         toolbar.menuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
         toolbar.menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+
+        toolbar.libraryButton.contentMode = .center
+        toolbar.libraryButton.setImage(UIImage.templateImageNamed("menu-library"), for: .normal)
+        toolbar.libraryButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
+        toolbar.libraryButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
+        toolbar.libraryButton.accessibilityIdentifier = "TabToolbar.libraryButton"
         setTheme(forButtons: toolbar.actionButtons)
     }
 
@@ -146,6 +135,10 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.menuButton)
     }
 
+    func didClickLibrary() {
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressLibrary(toolbar, button: toolbar.menuButton)
+    }
+
     func didClickStopReload() {
         if loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.stopReloadButton)
@@ -169,6 +162,9 @@ class ToolbarButton: UIButton {
     var selectedTintColor: UIColor!
     var unselectedTintColor: UIColor!
     var disabledTintColor = UIColor.Photon.Grey50
+
+    // Optionally can associate a separator line that hide/shows along with the button
+    weak var separatorLine: UIView?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -200,6 +196,11 @@ class ToolbarButton: UIButton {
         }
     }
 
+    override var isHidden: Bool {
+        didSet {
+            separatorLine?.isHidden = isHidden
+        }
+    }
 }
 
 extension ToolbarButton: Themeable {
@@ -217,16 +218,15 @@ class TabToolbar: UIView {
 
     let tabsButton = TabsButton()
     let menuButton = ToolbarButton()
+    let libraryButton = ToolbarButton()
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
     let stopReloadButton = ToolbarButton()
     let actionButtons: [Themeable & UIButton]
 
-    private let privateModeBadge = ToolbarPrivateModeBadge()
-    
-    func privateModeBadge(visible: Bool) {
-        privateModeBadge.isHidden = !visible
-    }
+    fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
+    fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -239,14 +239,19 @@ class TabToolbar: UIView {
         addSubview(contentView)
         helper = TabToolbarHelper(toolbar: self)
         addButtons(actionButtons)
-        contentView.addSubview(privateModeBadge)
+
+        privateModeBadge.add(toParent: contentView)
+        appMenuBadge.add(toParent: contentView)
+        warningMenuBadge.add(toParent: contentView)
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
     }
 
     override func updateConstraints() {
-        privateModeBadge.layout(forTabsButton: tabsButton)
+        privateModeBadge.layout(onButton: tabsButton)
+        appMenuBadge.layout(onButton: menuButton)
+        warningMenuBadge.layout(onButton: menuButton)
 
         contentView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
@@ -289,6 +294,25 @@ class TabToolbar: UIView {
 }
 
 extension TabToolbar: TabToolbarProtocol {
+    func privateModeBadge(visible: Bool) {
+        privateModeBadge.show(visible)
+    }
+
+    func appMenuBadge(setVisible: Bool) {
+        // Warning badges should take priority over the standard badge
+        guard warningMenuBadge.badge.isHidden else {
+            return
+        }
+
+        appMenuBadge.show(setVisible)
+    }
+
+    func warningMenuBadge(setVisible: Bool) {
+        // Disable other menu badges before showing the warning.
+        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
+        warningMenuBadge.show(setVisible)
+    }
+
     func updateBackStatus(_ canGoBack: Bool) {
         backButton.isEnabled = canGoBack
     }
@@ -314,6 +338,10 @@ extension TabToolbar: Themeable, PrivateModeUI {
     func applyTheme() {
         backgroundColor = UIColor.theme.browser.background
         helper?.setTheme(forButtons: actionButtons)
+
+        privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 
     func applyUIMode(isPrivate: Bool) {

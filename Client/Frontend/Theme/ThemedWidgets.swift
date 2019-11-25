@@ -4,26 +4,28 @@
 import UIKit
 
 class ThemedTableViewCell: UITableViewCell, Themeable {
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    var detailTextColor = UIColor.theme.tableView.disabledRowText
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         applyTheme()
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     func applyTheme() {
-        [textLabel, detailTextLabel].forEach {
-            $0?.textColor = UIColor.theme.tableView.rowText
-        }
+        textLabel?.textColor = UIColor.theme.tableView.rowText
+        detailTextLabel?.textColor = detailTextColor
+
         backgroundColor = UIColor.theme.tableView.rowBackground
         tintColor = UIColor.theme.general.controlTint
     }
 }
 
 class ThemedTableViewController: UITableViewController, Themeable {
-    override init(style: UITableViewStyle = .grouped) {
+    override init(style: UITableView.Style = .grouped) {
         super.init(style: style)
     }
 
@@ -37,6 +39,7 @@ class ThemedTableViewController: UITableViewController, Themeable {
     }
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         applyTheme()
     }
 
@@ -67,18 +70,6 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
         }
     }
 
-    var showTopBorder: Bool = true {
-        didSet {
-            topBorder.isHidden = !showTopBorder
-        }
-    }
-
-    var showBottomBorder: Bool = true {
-        didSet {
-            bottomBorder.isHidden = !showBottomBorder
-        }
-    }
-
     lazy var titleLabel: UILabel = {
         var headerLabel = UILabel()
         headerLabel.font = UIFont.systemFont(ofSize: 12.0, weight: UIFont.Weight.regular)
@@ -86,21 +77,13 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
         return headerLabel
     }()
 
-    fileprivate lazy var topBorder: UIView = {
-        let topBorder = UIView()
-       return topBorder
-    }()
-
-    fileprivate lazy var bottomBorder: UIView = {
-        let bottomBorder = UIView()
-        return bottomBorder
-    }()
+    fileprivate lazy var bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
-        addSubview(titleLabel)
-        addSubview(topBorder)
-        addSubview(bottomBorder)
+        contentView.addSubview(titleLabel)
+        bordersHelper.initBorders(view: self)
+        setDefaultBordersValues()
         setupInitialConstraints()
         applyTheme()
     }
@@ -110,30 +93,27 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
     }
 
     func applyTheme() {
-        topBorder.backgroundColor = UIColor.theme.tableView.separator
-        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
+        bordersHelper.applyTheme()
         contentView.backgroundColor = UIColor.theme.tableView.headerBackground
         titleLabel.textColor = UIColor.theme.tableView.headerTextLight
     }
 
     func setupInitialConstraints() {
-        bottomBorder.snp.makeConstraints { make in
-            make.bottom.left.right.equalTo(self)
-            make.height.equalTo(0.5)
-        }
-
-        topBorder.snp.makeConstraints { make in
-            make.top.left.right.equalTo(self)
-            make.height.equalTo(0.5)
-        }
-
         remakeTitleAlignmentConstraints()
+    }
+
+    func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {
+        bordersHelper.showBorder(for: location, show)
+    }
+
+    func setDefaultBordersValues() {
+        bordersHelper.showBorder(for: .top, false)
+        bordersHelper.showBorder(for: .bottom, false)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        showTopBorder = true
-        showBottomBorder = true
+        setDefaultBordersValues()
         titleLabel.text = nil
         titleAlignment = .bottom
 
@@ -145,16 +125,62 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
         case .top:
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self.contentView).inset(UX.titleHorizontalPadding)
-                make.top.equalTo(self).offset(UX.titleVerticalPadding)
-                make.bottom.equalTo(self).offset(-UX.titleVerticalLongPadding)
+                make.top.equalTo(self.contentView).offset(UX.titleVerticalPadding)
+                make.bottom.equalTo(self.contentView).offset(-UX.titleVerticalLongPadding)
             }
         case .bottom:
             titleLabel.snp.remakeConstraints { make in
                 make.left.right.equalTo(self.contentView).inset(UX.titleHorizontalPadding)
-                make.bottom.equalTo(self).offset(-UX.titleVerticalPadding)
-                make.top.equalTo(self).offset(UX.titleVerticalLongPadding)
+                make.bottom.equalTo(self.contentView).offset(-UX.titleVerticalPadding)
+                make.top.equalTo(self.contentView).offset(UX.titleVerticalLongPadding)
             }
         }
+    }
+}
+
+class ThemedHeaderFooterViewBordersHelper: Themeable {
+    enum BorderLocation {
+        case top
+        case bottom
+    }
+
+    fileprivate lazy var topBorder: UIView = {
+        let topBorder = UIView()
+        return topBorder
+    }()
+
+    fileprivate lazy var bottomBorder: UIView = {
+        let bottomBorder = UIView()
+        return bottomBorder
+    }()
+
+    func showBorder(for location: BorderLocation, _ show: Bool) {
+        switch location {
+        case .top:
+            topBorder.isHidden = !show
+        case .bottom:
+            bottomBorder.isHidden = !show
+        }
+    }
+
+    func initBorders(view: UITableViewHeaderFooterView) {
+        view.contentView.addSubview(topBorder)
+        view.contentView.addSubview(bottomBorder)
+
+        topBorder.snp.makeConstraints { make in
+            make.left.right.top.equalTo(view.contentView)
+            make.height.equalTo(0.25)
+        }
+
+        bottomBorder.snp.makeConstraints { make in
+            make.left.right.bottom.equalTo(view.contentView)
+            make.height.equalTo(0.5)
+        }
+    }
+
+    func applyTheme() {
+        topBorder.backgroundColor = UIColor.theme.tableView.separator
+        bottomBorder.backgroundColor = UIColor.theme.tableView.separator
     }
 }
 

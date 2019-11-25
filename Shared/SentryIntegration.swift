@@ -8,6 +8,9 @@ import Sentry
 public enum SentryTag: String {
     case swiftData = "SwiftData"
     case browserDB = "BrowserDB"
+    case rustPlaces = "RustPlaces"
+    case rustLogins = "RustLogins"
+    case rustLog = "RustLog"
     case notificationService = "NotificationService"
     case unifiedTelemetry = "UnifiedTelemetry"
     case general = "General"
@@ -61,7 +64,6 @@ public class Sentry {
             // be used for both the main application and the app extensions.
             if let defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier), defaults.string(forKey: SentryDeviceAppHashKey) == nil {
                 defaults.set(Bytes.generateRandomBytes(DeviceAppHashLength).hexEncodedString, forKey: SentryDeviceAppHashKey)
-                defaults.synchronize()
             }
 
             // For all outgoing reports, override the default device identifier with our own random
@@ -78,6 +80,9 @@ public class Sentry {
             Logger.browserLogger.error("Failed to initialize Sentry: \(error)")
         }
 
+        // Ignore SIGPIPE exceptions globally.
+        // https://stackoverflow.com/questions/108183/how-to-prevent-sigpipes-or-handle-them-properly
+        signal(SIGPIPE, SIG_IGN)
     }
 
     public func crash() {

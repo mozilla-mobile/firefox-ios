@@ -24,16 +24,18 @@ class AppAuthenticator {
                     return
                 }
 
-                guard let authError = error,
-                          let code = LAError.Code(rawValue: authError._code) else {
+                guard let authError = error else {
                     return
                 }
 
                 DispatchQueue.main.async {
-                    switch code {
-                    case .userFallback, .touchIDNotEnrolled, .touchIDNotAvailable, .touchIDLockout:
+                    switch Int32(authError._code) {
+                    case kLAErrorUserFallback,
+                         kLAErrorBiometryNotEnrolled,
+                         kLAErrorBiometryNotAvailable,
+                         kLAErrorBiometryLockout:
                         fallback?()
-                    case .userCancel:
+                    case kLAErrorUserCancel:
                         cancel?()
                     default:
                         cancel?()
@@ -45,11 +47,15 @@ class AppAuthenticator {
         }
     }
 
-    static func presentPasscodeAuthentication(_ presentingNavController: UINavigationController?, delegate: PasscodeEntryDelegate?) {
-        let passcodeVC = PasscodeEntryViewController()
-        passcodeVC.delegate = delegate
+    static func presentPasscodeAuthentication(_ presentingNavController: UINavigationController?) -> Deferred<Bool> {
+        let deferred = Deferred<Bool>()
+        let passcodeVC = PasscodeEntryViewController(passcodeCompletion: { isOk in
+            deferred.fill(isOk)
+        })
+
         let navController = UINavigationController(rootViewController: passcodeVC)
         navController.modalPresentationStyle = .formSheet
         presentingNavController?.present(navController, animated: true, completion: nil)
+        return deferred
     }
 }

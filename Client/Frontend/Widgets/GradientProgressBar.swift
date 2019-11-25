@@ -22,10 +22,10 @@ open class GradientProgressBar: UIProgressView {
 
     var gradientColors: [CGColor] = []
     // Alpha mask for visible part of gradient.
-    private var alphaMaskLayer: CALayer = CALayer()
+    private var alphaMaskLayer = CALayer()
 
     // Gradient layer.
-    open var gradientLayer: CAGradientLayer = CAGradientLayer()
+    open var gradientLayer = CAGradientLayer()
 
     // Duration for "setProgress(animated: true)"
     open var animationDuration = DefaultValues.animationDuration
@@ -112,7 +112,7 @@ open class GradientProgressBar: UIProgressView {
         moveAnimation.duration = DefaultValues.animationDuration
         moveAnimation.fromValue = gradientLayer.position
         moveAnimation.toValue = CGPoint(x: gradientLayer.frame.width, y: gradientLayer.position.y)
-        moveAnimation.fillMode = kCAFillModeForwards
+        moveAnimation.fillMode = CAMediaTimingFillMode.forwards
         moveAnimation.isRemovedOnCompletion = false
 
         CATransaction.setCompletionBlock {
@@ -140,7 +140,7 @@ open class GradientProgressBar: UIProgressView {
         gradientChangeAnimation.duration = DefaultValues.animationDuration * 4
         gradientChangeAnimation.toValue = [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.0]
         gradientChangeAnimation.fromValue = [0.0, 0.0, 0.0, 0.2, 0.4, 0.6, 0.8]
-        gradientChangeAnimation.fillMode = kCAFillModeForwards
+        gradientChangeAnimation.fillMode = CAMediaTimingFillMode.forwards
         gradientChangeAnimation.isRemovedOnCompletion = false
         gradientChangeAnimation.repeatCount = .infinity
         gradientLayer.add(gradientChangeAnimation, forKey: "colorChange")

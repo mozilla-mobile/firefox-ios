@@ -6,7 +6,6 @@ import Account
 import Foundation
 import FxA
 import Shared
-import Deferred
 @testable import Sync
 
 import XCTest

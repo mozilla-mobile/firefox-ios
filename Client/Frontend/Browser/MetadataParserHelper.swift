@@ -12,28 +12,24 @@ import WebKit
 private let log = Logger.browserLogger
 
 class MetadataParserHelper: TabEventHandler {
-    private var tabObservers: TabObservers!
-
     init() {
-        self.tabObservers = registerFor(
-            .didChangeURL,
-            queue: .main)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didChangeURL)
     }
 
     func tab(_ tab: Tab, didChangeURL url: URL) {
         // Get the metadata out of the page-metadata-parser, and into a type safe struct as soon
         // as possible.
         guard let webView = tab.webView,
-            let url = webView.url, url.isWebPage(includeDataURIs: false), !url.isLocal else {
-            return
+            let url = webView.url, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
+                TabEvent.post(.pageMetadataNotAvailable, for: tab)
+                tab.pageMetadata = nil
+                return
         }
 
         webView.evaluateJavaScript("__firefox__.metadata && __firefox__.metadata.getMetadata()") { (result, error) in
             guard error == nil else {
+                TabEvent.post(.pageMetadataNotAvailable, for: tab)
+                tab.pageMetadata = nil
                 return
             }
 
@@ -41,6 +37,8 @@ class MetadataParserHelper: TabEventHandler {
                 let pageURL = tab.url?.displayURL,
                 let pageMetadata = PageMetadata.fromDictionary(dict) else {
                     log.debug("Page contains no metadata!")
+                    TabEvent.post(.pageMetadataNotAvailable, for: tab)
+                    tab.pageMetadata = nil
                     return
             }
 
@@ -58,18 +56,11 @@ class MetadataParserHelper: TabEventHandler {
 }
 
 class MediaImageLoader: TabEventHandler {
-    private var tabObservers: TabObservers!
     private let prefs: Prefs
 
     init(_ prefs: Prefs) {
         self.prefs = prefs
-        self.tabObservers = registerFor(
-            .didLoadPageMetadata,
-            queue: .main)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didLoadPageMetadata)
     }
 
     func tab(_ tab: Tab, didLoadPageMetadata metadata: PageMetadata) {
@@ -81,16 +72,14 @@ class MediaImageLoader: TabEventHandler {
     }
 
     fileprivate func prepareCache(_ url: URL) {
-        let manager = SDWebImageManager.shared()
-        manager.cachedImageExists(for: url) { exists in
-            if !exists {
-                self.downloadAndCache(fromURL: url)
-            }
+        let manager = SDWebImageManager.shared
+        if manager.cacheKey(for: url) == nil {
+            self.downloadAndCache(fromURL: url)
         }
     }
 
     fileprivate func downloadAndCache(fromURL webUrl: URL) {
-        let manager = SDWebImageManager.shared()
+        let manager = SDWebImageManager.shared
         manager.loadImage(with: webUrl, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
             if let image = image {
                 self.cache(image: image, forURL: webUrl)
@@ -99,6 +88,6 @@ class MediaImageLoader: TabEventHandler {
     }
 
     fileprivate func cache(image: UIImage, forURL url: URL) {
-        SDWebImageManager.shared().saveImage(toCache: image, for: url)
+        SDImageCache.shared.storeImageData(toDisk: image.sd_imageData(), forKey: url.absoluteString)
     }
 }

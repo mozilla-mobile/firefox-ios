@@ -6,15 +6,11 @@ import XCTest
 
 class DataManagementTests: BaseTestCase {
 
-    //Testing the entries are correctly added and deleted. This a termporary behaviour. This test will be changed after releasing Firefox 15.x and Bug 1499074 will be fixed.
     func testWebSiteDataEnterFirstTime() {
-        navigator.goto(WebsiteDataSettings)
-        let expectedWebsiteDataEntries = app.tables.cells.count
-        XCTAssertEqual(expectedWebsiteDataEntries, 2)
         navigator.performAction(Action.AcceptClearAllWebsiteData)
         let expectedWebsiteDataEntries2 = app.tables.cells.count
         XCTAssertEqual(expectedWebsiteDataEntries2, 1)
-        navigator.createNewTab()
+        navigator.openURL("example.com")
         navigator.goto(WebsiteDataSettings)
         let expectedWebsiteDataEntries3 = app.tables.cells.count
         XCTAssertEqual(expectedWebsiteDataEntries3, 2)
@@ -28,6 +24,7 @@ class DataManagementTests: BaseTestCase {
             navigator.openURL(website)
         }
         navigator.goto(WebsiteDataSettings)
+        waitForExistence(app.searchFields["Filter Sites"])
         navigator.performAction(Action.TapOnFilterWebsites)
         app.typeText("youtube")
         waitForExistence(app.tables["Search results"])

@@ -85,7 +85,7 @@ class FormPostHelper: TabContentScript {
 
         let request = formPostData.urlRequestWithHeaders(navigationAction.request.allHTTPHeaderFields)
 
-        if let index = blankTargetFormPosts.index(where: { $0.matchesNavigationAction(navigationAction) }) {
+        if let index = blankTargetFormPosts.firstIndex(where: { $0.matchesNavigationAction(navigationAction) }) {
             blankTargetFormPosts.remove(at: index)
         }
 

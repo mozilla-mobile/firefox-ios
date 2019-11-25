@@ -8,6 +8,8 @@ import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
+    var showContentBlockerSetting = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,6 +26,14 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // display name, etc.
         profile.getAccount()?.updateProfile()
 
+        if showContentBlockerSetting {
+            let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            navigationController?.pushViewController(viewController, animated: false)
+            // Add a done button from this view
+            viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
+        }
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -42,17 +52,19 @@ class AppSettingsTableViewController: SettingsTableViewController {
         var generalSettings: [Setting] = [
             SearchSetting(settings: self),
             NewTabPageSetting(settings: self),
-            HomePageSetting(settings: self),
+            HomeSetting(settings: self),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
-            BoolSetting(prefs: prefs, prefKey: "saveLogins", defaultValue: true,
-                        titleText: NSLocalizedString("Save Logins", comment: "Setting to enable the built-in password manager")),
-            ]
+           ]
 
         if #available(iOS 12.0, *) {
             generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        }
+
+        if AppConstants.MOZ_DOCUMENT_SERVICES {
+            generalSettings.insert(TranslationSetting(settings: self), at: 6)
         }
 
         let accountChinaSyncSetting: [Setting]
@@ -81,7 +93,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             SettingSection(title: accountSectionTitle, footerTitle: footerText, children: [
                 // Without a Firefox Account:
                 ConnectSetting(settings: self),
-                AdvanceAccountSetting(settings: self),
+                AdvancedAccountSetting(settings: self),
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
@@ -124,8 +136,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ExportBrowserDataSetting(settings: self),
                 ExportLogDataSetting(settings: self),
                 DeleteExportedDataSetting(settings: self),
-                EnableBookmarkMergingSetting(settings: self),
-                ForceCrashSetting(settings: self)
+                ForceCrashSetting(settings: self),
+                SlowTheDatabase(settings: self),
+                SentryIDSetting(settings: self),
             ])]
 
         return settings
@@ -133,31 +146,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
-        // Prevent the top border from showing for the General section.
-        if !profile.hasAccount() {
-            switch section {
-                case 1:
-                    headerView.showTopBorder = false
-            default:
-                break
-            }
-        }
         return headerView
-    }
-}
-
-extension AppSettingsTableViewController {
-    func navigateToLoginsList() {
-        let viewController = LoginListViewController(profile: profile)
-        viewController.settingsDelegate = settingsDelegate
-        navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
-extension AppSettingsTableViewController: PasscodeEntryDelegate {
-    @objc func passcodeValidationDidSucceed() {
-        navigationController?.dismiss(animated: true) {
-            self.navigateToLoginsList()
-        }
     }
 }

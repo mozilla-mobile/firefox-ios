@@ -4,15 +4,8 @@
 
 import UIKit
 import SnapKit
-import Deferred
 import Shared
 import Storage
-
-// Reports portrait screen size regardless of the current orientation.
-func screenSizeOrientationIndependent() -> CGSize {
-    let screenSize = UIScreen.main.bounds.size
-    return CGSize(width: min(screenSize.width, screenSize.height), height: max(screenSize.width, screenSize.height))
-}
 
 // Small iPhone screens in landscape require that the popup have a shorter height.
 func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
@@ -20,7 +13,7 @@ func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
         return false
     }
 
-    let hasSmallScreen = screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
+    let hasSmallScreen = DeviceInfo.screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
     return hasSmallScreen && traitCollection.verticalSizeClass == .compact
 }
 
@@ -45,10 +38,10 @@ class EmbeddedNavController {
         self.isSearchMode = isSearchMode
         navigationController = UINavigationController(rootViewController: rootViewController)
 
-        parent.addChildViewController(navigationController)
+        parent.addChild(navigationController)
         parent.view.addSubview(navigationController.view)
 
-        let width = min(screenSizeOrientationIndependent().width * 0.90, CGFloat(UX.topViewWidth))
+        let width = min(DeviceInfo.screenSizeOrientationIndependent().width * 0.90, CGFloat(UX.topViewWidth))
 
         let initialHeight = isSearchMode ? UX.topViewHeightForSearchMode : UX.topViewHeight
         navigationController.view.snp.makeConstraints { make in
@@ -80,7 +73,7 @@ class EmbeddedNavController {
 
     deinit {
         navigationController.view.removeFromSuperview()
-        navigationController.removeFromParentViewController()
+        navigationController.removeFromParent()
     }
 }
 
@@ -92,7 +85,22 @@ class InitialViewController: UIViewController {
     override func viewDidLoad() {
         UIDevice.current.beginGeneratingDeviceOrientationNotifications()
         super.viewDidLoad()
-        view.backgroundColor = UIColor(white: 0.0, alpha: UX.alphaForFullscreenOverlay)
+        if #available(iOS 13, *) {
+            view.backgroundColor = .clear
+
+            // iPad drop shadow removal hack!
+            var view = parent?.view
+            while view != nil, view!.classForCoder.description() != "UITransitionView" {
+                view = view?.superview
+            }
+            if let view = view {
+                // For reasons unknown, if the alpha is < 1.0, the drop shadow is not shown
+                view.alpha = 0.99
+            }
+
+        } else {
+            view.backgroundColor = UIColor(white: 0.0, alpha: UX.alphaForFullscreenOverlay)
+        }
         view.alpha = 0
 
         getShareItem().uponQueue(.main) { shareItem in

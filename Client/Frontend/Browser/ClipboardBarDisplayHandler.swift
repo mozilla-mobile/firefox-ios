@@ -31,18 +31,17 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
 
         super.init()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(UIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForegroundNotification), name: .UIApplicationWillEnterForeground, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(didRestoreSession), name: .DidRestoreSession, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(UIPasteboardChanged), name: UIPasteboard.changedNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForegroundNotification), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 
     @objc private func UIPasteboardChanged() {
         // UIPasteboardChanged gets triggered when calling UIPasteboard.general.
-         NotificationCenter.default.removeObserver(self, name: .UIPasteboardChanged, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIPasteboard.changedNotification, object: nil)
 
         UIPasteboard.general.asyncURL().uponQueue(.main) { res in
             defer {
-                NotificationCenter.default.addObserver(self, selector: #selector(self.UIPasteboardChanged), name: .UIPasteboardChanged, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(self.UIPasteboardChanged), name: UIPasteboard.changedNotification, object: nil)
             }
 
             guard let copiedURL: URL? = res.successValue,
@@ -68,20 +67,17 @@ class ClipboardBarDisplayHandler: NSObject, URLChangeDelegate {
         firstTab.observeURLChanges(delegate: self)
     }
 
-    @objc private func didRestoreSession() {
-        DispatchQueue.main.sync {
-            if let tabManager = self.tabManager,
-                let firstTab = tabManager.selectedTab {
-                self.observeURLForFirstTab(firstTab: firstTab)
-            } else {
-                firstTabLoaded = true
-            }
-
-            NotificationCenter.default.removeObserver(self, name: .DidRestoreSession, object: nil)
-
-            sessionRestored = true
-            checkIfShouldDisplayBar()
+    func didRestoreSession() {
+        guard !sessionRestored else { return }
+        if let tabManager = self.tabManager,
+            let firstTab = tabManager.selectedTab {
+            observeURLForFirstTab(firstTab: firstTab)
+        } else {
+            firstTabLoaded = true
         }
+
+        sessionRestored = true
+        checkIfShouldDisplayBar()
     }
 
     func tab(_ tab: Tab, urlDidChangeTo url: URL) {

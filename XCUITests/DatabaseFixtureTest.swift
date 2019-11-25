@@ -17,13 +17,15 @@ class DatabaseFixtureTest: BaseTestCase {
     }
 
     func testOneBookmark() {
-        navigator.goto(HomePanel_Bookmarks)
+        navigator.goto(MobileBookmarks)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
     }
-
+    /*Disabled due to 5733 iOS 13
     func testBookmarksDatabaseFixture() {
-        navigator.goto(HomePanel_Bookmarks)
+        waitForTabsButton()
+        navigator.goto(MobileBookmarks)
+        waitForExistence(app.tables["Bookmarks List"], timeout: 15)
 
         let loaded = NSPredicate(format: "count == 1013")
         expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
@@ -31,10 +33,10 @@ class DatabaseFixtureTest: BaseTestCase {
 
         let bookmarksList = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(bookmarksList, 1013, "There should be an entry in the bookmarks list")
-    }
+    }*/
 
     func testHistoryDatabaseFixture() {
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
 
         // History list has two cells that are for recently closed and synced devices that should not count as history items,
         // the actual max number is 100

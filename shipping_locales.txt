@@ -1,5 +1,6 @@
 af
 an
+anp
 ar
 ast
 az
@@ -8,6 +9,7 @@ bn
 br
 bs
 ca
+co
 cs
 cy
 da
@@ -24,10 +26,12 @@ es-CL
 es-MX
 eu
 fa
+fi
 fr
 ga-IE
 gd
 gl
+gu-IN
 he
 hi-IN
 hr
@@ -39,6 +43,7 @@ id
 is
 it
 ja
+jv
 ka
 kab
 kk
@@ -70,6 +75,7 @@ si
 sk
 sl
 sq
+su
 sv-SE
 ta
 te
@@ -79,5 +85,6 @@ tr
 uk
 ur
 uz
+vi
 zh-CN
 zh-TW

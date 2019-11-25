@@ -3,10 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Deferred
 import Shared
 
-public let ActivityStreamTopSiteCacheSize: Int32 = 16
+public let ActivityStreamTopSiteCacheSize: Int32 = 32
 
 private let log = Logger.browserLogger
 

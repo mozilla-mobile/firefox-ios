@@ -9,6 +9,7 @@ import Shared
 struct NightModePrefsKey {
     static let NightModeButtonIsInMenu = PrefsKeys.KeyNightModeButtonIsInMenu
     static let NightModeStatus = PrefsKeys.KeyNightModeStatus
+    static let NightModeEnabledDarkTheme = PrefsKeys.KeyNightModeEnabledDarkTheme
 }
 
 class NightModeHelper: TabContentScript {
@@ -38,8 +39,17 @@ class NightModeHelper: TabContentScript {
     static func setNightMode(_ prefs: Prefs, tabManager: TabManager, enabled: Bool) {
         prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeStatus)
         for tab in tabManager.tabs {
-            tab.setNightMode(enabled)
+            tab.nightMode = enabled
+            tab.webView?.scrollView.indicatorStyle = enabled ? .white : .default
         }
+    }
+
+    static func setEnabledDarkTheme(_ prefs: Prefs, darkTheme enabled: Bool) {
+        prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeEnabledDarkTheme)
+    }
+
+    static func hasEnabledDarkTheme(_ prefs: Prefs) -> Bool {
+        return prefs.boolForKey(NightModePrefsKey.NightModeEnabledDarkTheme) ?? false
     }
 
     static func isActivated(_ prefs: Prefs) -> Bool {

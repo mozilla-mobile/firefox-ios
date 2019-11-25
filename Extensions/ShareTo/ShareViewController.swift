@@ -6,7 +6,6 @@ import UIKit
 import SnapKit
 import Shared
 import Storage
-import Deferred
 
 extension UIStackView {
     func addBackground(color: UIColor) {
@@ -313,7 +312,7 @@ extension ShareViewController {
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
             profile.queue.addToQueue(item).uponQueue(.main) { _ in
-                profile.shutdown()
+                profile._shutdown()
             }
 
             addAppExtensionTelemetryEvent(forMethod: "load-in-background")
@@ -328,8 +327,9 @@ extension ShareViewController {
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
-            _ = profile.bookmarks.shareItem(item).value // Blocks until database has settled
-            profile.shutdown()
+            profile._reopen()
+            _ = profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: item.url, title: item.title).value // Intentionally block thread with database call.
+            profile._shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "bookmark-this-page")
         }
@@ -343,8 +343,9 @@ extension ShareViewController {
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
             let profile = BrowserProfile(localName: "profile")
+            profile._reopen()
             profile.readingList.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
-            profile.shutdown()
+            profile._shutdown()
 
             addAppExtensionTelemetryEvent(forMethod: "add-to-reading-list")
         }

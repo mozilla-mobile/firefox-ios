@@ -8,7 +8,6 @@ import Account
 import Storage
 import SwiftyJSON
 import SyncTelemetry
-import Deferred
 
 fileprivate let log = Logger.syncLogger
 
@@ -245,7 +244,7 @@ public struct SyncPing: SyncTelemetryPing {
     public private(set) var payload: JSON
 
     public static func from(result: SyncOperationResult,
-                            account: FirefoxAccount,
+                            account: Account.FirefoxAccount,
                             remoteClientsAndTabs: RemoteClientsAndTabs,
                             prefs: Prefs,
                             why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {

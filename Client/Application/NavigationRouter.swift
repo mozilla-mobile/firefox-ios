@@ -11,22 +11,25 @@ struct FxALaunchParams {
 
 // An enum to route to HomePanels
 enum HomePanelPath: String {
-    case bookmarks
-    case topsites
-    case readingList
-    case history
+    case bookmarks = "bookmarks"
+    case topSites = "top-sites"
+    case readingList = "reading-list"
+    case history = "history"
+    case downloads = "downloads"
+    case newPrivateTab = "new-private-tab"
 }
 
 // An enum to route to a settings page.
 // This could be extended to provide default values to pass to fxa
 enum SettingsPage: String {
-    case newTab
-    case homePage
-    case mailto
-    case search
-    case clearData = "clear-private-data"
-    case fxa
-    case theme
+    case general = "general"
+    case newtab = "newtab"
+    case homepage = "homepage"
+    case mailto = "mailto"
+    case search = "search"
+    case clearPrivateData = "clear-private-data"
+    case fxa = "fxa"
+    case theme = "theme"
 }
 
 // Used by the App to navigate to different views.
@@ -79,13 +82,15 @@ enum NavigationPath {
             return nil
         }
 
-        if urlString.starts(with: "\(scheme)://deep-link"), let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL) {
+        if urlString.starts(with: "\(scheme)://deep-link"), let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
             self = .deepLink(link)
         } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
             self = .fxa(params: FxALaunchParams(query: url.getQuery()))
         } else if urlString.starts(with: "\(scheme)://open-url") {
             let url = components.valueForQuery("url")?.asURL
-            let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? false
+            // Unless the `open-url` URL specifies a `private` parameter,
+            // use the last browsing mode the user was in.
+            let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
@@ -126,16 +131,18 @@ enum NavigationPath {
 
     private static func handleHomePanel(panel: HomePanelPath, with bvc: BrowserViewController) {
         switch panel {
-        case .bookmarks: bvc.openURLInNewTab(HomePanelType.bookmarks.localhostURL, isPrivileged: true)
-        case .history: bvc.openURLInNewTab(HomePanelType.history.localhostURL, isPrivileged: true)
-        case .readingList:bvc.openURLInNewTab(HomePanelType.readingList.localhostURL, isPrivileged: true)
-        case .topsites: bvc.openURLInNewTab(HomePanelType.topSites.localhostURL, isPrivileged: true)
+        case .bookmarks: bvc.showLibrary(panel: .bookmarks)
+        case .history: bvc.showLibrary(panel: .history)
+        case .readingList: bvc.showLibrary(panel: .readingList)
+        case .downloads: bvc.showLibrary(panel: .downloads)
+        case .topSites: bvc.openURLInNewTab(HomePanelType.topSites.internalUrl)
+        case .newPrivateTab: bvc.openBlankNewTab(focusLocationField: false, isPrivate: true)
         }
     }
 
     private static func handleURL(url: URL?, isPrivate: Bool, with bvc: BrowserViewController) {
         if let newURL = url {
-            bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate, isPrivileged: false)
+            bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
         }
@@ -154,18 +161,20 @@ enum NavigationPath {
         }
 
         let controller = ThemedNavigationController(rootViewController: baseSettingsVC)
-        controller.popoverDelegate = bvc
+        controller.presentingModalViewControllerDelegate = bvc
         controller.modalPresentationStyle = UIModalPresentationStyle.formSheet
         rootNav.present(controller, animated: true, completion: nil)
 
         switch settings {
-        case .newTab:
-            let viewController = NewTabChoiceViewController(prefs: baseSettingsVC.profile.prefs)
-            controller.pushViewController(viewController, animated: true)
-        case .homePage:
-            let viewController = HomePageSettingsViewController()
+        case .general:
+            break // Intentional NOOP; Already displaying the general settings VC
+        case .newtab:
+            let viewController = NewTabContentSettingsViewController(prefs: baseSettingsVC.profile.prefs)
             viewController.profile = profile
-            viewController.tabManager = tabManager
+            controller.pushViewController(viewController, animated: true)
+        case .homepage:
+            let viewController = HomePageSettingViewController(prefs: baseSettingsVC.profile.prefs)
+            viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
         case .mailto:
             let viewController = OpenWithSettingsViewController(prefs: profile.prefs)
@@ -175,13 +184,14 @@ enum NavigationPath {
             viewController.model = profile.searchEngines
             viewController.profile = profile
             controller.pushViewController(viewController, animated: true)
-        case .clearData:
+        case .clearPrivateData:
             let viewController = ClearPrivateDataTableViewController()
             viewController.profile = profile
             viewController.tabManager = tabManager
             controller.pushViewController(viewController, animated: true)
         case .fxa:
-            bvc.presentSignInViewController()
+            let viewController = bvc.getSignInViewController()
+            controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)
         }

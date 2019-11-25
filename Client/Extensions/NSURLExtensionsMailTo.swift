@@ -27,7 +27,7 @@ public extension URL {
 
         // Extract 'to' value
         let toStart = urlString.index(urlString.startIndex, offsetBy: "mailto:".count)
-        let toEnd = urlString.index(of: "?") ?? urlString.endIndex
+        let toEnd = urlString.firstIndex(of: "?") ?? urlString.endIndex
 
         let to = String(urlString[toStart..<toEnd])
 

@@ -29,18 +29,21 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         case changePassword = "change_password"
         case sessionStatus = "session_status"
         case signOut = "sign_out"
+        case deleteAccount = "delete_account"
     }
 
     weak var delegate: FxAContentViewControllerDelegate?
 
     let profile: Profile
 
-    init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
+    private var helpBrowser: WKWebView?
+
+    init(profile: Profile, fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
         self.profile = profile
 
         super.init(backgroundColor: UIColor.Photon.Grey20, title: NSAttributedString(string: "Firefox Accounts"))
 
-        self.url = self.createFxAURLWith(fxaOptions, profile: profile)
+        self.url = self.createFxAURLWith(fxaOptions, profile: profile, isSignUpFlow: isSignUpFlow)
 
         NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
@@ -61,9 +64,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         // If the FxAContentViewController was launched from a FxA deferred link
         // onboarding might not have been shown. Check to see if it needs to be
         // displayed and don't animate.
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.browserViewController.presentIntroViewController(false, animated: false)
-        }
+        BrowserViewController.foregroundBVC().presentIntroViewController(false, animated: false)
     }
 
     override func makeWebView() -> WKWebView {
@@ -87,11 +88,17 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             configuration: config
         )
         webView.allowsLinkPreview = false
-        webView.navigationDelegate = self
         webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
 
         // Don't allow overscrolling.
         webView.scrollView.bounces = false
+
+        // This is not shown full-screen, use mobile UA
+        webView.customUserAgent = UserAgent.mobileUserAgent()
+
+        webView.navigationDelegate = self
+        webView.uiDelegate = self
+
         return webView
     }
 
@@ -103,7 +110,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         ] as [String: Any]
         let json = JSON(data).stringify() ?? ""
         let script = "window.postMessage(\(json), '\(self.url.absoluteString)');"
-        webView.evaluateJavaScript(script, completionHandler: nil)
+        settingsWebView.evaluateJavaScript(script, completionHandler: nil)
     }
 
     fileprivate func onCanLinkAccount(_ data: JSON) {
@@ -123,6 +130,13 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         injectData("message", content: ["status": "error"])
     }
 
+    // The user has deleted their Firefox Account. Disconnect them!
+    fileprivate func onDeleteAccount(_ data: JSON) {
+        FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: profile.hasAccount()])
+        dismiss(animated: true)
+    }
+
     // The user has signed in to a Firefox Account.  We're done!
     fileprivate func onLogin(_ data: JSON) {
         injectData("message", content: ["status": "login"])
@@ -132,11 +146,12 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         helper.delegate = self
         helper.application(app, didReceiveAccountJSON: data)
 
-        if profile.hasAccount() {
-            LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+        if let engines = data["offeredSyncEngines"].array, engines.count > 0 {
+            LeanPlumClient.shared.track(event: .signsUpFxa)
+        } else {
+            LeanPlumClient.shared.track(event: .signsInFxa)
         }
-
-        LeanPlumClient.shared.track(event: .signsInFxa)
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
     }
 
     @objc fileprivate func userDidVerify(_ notification: Notification) {
@@ -153,6 +168,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         DispatchQueue.main.async {
             self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
         }
+
+        helpBrowser?.removeFromSuperview()
+        helpBrowser = nil
     }
 
     // The content server page is ready to be shown.
@@ -181,6 +199,8 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
                 onSessionStatus(data)
             case .signOut:
                 onSignOut(data)
+            case .deleteAccount:
+                onDeleteAccount(data)
             }
         }
     }
@@ -205,31 +225,78 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // Configure the FxA signin url based on any passed options.
-    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile) -> URL {
-        let profileUrl = profile.accountConfiguration.signInURL
+    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile, isSignUpFlow: Bool) -> URL {
+        var profileUrl = profile.accountConfiguration.signInURL
+
+        if isSignUpFlow {
+            let s = profileUrl.absoluteString.replaceFirstOccurrence(of: "signin", with: "signup")
+            profileUrl = URL(string: s)!
+        }
 
         guard let launchParams = fxaOptions else {
             return profileUrl
         }
 
-        // Only append `signin`, `entrypoint` and `utm_*` parameters. Note that you can't
-        // override the service and context params.
+        // Only append certain parameters. Note that you can't override the service and context params.
         var params = launchParams.query
         params.removeValue(forKey: "service")
         params.removeValue(forKey: "context")
-        let queryURL = params.filter { $0.key == "signin" || $0.key == "entrypoint" || $0.key.range(of: "utm_") != nil }.map({
+
+        if !isSignUpFlow {
+            params["action"] = "email"
+        }
+        params["style"] = "trailhead" // adds Trailhead banners to the page
+
+        let queryURL = params.filter { ["action", "style", "signin", "entrypoint"].contains($0.key) || $0.key.range(of: "utm_") != nil }.map({
             return "\($0.key)=\($0.value)"
         }).joined(separator: "&")
+
 
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
     }
 
     override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        // Ignore for now.
+        let hideLongpress = "document.body.style.webkitTouchCallout='none';"
+        webView.evaluateJavaScript(hideLongpress)
+        guard webView !== helpBrowser else {
+            let isSecure = webView.hasOnlySecureContent
+            navigationItem.title = (isSecure ? "🔒 " : "") + (webView.url?.host ?? "")
+            return
+        }
+
+        navigationItem.title = nil
+    }
+}
+
+extension FxAContentViewController: WKUIDelegate {
+    // Blank target links (support  links) will create a 2nd webview to browse.
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        guard helpBrowser == nil else {
+            return nil
+        }
+        let f = webView.frame
+        let wv = WKWebView(frame: CGRect(width: f.width, height: f.height), configuration: configuration)
+        helpBrowser?.load(navigationAction.request)
+        webView.addSubview(wv)
+        helpBrowser = wv
+        helpBrowser?.navigationDelegate = self
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+
+        return helpBrowser
     }
 
-    override func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        // Ignore for now.
+    @objc func closeHelpBrowser() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.helpBrowser?.alpha = 0
+        }, completion: {_ in
+            self.helpBrowser?.removeFromSuperview()
+            self.helpBrowser = nil
+        })
+
+        navigationItem.title = nil
+        self.navigationItem.leftBarButtonItem = nil
+        self.navigationItem.hidesBackButton = false
     }
 }
 

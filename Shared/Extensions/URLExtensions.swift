@@ -24,33 +24,27 @@ private struct ETLDEntry: CustomStringConvertible {
 
 private typealias TLDEntryMap = [String: ETLDEntry]
 
-private func loadEntriesFromDisk() -> TLDEntryMap? {
-    if let data = String.contentsOfFileWithResourceName("effective_tld_names", ofType: "dat", fromBundle: Bundle(identifier: "org.mozilla.Shared")!, encoding: .utf8, error: nil) {
-        let lines = data.components(separatedBy: "\n")
-        let trimmedLines = lines.filter { !$0.hasPrefix("//") && $0 != "\n" && $0 != "" }
-
-        var entries = TLDEntryMap()
-        for line in trimmedLines {
-            let entry = ETLDEntry(entry: line)
-            let key: String
-            if entry.isWild {
-                // Trim off the '*.' part of the line
-                key = String(line[line.index(line.startIndex, offsetBy: 2)...])
-            } else if entry.isException {
-                // Trim off the '!' part of the line
-                key = String(line[line.index(line.startIndex, offsetBy: 1)...])
-            } else {
-                key = line
-            }
-            entries[key] = entry
+private func loadEntries() -> TLDEntryMap? {
+    var entries = TLDEntryMap()
+    for line in ETLD_NAMES_LIST where !line.isEmpty && !line.hasPrefix("//") {
+        let entry = ETLDEntry(entry: line)
+        let key: String
+        if entry.isWild {
+            // Trim off the '*.' part of the line
+            key = String(line[line.index(line.startIndex, offsetBy: 2)...])
+        } else if entry.isException {
+            // Trim off the '!' part of the line
+            key = String(line[line.index(line.startIndex, offsetBy: 1)...])
+        } else {
+            key = line
         }
-        return entries
+        entries[key] = entry
     }
-    return nil
+    return entries
 }
 
 private var etldEntries: TLDEntryMap? = {
-    return loadEntriesFromDisk()
+    return loadEntries()
 }()
 
 // MARK: - Local Resource URL Extensions
@@ -95,7 +89,7 @@ extension URL {
 }
 
 // The list of permanent URI schemes has been taken from http://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
-private let permanentURISchemes = ["aaa", "aaas", "about", "acap", "acct", "cap", "cid", "coap", "coaps", "crid", "data", "dav", "dict", "dns", "example", "file", "ftp", "geo", "go", "gopher", "h323", "http", "https", "iax", "icap", "im", "imap", "info", "ipp", "ipps", "iris", "iris.beep", "iris.lwz", "iris.xpc", "iris.xpcs", "jabber", "ldap", "mailto", "mid", "msrp", "msrps", "mtqp", "mupdate", "news", "nfs", "ni", "nih", "nntp", "opaquelocktoken", "pkcs11", "pop", "pres", "reload", "rtsp", "rtsps", "rtspu", "service", "session", "shttp", "sieve", "sip", "sips", "sms", "snmp", "soap.beep", "soap.beeps", "stun", "stuns", "tag", "tel", "telnet", "tftp", "thismessage", "tip", "tn3270", "turn", "turns", "tv", "urn", "vemmi", "vnc", "ws", "wss", "xcon", "xcon-userid", "xmlrpc.beep", "xmlrpc.beeps", "xmpp", "z39.50r", "z39.50s"]
+private let permanentURISchemes = ["aaa", "aaas", "about", "acap", "acct", "cap", "cid", "coap", "coaps", "crid", "data", "dav", "dict", "dns", "example", "file", "ftp", "geo", "go", "gopher", "h323", "http", "https", "iax", "icap", "im", "imap", "info", "ipp", "ipps", "iris", "iris.beep", "iris.lwz", "iris.xpc", "iris.xpcs", "jabber", "javascript", "ldap", "mailto", "mid", "msrp", "msrps", "mtqp", "mupdate", "news", "nfs", "ni", "nih", "nntp", "opaquelocktoken", "pkcs11", "pop", "pres", "reload", "rtsp", "rtsps", "rtspu", "service", "session", "shttp", "sieve", "sip", "sips", "sms", "snmp", "soap.beep", "soap.beeps", "stun", "stuns", "tag", "tel", "telnet", "tftp", "thismessage", "tip", "tn3270", "turn", "turns", "tv", "urn", "vemmi", "vnc", "ws", "wss", "xcon", "xcon-userid", "xmlrpc.beep", "xmlrpc.beeps", "xmpp", "z39.50r", "z39.50s"]
 
 extension URL {
 
@@ -150,12 +144,13 @@ extension URL {
     }
 
     /**
-     * Returns the second level domain (SLD) of a url. It removes any subdomain/TLD
+     * Returns a shorter displayable string for a domain
      *
      * E.g., https://m.foo.com/bar/baz?noo=abc#123  => foo
+     *       https://accounts.foo.com/bar/baz?noo=abc#123  => accounts.foo
      **/
-    public var hostSLD: String {
-        guard let publicSuffix = self.publicSuffix, let baseDomain = self.baseDomain else {
+    public var shortDisplayString: String {
+        guard let publicSuffix = self.publicSuffix, let baseDomain = self.normalizedHost else {
             return self.normalizedHost ?? self.absoluteString
         }
         return baseDomain.replacingOccurrences(of: ".\(publicSuffix)", with: "")
@@ -186,6 +181,10 @@ extension URL {
     }
 
     public var displayURL: URL? {
+        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
+            return self
+        }
+
         if self.absoluteString.starts(with: "blob:") {
             return URL(string: "blob:")
         }
@@ -198,11 +197,11 @@ extension URL {
             return self.decodeReaderModeURL?.havingRemovedAuthorisationComponents()
         }
 
-        if self.isErrorPageURL {
-            return originalURLFromErrorURL?.displayURL
+        if let internalUrl = InternalURL(self), internalUrl.isErrorPage {
+            return internalUrl.originalURLFromErrorPage?.displayURL
         }
 
-        if !self.isAboutURL {
+        if !InternalURL.isValid(url: self) {
             return self.havingRemovedAuthorisationComponents()
         }
 
@@ -277,32 +276,6 @@ extension URL {
         return scheme.map { schemes.contains($0) } ?? false
     }
 
-    // This helps find local urls that we do not want to show loading bars on.
-    // These utility pages should be invisible to the user
-    public var isLocalUtility: Bool {
-        guard self.isLocal else {
-            return false
-        }
-        let utilityURLs = ["/errors", "/about/sessionrestore", "/about/home", "/reader-mode"]
-        return utilityURLs.contains { self.path.hasPrefix($0) }
-    }
-
-    public var isLocal: Bool {
-        guard isWebPage(includeDataURIs: false) else {
-            return false
-        }
-        // iOS forwards hostless URLs (e.g., http://:6571) to localhost.
-        guard let host = host, !host.isEmpty else {
-            return true
-        }
-
-        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
-            return false
-        }
-
-        return host.lowercased() == "localhost" || host == "127.0.0.1"
-    }
-
     public var isIPv6: Bool {
         return host?.contains(":") ?? false
     }
@@ -327,6 +300,21 @@ extension URL {
         }
         return self
     }
+    
+    public func isEqual(_ url: URL) -> Bool {
+        if self == url {
+            return true
+        }
+
+        // Try an additional equality case by chopping off the trailing slash
+        let urls: [String] = [url.absoluteString, absoluteString].map { item in
+            if let lastCh = item.last, lastCh == "/" {
+                return item.dropLast().lowercased()
+            }
+            return item.lowercased()
+        }
+        return urls[0] == urls[1]
+    }
 }
 
 // Extensions to deal with ReaderMode URLs
@@ -343,8 +331,8 @@ extension URL {
 
     public var decodeReaderModeURL: URL? {
         if self.isReaderModeURL || self.isSyncedReaderModeURL {
-            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems, queryItems.count == 1 {
-                if let queryItem = queryItems.first, let value = queryItem.value {
+            if let components = URLComponents(url: self, resolvingAgainstBaseURL: false), let queryItems = components.queryItems {
+                if let queryItem = queryItems.find({ $0.name == "url"}), let value = queryItem.value {
                     return URL(string: value)
                 }
             }
@@ -364,50 +352,124 @@ extension URL {
 
 // Helpers to deal with ErrorPage URLs
 
-extension URL {
-    public var isErrorPageURL: Bool {
-        if let host = self.host {
-            return self.scheme == "http" && host == "localhost" && path == "/errors/error.html"
+public struct InternalURL {
+    public static let uuid = UUID().uuidString
+    public static let scheme = "internal"
+    public static let baseUrl = "\(scheme)://local"
+    public enum Path: String {
+        case errorpage = "errorpage"
+        case sessionrestore = "sessionrestore"
+        func matches(_ string: String) -> Bool {
+            return string.range(of: "/?\(self.rawValue)", options: .regularExpression, range: nil, locale: nil) != nil
         }
-        return false
     }
 
-    public var originalURLFromErrorURL: URL? {
-        let components = URLComponents(url: self, resolvingAgainstBaseURL: false)
-        if let queryURL = components?.queryItems?.find({ $0.name == "url" })?.value {
-            return URL(string: queryURL)
+    public enum Param: String {
+        case uuidkey = "uuidkey"
+        case url = "url"
+        func matches(_ string: String) -> Bool { return string == self.rawValue }
+    }
+
+    public let url: URL
+
+    private let sessionRestoreHistoryItemBaseUrl = "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?url="
+
+    public static func isValid(url: URL) -> Bool {
+        let isWebServerUrl = url.absoluteString.hasPrefix("http://localhost:\(AppInfo.webserverPort)/")
+        if isWebServerUrl, url.path.hasPrefix("/test-fixture/") {
+            // internal test pages need to be treated as external pages
+            return false
+        }
+
+        // TODO: (reader-mode-custom-scheme) remove isWebServerUrl when updating code.
+        return isWebServerUrl || InternalURL.scheme == url.scheme
+    }
+
+    public init?(_ url: URL) {
+        guard InternalURL.isValid(url: url) else {
+            return nil
+        }
+
+        self.url = url
+    }
+
+    public var isAuthorized: Bool {
+        return (url.getQuery()[InternalURL.Param.uuidkey.rawValue] ?? "") == InternalURL.uuid
+    }
+
+    public var stripAuthorization: String {
+        guard var components = URLComponents(string: url.absoluteString), let items = components.queryItems else { return url.absoluteString }
+        components.queryItems = items.filter { !Param.uuidkey.matches($0.name) }
+        if let items = components.queryItems, items.count == 0 {
+            components.queryItems = nil // This cleans up the url to not end with a '?'
+        }
+        return components.url?.absoluteString ?? ""
+    }
+
+    public static func authorize(url: URL) -> URL? {
+        guard var components = URLComponents(string: url.absoluteString) else { return nil }
+        if components.queryItems == nil {
+            components.queryItems = []
+        }
+
+        if var item = components.queryItems?.find({ Param.uuidkey.matches($0.name) }) {
+            item.value = InternalURL.uuid
+        } else {
+            components.queryItems?.append(URLQueryItem(name: Param.uuidkey.rawValue, value: InternalURL.uuid))
+        }
+        return components.url
+    }
+
+    public var isSessionRestore: Bool {
+        return url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl)
+    }
+
+    public var isErrorPage: Bool {
+        // Error pages can be nested in session restore URLs, and session restore handler will forward them to the error page handler
+        let path = url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) ? extractedUrlParam?.path : url.path
+        return InternalURL.Path.errorpage.matches(path ?? "")
+    }
+
+    public var originalURLFromErrorPage: URL? {
+        if !url.absoluteString.hasPrefix(sessionRestoreHistoryItemBaseUrl) {
+            return isErrorPage ? extractedUrlParam : nil
+        }
+        if let urlParam = extractedUrlParam, let nested = InternalURL(urlParam), nested.isErrorPage {
+            return nested.extractedUrlParam
         }
         return nil
     }
-}
 
-// Helpers to deal with About URLs
-extension URL {
-    public var isAboutHomeURL: Bool {
-        if let urlString = self.getQuery()["url"]?.unescape(), isErrorPageURL {
-            let url = URL(string: urlString) ?? self
-            return url.aboutComponent == "home"
+    public var extractedUrlParam: URL? {
+        if let nestedUrl = url.getQuery()[InternalURL.Param.url.rawValue]?.unescape() {
+            return URL(string: nestedUrl)
         }
-        return self.aboutComponent == "home"
+        return nil
+    }
+
+    public var isAboutHomeURL: Bool {
+        if let urlParam = extractedUrlParam, let internalUrlParam = InternalURL(urlParam) {
+            return internalUrlParam.aboutComponent?.hasPrefix("home") ?? false
+        }
+        return aboutComponent?.hasPrefix("home") ?? false
     }
 
     public var isAboutURL: Bool {
-        return self.aboutComponent != nil
+        return aboutComponent != nil
     }
 
-    /// If the URI is an about: URI, return the path after "about/" in the URI.
-    /// For example, return "home" for "http://localhost:1234/about/home/#panel=0".
+    /// Return the path after "about/" in the URI.
     public var aboutComponent: String? {
         let aboutPath = "/about/"
-        guard let scheme = self.scheme, let host = self.host else {
+        guard let url = URL(string: stripAuthorization) else {
             return nil
         }
-        if scheme == "http" && host == "localhost" && path.hasPrefix(aboutPath) {
-            return String(path[aboutPath.endIndex...])
+
+        if url.path.hasPrefix(aboutPath) {
+            return String(url.path.dropFirst(aboutPath.count))
         }
         return nil
     }
-
 }
 
 //MARK: Private Helpers
@@ -447,7 +509,7 @@ private extension URL {
         let tokens = host.components(separatedBy: ".")
         let tokenCount = tokens.count
         var suffix: String?
-        var previousDomain: String? = nil
+        var previousDomain: String?
         var currentDomain: String = host
 
         for offset in 0..<tokenCount {

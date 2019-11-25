@@ -33,11 +33,11 @@ class TopTabsHeaderFooter: UICollectionReusableView {
     func arrangeLine(_ kind: String) {
         line.snp.removeConstraints()
         switch kind {
-            case UICollectionElementKindSectionHeader:
+        case UICollectionView.elementKindSectionHeader:
                 line.snp.makeConstraints { make in
                     make.trailing.equalTo(self)
                 }
-            case UICollectionElementKindSectionFooter:
+        case UICollectionView.elementKindSectionFooter:
                 line.snp.makeConstraints { make in
                     make.leading.equalTo(self)
                 }
@@ -75,6 +75,8 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
             closeButton.layer.shadowColor = backgroundColor?.cgColor
             if selectedTab {
                 drawShadow()
+            } else {
+                self.layer.shadowOpacity = 0
             }
         }
     }
@@ -168,12 +170,13 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
         self.titleText.text = tab.displayTitle
 
         if tab.displayTitle.isEmpty {
-            if tab.webView?.url?.isLocalUtility ?? true {
+            if let url = tab.webView?.url, let internalScheme = InternalURL(url) {
                 self.titleText.text = Strings.AppMenuNewTabTitleString
+                self.accessibilityLabel = internalScheme.aboutComponent
             } else {
                 self.titleText.text = tab.webView?.url?.absoluteDisplayString
             }
-            self.accessibilityLabel = tab.url?.aboutComponent ?? ""
+            
             self.closeButton.accessibilityLabel = String(format: Strings.TopSitesRemoveButtonAccessibilityLabel, self.titleText.text ?? "")
         } else {
             self.accessibilityLabel = tab.displayTitle

@@ -9,14 +9,14 @@ extension BrowserViewController {
 
     @objc private func reloadTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "reload"])
-        if let tab = tabManager.selectedTab, homePanelController == nil {
+        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
             tab.reload()
         }
     }
 
     @objc private func goBackKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "go-back"])
-        if let tab = tabManager.selectedTab, tab.canGoBack, homePanelController == nil {
+        if let tab = tabManager.selectedTab, tab.canGoBack, firefoxHomeViewController == nil {
             tab.goBack()
         }
     }
@@ -30,7 +30,7 @@ extension BrowserViewController {
 
     @objc private func findInPageKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "find-in-page"])
-        if let tab = tabManager.selectedTab, homePanelController == nil {
+        if let tab = tabManager.selectedTab, firefoxHomeViewController == nil {
             self.tab(tab, didSelectFindInPageForSelection: "")
         }
     }
@@ -43,7 +43,8 @@ extension BrowserViewController {
 
     @objc private func newTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
-        openBlankNewTab(focusLocationField: true, isPrivate: false)
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
     }
 
     @objc private func newPrivateTabKeyCommand() {
@@ -68,7 +69,7 @@ extension BrowserViewController {
         }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        if let index = tabs.index(of: currentTab), index + 1 < tabs.count {
+        if let index = tabs.firstIndex(of: currentTab), index + 1 < tabs.count {
             tabManager.selectTab(tabs[index + 1])
         } else if let firstTab = tabs.first {
             tabManager.selectTab(firstTab)
@@ -82,7 +83,7 @@ extension BrowserViewController {
         }
 
         let tabs = currentTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        if let index = tabs.index(of: currentTab), index - 1 < tabs.count && index != 0 {
+        if let index = tabs.firstIndex(of: currentTab), index - 1 < tabs.count && index != 0 {
             tabManager.selectTab(tabs[index - 1])
         } else if let lastTab = tabs.last {
             tabManager.selectTab(lastTab)
@@ -104,14 +105,14 @@ extension BrowserViewController {
 
     override var keyCommands: [UIKeyCommand]? {
         let searchLocationCommands = [
-            UIKeyCommand(input: UIKeyInputDownArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
-            UIKeyCommand(input: UIKeyInputUpArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyCommand.inputDownArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
+            UIKeyCommand(input: UIKeyCommand.inputUpArrow, modifierFlags: [], action: #selector(moveURLCompletionKeyCommand(sender:))),
         ]
         let overidesTextEditing = [
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
-            UIKeyCommand(input: UIKeyInputLeftArrow, modifierFlags: .command, action: #selector(goBackKeyCommand)),
-            UIKeyCommand(input: UIKeyInputRightArrow, modifierFlags: .command, action: #selector(goForwardKeyCommand)),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [.command, .shift], action: #selector(nextTabKeyCommand)),
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [.command, .shift], action: #selector(previousTabKeyCommand)),
+            UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: .command, action: #selector(goBackKeyCommand)),
+            UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: .command, action: #selector(goForwardKeyCommand)),
         ]
         let tabNavigation = [
             UIKeyCommand(input: "r", modifierFlags: .command, action: #selector(reloadTabKeyCommand), discoverabilityTitle: Strings.ReloadPageTitle),

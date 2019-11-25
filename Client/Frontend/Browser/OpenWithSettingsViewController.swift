@@ -30,17 +30,12 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
-        headerView.showTopBorder = false
-        headerView.showBottomBorder = true
-
         let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        footerView.showTopBorder = false
-        footerView.showBottomBorder = false
 
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView
 
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: .UIApplicationDidBecomeActive, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {

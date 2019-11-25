@@ -7,8 +7,8 @@ import WebKit
 import Shared
 import EarlGrey
 import SwiftyJSON
+@testable import Client
 
-/// This test should be disabled since session restore does not seem to work
 class SessionRestoreTests: KIFTestCase {
     fileprivate var webRoot: String!
 
@@ -30,18 +30,13 @@ class SessionRestoreTests: KIFTestCase {
         let json = JSON(jsonDict)
         let escapedJSON = json.stringify()?.addingPercentEncoding(withAllowedCharacters: .URLAllowed)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
-        let restoreURL = URL(string: "/about/sessionrestore?history=\(escapedJSON!)", relativeTo: webView.url!)
+        let restoreURL = PrivilegedRequest(url: URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?history=\(escapedJSON!)")!).url
 
         // Enter the restore URL and verify the back/forward history.
         // After triggering the restore, the session should look like this:
         //   about:home, page1, *page2*, page3
         // where page2 is active.
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .perform(grey_replaceText(restoreURL!.absoluteString))
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: restoreURL!.absoluteString)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         EarlGrey.selectElement(with: grey_accessibilityLabel("Back"))
             .perform(grey_tap())
@@ -51,7 +46,7 @@ class SessionRestoreTests: KIFTestCase {
             .perform(grey_tap())
         let wentBack = GREYCondition(name: "Check browser went back", block: {
             var errorOrNil: NSError?
-            let matcher = grey_allOf([grey_accessibilityLabel("Top sites"),
+            let matcher = grey_allOf([grey_accessibilityID("TopSitesCell"),
                                               grey_sufficientlyVisible()])
             EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &errorOrNil)
             let success = errorOrNil == nil

@@ -38,7 +38,7 @@ class SearchTests: BaseTestCase {
         waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite])
 
         // Disable Search suggestion
-        app.buttons["goBack"].tap()
+        app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(HomePanelsScreen)
         suggestionsOnOff()
 
@@ -50,12 +50,12 @@ class SearchTests: BaseTestCase {
         waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
 
         // Verify that previous choice is remembered
-        app.buttons["goBack"].tap()
+        app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
         waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
-        app.buttons["goBack"].tap()
+        app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(HomePanelsScreen)
 
         // Reset suggestion button, set it to on
@@ -114,7 +114,7 @@ class SearchTests: BaseTestCase {
             }
         }
     }
-
+    /* Disabled due to issue 5581
     func testCopyPasteComplete() {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
@@ -122,8 +122,9 @@ class SearchTests: BaseTestCase {
         app.textFields["address"].press(forDuration: 5)
         app.menuItems["Select All"].tap()
         app.menuItems["Copy"].tap()
-        waitForExistence(app.buttons["goBack"])
-        app.buttons["goBack"].tap()
+        waitForExistence(app.buttons["urlBar-cancel"])
+        app.buttons["urlBar-cancel"].tap()
+
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
         app.textFields["address"].tap()
@@ -149,7 +150,7 @@ class SearchTests: BaseTestCase {
         waitForValueContains(app.textFields["address"], value: "mozilla.org")
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "mozilla.org")
-    }
+    }*/
 
     private func changeSearchEngine(searchEngine: String) {
         navigator.goto(SearchSettings)
@@ -197,5 +198,14 @@ class SearchTests: BaseTestCase {
         // Now there should be two tabs open
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
+    }
+    // Bug https://bugzilla.mozilla.org/show_bug.cgi?id=1541832 scenario 4
+    func testSearchStartAfterTypingTwoWords() {
+        navigator.goto(URLBarOpen)
+        waitForExistence(app.textFields["url"], timeout: 10)
+        app.typeText("foo bar")
+        app.typeText(XCUIKeyboardKey.return.rawValue)
+        waitForExistence(app.textFields["url"], timeout: 20)
+        waitForValueContains(app.textFields["url"], value: "google")
     }
 }

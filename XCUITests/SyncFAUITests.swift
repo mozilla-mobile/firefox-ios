@@ -37,39 +37,34 @@ class SyncUITests: BaseTestCase {
     }
 
     private func verifyFxASigninScreen() {
-        waitForExistence(app.webViews.staticTexts["Sign in"])
+        waitForExistence(app.navigationBars["Client.FxAContentView"])
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
-        XCTAssertTrue(app.webViews.secureTextFields["Password"].exists)
+
         // Verify the placeholdervalues here for the textFields
         let mailPlaceholder = "Email"
-        let passwordPlaceholder = "Password"
-
         let defaultMailPlaceholder = app.webViews.textFields["Email"].placeholderValue!
-        let defaultPasswordPlaceholder = app.webViews.secureTextFields["Password"].placeholderValue!
         XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-        XCTAssertEqual(passwordPlaceholder, defaultPasswordPlaceholder, "The password placeholder does not show the correct value")
-        XCTAssertTrue(app.webViews.buttons["Sign in"].exists)
+        XCTAssertTrue(app.webViews.buttons["Continue"].exists)
     }
 
     func testTypeOnGivenFields() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.staticTexts["Sign in"])
+        waitForExistence(app.navigationBars["Client.FxAContentView"])
 
         // Tap Sign in without any value in email Password focus on Email
-        navigator.performAction(Action.FxATapOnSignInButton)
+        navigator.performAction(Action.FxATapOnContinueButton)
         waitForExistence(app.webViews.staticTexts["Valid email required"])
 
         // Enter only email, wrong and correct and tap sign in
         userState.fxaUsername = "bademail"
         navigator.performAction(Action.FxATypeEmail)
-        navigator.performAction(Action.FxATapOnSignInButton)
+        navigator.performAction(Action.FxATapOnContinueButton)
         waitForExistence(app.webViews.staticTexts["Valid email required"])
 
-        userState.fxaUsername = "valid@email.com"
+        userState.fxaUsername = "valid@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
-        waitForExistence(app.webViews.staticTexts["Valid password required"])
 
         // Enter invalid (too short, it should be at least 8 chars) and incorrect password
         userState.fxaPassword = "foo"
@@ -80,45 +75,52 @@ class SyncUITests: BaseTestCase {
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePassword)
-        navigator.performAction(Action.FxATapOnSignInButton)
-        waitForExistence(app.webViews.staticTexts["Unknown account."], timeout: 10)
-        XCTAssertTrue(app.webViews.links["Sign up"].exists)
+        waitForExistence(app.secureTextFields["Repeat password"], timeout: 10)
     }
 
     func testCreateAnAccountLink() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.links["Create an account"])
-        navigator.goto(FxCreateAccount)
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 3)
+        userState.fxaUsername = "valid@gmail.com"
+        navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATapOnContinueButton)
         waitForExistence(app.webViews.buttons["Create account"])
     }
 
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.textFields["Email"])
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 15)
 
         // Typing on Email should not show Show (password) option
-        userState.fxaUsername = "email"
+        userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
-
+        navigator.performAction(Action.FxATapOnContinueButton)
         // Typing on Password should show Show (password) option
-        userState.fxaPassword = "foo"
+        userState.fxaPassword = "f"
         navigator.performAction(Action.FxATypePassword)
         waitForExistence(app.webViews.staticTexts["Show password"])
-        // Long press delete key to remove the password typed, Show (password) option should not be shown
-        app.keys["delete"].press(forDuration: 2)
+        // Remove the password typed, Show (password) option should not be shown
+        app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
+        waitForNoExistence(app.webViews.staticTexts["Show password"])
     }
 
     // Smoketest
-    func testAccountManagmentPage() {
+    /*Disabled due to the new 6 digits authen code to verify account
+    func testAccountManagementPage() {
         deleteInbox()
         // Log in
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.webViews.staticTexts["Sign in"], timeout: 10)
+        waitForExistence(app.textFields.element(boundBy: 0), timeout: 20)
         userState.fxaUsername = userMail
         userState.fxaPassword = password
         navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATapOnContinueButton)
         navigator.performAction(Action.FxATypePassword)
+        // Workaround in case the keyboard is not dismissed
+        if !isTablet {
+            app.toolbars.buttons["Done"].tap()
+        }
         navigator.performAction(Action.FxATapOnSignInButton)
         allowNotifications()
         // If the account is not verified need to verify it to access the menu
@@ -137,13 +139,9 @@ class SyncUITests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.cells["menu-TrackingProtection"])
+        waitForExistence(app.tables.cells["menu-library"])
         // Tap on the sync name option
-        if iPad() {
-            app.tables.cells.element(boundBy: 9).tap()
-        } else {
-            app.tables.cells.element(boundBy: 0).tap()
-        }
+        navigator.goto(FxAccountManagementPage)
         waitForExistence(app.navigationBars["Firefox Account"])
         XCTAssertTrue(app.tables.cells["Manage"].exists)
         XCTAssertTrue(app.cells.switches["sync.engine.bookmarks.enabled"].exists)
@@ -153,7 +151,7 @@ class SyncUITests: BaseTestCase {
         XCTAssertTrue(app.cells.textFields["DeviceNameSettingTextField"].exists)
         XCTAssertTrue(app.cells["SignOut"].exists)
         disconnectAccount()
-    }
+    }*/
 
     private func disconnectAccount() {
         app.cells["SignOut"].tap()
@@ -174,15 +172,14 @@ class SyncUITests: BaseTestCase {
     }
 
     private func deleteInbox() {
-    // First Delete the inbox
-    let restUrl = URL(string: deleteEndPoint)
-    var request = URLRequest(url: restUrl!)
-    request.httpMethod = "DELETE"
+        // First Delete the inbox
+        let restUrl = URL(string: deleteEndPoint)
+        var request = URLRequest(url: restUrl!)
+        request.httpMethod = "DELETE"
 
-    let task = URLSession.shared.dataTask(with: request) { data, response, error in
-        print("Delete")
-    }
-    task.resume()
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            print("Delete")
+        }.resume()
     }
 
     private func completeVerification(uid: String, code: String, done: @escaping () -> ()) {
@@ -203,14 +200,13 @@ class SyncUITests: BaseTestCase {
 
         request.httpBody = jsonData
         print("json \(jsonData!)")
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 print("error:", error)
                 return
             }
             done()
-        }
-        task.resume()
+        }.resume()
     }
 
     private func verifyAccount(done: @escaping () -> ()) {
@@ -219,7 +215,7 @@ class SyncUITests: BaseTestCase {
         var request = URLRequest(url: restUrl!)
         request.httpMethod = "GET"
 
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if(error != nil) {
                 print("Error: \(error ?? "Get Error" as! Error)")
             }
@@ -243,7 +239,6 @@ class SyncUITests: BaseTestCase {
             self.completeVerification(uid: String(uidNumber), code: String(codeNumber)) {
                 done()
             }
-        }
-        task.resume()
+        }.resume()
     }
 }

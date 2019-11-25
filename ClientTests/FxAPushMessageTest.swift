@@ -57,8 +57,8 @@ class FxAPushMessageTest: XCTestCase {
 
         let profile = MockProfile()
 
-        let account = FirefoxAccount(
-            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
+        let account = Account.FirefoxAccount(
+            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(prefs: profile.prefs),
             email: "testtest@test.com",
             uid: "uid",
             deviceRegistration: nil,
@@ -84,8 +84,8 @@ class FxAPushMessageTest: XCTestCase {
     }
 
     func createHandler(_ profile: Profile = MockProfile()) -> FxAPushMessageHandler {
-        let account = FirefoxAccount(
-            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(),
+        let account = Account.FirefoxAccount(
+            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(prefs: profile.prefs),
             email: "testtest@test.com",
             uid: "uid",
             deviceRegistration: nil,

@@ -25,7 +25,7 @@ private extension TrayToBrowserAnimator {
 
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard let expandFromIndex = displayedTabs.index(of: selectedTab) else { return }
+        guard let expandFromIndex = displayedTabs.firstIndex(of: selectedTab) else { return }
 
         //Disable toolbar until animation completes
         tabTray.toolbar.isUserInteractionEnabled = false
@@ -35,7 +35,7 @@ private extension TrayToBrowserAnimator {
         // Hide browser components
         bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
-        bvc.homePanelController?.view.isHidden = true
+        bvc.firefoxHomeViewController?.view.isHidden = true
 
         bvc.webViewContainerBackdrop.isHidden = true
         bvc.statusBarOverlay.isHidden = false
@@ -94,7 +94,7 @@ private extension TrayToBrowserAnimator {
             bvc.toggleSnackBarVisibility(show: true)
             toggleWebViewVisibility(true, usingTabManager: bvc.tabManager)
             bvc.webViewContainerBackdrop.isHidden = false
-            bvc.homePanelController?.view.isHidden = false
+            bvc.firefoxHomeViewController?.view.isHidden = false
             bvc.urlBar.isTransitioning = false
             tabTray.toolbar.isUserInteractionEnabled = true
             transitionContext.completeTransition(true)
@@ -123,7 +123,7 @@ private extension BrowserToTrayAnimator {
 
         let tabManager = bvc.tabManager
         let displayedTabs = selectedTab.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-        guard let scrollToIndex = displayedTabs.index(of: selectedTab) else { return }
+        guard let scrollToIndex = displayedTabs.firstIndex(of: selectedTab) else { return }
 
         //Disable toolbar until animation completes
         tabTray.toolbar.isUserInteractionEnabled = false
@@ -134,7 +134,7 @@ private extension BrowserToTrayAnimator {
         container.insertSubview(tabTray.view, belowSubview: bvc.view)
 
         // Force subview layout on the collection view so we can calculate the correct end frame for the animation
-        tabTray.view.layoutSubviews()
+        tabTray.view.layoutIfNeeded()
         tabTray.focusTab()
 
         // Build a tab cell that we will use to animate the scaling of the browser to the tab
@@ -158,7 +158,7 @@ private extension BrowserToTrayAnimator {
         cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.size.height)
 
         // Hide views we don't want to show during the animation in the BVC
-        bvc.homePanelController?.view.isHidden = true
+        bvc.firefoxHomeViewController?.view.isHidden = true
         bvc.statusBarOverlay.isHidden = true
         bvc.toggleSnackBarVisibility(show: false)
         toggleWebViewVisibility(false, usingTabManager: bvc.tabManager)
@@ -211,7 +211,7 @@ private extension BrowserToTrayAnimator {
 
                 bvc.toggleSnackBarVisibility(show: true)
                 toggleWebViewVisibility(true, usingTabManager: bvc.tabManager)
-                bvc.homePanelController?.view.isHidden = false
+                bvc.firefoxHomeViewController?.view.isHidden = false
 
                 resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
                 bvc.urlBar.isTransitioning = false
@@ -278,7 +278,9 @@ private func calculateExpandedCellFrameFromBVC(_ bvc: BrowserViewController) -> 
     // there is no toolbar for home panels
     if !bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
         return frame
-    } else if let url = bvc.tabManager.selectedTab?.url, url.isAboutURL && bvc.toolbar == nil {
+    }
+
+    if let url = bvc.tabManager.selectedTab?.url, bvc.toolbar == nil, let internalPage = InternalURL(url), internalPage.isAboutURL {
         frame.size.height += UIConstants.BottomToolbarHeight
     }
 
@@ -286,12 +288,9 @@ private func calculateExpandedCellFrameFromBVC(_ bvc: BrowserViewController) -> 
 }
 
 private func shouldDisplayFooterForBVC(_ bvc: BrowserViewController) -> Bool {
-    if bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) {
-        if let url = bvc.tabManager.selectedTab?.url {
-            return !url.isAboutURL
-        }
-    }
-    return false
+    guard let url = bvc.tabManager.selectedTab?.url else { return false }
+    let isAboutPage = InternalURL(url)?.isAboutURL ?? false
+    return bvc.shouldShowFooterForTraitCollection(bvc.traitCollection) && !isAboutPage
 }
 
 private func toggleWebViewVisibility(_ show: Bool, usingTabManager tabManager: TabManager) {

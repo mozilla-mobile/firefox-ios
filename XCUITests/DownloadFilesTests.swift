@@ -8,8 +8,6 @@ class DownloadFilesTests: BaseTestCase {
 
     override func tearDown() {
         // The downloaded file has to be removed between tests
-        navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
 
         let list = app.tables["DownloadsTable"].cells.count
@@ -25,11 +23,12 @@ class DownloadFilesTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft()
+        waitForExistence(app.tables.cells.buttons["Delete"], timeout: 3)
         app.tables.cells.buttons["Delete"].tap()
     }
 
     func testDownloadFilesAppMenuFirstTime() {
-        navigator.goto(HomePanel_Downloads)
+        navigator.goto(LibraryPanel_Downloads)
         XCTAssertTrue(app.tables["DownloadsTable"].exists)
         // Check that there is not any items and the default text shown is correct
         checkTheNumberOfDownloadedItems(items: 0)
@@ -47,12 +46,15 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileName].exists)
         XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
         app.buttons["Cancel"].tap()
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_Downloads)
+        checkTheNumberOfDownloadedItems(items: 0)
     }
 
     func testDownloadFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
+        navigator.goto(LibraryPanel_Downloads)
 
         waitForExistence(app.tables["DownloadsTable"])
         // There should be one item downloaded. It's name and size should be shown
@@ -64,7 +66,7 @@ class DownloadFilesTests: BaseTestCase {
     func testDeleteDownloadedFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
+        navigator.goto(LibraryPanel_Downloads)
         waitForExistence(app.tables["DownloadsTable"])
 
         deleteItem(itemName: testFileName)
@@ -77,34 +79,35 @@ class DownloadFilesTests: BaseTestCase {
     func testShareDownloadedFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
+        navigator.goto(LibraryPanel_Downloads)
         app.tables.cells.staticTexts[testFileName].swipeLeft()
 
         XCTAssertTrue(app.tables.cells.buttons["Share"].exists)
         XCTAssertTrue(app.tables.cells.buttons["Delete"].exists)
-
-        app.tables.cells.buttons["Share"].tap()
-        waitForExistence(app.otherElements["ActivityListView"])
-        if iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
-        } else {
-            app.buttons["Cancel"].tap()
-        }
+        //Comenting out until share sheet can be managed with automated tests issue #5477
+        //app.tables.cells.buttons["Share"].tap()
+        //waitForExistence(app.otherElements["ActivityListView"])
+        //if iPad() {
+        //    app.otherElements["PopoverDismissRegion"].tap()
+        //} else {
+        //    app.buttons["Cancel"].tap()
+        //}
     }
 
     func testLongPressOnDownloadedFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
+        navigator.goto(LibraryPanel_Downloads)
 
         waitForExistence(app.tables["DownloadsTable"])
-        app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
-        waitForExistence(app.otherElements["ActivityListView"])
-        if iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
-        } else {
-            app.buttons["Cancel"].tap()
-        }
+        //Comenting out until share sheet can be managed with automated tests issue #5477
+        //app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
+        //waitForExistence(app.otherElements["ActivityListView"])
+        //if iPad() {
+        //    app.otherElements["PopoverDismissRegion"].tap()
+        //} else {
+        //    app.buttons["Cancel"].tap()
+        //}
      }
 
     private func downloadFile(fileName: String, numberOfDownlowds: Int) {
@@ -122,7 +125,7 @@ class DownloadFilesTests: BaseTestCase {
     func testDownloadMoreThanOneFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 2)
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
+        navigator.goto(LibraryPanel_Downloads)
 
         waitForExistence(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 2)
@@ -138,7 +141,7 @@ class DownloadFilesTests: BaseTestCase {
 
         // Check there is one item
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
+        navigator.goto(LibraryPanel_Downloads)
 
         waitForExistence(app.tables["DownloadsTable"])
         checkTheNumberOfDownloadedItems(items: 1)
@@ -149,7 +152,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
 
         navigator.goto(BrowserTabMenu)
-        navigator.goto(HomePanel_Downloads)
+        navigator.goto(LibraryPanel_Downloads)
         // Check there is still one item
         checkTheNumberOfDownloadedItems(items: 0)
     }

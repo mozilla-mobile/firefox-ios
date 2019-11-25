@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import XCGLogger
-import Deferred
 import SwiftyJSON
 
 private let log = Logger.syncLogger
@@ -269,7 +268,7 @@ open class SQLiteRemoteClientsAndTabs: RemoteClientsAndTabs {
 
             // Most recent first.
             let fillTabs: (RemoteClient) -> ClientAndTabs = { client in
-                var tabs: [RemoteTab]? = nil
+                var tabs: [RemoteTab]?
                 if let guid: String = client.guid {
                     tabs = acc[guid]
                 }

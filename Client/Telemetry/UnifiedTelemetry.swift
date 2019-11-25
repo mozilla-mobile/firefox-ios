@@ -9,6 +9,13 @@ import Telemetry
 // 'Unified Telemetry' is the name for Mozilla's telemetry system
 //
 class UnifiedTelemetry {
+
+    // Boolean flag to temporarily remember if we crashed during the
+    // last run of the app. We cannot simply use `Sentry.crashedLastLaunch`
+    // because we want to clear this flag after we've already reported it
+    // to avoid re-reporting the same crash multiple times.
+    private var crashedLastLaunch: Bool
+
     private func migratePathComponentInDocumentsDirectory(_ pathComponent: String, to destinationSearchPath: FileManager.SearchPathDirectory) {
         guard let oldPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent(pathComponent).path, FileManager.default.fileExists(atPath: oldPath) else {
             return
@@ -30,6 +37,8 @@ class UnifiedTelemetry {
     }
 
     init(profile: Profile) {
+        crashedLastLaunch = Sentry.crashedLastLaunch
+
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-core", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("MozTelemetry-Default-mobile-event", to: .cachesDirectory)
         migratePathComponentInDocumentsDirectory("eventArray-MozTelemetry-Default-mobile-event.json", to: .cachesDirectory)
@@ -55,20 +64,39 @@ class UnifiedTelemetry {
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.normalbrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.privatebrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
+        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue, withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue, withDefaultValue: false)
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSliderValue.rawValue, withDefaultValue: 0)
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.themeName.rawValue, withDefaultValue: "normal")
-
+        telemetryConfig.measureUserDefaultsSetting(forKey: "profile.show-translation", withDefaultValue: true)
 
         let prefs = profile.prefs
         Telemetry.default.beforeSerializePing(pingType: CorePingBuilder.PingType) { (inputDict) -> [String: Any?] in
             var outputDict = inputDict // make a mutable copy
-            if let newTabChoice = prefs.stringForKey(NewTabAccessors.PrefKey) {
+
+            var settings: [String: Any?] = inputDict["settings"] as? [String: Any?] ?? [:]
+
+            if let newTabChoice = prefs.stringForKey(NewTabAccessors.HomePrefKey) {
                 outputDict["defaultNewTabExperience"] = newTabChoice as AnyObject?
             }
             if let chosenEmailClient = prefs.stringForKey(PrefsKeys.KeyMailToOption) {
                 outputDict["defaultMailClient"] = chosenEmailClient as AnyObject?
             }
+
+            // Report this flag as a `1` or `0` integer to allow it
+            // to be counted easily when reporting. Then, clear the
+            // flag to avoid it getting reported multiple times.
+            settings["crashedLastLaunch"] = self.crashedLastLaunch ? 1 : 0
+            self.crashedLastLaunch = false
+
+            outputDict["settings"] = settings
+            
+            var userInterfaceStyle = "unknown" // unknown implies that device is on pre-iOS 13
+            if #available(iOS 13.0, *) {
+                userInterfaceStyle = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
+            }
+            outputDict["systemTheme"] = userInterfaceStyle
+
             return outputDict
         }
 
@@ -118,6 +146,7 @@ extension UnifiedTelemetry {
     public enum EventCategory: String {
         case action = "action"
         case appExtensionAction = "app-extension-action"
+        case prompt = "prompt"
     }
 
     public enum EventMethod: String {
@@ -135,6 +164,7 @@ extension UnifiedTelemetry {
         case scan = "scan"
         case share = "share"
         case tap = "tap"
+        case translate = "translate"
         case view = "view"
         case applicationOpenUrl = "application-open-url"
     }
@@ -160,6 +190,10 @@ extension UnifiedTelemetry {
         case trackingProtectionWhitelist = "tracking-protection-whitelist"
         case url = "url"
         case searchText = "searchText"
+        case whatsNew = "whats-new"
+        case dismissedOnboarding = "dismissed-onboarding"
+        case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
+        case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
     }
 
     public enum EventValue: String {
@@ -168,6 +202,7 @@ extension UnifiedTelemetry {
         case awesomebarResults = "awesomebar-results"
         case bookmarksPanel = "bookmarks-panel"
         case browser = "browser"
+        case contextMenu = "context-menu"
         case downloadCompleteToast = "download-complete-toast"
         case downloadsPanel = "downloads-panel"
         case homePanel = "home-panel"
@@ -181,6 +216,11 @@ extension UnifiedTelemetry {
         case shareMenu = "share-menu"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
+        case systemThemeSwitch = "system-theme-switch"
+        case themeModeManually = "theme-manually"
+        case themeModeAutomatically = "theme-automatically"
+        case themeLight = "theme-light"
+        case themeDark = "theme-dark"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any?]? = nil) {

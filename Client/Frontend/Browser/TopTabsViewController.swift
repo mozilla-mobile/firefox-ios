@@ -51,6 +51,7 @@ class TopTabsViewController: UIViewController {
         tabsButton.semanticContentAttribute = .forceLeftToRight
         tabsButton.addTarget(self, action: #selector(TopTabsViewController.tabsTrayTapped), for: .touchUpInside)
         tabsButton.accessibilityIdentifier = "TopTabsViewController.tabsButton"
+        tabsButton.inTopTabs = true
         return tabsButton
     }()
 
@@ -83,7 +84,7 @@ class TopTabsViewController: UIViewController {
         tabDisplayManager = TabDisplayManager(collectionView: self.collectionView, tabManager: self.tabManager, tabDisplayer: self, reuseID: TopTabCell.Identifier)
         collectionView.dataSource = tabDisplayManager
         collectionView.delegate = tabLayoutDelegate
-        [UICollectionElementKindSectionHeader, UICollectionElementKindSectionFooter].forEach {
+        [UICollectionView.elementKindSectionHeader, UICollectionView.elementKindSectionFooter].forEach {
             collectionView.register(TopTabsHeaderFooter.self, forSupplementaryViewOfKind: $0, withReuseIdentifier: "HeaderFooter")
         }
     }
@@ -94,10 +95,10 @@ class TopTabsViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        view.setNeedsLayout()
+        view.layoutIfNeeded()
         tabDisplayManager.refreshStore(evenIfHidden: true)
     }
-
 
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
@@ -106,10 +107,8 @@ class TopTabsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if LeanPlumClient.shared.enableTabBarReorder.boolValue() {
-            collectionView.dragDelegate = tabDisplayManager
-            collectionView.dropDelegate = tabDisplayManager
-        }
+        collectionView.dragDelegate = tabDisplayManager
+        collectionView.dropDelegate = tabDisplayManager
 
         let topTabFader = TopTabFader()
         topTabFader.semanticContentAttribute = .forceLeftToRight
@@ -127,7 +126,7 @@ class TopTabsViewController: UIViewController {
 
         newTab.snp.makeConstraints { make in
             make.centerY.equalTo(view)
-            make.trailing.equalTo(tabsButton.snp.leading).offset(-10)
+            make.trailing.equalTo(tabsButton.snp.leading)
             make.size.equalTo(view.snp.height)
         }
         tabsButton.snp.makeConstraints { make in
@@ -227,7 +226,7 @@ extension TopTabsViewController: TabDisplayer {
 
 extension TopTabsViewController: TopTabCellDelegate {
     func tabCellDidClose(_ cell: UICollectionViewCell) {
-        tabDisplayManager.close(cell: cell)
+        tabDisplayManager.closeActionPerformed(forCell: cell)
     }
 }
 

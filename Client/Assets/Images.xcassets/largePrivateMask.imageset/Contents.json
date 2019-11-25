@@ -2,11 +2,14 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "largePrivateMask.pdf"
+      "filename" : "privatebrowsing.pdf"
     }
   ],
   "info" : {
     "version" : 1,
     "author" : "xcode"
+  },
+ "properties" : {
+      "preserves-vector-representation" : true
   }
 }

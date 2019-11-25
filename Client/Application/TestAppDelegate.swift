@@ -22,6 +22,15 @@ class TestAppDelegate: AppDelegate {
         let launchArguments = ProcessInfo.processInfo.arguments
 
         launchArguments.forEach { arg in
+            if arg.starts(with: LaunchArguments.ServerPort) {
+                let portString = arg.replacingOccurrences(of: LaunchArguments.ServerPort, with: "")
+                if let port = Int(portString) {
+                    AppInfo.webserverPort = port
+                } else {
+                    fatalError("Failed to set web server port override.")
+                }
+            }
+
             if arg.starts(with: LaunchArguments.LoadDatabasePrefix) {
                 if launchArguments.contains(LaunchArguments.ClearProfile) {
                     fatalError("Clearing profile and loading a test database is not a supported combination.")
@@ -35,7 +44,7 @@ class TestAppDelegate: AppDelegate {
 
                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
                 let filePaths = enumerator?.allObjects as! [String]
-                filePaths.filter{ $0.contains(".db") }.forEach { item in
+                filePaths.filter { $0.contains(".db") }.forEach { item in
                     try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
                 }
 
@@ -69,11 +78,14 @@ class TestAppDelegate: AppDelegate {
         return profile
     }
 
-    override func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    override func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+
         // If the app is running from a XCUITest reset all settings in the app
         if ProcessInfo.processInfo.arguments.contains(LaunchArguments.ClearProfile) {
             resetApplication()
         }
+
+        Tab.ChangeUserAgent.clear()
 
         return super.application(application, willFinishLaunchingWithOptions: launchOptions)
     }
@@ -85,8 +97,8 @@ class TestAppDelegate: AppDelegate {
         log.debug("Wiping everything for a clean start.")
 
         // Clear image cache
-        SDImageCache.shared().clearDisk()
-        SDImageCache.shared().clearMemory()
+        SDImageCache.shared.clearDisk()
+        SDImageCache.shared.clearMemory()
 
         // Clear the cookie/url cache
         URLCache.shared.removeAllCachedResponses()
@@ -111,7 +123,7 @@ class TestAppDelegate: AppDelegate {
         }
     }
 
-    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Speed up the animations to 100 times as fast.
         defer { application.keyWindow?.layer.speed = 100.0 }
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

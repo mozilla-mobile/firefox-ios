@@ -11,11 +11,18 @@ public struct PrefsKeys {
     public static let KeyNoImageModeStatus = "NoImageModeStatus"
     public static let KeyNightModeButtonIsInMenu = "NightModeButtonIsInMenuPrefKey"
     public static let KeyNightModeStatus = "NightModeStatus"
+    public static let KeyNightModeEnabledDarkTheme = "NightModeEnabledDarkTheme"
     public static let KeyMailToOption = "MailToOption"
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"
+    public static let HomePageTab = "HomePageTab"
+    public static let HomeButtonHomePageURL = "HomeButtonHomepageURL"
+    public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
+    public static let LoginsSaveEnabled = "saveLogins"
+    public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
 
+    public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
     public static let KeyTopSitesCacheSize = "topSitesCacheSize"
@@ -25,7 +32,10 @@ public struct PrefsKeys {
     public static let ASBookmarkHighlightsVisible = "ASBookmarkHighlightsVisible"
     public static let ASLastInvalidation = "ASLastInvalidation"
 
-    public static let KeyUseCustomSyncService = "useCustomSyncService"
+    public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
+    public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
+
+    public static let KeyUseCustomAccountAutoconfig = "useCustomSyncService"
     public static let KeyCustomSyncToken = "customSyncTokenServer"
     public static let KeyCustomSyncProfile = "customSyncProfileServer"
     public static let KeyCustomSyncOauth = "customSyncOauthServer"
@@ -77,7 +87,7 @@ open class MockProfilePrefs: Prefs {
     }
 
     // Public for testing.
-    open var things: NSMutableDictionary = NSMutableDictionary()
+    open var things = NSMutableDictionary()
 
     public init(things: NSMutableDictionary, prefix: String) {
         self.things = things

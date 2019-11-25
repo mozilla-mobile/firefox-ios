@@ -2,7 +2,7 @@ import logging
 import os
 import subprocess
 
-from xcrun import XCRun
+from .xcrun import XCRun
 
 here = os.path.dirname(__file__)
 logging.getLogger(__name__).addHandler(logging.NullHandler())
@@ -37,4 +37,4 @@ class XCodeBuild(object):
             raise
         finally:
             with open(self.log, 'w') as f:
-                f.writelines(out)
+                f.writelines(str(out))

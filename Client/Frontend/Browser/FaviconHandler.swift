@@ -6,20 +6,14 @@ import Foundation
 import Shared
 import Storage
 import SDWebImage
-import Deferred
 
 class FaviconHandler {
     static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
 
-    private var tabObservers: TabObservers!
     private let backgroundQueue = OperationQueue()
 
     init() {
-        self.tabObservers = registerFor(.didLoadPageMetadata, queue: backgroundQueue)
-    }
-
-    deinit {
-        unregister(tabObservers)
+        register(self, forTabEvents: .didLoadPageMetadata, .pageMetadataNotAvailable)
     }
 
     func loadFaviconURL(_ faviconURL: String, forTab tab: Tab) -> Deferred<Maybe<(Favicon, Data?)>> {
@@ -28,12 +22,12 @@ class FaviconHandler {
         }
 
         let deferred = Deferred<Maybe<(Favicon, Data?)>>()
-        let manager = SDWebImageManager.shared()
+        let manager = SDWebImageManager.shared
         let url = currentURL.absoluteString
         let site = Site(url: url, title: "")
-        let options: SDWebImageOptions = tab.isPrivate ? SDWebImageOptions([.lowPriority, .cacheMemoryOnly]) : SDWebImageOptions([.lowPriority])
+        let options: SDWebImageOptions = tab.isPrivate ? [SDWebImageOptions.lowPriority, SDWebImageOptions.fromCacheOnly] : SDWebImageOptions.lowPriority
 
-        var fetch: SDWebImageOperation? = nil
+        var fetch: SDWebImageOperation?
 
         let onProgress: SDWebImageDownloaderProgressBlock = { (receivedSize, expectedSize, _) -> Void in
             if receivedSize > FaviconHandler.MaximumFaviconSize || expectedSize > FaviconHandler.MaximumFaviconSize {
@@ -105,9 +99,13 @@ extension FaviconHandler: TabEventHandler {
             return
         }
 
-        loadFaviconURL(faviconURL, forTab: tab) >>== { (favicon, data) in
+        loadFaviconURL(faviconURL, forTab: tab).uponQueue(.main) { result in
+            guard let (favicon, data) = result.successValue else { return }
             TabEvent.post(.didLoadFavicon(favicon, with: data), for: tab)
         }
+    }
+    func tabMetadataNotAvailable(_ tab: Tab) {
+        tab.favicons.removeAll(keepingCapacity: false)
     }
 }
 

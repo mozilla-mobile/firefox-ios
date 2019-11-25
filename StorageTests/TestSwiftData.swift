@@ -98,37 +98,6 @@ class TestSwiftData: XCTestCase {
         return result.value.failureValue
     }
 
-    func testEncrypt() {
-        // XXX: Something is holding an open connection to the normal database, making it impossible
-        // to change its encryption. This kills it so that we can move on.
-        let files = MockFiles()
-        do {
-            try files.remove("testSwiftData.db")
-        } catch _ {
-        }
-        let path = testDB
-        func verifyData(_ swiftData: SwiftData) -> MaybeErrorType? {
-            let resultDeferred = swiftData.withConnection(SwiftData.Flags.readOnly) { db -> Void in
-                return ()
-            }
-            return resultDeferred.value.failureValue
-        }
-
-        XCTAssertNotNil(SwiftData(filename: path!, schema: BrowserSchema(), files: files), "Connected to unencrypted database")
-
-        // Encrypt the database.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret", schema: BrowserSchema(), files: files)), "Encrypted database")
-
-        // Now change the encryption key.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, key: "Secret2", prevKey: "Secret", schema: BrowserSchema(), files: files)), "Re-encrypted database")
-
-        // Changing the encryption without the prevKey should fail.
-        XCTAssertNotNil(verifyData(SwiftData(filename: path!, schema: BrowserSchema(), files: files)), "Failed decrypting database")
-
-        // Now remove the encryption key.
-        XCTAssertNil(verifyData(SwiftData(filename: path!, prevKey: "Secret2", schema: BrowserSchema(), files: files)), "Decrypted database")
-    }
-
     func testNulls() {
         guard let db = swiftData else {
             XCTFail("DB not open")

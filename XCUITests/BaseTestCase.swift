@@ -5,8 +5,10 @@
 import MappaMundi
 import XCTest
 
+let serverPort = Int.random(in: 1025..<65000)
+
 func path(forTestPage page: String) -> String {
-    return "http://localhost:6571/test-fixture/\(page)"
+    return "http://localhost:\(serverPort)/test-fixture/\(page)"
 }
 
 class BaseTestCase: XCTestCase {
@@ -19,7 +21,7 @@ class BaseTestCase: XCTestCase {
 
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
-    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName]
+    var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)"]
 
     func setUpScreenGraph() {
         navigator = createScreenGraph(for: self, with: app).navigator()
@@ -123,13 +125,13 @@ class BaseTestCase: XCTestCase {
 
     func waitForTabsButton() {
         if iPad() {
-        waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 10)
+        waitForExistence(app.buttons["TopTabsViewController.tabsButton"], timeout: 15)
         } else {
             // iPhone sim tabs button is called differently when in portrait or landscape
             if (XCUIDevice.shared.orientation == UIDeviceOrientation.landscapeLeft) {
-                waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 10)
+                waitForExistence(app.buttons["URLBarView.tabsButton"], timeout: 15)
             } else {
-                waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 10)
+                waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 15)
             }
         }
     }

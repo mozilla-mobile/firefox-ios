@@ -64,8 +64,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.showBottomBorder = false
-        footer.showTopBorder = false
         tableView.tableFooterView = footer
     }
 
@@ -91,7 +89,7 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
             cell.textLabel?.text = Strings.SettingsClearPrivateDataClearButton
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
-            cell.accessibilityTraits = UIAccessibilityTraitButton
+            cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearPrivateData"
             clearButton = cell
         }
@@ -180,7 +178,6 @@ class ClearPrivateDataTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        headerView?.showTopBorder = false
         var sectionTitle: String?
         if section == SectionToggles {
             sectionTitle = Strings.SettingsClearPrivateDataTitle

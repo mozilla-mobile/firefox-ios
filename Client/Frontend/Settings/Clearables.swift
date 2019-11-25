@@ -5,7 +5,6 @@
 import Foundation
 import Shared
 import WebKit
-import Deferred
 import SDWebImage
 import CoreSpotlight
 
@@ -41,9 +40,13 @@ class HistoryClearable: Clearable {
     }
 
     func clear() -> Success {
+
+        // Treat desktop sites as part of browsing history.
+        Tab.ChangeUserAgent.clear()
+
         return profile.history.clearHistory().bindQueue(.main) { success in
-            SDImageCache.shared().clearDisk()
-            SDImageCache.shared().clearMemory()
+            SDImageCache.shared.clearDisk()
+            SDImageCache.shared.clearMemory()
             self.profile.recentlyClosedTabs.clearTabs()
             CSSearchableIndex.default().deleteAllSearchableItems()
             NotificationCenter.default.post(name: .PrivateDataClearedHistory, object: nil)
@@ -151,7 +154,6 @@ class CookiesClearable: Clearable {
     }
 }
 
-@available(iOS 11, *)
 class TrackingProtectionClearable: Clearable {
     //@TODO: re-using string because we are too late in cycle to change strings
     var label: String {
@@ -160,7 +162,7 @@ class TrackingProtectionClearable: Clearable {
 
     func clear() -> Success {
         let result = Success()
-        ContentBlockerHelper.clearWhitelist() {
+        ContentBlocker.shared.clearWhitelist() {
             result.fill(Maybe(success: ()))
         }
         return result

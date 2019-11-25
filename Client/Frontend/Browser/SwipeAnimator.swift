@@ -24,6 +24,7 @@ private let DefaultParameters =
 
 protocol SwipeAnimatorDelegate: AnyObject {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView)
+    func swipeAnimatorIsAnimateAwayEnabled(_ animator: SwipeAnimator) -> Bool
 }
 
 class SwipeAnimator: NSObject {
@@ -70,6 +71,11 @@ extension SwipeAnimator {
 
     fileprivate func animateAwayWithVelocity(_ velocity: CGPoint, speed: CGFloat) {
         guard let animatingView = self.animatingView else {
+            return
+        }
+
+        if !(delegate?.swipeAnimatorIsAnimateAwayEnabled(self) ?? false) {
+            animateBackToCenter()
             return
         }
 
@@ -151,6 +157,6 @@ extension SwipeAnimator: UIGestureRecognizerDelegate {
         let cellView = recognizer.view
         let panGesture = recognizer as! UIPanGestureRecognizer
         let translation = panGesture.translation(in: cellView?.superview)
-        return fabs(translation.x) > fabs(translation.y)
+        return abs(translation.x) > abs(translation.y)
     }
 }

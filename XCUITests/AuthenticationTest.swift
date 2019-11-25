@@ -134,11 +134,11 @@ class AuthenticationTest: BaseTestCase {
         navigator.performAction(Action.UnlockLoginsSettings)
         waitForExistence(app.tables["Login List"])
         navigator.goto(SettingsScreen)
-
         // Trying again should display passcode screen since we've set the interval to be immediately.
         navigator.goto(LockedLoginsSettings)
-        waitForExistence(app.navigationBars["Enter Passcode"])
-        navigator.goto(SettingsScreen)
+        waitForExistence(app.navigationBars["Enter Passcode"], timeout: 3)
+        app.buttons["Cancel"].tap()
+        navigator.nowAt(SettingsScreen)
         navigator.goto(PasscodeSettings)
         navigator.performAction(Action.DisablePasscode)
     }
@@ -261,6 +261,6 @@ class AuthenticationTest: BaseTestCase {
         // Enter login, since the interval is reset, it will ask for password again
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.navigationBars["Enter Passcode"])
-        navigator.performAction(Action.DisablePasscode)
+        navigator.performAction(Action.UnlockLoginsSettings)
     }
 }

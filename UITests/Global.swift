@@ -278,14 +278,14 @@ class BrowserUtils {
 		var error: NSError?
 
 		let matcher = grey_allOf([
-			grey_accessibilityID("IntroViewController.scrollView"), grey_sufficientlyVisible()])
+			grey_accessibilityID("nextOnboardingButton"), grey_sufficientlyVisible()])
 
         EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &error)
 
 		if error == nil {
-            EarlGrey.selectElement(with: matcher).perform(grey_swipeFastInDirection(GREYDirection.left))
+            EarlGrey.selectElement(with: matcher).perform(grey_tap())
             let buttonMatcher = grey_allOf([
-                grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
+                grey_accessibilityID("startBrowsingOnboardingButton"), grey_sufficientlyVisible()])
 
             EarlGrey.selectElement(with: buttonMatcher).assert(grey_notNil(), error: &error)
 
@@ -294,6 +294,18 @@ class BrowserUtils {
             }
 		}
 	}
+
+    class func enterUrlAddressBar(typeUrl: String) {
+        EarlGrey.selectElement(with: grey_accessibilityID("url"))
+                .inRoot(grey_kindOfClass(UITextField.self))
+                .perform(grey_tap())
+            EarlGrey.selectElement(with: grey_accessibilityID("address"))
+                .inRoot(grey_kindOfClass(UITextField.self))
+                .perform(grey_replaceText(typeUrl))
+            EarlGrey.selectElement(with: grey_accessibilityID("address"))
+                .inRoot(grey_kindOfClass(UITextField.self))
+                .perform(grey_typeText("\n"))
+    }
 
     class func iPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
@@ -316,11 +328,14 @@ class BrowserUtils {
     }
 
 
-
     class func openClearPrivateDataDialog(_ swipe: Bool) {
         let settings_button = grey_allOf([grey_accessibilityLabel("Settings"),
                                                  grey_accessibilityID("menu-Settings")])
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+        }
 
         // Need this for simulator only
         if swipe {
@@ -410,6 +425,25 @@ class BrowserUtils {
         XCTAssertTrue(autocompleteFieldlabel != nil, "The autocomplete was not found")
         XCTAssertEqual(completion, autocompleteFieldlabel!.text, "Expected prefix matches actual prefix")
     }
+
+    class func openLibraryMenu(_ tester: KIFUITestActor) {
+        tester.waitForAnimationsToFinish()
+        tester.waitForView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
+        tester.waitForAnimationsToFinish()
+        tester.tapView(withAccessibilityIdentifier: "menu-library")
+    }
+
+    class func closeLibraryMenu(_ tester: KIFUITestActor) {
+        if iPad() {
+            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.libraryButton"))
+                .perform(grey_tap())
+        } else {
+            EarlGrey.selectElement(with: grey_accessibilityID("History"))
+                .perform(grey_swipeFastInDirection(GREYDirection.down))
+        }
+        tester.waitForAnimationsToFinish()
+    }
 }
 
 class SimplePageServer {
@@ -424,7 +458,7 @@ class SimplePageServer {
         let webServer: GCDWebServer = GCDWebServer()
 
         webServer.addHandler(forMethod: "GET", path: "/image.png", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
-            let img = UIImagePNGRepresentation(UIImage(named: "goBack")!)
+            let img = UIImage(named: "goBack")!.pngData()!
             return GCDWebServerDataResponse(data: img, contentType: "image/png")
         }
 
@@ -437,7 +471,7 @@ class SimplePageServer {
         // we may create more than one of these but we need to give them uniquie accessibility ids in the tab manager so we'll pass in a page number
         webServer.addHandler(forMethod: "GET", path: "/scrollablePage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("scrollablePage")
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int((request.query?["page"] as! String))!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
             return GCDWebServerDataResponse(html: pageData as String)
         }
@@ -445,7 +479,7 @@ class SimplePageServer {
         webServer.addHandler(forMethod: "GET", path: "/numberedPage.html", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse? in
             var pageData = self.getPageData("numberedPage")
 
-            let page = Int((request?.query["page"] as! String))!
+            let page = Int((request.query?["page"] as! String))!
             pageData = pageData.replacingOccurrences(of: "{page}", with: page.description)
 
             return GCDWebServerDataResponse(html: pageData as String)
@@ -472,11 +506,11 @@ class SimplePageServer {
             let expectedAuth = "Basic dXNlcjpwYXNz"
 
             let response: GCDWebServerDataResponse
-            if request?.headers["Authorization"] as? String == expectedAuth && request?.query["logout"] == nil {
-                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")
+            if request?.headers["Authorization"] == expectedAuth && request?.query?["logout"] == nil {
+                response = GCDWebServerDataResponse(html: "<html><body>logged in</body></html>")!
             } else {
                 // Request credentials if the user isn't logged in.
-                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")
+                response = GCDWebServerDataResponse(html: "<html><body>auth fail</body></html>")!
                 response.statusCode = 401
                 response.setValue("Basic realm=\"test\"", forAdditionalHeader: "WWW-Authenticate")
             }
@@ -493,6 +527,7 @@ class SimplePageServer {
                         tester.onload = imageFound;
                         tester.onerror = imageNotFound;
                         tester.src = URL;
+                        document.body.appendChild(tester);
                     }
 
                     function imageFound() {
@@ -540,7 +575,7 @@ class SimplePageServer {
 class SearchUtils {
     static func navigateToSearchSettings(_ tester: KIFUITestActor) {
         let engine = SearchUtils.getDefaultEngine().shortName
-        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.waitForAnimationsToFinish()
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.waitForView(withAccessibilityLabel: "Settings")
@@ -556,7 +591,7 @@ class SearchUtils {
     // Given that we're at the Search Settings sheet, select the named search engine as the default.
     // Afterwards, we're still at the Search Settings sheet.
     static func selectDefaultSearchEngineName(_ tester: KIFUITestActor, engineName: String) {
-        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraitButton)
+        tester.tapView(withAccessibilityLabel: "Default Search Engine", traits: UIAccessibilityTraits.button)
         tester.waitForView(withAccessibilityLabel: "Default Search Engine")
         tester.tapView(withAccessibilityLabel: engineName)
         tester.waitForView(withAccessibilityLabel: "Search")
@@ -654,13 +689,13 @@ class PasscodeUtils {
 class HomePageUtils {
     static func navigateToHomePageSettings(_ tester: KIFUITestActor) {
         tester.waitForAnimationsToFinish()
-        tester.tapView(withAccessibilityLabel: "Menu")
+        tester.tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         tester.tapView(withAccessibilityLabel: "Settings")
         tester.tapView(withAccessibilityIdentifier: "Homepage")
     }
 
     static func homePageSetting(_ tester: KIFUITestActor) -> String? {
-        let view = tester.waitForView(withAccessibilityIdentifier: "HomePageSettingTextField")
+        let view = tester.waitForView(withAccessibilityIdentifier: "HomeAsCustomURLTextField")
         guard let textField = view as? UITextField else {
             XCTFail("View is not a textField: view is \(String(describing: view))")
             return nil

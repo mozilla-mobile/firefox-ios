@@ -67,6 +67,7 @@ class SnackButton: UIButton {
 }
 
 class SnackBar: UIView {
+    let snackbarClassIdentifier: String
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -108,9 +109,9 @@ class SnackBar: UIView {
     // The Constraint for the bottom of this snackbar. We use this to transition it
     var bottom: Constraint?
 
-    init(text: String, img: UIImage?) {
+    init(text: String, img: UIImage?, snackbarClassIdentifier: String? = nil) {
+        self.snackbarClassIdentifier = snackbarClassIdentifier ?? text
         super.init(frame: .zero)
-
         imageView.image = img ?? UIImage(named: "defaultFavicon")
         textLabel.text = text
         setup()
@@ -220,14 +221,16 @@ class TimerSnackBar: SnackBar {
         fatalError("init(coder:) has not been implemented")
     }
 
-    static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL) {
+    static func showAppStoreConfirmationBar(forTab tab: Tab, appStoreURL: URL, completion: @escaping (Bool) -> Void) {
         let bar = TimerSnackBar(text: Strings.ExternalLinkAppStoreConfirmationTitle, img: UIImage(named: "defaultFavicon"))
         let openAppStore = SnackButton(title: Strings.AppStoreString, accessibilityIdentifier: "ConfirmOpenInAppStore", bold: true) { bar in
             tab.removeSnackbar(bar)
             UIApplication.shared.open(appStoreURL, options: [:])
+            completion(true)
         }
         let cancelButton = SnackButton(title: Strings.NotNowString, accessibilityIdentifier: "CancelOpenInAppStore", bold: false) { bar in
             tab.removeSnackbar(bar)
+            completion(false)
         }
         bar.addButton(cancelButton)
         bar.addButton(openAppStore)
@@ -236,7 +239,7 @@ class TimerSnackBar: SnackBar {
 
     override func show() {
         self.timer = Timer(timeInterval: timeout, target: self, selector: #selector(timerDone), userInfo: nil, repeats: false)
-        RunLoop.current.add(self.timer!, forMode: RunLoopMode.defaultRunLoopMode)
+        RunLoop.current.add(self.timer!, forMode: RunLoop.Mode.default)
         super.show()
     }
 

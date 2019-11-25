@@ -16,11 +16,11 @@ class PrivateBrowsingTest: BaseTestCase {
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
         // Go to History screen
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
 
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
-        // History without counting Recently Closed and Synced devices
+        // History without counting Clear Recent History and Recently Closed
         let history = app.tables["History List"].cells.count - 2
 
         XCTAssertEqual(history, 1, "History entries in regular browsing do not match")
@@ -30,7 +30,7 @@ class PrivateBrowsingTest: BaseTestCase {
 
         navigator.openURL(url2)
         waitForValueContains(app.textFields["url"], value: "facebook")
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
         XCTAssertTrue(app.tables["History List"].staticTexts[url1Label].exists)
         XCTAssertFalse(app.tables["History List"].staticTexts[url2Label].exists)
@@ -101,8 +101,9 @@ class PrivateBrowsingTest: BaseTestCase {
 
         // Now the enable the Close Private Tabs when closing the Private Browsing Button
         app.collectionViews.cells[url1Label].tap()
+        waitForTabsButton()
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.nowAt(BrowserTab)
-        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(SettingsScreen)
         closePrivateTabsSwitch.tap()
         navigator.goto(BrowserTab)
@@ -217,10 +218,10 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         // This action to enable private mode is defined on HomePanel Screen that is why we need to open a new tab and be sure we are on that screen to use the correct action
         navigator.goto(NewTabScreen)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarHomePanel)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
-        // History without counting Recently Closed and Synced devices
-        let history = app.tables["History List"].cells.count - 2
+        // History without counting Clear Recent History, Recently Closed and Synced devices
+        let history = app.tables["History List"].cells.count - 3
         XCTAssertEqual(history, 0, "History list should be empty")
     }
 
@@ -236,10 +237,10 @@ class PrivateBrowsingTestIpad: IpadOnlyTestCase {
         // Open website and check it does not appear under history once going back to regular mode
         navigator.openURL("http://example.com")
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateModeFromTabBarBrowserTab)
-        navigator.goto(HomePanel_History)
+        navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables["History List"])
-        // History without counting Recently Closed and Synced devices
-        let history = app.tables["History List"].cells.count - 2
+        // History without counting Clear Recent History, Recently Closed and Synced devices
+        let history = app.tables["History List"].cells.count - 3
         XCTAssertEqual(history, 1, "There should be one entry in History")
         let savedToHistory = app.tables["History List"].cells.staticTexts[url1Label]
         waitForExistence(savedToHistory)

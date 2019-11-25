@@ -44,13 +44,13 @@ public struct DateGroupedTableData<T: Equatable> {
     }
 
     mutating public func remove(_ item: T) {
-        if let index = today.index(where: { item == $0.0 }) {
+        if let index = today.firstIndex(where: { item == $0.0 }) {
             today.remove(at: index)
-        } else if let index = yesterday.index(where: { item == $0.0 }) {
+        } else if let index = yesterday.firstIndex(where: { item == $0.0 }) {
             yesterday.remove(at: index)
-        } else if let index = lastWeek.index(where: { item == $0.0 }) {
+        } else if let index = lastWeek.firstIndex(where: { item == $0.0 }) {
             lastWeek.remove(at: index)
-        } else if let index = older.index(where: { item == $0.0 }) {
+        } else if let index = older.firstIndex(where: { item == $0.0 }) {
             older.remove(at: index)
         }
     }

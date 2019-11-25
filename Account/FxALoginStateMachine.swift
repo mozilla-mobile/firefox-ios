@@ -6,7 +6,6 @@ import Foundation
 import FxA
 import Shared
 import XCGLogger
-import Deferred
 
 // TODO: log to an FxA-only, persistent log file.
 private let log = Logger.syncLogger
@@ -17,6 +16,7 @@ private let KeyUnwrappingError = NSError(domain: "org.mozilla", code: 1, userInf
 protocol FxALoginClient {
     func keyPair() -> Deferred<Maybe<KeyPair>>
     func keys(_ keyFetchToken: Data) -> Deferred<Maybe<FxAKeysResponse>>
+    func scopedKeyData(_ sessionToken: NSData, scope: String) -> Deferred<Maybe<[FxAScopedKeyDataResponse]>>
     func sign(_ sessionToken: Data, publicKey: PublicKey) -> Deferred<Maybe<FxASignResponse>>
 }
 

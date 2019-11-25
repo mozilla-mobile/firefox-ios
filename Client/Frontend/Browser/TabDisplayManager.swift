@@ -6,6 +6,15 @@ import Foundation
 import Shared
 import Storage
 
+extension UIGestureRecognizer {
+    func cancel() {
+        if isEnabled {
+            isEnabled = false
+            isEnabled = true
+        }
+    }
+}
+
 // MARK: Delegate for animation completion notifications.
 enum TabAnimationType {
     case addTab
@@ -45,13 +54,7 @@ class TabDisplayManager: NSObject {
     weak var tabDisplayCompletionDelegate: TabDisplayCompletionDelegate?
 
     fileprivate let tabManager: TabManager
-
-    // Instead of using UICollectionView.hasActiveDrag, manage the 'drag is active' flag ourselves in order to cancel the drag. UICollectionView has no drag cancellation support.
-    // ANY tab manager operation that arrives should set this to false, effectively cancelling the drag.
-    var isDragging = false
     fileprivate let collectionView: UICollectionView
-
-    private var tabObservers: TabObservers!
     fileprivate weak var tabDisplayer: TabDisplayer?
     private let tabReuseIdentifer: String
 
@@ -70,6 +73,33 @@ class TabDisplayManager: NSObject {
 
     private(set) var isPrivate = false
 
+    // Sigh. Dragging on the collection view is either an 'active drag' where the item is moved, or
+    // that the item has been long pressed on (and not moved yet), and this gesture recognizer has been triggered
+    var isDragging: Bool {
+        return collectionView.hasActiveDrag || isLongPressGestureStarted
+    }
+
+    fileprivate var isLongPressGestureStarted: Bool {
+        var started = false
+        collectionView.gestureRecognizers?.forEach { recognizer in
+            if let _ = recognizer as? UILongPressGestureRecognizer, recognizer.state == .began || recognizer.state == .changed {
+                started = true
+            }
+        }
+        return started
+    }
+
+    @discardableResult
+    fileprivate func cancelDragAndGestures() -> Bool {
+        let isActive = collectionView.hasActiveDrag || isLongPressGestureStarted
+        collectionView.cancelInteractiveMovement()
+
+        // Long-pressing a cell to initiate dragging, but not actually moving the cell, will not trigger the collectionView's internal 'interactive movement' vars/funcs, and cancelInteractiveMovement() will not work. The gesture recognizer needs to be cancelled in this case.
+        collectionView.gestureRecognizers?.forEach { $0.cancel() }
+
+        return isActive
+    }
+
     init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayer: TabDisplayer, reuseID: String) {
         self.collectionView = collectionView
         self.tabDisplayer = tabDisplayer
@@ -79,7 +109,7 @@ class TabDisplayManager: NSObject {
         super.init()
 
         tabManager.addDelegate(self)
-        self.tabObservers = registerFor(.didLoadFavicon, .didChangeURL, queue: .main)
+        register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
 
         tabsToDisplay.forEach {
             self.dataStore.insert($0)
@@ -91,6 +121,7 @@ class TabDisplayManager: NSObject {
         guard isPrivate != isOn else { return }
 
         isPrivate = isOn
+        UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
         searchedTabs = nil
         refreshStore()
@@ -159,25 +190,43 @@ class TabDisplayManager: NSObject {
             collectionView.reloadItems(at: indexPaths)
         }
 
+        tabDisplayer?.focusSelectedTab()
     }
 
-    func close(cell: UICollectionViewCell) {
+    // The user has tapped the close button or has swiped away the cell
+    func closeActionPerformed(forCell cell: UICollectionViewCell) {
+        if isDragging {
+            return
+        }
+
         guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else {
             return
         }
         tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 
-    // Once we are done with TabManager we need to call removeObservers to avoid a retain cycle with the observers
-    func removeObservers() {
-        unregister(tabObservers)
-        tabObservers = nil
-    }
-
     private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
         let isTabTray = tabDisplayer as? TabTrayController != nil
         let eventValue = isTabTray ? UnifiedTelemetry.EventValue.tabTray : UnifiedTelemetry.EventValue.topTabs
         UnifiedTelemetry.recordEvent(category: .action, method: method, object: object, value: eventValue)
+    }
+
+    // When using 'Close All', hide all the tabs so they don't animate their deletion individually
+    func hideDisplayedTabs( completion: @escaping () -> Void) {
+        let cells = collectionView.visibleCells
+
+        UIView.animate(withDuration: 0.2,
+                       animations: {
+                            cells.forEach {
+                                $0.alpha = 0
+                            }
+                        }, completion: { _ in
+                            cells.forEach {
+                                $0.alpha = 1
+                                $0.isHidden = true
+                            }
+                            completion()
+                        })
     }
 }
 
@@ -207,7 +256,7 @@ extension TabDisplayManager: UICollectionViewDataSource {
 extension TabDisplayManager: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         guard let tab = dataStore.at(index) else { return }
-        if tabsToDisplay.index(of: tab) != nil {
+        if tabsToDisplay.firstIndex(of: tab) != nil {
             tabManager.selectTab(tab)
         }
     }
@@ -241,16 +290,9 @@ extension TabDisplayManager: UIDropInteractionDelegate {
     }
 }
 
-@available(iOS 11.0, *)
 extension TabDisplayManager: UICollectionViewDragDelegate {
-    func collectionView(_ collectionView: UICollectionView, dragSessionWillBegin session: UIDragSession) {
-        isDragging = true
-    }
-
-    func collectionView(_ collectionView: UICollectionView, dragSessionDidEnd session: UIDragSession) {
-        isDragging = false
-    }
-
+    // This is called when the user has long-pressed on a cell, please note that `collectionView.hasActiveDrag` is not true
+    // until the user's finger moves. This problem is mitigated by checking the collectionView for activated long press gesture recognizers.
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
 
         guard let tab = dataStore.at(indexPath.item) else { return [] }
@@ -266,15 +308,8 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
             }
         }
 
-        // Ensure we actually have a URL for the tab being dragged and that the URL is not local.
-        // If not, just create an empty `NSItemProvider` so we can create a drag item with the
-        // `Tab` so that it can at still be re-ordered.
-        var itemProvider: NSItemProvider
-        if url != nil, !(url?.isLocal ?? true) {
-            itemProvider = NSItemProvider(contentsOf: url) ?? NSItemProvider()
-        } else {
-            itemProvider = NSItemProvider()
-        }
+        // Don't store the URL in the item as dragging a tab near the screen edge will prompt to open Safari with the URL
+        let itemProvider = NSItemProvider()
 
         recordEventAndBreadcrumb(object: .tab, method: .drag)
 
@@ -287,10 +322,9 @@ extension TabDisplayManager: UICollectionViewDragDelegate {
 @available(iOS 11.0, *)
 extension TabDisplayManager: UICollectionViewDropDelegate {
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard isDragging, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = dataStore.index(of: tab) else {
+        guard collectionView.hasActiveDrag, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = dataStore.index(of: tab) else {
             return
         }
-        isDragging = false
 
         recordEventAndBreadcrumb(object: .tab, method: .drop)
 
@@ -309,15 +343,8 @@ extension TabDisplayManager: UICollectionViewDropDelegate {
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let tab = item.localObject as? Tab else {
+        guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab else {
             return UICollectionViewDropProposal(operation: .forbidden)
-        }
-
-        // If the `isDragging` is not `true` by the time we get here, we've had other
-        // add/remove operations happen while the drag was going on. We must return a
-        // `.cancel` operation continuously until `isDragging` can be reset.
-        guard dataStore.index(of: tab) != nil, isDragging else {
-            return UICollectionViewDropProposal(operation: .cancel)
         }
 
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
@@ -345,7 +372,16 @@ extension TabDisplayManager: TabEventHandler {
                 }
             }
 
-            self?.collectionView.reloadItems(at: items)
+            for item in items {
+                if let cell = self?.collectionView.cellForItem(at: item), let tab = self?.dataStore.at(item.row) {
+                    let isSelected = (item.row == index && tab == self?.tabManager.selectedTab)
+                    if let tabCell = cell as? TabCell {
+                        tabCell.configureWith(tab: tab, is: isSelected)
+                    } else if let tabCell = cell as? TopTabCell {
+                        tabCell.configureWith(tab: tab, isSelected: isSelected)
+                    }
+                }
+            }
         }
     }
 
@@ -360,7 +396,7 @@ extension TabDisplayManager: TabEventHandler {
 
 extension TabDisplayManager: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
-        isDragging = false
+        cancelDragAndGestures()
 
         if let selected = selected {
             // A tab can be re-selected during deletion
@@ -373,28 +409,34 @@ extension TabDisplayManager: TabManagerDelegate {
         // any assumption of previous state of the view. Passing a previous tab (and relying on that to redraw the previous tab as unselected) would be making this assumption about the state of the view.
     }
 
-    func tabManager(_ tabManager: TabManager, willAddTab tab: Tab) {
-        isDragging = false
-    }
-
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
         if isRestoring {
             return
         }
 
+        if cancelDragAndGestures() {
+            refreshStore()
+            return
+        }
+
+        if tab.isPrivate != self.isPrivate {
+            return
+        }
+
         updateWith(animationType: .addTab) { [weak self] in
-            if let me = self {
-                me.dataStore.insert(tab)
-                me.collectionView.insertItems(at: [IndexPath(row: me.dataStore.count - 1, section: 0)])
+            if let me = self, let index = me.tabsToDisplay.firstIndex(of: tab) {
+                me.dataStore.insert(tab, at: index)
+                me.collectionView.insertItems(at: [IndexPath(row: index, section: 0)])
             }
         }
     }
 
-    func tabManager(_ tabManager: TabManager, willRemoveTab tab: Tab) {
-        isDragging = false
-    }
-
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+        if cancelDragAndGestures() {
+            refreshStore()
+            return
+        }
+
         let type = tabManager.normalTabs.isEmpty ? TabAnimationType.removedLastTab : TabAnimationType.removedNonLastTab
 
         updateWith(animationType: type) { [weak self] in
@@ -438,7 +480,7 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        isDragging = false
+        cancelDragAndGestures()
         refreshStore()
 
         // Need scrollToCurrentTab and not focusTab; these exact params needed to focus (without using async dispatch).
@@ -446,25 +488,10 @@ extension TabDisplayManager: TabManagerDelegate {
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
-        isDragging = false
-        refreshStore()
+        cancelDragAndGestures()
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        isDragging = false
-        refreshStore()
-    }
-}
-
-// Functions for testing
-extension TabDisplayManager {
-    func test_toggleIsDragging() {
-        assert(AppConstants.IsRunningTest)
-        isDragging = !isDragging
-    }
-
-    func test_getIsDragging() -> Bool {
-        assert(AppConstants.IsRunningTest)
-        return isDragging
+        cancelDragAndGestures()
     }
 }

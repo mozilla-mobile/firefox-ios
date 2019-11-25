@@ -3,8 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Deferred
 import Shared
+import UIKit
 import SwiftyJSON
 
 private let log = Logger.syncLogger
@@ -95,7 +95,7 @@ open class FxADeviceRegistrator {
             pushParams = nil
         }
 
-        let client = client ?? FxAClient10(authEndpoint: account.configuration.authEndpointURL, oauthEndpoint: account.configuration.oauthEndpointURL, profileEndpoint: account.configuration.profileEndpointURL)
+        let client = client ?? FxAClient10(configuration: account.configuration)
 
         let availableCommands = account.availableCommands()
 
@@ -106,7 +106,7 @@ open class FxADeviceRegistrator {
             device = FxADevice.forUpdate(account.deviceName, id: registration.id, availableCommands: availableCommands, push: pushParams)
             registrationResult = .updated
         } else {
-            device = FxADevice.forRegister(account.deviceName, type: "mobile", availableCommands: availableCommands, push: pushParams)
+            device = FxADevice.forRegister(account.deviceName, type: UIDevice.current.model.lowercased().contains("ipad") ? "tablet" : "mobile", availableCommands: availableCommands, push: pushParams)
             registrationResult = .registered
         }
 

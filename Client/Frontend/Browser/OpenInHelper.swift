@@ -6,6 +6,7 @@ import Foundation
 import MobileCoreServices
 import PassKit
 import WebKit
+import QuickLook
 import Shared
 
 struct MIMEType {
@@ -22,6 +23,7 @@ struct MIMEType {
     static let PNG = "image/png"
     static let WebP = "image/webp"
     static let Calendar = "text/calendar"
+    static let USDZ = "model/usd"
 
     private static let webViewViewableTypes: [String] = [MIMEType.Bitmap, MIMEType.GIF, MIMEType.JPEG, MIMEType.HTML, MIMEType.PDF, MIMEType.PlainText, MIMEType.PNG, MIMEType.WebP]
 
@@ -87,15 +89,23 @@ class DownloadHelper: NSObject, OpenInHelper {
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 
-        let filenameItem: PhotonActionSheetItem
+        var filenameItem: PhotonActionSheetItem
         if let expectedSize = expectedSize {
             let expectedSizeAndHost = "\(expectedSize) — \(host)"
             filenameItem = PhotonActionSheetItem(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
         } else {
             filenameItem = PhotonActionSheetItem(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
         }
+        filenameItem.customHeight = { _ in
+            return 80
+        }
+        filenameItem.customRender = { label, contentView in
+            label.numberOfLines = 2
+            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+            label.lineBreakMode = .byCharWrapping
+        }
 
-        let downloadFileItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
+        let downloadFileItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
             self.browserViewController.downloadQueue.enqueue(download)
             UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
@@ -121,27 +131,56 @@ class OpenPassBookHelper: NSObject, OpenInHelper {
 
     func open() {
         guard let passData = try? Data(contentsOf: url) else { return }
-        var error: NSError? = nil
-        let pass = PKPass(data: passData, error: &error)
-        if let _ = error {
-            // display an error
-            let alertController = UIAlertController(
-                title: Strings.UnableToAddPassErrorTitle,
-                message: Strings.UnableToAddPassErrorMessage,
-                preferredStyle: .alert)
-            alertController.addAction(
-                UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) { (action) in
+
+        do {
+            let pass = try PKPass(data: passData)
+
+            let passLibrary = PKPassLibrary()
+            if passLibrary.containsPass(pass) {
+                UIApplication.shared.open(pass.passURL!, options: [:])
+            } else {
+                if let addController = PKAddPassesViewController(pass: pass) {
+                    browserViewController.present(addController, animated: true, completion: nil)
+                }
+            }
+        } catch {
+            let alertController = UIAlertController(title: Strings.UnableToAddPassErrorTitle, message: Strings.UnableToAddPassErrorMessage, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: Strings.UnableToAddPassErrorDismiss, style: .cancel) { (action) in
                     // Do nothing.
-                })
+            })
             browserViewController.present(alertController, animated: true, completion: nil)
             return
         }
-        let passLibrary = PKPassLibrary()
-        if passLibrary.containsPass(pass) {
-            UIApplication.shared.open(pass.passURL!, options: [:])
-        } else {
-            let addController = PKAddPassesViewController(pass: pass)
-            browserViewController.present(addController, animated: true, completion: nil)
+    }
+}
+
+class OpenQLPreviewHelper: NSObject, OpenInHelper, QLPreviewControllerDataSource {
+    var url: NSURL
+
+    fileprivate let browserViewController: BrowserViewController
+
+    fileprivate let previewController: QLPreviewController
+
+    required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
+        guard let mimeType = response.mimeType, mimeType == MIMEType.USDZ, let responseURL = response.url as NSURL?, QLPreviewController.canPreview(responseURL), !forceDownload, !canShowInWebView else { return nil }
+        self.url = responseURL
+        self.browserViewController = browserViewController
+        self.previewController = QLPreviewController()
+        super.init()
+    }
+
+    func open() {
+        self.previewController.dataSource = self
+        ensureMainThread {
+            self.browserViewController.present(self.previewController, animated: true, completion: nil)
         }
+    }
+
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return 1
+    }
+
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        return self.url
     }
 }

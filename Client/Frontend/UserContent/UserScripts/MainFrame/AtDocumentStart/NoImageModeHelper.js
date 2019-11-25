@@ -70,13 +70,12 @@ Object.defineProperty(window.__firefox__.NoImageMode, "setEnabled", {
         }
 
         var backgroundImage = style.backgroundImage;
-        style.backgroundImage = "none";
         style.backgroundImage = backgroundImage;
       });
     });
   }
 });
 
-window.addEventListener("DOMContentLoaded", function (event) {
+window.addEventListener("DOMContentLoaded", function() {
   window.__firefox__.NoImageMode.setEnabled(window.__firefox__.NoImageMode.enabled);
 });

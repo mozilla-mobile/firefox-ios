@@ -50,22 +50,6 @@ public struct AppConstants {
 
     public static let PrefSendUsageData = "settings.sendUsageData"
 
-    /// Whether we just mirror (false) or actively do a full bookmark merge and upload (true).
-    public static var shouldMergeBookmarks = false
-
-    /// Should we send a repair request to other clients when the bookmarks buffer validation fails.
-    public static let MOZ_BOOKMARKS_REPAIR_REQUEST: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return false
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
-
     /// Enables support for International Domain Names (IDN)
     /// Disabled because of https://bugzilla.mozilla.org/show_bug.cgi?id=1312294
     public static let MOZ_PUNYCODE: Bool = {
@@ -115,29 +99,30 @@ public struct AppConstants {
         #endif
     }()
 
-    ///  Toggle full-text search for Awesomebar
-    public static let MOZ_ENABLE_HISTORY_FTS: Bool = {
+    ///  Toggle use of Document Services — initially language detection.
+    public static let MOZ_DOCUMENT_SERVICES: Bool = {
         #if MOZ_CHANNEL_RELEASE
-            return true
+        return false
         #elseif MOZ_CHANNEL_BETA
-            return true
+        return true
         #elseif MOZ_CHANNEL_FENNEC
-            return true
+        return true
         #else
-            return true
+        return true
+        #endif
+    }()
+    
+    /// Put it behind a feature flag as the strings didn't land in time
+    public static let MOZ_SHAKE_TO_RESTORE: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+        return false
+        #elseif MOZ_CHANNEL_BETA
+        return true
+        #elseif MOZ_CHANNEL_FENNEC
+        return true
+        #else
+        return true
         #endif
     }()
 
-    ///  Toggle use of FxA Messages (Pushbox) for "Send Tab"
-    public static let MOZ_FXA_MESSAGES: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-            return true
-        #elseif MOZ_CHANNEL_BETA
-            return true
-        #elseif MOZ_CHANNEL_FENNEC
-            return true
-        #else
-            return true
-        #endif
-    }()
 }

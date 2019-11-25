@@ -14,28 +14,30 @@ class TestBookmarks: ProfileTest {
         withTestProfile { profile -> Void in
             for i in 0...10 {
                 let bookmark = ShareItem(url: "http://www.example.com/\(i)", title: "Example \(i)", favicon: nil)
-                _ = profile.bookmarks.shareItem(bookmark).value
+                _ = profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: bookmark.url, title: bookmark.title).value
             }
 
             let expectation = self.expectation(description: "asynchronous request")
-            profile.bookmarks.modelFactory >>== {
-                guard let model = $0.modelForFolder(BookmarkRoots.MobileFolderGUID).value.successValue else {
+            profile.places.getBookmarksTree(rootGUID: BookmarkRoots.MobileFolderGUID, recursive: false) >>== { folder in
+                guard let mobileFolder = folder as? BookmarkFolder else {
                     XCTFail("Should not have failed to get mock bookmarks.")
                     expectation.fulfill()
                     return
                 }
 
                 // 11 bookmarks plus our two suggested sites.
-                XCTAssertEqual(model.current.count, 11, "We create \(model.current.count) stub bookmarks in the Mobile Bookmarks folder.")
-                let bookmark = model.current[0]
+                XCTAssertEqual(mobileFolder.children!.count, 11, "We create 11 stub bookmarks in the Mobile Bookmarks folder.")
+                let bookmark = mobileFolder.children![0]
                 XCTAssertTrue(bookmark is BookmarkItem)
                 XCTAssertTrue((bookmark as! BookmarkItem).url.hasPrefix("http://www.example.com/"), "Example URL found.")
                 expectation.fulfill()
             }
 
             self.waitForExpectations(timeout: 15.0, handler:nil)
+
             // This'll do.
-            try! profile.files.remove("mock.db")
+            _ = profile.places.forceClose()
+            try? profile.files.remove("mock_places.db")
         }
     }
 }

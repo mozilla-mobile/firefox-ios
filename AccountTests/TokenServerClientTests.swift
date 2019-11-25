@@ -9,6 +9,8 @@ import UIKit
 
 import XCTest
 
+private let ProductionTokenServerEndpointURL = URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
+
 // Testing client state is so delicate that I'm not going to test this.  The test below does two
 // requests; we would need a third, and a guarantee of the server state, to test this completely.
 // The rule is: if you turn up with a never-before-seen client state; you win.  If you turn up with
@@ -50,13 +52,13 @@ class TokenServerClientTests: LiveAccountTest {
     }
 
     func testTokenSuccess() {
-        let audience = TokenServerClient.getAudience(forURL: ProductionSync15Configuration().tokenServerEndpointURL)
+        let audience = TokenServerClient.getAudience(forURL: ProductionTokenServerEndpointURL)
 
         withCertificate { expectation, emailUTF8, keyPair, certificate in
             let assertion = JSONWebTokenUtils.createAssertionWithPrivateKeyToSign(with: keyPair.privateKey,
                 certificate: certificate, audience: audience)
 
-            let client = TokenServerClient()
+            let client = TokenServerClient(url: ProductionTokenServerEndpointURL)
             client.token(assertion!).upon { result in
                 if let token = result.successValue {
                     XCTAssertNotNil(token.id)
@@ -83,7 +85,7 @@ class TokenServerClientTests: LiveAccountTest {
 
             let assertion = "BAD ASSERTION"
 
-            let client = TokenServerClient()
+            let client = TokenServerClient(url: ProductionTokenServerEndpointURL)
             client.token(assertion).upon { result in
                 if let token = result.successValue {
                     XCTFail("Got token: \(token)")

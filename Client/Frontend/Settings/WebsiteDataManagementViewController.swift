@@ -43,7 +43,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderFooterIdentifier)
 
         let footer = ThemedTableSectionHeaderFooterView(frame: CGRect(width: tableView.bounds.width, height: SettingsUX.TableViewHeaderFooterHeight))
-        footer.showBottomBorder = false
+        footer.showBorder(for: .top, true)
         tableView.tableFooterView = footer
 
         view.addSubview(tableView)
@@ -63,6 +63,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         let searchResultsViewController = WebsiteDataSearchResultsViewController()
 
         let searchController = UISearchController(searchResultsController: searchResultsViewController)
+
+        // No need to hide the navigation bar on iPad, on iPhone the additional height is useful.
+        searchController.hidesNavigationBarDuringPresentation = UIDevice.current.userInterfaceIdiom != .pad
+
         searchController.searchResultsUpdater = searchResultsViewController
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = Strings.SettingsFilterSitesSearchLabel
@@ -96,14 +100,14 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         case .showMore:
             cell.textLabel?.text = Strings.SettingsWebsiteDataShowMoreButton
             cell.textLabel?.textColor = showMoreButtonEnabled ? UIColor.theme.general.highlightBlue : UIColor.gray
-            cell.accessibilityTraits = UIAccessibilityTraitButton
+            cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ShowMoreWebsiteData"
             showMoreButton = cell 
         case .clearAllButton:
             cell.textLabel?.text = Strings.SettingsClearAllWebsiteDataButton
             cell.textLabel?.textAlignment = .center
             cell.textLabel?.textColor = UIColor.theme.general.destructiveRed
-            cell.accessibilityTraits = UIAccessibilityTraitButton
+            cell.accessibilityTraits = UIAccessibilityTraits.button
             cell.accessibilityIdentifier = "ClearAllWebsiteData"
             clearButton = cell
         }
@@ -158,29 +162,45 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         }
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        guard editingStyle == UITableViewCellEditingStyle.delete, let record = siteRecords?[safe: indexPath.row] else {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        guard editingStyle == UITableViewCell.EditingStyle.delete, let record = siteRecords?[safe: indexPath.row] else {
             return
         }
 
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, for: [record]) {
-            self.siteRecords?.remove(at: indexPath.row)
-            self.tableView.reloadData()
-        }
+        WKWebsiteDataStore.default().removeData(ofTypes: types, for: [record]) {}
+
+        siteRecords?.remove(at: indexPath.row)
+        tableView.reloadData()
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
         headerView?.titleLabel.text = section == Section.sites.rawValue ? Strings.SettingsWebsiteDataTitle : nil
-        headerView?.showBottomBorder = false
+
+        headerView?.showBorder(for: .top, true)
+        headerView?.showBorder(for: .bottom, true)
+
+        // top section: no top border (this is a plain table)
+        guard let section = Section(rawValue: section) else { return headerView }
+        if section == .sites {
+            headerView?.showBorder(for: .top, false)
+
+            // no records: no bottom border (would make 2 with the one from the clear button)
+            let emptyRecords = siteRecords?.isEmpty ?? true
+            if emptyRecords {
+                headerView?.showBorder(for: .bottom, false)
+            }
+        }
         return headerView
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         let section = Section(rawValue: section)!
         switch section {
-        case .sites, .clearAllButton:
+        case .clearAllButton:
+            return 10 // Controls the space between the site list and the button
+        case .sites:
             return SettingsUX.TableViewHeaderFooterHeight
         case .showMore:
             return 0
@@ -189,7 +209,8 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let footerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderFooterIdentifier) as? ThemedTableSectionHeaderFooterView
-        footerView?.showBottomBorder = false
+        footerView?.showBorder(for: .top, true)
+        footerView?.showBorder(for: .bottom, true)
         return footerView
     }
 
@@ -220,10 +241,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 
     func clearWebsiteData(_ action: UIAlertAction) {
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
-        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) {
-            self.siteRecords = []
-            self.showMoreButtonEnabled = false
-            self.tableView.reloadData()
-        }
+        WKWebsiteDataStore.default().removeData(ofTypes: types, modifiedSince: .distantPast) {}
+
+        siteRecords = []
+        showMoreButtonEnabled = false
+        tableView.reloadData()
     }
 }

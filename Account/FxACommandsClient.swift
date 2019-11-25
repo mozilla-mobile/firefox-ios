@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Deferred
 import Shared
 import SwiftyJSON
 
@@ -47,7 +46,7 @@ public class FxACommandsClient {
 
         return account.marriedState() >>== { marriedState in
             let sessionToken = marriedState.sessionToken as NSData
-            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
+            let client = FxAClient10(configuration: self.account.configuration)
             return client.invokeCommand(name: commandName, targetDeviceID: deviceID, payload: payload, withSessionToken: sessionToken)
         }
     }
@@ -60,10 +59,10 @@ public class FxACommandsClient {
             }
 
             let prefs = self.account.configuration.prefs
-            var handledCommands = prefs?.arrayForKey(PrefsKeys.KeyFxAHandledCommands) as? [Int] ?? []
+            var handledCommands = prefs.arrayForKey(PrefsKeys.KeyFxAHandledCommands) as? [Int] ?? []
             handledCommands.append(contentsOf: commands.map({ $0.index }))
 
-            prefs?.setObject(handledCommands, forKey: PrefsKeys.KeyFxAHandledCommands)
+            prefs.setObject(handledCommands, forKey: PrefsKeys.KeyFxAHandledCommands)
 
             return self.handleCommands(commands) >>== { items in
                 // Once the `handledCommands` array length passes a threshold, check the
@@ -81,15 +80,15 @@ public class FxACommandsClient {
 
     public func fetchMissedRemoteCommands() -> Deferred<Maybe<[FxACommandSendTabItem]>> {
         let prefs = account.configuration.prefs
-        let lastCommandIndex = Int(prefs?.intForKey(PrefsKeys.KeyFxALastCommandIndex) ?? 0)
-        var handledCommands = prefs?.arrayForKey(PrefsKeys.KeyFxAHandledCommands) as? [Int] ?? []
+        let lastCommandIndex = Int(prefs.intForKey(PrefsKeys.KeyFxALastCommandIndex) ?? 0)
+        var handledCommands = prefs.arrayForKey(PrefsKeys.KeyFxAHandledCommands) as? [Int] ?? []
 
         handledCommands.append(lastCommandIndex)
 
         return fetchRemoteCommands(index: lastCommandIndex) >>== { response in
             let missedCommands = response.commands.filter({ !handledCommands.contains($0.index) })
-            prefs?.setInt(Int32(lastCommandIndex), forKey: PrefsKeys.KeyFxALastCommandIndex)
-            prefs?.setObject([], forKey: PrefsKeys.KeyFxAHandledCommands)
+            prefs.setInt(Int32(lastCommandIndex), forKey: PrefsKeys.KeyFxALastCommandIndex)
+            prefs.setObject([], forKey: PrefsKeys.KeyFxAHandledCommands)
 
             return self.handleCommands(missedCommands)
         }
@@ -98,7 +97,7 @@ public class FxACommandsClient {
     func fetchRemoteCommands(index: Int, limit: UInt? = nil) -> Deferred<Maybe<FxACommandsResponse>> {
         return account.marriedState() >>== { marriedState in
             let sessionToken = marriedState.sessionToken as NSData
-            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
+            let client = FxAClient10(configuration: self.account.configuration)
             return client.commands(atIndex: index, limit: limit, withSessionToken: sessionToken)
         }
     }
@@ -106,7 +105,7 @@ public class FxACommandsClient {
     func handleCommands(_ commands: [FxACommand]) -> Deferred<Maybe<[FxACommandSendTabItem]>> {
         return account.marriedState() >>== { marriedState in
             let sessionToken = marriedState.sessionToken as NSData
-            let client = FxAClient10(authEndpoint: self.account.configuration.authEndpointURL)
+            let client = FxAClient10(configuration: self.account.configuration)
             return client.devices(withSessionToken: sessionToken) >>== { response in
                 let devices = response.devices
 
@@ -286,7 +285,7 @@ open class FxACommandSendTab {
             // the message using aes128gcm.
             guard let publicKey = decryptedKey["publicKey"].string?.base64urlSafeDecodedData,
                 let authSecret = decryptedKey["authSecret"].string?.base64urlSafeDecodedData,
-                let result = (try? PushCrypto.sharedInstance.aes128gcm(plaintext: plaintext, encryptWith: publicKey, authenticateWith: authSecret).base64urlSafeEncodedString) as? String else {
+                let result = (try? PushCrypto.sharedInstance.aes128gcm(plaintext: plaintext, encryptWith: publicKey, authenticateWith: authSecret).base64urlSafeEncodedString) else {
                 return deferMaybe(FxACommandsClientError())
             }
 
@@ -312,10 +311,6 @@ open class FxACommandSendTab {
 
         // Save to Keychain.
         sendTabKeysCache.value = sendTabKeys
-
-        if let prefsBranchPrefix = account.configuration.prefs?.getBranchPrefix() {
-            print(prefsBranchPrefix)
-        }
 
         return sendTabKeys
     }

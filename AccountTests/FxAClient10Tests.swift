@@ -6,9 +6,20 @@
 import FxA
 import Shared
 import UIKit
-import Deferred
 
 import XCTest
+
+// Production Server URLs
+// From https://accounts.firefox.com/.well-known/fxa-client-configuration
+private let ProductionAuthEndpointURL = URL(string: "https://api.accounts.firefox.com/v1")!
+private let ProductionOAuthEndpointURL = URL(string: "https://oauth.accounts.firefox.com/v1")!
+private let ProductionProfileEndpointURL = URL(string: "https://profile.accounts.firefox.com/v1")!
+
+// Stage Server URLs
+// From https://accounts.stage.mozaws.net/.well-known/fxa-client-configuration
+private let StageAuthEndpointURL = URL(string: "https://api-accounts.stage.mozaws.net/v1")!
+private let StageOAuthEndpointURL = URL(string: "https://oauth.stage.mozaws.net/v1")!
+private let StageProfileEndpointURL = URL(string: "https://profile.stage.mozaws.net/v1")!
 
 class FxAClient10Tests: LiveAccountTest {
     func testUnwrapKey() {
@@ -55,7 +66,7 @@ class FxAClient10Tests: LiveAccountTest {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
             let e = self.expectation(description: "")
 
-            let client = FxAClient10()
+            let client = FxAClient10(authEndpoint: ProductionAuthEndpointURL, oauthEndpoint: ProductionOAuthEndpointURL, profileEndpoint: ProductionProfileEndpointURL)
             let result = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
             result.upon { result in
                 if let response = result.successValue {
@@ -78,7 +89,7 @@ class FxAClient10Tests: LiveAccountTest {
 
             let badPassword = FxAClient10.quickStretchPW(emailUTF8, password: "BAD PASSWORD".utf8EncodedData)
 
-            let client = FxAClient10()
+            let client = FxAClient10(authEndpoint: ProductionAuthEndpointURL, oauthEndpoint: ProductionOAuthEndpointURL, profileEndpoint: ProductionProfileEndpointURL)
             let result = client.login(emailUTF8, quickStretchedPW: badPassword, getKeys: true)
             result.upon { result in
                 if let response = result.successValue {
@@ -106,7 +117,7 @@ class FxAClient10Tests: LiveAccountTest {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
             let e = self.expectation(description: "")
 
-            let client = FxAClient10()
+            let client = FxAClient10(authEndpoint: ProductionAuthEndpointURL, oauthEndpoint: ProductionOAuthEndpointURL, profileEndpoint: ProductionProfileEndpointURL)
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
             let keys: Deferred<Maybe<FxAKeysResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
@@ -133,7 +144,7 @@ class FxAClient10Tests: LiveAccountTest {
         withVerifiedAccount { emailUTF8, quickStretchedPW in
             let e = self.expectation(description: "")
 
-            let client = FxAClient10()
+            let client = FxAClient10(authEndpoint: ProductionAuthEndpointURL, oauthEndpoint: ProductionOAuthEndpointURL, profileEndpoint: ProductionProfileEndpointURL)
             let login: Deferred<Maybe<FxALoginResponse>> = client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true)
             let sign: Deferred<Maybe<FxASignResponse>> = login.bind { (result: Maybe<FxALoginResponse>) in
                 switch result {
@@ -160,12 +171,21 @@ class FxAClient10Tests: LiveAccountTest {
 
     func testProfileSuccess() {
         withVerifiedAccountNoExpectations { emailUTF8, quickStretchedPW in
-            let stageConfiguration = StageFirefoxAccountConfiguration()
-            let client = FxAClient10(authEndpoint: stageConfiguration.authEndpointURL, oauthEndpoint: stageConfiguration.oauthEndpointURL, profileEndpoint: stageConfiguration.profileEndpointURL)
+            let client = FxAClient10(authEndpoint: StageAuthEndpointURL, oauthEndpoint: StageOAuthEndpointURL, profileEndpoint: StageProfileEndpointURL)
             let response = (client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true) >>== { login in
                 return client.getProfile(withSessionToken: login.sessionToken as NSData)
             }).value.successValue
             XCTAssertNotNil(response?.uid)
+        }
+    }
+
+    func testScopedKeyDataSuccess() {
+        withVerifiedAccountNoExpectations { emailUTF8, quickStretchedPW in
+            let client = FxAClient10(authEndpoint: StageAuthEndpointURL, oauthEndpoint: StageOAuthEndpointURL, profileEndpoint: StageProfileEndpointURL)
+            let response = (client.login(emailUTF8, quickStretchedPW: quickStretchedPW, getKeys: true) >>== { login in
+                    return client.scopedKeyData(login.sessionToken as NSData, scope: "profile")
+                }).value.successValue
+            XCTAssert(response!.count > 0)
         }
     }
 }

@@ -24,8 +24,7 @@ private struct SearchViewControllerUX {
 
     static let SearchImage = "search"
     static let SearchEngineTopBorderWidth = 0.5
-    static let SearchImageHeight: Float = 44
-    static let SearchImageWidth: Float = 24
+    static let SearchPillIconSize = 12
 
     static var SuggestionBackgroundColor: UIColor { return UIColor.theme.homePanel.searchSuggestionPillBackground }
     static var SuggestionBorderColor: UIColor { return UIColor.theme.homePanel.searchSuggestionPillForeground }
@@ -61,7 +60,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate let searchEngineScrollViewContent = UIView()
 
     fileprivate lazy var bookmarkedBadge: UIImage = {
-        return UIImage(named: "bookmarked_passive")!
+        return UIImage.templateImageNamed("bookmarked_passive")!.tinted(withColor: .lightGray).createScaled(CGSize(width: 16, height: 16))
     }()
 
     // Cell for the suggestion flow layout. Since heightForHeaderInSection is called *before*
@@ -95,7 +94,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchEngineScrollView.layer.shadowColor = SearchViewControllerUX.SearchEngineScrollViewBorderColor
         searchEngineScrollView.clipsToBounds = false
 
-        searchEngineScrollView.decelerationRate = UIScrollViewDecelerationRateFast
+        searchEngineScrollView.decelerationRate = UIScrollView.DecelerationRate.fast
         view.addSubview(searchEngineScrollView)
 
         searchEngineScrollViewContent.layer.backgroundColor = UIColor.clear.cgColor
@@ -207,11 +206,6 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
         searchButton.accessibilityLabel = String(format: NSLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button."))
 
-        searchButton.imageView?.snp.makeConstraints { make in
-            make.width.height.equalTo(SearchViewControllerUX.SearchImageWidth)
-            return
-        }
-
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
             make.size.equalTo(SearchViewControllerUX.FaviconSize)
@@ -254,7 +248,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     @objc func didSelectEngine(_ sender: UIButton) {
         // The UIButtons are the same cardinality and order as the array of quick search engines.
         // Subtract 1 from index to account for magnifying glass accessory.
-        guard let index = searchEngineScrollViewContent.subviews.index(of: sender) else {
+        guard let index = searchEngineScrollViewContent.subviews.firstIndex(of: sender) else {
             assertionFailure()
             return
         }
@@ -445,7 +439,7 @@ extension SearchViewController {
         let initialSection = SearchListSection.bookmarksAndHistory.rawValue
         guard let current = tableView.indexPathForSelectedRow else {
             let count = tableView(tableView, numberOfRowsInSection: initialSection)
-            if sender.input == UIKeyInputDownArrow, count > 0 {
+            if sender.input == UIKeyCommand.inputDownArrow, count > 0 {
                 let next = IndexPath(item: 0, section: initialSection)
                 self.tableView(tableView, didHighlightRowAt: next)
                 tableView.selectRow(at: next, animated: false, scrollPosition: .top)
@@ -457,7 +451,7 @@ extension SearchViewController {
         let nextItem: Int
         guard let input = sender.input else { return }
         switch input {
-        case UIKeyInputUpArrow:
+        case UIKeyCommand.inputUpArrow:
             // we're going down, we should check if we've reached the first item in this section.
             if current.item == 0 {
                 // We have, so check if we can decrement the section.
@@ -473,7 +467,7 @@ extension SearchViewController {
                 nextSection = current.section
                 nextItem = current.item - 1
             }
-        case UIKeyInputDownArrow:
+        case UIKeyCommand.inputDownArrow:
             let currentSectionItemsCount = tableView(tableView, numberOfRowsInSection: current.section)
             if current.item == currentSectionItemsCount - 1 {
                 if current.section == tableView.numberOfSections - 1 {
@@ -549,7 +543,7 @@ fileprivate class SuggestionCell: UITableViewCell {
     weak var delegate: SuggestionCellDelegate?
     let container = UIView()
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         isAccessibilityElement = false
@@ -582,7 +576,8 @@ fileprivate class SuggestionCell: UITableViewCell {
 
                 // If this is the first image, add the search icon.
                 if container.subviews.isEmpty {
-                    let image = UIImage(named: SearchViewControllerUX.SearchImage)
+                    let size = SearchViewControllerUX.SearchPillIconSize
+                    let image = UIImage.templateImageNamed(SearchViewControllerUX.SearchImage)?.createScaled(CGSize(width: size, height: size)).tinted(withColor: UIColor.theme.homePanel.searchSuggestionPillForeground)
                     button.setImage(image, for: [])
                     if UIApplication.shared.userInterfaceLayoutDirection == .leftToRight {
                         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)

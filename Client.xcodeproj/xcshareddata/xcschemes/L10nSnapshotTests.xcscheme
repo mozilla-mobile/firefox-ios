@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0940"
+   LastUpgradeVersion = "1020"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -53,6 +53,9 @@
                </Test>
                <Test
                   Identifier = "L10nSnapshotTests/test14SetHompage()">
+               </Test>
+               <Test
+                  Identifier = "ScreenGraphTest">
                </Test>
             </SkippedTests>
          </TestableReference>

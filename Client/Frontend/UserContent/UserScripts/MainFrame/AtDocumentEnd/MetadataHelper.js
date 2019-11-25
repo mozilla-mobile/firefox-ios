@@ -5,17 +5,34 @@
 
 "use strict";
 
-const metadataparser = require("page-metadata-parser/parser.js");
+const metadataParser = require("page-metadata-parser/parser.js");
 
 function MetadataWrapper() {
   this.getMetadata = function() {
-    return metadataparser.getMetadata(window.document, document.URL);
+    let metadata = metadataParser.getMetadata(document, document.URL);
+
+    // Default to using `document.URL` as the "official" URL.
+    metadata.url = document.URL;
+
+    // However, if this is an AMP page and a `link[rel="canonical"]`
+    // URL is available, use that instead. This is more reliable and
+    // produces better results than the URL extracted by the page
+    // metadata parser.
+    if (location.pathname.startsWith("/amp/")) {
+      let canonicalLink = document.querySelector("link[rel=\"canonical\"]");
+      let canonicalHref = canonicalLink && canonicalLink.href;
+      if (canonicalHref) {
+        metadata.url = canonicalHref;
+      }
+    }
+
+    return metadata;
   };
 }
 
-Object.defineProperty(window.__firefox__, 'metadata', {
+Object.defineProperty(window.__firefox__, "metadata", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: Object.freeze(new MetadataWrapper(metadataparser))
+  value: Object.freeze(new MetadataWrapper())
 });
