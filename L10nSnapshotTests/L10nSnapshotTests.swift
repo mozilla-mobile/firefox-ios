@@ -229,13 +229,18 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
 
     func test23SettingsETP() {
         navigator.goto(TrackingProtectionSettings)
-        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
+        
+        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
         snapshot("23TrackingProtectionBasicMoreInfo-01")
+
+        waitForExistence(app.navigationBars["Client.TPAccessoryInfo"])
         // Go back to TP settings
-        app.buttons["Tracking Protection"].tap()
+        app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.tap()
 
         // See Strict mode info
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
+        waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListStrict"])
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.tap()
+        app.tables.cells.staticTexts.firstMatch.swipeUp()
         snapshot("23TrackingProtectionStrictMoreInfo-02")
     }
 }
