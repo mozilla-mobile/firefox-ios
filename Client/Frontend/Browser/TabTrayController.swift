@@ -596,6 +596,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
 extension TabTrayController: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.dataStore.at(indexPath.item) {
+            tab.removeAllBrowsingData()
             removeByButtonOrSwipe(tab: tab, cell: cell)
         }
     }

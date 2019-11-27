@@ -328,6 +328,16 @@ class Tab: NSObject {
     }
 
     func closeAndRemovePrivateBrowsingData() {
+        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+
+        self.webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {
+            print("Done Removing Data")
+            
+        })
+//        webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
+//                                                     modifiedSince: Date.distantPast,
+//                                                 completionHandler: completionHandler)
+        
         contentScriptManager.uninstall(tab: self)
 
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
@@ -346,11 +356,37 @@ class Tab: NSObject {
     }
 
     func removeAllBrowsingData(completionHandler: @escaping () -> Void = {}) {
-        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+//        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+//
+//        webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
+//                                                     modifiedSince: Date.distantPast,
+//                                                 completionHandler: completionHandler)
+        
+//        var siteRecords: [WKWebsiteDataRecord]?
+    
+//        let types = WKWebsiteDataStore.allWebsiteDataTypes()
+//        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: types) { records in
+//            WKWebsiteDataStore.default().removeData(ofTypes: types, for: records) {}
+//        }
+        
+//        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
+//
+//        self.webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes, modifiedSince: Date.distantPast, completionHandler: {
+//            print("Done Removing Data")
+//            
+//        })
 
-        webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
-                                                     modifiedSince: Date.distantPast,
-                                                 completionHandler: completionHandler)
+//        let dataStore = WKWebsiteDataStore.default()
+//        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+//          dataStore.removeData(
+//            ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
+//            for: records.filter { $0.displayName.contains("google") }, completionHandler: completionHandler
+//          )
+//        }
+        
+//        let websiteDataTypes = NSSet(array: [WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
+//        let date = Date(timeIntervalSince1970: 0)
+//        WKWebsiteDataStore.default().removeData(ofTypes: websiteDataTypes as! Set<String>, modifiedSince: date, completionHandler:{ })
     }
 
     var loading: Bool {
