@@ -194,6 +194,7 @@ extension UnifiedTelemetry {
         case dismissedOnboarding = "dismissed-onboarding"
         case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
         case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
+        case privateBrowsingButton = "private-browsing-button"
     }
 
     public enum EventValue: String {
@@ -221,6 +222,8 @@ extension UnifiedTelemetry {
         case themeModeAutomatically = "theme-automatically"
         case themeLight = "theme-light"
         case themeDark = "theme-dark"
+        case privateTab = "private-tab"
+        case normalTab = "normal-tab"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any?]? = nil) {
