@@ -123,7 +123,7 @@ class TabDisplayManager: NSObject {
         isPrivate = isOn
         UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton)
+        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
         searchedTabs = nil
         refreshStore()
