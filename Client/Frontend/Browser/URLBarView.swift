@@ -183,6 +183,7 @@ class URLBarView: UIView {
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -204,6 +205,7 @@ class URLBarView: UIView {
 
         privateModeBadge.add(toParent: self)
         appMenuBadge.add(toParent: self)
+        warningMenuBadge.add(toParent: self)
 
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
@@ -284,6 +286,7 @@ class URLBarView: UIView {
         
         privateModeBadge.layout(onButton: tabsButton)
         appMenuBadge.layout(onButton: menuButton)
+        warningMenuBadge.layout(onButton: menuButton)
     }
 
     override func updateConstraints() {
@@ -524,7 +527,7 @@ class URLBarView: UIView {
         stopReloadButton.isHidden = !toolbarIsShowing || inOverlayMode
 
         // badge isHidden is tied to private mode on/off, use alpha to hide in this case
-        [privateModeBadge, appMenuBadge].forEach {
+        [privateModeBadge, appMenuBadge, warningMenuBadge].forEach {
             $0.badge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
             $0.backdrop.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : BadgeWithBackdrop.backdropAlpha
         }
@@ -571,7 +574,18 @@ extension URLBarView: TabToolbarProtocol {
     }
 
     func appMenuBadge(setVisible: Bool) {
+        // Warning badges should take priority over the standard badge
+        guard warningMenuBadge.badge.isHidden else {
+            return
+        }
+
         appMenuBadge.show(setVisible)
+    }
+
+    func warningMenuBadge(setVisible: Bool) {
+        // Disable other menu badges before showing the warning.
+        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
+        warningMenuBadge.show(setVisible)
     }
 
     func updateBackStatus(_ canGoBack: Bool) {
@@ -736,6 +750,7 @@ extension URLBarView: Themeable {
 
         privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
         appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 }
 

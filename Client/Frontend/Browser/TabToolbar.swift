@@ -23,6 +23,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
     func appMenuBadge(setVisible: Bool)
+    func warningMenuBadge(setVisible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -225,6 +226,7 @@ class TabToolbar: UIView {
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -240,6 +242,7 @@ class TabToolbar: UIView {
 
         privateModeBadge.add(toParent: contentView)
         appMenuBadge.add(toParent: contentView)
+        warningMenuBadge.add(toParent: contentView)
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
@@ -248,6 +251,7 @@ class TabToolbar: UIView {
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
         appMenuBadge.layout(onButton: menuButton)
+        warningMenuBadge.layout(onButton: menuButton)
 
         contentView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
@@ -295,7 +299,18 @@ extension TabToolbar: TabToolbarProtocol {
     }
 
     func appMenuBadge(setVisible: Bool) {
+        // Warning badges should take priority over the standard badge
+        guard warningMenuBadge.badge.isHidden else {
+            return
+        }
+
         appMenuBadge.show(setVisible)
+    }
+
+    func warningMenuBadge(setVisible: Bool) {
+        // Disable other menu badges before showing the warning.
+        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
+        warningMenuBadge.show(setVisible)
     }
 
     func updateBackStatus(_ canGoBack: Bool) {
@@ -326,6 +341,7 @@ extension TabToolbar: Themeable, PrivateModeUI {
 
         privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
         appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 
     func applyUIMode(isPrivate: Bool) {

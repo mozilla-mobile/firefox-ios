@@ -86,6 +86,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
         // Go to settings and set MDN as the default
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(SearchSettings)
 
         app.navigationBars["Search"].buttons["Edit"].tap()
@@ -116,6 +117,7 @@ class ThirdPartySearchTest: BaseTestCase {
         }
         app.buttons["AddSearch"].tap()
         app.alerts["Add Search Provider?"].buttons["OK"].tap()
+        waitForExistence(app.buttons["AddSearch"], timeout: 3)
         XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
     }
 

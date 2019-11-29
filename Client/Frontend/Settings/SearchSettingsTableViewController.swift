@@ -183,11 +183,21 @@ class SearchSettingsTableViewController: ThemedTableViewController {
         return false
     }
 
-    // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        // Hide a thin vertical line that iOS renders between the accessoryView and the reordering control.
         if cell.isEditing {
-            for v in cell.subviews where v.frame.width == 1.0 {
+            for v in cell.subviews where v.classForCoder.description() == "_UITableCellVerticalSeparator" {
                 v.backgroundColor = UIColor.clear
+            }
+        }
+        
+        // Change re-order control tint color to match app theme
+        for subViewA in cell.subviews where subViewA.classForCoder.description() == "UITableViewCellReorderControl" {
+            for subViewB in subViewA.subviews {
+                if let imageView = subViewB as? UIImageView {
+                    imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
+                    imageView.tintColor = UIColor.theme.tableView.accessoryViewTint
+                }
             }
         }
     }

@@ -135,10 +135,10 @@ class DevicePickerViewController: UITableViewController {
                 switch item {
                 case .client(let client):
                     clientCell.nameLabel.text = client.name
-                    clientCell.clientType = client.type == "mobile" ? .Mobile : .Desktop
+                    clientCell.clientType = ClientType.fromFxAType(client.type)
                 case .device(let device):
                     clientCell.nameLabel.text = device.name
-                    clientCell.clientType = device.type == "mobile" ? .Mobile : .Desktop
+                    clientCell.clientType = ClientType.fromFxAType(device.type)
                 }
 
                 if let id = item.identifier {
@@ -378,8 +378,28 @@ class DevicePickerTableViewHeaderCell: UITableViewCell {
 }
 
 public enum ClientType: String {
-    case Mobile = "deviceTypeMobile"
     case Desktop = "deviceTypeDesktop"
+    case Mobile = "deviceTypeMobile"
+    case Tablet = "deviceTypeTablet"
+    case VR = "deviceTypeVR"
+    case TV = "deviceTypeTV"
+
+    static func fromFxAType(_ type: String?) -> ClientType {
+        switch type {
+        case "desktop":
+            return ClientType.Desktop
+        case "mobile":
+            return ClientType.Mobile
+        case "tablet":
+            return ClientType.Tablet
+        case "vr":
+            return ClientType.VR
+        case "tv":
+            return ClientType.TV
+        default:
+            return ClientType.Mobile
+        }
+    }
 }
 
 class DevicePickerTableViewCell: UITableViewCell {

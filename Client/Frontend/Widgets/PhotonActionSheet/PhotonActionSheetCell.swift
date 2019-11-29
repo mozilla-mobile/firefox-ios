@@ -195,7 +195,7 @@ class PhotonActionSheetCell: UITableViewCell {
             case .Image:
                 let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
                 statusIcon.image = image
-                statusIcon.tintColor = self.tintColor
+                statusIcon.tintColor = action.iconTint ?? self.tintColor
             case .URL:
                 let image = UIImage(named: iconName)?.createScaled(PhotonActionSheetUX.IconSize)
                 statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
@@ -264,15 +264,14 @@ class PhotonActionSheetCell: UITableViewCell {
             if let manager = syncManager {
                 let padding = PhotonActionSheetCell.Padding
                 if syncButton == nil {
-                    let button = SyncMenuButton(with: manager)
-                    stackView.addArrangedSubview(button)
-                    syncButton = button
+                    syncButton = SyncMenuButton(with: manager)
                     syncButton?.contentHorizontalAlignment = .center
                     syncButton?.snp.makeConstraints { make in
                         make.width.equalTo(40 + padding)
                         make.height.equalTo(40)
                     }
                 }
+                stackView.addArrangedSubview(syncButton ?? SyncMenuButton(with: manager))
                 syncButton?.updateAnimations()
                 stackView.snp.remakeConstraints { make in
                     make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0))
