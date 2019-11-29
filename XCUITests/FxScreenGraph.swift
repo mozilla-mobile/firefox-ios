@@ -1084,9 +1084,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 extension MMNavigator where T == FxUserState {
 
     func openURL(_ urlString: String, waitForLoading: Bool = true) {
+        let app = XCUIApplication()
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
+        waitForExistence(app.textFields["url"], timeout: 5)
+        app.textFields["url"].tap()
         performAction(Action.LoadURL)
     }
 
