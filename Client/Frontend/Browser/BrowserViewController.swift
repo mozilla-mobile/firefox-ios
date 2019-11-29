@@ -148,6 +148,11 @@ class BrowserViewController: UIViewController {
 
         dismissVisibleMenus()
 
+        if let tab = tabManager.selectedTab,
+            let arkController = tab.arkController {
+            arkController.viewWillTransition(to: size)
+        }
+        
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()
             self.topTabsViewController?.scrollToCurrentTab(false, centerCell: false)
