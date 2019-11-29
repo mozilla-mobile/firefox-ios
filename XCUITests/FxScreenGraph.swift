@@ -409,11 +409,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
         screenState.gesture(forAction: Action.LoadURLByTyping, Action.LoadURL) { userState in
             let url = userState.url ?? defaultURL
+            sleep(1)
             app.textFields["address"].typeText("\(url)\r")
         }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
             let url = userState.url ?? defaultURL
+            sleep(1)
             app.textFields["address"].typeText("\(url)")
         }
 
