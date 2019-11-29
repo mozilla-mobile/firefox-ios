@@ -410,12 +410,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.gesture(forAction: Action.LoadURLByTyping, Action.LoadURL) { userState in
             let url = userState.url ?? defaultURL
             sleep(1)
+            app.textFields["address"].tap()
             app.textFields["address"].typeText("\(url)\r")
         }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
             let url = userState.url ?? defaultURL
             sleep(1)
+            app.textFields["address"].tap()
             app.textFields["address"].typeText("\(url)")
         }
 
@@ -1088,8 +1090,6 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
-        waitForExistence(app.textFields["address"], timeout: 5)
-        app.textFields["address"].tap()
         performAction(Action.LoadURL)
     }
 
