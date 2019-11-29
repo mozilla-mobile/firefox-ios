@@ -227,8 +227,12 @@ class BrowserViewController: UIViewController {
         let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
         let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
 
-        let showMenuBadge = hideImagesOn || showWhatsNew
-        
+        let actionNeeded = profile.getAccount()?.actionNeeded
+        let showWarningBadge = actionNeeded != nil && actionNeeded != FxAActionNeeded.none
+
+        let showMenuBadge = showWarningBadge ? false : hideImagesOn || showWhatsNew
+
+        urlBar.warningMenuBadge(setVisible: showWarningBadge)
         urlBar.appMenuBadge(setVisible: showMenuBadge)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
@@ -240,6 +244,7 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
+            toolbar?.warningMenuBadge(setVisible: showWarningBadge)
             toolbar?.appMenuBadge(setVisible: showMenuBadge)
             updateTabCountUsingTabManager(self.tabManager)
         }

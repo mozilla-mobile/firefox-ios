@@ -98,20 +98,19 @@ class NavigationTest: BaseTestCase {
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
-        navigator.goto(LibraryPanel_History)
-        XCTAssertTrue(app.tables["History List"].staticTexts["Synced Devices"].isEnabled)
-        app.tables["History List"].staticTexts["Synced Devices"].tap()
+        navigator.goto(LibraryPanel_SyncedTabs)
+
         app.tables.buttons["Sign in to Sync"].tap()
         checkFirefoxSyncScreenShown()
         app.navigationBars["Client.FxAContentView"].buttons["Done"].tap()
-        navigator.nowAt(LibraryPanel_History)
+        navigator.nowAt(LibraryPanel_SyncedTabs)
     }
 
     private func checkFirefoxSyncScreenShown() {
         waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
        if isTablet {
-            waitForExistence(app.textFields.element(boundBy: 1), timeout: 3)
-            let email = app.textFields.element(boundBy: 1)
+            waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)
+            let email = app.webViews.textFields.element(boundBy: 0)
             // Verify the placeholdervalues here for the textFields
             let mailPlaceholder = "Email"
             let defaultMailPlaceholder = email.placeholderValue!

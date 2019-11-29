@@ -238,18 +238,31 @@ class LibraryPanelButton: UIButton {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
-        addSubview(nameLabel)
-        nameLabel.snp.makeConstraints { make in
-            make.bottom.equalToSuperview()
-            make.centerX.equalToSuperview()
-            make.width.equalToSuperview()
+
+        // For iPhone 5 screen, don't show the button labels
+        if DeviceInfo.screenSizeOrientationIndependent().width > 320 {
+            if traitCollection.userInterfaceIdiom == .phone {
+                imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 14, right: 0)
+            }
+            addSubview(nameLabel)
+            nameLabel.snp.makeConstraints { make in
+                if traitCollection.userInterfaceIdiom == .phone {
+                    // On phone screen move the label up slightly off the bottom
+                    make.bottom.equalToSuperview().inset(4)
+                } else {
+                    // On the iPad, move the label down slightly
+                    make.bottom.equalToSuperview().offset(4)
+                }
+
+                make.centerX.equalToSuperview()
+                make.width.equalToSuperview()
+            }
+            nameLabel.adjustsFontSizeToFitWidth = true
+            nameLabel.minimumScaleFactor = 0.7
+            nameLabel.numberOfLines = 1
+            nameLabel.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultSmallFontSize - 1)
+            nameLabel.textAlignment = .center
         }
-        nameLabel.adjustsFontSizeToFitWidth = true
-        nameLabel.minimumScaleFactor = 0.7
-        nameLabel.numberOfLines = 1
-        nameLabel.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
-        nameLabel.textAlignment = .center
     }
 
     required init(coder: NSCoder) {
