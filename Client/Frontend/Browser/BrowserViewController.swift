@@ -217,6 +217,19 @@ class BrowserViewController: UIViewController {
         make.right.bottom.left.equalToSuperview()
     }
 
+    @objc fileprivate func appMenuBadgeUpdate() {
+        let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
+        let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
+        let actionNeeded = profile.getAccount()?.actionNeeded
+        let showWarningBadge = actionNeeded != nil && actionNeeded != FxAActionNeeded.none
+        let showMenuBadge = showWarningBadge ? false : hideImagesOn || showWhatsNew
+
+        urlBar.warningMenuBadge(setVisible: showWarningBadge)
+        urlBar.appMenuBadge(setVisible: showMenuBadge)
+        toolbar?.warningMenuBadge(setVisible: showWarningBadge)
+        toolbar?.appMenuBadge(setVisible: showMenuBadge)
+    }
+
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
@@ -224,16 +237,6 @@ class BrowserViewController: UIViewController {
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
 
-        let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
-        let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
-
-        let actionNeeded = profile.getAccount()?.actionNeeded
-        let showWarningBadge = actionNeeded != nil && actionNeeded != FxAActionNeeded.none
-
-        let showMenuBadge = showWarningBadge ? false : hideImagesOn || showWhatsNew
-
-        urlBar.warningMenuBadge(setVisible: showWarningBadge)
-        urlBar.appMenuBadge(setVisible: showMenuBadge)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         toolbar = nil
@@ -244,10 +247,10 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
-            toolbar?.warningMenuBadge(setVisible: showWarningBadge)
-            toolbar?.appMenuBadge(setVisible: showMenuBadge)
             updateTabCountUsingTabManager(self.tabManager)
         }
+
+        appMenuBadgeUpdate()
 
         if showTopTabs {
             if topTabsViewController == nil {
@@ -455,6 +458,8 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
     }
 
     fileprivate func setupConstraints() {
