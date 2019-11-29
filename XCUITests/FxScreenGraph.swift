@@ -1088,8 +1088,8 @@ extension MMNavigator where T == FxUserState {
         UIPasteboard.general.string = urlString
         userState.url = urlString
         userState.waitForLoading = waitForLoading
-        waitForExistence(app.textFields["url"], timeout: 5)
-        app.textFields["url"].tap()
+        waitForExistence(app.textFields["address"], timeout: 5)
+        app.textFields["address"].tap()
         performAction(Action.LoadURL)
     }
 
