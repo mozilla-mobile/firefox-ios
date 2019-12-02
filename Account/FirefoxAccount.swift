@@ -49,7 +49,15 @@ open class FirefoxAccount {
 
     private(set) open var commandsClient: FxACommandsClient!
 
-    let stateCache: KeychainCache<FxAState>
+    // Add notification on state change (checkpoint is called on each change)
+    class KeychainCacheState : KeychainCache<FxAState> {
+        open override func checkpoint() {
+            super.checkpoint()
+            NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
+        }
+    }
+
+    let stateCache: KeychainCacheState
 
     open var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
 
@@ -75,7 +83,7 @@ open class FirefoxAccount {
         self.deviceRegistration = deviceRegistration
         self.declinedEngines = declinedEngines
         self.configuration = configuration
-        self.stateCache = stateCache
+        self.stateCache = KeychainCacheState(branch: stateCache.branch, label: stateCache.label, value: stateCache.value)
         self.stateCache.checkpoint()
         self.fxaProfile = nil
         self.deviceName = deviceName
