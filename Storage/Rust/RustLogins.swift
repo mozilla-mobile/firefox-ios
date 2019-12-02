@@ -157,16 +157,18 @@ public class RustLogins {
         return error
     }
 
-    public func forceClose() -> NSError? {
-        var error: NSError?
-
+    public func interrupt() {
         do {
             try storage.interrupt()
         } catch let err as NSError {
-            error = err
-
             Sentry.shared.sendWithStacktrace(message: "Error interrupting Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
         }
+    }
+
+    public func forceClose() -> NSError? {
+        var error: NSError?
+
+        interrupt()
 
         queue.sync {
             guard isOpen else { return }
