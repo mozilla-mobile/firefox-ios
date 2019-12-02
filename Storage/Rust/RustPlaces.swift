@@ -267,6 +267,10 @@ public class RustPlaces {
         return error
     }
 
+    public func interrupt() {
+        api?.interrupt()
+    }
+
     public func forceClose() -> NSError? {
         var error: NSError? = nil
 
