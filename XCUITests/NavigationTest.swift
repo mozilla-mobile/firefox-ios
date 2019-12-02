@@ -82,19 +82,29 @@ class NavigationTest: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         waitForExistence(app.cells["TopSitesCell"])
     }
-    /* Failing on iPhone so disabled due to 5588
+    
     func testTapSigninShowsFxAFromSettings() {
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
         let signInToFirefoxStaticText = app.tables["AppSettingsTableViewController.tableView"].staticTexts["Sign in to Sync"]
         signInToFirefoxStaticText.tap()
-        checkFirefoxSyncScreenShown()
+        checkFirefoxSyncScreenShownViaSettings()
 
         // After that it is possible to go back to Settings
         let settingsButton = app.navigationBars["Client.FxAContentView"].buttons["Settings"]
         settingsButton.tap()
     }
-    */
+    
+    // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
+    private func checkFirefoxSyncScreenShownViaSettings() {
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
+        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
+        let email = app.webViews.textFields.element(boundBy: 0)
+        // Verify the placeholdervalues here for the textFields
+        let mailPlaceholder = "Email"
+        let defaultMailPlaceholder = email.placeholderValue!
+        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
@@ -109,14 +119,14 @@ class NavigationTest: BaseTestCase {
     private func checkFirefoxSyncScreenShown() {
         waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
        if isTablet {
-            waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)
+            waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
             let email = app.webViews.textFields.element(boundBy: 0)
             // Verify the placeholdervalues here for the textFields
             let mailPlaceholder = "Email"
             let defaultMailPlaceholder = email.placeholderValue!
             XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
         } else {
-            waitForExistence(app.textFields.element(boundBy: 0), timeout: 3)
+            waitForExistence(app.textFields.element(boundBy: 0), timeout: 20)
             let email = app.textFields.element(boundBy: 0)
             XCTAssertTrue(email.exists) // the email field
             // Verify the placeholdervalues here for the textFields
