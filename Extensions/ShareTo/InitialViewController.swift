@@ -7,19 +7,13 @@ import SnapKit
 import Shared
 import Storage
 
-// Reports portrait screen size regardless of the current orientation.
-func screenSizeOrientationIndependent() -> CGSize {
-    let screenSize = UIScreen.main.bounds.size
-    return CGSize(width: min(screenSize.width, screenSize.height), height: max(screenSize.width, screenSize.height))
-}
-
 // Small iPhone screens in landscape require that the popup have a shorter height.
 func isLandscapeSmallScreen(_ traitCollection: UITraitCollection) -> Bool {
     if !UX.enableResizeRowsForSmallScreens {
         return false
     }
 
-    let hasSmallScreen = screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
+    let hasSmallScreen = DeviceInfo.screenSizeOrientationIndependent().width <= CGFloat(UX.topViewWidth)
     return hasSmallScreen && traitCollection.verticalSizeClass == .compact
 }
 
@@ -47,7 +41,7 @@ class EmbeddedNavController {
         parent.addChild(navigationController)
         parent.view.addSubview(navigationController.view)
 
-        let width = min(screenSizeOrientationIndependent().width * 0.90, CGFloat(UX.topViewWidth))
+        let width = min(DeviceInfo.screenSizeOrientationIndependent().width * 0.90, CGFloat(UX.topViewWidth))
 
         let initialHeight = isSearchMode ? UX.topViewHeightForSearchMode : UX.topViewHeight
         navigationController.view.snp.makeConstraints { make in

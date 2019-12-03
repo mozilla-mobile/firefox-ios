@@ -31,12 +31,10 @@ class HistoryTests: BaseTestCase {
         navigator.goto(LibraryPanel_History)
         waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
         XCTAssertTrue(app.tables.cells["HistoryPanel.recentlyClosedCell"].exists)
-        XCTAssertTrue(app.tables.cells["HistoryPanel.syncedDevicesCell"].exists)
     }
 
     func testOpenSyncDevices() {
-        navigator.goto(LibraryPanel_History)
-        app.tables.cells["HistoryPanel.syncedDevicesCell"].tap()
+        navigator.goto(LibraryPanel_SyncedTabs)
         waitForExistence(app.tables.cells.staticTexts["Firefox Sync"])
         XCTAssertTrue(app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not appear")
     }

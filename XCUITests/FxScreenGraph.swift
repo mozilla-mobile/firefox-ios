@@ -303,22 +303,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     // Add the intro screens.
     var i = 0
     let introLast = allIntroPages.count - 1
-    let introPager = app.scrollViews["IntroViewController.scrollView"]
     for intro in allIntroPages {
         let prev = i == 0 ? nil : allIntroPages[i - 1]
         let next = i == introLast ? nil : allIntroPages[i + 1]
 
         map.addScreenState(intro) { screenState in
-            if let prev = prev {
-                screenState.swipeRight(introPager, to: prev)
-            }
-
             if let next = next {
-                screenState.swipeLeft(introPager, to: next)
-            }
-
-            if i > 0 {
-                let startBrowsingButton = app.buttons["IntroViewController.startBrowsingButton"]
+                screenState.tap(app.buttons["nextOnboardingButton"], to: next)
+            }  else {
+                let startBrowsingButton = app.buttons["startBrowsingOnboardingButton"]
                 screenState.tap(startBrowsingButton, to: BrowserTab)
             }
         }
@@ -541,7 +534,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(LibraryPanel_History) { screenState in
-        screenState.press(app.tables["History List"].cells.element(boundBy: 3), to: HistoryPanelContextMenu)
+        screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
         screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
             app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
@@ -683,8 +676,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
             if isTablet {
-                app.textFields.element(boundBy: 1).tap()
-                app.textFields.element(boundBy: 1).typeText(userState.fxaUsername!)
+                app.webViews.textFields.element(boundBy: 0).tap()
+                app.webViews.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
             } else {
                 app.textFields.element(boundBy: 0).tap()
                 app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
@@ -922,11 +915,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = cancelBackAction
     }
 
-    let lastButtonIsCancel = {
-        let lastIndex = app.sheets.element(boundBy: 0).buttons.count - 1
-        app.sheets.element(boundBy: 0).buttons.element(boundBy: lastIndex).tap()
-    }
-
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.textFields["url"], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
@@ -1022,14 +1010,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    map.addScreenState(WebImageContextMenu) { screenState in
-        screenState.dismissOnUse = true
-        screenState.backAction = lastButtonIsCancel
-    }
-
-    map.addScreenState(WebLinkContextMenu) { screenState in
-        screenState.dismissOnUse = true
-        screenState.backAction = lastButtonIsCancel
+    [WebImageContextMenu, WebLinkContextMenu].forEach { item in
+        map.addScreenState(item) { screenState in
+            screenState.dismissOnUse = true
+            screenState.backAction = {
+                let window = XCUIApplication().windows.element(boundBy: 0)
+                window.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+            }
+        }
     }
 
     // make sure after the menu action, navigator.nowAt() is used to set the current state
@@ -1058,7 +1046,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = navigationControllerBackAction
 
         screenState.tap(app.buttons["LibraryPanels.Bookmarks"], to: LibraryPanel_Bookmarks)
-//        screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
+        screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
         screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: LibraryPanel_ReadingList)
         screenState.tap(app.buttons["LibraryPanels.Downloads"], to: LibraryPanel_Downloads)
         screenState.tap(app.buttons["LibraryPanels.SyncedTabs"], to: LibraryPanel_SyncedTabs)

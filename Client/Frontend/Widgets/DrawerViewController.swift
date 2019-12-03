@@ -12,7 +12,7 @@ struct DrawerViewControllerUX {
     static let HandleMargin: CGFloat = 20
     static let DrawerCornerRadius: CGFloat = 10
     static let DrawerTopStop: CGFloat = 60
-    static let DrawerPadWidth: CGFloat = 320
+    static let DrawerPadWidth: CGFloat = 380
 }
 
 public class DrawerView: UIView {

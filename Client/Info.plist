@@ -20,6 +20,11 @@
 	<string>$(POCKET_API_KEY)</string>
 	<key>MozWhatsNewTopic</key>
 	<string>whats-new-ios-18</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>org.mozilla.ios.sync.part1</string>
+		<string>org.mozilla.ios.sync.part2</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -139,6 +144,7 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
+		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

@@ -8,6 +8,8 @@ extension Notification.Name {
     // add a property to allow the observation of firefox accounts
     public static let FirefoxAccountChanged = Notification.Name("FirefoxAccountChanged")
 
+    public static let FirefoxAccountStateChange = Notification.Name("FirefoxAccountStateChange")
+
     public static let FirefoxAccountProfileChanged = Notification.Name("FirefoxAccountProfileChanged")
 
     public static let FirefoxAccountDeviceRegistrationUpdated = Notification.Name("FirefoxAccountDeviceRegistrationUpdated")
