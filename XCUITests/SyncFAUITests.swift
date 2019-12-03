@@ -37,7 +37,8 @@ class SyncUITests: BaseTestCase {
     }
 
     private func verifyFxASigninScreen() {
-        waitForExistence(app.navigationBars["Client.FxAContentView"])
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
+        waitForExistence(app.webViews.textFields["Email"], timeout: 20)
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
 
@@ -80,7 +81,8 @@ class SyncUITests: BaseTestCase {
 
     func testCreateAnAccountLink() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 3)
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
+        waitForExistence(app.webViews.textFields["Email"], timeout: 20)
         userState.fxaUsername = "valid@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
@@ -91,7 +93,7 @@ class SyncUITests: BaseTestCase {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
         waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 15)
-
+        waitForExistence(app.webViews.textFields["Email"], timeout: 20)
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)

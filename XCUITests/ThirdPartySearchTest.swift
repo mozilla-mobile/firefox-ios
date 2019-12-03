@@ -87,6 +87,7 @@ class ThirdPartySearchTest: BaseTestCase {
         // Go to settings and set MDN as the default
         waitUntilPageLoad()
         waitForTabsButton()
+        navigator.nowAt(BrowserTab)
         navigator.goto(SearchSettings)
 
         app.navigationBars["Search"].buttons["Edit"].tap()

@@ -118,7 +118,7 @@ class NavigationTest: BaseTestCase {
 
     private func checkFirefoxSyncScreenShown() {
         waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
-       if isTablet {
+        if isTablet {
             waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
             let email = app.webViews.textFields.element(boundBy: 0)
             // Verify the placeholdervalues here for the textFields
