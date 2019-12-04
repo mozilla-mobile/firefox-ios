@@ -13,6 +13,14 @@ import LocalAuthentication
 private var ShowDebugSettings: Bool = false
 private var DebugSettingsClickCount: Int = 0
 
+private var disclosureIndicator: UIImageView {
+    let disclosureIndicator = UIImageView()
+    disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate)
+    disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
+    disclosureIndicator.sizeToFit()
+    return disclosureIndicator
+}
+
 // For great debugging!
 class HiddenSetting: Setting {
     unowned let settings: SettingsTableViewController
@@ -29,7 +37,7 @@ class HiddenSetting: Setting {
 
 // Sync setting for connecting a Firefox Account.  Shown when we don't have an account.
 class ConnectSetting: WithoutAccountSetting {
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var title: NSAttributedString? {
         return NSAttributedString(string: Strings.FxASignInToSync, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -159,11 +167,15 @@ class SyncNowSetting: WithAccountSetting {
     override var hidden: Bool { return !enabled }
 
     override var enabled: Bool {
-        if !DeviceInfo.hasConnectivity() {
-            return false
-        }
+        get {
+            if !DeviceInfo.hasConnectivity() {
+                return false
+            }
 
-        return profile.hasSyncableAccount()
+            return profile.hasSyncableAccount()
+        }
+        set {
+        }
     }
 
     fileprivate lazy var troubleshootButton: UIButton = {
@@ -304,24 +316,24 @@ class AccountStatusSetting: WithAccountSetting {
         return image?.createScaled(CGSize(width: 30, height: 30))
     }
 
-    override var accessoryType: UITableViewCell.AccessoryType {
+    override var accessoryView: UIImageView? {
         if let account = profile.getAccount() {
             switch account.actionNeeded {
             case .needsVerification:
                 // We link to the resend verification email page.
-                return .disclosureIndicator
+                return disclosureIndicator
             case .needsPassword:
                  // We link to the re-enter password page.
-                return .disclosureIndicator
+                return disclosureIndicator
             case .none:
                 // We link to FxA web /settings.
-                return .disclosureIndicator
+                return disclosureIndicator
             case .needsUpgrade:
                 // In future, we'll want to link to an upgrade page.
-                return .none
+                return nil
             }
         }
-        return .disclosureIndicator
+        return disclosureIndicator
     }
 
     override var title: NSAttributedString? {
@@ -707,9 +719,7 @@ class ShowIntroductionSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.browserViewController.presentIntroViewController(true)
-            }
+            BrowserViewController.foregroundBVC().presentIntroViewController(true)
         })
     }
 }
@@ -777,7 +787,7 @@ class OpenSupportPageSetting: Setting {
 class SearchSetting: Setting {
     let profile: Profile
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var style: UITableViewCell.CellStyle { return .value1 }
 
@@ -804,7 +814,7 @@ class LoginsSetting: Setting {
     weak var navigationController: UINavigationController?
     weak var settings: AppSettingsTableViewController?
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "Logins" }
 
@@ -827,8 +837,8 @@ class LoginsSetting: Setting {
     override func onClick(_: UINavigationController?) {
         deselectRow()
         
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate, let navController = navigationController else { return }
-        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: appDelegate.browserViewController).uponQueue(.main) { loginsVC in
+        guard let navController = navigationController else { return }
+        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC()).uponQueue(.main) { loginsVC in
             guard let loginsVC = loginsVC else { return }
             LeanPlumClient.shared.track(event: .openedLogins)
             navController.pushViewController(loginsVC, animated: true)
@@ -840,7 +850,7 @@ class TouchIDPasscodeSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "TouchIDPasscode" }
 
@@ -873,7 +883,7 @@ class TouchIDPasscodeSetting: Setting {
 class ContentBlockerSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
     override var accessibilityIdentifier: String? { return "TrackingProtection" }
 
     init(settings: SettingsTableViewController) {
@@ -894,7 +904,7 @@ class ClearPrivateDataSetting: Setting {
     let profile: Profile
     var tabManager: TabManager!
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "ClearPrivateData" }
 
@@ -1002,7 +1012,7 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
 class NewTabPageSetting: Setting {
     let profile: Profile
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "NewTab" }
 
@@ -1024,11 +1034,21 @@ class NewTabPageSetting: Setting {
     }
 }
 
+fileprivate func getDisclosureIndicator() -> UIImageView {
+    let disclosureIndicator = UIImageView()
+    disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate)
+    disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
+    disclosureIndicator.sizeToFit()
+    return disclosureIndicator
+}
+
 class HomeSetting: Setting {
     let profile: Profile
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
-
+    override var accessoryView: UIImageView {
+        getDisclosureIndicator()
+    }
+    
     override var accessibilityIdentifier: String? { return "Home" }
 
     override var status: NSAttributedString {
@@ -1054,7 +1074,7 @@ class HomeSetting: Setting {
 class SiriPageSetting: Setting {
     let profile: Profile
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "SiriSettings" }
 
@@ -1074,7 +1094,7 @@ class SiriPageSetting: Setting {
 class OpenWithSetting: Setting {
     let profile: Profile
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "OpenWith.Setting" }
 
@@ -1108,7 +1128,7 @@ class OpenWithSetting: Setting {
 class AdvancedAccountSetting: HiddenSetting {
     let profile: Profile
 
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
 
     override var accessibilityIdentifier: String? { return "AdvancedAccount.Setting" }
 
@@ -1134,12 +1154,16 @@ class AdvancedAccountSetting: HiddenSetting {
 
 class ThemeSetting: Setting {
     let profile: Profile
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
     override var style: UITableViewCell.CellStyle { return .value1 }
     override var accessibilityIdentifier: String? { return "DisplayThemeOption" }
 
     override var status: NSAttributedString {
-        if ThemeManager.instance.automaticBrightnessIsOn {
+        if ThemeManager.instance.systemThemeIsOn {
+            return NSAttributedString(string: Strings.SystemThemeSectionHeader)
+        } else if !ThemeManager.instance.automaticBrightnessIsOn {
+            return NSAttributedString(string: Strings.DisplayThemeManualStatusLabel)
+        } else if ThemeManager.instance.automaticBrightnessIsOn {
             return NSAttributedString(string: Strings.DisplayThemeAutomaticStatusLabel)
         }
         return NSAttributedString(string: "")
@@ -1157,7 +1181,7 @@ class ThemeSetting: Setting {
 
 class TranslationSetting: Setting {
     let profile: Profile
-    override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
+    override var accessoryView: UIImageView? { return disclosureIndicator }
     override var style: UITableViewCell.CellStyle { return .value1 }
     override var accessibilityIdentifier: String? { return "TranslationOption" }
 

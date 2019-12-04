@@ -155,7 +155,7 @@ class SearchEnginesTests: XCTestCase {
     func testUnorderedSearchEngines() {
         XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "zh-TW")).compactMap({$0.shortName}), ["Google", "Bing", "DuckDuckGo", "Wikipedia (zh)"])
         XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-CA")).compactMap({$0.shortName}), ["Google", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
-        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "de-DE")).compactMap({$0.shortName}), ["Google", "Bing", "Amazon.de", "DuckDuckGo", "Qwant", "Twitter", "Wikipedia (de)"])
+        XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "de-DE")).compactMap({$0.shortName}), ["Google", "Bing", "Amazon.de", "DuckDuckGo", "Qwant", "Twitter", "Wikipedia (de)", "Ecosia"])
         XCTAssertEqual(SearchEngines.getUnorderedBundledEnginesFor(locale: Locale(identifier: "en-US")).compactMap({$0.shortName}), ["Google", "Bing", "Amazon.com", "DuckDuckGo", "Twitter", "Wikipedia"])
     }
 

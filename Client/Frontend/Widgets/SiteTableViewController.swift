@@ -13,11 +13,8 @@ struct SiteTableViewControllerUX {
 }
 
 class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
-    // I can't get drawRect to play nicely with the glass background. As a fallback
-    // we just use views for the top and bottom borders.
-    let topBorder = UIView()
-    let bottomBorder = UIView()
     let titleLabel = UILabel()
+    fileprivate let bordersHelper = ThemedHeaderFooterViewBordersHelper()
 
     override var textLabel: UILabel? {
         return titleLabel
@@ -27,20 +24,10 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
         super.init(reuseIdentifier: reuseIdentifier)
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
 
-        addSubview(topBorder)
-        addSubview(bottomBorder)
         contentView.addSubview(titleLabel)
 
-        topBorder.snp.makeConstraints { make in
-            make.left.right.equalTo(self)
-            make.top.equalTo(self).offset(-0.5)
-            make.height.equalTo(0.5)
-        }
-
-        bottomBorder.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(self)
-            make.height.equalTo(0.5)
-        }
+        bordersHelper.initBorders(view: self)
+        setDefaultBordersValues()
 
         // A table view will initialize the header with CGSizeZero before applying the actual size. Hence, the label's constraints
         // must not impose a minimum width on the content view.
@@ -61,14 +48,23 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 
     override func prepareForReuse() {
         super.prepareForReuse()
+        setDefaultBordersValues()
         applyTheme()
     }
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        topBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
-        bottomBorder.backgroundColor = UIColor.theme.homePanel.siteTableHeaderBorder
         contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        bordersHelper.applyTheme()
+    }
+
+    func showBorder(for location: ThemedHeaderFooterViewBordersHelper.BorderLocation, _ show: Bool) {
+        bordersHelper.showBorder(for: location, show)
+    }
+
+    func setDefaultBordersValues() {
+        bordersHelper.showBorder(for: .top, true)
+        bordersHelper.showBorder(for: .bottom, true)
     }
 }
 

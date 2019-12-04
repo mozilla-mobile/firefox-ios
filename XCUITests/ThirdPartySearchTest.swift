@@ -4,31 +4,21 @@
 
 import XCTest
 
+let mozDeveloperWebsite = "https://developer.mozilla.org/en-US"
+let searchFieldPlaceholder = "Search MDN"
 class ThirdPartySearchTest: BaseTestCase {
     fileprivate func dismissKeyboardAssistant(forApp app: XCUIApplication) {
-        if iPad() {
-            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
-            searchTheDocsSearchField.typeText("\r")
-        } else {
-            app.buttons["Done"].tap()
-        }
+        app.buttons["Done"].tap()
     }
 
     func testCustomSearchEngines() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
-        if iPad() {
-            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
-            searchTheDocsSearchField.tap()
-            app.keyboards.buttons["Search"].tap()
-            searchTheDocsSearchField.tap()
-        } else {
-            app.webViews.searchFields.element(boundBy: 0).tap()
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
+        addSearchProvider()
+
+        if !isTablet {
+            dismissKeyboardAssistant(forApp: app)
         }
-        app.buttons["AddSearch"].tap()
-        app.alerts["Add Search Provider?"].buttons["OK"].tap()
-        XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
-        dismissKeyboardAssistant(forApp: app)
 
         // Perform a search using a custom search engine
         tabTrayButton(forApp: app).tap()
@@ -43,25 +33,17 @@ class ThirdPartySearchTest: BaseTestCase {
         if url.hasPrefix("https://") == false {
             url = "https://\(url)"
         }
-        XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US/search"), "The URL should indicate that the search was performed on MDN and not the default")
+        XCTAssert(url.hasPrefix("https://developer.mozilla.org/en-US"), "The URL should indicate that the search was performed on MDN and not the default")
     }
 
     func testCustomSearchEngineAsDefault() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
+        addSearchProvider()
 
-        if iPad() {
-            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
-            searchTheDocsSearchField.tap()
-            app.keyboards.buttons["Search"].tap()
-            searchTheDocsSearchField.tap()
-        } else {
-            app.webViews.searchFields.element(boundBy: 0).tap()
+        if !isTablet {
+            dismissKeyboardAssistant(forApp: app)
         }
-        app.buttons["AddSearch"].tap()
-        app.alerts["Add Search Provider?"].buttons["OK"].tap()
-        XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
-        dismissKeyboardAssistant(forApp: app)
 
         // Go to settings and set MDN as the default
         navigator.goto(SearchSettings)
@@ -82,20 +64,12 @@ class ThirdPartySearchTest: BaseTestCase {
 
     func testCustomSearchEngineDeletion() {
         // Visit MDN to add a custom search engine
-        loadWebPage("https://developer.mozilla.org/en-US/search", waitForLoadToFinish: true)
+        loadWebPage(mozDeveloperWebsite, waitForLoadToFinish: true)
+        addSearchProvider()
 
-        if iPad() {
-            let searchTheDocsSearchField = app.webViews.searchFields["Search the docs"]
-            searchTheDocsSearchField.tap()
-            app.keyboards.buttons["Search"].tap()
-            searchTheDocsSearchField.tap()
-        } else {
-            app.webViews.searchFields.element(boundBy: 0).tap()
+        if !isTablet {
+            dismissKeyboardAssistant(forApp: app)
         }
-        app.buttons["AddSearch"].tap()
-        app.alerts["Add Search Provider?"].buttons["OK"].tap()
-        XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
-        dismissKeyboardAssistant(forApp: app)
 
         let tabTrayButton = self.tabTrayButton(forApp: app)
         tabTrayButton.tap()
@@ -112,6 +86,7 @@ class ThirdPartySearchTest: BaseTestCase {
 
         // Go to settings and set MDN as the default
         waitUntilPageLoad()
+        waitForTabsButton()
         navigator.goto(SearchSettings)
 
         app.navigationBars["Search"].buttons["Edit"].tap()
@@ -129,6 +104,21 @@ class ThirdPartySearchTest: BaseTestCase {
         app.typeText("window")
         waitForNoExistence(app.scrollViews.otherElements.buttons["developer.mozilla.org search"])
         XCTAssertFalse(app.scrollViews.otherElements.buttons["developer.mozilla.org search"].exists)
+    }
+
+    private func addSearchProvider() {
+        // Tap on the search field
+        app.webViews.searchFields.element(boundBy: 0).tap()
+        // Workaround due to issue #5442
+        if isTablet {
+            app.buttons["Reload"].tap()
+            waitUntilPageLoad()
+            app.webViews.searchFields.element(boundBy: 0).tap()
+        }
+        app.buttons["AddSearch"].tap()
+        app.alerts["Add Search Provider?"].buttons["OK"].tap()
+        waitForExistence(app.buttons["AddSearch"], timeout: 3)
+        XCTAssertFalse(app.buttons["AddSearch"].isEnabled)
     }
 
     func testCustomEngineFromCorrectTemplate() {

@@ -191,8 +191,6 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in New Tab")
-        waitUntilPageLoad()
-
         // Check that two tabs are open and one of them is the default top site one
         navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
@@ -300,11 +298,14 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it
         selectOptionFromContextMenu(option: "Share")
-        if !iPad() {
-            app.buttons["Cancel"].tap()
-        }
+        // Comenting out until share sheet can be managed with automated tests issue #5477
+        //if !iPad() {
+        //    app.buttons["Cancel"].tap()
+        //}
     }
 
+    // Disable #5554
+    /*
     func testTopSitesShareNewTopSite() {
         navigator.goto(HomePanelsScreen)
         let topSiteCells = TopSiteCellgroup.cells
@@ -313,10 +314,11 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it....
         selectOptionFromContextMenu(option: "Share")
-        if !iPad() {
-            app.buttons["Cancel"].tap()
-        }
-    }
+        // Comenting out until share sheet can be managed with automated tests issue #5477
+        //if !iPad() {
+        //    app.buttons["Cancel"].tap()
+        //}
+    }*/
 
     private func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)

@@ -1191,9 +1191,12 @@ open class BrowserProfile: Profile {
             return readyDeferred.bind { readyResult in
                 guard let success = readyResult.successValue else {
                     if let tokenServerError = readyResult.failureValue as? TokenServerError,
-                        case let TokenServerError.remote(code, _, _) = tokenServerError,
-                        code == 401 {
-                        self.profile.getAccount()?.makeSeparated()
+                        case let TokenServerError.remote(code, status, _) = tokenServerError,
+                        code == 401, let acct = self.profile.getAccount() {
+                        log.debug("401 error: \(tokenServerError) \(code) \(status ?? "")")
+                        if !acct.makeCohabitingWithoutKeyPair() {
+                            acct.makeSeparated()
+                        }
                     }
                     return deferMaybe(readyResult.failureValue!)
                 }

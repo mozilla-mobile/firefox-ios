@@ -19,13 +19,15 @@ fileprivate class DarkTableViewColor: TableViewColor {
     override var headerTextLight: UIColor { return UIColor.Photon.Grey30 }
     override var headerTextDark: UIColor { return UIColor.Photon.Grey30 }
     override var syncText: UIColor { return defaultTextAndTint }
+    override var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 }
+    override var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightDark }
 }
 
 fileprivate class DarkActionMenuColor: ActionMenuColor {
-    override var foreground: UIColor { return defaultTextAndTint }
-    override var iPhoneBackground: UIColor { return UIColor.Photon.Grey90.withAlphaComponent(0.9) }
+    override var foreground: UIColor { return UIColor.Photon.White100 }
+    override var iPhoneBackgroundBlurStyle: UIBlurEffect.Style { return UIBlurEffect.Style.dark }
+    override var iPhoneBackground: UIColor { return defaultBackground.withAlphaComponent(0.9) }
     override var closeButtonBackground: UIColor { return defaultBackground }
-
 }
 
 fileprivate class DarkURLBarColor: URLBarColor {
@@ -118,7 +120,7 @@ fileprivate class DarkSnackBarColor: SnackBarColor {
 }
 
 fileprivate class DarkGeneralColor: GeneralColor {
-    override var settingsTextPlaceholder: UIColor? { return UIColor.black }
+    override var settingsTextPlaceholder: UIColor? { return UIColor.Photon.Grey50 }
     override var faviconBackground: UIColor { return UIColor.Photon.White100 }
     override var passcodeDot: UIColor { return UIColor.Photon.Grey40 }
 }

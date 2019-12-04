@@ -4,6 +4,7 @@
 import Foundation
 
 enum ThemeManagerPrefs: String {
+    case systemThemeIsOn = "prefKeySystemThemeSwitchOnOff"
     case automaticSwitchIsOn = "prefKeyAutomaticSwitchOnOff"
     case automaticSliderValue = "prefKeyAutomaticSliderValue"
     case themeName = "prefKeyThemeName"
@@ -32,17 +33,31 @@ class ThemeManager {
     var automaticBrightnessIsOn: Bool = UserDefaults.standard.bool(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue) {
         didSet {
             UserDefaults.standard.set(automaticBrightnessIsOn, forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue)
+            updateCurrentThemeBasedOnScreenBrightness()
+        }
+    }
+
+    var systemThemeIsOn: Bool {
+        didSet {
+            UserDefaults.standard.set(systemThemeIsOn, forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue)
         }
     }
 
     private init() {
+        UserDefaults.standard.register(defaults: [ThemeManagerPrefs.systemThemeIsOn.rawValue: true])
+        systemThemeIsOn = UserDefaults.standard.bool(forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue)
+
         NotificationCenter.default.addObserver(self, selector: #selector(brightnessChanged), name: UIScreen.brightnessDidChangeNotification, object: nil)
     }
 
     // UIViewControllers / UINavigationControllers need to have `preferredStatusBarStyle` and call this.
     var statusBarStyle: UIStatusBarStyle {
-        // On iPad the dark and normal theme both have a dark tab bar
-        guard UIDevice.current.userInterfaceIdiom == .phone else { return .lightContent }
+        if #available(iOS 13.0, *) {
+            if UIScreen.main.traitCollection.userInterfaceStyle == .dark && currentName == .normal {
+                return .darkContent
+            }
+        }
+
         return currentName == .dark ? .lightContent : .default
     }
 

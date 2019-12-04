@@ -5,28 +5,29 @@
 import XCTest
 
 // Tests for both platforms
-class DesktopModeTests: BaseTestCase {
+class DesktopModeTestsIpad: IpadOnlyTestCase {
     func testLongPressReload() {
+        if skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.goto(ReloadLongPressMenu)
         navigator.performAction(Action.ToggleRequestDesktopSite)
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         // Covering scenario that when reloading the page should preserve Desktop site
         navigator.performAction(Action.ReloadURL)
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
-        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
+        // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
         navigator.createNewTab()
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 }
 
@@ -134,5 +135,29 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+    }
+
+    func testLongPressReload() {
+        if skipPlatform { return }
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+
+        navigator.goto(ReloadLongPressMenu)
+        navigator.performAction(Action.ToggleRequestDesktopSite)
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+
+        // Covering scenario that when reloading the page should preserve Desktop site
+        navigator.performAction(Action.ReloadURL)
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+
+        navigator.performAction(Action.AcceptRemovingAllTabs)
+
+        // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
+        navigator.createNewTab()
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 }

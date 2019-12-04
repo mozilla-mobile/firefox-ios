@@ -10,8 +10,8 @@ import mozversion
 import pytest
 import requests
 
-from tps import TPS
-from xcodebuild import XCodeBuild
+from .tps import TPS
+from .xcodebuild import XCodeBuild
 
 here = os.path.dirname(__file__)
 

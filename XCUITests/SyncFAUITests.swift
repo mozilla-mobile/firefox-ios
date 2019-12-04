@@ -106,11 +106,12 @@ class SyncUITests: BaseTestCase {
     }
 
     // Smoketest
+    /*Disabled due to the new 6 digits authen code to verify account
     func testAccountManagementPage() {
         deleteInbox()
         // Log in
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 10)
+        waitForExistence(app.textFields.element(boundBy: 0), timeout: 20)
         userState.fxaUsername = userMail
         userState.fxaPassword = password
         navigator.performAction(Action.FxATypeEmail)
@@ -138,7 +139,7 @@ class SyncUITests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables.cells["menu-TrackingProtection"])
+        waitForExistence(app.tables.cells["menu-library"])
         // Tap on the sync name option
         navigator.goto(FxAccountManagementPage)
         waitForExistence(app.navigationBars["Firefox Account"])
@@ -150,7 +151,7 @@ class SyncUITests: BaseTestCase {
         XCTAssertTrue(app.cells.textFields["DeviceNameSettingTextField"].exists)
         XCTAssertTrue(app.cells["SignOut"].exists)
         disconnectAccount()
-    }
+    }*/
 
     private func disconnectAccount() {
         app.cells["SignOut"].tap()

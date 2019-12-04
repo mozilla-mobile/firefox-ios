@@ -30,12 +30,7 @@ class OpenWithSettingsViewController: ThemedTableViewController {
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
         headerView.titleLabel.text = Strings.SettingsOpenWithPageTitle.uppercased()
-        headerView.showTopBorder = false
-        headerView.showBottomBorder = true
-
         let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        footerView.showTopBorder = false
-        footerView.showBottomBorder = false
 
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView

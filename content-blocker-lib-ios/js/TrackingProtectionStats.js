@@ -9,48 +9,66 @@ if (webkit.messageHandlers.trackingProtectionStats) {
 }
 
 function install() {
+  let _enabled = true
+
   Object.defineProperty(window.__firefox__, "TrackingProtectionStats", {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: { enabled: false }
+    value: {}
   });
-
+  
   Object.defineProperty(window.__firefox__.TrackingProtectionStats, "setEnabled", {
     enumerable: false,
     configurable: false,
     writable: false,
     value: function(enabled, securityToken) {
-      if (securityToken !== SECURITY_TOKEN) {
+      if (securityToken !== SECURITY_TOKEN || enabled === _enabled) {
         return;
       }
 
-      if (enabled === window.__firefox__.TrackingProtectionStats.enabled) {
-        return;
-      }
-
-      window.__firefox__.TrackingProtectionStats.enabled = enabled;
-
+      _enabled = enabled;
       injectStatsTracking(enabled);
     }
   })
 
+  let sendUrls = new Array();
+  let sendUrlsTimeout = null;
+
   function sendMessage(url) {
+    if (!_enabled) { return }
+    
+    try { 
+      let mainDocHost = document.location.host;
+      let u = new URL(url);
+      // First party urls are not blocked
+      if (mainDocHost === u.host) {
+        return
+      }
+    } catch (e) {}
+
     if (url) {
-      webkit.messageHandlers.trackingProtectionStats.postMessage({ url: url });
+      sendUrls.push(url)
     }
+    
+    // If already set, return
+    if (sendUrlsTimeout) return;
+
+    // Send the URLs in batches every 200ms to avoid perf issues 
+    // from calling js-to-native too frequently. 
+    sendUrlsTimeout = setTimeout(() => {
+      sendUrlsTimeout = null;
+      if (sendUrls.length < 1) return;
+      webkit.messageHandlers.trackingProtectionStats.postMessage({ urls: sendUrls });
+      sendUrls = new Array();
+    }, 200);
   }
 
   function onLoadNativeCallback() {
     // Send back the sources of every script and image in the DOM back to the host application.
     [].slice.apply(document.scripts).forEach(function(el) { sendMessage(el.src); });
-    [].slice.apply(document.images).forEach(function(el) {
-      // If the image's natural width is zero, then it has not loaded so we
-      // can assume that it may have been blocked.
-      if (el.src && el.complete && el.naturalWidth === 0) {
-        sendMessage(el.src);
-      }
-    });
+    [].slice.apply(document.images).forEach(function(el) { sendMessage(el.src); });
+    [].slice.apply(document.getElementsByTagName('iframe')).forEach(function(el) { sendMessage(el.src); })
   }
 
   let originalXHROpen = null;
@@ -73,7 +91,7 @@ function install() {
         XMLHttpRequest.prototype.open = originalXHROpen;
         XMLHttpRequest.prototype.send = originalXHRSend;
         window.fetch = originalFetch;
-        Image.prototype.src = originalImageSrc;
+        // Image.prototype.src = originalImageSrc; // doesn't work to reset
         mutationObserver.disconnect();
 
         originalXHROpen = originalXHRSend = originalImageSrc = mutationObserver = null;
@@ -100,17 +118,7 @@ function install() {
     };
 
     XMLHttpRequest.prototype.send = function(body) {
-      // Only attach the `error` event listener once for this
-      // `XMLHttpRequest` instance.
-      if (!_tpErrorHandler.get(this)) {
-        // If this `XMLHttpRequest` instance fails to load, we
-        // can assume it has been blocked.
-        var tpErrorHandler = function() {
-          sendMessage(_url.get(this));
-        };
-        _tpErrorHandler.set(this, tpErrorHandler);
-        this.addEventListener("error", tpErrorHandler);
-      }
+      sendMessage(_url.get(this));
       return originalXHRSend.apply(this, arguments);
     };
 
@@ -122,14 +130,13 @@ function install() {
     }
 
     window.fetch = function(input, init) {
+      if (typeof input === 'string') {
+        sendMessage(input);
+      } else if (input instanceof Request) {
+        sendMessage(input.url);
+      }
+
       var result = originalFetch.apply(window, arguments);
-      result.catch(function() {
-        if (typeof input === 'string') {
-          sendMessage(input);
-        } else if (input instanceof Request) {
-          sendMessage(input.url);
-        }
-      });
       return result;
     };
 
@@ -145,31 +152,7 @@ function install() {
         return originalImageSrc.get.call(this);
       },
       set: function(value) {
-        // Only attach the `error` event listener once for this
-        // Image instance.
-        if (!_tpErrorHandler.get(this)) {
-          // If this `Image` instance fails to load, we can assume
-          // it has been blocked.
-          let tpErrorHandler = () => {
-            sendMessage(this.src);
-          };
-
-          _tpErrorHandler.set(this, tpErrorHandler);
-
-          // Unfortunately, we need to wait a tick before attaching
-          // our event listener otherwise we risk crashing the
-          // WKWebView content process (Bug 1489543).
-          requestAnimationFrame(() => {
-            // Check if the error has already occurred before
-            // we had a chance to attach our event listener.
-            if (this.src && this.complete && this.naturalWidth === 0) {
-              tpErrorHandler();
-            }
-
-            this.addEventListener("error", tpErrorHandler);
-          });
-        }
-
+        sendMessage(this.src);
         originalImageSrc.set.call(this, value);
       }
     });
@@ -183,47 +166,27 @@ function install() {
         mutation.addedNodes.forEach(function(node) {
           // `<script src="*">` elements.
           if (node.tagName === "SCRIPT" && node.src) {
-            // If the `<script>`  fails to load, we can assume
-            // it has been blocked.
-            node.addEventListener("error", function() {
-              sendMessage(node.src);
-            });
+            sendMessage(node.src);
+            return;
+          }
+          if (node.tagName === "IMG" && node.src) {
+            sendMessage(node.src);
             return;
           }
 
           // `<iframe src="*">` elements where [src] is not "about:blank".
           if (node.tagName === "IFRAME" && node.src) {
-            // Wait one tick before checking the `<iframe>`. If it is blocked
-            // this is enough time before checking it.
-            setTimeout(function() {
-              if (node.src === "about:blank") {
-                return;
-              }
+            if (node.src === "about:blank") {
+              return;
+            }
 
-              try {
-                // If an exception is thrown getting the <iframe>'s location,
-                // then we can assume that the <iframe> loaded successfully
-                // which means it was not blocked. If we can get the <iframe>'s
-                // location and it is "about:blank", but the [src] attribute is
-                // *not* "about:blank", then we can assume that the <iframe>
-                // was blocked from loading.
-                var frameHref = node.contentWindow.location.href;
-                if (frameHref === "about:blank") {
-                  sendMessage(node.src);
-                }
-              } catch (e) {}
-            }, 1);
+            sendMessage(node.src);
             return;
           }
 
           // `<link href="*">` elements.
           if (node.tagName === "LINK" && node.href) {
-            // If the `<link>` fails to load, we can assume
-            // it has been blocked.
-            node.addEventListener("error", function() {
-              sendMessage(node.href);
-            });
-            return;
+            sendMessage(node.href);
           }
         });
       });
@@ -235,8 +198,5 @@ function install() {
     });
   }
 
-  // Default to on because there is a delay in being able to enable/disable
-  // from native, and we don't want to miss events
-  window.__firefox__.TrackingProtectionStats.enabled = true;
   injectStatsTracking(true);
 }

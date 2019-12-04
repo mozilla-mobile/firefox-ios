@@ -39,12 +39,10 @@ class RequirePasscodeIntervalViewController: UITableViewController {
 
         let headerFooterFrame = CGRect(width: self.view.frame.width, height: SettingsUX.TableViewHeaderFooterHeight)
         let headerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        headerView.showTopBorder = false
-        headerView.showBottomBorder = true
+        headerView.showBorder(for: .bottom, true)
 
         let footerView = ThemedTableSectionHeaderFooterView(frame: headerFooterFrame)
-        footerView.showTopBorder = true
-        footerView.showBottomBorder = false
+        footerView.showBorder(for: .top, true)
 
         tableView.tableHeaderView = headerView
         tableView.tableFooterView = footerView

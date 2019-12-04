@@ -37,11 +37,11 @@ class ButtonToast: Toast {
 
         self.toastView.snp.makeConstraints { make in
             make.left.right.height.equalTo(self)
-            self.animationConstraint = make.top.equalTo(self).offset(ButtonToastUX.ToastHeight).constraint
+            self.animationConstraint = make.top.greaterThanOrEqualTo(self).offset(ButtonToastUX.ToastHeight).constraint
         }
 
         self.snp.makeConstraints { make in
-            make.height.equalTo(ButtonToastUX.ToastHeight)
+            make.height.greaterThanOrEqualTo(ButtonToastUX.ToastHeight)
         }
     }
 
@@ -128,6 +128,9 @@ class ButtonToast: Toast {
             make.centerX.equalTo(toastView)
             make.centerY.equalTo(toastView)
             make.width.equalTo(toastView.snp.width).offset(-2 * ButtonToastUX.ToastPadding)
+            make.bottom.equalTo(toastView.safeArea.bottom)
+            make.top.equalTo(toastView.snp.top)
+            make.height.equalTo(ButtonToastUX.ToastHeight)
         }
 
         return toastView

@@ -19,7 +19,6 @@ private struct DevicePickerViewControllerUX {
     static let TableHeaderTextColor = UIColor.Photon.Grey50
     static let TableHeaderTextPaddingLeft = CGFloat(20)
 
-    static let DeviceRowTintColor = UIColor.Photon.Green60
     static let DeviceRowHeight = CGFloat(50)
     static let DeviceRowTextFont = UIFont.systemFont(ofSize: 16)
     static let DeviceRowTextPaddingLeft = CGFloat(72)
@@ -136,10 +135,10 @@ class DevicePickerViewController: UITableViewController {
                 switch item {
                 case .client(let client):
                     clientCell.nameLabel.text = client.name
-                    clientCell.clientType = client.type == "mobile" ? .Mobile : .Desktop
+                    clientCell.clientType = ClientType.fromFxAType(client.type)
                 case .device(let device):
                     clientCell.nameLabel.text = device.name
-                    clientCell.clientType = device.type == "mobile" ? .Mobile : .Desktop
+                    clientCell.clientType = ClientType.fromFxAType(device.type)
                 }
 
                 if let id = item.identifier {
@@ -202,7 +201,7 @@ class DevicePickerViewController: UITableViewController {
         if let profile = self.profile {
             // Re-open the profile if it was shutdown. This happens when we run from an app extension, where we must
             // make sure that the profile is only open for brief moments of time.
-            if profile.isShutdown {
+            if profile.isShutdown && Bundle.main.bundleURL.pathExtension == "appex" {
                 profile._reopen()
             }
             return profile
@@ -379,8 +378,28 @@ class DevicePickerTableViewHeaderCell: UITableViewCell {
 }
 
 public enum ClientType: String {
-    case Mobile = "deviceTypeMobile"
     case Desktop = "deviceTypeDesktop"
+    case Mobile = "deviceTypeMobile"
+    case Tablet = "deviceTypeTablet"
+    case VR = "deviceTypeVR"
+    case TV = "deviceTypeTV"
+
+    static func fromFxAType(_ type: String?) -> ClientType {
+        switch type {
+        case "desktop":
+            return ClientType.Desktop
+        case "mobile":
+            return ClientType.Mobile
+        case "tablet":
+            return ClientType.Tablet
+        case "vr":
+            return ClientType.VR
+        case "tv":
+            return ClientType.TV
+        default:
+            return ClientType.Mobile
+        }
+    }
 }
 
 class DevicePickerTableViewCell: UITableViewCell {
@@ -395,7 +414,7 @@ class DevicePickerTableViewCell: UITableViewCell {
 
     var clientType = ClientType.Mobile {
         didSet {
-            self.imageView?.image = UIImage(named: clientType.rawValue)
+            self.imageView?.image = UIImage.templateImageNamed(clientType.rawValue)
         }
     }
 
@@ -406,7 +425,11 @@ class DevicePickerTableViewCell: UITableViewCell {
         nameLabel.font = DevicePickerViewControllerUX.DeviceRowTextFont
         nameLabel.numberOfLines = 2
         nameLabel.lineBreakMode = .byWordWrapping
-        self.tintColor = DevicePickerViewControllerUX.DeviceRowTintColor
+        if #available(iOS 13.0, *) {
+            self.tintColor = UIColor.label
+        } else {
+            self.tintColor = UIColor.gray
+        }
         self.preservesSuperviewLayoutMargins = false
         self.selectionStyle = .none
     }

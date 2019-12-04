@@ -21,11 +21,15 @@ class MetadataParserHelper: TabEventHandler {
         // as possible.
         guard let webView = tab.webView,
             let url = webView.url, url.isWebPage(includeDataURIs: false), !InternalURL.isValid(url: url) else {
-            return
+                TabEvent.post(.pageMetadataNotAvailable, for: tab)
+                tab.pageMetadata = nil
+                return
         }
 
         webView.evaluateJavaScript("__firefox__.metadata && __firefox__.metadata.getMetadata()") { (result, error) in
             guard error == nil else {
+                TabEvent.post(.pageMetadataNotAvailable, for: tab)
+                tab.pageMetadata = nil
                 return
             }
 
@@ -33,6 +37,8 @@ class MetadataParserHelper: TabEventHandler {
                 let pageURL = tab.url?.displayURL,
                 let pageMetadata = PageMetadata.fromDictionary(dict) else {
                     log.debug("Page contains no metadata!")
+                    TabEvent.post(.pageMetadataNotAvailable, for: tab)
+                    tab.pageMetadata = nil
                     return
             }
 

@@ -170,7 +170,8 @@ class ErrorPageHandler: InternalSchemeResponse {
             ]
 
         let tryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
-        var actions = "<button onclick='webkit.messageHandlers.localRequestHelper.postMessage({ type: \"reload\" })'>\(tryAgain)</button>"
+        var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
+                    "</script><button onclick='reloader()'>\(tryAgain)</button>"
 
         if errDomain == kCFErrorDomainCFNetwork as String {
             if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
@@ -203,26 +204,6 @@ class ErrorPageHandler: InternalSchemeResponse {
             "<p><a href='javascript:webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageCertVisitOnce)\"})'>\(Strings.ErrorPagesVisitOnceButton)</button></p>"
         }
 
-        // If a reload is requested and this much time has expired since the page was shown, try to reload the original url. Alternatively, this could have been a boolean flag to indicate if a page has been shown to the user already (the code for that would be nearly identical).
-        // The previous method for this this was to track a list of urls for which errorpage should be shown instead of trying to load the original url.
-        // This old method was too fragile to reliably add and insert urls into that list, particularly on page restoration as only native code can modify that list.
-        let expiryTimeToTryReloadOriginal_ms = 2000
-
-        variables["reloader"] = """
-        let url = new URL(location.href);
-        let lastTime = parseInt(url.searchParams.get('timestamp'), 10);
-        let originalUrl = url.searchParams.get('url');
-
-        if (isNaN(lastTime) || lastTime < 1) {
-            setTimeout(() => {
-              url.searchParams.set('timestamp', Date.now());
-              location.replace(url.toString());
-            })
-        } else if (lastTime > 0 && Date.now() - lastTime > \(expiryTimeToTryReloadOriginal_ms)) {
-        location.replace(originalUrl);
-        }
-        """
-
         variables["actions"] = actions
 
         let response = InternalSchemeHandler.response(forUrl: originalUrl)
@@ -253,15 +234,8 @@ class ErrorPageHelper {
             return
         }
 
-        // When an error page is reloaded, the js on the page checks if >2s have passed since the error page was initially loaded, and if so, it reloads the original url for the page. If that original page immediately errors out again, we don't want to push another error page on history stack. This will detect this case, and clear the timestamp to ensure the error page doesn't try to reload.
+        // Page has failed to load again, just return and keep showing the existing error page.
         if let internalUrl = InternalURL(webViewUrl), internalUrl.originalURLFromErrorPage == url {
-            webView.evaluateJavaScript("""
-                (function () {
-                   let url = new URL(location.href);
-                   url.searchParams.remove('timestamp');
-                   location.replace(url.toString());
-                })();
-            """)
             return
         }
 

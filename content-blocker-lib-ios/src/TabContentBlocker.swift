@@ -24,7 +24,7 @@ class TabContentBlocker {
 
     @objc func notifiedTabSetupRequired() {}
 
-    func currentlyEnabledLists() -> [BlocklistName] {
+    func currentlyEnabledLists() -> [BlocklistFileName] {
         return []
     }
 
@@ -34,11 +34,15 @@ class TabContentBlocker {
         guard isEnabled else {
             return .Disabled
         }
+        guard let url = tab?.currentURL() else {
+            return .NoBlockedURLs
+        }
+
+        if ContentBlocker.shared.isWhitelisted(url: url) {
+            return .Whitelisted
+        }
         if stats.total == 0 {
-            guard let url = tab?.currentURL() else {
-                return .NoBlockedURLs
-            }
-            return ContentBlocker.shared.isWhitelisted(url: url) ? .Whitelisted : .NoBlockedURLs
+            return .NoBlockedURLs
         } else {
             return .Blocking
         }
@@ -46,7 +50,7 @@ class TabContentBlocker {
 
     var stats: TPPageStats = TPPageStats() {
         didSet {
-            guard let tab = self.tab else { return }
+            guard let _ = self.tab else { return }
             if stats.total <= 1 {
                 notifyContentBlockingChanged()
             }

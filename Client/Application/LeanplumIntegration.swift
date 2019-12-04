@@ -41,6 +41,7 @@ enum LPEvent: String {
     case openedApp = "E_Opened_App"
     case dismissedOnboarding = "E_Dismissed_Onboarding"
     case dismissedOnboardingShowLogin = "E_Dismissed_Onboarding_Showed_Login"
+    case dismissedOnboardingShowSignUp = "E_Dismissed_Onboarding_Showed_SignUpFlow"
     case openedLogins = "Opened Login Manager"
     case openedBookmark = "E_Opened_Bookmark"
     case openedNewTab = "E_Opened_New_Tab"
@@ -56,6 +57,7 @@ enum LPEvent: String {
     case downloadedPocket = "E_User_Downloaded_Pocket"
     case userSharedWebpage = "E_User_Tapped_Share_Button"
     case signsInFxa = "E_User_Signed_In_To_FxA"
+    case signsUpFxa = "E_User_Signed_Up_For_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
     case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
@@ -79,8 +81,11 @@ struct MozillaAppSchemes {
     static let pocket = "pocket"
 }
 
-private let supportedLocales = ["en_US", "de_DE", "en_GB", "en_CA", "en_AU", "zh_TW", "en_HK", "en_SG",
-                        "fr_FR", "it_IT", "id_ID", "id_ID", "pt_BR", "pl_PL", "ru_RU", "es_ES", "es_MX"]
+private func isLocaleSupported() -> Bool {
+    guard let code = Locale.current.languageCode else { return false }
+    let supportedLocalePrefixes = ["en", "de", "zh", "fr", "it", "id", "pt", "pl", "ru", "es"]
+    return supportedLocalePrefixes.contains(code)
+}
 
 private struct LPSettings {
     var appId: String
@@ -102,7 +107,7 @@ class LeanPlumClient {
     private var useFxAPrePush = LPVar.define("useFxAPrePush", with: false)
     var enablePocketVideo = LPVar.define("pocketVideo", with: false)
 
-    var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
+   // var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
@@ -137,7 +142,7 @@ class LeanPlumClient {
     }
 
     fileprivate func start() {
-        guard let settings = getSettings(), supportedLocales.contains(Locale.current.identifier), !Leanplum.hasStarted() else {
+        guard let settings = getSettings(), isLocaleSupported(), !Leanplum.hasStarted() else {
             enabled = false
             log.error("LeanplumIntegration - Could not be started")
             return

@@ -74,6 +74,12 @@ class TabManager: NSObject {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         }
 
+        // Append FxiOS/version Mobile/version Safari/version to the built-in user agent
+        let desktop = UserAgent.isDesktop(ua: UserAgent.defaultUserAgent())
+        configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.appVersion) " +
+             (desktop ? "\(UserAgent.uaBitGoogleIpad) " : "\(UserAgent.uaBitMobile) ") +
+             "\(UserAgent.uaBitSafari)"
+
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
     }
@@ -210,7 +216,7 @@ class TabManager: NSObject {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
-            UITextField.appearance().keyboardAppearance = tab.isPrivate ? .dark : .light
+            tab.applyTheme()
         }
     }
 
@@ -225,7 +231,7 @@ class TabManager: NSObject {
         recentlyClosedForUndo.removeAll()
 
         // Clear every time entering/exiting this mode.
-        Tab.DesktopSites.privateModeHostList = Set<String>()
+        Tab.ChangeUserAgent.privateModeHostList = Set<String>()
 
         if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
@@ -240,8 +246,8 @@ class TabManager: NSObject {
         }
     }
 
-    func addPopupForParentTab(_ parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
-        let popup = Tab(configuration: configuration, isPrivate: parentTab.isPrivate)
+    func addPopupForParentTab(bvc: BrowserViewController, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
+        let popup = Tab(bvc: bvc, configuration: configuration, isPrivate: parentTab.isPrivate)
         configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
 
         // Wait momentarily before selecting the new tab, otherwise the parent tab
@@ -285,7 +291,8 @@ class TabManager: NSObject {
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
-        let tab = Tab(configuration: configuration, isPrivate: isPrivate)
+        let bvc = BrowserViewController.foregroundBVC()
+        let tab = Tab(bvc: bvc, configuration: configuration, isPrivate: isPrivate)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }

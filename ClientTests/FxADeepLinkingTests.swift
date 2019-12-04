@@ -24,7 +24,7 @@ class FxADeepLinkingTests: XCTestCase {
     }
 
     func testLaunchWithNilOptions() {
-        let testUrl = self.vc.createFxAURLWith(nil, profile: self.profile)
+        let testUrl = self.vc.createFxAURLWith(nil, profile: self.profile, isSignUpFlow: false)
         // Should use default urls for nil options
         XCTAssertEqual(testUrl, self.vc.profile.accountConfiguration.signInURL)
     }
@@ -33,7 +33,7 @@ class FxADeepLinkingTests: XCTestCase {
         let url = URL(string: "firefox://fxa-signin?signin=test&utm_source=somesource&entrypoint=one&ignore=this")
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
-        let testUrl = self.vc.createFxAURLWith(fxaOptions, profile: self.profile)
+        let testUrl = self.vc.createFxAURLWith(fxaOptions, profile: self.profile, isSignUpFlow: false)
         let dict = testUrl.getQuery()
         let expected = expectUrl!.getQuery()
         XCTAssertTrue(dict.contains { (key, value) -> Bool in
@@ -45,7 +45,7 @@ class FxADeepLinkingTests: XCTestCase {
         let url = URL(string: "firefox://fxa-signin?service=asdf&context=123&signin=test&entrypoint=one&utm_source=somesource&ignore=this")
         let query = url!.getQuery()
         let fxaOptions = FxALaunchParams(query: query)
-        let testUrl = self.vc.createFxAURLWith(fxaOptions, profile: self.profile)
+        let testUrl = self.vc.createFxAURLWith(fxaOptions, profile: self.profile, isSignUpFlow: false)
         let dict = testUrl.getQuery()
         let expected = expectUrl!.getQuery()
         XCTAssertTrue(dict.contains { (key, value) -> Bool in

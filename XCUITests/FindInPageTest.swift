@@ -131,7 +131,7 @@ class FindInPageTests: BaseTestCase {
         openFindInPageFromMenu()
 
         // Dismiss keyboard
-        app.otherElements["contentView"].tap()
+        app.buttons["FindInPage.close"].tap()
         navigator.nowAt(BrowserTab)
 
         // Going to tab tray and back to the website hides the search field.

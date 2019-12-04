@@ -70,14 +70,14 @@ private let miniConfig = InfoConfiguration(maxRequestBytes: 1_048_576, maxPostRe
 class Sync15BatchClientTests: XCTestCase {
 
     func testAddLargeRecordFails() {
-        let uploader: BatchUploadFunction = { _,_,_  in deferEmptyResponse(lastModified: 10_000) }
+        let uploader: BatchUploadFunction = { _,_, _  in deferEmptyResponse(lastModified: 10_000) }
         let serializeRecord = { massivify($0)?.stringify() }
 
         let batch = Sync15BatchClient(config: miniConfig,
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: serializeRecord,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _,_  in deferMaybe(Date() as! MaybeErrorType)})
+                                      onCollectionUploaded: { _, _  in deferMaybe(Date() as! MaybeErrorType)})
 
         let record = createRecordWithID(id: "A")
         let result = batch.addRecords([record]).value
@@ -86,12 +86,12 @@ class Sync15BatchClientTests: XCTestCase {
     }
 
     func testFailToSerializeRecord() {
-        let uploader: BatchUploadFunction = { _,_,_  in deferEmptyResponse(lastModified: 10_000) }
+        let uploader: BatchUploadFunction = { _,_, _  in deferEmptyResponse(lastModified: 10_000) }
         let batch = Sync15BatchClient(config: miniConfig,
                                       ifUnmodifiedSince: nil,
                                       serializeRecord: { _ in nil },
                                       uploader: uploader,
-                                      onCollectionUploaded: { _,_  in deferMaybe(Date.now())})
+                                      onCollectionUploaded: { _, _  in deferMaybe(Date.now())})
 
         let record = createRecordWithID(id: "A")
         let result = batch.addRecords([record]).value
@@ -117,7 +117,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: 10_000,
                                       serializeRecord: basicSerializer,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _,_  in deferMaybe(Date.now())})
+                                      onCollectionUploaded: { _, _  in deferMaybe(Date.now())})
 
         let record = createRecordWithID(id: "A")
         batch.addRecords([record]).succeeded()
@@ -166,7 +166,7 @@ class Sync15BatchClientTests: XCTestCase {
                                       ifUnmodifiedSince: 10_000_000,
                                       serializeRecord: basicSerializer,
                                       uploader: uploader,
-                                      onCollectionUploaded: { _,_  in deferMaybe(Date.now())})
+                                      onCollectionUploaded: { _, _  in deferMaybe(Date.now())})
 
         let recordA = createRecordWithID(id: "A")
         let recordB = createRecordWithID(id: "B")
@@ -198,7 +198,7 @@ class Sync15BatchClientTests: XCTestCase {
             return deferEmptyResponse(lastModified: 10_000)
         }
 
-        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _,_ in
+        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _, _ in
             uploadedCollectionCount += 1
             return deferMaybe(Date.now())
         }
@@ -279,7 +279,7 @@ class Sync15BatchClientTests: XCTestCase {
             }
         }
 
-        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = {_,_ in
+        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = {_, _ in
             uploadedCollectionCount += 1
             return deferMaybe(Date.now())
         }
@@ -350,7 +350,7 @@ class Sync15BatchClientTests: XCTestCase {
             }
         }
 
-        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = {_,_ in
+        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = {_, _ in
             uploadedCollectionCount += 1
             return deferMaybe(Date.now())
         }
@@ -427,7 +427,7 @@ class Sync15BatchClientTests: XCTestCase {
             }
         }
 
-        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = {_,_ in
+        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = {_, _ in
             uploadedCollectionCount += 1
             return deferMaybe(Date.now())
         }
@@ -486,7 +486,7 @@ class Sync15BatchClientTests: XCTestCase {
             }
         }
 
-        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = {_,_ in
+        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = {_, _ in
             uploadedCollectionCount += 1
             return deferMaybe(Date.now())
         }
@@ -574,7 +574,7 @@ class Sync15BatchClientTests: XCTestCase {
             }
         }
 
-        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _,_  in
+        let collectionUploaded: (POSTResult, Timestamp?) -> DeferredTimestamp = { _, _  in
             uploadedCollectionCount += 1
             return deferMaybe(Date.now())
         }

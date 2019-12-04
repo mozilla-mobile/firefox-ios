@@ -28,9 +28,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         var urls: [(title: String, domain: String, dispDomain: String, url: String)] = []
         for pageNo in 1...noOfSites {
             let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
-            EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-            EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
-            EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+            BrowserUtils.enterUrlAddressBar(typeUrl: url)
 
             tester().waitForAnimationsToFinish()
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
@@ -145,11 +143,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsCookies() {
         let url = "\(webRoot!)/numberedPage.html?page=1"
-
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: url)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
@@ -180,9 +174,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let cachedServer = CachedPageServer()
         let cacheRoot = cachedServer.start()
         let url = "\(cacheRoot)/cachedPage.html"
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: url)
         tester().waitForWebViewElementWithAccessibilityLabel("Cache test")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView

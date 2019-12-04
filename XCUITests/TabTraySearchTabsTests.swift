@@ -9,9 +9,8 @@ class TabTraySearchTabsTests: BaseTestCase {
     func testSearchTabs() {
         // Open two tabs and go to tab tray
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
-        waitUntilPageLoad()
         waitForTabsButton()
-        navigator.openNewURL(urlString: secondURL )
+        navigator.openNewURL(urlString: secondURL)
         waitForTabsButton()
         navigator.goto(TabTray)
 

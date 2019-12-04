@@ -43,12 +43,14 @@ class TableViewColor {
     var syncText: UIColor { return defaultTextAndTint }
     var errorText: UIColor { return UIColor.Photon.Red50 }
     var warningText: UIColor { return UIColor.Photon.Orange50 }
+    var accessoryViewTint: UIColor { return UIColor.Photon.Grey40 }
+    var selectedBackground: UIColor { return UIColor.Custom.selectedHighlightLight }
 }
 
 class ActionMenuColor {
     var foreground: UIColor { return defaultTextAndTint }
     var iPhoneBackgroundBlurStyle: UIBlurEffect.Style { return UIBlurEffect.Style.light }
-    var iPhoneBackground: UIColor { return UIColor.theme.browser.background.withAlphaComponent(0.9) }
+    var iPhoneBackground: UIColor { return defaultBackground.withAlphaComponent(0.9) }
     var closeButtonBackground: UIColor { return defaultBackground }
 }
 

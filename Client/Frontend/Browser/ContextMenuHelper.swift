@@ -10,6 +10,8 @@ protocol ContextMenuHelperDelegate: AnyObject {
 }
 
 class ContextMenuHelper: NSObject {
+    var touchPoint = CGPoint()
+
     struct Elements {
         let link: URL?
         let image: URL?
@@ -22,11 +24,25 @@ class ContextMenuHelper: NSObject {
     weak var delegate: ContextMenuHelperDelegate?
 
     fileprivate var nativeHighlightLongPressRecognizer: UILongPressGestureRecognizer?
-    fileprivate var elements: Elements?
+
+    lazy var gestureRecognizer: UILongPressGestureRecognizer = {
+        let g = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressGestureDetected))
+        g.delegate = self
+        return g
+    }()
+
+    fileprivate(set) var elements: Elements?
 
     required init(tab: Tab) {
         super.init()
         self.tab = tab
+    }
+}
+
+@available(iOS, obsoleted: 13.0)
+extension ContextMenuHelper: UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
 
     // BVC KVO events for all changes on the webview will call this. 
@@ -53,7 +69,7 @@ class ContextMenuHelper: NSObject {
         }
     }
 
-    func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UILongPressGestureRecognizer? {
+    private func gestureRecognizerWithDescriptionFragment(_ descriptionFragment: String) -> UILongPressGestureRecognizer? {
         let result = tab?.webView?.scrollView.subviews.compactMap({ $0.gestureRecognizers }).joined().first(where: {
             (($0 as? UILongPressGestureRecognizer) != nil) && $0.description.contains(descriptionFragment)
         })
@@ -99,6 +115,10 @@ extension ContextMenuHelper: TabContentScript {
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let data = message.body as? [String: AnyObject] else {
             return
+        }
+
+        if let x = data["touchX"] as? Double, let y = data["touchY"] as? Double {
+            touchPoint = CGPoint(x: x, y: y)
         }
 
         var linkURL: URL?

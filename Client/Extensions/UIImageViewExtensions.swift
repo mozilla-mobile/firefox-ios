@@ -7,6 +7,17 @@ import Storage
 import SDWebImage
 import Shared
 
+extension UIColor {
+    var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        return (r, g, b, a)
+    }
+}
+
 public extension UIImageView {
 
     func setIcon(_ icon: Favicon?, forURL url: URL?, completed completion: ((UIColor, URL?) -> Void)? = nil ) {
@@ -46,16 +57,8 @@ public extension UIImageView {
             self.backgroundColor = color
             completionBlock?(color)
         } else {
-            image.getColors(scaleDownSize: CGSize(width: 25, height: 25)) {colors in
-                let isSame = [colors.primary, colors.secondary, colors.detail].every { $0 == colors.primary }
-                if isSame {
-                    completionBlock?(UIColor.Photon.White100)
-                    FaviconFetcher.colors[domain] = UIColor.Photon.White100
-                } else {
-                    completionBlock?(colors.background)
-                    FaviconFetcher.colors[domain] = colors.background
-                }
-            }
+            completionBlock?(UIColor.Photon.White100)
+            FaviconFetcher.colors[domain] = UIColor.Photon.White100
         }
     }
 

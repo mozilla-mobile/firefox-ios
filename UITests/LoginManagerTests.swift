@@ -59,8 +59,9 @@ class LoginManagerTests: KIFTestCase {
     }
 
     fileprivate func closeLoginManager() {
-        EarlGrey.selectElement(with:grey_allOf([grey_accessibilityLabel("Settings"), grey_kindOfClass(NSClassFromString("UIButtonLabel")!)])).perform(grey_tap())
-
+        tester().waitForAnimationsToFinish(withTimeout: 5)
+        tester().tapView(withAccessibilityLabel: "Settings")
+        
         let DoneAppeared = GREYCondition(name: "Wait for the Done button", block: { () -> Bool in
             var errorOrNil: NSError?
             EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
@@ -68,7 +69,7 @@ class LoginManagerTests: KIFTestCase {
             let success = errorOrNil == nil
             return success
         })
-        let success = DoneAppeared.wait(withTimeout: 10)
+        let success = DoneAppeared.wait(withTimeout: 15)
         GREYAssertTrue(success, reason: "Failed to see Done button")
         EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem")).perform(grey_tap())
    }
@@ -191,7 +192,7 @@ class LoginManagerTests: KIFTestCase {
     func testListIndexView() {
         openLoginManager()
         // Swipe the index view to navigate to bottom section
-        tester().waitForAnimationsToFinish()
+        tester().wait(forTimeInterval: 1)
         tester().waitForView(withAccessibilityLabel: "a0@email.com")
         for _ in 1...6 {
             EarlGrey.selectElement(with: grey_accessibilityID("Login List")).perform(grey_swipeFastInDirection(.up))
@@ -447,9 +448,9 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
 
         tester().waitForView(withAccessibilityLabel: "Settings")
-        tester().wait(forTimeInterval: 2) // Wait for the list to be updated
+        tester().wait(forTimeInterval: 3) // Wait for the list to be updated
         list = tester().waitForView(withAccessibilityIdentifier: "Login List") as! UITableView
-        tester().wait(forTimeInterval: 1)
+        tester().wait(forTimeInterval: 3)
         var newLoginCount = countOfRowsInTableView(list)
         XCTAssertEqual(oldLoginCount - 1, newLoginCount)
 
@@ -607,7 +608,7 @@ class LoginManagerTests: KIFTestCase {
         let usernameField = usernameCell.descriptionLabel
         XCTAssertEqual(usernameField, firstResponder)
         tester().clearTextFromAndThenEnterText(intoCurrentFirstResponder: "changedusername")
-        tester().tapView(withAccessibilityLabel: "Next")
+        tester().tapView(withAccessibilityLabel: "next")
         firstResponder = UIApplication.shared.keyWindow?.firstResponder()
         var passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         let passwordField = passwordCell.descriptionLabel
@@ -637,13 +638,14 @@ class LoginManagerTests: KIFTestCase {
         let loginInitialCount = countOfRowsInTableView(list)
 
         // Both the count and the first element is checked before removing
-        tester().waitForView(withAccessibilityLabel: "http://a0.com")
+        tester().wait(forTimeInterval: 3)
+        tester().waitForView(withAccessibilityIdentifier: "Login List")
         let loginCountBeforeRemoving = countOfRowsInTableView(list)
         XCTAssertEqual(loginCountBeforeRemoving, loginInitialCount)
 
         let firstIndexPathBeforeRemoving = IndexPath(row: 0, section: 1)
         let firstCellBeforeRemoving = list.cellForRow(at: firstIndexPathBeforeRemoving)!
-        let firstCellLabelBeforeRemoving  = firstCellBeforeRemoving.textLabel?.text as! String
+        let firstCellLabelBeforeRemoving  = firstCellBeforeRemoving.textLabel?.text!
         XCTAssertEqual(firstCellLabelBeforeRemoving, "http://a0.com")
 
         EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
@@ -664,7 +666,7 @@ class LoginManagerTests: KIFTestCase {
         // Both the count and the first element is checked before removing
         let firstIndexPathAfterRemoving = IndexPath(row: 0, section: 1)
         let firstCellAfterRemoving = list.cellForRow(at: firstIndexPathAfterRemoving)!
-        let firstCellLabelAfterRemoving  = firstCellAfterRemoving.textLabel?.text as! String
+        let firstCellLabelAfterRemoving  = firstCellAfterRemoving.textLabel?.text!
         XCTAssertEqual(firstCellLabelAfterRemoving, "http://a1.com")
 
         let loginCountAfterRemoving = countOfRowsInTableView(list)
@@ -675,7 +677,7 @@ class LoginManagerTests: KIFTestCase {
 
     func testLoginDetailDisplaysLastModified() {
         openLoginManager()
-
+        tester().wait(forTimeInterval: 1)
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
         EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
         tester().waitForView(withAccessibilityLabel: "Password")
@@ -688,7 +690,7 @@ class LoginManagerTests: KIFTestCase {
 
     func testPreventBlankPasswordInDetail() {
         openLoginManager()
-
+        tester().waitForAnimationsToFinish(withTimeout: 5)
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
         EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
         tester().waitForView(withAccessibilityLabel: "Password")
@@ -703,7 +705,7 @@ class LoginManagerTests: KIFTestCase {
         var passwordCell = list.cellForRow(at: IndexPath(row: 2, section: 0)) as! LoginTableViewCell
         var passwordField = passwordCell.descriptionLabel
 
-        tester().tapView(withAccessibilityLabel: "Next")
+        tester().tapView(withAccessibilityLabel: "next")
         tester().waitForAnimationsToFinish()
         tester().clearTextFromView(withAccessibilityIdentifier: "passwordField")
         tester().tapView(withAccessibilityLabel: "Done")

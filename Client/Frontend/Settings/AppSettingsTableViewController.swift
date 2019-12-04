@@ -8,6 +8,8 @@ import Account
 
 /// App Settings Screen (triggered by tapping the 'Gear' in the Tab Tray Controller)
 class AppSettingsTableViewController: SettingsTableViewController {
+    var showContentBlockerSetting = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -24,6 +26,14 @@ class AppSettingsTableViewController: SettingsTableViewController {
         // display name, etc.
         profile.getAccount()?.updateProfile()
 
+        if showContentBlockerSetting {
+            let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
+            viewController.profile = profile
+            viewController.tabManager = tabManager
+            navigationController?.pushViewController(viewController, animated: false)
+            // Add a done button from this view
+            viewController.navigationItem.rightBarButtonItem = navigationItem.rightBarButtonItem
+        }
     }
 
     override func generateSettings() -> [SettingSection] {
@@ -136,15 +146,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = super.tableView(tableView, viewForHeaderInSection: section) as! ThemedTableSectionHeaderFooterView
-        // Prevent the top border from showing for the General section.
-        if !profile.hasAccount() {
-            switch section {
-                case 1:
-                    headerView.showTopBorder = false
-            default:
-                break
-            }
-        }
         return headerView
     }
 }

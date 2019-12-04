@@ -24,33 +24,27 @@ private struct ETLDEntry: CustomStringConvertible {
 
 private typealias TLDEntryMap = [String: ETLDEntry]
 
-private func loadEntriesFromDisk() -> TLDEntryMap? {
-    if let data = String.contentsOfFileWithResourceName("effective_tld_names", ofType: "dat", fromBundle: Bundle(identifier: "org.mozilla.Shared")!, encoding: .utf8, error: nil) {
-        let lines = data.components(separatedBy: "\n")
-        let trimmedLines = lines.filter { !$0.hasPrefix("//") && $0 != "\n" && $0 != "" }
-
-        var entries = TLDEntryMap()
-        for line in trimmedLines {
-            let entry = ETLDEntry(entry: line)
-            let key: String
-            if entry.isWild {
-                // Trim off the '*.' part of the line
-                key = String(line[line.index(line.startIndex, offsetBy: 2)...])
-            } else if entry.isException {
-                // Trim off the '!' part of the line
-                key = String(line[line.index(line.startIndex, offsetBy: 1)...])
-            } else {
-                key = line
-            }
-            entries[key] = entry
+private func loadEntries() -> TLDEntryMap? {
+    var entries = TLDEntryMap()
+    for line in ETLD_NAMES_LIST where !line.isEmpty && !line.hasPrefix("//") {
+        let entry = ETLDEntry(entry: line)
+        let key: String
+        if entry.isWild {
+            // Trim off the '*.' part of the line
+            key = String(line[line.index(line.startIndex, offsetBy: 2)...])
+        } else if entry.isException {
+            // Trim off the '!' part of the line
+            key = String(line[line.index(line.startIndex, offsetBy: 1)...])
+        } else {
+            key = line
         }
-        return entries
+        entries[key] = entry
     }
-    return nil
+    return entries
 }
 
 private var etldEntries: TLDEntryMap? = {
-    return loadEntriesFromDisk()
+    return loadEntries()
 }()
 
 // MARK: - Local Resource URL Extensions

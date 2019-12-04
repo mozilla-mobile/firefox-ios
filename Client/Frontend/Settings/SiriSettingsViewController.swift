@@ -16,7 +16,6 @@ class SiriSettingsViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.SettingsSiriSectionName
-        hasSectionSeparatorLine = false
     }
 
     required init?(coder aDecoder: NSCoder) {

@@ -109,11 +109,11 @@ extension HomePanelContextMenu {
     func getDefaultContextMenuActions(for site: Site, homePanelDelegate: HomePanelDelegate?) -> [PhotonActionSheetItem]? {
         guard let siteURL = URL(string: site.url) else { return nil }
 
-        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
         }
 
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
             homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
@@ -364,6 +364,7 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                 case .pocket:
                     view.title = title
                     view.moreButton.isHidden = false
+                    view.moreButton.setTitle(Strings.PocketMoreStoriesText, for: .normal)
                     view.moreButton.addTarget(self, action: #selector(showMorePocketStories), for: .touchUpInside)
                     view.titleLabel.textColor = UIColor.Pocket.red
                     view.titleLabel.accessibilityIdentifier = "pocketTitle"
@@ -377,8 +378,11 @@ extension FirefoxHomeViewController: UICollectionViewDelegateFlowLayout {
                     return view
                 case .libraryShortcuts:
                     view.title = title
+                    view.moreButton.isHidden = false
+                    view.moreButton.setTitle(Strings.AppMenuLibrarySeeAllTitleString, for: .normal)
+                    view.moreButton.addTarget(self, action: #selector(openHistory), for: .touchUpInside)
+                    view.moreButton.accessibilityIdentifier = "libraryMoreButton"
                     view.titleLabel.accessibilityIdentifier = "libraryTitle"
-                    view.moreButton.isHidden = true
                     return view
             }
         case UICollectionView.elementKindSectionFooter:
@@ -503,7 +507,7 @@ extension FirefoxHomeViewController {
 
     func configureLibraryShortcutsCell(_ cell: UICollectionViewCell, forIndexPath indexPath: IndexPath) -> UICollectionViewCell {
         let libraryCell = cell as! ASLibraryCell
-        let targets = [#selector(openBookmarks), #selector(openHistory), #selector(openReadingList), #selector(openDownloads)]
+        let targets = [#selector(openBookmarks), #selector(openReadingList), #selector(openDownloads), #selector(openSyncedTabs)]
         libraryCell.libraryButtons.map({ $0.button }).zip(targets).forEach { (button, selector) in
             button.removeTarget(nil, action: nil, for: .allEvents)
             button.addTarget(self, action: selector, for: .touchUpInside)
@@ -728,6 +732,10 @@ extension FirefoxHomeViewController {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .history)
     }
 
+    @objc func openSyncedTabs() {
+        homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .syncedTabs)
+    }
+
     @objc func openReadingList() {
         homePanelDelegate?.homePanelDidRequestToOpenLibrary(panel: .readingList)
     }
@@ -771,7 +779,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             return nil
         }
 
-        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { action in
+        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
             let source = ["Source": "Activity Stream Long Press Context Menu"]
             LeanPlumClient.shared.track(event: .openedNewTab, withParameters: source)
@@ -780,13 +788,13 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             }
         }
 
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { action in
+        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
             self.homePanelDelegate?.homePanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
         }
 
         let bookmarkAction: PhotonActionSheetItem
         if site.bookmarked ?? false {
-            bookmarkAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { action in
+            bookmarkAction = PhotonActionSheetItem(title: Strings.RemoveBookmarkContextMenuTitle, iconString: "action_bookmark_remove", handler: { _, _ in
                 self.profile.places.deleteBookmarksWithURL(url: site.url) >>== {
                     self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
                     site.setBookmarked(false)
@@ -795,7 +803,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
                 UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .activityStream)
             })
         } else {
-            bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { action in
+            bookmarkAction = PhotonActionSheetItem(title: Strings.BookmarkContextMenuTitle, iconString: "action_bookmark", handler: { _, _ in
                 let shareItem = ShareItem(url: site.url, title: site.title, favicon: site.icon)
                 _ = self.profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: shareItem.url, title: shareItem.title)
 
@@ -813,7 +821,7 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             })
         }
 
-        let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { action in
+        let shareAction = PhotonActionSheetItem(title: Strings.ShareContextMenuTitle, iconString: "action_share", handler: { _, _ in
             let helper = ShareExtensionHelper(url: siteURL, tab: nil)
             let controller = helper.createActivityViewController({ (_, _) in })
             if UI_USER_INTERFACE_IDIOM() == .pad, let popoverController = controller.popoverPresentationController {
@@ -828,15 +836,15 @@ extension FirefoxHomeViewController: HomePanelContextMenu {
             self.present(controller, animated: true, completion: nil)
         })
 
-        let removeTopSiteAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+        let removeTopSiteAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { _, _ in
             self.hideURLFromTopSites(site)
         })
 
-        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { action in
+        let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { _, _ in
             self.pinTopSite(site)
         })
 
-        let removePinTopSite = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin", handler: { action in
+        let removePinTopSite = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin", handler: { _, _ in
             self.removePinTopSite(site)
         })
 
@@ -940,7 +948,6 @@ class ASHeaderView: UICollectionReusableView {
 
     lazy var moreButton: UIButton = {
         let button = UIButton()
-        button.setTitle(Strings.PocketMoreStoriesText, for: .normal)
         button.isHidden = true
         button.titleLabel?.font = FirefoxHomeHeaderViewUX.ButtonFont
         button.contentHorizontalAlignment = .right
@@ -974,6 +981,8 @@ class ASHeaderView: UICollectionReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
         moreButton.isHidden = true
+        moreButton.setTitle(nil, for: .normal)
+        moreButton.accessibilityIdentifier = nil;
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
         iconView.isHidden = true
@@ -1071,10 +1080,11 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
 
     var libraryButtons: [LibraryShortcutView] = []
 
-    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor(rgb: 0x0A84FF))
-    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor(rgb: 0xFF9402))
-    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor(rgb: 0x00C8D7))
-    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor(rgb: 0xEC00B5))
+    let bookmarks = LibraryPanel(title: Strings.AppMenuBookmarksTitleString, image: UIImage.templateImageNamed("menu-Bookmark"), color: UIColor.Photon.Blue50)
+    let history = LibraryPanel(title: Strings.AppMenuHistoryTitleString, image: UIImage.templateImageNamed("menu-panel-History"), color: UIColor.Photon.Orange50)
+    let readingList = LibraryPanel(title: Strings.AppMenuReadingListTitleString, image: UIImage.templateImageNamed("menu-panel-ReadingList"), color: UIColor.Photon.Teal60)
+    let downloads = LibraryPanel(title: Strings.AppMenuDownloadsTitleString, image: UIImage.templateImageNamed("menu-panel-Downloads"), color: UIColor.Photon.Magenta60)
+    let syncedTabs = LibraryPanel(title: Strings.AppMenuSyncedTabsTitleString, image: UIImage.templateImageNamed("menu-sync"), color: UIColor.Photon.Purple70)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -1085,12 +1095,13 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
             make.edges.equalTo(self)
         }
 
-        [bookmarks, history, readingList, downloads].forEach { item in
+        [bookmarks, readingList, downloads, syncedTabs].forEach { item in
             let view = LibraryShortcutView()
             view.button.setImage(item.image, for: .normal)
             view.title.text = item.title
             view.button.backgroundColor = item.color
             view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
+            view.accessibilityLabel = item.title
             mainView.addArrangedSubview(view)
             libraryButtons.append(view)
         }

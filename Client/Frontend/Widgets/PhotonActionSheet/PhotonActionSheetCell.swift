@@ -106,7 +106,8 @@ class PhotonActionSheetCell: UITableViewCell {
 
     lazy var disclosureIndicator: UIImageView = {
         let disclosureIndicator = createIconImageView()
-        disclosureIndicator.image = UIImage(named: "menu-Disclosure")
+        disclosureIndicator.image = UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate)
+        disclosureIndicator.tintColor = UIColor.theme.tableView.accessoryViewTint
         return disclosureIndicator
     }()
 
@@ -174,26 +175,27 @@ class PhotonActionSheetCell: UITableViewCell {
 
     func configure(with action: PhotonActionSheetItem, syncManager: SyncManager? = nil) {
         titleLabel.text = action.title
-        titleLabel.textColor = self.tintColor
+        titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
 
         subtitleLabel.text = action.text
-        subtitleLabel.textColor = self.tintColor
+        subtitleLabel.textColor = UIColor.theme.tableView.rowText
         subtitleLabel.isHidden = action.text == nil
-        titleLabel.font  = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
-        accessibilityIdentifier = action.iconString
+        subtitleLabel.numberOfLines = 0
+        titleLabel.font = action.bold ? DynamicFontHelper.defaultHelper.DeviceFontLargeBold : DynamicFontHelper.defaultHelper.LargeSizeRegularWeightAS
+        accessibilityIdentifier = action.iconString ?? action.accessibilityId
         accessibilityLabel = action.title
-        selectionStyle = action.handler != nil ? .default : .none
+        selectionStyle = action.tapHandler != nil ? .default : .none
 
         if let iconName = action.iconString {
             switch action.iconType {
             case .Image:
                 let image = UIImage(named: iconName)?.withRenderingMode(.alwaysTemplate)
                 statusIcon.image = image
-                statusIcon.tintColor = self.tintColor
+                statusIcon.tintColor = action.iconTint ?? self.tintColor
             case .URL:
                 let image = UIImage(named: iconName)?.createScaled(PhotonActionSheetUX.IconSize)
                 statusIcon.layer.cornerRadius = PhotonActionSheetUX.IconSize.width / 2
@@ -262,15 +264,14 @@ class PhotonActionSheetCell: UITableViewCell {
             if let manager = syncManager {
                 let padding = PhotonActionSheetCell.Padding
                 if syncButton == nil {
-                    let button = SyncMenuButton(with: manager)
-                    stackView.addArrangedSubview(button)
-                    syncButton = button
+                    syncButton = SyncMenuButton(with: manager)
                     syncButton?.contentHorizontalAlignment = .center
                     syncButton?.snp.makeConstraints { make in
                         make.width.equalTo(40 + padding)
                         make.height.equalTo(40)
                     }
                 }
+                stackView.addArrangedSubview(syncButton ?? SyncMenuButton(with: manager))
                 syncButton?.updateAnimations()
                 stackView.snp.remakeConstraints { make in
                     make.edges.equalTo(contentView).inset(UIEdgeInsets(top: 0, left: padding, bottom: 0, right: 0))
@@ -279,5 +280,7 @@ class PhotonActionSheetCell: UITableViewCell {
         default:
             break // Do nothing. The rest are not supported yet.
         }
+
+        action.customRender?(titleLabel, contentView)
     }
 }
