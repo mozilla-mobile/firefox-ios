@@ -89,7 +89,8 @@ class ThirdPartySearchTest: BaseTestCase {
         waitForNoExistence(app.alerts.buttons["Don't Allow"], timeoutValue: 15)
         waitForTabsButton()
         
-        navigator.nowAt(BrowserTab)
+        // Workaround for iOS13, can't go directly to BrowserTabMenu
+        app.buttons["TabToolbar.menuButton"].tap()
         navigator.goto(SearchSettings)
 
         app.navigationBars["Search"].buttons["Edit"].tap()

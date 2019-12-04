@@ -97,8 +97,8 @@ class NavigationTest: BaseTestCase {
     
     // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
-        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 20)
+        // waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
+        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 30)
         let email = app.webViews.textFields.element(boundBy: 0)
         // Verify the placeholdervalues here for the textFields
         let mailPlaceholder = "Email"

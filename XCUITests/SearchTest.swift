@@ -17,8 +17,10 @@ private let SuggestedSite6: String = "foobar bit perfect"
 
 class SearchTests: BaseTestCase {
     private func typeOnSearchBar(text: String) {
-        waitForExistence(app.textFields["address"])
-        app.textFields["address"].typeText(text)
+        waitForExistence(app.textFields.firstMatch, timeout: 10)
+        app.textFields.firstMatch.tap()
+        app.textFields.firstMatch.tap()
+        app.textFields.firstMatch.typeText(text)
     }
 
     private func suggestionsOnOff() {
