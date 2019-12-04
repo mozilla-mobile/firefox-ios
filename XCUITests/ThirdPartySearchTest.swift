@@ -86,7 +86,9 @@ class ThirdPartySearchTest: BaseTestCase {
 
         // Go to settings and set MDN as the default
         waitUntilPageLoad()
+        waitForNoExistence(app.alerts.buttons["Don't Allow"], timeoutValue: 15)
         waitForTabsButton()
+        
         navigator.nowAt(BrowserTab)
         navigator.goto(SearchSettings)
 
