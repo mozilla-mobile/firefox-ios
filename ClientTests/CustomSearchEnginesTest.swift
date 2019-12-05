@@ -24,25 +24,6 @@ class CustomSearchEnginesTest: XCTestCase {
         XCTAssertNil(badTemplate)
    }
 
-    func testaddSearchEngine() {
-        let profile = MockBrowserProfile(localName: "customSearchTests")
-        let customSearchEngineForm = CustomSearchViewController()
-        customSearchEngineForm.profile = profile
-        let q = "http://www.google.ca/?#q=%s"
-        let title = "YASE"
-
-        let expectation = self.expectation(description: "Waiting on favicon fetching")
-        customSearchEngineForm.createEngine(forQuery: q, andName: title).uponQueue(.main) { result in
-            XCTAssertNotNil(result.successValue, "Make sure the new engine is not nil")
-            let engine = result.successValue!
-            XCTAssertEqual(engine.shortName, title)
-            XCTAssertNotNil(engine.image)
-            XCTAssertEqual(engine.searchTemplate, "http://www.google.ca/?#q={searchTerms}")
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 5, handler: nil)
-    }
-
     func testaddSearchEngineFailure() {
         let profile = MockBrowserProfile(localName: "customSearchTests")
         let customSearchEngineForm = CustomSearchViewController()
