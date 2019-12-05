@@ -249,11 +249,20 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     // Returns a color based on the url's hash
     class func getDefaultColor(_ url: URL) -> UIColor {
-        guard let hash = url.baseDomain?.hashValue else {
+        // A stable hash (unlike hashValue), from https://useyourloaf.com/blog/swift-hashable/
+        func stableHash(_ str: String) -> Int {
+            let unicodeScalars = str.unicodeScalars.map { $0.value }
+            return unicodeScalars.reduce(5381) {
+                ($0 << 5) &+ $0 &+ Int($1)
+            }
+        }
+
+        guard let domain = url.baseDomain else {
             return UIColor.Photon.Grey50
         }
-        let index = abs(hash) % (DefaultFaviconBackgroundColors.count - 1)
+        let index = abs(stableHash(domain)) % (DefaultFaviconBackgroundColors.count - 1)
         let colorHex = DefaultFaviconBackgroundColors[index]
+        print("\(url) \(colorHex)")
         return UIColor(colorString: colorHex)
     }
 
