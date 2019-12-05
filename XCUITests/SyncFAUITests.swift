@@ -38,8 +38,8 @@ class SyncUITests: BaseTestCase {
 
     private func verifyFxASigninScreen() {
         // Workaround BB iOS13
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 40)
         sleep(1)
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 30)
         waitForExistence(app.webViews.textFields["Email"], timeout: 40)
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
@@ -53,7 +53,7 @@ class SyncUITests: BaseTestCase {
 
     func testTypeOnGivenFields() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.navigationBars["Client.FxAContentView"])
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 40)
 
         // Tap Sign in without any value in email Password focus on Email
         navigator.performAction(Action.FxATapOnContinueButton)
@@ -95,8 +95,8 @@ class SyncUITests: BaseTestCase {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
         // Workaround BB iOS13
-        sleep(1)
         waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 40)
+        sleep(1)
         waitForExistence(app.webViews.textFields["Email"], timeout: 40)
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"

@@ -118,6 +118,8 @@ class NavigationTest: BaseTestCase {
     }
 
     private func checkFirefoxSyncScreenShown() {
+        // Workaround BB iOS13 
+        sleep(1)
         waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 40)
         if isTablet {
             waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 40)
