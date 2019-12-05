@@ -10,14 +10,14 @@ class CopiedLinksTests: BaseTestCase {
         navigator.goto(SettingsScreen)
 
         //Check Offer to open copied links, when opening firefox is off
-        let value = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value = app.tables.cells.switches["Offer to Open Copied Links, When Opening XRViewer"].value
         XCTAssertEqual(value as? String, "0")
 
         //Switch on, Offer to open copied links, when opening firefox
-        app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].tap()
+        app.tables.cells.switches["Offer to Open Copied Links, When Opening XRViewer"].tap()
 
         //Check Offer to open copied links, when opening firefox is on
-        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value2 = app.tables.cells.switches["Offer to Open Copied Links, When Opening XRViewer"].value
         XCTAssertEqual(value2 as? String, "1")
 
         app.navigationBars["Settings"]/*@START_MENU_TOKEN@*/.buttons["Done"]/*[[".buttons[\"Done\"]",".buttons[\"AppSettingsTableViewController.navigationItem.leftBarButtonItem\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
@@ -27,7 +27,7 @@ class CopiedLinksTests: BaseTestCase {
         settingsmenuitemCell.tap()
 
         //Check Offer to open copied links, when opening firefox is on
-        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When Opening Firefox"].value
+        let value3 = app.tables.cells.switches["Offer to Open Copied Links, When Opening XRViewer"].value
         XCTAssertEqual(value3 as? String, "1")
     }
 }

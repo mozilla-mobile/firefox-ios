@@ -13,7 +13,7 @@ class FirstRunTourTests: BaseTestCase {
         // Complet the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
 
-        waitForExistence(app.staticTexts["Welcome to Firefox"])
+        waitForExistence(app.staticTexts["Welcome to XRViewer"])
         XCTAssertTrue(app.buttons["nextOnboardingButton"].exists)
         XCTAssertTrue(app.buttons["signInOnboardingButton"].exists)
         XCTAssertTrue(app.buttons["signUpOnboardingButton"].exists)
@@ -46,6 +46,6 @@ class FirstRunTourTests: BaseTestCase {
         goToNextScreen()
         tapStartBrowsingButton()
         navigator.goto(ShowTourInSettings)
-        waitForExistence(app.staticTexts["Welcome to Firefox"])
+        waitForExistence(app.staticTexts["Welcome to XRViewer"])
     }
 }
