@@ -409,6 +409,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
         screenState.gesture(forAction: Action.LoadURLByTyping, Action.LoadURL) { userState in
             let url = userState.url ?? defaultURL
+            // Workaround BB iOS13 be sure tap happens on url bar
             sleep(1)
             app.textFields.firstMatch.tap()
             app.textFields.firstMatch.tap()
@@ -417,6 +418,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
             let url = userState.url ?? defaultURL
+            // Workaround BB iOS13 be sure tap happens on url bar
             sleep(1)
             app.textFields.firstMatch.tap()
             app.textFields.firstMatch.tap()
