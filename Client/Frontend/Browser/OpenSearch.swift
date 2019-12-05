@@ -39,8 +39,8 @@ class OpenSearchEngine: NSObject, NSCoding {
         // http://stackoverflow.com/a/40034694
         let isCustomEngine = aDecoder.decodeAsBool(forKey: "isCustomEngine")
         guard let searchTemplate = aDecoder.decodeObject(forKey: "searchTemplate") as? String,
-              let shortName = aDecoder.decodeObject(forKey: "shortName") as? String,
-              let image = aDecoder.decodeObject(forKey: "image") as? UIImage else {
+            let shortName = aDecoder.decodeObject(forKey: "shortName") as? String,
+            let image = aDecoder.decodeObject(forKey: "image") as? UIImage else {
                 assertionFailure()
                 return nil
         }
@@ -80,25 +80,23 @@ class OpenSearchEngine: NSObject, NSCoding {
         let template = searchTemplate.replacingOccurrences(of: SearchTermComponent, with: placeholder)
         var components = URLComponents(string: template)
         
-        if let retVal = extractQueryArg(in: components, for: placeholder) {
+        if let retVal = extractQueryArg(in: components?.queryItems, for: placeholder) {
             return retVal
         } else {
             // Query arg may be exist inside fragment
             components = URLComponents()
             components?.query = URL(string: template)?.fragment
-            return extractQueryArg(in: components, for: placeholder)
+            return extractQueryArg(in: components?.queryItems, for: placeholder)
         }
     }
     
-    fileprivate func extractQueryArg(in urlComponents : URLComponents?,
-                                    for placeholder : String) -> String? {
-        let searchTerm = urlComponents?.queryItems?.filter { item in
+    fileprivate func extractQueryArg(in queryItems: [URLQueryItem]?, for placeholder: String) -> String? {
+        let searchTerm = queryItems?.filter { item in
             return item.value == placeholder
         }
-        guard let term = searchTerm, !term.isEmpty else { return nil }
-        return term[0].name
+        return searchTerm?.first?.name
     }
-
+    
     /**
      * check that the URL host contains the name of the search engine somewhere inside it
      **/
@@ -113,21 +111,18 @@ class OpenSearchEngine: NSObject, NSCoding {
      * Returns the query that was used to construct a given search URL
      **/
     func queryForSearchURL(_ url: URL?) -> String? {
-        if isSearchURLForEngine(url) {
-            if let key = searchQueryComponentKey {
-                if let value = url?.getQuery()[key] {
-                    return value.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
-                } else {
-                    // If search term could not found in query, it may be exist inside fragment
-                    var components = URLComponents()
-                    components.query = url?.fragment?.removingPercentEncoding
-                    if let value = components.url?.getQuery()[key] {
-                        return value.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
-                    }
-                }
-            }
+        guard isSearchURLForEngine(url), let key = searchQueryComponentKey else { return nil }
+        
+        if let value = url?.getQuery()[key] {
+            return value.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
+        } else {
+            // If search term could not found in query, it may be exist inside fragment
+            var components = URLComponents()
+            components.query = url?.fragment?.removingPercentEncoding
+            
+            guard let value = components.url?.getQuery()[key] else { return nil }
+            return value.replacingOccurrences(of: "+", with: " ").removingPercentEncoding
         }
-        return nil
     }
 
     /**
@@ -287,9 +282,9 @@ class OpenSearchParser {
 
         let uiImage: UIImage
         if let imageElement = largestImageElement,
-           let imageURL = URL(string: imageElement.stringValue),
-           let imageData = try? Data(contentsOf: imageURL),
-           let image = UIImage.imageFromDataThreadSafe(imageData) {
+            let imageURL = URL(string: imageElement.stringValue),
+            let imageData = try? Data(contentsOf: imageURL),
+            let image = UIImage.imageFromDataThreadSafe(imageData) {
             uiImage = image
         } else {
             print("Error: Invalid search image data")
