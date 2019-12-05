@@ -703,6 +703,7 @@ class Tab: NSObject {
 
                 blockSelf?.webController?.lastXRVisitedURL = blockSelf?.webController?.webView?.url?.absoluteString ?? ""
                 blockSelf?.browserViewController?.scrollController.hideToolbars(animated: true)
+                blockSelf?.browserViewController?.urlBar.updateReaderModeState(.unavailable)
             } else {
                 blockSelf?.stateController.setShowMode(.nothing)
 //                blockSelf?.webController?.barView?.permissionLevelButton?.buttonImage = nil
