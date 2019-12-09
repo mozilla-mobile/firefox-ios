@@ -88,10 +88,7 @@ class BadgeWithBackdrop {
     }
 
     func show(_ visible: Bool) {
-        DispatchQueue.main.async {
-            self.badge.isHidden = !visible
-            self.backdrop.isHidden = !visible
-        }
-        
+        badge.isHidden = !visible
+        backdrop.isHidden = !visible
     }
 }
