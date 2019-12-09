@@ -299,18 +299,22 @@ extension TabToolbar: TabToolbarProtocol {
     }
 
     func appMenuBadge(setVisible: Bool) {
-        // Warning badges should take priority over the standard badge
-        guard warningMenuBadge.badge.isHidden else {
-            return
-        }
+        DispatchQueue.main.async {
+            // Warning badges should take priority over the standard badge
+            guard self.warningMenuBadge.badge.isHidden else {
+                return
+            }
 
-        appMenuBadge.show(setVisible)
+            self.appMenuBadge.show(setVisible)
+        }
     }
 
     func warningMenuBadge(setVisible: Bool) {
-        // Disable other menu badges before showing the warning.
-        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
-        warningMenuBadge.show(setVisible)
+        DispatchQueue.main.async {
+            // Disable other menu badges before showing the warning.
+            if !self.appMenuBadge.badge.isHidden { self.appMenuBadge.show(false) }
+            self.warningMenuBadge.show(setVisible)
+        }
     }
 
     func updateBackStatus(_ canGoBack: Bool) {
