@@ -253,6 +253,8 @@ class LibraryPanelButton: UIButton {
             let currentDeviceType = UIDevice.current.userInterfaceIdiom
             if currentDeviceType == .phone {
                 imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 14, right: 0)
+            } else {
+                imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0)
             }
             addSubview(nameLabel)
             nameLabel.snp.makeConstraints { make in
@@ -260,8 +262,8 @@ class LibraryPanelButton: UIButton {
                     // On phone screen move the label up slightly off the bottom
                     make.bottom.equalToSuperview().inset(4)
                 } else {
-                    // On the iPad, move the label down slightly
-                    make.bottom.equalToSuperview().offset(4)
+                    // On the iPad, move the label up slightly
+                    make.bottom.equalToSuperview().inset(2)
                 }
 
                 make.centerX.equalToSuperview()
