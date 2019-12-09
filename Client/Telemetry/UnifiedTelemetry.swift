@@ -226,11 +226,11 @@ extension UnifiedTelemetry {
         case normalTab = "normal-tab"
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any?]? = nil) {
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any]? = nil) {
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value.rawValue, extras: extras)
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String: Any?]? = nil) {
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String: Any]? = nil) {
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value, extras: extras)
     }
 }
