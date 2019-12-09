@@ -451,7 +451,9 @@ class BrowserViewController: UIViewController {
             }
         }
 
-        NotificationCenter.default.addObserver(self, selector: #selector(appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
+        DispatchQueue.main.async {
+            NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
+        }
     }
 
     fileprivate func setupConstraints() {
