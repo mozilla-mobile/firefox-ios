@@ -37,6 +37,7 @@ class ButtonToast: Toast {
 
         self.toastView.snp.makeConstraints { make in
             make.left.right.height.equalTo(self)
+            make.bottom.equalTo(self)
             self.animationConstraint = make.top.greaterThanOrEqualTo(self).offset(ButtonToastUX.ToastHeight).constraint
         }
 
