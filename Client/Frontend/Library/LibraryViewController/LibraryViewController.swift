@@ -7,7 +7,7 @@ import SnapKit
 import UIKit
 import Storage
 
-private struct LibraryViewControllerUX {
+private enum LibraryViewControllerUX {
     // Height of the top panel switcher button toolbar.
     static let ButtonContainerHeight: CGFloat = 50
 }
@@ -198,86 +198,6 @@ class LibraryViewController: UIViewController {
     }
 }
 
-extension LibraryViewController: LibraryPanelDelegate {
-    func libraryPanelDidRequestToSignIn() {
-        self.dismiss(animated: false, completion: nil)
-        delegate?.libraryPanelDidRequestToSignIn()
-    }
-
-    func libraryPanelDidRequestToCreateAccount() {
-        self.dismiss(animated: false, completion: nil)
-        delegate?.libraryPanelDidRequestToCreateAccount()
-    }
-
-    func libraryPanelDidRequestToOpenInNewTab(_ url: URL, isPrivate: Bool) {
-        delegate?.libraryPanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
-    }
-
-    func libraryPanel(didSelectURL url: URL, visitType: VisitType) {
-        delegate?.libraryPanel(didSelectURL: url, visitType: visitType)
-        dismiss(animated: true, completion: nil)
-    }
-
-    func libraryPanel(didSelectURLString url: String, visitType: VisitType) {
-        // If we can't get a real URL out of what should be a URL, we let the user's
-        // default search engine give it a shot.
-        // Typically we'll be in this state if the user has tapped a bookmarked search template
-        // (e.g., "http://foo.com/bar/?query=%s"), and this will get them the same behavior as if
-        // they'd copied and pasted into the URL bar.
-        // See BrowserViewController.urlBar:didSubmitText:.
-        guard let url = URIFixup.getURL(url) ?? profile.searchEngines.defaultEngine.searchURLForQuery(url) else {
-            Logger.browserLogger.warning("Invalid URL, and couldn't generate a search URL for it.")
-            return
-        }
-        return self.libraryPanel(didSelectURL: url, visitType: visitType)
-    }
-}
-
-class LibraryPanelButton: UIButton {
-    var nameLabel = UILabel()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setupLibraryPanel()
-    }
-
-    required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    fileprivate func setupLibraryPanel() {
-        
-        // For iPhone 5 screen, don't show the button labels
-        if DeviceInfo.screenSizeOrientationIndependent().width > 320 {
-            let currentDeviceType = UIDevice.current.userInterfaceIdiom
-            if currentDeviceType == .phone {
-                imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 14, right: 0)
-            } else {
-                imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 12, right: 0)
-            }
-            addSubview(nameLabel)
-            nameLabel.snp.makeConstraints { make in
-                if currentDeviceType == .phone {
-                    // On phone screen move the label up slightly off the bottom
-                    make.bottom.equalToSuperview().inset(4)
-                } else {
-                    // On the iPad, move the label up slightly
-                    make.bottom.equalToSuperview().inset(2)
-                }
-
-                make.centerX.equalToSuperview()
-                make.width.equalToSuperview()
-            }
-            nameLabel.adjustsFontSizeToFitWidth = true
-            nameLabel.minimumScaleFactor = 0.7
-            nameLabel.numberOfLines = 1
-            nameLabel.font = UIFont.systemFont(ofSize: DynamicFontHelper.defaultHelper.DefaultSmallFontSize - 1)
-            nameLabel.textAlignment = .center
-        }
-    }
-}
-
 // MARK: UIAppearance
 extension LibraryViewController: Themeable {
     func applyTheme() {
@@ -289,49 +209,5 @@ extension LibraryViewController: Themeable {
         buttonTintColor = UIColor.theme.homePanel.toolbarTint
         buttonSelectedTintColor = UIColor.theme.homePanel.toolbarHighlight
         updateButtonTints()
-    }
-}
-
-protocol LibraryPanelContextMenu {
-    func getSiteDetails(for indexPath: IndexPath) -> Site?
-    func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]?
-    func presentContextMenu(for indexPath: IndexPath)
-    func presentContextMenu(for site: Site, with indexPath: IndexPath, completionHandler: @escaping () -> PhotonActionSheet?)
-}
-
-extension LibraryPanelContextMenu {
-    func presentContextMenu(for indexPath: IndexPath) {
-        guard let site = getSiteDetails(for: indexPath) else { return }
-
-        presentContextMenu(for: site, with: indexPath, completionHandler: {
-            return self.contextMenu(for: site, with: indexPath)
-        })
-    }
-
-    func contextMenu(for site: Site, with indexPath: IndexPath) -> PhotonActionSheet? {
-        guard let actions = self.getContextMenuActions(for: site, with: indexPath) else { return nil }
-
-        let contextMenu = PhotonActionSheet(site: site, actions: actions)
-        contextMenu.modalPresentationStyle = .overFullScreen
-        contextMenu.modalTransitionStyle = .crossDissolve
-
-        let generator = UIImpactFeedbackGenerator(style: .heavy)
-        generator.impactOccurred()
-
-        return contextMenu
-    }
-
-    func getDefaultContextMenuActions(for site: Site, libraryPanelDelegate: LibraryPanelDelegate?) -> [PhotonActionSheetItem]? {
-        guard let siteURL = URL(string: site.url) else { return nil }
-
-        let openInNewTabAction = PhotonActionSheetItem(title: Strings.OpenInNewTabContextMenuTitle, iconString: "quick_action_new_tab") { _, _ in
-            libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: false)
-        }
-
-        let openInNewPrivateTabAction = PhotonActionSheetItem(title: Strings.OpenInNewPrivateTabContextMenuTitle, iconString: "quick_action_new_private_tab") { _, _ in
-            libraryPanelDelegate?.libraryPanelDidRequestToOpenInNewTab(siteURL, isPrivate: true)
-        }
-
-        return [openInNewTabAction, openInNewPrivateTabAction]
     }
 }
