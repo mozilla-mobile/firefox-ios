@@ -46,7 +46,7 @@ class UnifiedTelemetry {
         NotificationCenter.default.addObserver(self, selector: #selector(uploadError), name: Telemetry.notificationReportError, object: nil)
 
         let telemetryConfig = Telemetry.default.configuration
-        telemetryConfig.appName = "Fennec"
+        telemetryConfig.appName = "XRViewer"
         telemetryConfig.userDefaultsSuiteName = AppInfo.sharedContainerIdentifier
         telemetryConfig.dataDirectory = .cachesDirectory
         telemetryConfig.updateChannel = AppConstants.BuildChannel.rawValue
