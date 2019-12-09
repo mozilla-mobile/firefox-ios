@@ -128,7 +128,9 @@ class ButtonToast: Toast {
         horizontalStackView.snp.makeConstraints { make in
             make.centerX.equalTo(toastView)
             make.centerY.equalTo(toastView)
-            make.width.equalTo(toastView.snp.width).offset(-2 * ButtonToastUX.ToastPadding)
+            let paddingMultiplier : CGFloat = UIDevice.current.orientation.isLandscape ? 2 : 1
+            let totalPadding = paddingMultiplier * -2 * ButtonToastUX.ToastPadding
+            make.width.equalTo(toastView.snp.width).offset(totalPadding)
             make.bottom.equalTo(toastView.safeArea.bottom)
             make.top.equalTo(toastView.snp.top)
             make.height.equalTo(ButtonToastUX.ToastHeight)
