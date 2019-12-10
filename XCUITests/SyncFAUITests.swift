@@ -39,7 +39,6 @@ class SyncUITests: BaseTestCase {
     private func verifyFxASigninScreen() {
         // Workaround BB iOS13
         waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 40)
-        sleep(1)
         waitForExistence(app.webViews.textFields["Email"], timeout: 40)
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
@@ -96,7 +95,6 @@ class SyncUITests: BaseTestCase {
         navigator.goto(FxASigninScreen)
         // Workaround BB iOS13
         waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 40)
-        sleep(1)
         waitForExistence(app.webViews.textFields["Email"], timeout: 40)
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
