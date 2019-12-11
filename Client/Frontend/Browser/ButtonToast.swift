@@ -7,7 +7,7 @@ import SnapKit
 
 struct ButtonToastUX {
     static let ToastHeight: CGFloat = 55.0
-    static let ToastPadding: CGFloat = 10.0
+    static let ToastPadding: CGFloat = 20.0
     static let ToastButtonPadding: CGFloat = 10.0
     static let ToastDelay = DispatchTimeInterval.milliseconds(900)
     static let ToastButtonBorderRadius: CGFloat = 5
@@ -107,6 +107,8 @@ class ButtonToast: Toast {
 
             button.snp.makeConstraints { (make) in
                 make.width.equalTo(button.titleLabel!.intrinsicContentSize.width + 2 * ButtonToastUX.ToastButtonPadding)
+                make.height.equalTo(button.titleLabel!.intrinsicContentSize.height + 2 * ButtonToastUX.ToastButtonPadding )
+
             }
 
             horizontalStackView.addArrangedSubview(button)
