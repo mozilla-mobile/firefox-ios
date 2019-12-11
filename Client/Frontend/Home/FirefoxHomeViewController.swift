@@ -1035,6 +1035,7 @@ class LibraryShortcutView: UIView {
         }
         title.adjustsFontSizeToFitWidth = true
         title.minimumScaleFactor = 0.7
+        title.lineBreakMode = .byWordWrapping
         title.numberOfLines = 2
         title.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         title.textAlignment = .center

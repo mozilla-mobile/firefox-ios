@@ -42,7 +42,10 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 
     lazy fileprivate var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.layer.masksToBounds = true
+        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.minimumScaleFactor = 0.7
+        titleLabel.lineBreakMode = .byWordWrapping
+        titleLabel.numberOfLines = 2
         titleLabel.textAlignment = .center
         titleLabel.font = TopSiteCellUX.TitleFont
         return titleLabel
