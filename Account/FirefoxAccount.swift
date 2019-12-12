@@ -53,7 +53,9 @@ open class FirefoxAccount {
     class KeychainCacheState : KeychainCache<FxAState> {
         open override func checkpoint() {
             super.checkpoint()
-            NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
+            }
         }
     }
 
