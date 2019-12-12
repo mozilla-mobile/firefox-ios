@@ -89,7 +89,7 @@ public extension UIImageView {
     }
     
     private func defaultIconIfNeeded(_ url: URL?) -> (image: UIImage, color: UIColor)? {
-        if let image = image, let url = url, image.size.width <= 57 || image.size.height <= 57 {
+        if let image = image, let url = url, image.size.width < 32 || image.size.height < 32 {
             let defaults = defaultFavicon(url)
             return (defaults.image, defaults.color)
         }
