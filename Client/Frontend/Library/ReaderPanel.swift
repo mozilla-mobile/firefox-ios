@@ -267,7 +267,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         welcomeLabel.adjustsFontSizeToFitWidth = true
         welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(150)
+            make.top.equalToSuperview().offset(UIDevice.current.orientation.isLandscape ? 16 : 150)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
         }
 
