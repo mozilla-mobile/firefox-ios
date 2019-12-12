@@ -38,8 +38,8 @@ class SyncUITests: BaseTestCase {
 
     private func verifyFxASigninScreen() {
         // Workaround BB iOS13
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 40)
-        waitForExistence(app.webViews.textFields["Email"], timeout: 40)
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 50)
+        waitForExistence(app.webViews.textFields["Email"], timeout: 50)
         XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
 
@@ -94,8 +94,8 @@ class SyncUITests: BaseTestCase {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
         // Workaround BB iOS13
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 40)
-        waitForExistence(app.webViews.textFields["Email"], timeout: 40)
+        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 50)
+        waitForExistence(app.webViews.textFields["Email"], timeout: 50)
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
