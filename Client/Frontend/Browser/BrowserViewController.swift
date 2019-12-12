@@ -1964,7 +1964,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
         let vcToPresent = getSignInViewController(fxaOptions, isSignUpFlow: isSignUpFlow)
-        vcToPresent.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
+        let closeBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .plain, target: self, action: #selector(dismissSignInViewController))
+        vcToPresent.navigationItem.leftBarButtonItem = closeBarButtonItem
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
         themedNavigationController.navigationBar.isTranslucent = false
         if topTabsVisible {
