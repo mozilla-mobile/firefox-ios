@@ -199,7 +199,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
-        adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+        // Turn off Adjust link attribution for XR Viewer
+//        adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
         UNUserNotificationCenter.current().delegate = self
         SentTabAction.registerActions()
