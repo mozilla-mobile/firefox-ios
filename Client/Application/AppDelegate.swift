@@ -227,10 +227,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
-        if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
-            LeanPlumClient.shared.setup(profile: profile)
-            LeanPlumClient.shared.set(enabled: true)
-        }
+        // Turn off Leanplum marketing for XR Viewer
+//        if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
+//            LeanPlumClient.shared.setup(profile: profile)
+//            LeanPlumClient.shared.set(enabled: true)
+//        }
 
         if #available(iOS 13.0, *) {
             BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
