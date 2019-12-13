@@ -14,6 +14,8 @@ class HistoryTests: BaseTestCase {
 
     // This DDBB contains those 4 websites listed in the name
     let historyDB = "browserYoutubeTwitterMozillaExample.db"
+    
+    let clearRecentHistoryOptions = ["The Last Hour", "Today", "Today and Yesterday", "Everything"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
@@ -233,6 +235,12 @@ class HistoryTests: BaseTestCase {
         app.sheets.buttons[optionSelected].tap()
     }
     
+    private func navigateToGoogle(){
+        navigator.openURL("google.com")
+        navigator.goto(LibraryPanel_History)
+        XCTAssertTrue(app.tables.cells.staticTexts["Google"].exists)
+    }
+    
     func testClearRecentHistory() {
         navigator.performAction(Action.ClearRecentHistory)
         tapOnClearRecentHistoryOption(optionSelected: "The Last Hour")
@@ -241,9 +249,7 @@ class HistoryTests: BaseTestCase {
             XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
         }
         // Go to 'goolge.com' to create a recent history entry.
-        navigator.openURL("google.com")
-        navigator.goto(LibraryPanel_History)
-        XCTAssertTrue(app.tables.cells.staticTexts["Google"].exists)
+        navigateToGoogle()
         navigator.performAction(Action.ClearRecentHistory)
         // Recent data will be removed after calling tapOnClearRecentHistoryOption(optionSelected: "Today").
         // Older data will not be removed
@@ -252,5 +258,38 @@ class HistoryTests: BaseTestCase {
             XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
         }
         XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
+        
+        // Begin Test for Today and Yesterday
+        // Go to 'goolge.com' to create a recent history entry.
+        navigateToGoogle()
+        navigator.performAction(Action.ClearRecentHistory)
+        // Tapping "Today and Yesterday" will remove recent data (from yesterday and today).
+        // Older data will not be removed
+        tapOnClearRecentHistoryOption(optionSelected: "Today and Yesterday")
+        for entry in oldHistoryEntries {
+            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+        }
+        XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
+        
+        // Begin Test for Everything
+        // Go to 'goolge.com' to create a recent history entry.
+        navigateToGoogle()
+        navigator.performAction(Action.ClearRecentHistory)
+        // Tapping everything removes both current data and older data.
+        tapOnClearRecentHistoryOption(optionSelected: "Everything")
+        for entry in oldHistoryEntries {
+            XCTAssertFalse(app.tables.cells.staticTexts[entry].exists)
+        }
+        XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
+        
+    }
+    
+    func testAllOptionsArePresent(){
+        // Go to 'goolge.com' to create a recent history entry.
+        navigateToGoogle()
+        navigator.performAction(Action.ClearRecentHistory)
+        for option in clearRecentHistoryOptions {
+            XCTAssertTrue(app.sheets.buttons[option].exists)
+        }
     }
 }

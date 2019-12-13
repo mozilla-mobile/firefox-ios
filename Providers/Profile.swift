@@ -164,6 +164,16 @@ extension Profile {
         }
         return clientID
     }
+    
+    // Returns false for when there is no account available and true if the account
+    // is not verified or has no password attached to it
+    var accountNeedsUserAction: Bool {
+        guard let account = self.getAccount() else { return false }
+        let actionNeeded = account.actionNeeded
+        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
+        
+        return needsVerification
+    }
 }
 
 open class BrowserProfile: Profile {
