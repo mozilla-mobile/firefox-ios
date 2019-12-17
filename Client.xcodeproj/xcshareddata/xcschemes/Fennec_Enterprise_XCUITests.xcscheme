@@ -283,6 +283,9 @@
                <Test
                   Identifier = "NewTabSettingsTest/testToggleOffOnAdditionalContentBookmarks()">
                </Test>
+	       <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowCustomURL()">
+               </Test>
                <Test
                   Identifier = "NoImageTests">
                </Test>
