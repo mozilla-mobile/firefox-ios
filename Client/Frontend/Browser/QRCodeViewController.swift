@@ -48,20 +48,6 @@ class QRCodeViewController: UIViewController {
     private var isLightOn: Bool = false
     private var shapeLayer = CAShapeLayer()
 
-    private var scanRange: CGRect {
-        let size = UIDevice.current.userInterfaceIdiom == .pad ?
-            CGSize(width: view.frame.width / 2, height: view.frame.width / 2) :
-            CGSize(width: view.frame.width / 3 * 2, height: view.frame.width / 3 * 2)
-        var rect = CGRect(size: size)
-        rect.center = UIScreen.main.bounds.center
-        return rect
-    }
-
-    private var scanBorderHeight: CGFloat {
-        return UIDevice.current.userInterfaceIdiom == .pad ?
-            view.frame.width / 2 : view.frame.width / 3 * 2
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -104,19 +90,28 @@ class QRCodeViewController: UIViewController {
         self.view.addSubview(instructionsLabel)
 
         setupConstraints()
-        let rectPath = UIBezierPath(rect: UIScreen.main.bounds)
-        rectPath.append(UIBezierPath(rect: scanRange).reversing())
-        shapeLayer.path = rectPath.cgPath
-        maskView.layer.mask = shapeLayer
-
         isAnimationing = true
         startScanLineAnimation()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyShapeLayer()
+    }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         self.captureSession.stopRunning()
         stopScanLineAnimation()
+    }
+    
+    private func applyShapeLayer() {
+        view.layoutIfNeeded()
+        shapeLayer.removeFromSuperlayer()
+        let rectPath = UIBezierPath(rect: view.bounds)
+        rectPath.append(UIBezierPath(rect: scanBorder.frame).reversing())
+        shapeLayer.path = rectPath.cgPath
+        maskView.layer.mask = shapeLayer
     }
 
     private func setupConstraints() {
@@ -155,7 +150,7 @@ class QRCodeViewController: UIViewController {
         self.view.setNeedsLayout()
         UIView.animate(withDuration: 2.4, animations: {
             self.scanLine.snp.updateConstraints({ (make) in
-                make.top.equalTo(self.scanBorder.snp.top).offset(self.scanBorderHeight - 6)
+                make.top.equalTo(self.scanBorder.snp.top).offset(self.scanBorder.frame.size.height - 6)
             })
             self.view.layoutIfNeeded()
         }) { (value: Bool) in
@@ -231,11 +226,7 @@ class QRCodeViewController: UIViewController {
     }
 
     override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-        shapeLayer.removeFromSuperlayer()
-        let rectPath = UIBezierPath(rect: UIScreen.main.bounds)
-        rectPath.append(UIBezierPath(rect: scanRange).reversing())
-        shapeLayer.path = rectPath.cgPath
-        maskView.layer.mask = shapeLayer
+        applyShapeLayer()
 
         guard let videoPreviewLayer = self.videoPreviewLayer else {
             return
