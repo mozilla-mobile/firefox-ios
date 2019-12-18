@@ -769,19 +769,6 @@ WKScriptMessageHandler {
         let version = versionBuild() ?? "unknown"
         conf.applicationNameForUserAgent = " Mobile WebXRViewer/" + version
 
-        let standardUserDefaults = UserDefaults.standard
-        // Check if we are supposed to be exposing WebXR.
-        if standardUserDefaults.bool(forKey: Constant.exposeWebXRAPIKey()) {
-            let scriptBundle = Bundle(for: WebController.self)
-            let scriptURL = scriptBundle.path(forResource: "webxrShim", ofType: "js")
-            let scriptContent = try? String(contentsOfFile: scriptURL ?? "", encoding: .utf8)
-
-            print(String(format: "size of webxrShim.js: %ld", scriptContent?.count ?? 0))
-
-            let userScript = WKUserScript(source: scriptContent ?? "", injectionTime: .atDocumentStart, forMainFrameOnly: true)
-
-            contentController.addUserScript(userScript)
-        }
         conf.userContentController = contentController
         self.contentController = contentController
 

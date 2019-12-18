@@ -486,7 +486,17 @@ class Tab: NSObject {
             if let url = request.url, url.isFileURL, request.isPrivileged {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
-
+            if UserDefaults.standard.bool(forKey: Constant.exposeWebXRAPIKey()) {
+                if let webView = self.webView,
+                    let path = Bundle.main.path(forResource: "webxrShim", ofType: "js"),
+                    var source = try? String(contentsOfFile: path)
+                {
+                    let polyfillURL = UserDefaults.standard.string(forKey: Constant.polyfillURLKey()) ?? "https://raw.githack.com/MozillaReality/webxr-ios-js/develop/dist/webxr.js"
+                    source = "{ const REALAPI_URL = '\(polyfillURL)'; " + source
+                    let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+                    webView.configuration.userContentController.addUserScript(userScript)
+                }
+            }
             return webView.load(request)
         }
         return nil
