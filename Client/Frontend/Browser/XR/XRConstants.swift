@@ -131,9 +131,11 @@ class Constant: NSObject {
     
     static func homeURLKey() -> String { return "homeURL" }
     static func exposeWebXRAPIKey() -> String { return "exposeWebXRAPI" }
+    static func polyfillURLKey() -> String { return "polyfillURL" }
     static func urlBarHeight() -> CGFloat { return 49 }
     static func urlBarAnimationTimeInSeconds() -> TimeInterval { return 0.2 }
     static func distantAnchorsDistanceKey() -> String { return "distantAnchorsDistance" }
+    static func distantAnchorsDefaultDistanceInMeters() -> Float { return 3 }
     static func lastResetSessionTrackingDateKey() -> String { return "lastResetSessionTrackingDate" }
     static func boxSize() -> CGFloat { return 0.05 }
     static func backgroundOrPausedDateKey() -> String { return "backgroundOrPausedDate" }
@@ -141,6 +143,7 @@ class Constant: NSObject {
     static func thresholdTimeInSecondsSinceLastTrackingReset() -> Double { return 600 }
     static func pauseTimeInSecondsToRemoveAnchors() -> Double { return 10 }
     static func secondsInBackgroundKey() -> String { return "secondsInBackground" }
+    static func sessionInBackgroundDefaultTimeInSeconds() -> Int { return 60 }
     static func minimalWebXREnabled() -> String { return "minimalWebXREnabled" }
     static func worldSensingWebXREnabled() -> String { return "worldSensingWebXREnabled" }
     static func videoCameraAccessWebXREnabled() -> String { return "videoCameraAccessWebXREnabled" }
