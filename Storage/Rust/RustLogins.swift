@@ -245,8 +245,7 @@ public class RustLogins {
             }
 
             let filteredRecords = records.filter({
-                $0.hostname.lowercased().contains(query) ||
-                ($0.username?.lowercased() ?? "").contains(query)
+                $0.hostname.lowercased().contains(query) || $0.username.lowercased().contains(query)
             })
             return deferMaybe(ArrayCursor(data: filteredRecords))
         })
