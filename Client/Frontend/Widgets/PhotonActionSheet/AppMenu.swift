@@ -18,11 +18,10 @@ extension PhotonActionSheetProtocol {
         }
 
         let openHomePage = PhotonActionSheetItem(title: Strings.AppMenuOpenHomePageTitleString, iconString: "menu-Home") { _, _ in
-            let page = NewTabAccessors.getHomePage(self.profile.prefs)
-            if page == .homePage, let homePageURL = HomeButtonHomePageAccessors.getHomePage(self.profile.prefs) {
-                tab.loadRequest(PrivilegedRequest(url: homePageURL) as URLRequest)
-            } else if let homePanelURL = page.url {
-                tab.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
+            if let string = UserDefaults.standard.string(forKey: Constant.homeURLKey()),
+                let url = URL(string: string)
+            {
+                tab.loadRequest(URLRequest(url: url))
             }
         }
 
