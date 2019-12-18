@@ -173,8 +173,8 @@ class LoginsHelper: TabContentScript {
         let promptMessage: String
         let https = "^https:\\/\\/"
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
-        if let username = login.username, !username.isEmpty {
-            promptMessage = String(format: Strings.SaveLoginUsernamePrompt, username, url)
+        if !login.username.isEmpty {
+            promptMessage = String(format: Strings.SaveLoginUsernamePrompt, login.username, url)
         } else {
             promptMessage = String(format: Strings.SaveLoginPrompt, url)
         }
@@ -208,8 +208,8 @@ class LoginsHelper: TabContentScript {
         new.id = old.id
 
         let formatted: String
-        if let username = new.username {
-            formatted = String(format: Strings.UpdateLoginUsernamePrompt, username, new.hostname)
+        if !new.username.isEmpty {
+            formatted = String(format: Strings.UpdateLoginUsernamePrompt, new.username, new.hostname)
         } else {
             formatted = String(format: Strings.UpdateLoginPrompt, new.hostname)
         }

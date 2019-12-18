@@ -31,7 +31,7 @@ public extension LoginRecord {
     }
 
     var credentials: URLCredential {
-        return URLCredential(user: username ?? "", password: password, persistence: .forSession)
+        return URLCredential(user: username, password: password, persistence: .forSession)
     }
 
     var protectionSpace: URLProtectionSpace {
@@ -246,7 +246,7 @@ public class RustLogins {
 
             let filteredRecords = records.filter({
                 $0.hostname.lowercased().contains(query) ||
-                ($0.username?.lowercased() ?? "").contains(query)
+                ($0.username.lowercased()).contains(query)
             })
             return deferMaybe(ArrayCursor(data: filteredRecords))
         })
