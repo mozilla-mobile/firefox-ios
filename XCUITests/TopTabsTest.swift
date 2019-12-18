@@ -131,7 +131,7 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         app.buttons["Undo"].tap()
-        waitUntilPageLoad()
+        waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 5)
         navigator.nowAt(BrowserTab)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
