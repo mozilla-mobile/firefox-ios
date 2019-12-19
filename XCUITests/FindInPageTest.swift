@@ -82,6 +82,7 @@ class FindInPageTests: BaseTestCase {
     func testFindInPageTwoWordsSearchLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         // Workaround until FxSGraph is fixed to allow the previos way with goto
+        waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         waitForExistence(app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/, timeout: 15)
         app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()

@@ -65,6 +65,20 @@ public extension UIImageView {
     func setFavicon(forSite site: Site, onCompletion completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
         self.setIcon(site.icon, forURL: site.tileURL, completed: completionBlock)
     }
+    
+   /*
+    * If the webpage has low-res favicon, use defaultFavIcon
+    */
+    func setFaviconOrDefaultIcon(forSite site: Site, onCompletion completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
+        setIcon(site.icon, forURL: site.tileURL) { color, url in
+            if let defaults = self.defaultIconIfNeeded(url) {
+                self.image = defaults.image
+                completionBlock?(defaults.color, url)
+            } else {
+                completionBlock?(color, url)
+            }
+        }
+    }
 
     private func defaultFavicon(_ url: URL?) -> (image: UIImage, color: UIColor) {
         if let url = url {
@@ -72,6 +86,14 @@ public extension UIImageView {
         } else {
             return (FaviconFetcher.defaultFavicon, .white)
         }
+    }
+    
+    private func defaultIconIfNeeded(_ url: URL?) -> (image: UIImage, color: UIColor)? {
+        if let image = image, let url = url, image.size.width < 32 || image.size.height < 32 {
+            let defaults = defaultFavicon(url)
+            return (defaults.image, defaults.color)
+        }
+        return nil
     }
 }
 

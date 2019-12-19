@@ -59,7 +59,7 @@ class NewTabSettingsTest: BaseTestCase {
         XCTAssertEqual(valueTyped, "mozilla.org")
         // Open new page and check that the custom url is used
         navigator.performAction(Action.OpenNewTabFromTabTray)
-        waitForExistence(app.textFields["url"])
+        waitForExistence(app.textFields["url"], timeout: 20)
         waitForValueContains(app.textFields["url"], value: "mozilla")
     }
     

@@ -48,7 +48,6 @@ class TabTrayController: UIViewController {
     var collectionView: UICollectionView!
 
     let statusBarBG = UIView()
-
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(didTapToolbarAddTab), for: .touchUpInside)
@@ -131,12 +130,17 @@ class TabTrayController: UIViewController {
         self.view.layoutIfNeeded()
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        // When the app enters split screen mode we refresh the collection view layout to show the proper grid
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
         tabDisplayManager = nil
     }
-
+    
     func focusTab() {
         guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.dataStore.index(of: currentTab), let rect = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame else {
             return
