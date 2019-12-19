@@ -68,6 +68,6 @@ To simplify the build process, these compiled files are checked-in to this repos
 npm run build
 ```
 
-## CONTRIBUTING
+## Contributing
 
 Want to contribute to this repository? Check out [Contributing Guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/master/CONTRIBUTING.md)
