@@ -708,6 +708,17 @@ class Tab: NSObject {
                     blockSelf?.stateController.setShowMode(.nothing)
                 }
 
+                var tabsRunningXR = 0
+                for tab in blockSelf?.browserViewController?.tabManager.tabs ?? [] {
+                    if tab.arkController?.arSessionState == .arkSessionRunning {
+                        tabsRunningXR += 1
+                    }
+                }
+                if tabsRunningXR > 1 {
+                    blockSelf?.stateController.state.shouldShowSessionStartedPopup = false
+                    blockSelf?.messageController?.showMessage(withTitle: MULTIPLE_AR_SESSIONS_TITLE, message: MULTIPLE_AR_SESSIONS_MESSAGE, hideAfter: MULTIPLE_AR_SESSIONS_POPUP_TIME_IN_SECONDS)
+                }
+                
                 if shouldShowSessionStartedPopup {
                     blockSelf?.stateController.state.shouldShowSessionStartedPopup = false
                     blockSelf?.messageController?.showMessage(withTitle: AR_SESSION_STARTED_POPUP_TITLE, message: AR_SESSION_STARTED_POPUP_MESSAGE, hideAfter: AR_SESSION_STARTED_POPUP_TIME_IN_SECONDS)

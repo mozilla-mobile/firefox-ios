@@ -119,6 +119,9 @@ let WEB_AR_CV_INFORMATION_OPTION = "computer_vision_data"
 let AR_SESSION_STARTED_POPUP_TITLE = "AR Session Started"
 let AR_SESSION_STARTED_POPUP_MESSAGE = "Rotate device to show the URL bar"
 let AR_SESSION_STARTED_POPUP_TIME_IN_SECONDS = 2
+let MULTIPLE_AR_SESSIONS_TITLE = "Only one AR experience can run at a time"
+let MULTIPLE_AR_SESSIONS_MESSAGE = "Shutting down last AR session"
+let MULTIPLE_AR_SESSIONS_POPUP_TIME_IN_SECONDS = 4
 let WEB_AR_WORLD_SENSING_DATA_OPTION = "worldSensing"
 
 let UNSUPPORTED_CONFIGURATION_ARKIT_ERROR_MESSAGE = "The selected ARSessionConfiguration is not supported by the current device"
