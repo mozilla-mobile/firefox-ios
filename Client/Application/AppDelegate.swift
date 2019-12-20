@@ -85,8 +85,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
-        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
-        Sentry.shared.setup(sendUsageData: sendUsageData)
+        //Turn off Sentry crash reporting for XR Viewer
+//        let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
+//        Sentry.shared.setup(sendUsageData: sendUsageData)
 
         // Set the Firefox UA for browsing.
         setUserAgent()
@@ -196,10 +197,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        registerDefaultsFromSettingsBundle()
+        
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
 
-        adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
+        // Turn off Adjust link attribution for XR Viewer
+//        adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
         UNUserNotificationCenter.current().delegate = self
         SentTabAction.registerActions()
@@ -226,10 +231,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
-        if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
-            LeanPlumClient.shared.setup(profile: profile)
-            LeanPlumClient.shared.set(enabled: true)
-        }
+        // Turn off Leanplum marketing for XR Viewer
+//        if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
+//            LeanPlumClient.shared.setup(profile: profile)
+//            LeanPlumClient.shared.set(enabled: true)
+//        }
 
         if #available(iOS 13.0, *) {
             BGTaskScheduler.shared.register(forTaskWithIdentifier: "org.mozilla.ios.sync.part1", using: DispatchQueue.global()) { task in
@@ -266,6 +272,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         return shouldPerformAdditionalDelegateHandling
+    }
+    
+    func registerDefaultsFromSettingsBundle() {
+        guard let settingsBundle = Bundle.main.url(forResource: "Settings", withExtension: "bundle") else {
+            print("Could not find Settings.bundle")
+            return
+        }
+
+        guard let settings = NSDictionary(contentsOf: settingsBundle.appendingPathComponent("Root.plist")) else {
+            print("Could not find settings dictionary")
+            return
+        }
+        let preferences = settings["PreferenceSpecifiers"] as? [[AnyHashable : Any]]
+
+        var defaultsToRegister = [AnyHashable : Any]()
+        for prefSpecification: [AnyHashable : Any] in preferences ?? [] {
+            let key = prefSpecification["Key"] as? String
+            if key != nil {
+                defaultsToRegister[key] = prefSpecification["DefaultValue"]
+            }
+        }
+
+        if let aRegister = defaultsToRegister as? [String : Any] {
+            UserDefaults.standard.register(defaults: aRegister)
+        }
+
+        if UserDefaults.standard.integer(forKey: Constant.secondsInBackgroundKey()) == 0 {
+            UserDefaults.standard.set(Constant.sessionInBackgroundDefaultTimeInSeconds(), forKey: Constant.secondsInBackgroundKey())
+        }
+
+        if UserDefaults.standard.float(forKey: Constant.distantAnchorsDistanceKey()) == 0.0 {
+            UserDefaults.standard.set(Constant.distantAnchorsDefaultDistanceInMeters(), forKey: Constant.distantAnchorsDistanceKey())
+        }
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {

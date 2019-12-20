@@ -476,6 +476,7 @@ class Tab: NSObject {
         }
         
         if let webView = webView {
+            stateController.setWebXR(false)
             // Convert about:reader?url=http://example.com URLs to local ReaderMode URLs
             if let url = request.url, let syncedReaderModeURL = url.decodeReaderModeURL, let localReaderModeURL = syncedReaderModeURL.encodeReaderModeURL(WebServer.sharedInstance.baseReaderModeURL()) {
                 let readerModeRequest = PrivilegedRequest(url: localReaderModeURL) as URLRequest
@@ -486,7 +487,17 @@ class Tab: NSObject {
             if let url = request.url, url.isFileURL, request.isPrivileged {
                 return webView.loadFileURL(url, allowingReadAccessTo: url)
             }
-
+            if UserDefaults.standard.bool(forKey: Constant.exposeWebXRAPIKey()) {
+                if let webView = self.webView,
+                    let path = Bundle.main.path(forResource: "webxrShim", ofType: "js"),
+                    var source = try? String(contentsOfFile: path)
+                {
+                    let polyfillURL = UserDefaults.standard.string(forKey: Constant.polyfillURLKey()) ?? "https://raw.githack.com/MozillaReality/webxr-ios-js/develop/dist/webxr.js"
+                    source = "{ const REALAPI_URL = '\(polyfillURL)'; " + source
+                    let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+                    webView.configuration.userContentController.addUserScript(userScript)
+                }
+            }
             return webView.load(request)
         }
         return nil
@@ -651,6 +662,7 @@ class Tab: NSObject {
         setupMessageController()
 //        setupXRWebController()
 //        setupOverlayController()
+        setupXRNotifications()
     }
     
     // MARK: - Setup State Controller
@@ -696,6 +708,17 @@ class Tab: NSObject {
                     blockSelf?.stateController.setShowMode(.nothing)
                 }
 
+                var tabsRunningXR = 0
+                for tab in blockSelf?.browserViewController?.tabManager.tabs ?? [] {
+                    if tab.arkController?.arSessionState == .arkSessionRunning {
+                        tabsRunningXR += 1
+                    }
+                }
+                if tabsRunningXR > 1 {
+                    blockSelf?.stateController.state.shouldShowSessionStartedPopup = false
+                    blockSelf?.messageController?.showMessage(withTitle: MULTIPLE_AR_SESSIONS_TITLE, message: MULTIPLE_AR_SESSIONS_MESSAGE, hideAfter: MULTIPLE_AR_SESSIONS_POPUP_TIME_IN_SECONDS)
+                }
+                
                 if shouldShowSessionStartedPopup {
                     blockSelf?.stateController.state.shouldShowSessionStartedPopup = false
                     blockSelf?.messageController?.showMessage(withTitle: AR_SESSION_STARTED_POPUP_TITLE, message: AR_SESSION_STARTED_POPUP_MESSAGE, hideAfter: AR_SESSION_STARTED_POPUP_TIME_IN_SECONDS)
@@ -881,6 +904,49 @@ class Tab: NSObject {
         messageController?.didHideMessageByUser = {
             //[[blockSelf stateController] applyOnMessageShowMode];
         }
+    }
+    
+    func setupXRNotifications() {
+        weak var blockSelf: Tab? = self
+
+        NotificationCenter.default.addObserver(forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: OperationQueue.main, using: { note in
+            blockSelf?.arkController?.controller.previewingSinglePlane = false
+//            blockSelf?.chooseSinglePlaneButton.isHidden = true
+            var arSessionState: ARKitSessionState
+            if blockSelf?.arkController?.arSessionState != nil {
+                arSessionState = (blockSelf?.arkController?.arSessionState)!
+            } else {
+                arSessionState = .arkSessionUnknown
+            }
+            switch arSessionState {
+                case .arkSessionUnknown:
+                    print("\n\n*********\n\nMoving to background while ARKit is not initialized, nothing to do\n\n*********")
+                case .arkSessionPaused:
+                    print("\n\n*********\n\nMoving to background while the session is paused, nothing to do\n\n*********")
+                    // need to try and save WorldMap here.  May fail?
+                    blockSelf?.arkController?.saveWorldMapInBackground()
+                case .arkSessionRunning:
+                    print("\n\n*********\n\nMoving to background while the session is running, store the timestamp\n\n*********")
+                    UserDefaults.standard.set(Date(), forKey: Constant.backgroundOrPausedDateKey())
+                    // need to save WorldMap here
+                    blockSelf?.arkController?.saveWorldMapInBackground()
+            }
+
+            blockSelf?.webController?.didBackgroundAction(true)
+
+            blockSelf?.stateController.saveMoveToBackground(onURL: blockSelf?.webController?.lastURL)
+        })
+
+        NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: OperationQueue.main, using: { note in
+            blockSelf?.stateController.applyOnEnterForegroundAction()
+        })
+
+        NotificationCenter.default.addObserver(self, selector: #selector(Tab.deviceOrientationDidChange(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    
+    @objc func deviceOrientationDidChange(_ notification: Notification?) {
+        arkController?.shouldUpdateWindowSize = true
+        updateConstraints()
     }
     
     // MARK: - Setup Web Controller

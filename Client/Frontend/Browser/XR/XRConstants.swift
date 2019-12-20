@@ -119,6 +119,9 @@ let WEB_AR_CV_INFORMATION_OPTION = "computer_vision_data"
 let AR_SESSION_STARTED_POPUP_TITLE = "AR Session Started"
 let AR_SESSION_STARTED_POPUP_MESSAGE = "Rotate device to show the URL bar"
 let AR_SESSION_STARTED_POPUP_TIME_IN_SECONDS = 2
+let MULTIPLE_AR_SESSIONS_TITLE = "Only one AR experience can run at a time"
+let MULTIPLE_AR_SESSIONS_MESSAGE = "Shutting down last AR session"
+let MULTIPLE_AR_SESSIONS_POPUP_TIME_IN_SECONDS = 4
 let WEB_AR_WORLD_SENSING_DATA_OPTION = "worldSensing"
 
 let UNSUPPORTED_CONFIGURATION_ARKIT_ERROR_MESSAGE = "The selected ARSessionConfiguration is not supported by the current device"
@@ -131,9 +134,11 @@ class Constant: NSObject {
     
     static func homeURLKey() -> String { return "homeURL" }
     static func exposeWebXRAPIKey() -> String { return "exposeWebXRAPI" }
+    static func polyfillURLKey() -> String { return "polyfillURL" }
     static func urlBarHeight() -> CGFloat { return 49 }
     static func urlBarAnimationTimeInSeconds() -> TimeInterval { return 0.2 }
     static func distantAnchorsDistanceKey() -> String { return "distantAnchorsDistance" }
+    static func distantAnchorsDefaultDistanceInMeters() -> Float { return 3 }
     static func lastResetSessionTrackingDateKey() -> String { return "lastResetSessionTrackingDate" }
     static func boxSize() -> CGFloat { return 0.05 }
     static func backgroundOrPausedDateKey() -> String { return "backgroundOrPausedDate" }
@@ -141,6 +146,7 @@ class Constant: NSObject {
     static func thresholdTimeInSecondsSinceLastTrackingReset() -> Double { return 600 }
     static func pauseTimeInSecondsToRemoveAnchors() -> Double { return 10 }
     static func secondsInBackgroundKey() -> String { return "secondsInBackground" }
+    static func sessionInBackgroundDefaultTimeInSeconds() -> Int { return 60 }
     static func minimalWebXREnabled() -> String { return "minimalWebXREnabled" }
     static func worldSensingWebXREnabled() -> String { return "worldSensingWebXREnabled" }
     static func videoCameraAccessWebXREnabled() -> String { return "videoCameraAccessWebXREnabled" }

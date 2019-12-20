@@ -409,12 +409,20 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
         screenState.gesture(forAction: Action.LoadURLByTyping, Action.LoadURL) { userState in
             let url = userState.url ?? defaultURL
-            app.textFields["address"].typeText("\(url)\r")
+            // Workaround BB iOS13 be sure tap happens on url bar
+            sleep(1)
+            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.typeText("\(url)\r")
         }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
             let url = userState.url ?? defaultURL
-            app.textFields["address"].typeText("\(url)")
+            // Workaround BB iOS13 be sure tap happens on url bar
+            sleep(1)
+            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.typeText("\(url)")
         }
 
         screenState.noop(to: HomePanelsScreen)
@@ -918,6 +926,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.textFields["url"], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
+            sleep(1)
             app.textFields["url"].press(forDuration: 1.0)
         }
     }

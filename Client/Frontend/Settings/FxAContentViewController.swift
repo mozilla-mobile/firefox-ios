@@ -7,6 +7,7 @@ import SnapKit
 import UIKit
 import WebKit
 import SwiftyJSON
+import Account
 
 protocol FxAContentViewControllerDelegate: AnyObject {
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags: FxALoginFlags)
@@ -54,6 +55,10 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // We check the fx account state and if its not verified or missing password
+        // then we allow the user to remove the account
+        shouldShowRemoveAccountBtn()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -112,6 +117,47 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let script = "window.postMessage(\(json), '\(self.url.absoluteString)');"
         settingsWebView.evaluateJavaScript(script, completionHandler: nil)
     }
+    
+    // Show the remove button if the account isn't verfied or has no password attached to it
+    fileprivate func shouldShowRemoveAccountBtn() {
+        if profile.accountNeedsUserAction {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.FxARemoveAccountButton, style: .plain, closure: { (barButtonItem) in
+                self.showRemoveAccountAlert()
+            })
+            navigationItem.rightBarButtonItem?.tintColor = UIColor.red
+        }
+    }
+    
+    fileprivate func showRemoveAccountAlert() {
+
+        let alertController = UIAlertController(
+            title: Strings.FxARemoveAccountAlertTitle,
+            message: Strings.FxARemoveAccountAlertMessage,
+            preferredStyle: UIAlertController.Style.alert
+        )
+        
+        alertController.addAction(
+            UIAlertAction(
+            title: Strings.SettingsDisconnectCancelAction,
+            style: .cancel
+            ) { (action) in
+                // Do nothing.
+        })
+        
+        alertController.addAction(
+            UIAlertAction(
+            title: Strings.FxARemoveAccountButton,
+            style: .destructive
+            ) { (action) in
+                UnifiedTelemetry.recordEvent(
+                    category: .action,
+                    method: .tap,
+                    object: .removeUnVerifiedAccountButton
+                )
+                self.onDeleteAccount()
+        })
+        navigationController?.present(alertController, animated: true, completion: nil)
+    }
 
     fileprivate func onCanLinkAccount(_ data: JSON) {
         //    // We need to confirm a relink - see shouldAllowRelink for more
@@ -131,7 +177,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // The user has deleted their Firefox Account. Disconnect them!
-    fileprivate func onDeleteAccount(_ data: JSON) {
+    fileprivate func onDeleteAccount() {
         FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: profile.hasAccount()])
         dismiss(animated: true)
@@ -200,7 +246,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             case .signOut:
                 onSignOut(data)
             case .deleteAccount:
-                onDeleteAccount(data)
+                onDeleteAccount()
             }
         }
     }
