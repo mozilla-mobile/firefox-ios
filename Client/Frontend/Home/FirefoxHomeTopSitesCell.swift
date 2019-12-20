@@ -161,11 +161,10 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
                     guard let faviconBG = self?.faviconBG , let frame = self?.frame else { return }
                     if color == nil {
                         make.size.equalTo(frame.width)
-                        make.center.equalTo(faviconBG)
                     } else {
                         make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
-                        make.center.equalTo(faviconBG)
                     }
+                     make.center.equalTo(faviconBG)
                 }
             }
         })
