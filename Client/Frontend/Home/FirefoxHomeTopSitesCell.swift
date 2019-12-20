@@ -52,7 +52,6 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         let view = UIView()
         view.layer.cornerRadius = TopSiteCellUX.CellCornerRadius
         view.layer.masksToBounds = true
-        view.layer.borderWidth = TopSiteCellUX.BorderWidth
         return view
     }()
 
@@ -157,15 +156,25 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
                 self?.imageView.image = tempImageView.image
                 self?.faviconBG.backgroundColor = color
                 self?.imageView.backgroundColor = color
+                
+                self?.imageView.snp.remakeConstraints { make in
+                    guard let faviconBG = self?.faviconBG , let frame = self?.frame else { return }
+                    if color == nil {
+                        make.size.equalTo(frame.width)
+                        make.center.equalTo(faviconBG)
+                    } else {
+                        make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
+                        make.center.equalTo(faviconBG)
+                    }
+                }
             }
         })
-
+        
         applyTheme()
     }
 
     func applyTheme() {
         imageView.tintColor = TopSiteCellUX.PinColor
-        faviconBG.layer.borderColor = TopSiteCellUX.BorderColor.cgColor
         selectedOverlay.backgroundColor = TopSiteCellUX.OverlayColor
         titleBorder.backgroundColor = TopSiteCellUX.BorderColor.cgColor
         titleLabel.backgroundColor = UIColor.clear

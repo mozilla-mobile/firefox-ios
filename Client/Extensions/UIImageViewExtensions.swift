@@ -20,15 +20,18 @@ extension UIColor {
 
 public extension UIImageView {
 
-    func setIcon(_ icon: Favicon?, forURL url: URL?, completed completion: ((UIColor, URL?) -> Void)? = nil ) {
-        func finish(filePath: String?, bgColor: UIColor) {
+    func setIcon(_ icon: Favicon?, forURL url: URL?, completed completion: ((UIColor?, URL?) -> Void)? = nil ) {
+        func finish(filePath: String?, bgColor: UIColor?) {
             if let filePath = filePath {
                 self.image = UIImage(contentsOfFile: filePath)
             }
+            
             // If the background color is clear, we may decide to set our own background based on the theme.
-            let color = bgColor.components.alpha < 0.01 ? UIColor.theme.general.faviconBackground : bgColor
-            self.backgroundColor = color
-            completion?(color, url)
+            if let color = bgColor, color.components.alpha < 0.01 {
+                completion?(UIColor.theme.general.faviconBackground, url)
+            } else {
+                completion?(bgColor, url)
+            }
         }
 
         if let url = url, let defaultIcon = FaviconFetcher.getDefaultIconForURL(url: url) {
@@ -51,18 +54,17 @@ public extension UIImageView {
    /*
     * Fetch a background color for a specfic favicon UIImage. It uses the URL to store the UIColor in memory for subsequent requests.
     */
-    private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor) -> Void)? = nil) {
+    private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor?) -> Void)? = nil) {
         let domain = url.domainURL.absoluteString
         if let color = FaviconFetcher.colors[domain] {
             self.backgroundColor = color
             completionBlock?(color)
         } else {
-            completionBlock?(UIColor.Photon.White100)
-            FaviconFetcher.colors[domain] = UIColor.Photon.White100
+            completionBlock?(nil)
         }
     }
 
-    func setFavicon(forSite site: Site, onCompletion completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
+    func setFavicon(forSite site: Site, onCompletion completionBlock: ((UIColor?, URL?) -> Void)? = nil ) {
         self.setIcon(site.icon, forURL: site.tileURL, completed: completionBlock)
     }
 
