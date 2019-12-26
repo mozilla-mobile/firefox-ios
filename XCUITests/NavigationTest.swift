@@ -78,10 +78,10 @@ class NavigationTest: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         checkFirefoxSyncScreenShown()
 
-        // Disabled due to issue 5793, not possible to tap on Close button
+        // Disabled due to issue 5937, not possible to tap on Close button
         // Go back to NewTabScreen
-        navigator.goto(HomePanelsScreen)
-        waitForExistence(app.cells["TopSitesCell"])
+        // navigator.goto(HomePanelsScreen)
+        // waitForExistence(app.cells["TopSitesCell"])
     }
     
     func testTapSigninShowsFxAFromSettings() {
@@ -91,9 +91,10 @@ class NavigationTest: BaseTestCase {
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
+        // Disable check, page load issues on iOS13.3 sims, issue #5937
         // After that it is possible to go back to Settings
-        let settingsButton = app.navigationBars["Client.FxAContentView"].buttons["Settings"]
-        settingsButton.tap()
+        // let settingsButton = app.navigationBars["Client.FxAContentView"].buttons["Settings"]
+        // settingsButton.tap()
     }
     
     // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
