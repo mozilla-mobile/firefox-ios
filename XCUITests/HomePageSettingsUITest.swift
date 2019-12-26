@@ -41,23 +41,23 @@ class HomePageSettingsUITests: BaseTestCase {
     func testTyping() {
         navigator.goto(HomeSettings)
         // Enter a webpage
-        enterWebPageAsHomepage(text: websiteUrl1)
+        enterWebPageAsHomepage(text: "example.com")
 
         // Check if it is saved going back and then again to home settings menu
         navigator.goto(SettingsScreen)
         navigator.goto(HomeSettings)
         let valueAfter = app.textFields["HomeAsCustomURLTextField"].value
-        XCTAssertEqual(valueAfter as? String, "http://\(websiteUrl1)")
+        XCTAssertEqual(valueAfter as? String, "http://example.com")
 
         // Check that it is actually set by opening a different website and going to Home
-        navigator.openURL(websiteUrl2)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         navigator.goto(BrowserTabMenu)
 
         //Now check open home page should load the previously saved home page
         let homePageMenuItem = app.cells["menu-Home"]
         waitForExistence(homePageMenuItem)
         homePageMenuItem.tap()
-        waitForValueContains(app.textFields["url"], value: websiteUrl1)
+        waitForValueContains(app.textFields["url"], value: "example")
     }
 
     /* Test disabled until bug 1510243 is fixed

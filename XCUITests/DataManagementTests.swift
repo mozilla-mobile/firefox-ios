@@ -19,14 +19,14 @@ class DataManagementTests: BaseTestCase {
     // Testing the search bar, search results and 'Show More' option.
     func testWebSiteDataOptions() {
         // Visiting some websites to create Website Data needed to reveal the "Show More" button
-        let websitesList = ["www.facebook.com", "www.youtube.com", "www.twitter.com", "www.google.com", "www.facebook.com", "www.mozilla.org"]
+        let websitesList = [path(forTestPage: "test-example.html"), path(forTestPage: "test-mozilla-org.html"), path(forTestPage: "test-mozilla-book.html"), "www.google.com"]
         for website in websitesList {
             navigator.openURL(website)
         }
         navigator.goto(WebsiteDataSettings)
         waitForExistence(app.searchFields["Filter Sites"])
         navigator.performAction(Action.TapOnFilterWebsites)
-        app.typeText("youtube")
+        app.typeText("example")
         waitForExistence(app.tables["Search results"])
         let expectedSearchResults = app.tables["Search results"].cells.count
         XCTAssertEqual(expectedSearchResults, 1)
