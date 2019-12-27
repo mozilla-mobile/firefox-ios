@@ -6,6 +6,9 @@ import XCTest
 
 let website = ["url": "www.mozilla.org", "value": "www.mozilla.org", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
 
+let websiteExample = ["url": "www.example.com", "value": "www.example.com"]
+
+
 class DomainAutocompleteTest: BaseTestCase {
 
     let testWithDB = ["testAutocomplete","testAutocompleteDeletingChars","testDeleteEntireString","testNoMatches","testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
@@ -73,13 +76,13 @@ class DomainAutocompleteTest: BaseTestCase {
 
     // Ensure that the scheme is included in the autocompletion.
     func testEnsureSchemeIncludedAutocompletion() {
-        navigator.openURL(website["url"]!)
+        navigator.openURL(websiteExample["url"]!)
         waitUntilPageLoad()
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("https")
-        waitForValueContains(app.textFields["address"], value: "mozilla")
+        app.textFields["address"].typeText("http")
+        waitForValueContains(app.textFields["address"], value: "example")
         let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "https://www.mozilla.org", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "http://www.example.com", "Wrong autocompletion")
     }
     // Non-matches.
     func testNoMatches() {
