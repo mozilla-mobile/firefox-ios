@@ -407,13 +407,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(URLBarOpen) { screenState in
         // This is used for opening BrowserTab with default mozilla URL
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
-        screenState.gesture(forAction: Action.LoadURLByTyping, Action.LoadURL) { userState in
+        screenState.gesture(forAction: Action.LoadURLByTyping) { userState in
             let url = userState.url ?? defaultURL
             // Workaround BB iOS13 be sure tap happens on url bar
-            sleep(1)
             app.textFields.firstMatch.tap()
             app.textFields.firstMatch.tap()
-            app.textFields.firstMatch.typeText("\(url)\r")
+            app.textFields.firstMatch.typeText(url)
+            app.textFields.firstMatch.typeText("\r")
         }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
