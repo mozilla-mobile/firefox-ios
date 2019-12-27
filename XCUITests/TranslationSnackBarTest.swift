@@ -4,18 +4,22 @@
 
 import XCTest
 
+let spanishURL = "elpais.es"
+
 class TranslationSnackBarTest: BaseTestCase {
-    /*
+
     // This test checks to the correct functionalty of the Translation prompt and Translation is done corrrectly using Google
     func testSnackBarDisplayed() {
         userState.localeIsExpectedDifferent = true
-        navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        // Disable local site due to snackbar not accessible there
+        // navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        navigator.openURL(spanishURL)
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TranslationPrompt.doTranslate"])
+        waitForExistence(app.buttons["TranslationPrompt.doTranslate"], timeout: 5)
         navigator.performAction(Action.SelectDontTranslateThisPage)
         XCTAssertFalse(app.buttons["TranslationPrompt.dontTranslate"].exists)
         navigator.performAction(Action.ReloadURL)
-        waitForExistence(app.buttons["TranslationPrompt.doTranslate"])
+        waitForExistence(app.buttons["TranslationPrompt.doTranslate"], timeout: 5)
         navigator.performAction(Action.SelectTranslateThisPage)
         waitForValueContains(app.textFields["url"], value: "translate.google")
     }
@@ -26,7 +30,9 @@ class TranslationSnackBarTest: BaseTestCase {
         let translationSwitch = app.switches["TranslateSwitchValue"]
         XCTAssertTrue(translationSwitch.isEnabled)
         navigator.performAction(Action.DisableTranslation)
-        navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        // Disable local site due to snackbar not accessible there
+        // navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        navigator.openURL(spanishURL)
         waitUntilPageLoad()
         XCTAssertFalse(app.buttons["TranslationPrompt.dontTranslate"].exists)
     }
@@ -36,9 +42,13 @@ class TranslationSnackBarTest: BaseTestCase {
         userState.localeIsExpectedDifferent = true
         navigator.goto(TranslationSettings)
         navigator.performAction(Action.SelectBing)
-        navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        // Disable local site due to snackbar not accessible there
+        // navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        navigator.openURL(spanishURL)
         waitUntilPageLoad()
         navigator.performAction(Action.SelectTranslateThisPage)
-        waitForValueContains(app.textFields["url"], value: "translatetheweb")
-    }*/
+        // Disable check after iOS 13.3 update #5937
+        // Value on url text field is not updated
+        // waitForValueContains(app.textFields["url"], value: "translatetheweb")
+    }
 }
