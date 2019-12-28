@@ -29,17 +29,24 @@ enum ReaderModeTheme: String {
     case light = "light"
     case dark = "dark"
     case sepia = "sepia"
+
+    init() {
+        self = ReaderModeTheme(rawValue: ThemeManager.instance.currentName.rawValue)?.preferredTheme() ?? .light
+    }
 }
 
 extension ReaderModeTheme {
-    var preferredTheme: ReaderModeTheme {
-        let theme = ReaderModeTheme(rawValue: ThemeManager.instance.currentName.rawValue) ?? .light
-
-        if isThemeSystemCompatible {
-            return theme
+    func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
+        let theme = theme ?? self
+        let appWideTheme = ReaderModeTheme(rawValue: ThemeManager.instance.currentName.rawValue) ?? .light
+        
+        if appWideTheme.isThemeDark {
+            return .dark // app-wide dark overrides all
+        } else if appWideTheme.isThemeSystemCompatible && theme.isThemeSystemCompatible {
+            return .light // app-wide light overrides Reader Mode's dark
         }
 
-        return theme.isThemeDark ? .dark : .light
+        return .sepia
     }
 
     private var isThemeSystemCompatible: Bool {
@@ -142,6 +149,10 @@ struct ReaderModeStyle {
         return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
     }
 
+    init() {
+        self.init(theme: ReaderModeTheme(), fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
+    }
+
     init(theme: ReaderModeTheme, fontType: ReaderModeFontType, fontSize: ReaderModeFontSize) {
         self.theme = theme
         self.fontType = fontType
@@ -164,7 +175,7 @@ struct ReaderModeStyle {
             return nil
         }
 
-        self.theme = theme?.preferredTheme ?? .light
+        self.theme = theme ?? ReaderModeTheme()
         self.fontType = fontType!
         self.fontSize = fontSize!
     }
