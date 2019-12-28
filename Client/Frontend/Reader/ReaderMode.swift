@@ -29,6 +29,10 @@ enum ReaderModeTheme: String {
     case light = "light"
     case dark = "dark"
     case sepia = "sepia"
+
+    init() {
+        self = ReaderModeTheme(rawValue: ThemeManager.instance.currentName.rawValue)?.preferredTheme() ?? .light
+    }
 }
 
 private struct FontFamily {
@@ -138,6 +142,10 @@ struct ReaderModeStyle {
     /// Encode the style to a dictionary that can be stored in the profile
     func encodeAsDictionary() -> [String: Any] {
         return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
+    }
+
+    init() {
+        self.init(theme: ReaderModeTheme(), fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
     }
 
     init(theme: ReaderModeTheme, fontType: ReaderModeFontType, fontSize: ReaderModeFontSize) {
