@@ -743,6 +743,9 @@ class Tab: NSObject {
                         blockSelf?.timerSessionRunningInBackground = nil
                     })
                 }
+                if blockSelf?.browserViewController?.webViewContainer.subviews.count ?? 1 > 1 {
+                    blockSelf?.browserViewController?.webViewContainer.subviews[0].removeFromSuperview()
+                }
                 blockSelf?.browserViewController?.scrollController.showToolbars(animated: true)
             }
             blockSelf?.updateConstraints()
