@@ -1031,6 +1031,7 @@ class Tab: NSObject {
         webController?.onStopAR = {
             blockSelf?.stateController.setWebXR(false)
             blockSelf?.stateController.setShowMode(.nothing)
+            blockSelf?.webController?.userStoppedAR()
         }
         
         webController?.onShowPermissions = {
