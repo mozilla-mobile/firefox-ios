@@ -19,7 +19,7 @@ class TranslationSnackBarTest: BaseTestCase {
         navigator.performAction(Action.SelectDontTranslateThisPage)
         XCTAssertFalse(app.buttons["TranslationPrompt.dontTranslate"].exists)
         navigator.performAction(Action.ReloadURL)
-        waitForExistence(app.buttons["TranslationPrompt.doTranslate"], timeout: 5)
+        waitForExistence(app.buttons["TranslationPrompt.doTranslate"], timeout: 15)
         navigator.performAction(Action.SelectTranslateThisPage)
         waitForValueContains(app.textFields["url"], value: "translate.google")
     }
