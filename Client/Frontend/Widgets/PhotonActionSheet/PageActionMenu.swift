@@ -221,7 +221,9 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        mainActions.append(contentsOf: [sendToDevice, copyURL, xrToggleDebug, xrSwitchCamera, xrResetTracking, xrStopAR, xrReenterFullscreen])
+        // Removing the xrStopAR option until ability to resume session after stopping is added,
+        // currently all XR requests launch a new session
+        mainActions.append(contentsOf: [sendToDevice, copyURL, xrToggleDebug, xrSwitchCamera, xrResetTracking, xrReenterFullscreen])
 
         let pinAction = (isPinned ? removeTopSitesPin : pinToTopSites)
         var commonActions = [toggleDesktopSite, pinAction]
