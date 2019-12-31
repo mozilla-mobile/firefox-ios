@@ -68,7 +68,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
         self.tableView.register(OneLineTableViewCell.self, forCellReuseIdentifier: BookmarkNodeCellIdentifier)
         self.tableView.register(SeparatorTableViewCell.self, forCellReuseIdentifier: BookmarkSeparatorCellIdentifier)
-        self.tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: BookmarkSectionHeaderIdentifier)
+        self.tableView.register(SiteTableViewHeader.self, forHeaderFooterViewReuseIdentifier: BookmarkSectionHeaderIdentifier)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -409,11 +409,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == BookmarksSection.recent.rawValue, !recentBookmarks.isEmpty,
-            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView else {
+            let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: BookmarkSectionHeaderIdentifier) as? SiteTableViewHeader else {
             return nil
         }
 
-        headerView.titleLabel.text = Strings.RecentlyBookmarkedTitle.uppercased()
+        headerView.titleLabel.text = Strings.RecentlyBookmarkedTitle
         headerView.showBorder(for: .top, true)
         headerView.showBorder(for: .bottom, true)
 
