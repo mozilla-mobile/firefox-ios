@@ -47,12 +47,13 @@ open class UserAgent {
     public static func isDesktop(ua: String) -> Bool {
         return ua.lowercased().contains("intel mac")
     }
+    
     public static func desktopUserAgent() -> String {
-        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/\(AppInfo.appVersion) \(uaBitSafari)"
+        return UserAgentBuilder.defaultDesktopUserAgent().userAgent()
     }
 
     public static func mobileUserAgent() -> String {
-        return "Mozilla/5.0 (\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/\(AppInfo.appVersion)  \(uaBitMobile) \(uaBitSafari)"
+        return UserAgentBuilder.defaultMobileUserAgent().userAgent()
     }
 
     public static func oppositeUserAgent() -> String {
@@ -61,6 +62,70 @@ open class UserAgent {
             return mobileUserAgent()
         } else {
             return desktopUserAgent()
+        }
+    }
+}
+
+public enum UserAgentPlatform {
+    case Desktop
+    case Mobile
+}
+
+public struct UserAgentConstant {
+    public static let mobileUserAgent = ["whatsapp.com": UserAgentBuilder.defaultMobileUserAgent().userAgent()]
+    public static let desktopUserAgent = ["whatsapp.com": UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)") ]
+    
+}
+
+public struct UserAgentBuilder {
+    fileprivate var product: String = ""
+    fileprivate var systemInfo: String = ""
+    fileprivate var platform: String = ""
+    fileprivate var platformDetails: String = ""
+    fileprivate var extensions: String = ""
+    
+    init(product: String, systemInfo: String, platform: String, platformDetails: String, extensions: String) {
+        self.product = product
+        self.systemInfo = systemInfo
+        self.platform = platform
+        self.platformDetails = platformDetails
+        self.extensions = extensions
+    }
+    
+    func userAgent() -> String {
+        return "\(product) \(systemInfo) \(platform) \(platformDetails) \(extensions)"
+    }
+    
+    func modifiedUserAgent(product: String? = nil, systemInfo: String? = nil, platform: String? = nil, platformDetails: String? = nil, extensions: String? = nil) -> String {
+        return "\(product ?? self.product) \(systemInfo ?? self.systemInfo) \(platform ?? self.platform) \(platformDetails ?? self.platformDetails) \(extensions ?? self.extensions)"
+    }
+    
+    public static func defaultMobileUserAgent() -> UserAgentBuilder {
+        return UserAgentBuilder(product: "Mozilla/5.0", systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: "AppleWebKit/605.1.15", platformDetails: "(KHTML, like Gecko)", extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+    }
+    
+    public static func defaultDesktopUserAgent() -> UserAgentBuilder {
+        return UserAgentBuilder(product: "Mozilla/5.0", systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: "AppleWebKit/605.1.15", platformDetails: "(KHTML, like Gecko)", extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+    }
+}
+
+extension UserAgent {
+    
+    //Check if the website requires a custom user agent
+    public static func getUserAgent(domain:String, platform:UserAgentPlatform) -> String {
+        switch platform {
+        case .Desktop:
+            if let customUA = UserAgentConstant.desktopUserAgent[domain] {
+                return customUA
+            } else {
+                return desktopUserAgent()
+            }
+        case .Mobile:
+            if let customUA = UserAgentConstant.mobileUserAgent[domain] {
+                return customUA
+            } else {
+                return mobileUserAgent()
+            }
         }
     }
 }
