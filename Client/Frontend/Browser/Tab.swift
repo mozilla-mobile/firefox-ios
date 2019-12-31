@@ -512,6 +512,8 @@ class Tab: NSObject {
             browserViewController?.webViewContainer.subviews[0].removeFromSuperview()
         }
         
+        stateController.setWebXR(false)
+        
         // If the current page is an error page, and the reload button is tapped, load the original URL
         if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
             webView?.evaluateJavaScript("location.replace('\(page)')", completionHandler: nil)
@@ -731,18 +733,8 @@ class Tab: NSObject {
                 blockSelf?.stateController.setShowMode(.nothing)
 //                blockSelf?.webController?.barView?.permissionLevelButton?.buttonImage = nil
 //                blockSelf?.webController?.barView?.permissionLevelButton?.isEnabled = blockSelf?.arkController?.webXRAuthorizationStatus == .denied ? true : false
-                if blockSelf?.arkController?.arSessionState == .arkSessionRunning {
-                    blockSelf?.timerSessionRunningInBackground?.invalidate()
-                    let timerSeconds: Int = UserDefaults.standard.integer(forKey: Constant.secondsInBackgroundKey())
-                    print(String(format: "\n\n*********\n\nMoving away from an XR site, keep ARKit running, and launch the timer for %ld seconds\n\n*********", timerSeconds))
-                    blockSelf?.timerSessionRunningInBackground = Timer.scheduledTimer(withTimeInterval: TimeInterval(timerSeconds), repeats: false, block: { timer in
-                        print("\n\n*********\n\nTimer expired, pausing session\n\n*********")
-                        UserDefaults.standard.set(Date(), forKey: Constant.backgroundOrPausedDateKey())
-                        blockSelf?.arkController?.pauseSession()
-                        blockSelf?.timerSessionRunningInBackground?.invalidate()
-                        blockSelf?.timerSessionRunningInBackground = nil
-                    })
-                }
+                
+                blockSelf?.arkController?.pauseSession()
                 if blockSelf?.browserViewController?.webViewContainer.subviews.count ?? 1 > 1 {
                     blockSelf?.browserViewController?.webViewContainer.subviews[0].removeFromSuperview()
                 }
@@ -829,12 +821,9 @@ class Tab: NSObject {
                 print("\n\n*********\n\nInvalidate timer\n\n*********")
                 blockSelf?.timerSessionRunningInBackground?.invalidate()
             }
-            if let metal = blockSelf?.arkController?.usingMetal,
-                metal != UserDefaults.standard.bool(forKey: Constant.useMetalForARKey())
-            {
-                blockSelf?.savedRender = nil
-                blockSelf?.arkController = nil
-            }
+
+            blockSelf?.savedRender = nil
+            blockSelf?.arkController = nil
 
             if blockSelf?.arkController == nil {
                 print("\n\n*********\n\nARKit is nil, instantiate and start a session\n\n*********")
@@ -1030,7 +1019,6 @@ class Tab: NSObject {
 
         webController?.onStopAR = {
             blockSelf?.stateController.setWebXR(false)
-            blockSelf?.stateController.setShowMode(.nothing)
             blockSelf?.webController?.userStoppedAR()
         }
         
