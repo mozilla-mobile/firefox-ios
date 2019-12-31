@@ -133,9 +133,6 @@ class ARKController: NSObject {
     // A flag representing whether geometry is being sent in arrays (true) or dictionaries (false)
     var geometryArrays = false
     
-    // A flag representing whether Metal (true) is being used for ARKController or SceneKit (false)
-    var usingMetal = false
-    
     var session: ARSession = ARSession()
     var request: [AnyHashable : Any] = [:]
     var configuration: ARConfiguration
@@ -303,7 +300,6 @@ class ARKController: NSObject {
         controller.setHitTestFocus(renderView.center)
         
         interfaceOrientation = Utils.getInterfaceOrientationFromDeviceOrientation()
-        usingMetal = true //type == .arkMetal
         lumaDataBuffer = nil
         lumaBase64StringBuffer = ""
         chromaDataBuffer = nil

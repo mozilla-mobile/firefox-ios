@@ -4,31 +4,26 @@ import ARKit
 extension ARKController: ARSessionDelegate {
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        if !usingMetal {
-            updateARKData(with: frame)
-            didUpdate?()
-        } else {
-            if let controller = controller as? ARKMetalController {
-                controller.renderer.interfaceOrientation = UIApplication.shared.statusBarOrientation
+        if let controller = controller as? ARKMetalController {
+            controller.renderer.interfaceOrientation = UIApplication.shared.statusBarOrientation
+            
+            if controller.previewingSinglePlane,
+                let frame = session.currentFrame
+            {
+                let boundsSize = controller.getRenderView().bounds.size
+                controller.renderer.showDebugPlanes = true
+                let transform = frame.displayTransform(for: controller.renderer.interfaceOrientation, viewportSize: boundsSize)
+                let frameUnitPoint = CGPoint(x: 0.5, y: 0.5).applying(transform.inverted())
                 
-                if controller.previewingSinglePlane,
-                    let frame = session.currentFrame
+                if let firstHitTestResult = frame.hitTest(frameUnitPoint, types: .existingPlaneUsingGeometry).first,
+                    let anchor = firstHitTestResult.anchor,
+                    let node = controller.planes[anchor.identifier]
                 {
-                    let boundsSize = controller.getRenderView().bounds.size
-                    controller.renderer.showDebugPlanes = true
-                    let transform = frame.displayTransform(for: controller.renderer.interfaceOrientation, viewportSize: boundsSize)
-                    let frameUnitPoint = CGPoint(x: 0.5, y: 0.5).applying(transform.inverted())
-                    
-                    if let firstHitTestResult = frame.hitTest(frameUnitPoint, types: .existingPlaneUsingGeometry).first,
-                        let anchor = firstHitTestResult.anchor,
-                        let node = controller.planes[anchor.identifier]
-                    {
-                        controller.focusedPlane = node
-                        node.geometry?.elements.first?.material.diffuse.contents = UIColor.green
-                    }
-                } else if controller.showMode != .debug && controller.showMode != .urlDebug {
-                    controller.renderer.showDebugPlanes = false
+                    controller.focusedPlane = node
+                    node.geometry?.elements.first?.material.diffuse.contents = UIColor.green
                 }
+            } else if controller.showMode != .debug && controller.showMode != .urlDebug {
+                controller.renderer.showDebugPlanes = false
             }
         }
         if shouldUpdateWindowSize {
@@ -53,8 +48,7 @@ extension ARKController: ARSessionDelegate {
                 continue
             }
 
-            if usingMetal,
-                let controller = controller as? ARKMetalController,
+            if let controller = controller as? ARKMetalController,
                 addedAnchor is ARPlaneAnchor
             {
                 let node = Node()
@@ -106,8 +100,7 @@ extension ARKController: ARSessionDelegate {
                 continue
             }
             
-            if usingMetal,
-                let controller = controller as? ARKMetalController,
+            if let controller = controller as? ARKMetalController,
                 updatedAnchor is ARPlaneAnchor,
                 let node = controller.planes[updatedAnchor.identifier]
             {
@@ -127,8 +120,7 @@ extension ARKController: ARSessionDelegate {
         print("Remove Anchors - \(anchors.debugDescription)")
         for removedAnchor: ARAnchor in anchors {
             
-            if usingMetal,
-                let controller = controller as? ARKMetalController,
+            if let controller = controller as? ARKMetalController,
                 removedAnchor is ARPlaneAnchor,
                 let node = controller.planes[removedAnchor.identifier]
             {

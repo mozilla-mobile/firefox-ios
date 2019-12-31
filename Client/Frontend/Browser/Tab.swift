@@ -1063,37 +1063,27 @@ class Tab: NSObject {
                 // (HIT_TEST_TYPE_EXISTING_PLANE_GEOMETRY = 32 = 2^5), but to preserve privacy in
                 // .lite Mode only hit test against the plane itself
                 // (HIT_TEST_TYPE_EXISTING_PLANE = 8 = 2^3)
-                if blockSelf?.arkController?.usingMetal ?? false {
-                    var array = [[AnyHashable: Any]]()
-                    switch blockSelf?.arkController?.interfaceOrientation {
-                    case .landscapeLeft?:
-                        array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: 1-x, y: 1-y), types: 8) ?? []
-                    case .landscapeRight?:
-                        array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: x, y: y), types: 8) ?? []
-                    default:
-                        array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: y, y: 1-x), types: 8) ?? []
-                    }
-                    result(array)
-                } else {
-                    let array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: x, y: y), types: 8)
-                    result(array)
+                var array = [[AnyHashable: Any]]()
+                switch blockSelf?.arkController?.interfaceOrientation {
+                case .landscapeLeft?:
+                    array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: 1-x, y: 1-y), types: 8) ?? []
+                case .landscapeRight?:
+                    array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: x, y: y), types: 8) ?? []
+                default:
+                    array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: y, y: 1-x), types: 8) ?? []
                 }
+                result(array)
             } else {
-                if blockSelf?.arkController?.usingMetal ?? false {
-                    var array = [[AnyHashable: Any]]()
-                    switch blockSelf?.arkController?.interfaceOrientation {
-                    case .landscapeLeft?:
-                        array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: 1-x, y: 1-y), types: mask) ?? []
-                    case .landscapeRight?:
-                        array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: x, y: y), types: mask) ?? []
-                    default:
-                        array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: y, y: 1-x), types: mask) ?? []
-                    }
-                    result(array)
-                } else {
-                    let array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: x, y: y), types: mask)
-                    result(array)
+                var array = [[AnyHashable: Any]]()
+                switch blockSelf?.arkController?.interfaceOrientation {
+                case .landscapeLeft?:
+                    array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: 1-x, y: 1-y), types: mask) ?? []
+                case .landscapeRight?:
+                    array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: x, y: y), types: mask) ?? []
+                default:
+                    array = blockSelf?.arkController?.hitTestNormPoint(CGPoint(x: y, y: 1-x), types: mask) ?? []
                 }
+                result(array)
             }
         }
 
@@ -1259,7 +1249,7 @@ class Tab: NSObject {
             print("Unable to grab tab webView")
             return
         }
-//        arkController = ARKController(type: UserDefaults.standard.bool(forKey: Constant.useMetalForARKey()) ? .arkMetal : .arkSceneKit, rootView: self.view)
+        
         arkController = ARKController(type: .arkMetal, rootView: browserViewController?.webViewContainer ?? UIView())
 
         arkController?.didUpdate = {
@@ -1364,17 +1354,15 @@ class Tab: NSObject {
 
         arkController?.startSession(with: stateController.state)
         
-        if arkController?.usingMetal ?? false {
-            arkController?.controller.renderer.rendererShouldUpdateFrame = { block in
-                if let frame = blockSelf?.arkController?.session.currentFrame {
-                    blockSelf?.arkController?.controller.readyToRenderFrame = false
-                    blockSelf?.savedRender = block
-                    blockSelf?.arkController?.updateARKData(with: frame)
-                    blockSelf?.arkController?.didUpdate?()
-                } else {
-                    print("Unable to updateARKData since ARFrame isn't ready")
-                    block()
-                }
+        arkController?.controller.renderer.rendererShouldUpdateFrame = { block in
+            if let frame = blockSelf?.arkController?.session.currentFrame {
+                blockSelf?.arkController?.controller.readyToRenderFrame = false
+                blockSelf?.savedRender = block
+                blockSelf?.arkController?.updateARKData(with: frame)
+                blockSelf?.arkController?.didUpdate?()
+            } else {
+                print("Unable to updateARKData since ARFrame isn't ready")
+                block()
             }
         }
 

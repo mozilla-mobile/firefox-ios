@@ -143,7 +143,6 @@ class Constant: NSObject {
     static func lastResetSessionTrackingDateKey() -> String { return "lastResetSessionTrackingDate" }
     static func boxSize() -> CGFloat { return 0.05 }
     static func backgroundOrPausedDateKey() -> String { return "backgroundOrPausedDate" }
-    static func useMetalForARKey() -> String { return "useMetalForAR" }
     static func thresholdTimeInSecondsSinceLastTrackingReset() -> Double { return 600 }
     static func pauseTimeInSecondsToRemoveAnchors() -> Double { return 10 }
     static func secondsInBackgroundKey() -> String { return "secondsInBackground" }
