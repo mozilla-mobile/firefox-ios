@@ -11,7 +11,7 @@ let noTrackingElementsString = "tp.no-trackers-blocked"
 
 let websiteWithBlockedElements = "twitter.com"
 let websiteWithoutBlockedElements = "wikipedia.com"
-let differentWebsite = "mozilla.org"
+let differentWebsite = path(forTestPage: "test-example.html")
 
 class TrackingProtectionTests: BaseTestCase {
 
