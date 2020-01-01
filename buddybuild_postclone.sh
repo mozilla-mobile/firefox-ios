@@ -43,11 +43,7 @@ fi
 carthage checkout
 ./Carthage/Checkouts/EarlGrey/Scripts/setup-earlgrey.sh
 
-cd content-blocker-lib-ios
-./build-disconnect.py block
-./build-disconnect.py block-cookies
-cd ..
-
+(cd content-blocker-lib-ios/ContentBlockerGen && swift run)
 
 #
 # Add a badge for FirefoxBeta

@@ -98,8 +98,7 @@ class ActivityStreamTest: BaseTestCase {
         // Open a new page and wait for the completion
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL(newTopSite["url"]!)
-        waitUntilPageLoad()
-        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -236,6 +235,8 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Open in New Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
+        // Workaroud needed after xcode 11.3 update Issue 5937
+        sleep(1)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])

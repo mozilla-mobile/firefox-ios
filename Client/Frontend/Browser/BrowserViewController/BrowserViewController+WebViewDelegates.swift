@@ -292,6 +292,10 @@ extension BrowserViewController: WKNavigationDelegate {
                 hideReaderModeBar(animated: false)
             }
         }
+        
+        if let tab = tabManager.selectedTab {
+            tab.webController?.onStartLoad?()
+        }
     }
 
     // Recognize an Apple Maps URL. This will trigger the native app. But only if a search query is present. Otherwise

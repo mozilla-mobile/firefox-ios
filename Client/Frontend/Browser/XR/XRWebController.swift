@@ -205,6 +205,10 @@ WKScriptMessageHandler {
         callWebMethod(WEB_AR_IOS_USERSTOPPED_AR, param: "", webCompletion: nil)
     }
 
+    func userStoppedAR() {
+        callWebMethod(WEB_AR_IOS_USERSTOPPED_AR, param: "", webCompletion: nil)
+    }
+    
     func hideKeyboard() {
 //        barView?.hideKeyboard()
     }
