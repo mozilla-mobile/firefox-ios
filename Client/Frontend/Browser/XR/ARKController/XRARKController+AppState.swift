@@ -260,14 +260,7 @@ extension ARKController {
      @return an array of hit tests
      */
     func hitTestNormPoint(_ normPoint: CGPoint, types type: Int) -> [[AnyHashable: Any]] {
-        var point = CGPoint()
-        if usingMetal {
-            point = normPoint
-        } else {
-            let renderSize: CGSize? = controller.getRenderView().bounds.size
-            point = CGPoint(x: normPoint.x * (renderSize?.width ?? 0.0), y: normPoint.y * (renderSize?.height ?? 0.0))
-        }
-        let result = controller.hitTest(point, with: ARHitTestResult.ResultType(rawValue: UInt(type)))
+        let result = controller.hitTest(normPoint, with: ARHitTestResult.ResultType(rawValue: UInt(type)))
         return hitTestResultArrayFromResult(resultArray: result)
     }
     

@@ -38,6 +38,7 @@ let WEB_AR_IOS_SHOW_DEBUG = "arkitShowDebug"
 let WEB_AR_IOS_DID_RECEIVE_MEMORY_WARNING_MESSAGE = "ios_did_receive_memory_warning"
 let WEB_AR_IOS_USER_GRANTED_CV_DATA = "userGrantedComputerVisionData"
 let WEB_AR_IOS_USER_GRANTED_WORLD_SENSING_DATA = "userGrantedWorldSensingData"
+let WEB_AR_IOS_USERSTOPPED_AR = "userStoppedAR"
 
 // OPTIONS
 let WEB_AR_CALLBACK_OPTION = "callback"
@@ -142,7 +143,6 @@ class Constant: NSObject {
     static func lastResetSessionTrackingDateKey() -> String { return "lastResetSessionTrackingDate" }
     static func boxSize() -> CGFloat { return 0.05 }
     static func backgroundOrPausedDateKey() -> String { return "backgroundOrPausedDate" }
-    static func useMetalForARKey() -> String { return "useMetalForAR" }
     static func thresholdTimeInSecondsSinceLastTrackingReset() -> Double { return 600 }
     static func pauseTimeInSecondsToRemoveAnchors() -> Double { return 10 }
     static func secondsInBackgroundKey() -> String { return "secondsInBackground" }
