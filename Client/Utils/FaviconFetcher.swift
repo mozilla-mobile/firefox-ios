@@ -218,8 +218,9 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return deferred
     }
 
-    // Returns the default favicon for a site based on the first letter of the site's domain
-    class func getDefaultFavicon(_ url: URL) -> UIImage {
+    // Create (or return from cache) a fallback image for a site based on the first letter of the site's domain
+    // Letter is white on a clear background
+    class func letter(forUrl url: URL) -> UIImage {
         guard let character = url.baseDomain?.first else {
             return defaultFavicon
         }
@@ -246,7 +247,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     }
 
     // Returns a color based on the url's hash
-    class func getDefaultColor(_ url: URL) -> UIColor {
+    class func color(forUrl url: URL) -> UIColor {
         // A stable hash (unlike hashValue), from https://useyourloaf.com/blog/swift-hashable/
         func stableHash(_ str: String) -> Int {
             let unicodeScalars = str.unicodeScalars.map { $0.value }

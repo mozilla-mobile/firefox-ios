@@ -35,7 +35,8 @@ public extension UIImageView {
             finish(bgColor: bundledIcon.bgcolor)
         } else {
             let imageURL = URL(string: icon?.url ?? "")
-            let defaults = defaultFavicon(website)
+            let defaults = fallbackFavicon(forUrl: website)
+            backgroundColor = defaults.color
             self.sd_setImage(with: imageURL, placeholderImage: defaults.image, options: []) {(img, err, _, _) in
                 guard let image = img, let url = website, err == nil else {
                     finish(bgColor: defaults.color)
@@ -70,29 +71,22 @@ public extension UIImageView {
     * If the webpage has low-res favicon, use defaultFavIcon
     */
     func setFaviconOrDefaultIcon(forSite site: Site, completion: @escaping () -> Void ) {
-        setImageAndBackground(forIcon: site.icon, website: site.tileURL) {
-            if let defaults = self.defaultIconIfNeeded(site.tileURL) {
-                self.image = defaults.image
-                self.backgroundColor = defaults.color
+        setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak self] in
+            if let image = self?.image, image.size.width < 32 || image.size.height < 32 {
+                let defaults = self?.fallbackFavicon(forUrl: site.tileURL)
+                self?.image = defaults?.image
+                self?.backgroundColor = defaults?.color
             }
             completion()
         }
     }
 
-    private func defaultFavicon(_ url: URL?) -> (image: UIImage, color: UIColor) {
+    private func fallbackFavicon(forUrl url: URL?) -> (image: UIImage, color: UIColor) {
         if let url = url {
-            return (FaviconFetcher.getDefaultFavicon(url), FaviconFetcher.getDefaultColor(url))
+            return (FaviconFetcher.letter(forUrl: url), FaviconFetcher.color(forUrl: url))
         } else {
             return (FaviconFetcher.defaultFavicon, .white)
         }
-    }
-    
-    private func defaultIconIfNeeded(_ url: URL?) -> (image: UIImage, color: UIColor)? {
-        if let image = image, let url = url, image.size.width < 32 || image.size.height < 32 {
-            let defaults = defaultFavicon(url)
-            return (defaults.image, defaults.color)
-        }
-        return nil
     }
 }
 
