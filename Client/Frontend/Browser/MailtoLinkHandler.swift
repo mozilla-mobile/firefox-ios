@@ -40,6 +40,8 @@ open class MailtoLinkHandler {
                         providerDict[scheme] = YMailIntegration()
                     } else if scheme == "googlegmail://" {
                         providerDict[scheme] = GoogleGmailIntegration()
+                    } else if scheme == "fastmail://" {
+                        providerDict[scheme] = FastmailIntegration()
                     }
                 }
             })
