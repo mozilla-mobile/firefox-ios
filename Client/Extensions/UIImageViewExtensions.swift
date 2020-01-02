@@ -31,8 +31,8 @@ public extension UIImageView {
             completion?(color, url)
         }
 
-        if let url = url, let defaultIcon = FaviconFetcher.getDefaultIconForURL(url: url) {
-            finish(filePath: defaultIcon.url, bgColor: defaultIcon.color)
+        if let url = url, let bundledIcon = FaviconFetcher.getBundledIcon(forUrl: url) {
+            finish(filePath: bundledIcon.filePath, bgColor: bundledIcon.bgcolor)
         } else {
             let imageURL = URL(string: icon?.url ?? "")
             let defaults = defaultFavicon(url)
