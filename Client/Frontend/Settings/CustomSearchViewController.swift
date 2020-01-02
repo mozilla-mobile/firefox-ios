@@ -137,7 +137,8 @@ class CustomSearchViewController: SettingsTableViewController {
         })
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
 
-        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 133, settingIsValid: { text in
+        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 133,
+            keyboardType: .URL, settingIsValid: { text in
             //Can check url text text validity here.
             return true
         }, settingDidChange: {fieldText in
@@ -180,13 +181,15 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
     let textField = UITextView()
     let placeholderLabel = UILabel()
+    var keyboardType: UIKeyboardType = .default
 
-    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, keyboardType: UIKeyboardType = .default, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
         self.defaultValue = defaultValue
         self.TextFieldHeight = height
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
         self.placeholder = placeholder
+        self.keyboardType = keyboardType
         textField.addSubview(placeholderLabel)
         super.init(cellHeight: TextFieldHeight)
     }
@@ -204,7 +207,10 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         textField.font = placeholderLabel.font
 
         textField.textContainer.lineFragmentPadding = 0
-        textField.keyboardType = .URL
+        textField.keyboardType = keyboardType
+        if (keyboardType == .default) {
+            textField.autocapitalizationType = .words
+        }
         textField.autocorrectionType = .no
         textField.delegate = self
         textField.backgroundColor = UIColor.theme.tableView.rowBackground
