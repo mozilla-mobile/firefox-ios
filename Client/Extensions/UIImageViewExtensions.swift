@@ -20,29 +20,29 @@ extension UIColor {
 
 public extension UIImageView {
 
-    func setIcon(_ icon: Favicon?, forURL url: URL?, completed completion: ((UIColor, URL?) -> Void)? = nil ) {
-        func finish(filePath: String?, bgColor: UIColor) {
-            if let filePath = filePath {
-                self.image = UIImage(contentsOfFile: filePath)
-            }
+    func setImageAndBackground(forIcon icon: Favicon?, website: URL?, completion: @escaping () -> Void) {
+        func finish(bgColor: UIColor) {
             // If the background color is clear, we may decide to set our own background based on the theme.
             let color = bgColor.components.alpha < 0.01 ? UIColor.theme.general.faviconBackground : bgColor
             self.backgroundColor = color
-            completion?(color, url)
+            completion()
         }
 
-        if let url = url, let bundledIcon = FaviconFetcher.getBundledIcon(forUrl: url) {
-            finish(filePath: bundledIcon.filePath, bgColor: bundledIcon.bgcolor)
+        sd_setImage(with: nil) // cancels any pending SDWebImage operations.
+
+        if let url = website, let bundledIcon = FaviconFetcher.getBundledIcon(forUrl: url) {
+            self.image = UIImage(contentsOfFile: bundledIcon.filePath)
+            finish(bgColor: bundledIcon.bgcolor)
         } else {
             let imageURL = URL(string: icon?.url ?? "")
-            let defaults = defaultFavicon(url)
+            let defaults = defaultFavicon(website)
             self.sd_setImage(with: imageURL, placeholderImage: defaults.image, options: []) {(img, err, _, _) in
-                guard let image = img, let dUrl = url, err == nil else {
-                    finish(filePath: nil, bgColor: defaults.color)
+                guard let image = img, let url = website, err == nil else {
+                    finish(bgColor: defaults.color)
                     return
                 }
-                self.color(forImage: image, andURL: dUrl) { color in
-                    finish(filePath: nil, bgColor: color)
+                self.color(forImage: image, andURL: url) { color in
+                    finish(bgColor: color)
                 }
             }
         }
@@ -62,21 +62,20 @@ public extension UIImageView {
         }
     }
 
-    func setFavicon(forSite site: Site, onCompletion completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
-        self.setIcon(site.icon, forURL: site.tileURL, completed: completionBlock)
+    func setFavicon(forSite site: Site, completion: @escaping () -> Void ) {
+        setImageAndBackground(forIcon: site.icon, website: site.tileURL, completion: completion)
     }
     
    /*
     * If the webpage has low-res favicon, use defaultFavIcon
     */
-    func setFaviconOrDefaultIcon(forSite site: Site, onCompletion completionBlock: ((UIColor, URL?) -> Void)? = nil ) {
-        setIcon(site.icon, forURL: site.tileURL) { color, url in
-            if let defaults = self.defaultIconIfNeeded(url) {
+    func setFaviconOrDefaultIcon(forSite site: Site, completion: @escaping () -> Void ) {
+        setImageAndBackground(forIcon: site.icon, website: site.tileURL) {
+            if let defaults = self.defaultIconIfNeeded(site.tileURL) {
                 self.image = defaults.image
-                completionBlock?(defaults.color, url)
-            } else {
-                completionBlock?(color, url)
+                self.backgroundColor = defaults.color
             }
+            completion()
         }
     }
 

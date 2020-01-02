@@ -151,14 +151,10 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         }
 
         accessibilityLabel = titleLabel.text
-        let tempImageView = UIImageView()
-        tempImageView.setFaviconOrDefaultIcon(forSite: site, onCompletion: { [weak self] (color, url) in
-            if let url = url, url == self?.url {
-                self?.imageView.image = tempImageView.image
-                self?.faviconBG.backgroundColor = color
-                self?.imageView.backgroundColor = color
-            }
-        })
+        faviconBG.backgroundColor = .clear
+        self.imageView.setFaviconOrDefaultIcon(forSite: site) { [weak self] in
+            self?.faviconBG.backgroundColor = self?.imageView.backgroundColor
+        }
 
         applyTheme()
     }
