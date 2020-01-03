@@ -36,7 +36,7 @@ public extension UIImageView {
         } else {
             let imageURL = URL(string: icon?.url ?? "")
             let defaults = fallbackFavicon(forUrl: website)
-            backgroundColor = defaults.color
+            backgroundColor = .clear
             self.sd_setImage(with: imageURL, placeholderImage: defaults.image, options: []) {(img, err, _, _) in
                 guard let image = img, let url = website, err == nil else {
                     finish(bgColor: defaults.color)
