@@ -343,6 +343,8 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
+        
+        webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
 
         if InternalURL.isValid(url: url) {
             if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {

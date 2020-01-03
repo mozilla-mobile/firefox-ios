@@ -15,33 +15,23 @@ open class UserAgent {
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
-        return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName))"
+        return UserAgentBuilder.defaultClientUserAgent().userAgent()
     }
 
     public static var syncUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-Sync")
+        return UserAgentBuilder.defaultClientUserAgent().modifiedUserAgent(prefix: "Firefox-iOS-Sync/")
     }
 
     public static var tokenServerClientUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-Token")
+        return UserAgentBuilder.defaultClientUserAgent().modifiedUserAgent(prefix: "Firefox-iOS-Token/")
     }
 
     public static var fxaUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-FxA")
+        return UserAgentBuilder.defaultClientUserAgent().modifiedUserAgent(prefix: "Firefox-iOS-FxA/")
     }
 
     public static var defaultClientUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS")
-    }
-
-    public static func defaultUserAgent() -> String {
-        // As of iOS 13 using a hidden webview method does not return the correct UA on
-        // iPad (it returns mobile UA). We should consider that method no longer reliable.
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            return desktopUserAgent()
-        } else {
-            return mobileUserAgent()
-        }
+        return UserAgentBuilder.defaultClientUserAgent().modifiedUserAgent(prefix: "Firefox-iOS/")
     }
 
     public static func isDesktop(ua: String) -> Bool {
@@ -56,12 +46,12 @@ open class UserAgent {
         return UserAgentBuilder.defaultMobileUserAgent().userAgent()
     }
 
-    public static func oppositeUserAgent() -> String {
-        let isDefaultUADesktop = UserAgent.isDesktop(ua: UserAgent.defaultUserAgent())
+    public static func oppositeUserAgent(domain: String) -> String {
+        let isDefaultUADesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent(domain: domain))
         if isDefaultUADesktop {
-            return mobileUserAgent()
+            return UserAgent.getUserAgent(domain: domain, platform: .Mobile)
         } else {
-            return desktopUserAgent()
+            return UserAgent.getUserAgent(domain: domain, platform: .Desktop)
         }
     }
 }
@@ -73,46 +63,55 @@ public enum UserAgentPlatform {
 
 public struct UserAgentConstant {
     public static let mobileUserAgent = ["whatsapp.com": UserAgentBuilder.defaultMobileUserAgent().userAgent()]
-    public static let desktopUserAgent = ["whatsapp.com": UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)") ]
+    public static let desktopUserAgent = ["whatsapp.com": UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)") ]
     
 }
 
 public struct UserAgentBuilder {
+    fileprivate var prefix: String = ""
     fileprivate var product: String = ""
     fileprivate var systemInfo: String = ""
     fileprivate var platform: String = ""
     fileprivate var platformDetails: String = ""
     fileprivate var extensions: String = ""
+    fileprivate var other: String = "" //If the useragent item we want is completely different and doesn't fall under any other items than we use the other field
+    fileprivate var suffix: String = ""
     
-    init(product: String, systemInfo: String, platform: String, platformDetails: String, extensions: String) {
+    init(prefix: String, product: String, systemInfo: String, platform: String, platformDetails: String, extensions: String, other: String, suffix: String) {
+        self.prefix = prefix
         self.product = product
         self.systemInfo = systemInfo
         self.platform = platform
         self.platformDetails = platformDetails
         self.extensions = extensions
+        self.other = other
+        self.suffix = suffix
     }
     
     func userAgent() -> String {
         return "\(product) \(systemInfo) \(platform) \(platformDetails) \(extensions)"
     }
     
-    func modifiedUserAgent(product: String? = nil, systemInfo: String? = nil, platform: String? = nil, platformDetails: String? = nil, extensions: String? = nil) -> String {
-        return "\(product ?? self.product) \(systemInfo ?? self.systemInfo) \(platform ?? self.platform) \(platformDetails ?? self.platformDetails) \(extensions ?? self.extensions)"
+    func modifiedUserAgent(prefix: String? = nil, product: String? = nil, systemInfo: String? = nil, platform: String? = nil, platformDetails: String? = nil, extensions: String? = nil, other: String? = nil, suffix: String? = nil) -> String {
+        return "\(prefix ?? self.prefix) \(product ?? self.product) \(systemInfo ?? self.systemInfo) \(platform ?? self.platform) \(platformDetails ?? self.platformDetails) \(extensions ?? self.extensions)"
+    }
+    
+    public static func defaultClientUserAgent() -> UserAgentBuilder {
+        return UserAgentBuilder(prefix: "Firefox-iOS/", product: "", systemInfo: "", platform: "", platformDetails: "", extensions: "", other: "\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName)", suffix: "")
     }
     
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(product: "Mozilla/5.0", systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: "AppleWebKit/605.1.15", platformDetails: "(KHTML, like Gecko)", extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+        return UserAgentBuilder(prefix: "", product: "Mozilla/5.0", systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: "AppleWebKit/605.1.15", platformDetails: "(KHTML, like Gecko)", extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)", other: "", suffix: "")
     }
     
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(product: "Mozilla/5.0", systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: "AppleWebKit/605.1.15", platformDetails: "(KHTML, like Gecko)", extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+        return UserAgentBuilder(prefix: "", product: "Mozilla/5.0", systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: "AppleWebKit/605.1.15", platformDetails: "(KHTML, like Gecko)", extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)", other: "", suffix: "")
     }
 }
 
 extension UserAgent {
     
-    //Check if the website requires a custom user agent
-    public static func getUserAgent(domain:String, platform:UserAgentPlatform) -> String {
+    public static func getUserAgent(domain: String, platform: UserAgentPlatform) -> String {
         switch platform {
         case .Desktop:
             if let customUA = UserAgentConstant.desktopUserAgent[domain] {
@@ -126,6 +125,16 @@ extension UserAgent {
             } else {
                 return mobileUserAgent()
             }
+        }
+    }
+    
+    public static func getUserAgent(domain: String) -> String {
+        // As of iOS 13 using a hidden webview method does not return the correct UA on
+        // iPad (it returns mobile UA). We should consider that method no longer reliable.
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return getUserAgent(domain: domain, platform: .Desktop)
+        } else {
+            return getUserAgent(domain: domain, platform: .Mobile)
         }
     }
 }
