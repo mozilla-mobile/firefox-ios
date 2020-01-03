@@ -76,12 +76,7 @@ class TabManager: NSObject {
 
         // Append FxiOS/version Mobile/version Safari/version to the built-in user agent
         let desktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent(domain: ""))
-//        configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.appVersion) " +
-//             (desktop ? "\(UserAgent.uaBitGoogleIpad) " : "\(UserAgent.uaBitMobile) ") +
-//             "\(UserAgent.uaBitSafari)"
-//
-        configuration.applicationNameForUserAgent = "" +
-             (desktop ? "\(UserAgent.uaBitGoogleIpad) " : "\(UserAgent.uaBitMobile) ") +
+        configuration.applicationNameForUserAgent = (desktop ? "\(UserAgent.uaBitGoogleIpad) " : "\(UserAgent.uaBitMobile) ") +
              "\(UserAgent.uaBitSafari)"
         
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
