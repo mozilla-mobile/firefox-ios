@@ -38,28 +38,12 @@ public extension UIImageView {
             let defaults = fallbackFavicon(forUrl: website)
             backgroundColor = .clear
             self.sd_setImage(with: imageURL, placeholderImage: defaults.image, options: []) {(img, err, _, _) in
-                guard let image = img, let url = website, err == nil else {
+                guard err == nil else {
                     finish(bgColor: defaults.color)
                     return
                 }
-                self.color(forImage: image, andURL: url) { color in
-                    finish(bgColor: color)
-                }
+                finish(bgColor: UIColor.Photon.White100)
             }
-        }
-    }
-
-   /*
-    * Fetch a background color for a specfic favicon UIImage. It uses the URL to store the UIColor in memory for subsequent requests.
-    */
-    private func color(forImage image: UIImage, andURL url: URL, completed completionBlock: ((UIColor) -> Void)? = nil) {
-        let domain = url.domainURL.absoluteString
-        if let color = FaviconFetcher.colors[domain] {
-            self.backgroundColor = color
-            completionBlock?(color)
-        } else {
-            completionBlock?(UIColor.Photon.White100)
-            FaviconFetcher.colors[domain] = UIColor.Photon.White100
         }
     }
 

@@ -31,8 +31,6 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return UIImage(named: "defaultFavicon")!
     }()
 
-    static var colors: [String: UIColor] = [:] //An in-Memory data store that stores background colors domains. Stored using url.baseDomain.
-
     typealias BundledIconType = (bgcolor: UIColor, filePath: String)
     // Sites can be accessed via their baseDomain.
     static let bundledIcons: [String: BundledIconType] = FaviconFetcher.getBundledIcons()
