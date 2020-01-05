@@ -88,8 +88,18 @@ body {
   font-family: sans-serif;
 }
 
+.sans-serif-bold {
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
 .serif {
   font-family: serif;
+}
+
+.serif-bold {
+    font-family: serif;
+    font-weight: bold;
 }
 
 .message {

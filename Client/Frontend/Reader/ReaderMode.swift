@@ -32,8 +32,30 @@ enum ReaderModeTheme: String {
 }
 
 enum ReaderModeFontType: String {
+    private var isBoldFontEnabeld: Bool {
+        return UIAccessibility.isBoldTextEnabled
+    }
+    
     case serif = "serif"
+    case serifBold = "serif-bold"
     case sansSerif = "sans-serif"
+    case sansSerifBold = "sans-serif-bold"
+    
+    init(type: String) {
+        let fontFamily = ReaderModeFontType(rawValue: type)
+        let isBoldFontEnabled = UIAccessibility.isBoldTextEnabled
+        
+        switch fontFamily {
+        case .serif,
+             .serifBold:
+            self = isBoldFontEnabled ? .serifBold : .serif
+        case .sansSerif,
+             .sansSerifBold:
+            self = isBoldFontEnabled ? .sansSerifBold : .sansSerif
+        case .none:
+            self = .sansSerif
+        } 
+    }
 }
 
 enum ReaderModeFontSize: Int {
@@ -128,14 +150,14 @@ struct ReaderModeStyle {
         }
 
         let theme = ReaderModeTheme(rawValue: themeRawValue!)
-        let fontType = ReaderModeFontType(rawValue: fontTypeRawValue!)
+        let fontType = ReaderModeFontType(type: fontTypeRawValue!)
         let fontSize = ReaderModeFontSize(rawValue: fontSizeRawValue!)
-        if theme == nil || fontType == nil || fontSize == nil {
+        if theme == nil || fontSize == nil {
             return nil
         }
 
         self.theme = theme!
-        self.fontType = fontType!
+        self.fontType = fontType
         self.fontSize = fontSize!
     }
 }
