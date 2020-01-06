@@ -222,8 +222,7 @@ class PhotonActionSheetSiteHeaderView: UITableViewHeaderFooterView {
 
     func configure(with site: Site) {
         if let _ = site.icon {
-            self.siteImageView.setFavicon(forSite: site) { (color, url) in
-                self.siteImageView.backgroundColor = color
+            self.siteImageView.setFavicon(forSite: site) { 
                 self.siteImageView.image = self.siteImageView.image?.createScaled(PhotonActionSheetUX.IconSize)
             }
         } else if let appDelegate = UIApplication.shared.delegate as? AppDelegate, let profile = appDelegate.profile {

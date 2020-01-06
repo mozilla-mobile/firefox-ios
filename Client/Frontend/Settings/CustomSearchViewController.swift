@@ -91,7 +91,7 @@ class CustomSearchViewController: SettingsTableViewController {
         }
 
         FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(.main) { result in
-            let image = result.successValue ?? FaviconFetcher.getDefaultFavicon(url)
+            let image = result.successValue ?? FaviconFetcher.letter(forUrl: url)
             let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
 
             //Make sure a valid scheme is used

@@ -383,6 +383,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 cell.textLabel?.text = bookmarkItem.title
             }
 
+            cell.imageView?.image = nil
+
             let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
                 // Check that we successfully retrieved an image (should always happen)
