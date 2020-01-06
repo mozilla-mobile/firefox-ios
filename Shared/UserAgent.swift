@@ -39,7 +39,6 @@ open class UserAgent {
     }
     
     public static func desktopUserAgent() -> String {
-        print("DESKTOP USER AGENT - \(UserAgentBuilder.defaultDesktopUserAgent().userAgent())")
         return UserAgentBuilder.defaultDesktopUserAgent().userAgent()
     }
 
@@ -77,7 +76,6 @@ public struct UserAgentConstant {
         UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)"),
        "whatsmyuseragent.org":
         UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")]
-    
 }
 
 public struct UserAgentBuilder {
@@ -123,7 +121,6 @@ public struct UserAgentBuilder {
 }
 
 extension UserAgent {
-    
     public static func getUserAgent(domain: String, platform: UserAgentPlatform) -> String {
         switch platform {
         case .Desktop:
@@ -145,7 +142,6 @@ extension UserAgent {
         // As of iOS 13 using a hidden webview method does not return the correct UA on
         // iPad (it returns mobile UA). We should consider that method no longer reliable.
         if UIDevice.current.userInterfaceIdiom == .pad {
-            print("AGENT IPAD - \(getUserAgent(domain: domain, platform: .Desktop)) \n Domain - \(domain)")
             return getUserAgent(domain: domain, platform: .Desktop)
         } else {
             return getUserAgent(domain: domain, platform: .Mobile)
