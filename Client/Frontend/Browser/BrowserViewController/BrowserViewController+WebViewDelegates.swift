@@ -343,8 +343,16 @@ extension BrowserViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-        
+
         webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
+//        if let tabSpecificUserAgent = tab.currentCustomUserAgent {
+        if tab.changedUserAgent {
+//            print("Tab Specific UA - \(tabSpecificUserAgent)")
+//            webView.customUserAgent = tabSpecificUserAgent
+            let platformSpecicUserAgent = UserAgent.oppositeUserAgent(domain: url.baseDomain ?? "")
+            print("Website Specific Platofmr U/A \(platformSpecicUserAgent  )")
+            webView.customUserAgent = platformSpecicUserAgent
+        }
 
         if InternalURL.isValid(url: url) {
             if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {

@@ -161,13 +161,29 @@ class Tab: NSObject {
     /// Whether or not the desktop site was requested with the last request, reload or navigation.
     var changedUserAgent: Bool = false {
         didSet {
-            webView?.customUserAgent = changedUserAgent ? UserAgent.oppositeUserAgent(domain: webView?.url?.baseDomain ?? "") : nil
+            let baseDomain = webView?.url?.baseDomain ?? ""
+            webView?.customUserAgent = changedUserAgent ? UserAgent.oppositeUserAgent(domain: baseDomain) : UserAgent.getUserAgent(domain: baseDomain)
             if changedUserAgent != oldValue {
                 TabEvent.post(.didToggleDesktopMode, for: self)
             }
         }
     }
 
+    /// We need this mainly for when a mobile / desktop user agent is requested for the particular tab
+    var currentCustomUserAgent: String?
+
+//    /// Whether or not the desktop site was requested with the last request, reload or navigation.
+//    var changedUserAgent: Bool = false {
+//        didSet {
+//            print("Changed User Agent \(changedUserAgent)")
+//            let baseDomain = webView?.url?.baseDomain ?? ""
+//            if changedUserAgent != oldValue {
+//                TabEvent.post(.didToggleDesktopMode, for: self)
+//                currentCustomUserAgent = UserAgent.oppositeUserAgent(domain: baseDomain)
+//            }
+//        }
+//    }
+    
     var readerModeAvailableOrActive: Bool {
         if let readerMode = self.getContentScript(name: "ReaderMode") as? ReaderMode {
             return readerMode.state != .unavailable

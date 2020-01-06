@@ -39,6 +39,7 @@ open class UserAgent {
     }
     
     public static func desktopUserAgent() -> String {
+        print("DESKTOP USER AGENT - \(UserAgentBuilder.defaultDesktopUserAgent().userAgent())")
         return UserAgentBuilder.defaultDesktopUserAgent().userAgent()
     }
 
@@ -62,8 +63,16 @@ public enum UserAgentPlatform {
 }
 
 public struct UserAgentConstant {
-    public static let mobileUserAgent = ["whatsapp.com": UserAgentBuilder.defaultMobileUserAgent().userAgent()]
-    public static let desktopUserAgent = ["whatsapp.com": UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)") ]
+    public static let mobileUserAgent = [
+        "whatsapp.com":
+        UserAgentBuilder.defaultMobileUserAgent().userAgent(),
+        "whatsmyuseragent.org":
+        UserAgentBuilder.defaultMobileUserAgent().userAgent()]
+    public static let desktopUserAgent = [
+        "whatsapp.com":
+        UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)"),
+       "whatsmyuseragent.org":
+        UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")]
     
 }
 
@@ -132,6 +141,7 @@ extension UserAgent {
         // As of iOS 13 using a hidden webview method does not return the correct UA on
         // iPad (it returns mobile UA). We should consider that method no longer reliable.
         if UIDevice.current.userInterfaceIdiom == .pad {
+            print("AGENT IPAD - \(getUserAgent(domain: domain, platform: .Desktop)) \n Domain - \(domain)")
             return getUserAgent(domain: domain, platform: .Desktop)
         } else {
             return getUserAgent(domain: domain, platform: .Mobile)
