@@ -551,7 +551,19 @@ open class BrowserProfile: Profile {
 
     lazy var logins: RustLogins = {
         let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
-        return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey)
+
+        let salt: String
+        let key = "sqlcipher.key.logins.salt"
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
+        if keychain.hasValue(forKey: key), let val = keychain.string(forKey: key) {
+            salt = val
+        } else {
+            salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey)
+            keychain.set(salt, forKey: key, withAccessibility: .afterFirstUnlock)
+        }
+
+        return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey, salt: salt)
     }()
 
     static var isChinaEdition: Bool = {
