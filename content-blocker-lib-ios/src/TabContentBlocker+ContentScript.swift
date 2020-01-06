@@ -11,9 +11,12 @@ extension TabContentBlocker {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard isEnabled,
-            let body = message.body as? [String: [String]],
-            let urls = body["urls"],
-            let mainDocumentUrl = tab?.currentURL() else {
+            let body = message.body as? [String: Any],
+            let urls = body["urls"] as? [String],
+            let mainDocumentUrl = tab?.currentURL(),
+            let token = body["securityToken"] as? String,
+            token == UserScriptManager.securityToken
+        else {
             return
         }
 
