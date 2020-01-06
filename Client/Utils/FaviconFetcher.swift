@@ -31,26 +31,22 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return UIImage(named: "defaultFavicon")!
     }()
 
-    static var colors: [String: UIColor] = [:] //An in-Memory data store that stores background colors domains. Stored using url.baseDomain.
-
+    typealias BundledIconType = (bgcolor: UIColor, filePath: String)
     // Sites can be accessed via their baseDomain.
-    static var defaultIcons: [String: (color: UIColor, url: String)] = {
-        return FaviconFetcher.getDefaultIcons()
-    }()
+    static let bundledIcons: [String: BundledIconType] = FaviconFetcher.getBundledIcons()
 
     static let multiRegionDomains = ["craigslist", "google", "amazon"]
 
-    class func getDefaultIconForURL(url: URL) -> (color: UIColor, url: String)? {
-
+    class func getBundledIcon(forUrl url: URL) -> BundledIconType? {
         // Problem: Sites like amazon exist with .ca/.de and many other tlds.
         // Solution: They are stored in the default icons list as "amazon" instead of "amazon.com" this allows us to have favicons for every tld."
         // Here, If the site is in the multiRegionDomain array look it up via its second level domain (amazon) instead of its baseDomain (amazon.com)
         let hostName = url.shortDisplayString
-        if multiRegionDomains.contains(hostName), let icon = defaultIcons[hostName] {
+        if multiRegionDomains.contains(hostName), let icon = bundledIcons[hostName] {
             return icon
         }
         let fullURL = url.absoluteDisplayString.remove("\(url.scheme ?? "")://")
-        if let name = url.baseDomain, let icon = defaultIcons[name] ?? defaultIcons[fullURL] {
+        if let name = url.baseDomain, let icon = bundledIcons[name] ?? bundledIcons[fullURL] {
             return icon
         }
         return nil
@@ -220,8 +216,9 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return deferred
     }
 
-    // Returns the default favicon for a site based on the first letter of the site's domain
-    class func getDefaultFavicon(_ url: URL) -> UIImage {
+    // Create (or return from cache) a fallback image for a site based on the first letter of the site's domain
+    // Letter is white on a clear background
+    class func letter(forUrl url: URL) -> UIImage {
         guard let character = url.baseDomain?.first else {
             return defaultFavicon
         }
@@ -248,7 +245,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     }
 
     // Returns a color based on the url's hash
-    class func getDefaultColor(_ url: URL) -> UIColor {
+    class func color(forUrl url: URL) -> UIColor {
         // A stable hash (unlike hashValue), from https://useyourloaf.com/blog/swift-hashable/
         func stableHash(_ str: String) -> Int {
             let unicodeScalars = str.unicodeScalars.map { $0.value }
@@ -262,21 +259,37 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         }
         let index = abs(stableHash(domain)) % (DefaultFaviconBackgroundColors.count - 1)
         let colorHex = DefaultFaviconBackgroundColors[index]
-        print("\(url) \(colorHex)")
+
         return UIColor(colorString: colorHex)
     }
 
+    private struct BundledIcon: Codable {
+        var title: String
+        var url: String?
+        var image_url: String
+        var background_color: String
+        var domain: String
+    }
+
     // Default favicons and background colors provided via mozilla/tippy-top-sites
-    class func getDefaultIcons() -> [String: (color: UIColor, url: String)] {
+    private class func getBundledIcons() -> [String: BundledIconType] {
         let filePath = Bundle.main.path(forResource: "top_sites", ofType: "json")
         let file = try! Data(contentsOf: URL(fileURLWithPath: filePath!))
-        let json = JSON(file)
-        var icons: [String: (color: UIColor, url: String)] = [:]
-        json.forEach({
-            guard let url = $0.1["domain"].string, let color = $0.1["background_color"].string, var path = $0.1["image_url"].string else {
-                return
-            }
-            path = path.replacingOccurrences(of: ".png", with: "")
+        let decoder = JSONDecoder()
+        var icons = [String: BundledIconType]()
+        var decoded = [BundledIcon]()
+        do {
+            decoded = try decoder.decode([BundledIcon].self, from: file)
+        } catch {
+            print(error)
+            assert(false)
+            return icons
+        }
+
+        decoded.forEach {
+            let path = $0.image_url.replacingOccurrences(of: ".png", with: "")
+            let url = $0.domain
+            let color = $0.background_color
             let filePath = Bundle.main.path(forResource: "TopSites/" + path, ofType: "png")
             if let filePath = filePath {
                 if color == "#fff" || color == "#FFF" {
@@ -285,7 +298,8 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
                     icons[url] = (UIColor(colorString: color.replacingOccurrences(of: "#", with: "")), filePath)
                 }
             }
-        })
+        }
+
         return icons
     }
 }

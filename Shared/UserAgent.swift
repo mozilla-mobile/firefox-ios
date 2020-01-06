@@ -8,7 +8,8 @@ import UIKit
 open class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"
     public static let uaBitMobile = "Mobile/15E148"
-
+    public static let uaBitFx = "FxiOS/\(AppInfo.appVersion)"
+    
     // For iPad, we need to append this to the default UA for google.com to show correct page
     public static let uaBitGoogleIpad = "Version/13.0.3"
 
@@ -45,7 +46,7 @@ open class UserAgent {
     public static func mobileUserAgent() -> String {
         return UserAgentBuilder.defaultMobileUserAgent().userAgent()
     }
-
+  
     public static func oppositeUserAgent(domain: String) -> String {
         let isDefaultUADesktop = UserAgent.isDesktop(ua: UserAgent.getUserAgent(domain: domain))
         if isDefaultUADesktop {
