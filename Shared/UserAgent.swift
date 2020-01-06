@@ -66,10 +66,14 @@ public struct UserAgentConstant {
     public static let mobileUserAgent = [
         "whatsapp.com":
         UserAgentBuilder.defaultMobileUserAgent().userAgent(),
+        "paypal.com":
+        UserAgentBuilder.defaultMobileUserAgent().userAgent(),
         "whatsmyuseragent.org":
         UserAgentBuilder.defaultMobileUserAgent().userAgent()]
     public static let desktopUserAgent = [
         "whatsapp.com":
+        UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)"),
+        "paypal.com":
         UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)"),
        "whatsmyuseragent.org":
         UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")]
