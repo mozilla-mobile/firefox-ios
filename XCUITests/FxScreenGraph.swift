@@ -1018,7 +1018,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(TranslatePageMenu) { screenState in
-        screenState.onEnterWaitFor(element: app.buttons["TranslationPrompt.doTranslate"])
+//        screenState.onEnterWaitFor(element: app.buttons["TranslationPrompt.doTranslate"])
 
         screenState.tap(app.buttons["TranslationPrompt.dontTranslate"], forAction: Action.SelectDontTranslateThisPage)
 
