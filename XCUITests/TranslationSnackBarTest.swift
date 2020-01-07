@@ -15,7 +15,7 @@ class TranslationSnackBarTest: BaseTestCase {
         // navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
         navigator.openURL(spanishURL)
         waitUntilPageLoad()
-        waitForExistence(app.buttons["TranslationPrompt.doTranslate"], timeout: 5)
+        waitForExistence(app.buttons["TranslationPrompt.doTranslate"], timeout: 15)
         navigator.performAction(Action.SelectDontTranslateThisPage)
         XCTAssertFalse(app.buttons["TranslationPrompt.dontTranslate"].exists)
         navigator.performAction(Action.ReloadURL)
@@ -48,7 +48,7 @@ class TranslationSnackBarTest: BaseTestCase {
         // Disable local site due to snackbar not accessible there
         // navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
         navigator.openURL(spanishURL)
-        waitUntilPageLoad()
+        // waitUntilPageLoad()
         navigator.performAction(Action.SelectTranslateThisPage)
         // Disable check after iOS 13.3 update #5937
         // Value on url text field is not updated
