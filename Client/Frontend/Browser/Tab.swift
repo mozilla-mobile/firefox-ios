@@ -161,8 +161,6 @@ class Tab: NSObject {
     /// Whether or not the desktop site was requested with the last request, reload or navigation.
     var changedUserAgent: Bool = false {
         didSet {
-            let baseDomain = webView?.url?.baseDomain ?? ""
-            webView?.customUserAgent = changedUserAgent ? UserAgent.oppositeUserAgent(domain: baseDomain) : UserAgent.getUserAgent(domain: baseDomain)
             if changedUserAgent != oldValue {
                 TabEvent.post(.didToggleDesktopMode, for: self)
             }
@@ -190,7 +188,7 @@ class Tab: NSObject {
     /// tab instance, queue it for later until we become foregrounded.
     fileprivate var alertQueue = [JSAlertInfo]()
 
-    weak var browserViewController:BrowserViewController?
+    weak var browserViewController: BrowserViewController?
 
     init(bvc: BrowserViewController, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
@@ -256,7 +254,6 @@ class Tab: NSObject {
             } else {
                 webView.allowsLinkPreview = false
             }
-
 
             // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
             webView.backgroundColor = .black
@@ -397,7 +394,7 @@ class Tab: NSObject {
         }
 
         //lets double check the sessionData in case this is a non-restored new tab
-        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1,  InternalURL(firstURL)?.isAboutHomeURL ?? false {
+        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
             return Strings.AppMenuOpenHomePageTitleString
         }
 

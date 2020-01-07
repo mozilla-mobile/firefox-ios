@@ -9,6 +9,9 @@ open class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"
     public static let uaBitMobile = "Mobile/15E148"
     public static let uaBitFx = "FxiOS/\(AppInfo.appVersion)"
+    public static let product = "Mozilla/5.0"
+    public static let platform = "AppleWebKit/605.1.15"
+    public static let platformDetails = "(KHTML, like Gecko)"
     
     // For iPad, we need to append this to the default UA for google.com to show correct page
     public static let uaBitGoogleIpad = "Version/13.0.3"
@@ -16,23 +19,23 @@ open class UserAgent {
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
-        return UserAgentBuilder.defaultClientUserAgent().userAgent()
+        return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName))"
     }
 
     public static var syncUserAgent: String {
-        return UserAgentBuilder.defaultClientUserAgent().modifiedUserAgent(prefix: "Firefox-iOS-Sync/")
+        return clientUserAgent(prefix: "Firefox-iOS-Sync")
     }
 
     public static var tokenServerClientUserAgent: String {
-        return UserAgentBuilder.defaultClientUserAgent().modifiedUserAgent(prefix: "Firefox-iOS-Token/")
+        return clientUserAgent(prefix: "Firefox-iOS-Token")
     }
 
     public static var fxaUserAgent: String {
-        return UserAgentBuilder.defaultClientUserAgent().modifiedUserAgent(prefix: "Firefox-iOS-FxA/")
+        return clientUserAgent(prefix: "Firefox-iOS-FxA")
     }
 
     public static var defaultClientUserAgent: String {
-        return UserAgentBuilder.defaultClientUserAgent().modifiedUserAgent(prefix: "Firefox-iOS/")
+        return clientUserAgent(prefix: "Firefox-iOS")
     }
 
     public static func isDesktop(ua: String) -> Bool {
@@ -59,13 +62,13 @@ open class UserAgent {
     public static func getUserAgent(domain: String, platform: UserAgentPlatform) -> String {
         switch platform {
         case .Desktop:
-            if let customUA = UserAgentConstant.desktopUserAgent[domain] {
+            if let customUA = CustomUserAgentConstant.desktopUserAgent[domain] {
                 return customUA
             } else {
                 return desktopUserAgent()
             }
         case .Mobile:
-            if let customUA = UserAgentConstant.mobileUserAgent[domain] {
+            if let customUA = CustomUserAgentConstant.mobileUserAgent[domain] {
                 return customUA
             } else {
                 return mobileUserAgent()
@@ -89,61 +92,55 @@ public enum UserAgentPlatform {
     case Mobile
 }
 
-public struct UserAgentConstant {
+public struct CustomUserAgentConstant {
+    private static let defaultMobileUA = UserAgentBuilder.defaultMobileUserAgent().userAgent()
+    private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
     public static let mobileUserAgent = [
-        "whatsapp.com":
-        UserAgentBuilder.defaultMobileUserAgent().userAgent(),
-        "paypal.com":
-        UserAgentBuilder.defaultMobileUserAgent().userAgent(),
-        "whatsmyuseragent.org":
-        UserAgentBuilder.defaultMobileUserAgent().userAgent()]
+        "whatsapp.com": defaultMobileUA,
+        "paypal.com": defaultMobileUA,
+        "yahoo.com": defaultMobileUA ]
     public static let desktopUserAgent = [
-        "whatsapp.com":
-        UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)"),
-        "paypal.com":
-        UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)"),
-       "whatsmyuseragent.org":
-        UserAgentBuilder.defaultDesktopUserAgent().modifiedUserAgent(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")]
+        "whatsapp.com": customDesktopUA,
+        "paypal.com": customDesktopUA,
+        "yahoo.com": customDesktopUA ]
 }
 
 public struct UserAgentBuilder {
-    fileprivate var prefix: String = ""
-    fileprivate var product: String = ""
-    fileprivate var systemInfo: String = ""
-    fileprivate var platform: String = ""
-    fileprivate var platformDetails: String = ""
-    fileprivate var extensions: String = ""
-    fileprivate var other: String = "" //If the useragent item we want is completely different and doesn't fall under any other items than we use the other field
-    fileprivate var suffix: String = ""
+    // User agent components
+    fileprivate var product = ""
+    fileprivate var systemInfo = ""
+    fileprivate var platform = ""
+    fileprivate var platformDetails = ""
+    fileprivate var extensions = ""
     
-    init(prefix: String, product: String, systemInfo: String, platform: String, platformDetails: String, extensions: String, other: String, suffix: String) {
-        self.prefix = prefix
+    init(product: String, systemInfo: String, platform: String, platformDetails: String, extensions: String) {
         self.product = product
         self.systemInfo = systemInfo
         self.platform = platform
         self.platformDetails = platformDetails
         self.extensions = extensions
-        self.other = other
-        self.suffix = suffix
     }
     
     public func userAgent() -> String {
-        return "\(product) \(systemInfo) \(platform) \(platformDetails) \(extensions)"
+        let userAgentItems = [product, systemInfo, platform, platformDetails, extensions]
+        return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
     }
     
-    public func modifiedUserAgent(prefix: String? = nil, product: String? = nil, systemInfo: String? = nil, platform: String? = nil, platformDetails: String? = nil, extensions: String? = nil, other: String? = nil, suffix: String? = nil) -> String {
-        return "\(prefix ?? self.prefix) \(product ?? self.product) \(systemInfo ?? self.systemInfo) \(platform ?? self.platform) \(platformDetails ?? self.platformDetails) \(extensions ?? self.extensions)"
+    public func clone(product: String? = nil, systemInfo: String? = nil, platform: String? = nil, platformDetails: String? = nil, extensions: String? = nil) -> String {
+        let userAgentItems = [product ?? self.product, systemInfo ?? self.systemInfo, platform ?? self.platform, platformDetails ?? self.platformDetails, extensions ?? self.extensions]
+        return removeEmptyComponentsAndJoin(uaItems: userAgentItems)
     }
     
-    public static func defaultClientUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(prefix: "Firefox-iOS/", product: "", systemInfo: "", platform: "", platformDetails: "", extensions: "", other: "\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName)", suffix: "")
+    /// Helper method to remove the empty components from user agent string that contain only whitespaces or are just empty
+    private func removeEmptyComponentsAndJoin(uaItems: [String]) -> String {
+        return uaItems.filter{ !$0.isEmptyOrWhitespace() }.joined(separator: " ")
     }
     
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(prefix: "", product: "Mozilla/5.0", systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: "AppleWebKit/605.1.15", platformDetails: "(KHTML, like Gecko)", extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)", other: "", suffix: "")
+        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
     
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(prefix: "", product: "Mozilla/5.0", systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: "AppleWebKit/605.1.15", platformDetails: "(KHTML, like Gecko)", extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)", other: "", suffix: "")
+        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
     }
 }

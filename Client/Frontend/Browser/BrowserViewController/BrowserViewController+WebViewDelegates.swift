@@ -344,12 +344,6 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
-        webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
-        if tab.changedUserAgent {
-            let platformSpecicUserAgent = UserAgent.oppositeUserAgent(domain: url.baseDomain ?? "")
-            webView.customUserAgent = platformSpecicUserAgent
-        }
-
         if InternalURL.isValid(url: url) {
             if navigationAction.navigationType != .backForward, navigationAction.isInternalUnprivileged {
                 log.warning("Denying unprivileged request: \(navigationAction.request)")
@@ -446,6 +440,14 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             pendingRequests[url.absoluteString] = navigationAction.request
+
+            if tab.changedUserAgent {
+                let platformSpecificUserAgent = UserAgent.oppositeUserAgent(domain: url.baseDomain ?? "")
+                webView.customUserAgent = platformSpecificUserAgent
+            } else {
+                webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
+            }
+            
             decisionHandler(.allow)
             return
         }
