@@ -21,7 +21,10 @@ class TranslationSnackBarTest: BaseTestCase {
         navigator.performAction(Action.ReloadURL)
         waitForExistence(app.buttons["TranslationPrompt.doTranslate"], timeout: 15)
         navigator.performAction(Action.SelectTranslateThisPage)
-        waitForValueContains(app.textFields["url"], value: "translate.google")
+
+        // Disable check after iOS 13.3 update #5937
+        // Value on url text field is not updated
+        // waitForValueContains(app.textFields["url"], value: "translate.google")
     }
     
     // This test checks to see if Translation is enabled by default from the Settings menu and can be correctly disabled
