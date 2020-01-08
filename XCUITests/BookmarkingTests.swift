@@ -115,7 +115,7 @@ class BookmarkingTests: BaseTestCase {
         
         // Check if it shows in recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.otherElements["RECENT BOOKMARKS"])
+        waitForExistence(app.otherElements["Recent Bookmarks"])
         waitForExistence(app.staticTexts[urlLabelExample_3])
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 5)
         
@@ -126,7 +126,7 @@ class BookmarkingTests: BaseTestCase {
         
         // Check if it shows in recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.otherElements["RECENT BOOKMARKS"])
+        waitForExistence(app.otherElements["Recent Bookmarks"])
         waitForExistence(app.staticTexts[urlLabelExample_4])
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 6)
         
