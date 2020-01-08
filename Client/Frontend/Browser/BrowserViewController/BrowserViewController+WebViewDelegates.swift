@@ -440,6 +440,14 @@ extension BrowserViewController: WKNavigationDelegate {
             }
 
             pendingRequests[url.absoluteString] = navigationAction.request
+
+            if tab.changedUserAgent {
+                let platformSpecificUserAgent = UserAgent.oppositeUserAgent(domain: url.baseDomain ?? "")
+                webView.customUserAgent = platformSpecificUserAgent
+            } else {
+                webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
+            }
+            
             decisionHandler(.allow)
             return
         }
