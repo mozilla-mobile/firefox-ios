@@ -37,15 +37,13 @@ private struct RemoteTabsPanelUX {
 private let RemoteClientIdentifier = "RemoteClient"
 private let RemoteTabIdentifier = "RemoteTab"
 
-class RemoteTabsPanel: UIViewController, LibraryPanel {
-    weak var libraryPanelDelegate: LibraryPanelDelegate?
+class RemoteTabsPanel: SiteTableViewController, LibraryPanel {
+    var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()
 
-    let profile: Profile
 
-    init(profile: Profile) {
-        self.profile = profile
-        super.init(nibName: nil, bundle: nil)
+    override init(profile: Profile) {
+        super.init(profile: profile)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .ProfileDidFinishSyncing, object: nil)
     }
@@ -70,6 +68,14 @@ class RemoteTabsPanel: UIViewController, LibraryPanel {
         }
 
         tableViewController.didMove(toParent: self)
+    }
+    
+    override func applyTheme() {
+        super.applyTheme()
+        tableViewController.tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
+        tableViewController.tableView.reloadData()
+        tableViewController.refreshTabs()
     }
 
     @objc func notificationReceived(_ notification: Notification) {
@@ -495,7 +501,8 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        (navigationController as? ThemedNavigationController)?.applyTheme()
+        
         // Add a refresh control if the user is logged in and the control was not added before. If the user is not
         // logged in, remove any existing control.
         if profile.hasSyncableAccount() && refreshControl == nil {
@@ -615,13 +622,5 @@ extension RemoteTabsTableViewController: LibraryPanelContextMenu {
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         return getDefaultContextMenuActions(for: site, libraryPanelDelegate: remoteTabsPanel?.libraryPanelDelegate)
-    }
-}
-
-extension RemoteTabsPanel: Themeable {
-    func applyTheme() {
-        tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
-        tableViewController.tableView.reloadData()
-        tableViewController.refreshTabs()
     }
 }
