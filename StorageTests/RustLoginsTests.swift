@@ -18,7 +18,8 @@ class RustLoginsTests: XCTestCase {
         try? files.remove("testlogins.db")
 
         let encryptionKey = Bytes.generateRandomBytes(256).base64EncodedString
-        logins = RustLogins(databasePath: databasePath, encryptionKey: encryptionKey)
+        let salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: databasePath, encryptionKey: encryptionKey)
+        logins = RustLogins(databasePath: databasePath, encryptionKey: encryptionKey, salt: salt)
         _ = logins.reopenIfClosed()
     }
 
