@@ -4,6 +4,8 @@
 
 import Shared
 import SwiftyJSON
+import Account
+import SwiftKeychainWrapper
 
 private let log = Logger.syncLogger
 
@@ -27,9 +29,9 @@ extension FxAPushMessageHandler {
     /// This method then decrypts it according to the content-encoding (aes128gcm or aesgcm)
     /// and then effects changes on the logged in account.
     @discardableResult func handle(userInfo: [AnyHashable: Any]) -> PushMessageResult {
-        guard let subscription = profile.getAccount()?.pushRegistration?.defaultSubscription else {
-            return deferMaybe(PushMessageError.subscriptionOutOfDate)
-        }
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        let pushReg = keychain.object(forKey: "account.push-registration") as! PushRegistration
+        let subscription = pushReg.defaultSubscription
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
             let payload = userInfo["body"] as? String else {
@@ -52,46 +54,64 @@ extension FxAPushMessageHandler {
             return deferMaybe(PushMessageError.notDecrypted)
         }
 
-        return handle(plaintext: string)
+        // return handle(plaintext: string)
+        let deferred = PushMessageResult()
+        RustFirefoxAccounts.startup() { fxa in
+            fxa.accountManager.deviceConstellation()?.processRawIncomingDeviceEvent(pushPayload: string) { result in
+                guard case .success(let events) = result else {
+                    return
+                }
+                events.forEach { event in
+                    switch event {
+                    case .tabReceived(_, let tabData):
+                        let title = tabData.last?.title ?? ""
+                        let url = tabData.last?.url ?? ""
+                        let message = PushMessage.commandReceived(tab: ["title": title, "url": url])
+                        deferred.fill(Maybe(success: message))
+                    }
+                }
+            }
+        }
+        return deferred
     }
 
-    func handle(plaintext: String) -> PushMessageResult {
-        return handle(message: JSON(parseJSON: plaintext))
-    }
-
-    /// The main entry point to the handler for decrypted messages.
-    func handle(message json: JSON) -> PushMessageResult {
-        if !json.isDictionary() || json.isEmpty {
-            return handleVerification()
-        }
-
-        let rawValue = json["command"].stringValue
-        guard let command = PushMessageType(rawValue: rawValue) else {
-            print("Command \(rawValue) received but not recognized")
-            return deferMaybe(PushMessageError.messageIncomplete)
-        }
-
-        let result: PushMessageResult
-        switch command {
-        case .commandReceived:
-            result = handleCommandReceived(json["data"])
-        case .deviceConnected:
-            result = handleDeviceConnected(json["data"])
-        case .deviceDisconnected:
-            result = handleDeviceDisconnected(json["data"])
-        case .profileUpdated:
-            result = handleProfileUpdated()
-        case .passwordChanged:
-            result = handlePasswordChanged()
-        case .passwordReset:
-            result = handlePasswordReset()
-        case .collectionChanged:
-            result = handleCollectionChanged(json["data"])
-        case .accountVerified:
-            result = handleVerification()
-        }
-        return result
-    }
+//    func handle(plaintext: String) -> PushMessageResult {
+//        return handle(message: JSON(parseJSON: plaintext))
+//    }
+//
+//    /// The main entry point to the handler for decrypted messages.
+//    func handle(message json: JSON) -> PushMessageResult {
+//        if !json.isDictionary() || json.isEmpty {
+//            return handleVerification()
+//        }
+//
+//        let rawValue = json["command"].stringValue
+//        guard let command = PushMessageType(rawValue: rawValue) else {
+//            print("Command \(rawValue) received but not recognized")
+//            return deferMaybe(PushMessageError.messageIncomplete)
+//        }
+//
+//        let result: PushMessageResult
+//        switch command {
+//        case .commandReceived:
+//            result = handleCommandReceived(json["data"])
+//        case .deviceConnected:
+//            result = handleDeviceConnected(json["data"])
+//        case .deviceDisconnected:
+//            result = handleDeviceDisconnected(json["data"])
+//        case .profileUpdated:
+//            result = handleProfileUpdated()
+//        case .passwordChanged:
+//            result = handlePasswordChanged()
+//        case .passwordReset:
+//            result = handlePasswordReset()
+//        case .collectionChanged:
+//            result = handleCollectionChanged(json["data"])
+//        case .accountVerified:
+//            result = handleVerification()
+//        }
+//        return result
+//    }
 }
 
 extension FxAPushMessageHandler {

@@ -307,69 +307,25 @@ class AccountStatusSetting: WithAccountSetting {
         }
     }
 
-    override var image: UIImage? {
-        if let image = profile.getAccount()?.fxaProfile?.avatar.image {
-            return image.createScaled(CGSize(width: 30, height: 30))
-        }
-
-        let image = UIImage(named: "placeholder-avatar")
-        return image?.createScaled(CGSize(width: 30, height: 30))
-    }
-
     override var accessoryView: UIImageView? {
-        if let account = profile.getAccount() {
-            switch account.actionNeeded {
-            case .needsVerification:
-                // We link to the resend verification email page.
-                return disclosureIndicator
-            case .needsPassword:
-                 // We link to the re-enter password page.
-                return disclosureIndicator
-            case .none:
-                // We link to FxA web /settings.
-                return disclosureIndicator
-            case .needsUpgrade:
-                // In future, we'll want to link to an upgrade page.
-                return nil
-            }
-        }
         return disclosureIndicator
     }
 
     override var title: NSAttributedString? {
-        if let account = profile.getAccount() {
-
-            if let displayName = account.fxaProfile?.displayName {
-                return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
-            }
-
-            if let email = account.fxaProfile?.email {
-                return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
-            }
-
-            return NSAttributedString(string: account.email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
+        if let displayName = RustFirefoxAccounts.shared?.accountManager.accountProfile()?.displayName {
+            return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
+
+        if let email = RustFirefoxAccounts.shared?.accountManager.accountProfile()?.email {
+            return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
+        }
+
         return nil
     }
 
     override var status: NSAttributedString? {
-        if let account = profile.getAccount() {
-            var string: String
-
-            switch account.actionNeeded {
-            case .none:
-                return nil
-            case .needsVerification:
-                string = Strings.FxAAccountVerifyEmail
-                break
-            case .needsPassword:
-                string = Strings.FxAAccountVerifyPassword
-                break
-            case .needsUpgrade:
-                string = Strings.FxAAccountUpgradeFirefox
-                break
-            }
-
+        if RustFirefoxAccounts.shared?.isActionNeeded ?? false {
+            let string = Strings.FxAAccountVerifyPassword
             let orange = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
             let attrs = [NSAttributedString.Key.foregroundColor: orange]
@@ -419,7 +375,12 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.frame = CGRect(width: 30, height: 30)
             imageView.layer.cornerRadius = (imageView.frame.height) / 2
             imageView.layer.masksToBounds = true
-            imageView.image = image
+
+            imageView.image = UIImage(named: "placeholder-avatar")!.createScaled(CGSize(width: 30, height: 30))
+
+            RustFirefoxAccounts.shared?.avatar?.image.uponQueue(.main) { image in
+                imageView.image = image.createScaled(CGSize(width: 30, height: 30))
+            }
         }
     }
 }

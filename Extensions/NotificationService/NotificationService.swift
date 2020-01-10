@@ -107,7 +107,7 @@ class SyncDataDisplay {
             displayThisDeviceDisconnectedNotification()
         case .collectionChanged(let collections):
             if collections.contains("clients") {
-                displayOldSentTabNotification()
+                /// displayOldSentTabNotification()
             } else {
                 displayUnknownMessageNotification(debugInfo: "collection changed")
             }
@@ -156,13 +156,8 @@ extension SyncDataDisplay {
             Sentry.shared.send(message: "SentTab error: \(debugInfo)")
             return
         #endif
-        // if, by any change we haven't dealt with the message, then perhaps we
-        // can recycle it as a sent tab message.
-        if sentTabs.count > 0 {
-            displayOldSentTabNotification()
-        } else {
-            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
-        }
+
+        presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
     }
 }
 
@@ -188,62 +183,6 @@ extension SyncDataDisplay {
 }
 
 extension SyncDataDisplay {
-    func displayOldSentTabNotification() {
-        // We will need to be more precise about calling these SentTab alerts
-        // once we are a) detecting different types of notifications and b) adding actions.
-        // For now, we need to add them so we can handle zero-tab sent-tab-notifications.
-        notificationContent.categoryIdentifier = "org.mozilla.ios.SentTab.placeholder"
-
-        var userInfo = notificationContent.userInfo
-
-        // Add the tabs we've found to userInfo, so that the AppDelegate
-        // doesn't have to do it again.
-        let serializedTabs = sentTabs.compactMap { t -> NSDictionary? in
-            return [
-                "title": t.title,
-                "url": t.url.absoluteString,
-                "displayURL": t.url.absoluteDisplayExternalString,
-                "deviceName": t.deviceName as Any,
-                ] as NSDictionary
-        }
-
-        func present(_ tabs: [NSDictionary]) {
-            if !tabs.isEmpty {
-                userInfo["sentTabs"] = tabs as NSArray
-            }
-            notificationContent.userInfo = userInfo
-            presentSentTabsNotification(tabs)
-        }
-
-        let center = UNUserNotificationCenter.current()
-        center.getDeliveredNotifications { notifications in
-            // Let's deal with sent-tab-notifications
-            let sentTabNotifications = notifications.filter {
-                $0.request.content.categoryIdentifier == self.notificationContent.categoryIdentifier
-            }
-
-            // We can delete zero tab sent-tab-notifications
-            let emptyTabNotificationsIds = sentTabNotifications.filter {
-                $0.request.content.userInfo["sentTabs"] == nil
-                }.map { $0.request.identifier }
-            center.removeDeliveredNotifications(withIdentifiers: emptyTabNotificationsIds)
-
-            // The one we've just received (but not delivered) may not have any tabs in it either
-            // e.g. if the previous one consumed two tabs.
-            if serializedTabs.count == 0 {
-                // In that case, we try and recycle an existing notification (one that has a tab in it).
-                if let firstNonEmpty = sentTabNotifications.first(where: { $0.request.content.userInfo["sentTabs"] != nil }),
-                    let previouslyDeliveredTabs = firstNonEmpty.request.content.userInfo["sentTabs"] as? [NSDictionary] {
-                    center.removeDeliveredNotifications(withIdentifiers: [firstNonEmpty.request.identifier])
-                    return present(previouslyDeliveredTabs)
-                }
-            }
-
-            // We have tabs in this notification, or we couldn't recycle an existing one that does.
-            present(serializedTabs)
-        }
-    }
-
     func presentSentTabsNotification(_ tabs: [NSDictionary]) {
         let title: String
         let body: String

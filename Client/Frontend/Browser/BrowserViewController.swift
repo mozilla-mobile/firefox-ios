@@ -212,8 +212,8 @@ class BrowserViewController: UIViewController {
     @objc fileprivate func appMenuBadgeUpdate() {
         let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
         let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
-        let actionNeeded = profile.getAccount()?.actionNeeded
-        let showWarningBadge = actionNeeded != nil && actionNeeded != FxAActionNeeded.none
+        let actionNeeded = RustFirefoxAccounts.shared?.isActionNeeded ?? false
+        let showWarningBadge = actionNeeded 
         let showMenuBadge = showWarningBadge ? false : hideImagesOn || showWhatsNew
 
         urlBar.warningMenuBadge(setVisible: showWarningBadge)
@@ -1932,7 +1932,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         self.presentSignInViewController(fxaParams)
     }
 
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, showLoginFlow: FxALoginFlow?) {
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxALoginFlow?) {
         self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
 
         introViewController.dismiss(animated: true) {
@@ -1940,19 +1940,20 @@ extension BrowserViewController: IntroViewControllerDelegate {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
 
-            if let flow = showLoginFlow {
+            if let flow = fxaLoginFlow {
                 let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
-                self.presentSignInViewController(fxaParams, isSignUpFlow: flow == .signUpFlow)
+                self.presentSignInViewController(fxaParams, flowType: flow)
             }
         }
     }
 
-    func getSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) -> UIViewController {
+    func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxALoginFlow) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
-        guard profile.hasAccount(), let status = profile.getAccount()?.actionNeeded, status == .none else {
-            let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions, isSignUpFlow: isSignUpFlow)
-            signInVC.delegate = self
-            return signInVC
+        print(profile.hasAccount())
+        guard profile.hasAccount(), !(profile.rustAccount?.accountNeedsReauth() ?? false) else {
+            let vc = RustLoginView(fxaOptions: fxaOptions, flowType: flowType)
+            vc.dismissType = .dismiss
+            return vc
         }
 
         let settingsTableViewController = SyncContentSettingsViewController()
@@ -1960,8 +1961,9 @@ extension BrowserViewController: IntroViewControllerDelegate {
         return settingsTableViewController
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
-        let vcToPresent = getSignInViewController(fxaOptions, isSignUpFlow: isSignUpFlow)
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxALoginFlow = .emailLoginFlow) {
+        let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType)
+
         let closeBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .plain, target: self, action: #selector(dismissSignInViewController))
         vcToPresent.navigationItem.leftBarButtonItem = closeBarButtonItem
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)

@@ -242,66 +242,6 @@ open class FirefoxAccount {
             self.displayName = displayName
             self.avatar = Avatar(url: avatar?.asURL)
         }
-
-        enum ImageDownloadState {
-            case notStarted
-            case started
-            case failedCanRetry
-            case failedCanNotRetry
-            case succeededMalformed
-            case succeeded
-        }
-
-        open class Avatar {
-            open var image: UIImage?
-            public let url: URL?
-            var currentImageState: ImageDownloadState = .notStarted
-
-            init(url: URL?) {
-                self.image = UIImage(named: "placeholder-avatar")
-                self.url = url
-                self.updateAvatarImageState()
-            }
-
-            func updateAvatarImageState() {
-                switch currentImageState {
-                case .notStarted:
-                    self.currentImageState = .started
-                    self.downloadAvatar()
-                    break
-                case .failedCanRetry:
-                    self.downloadAvatar()
-                    break
-                default:
-                    break
-                }
-            }
-
-            func downloadAvatar() {
-                SDWebImageManager.shared.loadImage(with: url, options: [.continueInBackground, .lowPriority], progress: nil) { (image, _, error, _, success, _) in
-                    if let error = error {
-                        if (error as NSError).code == 404 || self.currentImageState == .failedCanRetry {
-                            // Image is not found or failed to download a second time
-                            self.currentImageState = .failedCanNotRetry
-                        } else {
-                            // This could have been a transient error, attempt to download the image only once more
-                            self.currentImageState = .failedCanRetry
-                            self.updateAvatarImageState()
-                        }
-                        return
-                    }
-
-                    if success == true && image == nil {
-                        self.currentImageState = .succeededMalformed
-                        return
-                    }
-
-                    self.image = image
-                    self.currentImageState = .succeeded
-                    NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
-                }
-            }
-        }
     }
 
     // Don't forget to call Profile.flushAccount() to persist this change!
