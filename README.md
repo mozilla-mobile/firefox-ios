@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (master)
 -----------
 
-This branch only works with Xcode 11 and supports iOS 11.0 and above
+This branch only works with Xcode 11 and supports iOS 11.0 and above.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -21,22 +21,22 @@ Building the code
 -----------------
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install Carthage
+2. Install Carthage
     ```shell
     brew update
     brew install carthage
     ```
-1. Clone the repository:
+3. Clone the repository:
     ```shell
     git clone https://github.com/mozilla-mobile/firefox-ios
     ```
-1. Pull in the project dependencies:
+4. Pull in the project dependencies:
     ```shell
     cd firefox-ios
     sh ./bootstrap.sh
     ```
-1. Open `Client.xcodeproj` in Xcode.
-1. Build the `Fennec` scheme in Xcode.
+5. Open `Client.xcodeproj` in Xcode.
+6. Build the `Fennec` scheme in Xcode.
 
 ## Building User Scripts
 
