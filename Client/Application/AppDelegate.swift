@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
+    var debugViewController: UpdateViewController!   // ONLY FOR DEBUGGING PURPOSE - REMOVE THIS CODE
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
@@ -150,19 +151,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     // TODO: Move to scene controller for iOS 13
     private func setupRootViewController() {
-        browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
-        browserViewController.edgesForExtendedLayout = []
-
-        browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
-        browserViewController.restorationClass = AppDelegate.self
-
-        let navigationController = UINavigationController(rootViewController: browserViewController)
-        navigationController.delegate = self
-        navigationController.isNavigationBarHidden = true
-        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
-        rootViewController = navigationController
-
-        self.window!.rootViewController = rootViewController
+//        browserViewController = BrowserViewController(profile: self.profile!, tabManager: self.tabManager)
+//        browserViewController.edgesForExtendedLayout = []
+//
+//        browserViewController.restorationIdentifier = NSStringFromClass(BrowserViewController.self)
+//        browserViewController.restorationClass = AppDelegate.self
+//
+//        let navigationController = UINavigationController(rootViewController: browserViewController)
+//        navigationController.delegate = self
+//        navigationController.isNavigationBarHidden = true
+//        navigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+//        rootViewController = navigationController
+//
+//        self.window!.rootViewController = rootViewController
+        
+//        ONLY FOR DEBUGGING PURPOSE - Remove this code
+        debugViewController = UpdateViewController()
+        debugViewController.view.backgroundColor = UIColor.orange
+        debugViewController.edgesForExtendedLayout = []
+        
+        let debugNavigationController = UINavigationController(rootViewController: debugViewController)
+        debugNavigationController.delegate = self
+        debugNavigationController.isNavigationBarHidden = true
+        debugNavigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
+        rootViewController = debugNavigationController
+        
+        self.window?.rootViewController = rootViewController
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -291,60 +305,63 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     // We sync in the foreground only, to avoid the possibility of runaway resource usage.
     // Eventually we'll sync in response to notifications.
     func applicationDidBecomeActive(_ application: UIApplication) {
-        shutdownWebServer?.cancel()
-        shutdownWebServer = nil
-
-        //
-        // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
-        // the application was cleanly backgrounded later.
-        //
-
-        let defaults = UserDefaults()
-        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
-
-        if let profile = self.profile {
-            profile._reopen()
-
-            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
-                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
-            }
-
-            profile.syncManager.applicationDidBecomeActive()
-
-            setUpWebServer(profile)
-        }
-        
-        BrowserViewController.foregroundBVC().firefoxHomeViewController?.reloadAll()
-        
-        // Resume file downloads.
-        // TODO: iOS 13 needs to iterate all the BVCs.
-        BrowserViewController.foregroundBVC().downloadQueue.resumeAll()
-
-        // handle quick actions is available
-        let quickActions = QuickActions.sharedInstance
-        if let shortcut = quickActions.launchedShortcutItem {
-            // dispatch asynchronously so that BVC is all set up for handling new tabs
-            // when we try and open them
-            quickActions.handleShortCutItem(shortcut, withBrowserViewController: BrowserViewController.foregroundBVC())
-            quickActions.launchedShortcutItem = nil
-        }
-
-        UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
-
-        // Delay these operations until after UIKit/UIApp init is complete
-        // - loadQueuedTabs accesses the DB and shows up as a hot path in profiling
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            // We could load these here, but then we have to futz with the tab counter
-            // and making NSURLRequests.
-            BrowserViewController.foregroundBVC().loadQueuedTabs(receivedURLs: self.receivedURLs)
-            self.receivedURLs.removeAll()
-            application.applicationIconBadgeNumber = 0
-        }
-
-        // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            self.profile?.cleanupHistoryIfNeeded()
-        }
+        return
+            
+            
+//        shutdownWebServer?.cancel()
+//        shutdownWebServer = nil
+//
+//        //
+//        // We are back in the foreground, so set CleanlyBackgrounded to false so that we can detect that
+//        // the application was cleanly backgrounded later.
+//        //
+//
+//        let defaults = UserDefaults()
+//        defaults.set(false, forKey: "ApplicationCleanlyBackgrounded")
+//
+//        if let profile = self.profile {
+//            profile._reopen()
+//
+//            if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+//                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+//            }
+//
+//            profile.syncManager.applicationDidBecomeActive()
+//
+//            setUpWebServer(profile)
+//        }
+//        
+//        BrowserViewController.foregroundBVC().firefoxHomeViewController?.reloadAll()
+//        
+//        // Resume file downloads.
+//        // TODO: iOS 13 needs to iterate all the BVCs.
+//        BrowserViewController.foregroundBVC().downloadQueue.resumeAll()
+//
+//        // handle quick actions is available
+//        let quickActions = QuickActions.sharedInstance
+//        if let shortcut = quickActions.launchedShortcutItem {
+//            // dispatch asynchronously so that BVC is all set up for handling new tabs
+//            // when we try and open them
+//            quickActions.handleShortCutItem(shortcut, withBrowserViewController: BrowserViewController.foregroundBVC())
+//            quickActions.launchedShortcutItem = nil
+//        }
+//
+//        UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
+//
+//        // Delay these operations until after UIKit/UIApp init is complete
+//        // - loadQueuedTabs accesses the DB and shows up as a hot path in profiling
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+//            // We could load these here, but then we have to futz with the tab counter
+//            // and making NSURLRequests.
+//            BrowserViewController.foregroundBVC().loadQueuedTabs(receivedURLs: self.receivedURLs)
+//            self.receivedURLs.removeAll()
+//            application.applicationIconBadgeNumber = 0
+//        }
+//
+//        // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+//            self.profile?.cleanupHistoryIfNeeded()
+//        }
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
