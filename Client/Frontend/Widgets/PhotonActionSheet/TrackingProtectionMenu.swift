@@ -164,7 +164,8 @@ extension PhotonActionSheetProtocol {
         }
 
         var addToWhitelist = PhotonActionSheetItem(title: Strings.TPBlockingSiteEnabled, isEnabled: !isWhitelisted, accessory: .Switch) { _, cell in
-           UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
+            LeanPlumClient.shared.track(event: .trackingProtectionWhiteList)
+            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
             ContentBlocker.shared.whitelist(enable: tab.contentBlocker?.status != .Whitelisted, url: currentURL) {
                 tab.reload()
                 // trigger a call to customRender
