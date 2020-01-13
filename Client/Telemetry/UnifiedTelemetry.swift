@@ -188,6 +188,7 @@ extension UnifiedTelemetry {
         case tab = "tab"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionWhitelist = "tracking-protection-whitelist"
+        case trackingProtectionMenu = "tracking-protection-menu"
         case url = "url"
         case searchText = "searchText"
         case whatsNew = "whats-new"
