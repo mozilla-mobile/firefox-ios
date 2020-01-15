@@ -16,7 +16,7 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
     static let buttonBlue = UIColor.Photon.Blue50
     
     // Private Vars
-    private var debugItems:[String] = [Strings.CoverSheetV22DarkModeTitle]
+    private var debugItems:[String] = ["\(Strings.CoverSheetV22DarkModeTitle)\n\n\(Strings.CoverSheetV22DarkModeDescription)"]
     private var tableView: CoverSheetTableView?
     private var imageView: UIImageView = {
         let imgView = UIImageView(image: #imageLiteral(resourceName: "splash"))
@@ -128,10 +128,6 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-//    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 50
-//    }
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return CGFloat.leastNormalMagnitude
     }
@@ -178,13 +174,17 @@ class CustomCoverSheetTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        addSubview(coverSheetCellImageView)
+        addSubview(coverSheetCellImageView)
         addSubview(coverSheetCellDescriptionLabel)
-//        coverSheetCellImageView.snp.makeConstraints { make in
-//            make.height.equalTo(20)
-//            make.width.equalTo(20)
+        coverSheetCellImageView.snp.makeConstraints { make in
+            
+            make.left.equalToSuperview().inset(UpdateViewController.buttonEdgeInset)
+            make.height.width.equalTo(40)
+            make.top.equalToSuperview().offset(2)
+//            make.bottom.equalToSuperview().offset(-10)
+//            make.centerY.equalToSuperview()
 //            make.centerY.centerX.equalToSuperview()
-//        }
+        }
         
         coverSheetCellDescriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(self.snp.top)
