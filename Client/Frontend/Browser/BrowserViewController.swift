@@ -1289,6 +1289,8 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
             let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
+            LeanPlumClient.shared.track(event: .trackingProtectionMenu)
+            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar)
         }
     }
