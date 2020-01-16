@@ -167,7 +167,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         
 //        ONLY FOR DEBUGGING PURPOSE - Remove this code
         debugViewController = UpdateViewController()
-        debugViewController.view.backgroundColor = UIColor.orange
+        debugViewController.view.backgroundColor = UIColor.white
         debugViewController.edgesForExtendedLayout = []
         
         let debugNavigationController = UINavigationController(rootViewController: debugViewController)

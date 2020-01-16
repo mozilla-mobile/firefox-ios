@@ -10,7 +10,7 @@ import Shared
 class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // Constants
-    static let buttonEdgeInset = 15
+    static let buttonEdgeInset = 18
     static let buttonHeight = 46
     static let buttonSpacing = 16
     static let buttonBlue = UIColor.Photon.Blue50
@@ -28,7 +28,7 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let label = UILabel()
         label.text = Strings.WhatsNewString
         label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.systemFont(ofSize: 34)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -36,7 +36,7 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
     private var startBrowsingButton: UIButton = {
         let button = UIButton()
         button.setTitle(Strings.StartBrowsingButtonTitle, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.layer.cornerRadius = 10
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = buttonBlue
@@ -80,10 +80,6 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func setupTopView() {
         imageView.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(UpdateViewController.buttonEdgeInset)
-//            let h = view.frame.height
-            // On large iPhone screens, bump this up from the bottom
-//            let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (h > 800 ? 60 : 20)
-//            make.bottom.equalTo(titleLabel.snp.top)
             make.top.equalToSuperview().inset(50)
             make.height.width.equalTo(70)
         }
@@ -92,7 +88,7 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
             make.left.equalToSuperview().inset(UpdateViewController.buttonEdgeInset)
             make.right.equalToSuperview()
             make.height.equalTo(40)
-            make.top.equalTo(imageView.snp.bottom)
+            make.top.equalTo(imageView.snp.bottom).offset(15)
         }
     }
     
@@ -100,19 +96,14 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView?.register(CustomCoverSheetTableViewCell.self, forCellReuseIdentifier: "CustomCoverSheetTableViewCellIdentifier")
         self.tableView?.delegate = self
         self.tableView?.dataSource = self
-        self.tableView?.backgroundColor = UIColor.green
+        self.tableView?.backgroundColor = UIColor.white
         self.tableView?.separatorStyle = .none
         self.tableView?.sectionHeaderHeight = 0
         self.tableView?.sectionFooterHeight = 0
         self.tableView?.snp.makeConstraints({ make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
-//            make.top.equalTo(self.view.snp.top)
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.bottom.equalTo(startBrowsingButton.snp.top).offset(-10)
-//            make.height.equalTo(self.view.snp.height)
-            make.width.equalTo(self.view.snp.width)
-//            make.leading.equalToSuperview()
-//            make.trailing.equalToSuperview()
-//            make.right.equalToSuperview()
+            make.width.equalToSuperview()
             make.centerX.equalToSuperview()
         })
     }
@@ -136,7 +127,7 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return CGFloat.leastNormalMagnitude
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150
     }
     
@@ -166,7 +157,7 @@ class CustomCoverSheetTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = Strings.CoverSheetV22DarkModeTitle
         label.textColor = .black
-        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.font = UIFont.systemFont(ofSize: 20, weight: .regular)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -177,22 +168,19 @@ class CustomCoverSheetTableViewCell: UITableViewCell {
         addSubview(coverSheetCellImageView)
         addSubview(coverSheetCellDescriptionLabel)
         coverSheetCellImageView.snp.makeConstraints { make in
-            
             make.left.equalToSuperview().inset(UpdateViewController.buttonEdgeInset)
             make.height.width.equalTo(40)
             make.top.equalToSuperview().offset(2)
-//            make.bottom.equalToSuperview().offset(-10)
-//            make.centerY.equalToSuperview()
-//            make.centerY.centerX.equalToSuperview()
         }
         
         coverSheetCellDescriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top)
-            make.bottom.equalTo(self.snp.bottom)
-//            make.leading.equalTo(coverSheetCellImageView.snp.leading)
-            make.leading.equalTo(self.snp.leading)
-            make.trailing.equalTo(self.snp.trailing)
+            make.top.equalToSuperview().offset(2)
+            make.trailing.equalToSuperview().inset(UpdateViewController.buttonEdgeInset)
+            make.bottom.equalTo(self.snp.bottom).offset(-10)
+            make.leading.equalTo(coverSheetCellImageView.snp.trailing).offset(10)
         }
+        
+        self.selectionStyle = .none
     }
     
     required init?(coder: NSCoder) {
