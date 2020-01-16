@@ -20,11 +20,8 @@ struct UX {
     static let rowInset: CGFloat = 16
     static let pageInfoRowLeftInset = UX.rowInset + 6
     static let pageInfoLineSpacing: CGFloat = 2
-    static let doneLabelBackgroundColor = UIColor.Photon.Blue40
     static let doneLabelFont = UIFont.boldSystemFont(ofSize: 17)
-    static let separatorColor = UIColor.Photon.Grey30
     static let baseFont = UIFont.systemFont(ofSize: 15)
-    static let actionRowTextAndIconColor = UIColor.Photon.Grey80
 
     static let navBarLandscapeShrinkage = 10 // iOS automatically shrinks nav bar in compact landscape
     static let numberOfActionRows = 5 // One more row than this for the page info row.
