@@ -203,6 +203,9 @@ class Action {
     static let DisableTranslation = "DisableTranlation"
     static let SelectGoogle = "SelectGoogle"
     static let SelectBing = "SelectBing"
+    
+    static let AddCustomSearchEngine = "AddCustomSearchEngine"
+    static let RemoveCustomSearchEngine = "RemoveCustomSearchEngine"
 
     static let ExitMobileBookmarksFolder = "ExitMobileBookmarksFolder"
     static let CloseBookmarkPanel = "CloseBookmarkPanel"
@@ -407,13 +410,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(URLBarOpen) { screenState in
         // This is used for opening BrowserTab with default mozilla URL
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
-        screenState.gesture(forAction: Action.LoadURLByTyping, Action.LoadURL) { userState in
+        screenState.gesture(forAction: Action.LoadURLByTyping) { userState in
             let url = userState.url ?? defaultURL
             // Workaround BB iOS13 be sure tap happens on url bar
-            sleep(1)
             app.textFields.firstMatch.tap()
             app.textFields.firstMatch.tap()
-            app.textFields.firstMatch.typeText("\(url)\r")
+            app.textFields.firstMatch.typeText(url)
+            app.textFields.firstMatch.typeText("\r")
         }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
@@ -665,6 +668,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let table = app.tables.element(boundBy: 0)
         screenState.tap(table.cells["customEngineViewButton"], to: AddCustomSearchSettings)
         screenState.backAction = navigationControllerBackAction
+        screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
+            // Screengraph will go back to main Settings screen. Manually tap on settings
+            app.tables["AppSettingsTableViewController.tableView"].staticTexts["Google"].tap()
+            app.navigationBars["Search"].buttons["Edit"].tap()
+            app.tables.buttons["Delete Mozilla Engine"].tap()
+            app.tables.buttons["Delete"].tap()
+        }
     }
 
     map.addScreenState(SiriSettings) { screenState in
@@ -709,6 +719,19 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(AddCustomSearchSettings) { screenState in
+        screenState.gesture(forAction: Action.AddCustomSearchEngine) { userState in
+            app.tables.textViews["customEngineTitle"].staticTexts["Search Engine"].tap()
+            app.typeText("Mozilla Engine")
+            app.tables.textViews["customEngineUrl"].tap()
+            
+            UIPasteboard.general.string = "https://developer.mozilla.org/search?q=%s"
+            
+            let tablesQuery = app.tables
+            let customengineurlTextView = tablesQuery.textViews["customEngineUrl"]
+            sleep(1)
+            customengineurlTextView.press(forDuration: 1.0)
+            app.staticTexts["Paste"].tap()
+        }
         screenState.backAction = navigationControllerBackAction
     }
 

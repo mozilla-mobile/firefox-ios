@@ -339,13 +339,10 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
             cell.imageView?.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
             cell.imageView?.layer.borderWidth = HistoryPanelUX.IconBorderWidth
-            cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
-                if site.tileURL == url {
-                    cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
-                    cell.imageView?.backgroundColor = color
-                    cell.imageView?.contentMode = .center
-                }
-            })
+            cell.imageView?.contentMode = .center
+            cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
+                cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+            }
         }
         return cell
     }
