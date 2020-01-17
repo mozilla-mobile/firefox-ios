@@ -13,6 +13,7 @@ public struct PrefsKeys {
     public static let KeyNightModeStatus = "NightModeStatus"
     public static let KeyNightModeEnabledDarkTheme = "NightModeEnabledDarkTheme"
     public static let KeyMailToOption = "MailToOption"
+    public static let KeyLastVersionNumber = "KeyLastVersionNumber"
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"

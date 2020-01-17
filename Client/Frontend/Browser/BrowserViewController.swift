@@ -576,7 +576,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-
+//        presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
@@ -1893,7 +1893,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     }
 }
 
-extension BrowserViewController: IntroViewControllerDelegate {
+extension BrowserViewController: IntroViewControllerDelegate, UpdateViewControllerDelegate {
     @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
         if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
             self.launchFxAFromDeeplinkURL(url)
@@ -1905,7 +1905,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             introViewController.delegate = self
             // On iPad we present it modally in a controller
             if topTabsVisible {
-                introViewController.preferredContentSize = CGSize(width: IntroViewController.preferredSize.width, height: IntroViewController.preferredSize.height)
+                introViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
                 introViewController.modalPresentationStyle = .formSheet
             } else {
                 introViewController.modalPresentationStyle = .fullScreen
@@ -1920,6 +1920,32 @@ extension BrowserViewController: IntroViewControllerDelegate {
             return true
         }
 
+        return false
+    }
+    
+    @discardableResult func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
+        if force || UpdateViewController.shouldShow(userPrefs: profile.prefs) {
+            let updateViewController = UpdateViewController(userPrefs: profile.prefs)
+            updateViewController.delegate = self
+            
+            if topTabsVisible {
+                updateViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
+                updateViewController.modalPresentationStyle = .formSheet
+            } else {
+                updateViewController.modalPresentationStyle = .fullScreen
+            }
+            
+            // On iPad we present it modally in a controller
+            present(updateViewController, animated: animated) {
+                // On first run (and forced) open up the homepage in the background.
+                if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
+                    tab.loadRequest(URLRequest(url: homePageURL))
+                }
+            }
+
+            return true
+        }
+        
         return false
     }
 
@@ -1946,6 +1972,14 @@ extension BrowserViewController: IntroViewControllerDelegate {
             }
         }
     }
+    
+    func UpdateViewControllerDidFinish(_ updateViewController: UpdateViewController) {
+        updateViewController.dismiss(animated: true) {
+            if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                _ = self.navigationController?.popToRootViewController(animated: true)
+            }
+        }
+    }
 
     func getSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
@@ -1967,7 +2001,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
         themedNavigationController.navigationBar.isTranslucent = false
         if topTabsVisible {
-            themedNavigationController.preferredContentSize = CGSize(width: IntroViewController.preferredSize.width, height: IntroViewController.preferredSize.height)
+            themedNavigationController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
             themedNavigationController.modalPresentationStyle = .formSheet
         } else {
             themedNavigationController.modalPresentationStyle = .fullScreen

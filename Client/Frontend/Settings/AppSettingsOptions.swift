@@ -625,7 +625,7 @@ class SentryIDSetting: HiddenSetting {
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
 
-     override var accessibilityIdentifier: String? { return "FxVersion" }
+    override var accessibilityIdentifier: String? { return "FxVersion" }
 
     init(settings: SettingsTableViewController) {
         self.settings = settings
@@ -633,9 +633,15 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), appVersion, buildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"),  VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+    
+    public static var appVersion: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+    }
+    
+    public static var appBuildNumber: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {

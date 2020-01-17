@@ -6,8 +6,25 @@ import Foundation
 import UIKit
 import SnapKit
 import Shared
+import Leanplum
+
+protocol UpdateViewControllerDelegate: AnyObject {
+    func UpdateViewControllerDidFinish(_ updateViewController: UpdateViewController)
+}
+
+enum CoverSheetType {
+    case update
+}
+
+class CoverSheetModel {
+    
+}
 
 class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    // Public vars
+    weak var delegate: UpdateViewControllerDelegate?
+    var userPrefs: Prefs?
     
     // Constants
     static let buttonEdgeInset = 18
@@ -42,6 +59,13 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
         button.backgroundColor = buttonBlue
         return button
     }()
+    private var doneButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(Strings.SettingsSearchDoneButton, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        button.setTitleColor(UIColor.systemBlue, for: .normal)
+        return button
+    }()
     
     /* The layout for update view controller.
         
@@ -65,9 +89,42 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
      
      */
     
+    init(userPrefs: Prefs) {
+        super.init(nibName: nil, bundle: nil)
+        self.userPrefs = userPrefs
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    static func shouldShow(userPrefs: Prefs) -> Bool {
+        let currentVersion = "\(VersionSetting.appVersion) \(VersionSetting.appBuildNumber)"
+        
+        if let lastVersion = userPrefs.stringForKey(PrefsKeys.KeyLastVersionNumber) {
+            // Version are not the same
+            if lastVersion != currentVersion {
+                userPrefs.setString(currentVersion, forKey: PrefsKeys.KeyLastVersionNumber)
+                return true
+              // Versions are same, return false
+            } else if lastVersion == currentVersion {
+                return false
+            }
+        } else {
+            // Version doesn't exist, set the current versiojn and return true
+            userPrefs.setString(currentVersion, forKey: PrefsKeys.KeyLastVersionNumber)
+            return true
+        }
+
+        return false
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.view.backgroundColor = UIColor.white
         self.tableView = CoverSheetTableView(frame: CGRect.zero, style: .grouped)
+        self.view.addSubview(doneButton)
         self.view.addSubview(imageView)
         self.view.addSubview(titleLabel)
         self.view.addSubview(startBrowsingButton)
@@ -78,9 +135,17 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func setupTopView() {
+        doneButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
+        startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
+        doneButton.snp.makeConstraints { make in
+            make.top.equalTo(view.snp.topMargin).offset(20)
+            make.right.equalToSuperview().inset(20)
+            make.height.equalTo(20)
+        }
+        
         imageView.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(UpdateViewController.buttonEdgeInset)
-            make.top.equalToSuperview().inset(50)
+            make.top.equalTo(view.snp.topMargin).inset(50)
             make.height.width.equalTo(70)
         }
         
@@ -141,13 +206,25 @@ class UpdateViewController: UIViewController, UITableViewDelegate, UITableViewDa
         cell?.coverSheetCellDescriptionLabel.text = currentLastItem
         return cell!
     }
+    
+    // Button Actions
+    
+    @objc func dismissAnimated() {
+        print("Dismissed")
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func startBrowsing() {
+        print("Start Browsing")
+        delegate?.UpdateViewControllerDidFinish(self)
+    }
 }
 
 class CustomCoverSheetTableViewCell: UITableViewCell {
     
     // Tableview cell items
     var coverSheetCellImageView: UIImageView = {
-        let imgView = UIImageView(image: #imageLiteral(resourceName: "pin_small"))
+        let imgView = UIImageView(image: #imageLiteral(resourceName: "darkModeUpdate"))
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
         return imgView
@@ -169,7 +246,7 @@ class CustomCoverSheetTableViewCell: UITableViewCell {
         addSubview(coverSheetCellDescriptionLabel)
         coverSheetCellImageView.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(UpdateViewController.buttonEdgeInset)
-            make.height.width.equalTo(40)
+            make.height.width.equalTo(30)
             make.top.equalToSuperview().offset(2)
         }
         
