@@ -4,19 +4,19 @@ import MozillaAppServices
 open class RustFirefoxAccounts {
     private let ClientID =  "98adfa37698f255b" // actual one is "1b1a3e44c54fbb58"
     public let redirectURL = "https://lockbox.firefox.com/fxa/ios-redirect.html"
-    public static var shared: RustFirefoxAccounts? = nil
+    public static var shared = RustFirefoxAccounts()
     public let accountManager: FxaAccountManager
     public var avatar: Avatar? = nil
+    private var isInit = false
 
     public static func startup(completion: ((RustFirefoxAccounts) -> Void)? = nil) {
-        guard RustFirefoxAccounts.shared == nil else {
-            completion?(shared!)
+        if shared.isInit {
+            completion?(shared)
             return
         }
-        let fxa = RustFirefoxAccounts()
-        fxa.accountManager.initialize() { result in
-            shared = fxa
-            completion?(fxa)
+        shared.accountManager.initialize() { result in
+            shared.isInit = true
+            completion?(shared)
         }
     }
 

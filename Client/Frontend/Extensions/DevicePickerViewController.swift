@@ -208,7 +208,7 @@ class DevicePickerViewController: UITableViewController {
     }
 
     @objc func refresh() {
-        RustFirefoxAccounts.shared?.accountManager.deviceConstellation()?.refreshState()
+        RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.refreshState()
         if let refreshControl = self.refreshControl {
             refreshControl.beginRefreshing()
             let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))

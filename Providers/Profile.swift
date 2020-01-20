@@ -502,7 +502,7 @@ open class BrowserProfile: Profile {
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
-        guard let constellation = RustFirefoxAccounts.shared?.accountManager.deviceConstellation() else {
+        guard let constellation = RustFirefoxAccounts.shared.accountManager.deviceConstellation() else {
             return deferMaybe(NoAccountError())
         }
         devices.forEach {
@@ -579,7 +579,7 @@ open class BrowserProfile: Profile {
     }
 
     var rustAccount: FxaAccountManager? {
-        return RustFirefoxAccounts.shared?.accountManager
+        return RustFirefoxAccounts.shared.accountManager
     }
 
     func removeAccountMetadata() {

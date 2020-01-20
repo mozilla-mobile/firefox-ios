@@ -38,7 +38,7 @@ class RustLoginView: UIViewController, WKNavigationDelegate {
         self.webView.navigationDelegate = self
         self.view = self.webView
 
-        RustFirefoxAccounts.shared?.accountManager.beginAuthentication() { [weak self] result in
+        RustFirefoxAccounts.shared.accountManager.beginAuthentication() { [weak self] result in
             if case .success(let url) = result {
                 self?.webView.load(URLRequest(url: url))
             }
@@ -82,7 +82,7 @@ class RustLoginView: UIViewController, WKNavigationDelegate {
         var dic = [String: String]()
         components.queryItems?.forEach { dic[$0.name] = $0.value }
         let data = FxaAuthData(code: dic["code"]!, state: dic["state"]!, actionQueryParam: "signin")
-        RustFirefoxAccounts.shared?.accountManager.finishAuthentication(authData: data) { _ in
+        RustFirefoxAccounts.shared.accountManager.finishAuthentication(authData: data) { _ in
             let application = UIApplication.shared
             // ask for push notification
             let center = UNUserNotificationCenter.current()
@@ -107,7 +107,8 @@ class RustLoginView: UIViewController, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
-        if let redirectUrl = RustFirefoxAccounts.shared?.redirectURL, let navigationURL = navigationAction.request.url {
+        let redirectUrl = RustFirefoxAccounts.shared.redirectURL
+        if let navigationURL = navigationAction.request.url {
             let expectedRedirectURL = URL(string: redirectUrl)!
             if navigationURL.scheme == expectedRedirectURL.scheme && navigationURL.host == expectedRedirectURL.host && navigationURL.path == expectedRedirectURL.path,
                 let components = URLComponents(url: navigationURL, resolvingAgainstBaseURL: true) {
@@ -119,8 +120,4 @@ class RustLoginView: UIViewController, WKNavigationDelegate {
 
         decisionHandler(.allow)
     }
-
-//    private func styleNavigationBar() {
-//        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: nil, action: nil)
-//    }
 }

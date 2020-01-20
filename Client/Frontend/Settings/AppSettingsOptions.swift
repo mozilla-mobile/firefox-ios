@@ -312,11 +312,11 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        if let displayName = RustFirefoxAccounts.shared?.accountManager.accountProfile()?.displayName {
+        if let displayName = RustFirefoxAccounts.shared.accountManager.accountProfile()?.displayName {
             return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
-        if let email = RustFirefoxAccounts.shared?.accountManager.accountProfile()?.email {
+        if let email = RustFirefoxAccounts.shared.accountManager.accountProfile()?.email {
             return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
@@ -324,7 +324,7 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        if RustFirefoxAccounts.shared?.isActionNeeded ?? false {
+        if RustFirefoxAccounts.shared.isActionNeeded ?? false {
             let string = Strings.FxAAccountVerifyPassword
             let orange = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
@@ -378,7 +378,7 @@ class AccountStatusSetting: WithAccountSetting {
 
             imageView.image = UIImage(named: "placeholder-avatar")!.createScaled(CGSize(width: 30, height: 30))
 
-            RustFirefoxAccounts.shared?.avatar?.image.uponQueue(.main) { image in
+            RustFirefoxAccounts.shared.avatar?.image.uponQueue(.main) { image in
                 imageView.image = image.createScaled(CGSize(width: 30, height: 30))
             }
         }

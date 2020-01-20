@@ -63,7 +63,7 @@ class DisconnectSetting: Setting {
         })
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
-                RustFirefoxAccounts.shared?.accountManager.logout() { _ in }
+                RustFirefoxAccounts.shared.accountManager.logout() { _ in }
 
                 FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
@@ -82,13 +82,13 @@ class DisconnectSetting: Setting {
 
 class DeviceNamePersister: SettingValuePersister {
     func readPersistedValue() -> String? {
-        return RustFirefoxAccounts.shared?.accountManager.deviceConstellation()?
+        return RustFirefoxAccounts.shared.accountManager.deviceConstellation()?
             .state()?.localDevice?.displayName
     }
 
     func writePersistedValue(value: String?) {
         guard let newName = value,
-              let deviceConstellation = RustFirefoxAccounts.shared?.accountManager.deviceConstellation() else {
+              let deviceConstellation = RustFirefoxAccounts.shared.accountManager.deviceConstellation() else {
             return
         }
 
@@ -106,7 +106,7 @@ class DeviceNameSetting: StringSetting {
         let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
         super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(), settingIsValid: settingsIsValid)
 
-        RustFirefoxAccounts.shared?.accountManager.deviceConstellation()?.refreshState()
+        RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.refreshState()
 
         notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: nil) { [weak self] notification in
             self?.tableView?.tableView.reloadData()

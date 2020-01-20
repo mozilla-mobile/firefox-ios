@@ -626,7 +626,7 @@ extension AppDelegate {
             if let pushReg = result.successValue {
                 let subscription = pushReg.defaultSubscription
                 let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
-                RustFirefoxAccounts.shared?.accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
+                RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
 
                 let keychain = KeychainWrapper.sharedAppContainerKeychain
                 keychain.set(pushReg as NSCoding, forKey: "account.push-registration")

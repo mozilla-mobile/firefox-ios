@@ -83,10 +83,11 @@ extension PhotonActionSheetProtocol {
             showFxA(fxaParams, .emailLoginFlow)
         }
 
-        guard let rustAccount = RustFirefoxAccounts.shared?.accountManager, let rustProfile = rustAccount.accountProfile() else {
+        let rustAccount = RustFirefoxAccounts.shared.accountManager
+
+        guard let rustProfile = rustAccount.accountProfile() else {
             return PhotonActionSheetItem(title: Strings.FxASignInToSync, iconString: "menu-sync", handler: action)
         }
-
         let title: String = {
             if rustAccount.accountNeedsReauth() {
                 return Strings.FxAAccountVerifyPassword
