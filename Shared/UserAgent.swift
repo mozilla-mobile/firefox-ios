@@ -98,11 +98,13 @@ public struct CustomUserAgentConstant {
     public static let mobileUserAgent = [
         "whatsapp.com": defaultMobileUA,
         "paypal.com": defaultMobileUA,
-        "yahoo.com": defaultMobileUA ]
+        "yahoo.com": defaultMobileUA,
+        "google.com": defaultMobileUA ]
     public static let desktopUserAgent = [
         "whatsapp.com": customDesktopUA,
         "paypal.com": customDesktopUA,
-        "yahoo.com": customDesktopUA ]
+        "yahoo.com": customDesktopUA,
+        "google.com": customDesktopUA ]
 }
 
 public struct UserAgentBuilder {
