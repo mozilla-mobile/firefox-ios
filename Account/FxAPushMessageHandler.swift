@@ -35,7 +35,7 @@ extension FxAPushMessageHandler {
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
             let payload = userInfo["body"] as? String else {
-                return handleVerification()
+                return deferMaybe(PushMessageError.messageIncomplete)
         }
         // ver == endpointURL path, chid == channel id, aps == alert text and content_available.
 
@@ -115,12 +115,6 @@ extension FxAPushMessageHandler {
 }
 
 extension FxAPushMessageHandler {
-    func handleVerification() -> PushMessageResult {
-        // What we'd really like to be able to start syncing immediately we receive this
-        // message, but this method is run by the extension, so we can't do it here.
-        return deferMaybe(.accountVerified)
-    }
-
     // This will be executed by the app, not the extension.
     // This isn't guaranteed to be run (when the app is backgrounded, and the user
     // doesn't tap on the notification), but that's okay because:
@@ -226,16 +220,16 @@ extension FxAPushMessageHandler {
 }
 
 extension FxAPushMessageHandler {
-    func handleCollectionChanged(_ data: JSON?) -> PushMessageResult {
-        guard let collections = data?["collections"].arrayObject as? [String] else {
-            print("collections_changed received but incomplete: \(data ?? "nil")")
-            return deferMaybe(PushMessageError.messageIncomplete)
-        }
-        // Possible values: "addons", "bookmarks", "history", "forms", "prefs", "tabs", "passwords", "clients"
-
-        // syncManager will only do a subset; others will be ignored.
-        return profile.syncManager.syncNamedCollections(why: .push, names: collections) >>== { deferMaybe(.collectionChanged(collections: collections)) }
-    }
+//    func handleCollectionChanged(_ data: JSON?) -> PushMessageResult {
+//        guard let collections = data?["collections"].arrayObject as? [String] else {
+//            print("collections_changed received but incomplete: \(data ?? "nil")")
+//            return deferMaybe(PushMessageError.messageIncomplete)
+//        }
+//        // Possible values: "addons", "bookmarks", "history", "forms", "prefs", "tabs", "passwords", "clients"
+//
+//        // syncManager will only do a subset; others will be ignored.
+//        return profile.syncManager.syncNamedCollections(why: .push, names: collections) >>== { deferMaybe(.collectionChanged(collections: collections)) }
+//    }
 }
 
 /// Some utility methods
@@ -262,10 +256,10 @@ enum PushMessageType: String {
     case profileUpdated = "fxaccounts:profile_updated"
     case passwordChanged = "fxaccounts:password_changed"
     case passwordReset = "fxaccounts:password_reset"
-    case collectionChanged = "sync:collection_changed"
+   // case collectionChanged = "sync:collection_changed"
 
     // This isn't a real message type, just the absence of one.
-    case accountVerified = "account_verified"
+   // case accountVerified = "account_verified"
 }
 
 enum PushMessage: Equatable {
@@ -275,8 +269,6 @@ enum PushMessage: Equatable {
     case profileUpdated
     case passwordChanged
     case passwordReset
-    case collectionChanged(collections: [String])
-    case accountVerified
 
     // This is returned when we detect that it is us that has been disconnected.
     case thisDeviceDisconnected
@@ -297,10 +289,6 @@ enum PushMessage: Equatable {
             return .passwordChanged
         case .passwordReset:
             return .passwordReset
-        case .collectionChanged(collections: _):
-            return .collectionChanged
-        case .accountVerified:
-            return .accountVerified
         }
     }
 
@@ -314,8 +302,8 @@ enum PushMessage: Equatable {
             return lIndex == rIndex
         case (.deviceConnected(let lName), .deviceConnected(let rName)):
             return lName == rName
-        case (.collectionChanged(let lList), .collectionChanged(let rList)):
-            return lList == rList
+//        case (.collectionChanged(let lList), .collectionChanged(let rList)):
+//            return lList == rList
         default:
             return true
         }

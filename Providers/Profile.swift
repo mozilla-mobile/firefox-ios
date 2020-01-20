@@ -502,53 +502,15 @@ open class BrowserProfile: Profile {
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
-        guard let account = self.getAccount() else {
+        guard let constellation = RustFirefoxAccounts.shared?.accountManager.deviceConstellation() else {
             return deferMaybe(NoAccountError())
         }
-
-        let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
-        let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
-        let command = SyncCommand.displayURIFromShareItem(item, asClient: id)
-        let fxaDeviceIds = devices.compactMap { $0.id }
-
-        let result = Success()
-
-        self.remoteClientsAndTabs.getClients() >>== { clients in
-            let newRemoteDevices = devices.filter { account.commandsClient.sendTab.isDeviceCompatible($0) }
-            var oldRemoteClients = devices.filter { !account.commandsClient.sendTab.isDeviceCompatible($0) }.compactMap { remoteDevice in
-                clients.find { $0.fxaDeviceId == remoteDevice.id }
-            }
-
-            func sendViaSyncFallback() {
-                if oldRemoteClients.isEmpty {
-                    result.fill(Maybe(success: ()))
-                } else {
-                    self.remoteClientsAndTabs.insertCommands([command], forClients: oldRemoteClients) >>> {
-                        self.syncManager.syncClients() >>> {
-                            account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
-                            result.fill(Maybe(success: ()))
-                        }
-                    }
-                }
-            }
-
-            if !newRemoteDevices.isEmpty {
-                account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "") >>== { report in
-                    for failedRemoteDevice in report.failed {
-                        log.debug("Failed to send a tab with FxA commands for \(failedRemoteDevice.name). Falling back on the Sync back-end")
-                        if let oldRemoteClient = clients.find({ $0.fxaDeviceId == failedRemoteDevice.id }) {
-                            oldRemoteClients.append(oldRemoteClient)
-                        }
-                    }
-
-                    sendViaSyncFallback()
-                }
-            } else {
-                sendViaSyncFallback()
+        devices.forEach {
+            if let id = $0.id, let title = item.title {
+                constellation.sendEventToDevice(targetDeviceId: id, e: .sendTab(title: title, url: item.url))
             }
         }
-
-        return result
+        return Success()
     }
 
     lazy var logins: RustLogins = {

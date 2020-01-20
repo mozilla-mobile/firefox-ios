@@ -20,9 +20,7 @@ class NotificationService: UNNotificationServiceExtension {
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         let userInfo = request.content.userInfo
 
-        guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
-            return self.didFinish(PushMessage.accountVerified)
-        }
+        let content = request.content.mutableCopy() as! UNMutableNotificationContent
 
         if self.profile == nil {
             self.profile = ExtensionProfile(localName: "profile")
@@ -97,20 +95,12 @@ class SyncDataDisplay {
         switch message {
         case .commandReceived(let tab):
             displayNewSentTabNotification(tab: tab)
-        case .accountVerified:
-            displayAccountVerifiedNotification()
         case .deviceConnected(let deviceName):
             displayDeviceConnectedNotification(deviceName)
         case .deviceDisconnected(let deviceName):
             displayDeviceDisconnectedNotification(deviceName)
         case .thisDeviceDisconnected:
             displayThisDeviceDisconnectedNotification()
-        case .collectionChanged(let collections):
-            if collections.contains("clients") {
-                /// displayOldSentTabNotification()
-            } else {
-                displayUnknownMessageNotification(debugInfo: "collection changed")
-            }
         default:
             displayUnknownMessageNotification(debugInfo: "Unknown: \(message)")
             break
