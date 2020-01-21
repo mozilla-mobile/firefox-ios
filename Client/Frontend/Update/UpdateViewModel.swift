@@ -6,19 +6,17 @@ import Foundation
 import Shared
 
 class UpdateViewModel {
+    //  Internal vars
     var updateCoverSheetModel: UpdateCoverSheetModel?
-    var updates: [Update] {
-        return [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(Strings.CoverSheetV22DarkModeTitle)\n\n\(Strings.CoverSheetV22DarkModeDescription)")]
-    }
-    var count: Int {
-        return updates.count
-    }
+    
+    // Constants
+    let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(Strings.CoverSheetV22DarkModeTitle)\n\n\(Strings.CoverSheetV22DarkModeDescription)")]
     
     init() {
         setupUpdateModel()
     }
 
-    func setupUpdateModel() {
+    private func setupUpdateModel() {
         updateCoverSheetModel = UpdateCoverSheetModel(titleImage: #imageLiteral(resourceName: "splash"), titleText: Strings.WhatsNewString, updates: updates)
     }
     

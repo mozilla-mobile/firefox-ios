@@ -13,7 +13,6 @@ class UpdateCustomCoverSheetTableViewCell: UITableViewCell {
         imgView.clipsToBounds = true
         return imgView
     }()
-    
     var coverSheetCellDescriptionLabel: UILabel = {
         let label = UILabel()
         label.text = Strings.CoverSheetV22DarkModeTitle
@@ -26,6 +25,16 @@ class UpdateCustomCoverSheetTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        initialViewSetup()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func initialViewSetup() {
+        self.contentView.backgroundColor = .white
+        self.selectionStyle = .none
         addSubview(updateCoverSheetCellImageView)
         addSubview(coverSheetCellDescriptionLabel)
         updateCoverSheetCellImageView.snp.makeConstraints { make in
@@ -40,11 +49,5 @@ class UpdateCustomCoverSheetTableViewCell: UITableViewCell {
             make.bottom.equalTo(snp.bottom).offset(-10)
             make.leading.equalTo(updateCoverSheetCellImageView.snp.trailing).offset(10)
         }
-        
-        self.selectionStyle = .none
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }

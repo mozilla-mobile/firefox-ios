@@ -68,7 +68,7 @@ struct UpdateViewControllerUX {
  */
 
 class UpdateViewController: UIViewController {
-    // Public vars
+    // Internal vars
     var shouldStartBrowsing: (() -> Void)?
     
     // Private vars
@@ -132,7 +132,7 @@ class UpdateViewController: UIViewController {
         setupBottomView()
     }
     
-    func initialViewSetup() {
+    private func initialViewSetup() {
         self.view.backgroundColor = UIColor.white
         
         // Initialize
@@ -143,7 +143,7 @@ class UpdateViewController: UIViewController {
         self.view.addSubview(updatesTableView)
     }
     
-    func setupTopView() {
+    private func setupTopView() {
         // Done button target setup
         doneButton.addTarget(self, action: #selector(dismissAnimated), for: .touchUpInside)
         
@@ -173,7 +173,7 @@ class UpdateViewController: UIViewController {
         }
     }
     
-    func setupMidView() {
+    private func setupMidView() {
         // Mid tableview setup
         // Mid tableview hosts the items for updated cover sheet
         self.updatesTableView.delegate = self
@@ -188,7 +188,7 @@ class UpdateViewController: UIViewController {
         })
     }
     
-    func setupBottomView() {
+    private func setupBottomView() {
         // Bottom start browsing target setup
         startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
         
@@ -205,13 +205,13 @@ class UpdateViewController: UIViewController {
     }
     
     // Button Actions
-    @objc func dismissAnimated() {
+    @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         LeanPlumClient.shared.track(event: .dismissedUpdateCoverSheet)
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedUpdateCoverSheet)
     }
     
-    @objc func startBrowsing() {
+    @objc private func startBrowsing() {
         shouldStartBrowsing?()
         LeanPlumClient.shared.track(event: .dismissUpdateCoverSheetAndStartBrowsing)
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
@@ -228,7 +228,7 @@ extension UpdateViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.count
+        return viewModel.updates.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
