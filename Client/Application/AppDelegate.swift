@@ -33,7 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
-//    var debugViewController: UpdateViewController!   // ONLY FOR DEBUGGING PURPOSE - REMOVE THIS CODE
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
@@ -164,19 +163,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         rootViewController = navigationController
 
         self.window!.rootViewController = rootViewController
-        
-//        ONLY FOR DEBUGGING PURPOSE - Remove this code
-//        debugViewController = UpdateViewController()
-//        debugViewController.view.backgroundColor = UIColor.white
-//        debugViewController.edgesForExtendedLayout = []
-//
-//        let debugNavigationController = UINavigationController(rootViewController: debugViewController)
-//        debugNavigationController.delegate = self
-//        debugNavigationController.isNavigationBarHidden = true
-//        debugNavigationController.edgesForExtendedLayout = UIRectEdge(rawValue: 0)
-//        rootViewController = debugNavigationController
-//
-//        self.window?.rootViewController = rootViewController
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
