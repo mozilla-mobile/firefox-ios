@@ -576,7 +576,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-//        presentUpdateViewController()
+        presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
@@ -1893,7 +1893,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     }
 }
 
-extension BrowserViewController: IntroViewControllerDelegate, UpdateViewControllerDelegate {
+extension BrowserViewController: IntroViewControllerDelegate {
     @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
         if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
             self.launchFxAFromDeeplinkURL(url)
@@ -1924,9 +1924,16 @@ extension BrowserViewController: IntroViewControllerDelegate, UpdateViewControll
     }
     
     @discardableResult func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
-        if force || UpdateViewController.shouldShow(userPrefs: profile.prefs) {
-            let updateViewController = UpdateViewController(userPrefs: profile.prefs)
-            updateViewController.delegate = self
+        if force || UpdateViewModel.shouldShow(userPrefs: profile.prefs) {
+            let updateViewController = UpdateViewController()
+            
+            updateViewController.shouldStartBrowsing = {
+                updateViewController.dismiss(animated: true) {
+                if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                    _ = self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
+            }
             
             if topTabsVisible {
                 updateViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
@@ -1973,12 +1980,13 @@ extension BrowserViewController: IntroViewControllerDelegate, UpdateViewControll
         }
     }
     
-    func UpdateViewControllerDidFinish(_ updateViewController: UpdateViewController) {
-        updateViewController.dismiss(animated: true) {
-            if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                _ = self.navigationController?.popToRootViewController(animated: true)
-            }
-        }
+//    func UpdateViewControllerDidFinish(_ updateViewController: UpdateViewController) {
+    func UpdateViewControllerDidFinish() {
+//        updateViewController.dismiss(animated: true) {
+//            if self.navigationController?.viewControllers.count ?? 0 > 1 {
+//                _ = self.navigationController?.popToRootViewController(animated: true)
+//            }
+//        }
     }
 
     func getSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) -> UIViewController {
