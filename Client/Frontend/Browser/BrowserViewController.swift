@@ -1979,15 +1979,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
             }
         }
     }
-    
-//    func UpdateViewControllerDidFinish(_ updateViewController: UpdateViewController) {
-    func UpdateViewControllerDidFinish() {
-//        updateViewController.dismiss(animated: true) {
-//            if self.navigationController?.viewControllers.count ?? 0 > 1 {
-//                _ = self.navigationController?.popToRootViewController(animated: true)
-//            }
-//        }
-    }
 
     func getSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
