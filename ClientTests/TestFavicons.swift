@@ -52,7 +52,7 @@ class TestFavicons: ProfileTest {
         // The amazon case tests a special case for multi-reguin domain lookups
         ["http://www.youtube.com", "https://www.taobao.com/", "https://www.amazon.ca"].forEach {
             let url = URL(string: $0)!
-            let icon = FaviconFetcher.getDefaultIconForURL(url: url)
+            let icon = FaviconFetcher.getBundledIcon(forUrl: url)
             XCTAssertNotNil(icon)
         }
     }

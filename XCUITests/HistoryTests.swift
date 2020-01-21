@@ -236,9 +236,9 @@ class HistoryTests: BaseTestCase {
     }
     
     private func navigateToGoogle(){
-        navigator.openURL("google.com")
+        navigator.openURL("example.com")
         navigator.goto(LibraryPanel_History)
-        XCTAssertTrue(app.tables.cells.staticTexts["Google"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Example Domain"].exists)
     }
     
     func testClearRecentHistory() {

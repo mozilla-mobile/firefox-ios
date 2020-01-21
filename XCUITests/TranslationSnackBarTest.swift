@@ -5,7 +5,7 @@
 import XCTest
 
 class TranslationSnackBarTest: BaseTestCase {
-    
+    /*
     // This test checks to the correct functionalty of the Translation prompt and Translation is done corrrectly using Google
     func testSnackBarDisplayed() {
         userState.localeIsExpectedDifferent = true
@@ -40,5 +40,5 @@ class TranslationSnackBarTest: BaseTestCase {
         waitUntilPageLoad()
         navigator.performAction(Action.SelectTranslateThisPage)
         waitForValueContains(app.textFields["url"], value: "translatetheweb")
-    }
+    }*/
 }

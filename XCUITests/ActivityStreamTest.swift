@@ -98,8 +98,7 @@ class ActivityStreamTest: BaseTestCase {
         // Open a new page and wait for the completion
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL(newTopSite["url"]!)
-        waitUntilPageLoad()
-        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -192,6 +191,10 @@ class ActivityStreamTest: BaseTestCase {
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in New Tab")
         // Check that two tabs are open and one of them is the default top site one
+        // Needed for BB to work after iOS 13.3 update
+        sleep(1)
+        waitForNoExistence(app.tables["Context Menu"], timeoutValue: 15)
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
         let numTabsOpen = app.collectionViews.cells.count
@@ -236,6 +239,10 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Open in New Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
+        // Workaroud needed after xcode 11.3 update Issue 5937
+        sleep(2)
+        navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])

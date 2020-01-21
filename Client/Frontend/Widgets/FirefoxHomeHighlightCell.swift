@@ -172,13 +172,9 @@ class FirefoxHomeHighlightCell: UICollectionViewCell {
             self.siteImageView.sd_setImage(with: mediaURL)
             self.siteImageView.contentMode = .scaleAspectFill
         } else {
-            let itemURL = site.tileURL
-            self.siteImageView.setFavicon(forSite: site, onCompletion: { [weak self] (color, url)  in
-                if itemURL == url {
-                    self?.siteImageView.image = self?.siteImageView.image?.createScaled(FirefoxHomeHighlightCellUX.FaviconSize)
-                    self?.siteImageView.backgroundColor = color
-                }
-            })
+            self.siteImageView.setFavicon(forSite: site) { [weak self]  in
+                self?.siteImageView.image = self?.siteImageView.image?.createScaled(FirefoxHomeHighlightCellUX.FaviconSize)
+            }
             self.siteImageView.contentMode = .center
         }
 

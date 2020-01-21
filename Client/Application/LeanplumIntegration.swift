@@ -60,6 +60,8 @@ enum LPEvent: String {
     case signsUpFxa = "E_User_Signed_Up_For_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
+    case trackingProtectionMenu = "E_Opened_Tracking_Protection_Menu"
+    case trackingProtectionWhiteList = "E_Added_Site_To_Tracking_Protection_Whitelist"
     case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
     case onboardingTestLoadedTooSlow = "E_Onboarding_Was_Swiped_Before_AB_Test_Could_Start"
 }
