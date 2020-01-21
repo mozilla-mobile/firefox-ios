@@ -21,13 +21,16 @@ extension UIColor {
 public extension UIImageView {
 
     func setImageAndBackground(forIcon icon: Favicon?, website: URL?, completion: @escaping () -> Void) {
-        func finish(bgColor: UIColor) {
-            // If the background color is clear, we may decide to set our own background based on the theme.
-            let color = bgColor.components.alpha < 0.01 ? UIColor.theme.general.faviconBackground : bgColor
-            self.backgroundColor = color
+        func finish(bgColor: UIColor?) {
+            if let bgColor = bgColor {
+                // If the background color is clear, we may decide to set our own background based on the theme.
+                let color = bgColor.components.alpha < 0.01 ? UIColor.theme.general.faviconBackground : bgColor
+                self.backgroundColor = color
+            }
             completion()
         }
 
+        backgroundColor = nil
         sd_setImage(with: nil) // cancels any pending SDWebImage operations.
 
         if let url = website, let bundledIcon = FaviconFetcher.getBundledIcon(forUrl: url) {
@@ -36,13 +39,12 @@ public extension UIImageView {
         } else {
             let imageURL = URL(string: icon?.url ?? "")
             let defaults = fallbackFavicon(forUrl: website)
-            backgroundColor = .clear
             self.sd_setImage(with: imageURL, placeholderImage: defaults.image, options: []) {(img, err, _, _) in
                 guard err == nil else {
                     finish(bgColor: defaults.color)
                     return
                 }
-                finish(bgColor: UIColor.Photon.White100)
+                finish(bgColor: nil)
             }
         }
     }

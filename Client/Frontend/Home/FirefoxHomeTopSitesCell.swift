@@ -153,6 +153,16 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
         accessibilityLabel = titleLabel.text
         faviconBG.backgroundColor = .clear
         self.imageView.setFaviconOrDefaultIcon(forSite: site) { [weak self] in
+            self?.imageView.snp.remakeConstraints { make in
+                guard let faviconBG = self?.faviconBG , let frame = self?.frame else { return }
+                if self?.imageView.backgroundColor == nil {
+                    make.size.equalTo(frame.width)
+                } else {
+                    make.size.equalTo(floor(frame.width * TopSiteCellUX.IconSizePercent))
+                }
+                make.center.equalTo(faviconBG)
+            }
+
             self?.faviconBG.backgroundColor = self?.imageView.backgroundColor
         }
 
