@@ -68,11 +68,8 @@ struct UpdateViewControllerUX {
  */
 
 class UpdateViewController: UIViewController {
-    // Internal vars
-    var shouldStartBrowsing: (() -> Void)?
-    
     // Private vars
-    lazy private var viewModel:UpdateViewModel = UpdateViewModel()
+    let viewModel:UpdateViewModel = UpdateViewModel()
     private var updatesTableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .grouped)
         tableView.register(UpdateCustomCoverSheetTableViewCell.self, forCellReuseIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier)
@@ -212,7 +209,7 @@ class UpdateViewController: UIViewController {
     }
     
     @objc private func startBrowsing() {
-        shouldStartBrowsing?()
+        viewModel.shouldStartBrowsing?()
         LeanPlumClient.shared.track(event: .dismissUpdateCoverSheetAndStartBrowsing)
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
     }

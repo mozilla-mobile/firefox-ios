@@ -1927,7 +1927,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         if force || UpdateViewModel.shouldShow(userPrefs: profile.prefs) {
             let updateViewController = UpdateViewController()
             
-            updateViewController.shouldStartBrowsing = {
+            updateViewController.viewModel.shouldStartBrowsing = {
                 updateViewController.dismiss(animated: true) {
                 if self.navigationController?.viewControllers.count ?? 0 > 1 {
                     _ = self.navigationController?.popToRootViewController(animated: true)
