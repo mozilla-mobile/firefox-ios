@@ -13,13 +13,13 @@ private struct TabsButtonUX {
 }
 
 class TabsButton: UIButton {
-    var textColor = UIColor.clear {
+    var textColor = UIColor.Photon.Blue40 {
         didSet {
             countLabel.textColor = textColor
             borderView.color = textColor
         }
     }
-    var titleBackgroundColor = UIColor.clear {
+    var titleBackgroundColor = UIColor.Photon.Blue40 {
         didSet {
             labelBackground.backgroundColor = titleBackgroundColor
         }
