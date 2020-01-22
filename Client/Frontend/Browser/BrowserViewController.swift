@@ -1926,7 +1926,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
     }
     
     @discardableResult func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
-        if force || UpdateViewModel.shouldShow(userPrefs: profile.prefs) {
+        let cleanInstall = UpdateViewModel.isCleanInstall(userPrefs: profile.prefs)
+        if force || UpdateViewModel.shouldShow(userPrefs: profile.prefs, isCleanInstall: cleanInstall) {
             let updateViewController = UpdateViewController()
             
             updateViewController.viewModel.shouldStartBrowsing = {
