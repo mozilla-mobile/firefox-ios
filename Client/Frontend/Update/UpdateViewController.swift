@@ -72,7 +72,7 @@ class UpdateViewController: UIViewController {
     private var updatesTableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .grouped)
         tableView.register(UpdateCoverSheetTableViewCell.self, forCellReuseIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier)
-        tableView.backgroundColor = UIColor.green
+        tableView.backgroundColor = UIColor.white
         tableView.separatorStyle = .none
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
