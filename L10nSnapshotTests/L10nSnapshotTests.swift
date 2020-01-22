@@ -59,6 +59,17 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     // From here on it is fine to load pages
+    func test07LongPressOnTextOptions() {
+        navigator.openURL(loremIpsumURL)
+
+        // Select some text and long press to find the option
+        app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
+        snapshot("07LongPressTextOptions-01")
+        waitForExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
+        app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
+        snapshot("07LongPressTextOptions-02")
+    }
+
     func test08URLBar() {
         navigator.goto(URLBarOpen)
         snapshot("08URLBar-01")
