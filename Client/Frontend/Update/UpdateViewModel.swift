@@ -28,29 +28,26 @@ class UpdateViewModel {
         return false
     }
     
-    static func shouldShow(userPrefs: Prefs, currentAppVersion: String = VersionSetting.appVersion, currentAppBuildNumber: String = VersionSetting.appBuildNumber, isCleanInstall: Bool) -> Bool {
-        let currentVersion = "\(currentAppVersion) \(currentAppBuildNumber)"
-        
+    static func shouldShow(userPrefs: Prefs, currentAppVersion: String = VersionSetting.appVersion, isCleanInstall: Bool) -> Bool {
         if isCleanInstall {
             // We don't show it but save the currentVersion number
-            let currentVersion = "\(currentAppVersion) \(currentAppBuildNumber)"
-            userPrefs.setString(currentVersion, forKey: PrefsKeys.KeyLastVersionNumber)
+            userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
             return false
         } else {
             // Its not a new install so first we check if there is a version number already saved
             if let savedVersion = userPrefs.stringForKey(PrefsKeys.KeyLastVersionNumber) {
                // Version number saved in user prefs is not the same as current version, return true
-               if savedVersion != currentVersion {
-                   userPrefs.setString(currentVersion, forKey: PrefsKeys.KeyLastVersionNumber)
+               if savedVersion != currentAppVersion {
+                   userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
                    return true
                  // Version number saved in user prefs matches the current version, return false
-               } else if savedVersion == currentVersion {
+               } else if savedVersion == currentAppVersion {
                    return false
                }
             } else {
                 // Only way the version is not saved if the user is coming from an app that didn't have this feature
-                // ss its not a clean install. Hence we should still show the update screen but save the version
-                userPrefs.setString(currentVersion, forKey: PrefsKeys.KeyLastVersionNumber)
+                // as its not a clean install. Hence we should still show the update screen but save the version
+                userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
                 return true
             }
         }
