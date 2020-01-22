@@ -39,6 +39,8 @@ enum LPEvent: String {
     case firstRun = "E_First_Run"
     case secondRun = "E_Second_Run"
     case openedApp = "E_Opened_App"
+    case dismissUpdateCoverSheetAndStartBrowsing = "E_Dismissed_Update_Cover_Sheet_And_Start_Browsing"
+    case dismissedUpdateCoverSheet = "E_Dismissed_Update_Cover_Sheet"
     case dismissedOnboarding = "E_Dismissed_Onboarding"
     case dismissedOnboardingShowLogin = "E_Dismissed_Onboarding_Showed_Login"
     case dismissedOnboardingShowSignUp = "E_Dismissed_Onboarding_Showed_SignUpFlow"

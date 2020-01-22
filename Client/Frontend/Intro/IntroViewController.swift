@@ -15,9 +15,13 @@ protocol IntroViewControllerDelegate: AnyObject {
     func introViewControllerDidFinish(_ introViewController: IntroViewController, showLoginFlow: FxALoginFlow?)
 }
 
+struct ViewControllerConsts {
+    struct PreferredSize {
+        static let IntroViewController = CGSize(width: 375, height: 667)
+        static let UpdateViewController = CGSize(width: 375, height: 667)
+    }
+}
 class IntroViewController: UIViewController {
-
-    static let preferredSize = CGSize(width: 375, height: 667)
 
     weak var delegate: IntroViewControllerDelegate?
 
