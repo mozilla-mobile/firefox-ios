@@ -59,20 +59,6 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     // From here on it is fine to load pages
-
-    func test07AddSearchProvider() {
-        navigator.openURL("www.duckduckgo.com")
-        app.webViews.textFields.element(boundBy: 0).tap()
-        snapshot("07AddSearchProvider-01", waitForLoadingIndicator: false)
-        app.buttons["BrowserViewController.customSearchEngineButton"].tap()
-        snapshot("07AddSearchProvider-02", waitForLoadingIndicator: false)
-
-        let alert = app.alerts.element(boundBy: 0)
-        expectation(for: NSPredicate(format: "exists == 1"), evaluatedWith: alert, handler: nil)
-        waitForExpectations(timeout: 3, handler: nil)
-        alert.buttons.element(boundBy: 0).tap()
-    }
-
     func test08URLBar() {
         navigator.goto(URLBarOpen)
         snapshot("08URLBar-01")
@@ -218,7 +204,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         snapshot("22TrackingProtectionDisabledPerSite-02")
 
         // Website with blocked elements
-        navigator.openNewURL(urlString: "mozilla.org")
+        navigator.openNewURL(urlString: "twitter.com")
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
         snapshot("22TrackingProtectionBlockedElements-01")
