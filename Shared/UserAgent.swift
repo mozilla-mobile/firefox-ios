@@ -97,12 +97,10 @@ public struct CustomUserAgentConstant {
     private static let customDesktopUA = UserAgentBuilder.defaultDesktopUserAgent().clone(extensions: "Version/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
     public static let mobileUserAgent = [
         "paypal.com": defaultMobileUA,
-        "yahoo.com": defaultMobileUA,
-        "google.com": defaultMobileUA ]
+        "yahoo.com": defaultMobileUA ]
     public static let desktopUserAgent = [
         "paypal.com": customDesktopUA,
-        "yahoo.com": customDesktopUA,
-        "google.com": customDesktopUA ]
+        "yahoo.com": customDesktopUA ]
 }
 
 public struct UserAgentBuilder {
