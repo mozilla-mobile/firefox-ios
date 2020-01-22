@@ -5,7 +5,22 @@
 import Foundation
 import Shared
 
-class UpdateCustomCoverSheetTableViewCell: UITableViewCell {
+struct UpdateCoverSheetTableViewCellUX {
+    struct ImageView {
+        static let paddingTop = 2
+        static let paddingLeft = 18
+        static let height = 30
+    }
+    
+    struct DescriptionLabel {
+        static let paddingTop = 2
+        static let paddingTrailing = 18
+        static let bottom = -10
+        static let leading = 10
+    }
+}
+    
+class UpdateCoverSheetTableViewCell: UITableViewCell {
     // Tableview cell items
     var updateCoverSheetCellImageView: UIImageView = {
         let imgView = UIImageView(image: #imageLiteral(resourceName: "darkModeUpdate"))
@@ -38,16 +53,16 @@ class UpdateCustomCoverSheetTableViewCell: UITableViewCell {
         addSubview(updateCoverSheetCellImageView)
         addSubview(coverSheetCellDescriptionLabel)
         updateCoverSheetCellImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(UpdateViewControllerUX.edgeInset)
-            make.height.width.equalTo(30)
-            make.top.equalToSuperview().offset(2)
+            make.left.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.ImageView.paddingLeft)
+            make.height.width.equalTo(UpdateCoverSheetTableViewCellUX.ImageView.height)
+            make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.ImageView.paddingTop)
         }
         
         coverSheetCellDescriptionLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(2)
-            make.trailing.equalToSuperview().inset(UpdateViewControllerUX.edgeInset)
-            make.bottom.equalTo(snp.bottom).offset(-10)
-            make.leading.equalTo(updateCoverSheetCellImageView.snp.trailing).offset(10)
+            make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTop)
+            make.trailing.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTrailing)
+            make.bottom.equalTo(snp.bottom).offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.bottom)
+            make.leading.equalTo(updateCoverSheetCellImageView.snp.trailing).offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.leading)
         }
     }
 }

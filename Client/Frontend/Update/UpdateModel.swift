@@ -4,7 +4,7 @@
 
 import Foundation
 
-protocol CoverSheet {
+protocol UpdateCoverSheet {
     var titleImage: UIImage { get set }
     var titleText: String { get set }
 }
@@ -14,7 +14,7 @@ struct Update {
     var updateText: String
 }
 
-struct UpdateCoverSheetModel: CoverSheet {
+struct UpdateCoverSheetModel: UpdateCoverSheet {
     var titleImage: UIImage
     var titleText: String
     var updates:[Update]

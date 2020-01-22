@@ -10,9 +10,6 @@ import Leanplum
 
 // Update view UX constants
 struct UpdateViewControllerUX {
-    static let edgeInset = 18
-    static let height = 46
-    
     struct DoneButton {
         static let paddingTop = 20
         static let paddingRight = 20
@@ -41,6 +38,8 @@ struct UpdateViewControllerUX {
         static let colour = UIColor.Photon.Blue50
         static let cornerRadius:CGFloat = 10
         static let font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        static let height = 46
+        static let edgeInset = 18
     }
 }
 
@@ -72,13 +71,12 @@ class UpdateViewController: UIViewController {
     let viewModel:UpdateViewModel = UpdateViewModel()
     private var updatesTableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .grouped)
-        tableView.register(UpdateCustomCoverSheetTableViewCell.self, forCellReuseIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier)
-        tableView.backgroundColor = UIColor.white
+        tableView.register(UpdateCoverSheetTableViewCell.self, forCellReuseIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier)
+        tableView.backgroundColor = UIColor.green
         tableView.separatorStyle = .none
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 44
         return tableView
     }()
     private lazy var titleImageView: UIImageView = {
@@ -192,12 +190,12 @@ class UpdateViewController: UIViewController {
         // Bottom start button constraints
         // Bottom start button sits at the bottom of the screen with some padding on left and right hence left, right, bottom, height
         startBrowsingButton.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(UpdateViewControllerUX.edgeInset)
+            make.left.right.equalToSuperview().inset(UpdateViewControllerUX.StartBrowsingButton.edgeInset)
             let h = view.frame.height
             // On large iPhone screens, bump this up from the bottom
             let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (h > 800 ? 60 : 20)
             make.bottom.equalToSuperview().inset(offset)
-            make.height.equalTo(UpdateViewControllerUX.height)
+            make.height.equalTo(UpdateViewControllerUX.StartBrowsingButton.height)
         }
     }
     
@@ -229,7 +227,7 @@ extension UpdateViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier, for: indexPath) as? UpdateCustomCoverSheetTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier, for: indexPath) as? UpdateCoverSheetTableViewCell
         let currentLastItem = viewModel.updates[indexPath.row]
         cell?.coverSheetCellDescriptionLabel.text = currentLastItem.updateText
         cell?.updateCoverSheetCellImageView.image = currentLastItem.updateImage
