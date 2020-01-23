@@ -1,5 +1,6 @@
 import Shared
 import MozillaAppServices
+import SwiftKeychainWrapper
 
 open class RustFirefoxAccounts {
     private let ClientID =  "98adfa37698f255b" // actual one is "1b1a3e44c54fbb58"
@@ -37,6 +38,34 @@ open class RustFirefoxAccounts {
         NotificationCenter.default.addObserver(forName: Notification.Name.accountProfileUpdate,  object: nil, queue: nil) { notification in
             self.update()
         }
+    }
+
+    class func migrateTokens() -> (String, String, String)? {
+        // Keychain forKey("profile.account"), return dictionary, from there
+        // forKey("account.state.<guid>"), guid is dictionary["stateKeyLabel"]
+        // that returns JSON string.
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        let key = "profile.account"
+        keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
+        guard let dict = keychain.object(forKey: key) as? [String: AnyObject], let guid = dict["stateKeyLabel"] else {
+            return nil
+        }
+
+        let key2 = "account.state.\(guid)"
+        keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key2)
+        guard let jsonData = keychain.data(forKey: key2) else {
+            return nil
+        }
+
+        guard let json = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) as? [String: Any] else {
+            return nil
+        }
+
+        guard let sessionToken = json["sessionToken"] as? String, let ksync = json["kSync"] as? String, let kxcs = json["kXCS"] as? String else {
+            return nil
+        }
+
+        return (sessionToken: sessionToken, ksync: ksync, kxcs: kxcs)
     }
 
     public var isActionNeeded: Bool {
