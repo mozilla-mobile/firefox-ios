@@ -67,12 +67,21 @@ struct UpdateViewControllerUX {
  */
 
 class UpdateViewController: UIViewController {
-    // Private vars
+    // Public constants 
     let viewModel:UpdateViewModel = UpdateViewModel()
-    private var updatesTableView: UITableView = {
+    static let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    // Private vars
+    private var fxTextThemeColour: UIColor {
+        // For dark theme we want to show light colours and for light we want to show dark colours
+        return UpdateViewController.theme == .dark ? .white : .black
+    }
+    private var fxBackgroundThemeColour: UIColor {
+        return UpdateViewController.theme == .dark ? .black : .white
+    }
+    private lazy var updatesTableView: UITableView = {
         let tableView = UITableView(frame: CGRect.zero, style: .grouped)
         tableView.register(UpdateCoverSheetTableViewCell.self, forCellReuseIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier)
-        tableView.backgroundColor = UIColor.white
+        tableView.backgroundColor = fxBackgroundThemeColour
         tableView.separatorStyle = .none
         tableView.sectionHeaderHeight = 0
         tableView.sectionFooterHeight = 0
@@ -88,7 +97,7 @@ class UpdateViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = viewModel.updateCoverSheetModel?.titleText
-        label.textColor = .black
+        label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 34)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -101,12 +110,12 @@ class UpdateViewController: UIViewController {
         button.setTitleColor(UIColor.systemBlue, for: .normal)
         return button
     }()
-    private var startBrowsingButton: UIButton = {
+    private lazy var startBrowsingButton: UIButton = {
         let button = UIButton()
         button.setTitle(Strings.StartBrowsingButtonTitle, for: .normal)
         button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
         return button
     }()
@@ -128,7 +137,7 @@ class UpdateViewController: UIViewController {
     }
     
     private func initialViewSetup() {
-        self.view.backgroundColor = UIColor.white
+        self.view.backgroundColor = fxBackgroundThemeColour
         
         // Initialize
         self.view.addSubview(doneButton)
@@ -229,8 +238,9 @@ extension UpdateViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UpdateViewControllerUX.MidTableView.cellIdentifier, for: indexPath) as? UpdateCoverSheetTableViewCell
         let currentLastItem = viewModel.updates[indexPath.row]
-        cell?.coverSheetCellDescriptionLabel.text = currentLastItem.updateText
+        cell?.updateCoverSheetCellDescriptionLabel.text = currentLastItem.updateText
         cell?.updateCoverSheetCellImageView.image = currentLastItem.updateImage
+        cell?.fxThemeSupport()
         return cell!
     }
 }
