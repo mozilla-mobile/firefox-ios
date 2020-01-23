@@ -28,7 +28,7 @@ class UpdateCoverSheetTableViewCell: UITableViewCell {
         imgView.clipsToBounds = true
         return imgView
     }()
-    var coverSheetCellDescriptionLabel: UILabel = {
+    var updateCoverSheetCellDescriptionLabel: UILabel = {
         let label = UILabel()
         label.text = Strings.CoverSheetV22DarkModeTitle
         label.textColor = .black
@@ -48,21 +48,33 @@ class UpdateCoverSheetTableViewCell: UITableViewCell {
     }
     
     private func initialViewSetup() {
-        self.contentView.backgroundColor = .white
         self.selectionStyle = .none
         addSubview(updateCoverSheetCellImageView)
-        addSubview(coverSheetCellDescriptionLabel)
+        addSubview(updateCoverSheetCellDescriptionLabel)
         updateCoverSheetCellImageView.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.ImageView.paddingLeft)
             make.height.width.equalTo(UpdateCoverSheetTableViewCellUX.ImageView.height)
             make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.ImageView.paddingTop)
         }
         
-        coverSheetCellDescriptionLabel.snp.makeConstraints { make in
+        updateCoverSheetCellDescriptionLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTop)
             make.trailing.equalToSuperview().inset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.paddingTrailing)
             make.bottom.equalTo(snp.bottom).offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.bottom)
             make.leading.equalTo(updateCoverSheetCellImageView.snp.trailing).offset(UpdateCoverSheetTableViewCellUX.DescriptionLabel.leading)
+        }
+        fxThemeSupport()
+    }
+    
+    func fxThemeSupport() {
+        if UpdateViewController.theme == .dark {
+            self.updateCoverSheetCellImageView.setImageColor(color: .white)
+            self.updateCoverSheetCellDescriptionLabel.textColor = .white
+            self.contentView.backgroundColor = .black
+        } else {
+            self.updateCoverSheetCellImageView.setImageColor(color: .black)
+            self.updateCoverSheetCellDescriptionLabel.textColor = .black
+            self.contentView.backgroundColor = .white
         }
     }
 }
