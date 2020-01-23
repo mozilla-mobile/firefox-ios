@@ -59,18 +59,15 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     // From here on it is fine to load pages
+    func test07LongPressOnTextOptions() {
+        navigator.openURL(loremIpsumURL)
 
-    func test07AddSearchProvider() {
-        navigator.openURL("www.duckduckgo.com")
-        app.webViews.textFields.element(boundBy: 0).tap()
-        snapshot("07AddSearchProvider-01", waitForLoadingIndicator: false)
-        app.buttons["BrowserViewController.customSearchEngineButton"].tap()
-        snapshot("07AddSearchProvider-02", waitForLoadingIndicator: false)
-
-        let alert = app.alerts.element(boundBy: 0)
-        expectation(for: NSPredicate(format: "exists == 1"), evaluatedWith: alert, handler: nil)
-        waitForExpectations(timeout: 3, handler: nil)
-        alert.buttons.element(boundBy: 0).tap()
+        // Select some text and long press to find the option
+        app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
+        snapshot("07LongPressTextOptions-01")
+        waitForExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
+        app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
+        snapshot("07LongPressTextOptions-02")
     }
 
     func test08URLBar() {
@@ -218,7 +215,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         snapshot("22TrackingProtectionDisabledPerSite-02")
 
         // Website with blocked elements
-        navigator.openNewURL(urlString: "mozilla.org")
+        navigator.openNewURL(urlString: "twitter.com")
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
         snapshot("22TrackingProtectionBlockedElements-01")
