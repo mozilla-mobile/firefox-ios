@@ -95,7 +95,7 @@ class DomainAutocompleteTest: BaseTestCase {
 
         // Ensure we don't match against TLDs.
         app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("com")
+        app.textFields["address"].typeText(".com")
         let value2 = app.textFields["address"].value
         // Check there is not more text added, just what user typed
         XCTAssertEqual(value2 as? String, "com", "Wrong autocompletion")
