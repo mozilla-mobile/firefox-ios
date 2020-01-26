@@ -98,7 +98,7 @@ class DomainAutocompleteTest: BaseTestCase {
         app.textFields["address"].typeText(".com")
         let value2 = app.textFields["address"].value
         // Check there is not more text added, just what user typed
-        XCTAssertEqual(value2 as? String, "com", "Wrong autocompletion")
+        XCTAssertEqual(value2 as? String, ".com", "Wrong autocompletion")
 
         // Ensure we don't match other characters ie: ., :, /
         app.buttons["Clear text"].tap()
