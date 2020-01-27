@@ -217,7 +217,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     }
 
     // Create (or return from cache) a fallback image for a site based on the first letter of the site's domain
-    // Letter is white on a clear background
+    // Letter is white on a colored background
     class func letter(forUrl url: URL) -> UIImage {
         guard let character = url.baseDomain?.first else {
             return defaultFavicon
@@ -235,6 +235,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         faviconLabel.textAlignment = .center
         faviconLabel.font = UIFont.systemFont(ofSize: 40, weight: UIFont.Weight.medium)
         faviconLabel.textColor = UIColor.Photon.White100
+        faviconLabel.backgroundColor = color(forUrl: url)
         UIGraphicsBeginImageContextWithOptions(faviconLabel.bounds.size, false, 0.0)
         faviconLabel.layer.render(in: UIGraphicsGetCurrentContext()!)
         faviconImage = UIGraphicsGetImageFromCurrentImageContext()!

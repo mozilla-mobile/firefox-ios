@@ -192,6 +192,8 @@ extension UnifiedTelemetry {
         case url = "url"
         case searchText = "searchText"
         case whatsNew = "whats-new"
+        case dismissUpdateCoverSheetAndStartBrowsing = "dismissed-update-cover_sheet_and_start_browsing"
+        case dismissedUpdateCoverSheet = "dismissed-update-cover-sheet"
         case dismissedOnboarding = "dismissed-onboarding"
         case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
         case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"

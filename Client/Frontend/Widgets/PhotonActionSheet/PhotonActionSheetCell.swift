@@ -91,8 +91,7 @@ class PhotonActionSheetCell: UITableViewCell {
         func setOn(_ on: Bool) {
             foreground.image = on ? UIImage(named: "menu-customswitch-on") : UIImage(named: "menu-customswitch-off")
             mainView.accessibilityIdentifier = on ? "enabled" : "disabled"
-            mainView.tintColor = on ? UIColor.theme.general.controlTint : UIColor.Photon.Grey90A40
-        }
+            mainView.tintColor = on ? UIColor.theme.general.controlTint : UIColor.theme.general.switchToggle }
     }
 
     let toggleSwitch = ToggleSwitch()

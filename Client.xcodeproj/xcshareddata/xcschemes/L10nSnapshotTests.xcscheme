@@ -46,12 +46,6 @@
                   Identifier = "L10nSnapshotTests/test04Foo()">
                </Test>
                <Test
-                  Identifier = "L10nSnapshotTests/test07AddSearchProvider()">
-               </Test>
-               <Test
-                  Identifier = "L10nSnapshotTests/test13ReloadButtonContextMenu()">
-               </Test>
-               <Test
                   Identifier = "L10nSnapshotTests/test14SetHompage()">
                </Test>
                <Test
