@@ -47,24 +47,6 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     fileprivate var fontTypeRow: UIView!
     fileprivate var fontSizeRow: UIView!
     fileprivate var brightnessRow: UIView!
-
-    func applyTheme() {
-        fontTypeRow.backgroundColor = UIColor.theme.tableView.rowBackground
-        fontSizeRow.backgroundColor = UIColor.theme.tableView.rowBackground
-        brightnessRow.backgroundColor = UIColor.theme.tableView.rowBackground
-        fontSizeLabel.textColor = UIColor.theme.tableView.rowText
-        fontTypeButtons.forEach { button in
-            button.setTitleColor(UIColor.theme.tableView.rowText, for: .selected)
-            button.setTitleColor(UIColor.Photon.Grey40, for: [])
-        }
-        fontSizeButtons.forEach { button in
-            button.setTitleColor(UIColor.theme.tableView.rowText, for: .normal)
-            button.setTitleColor(UIColor.theme.tableView.disabledRowText, for: .disabled)
-        }
-        separatorLines.forEach { line in
-            line.backgroundColor = UIColor.theme.tableView.separator
-        }
-    }
     
     override func viewDidLoad() {
         // Our preferred content size has a fixed width and height based on the rows + padding
@@ -189,6 +171,37 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
         slider.value = Float(UIScreen.main.brightness)
         
         applyTheme()
+    }
+    
+    
+    // MARK: - Theme
+    func applyTheme() {
+        fontTypeRow.backgroundColor = UIColor.theme.tableView.rowBackground
+        fontSizeRow.backgroundColor = UIColor.theme.tableView.rowBackground
+        brightnessRow.backgroundColor = UIColor.theme.tableView.rowBackground
+        fontSizeLabel.textColor = UIColor.theme.tableView.rowText
+        fontTypeButtons.forEach { button in
+            button.setTitleColor(UIColor.theme.tableView.rowText, for: .selected)
+            button.setTitleColor(UIColor.Photon.Grey40, for: [])
+        }
+        fontSizeButtons.forEach { button in
+            button.setTitleColor(UIColor.theme.tableView.rowText, for: .normal)
+            button.setTitleColor(UIColor.theme.tableView.disabledRowText, for: .disabled)
+        }
+        separatorLines.forEach { line in
+            line.backgroundColor = UIColor.theme.tableView.separator
+        }
+    }
+    
+    func applyTheme(_ preferences: Prefs, contentScript: TabContentScript) {        
+        guard let readerPreferences = preferences.dictionaryForKey(ReaderModeProfileKeyStyle),
+              let readerMode = contentScript as? ReaderMode,
+              let style = ReaderModeStyle(dict: readerPreferences) else { return }
+        
+        let theme = ReaderModeTheme().preferredTheme(for: style.theme)
+        readerMode.style = ReaderModeStyle(theme: theme,
+                                           fontType: readerModeStyle.fontType,
+                                           fontSize: readerModeStyle.fontSize)
     }
 
     fileprivate func makeSeparatorView(fromView: UIView, topConstraint: UIView) {
