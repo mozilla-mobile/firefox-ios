@@ -6550,6 +6550,7 @@
 				INFOPLIST_FILE = Client/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = "xrviewer-internal";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
@@ -7273,6 +7274,7 @@
 				INFOPLIST_FILE = Client/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MOZ_INTERNAL_URL_SCHEME = "xrviewer-internal";
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lxml2",
