@@ -10,7 +10,7 @@ import Shared
 @available(iOS 12.0, *)
 class SiriShortcuts {
     enum activityType: String {
-        case openURL = "org.mozilla.ios.Firefox.newTab"
+        case openURL = "org.mozilla.ios.XRViewer.newTab"
     }
 
     func getActivity(for type: activityType) -> NSUserActivity? {
