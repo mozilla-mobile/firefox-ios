@@ -201,11 +201,13 @@ public struct StageFirefoxAccountConfiguration: FirefoxAccountConfiguration {
 
     public var pushConfiguration: PushConfiguration {
         #if MOZ_CHANNEL_RELEASE
-            return FirefoxStagingPushConfiguration()
+            return XRViewerStagingPushConfiguration()
+            //return FirefoxStagingPushConfiguration()
         #elseif MOZ_CHANNEL_BETA
             return FirefoxBetaStagingPushConfiguration()
         #elseif MOZ_CHANNEL_FENNEC
-            return FennecStagingPushConfiguration()
+            return XRViewerStagingPushConfiguration()
+            //return FennecStagingPushConfiguration()
         #endif
     }
 }

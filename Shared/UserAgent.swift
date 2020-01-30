@@ -8,7 +8,7 @@ import UIKit
 open class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"
     public static let uaBitMobile = "Mobile/15E148"
-    public static let uaBitFx = "FxiOS/\(AppInfo.appVersion)"
+    public static let uaBitFx = "XRViewer/\(AppInfo.appVersion)"
     
     // For iPad, we need to append this to the default UA for google.com to show correct page
     public static let uaBitGoogleIpad = "Version/13.0.3"
@@ -20,19 +20,19 @@ open class UserAgent {
     }
 
     public static var syncUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-Sync")
+        return clientUserAgent(prefix: "XRViewer-iOS-Sync")
     }
 
     public static var tokenServerClientUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-Token")
+        return clientUserAgent(prefix: "XRViewer-iOS-Token")
     }
 
     public static var fxaUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS-FxA")
+        return clientUserAgent(prefix: "XRViewer-iOS-FxA")
     }
 
     public static var defaultClientUserAgent: String {
-        return clientUserAgent(prefix: "Firefox-iOS")
+        return clientUserAgent(prefix: "XRViewer-iOS")
     }
 
     public static func defaultUserAgent() -> String {

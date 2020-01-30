@@ -10,6 +10,7 @@ public enum PushConfigurationLabel: String {
     case firefoxBeta = "FirefoxBeta"
     case firefoxNightlyEnterprise = "FirefoxNightly"
     case firefox = "Firefox"
+    case xrviewer = "XRViewer"
 
     public func toConfiguration() -> PushConfiguration {
         switch self {
@@ -18,6 +19,7 @@ public enum PushConfigurationLabel: String {
         case .firefoxBeta: return FirefoxBetaPushConfiguration()
         case .firefoxNightlyEnterprise: return FirefoxNightlyEnterprisePushConfiguration()
         case .firefox: return FirefoxPushConfiguration()
+        case .xrviewer: return XRViewerPushConfiguration()
         }
     }
 }
@@ -79,4 +81,16 @@ public struct FirefoxStagingPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.firefox
     public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/firefox")!
+}
+
+public struct XRViewerPushConfiguration: PushConfiguration {
+    public init() {}
+    public let label = PushConfigurationLabel.xrviewer
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/xrviewer")!
+}
+
+public struct XRViewerStagingPushConfiguration: PushConfiguration {
+    public init() {}
+    public let label = PushConfigurationLabel.xrviewer
+    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/xrviewer")!
 }
