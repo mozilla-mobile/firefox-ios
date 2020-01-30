@@ -86,7 +86,7 @@ class DomainAutocompleteTest: BaseTestCase {
     }
     // Non-matches.
     func testNoMatches() {
-        navigator.openURL(website["subDomain"]!)
+        navigator.openURL("twitter.com/login")
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("baz")
         let value = app.textFields["address"].value
@@ -95,10 +95,10 @@ class DomainAutocompleteTest: BaseTestCase {
 
         // Ensure we don't match against TLDs.
         app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("org")
+        app.textFields["address"].typeText(".com")
         let value2 = app.textFields["address"].value
         // Check there is not more text added, just what user typed
-        XCTAssertEqual(value2 as? String, "org", "Wrong autocompletion")
+        XCTAssertEqual(value2 as? String, ".com", "Wrong autocompletion")
 
         // Ensure we don't match other characters ie: ., :, /
         app.buttons["Clear text"].tap()
@@ -118,15 +118,15 @@ class DomainAutocompleteTest: BaseTestCase {
 
         // Ensure we don't match strings that don't start a word.
         app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("ozilla")
+        app.textFields["address"].typeText("tter")
         let value6 = app.textFields["address"].value
-        XCTAssertEqual(value6 as? String, "ozilla", "Wrong autocompletion")
+        XCTAssertEqual(value6 as? String, "tter", "Wrong autocompletion")
 
         // Ensure we don't match words outside of the domain
         app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("products")
+        app.textFields["address"].typeText("login")
         let value7 = app.textFields["address"].value
-        XCTAssertEqual(value7 as? String, "products", "Wrong autocompletion")
+        XCTAssertEqual(value7 as? String, "login", "Wrong autocompletion")
     }
     // Test default domains.
     func testDefaultDomains() {
