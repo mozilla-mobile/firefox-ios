@@ -32,10 +32,6 @@ enum ReaderModeTheme: String {
 }
 
 enum ReaderModeFontType: String {
-    private var isBoldFontEnabeld: Bool {
-        return UIAccessibility.isBoldTextEnabled
-    }
-    
     case serif = "serif"
     case serifBold = "serif-bold"
     case sansSerif = "sans-serif"
