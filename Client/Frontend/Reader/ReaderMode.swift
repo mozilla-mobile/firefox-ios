@@ -174,6 +174,10 @@ struct ReaderModeStyle {
         self.fontType = fontType
         self.fontSize = fontSize!
     }
+    
+    mutating func ensurePreferredColorThemeIfNeeded() {
+        self.theme = ReaderModeTheme().preferredTheme(for: self.theme)
+    }
 }
 
 let DefaultReaderModeStyle = ReaderModeStyle(theme: .light, fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)

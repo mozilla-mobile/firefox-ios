@@ -23,7 +23,14 @@ extension BrowserViewController: ReaderModeDelegate {
 }
 
 extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
-    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, didConfigureStyle style: ReaderModeStyle) {
+    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, 
+                                       didConfigureStyle style: ReaderModeStyle,
+                                       isUsingUserDefinedColor: Bool) {
+        var newStyle = style
+        if !isUsingUserDefinedColor {
+            newStyle.ensurePreferredColorThemeIfNeeded()
+        }
+        
         // Persist the new style to the profile
         let encodedStyle: [String: Any] = style.encodeAsDictionary()
         profile.prefs.setObject(encodedStyle, forKey: ReaderModeProfileKeyStyle)
