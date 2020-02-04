@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 class UpdateViewModel {
-    //  Internal vars
+    // Internal vars
     var updateCoverSheetModel: UpdateCoverSheetModel?
     var shouldStartBrowsing: (() -> Void)?
     
