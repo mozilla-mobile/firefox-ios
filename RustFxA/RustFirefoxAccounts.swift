@@ -11,13 +11,16 @@ open class RustFirefoxAccounts {
     private var isInit = false
 
     public static func startup(completion: ((RustFirefoxAccounts) -> Void)? = nil) {
+        objc_sync_enter(shared)
         if shared.isInit {
             completion?(shared)
+            objc_sync_exit(shared)
             return
         }
         shared.accountManager.initialize() { result in
             shared.isInit = true
             completion?(shared)
+            objc_sync_exit(shared)
         }
     }
 
