@@ -10,17 +10,19 @@ open class RustFirefoxAccounts {
     public var avatar: Avatar? = nil
     private var isInit = false
 
+    static let lock = NSLock()
+
     public static func startup(completion: ((RustFirefoxAccounts) -> Void)? = nil) {
-        objc_sync_enter(shared)
+        lock.lock()
         if shared.isInit {
+            lock.unlock()
             completion?(shared)
-            objc_sync_exit(shared)
             return
         }
         shared.accountManager.initialize() { result in
             shared.isInit = true
+            lock.unlock()
             completion?(shared)
-            objc_sync_exit(shared)
         }
     }
 
