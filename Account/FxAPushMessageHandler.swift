@@ -30,7 +30,10 @@ extension FxAPushMessageHandler {
     /// and then effects changes on the logged in account.
     @discardableResult func handle(userInfo: [AnyHashable: Any]) -> PushMessageResult {
         let keychain = KeychainWrapper.sharedAppContainerKeychain
-        let pushReg = keychain.object(forKey: "account.push-registration") as! PushRegistration
+        guard let pushReg = keychain.object(forKey: "account.push-registration") as? PushRegistration else {
+            return deferMaybe(PushMessageError.accountError)
+        }
+
         let subscription = pushReg.defaultSubscription
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
@@ -217,19 +220,6 @@ extension FxAPushMessageHandler {
     func handlePasswordReset() -> PushMessageResult {
         return unimplemented(.passwordReset)
     }
-}
-
-extension FxAPushMessageHandler {
-//    func handleCollectionChanged(_ data: JSON?) -> PushMessageResult {
-//        guard let collections = data?["collections"].arrayObject as? [String] else {
-//            print("collections_changed received but incomplete: \(data ?? "nil")")
-//            return deferMaybe(PushMessageError.messageIncomplete)
-//        }
-//        // Possible values: "addons", "bookmarks", "history", "forms", "prefs", "tabs", "passwords", "clients"
-//
-//        // syncManager will only do a subset; others will be ignored.
-//        return profile.syncManager.syncNamedCollections(why: .push, names: collections) >>== { deferMaybe(.collectionChanged(collections: collections)) }
-//    }
 }
 
 /// Some utility methods

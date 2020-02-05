@@ -8,20 +8,16 @@ open class RustFirefoxAccounts {
     public static var shared = RustFirefoxAccounts()
     public let accountManager: FxaAccountManager
     public var avatar: Avatar? = nil
-    private var isInit = false
-
-    static let lock = NSLock()
+    private static var startupCalled = false
 
     public static func startup(completion: ((RustFirefoxAccounts) -> Void)? = nil) {
-        lock.lock()
-        if shared.isInit {
-            lock.unlock()
+        if startupCalled {
             completion?(shared)
             return
         }
+        startupCalled = true
+
         shared.accountManager.initialize() { result in
-            shared.isInit = true
-            lock.unlock()
             completion?(shared)
         }
     }

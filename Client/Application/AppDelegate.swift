@@ -84,9 +84,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     func startApplication(_ application: UIApplication, withLaunchOptions launchOptions: [AnyHashable: Any]?) -> Bool {
         log.info("startApplication begin")
 
-        let isRegisteredForRemoteNotifications = UIApplication.shared.isRegisteredForRemoteNotifications
-        print(isRegisteredForRemoteNotifications)
-
         // Need to get "settings.sendUsageData" this way so that Sentry can be initialized
         // before getting the Profile.
         let sendUsageData = NSUserDefaultsPrefs(prefix: "profile").boolForKey(AppConstants.PrefSendUsageData) ?? true
@@ -619,7 +616,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-       // FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(deviceToken)
         let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
         let client = PushClient(endpointURL: config.endpointURL, experimentalMode: false)
         client.register(deviceToken.hexEncodedString).uponQueue(.main) { result in

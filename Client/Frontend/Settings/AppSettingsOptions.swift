@@ -324,7 +324,7 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        if RustFirefoxAccounts.shared.isActionNeeded ?? false {
+        if RustFirefoxAccounts.shared.isActionNeeded {
             let string = Strings.FxAAccountVerifyPassword
             let orange = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
