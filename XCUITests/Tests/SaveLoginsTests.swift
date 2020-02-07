@@ -24,32 +24,32 @@ class SaveLoginTest: BaseTestCase {
     private func saveLogin(givenUrl: String) {
         navigator.openURL(givenUrl)
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForExistence(app.buttons["submit"], timeout: 3)
-        app.buttons["submit"].tap()
-        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
+        Base.helper.waitForExistence(Base.app.buttons["submit"], timeout: 3)
+        Base.app.buttons["submit"].tap()
+        Base.app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
     }
 
     private func openLoginsSettings() {
         navigator.goto(SettingsScreen)
         navigator.goto(LoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
     }
     
     func testLoginsListFromBrowserTabMenu() {
         Base.helper.waitForTabsButton()
         //Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields["Filter"].exists)
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
+        XCTAssertTrue(Base.app.searchFields["Filter"].exists)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         saveLogin(givenUrl: testLoginPage)
         //Make sure you can access populated Login List from Browser Tab Menu
         navigator.goto(LoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields["Filter"].exists)
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
+        XCTAssertTrue(Base.app.searchFields["Filter"].exists)
+        XCTAssertTrue(Base.app.staticTexts[domain].exists)
+        XCTAssertTrue(Base.app.staticTexts[domainLogin].exists)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
     
     func testPasscodeLoginsListFromBrowserTabMenu() {
@@ -60,50 +60,50 @@ class SaveLoginTest: BaseTestCase {
         //Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LockedLoginsSettings)
         navigator.performAction(Action.UnlockLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields["Filter"].exists)
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
+        XCTAssertTrue(Base.app.searchFields["Filter"].exists)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         saveLogin(givenUrl: testLoginPage)
         //Make sure you can access populated Login List from Browser Tab Menu
         navigator.goto(LockedLoginsSettings)
         navigator.performAction(Action.UnlockLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
-        XCTAssertTrue(app.searchFields["Filter"].exists)
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
+        XCTAssertTrue(Base.app.searchFields["Filter"].exists)
+        XCTAssertTrue(Base.app.staticTexts[domain].exists)
+        XCTAssertTrue(Base.app.staticTexts[domainLogin].exists)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
     func testSaveLogin() {
         // Initially the login list should be empty
         openLoginsSettings()
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
         // Save a login and check that it appears on the list
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
-        Base.helper.waitForExistence(app.tables["Login List"])
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
+        XCTAssertTrue(Base.app.staticTexts[domain].exists)
+        XCTAssertTrue(Base.app.staticTexts[domainLogin].exists)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
         //Check to see how it works with multiple entries in the list- in this case, two for now
         saveLogin(givenUrl: testSecondLoginPage)
         openLoginsSettings()
-        Base.helper.waitForExistence(app.tables["Login List"])
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainSecondLogin].exists)
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
+        XCTAssertTrue(Base.app.staticTexts[domain].exists)
+        XCTAssertTrue(Base.app.staticTexts[domainSecondLogin].exists)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 2)
     }
 
     func testDoNotSaveLogin() {
         navigator.openURL(testLoginPage)
         Base.helper.waitUntilPageLoad()
-        app.buttons["submit"].tap()
-        app.buttons["SaveLoginPrompt.dontSaveButton"].tap()
+        Base.app.buttons["submit"].tap()
+        Base.app.buttons["SaveLoginPrompt.dontSaveButton"].tap()
         // There should not be any login saved
         openLoginsSettings()
-        XCTAssertFalse(app.staticTexts[domain].exists)
-        XCTAssertFalse(app.staticTexts[domainLogin].exists)
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        XCTAssertFalse(Base.app.staticTexts[domain].exists)
+        XCTAssertFalse(Base.app.staticTexts[domainLogin].exists)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
     }
 
     // Smoketest
@@ -111,73 +111,73 @@ class SaveLoginTest: BaseTestCase {
         saveLogin(givenUrl: testLoginPage)
         navigator.goto(SettingsScreen)
         openLoginsSettings()
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
-        app.buttons["Edit"].tap()
+        XCTAssertTrue(Base.app.staticTexts[domain].exists)
+        XCTAssertTrue(Base.app.staticTexts[domainLogin].exists)
+        Base.app.buttons["Edit"].tap()
         // Due to Bug 1533475 this isn't working
-        //XCTAssertTrue(app.cells.images["loginUnselected"].exists)
-        XCTAssertTrue(app.buttons["Select All"].exists)
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
+        //XCTAssertTrue(Base.app.cells.images["loginUnselected"].exists)
+        XCTAssertTrue(Base.app.buttons["Select All"].exists)
+        XCTAssertTrue(Base.app.staticTexts[domain].exists)
+        XCTAssertTrue(Base.app.staticTexts[domainLogin].exists)
 
-        app.staticTexts[domain].tap()
-        Base.helper.waitForExistence(app.buttons["Deselect All"])
+        Base.app.staticTexts[domain].tap()
+        Base.helper.waitForExistence(Base.app.buttons["Deselect All"])
         // Due to Bug 1533475 this isn't working
-        //XCTAssertTrue(app.cells.images["loginSelected"].exists)
-        XCTAssertTrue(app.buttons["Deselect All"].exists)
-        XCTAssertTrue(app.buttons["Delete"].exists)
+        //XCTAssertTrue(Base.app.cells.images["loginSelected"].exists)
+        XCTAssertTrue(Base.app.buttons["Deselect All"].exists)
+        XCTAssertTrue(Base.app.buttons["Delete"].exists)
 
-        app.buttons["Cancel"].tap()
-        app.buttons["Edit"].tap()
+        Base.app.buttons["Cancel"].tap()
+        Base.app.buttons["Edit"].tap()
         // Due to Bug 1533475 this isn't working
-        //XCTAssertTrue(app.cells.images["loginUnselected"].exists)
+        //XCTAssertTrue(Base.app.cells.images["loginUnselected"].exists)
     }
 
     func testDeleteLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
-        app.staticTexts[domain].tap()
-        app.cells.staticTexts["Delete"].tap()
-        Base.helper.waitForExistence(app.alerts["Are you sure?"])
-        app.alerts.buttons["Delete"].tap()
-        Base.helper.waitForExistence(app.tables["Login List"])
-        XCTAssertFalse(app.staticTexts[domain].exists)
-        XCTAssertFalse(app.staticTexts[domainLogin].exists)
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
+        Base.app.staticTexts[domain].tap()
+        Base.app.cells.staticTexts["Delete"].tap()
+        Base.helper.waitForExistence(Base.app.alerts["Are you sure?"])
+        Base.app.alerts.buttons["Delete"].tap()
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
+        XCTAssertFalse(Base.app.staticTexts[domain].exists)
+        XCTAssertFalse(Base.app.staticTexts[domainLogin].exists)
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList)
        // Due to Bug 1533475 this isn't working
-        //XCTAssertTrue(app.tables["No logins found"].exists)
+        //XCTAssertTrue(Base.app.tables["No logins found"].exists)
     }
 
     func testEditOneLoginEntry() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
-        XCTAssertTrue(app.staticTexts[domain].exists)
-        XCTAssertTrue(app.staticTexts[domainLogin].exists)
-        app.staticTexts[domain].tap()
-        Base.helper.waitForExistence(app.tables["Login Detail List"])
-        XCTAssertTrue(app.tables.cells[loginsListURLLabel].exists)
-        XCTAssertTrue(app.tables.cells[loginsListUsernameLabel].exists)
-        XCTAssertTrue(app.tables.cells[loginsListPasswordLabel].exists)
-        XCTAssertTrue(app.tables.cells.staticTexts["Delete"].exists)
+        XCTAssertTrue(Base.app.staticTexts[domain].exists)
+        XCTAssertTrue(Base.app.staticTexts[domainLogin].exists)
+        Base.app.staticTexts[domain].tap()
+        Base.helper.waitForExistence(Base.app.tables["Login Detail List"])
+        XCTAssertTrue(Base.app.tables.cells[loginsListURLLabel].exists)
+        XCTAssertTrue(Base.app.tables.cells[loginsListUsernameLabel].exists)
+        XCTAssertTrue(Base.app.tables.cells[loginsListPasswordLabel].exists)
+        XCTAssertTrue(Base.app.tables.cells.staticTexts["Delete"].exists)
     }
 
     func testSearchLogin() {
         saveLogin(givenUrl: testLoginPage)
         openLoginsSettings()
         // Enter on Search mode
-        app.searchFields["Filter"].tap()
+        Base.app.searchFields["Filter"].tap()
         // Type Text that matches user, website
-        app.searchFields["Filter"].typeText("test")
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+        Base.app.searchFields["Filter"].typeText("test")
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
 
         // Type Text that does not match
-        app.typeText("b")
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsEmptyFilterList)
-        //Base.helper.waitForExistence(app.tables["No logins found"])
+        Base.app.typeText("b")
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsEmptyFilterList)
+        //Base.helper.waitForExistence(Base.app.tables["No logins found"])
 
         // Clear Text
-        app.buttons["Clear text"].tap()
-        XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
+        Base.app.buttons["Clear text"].tap()
+        XCTAssertEqual(Base.app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
     // Smoketest
@@ -185,19 +185,19 @@ class SaveLoginTest: BaseTestCase {
         navigator.openURL(urlLogin)
         Base.helper.waitUntilPageLoad()
         // Provided text fields are completely empty
-        Base.helper.waitForExistence(app.webViews.staticTexts["Username:"])
+        Base.helper.waitForExistence(Base.app.webViews.staticTexts["Username:"])
         
         // Fill in the username text box
-        app.webViews.textFields.element(boundBy: 0).tap()
-        app.webViews.textFields.element(boundBy: 0).typeText(mailLogin)
+        Base.app.webViews.textFields.element(boundBy: 0).tap()
+        Base.app.webViews.textFields.element(boundBy: 0).typeText(mailLogin)
         
         // Fill in the password text box
-        app.webViews.secureTextFields.element(boundBy: 0).tap()
-        app.webViews.secureTextFields.element(boundBy: 0).typeText("test15mz")
+        Base.app.webViews.secureTextFields.element(boundBy: 0).tap()
+        Base.app.webViews.secureTextFields.element(boundBy: 0).typeText("test15mz")
         
         // Submit form and choose to save the logins
-        app.buttons["submit"].tap()
-        app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
+        Base.app.buttons["submit"].tap()
+        Base.app.buttons["SaveLoginPrompt.saveLoginButton"].tap()
 
         // Clear Data and go to test page, fields should be filled in
         navigator.goto(SettingsScreen)
@@ -207,10 +207,10 @@ class SaveLoginTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.openURL(urlLogin)
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)
-        let emailValue = app.webViews.textFields.element(boundBy: 0).value!
+        Base.helper.waitForExistence(Base.app.webViews.textFields.element(boundBy: 0), timeout: 3)
+        let emailValue = Base.app.webViews.textFields.element(boundBy: 0).value!
         XCTAssertEqual(emailValue as! String, mailLogin)
-        let passwordValue =  app.webViews.secureTextFields.element(boundBy: 0).value!
+        let passwordValue =  Base.app.webViews.secureTextFields.element(boundBy: 0).value!
         XCTAssertEqual(passwordValue as! String, "••••••••")
     }
 }

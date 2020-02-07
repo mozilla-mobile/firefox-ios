@@ -6,13 +6,13 @@ import XCTest
 class NightModeTests: BaseTestCase {
 
     private func checkNightModeOn() {
-        Base.helper.waitForExistence(app.tables.cells["menu-NightMode"])
-        XCTAssertTrue(app.tables.cells.images["enabled"].exists)
+        Base.helper.waitForExistence(Base.app.tables.cells["menu-NightMode"])
+        XCTAssertTrue(Base.app.tables.cells.images["enabled"].exists)
     }
 
     private func checkNightModeOff() {
-        Base.helper.waitForExistence(app.tables.cells["menu-NightMode"])
-        XCTAssertTrue(app.tables.cells.images["disabled"].exists)
+        Base.helper.waitForExistence(Base.app.tables.cells["menu-NightMode"])
+        XCTAssertTrue(Base.app.tables.cells.images["disabled"].exists)
     }
 
     func testNightModeUI() {

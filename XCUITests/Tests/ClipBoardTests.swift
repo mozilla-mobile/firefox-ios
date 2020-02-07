@@ -9,25 +9,25 @@ class ClipBoardTests: BaseTestCase {
 
     //Check for test url in the browser
     func checkUrl() {
-        let urlTextField = app.textFields["url"]
+        let urlTextField = Base.app.textFields["url"]
         Base.helper.waitForValueContains(urlTextField, value: "www.example")
     }
 
     //Copy url from the browser
     func copyUrl() {
         navigator.goto(URLBarOpen)
-        Base.helper.waitForExistence(app.textFields["address"])
-        app.textFields["address"].press(forDuration: 3)
-        Base.helper.waitForExistence(app.menuItems["Copy"])
-        app.menuItems["Copy"].tap()
-        app.typeText("\r")
+        Base.helper.waitForExistence(Base.app.textFields["address"])
+        Base.app.textFields["address"].press(forDuration: 3)
+        Base.helper.waitForExistence(Base.app.menuItems["Copy"])
+        Base.app.menuItems["Copy"].tap()
+        Base.app.typeText("\r")
         navigator.nowAt(BrowserTab)
     }
 
     //Check copied url is same as in browser
     func checkCopiedUrl() {
         if let myString = UIPasteboard.general.string {
-            var value = app.textFields["url"].value as! String
+            var value = Base.app.textFields["url"].value as! String
             if value.hasPrefix("http") == false {
                 value = "http://\(value)"
             }
@@ -46,9 +46,9 @@ class ClipBoardTests: BaseTestCase {
 
         navigator.createNewTab()
         navigator.goto(URLBarOpen)
-        app.textFields["address"].press(forDuration: 3)
-        app.menuItems["Paste"].tap()
-        Base.helper.waitForValueContains(app.textFields["address"], value: "www.example.com")
+        Base.app.textFields["address"].press(forDuration: 3)
+        Base.app.menuItems["Paste"].tap()
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: "www.example.com")
     }
 
     // Smoketest
@@ -60,10 +60,10 @@ class ClipBoardTests: BaseTestCase {
 
         checkCopiedUrl()
         navigator.createNewTab()
-        app.textFields["url"].press(forDuration: 3)
-        Base.helper.waitForExistence(app.tables["Context Menu"])
-        app.cells["menu-PasteAndGo"].tap()
-        Base.helper.waitForExistence(app.textFields["url"])
-        Base.helper.waitForValueContains(app.textFields["url"], value: "www.example.com")
+        Base.app.textFields["url"].press(forDuration: 3)
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"])
+        Base.app.cells["menu-PasteAndGo"].tap()
+        Base.helper.waitForExistence(Base.app.textFields["url"])
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: "www.example.com")
     }
 }

@@ -15,26 +15,26 @@ class TabTraySearchTabsTests: BaseTestCase {
         navigator.goto(TabTray)
 
         // Search no matches
-        Base.helper.waitForExistence(app.textFields["Search Tabs"])
-        XCTAssertTrue(app.textFields["Search Tabs"].exists)
+        Base.helper.waitForExistence(Base.app.textFields["Search Tabs"])
+        XCTAssertTrue(Base.app.textFields["Search Tabs"].exists)
         searchTabs(tabTitleOrUrl: "foo")
 
         // Search by title one match
-        XCTAssertEqual(app.collectionViews.cells.count, 0)
-        app.buttons["close medium"].tap()
+        XCTAssertEqual(Base.app.collectionViews.cells.count, 0)
+        Base.app.buttons["close medium"].tap()
         searchTabs(tabTitleOrUrl: "Internet")
-        XCTAssertEqual(app.collectionViews.cells.count, 1)
+        XCTAssertEqual(Base.app.collectionViews.cells.count, 1)
 
         // Search by url two matches
-        app.buttons["close medium"].tap()
+        Base.app.buttons["close medium"].tap()
         searchTabs(tabTitleOrUrl: "mozilla")
-        XCTAssertEqual(app.collectionViews.cells.count, 2)
+        XCTAssertEqual(Base.app.collectionViews.cells.count, 2)
     }
 
     private func searchTabs(tabTitleOrUrl: String) {
-        Base.helper.waitForExistence(app.textFields["Search Tabs"])
-        app.textFields["Search Tabs"].tap()
-        app.textFields["Search Tabs"].typeText(tabTitleOrUrl)
+        Base.helper.waitForExistence(Base.app.textFields["Search Tabs"])
+        Base.app.textFields["Search Tabs"].tap()
+        Base.app.textFields["Search Tabs"].typeText(tabTitleOrUrl)
     }
 
     func testSearchTabsPrivateMode() {
@@ -47,16 +47,16 @@ class TabTraySearchTabsTests: BaseTestCase {
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
         searchTabs(tabTitleOrUrl: "internet")
-        XCTAssertEqual(app.collectionViews.cells.count, 1)
+        XCTAssertEqual(Base.app.collectionViews.cells.count, 1)
     }
     // Test disabled because the DragAndDrop is off for master and 14.x
     /*func testDragAndDropTabToSearchTabField() {
         navigator.openURL(firstURL)
         navigator.goto(TabTray)
-        Base.helper.waitForExistence(app.textFields["Search Tabs"])
-        app.collectionViews.cells["Internet for people, not profit — Mozilla"].press(forDuration: 2, thenDragTo: app.textFields["Search Tabs"])
-        Base.helper.waitForValueContains(app.textFields["Search Tabs"], value: "mozilla.org")
-        let searchValue = app.textFields["Search Tabs"].value
+        Base.helper.waitForExistence(Base.app.textFields["Search Tabs"])
+        Base.app.collectionViews.cells["Internet for people, not profit — Mozilla"].press(forDuration: 2, thenDragTo: Base.app.textFields["Search Tabs"])
+        Base.helper.waitForValueContains(Base.app.textFields["Search Tabs"], value: "mozilla.org")
+        let searchValue = Base.app.textFields["Search Tabs"].value
         XCTAssertEqual(searchValue as! String, fullFirstURL)
     }*/
 
@@ -65,11 +65,11 @@ class TabTraySearchTabsTests: BaseTestCase {
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
         searchTabs(tabTitleOrUrl: "mozilla")
-        app.collectionViews.cells["Internet for people, not profit — Mozilla"].tap()
+        Base.app.collectionViews.cells["Internet for people, not profit — Mozilla"].tap()
         navigator.nowAt(BrowserTab)
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
-        let searchValue = app.textFields["Search Tabs"].value
+        let searchValue = Base.app.textFields["Search Tabs"].value
         XCTAssertEqual(searchValue as! String, "Search Tabs")
     }
 }

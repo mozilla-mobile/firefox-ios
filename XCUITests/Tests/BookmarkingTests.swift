@@ -14,23 +14,23 @@ let url_4 = "test-password-2.html"
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
         navigator.goto(PageOptionsMenu)
-        Base.helper.waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 15)
-        app.tables.cells["Bookmark This Page"].tap()
+        Base.helper.waitForExistence(Base.app.tables.cells["Bookmark This Page"], timeout: 15)
+        Base.app.tables.cells["Bookmark This Page"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func unbookmark() {
         navigator.goto(PageOptionsMenu)
-        Base.helper.waitForExistence(app.tables.cells["Remove Bookmark"])
-        app.cells["Remove Bookmark"].tap()
+        Base.helper.waitForExistence(Base.app.tables.cells["Remove Bookmark"])
+        Base.app.cells["Remove Bookmark"].tap()
         navigator.nowAt(BrowserTab)
     }
 
     private func checkBookmarked() {
         navigator.goto(PageOptionsMenu)
-        Base.helper.waitForExistence(app.tables.cells["Remove Bookmark"])
+        Base.helper.waitForExistence(Base.app.tables.cells["Remove Bookmark"])
         if Base.helper.iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
+            Base.app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
         } else {
             navigator.goto(BrowserTab)
@@ -39,9 +39,9 @@ class BookmarkingTests: BaseTestCase {
 
     private func checkUnbookmarked() {
         navigator.goto(PageOptionsMenu)
-        Base.helper.waitForExistence(app.tables.cells["Bookmark This Page"])
+        Base.helper.waitForExistence(Base.app.tables.cells["Bookmark This Page"])
         if Base.helper.iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
+            Base.app.otherElements["PopoverDismissRegion"].tap()
             navigator.nowAt(BrowserTab)
         } else {
             navigator.goto(BrowserTab)
@@ -66,7 +66,7 @@ class BookmarkingTests: BaseTestCase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
-        app.collectionViews.cells["Example Domain"].tap()
+        Base.app.collectionViews.cells["Example Domain"].tap()
         navigator.nowAt(BrowserTab)
         Base.helper.waitForTabsButton()
         checkBookmarked()
@@ -78,15 +78,15 @@ class BookmarkingTests: BaseTestCase {
     }
 
     private func checkEmptyBookmarkList() {
-        let list = app.tables["Bookmarks List"].cells.count
+        let list = Base.app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 0, "There should not be any entry in the bookmarks list")
     }
 
     private func checkItemInBookmarkList() {
-        Base.helper.waitForExistence(app.tables["Bookmarks List"])
-        let list = app.tables["Bookmarks List"].cells.count
+        Base.helper.waitForExistence(Base.app.tables["Bookmarks List"])
+        let list = Base.app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
-        XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
+        XCTAssertTrue(Base.app.tables["Bookmarks List"].staticTexts[url_2["bookmarkLabel"]!].exists)
     }
 
     func testAccessBookmarksFromContextMenu() {
@@ -94,7 +94,7 @@ class BookmarkingTests: BaseTestCase {
         navigator.openURL(path(forTestPage: url_2["url"]!))
         Base.helper.waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
-        Base.helper.waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
+        Base.helper.waitForExistence(Base.app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
         bookmark()
 
         //There should be a bookmark
@@ -105,8 +105,8 @@ class BookmarkingTests: BaseTestCase {
     func testRecentBookmarks() {
         // Verify that there are only 4 cells without recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        Base.helper.waitForNoExistence(app.otherElements["RECENT BOOKMARKS"])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
+        Base.helper.waitForNoExistence(Base.app.otherElements["RECENT BOOKMARKS"])
+        XCTAssertEqual(Base.app.tables["Bookmarks List"].cells.count, 4)
         
         //Add a bookmark
         navigator.openURL(url_3)
@@ -115,9 +115,9 @@ class BookmarkingTests: BaseTestCase {
         
         // Check if it shows in recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        Base.helper.waitForExistence(app.otherElements["Recent Bookmarks"])
-        Base.helper.waitForExistence(app.staticTexts[urlLabelExample_3])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 5)
+        Base.helper.waitForExistence(Base.app.otherElements["Recent Bookmarks"])
+        Base.helper.waitForExistence(Base.app.staticTexts[urlLabelExample_3])
+        XCTAssertEqual(Base.app.tables["Bookmarks List"].cells.count, 5)
         
         // Add another
         navigator.openURL(path(forTestPage: url_4))
@@ -126,14 +126,14 @@ class BookmarkingTests: BaseTestCase {
         
         // Check if it shows in recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        Base.helper.waitForExistence(app.otherElements["Recent Bookmarks"])
-        Base.helper.waitForExistence(app.staticTexts[urlLabelExample_4])
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 6)
+        Base.helper.waitForExistence(Base.app.otherElements["Recent Bookmarks"])
+        Base.helper.waitForExistence(Base.app.staticTexts[urlLabelExample_4])
+        XCTAssertEqual(Base.app.tables["Bookmarks List"].cells.count, 6)
         
         // Click a recent bookmark and make sure it navigates. Disabled because of issue 5038 not opening recent bookmarks when tapped
-        app.tables["Bookmarks List"].cells.element(boundBy: 5).tap()
-        Base.helper.waitForExistence(app.textFields["url"], timeout: 6)
-        Base.helper.waitForValueContains(app.textFields["url"], value: url_3)
+        Base.app.tables["Bookmarks List"].cells.element(boundBy: 5).tap()
+        Base.helper.waitForExistence(Base.app.textFields["url"], timeout: 6)
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: url_3)
     }
 
     // Smoketest
@@ -143,9 +143,9 @@ class BookmarkingTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "www.ebay")
-        Base.helper.waitForExistence(app.tables["SiteTable"])
-        Base.helper.waitForExistence(app.buttons["www.ebay.com"])
-        XCTAssertTrue(app.buttons["www.ebay.com"].exists)
+        Base.helper.waitForExistence(Base.app.tables["SiteTable"])
+        Base.helper.waitForExistence(Base.app.buttons["www.ebay.com"])
+        XCTAssertTrue(Base.app.buttons["www.ebay.com"].exists)
         typeOnSearchBar(text: ".com")
         typeOnSearchBar(text: "\r")
         navigator.nowAt(BrowserTab)
@@ -157,8 +157,8 @@ class BookmarkingTests: BaseTestCase {
         typeOnSearchBar(text: "http://www.olx.ro")
 
         // Site table existes but is empty
-        Base.helper.waitForExistence(app.tables["SiteTable"])
-        XCTAssertEqual(app.tables["SiteTable"].cells.count, 0)
+        Base.helper.waitForExistence(Base.app.tables["SiteTable"])
+        XCTAssertEqual(Base.app.tables["SiteTable"].cells.count, 0)
         typeOnSearchBar(text: "\r")
         navigator.nowAt(BrowserTab)
 
@@ -167,38 +167,38 @@ class BookmarkingTests: BaseTestCase {
         bookmark()
 
         // Now the site should be suggested
-        Base.helper.waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        Base.helper.waitForExistence(Base.app.buttons["TabToolbar.menuButton"], timeout: 10)
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(BrowserTab)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "olx.ro")
-        Base.helper.waitForExistence(app.tables["SiteTable"])
-        Base.helper.waitForExistence(app.buttons["olx.ro"])
-        XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
+        Base.helper.waitForExistence(Base.app.tables["SiteTable"])
+        Base.helper.waitForExistence(Base.app.buttons["olx.ro"])
+        XCTAssertNotEqual(Base.app.tables["SiteTable"].cells.count, 0)
     }*/
 
     func testAddBookmark() {
         addNewBookmark()
         // Verify that clicking on bookmark opens the website
-        app.tables["Bookmarks List"].cells.element(boundBy: 0).tap()
-        Base.helper.waitForExistence(app.textFields["url"], timeout: 5)
+        Base.app.tables["Bookmarks List"].cells.element(boundBy: 0).tap()
+        Base.helper.waitForExistence(Base.app.textFields["url"], timeout: 5)
     }
 
     func testAddNewFolder() {
         navigator.goto(MobileBookmarks)
         navigator.goto(MobileBookmarksAdd)
         navigator.performAction(Action.AddNewFolder)
-        Base.helper.waitForExistence(app.navigationBars["New Folder"])
-        // XCTAssertFalse(app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
-        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).tap()
-        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).typeText("Test Folder")
-        app.buttons["Save"].tap()
-        app.buttons["Done"].tap()
+        Base.helper.waitForExistence(Base.app.navigationBars["New Folder"])
+        // XCTAssertFalse(Base.app.buttons["Save"].isEnabled), is this a bug allowing empty folder name?
+        Base.app.tables["SiteTable"].cells.textFields.element(boundBy: 0).tap()
+        Base.app.tables["SiteTable"].cells.textFields.element(boundBy: 0).typeText("Test Folder")
+        Base.app.buttons["Save"].tap()
+        Base.app.buttons["Done"].tap()
         checkItemsInBookmarksList(items: 1)
         navigator.nowAt(MobileBookmarks)
         // Now remove the folder
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        Base.helper.waitForExistence(app.buttons["Delete"])
+        Base.helper.waitForExistence(Base.app.buttons["Delete"])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
         checkItemsInBookmarksList(items: 0)
     }
@@ -207,13 +207,13 @@ class BookmarkingTests: BaseTestCase {
         navigator.goto(MobileBookmarks)
         navigator.goto(MobileBookmarksAdd)
         navigator.performAction(Action.AddNewSeparator)
-        app.buttons["Done"].tap()
+        Base.app.buttons["Done"].tap()
         checkItemsInBookmarksList(items: 1)
 
         // Remove it
         navigator.nowAt(MobileBookmarks)
         navigator.performAction(Action.RemoveItemMobileBookmarks)
-        Base.helper.waitForExistence(app.buttons["Delete"])
+        Base.helper.waitForExistence(Base.app.buttons["Delete"])
         navigator.performAction(Action.ConfirmRemoveItemMobileBookmarks)
         checkItemsInBookmarksList(items: 0)
     }
@@ -221,44 +221,44 @@ class BookmarkingTests: BaseTestCase {
     func testDeleteBookmarkSwiping() {
         addNewBookmark()
         // Remove by swiping
-        app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
-        app.buttons["Delete"].tap()
+        Base.app.tables["Bookmarks List"].staticTexts["BBC"].swipeLeft()
+        Base.app.buttons["Delete"].tap()
         checkItemsInBookmarksList(items: 0)
     }
 
     func testDeleteBookmarkContextMenu() {
         addNewBookmark()
         // Remove by long press and select option from context menu
-        app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
-        Base.helper.waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].cells["action_bookmark_remove"].tap()
+        Base.app.tables.staticTexts.element(boundBy: 0).press(forDuration: 1)
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"])
+        Base.app.tables["Context Menu"].cells["action_bookmark_remove"].tap()
         checkItemsInBookmarksList(items: 0)
     }
 
     private func addNewBookmark() {
         navigator.goto(MobileBookmarksAdd)
         navigator.performAction(Action.AddNewBookmark)
-        Base.helper.waitForExistence(app.navigationBars["New Bookmark"], timeout: 3)
+        Base.helper.waitForExistence(Base.app.navigationBars["New Bookmark"], timeout: 3)
         // Enter the bookmarks details
-        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).tap()
-        app.tables["SiteTable"].cells.textFields.element(boundBy: 0).typeText("BBC")
+        Base.app.tables["SiteTable"].cells.textFields.element(boundBy: 0).tap()
+        Base.app.tables["SiteTable"].cells.textFields.element(boundBy: 0).typeText("BBC")
 
-        app.tables["SiteTable"].cells.textFields["https://"].tap()
-        app.tables["SiteTable"].cells.textFields["https://"].typeText("bbc.com")
+        Base.app.tables["SiteTable"].cells.textFields["https://"].tap()
+        Base.app.tables["SiteTable"].cells.textFields["https://"].typeText("bbc.com")
         navigator.performAction(Action.SaveCreatedBookmark)
-        app.buttons["Done"].tap()
+        Base.app.buttons["Done"].tap()
         checkItemsInBookmarksList(items: 1)
     }
 
     private func checkItemsInBookmarksList(items: Int) {
-        Base.helper.waitForExistence(app.tables["Bookmarks List"], timeout: 3)
-        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, items)
+        Base.helper.waitForExistence(Base.app.tables["Bookmarks List"], timeout: 3)
+        XCTAssertEqual(Base.app.tables["Bookmarks List"].cells.count, items)
     }
 
     private func typeOnSearchBar(text: String) {
-        Base.helper.waitForExistence(app.textFields["url"], timeout: 5)
+        Base.helper.waitForExistence(Base.app.textFields["url"], timeout: 5)
         sleep(1)
-        app.textFields["address"].tap()
-        app.textFields["address"].typeText(text)
+        Base.app.textFields["address"].tap()
+        Base.app.textFields["address"].typeText(text)
     }
 }

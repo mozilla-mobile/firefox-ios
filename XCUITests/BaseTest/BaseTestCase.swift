@@ -17,10 +17,7 @@ struct Base {
 }
 
 class BaseTestCase: XCTestCase {
-    // H: find a way to avoid forced unwrap
     var navigator: MMNavigator<FxUserState>!
-    let app =  XCUIApplication()
-    // H: find a way to avoid forced unwrap
     var userState: FxUserState!
     
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
@@ -28,15 +25,15 @@ class BaseTestCase: XCTestCase {
     var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)"]
 
     func setUpScreenGraph() {
-        navigator = createScreenGraph(for: self, with: app).navigator()
+        navigator = createScreenGraph(for: self, with: Base.app).navigator()
         userState = navigator.userState
     }
 
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
-        app.launchArguments = [LaunchArguments.Test] + launchArguments
-        app.launch()
+        Base.app.launchArguments = [LaunchArguments.Test] + launchArguments
+        Base.app.launch()
         setUpScreenGraph()
     }
 
@@ -44,7 +41,7 @@ class BaseTestCase: XCTestCase {
         to observe whenever a test suite starts executing and ends it's execution, there is the XCTestObservation protocol: https://developer.apple.com/documentation/xctest/xctestobservation
      */
     override func tearDown() {
-        app.terminate()
+        Base.app.terminate()
         super.tearDown()
     }
 

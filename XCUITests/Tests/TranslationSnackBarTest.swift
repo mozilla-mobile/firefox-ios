@@ -11,24 +11,24 @@ class TranslationSnackBarTest: BaseTestCase {
         userState.localeIsExpectedDifferent = true
         navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForExistence(app.buttons["TranslationPrompt.doTranslate"])
+        Base.helper.waitForExistence(Base.app.buttons["TranslationPrompt.doTranslate"])
         navigator.performAction(Action.SelectDontTranslateThisPage)
-        XCTAssertFalse(app.buttons["TranslationPrompt.dontTranslate"].exists)
+        XCTAssertFalse(Base.app.buttons["TranslationPrompt.dontTranslate"].exists)
         navigator.performAction(Action.ReloadURL)
-        Base.helper.waitForExistence(app.buttons["TranslationPrompt.doTranslate"])
+        Base.helper.waitForExistence(Base.app.buttons["TranslationPrompt.doTranslate"])
         navigator.performAction(Action.SelectTranslateThisPage)
-        Base.helper.waitForValueContains(app.textFields["url"], value: "translate.google")
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: "translate.google")
     }
     
     // This test checks to see if Translation is enabled by default from the Settings menu and can be correctly disabled
     func testTranslationDisabled() {
         navigator.goto(TranslationSettings)
-        let translationSwitch = app.switches["TranslateSwitchValue"]
+        let translationSwitch = Base.app.switches["TranslateSwitchValue"]
         XCTAssertTrue(translationSwitch.isEnabled)
         navigator.performAction(Action.DisableTranslation)
         navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssertFalse(app.buttons["TranslationPrompt.dontTranslate"].exists)
+        XCTAssertFalse(Base.app.buttons["TranslationPrompt.dontTranslate"].exists)
     }
     
     // This test checks to see if Translation is correctly done when using Bing
@@ -39,6 +39,6 @@ class TranslationSnackBarTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
         Base.helper.waitUntilPageLoad()
         navigator.performAction(Action.SelectTranslateThisPage)
-        Base.helper.waitForValueContains(app.textFields["url"], value: "translatetheweb")
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: "translatetheweb")
     }*/
 }

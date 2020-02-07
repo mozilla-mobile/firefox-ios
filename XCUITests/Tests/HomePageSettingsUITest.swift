@@ -11,9 +11,9 @@ let exampleUrl = "test-example.html"
 
 class HomePageSettingsUITests: BaseTestCase {
     private func enterWebPageAsHomepage(text: String) {
-        app.textFields["HomeAsCustomURLTextField"].tap()
-        app.textFields["HomeAsCustomURLTextField"].typeText(text)
-        let value = app.textFields["HomeAsCustomURLTextField"].value
+        Base.app.textFields["HomeAsCustomURLTextField"].tap()
+        Base.app.textFields["HomeAsCustomURLTextField"].typeText(text)
+        let value = Base.app.textFields["HomeAsCustomURLTextField"].value
         XCTAssertEqual(value as? String, text, "The webpage typed does not match with the one saved")
     }
     let testWithDB = ["testTopSitesCustomNumberOfRows"]
@@ -31,11 +31,11 @@ class HomePageSettingsUITests: BaseTestCase {
     }
     func testCheckHomeSettingsByDefault() {
         navigator.goto(HomeSettings)
-        XCTAssertTrue(app.tables.cells["Firefox Home"].exists)
-        XCTAssertTrue(app.tables.cells["HomeAsCustomURL"].exists)
-        Base.helper.waitForExistence(app.tables.cells["TopSitesRows"])
-        XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: 2")
-        XCTAssertTrue(app.tables.switches["ASPocketStoriesVisible"].isEnabled)
+        XCTAssertTrue(Base.app.tables.cells["Firefox Home"].exists)
+        XCTAssertTrue(Base.app.tables.cells["HomeAsCustomURL"].exists)
+        Base.helper.waitForExistence(Base.app.tables.cells["TopSitesRows"])
+        XCTAssertEqual(Base.app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: 2")
+        XCTAssertTrue(Base.app.tables.switches["ASPocketStoriesVisible"].isEnabled)
     }
 
     func testTyping() {
@@ -46,7 +46,7 @@ class HomePageSettingsUITests: BaseTestCase {
         // Check if it is saved going back and then again to home settings menu
         navigator.goto(SettingsScreen)
         navigator.goto(HomeSettings)
-        let valueAfter = app.textFields["HomeAsCustomURLTextField"].value
+        let valueAfter = Base.app.textFields["HomeAsCustomURLTextField"].value
         XCTAssertEqual(valueAfter as? String, "http://example.com")
 
         // Check that it is actually set by opening a different website and going to Home
@@ -54,31 +54,31 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
 
         //Now check open home page should load the previously saved home page
-        let homePageMenuItem = app.cells["menu-Home"]
+        let homePageMenuItem = Base.app.cells["menu-Home"]
         Base.helper.waitForExistence(homePageMenuItem)
         homePageMenuItem.tap()
-        Base.helper.waitForValueContains(app.textFields["url"], value: "example")
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: "example")
     }
 
     /* Test disabled until bug 1510243 is fixed
     func testTypingBadURL() {
-        Base.helper.waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        Base.helper.waitForExistence(Base.app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(HomeSettings)
         // Enter an invalid Url
         enterWebPageAsHomepage(text: invalidUrl)
         navigator.goto(SettingsScreen)
         // Check that it is not saved
         navigator.goto(HomeSettings)
-        Base.helper.waitForExistence(app.textFields["HomePageSettingTextField"])
-        let valueAfter = app.textFields["HomePageSettingTextField"].value
+        Base.helper.waitForExistence(Base.app.textFields["HomePageSettingTextField"])
+        let valueAfter = Base.app.textFields["HomePageSettingTextField"].value
         XCTAssertEqual("Enter a webpage", valueAfter as! String)
 
         // There is no option to go to Home, instead the website open has the option to be set as HomePageSettings
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
+        Base.helper.waitForExistence(Base.app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(BrowserTabMenu)
-        let homePageMenuItem = app.tables["Context Menu"].cells["Open Homepage"]
+        let homePageMenuItem = Base.app.tables["Context Menu"].cells["Open Homepage"]
         XCTAssertFalse(homePageMenuItem.exists)
     }*/
 
@@ -86,14 +86,14 @@ class HomePageSettingsUITests: BaseTestCase {
         // Check that what's in clipboard is copied
         UIPasteboard.general.string = websiteUrl1
         navigator.goto(HomeSettings)
-        app.textFields["HomeAsCustomURLTextField"].tap()
-        app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
-        print(app.debugDescription)
-        Base.helper.waitForExistence(app.menuItems["Paste"])
-        app.menuItems["Paste"].tap()
-        Base.helper.waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
+        Base.app.textFields["HomeAsCustomURLTextField"].tap()
+        Base.app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
+        print(Base.app.debugDescription)
+        Base.helper.waitForExistence(Base.app.menuItems["Paste"])
+        Base.app.menuItems["Paste"].tap()
+        Base.helper.waitForValueContains(Base.app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         // Check that the webpage has been correclty copied into the correct field
-        let value = app.textFields["HomeAsCustomURLTextField"].value as! String
+        let value = Base.app.textFields["HomeAsCustomURLTextField"].value as! String
         XCTAssertEqual(value, websiteUrl1)
     }
 
@@ -102,21 +102,21 @@ class HomePageSettingsUITests: BaseTestCase {
     func testDisabledClipboard() {
         // Type an incorrect URL and copy it
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText(invalidUrl)
-        app.textFields["address"].press(forDuration: 5)
-        app.menuItems["Select All"].tap()
-        app.menuItems["Copy"].tap()
-        Base.helper.waitForExistence(app.buttons["goBack"])
-        app.buttons["goBack"].tap()
+        Base.app.textFields["address"].typeText(invalidUrl)
+        Base.app.textFields["address"].press(forDuration: 5)
+        Base.app.menuItems["Select All"].tap()
+        Base.app.menuItems["Copy"].tap()
+        Base.helper.waitForExistence(Base.app.buttons["goBack"])
+        Base.app.buttons["goBack"].tap()
 
         // Go to HomePage settings and check that it is not possible to copy it into the set webpage field
         navigator.nowAt(BrowserTab)
         navigator.goto(HomeSettings)
-        Base.helper.waitForExistence(app.staticTexts["Use Copied Link"])
+        Base.helper.waitForExistence(Base.app.staticTexts["Use Copied Link"])
 
         // Check that nothing is copied in the Set webpage field
-        app.cells["Use Copied Link"].tap()
-        let value = app.textFields["HomePageSettingTextField"].value
+        Base.app.cells["Use Copied Link"].tap()
+        let value = Base.app.textFields["HomePageSettingTextField"].value
 
         XCTAssertEqual("Enter a webpage", value as! String)
     }*/
@@ -128,14 +128,14 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(HomeSettings)
         enterWebPageAsHomepage(text: websiteUrl1)
         navigator.performAction(Action.GoToHomePage)
-        Base.helper.waitForExistence(app.textFields["url"], timeout: 3)
+        Base.helper.waitForExistence(Base.app.textFields["url"], timeout: 3)
 
         // Now after setting History, make sure FF home is set
         navigator.goto(SettingsScreen)
         navigator.goto(NewTabSettings)
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.performAction(Action.GoToHomePage)
-        Base.helper.waitForExistence(app.collectionViews.cells["TopSitesCell"])
+        Base.helper.waitForExistence(Base.app.collectionViews.cells["TopSitesCell"])
     }*/
 
     func testSetCustomURLAsHome() {
@@ -150,8 +150,8 @@ class HomePageSettingsUITests: BaseTestCase {
 
         // Workaroud needed after xcode 11.3 update Issue 5937
         // Lets check only that website is open
-        // Base.helper.waitForExistence(app.textFields["url"], timeout: 5)
-        // Base.helper.waitForValueContains(app.textFields["url"], value: "mozilla")
+        // Base.helper.waitForExistence(Base.app.textFields["url"], timeout: 5)
+        // Base.helper.waitForValueContains(Base.app.textFields["url"], value: "mozilla")
     }
     
     func testTopSitesCustomNumberOfRows() {
@@ -167,11 +167,11 @@ class HomePageSettingsUITests: BaseTestCase {
                 userState.numTopSitesRows = n
                 // Workaround for new Xcode11/iOS13
                 navigator.goto(HomeSettings)
-                app.tables.cells.element(boundBy: 2).tap()
-                Base.helper.waitForExistence(app.cells.staticTexts["1"], timeout: 3)
-                app.tables.cells.element(boundBy: n-1).tap()
+                Base.app.tables.cells.element(boundBy: 2).tap()
+                Base.helper.waitForExistence(Base.app.cells.staticTexts["1"], timeout: 3)
+                Base.app.tables.cells.element(boundBy: n-1).tap()
                 navigator.goto(NewTabScreen)
-                app.buttons["Done"].tap()
+                Base.app.buttons["Done"].tap()
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
         } else {
@@ -181,7 +181,7 @@ class HomePageSettingsUITests: BaseTestCase {
             for n in 1...4 {
                 userState.numTopSitesRows = n
                 navigator.performAction(Action.SelectTopSitesRows)
-                XCTAssertEqual(app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: " + String(n))
+                XCTAssertEqual(Base.app.tables.cells["TopSitesRows"].label as String, "Top Sites, Rows: " + String(n))
                 navigator.performAction(Action.GoToHomePage)
                 checkNumberOfExpectedTopSites(numberOfExpectedTopSites: (n * topSitesPerRow))
             }
@@ -194,21 +194,21 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.nowAt(HomeSettings)
         //Enter a custom URL
         enterWebPageAsHomepage(text: websiteUrl1)
-        Base.helper.waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
+        Base.helper.waitForValueContains(Base.app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
         //Assert that the label showing up in Settings is equal to the URL entere (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD OF URL)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Homepage")
+        XCTAssertEqual(Base.app.tables.cells["Home"].label, "Home, Homepage")
         //Switch to FXHome and check label
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)
         navigator.nowAt(HomeSettings)
         navigator.goto(SettingsScreen)
-        XCTAssertEqual(app.tables.cells["Home"].label, "Home, Firefox Home")
+        XCTAssertEqual(Base.app.tables.cells["Home"].label, "Home, Firefox Home")
     }
     //Function to check the number of top sites shown given a selected number of rows
     private func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
-        Base.helper.waitForExistence(app.cells["TopSitesCell"])
-        XCTAssertTrue(app.cells["TopSitesCell"].exists)
-        let numberOfTopSites = app.collectionViews.cells["TopSitesCell"].cells.matching(identifier: "TopSite").count
+        Base.helper.waitForExistence(Base.app.cells["TopSitesCell"])
+        XCTAssertTrue(Base.app.cells["TopSitesCell"].exists)
+        let numberOfTopSites = Base.app.collectionViews.cells["TopSitesCell"].cells.matching(identifier: "TopSite").count
         XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites)
     }
 }

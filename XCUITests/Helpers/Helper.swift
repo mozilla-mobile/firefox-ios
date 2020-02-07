@@ -24,8 +24,8 @@ class Helper {
         args.forEach { arg in
             launchArguments.append(arg)
         }
-        app.launchArguments = launchArguments
-        app.activate()
+        Base.app.launchArguments = launchArguments
+        Base.app.activate()
     }
 
     //If it is a first run, first run window should be gone
@@ -51,16 +51,13 @@ class Helper {
     }
 
     func loadWebPage(_ url: String, waitForLoadToFinish: Bool = true, file: String = #file, line: UInt = #line) {
-        // H: let's make this global or use the already-existing app instance
-        let app = XCUIApplication()
         UIPasteboard.general.string = url
-        app.textFields["url"].press(forDuration: 2.0)
-        app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
+        Base.app.textFields["url"].press(forDuration: 2.0)
+        Base.app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
 
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
-            let progressIndicator = app.progressIndicators.element(boundBy: 0) // H: or use .firstMatch
-            // H: this could be safely replaced with "if progressIndicator.Base.helper.waitForExistence(timeout: finishLoadingTimeout) { ... }"
+            let progressIndicator = Base.app.progressIndicators.firstMatch
             waitFor(progressIndicator,
                     with: "exists != true",
                     description: "Problem loading \(url)",
@@ -76,13 +73,8 @@ class Helper {
         return false
     }
 
-    // H: We could have a general method to wait for a specific UI element, with the timeout as a parameter with default value
     func waitUntilPageLoad() {
-        // H: There's no need to have a separate instance of the app
-        let app = XCUIApplication()
-        // H: "app.progressIndicators.firstMatch" looks better
-        let progressIndicator = app.progressIndicators.element(boundBy: 0)
-
+        let progressIndicator = Base.app.progressIndicators.firstMatch
         waitForNoExistence(progressIndicator, timeoutValue: 20.0)
     }
 

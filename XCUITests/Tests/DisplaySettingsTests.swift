@@ -8,44 +8,44 @@ class DisplaySettingTests: BaseTestCase {
 
     func testCheckDisplaySettingsDefault() {
         navigator.goto(DisplaySettings)
-        Base.helper.waitForExistence(app.navigationBars["Theme"])
-        XCTAssertTrue(app.tables["DisplayTheme.Setting.Options"].exists)
-        let switchValue = app.switches["SystemThemeSwitchValue"].value!
+        Base.helper.waitForExistence(Base.app.navigationBars["Theme"])
+        XCTAssertTrue(Base.app.tables["DisplayTheme.Setting.Options"].exists)
+        let switchValue = Base.app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValue as! String, "1")
     }
 
     func testCheckSystemThemeChanges() {
         navigator.goto(DisplaySettings)
-        Base.helper.waitForExistence(app.switches["SystemThemeSwitchValue"])
+        Base.helper.waitForExistence(Base.app.switches["SystemThemeSwitchValue"])
         navigator.performAction(Action.SystemThemeSwitch)
-        Base.helper.waitForExistence(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
+        Base.helper.waitForExistence(Base.app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"])
 
         // Going back to Settings and Display settings keeps the value
         navigator.goto(SettingsScreen)
         navigator.goto(DisplaySettings)
-        Base.helper.waitForExistence(app.switches["SystemThemeSwitchValue"])
-        let switchValue = app.switches["SystemThemeSwitchValue"].value!
+        Base.helper.waitForExistence(Base.app.switches["SystemThemeSwitchValue"])
+        let switchValue = Base.app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValue as! String, "0")
-        XCTAssertTrue(app.cells.staticTexts["Light"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Dark"].exists)
+        XCTAssertTrue(Base.app.cells.staticTexts["Light"].exists)
+        XCTAssertTrue(Base.app.cells.staticTexts["Dark"].exists)
 
         // Select the Automatic mode
         navigator.performAction(Action.SelectAutomatically)
 
-        XCTAssertTrue(app.tables.otherElements["THRESHOLD"].exists)
-        XCTAssertFalse(app.cells.staticTexts["Light"].exists)
-        XCTAssertFalse(app.cells.staticTexts["Dark"].exists)
+        XCTAssertTrue(Base.app.tables.otherElements["THRESHOLD"].exists)
+        XCTAssertFalse(Base.app.cells.staticTexts["Light"].exists)
+        XCTAssertFalse(Base.app.cells.staticTexts["Dark"].exists)
 
         // Now select the Manaul mode
         navigator.performAction(Action.SelectManually)
-        XCTAssertFalse(app.tables.otherElements["THRESHOLD"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Light"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Dark"].exists)
+        XCTAssertFalse(Base.app.tables.otherElements["THRESHOLD"].exists)
+        XCTAssertTrue(Base.app.cells.staticTexts["Light"].exists)
+        XCTAssertTrue(Base.app.cells.staticTexts["Dark"].exists)
 
         // Enable back syste theme
         navigator.performAction(Action.SystemThemeSwitch)
-        let switchValueAfter = app.switches["SystemThemeSwitchValue"].value!
+        let switchValueAfter = Base.app.switches["SystemThemeSwitchValue"].value!
         XCTAssertEqual(switchValueAfter as! String, "1")
-        XCTAssertFalse(app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"].exists)
+        XCTAssertFalse(Base.app.tables["DisplayTheme.Setting.Options"].otherElements.staticTexts["SWITCH MODE"].exists)
     }
 }

@@ -13,26 +13,26 @@ class FirstRunTourTests: BaseTestCase {
         // Complet the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
 
-        Base.helper.waitForExistence(app.staticTexts["Welcome to Firefox"])
-        XCTAssertTrue(app.buttons["nextOnboardingButton"].exists)
-        XCTAssertTrue(app.buttons["signInOnboardingButton"].exists)
-        XCTAssertTrue(app.buttons["signUpOnboardingButton"].exists)
+        Base.helper.waitForExistence(Base.app.staticTexts["Welcome to Firefox"])
+        XCTAssertTrue(Base.app.buttons["nextOnboardingButton"].exists)
+        XCTAssertTrue(Base.app.buttons["signInOnboardingButton"].exists)
+        XCTAssertTrue(Base.app.buttons["signUpOnboardingButton"].exists)
 
         // Swipe to the second screen
-        app.buttons.staticTexts["Next"].tap()
-        XCTAssertTrue(app.buttons["startBrowsingOnboardingButton"].exists)
-        XCTAssertTrue(app.buttons["signInOnboardingButton"].exists)
-        XCTAssertTrue(app.buttons["signUpOnboardingButton"].exists)
+        Base.app.buttons.staticTexts["Next"].tap()
+        XCTAssertTrue(Base.app.buttons["startBrowsingOnboardingButton"].exists)
+        XCTAssertTrue(Base.app.buttons["signInOnboardingButton"].exists)
+        XCTAssertTrue(Base.app.buttons["signUpOnboardingButton"].exists)
     }
 
     private func goToNextScreen() {
-        app.buttons["nextOnboardingButton"].tap()
+        Base.app.buttons["nextOnboardingButton"].tap()
     }
 
     private func tapStartBrowsingButton() {
-        app.buttons["startBrowsingOnboardingButton"].tap()
+        Base.app.buttons["startBrowsingOnboardingButton"].tap()
         // User starts in HomePanelScreen with the default Top Sites
-        let topSites = app.collectionViews.cells["TopSitesCell"]
+        let topSites = Base.app.collectionViews.cells["TopSitesCell"]
         Base.helper.waitForExistence(topSites)
     }
     
@@ -46,6 +46,6 @@ class FirstRunTourTests: BaseTestCase {
         goToNextScreen()
         tapStartBrowsingButton()
         navigator.goto(ShowTourInSettings)
-        Base.helper.waitForExistence(app.staticTexts["Welcome to Firefox"])
+        Base.helper.waitForExistence(Base.app.staticTexts["Welcome to Firefox"])
     }
 }

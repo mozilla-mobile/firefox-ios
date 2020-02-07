@@ -21,8 +21,8 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openNewURL(urlString: websiteWithBlockedElements)
         Base.helper.waitUntilPageLoad()
         navigator.goto(TrackingProtectionContextMenuDetails)
-        if (app.cells.staticTexts["Disabled for this site"].exists) {
-            app.cells.staticTexts["Disabled for this site"].tap()
+        if (Base.app.cells.staticTexts["Disabled for this site"].exists) {
+            Base.app.cells.staticTexts["Disabled for this site"].tap()
         }
     }
 
@@ -31,7 +31,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionSettings)
 
         // Make sure ETP is enabled by default
-        XCTAssertTrue(app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
+        XCTAssertTrue(Base.app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
 
         // Turn off ETP
         navigator.performAction(Action.SwitchETP)
@@ -41,7 +41,7 @@ class TrackingProtectionTests: BaseTestCase {
         Base.helper.waitUntilPageLoad()
 
         // Now there should not be any shield icon
-        Base.helper.waitForNoExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        Base.helper.waitForNoExistence(Base.app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
@@ -50,7 +50,7 @@ class TrackingProtectionTests: BaseTestCase {
         Base.helper.waitUntilPageLoad()
 
         // Make sure TP is off also in PMB
-        Base.helper.waitForNoExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        Base.helper.waitForNoExistence(Base.app.buttons["TabLocationView.trackingProtectionButton"])
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
         // Turn on ETP
@@ -66,14 +66,14 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     private func checkTrackingProtectionDisabledForSite() {
-        app.buttons["TabLocationView.trackingProtectionButton"].tap()
-        Base.helper.waitForExistence(app.cells.staticTexts["Disabled for this site"], timeout: 5)
+        Base.app.buttons["TabLocationView.trackingProtectionButton"].tap()
+        Base.helper.waitForExistence(Base.app.cells.staticTexts["Disabled for this site"], timeout: 5)
         navigator.nowAt(TrackingProtectionContextMenuDetails)
     }
 
     private func checkTrackingProtectionEnabledForSite() {
         navigator.goto(TrackingProtectionContextMenuDetails)
-        Base.helper.waitForExistence(app.cells.staticTexts["Enabled for this site"])
+        Base.helper.waitForExistence(Base.app.cells.staticTexts["Enabled for this site"])
     }
 
     func testMenuWhenThereAreBlockedElements() {
@@ -84,14 +84,14 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionContextMenuDetails)
 
         // Verify that all elements for ETP menu are shown
-        Base.helper.waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.cells["tp-cookie"].exists, "ETP menu with elements blocked is not right")
-        XCTAssertTrue(app.tables.cells["settings"].exists, "Settings option does not appear")
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"])
+        XCTAssertTrue(Base.app.tables.cells["tp-cookie"].exists, "ETP menu with elements blocked is not right")
+        XCTAssertTrue(Base.app.tables.cells["settings"].exists, "Settings option does not appear")
 
         // Tap on social trackers
-        app.cells["tp-cookie"].tap()
-        XCTAssertTrue(app.tables.cells.count > 0)
-        app.cells["goBack"].tap()
+        Base.app.cells["tp-cookie"].tap()
+        XCTAssertTrue(Base.app.tables.cells.count > 0)
+        Base.app.cells["goBack"].tap()
     }
 
     func testMenuWhenThereAreNotBlockedElements() {
@@ -100,8 +100,8 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Open ETP menu and check view with no blocked elements
         navigator.goto(TrackingProtectionContextMenuDetails)
-        Base.helper.waitForExistence(app.tables.cells.staticTexts[noTrackingElementsString])
-        XCTAssertTrue(app.tables.cells.staticTexts[noTrackingElementsString].exists, "TP menu is wrong when there are not blocking elements")
+        Base.helper.waitForExistence(Base.app.tables.cells.staticTexts[noTrackingElementsString])
+        XCTAssertTrue(Base.app.tables.cells.staticTexts[noTrackingElementsString].exists, "TP menu is wrong when there are not blocking elements")
     }
 
     // Smoketest
@@ -166,7 +166,7 @@ class TrackingProtectionTests: BaseTestCase {
         disableTrackingProtectionForSite()
 
         navigator.goto(TrackingProtectionSettings)
-        XCTAssertTrue(app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
+        XCTAssertTrue(Base.app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
     }
 
     func testOpenSettingsFromTPcontextMenu() {
@@ -180,42 +180,42 @@ class TrackingProtectionTests: BaseTestCase {
         // Turn off ETP
         navigator.performAction(Action.SwitchETP)
         // Go back to the site
-        app.buttons["Done"].tap()
-        app.buttons["Reload"].tap()
+        Base.app.buttons["Done"].tap()
+        Base.app.buttons["Reload"].tap()
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForNoExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        Base.helper.waitForNoExistence(Base.app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.nowAt(BrowserTab)
         navigator.goto(TrackingProtectionSettings)
         // Turn on ETP
         // Ask if bug, need to reload to see the shield icon again once it is turned on from settings
         navigator.performAction(Action.SwitchETP)
-        app.buttons["Settings"].tap()
-        app.buttons["Done"].tap()
-        app.buttons["Reload"].tap()
+        Base.app.buttons["Settings"].tap()
+        Base.app.buttons["Done"].tap()
+        Base.app.buttons["Reload"].tap()
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        Base.helper.waitForExistence(Base.app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.nowAt(BrowserTab)
     }
 
     func testBasicMoreInfo() {
         navigator.goto(TrackingProtectionSettings)
         // See Basic mode info
-        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
-        XCTAssertTrue(app.navigationBars["Client.TPAccessoryInfo"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Social Trackers"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Cross-Site Trackers"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Fingerprinters"].exists)
-        XCTAssertTrue(app.cells.staticTexts["Cryptominers"].exists)
-        XCTAssertFalse(app.cells.staticTexts["Tracking content"].exists)
+        Base.app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
+        XCTAssertTrue(Base.app.navigationBars["Client.TPAccessoryInfo"].exists)
+        XCTAssertTrue(Base.app.cells.staticTexts["Social Trackers"].exists)
+        XCTAssertTrue(Base.app.cells.staticTexts["Cross-Site Trackers"].exists)
+        XCTAssertTrue(Base.app.cells.staticTexts["Fingerprinters"].exists)
+        XCTAssertTrue(Base.app.cells.staticTexts["Cryptominers"].exists)
+        XCTAssertFalse(Base.app.cells.staticTexts["Tracking content"].exists)
 
         // Go back to TP settings
-        app.buttons["Tracking Protection"].tap()
+        Base.app.buttons["Tracking Protection"].tap()
 
         // See Strict mode info
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
-        XCTAssertTrue(app.cells.staticTexts["Tracking content"].exists)
+        Base.app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
+        XCTAssertTrue(Base.app.cells.staticTexts["Tracking content"].exists)
 
         // Go back to TP settings
-        app.buttons["Tracking Protection"].tap()
+        Base.app.buttons["Tracking Protection"].tap()
     }
 }

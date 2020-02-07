@@ -8,11 +8,11 @@ class DataManagementTests: BaseTestCase {
 
     func testWebSiteDataEnterFirstTime() {
         navigator.performAction(Action.AcceptClearAllWebsiteData)
-        let expectedWebsiteDataEntries2 = app.tables.cells.count
+        let expectedWebsiteDataEntries2 = Base.app.tables.cells.count
         XCTAssertEqual(expectedWebsiteDataEntries2, 1)
         navigator.openURL("example.com")
         navigator.goto(WebsiteDataSettings)
-        let expectedWebsiteDataEntries3 = app.tables.cells.count
+        let expectedWebsiteDataEntries3 = Base.app.tables.cells.count
         XCTAssertEqual(expectedWebsiteDataEntries3, 2)
     }
     
@@ -24,23 +24,23 @@ class DataManagementTests: BaseTestCase {
             navigator.openURL(website)
         }
         navigator.goto(WebsiteDataSettings)
-        Base.helper.waitForExistence(app.searchFields["Filter Sites"])
+        Base.helper.waitForExistence(Base.app.searchFields["Filter Sites"])
         navigator.performAction(Action.TapOnFilterWebsites)
-        app.typeText("bing")
-        Base.helper.waitForExistence(app.tables["Search results"])
-        let expectedSearchResults = app.tables["Search results"].cells.count
+        Base.app.typeText("bing")
+        Base.helper.waitForExistence(Base.app.tables["Search results"])
+        let expectedSearchResults = Base.app.tables["Search results"].cells.count
         XCTAssertEqual(expectedSearchResults, 1)
         navigator.performAction(Action.TapOnFilterWebsites)
-        app.typeText("foo")
-        let expectedNoSearchResults = app.tables["Search results"].cells.count
+        Base.app.typeText("foo")
+        let expectedNoSearchResults = Base.app.tables["Search results"].cells.count
         XCTAssertEqual(expectedNoSearchResults, 0)
-        app.buttons["Cancel"].tap()
+        Base.app.buttons["Cancel"].tap()
         navigator.performAction(Action.ShowMoreWebsiteDataEntries)
-        let expectedShowMoreWebsites = app.tables.cells.count
+        let expectedShowMoreWebsites = Base.app.tables.cells.count
         XCTAssertNotEqual(expectedShowMoreWebsites, 9)
         navigator.performAction(Action.AcceptClearAllWebsiteData)
-        Base.helper.waitForExistence(app.tables.cells["ClearAllWebsiteData"])
-        let expectedWebsitesCleared = app.tables.cells.count
+        Base.helper.waitForExistence(Base.app.tables.cells["ClearAllWebsiteData"])
+        let expectedWebsitesCleared = Base.app.tables.cells.count
         XCTAssertEqual(expectedWebsitesCleared, 1)
     }
 }

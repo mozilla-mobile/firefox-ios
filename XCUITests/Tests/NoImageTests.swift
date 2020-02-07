@@ -10,13 +10,13 @@ let ContextMenuIdentifier = "Context Menu"
 class NoImageTests: BaseTestCase {
 
     private func checkShowImages() {
-        Base.helper.waitForExistence(app.tables.cells[NoImageButtonIdentifier])
-        XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["enabled"].exists)
+        Base.helper.waitForExistence(Base.app.tables.cells[NoImageButtonIdentifier])
+        XCTAssertTrue(Base.app.tables.cells[NoImageButtonIdentifier].images["enabled"].exists)
     }
 
     private func checkHideImages() {
-        Base.helper.waitForExistence(app.tables.cells[NoImageButtonIdentifier])
-        XCTAssertTrue(app.tables.cells[NoImageButtonIdentifier].images["disabled"].exists)
+        Base.helper.waitForExistence(Base.app.tables.cells[NoImageButtonIdentifier])
+        XCTAssertTrue(Base.app.tables.cells[NoImageButtonIdentifier].images["disabled"].exists)
     }
 
     // Functionality is tested by UITests/NoImageModeTests, here only the UI is updated properly

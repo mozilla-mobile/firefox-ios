@@ -31,50 +31,50 @@ class HistoryTests: BaseTestCase {
     func testEmptyHistoryListFirstTime() {
         // Go to History List from Top Sites and check it is empty
         navigator.goto(LibraryPanel_History)
-        Base.helper.waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
-        XCTAssertTrue(app.tables.cells["HistoryPanel.recentlyClosedCell"].exists)
+        Base.helper.waitForExistence(Base.app.tables.cells["HistoryPanel.recentlyClosedCell"])
+        XCTAssertTrue(Base.app.tables.cells["HistoryPanel.recentlyClosedCell"].exists)
     }
 
     func testOpenSyncDevices() {
         navigator.goto(LibraryPanel_SyncedTabs)
-        Base.helper.waitForExistence(app.tables.cells.staticTexts["Firefox Sync"])
-        XCTAssertTrue(app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not appear")
+        Base.helper.waitForExistence(Base.app.tables.cells.staticTexts["Firefox Sync"])
+        XCTAssertTrue(Base.app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not appear")
     }
 
     func testClearHistoryFromSettings() {
         // Browse to have an item in history list
         navigator.goto(LibraryPanel_History)
-        Base.helper.waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"], timeout: 5)
-        XCTAssertTrue(app.tables.cells.staticTexts[webpage["label"]!].exists)
+        Base.helper.waitForExistence(Base.app.tables.cells["HistoryPanel.recentlyClosedCell"], timeout: 5)
+        XCTAssertTrue(Base.app.tables.cells.staticTexts[webpage["label"]!].exists)
 
         // Go to Clear Data
         navigator.performAction(Action.AcceptClearPrivateData)
 
         // Back on History panel view check that there is not any item
         navigator.goto(LibraryPanel_History)
-        Base.helper.waitForExistence(app.tables.cells["HistoryPanel.recentlyClosedCell"])
-        XCTAssertFalse(app.tables.cells.staticTexts[webpage["label"]!].exists)
+        Base.helper.waitForExistence(Base.app.tables.cells["HistoryPanel.recentlyClosedCell"])
+        XCTAssertFalse(Base.app.tables.cells.staticTexts[webpage["label"]!].exists)
     }
 
     func testClearPrivateDataButtonDisabled() {
         //Clear private data from settings and confirm
         navigator.goto(ClearPrivateDataSettings)
-        app.tables.cells["ClearPrivateData"].tap()
-        app.alerts.buttons["OK"].tap()
+        Base.app.tables.cells["ClearPrivateData"].tap()
+        Base.app.alerts.buttons["OK"].tap()
         
         //Wait for OK pop-up to disappear after confirming
-        Base.helper.waitForNoExistence(app.alerts.buttons["OK"], timeoutValue:5)
+        Base.helper.waitForNoExistence(Base.app.alerts.buttons["OK"], timeoutValue:5)
         
         //Try to tap on the disabled Clear Private Data button
-        app.tables.cells["ClearPrivateData"].tap()
+        Base.app.tables.cells["ClearPrivateData"].tap()
         
         //If the button is disabled, the confirmation pop-up should not exist
-        XCTAssertEqual(app.alerts.buttons["OK"].exists, false)
+        XCTAssertEqual(Base.app.alerts.buttons["OK"].exists, false)
     }
 
     func testRecentlyClosedOptionAvailable() {
         navigator.goto(HistoryRecentlyClosed)
-        Base.helper.waitForNoExistence(app.tables["Recently Closed Tabs List"])
+        Base.helper.waitForNoExistence(Base.app.tables["Recently Closed Tabs List"])
 
         // Go to the default web site  and check whether the option is enabled
         navigator.nowAt(LibraryPanel_History)
@@ -86,7 +86,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(LibraryPanel_Bookmarks)
         navigator.goto(LibraryPanel_History)
         navigator.goto(HistoryRecentlyClosed)
-        Base.helper.waitForNoExistence(app.tables["Recently Closed Tabs List"])
+        Base.helper.waitForNoExistence(Base.app.tables["Recently Closed Tabs List"])
         navigator.nowAt(LibraryPanel_History)
         navigator.goto(HomePanelsScreen)
 
@@ -101,8 +101,8 @@ class HistoryTests: BaseTestCase {
         navigator.goto(HistoryRecentlyClosed)
 
         // The Closed Tabs list should contain the info of the website just closed
-        Base.helper.waitForExistence(app.tables["Recently Closed Tabs List"], timeout: 3)
-        XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
+        Base.helper.waitForExistence(Base.app.tables["Recently Closed Tabs List"], timeout: 3)
+        XCTAssertTrue(Base.app.tables.cells.staticTexts[closedWebPageLabel].exists)
 
         navigator.goto(HomePanelsScreen)
 
@@ -112,7 +112,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
-        Base.helper.waitForExistence(app.tables["Recently Closed Tabs List"])
+        Base.helper.waitForExistence(Base.app.tables["Recently Closed Tabs List"])
     }
 
     func testClearRecentlyClosedHistory() {
@@ -126,8 +126,8 @@ class HistoryTests: BaseTestCase {
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
         // Once the website is visited and closed it will appear in Recently Closed Tabs list
-        Base.helper.waitForExistence(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
+        Base.helper.waitForExistence(Base.app.tables["Recently Closed Tabs List"])
+        XCTAssertTrue(Base.app.tables.cells.staticTexts[closedWebPageLabel].exists)
 
         navigator.goto(HomePanelsScreen)
 
@@ -136,7 +136,7 @@ class HistoryTests: BaseTestCase {
 
         // Back on History panel view check that there is not any item
         navigator.goto(HistoryRecentlyClosed)
-        Base.helper.waitForNoExistence(app.tables["Recently Closed Tabs List"])
+        Base.helper.waitForNoExistence(Base.app.tables["Recently Closed Tabs List"])
     }
 
     func testLongTapOptionsRecentlyClosedItem() {
@@ -149,12 +149,12 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
-        Base.helper.waitForExistence(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
-        app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
-        Base.helper.waitForExistence(app.tables["Context Menu"])
-        XCTAssertTrue(app.tables.cells["quick_action_new_tab"].exists)
-        XCTAssertTrue(app.tables.cells["quick_action_new_private_tab"].exists)
+        Base.helper.waitForExistence(Base.app.tables["Recently Closed Tabs List"])
+        XCTAssertTrue(Base.app.tables.cells.staticTexts[closedWebPageLabel].exists)
+        Base.app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"])
+        XCTAssertTrue(Base.app.tables.cells["quick_action_new_tab"].exists)
+        XCTAssertTrue(Base.app.tables.cells["quick_action_new_private_tab"].exists)
     }
 
     func testOpenInNewTabRecentlyClosedItem() {
@@ -166,13 +166,13 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
-        Base.helper.waitForExistence(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
+        Base.helper.waitForExistence(Base.app.tables["Recently Closed Tabs List"])
+        XCTAssertTrue(Base.app.tables.cells.staticTexts[closedWebPageLabel].exists)
         let numTabsOpen = userState.numTabs
         XCTAssertEqual(numTabsOpen, 1)
-        app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
-        Base.helper.waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["quick_action_new_tab"].tap()
+        Base.app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"])
+        Base.app.tables.cells["quick_action_new_tab"].tap()
         navigator.goto(TabTray)
         let numTabsOpen2 = userState.numTabs
         XCTAssertEqual(numTabsOpen2, 2)
@@ -187,12 +187,12 @@ class HistoryTests: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.nowAt(NewTabScreen)
         navigator.goto(HistoryRecentlyClosed)
-        Base.helper.waitForExistence(app.tables["Recently Closed Tabs List"])
-        XCTAssertTrue(app.tables.cells.staticTexts[closedWebPageLabel].exists)
+        Base.helper.waitForExistence(Base.app.tables["Recently Closed Tabs List"])
+        XCTAssertTrue(Base.app.tables.cells.staticTexts[closedWebPageLabel].exists)
 
-        app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
-        Base.helper.waitForExistence(app.tables["Context Menu"])
-        app.tables.cells["quick_action_new_private_tab"].tap()
+        Base.app.tables.cells.staticTexts[closedWebPageLabel].press(forDuration: 1)
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"])
+        Base.app.tables.cells["quick_action_new_private_tab"].tap()
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
@@ -211,34 +211,34 @@ class HistoryTests: BaseTestCase {
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
-        Base.helper.waitForExistence(app.collectionViews.cells[webpage["label"]!])
+        Base.helper.waitForExistence(Base.app.collectionViews.cells[webpage["label"]!])
         // 'x' button to close the tab is not visible, so closing by swiping the tab
-        app.collectionViews.cells[webpage["label"]!].swipeRight()
+        Base.app.collectionViews.cells[webpage["label"]!].swipeRight()
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)
         navigator.goto(LibraryPanel_History)
-        XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
-        Base.helper.waitForNoExistence(app.tables["Recently Closed Tabs List"])
+        XCTAssertFalse(Base.app.cells.staticTexts["Recently Closed"].isSelected)
+        Base.helper.waitForNoExistence(Base.app.tables["Recently Closed Tabs List"])
 
         // Now verify that on regular mode the recently closed list is empty too
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(NewTabScreen)
         navigator.goto(LibraryPanel_History)
-        XCTAssertFalse(app.cells.staticTexts["Recently Closed"].isSelected)
-        Base.helper.waitForNoExistence(app.tables["Recently Closed Tabs List"])
+        XCTAssertFalse(Base.app.cells.staticTexts["Recently Closed"].isSelected)
+        Base.helper.waitForNoExistence(Base.app.tables["Recently Closed Tabs List"])
     }
     
     // Private function created to select desired option from the "Clear Recent History" list
     // We used this aproch to avoid code duplication
     private func tapOnClearRecentHistoryOption(optionSelected: String) {
-        app.sheets.buttons[optionSelected].tap()
+        Base.app.sheets.buttons[optionSelected].tap()
     }
     
     private func navigateToGoogle(){
         navigator.openURL("example.com")
         navigator.goto(LibraryPanel_History)
-        XCTAssertTrue(app.tables.cells.staticTexts["Example Domain"].exists)
+        XCTAssertTrue(Base.app.tables.cells.staticTexts["Example Domain"].exists)
     }
     
     func testClearRecentHistory() {
@@ -246,7 +246,7 @@ class HistoryTests: BaseTestCase {
         tapOnClearRecentHistoryOption(optionSelected: "The Last Hour")
         // No data will be removed after Action.ClearRecentHistory since there is no recent history created.
         for entry in oldHistoryEntries {
-            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+            XCTAssertTrue(Base.app.tables.cells.staticTexts[entry].exists)
         }
         // Go to 'goolge.com' to create a recent history entry.
         navigateToGoogle()
@@ -255,9 +255,9 @@ class HistoryTests: BaseTestCase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Today")
         for entry in oldHistoryEntries {
-            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+            XCTAssertTrue(Base.app.tables.cells.staticTexts[entry].exists)
         }
-        XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
+        XCTAssertFalse(Base.app.tables.cells.staticTexts["Google"].exists)
         
         // Begin Test for Today and Yesterday
         // Go to 'goolge.com' to create a recent history entry.
@@ -267,9 +267,9 @@ class HistoryTests: BaseTestCase {
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Today and Yesterday")
         for entry in oldHistoryEntries {
-            XCTAssertTrue(app.tables.cells.staticTexts[entry].exists)
+            XCTAssertTrue(Base.app.tables.cells.staticTexts[entry].exists)
         }
-        XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
+        XCTAssertFalse(Base.app.tables.cells.staticTexts["Google"].exists)
         
         // Begin Test for Everything
         // Go to 'goolge.com' to create a recent history entry.
@@ -278,9 +278,9 @@ class HistoryTests: BaseTestCase {
         // Tapping everything removes both current data and older data.
         tapOnClearRecentHistoryOption(optionSelected: "Everything")
         for entry in oldHistoryEntries {
-            XCTAssertFalse(app.tables.cells.staticTexts[entry].exists)
+            XCTAssertFalse(Base.app.tables.cells.staticTexts[entry].exists)
         }
-        XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
+        XCTAssertFalse(Base.app.tables.cells.staticTexts["Google"].exists)
         
     }
     
@@ -289,7 +289,7 @@ class HistoryTests: BaseTestCase {
         navigateToGoogle()
         navigator.performAction(Action.ClearRecentHistory)
         for option in clearRecentHistoryOptions {
-            XCTAssertTrue(app.sheets.buttons[option].exists)
+            XCTAssertTrue(Base.app.sheets.buttons[option].exists)
         }
     }
 }

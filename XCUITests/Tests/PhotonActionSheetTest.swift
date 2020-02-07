@@ -17,17 +17,17 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
         // Verify that the site is pinned to top
-        Base.helper.waitForExistence(app.cells["example"])
-        let cell = app.cells["example"]
+        Base.helper.waitForExistence(Base.app.cells["example"])
+        let cell = Base.app.cells["example"]
         Base.helper.waitForExistence(cell)
 
         // Remove pin
-        app.cells["example"].press(forDuration: 2)
-        app.cells["action_unpin"].tap()
+        Base.app.cells["example"].press(forDuration: 2)
+        Base.app.cells["action_unpin"].tap()
 
         // Check that it has been unpinned
         cell.press(forDuration: 2)
-        Base.helper.waitForExistence(app.cells["action_pin"])
+        Base.helper.waitForExistence(Base.app.cells["action_pin"])
     }
     // Disable issue #5554
     /*
@@ -35,27 +35,27 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
-        Base.helper.waitForExistence(app.buttons["Copy"])
+        Base.helper.waitForExistence(Base.app.buttons["Copy"])
     }
 
     // Smoketest
     func testShareOptionIsShownFromShortCut() {
         navigator.goto(BrowserTab)
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
-        let pageObjectButton = app.buttons["TabLocationView.pageOptionsButton"]
+        Base.helper.waitForExistence(Base.app.buttons["TabLocationView.pageOptionsButton"])
+        let pageObjectButton = Base.app.buttons["TabLocationView.pageOptionsButton"]
         // Fix to bug 1467393, url bar long press is shown sometimes instead of the share menu
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
         pageObjectButtonCenter.press(forDuration: 1)
 
-        Base.helper.waitForExistence(app.buttons["Copy"], timeout: 10)
+        Base.helper.waitForExistence(Base.app.buttons["Copy"], timeout: 10)
     }*/
 
     func testSendToDeviceFromPageOptionsMenu() {
         // User not logged in
         navigator.browserPerformAction(.sendToDeviceOption)
-        Base.helper.waitForExistence(app.navigationBars["Client.InstructionsView"])
-        XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
+        Base.helper.waitForExistence(Base.app.navigationBars["Client.InstructionsView"])
+        XCTAssertTrue(Base.app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
     // Disable issue #5554
     /*
@@ -63,89 +63,89 @@ class PhotonActionSheetTest: BaseTestCase {
     func testSendToDeviceFromShareOption() {
         // Open and Wait to see the Share options sheet
         navigator.browserPerformAction(.shareOption)
-        Base.helper.waitForExistence(app.buttons["More"])
-        Base.helper.waitForNoExistence(app.buttons["Send Tab"])
-        app.collectionViews.cells/*@START_MENU_TOKEN@*/.collectionViews.containing(.button, identifier:"Copy")/*[[".collectionViews.containing(.button, identifier:\"Create PDF\")",".collectionViews.containing(.button, identifier:\"Print\")",".collectionViews.containing(.button, identifier:\"Copy\")"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.buttons["More"].tap()
+        Base.helper.waitForExistence(Base.app.buttons["More"])
+        Base.helper.waitForNoExistence(Base.app.buttons["Send Tab"])
+        Base.app.collectionViews.cells/*@START_MENU_TOKEN@*/.collectionViews.containing(.button, identifier:"Copy")/*[[".collectionViews.containing(.button, identifier:\"Create PDF\")",".collectionViews.containing(.button, identifier:\"Print\")",".collectionViews.containing(.button, identifier:\"Copy\")"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.buttons["More"].tap()
 
         // Enable Send Tab
-        let sendTabButton = app.tables.cells.switches["Send Tab"]
+        let sendTabButton = Base.app.tables.cells.switches["Send Tab"]
         sendTabButton.tap()
-        app.navigationBars["Activities"].buttons["Done"].tap()
+        Base.app.navigationBars["Activities"].buttons["Done"].tap()
 
         // Send Tab option appears on the Share options sheet
-        Base.helper.waitForExistence(app.buttons["Send Tab"])
-        app.buttons["Send Tab"].tap()
+        Base.helper.waitForExistence(Base.app.buttons["Send Tab"])
+        Base.app.buttons["Send Tab"].tap()
 
         // User not logged in
-        Base.helper.waitForExistence(app.images["emptySync"])
-        XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
+        Base.helper.waitForExistence(Base.app.images["emptySync"])
+        XCTAssertTrue(Base.app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }*/
 
     private func openNewShareSheet() {
         navigator.openURL("example.com")
         navigator.goto(PageOptionsMenu)
-        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        Base.helper.waitForExistence(app.buttons["Copy"], timeout: 5)
-        let countButtons = app.collectionViews.cells.collectionViews.buttons.count
-        let fennecElement = app.collectionViews.cells.collectionViews.buttons.element(boundBy: 1)
+        Base.app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
+        Base.helper.waitForExistence(Base.app.buttons["Copy"], timeout: 5)
+        let countButtons = Base.app.collectionViews.cells.collectionViews.buttons.count
+        let fennecElement = Base.app.collectionViews.cells.collectionViews.buttons.element(boundBy: 1)
         // If Fennec has not been configured there are 5 buttons, 6 if it is there already
         if (countButtons <= 6) {
-            let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
+            let moreElement = Base.app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
             moreElement.tap()
-            Base.helper.waitForExistence(app.switches["Reminders"])
+            Base.helper.waitForExistence(Base.app.switches["Reminders"])
             // Tap on Fennec switch
-            app.switches.element(boundBy: 1).tap()
-            app.buttons["Done"].tap()
-            Base.helper.waitForExistence(app.buttons["Copy"])
+            Base.app.switches.element(boundBy: 1).tap()
+            Base.app.buttons["Done"].tap()
+            Base.helper.waitForExistence(Base.app.buttons["Copy"])
         }
         fennecElement.tap()
-        Base.helper.waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 5)
+        Base.helper.waitForExistence(Base.app.navigationBars["ShareTo.ShareView"], timeout: 5)
     }
 
     private func disableFennec() {
         navigator.nowAt(BrowserTab)
         navigator.goto(PageOptionsMenu)
-        Base.helper.waitForExistence(app.tables["Context Menu"])
-        app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        Base.helper.waitForExistence(app.buttons["Copy"])
-        let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"])
+        Base.app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
+        Base.helper.waitForExistence(Base.app.buttons["Copy"])
+        let moreElement = Base.app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
         moreElement.tap()
-        Base.helper.waitForExistence(app.switches["Reminders"])
+        Base.helper.waitForExistence(Base.app.switches["Reminders"])
         // Tap on Fennec switch
-        app.switches.element(boundBy: 1).tap()
-        app.buttons["Done"].tap()
-        Base.helper.waitForExistence(app.buttons["Copy"], timeout: 3)
+        Base.app.switches.element(boundBy: 1).tap()
+        Base.app.buttons["Done"].tap()
+        Base.helper.waitForExistence(Base.app.buttons["Copy"], timeout: 3)
     }
     // Disable issue #5554
     /*
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
-        XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
-        XCTAssertTrue(app.staticTexts["Load in Background"].exists)
-        XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
-        XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
-        XCTAssertTrue(app.staticTexts["Send to Device"].exists)
-        app.buttons["Cancel"].tap()
+        XCTAssertTrue(Base.app.staticTexts["Open in Firefox"].exists)
+        XCTAssertTrue(Base.app.staticTexts["Load in Background"].exists)
+        XCTAssertTrue(Base.app.staticTexts["Bookmark This Page"].exists)
+        XCTAssertTrue(Base.app.staticTexts["Add to Reading List"].exists)
+        XCTAssertTrue(Base.app.staticTexts["Send to Device"].exists)
+        Base.app.buttons["Cancel"].tap()
         disableFennec()
     }
 
     func testShareSheetSendToDevice() {
         openNewShareSheet()
-        app.staticTexts["Send to Device"].tap()
-        XCTAssertTrue(app.images["emptySync"].exists)
-        XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
-        Base.helper.waitForExistence(app.navigationBars.buttons["Close"], timeout: 3)
-        app.navigationBars.buttons["Close"].tap()
+        Base.app.staticTexts["Send to Device"].tap()
+        XCTAssertTrue(Base.app.images["emptySync"].exists)
+        XCTAssertTrue(Base.app.staticTexts["You are not signed in to your Firefox Account."].exists)
+        Base.helper.waitForExistence(Base.app.navigationBars.buttons["Close"], timeout: 3)
+        Base.app.navigationBars.buttons["Close"].tap()
         disableFennec()
     }
 
     func testShareSheetOpenAndCancel() {
         openNewShareSheet()
-        app.buttons["Cancel"].tap()
+        Base.app.buttons["Cancel"].tap()
         // User is back to the BrowserTab where the sharesheet was launched
-        Base.helper.waitForExistence(app.textFields["url"])
-        Base.helper.waitForValueContains(app.textFields["url"], value:"example.com/")
+        Base.helper.waitForExistence(Base.app.textFields["url"])
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value:"example.com/")
         disableFennec()
     }*/
 }

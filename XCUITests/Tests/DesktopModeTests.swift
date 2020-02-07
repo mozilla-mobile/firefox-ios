@@ -10,16 +10,16 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         if Base.helper.skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.goto(ReloadLongPressMenu)
         navigator.performAction(Action.ToggleRequestDesktopSite)
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         // Covering scenario that when reloading the page should preserve Desktop site
         navigator.performAction(Action.ReloadURL)
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
@@ -27,7 +27,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
         navigator.createNewTab()
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 }
 
@@ -37,11 +37,11 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // Go to Clear Data
         navigator.nowAt(BrowserTab)
@@ -53,7 +53,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
     func testSameHostInMultipleTabs() {
@@ -61,29 +61,29 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // Tab #2
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         // Tab #3
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
@@ -91,11 +91,11 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite) // toggle on
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // is now on in normal mode
 
@@ -105,7 +105,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite) // toggle off
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         // is now off in private, mode, confirm it is off in normal mode
 
@@ -113,7 +113,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
     func testPrivateModeOnHasNoAffectOnNormalMode() {
@@ -121,36 +121,36 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.nowAt(BrowserTab)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
     func testLongPressReload() {
         if Base.helper.skipPlatform { return }
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.goto(ReloadLongPressMenu)
         navigator.performAction(Action.ToggleRequestDesktopSite)
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         // Covering scenario that when reloading the page should preserve Desktop site
         navigator.performAction(Action.ReloadURL)
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
         navigator.performAction(Action.AcceptRemovingAllTabs)
 
@@ -158,6 +158,6 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         navigator.createNewTab()
         navigator.openURL(path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
-        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }
 }

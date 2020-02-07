@@ -30,48 +30,48 @@ class DomainAutocompleteTest: BaseTestCase {
     func testAutocomplete() {
         // Basic autocompletion cases
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("w")
+        Base.app.textFields["address"].typeText("w")
 
-        Base.helper.waitForValueContains(app.textFields["address"], value: website["value"]!)
-        let value = app.textFields["address"].value
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: website["value"]!)
+        let value = Base.app.textFields["address"].value
         XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
 
         // Enter the complete website and check that there is not more text added, just what user typed
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText(website["value"]!)
-        Base.helper.waitForValueContains(app.textFields["address"], value: website["value"]!)
-        let value2 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText(website["value"]!)
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: website["value"]!)
+        let value2 = Base.app.textFields["address"].value
         XCTAssertEqual(value2 as? String, website["value"]!, "Wrong autocompletion")
     }
     // Test that deleting characters works correctly with autocomplete
     func testAutocompleteDeletingChars() {
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("www.moz")
+        Base.app.textFields["address"].typeText("www.moz")
 
         // First delete the autocompleted part
-        app.textFields["address"].typeText("\u{0008}")
+        Base.app.textFields["address"].typeText("\u{0008}")
         // Then remove an extra char and check that the autocompletion stops working
-        app.textFields["address"].typeText("\u{0008}")
-        Base.helper.waitForValueContains(app.textFields["address"], value: "mo")
+        Base.app.textFields["address"].typeText("\u{0008}")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: "mo")
         // Then write another letter and the autocompletion works again
-        app.textFields["address"].typeText("z")
-        Base.helper.waitForValueContains(app.textFields["address"], value: "moz")
+        Base.app.textFields["address"].typeText("z")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: "moz")
 
-        let value = app.textFields["address"].value
+        let value = Base.app.textFields["address"].value
         XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
     }
     // Delete the entire string and verify that the home panels are shown again.
     func testDeleteEntireString() {
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("www.moz")
-        Base.helper.waitForExistence(app.buttons["Clear text"])
-        app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText("www.moz")
+        Base.helper.waitForExistence(Base.app.buttons["Clear text"])
+        Base.app.buttons["Clear text"].tap()
 
         // Check that the address field is empty and that the home panels are shown
-        let value = app.textFields["address"].value
+        let value = Base.app.textFields["address"].value
         XCTAssertEqual(value as? String, "", "The url has not been removed correctly")
 
-        Base.helper.waitForExistence(app.cells["TopSitesCell"])
+        Base.helper.waitForExistence(Base.app.cells["TopSitesCell"])
     }
 
     // Ensure that the scheme is included in the autocompletion.
@@ -79,95 +79,95 @@ class DomainAutocompleteTest: BaseTestCase {
         navigator.openURL(websiteExample["url"]!)
         Base.helper.waitUntilPageLoad()
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("http")
-        Base.helper.waitForValueContains(app.textFields["address"], value: "example")
-        let value = app.textFields["address"].value
+        Base.app.textFields["address"].typeText("http")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: "example")
+        let value = Base.app.textFields["address"].value
         XCTAssertEqual(value as? String, "http://www.example.com", "Wrong autocompletion")
     }
     // Non-matches.
     func testNoMatches() {
         navigator.openURL("twitter.com/login")
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("baz")
-        let value = app.textFields["address"].value
+        Base.app.textFields["address"].typeText("baz")
+        let value = Base.app.textFields["address"].value
         // Check there is not more text added, just what user typed
         XCTAssertEqual(value as? String, "baz", "Wrong autocompletion")
 
         // Ensure we don't match against TLDs.
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText(".com")
-        let value2 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText(".com")
+        let value2 = Base.app.textFields["address"].value
         // Check there is not more text added, just what user typed
         XCTAssertEqual(value2 as? String, ".com", "Wrong autocompletion")
 
         // Ensure we don't match other characters ie: ., :, /
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText(".")
-        let value3 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText(".")
+        let value3 = Base.app.textFields["address"].value
         XCTAssertEqual(value3 as? String, ".", "Wrong autocompletion")
 
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText(":")
-        let value4 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText(":")
+        let value4 = Base.app.textFields["address"].value
         XCTAssertEqual(value4 as? String, ":", "Wrong autocompletion")
 
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("/")
-        let value5 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText("/")
+        let value5 = Base.app.textFields["address"].value
         XCTAssertEqual(value5 as? String, "/", "Wrong autocompletion")
 
         // Ensure we don't match strings that don't start a word.
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("tter")
-        let value6 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText("tter")
+        let value6 = Base.app.textFields["address"].value
         XCTAssertEqual(value6 as? String, "tter", "Wrong autocompletion")
 
         // Ensure we don't match words outside of the domain
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("login")
-        let value7 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText("login")
+        let value7 = Base.app.textFields["address"].value
         XCTAssertEqual(value7 as? String, "login", "Wrong autocompletion")
     }
     // Test default domains.
     func testDefaultDomains() {
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("a")
-        Base.helper.waitForValueContains(app.textFields["address"], value: ".com")
-        let value = app.textFields["address"].value
+        Base.app.textFields["address"].typeText("a")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: ".com")
+        let value = Base.app.textFields["address"].value
         XCTAssertEqual(value as? String, "amazon.com", "Wrong autocompletion")
 
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("an")
-        Base.helper.waitForValueContains(app.textFields["address"], value: ".com")
-        let value2 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText("an")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: ".com")
+        let value2 = Base.app.textFields["address"].value
         XCTAssertEqual(value2 as? String, "answers.com", "Wrong autocompletion")
 
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("anc")
-        Base.helper.waitForValueContains(app.textFields["address"], value: ".com")
-        let value3 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText("anc")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: ".com")
+        let value3 = Base.app.textFields["address"].value
         XCTAssertEqual(value3 as? String, "ancestry.com", "Wrong autocompletion")
     }
     // Test mixed case autocompletion.
     func testMixedCaseAutocompletion() {
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("MoZ")
-        Base.helper.waitForValueContains(app.textFields["address"], value: ".org")
-        let value = app.textFields["address"].value
+        Base.app.textFields["address"].typeText("MoZ")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: ".org")
+        let value = Base.app.textFields["address"].value
         XCTAssertEqual(value as? String, "MoZilla.org", "Wrong autocompletion")
 
         // Test that leading spaces still show suggestions.
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("    moz")
-        Base.helper.waitForValueContains(app.textFields["address"], value: ".org")
-        let value2 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText("    moz")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: ".org")
+        let value2 = Base.app.textFields["address"].value
         XCTAssertEqual(value2 as? String, "    mozilla.org", "Wrong autocompletion")
 
         // Test that trailing spaces do *not* show suggestions.
-        app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("    moz ")
-        Base.helper.waitForValueContains(app.textFields["address"], value: "moz")
-        let value3 = app.textFields["address"].value
+        Base.app.buttons["Clear text"].tap()
+        Base.app.textFields["address"].typeText("    moz ")
+        Base.helper.waitForValueContains(Base.app.textFields["address"], value: "moz")
+        let value3 = Base.app.textFields["address"].value
         // No autocompletion, just what user typed
         XCTAssertEqual(value3 as? String, "    moz ", "Wrong autocompletion")
     }
@@ -178,29 +178,29 @@ class DomainAutocompleteTest: BaseTestCase {
         let url2 = ["url" : "github.com", "label" : "The world's leading software development platform · GitHub"]
 
         navigator.goto(URLBarOpen)
-        app.typeText("gith")
+        Base.app.typeText("gith")
 
-        Base.helper.waitForExistence(app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
+        Base.helper.waitForExistence(Base.app.tables["SiteTable"].cells.staticTexts[url2["label"]!])
         // There should be only one matching entry
-        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
-        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
+        XCTAssertTrue(Base.app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertFalse(Base.app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
 
         // Remove 2 chars ("th")  to have two coincidences with git
-        app.typeText("\u{0008}")
-        app.typeText("\u{0008}")
+        Base.app.typeText("\u{0008}")
+        Base.app.typeText("\u{0008}")
 
-        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
-        XCTAssertTrue(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
+        XCTAssertTrue(Base.app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertTrue(Base.app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
 
         // Remove All chars so that there is not any matches
-        let charsAddressBar: String = (app.textFields["address"].value! as? String)!
+        let charsAddressBar: String = (Base.app.textFields["address"].value! as? String)!
 
         for _ in 1...charsAddressBar.count {
-            app.typeText("\u{0008}")
+            Base.app.typeText("\u{0008}")
         }
 
-        Base.helper.waitForNoExistence(app.tables["SiteTable"].staticTexts[url2["label"]!])
-        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
-        XCTAssertFalse(app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
+        Base.helper.waitForNoExistence(Base.app.tables["SiteTable"].staticTexts[url2["label"]!])
+        XCTAssertFalse(Base.app.tables["SiteTable"].staticTexts[url2["label"]!].exists)
+        XCTAssertFalse(Base.app.tables["SiteTable"].staticTexts[url1["label"]!].exists)
     }
 }

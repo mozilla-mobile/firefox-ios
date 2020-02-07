@@ -12,9 +12,9 @@ class ScreenGraphTest: XCTestCase {
     override func setUp() {
         app = XCUIApplication()
         navigator = createTestGraph(for: self, with: app).navigator()
-        app.terminate()
-        app.launchArguments = [LaunchArguments.Test, LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew]
-        app.activate()
+        Base.app.terminate()
+        Base.app.launchArguments = [LaunchArguments.Test, LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew]
+        Base.app.activate()
     }
 }
 
@@ -107,7 +107,7 @@ extension ScreenGraphTest {
 
         func typePasscode(_ passCode: String) {
             passCode.forEach { char in
-                app.keys["\(char)"].tap()
+                Base.app.keys["\(char)"].tap()
             }
         }
 
@@ -178,37 +178,37 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
 
     map.addScreenState(FirstRun) { screenState in
         screenState.noop(to: BrowserTab)
-        screenState.tap(app.textFields["url"], to: URLBarOpen)
+        screenState.tap(Base.app.textFields["url"], to: URLBarOpen)
     }
 
     map.addScreenState(WebPageLoading) { screenState in
         screenState.dismissOnUse = true
-        // Would like to use app.otherElements.deviceStatusBars.networkLoadingIndicators.element
+        // Would like to use Base.app.otherElements.deviceStatusBars.networkLoadingIndicators.element
         // but this means exposing some of SnapshotHelper to another target.
         // screenState.onEnterWaitFor("exists != true",
-                                   // element: app.progressIndicators.element(boundBy: 0))
+                                   // element: Base.app.progressIndicators.element(boundBy: 0))
         screenState.noop(to: BrowserTab)
     }
 
     map.addScreenState(BrowserTab) { screenState in
         screenState.onEnter { userState in
-            userState.url = app.textFields["url"].value as? String
+            userState.url = Base.app.textFields["url"].value as? String
         }
 
-        screenState.tap(app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
-        screenState.tap(app.textFields["url"], to: URLBarOpen)
+        screenState.tap(Base.app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
+        screenState.tap(Base.app.textFields["url"], to: URLBarOpen)
 
         screenState.gesture(forAction: TestActions.LoadURLByPasting, TestActions.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            app.textFields["url"].press(forDuration: 1.0)
-            app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
+            Base.app.textFields["url"].press(forDuration: 1.0)
+            Base.app.tables["Context Menu"].cells["menu-PasteAndGo"].firstMatch.tap()
         }
     }
 
     map.addScreenState(URLBarOpen) { screenState in
         screenState.gesture(forAction: TestActions.LoadURLByTyping, TestActions.LoadURL) { userState in
             let urlString = userState.url ?? defaultURL
-            app.textFields["address"].typeText("\(urlString)\r")
+            Base.app.textFields["address"].typeText("\(urlString)\r")
         }
     }
 
@@ -216,29 +216,29 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.dismissOnUse = true
-        screenState.onEnterWaitFor(element: app.tables["Context Menu"])
-        screenState.tap(app.tables.cells["Settings"], to: SettingsScreen)
+        screenState.onEnterWaitFor(element: Base.app.tables["Context Menu"])
+        screenState.tap(Base.app.tables.cells["Settings"], to: SettingsScreen)
 
-        screenState.tap(app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
+        screenState.tap(Base.app.cells["menu-NightMode"], forAction: TestActions.ToggleNightMode, transitionTo: BrowserTabMenu) { userState in
             userState.nightMode = !userState.nightMode
         }
 
         screenState.backAction = {
             if isTablet {
                 // There is no Cancel option in iPad.
-                app.otherElements["PopoverDismissRegion"].tap()
+                Base.app.otherElements["PopoverDismissRegion"].tap()
             } else {
-                app.buttons["PhotonMenu.close"].tap()
+                Base.app.buttons["PhotonMenu.close"].tap()
             }
         }
     }
 
     let navigationControllerBackAction = {
-        app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
+        Base.app.navigationBars.element(boundBy: 0).buttons.element(boundBy: 0).tap()
     }
 
     map.addScreenState(SettingsScreen) { screenState in
-        let table = app.tables["AppSettingsTableViewController.tableView"]
+        let table = Base.app.tables["AppSettingsTableViewController.tableView"]
         screenState.onEnterWaitFor(element: table)
 
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettingsOff, if: "passcode == nil")
@@ -252,7 +252,7 @@ fileprivate func createTestGraph(for test: XCTestCase, with app: XCUIApplication
     }
 
     map.addScreenState(PasscodeSettingsOff) { screenState in
-        screenState.tap(app.staticTexts["Turn Passcode On"], to: SetPasscodeScreen)
+        screenState.tap(Base.app.staticTexts["Turn Passcode On"], to: SetPasscodeScreen)
         screenState.backAction = navigationControllerBackAction
     }
 

@@ -23,7 +23,7 @@ class SyncUITests: BaseTestCase {
     func testSyncUIFromBrowserTabMenu() {
         // Check menu available from HomeScreenPanel
         navigator.goto(BrowserTabMenu)
-        Base.helper.waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"].cells["menu-sync"])
         navigator.goto(FxASigninScreen)
         verifyFxASigninScreen()
 
@@ -33,41 +33,41 @@ class SyncUITests: BaseTestCase {
         navigator.openURL("mozilla.org")
         Base.helper.waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
-        Base.helper.waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
+        Base.helper.waitForExistence(Base.app.tables["Context Menu"].cells["menu-sync"])
         navigator.goto(FxASigninScreen)
         verifyFxASigninScreen()*/
     }
 
     private func verifyFxASigninScreen() {
         // Disable check, page load issues on iOS13.3 sims, issue #5937
-        Base.helper.waitForExistence(app.webViews.firstMatch, timeout: 20)
+        Base.helper.waitForExistence(Base.app.webViews.firstMatch, timeout: 20)
         // Workaround BB iOS13
-//        Base.helper.waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
-//        Base.helper.waitForExistence(app.webViews.textFields["Email"], timeout: 60)
-//        XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
-//        XCTAssertTrue(app.webViews.textFields["Email"].exists)
+//        Base.helper.waitForExistence(Base.app.navigationBars["Client.FxAContentView"], timeout: 60)
+//        Base.helper.waitForExistence(Base.app.webViews.textFields["Email"], timeout: 60)
+//        XCTAssertTrue(Base.app.navigationBars["Client.FxAContentView"].exists)
+//        XCTAssertTrue(Base.app.webViews.textFields["Email"].exists)
 //
 //        // Verify the placeholdervalues here for the textFields
 //        let mailPlaceholder = "Email"
-//        let defaultMailPlaceholder = app.webViews.textFields["Email"].placeholderValue!
+//        let defaultMailPlaceholder = Base.app.webViews.textFields["Email"].placeholderValue!
 //        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-//        XCTAssertTrue(app.webViews.buttons["Continue"].exists)
+//        XCTAssertTrue(Base.app.webViews.buttons["Continue"].exists)
     }
     // Disabling, xcode 11.3 update Issue 5937
     /*
     func testTypeOnGivenFields() {
         navigator.goto(FxASigninScreen)
-        Base.helper.waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
+        Base.helper.waitForExistence(Base.app.navigationBars["Client.FxAContentView"], timeout: 60)
 
         // Tap Sign in without any value in email Password focus on Email
         navigator.performAction(Action.FxATapOnContinueButton)
-        Base.helper.waitForExistence(app.webViews.staticTexts["Valid email required"])
+        Base.helper.waitForExistence(Base.app.webViews.staticTexts["Valid email required"])
 
         // Enter only email, wrong and correct and tap sign in
         userState.fxaUsername = "bademail"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
-        Base.helper.waitForExistence(app.webViews.staticTexts["Valid email required"])
+        Base.helper.waitForExistence(Base.app.webViews.staticTexts["Valid email required"])
 
         userState.fxaUsername = "valid@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
@@ -77,24 +77,24 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "foo"
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
-        Base.helper.waitForExistence(app.webViews.staticTexts["Must be at least 8 characters"])
+        Base.helper.waitForExistence(Base.app.webViews.staticTexts["Must be at least 8 characters"])
 
         // Enter valid but incorrect, it does not exists, password
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePassword)
-        Base.helper.waitForExistence(app.secureTextFields["Repeat password"], timeout: 10)
+        Base.helper.waitForExistence(Base.app.secureTextFields["Repeat password"], timeout: 10)
     }*/
 
     func testCreateAnAccountLink() {
         navigator.goto(FxASigninScreen)
         // Disable check, page load issues on iOS13.3 sims, issue #5937
-        Base.helper.waitForExistence(app.webViews.firstMatch, timeout: 20)
-//      Base.helper.waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
-//        Base.helper.waitForExistence(app.webViews.textFields["Email"], timeout: 40)
+        Base.helper.waitForExistence(Base.app.webViews.firstMatch, timeout: 20)
+//      Base.helper.waitForExistence(Base.app.navigationBars["Client.FxAContentView"], timeout: 60)
+//        Base.helper.waitForExistence(Base.app.webViews.textFields["Email"], timeout: 40)
 //        userState.fxaUsername = "valid@gmail.com"
 //        navigator.performAction(Action.FxATypeEmail)
 //        navigator.performAction(Action.FxATapOnContinueButton)
-//        Base.helper.waitForExistence(app.webViews.buttons["Create account"])
+//        Base.helper.waitForExistence(Base.app.webViews.buttons["Create account"])
     }
     // Disabling, xcode 11.3 update Issue 5937
     /*
@@ -102,8 +102,8 @@ class SyncUITests: BaseTestCase {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
         // Workaround BB iOS13
-        Base.helper.waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
-        Base.helper.waitForExistence(app.webViews.textFields["Email"], timeout: 50)
+        Base.helper.waitForExistence(Base.app.navigationBars["Client.FxAContentView"], timeout: 60)
+        Base.helper.waitForExistence(Base.app.webViews.textFields["Email"], timeout: 50)
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
@@ -111,10 +111,10 @@ class SyncUITests: BaseTestCase {
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"
         navigator.performAction(Action.FxATypePassword)
-        Base.helper.waitForExistence(app.webViews.staticTexts["Show password"])
+        Base.helper.waitForExistence(Base.app.webViews.staticTexts["Show password"])
         // Remove the password typed, Show (password) option should not be shown
-        app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
-        Base.helper.waitForNoExistence(app.webViews.staticTexts["Show password"])
+        Base.app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
+        Base.helper.waitForNoExistence(Base.app.webViews.staticTexts["Show password"])
     }*/
 
     // Smoketest
@@ -123,7 +123,7 @@ class SyncUITests: BaseTestCase {
         deleteInbox()
         // Log in
         navigator.goto(FxASigninScreen)
-        Base.helper.waitForExistence(app.textFields.element(boundBy: 0), timeout: 20)
+        Base.helper.waitForExistence(Base.app.textFields.element(boundBy: 0), timeout: 20)
         userState.fxaUsername = userMail
         userState.fxaPassword = password
         navigator.performAction(Action.FxATypeEmail)
@@ -131,12 +131,12 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.FxATypePassword)
         // Workaround in case the keyboard is not dismissed
         if !isTablet {
-            app.toolbars.buttons["Done"].tap()
+            Base.app.toolbars.buttons["Done"].tap()
         }
         navigator.performAction(Action.FxATapOnSignInButton)
         allowNotifications()
         // If the account is not verified need to verify it to access the menu
-        if (app.webViews.staticTexts["Confirm this sign-in"].exists) {
+        if (Base.app.webViews.staticTexts["Confirm this sign-in"].exists) {
             let group = DispatchGroup()
             group.enter()
             DispatchQueue.global(qos: .userInitiated).async {
@@ -151,23 +151,23 @@ class SyncUITests: BaseTestCase {
         navigator.nowAt(BrowserTab)
         Base.helper.waitForTabsButton()
         navigator.goto(BrowserTabMenu)
-        Base.helper.waitForExistence(app.tables.cells["menu-library"])
+        Base.helper.waitForExistence(Base.app.tables.cells["menu-library"])
         // Tap on the sync name option
         navigator.goto(FxAccountManagementPage)
-        Base.helper.waitForExistence(app.navigationBars["Firefox Account"])
-        XCTAssertTrue(app.tables.cells["Manage"].exists)
-        XCTAssertTrue(app.cells.switches["sync.engine.bookmarks.enabled"].exists)
-        XCTAssertTrue(app.cells.switches["sync.engine.history.enabled"].exists)
-        XCTAssertTrue(app.cells.switches["sync.engine.tabs.enabled"].exists)
-        XCTAssertTrue(app.cells.switches["sync.engine.passwords.enabled"].exists)
-        XCTAssertTrue(app.cells.textFields["DeviceNameSettingTextField"].exists)
-        XCTAssertTrue(app.cells["SignOut"].exists)
+        Base.helper.waitForExistence(Base.app.navigationBars["Firefox Account"])
+        XCTAssertTrue(Base.app.tables.cells["Manage"].exists)
+        XCTAssertTrue(Base.app.cells.switches["sync.engine.bookmarks.enabled"].exists)
+        XCTAssertTrue(Base.app.cells.switches["sync.engine.history.enabled"].exists)
+        XCTAssertTrue(Base.app.cells.switches["sync.engine.tabs.enabled"].exists)
+        XCTAssertTrue(Base.app.cells.switches["sync.engine.passwords.enabled"].exists)
+        XCTAssertTrue(Base.app.cells.textFields["DeviceNameSettingTextField"].exists)
+        XCTAssertTrue(Base.app.cells["SignOut"].exists)
         disconnectAccount()
     }*/
 
     private func disconnectAccount() {
-        app.cells["SignOut"].tap()
-        app.buttons["Disconnect"].tap()
+        Base.app.cells["SignOut"].tap()
+        Base.app.buttons["Disconnect"].tap()
         // Remove the history so that starting to sign is does not keep the userEmail
         navigator.nowAt(BrowserTab)
         navigator.goto(BrowserTabMenu)
@@ -180,7 +180,7 @@ class SyncUITests: BaseTestCase {
             return true
         }
         sleep(5)
-        app.swipeDown()
+        Base.app.swipeDown()
     }
 
     private func deleteInbox() {

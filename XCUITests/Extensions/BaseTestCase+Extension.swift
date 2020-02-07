@@ -10,6 +10,6 @@ import XCTest
 
 extension BaseTestCase {
     func tabTrayButton(forApp app: XCUIApplication) -> XCUIElement {
-        return Base.app.buttons["TopTabsViewController.tabsButton"].exists ? app.buttons["TopTabsViewController.tabsButton"] : app.buttons["TabToolbar.tabsButton"]
+        return Base.app.buttons["TopTabsViewController.tabsButton"].exists ? Base.app.buttons["TopTabsViewController.tabsButton"] : Base.app.buttons["TabToolbar.tabsButton"]
     }
 }

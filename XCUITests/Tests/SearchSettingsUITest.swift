@@ -12,14 +12,14 @@ class SearchSettingsUITests: BaseTestCase {
     func testDefaultSearchEngine() {
         navigator.goto(SearchSettings)
         // Check the default browser
-        let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
-        Base.helper.waitForExistence(app.tables.cells.staticTexts[defaultSearchEngine1])
+        let defaultSearchEngine = Base.app.tables.cells.element(boundBy: 0)
+        Base.helper.waitForExistence(Base.app.tables.cells.staticTexts[defaultSearchEngine1])
 
         // Change to another browser and check it is set as default
         defaultSearchEngine.tap()
-        let listOfEngines = app.tables
+        let listOfEngines = Base.app.tables
         listOfEngines.staticTexts[defaultSearchEngine2].tap()
-        Base.helper.waitForExistence(app.tables.cells.staticTexts[defaultSearchEngine2])
+        Base.helper.waitForExistence(Base.app.tables.cells.staticTexts[defaultSearchEngine2])
     }
 
     func testCustomSearchEngineIsEditable() {
@@ -27,87 +27,87 @@ class SearchSettingsUITests: BaseTestCase {
         // Add a custom search engine
         addCustomSearchEngine()
         // Check that the custom search appears on the list
-        Base.helper.waitForExistence(app.tables.cells.staticTexts[customSearchEngine["name"]!])
+        Base.helper.waitForExistence(Base.app.tables.cells.staticTexts[customSearchEngine["name"]!])
 
         // Check that it can be edited
-        XCTAssertTrue(app.buttons["Edit"].isEnabled)
-        app.buttons["Edit"].tap()
+        XCTAssertTrue(Base.app.buttons["Edit"].isEnabled)
+        Base.app.buttons["Edit"].tap()
 
-        Base.helper.waitForExistence(app.tables.buttons["Delete \(customSearchEngine["name"]!)"])
+        Base.helper.waitForExistence(Base.app.tables.buttons["Delete \(customSearchEngine["name"]!)"])
     }
 
     private func addCustomSearchEngine() {
-        Base.helper.waitForExistence(app.tables.cells["customEngineViewButton"])
-        app.tables.cells["customEngineViewButton"].tap()
-        Base.helper.waitForExistence(app.tables.cells.staticTexts["Search Engine"])
-        app.tables.cells.textViews["customEngineTitle"].tap()
-        app.tables.cells.textViews["customEngineTitle"].typeText(customSearchEngine["name"]!)
+        Base.helper.waitForExistence(Base.app.tables.cells["customEngineViewButton"])
+        Base.app.tables.cells["customEngineViewButton"].tap()
+        Base.helper.waitForExistence(Base.app.tables.cells.staticTexts["Search Engine"])
+        Base.app.tables.cells.textViews["customEngineTitle"].tap()
+        Base.app.tables.cells.textViews["customEngineTitle"].typeText(customSearchEngine["name"]!)
 
-        app.tables.cells.textViews["customEngineUrl"].tap()
-        app.tables.cells.textViews["customEngineUrl"].typeText(customSearchEngine["url"]!)
+        Base.app.tables.cells.textViews["customEngineUrl"].tap()
+        Base.app.tables.cells.textViews["customEngineUrl"].typeText(customSearchEngine["url"]!)
 
-        app.buttons["Save"].tap()
+        Base.app.buttons["Save"].tap()
         // Check that custom engine has been added successfully
-        Base.helper.waitForExistence(app.tables.cells.staticTexts[customSearchEngine["name"]!])
+        Base.helper.waitForExistence(Base.app.tables.cells.staticTexts[customSearchEngine["name"]!])
     }
 
     func testCustomSearchEngineAsDefaultIsNotEditable() {
         navigator.goto(SearchSettings)
         // Edit is disabled
-        XCTAssertFalse(app.buttons["Edit"].isEnabled)
+        XCTAssertFalse(Base.app.buttons["Edit"].isEnabled)
 
         addCustomSearchEngine()
         // Edit is enabled
-        XCTAssertTrue(app.buttons["Edit"].isEnabled)
+        XCTAssertTrue(Base.app.buttons["Edit"].isEnabled)
 
         // Select the custom engine as the default one
-        let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
+        let defaultSearchEngine = Base.app.tables.cells.element(boundBy: 0)
         defaultSearchEngine.tap()
-        let listOfEngines = app.tables
+        let listOfEngines = Base.app.tables
         listOfEngines.staticTexts[customSearchEngine["name"]!].tap()
         // Edit is disabled
-        XCTAssertFalse(app.buttons["Edit"].isEnabled)
+        XCTAssertFalse(Base.app.buttons["Edit"].isEnabled)
     }
 
     func testNavigateToSearchPickerTurnsOffEditing() {
         navigator.goto(SearchSettings)
         // Edit is disabled
-        XCTAssertFalse(app.buttons["Edit"].isEnabled)
+        XCTAssertFalse(Base.app.buttons["Edit"].isEnabled)
 
         addCustomSearchEngine()
         // Edit is enabled
-        XCTAssertTrue(app.buttons["Edit"].isEnabled)
-        app.buttons["Edit"].tap()
-        XCTAssertTrue(app.buttons["Done"].isEnabled)
+        XCTAssertTrue(Base.app.buttons["Edit"].isEnabled)
+        Base.app.buttons["Edit"].tap()
+        XCTAssertTrue(Base.app.buttons["Done"].isEnabled)
 
         // Navigate to the search engine picker and back
-        let defaultSearchEngine = app.tables.cells.element(boundBy: 0)
+        let defaultSearchEngine = Base.app.tables.cells.element(boundBy: 0)
         defaultSearchEngine.tap()
-        app.buttons["Cancel"].tap()
+        Base.app.buttons["Cancel"].tap()
 
         // Check to see we're not in editing state, edit is enable and done does not appear
-        XCTAssertTrue(app.buttons["Edit"].isEnabled)
-        Base.helper.waitForNoExistence(app.buttons["Done"])
+        XCTAssertTrue(Base.app.buttons["Edit"].isEnabled)
+        Base.helper.waitForNoExistence(Base.app.buttons["Done"])
 
         //Make sure switches are there
-        XCTAssertEqual(app.tables.cells.switches.count, app.tables.cells.count - 2)
+        XCTAssertEqual(Base.app.tables.cells.switches.count, Base.app.tables.cells.count - 2)
     }
 
     func testDeletingLastCustomEngineExitsEditing() {
         navigator.goto(SearchSettings)
         // Edit is disabled
-        XCTAssertFalse(app.buttons["Edit"].isEnabled)
+        XCTAssertFalse(Base.app.buttons["Edit"].isEnabled)
         // Add a custom search engine
         addCustomSearchEngine()
-        XCTAssertTrue(app.buttons["Edit"].isEnabled)
+        XCTAssertTrue(Base.app.buttons["Edit"].isEnabled)
 
-        app.buttons["Edit"].tap()
-        XCTAssertTrue(app.buttons["Done"].isEnabled)
+        Base.app.buttons["Edit"].tap()
+        XCTAssertTrue(Base.app.buttons["Done"].isEnabled)
         // Remove the custom search engine and check that edit is disabled
-        let tablesQuery = app.tables
+        let tablesQuery = Base.app.tables
         tablesQuery.buttons["Delete \(customSearchEngine["name"]!)"].tap()
         tablesQuery.buttons["Delete"].tap()
 
-        XCTAssertFalse(app.buttons["Edit"].isEnabled)
+        XCTAssertFalse(Base.app.buttons["Edit"].isEnabled)
     }
 }

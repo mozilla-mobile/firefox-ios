@@ -7,7 +7,7 @@ import XCTest
 class SettingsTest: BaseTestCase {
     func testHelpOpensSUMOInTab() {
         navigator.goto(SettingsScreen)
-        let settingsTableView = app.tables["AppSettingsTableViewController.tableView"]
+        let settingsTableView = Base.app.tables["AppSettingsTableViewController.tableView"]
 
         while settingsTableView.staticTexts["Help"].exists == false {
             settingsTableView.swipeUp()
@@ -17,18 +17,18 @@ class SettingsTest: BaseTestCase {
         helpMenu.tap()
 
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForValueContains(app.textFields["url"], value: "support.mozilla.org")
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: "support.mozilla.org")
         if Base.helper.iPad() {
-            Base.helper.waitForExistence(app.webViews.staticTexts["Firefox for iOS Support"])
+            Base.helper.waitForExistence(Base.app.webViews.staticTexts["Firefox for iOS Support"])
         } else {
-            Base.helper.waitForExistence(app.webViews.staticTexts["Firefox for iOS"])
+            Base.helper.waitForExistence(Base.app.webViews.staticTexts["Firefox for iOS"])
         }
-        let numTabs = app.buttons["Show Tabs"].value
+        let numTabs = Base.app.buttons["Show Tabs"].value
         XCTAssertEqual("2", numTabs as? String, "Sume should be open in a different tab")
     }
 
     func testOpenSiriOption() {
         navigator.performAction(Action.OpenSiriFromSettings)
-        Base.helper.waitForExistence(app.buttons["Add to Siri"], timeout: 5)
+        Base.helper.waitForExistence(Base.app.buttons["Add to Siri"], timeout: 5)
     }
 }

@@ -8,8 +8,8 @@ class AuthenticationTest: BaseTestCase {
 
     fileprivate func setInterval(_ interval: String = "Immediately") {
         navigator.goto(PasscodeIntervalSettings)
-        let table = app.tables["AuthenticationManager.settingsTableView"]
-        app.staticTexts[interval].tap()
+        let table = Base.app.tables["AuthenticationManager.settingsTableView"]
+        Base.app.staticTexts[interval].tap()
         navigator.goto(PasscodeSettings)
         Base.helper.waitForExistence(table.staticTexts[interval])
     }
@@ -17,7 +17,7 @@ class AuthenticationTest: BaseTestCase {
     func testTurnOnOff() {
         navigator.performAction(Action.SetPasscode)
         setInterval("Immediately")
-        XCTAssertTrue(app.staticTexts["Immediately"].exists)
+        XCTAssertTrue(Base.app.staticTexts["Immediately"].exists)
         navigator.performAction(Action.DisablePasscode)
     }
 
@@ -26,7 +26,7 @@ class AuthenticationTest: BaseTestCase {
 
         userState.newPasscode = "222222"
         navigator.performAction(Action.ChangePasscode)
-        Base.helper.waitForExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode Off"])
+        Base.helper.waitForExistence(Base.app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode Off"])
         navigator.performAction(Action.DisablePasscode)
     }
 
@@ -35,36 +35,36 @@ class AuthenticationTest: BaseTestCase {
         navigator.performAction(Action.SetPasscode)
         navigator.goto(SettingsScreen)
         navigator.performAction(Action.UnlockLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
 
         //send app to background, and re-enter
         XCUIDevice.shared.press(.home)
-        app.activate()
-        let contentView = app.navigationBars["Client.FxAContentView"]
+        Base.app.activate()
+        let contentView = Base.app.navigationBars["Client.FxAContentView"]
         if contentView.exists {
-            app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
+            Base.app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
         }
         navigator.nowAt(SettingsScreen)
         navigator.goto(LockedLoginsSettings)
-        Base.helper.waitForExistence(app.navigationBars["Enter Passcode"])
+        Base.helper.waitForExistence(Base.app.navigationBars["Enter Passcode"])
     }
 
     func testPromptPassCodeUponReentryWithDelay() {
         navigator.performAction(Action.SetPasscode)
         setInterval("After 5 minutes")
         navigator.performAction(Action.UnlockLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
 
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
-        app.activate()
-        let contentView = app.navigationBars["Client.FxAContentView"]
+        Base.app.activate()
+        let contentView = Base.app.navigationBars["Client.FxAContentView"]
         if contentView.exists {
-            app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
+            Base.app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
         }
         navigator.nowAt(SettingsScreen)
         navigator.goto(LockedLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
     }
 
     func testChangePasscodeShowsErrorStates() {
@@ -72,50 +72,50 @@ class AuthenticationTest: BaseTestCase {
 
         userState.passcode = "222222"
         navigator.performAction(Action.ConfirmPasscodeToChangePasscode)
-        Base.helper.waitForExistence(app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 2)."])
+        Base.helper.waitForExistence(Base.app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 2)."])
         navigator.performAction(Action.ConfirmPasscodeToChangePasscode)
-        Base.helper.waitForExistence(app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 1)."])
+        Base.helper.waitForExistence(Base.app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 1)."])
 
         userState.passcode = "111111"
         navigator.performAction(Action.ConfirmPasscodeToChangePasscode)
-        Base.helper.waitForExistence(app.staticTexts["Enter a new passcode"])
+        Base.helper.waitForExistence(Base.app.staticTexts["Enter a new passcode"])
 
         // Enter same passcode as new one
         userState.newPasscode = "111111"
         navigator.performAction(Action.ChangePasscodeTypeOnce)
-        Base.helper.waitForExistence(app.staticTexts["New passcode must be different than existing code."])
+        Base.helper.waitForExistence(Base.app.staticTexts["New passcode must be different than existing code."])
 
         // Enter mismatched passcode
         userState.newPasscode = "444444"
         navigator.performAction(Action.ChangePasscodeTypeOnce)
-        Base.helper.waitForExistence(app.staticTexts["Re-enter passcode"])
+        Base.helper.waitForExistence(Base.app.staticTexts["Re-enter passcode"])
         userState.newPasscode = "444445"
         navigator.performAction(Action.ChangePasscodeTypeOnce)
-        Base.helper.waitForExistence(app.staticTexts["Passcodes didn’t match. Try again."])
+        Base.helper.waitForExistence(Base.app.staticTexts["Passcodes didn’t match. Try again."])
 
         // Put proper password
         userState.newPasscode = "555555"
-        XCTAssertTrue(app.staticTexts["Enter a new passcode"].exists)
+        XCTAssertTrue(Base.app.staticTexts["Enter a new passcode"].exists)
         navigator.performAction(Action.ChangePasscodeTypeOnce)
-        Base.helper.waitForExistence(app.staticTexts["Re-enter passcode"])
+        Base.helper.waitForExistence(Base.app.staticTexts["Re-enter passcode"])
         navigator.performAction(Action.ChangePasscodeTypeOnce)
-        Base.helper.waitForExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode Off"])
+        Base.helper.waitForExistence(Base.app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode Off"])
     }
 
     func testChangeRequirePasscodeInterval() {
         navigator.performAction(Action.SetPasscode)
         navigator.goto(PasscodeIntervalSettings)
 
-        Base.helper.waitForExistence(app.staticTexts["Immediately"])
-        XCTAssertTrue(app.staticTexts["After 1 minute"].exists)
-        XCTAssertTrue(app.staticTexts["After 5 minutes"].exists)
-        XCTAssertTrue(app.staticTexts["After 10 minutes"].exists)
-        XCTAssertTrue(app.staticTexts["After 15 minutes"].exists)
-        XCTAssertTrue(app.staticTexts["After 1 hour"].exists)
+        Base.helper.waitForExistence(Base.app.staticTexts["Immediately"])
+        XCTAssertTrue(Base.app.staticTexts["After 1 minute"].exists)
+        XCTAssertTrue(Base.app.staticTexts["After 5 minutes"].exists)
+        XCTAssertTrue(Base.app.staticTexts["After 10 minutes"].exists)
+        XCTAssertTrue(Base.app.staticTexts["After 15 minutes"].exists)
+        XCTAssertTrue(Base.app.staticTexts["After 1 hour"].exists)
 
-        app.staticTexts["After 15 minutes"].tap()
+        Base.app.staticTexts["After 15 minutes"].tap()
         navigator.goto(PasscodeSettings)
-        let table = app.tables["AuthenticationManager.settingsTableView"]
+        let table = Base.app.tables["AuthenticationManager.settingsTableView"]
         Base.helper.waitForExistence(table.staticTexts["After 15 minutes"])
 
         // Since we set to 15 min, it shouldn't ask for password again, but it skips verification
@@ -132,12 +132,12 @@ class AuthenticationTest: BaseTestCase {
 
         // Enter login
         navigator.performAction(Action.UnlockLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
         navigator.goto(SettingsScreen)
         // Trying again should display passcode screen since we've set the interval to be immediately.
         navigator.goto(LockedLoginsSettings)
-        Base.helper.waitForExistence(app.navigationBars["Enter Passcode"], timeout: 3)
-        app.buttons["Cancel"].tap()
+        Base.helper.waitForExistence(Base.app.navigationBars["Enter Passcode"], timeout: 3)
+        Base.app.buttons["Cancel"].tap()
         navigator.nowAt(SettingsScreen)
         navigator.goto(PasscodeSettings)
         navigator.performAction(Action.DisablePasscode)
@@ -149,25 +149,25 @@ class AuthenticationTest: BaseTestCase {
 
         // Now we've changed the timeout, we should prompt next time for passcode.
         navigator.performAction(Action.UnlockLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
 
         // Trying again should not display the passcode screen since the interval is 5 minutes
         navigator.goto(SettingsScreen)
         navigator.goto(LockedLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
 
         navigator.goto(PasscodeSettings)
-        Base.helper.waitForExistence(app.staticTexts["After 5 minutes"])
+        Base.helper.waitForExistence(Base.app.staticTexts["After 5 minutes"])
         navigator.performAction(Action.DisablePasscode)
     }
 
     func testEnteringLoginsWithNoPasscode() {
         // It is disabled
         navigator.goto(PasscodeSettings)
-        Base.helper.waitForExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
+        Base.helper.waitForExistence(Base.app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
 
         navigator.goto(LoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
     }
 
     func testWrongPasscodeDisplaysAttemptsAndMaxError() {
@@ -176,16 +176,16 @@ class AuthenticationTest: BaseTestCase {
 
         // Enter wrong passcode
         navigator.goto(LockedLoginsSettings)
-        Base.helper.waitForExistence(app.navigationBars["Enter Passcode"])
+        Base.helper.waitForExistence(Base.app.navigationBars["Enter Passcode"])
 
         navigator.performAction(Action.LoginPasscodeTypeIncorrectOne)
-        Base.helper.waitForExistence(app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 2)."])
+        Base.helper.waitForExistence(Base.app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 2)."])
         navigator.nowAt(LockedLoginsSettings)
         navigator.performAction(Action.LoginPasscodeTypeIncorrectOne)
-        Base.helper.waitForExistence(app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 1)."])
+        Base.helper.waitForExistence(Base.app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 1)."])
         navigator.nowAt(LockedLoginsSettings)
         navigator.performAction(Action.LoginPasscodeTypeIncorrectOne)
-        Base.helper.waitForExistence(app.staticTexts["Maximum attempts reached. Please try again later."])
+        Base.helper.waitForExistence(Base.app.staticTexts["Maximum attempts reached. Please try again later."])
     }
 
     func testWrongPasscodeAttemptsPersistAcrossEntryAndConfirmation() {
@@ -193,24 +193,24 @@ class AuthenticationTest: BaseTestCase {
 
         // Enter wrong passcode on Logins
         navigator.goto(LockedLoginsSettings)
-        Base.helper.waitForExistence(app.navigationBars["Enter Passcode"])
+        Base.helper.waitForExistence(Base.app.navigationBars["Enter Passcode"])
 
         navigator.performAction(Action.LoginPasscodeTypeIncorrectOne)
-        Base.helper.waitForExistence(app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 2)."])
-        app.buttons["Cancel"].tap()
+        Base.helper.waitForExistence(Base.app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 2)."])
+        Base.app.buttons["Cancel"].tap()
 
         // Go back to Passcode, and enter a wrong passcode, notice the error count
         navigator.goto(PasscodeSettings)
         userState.passcode = "222222"
         navigator.performAction(Action.ConfirmPasscodeToChangePasscode)
 
-        Base.helper.waitForExistence(app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 1)."])
-        app.buttons["Cancel"].tap()
+        Base.helper.waitForExistence(Base.app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 1)."])
+        Base.app.buttons["Cancel"].tap()
 
         userState.passcode = "111111"
         navigator.nowAt(PasscodeSettings)
         navigator.performAction(Action.DisablePasscode)
-        Base.helper.waitForExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
+        Base.helper.waitForExistence(Base.app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
     }
 
     func testChangedPasswordMustBeNew() {
@@ -218,33 +218,33 @@ class AuthenticationTest: BaseTestCase {
         userState.newPasscode = "111111"
 
         navigator.performAction(Action.ChangePasscode)
-        Base.helper.waitForExistence(app.staticTexts["New passcode must be different than existing code."])
-        app.navigationBars["Change Passcode"].buttons["Cancel"].tap()
+        Base.helper.waitForExistence(Base.app.staticTexts["New passcode must be different than existing code."])
+        Base.app.navigationBars["Change Passcode"].buttons["Cancel"].tap()
 
         navigator.performAction(Action.DisablePasscode)
-        Base.helper.waitForExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
+        Base.helper.waitForExistence(Base.app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
     }
 
     func testPasscodesMustMatchWhenCreating() {
         navigator.performAction(Action.SetPasscodeTypeOnce)
-        Base.helper.waitForExistence(app.staticTexts["Re-enter passcode"])
+        Base.helper.waitForExistence(Base.app.staticTexts["Re-enter passcode"])
 
         // Enter a passcode that does not match
         userState.newPasscode = "333333"
         navigator.performAction(Action.SetPasscodeTypeOnce)
-        Base.helper.waitForExistence(app.staticTexts["Passcodes didn’t match. Try again."])
-        Base.helper.waitForExistence(app.staticTexts["Enter a passcode"])
+        Base.helper.waitForExistence(Base.app.staticTexts["Passcodes didn’t match. Try again."])
+        Base.helper.waitForExistence(Base.app.staticTexts["Enter a passcode"])
     }
 
     func testPasscodeMustBeCorrectWhenRemoving() {
         navigator.performAction(Action.SetPasscode)
-        XCTAssertTrue(app.staticTexts["Immediately"].exists)
+        XCTAssertTrue(Base.app.staticTexts["Immediately"].exists)
 
         navigator.performAction(Action.DisablePasscodeTypeIncorrectPasscode)
-        Base.helper.waitForExistence(app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 2)."])
+        Base.helper.waitForExistence(Base.app.staticTexts["Incorrect passcode. Try again (Attempts remaining: 2)."])
 
         navigator.performAction(Action.DisablePasscode)
-        Base.helper.waitForExistence(app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
+        Base.helper.waitForExistence(Base.app.tables["AuthenticationManager.settingsTableView"].staticTexts["Turn Passcode On"])
     }
 
     func testChangingIntervalResetsValidationTimer() {
@@ -252,7 +252,7 @@ class AuthenticationTest: BaseTestCase {
 
         // Enter login, since the default is 'set immediately,' it will ask for passcode
         navigator.performAction(Action.UnlockLoginsSettings)
-        Base.helper.waitForExistence(app.tables["Login List"])
+        Base.helper.waitForExistence(Base.app.tables["Login List"])
 
         // Change it to 15 minutes
         navigator.goto(PasscodeSettings)
@@ -260,7 +260,7 @@ class AuthenticationTest: BaseTestCase {
 
         // Enter login, since the interval is reset, it will ask for password again
         navigator.goto(LockedLoginsSettings)
-        Base.helper.waitForExistence(app.navigationBars["Enter Passcode"])
+        Base.helper.waitForExistence(Base.app.navigationBars["Enter Passcode"])
         navigator.performAction(Action.UnlockLoginsSettings)
     }
 }
