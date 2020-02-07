@@ -65,7 +65,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         // Select some text and long press to find the option
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
         snapshot("07LongPressTextOptions-01")
-        waitForExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
+        Base.helper.waitForExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
         app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
         snapshot("07LongPressTextOptions-02")
     }
@@ -200,7 +200,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test21ReaderModeSettingsMenu() {
-        loadWebPage(url: "en.m.wikipedia.org/wiki/Main_Page")
+        Base.helper.loadWebPage(url: "en.m.wikipedia.org/wiki/Main_Page")
         app.buttons["TabLocationView.readerModeButton"].tap()
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         snapshot("21ReaderModeSettingsMenu-01")
@@ -216,7 +216,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
 
         // Website with blocked elements
         navigator.openNewURL(urlString: "twitter.com")
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        Base.helper.waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
         snapshot("22TrackingProtectionBlockedElements-01")
         // Tap on the block element to get more details
@@ -230,12 +230,12 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
         snapshot("23TrackingProtectionBasicMoreInfo-01")
 
-        waitForExistence(app.navigationBars["Client.TPAccessoryInfo"])
+        Base.helper.waitForExistence(app.navigationBars["Client.TPAccessoryInfo"])
         // Go back to TP settings
         app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.tap()
 
         // See Strict mode info
-        waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListStrict"])
+        Base.helper.waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListStrict"])
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.tap()
         app.tables.cells.staticTexts.firstMatch.swipeUp()
         snapshot("23TrackingProtectionStrictMoreInfo-02")

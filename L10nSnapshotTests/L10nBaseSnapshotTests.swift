@@ -42,7 +42,7 @@ class L10nBaseSnapshotTests: XCTestCase {
         app.activate()
     }
 
-    func waitForExistence(_ element: XCUIElement) {
+    func Base.helper.waitForExistence(_ element: XCUIElement) {
         let exists = NSPredicate(format: "exists == true")
 
         expectation(for: exists, evaluatedWith: element, handler: nil)
@@ -56,12 +56,12 @@ class L10nBaseSnapshotTests: XCTestCase {
         waitForExpectations(timeout: 20, handler: nil)
     }
 
-    func loadWebPage(url: String, waitForOtherElementWithAriaLabel ariaLabel: String) {
+    func Base.helper.loadWebPage(url: String, waitForOtherElementWithAriaLabel ariaLabel: String) {
         userState.url = url
         navigator.performAction(Action.LoadURL)
     }
 
-    func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
+    func Base.helper.loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
         userState.url = url
         navigator.performAction(Action.LoadURL)
     }

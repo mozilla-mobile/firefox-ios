@@ -70,20 +70,20 @@ class MarketingSnapshotTests: XCTestCase {
         addTabButton.tap()
 
         // load some web pages in some new tabs
-        loadWebPage("http://twitter.com", testForAutocompleteDialog: true)
+        Base.helper.loadWebPage("http://twitter.com", testForAutocompleteDialog: true)
 
         app.staticTexts.firstWithName("2").tap()
         addTabButton.tap()
-        loadWebPage("https://mozilla.org/firefox/desktop")
+        Base.helper.loadWebPage("https://mozilla.org/firefox/desktop")
 
         app.staticTexts.firstWithName("3").tap()
         addTabButton.tap()
-        loadWebPage("https://mozilla.org")
+        Base.helper.loadWebPage("https://mozilla.org")
         app.staticTexts.firstWithName("4").tap()
         addTabButton.tap()
 
-        loadWebPage("firefox")
-        loadWebPage("https://mozilla.org/firefox/new")
+        Base.helper.loadWebPage("firefox")
+        Base.helper.loadWebPage("https://mozilla.org/firefox/new")
         app.staticTexts.firstWithName("5").tap()
         snapshot("02TabTray")
 
