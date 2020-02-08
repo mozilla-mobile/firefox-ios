@@ -225,7 +225,8 @@ class ReaderModeStyleViewController: UIViewController, Themeable {
     fileprivate func selectFontType(_ fontType: ReaderModeFontType) {
         readerModeStyle.fontType = fontType
         for button in fontTypeButtons {
-            button.isSelected = (button.fontType == fontType)
+            button.isSelected = button.fontType.isSameFamily(fontType)
+            
         }
         for button in themeButtons {
             button.fontType = fontType

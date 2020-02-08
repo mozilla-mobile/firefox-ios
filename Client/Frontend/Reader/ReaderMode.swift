@@ -31,6 +31,12 @@ enum ReaderModeTheme: String {
     case sepia = "sepia"
 }
 
+private struct FontFamily {
+    static let serifFamily = [ReaderModeFontType.serif, ReaderModeFontType.serifBold]
+    static let sansFamily = [ReaderModeFontType.sansSerif, ReaderModeFontType.sansSerifBold]
+    static let families = [serifFamily, sansFamily]
+}
+
 enum ReaderModeFontType: String {
     case serif = "serif"
     case serifBold = "serif-bold"
@@ -38,10 +44,10 @@ enum ReaderModeFontType: String {
     case sansSerifBold = "sans-serif-bold"
     
     init(type: String) {
-        let fontFamily = ReaderModeFontType(rawValue: type)
+        let font = ReaderModeFontType(rawValue: type)
         let isBoldFontEnabled = UIAccessibility.isBoldTextEnabled
         
-        switch fontFamily {
+        switch font {
         case .serif,
              .serifBold:
             self = isBoldFontEnabled ? .serifBold : .serif
@@ -51,6 +57,10 @@ enum ReaderModeFontType: String {
         case .none:
             self = .sansSerif
         } 
+    }
+    
+    func isSameFamily(_ font: ReaderModeFontType) -> Bool {        
+        return !FontFamily.families.filter { $0.contains(font) && $0.contains(self) }.isEmpty        
     }
 }
 
