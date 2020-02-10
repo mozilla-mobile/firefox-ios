@@ -9,7 +9,7 @@ let website_2 = ["url": "www.example.com", "label": "Example", "value": "example
 
 let urlAddons = "addons.mozilla.org"
 let urlGoogle = "www.google.com"
-let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
+let popUpTestUrl = Base.helper.path(forTestPage: "test-popup-blocker.html")
 
 let requestMobileSiteLabel = "Request Mobile Site"
 let requestDesktopSiteLabel = "Request Desktop Site"
@@ -34,7 +34,7 @@ class NavigationTest: BaseTestCase {
         }
 
         // Once an url has been open, the back button is enabled but not the forward button
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-example.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForValueContains(Base.app.textFields["url"], value: "test-example.html")
         if Base.helper.iPad() {
@@ -46,7 +46,7 @@ class NavigationTest: BaseTestCase {
         }
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForValueContains(Base.app.textFields["url"], value: "test-mozilla-org.html")
         if Base.helper.iPad() {
@@ -171,7 +171,7 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testLongPressLinkOptions() {
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-example.html"))
         Base.app.webViews.links[website_2["link"]!].press(forDuration: 2)
         Base.helper.waitForExistence(Base.app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
         XCTAssertTrue(Base.app.buttons["Open in New Tab"].exists, "The option is not shown")
@@ -182,7 +182,7 @@ class NavigationTest: BaseTestCase {
 
     func testLongPressLinkOptionsPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-example.html"))
         Base.app.webViews.links[website_2["link"]!].press(forDuration: 2)
         Base.helper.waitForExistence(Base.app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
         XCTAssertFalse(Base.app.buttons["Open in New Tab"].exists, "The option is not shown")
@@ -279,7 +279,7 @@ class NavigationTest: BaseTestCase {
     }*/
 
     private func longPressLinkOptions(optionSelected: String) {
-        navigator.openURL(path(forTestPage: "test-example.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-example.html"))
         Base.helper.waitUntilPageLoad()
         Base.app.webViews.links[website_2["link"]!].press(forDuration: 2)
         Base.app.buttons[optionSelected].tap()
@@ -386,7 +386,7 @@ class NavigationTest: BaseTestCase {
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
         navigator.goto(BrowserTab)
-        navigator.openURL(path(forTestPage: "test-window-opener.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-window-opener.html"))
         Base.helper.waitForExistence(Base.app.links["link-created-by-parent"], timeout: 10)
     }
  }

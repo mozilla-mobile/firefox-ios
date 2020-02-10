@@ -7,7 +7,7 @@ import XCTest
 class ReaderViewTest: BaseTestCase {
     // Smoketest
     func testLoadReaderContent() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         Base.app.buttons["Reader View"].tap()
         Base.app.buttons["Reload"].tap()
@@ -17,7 +17,7 @@ class ReaderViewTest: BaseTestCase {
     }
 
     private func addContentToReaderView() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         Base.helper.waitUntilPageLoad()
         Base.app.buttons["Reader View"].tap()
@@ -163,7 +163,7 @@ class ReaderViewTest: BaseTestCase {
         checkReadingListNumberOfItems(items: 0)
 
         // Add item to Reading List from Page Options Menu
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         Base.helper.waitUntilPageLoad()
         navigator.browserPerformAction(.addReadingListOption)

@@ -186,7 +186,7 @@ class SearchTests: BaseTestCase {
     }
 
     func testSearchWithFirefoxOption() {
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-book.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForExistence(Base.app.webViews.staticTexts["cloud"], timeout: 10)
         // Select some text and long press to find the option

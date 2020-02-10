@@ -9,7 +9,7 @@ let urlLabel = "Internet for people, not profit — Mozilla"
 let urlValue = "mozilla.org"
 let urlValueLong = "localhost:\(serverPort)/test-fixture/test-mozilla-org.html"
 
-let urlExample = path(forTestPage: "test-example.html")
+let urlExample = Base.helper.path(forTestPage: "test-example.html")
 let urlLabelExample = "Example Domain"
 let urlValueExample = "example"
 let urlValueLongExample = "localhost:\(serverPort)/test-fixture/test-example.html"
@@ -20,7 +20,7 @@ class TopTabsTest: BaseTestCase {
     func testAddTabFromTabTray() {
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
         // The tabs counter shows the correct number
@@ -64,7 +64,7 @@ class TopTabsTest: BaseTestCase {
 
     func testSwitchBetweenTabs() {
         // Open two urls from tab tray and switch between them
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
         navigator.openURL(urlExample)
@@ -87,7 +87,7 @@ class TopTabsTest: BaseTestCase {
     }
 
     func testCloseOneTab() {
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
@@ -111,7 +111,7 @@ class TopTabsTest: BaseTestCase {
     // Smoketest
     func testCloseAllTabsUndo() {
         // A different tab than home is open to do the proper checks
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
         navigator.nowAt(BrowserTab)
@@ -143,7 +143,7 @@ class TopTabsTest: BaseTestCase {
     func testCloseAllTabsPrivateModeUndo() {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
 
@@ -170,7 +170,7 @@ class TopTabsTest: BaseTestCase {
 
     func testCloseAllTabs() {
         // A different tab than home is open to do the proper checks
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all
@@ -194,7 +194,7 @@ class TopTabsTest: BaseTestCase {
     func testCloseAllTabsPrivateMode() {
         // A different tab than home is open to do the proper checks
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
         // Add several tabs from tab tray menu and check that the  number is correct before closing all

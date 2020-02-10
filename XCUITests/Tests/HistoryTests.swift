@@ -79,7 +79,7 @@ class HistoryTests: BaseTestCase {
         // Go to the default web site  and check whether the option is enabled
         navigator.nowAt(LibraryPanel_History)
         navigator.goto(HomePanelsScreen)
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         navigator.goto(BrowserTabMenu)
         // Workaround to bug 1508368
@@ -91,7 +91,7 @@ class HistoryTests: BaseTestCase {
         navigator.goto(HomePanelsScreen)
 
         // Now go back to default website close it and check whether the option is enabled
-        navigator.openURL(path(forTestPage: "test-mozilla-book.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-book.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
@@ -117,7 +117,7 @@ class HistoryTests: BaseTestCase {
 
     func testClearRecentlyClosedHistory() {
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
@@ -141,7 +141,7 @@ class HistoryTests: BaseTestCase {
 
     func testLongTapOptionsRecentlyClosedItem() {
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
@@ -159,7 +159,7 @@ class HistoryTests: BaseTestCase {
 
     func testOpenInNewTabRecentlyClosedItem() {
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
@@ -180,7 +180,7 @@ class HistoryTests: BaseTestCase {
 
     func testOpenInNewPrivateTabRecentlyClosedItem() {
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
@@ -204,10 +204,10 @@ class HistoryTests: BaseTestCase {
         Base.helper.waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         // Open the default website
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         // It is necessary to open two sites so that when one is closed private mode is not closed
-        navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
+        navigator.openNewURL(urlString: Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)

@@ -13,4 +13,6 @@ class UIElements {
     static let siteTablesFirstTextField = Base.app.tables["SiteTable"].cells.textFields.firstMatch
     static let urlTextField = Base.app.tables["SiteTable"].cells.textFields["https://"]
     static let newBookmarkNavigationBar = Base.app.navigationBars["New Bookmark"]
+    static let tabTrayButton = Base.app.buttons["TopTabsViewController.tabsButton"].waitForExistence(timeout: Constants.defaultWaitTime) ?
+        Base.app.buttons["TopTabsViewController.tabsButton"] : Base.app.buttons["TabToolbar.tabsButton"]
 }

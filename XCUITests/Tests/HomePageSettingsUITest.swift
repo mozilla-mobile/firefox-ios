@@ -50,7 +50,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual(valueAfter as? String, "http://example.com")
 
         // Check that it is actually set by opening a different website and going to Home
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         navigator.goto(BrowserTabMenu)
 
         //Now check open home page should load the previously saved home page
@@ -74,7 +74,7 @@ class HomePageSettingsUITests: BaseTestCase {
         XCTAssertEqual("Enter a webpage", valueAfter as! String)
 
         // There is no option to go to Home, instead the website open has the option to be set as HomePageSettings
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForExistence(Base.app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(BrowserTabMenu)

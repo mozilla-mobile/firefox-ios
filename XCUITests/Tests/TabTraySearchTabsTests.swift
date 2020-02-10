@@ -8,7 +8,7 @@ class TabTraySearchTabsTests: BaseTestCase {
 
     func testSearchTabs() {
         // Open two tabs and go to tab tray
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitForTabsButton()
         navigator.openNewURL(urlString: secondURL)
         Base.helper.waitForTabsButton()
@@ -41,9 +41,9 @@ class TabTraySearchTabsTests: BaseTestCase {
         navigator.performAction(Action.TogglePrivateMode)
         navigator.goto(NewTabScreen)
         // Open two tabs to check that the search works
-        navigator.openNewURL(urlString: path(forTestPage: "test-mozilla-org.html"))
+        navigator.openNewURL(urlString: Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitUntilPageLoad()
-        navigator.openNewURL(urlString: path(forTestPage: "test-example.html"))
+        navigator.openNewURL(urlString: Base.helper.path(forTestPage: "test-example.html"))
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
         searchTabs(tabTitleOrUrl: "internet")
@@ -61,7 +61,7 @@ class TabTraySearchTabsTests: BaseTestCase {
     }*/
 
     func testSearchFieldClearedAfterVisingWebsite() {
-        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-mozilla-org.html"))
         Base.helper.waitForTabsButton()
         navigator.goto(TabTray)
         searchTabs(tabTitleOrUrl: "mozilla")

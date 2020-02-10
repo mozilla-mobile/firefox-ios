@@ -8,7 +8,7 @@ import XCTest
 class DesktopModeTestsIpad: IpadOnlyTestCase {
     func testLongPressReload() {
         if Base.helper.skipPlatform { return }
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
 
@@ -25,7 +25,7 @@ class DesktopModeTestsIpad: IpadOnlyTestCase {
 
         // Covering scenario that when closing a tab and re-opening should preserve Mobile mode
         navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
@@ -35,7 +35,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
     func testClearPrivateData() {
         if Base.helper.skipPlatform { return }
 
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(PageOptionsMenu)
@@ -51,7 +51,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         // Tab #2
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
@@ -59,7 +59,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
     func testSameHostInMultipleTabs() {
         if Base.helper.skipPlatform { return }
 
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(PageOptionsMenu)
@@ -70,7 +70,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         // Tab #2
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
         navigator.goto(PageOptionsMenu)
@@ -81,7 +81,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         // Tab #3
         navigator.nowAt(BrowserTab)
         navigator.performAction(Action.OpenNewTabLongPressTabsButton)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
@@ -89,7 +89,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
         if Base.helper.skipPlatform { return }
 
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
         navigator.goto(PageOptionsMenu)
@@ -101,7 +101,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.nowAt(BrowserTab)
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite) // toggle off
         Base.helper.waitUntilPageLoad()
@@ -111,7 +111,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.nowAt(BrowserTab)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
@@ -119,12 +119,12 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
     func testPrivateModeOnHasNoAffectOnNormalMode() {
         if Base.helper.skipPlatform { return }
 
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         navigator.goto(PageOptionsMenu)
         navigator.goto(RequestDesktopSite)
         Base.helper.waitUntilPageLoad()
@@ -132,14 +132,14 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         navigator.nowAt(BrowserTab)
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
 
     func testLongPressReload() {
         if Base.helper.skipPlatform { return }
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
 
@@ -156,7 +156,7 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
 
         // Covering scenario that when closing a tab and re-opening should preserve Desktop mode
         navigator.createNewTab()
-        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "test-user-agent.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssert(Base.app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
     }

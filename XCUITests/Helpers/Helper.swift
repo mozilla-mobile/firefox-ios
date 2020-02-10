@@ -18,6 +18,10 @@ class Helper {
         return UIDevice.current.userInterfaceIdiom != platform
     }
 
+    func path(forTestPage page: String) -> String {
+        return "http://localhost:\(serverPort)/test-fixture/\(page)"
+    }
+    
     func restart(_ app: XCUIApplication, args: [String] = []) {
         XCUIDevice.shared.press(.home)
         var launchArguments = [LaunchArguments.Test]
@@ -99,6 +103,16 @@ class Helper {
             let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
             XCTFail("\(message) - Error in file \(file) at line \(line).")
         }
+    }
+    
+    /**
+     Returns the number of cells found on the current UI element
+     */
+    func getNumberOfCells(forTableElement: XCUIElement = Base.app, maxTimeOut: Double = 5, file: String = #file, line: Int = #line) -> Int {
+        let cells = forTableElement.cells
+        let firstCell = cells.firstMatch
+        XCTAssertTrue(firstCell.waitForExistence(timeout: maxTimeOut), "The UI element for table cells was not found. Error in file \(file) at line \(line).")
+        return cells.count
     }
     
 }

@@ -5,12 +5,6 @@
 import MappaMundi
 import XCTest
 
-let serverPort = Int.random(in: 1025..<65000)
-
-func path(forTestPage page: String) -> String {
-    return "http://localhost:\(serverPort)/test-fixture/\(page)"
-}
-
 struct Base {
     static let app = XCUIApplication()
     static let helper = Helper()
@@ -37,9 +31,6 @@ class BaseTestCase: XCTestCase {
         setUpScreenGraph()
     }
 
-    /* H: we might need a class tearDown() to be executed once a test suite is done;
-        to observe whenever a test suite starts executing and ends it's execution, there is the XCTestObservation protocol: https://developer.apple.com/documentation/xctest/xctestobservation
-     */
     override func tearDown() {
         Base.app.terminate()
         super.tearDown()

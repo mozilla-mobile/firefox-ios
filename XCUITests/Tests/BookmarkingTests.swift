@@ -50,7 +50,7 @@ class BookmarkingTests: BaseTestCase {
 
     func testBookmarkingUI() {
         // Go to a webpage, and add to bookmarks, check it's added
-        navigator.openURL(path(forTestPage: url_1))
+        navigator.openURL(Base.helper.path(forTestPage: url_1))
         navigator.nowAt(BrowserTab)
         Base.helper.waitForTabsButton()
         bookmark()
@@ -58,7 +58,7 @@ class BookmarkingTests: BaseTestCase {
         checkBookmarked()
 
         // Load a different page on a new tab, check it's not bookmarked
-        navigator.openNewURL(urlString: path(forTestPage: url_2["url"]!))
+        navigator.openNewURL(urlString: Base.helper.path(forTestPage: url_2["url"]!))
         navigator.nowAt(BrowserTab)
         Base.helper.waitForTabsButton()
         checkUnbookmarked()
@@ -91,7 +91,7 @@ class BookmarkingTests: BaseTestCase {
 
     func testAccessBookmarksFromContextMenu() {
         //Add a bookmark
-        navigator.openURL(path(forTestPage: url_2["url"]!))
+        navigator.openURL(Base.helper.path(forTestPage: url_2["url"]!))
         Base.helper.waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         Base.helper.waitForExistence(Base.app.buttons["TabLocationView.pageOptionsButton"], timeout: 10)
@@ -120,7 +120,7 @@ class BookmarkingTests: BaseTestCase {
         XCTAssertEqual(Base.app.tables["Bookmarks List"].cells.count, 5)
         
         // Add another
-        navigator.openURL(path(forTestPage: url_4))
+        navigator.openURL(Base.helper.path(forTestPage: url_4))
         Base.helper.waitForTabsButton()
         bookmark()
         

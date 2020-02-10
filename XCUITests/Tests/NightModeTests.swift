@@ -19,7 +19,7 @@ class NightModeTests: BaseTestCase {
         let url1 = "test-example.html"
 
         // Go to a webpage, and select night mode on and off, check it's applied or not
-        navigator.openURL(path(forTestPage: url1))
+        navigator.openURL(Base.helper.path(forTestPage: url1))
 
         //turn on the night mode
         navigator.performAction(Action.ToggleNightMode)

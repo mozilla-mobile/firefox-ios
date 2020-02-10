@@ -7,10 +7,10 @@ import XCTest
 let domain = "http://localhost:\(serverPort)"
 let domainLogin = "test@example.com"
 let domainSecondLogin = "test2@example.com"
-let testLoginPage = path(forTestPage: "test-password.html")
-let testSecondLoginPage = path(forTestPage: "test-password-2.html")
+let testLoginPage = Base.helper.path(forTestPage: "test-password.html")
+let testSecondLoginPage = Base.helper.path(forTestPage: "test-password-2.html")
 let savedLoginEntry = "test@example.com, http://localhost:\(serverPort)"
-let urlLogin = path(forTestPage: "empty-login-form.html")
+let urlLogin = Base.helper.path(forTestPage: "empty-login-form.html")
 let mailLogin = "iosmztest@mailinator.com"
 //The following seem to be labels that change a lot and make the tests break; aka volatile. Let's keep them in one place.
 let loginsListURLLabel = "Website, \(domain)"

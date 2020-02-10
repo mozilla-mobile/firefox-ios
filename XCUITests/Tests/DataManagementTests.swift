@@ -19,7 +19,7 @@ class DataManagementTests: BaseTestCase {
     // Testing the search bar, search results and 'Show More' option.
     func testWebSiteDataOptions() {
         // Visiting some websites to create Website Data needed to reveal the "Show More" button
-        let websitesList = ["example.com", path(forTestPage: "test-mozilla-org.html"), path(forTestPage: "test-mozilla-book.html"), "youtube.com", "www.google.com", "bing.com"]
+        let websitesList = ["example.com", Base.helper.path(forTestPage: "test-mozilla-org.html"), Base.helper.path(forTestPage: "test-mozilla-book.html"), "youtube.com", "www.google.com", "bing.com"]
         for website in websitesList {
             navigator.openURL(website)
         }

@@ -34,7 +34,7 @@ class FindInPageTests: BaseTestCase {
 
     // Smoketest
     func testFindFromMenu() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 
         // Enter some text to start finding
@@ -69,7 +69,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testFindInPageTwoWordsSearch() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
         // Enter some text to start finding
         Base.app.textFields["FindInPage.searchField"].typeText("The Book of")
@@ -105,7 +105,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testQueryWithNoMatches() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 
         // Try to find text which does not match and check that there are not results
@@ -115,7 +115,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testBarDissapearsWhenReloading() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 
         // Before reloading, it is necessary to hide the keyboard
@@ -128,7 +128,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testBarDissapearsWhenOpeningTabsTray() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
 
         // Dismiss keyboard
@@ -146,7 +146,7 @@ class FindInPageTests: BaseTestCase {
     }
 
     func testFindFromSelection() {
-        userState.url = path(forTestPage: "test-mozilla-book.html")
+        userState.url = Base.helper.path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         let textToFind = "from"
 

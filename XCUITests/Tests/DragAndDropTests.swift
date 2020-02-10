@@ -4,9 +4,9 @@
 
 import XCTest
 
-let firstWebsite = (url: path(forTestPage: "test-mozilla-org.html"), tabName: "Internet for people, not profit — Mozilla")
-let secondWebsite = (url: path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
-let exampleWebsite = (url: path(forTestPage: "test-example.html"), tabName: "Example Domain")
+let firstWebsite = (url: Base.helper.path(forTestPage: "test-mozilla-org.html"), tabName: "Internet for people, not profit — Mozilla")
+let secondWebsite = (url: Base.helper.path(forTestPage: "test-mozilla-book.html"), tabName: "The Book of Mozilla")
+let exampleWebsite = (url: Base.helper.path(forTestPage: "test-example.html"), tabName: "Example Domain")
 let homeTabName = "Home"
 let websiteWithSearchField = "https://developer.mozilla.org/en-US/"
 

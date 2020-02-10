@@ -5,8 +5,8 @@
 import XCTest
 
 let url1 = "example.com"
-let url2 = path(forTestPage: "test-mozilla-org.html")
-let url3 = path(forTestPage: "test-example.html")
+let url2 = Base.helper.path(forTestPage: "test-mozilla-org.html")
+let url3 = Base.helper.path(forTestPage: "test-example.html")
 
 let url1And3Label = "Example Domain"
 let url2Label = "Internet for people, not profit — Mozilla"

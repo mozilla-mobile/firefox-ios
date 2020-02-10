@@ -9,7 +9,7 @@ class TranslationSnackBarTest: BaseTestCase {
     // This test checks to the correct functionalty of the Translation prompt and Translation is done corrrectly using Google
     func testSnackBarDisplayed() {
         userState.localeIsExpectedDifferent = true
-        navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "manifesto-zh-CN.html"))
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForExistence(Base.app.buttons["TranslationPrompt.doTranslate"])
         navigator.performAction(Action.SelectDontTranslateThisPage)
@@ -26,7 +26,7 @@ class TranslationSnackBarTest: BaseTestCase {
         let translationSwitch = Base.app.switches["TranslateSwitchValue"]
         XCTAssertTrue(translationSwitch.isEnabled)
         navigator.performAction(Action.DisableTranslation)
-        navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "manifesto-zh-CN.html"))
         Base.helper.waitUntilPageLoad()
         XCTAssertFalse(Base.app.buttons["TranslationPrompt.dontTranslate"].exists)
     }
@@ -36,7 +36,7 @@ class TranslationSnackBarTest: BaseTestCase {
         userState.localeIsExpectedDifferent = true
         navigator.goto(TranslationSettings)
         navigator.performAction(Action.SelectBing)
-        navigator.openURL(path(forTestPage: "manifesto-zh-CN.html"))
+        navigator.openURL(Base.helper.path(forTestPage: "manifesto-zh-CN.html"))
         Base.helper.waitUntilPageLoad()
         navigator.performAction(Action.SelectTranslateThisPage)
         Base.helper.waitForValueContains(Base.app.textFields["url"], value: "translatetheweb")
