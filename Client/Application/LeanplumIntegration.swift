@@ -39,6 +39,8 @@ enum LPEvent: String {
     case firstRun = "E_First_Run"
     case secondRun = "E_Second_Run"
     case openedApp = "E_Opened_App"
+    case dismissUpdateCoverSheetAndStartBrowsing = "E_Dismissed_Update_Cover_Sheet_And_Start_Browsing"
+    case dismissedUpdateCoverSheet = "E_Dismissed_Update_Cover_Sheet"
     case dismissedOnboarding = "E_Dismissed_Onboarding"
     case dismissedOnboardingShowLogin = "E_Dismissed_Onboarding_Showed_Login"
     case dismissedOnboardingShowSignUp = "E_Dismissed_Onboarding_Showed_SignUpFlow"
@@ -60,6 +62,8 @@ enum LPEvent: String {
     case signsUpFxa = "E_User_Signed_Up_For_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
+    case trackingProtectionMenu = "E_Opened_Tracking_Protection_Menu"
+    case trackingProtectionWhiteList = "E_Added_Site_To_Tracking_Protection_Whitelist"
     case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
     case onboardingTestLoadedTooSlow = "E_Onboarding_Was_Swiped_Before_AB_Test_Could_Start"
 }

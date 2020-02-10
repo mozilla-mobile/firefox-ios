@@ -13,7 +13,7 @@ let rootdir = execIsFromCorrectDir ? fm.currentDirectoryPath : fallbackPath
 let blacklist = "\(rootdir)/../../Carthage/Checkouts/shavar-prod-lists/disconnect-blacklist.json"
 let entityList = "\(rootdir)/../../Carthage/Checkouts/shavar-prod-lists/disconnect-entitylist.json"
 let googleMappingList = "\(rootdir)/../../Carthage/Checkouts/shavar-prod-lists/google_mapping.json"
-let fingerprintingList = "\(rootdir)/../base-fingerprinting-track.json"
+let fingerprintingList = "\(rootdir)/../../Carthage/Checkouts/shavar-prod-lists/normalized-lists/base-fingerprinting-track.json"
 
 func jsonFrom(filename: String) -> [String: Any] {
     let file = URL(fileURLWithPath: filename)
