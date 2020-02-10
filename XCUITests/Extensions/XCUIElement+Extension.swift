@@ -15,10 +15,10 @@ public extension XCUIElement {
         // See: http://stackoverflow.com/a/33534187/1248491
         XCTAssertTrue(self.waitForExistence(timeout: maxTimeOut), "The element to tap on was not found.")
         
-        if isHittable {
-            tap()
+        if self.isHittable {
+            self.tap()
         } else if force {
-            coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+            self.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         }
     }
     

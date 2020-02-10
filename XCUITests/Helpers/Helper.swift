@@ -105,16 +105,6 @@ class Helper {
         }
     }
     
-    /**
-     Returns the number of cells found on the current UI element
-     */
-    func getNumberOfCells(forTableElement: XCUIElement = Base.app, maxTimeOut: Double = 5, file: String = #file, line: Int = #line) -> Int {
-        let cells = forTableElement.cells
-        let firstCell = cells.firstMatch
-        XCTAssertTrue(firstCell.waitForExistence(timeout: maxTimeOut), "The UI element for table cells was not found. Error in file \(file) at line \(line).")
-        return cells.count
-    }
-    
 }
 
 class IpadOnlyTestCase: BaseTestCase {
