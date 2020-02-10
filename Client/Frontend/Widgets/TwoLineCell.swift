@@ -73,6 +73,7 @@ class TwoLineTableViewCell: UITableViewCell, Themeable {
         let color = imageView?.backgroundColor
         super.setHighlighted(highlighted, animated: animated)
         imageView?.backgroundColor = color
+        contentView.backgroundColor = highlighted ? UIColor.theme.tableView.selectedBackground : .clear
     }
 
     // Save background color on UITableViewCell "select" because it disappears in the default behavior
