@@ -1986,7 +1986,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
     func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxALoginFlow) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         print(profile.hasAccount())
-        guard profile.hasAccount(), !(profile.rustAccount?.accountNeedsReauth() ?? false) else {
+        guard profile.hasSyncableAccount() else {
             let vc = RustLoginView(fxaOptions: fxaOptions, flowType: flowType)
             vc.dismissType = .dismiss
             return vc
