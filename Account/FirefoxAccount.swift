@@ -61,7 +61,7 @@ open class FirefoxAccount {
 
     let stateCache: KeychainCacheState
 
-    open var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
+//    open var syncAuthState: SyncAuthState! // We can't give a reference to self if this is a let.
 
     // To prevent advance() consumers racing, we maintain a shared advance() deferred (`advanceDeferred`).  If an
     // advance() is in progress, the shared deferred will be returned.  (Multiple consumers can chain off a single
@@ -91,8 +91,8 @@ open class FirefoxAccount {
         self.deviceName = deviceName
 
         self.commandsClient = FxACommandsClient(account: self)
-        self.syncAuthState = FirefoxAccountSyncAuthState(account: self,
-            cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON))
+//        self.syncAuthState = FirefoxAccountSyncAuthState(account: self,
+//            cache: KeychainCache.fromBranch("account.syncAuthState", withLabel: self.stateCache.label, factory: syncAuthStateCachefromJSON))
     }
 
     open class func from(_ configuration: FirefoxAccountConfiguration, andJSON data: JSON) -> FirefoxAccount? {
@@ -288,19 +288,6 @@ open class FirefoxAccount {
         }
     }
 
-    open func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
-        let d = Deferred<Maybe<SyncUnlockInfo>>()
-        RustFirefoxAccounts.shared.accountManager.getAccessToken(scope: FxAOAuthScope.OldSync) { result in
-            guard let accessTokenInfo = try? result.get(), let key = accessTokenInfo.key else {
-                d.fill(Maybe(failure: ScopedKeyError()))
-                return
-            }
-            // @TODO remove hard-coded URL
-            d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: "https://token.services.mozilla.com/")))
-        }
-        return d
-    }
-
     // Fetch the devices list from FxA then replace the current stored remote devices.
     open func updateFxADevices(remoteDevices: RemoteDevices) -> Success {
         guard let session = stateCache.value as? TokenState else {
@@ -312,42 +299,8 @@ open class FirefoxAccount {
         }
     }
 
-    open func oauthKeyID(for scope: String) -> Deferred<Maybe<String>> {
-        // Ensure we are in a "married" state before continuing.
-        guard let married = stateCache.value as? MarriedState else {
-            return deferMaybe(NotATokenStateError(state: stateCache.value))
-        }
-        // This method of forming a KeyID is currently only valid for 'oldsync'.
-        guard scope == FxAOAuthScope.OldSync else {
-            log.error("oauthKeyID(for scope:) is currently only valid for 'oldsync'.")
-            return deferMaybe(ScopedKeyError())
-        }
-        // If we have a cached copy of the KeyID in the Keychain, use it.
-        let kidKeychainKey = "FxAOAuthKeyID:\(scope)"
-        if let cachedOAuthKeyID = KeychainStore.shared.string(forKey: kidKeychainKey) {
-            return deferMaybe(cachedOAuthKeyID)
-        }
-        // Otherwise, request the scoped key data from the server.
-        let client = FxAClient10(configuration: configuration)
-        return client.scopedKeyData(married.sessionToken as NSData, scope: scope).bind { response in
-            guard let allScopedKeyData = response.successValue, let scopedKeyData = allScopedKeyData.find({ $0.scope == scope }), let kXCS = married.kXCS.hexDecodedData.base64urlSafeEncodedString else {
-                return deferMaybe(ScopedKeyError())
-            }
-            let kid = "\(scopedKeyData.keyRotationTimestamp)-\(kXCS)"
-
-            // Cache the KeyID in the Keychain for subsequent requests.
-            KeychainStore.shared.setString(kid, forKey: kidKeychainKey)
-
-            return deferMaybe(kid)
-        }
-    }
-
     public class NotifyError: MaybeErrorType {
         public var description = "The server could not notify the clients."
-    }
-
-    public class ScopedKeyError: MaybeErrorType {
-        public var description = "No key data found for scope."
     }
 
     @discardableResult open func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {
