@@ -9,6 +9,7 @@ open class RustFirefoxAccounts {
     public let accountManager: FxaAccountManager
     public var avatar: Avatar? = nil
     private static var startupCalled = false
+    public let syncAuthState: SyncAuthState
 
     public static func startup(completion: ((RustFirefoxAccounts) -> Void)? = nil) {
         if startupCalled {
@@ -31,6 +32,11 @@ open class RustFirefoxAccounts {
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
         accountManager = FxaAccountManager(config: config, deviceConfig: deviceConfig, keychainAccessGroup: accessGroupIdentifier)
+
+        syncAuthState = FirefoxAccountSyncAuthState(
+            cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",
+                                            withLabel: nil /* we probably want a random string associated with the current account here*/,
+                factory: syncAuthStateCachefromJSON))
 
         NotificationCenter.default.addObserver(forName: Notification.Name.accountAuthenticated,  object: nil, queue: nil) { notification in
             self.update()
