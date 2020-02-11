@@ -162,7 +162,7 @@ open class TokenServerClient {
             }
 
             let json = JSON(data)
-            let remoteTimestampHeader = response.allHeaderFields["X-Timestamp"] as? String
+            let remoteTimestampHeader = (response.allHeaderFields as NSDictionary)["x-timestamp"] as? String
             if let remoteError = TokenServerClient.remoteError(fromJSON: json, statusCode: response.statusCode, remoteTimestampHeader: remoteTimestampHeader) {
                 deferred.fill(Maybe(failure: remoteError))
                 return
