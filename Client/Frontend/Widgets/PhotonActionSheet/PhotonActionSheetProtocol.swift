@@ -25,7 +25,7 @@ extension PhotonActionSheetProtocol {
         sheet.modalPresentationStyle = style
         sheet.photonTransitionDelegate = PhotonActionSheetAnimator()
         // TODO [rustfxa] hookup sync manager to the sheet
-        if let account = profile.rustAccount, !account.accountNeedsReauth() {
+        if profile.hasSyncableAccount() {
             // the sync manager is only needed when we have a logged in user with sync in a good state
             sheet.syncManager = profile.syncManager // the syncmanager is used to display the sync button in the browser menu
         }

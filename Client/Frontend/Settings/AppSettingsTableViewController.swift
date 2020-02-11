@@ -24,7 +24,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
-        profile.rustAccount?.refreshProfile()
+        profile.rustAccount.refreshProfile()
 
         if showContentBlockerSetting {
             let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
