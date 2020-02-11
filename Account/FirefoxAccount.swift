@@ -242,66 +242,6 @@ open class FirefoxAccount {
             self.displayName = displayName
             self.avatar = Avatar(url: avatar?.asURL)
         }
-
-        enum ImageDownloadState {
-            case notStarted
-            case started
-            case failedCanRetry
-            case failedCanNotRetry
-            case succeededMalformed
-            case succeeded
-        }
-
-        open class Avatar {
-            open var image: UIImage?
-            public let url: URL?
-            var currentImageState: ImageDownloadState = .notStarted
-
-            init(url: URL?) {
-                self.image = UIImage(named: "placeholder-avatar")
-                self.url = url
-                self.updateAvatarImageState()
-            }
-
-            func updateAvatarImageState() {
-                switch currentImageState {
-                case .notStarted:
-                    self.currentImageState = .started
-                    self.downloadAvatar()
-                    break
-                case .failedCanRetry:
-                    self.downloadAvatar()
-                    break
-                default:
-                    break
-                }
-            }
-
-            func downloadAvatar() {
-                SDWebImageManager.shared.loadImage(with: url, options: [.continueInBackground, .lowPriority], progress: nil) { (image, _, error, _, success, _) in
-                    if let error = error {
-                        if (error as NSError).code == 404 || self.currentImageState == .failedCanRetry {
-                            // Image is not found or failed to download a second time
-                            self.currentImageState = .failedCanNotRetry
-                        } else {
-                            // This could have been a transient error, attempt to download the image only once more
-                            self.currentImageState = .failedCanRetry
-                            self.updateAvatarImageState()
-                        }
-                        return
-                    }
-
-                    if success == true && image == nil {
-                        self.currentImageState = .succeededMalformed
-                        return
-                    }
-
-                    self.image = image
-                    self.currentImageState = .succeeded
-                    NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
-                }
-            }
-        }
     }
 
     // Don't forget to call Profile.flushAccount() to persist this change!
@@ -349,26 +289,16 @@ open class FirefoxAccount {
     }
 
     open func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
-        guard let married = stateCache.value as? MarriedState else {
-            return deferMaybe(NotATokenStateError(state: stateCache.value))
-        }
-        let client = FxAClient10(configuration: configuration)
-        return client.oauthAuthorize(withSessionToken: married.sessionToken as NSData, scope: FxAOAuthScope.OldSync).bind({ result in
-            guard let oauthResponse = result.successValue else {
-                return deferMaybe(ScopedKeyError())
+        let d = Deferred<Maybe<SyncUnlockInfo>>()
+        RustFirefoxAccounts.shared.accountManager.getAccessToken(scope: FxAOAuthScope.OldSync) { result in
+            guard let accessTokenInfo = try? result.get(), let key = accessTokenInfo.key else {
+                d.fill(Maybe(failure: ScopedKeyError()))
+                return
             }
-
-            return self.oauthKeyID(for: FxAOAuthScope.OldSync).bind({ result in
-                guard let kid = result.successValue,
-                    let kSync = married.kSync.base64urlSafeEncodedString else {
-                    return deferMaybe(ScopedKeyError())
-                }
-
-                let accessToken = oauthResponse.accessToken
-                let tokenServerURL = self.configuration.sync15Configuration.tokenServerEndpointURL.absoluteString
-                return deferMaybe(SyncUnlockInfo(kid: kid, fxaAccessToken: accessToken, syncKey: kSync, tokenserverURL: tokenServerURL))
-            })
-        })
+            // @TODO remove hard-coded URL
+            d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: "https://token.services.mozilla.com/")))
+        }
+        return d
     }
 
     // Fetch the devices list from FxA then replace the current stored remote devices.

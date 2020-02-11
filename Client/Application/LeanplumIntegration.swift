@@ -10,7 +10,7 @@ import Leanplum
 private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
-private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+//private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 private let FxaDevicesCountPrefKey = "FxaDevicesCount"
 
 // FxA Custom Leanplum message template for A/B testing push notifications.
@@ -305,7 +305,7 @@ class LeanPlumClient {
             }
 
             // Don't display permission screen if they have already allowed/disabled push permissions
-            if self.prefs?.boolForKey(AppRequestedUserNotificationsPrefKey) ?? false {
+            if self.prefs?.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? false {
                 FxALoginHelper.sharedInstance.readyForSyncing()
                 return false
             }
@@ -324,7 +324,7 @@ class LeanPlumClient {
                 // Log accept event and present push permission modal
                 context.runTrackedActionNamed(LPMessage.ArgAcceptAction)
                 FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
-                self.prefs?.setBool(true, forKey: AppRequestedUserNotificationsPrefKey)
+                self.prefs?.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
             }))
 
             rootViewController?.present(alert, animated: true, completion: nil)

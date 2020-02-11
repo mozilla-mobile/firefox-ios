@@ -324,7 +324,7 @@ public class RustPlaces {
             }
 
             do {
-                try self.api?.resetBookmarksMetadata()
+                try self.api?.resetBookmarkSyncMetadata()
                 deferred.fill(Maybe(success: ()))
             } catch let error {
                 deferred.fill(Maybe(failure: error as MaybeErrorType))
