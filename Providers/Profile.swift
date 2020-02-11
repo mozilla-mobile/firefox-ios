@@ -134,6 +134,8 @@ protocol Profile: AnyObject {
     func hasSyncableAccount() -> Bool
 
     func getAccount() -> Account.FirefoxAccount?
+    var rustAccount: FxaAccountManager? { get }
+
     func removeAccount()
     func setAccount(_ account: Account.FirefoxAccount)
     func flushAccount()
@@ -167,13 +169,13 @@ extension Profile {
     
     // Returns false for when there is no account available and true if the account
     // is not verified or has no password attached to it
-    var accountNeedsUserAction: Bool {
-        guard let account = self.getAccount() else { return false }
-        let actionNeeded = account.actionNeeded
-        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
-        
-        return needsVerification
-    }
+//    var accountNeedsUserAction: Bool {
+//        guard let account = self.getAccount() else { return false }
+//        let actionNeeded = account.actionNeeded
+//        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
+//
+//        return needsVerification
+//    }
 }
 
 open class BrowserProfile: Profile {
@@ -500,53 +502,15 @@ open class BrowserProfile: Profile {
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
-        guard let account = self.getAccount() else {
+        guard let constellation = RustFirefoxAccounts.shared.accountManager.deviceConstellation() else {
             return deferMaybe(NoAccountError())
         }
-
-        let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
-        let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
-        let command = SyncCommand.displayURIFromShareItem(item, asClient: id)
-        let fxaDeviceIds = devices.compactMap { $0.id }
-
-        let result = Success()
-
-        self.remoteClientsAndTabs.getClients() >>== { clients in
-            let newRemoteDevices = devices.filter { account.commandsClient.sendTab.isDeviceCompatible($0) }
-            var oldRemoteClients = devices.filter { !account.commandsClient.sendTab.isDeviceCompatible($0) }.compactMap { remoteDevice in
-                clients.find { $0.fxaDeviceId == remoteDevice.id }
-            }
-
-            func sendViaSyncFallback() {
-                if oldRemoteClients.isEmpty {
-                    result.fill(Maybe(success: ()))
-                } else {
-                    self.remoteClientsAndTabs.insertCommands([command], forClients: oldRemoteClients) >>> {
-                        self.syncManager.syncClients() >>> {
-                            account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
-                            result.fill(Maybe(success: ()))
-                        }
-                    }
-                }
-            }
-
-            if !newRemoteDevices.isEmpty {
-                account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "") >>== { report in
-                    for failedRemoteDevice in report.failed {
-                        log.debug("Failed to send a tab with FxA commands for \(failedRemoteDevice.name). Falling back on the Sync back-end")
-                        if let oldRemoteClient = clients.find({ $0.fxaDeviceId == failedRemoteDevice.id }) {
-                            oldRemoteClients.append(oldRemoteClient)
-                        }
-                    }
-
-                    sendViaSyncFallback()
-                }
-            } else {
-                sendViaSyncFallback()
+        devices.forEach {
+            if let id = $0.id, let title = item.title {
+                constellation.sendEventToDevice(targetDeviceId: id, e: .sendTab(title: title, url: item.url))
             }
         }
-
-        return result
+        return Success()
     }
 
     lazy var logins: RustLogins = {
@@ -602,15 +566,20 @@ open class BrowserProfile: Profile {
     }()
 
     func hasAccount() -> Bool {
-        return account != nil
+        return rustAccount?.hasAccount() ?? false
     }
 
     func hasSyncableAccount() -> Bool {
-        return account?.actionNeeded == FxAActionNeeded.none
+        return hasAccount() &&
+            !(rustAccount?.accountNeedsReauth() ?? false)
     }
 
     func getAccount() -> Account.FirefoxAccount? {
         return account
+    }
+
+    var rustAccount: FxaAccountManager? {
+        return RustFirefoxAccounts.shared.accountManager
     }
 
     func removeAccountMetadata() {
@@ -1214,6 +1183,7 @@ open class BrowserProfile: Profile {
                 guard let success = readyResult.successValue else {
                     if let tokenServerError = readyResult.failureValue as? TokenServerError,
                         case let TokenServerError.remote(code, status, _) = tokenServerError,
+                        // TODO [rustfxa] Remove use of getAccount here
                         code == 401, let acct = self.profile.getAccount() {
                         log.debug("401 error: \(tokenServerError) \(code) \(status ?? "")")
                         if !acct.makeCohabitingWithoutKeyPair() {
