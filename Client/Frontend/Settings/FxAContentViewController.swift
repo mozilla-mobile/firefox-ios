@@ -46,7 +46,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
         self.url = self.createFxAURLWith(fxaOptions, profile: profile, isSignUpFlow: isSignUpFlow)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
+      //  NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -64,7 +64,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        profile.getAccount()?.updateProfile()
+        profile.rustAccount?.refreshProfile()
 
         // If the FxAContentViewController was launched from a FxA deferred link
         // onboarding might not have been shown. Check to see if it needs to be
@@ -120,12 +120,13 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     
     // Show the remove button if the account isn't verfied or has no password attached to it
     fileprivate func shouldShowRemoveAccountBtn() {
-        if profile.accountNeedsUserAction {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.FxARemoveAccountButton, style: .plain, closure: { (barButtonItem) in
-                self.showRemoveAccountAlert()
-            })
-            navigationItem.rightBarButtonItem?.tintColor = UIColor.red
-        }
+        // TODO [rustfxa] do we need a remove account button again?
+//        if profile.accountNeedsUserAction {
+//            navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.FxARemoveAccountButton, style: .plain, closure: { (barButtonItem) in
+//                self.showRemoveAccountAlert()
+//            })
+//            navigationItem.rightBarButtonItem?.tintColor = UIColor.red
+//        }
     }
     
     fileprivate func showRemoveAccountAlert() {
@@ -200,24 +201,24 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
     }
 
-    @objc fileprivate func userDidVerify(_ notification: Notification) {
-        guard let account = profile.getAccount() else {
-            return
-        }
-        // We can't verify against the actionNeeded of the account,
-        // because of potential race conditions.
-        // However, we restrict visibility of this method, and make sure
-        // we only Notify via the FxALoginStateMachine.
-        let flags = FxALoginFlags(pushEnabled: account.pushRegistration != nil,
-                                  verified: true)
-        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
-        DispatchQueue.main.async {
-            self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
-        }
-
-        helpBrowser?.removeFromSuperview()
-        helpBrowser = nil
-    }
+//    @objc fileprivate func userDidVerify(_ notification: Notification) {
+//        guard let account = profile.getAccount() else {
+//            return
+//        }
+//        // We can't verify against the actionNeeded of the account,
+//        // because of potential race conditions.
+//        // However, we restrict visibility of this method, and make sure
+//        // we only Notify via the FxALoginStateMachine.
+//        let flags = FxALoginFlags(pushEnabled: account.pushRegistration != nil,
+//                                  verified: true)
+//        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+//        DispatchQueue.main.async {
+//            self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
+//        }
+//
+//        helpBrowser?.removeFromSuperview()
+//        helpBrowser = nil
+//    }
 
     // The content server page is ready to be shown.
     fileprivate func onLoaded() {

@@ -542,7 +542,7 @@ class AccountSetting: Setting, FxAContentViewControllerDelegate {
 
     override func onConfigureCell(_ cell: UITableViewCell) {
         super.onConfigureCell(cell)
-        if settings.profile.getAccount() != nil {
+        if settings.profile.rustAccount != nil {
             cell.selectionStyle = .none
         }
     }
@@ -661,12 +661,9 @@ class SettingsTableViewController: ThemedTableViewController {
 
     @objc fileprivate func refresh() {
         // Through-out, be aware that modifying the control while a refresh is in progress is /not/ supported and will likely crash the app.
-        if let account = self.profile.getAccount() {
-            account.advance().upon { state in
-                DispatchQueue.main.async { () -> Void in
-                    self.tableView.reloadData()
-                }
-            }
+        if let account = self.profile.rustAccount {
+            account.refreshProfile()
+            // TODO [rustfxa] listen to notification and refresh profile
         } else {
             self.tableView.reloadData()
         }

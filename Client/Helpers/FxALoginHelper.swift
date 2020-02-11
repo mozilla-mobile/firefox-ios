@@ -10,7 +10,7 @@ import Sync
 import UserNotifications
 import XCGLogger
 
-private let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 
 private let log = Logger.browserLogger
 
@@ -83,41 +83,41 @@ class FxALoginHelper {
     // if already logged in, checking if anything needs to be done in response
     // to changing of user settings and push notifications.
     func application(_ application: UIApplication, didLoadProfile profile: Profile) {
-        self.profile = profile
-        self.account = profile.getAccount()
-
-        self.apnsTokenDeferred = Deferred()
-
-        guard let account = self.account else {
-            // There's no account, no further action.
-            return loginDidFail()
-        }
-
-        // accountVerified is needed by delegates.
-        accountVerified = account.actionNeeded != .needsVerification
-
-        // Now: we have an account that does not have push notifications set up.
-        // however, we need to deal with cases of asking for permissions too frequently.
-        let asked = profile.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
-        UNUserNotificationCenter.current().getNotificationSettings { settings in
-            if settings.authorizationStatus != .authorized {
-
-                // If we've never asked(*), then we should probably ask.
-                // If we've asked already, then we should not ask again.
-                // TODO: add UI to tell the user to go flip the Setting app.
-                // (*) if we asked in a prior release, and the user was ok with it, then there is no harm asking again.
-                // If the user denied permission, or flipped permissions in the Settings app, then
-                // we'll bug them once, but this is probably unavoidable.
-                if asked {
-                    return self.loginDidSucceed()
-                }
-            }
-
-            // By the time we reach here, we haven't registered for APNS
-            // Either we've never asked the user, or the user declined, then re-enabled
-            // the notification in the Settings app.
-            self.requestUserNotifications(application)
-        }
+//        self.profile = profile
+//        self.account = profile.getAccount()
+//
+//        self.apnsTokenDeferred = Deferred()
+//
+//        guard let account = self.account else {
+//            // There's no account, no further action.
+//            return loginDidFail()
+//        }
+//
+//        // accountVerified is needed by delegates.
+//        accountVerified = account.actionNeeded != .needsVerification
+//
+//        // Now: we have an account that does not have push notifications set up.
+//        // however, we need to deal with cases of asking for permissions too frequently.
+//        let asked = profile.prefs.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? true
+//        UNUserNotificationCenter.current().getNotificationSettings { settings in
+//            if settings.authorizationStatus != .authorized {
+//
+//                // If we've never asked(*), then we should probably ask.
+//                // If we've asked already, then we should not ask again.
+//                // TODO: add UI to tell the user to go flip the Setting app.
+//                // (*) if we asked in a prior release, and the user was ok with it, then there is no harm asking again.
+//                // If the user denied permission, or flipped permissions in the Settings app, then
+//                // we'll bug them once, but this is probably unavoidable.
+//                if asked {
+//                    return self.loginDidSucceed()
+//                }
+//            }
+//
+//            // By the time we reach here, we haven't registered for APNS
+//            // Either we've never asked the user, or the user declined, then re-enabled
+//            // the notification in the Settings app.
+//            self.requestUserNotifications(application)
+//        }
     }
 
     // This is called when the user logs into a new FxA account.
