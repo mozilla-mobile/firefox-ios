@@ -376,28 +376,6 @@ class AccountStatusSetting: WithAccountSetting {
     }
 }
 
-// For great debugging!
-//class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
-//    override var hidden: Bool {
-//        if !ShowDebugSettings {
-//            return true
-//        }
-//        if let _ = profile.getAccount() {
-//            return false
-//        }
-//        return true
-//    }
-//
-//    override var title: NSAttributedString? {
-//        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-//    }
-//
-//    override func onClick(_ navigationController: UINavigationController?) {
-//        profile.getAccount()?.syncAuthState.invalidate()
-//        settings.tableView.reloadData()
-//    }
-//}
-
 class DeleteExportedDataSetting: HiddenSetting {
     override var title: NSAttributedString? {
         // Not localized for now.

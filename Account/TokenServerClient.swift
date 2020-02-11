@@ -136,14 +136,12 @@ open class TokenServerClient {
 
     lazy fileprivate var urlSession: URLSession = makeURLSession(userAgent: UserAgent.fxaUserAgent, configuration: URLSessionConfiguration.ephemeral)
 
-    open func token(_ assertion: String, clientState: String? = nil) -> Deferred<Maybe<TokenServerToken>> {
+    open func token(token: String, kid: String) -> Deferred<Maybe<TokenServerToken>> {
         let deferred = Deferred<Maybe<TokenServerToken>>()
 
         var mutableURLRequest = URLRequest(url: url)
-        mutableURLRequest.setValue("BrowserID " + assertion, forHTTPHeaderField: "Authorization")
-        if let clientState = clientState {
-            mutableURLRequest.setValue(clientState, forHTTPHeaderField: "X-Client-State")
-        }
+        mutableURLRequest.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
+        mutableURLRequest.setValue(kid, forHTTPHeaderField: "X-KeyID")
 
         urlSession.dataTask(with: mutableURLRequest) { (data, response, error) in
             guard let response = validatedHTTPResponse(response, contentType: "application/json") else {

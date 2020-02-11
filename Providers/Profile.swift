@@ -985,13 +985,26 @@ open class BrowserProfile: Profile {
             return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
-        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
-            guard let account = profile.account else {
-                return deferMaybe(SyncStatus.notStarted(.noAccount))
-            }
+        public class ScopedKeyError: MaybeErrorType {
+            public var description = "No key data found for scope."
+        }
 
+        fileprivate func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
+            let d = Deferred<Maybe<SyncUnlockInfo>>()
+            RustFirefoxAccounts.shared.accountManager.getAccessToken(scope: OAuthScope.oldSync) { result in
+                guard let accessTokenInfo = try? result.get(), let key = accessTokenInfo.key else {
+                    d.fill(Maybe(failure: ScopedKeyError()))
+                    return
+                }
+                // @TODO remove hard-coded URL
+                d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: "https://token.services.mozilla.com/")))
+            }
+            return d
+        }
+
+        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing logins to storage.")
-            return account.syncUnlockInfo().bind({ result in
+            return syncUnlockInfo().bind({ result in
                 guard let syncUnlockInfo = result.successValue else {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
                 }
@@ -1008,12 +1021,8 @@ open class BrowserProfile: Profile {
         }
 
         fileprivate func syncBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
-            guard let account = profile.account else {
-                return deferMaybe(SyncStatus.notStarted(.noAccount))
-            }
-
             log.debug("Syncing bookmarks to storage.")
-            return account.syncUnlockInfo().bind({ result in
+            return syncUnlockInfo().bind({ result in
                 guard let syncUnlockInfo = result.successValue else {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
                 }
@@ -1030,6 +1039,8 @@ open class BrowserProfile: Profile {
         }
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(_ changes: T) -> Deferred<Maybe<T>> {
+            // TODO: for some reason the reset on logins/bookmarks end up badly. Disable for now.
+            return deferMaybe(changes)
             var needReset = Set<String>(changes.collectionsThatNeedLocalReset())
             needReset.formUnion(changes.enginesDisabled())
             needReset.formUnion(changes.enginesEnabled())
@@ -1079,20 +1090,17 @@ open class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
 
-            guard let account = self.profile.account else {
-                log.info("No account to sync with.")
-                let statuses = synchronizers.map {
-                    ($0.0, SyncStatus.notStarted(.noAccount))
-                }
-                return deferMaybe(statuses)
-            }
+            // TODO: we should check if we can sync!
 
             // TODO: Invoke `account.commandsClient.fetchMissedRemoteCommands()` to
             // catch any missed FxA commands at time of Sync?
 
             if !isSyncing {
+                // TODO: needs lots of clean-up
+                let uid = RustFirefoxAccounts.shared.accountManager.accountProfile()!.uid
+                let deviceID = RustFirefoxAccounts.shared.accountManager.deviceConstellation()!.state()!.localDevice!.id
                 // A sync isn't already going on, so start another one.
-                let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
+                let statsSession = SyncOperationStatsSession(why: why, uid: uid, deviceID: deviceID)
                 let reducer = AsyncReducer<EngineResults, EngineTasks>(initialValue: [], queue: syncQueue) { (statuses, synchronizers)  in
                     let done = Set(statuses.map { $0.0 })
                     let remaining = synchronizers.filter { !done.contains($0.0) }
@@ -1101,7 +1109,7 @@ open class BrowserProfile: Profile {
                         return deferMaybe(statuses)
                     }
 
-                    return self.syncWith(synchronizers: remaining, account: account, statsSession: statsSession, why: why) >>== { deferMaybe(statuses + $0) }
+                    return self.syncWith(synchronizers: remaining, statsSession: statsSession, why: why) >>== { deferMaybe(statuses + $0) }
                 }
 
                 reducer.terminal.upon { results in
@@ -1153,21 +1161,22 @@ open class BrowserProfile: Profile {
 
         // This SHOULD NOT be called directly: use syncSeveral instead.
         fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
-                                  account: Account.FirefoxAccount,
                                   statsSession: SyncOperationStatsSession, why: SyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
-            var authState = account.syncAuthState
+            let authState = RustFirefoxAccounts.shared.syncAuthState
             let delegate = self.profile.getSyncDelegate()
-            if let enginesEnablements = self.engineEnablementChangesForAccount(account: account, profile: profile),
-               !enginesEnablements.isEmpty {
-                authState?.enginesEnablements = enginesEnablements
-                log.debug("engines to enable: \(enginesEnablements.compactMap { $0.value ? $0.key : nil })")
-                log.debug("engines to disable: \(enginesEnablements.compactMap { !$0.value ? $0.key : nil })")
-            }
+            // TODO
+//            if let enginesEnablements = self.engineEnablementChangesForAccount(account: account, profile: profile),
+//               !enginesEnablements.isEmpty {
+//                authState?.enginesEnablements = enginesEnablements
+//                log.debug("engines to enable: \(enginesEnablements.compactMap { $0.value ? $0.key : nil })")
+//                log.debug("engines to disable: \(enginesEnablements.compactMap { !$0.value ? $0.key : nil })")
+//            }
 
-            authState?.clientName = account.deviceName
+            // TODO
+//            authState?.clientName = account.deviceName
 
-            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState!)
+            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
 
             let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in
                 let thunks = synchronizers.map { (i, f) in
@@ -1181,15 +1190,6 @@ open class BrowserProfile: Profile {
 
             return readyDeferred.bind { readyResult in
                 guard let success = readyResult.successValue else {
-                    if let tokenServerError = readyResult.failureValue as? TokenServerError,
-                        case let TokenServerError.remote(code, status, _) = tokenServerError,
-                        // TODO [rustfxa] Remove use of getAccount here
-                        code == 401, let acct = self.profile.getAccount() {
-                        log.debug("401 error: \(tokenServerError) \(code) \(status ?? "")")
-                        if !acct.makeCohabitingWithoutKeyPair() {
-                            acct.makeSeparated()
-                        }
-                    }
                     return deferMaybe(readyResult.failureValue!)
                 }
                 return self.takeActionsOnEngineStateChanges(success) >>== { ready in
