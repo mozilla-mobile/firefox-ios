@@ -23,9 +23,6 @@ extension Notification.Name {
     // MARK: Notification UserInfo Keys
     public static let UserInfoKeyHasSyncableAccount = Notification.Name("UserInfoKeyHasSyncableAccount")
 
-    // Fired when the FxA account has been verified. This should only be fired by the FxALoginStateMachine.
-    public static let FirefoxAccountVerified = Notification.Name("FirefoxAccountVerified")
-
     // Fired when the login synchronizer has finished applying remote changes
     public static let DataRemoteLoginChangesWereApplied = Notification.Name("DataRemoteLoginChangesWereApplied")
 

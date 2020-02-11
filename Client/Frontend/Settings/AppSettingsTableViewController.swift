@@ -24,7 +24,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
-        profile.getAccount()?.updateProfile()
+        profile.rustAccount?.refreshProfile()
 
         if showContentBlockerSetting {
             let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
@@ -42,9 +42,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
         let accountDebugSettings = [
             // Debug settings:
-            RequirePasswordDebugSetting(settings: self),
-            RequireUpgradeDebugSetting(settings: self),
-            ForgetSyncAuthStateDebugSetting(settings: self),
+            //ForgetSyncAuthStateDebugSetting(settings: self),
             StageSyncServiceDebugSetting(settings: self),
         ]
 

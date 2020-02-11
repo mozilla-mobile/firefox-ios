@@ -227,7 +227,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
-        RustFirefoxAccounts.startup()
+        RustFirefoxAccounts.startup() { shared in
+            guard shared.accountManager.hasAccount() else { return }
+
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                DispatchQueue.main.async {
+                    if settings.authorizationStatus != .denied {
+                        application.registerForRemoteNotifications()
+                    }
+                }
+            }
+        }
+        
         if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
             LeanPlumClient.shared.setup(profile: profile)
             LeanPlumClient.shared.set(enabled: true)

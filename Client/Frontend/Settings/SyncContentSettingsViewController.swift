@@ -24,13 +24,14 @@ class ManageSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = FxAContentViewController(profile: profile)
 
-        if let account = profile.getAccount() {
-            var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
-            cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-            if let url = cs?.url {
-                viewController.url = url
-            }
-        }
+        // TODO [rustfxa] hookup account management webview
+//        if let account = profile.getAccount() {
+//            var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
+//            cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
+//            if let url = cs?.url {
+//                viewController.url = url
+//            }
+//        }
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

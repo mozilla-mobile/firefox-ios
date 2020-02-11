@@ -169,13 +169,13 @@ extension Profile {
     
     // Returns false for when there is no account available and true if the account
     // is not verified or has no password attached to it
-    var accountNeedsUserAction: Bool {
-        guard let account = self.getAccount() else { return false }
-        let actionNeeded = account.actionNeeded
-        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
-        
-        return needsVerification
-    }
+//    var accountNeedsUserAction: Bool {
+//        guard let account = self.getAccount() else { return false }
+//        let actionNeeded = account.actionNeeded
+//        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
+//
+//        return needsVerification
+//    }
 }
 
 open class BrowserProfile: Profile {
@@ -1183,6 +1183,7 @@ open class BrowserProfile: Profile {
                 guard let success = readyResult.successValue else {
                     if let tokenServerError = readyResult.failureValue as? TokenServerError,
                         case let TokenServerError.remote(code, status, _) = tokenServerError,
+                        // TODO [rustfxa] Remove use of getAccount here
                         code == 401, let acct = self.profile.getAccount() {
                         log.debug("401 error: \(tokenServerError) \(code) \(status ?? "")")
                         if !acct.makeCohabitingWithoutKeyPair() {

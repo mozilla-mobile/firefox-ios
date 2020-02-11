@@ -122,38 +122,38 @@ extension FxAPushMessageHandler {
     // This isn't guaranteed to be run (when the app is backgrounded, and the user
     // doesn't tap on the notification), but that's okay because:
     // We'll naturally be syncing shortly after startup.
-    func postVerification() -> Success {
-        if let account = profile.getAccount(),
-            let syncManager = profile.syncManager {
-            return account.advance().bind { _ in
-                return syncManager.syncEverything(why: .didLogin)
-            } >>> succeed
-        }
-        return succeed()
-    }
+//    func postVerification() -> Success {
+//        if let account = profile.getAccount(),
+//            let syncManager = profile.syncManager {
+//            return account.advance().bind { _ in
+//                return syncManager.syncEverything(why: .didLogin)
+//            } >>> succeed
+//        }
+//        return succeed()
+//    }
 }
 
 /// An extension to handle each of the messages.
 extension FxAPushMessageHandler {
-    func handleCommandReceived(_ data: JSON?) -> PushMessageResult {
-        log.info("[FxA Commands] Push notification received: \(data?.stringify() ?? "nil")")
-
-        guard let index = data?["index"].int,
-            let account = profile.getAccount() else {
-            log.error("[FxA Commands] Push notification JSON is missing required 'index' value")
-            return messageIncomplete(.commandReceived)
-        }
-
-        return account.commandsClient.consumeRemoteCommand(index: index) >>== { items in
-            guard let item = items.first else {
-                log.error("[FxA Commands] Unable to consume remote command for index \(index)")
-                return self.messageIncomplete(.commandReceived)
-            }
-
-            let message = PushMessage.commandReceived(tab: ["title": item.title, "url": item.url])
-            return deferMaybe(message)
-        }
-    }
+//    func handleCommandReceived(_ data: JSON?) -> PushMessageResult {
+//        log.info("[FxA Commands] Push notification received: \(data?.stringify() ?? "nil")")
+//
+//        guard let index = data?["index"].int,
+//            let account = profile.getAccount() else {
+//            log.error("[FxA Commands] Push notification JSON is missing required 'index' value")
+//            return messageIncomplete(.commandReceived)
+//        }
+//
+//        return account.commandsClient.consumeRemoteCommand(index: index) >>== { items in
+//            guard let item = items.first else {
+//                log.error("[FxA Commands] Unable to consume remote command for index \(index)")
+//                return self.messageIncomplete(.commandReceived)
+//            }
+//
+//            let message = PushMessage.commandReceived(tab: ["title": item.title, "url": item.url])
+//            return deferMaybe(message)
+//        }
+//    }
 }
 
 extension FxAPushMessageHandler {
@@ -167,41 +167,41 @@ extension FxAPushMessageHandler {
 }
 
 extension FxAPushMessageHandler {
-    func handleDeviceDisconnected(_ data: JSON?) -> PushMessageResult {
-        guard let deviceId = data?["id"].string else {
-            return messageIncomplete(.deviceDisconnected)
-        }
+//    func handleDeviceDisconnected(_ data: JSON?) -> PushMessageResult {
+//        guard let deviceId = data?["id"].string else {
+//            return messageIncomplete(.deviceDisconnected)
+//        }
+//
+//        if let ourDeviceId = self.getOurDeviceId(), deviceId == ourDeviceId {
+//            // We can't disconnect the device from the account until we have
+//            // access to the application, so we'll handle this properly in the AppDelegate,
+//            // by calling the FxALoginHelper.applicationDidDisonnect(application).
+//            profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
+//            return deferMaybe(PushMessage.thisDeviceDisconnected)
+//        }
+//
+//        guard let profile = self.profile as? BrowserProfile else {
+//            // We can't look up a name in testing, so this is the same as
+//            // not knowing about it.
+//            return deferMaybe(PushMessage.deviceDisconnected(nil))
+//        }
+//
+//        let clients = profile.remoteClientsAndTabs
+//        let getClient = clients.getClient(fxaDeviceId: deviceId)
+//
+//        return getClient >>== { device in
+//            let message = PushMessage.deviceDisconnected(device?.name)
+//            if let id = device?.guid {
+//                return clients.deleteClient(guid: id) >>== { _ in deferMaybe(message) }
+//            }
+//
+//            return deferMaybe(message)
+//        }
+//    }
 
-        if let ourDeviceId = self.getOurDeviceId(), deviceId == ourDeviceId {
-            // We can't disconnect the device from the account until we have
-            // access to the application, so we'll handle this properly in the AppDelegate,
-            // by calling the FxALoginHelper.applicationDidDisonnect(application).
-            profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
-            return deferMaybe(PushMessage.thisDeviceDisconnected)
-        }
-
-        guard let profile = self.profile as? BrowserProfile else {
-            // We can't look up a name in testing, so this is the same as
-            // not knowing about it.
-            return deferMaybe(PushMessage.deviceDisconnected(nil))
-        }
-
-        let clients = profile.remoteClientsAndTabs
-        let getClient = clients.getClient(fxaDeviceId: deviceId)
-
-        return getClient >>== { device in
-            let message = PushMessage.deviceDisconnected(device?.name)
-            if let id = device?.guid {
-                return clients.deleteClient(guid: id) >>== { _ in deferMaybe(message) }
-            }
-
-            return deferMaybe(message)
-        }
-    }
-
-    fileprivate func getOurDeviceId() -> String? {
-        return profile.getAccount()?.deviceRegistration?.id
-    }
+//    fileprivate func getOurDeviceId() -> String? {
+//        return profile.getAccount()?.deviceRegistration?.id
+//    }
 }
 
 extension FxAPushMessageHandler {
