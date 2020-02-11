@@ -14,6 +14,7 @@ import SyncTelemetry
 import Sync
 import CoreSpotlight
 import UserNotifications
+import Account
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
@@ -226,6 +227,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
+        RustFirefoxAccounts.startup() { shared in
+            guard shared.accountManager.hasAccount() else { return }
+
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                DispatchQueue.main.async {
+                    if settings.authorizationStatus != .denied {
+                        application.registerForRemoteNotifications()
+                    }
+                }
+            }
+        }
+        
         if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
             LeanPlumClient.shared.setup(profile: profile)
             LeanPlumClient.shared.set(enabled: true)
@@ -614,83 +627,23 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        FxALoginHelper.sharedInstance.apnsRegisterDidSucceed(deviceToken)
+        let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
+        let client = PushClient(endpointURL: config.endpointURL, experimentalMode: false)
+        client.register(deviceToken.hexEncodedString).uponQueue(.main) { result in
+            if let pushReg = result.successValue {
+                let subscription = pushReg.defaultSubscription
+                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
+                RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
+
+                let keychain = KeychainWrapper.sharedAppContainerKeychain
+                keychain.set(pushReg as NSCoding, forKey: "account.push-registration")
+            }
+        }
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("failed to register. \(error)")
         FxALoginHelper.sharedInstance.apnsRegisterDidFail()
-    }
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        if Logger.logPII && log.isEnabledFor(level: .info) {
-            NSLog("APNS NOTIFICATION \(userInfo)")
-        }
-
-        // At this point, we know that NotificationService has been run.
-        // We get to this point if the notification was received while the app was in the foreground
-        // OR the app was backgrounded and now the user has tapped on the notification.
-        // Either way, if this method is being run, then the app is foregrounded.
-
-        // Either way, we should zero the badge number.
-        application.applicationIconBadgeNumber = 0
-
-        guard let profile = self.profile else {
-            return completionHandler(.noData)
-        }
-
-        // NotificationService will have decrypted the push message, and done some syncing
-        // activity. If the `client` collection was synced, and there are `displayURI` commands (i.e. sent tabs)
-        // NotificationService will have collected them for us in the userInfo.
-        if let serializedTabs = userInfo["sentTabs"] as? [NSDictionary] {
-            // Let's go ahead and open those.
-            for item in serializedTabs {
-                if let urlString = item["url"] as? String, let url = URL(string: urlString) {
-                    receivedURLs.append(url)
-                }
-            }
-
-            if receivedURLs.count > 0 {
-                // If we're in the foreground, load the queued tabs now.
-                if application.applicationState == .active {
-                    DispatchQueue.main.async {
-                        BrowserViewController.foregroundBVC().loadQueuedTabs(receivedURLs: self.receivedURLs)
-                        self.receivedURLs.removeAll()
-                    }
-                }
-
-                return completionHandler(.newData)
-            }
-        }
-
-        // By now, we've dealt with any sent tab notifications.
-        //
-        // The only thing left to do now is to perform actions that can only be performed
-        // while the app is foregrounded.
-        //
-        // Use the push message handler to re-parse the message,
-        // this time with a BrowserProfile and processing the return
-        // differently than in NotificationService.
-        let handler = FxAPushMessageHandler(with: profile)
-        handler.handle(userInfo: userInfo).upon { res in
-            if let message = res.successValue {
-                switch message {
-                case .accountVerified:
-                    _ = handler.postVerification()
-                case .thisDeviceDisconnected:
-                    FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
-                default:
-                    break
-                }
-            }
-
-            completionHandler(res.isSuccess ? .newData : .failed)
-        }
-    }
-
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        let completionHandler: (UIBackgroundFetchResult) -> Void = { _ in }
-        self.application(application, didReceiveRemoteNotification: userInfo, fetchCompletionHandler: completionHandler)
     }
 }
 

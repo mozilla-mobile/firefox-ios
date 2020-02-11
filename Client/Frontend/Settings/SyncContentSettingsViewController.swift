@@ -5,6 +5,8 @@
 import Foundation
 import Shared
 import Sync
+import Account
+import MozillaAppServices
 
 class ManageSetting: Setting {
     let profile: Profile
@@ -22,13 +24,14 @@ class ManageSetting: Setting {
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = FxAContentViewController(profile: profile)
 
-        if let account = profile.getAccount() {
-            var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
-            cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-            if let url = cs?.url {
-                viewController.url = url
-            }
-        }
+        // TODO [rustfxa] hookup account management webview
+//        if let account = profile.getAccount() {
+//            var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
+//            cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
+//            if let url = cs?.url {
+//                viewController.url = url
+//            }
+//        }
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -61,6 +64,8 @@ class DisconnectSetting: Setting {
         })
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
+                RustFirefoxAccounts.shared.accountManager.logout() { _ in }
+
                 FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
 
@@ -77,33 +82,36 @@ class DisconnectSetting: Setting {
 }
 
 class DeviceNamePersister: SettingValuePersister {
-    let profile: Profile
-
-    init(profile: Profile) {
-        self.profile = profile
-    }
-
     func readPersistedValue() -> String? {
-        return self.profile.getAccount()?.deviceName
+        return RustFirefoxAccounts.shared.accountManager.deviceConstellation()?
+            .state()?.localDevice?.displayName
     }
 
     func writePersistedValue(value: String?) {
         guard let newName = value,
-              let account = self.profile.getAccount() else {
+              let deviceConstellation = RustFirefoxAccounts.shared.accountManager.deviceConstellation() else {
             return
         }
-        account.updateDeviceName(newName)
-        self.profile.flushAccount()
-        _ = self.profile.syncManager.syncNamedCollections(why: .clientNameChanged, names: ["clients"])
+
+        deviceConstellation.setLocalDeviceName(name: newName)
     }
 }
 
 class DeviceNameSetting: StringSetting {
+    weak var tableView: UITableViewController?
+
+    private var notification: NSObjectProtocol?
 
     init(settings: SettingsTableViewController) {
+        tableView = settings
         let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
-        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: settingsIsValid)
+        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(), settingIsValid: settingsIsValid)
 
+        RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.refreshState()
+
+        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: nil) { [weak self] notification in
+            self?.tableView?.tableView.reloadData()
+        }
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -111,7 +119,13 @@ class DeviceNameSetting: StringSetting {
         textField.textAlignment = .natural
     }
 
+    deinit {
+        if let notification = notification {
+            NotificationCenter.default.removeObserver(notification)
+        }
+    }
 }
+
 
 class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()

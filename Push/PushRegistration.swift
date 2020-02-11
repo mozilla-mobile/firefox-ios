@@ -63,12 +63,12 @@ fileprivate let defaultSubscriptionID = "defaultSubscription"
 /// Small NSCodable class for persisting a channel subscription.
 /// We use NSCoder because we expect it to be stored in the profile.
 public class PushSubscription: NSObject, NSCoding {
-    let channelID: String
-    let endpoint: URL
+    public let channelID: String
+    public let endpoint: URL
 
-    let p256dhPublicKey: String
-    let p256dhPrivateKey: String
-    let authKey: String
+    public let p256dhPublicKey: String
+    public let p256dhPrivateKey: String
+    public let authKey: String
 
     init(channelID: String, endpoint: URL, p256dhPrivateKey: String, p256dhPublicKey: String, authKey: String) {
         self.channelID =  channelID
