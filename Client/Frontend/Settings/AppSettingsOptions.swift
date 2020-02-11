@@ -341,20 +341,19 @@ class AccountStatusSetting: WithAccountSetting {
         let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
         viewController.delegate = self
 
-        if let account = profile.rustAccount {
-            if !account.accountNeedsReauth() {
-                let viewController = SyncContentSettingsViewController()
-                viewController.profile = profile
-                navigationController?.pushViewController(viewController, animated: true)
-                return
-            } else {
-                // TODO [rustfxa] hookup re-auth case
+        let account = profile.rustAccount
+        if !account.accountNeedsReauth() {
+            let viewController = SyncContentSettingsViewController()
+            viewController.profile = profile
+            navigationController?.pushViewController(viewController, animated: true)
+            return
+        } else {
+            // TODO [rustfxa] hookup re-auth case
 //                var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
 //                cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
 //                if let url = cs?.url {
 //                    viewController.url = url
 //                }
-            }
         }
         navigationController?.pushViewController(viewController, animated: true)
     }

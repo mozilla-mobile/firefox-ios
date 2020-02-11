@@ -134,7 +134,7 @@ protocol Profile: AnyObject {
     func hasSyncableAccount() -> Bool
 
     func getAccount() -> Account.FirefoxAccount?
-    var rustAccount: FxaAccountManager? { get }
+    var rustAccount: FxaAccountManager { get }
 
     func removeAccount()
     func setAccount(_ account: Account.FirefoxAccount)
@@ -566,19 +566,18 @@ open class BrowserProfile: Profile {
     }()
 
     func hasAccount() -> Bool {
-        return rustAccount?.hasAccount() ?? false
+        return rustAccount.hasAccount()
     }
 
     func hasSyncableAccount() -> Bool {
-        return hasAccount() &&
-            !(rustAccount?.accountNeedsReauth() ?? false)
+        return hasAccount() && !rustAccount.accountNeedsReauth() 
     }
 
     func getAccount() -> Account.FirefoxAccount? {
         return account
     }
 
-    var rustAccount: FxaAccountManager? {
+    var rustAccount: FxaAccountManager {
         return RustFirefoxAccounts.shared.accountManager
     }
 
@@ -640,6 +639,7 @@ open class BrowserProfile: Profile {
         // safe as a strong reference, because there's no cycle.
         unowned fileprivate let profile: BrowserProfile
         fileprivate let prefs: Prefs
+        fileprivate var constellationStateUpdate: Any?
 
         let FifteenMinutes = TimeInterval(60 * 15)
         let OneMinute = TimeInterval(60)
@@ -650,6 +650,12 @@ open class BrowserProfile: Profile {
         public func applicationDidEnterBackground() {
             self.backgrounded = true
             self.endTimedSyncs()
+        }
+
+        deinit {
+            if let c = constellationStateUpdate {
+                NotificationCenter.default.removeObserver(c)
+            }
         }
 
         public func applicationDidBecomeActive() {
@@ -958,19 +964,22 @@ open class BrowserProfile: Profile {
         fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing clients to storage.")
 
-            let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
-            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info, notifier: self) >>== { result in
-                guard case .completed = result else {
-                    return deferMaybe(result)
-                }
-                guard let account = self.profile.account else {
-                    return deferMaybe(result)
-                }
-                log.debug("Updating FxA devices list.")
-                return account.updateFxADevices(remoteDevices: self.profile.remoteClientsAndTabs).bind { _ in
-                    return deferMaybe(result)
+            if constellationStateUpdate == nil {
+                constellationStateUpdate = NotificationCenter.default.addObserver(forName: .constellationStateUpdate, object: nil, queue: .main) { [weak self] notification in
+                    guard let state = self?.profile.rustAccount.deviceConstellation()?.state() else {
+                        return
+                    }
+                    guard let self = self else { return }
+                    let devices = state.remoteDevices.map { d -> RemoteDevice in
+                        let t = "\(d.deviceType)"
+                        return RemoteDevice(id: d.id, name: d.displayName, type: t, isCurrentDevice: d.isCurrentDevice, lastAccessTime: d.lastAccessTime, availableCommands: nil)
+                    }
+                    let _ = self.profile.remoteClientsAndTabs.replaceRemoteDevices(devices)
                 }
             }
+
+            profile.rustAccount.deviceConstellation()?.refreshState()
+            return deferMaybe(.notStarted(.unknown))
         }
 
         fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {

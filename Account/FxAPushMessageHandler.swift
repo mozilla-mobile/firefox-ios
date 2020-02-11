@@ -60,17 +60,24 @@ extension FxAPushMessageHandler {
         // return handle(plaintext: string)
         let deferred = PushMessageResult()
         RustFirefoxAccounts.startup() { fxa in
-            fxa.accountManager.deviceConstellation()?.processRawIncomingDeviceEvent(pushPayload: string) { result in
+            fxa.accountManager.deviceConstellation()?.processRawIncomingAccountEvent(pushPayload: string) { result in
                 guard case .success(let events) = result else {
                     return
                 }
                 events.forEach { event in
                     switch event {
-                    case .tabReceived(_, let tabData):
-                        let title = tabData.last?.title ?? ""
-                        let url = tabData.last?.url ?? ""
-                        let message = PushMessage.commandReceived(tab: ["title": title, "url": url])
-                        deferred.fill(Maybe(success: message))
+                    case .incomingDeviceCommand(let deviceCommand):
+                        switch deviceCommand {
+                            case .tabReceived(_, let tabData):
+                                let title = tabData.last?.title ?? ""
+                                let url = tabData.last?.url ?? ""
+                                let message = PushMessage.commandReceived(tab: ["title": title, "url": url])
+                                deferred.fill(Maybe(success: message))
+                        }
+                    case .deviceConnected(let deviceName):
+                        print()
+                    case .deviceDisconnected(let isLocalDevice):
+                        print()
                     }
                 }
             }
