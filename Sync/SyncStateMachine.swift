@@ -157,7 +157,7 @@ open class SyncStateMachine {
 
             // Take the scratchpad and add the fxaDeviceId from the state, and hashedUID from the token
             let b = Scratchpad.Builder(p: scratchpad)
-            if let deviceID = authState.deviceID {
+            if let deviceID = RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.state()?.localDevice?.id {
                 b.fxaDeviceId = deviceID
             } else {
                 // Either deviceRegistration hasn't occurred yet (our bug) or
