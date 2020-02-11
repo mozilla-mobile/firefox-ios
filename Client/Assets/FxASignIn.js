@@ -13,6 +13,6 @@
 function handleAccountsCommand(evt) {
   webkit.messageHandlers.accountsCommandHandler.postMessage({ type: evt.type, detail: evt.detail });
 };
-window.addEventListener("FirefoxAccountsCommand", handleAccountsCommand);
+window.addEventListener("WebChannelMessageToChrome", handleAccountsCommand);
 
 })();
