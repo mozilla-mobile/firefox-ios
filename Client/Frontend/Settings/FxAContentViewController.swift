@@ -64,7 +64,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        profile.rustAccount.refreshProfile()
+        //////profile.rustAccount.refreshProfile()
 
         // If the FxAContentViewController was launched from a FxA deferred link
         // onboarding might not have been shown. Check to see if it needs to be
