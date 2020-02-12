@@ -1215,6 +1215,13 @@ open class BrowserProfile: Profile {
         }
 
         @discardableResult public func syncEverything(why: SyncReason) -> Success {
+            if RustFirefoxAccounts.shared.accountManager.accountMigrationInFlight() {
+                RustFirefoxAccounts.shared.accountManager.retryMigration() { result in
+                    print(result)
+                }
+                return Success()
+            }
+
             let synchronizers = [
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),

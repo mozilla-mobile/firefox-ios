@@ -12,9 +12,10 @@ enum DismissType {
     case popToRootVC
 }
 
-enum FxALoginFlow {
+enum FxAPageType {
     case emailLoginFlow
     case signUpFlow
+    case settingsPage
 }
 
 fileprivate enum RemoteCommand: String {
@@ -27,23 +28,20 @@ fileprivate enum RemoteCommand: String {
     //case deleteAccount = "delete_account"
 }
 
-class RustLoginView: UIViewController, WKNavigationDelegate {
+class FxAWebView: UIViewController, WKNavigationDelegate {
     private var webView: WKWebView
     var dismissType: DismissType = .dismiss
-    let fxaLaunchParams: FxALaunchParams
-    let loginFlowType: FxALoginFlow
+    let pageType: FxAPageType
     fileprivate var baseURL: URL?
+    let settingsURL = "https://accounts.firefox.com/settings?service=sync&context=oauth_webchannel_v1"
 
-    init(fxaOptions: FxALaunchParams?, flowType: FxALoginFlow) {
-        self.fxaLaunchParams = fxaOptions ?? FxALaunchParams(query: [String: String]())
-        self.loginFlowType = flowType
+    init(pageType: FxAPageType) {
+        self.pageType = pageType
 
         let contentController = WKUserContentController()
-        if let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js") {
-            if let source = try? String(contentsOfFile: path, encoding: .utf8) {
-                let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-                contentController.addUserScript(userScript)
-            }
+        if let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) {
+            let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+            contentController.addUserScript(userScript)
         }
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
@@ -59,13 +57,18 @@ class RustLoginView: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.webView.navigationDelegate = self
-        self.view = self.webView
+        webView.navigationDelegate = self
+        view = webView
 
-        RustFirefoxAccounts.shared.accountManager.beginAuthentication() { [weak self] result in
-            if case .success(let url) = result {
-                self?.baseURL = url
-                self?.webView.load(URLRequest(url: url))
+        if pageType == .settingsPage, let url = URL(string: settingsURL) {
+            baseURL = url
+            webView.load(URLRequest(url: url))
+        } else {
+            RustFirefoxAccounts.shared.accountManager.beginAuthentication() { [weak self] result in
+                if case .success(let url) = result {
+                    self?.baseURL = url
+                    self?.webView.load(URLRequest(url: url))
+                }
             }
         }
     }
@@ -114,13 +117,15 @@ class RustLoginView: UIViewController, WKNavigationDelegate {
     }
 }
 
-extension RustLoginView: WKScriptMessageHandler {
+extension FxAWebView: WKScriptMessageHandler {
     // Handle a message coming from the content server.
     private func handleRemote(command rawValue: String, id: Int?, data: Any?) {
         if let command = RemoteCommand(rawValue: rawValue) {
             switch command {
             case .login:
-                onLogin(data: data)
+                if let data = data {
+                    onLogin(data: data)
+                }
             case .status:
                 if let id = id {
                     onSessionStatus(id: id)
@@ -129,14 +134,14 @@ extension RustLoginView: WKScriptMessageHandler {
         }
     }
 
-    private func runJS(typeId: String, messageId: Int, command: String) {
+    private func runJS(typeId: String, messageId: Int, command: String, data: String = "{}") {
         let msg = """
             var msg = {
                 id: "\(typeId)",
                 message: {
                     messageId: \(messageId),
                     command: "\(command)",
-                    data : {}
+                    data : \(data)
                 }
             };
             window.dispatchEvent(new CustomEvent('WebChannelMessageToContent', { detail: JSON.stringify(msg) }));
@@ -148,7 +153,28 @@ extension RustLoginView: WKScriptMessageHandler {
     private func onSessionStatus(id: Int) {
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
-        runJS(typeId: typeId, messageId: id, command: cmd)
+        let data: String
+        if pageType == .settingsPage {
+            let fxa = RustFirefoxAccounts.shared.accountManager
+            let email = fxa.accountProfile()?.email ?? ""
+            let token = (try? fxa.getSessionToken().get()) ?? ""
+            data = """
+            {   signedInUser: {
+                    sessionToken: "\(token)",
+                    email: "\(email)",
+                    verified: true,
+                }
+            }
+        """
+        } else {
+            data = """
+                { capabilities:
+                    { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
+                }
+            """
+        }
+
+        runJS(typeId: typeId, messageId: id, command: cmd, data: data)
     }
 
     private func onLogin(data: Any) {
