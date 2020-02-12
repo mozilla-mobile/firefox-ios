@@ -2019,7 +2019,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         self.presentSignInViewController(fxaParams)
     }
 
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxALoginFlow?) {
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxAPageType?) {
         self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         introViewController.dismiss(animated: true) {
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
@@ -2033,11 +2033,10 @@ extension BrowserViewController: IntroViewControllerDelegate {
         }
     }
 
-    func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxALoginFlow) -> UIViewController {
+    func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
-        print(profile.hasAccount())
         guard profile.hasSyncableAccount() else {
-            let vc = RustLoginView(fxaOptions: fxaOptions, flowType: flowType)
+            let vc = FxAWebView(pageType: flowType)
             vc.dismissType = .dismiss
             return vc
         }
@@ -2047,7 +2046,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
         return settingsTableViewController
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxALoginFlow = .emailLoginFlow) {
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow) {
         let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType)
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent)
     }

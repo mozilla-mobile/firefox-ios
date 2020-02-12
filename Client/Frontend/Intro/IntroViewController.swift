@@ -7,7 +7,7 @@ import SnapKit
 import Shared
 
 protocol IntroViewControllerDelegate: AnyObject {
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxALoginFlow?)
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxAPageType?)
 }
 
 struct ViewControllerConsts {
