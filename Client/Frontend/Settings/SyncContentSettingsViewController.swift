@@ -8,7 +8,7 @@ import Sync
 import Account
 import MozillaAppServices
 
-class ManageSetting: Setting {
+class ManageFxAccountSetting: Setting {
     let profile: Profile
 
     override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
@@ -22,16 +22,7 @@ class ManageSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAContentViewController(profile: profile)
-
-        // TODO [rustfxa] hookup account management webview
-//        if let account = profile.getAccount() {
-//            var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
-//            cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-//            if let url = cs?.url {
-//                viewController.url = url
-//            }
-//        }
+        let viewController = FxAWebView(pageType: .settingsPage)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -64,10 +55,13 @@ class DisconnectSetting: Setting {
         })
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
-                RustFirefoxAccounts.shared.accountManager.logout() { _ in }
+                RustFirefoxAccounts.shared.accountManager.logout() { _ in
+                    assert(RustFirefoxAccounts.shared.accountManager.accountProfile() == nil)
+                    assert(RustFirefoxAccounts.shared.accountManager.hasAccount() == false)
+                }
 
-                FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
-                LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
+//                FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
+//                LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
 
                 // If there is more than one view controller in the navigation controller, we can pop.
                 // Otherwise, assume that we got here directly from the App Menu and dismiss the VC.
@@ -162,7 +156,7 @@ class SyncContentSettingsViewController: SettingsTableViewController {
     }
 
     override func generateSettings() -> [SettingSection] {
-        let manage = ManageSetting(settings: self)
+        let manage = ManageFxAccountSetting(settings: self)
         let manageSection = SettingSection(title: nil, footerTitle: nil, children: [manage])
 
         let bookmarks = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.bookmarks.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.FirefoxSyncBookmarksEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("bookmarks"))

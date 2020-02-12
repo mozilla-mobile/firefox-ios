@@ -19,6 +19,22 @@ open class RustFirefoxAccounts {
         startupCalled = true
 
         shared.accountManager.initialize() { result in
+            let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
+            if Bundle.main.bundleURL.pathExtension != "appex", let tokens = migrationTokens(), !hasAttemptedMigration {
+                UserDefaults.standard.set(true, forKey: "hasAttemptedMigration")
+                shared.accountManager.migrationAuthentication(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { result in
+                    // handle failure case
+                    switch result {
+                    case .success:
+                        break
+                    case .failure:
+                        break
+                    case .willRetry:
+                        break
+                    }
+                }
+            }
+
             completion?(shared)
         }
     }
@@ -31,7 +47,7 @@ open class RustFirefoxAccounts {
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
-        accountManager = FxaAccountManager(config: config, deviceConfig: deviceConfig, keychainAccessGroup: accessGroupIdentifier)
+        accountManager = FxaAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
 
         syncAuthState = FirefoxAccountSyncAuthState(
             cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",
@@ -47,7 +63,7 @@ open class RustFirefoxAccounts {
         }
     }
 
-    class func migrateTokens() -> (String, String, String)? {
+    class func migrationTokens() -> (session: String, ksync: String, kxcs: String)? {
         // Keychain forKey("profile.account"), return dictionary, from there
         // forKey("account.state.<guid>"), guid is dictionary["stateKeyLabel"]
         // that returns JSON string.
@@ -72,7 +88,7 @@ open class RustFirefoxAccounts {
             return nil
         }
 
-        return (sessionToken: sessionToken, ksync: ksync, kxcs: kxcs)
+        return (session: sessionToken, ksync: ksync, kxcs: kxcs)
     }
 
     public var isActionNeeded: Bool {

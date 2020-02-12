@@ -75,7 +75,7 @@ extension PhotonActionSheetProtocol {
         return items
     }
 
-    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ flowType: FxALoginFlow) -> Void) -> PhotonActionSheetItem? {
+    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ flowType: FxAPageType) -> Void) -> PhotonActionSheetItem? {
         //profile.getAccount()?.updateProfile()
 
         let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
