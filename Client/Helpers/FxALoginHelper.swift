@@ -299,10 +299,10 @@ class FxALoginHelper {
 }
 
 extension FxALoginHelper {
-    func applicationDidDisconnect(_ application: UIApplication) {
+    func disconnect() {
         // According to https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications
         // we should be calling:
-        application.unregisterForRemoteNotifications()
+        UIApplication.shared.unregisterForRemoteNotifications()
         // However, https://forums.developer.apple.com/message/179264#179264 advises against it, suggesting there is
         // a 24h period after unregistering where re-registering fails. This doesn't seem to be the case (for me)
         // but this may be useful to know if QA/user-testing find this a problem.
