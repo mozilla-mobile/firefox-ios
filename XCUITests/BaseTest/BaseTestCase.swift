@@ -10,9 +10,10 @@ struct Base {
     static let helper = Helper()
 }
 
+var navigator: MMNavigator<FxUserState>!
+var userState: FxUserState!
+
 class BaseTestCase: XCTestCase {
-    var navigator: MMNavigator<FxUserState>!
-    var userState: FxUserState!
     
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.

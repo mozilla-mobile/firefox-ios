@@ -340,6 +340,8 @@
 		B5340D6923ED7F36009F440B /* TestCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = B5340D6723ED7F36009F440B /* TestCheck.swift */; };
 		B5340D6D23ED80AD009F440B /* LaunchArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075861E37F7AB006961AC /* LaunchArguments.swift */; };
 		B5340D7023ED845C009F440B /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
+		B59D4BA223F2B48A000A9CEF /* CommonCheckFlows.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59D4BA123F2B48A000A9CEF /* CommonCheckFlows.swift */; };
+		B59D4BA423F2B4BC000A9CEF /* CommonStepFlows.swift in Sources */ = {isa = PBXBuildFile; fileRef = B59D4BA323F2B4BC000A9CEF /* CommonStepFlows.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
 		C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45F44681D087DB600CB7EF0 /* TopTabsViewController.swift */; };
@@ -1480,6 +1482,8 @@
 		B5340D6423ED7F24009F440B /* Helper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		B5340D6623ED7F36009F440B /* TestStep.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestStep.swift; sourceTree = "<group>"; };
 		B5340D6723ED7F36009F440B /* TestCheck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestCheck.swift; sourceTree = "<group>"; };
+		B59D4BA123F2B48A000A9CEF /* CommonCheckFlows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonCheckFlows.swift; sourceTree = "<group>"; };
+		B59D4BA323F2B4BC000A9CEF /* CommonStepFlows.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonStepFlows.swift; sourceTree = "<group>"; };
 		C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
 		C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListAnimator.swift; sourceTree = "<group>"; };
 		C45F44681D087DB600CB7EF0 /* TopTabsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopTabsViewController.swift; sourceTree = "<group>"; };
@@ -2655,8 +2659,10 @@
 			isa = PBXGroup;
 			children = (
 				3BF4B8E81D38497A00493393 /* BaseTestCase.swift */,
-				B5340D6723ED7F36009F440B /* TestCheck.swift */,
 				B5340D6623ED7F36009F440B /* TestStep.swift */,
+				B5340D6723ED7F36009F440B /* TestCheck.swift */,
+				B59D4BA323F2B4BC000A9CEF /* CommonStepFlows.swift */,
+				B59D4BA123F2B48A000A9CEF /* CommonCheckFlows.swift */,
 			);
 			path = BaseTest;
 			sourceTree = "<group>";
@@ -4904,6 +4910,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2CA16FDE1E5F089100332277 /* SearchTest.swift in Sources */,
+				B59D4BA223F2B48A000A9CEF /* CommonCheckFlows.swift in Sources */,
 				B5340D6523ED7F25009F440B /* Helper.swift in Sources */,
 				0BF0DB4A1E57B05E009172B0 /* LaunchArguments.swift in Sources */,
 				3B546EC01D95ECAE00BDBE36 /* ActivityStreamTest.swift in Sources */,
@@ -4940,6 +4947,7 @@
 				2CC1B3F01E9B861400814EEC /* DomainAutocompleteTest.swift in Sources */,
 				B5340D6123ED7ECF009F440B /* XCUIElement+Extension.swift in Sources */,
 				2C473BD0209778900008C853 /* DownloadFilesTests.swift in Sources */,
+				B59D4BA423F2B4BC000A9CEF /* CommonStepFlows.swift in Sources */,
 				39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */,
 				3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */,
 				2CEDADA220207EC400223A89 /* SyncFAUITests.swift in Sources */,

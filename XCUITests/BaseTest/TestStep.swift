@@ -8,7 +8,7 @@
 
 import XCTest
 
-class TestStep {
+class TestStep: CommonStepFlows {
     
     /**
      Taps on the specified UI element

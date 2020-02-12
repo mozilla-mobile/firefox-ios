@@ -8,7 +8,7 @@
 
 import XCTest
 
-class TestCheck {
+class TestCheck: CommonCheckFlows {
     
     /**
      Checks if the specified UI element is present on the screen
