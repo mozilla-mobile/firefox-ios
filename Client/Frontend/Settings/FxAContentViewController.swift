@@ -179,7 +179,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     // The user has deleted their Firefox Account. Disconnect them!
     fileprivate func onDeleteAccount() {
-        FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
+        FxALoginHelper.sharedInstance.disconnect()
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: profile.hasAccount()])
         dismiss(animated: true)
     }
