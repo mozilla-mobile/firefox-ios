@@ -323,7 +323,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             profile._reopen()
 
             if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
-                FxALoginHelper.sharedInstance.applicationDidDisconnect(application)
+                FxALoginHelper.sharedInstance.disconnect()
             }
 
             profile.syncManager.applicationDidBecomeActive()
