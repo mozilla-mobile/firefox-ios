@@ -22,20 +22,19 @@ open class RustFirefoxAccounts {
             let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
             if Bundle.main.bundleURL.pathExtension != "appex", let tokens = migrationTokens(), !hasAttemptedMigration {
                 UserDefaults.standard.set(true, forKey: "hasAttemptedMigration")
-                shared.accountManager.migrationAuthentication(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { result in
-                    // handle failure case
-                    switch result {
-                    case .success:
-                        break
-                    case .failure:
-                        break
-                    case .willRetry:
-                        break
-                    }
+                shared.accountManager.migrationAuthentication(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in
+                    // error case is handled by notification of .accountMigrationFailed
+                    NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
                 }
             }
 
             completion?(shared)
+
+            // We update the UI based on `.FirefoxAccountStateChange`, allow additional time for FxaAccountManager to
+            // complete any async work it is doing and notify the UI that it may need to update.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
+            }
         }
     }
 
@@ -54,12 +53,21 @@ open class RustFirefoxAccounts {
                                             withLabel: nil /* we probably want a random string associated with the current account here*/,
                 factory: syncAuthStateCachefromJSON))
 
-        NotificationCenter.default.addObserver(forName: Notification.Name.accountAuthenticated,  object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: .accountAuthenticated,  object: nil, queue: nil) { notification in
             self.update()
         }
         
-        NotificationCenter.default.addObserver(forName: Notification.Name.accountProfileUpdate,  object: nil, queue: nil) { notification in
+        NotificationCenter.default.addObserver(forName: .accountProfileUpdate,  object: nil, queue: nil) { notification in
             self.update()
+        }
+
+        NotificationCenter.default.addObserver(forName: .accountMigrationFailed, object: nil, queue: nil) { notification in
+            var info = ""
+            if let error = notification.userInfo?["error"] as? Error {
+                info = error.localizedDescription
+            }
+            Sentry.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
+            NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)             
         }
     }
 
@@ -92,6 +100,7 @@ open class RustFirefoxAccounts {
     }
 
     public var isActionNeeded: Bool {
+        if accountManager.accountMigrationInFlight() { return true }
         if !accountManager.hasAccount() { return false }
         return accountManager.accountNeedsReauth()
     }
