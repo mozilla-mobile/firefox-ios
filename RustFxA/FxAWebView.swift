@@ -182,6 +182,11 @@ extension FxAWebView: WKScriptMessageHandler {
             return
         }
 
+        if let declinedSyncEngines = data["declinedSyncEngines"] as? [String] {
+            // Stash the declined engines so on first sync we can disable them!
+            UserDefaults.standard.set(declinedSyncEngines, forKey: "fxa.cwts.declinedSyncEngines")
+        }
+
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
         RustFirefoxAccounts.shared.accountManager.finishAuthentication(authData: auth) { _ in
             let application = UIApplication.shared

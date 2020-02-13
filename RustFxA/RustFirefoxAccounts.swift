@@ -51,7 +51,7 @@ open class RustFirefoxAccounts {
 
         syncAuthState = FirefoxAccountSyncAuthState(
             cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",
-                                            withLabel: nil /* we probably want a random string associated with the current account here*/,
+                                            withLabel: "bobo" /* TODO: we probably want a random string associated with the current account here*/,
                 factory: syncAuthStateCachefromJSON))
 
         NotificationCenter.default.addObserver(forName: Notification.Name.accountAuthenticated,  object: nil, queue: nil) { notification in
