@@ -31,7 +31,7 @@ public extension LoginRecord {
     }
 
     var credentials: URLCredential {
-        return URLCredential(user: username ?? "", password: password, persistence: .forSession)
+        return URLCredential(user: username, password: password, persistence: .forSession)
     }
 
     var protectionSpace: URLProtectionSpace {
