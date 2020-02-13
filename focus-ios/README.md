@@ -17,7 +17,7 @@ We encourage you to participate in this open source project. We love Pull Reques
 * Mailing List:   [firefox-focus-public@](https://mail.mozilla.org/listinfo/firefox-focus-public)
 * Bugs:           [File a new bug](https://github.com/mozilla-mobile/focus-ios/issues/new) • [Existing bugs](https://github.com/mozilla-mobile/focus-ios/issues)
 
-If you're looking for a good way to get started contributing, check out out some [good first issues](https://github.com/mozilla-mobile/focus-ios/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
+If you're looking for a good way to get started contributing, check out some [good first issues](https://github.com/mozilla-mobile/focus-ios/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
 We also tag recommended bugs for contributions with [help wanted](https://github.com/mozilla-mobile/focus-ios/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22).
 
