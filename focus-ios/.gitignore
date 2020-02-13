@@ -16,6 +16,10 @@ DerivedData
 *.ipa
 *.xcuserstate
 *.xcscmblueprint
+.build
+
+# Swift Package Manager
+.swiftpm
 
 # OS X
 .DS_Store
