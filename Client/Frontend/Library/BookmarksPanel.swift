@@ -90,7 +90,7 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         self.doneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
             self.disableEditMode()
         }
-        
+
         self.newBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add) { _ in
             let newBookmark = PhotonActionSheetItem(title: Strings.BookmarksNewBookmark, iconString: "action_bookmark", handler: { _, _ in
                 guard let bookmarkFolder = self.bookmarkFolder else {
