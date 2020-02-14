@@ -300,6 +300,8 @@ class FxALoginHelper {
 
 extension FxALoginHelper {
     func disconnect() {
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
+
         // According to https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications
         // we should be calling:
         UIApplication.shared.unregisterForRemoteNotifications()
