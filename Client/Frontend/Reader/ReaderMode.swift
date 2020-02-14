@@ -41,6 +41,12 @@ private struct FontFamily {
     static let families = [serifFamily, sansFamily]
 }
 
+private struct FontFamily {
+    static let serifFamily = [ReaderModeFontType.serif, ReaderModeFontType.serifBold]
+    static let sansFamily = [ReaderModeFontType.sansSerif, ReaderModeFontType.sansSerifBold]
+    static let families = [serifFamily, sansFamily]
+}
+
 enum ReaderModeFontType: String {
     case serif = "serif"
     case serifBold = "serif-bold"
