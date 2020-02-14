@@ -6,6 +6,7 @@ import WebKit
 import UIKit
 import Account
 import MozillaAppServices
+import Shared
 
 enum DismissType {
     case dismiss
@@ -23,9 +24,9 @@ fileprivate enum RemoteCommand: String {
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
     case login = "fxaccounts:oauth_login"
-    //case changePassword = "change_password"
+    case changePassword = "fxaccounts:change_password"
     //case signOut = "sign_out"
-    //case deleteAccount = "delete_account"
+    case deleteAccount = "fxaccounts:delete_account"
 }
 
 class FxAWebView: UIViewController, WKNavigationDelegate {
@@ -34,6 +35,7 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
     let pageType: FxAPageType
     fileprivate var baseURL: URL?
     let settingsURL = "https://accounts.firefox.com/settings?service=sync&context=oauth_webchannel_v1"
+    private var helpBrowser: WKWebView?
 
     init(pageType: FxAPageType) {
         self.pageType = pageType
@@ -46,9 +48,15 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         webView = WKWebView(frame: .zero, configuration: config)
+        webView.allowsLinkPreview = false
+        webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+        webView.scrollView.bounces = false  // Don't allow overscrolling.
+        webView.customUserAgent = UserAgent.mobileUserAgent() // This is not shown full-screen, use mobile UA
 
         super.init(nibName: nil, bundle: nil)
         contentController.add(self, name: "accountsCommandHandler")
+        webView.navigationDelegate = self
+        webView.uiDelegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,41 +85,12 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
         }
     }
 
-    private func matchingRedirectURLReceived(components: URLComponents) {
-        var dic = [String: String]()
-        components.queryItems?.forEach { dic[$0.name] = $0.value }
-        let data = FxaAuthData(code: dic["code"]!, state: dic["state"]!, actionQueryParam: "signin")
-        RustFirefoxAccounts.shared.accountManager.finishAuthentication(authData: data) { _ in
-            let application = UIApplication.shared
-            // ask for push notification
-            let center = UNUserNotificationCenter.current()
-            center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                DispatchQueue.main.async {
-                    guard error == nil else {
-                        return
-                    }
-                    if granted {
-                        application.registerForRemoteNotifications()
-                    }
-                }
-            }
-        }
-
-        if dismissType == .dismiss {
-            dismiss(animated: true)
-        } else {
-            navigationController?.popToRootViewController(animated: true)
-        }
-    }
-
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
         let redirectUrl = RustFirefoxAccounts.shared.redirectURL
         if let navigationURL = navigationAction.request.url {
             let expectedRedirectURL = URL(string: redirectUrl)!
-            if navigationURL.scheme == expectedRedirectURL.scheme && navigationURL.host == expectedRedirectURL.host && navigationURL.path == expectedRedirectURL.path,
-                let components = URLComponents(url: navigationURL, resolvingAgainstBaseURL: true) {
-                matchingRedirectURLReceived(components: components)
+            if navigationURL.scheme == expectedRedirectURL.scheme && navigationURL.host == expectedRedirectURL.host && navigationURL.path == expectedRedirectURL.path {
                 decisionHandler(.cancel)
                 return
             }
@@ -126,7 +105,7 @@ extension FxAWebView: WKScriptMessageHandler {
     private func handleRemote(command rawValue: String, id: Int?, data: Any?) {
         if let command = RemoteCommand(rawValue: rawValue) {
             switch command {
-            case .login:
+            case .login, .changePassword:
                 if let data = data {
                     onLogin(data: data)
                 }
@@ -134,6 +113,9 @@ extension FxAWebView: WKScriptMessageHandler {
                 if let id = id {
                     onSessionStatus(id: id)
                 }
+            case .deleteAccount:
+                FxALoginHelper.sharedInstance.disconnect()
+                dismiss(animated: true)
             }
         }
     }
@@ -228,5 +210,51 @@ extension FxAWebView: WKScriptMessageHandler {
 
         let id = Int(msg["messageId"] as? String ?? "")
         handleRemote(command: cmd, id: id, data: msg["data"])
+    }
+}
+
+extension FxAWebView{
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let hideLongpress = "document.body.style.webkitTouchCallout='none';"
+        webView.evaluateJavaScript(hideLongpress)
+        guard webView !== helpBrowser else {
+            let isSecure = webView.hasOnlySecureContent
+            navigationItem.title = (isSecure ? "🔒 " : "") + (webView.url?.host ?? "")
+            return
+        }
+
+        navigationItem.title = nil
+    }
+}
+
+extension FxAWebView: WKUIDelegate {
+    // Blank target links (support  links) will create a 2nd webview to browse.
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        guard helpBrowser == nil else {
+            return nil
+        }
+        let f = webView.frame
+        let wv = WKWebView(frame: CGRect(width: f.width, height: f.height), configuration: configuration)
+        helpBrowser?.load(navigationAction.request)
+        webView.addSubview(wv)
+        helpBrowser = wv
+        helpBrowser?.navigationDelegate = self
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+
+        return helpBrowser
+    }
+
+    @objc func closeHelpBrowser() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.helpBrowser?.alpha = 0
+        }, completion: {_ in
+            self.helpBrowser?.removeFromSuperview()
+            self.helpBrowser = nil
+        })
+
+        navigationItem.title = nil
+        self.navigationItem.leftBarButtonItem = nil
+        self.navigationItem.hidesBackButton = false
     }
 }
