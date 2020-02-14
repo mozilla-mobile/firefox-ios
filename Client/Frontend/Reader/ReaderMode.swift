@@ -31,9 +31,37 @@ enum ReaderModeTheme: String {
     case sepia = "sepia"
 }
 
+private struct FontFamily {
+    static let serifFamily = [ReaderModeFontType.serif, ReaderModeFontType.serifBold]
+    static let sansFamily = [ReaderModeFontType.sansSerif, ReaderModeFontType.sansSerifBold]
+    static let families = [serifFamily, sansFamily]
+}
+
 enum ReaderModeFontType: String {
     case serif = "serif"
+    case serifBold = "serif-bold"
     case sansSerif = "sans-serif"
+    case sansSerifBold = "sans-serif-bold"
+    
+    init(type: String) {
+        let font = ReaderModeFontType(rawValue: type)
+        let isBoldFontEnabled = UIAccessibility.isBoldTextEnabled
+        
+        switch font {
+        case .serif,
+             .serifBold:
+            self = isBoldFontEnabled ? .serifBold : .serif
+        case .sansSerif,
+             .sansSerifBold:
+            self = isBoldFontEnabled ? .sansSerifBold : .sansSerif
+        case .none:
+            self = .sansSerif
+        } 
+    }
+    
+    func isSameFamily(_ font: ReaderModeFontType) -> Bool {        
+        return !FontFamily.families.filter { $0.contains(font) && $0.contains(self) }.isEmpty        
+    }
 }
 
 enum ReaderModeFontSize: Int {
@@ -128,14 +156,14 @@ struct ReaderModeStyle {
         }
 
         let theme = ReaderModeTheme(rawValue: themeRawValue!)
-        let fontType = ReaderModeFontType(rawValue: fontTypeRawValue!)
+        let fontType = ReaderModeFontType(type: fontTypeRawValue!)
         let fontSize = ReaderModeFontSize(rawValue: fontSizeRawValue!)
-        if theme == nil || fontType == nil || fontSize == nil {
+        if theme == nil || fontSize == nil {
             return nil
         }
 
         self.theme = theme!
-        self.fontType = fontType!
+        self.fontType = fontType
         self.fontSize = fontSize!
     }
 }
