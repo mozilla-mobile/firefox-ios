@@ -56,6 +56,10 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
     }
 
     override func viewDidLoad() {
+        // If accountMigrationFailed then the app menu has a caution icon, and at this point the user has taken
+        // sufficient action to clear the caution.
+        RustFirefoxAccounts.shared.accountMigrationFailed = false
+
         super.viewDidLoad()
         webView.navigationDelegate = self
         view = webView
