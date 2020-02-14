@@ -151,7 +151,7 @@ class URLBarView: UIView {
         return button
     }()
 
-    var menuButton = ToolbarButton()
+    var appMenuButton = ToolbarButton()
     var libraryButton = ToolbarButton()
 
     var bookmarkButton = ToolbarButton()
@@ -164,7 +164,7 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.menuButton, self.forwardButton, self.backButton, self.stopReloadButton]
+    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton, self.forwardButton, self.backButton, self.stopReloadButton]
 
     var currentURL: URL? {
         get {
@@ -199,7 +199,7 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationView)
 
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         libraryButton, menuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
+         libraryButton, appMenuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
             addSubview($0)
         }
 
@@ -261,19 +261,19 @@ class URLBarView: UIView {
         }
 
         libraryButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.menuButton.snp.leading)
+            make.trailing.equalTo(self.appMenuButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
-        menuButton.snp.makeConstraints { make in
+        appMenuButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.safeArea.trailing).offset(-URLBarViewUX.Padding)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
 
         tabsButton.snp.makeConstraints { make in
-            make.trailing.equalTo(self.menuButton.snp.leading)
+            make.trailing.equalTo(self.appMenuButton.snp.leading)
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
@@ -285,8 +285,8 @@ class URLBarView: UIView {
         }
         
         privateModeBadge.layout(onButton: tabsButton)
-        appMenuBadge.layout(onButton: menuButton)
-        warningMenuBadge.layout(onButton: menuButton)
+        appMenuBadge.layout(onButton: appMenuButton)
+        warningMenuBadge.layout(onButton: appMenuButton)
     }
 
     override func updateConstraints() {
@@ -479,7 +479,7 @@ class URLBarView: UIView {
         cancelButton.isHidden = false
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false
-        menuButton.isHidden = !toolbarIsShowing
+        appMenuButton.isHidden = !toolbarIsShowing
         libraryButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
         backButton.isHidden = !toolbarIsShowing
@@ -493,7 +493,7 @@ class URLBarView: UIView {
         showQRScannerButton.alpha = inOverlayMode ? 1 : 0
         progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
         tabsButton.alpha = inOverlayMode ? 0 : 1
-        menuButton.alpha = inOverlayMode ? 0 : 1
+        appMenuButton.alpha = inOverlayMode ? 0 : 1
         libraryButton.alpha = inOverlayMode ? 0 : 1
         forwardButton.alpha = inOverlayMode ? 0 : 1
         backButton.alpha = inOverlayMode ? 0 : 1
@@ -523,7 +523,7 @@ class URLBarView: UIView {
         cancelButton.isHidden = !inOverlayMode
         showQRScannerButton.isHidden = !inOverlayMode
         progressBar.isHidden = inOverlayMode
-        menuButton.isHidden = !toolbarIsShowing || inOverlayMode
+        appMenuButton.isHidden = !toolbarIsShowing || inOverlayMode
         libraryButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
         backButton.isHidden = !toolbarIsShowing || inOverlayMode
@@ -624,7 +624,7 @@ extension URLBarView: TabToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, menuButton, progressBar]
+                    return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, appMenuButton, progressBar]
                 } else {
                     return [locationView, progressBar]
                 }
