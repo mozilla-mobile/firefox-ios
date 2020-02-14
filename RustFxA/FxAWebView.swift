@@ -168,19 +168,23 @@ extension FxAWebView: WKScriptMessageHandler {
             return
         }
 
+        if let engines = data["offeredSyncEngines"] as? [String], engines.count > 0 {
+            LeanPlumClient.shared.track(event: .signsUpFxa)
+        } else {
+            LeanPlumClient.shared.track(event: .signsInFxa)
+        }
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
         RustFirefoxAccounts.shared.accountManager.finishAuthentication(authData: auth) { _ in
-            let application = UIApplication.shared
             // ask for push notification
             let center = UNUserNotificationCenter.current()
             center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                DispatchQueue.main.async {
-                    guard error == nil else {
-                        return
-                    }
-                    if granted {
-                        application.registerForRemoteNotifications()
-                    }
+                guard error == nil else {
+                    return
+                }
+                if granted {
+                    NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
                 }
             }
         }

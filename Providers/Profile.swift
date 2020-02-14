@@ -1216,10 +1216,7 @@ open class BrowserProfile: Profile {
 
         @discardableResult public func syncEverything(why: SyncReason) -> Success {
             if RustFirefoxAccounts.shared.accountManager.accountMigrationInFlight() {
-                RustFirefoxAccounts.shared.accountManager.retryMigration() { result in
-                    // error case is handled by notification of .accountMigrationFailed
-                    NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
-                }
+                RustFirefoxAccounts.shared.accountManager.retryMigration() { _ in }
                 return Success()
             }
 
