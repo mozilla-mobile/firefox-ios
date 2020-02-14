@@ -227,9 +227,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
-        RustFirefoxAccounts.startup() { shared in
-            guard shared.accountManager.hasAccount() else { return }
-
+        NotificationCenter.default.addObserver(forName: .RegisterForPushNotifications, object: nil, queue: .main) { _ in
             UNUserNotificationCenter.current().getNotificationSettings { settings in
                 DispatchQueue.main.async {
                     if settings.authorizationStatus != .denied {
@@ -237,6 +235,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                     }
                 }
             }
+        }
+
+        RustFirefoxAccounts.startup() { shared in
+            guard shared.accountManager.hasAccount() else { return }
+            NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
         }
         
         if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
@@ -627,17 +630,24 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        // If we've already registered this push subscription, we don't need to do it again.
+        let apnsToken = deviceToken.hexEncodedString
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        guard keychain.string(forKey: "apnsToken") != apnsToken else {
+            return
+        }
+
         let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
         let client = PushClient(endpointURL: config.endpointURL, experimentalMode: false)
-        client.register(deviceToken.hexEncodedString).uponQueue(.main) { result in
-            if let pushReg = result.successValue {
-                let subscription = pushReg.defaultSubscription
-                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
-                RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
+        client.register(apnsToken).uponQueue(.main) { result in
+            guard let pushReg = result.successValue else { return }
+            keychain.set(apnsToken, forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
 
-                let keychain = KeychainWrapper.sharedAppContainerKeychain
-                keychain.set(pushReg as NSCoding, forKey: "account.push-registration")
-            }
+            let subscription = pushReg.defaultSubscription
+            let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
+            RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
+
+            keychain.set(pushReg as NSCoding, forKey: "account.push-registration", withAccessibility: .afterFirstUnlock)
         }
     }
 
