@@ -31,19 +31,18 @@ open class RustFirefoxAccounts {
             let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
             if Bundle.main.bundleURL.pathExtension != "appex", let tokens = migrationTokens(), !hasAttemptedMigration {
                 UserDefaults.standard.set(true, forKey: "hasAttemptedMigration")
-                shared.accountManager.migrationAuthentication(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in
-                    // error case is handled by notification of .accountMigrationFailed
-                    NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
+
+                let prefs = NSUserDefaultsPrefs(prefix: "profile")
+                ["bookmarks", "history", "passwords", "tabs"].forEach {
+                    if let val = prefs.boolForKey("sync.engine.\($0).enabled"), !val {
+                        // is disabled
+                    }
                 }
+
+                shared.accountManager.migrationAuthentication(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
             }
 
             completion?(shared)
-
-            // We update the UI based on `.FirefoxAccountStateChange`, allow additional time for FxaAccountManager to
-            // complete any async work it is doing and notify the UI that it may need to update.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
-            }
         }
     }
 
@@ -62,15 +61,20 @@ open class RustFirefoxAccounts {
                                             withLabel: nil /* we probably want a random string associated with the current account here*/,
                 factory: syncAuthStateCachefromJSON))
 
-        NotificationCenter.default.addObserver(forName: .accountAuthenticated,  object: nil, queue: nil) { [weak self] notification in
+        NotificationCenter.default.addObserver(forName: .accountAuthenticated,  object: nil, queue: .main) { [weak self] notification in
+            if let type = notification.userInfo?["authType"] as? FxaAuthType, case .migrated = type {
+                KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
+                NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            }
+
             self?.update()
         }
         
-        NotificationCenter.default.addObserver(forName: .accountProfileUpdate,  object: nil, queue: nil) { [weak self] notification in
+        NotificationCenter.default.addObserver(forName: .accountProfileUpdate,  object: nil, queue: .main) { [weak self] notification in
             self?.update()
         }
 
-        NotificationCenter.default.addObserver(forName: .accountMigrationFailed, object: nil, queue: nil) { [weak self] notification in
+        NotificationCenter.default.addObserver(forName: .accountMigrationFailed, object: nil, queue: .main) { [weak self] notification in
             var info = ""
             if let error = notification.userInfo?["error"] as? Error {
                 info = error.localizedDescription
@@ -81,7 +85,7 @@ open class RustFirefoxAccounts {
         }
     }
 
-    class func migrationTokens() -> (session: String, ksync: String, kxcs: String)? {
+    private class func migrationTokens() -> (session: String, ksync: String, kxcs: String)? {
         // Keychain forKey("profile.account"), return dictionary, from there
         // forKey("account.state.<guid>"), guid is dictionary["stateKeyLabel"]
         // that returns JSON string.
