@@ -175,7 +175,7 @@ class NavigationTest: BaseTestCase {
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
-        print(app.debugDescription)
+
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
