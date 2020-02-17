@@ -170,9 +170,9 @@
       buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "NO"
       language = "en"
-      region = "US"
-      shouldUseLaunchSchemeArgsEnv = "NO">
+      region = "US">
       <PreActions>
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
@@ -182,10 +182,28 @@
             </ActionContent>
          </ExecutionAction>
       </PreActions>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+            BuildableName = "Client.app"
+            BlueprintName = "Client"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "FIREFOX_CLEAR_PROFILE"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "FIREFOX_TEST"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <Testables>
          <TestableReference
-            skipped = "NO"
-            parallelizable = "NO">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3BFE4B061D342FB800DDF53F"
@@ -336,7 +354,28 @@
                   Identifier = "DomainAutocompleteTest">
                </Test>
                <Test
-                  Identifier = "DownloadFilesTests">
+                  Identifier = "DownloadFilesTests/testDeleteDownloadedFile()">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests/testDownloadFile()">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests/testDownloadFileContextMenu()">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests/testDownloadFilesAppMenuFirstTime()">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests/testDownloadMoreThanOneFile()">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests/testLongPressOnDownloadedFile()">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests/testRemoveUserDataRemovesDownloadedFiles()">
+               </Test>
+               <Test
+                  Identifier = "DownloadFilesTests/testShareDownloadedFile()">
                </Test>
                <Test
                   Identifier = "DragAndDropTestIpad">
@@ -552,7 +591,10 @@
                   Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
-                  Identifier = "PrivateBrowsingTestIpad">
+                  Identifier = "PrivateBrowsingTestIpad/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()">
+               </Test>
+               <Test
+                  Identifier = "PrivateBrowsingTestIpad/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
                   Identifier = "ReaderViewTest/testAddToReadingListFromPageOptionsMenu()">
@@ -585,16 +627,13 @@
                   Identifier = "SaveLoginTest/testDoNotSaveLogin()">
                </Test>
                <Test
-                  Identifier = "SaveLoginTest/testEditOneLoginEntry()">
-               </Test>
-               <Test
                   Identifier = "SaveLoginTest/testLoginsListFromBrowserTabMenu()">
                </Test>
                <Test
                   Identifier = "SaveLoginTest/testPasscodeLoginsListFromBrowserTabMenu()">
                </Test>
                <Test
-                  Identifier = "SaveLoginTest/testSaveLogin()">
+                  Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">
                </Test>
                <Test
                   Identifier = "SaveLoginTest/testSearchLogin()">
@@ -705,13 +744,7 @@
                   Identifier = "TopTabsTestIpad/testUpdateTabCounter()">
                </Test>
                <Test
-                  Identifier = "TopTabsTestIphone/testAddPrivateTabByLongPressTabsButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTestIphone/testAddTabByLongPressTabsButton()">
-               </Test>
-               <Test
-                  Identifier = "TopTabsTestIphone/testCloseTabFromLongPressTabsButton()">
+                  Identifier = "TrackingProtectionTests/testBasicMoreInfo()">
                </Test>
                <Test
                   Identifier = "TrackingProtectionTests/testDisableForSiteDoesNotDisableForOthersDifferentTab()">
@@ -726,16 +759,13 @@
                   Identifier = "TrackingProtectionTests/testDisablingTPforOneSiteDoesNotChangeGeneralTPOption()">
                </Test>
                <Test
-                  Identifier = "TrackingProtectionTests/testOpenSettingsFromTPcontextMenu()">
-               </Test>
-               <Test
-                  Identifier = "TrackingProtectionTests/testBasicMoreInfo()">
-               </Test>
-               <Test
                   Identifier = "TrackingProtectionTests/testMenuWhenThereAreBlockedElements()">
                </Test>
                <Test
                   Identifier = "TrackingProtectionTests/testMenuWhenThereAreNotBlockedElements()">
+               </Test>
+               <Test
+                  Identifier = "TrackingProtectionTests/testOpenSettingsFromTPcontextMenu()">
                </Test>
                <Test
                   Identifier = "TrackingProtectionTests/testTPMenuHomePanel()">
@@ -752,27 +782,6 @@
             </SkippedTests>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
-            BuildableName = "Client.app"
-            BlueprintName = "Client"
-            ReferencedContainer = "container:Client.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "FIREFOX_CLEAR_PROFILE"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "FIREFOX_TEST"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Fennec"
@@ -801,8 +810,6 @@
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Fennec"
