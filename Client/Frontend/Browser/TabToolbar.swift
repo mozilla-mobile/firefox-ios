@@ -22,7 +22,8 @@ protocol TabToolbarProtocol: AnyObject {
     func updatePageStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
-    func hideImagesBadge(visible: Bool)
+    func appMenuBadge(setVisible: Bool)
+    func warningMenuBadge(setVisible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -162,6 +163,9 @@ class ToolbarButton: UIButton {
     var unselectedTintColor: UIColor!
     var disabledTintColor = UIColor.Photon.Grey50
 
+    // Optionally can associate a separator line that hide/shows along with the button
+    weak var separatorLine: UIView?
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         adjustsImageWhenHighlighted = false
@@ -192,6 +196,11 @@ class ToolbarButton: UIButton {
         }
     }
 
+    override var isHidden: Bool {
+        didSet {
+            separatorLine?.isHidden = isHidden
+        }
+    }
 }
 
 extension ToolbarButton: Themeable {
@@ -216,7 +225,8 @@ class TabToolbar: UIView {
     let actionButtons: [Themeable & UIButton]
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
-    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
     var helper: TabToolbarHelper?
     private let contentView = UIStackView()
@@ -231,7 +241,8 @@ class TabToolbar: UIView {
         addButtons(actionButtons)
 
         privateModeBadge.add(toParent: contentView)
-        hideImagesBadge.add(toParent: contentView)
+        appMenuBadge.add(toParent: contentView)
+        warningMenuBadge.add(toParent: contentView)
 
         contentView.axis = .horizontal
         contentView.distribution = .fillEqually
@@ -239,7 +250,8 @@ class TabToolbar: UIView {
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
-        hideImagesBadge.layout(onButton: menuButton)
+        appMenuBadge.layout(onButton: menuButton)
+        warningMenuBadge.layout(onButton: menuButton)
 
         contentView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
@@ -286,8 +298,19 @@ extension TabToolbar: TabToolbarProtocol {
         privateModeBadge.show(visible)
     }
 
-    func hideImagesBadge(visible: Bool) {
-        hideImagesBadge.show(visible)
+    func appMenuBadge(setVisible: Bool) {
+        // Warning badges should take priority over the standard badge
+        guard warningMenuBadge.badge.isHidden else {
+            return
+        }
+
+        appMenuBadge.show(setVisible)
+    }
+
+    func warningMenuBadge(setVisible: Bool) {
+        // Disable other menu badges before showing the warning.
+        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
+        warningMenuBadge.show(setVisible)
     }
 
     func updateBackStatus(_ canGoBack: Bool) {
@@ -317,7 +340,8 @@ extension TabToolbar: Themeable, PrivateModeUI {
         helper?.setTheme(forButtons: actionButtons)
 
         privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        hideImagesBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 
     func applyUIMode(isPrivate: Bool) {

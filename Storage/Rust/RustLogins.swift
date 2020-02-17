@@ -31,7 +31,7 @@ public extension LoginRecord {
     }
 
     var credentials: URLCredential {
-        return URLCredential(user: username ?? "", password: password, persistence: .forSession)
+        return URLCredential(user: username, password: password, persistence: .forSession)
     }
 
     var protectionSpace: URLProtectionSpace {
@@ -85,6 +85,7 @@ public class LoginRecordError: MaybeErrorType {
 public class RustLogins {
     let databasePath: String
     let encryptionKey: String
+    let salt: String
 
     let queue: DispatchQueue
     let storage: LoginsStorage
@@ -93,17 +94,37 @@ public class RustLogins {
 
     private var didAttemptToMoveToBackup = false
 
-    public init(databasePath: String, encryptionKey: String) {
+    public init(databasePath: String, encryptionKey: String, salt: String) {
         self.databasePath = databasePath
         self.encryptionKey = encryptionKey
+        self.salt = salt
 
         self.queue =  DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
         self.storage = LoginsStorage(databasePath: databasePath)
     }
 
+    // Migrate and return the salt, or create a new salt
+    // Also, in the event of an error, returns a new salt.
+    public static func setupPlaintextHeaderAndGetSalt(databasePath: String, encryptionKey: String) -> String {
+        do {
+            if FileManager.default.fileExists(atPath: databasePath) {
+                let db = LoginsStorage(databasePath: databasePath)
+                let salt = try db.getDbSaltForKey(key: encryptionKey)
+                try db.migrateToPlaintextHeader(key: encryptionKey, salt: salt)
+                return salt
+            }
+        } catch {
+            print(error)
+            Sentry.shared.send(message: "setupPlaintextHeaderAndGetSalt failed", tag: SentryTag.rustLogins, severity: .error, description: error.localizedDescription)
+        }
+        let saltOf32Chars = UUID().uuidString.replacingOccurrences(of: "-", with: "")
+        return saltOf32Chars
+    }
+
+    // Open the db, and if it fails, it moves the db and creates a new db file and opens it.
     private func open() -> NSError? {
         do {
-            try storage.unlock(withEncryptionKey: encryptionKey)
+            try storage.unlockWithKeyAndSalt(key: encryptionKey, salt: salt)
             isOpen = true
             return nil
         } catch let err as NSError {
@@ -157,16 +178,18 @@ public class RustLogins {
         return error
     }
 
-    public func forceClose() -> NSError? {
-        var error: NSError?
-
+    public func interrupt() {
         do {
             try storage.interrupt()
         } catch let err as NSError {
-            error = err
-
             Sentry.shared.sendWithStacktrace(message: "Error interrupting Logins database", tag: SentryTag.rustLogins, severity: .error, description: err.localizedDescription)
         }
+    }
+
+    public func forceClose() -> NSError? {
+        var error: NSError?
+
+        interrupt()
 
         queue.sync {
             guard isOpen else { return }
@@ -188,7 +211,7 @@ public class RustLogins {
             }
 
             do {
-                try self.storage.sync(unlockInfo: unlockInfo)
+                try _ = self.storage.sync(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let loginsStoreError = err as? LoginsStoreError {
@@ -243,8 +266,7 @@ public class RustLogins {
             }
 
             let filteredRecords = records.filter({
-                $0.hostname.lowercased().contains(query) ||
-                ($0.username?.lowercased() ?? "").contains(query)
+                $0.hostname.lowercased().contains(query) || $0.username.lowercased().contains(query)
             })
             return deferMaybe(ArrayCursor(data: filteredRecords))
         })

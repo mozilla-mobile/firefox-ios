@@ -16,7 +16,6 @@ class HomePageSettingViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.AppMenuOpenHomePageTitleString
-        hasSectionSeparatorLine = false
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,16 +28,15 @@ class HomePageSettingViewController: SettingsTableViewController {
         self.hasHomePage = HomeButtonHomePageAccessors.getHomePage(self.prefs) != nil
 
         let onFinished = {
-            self.prefs.removeObjectForKey(PrefsKeys.HomeButtonHomePageURL)
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "HomeAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
             self.currentChoice = NewTabPage.topSites
             onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", settingDidChange: { (string) in
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: PrefsKeys.HomeButtonHomePageURL, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "HomeAsCustomURL", isChecked: {return !showTopSites.isChecked()}, settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.HomePrefKey)
             self.tableView.reloadData()
@@ -100,7 +98,6 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
         numberOfRows = self.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows
         super.init(style: .grouped)
         self.title = Strings.AppMenuTopSitesTitleString
-        hasSectionSeparatorLine = false
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -110,7 +107,7 @@ class TopSitesRowCountSettingsController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
 
         let createSetting: (Int32) -> CheckmarkSetting = { num in
-            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"), subtitle: nil, isEnabled: { return num == self.numberOfRows }, onChanged: {
+            return CheckmarkSetting(title: NSAttributedString(string: "\(num)"), subtitle: nil, isChecked: { return num == self.numberOfRows }, onChecked: {
                 self.numberOfRows = num
                 self.prefs.setInt(Int32(num), forKey: PrefsKeys.NumberOfTopSiteRows)
                 self.tableView.reloadData()

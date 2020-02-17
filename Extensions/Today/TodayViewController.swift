@@ -100,9 +100,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.alignment = .fill
         stackView.spacing = 0
         stackView.distribution = UIStackView.Distribution.fillEqually
-        let edge = self.view.frame.size.width * TodayUX.buttonsHorizontalMarginPercentage
-        stackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
-        stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
 
@@ -119,7 +116,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         let widgetView: UIView!
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
-        let effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+        let effectView: UIVisualEffectView
+        if #available(iOS 13, *) {
+            effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
+        } else {
+            effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+        }
         self.view.addSubview(effectView)
         effectView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)

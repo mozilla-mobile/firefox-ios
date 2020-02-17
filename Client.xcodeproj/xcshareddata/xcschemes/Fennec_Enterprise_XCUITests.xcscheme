@@ -227,9 +227,6 @@
                   Identifier = "DragAndDropTestIpad/testTryDragAndDropHistoryToURLBar()">
                </Test>
                <Test
-                  Identifier = "DragAndDropTests/testRearrangeTabsTabTray()">
-               </Test>
-               <Test
                   Identifier = "FindInPageTests/testFindFromMenu()">
                </Test>
                <Test
@@ -285,6 +282,9 @@
                </Test>
                <Test
                   Identifier = "NewTabSettingsTest/testToggleOffOnAdditionalContentBookmarks()">
+               </Test>
+	       <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowCustomURL()">
                </Test>
                <Test
                   Identifier = "NoImageTests">

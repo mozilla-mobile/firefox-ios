@@ -43,7 +43,8 @@ extension BrowserViewController {
 
     @objc private func newTabKeyCommand() {
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "new-tab"])
-        openBlankNewTab(focusLocationField: true, isPrivate: false)
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
     }
 
     @objc private func newPrivateTabKeyCommand() {

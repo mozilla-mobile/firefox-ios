@@ -105,7 +105,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         if style == .popover {
-            self.actions = actions.map({ $0.reversed() }).reversed()
             tableView.snp.makeConstraints { make in
                 make.edges.equalTo(self.view)
             }
@@ -124,6 +123,12 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidFinishSyncing, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(stopRotateSyncIcon), name: .ProfileDidStartSyncing, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reduceTransparencyChanged), name: UIAccessibility.reduceTransparencyStatusDidChangeNotification, object: nil)
+    }
+
+    @objc func reduceTransparencyChanged() {
+        // If the user toggles transparency settings, re-apply the theme to also toggle the blur effect.
+        applyTheme()
     }
 
     func applyTheme() {
@@ -131,6 +136,17 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             view.backgroundColor = UIColor.theme.browser.background.withAlphaComponent(0.7)
         } else {
             tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground
+        }
+
+        // Apply or remove the background blur effect
+        if let visualEffectView = tableView.backgroundView as? UIVisualEffectView {
+            if UIAccessibility.isReduceTransparencyEnabled {
+                // Remove the visual effect and the background alpha
+                visualEffectView.effect = nil
+                tableView.backgroundView?.backgroundColor = UIColor.theme.actionMenu.iPhoneBackground.withAlphaComponent(1.0)
+            } else {
+                visualEffectView.effect = UIBlurEffect(style: UIColor.theme.actionMenu.iPhoneBackgroundBlurStyle)
+            }
         }
 
         tintColor = UIColor.theme.actionMenu.foreground
@@ -157,21 +173,37 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         tableView.register(PhotonActionSheetTitleHeaderView.self, forHeaderFooterViewReuseIdentifier: PhotonActionSheetUX.TitleHeaderName)
         tableView.register(PhotonActionSheetSeparator.self, forHeaderFooterViewReuseIdentifier: "SeparatorSectionHeader")
         tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "EmptyHeader")
-        tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
-        tableView.estimatedSectionFooterHeight = PhotonActionSheetUX.HeaderFooterHeight
-        // When the menu style is centered the header is much bigger than default. Set a larger estimated height to make sure autolayout sizes the view correctly
-        tableView.estimatedSectionHeaderHeight = (style == .centered) ? PhotonActionSheetUX.RowHeight : PhotonActionSheetUX.HeaderFooterHeight
+
         tableView.isScrollEnabled = true
         tableView.showsVerticalScrollIndicator = false
         tableView.layer.cornerRadius = PhotonActionSheetUX.CornerRadius
         tableView.separatorStyle = .none
         tableView.cellLayoutMarginsFollowReadableWidth = false
         tableView.accessibilityIdentifier = "Context Menu"
-        let footer = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
-        tableView.tableHeaderView = footer
-        tableView.tableFooterView = footer.clone()
+
+        tableView.tableFooterView = UIView(frame: CGRect(width: tableView.frame.width, height: PhotonActionSheetUX.Padding))
+
+        // UITableView has a large default footer height, remove this extra space
+        tableView.sectionFooterHeight = 1
 
         applyTheme()
+
+        DispatchQueue.main.async {
+            // Pick up the correct/final tableview.contentsize in order to set the height.
+            // Without async dispatch, the contentsize is wrong.
+            self.view.setNeedsLayout()
+        }
+    }
+
+    // Nested tableview rows get additional height
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if let section = actions[safe: indexPath.section], let action = section[safe: indexPath.row] {
+            if let custom = action.customHeight {
+                return custom(action)
+            }
+        }
+
+        return PhotonActionSheetUX.RowHeight
     }
 
     override func viewDidLayoutSubviews() {
@@ -237,7 +269,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var action = actions[indexPath.section][indexPath.row]
-        guard let handler = action.handler else {
+        guard let handler = action.tapHandler else {
             self.dismiss(nil)
             return
         }
@@ -254,7 +286,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             self.dismiss(nil)
         }
 
-        return handler(action)
+        return handler(action, self.tableView(tableView, cellForRowAt: indexPath))
     }
 
     func tableView(_ tableView: UITableView, hasFullWidthSeparatorForRowAtIndexPath indexPath: IndexPath) -> Bool {
@@ -268,6 +300,19 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         let syncManager = action.accessory == .Sync ? self.syncManager : nil
         cell.configure(with: action, syncManager: syncManager)
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            if site != nil {
+                return PhotonActionSheetUX.TitleHeaderSectionHeightWithSite
+            } else if title != nil {
+                return PhotonActionSheetUX.TitleHeaderSectionHeight
+            }
+            return 6
+        }
+
+        return PhotonActionSheetUX.SeparatorRowHeight
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -289,15 +334,6 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         }
 
         // A header height of at least 1 is required to make sure the default header size isnt used when laying out with AutoLayout
-        let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
-        view?.snp.makeConstraints { make in
-            make.height.equalTo(1)
-        }
-        return view
-    }
-
-    // A footer height of at least 1 is required to make sure the default footer size isnt used when laying out with AutoLayout
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EmptyHeader")
         view?.snp.makeConstraints { make in
             make.height.equalTo(1)

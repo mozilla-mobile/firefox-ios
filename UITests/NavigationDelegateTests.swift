@@ -25,15 +25,9 @@ class NavigationDelegateTests: KIFTestCase {
         super.tearDown()
     }
 
-    func enterUrl(url: String) {
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
-    }
-
     func testAppStoreLinkShowsConfirmation() {
         let url = "\(webRoot!)/navigationDelegate.html"
-        enterUrl(url: url)
+        BrowserUtils.enterUrlAddressBar(typeUrl: url)
         tester().waitForAnimationsToFinish()
         tester().waitForWebViewElementWithAccessibilityLabel("link")
         tester().tapWebViewElementWithAccessibilityLabel("link")

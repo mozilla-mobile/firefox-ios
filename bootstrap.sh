@@ -31,3 +31,5 @@ carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
 
 npm install
 npm run build
+
+(cd content-blocker-lib-ios/ContentBlockerGen && swift run)

@@ -13,19 +13,20 @@ private struct TabsButtonUX {
 }
 
 class TabsButton: UIButton {
-    var textColor = UIColor.clear {
+    var textColor = UIColor.Photon.Blue40 {
         didSet {
             countLabel.textColor = textColor
             borderView.color = textColor
         }
     }
-    var titleBackgroundColor = UIColor.clear {
+    var titleBackgroundColor = UIColor.Photon.Blue40 {
         didSet {
             labelBackground.backgroundColor = titleBackgroundColor
         }
     }
     var highlightTextColor: UIColor?
     var highlightBackgroundColor: UIColor?
+    var inTopTabs = false
 
     // When all animations are completed, this is the most-recently assigned tab count that is shown.
     // updateTabCount() can be called in rapid succession, this ensures only final tab count is displayed.
@@ -226,7 +227,7 @@ class TabsButton: UIButton {
 
 extension TabsButton: Themeable {
     func applyTheme() {
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if inTopTabs {
             textColor = UIColor.theme.topTabs.buttonTint
         } else {
             textColor = UIColor.theme.browser.tint

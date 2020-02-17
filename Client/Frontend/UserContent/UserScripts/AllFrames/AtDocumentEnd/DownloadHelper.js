@@ -4,7 +4,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 "use strict";
-
+if (typeof window.__firefox__.download == "undefined") {
 Object.defineProperty(window.__firefox__, "download", {
   enumerable: false,
   configurable: false,
@@ -28,6 +28,7 @@ Object.defineProperty(window.__firefox__, "download", {
 
         blobToBase64String(blob, function(base64String) {
           webkit.messageHandlers.downloadManager.postMessage({
+            securityToken: securityToken,
             filename: filename,
             mimeType: blob.type,
             size: blob.size,
@@ -45,7 +46,7 @@ Object.defineProperty(window.__firefox__, "download", {
     link.dispatchEvent(new MouseEvent("click"));
   }
 });
-
+}
 function getLastPathComponent(url) {
   return url.split("/").pop();
 }
@@ -58,3 +59,4 @@ function blobToBase64String(blob, callback) {
 
   reader.readAsDataURL(blob);
 }
+

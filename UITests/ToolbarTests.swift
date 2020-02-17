@@ -17,9 +17,13 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
 
     func testURLEntry() {
         let textField = tester().waitForView(withAccessibilityIdentifier: "url") as! UITextField
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText("foobar"))
-        tester().tapView(withAccessibilityIdentifier: "goBack")
+        EarlGrey.selectElement(with: grey_accessibilityID("url"))
+            .inRoot(grey_kindOfClass(UITextField.self))
+            .perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("address"))
+            .inRoot(grey_kindOfClass(UITextField.self))
+            .perform(grey_replaceText("foobar"))
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         XCTAssertNotEqual(textField.text, "foobar", "Verify that the URL bar text clears on about:home")
 
         // 127.0.0.1 doesn't cause http:// to be hidden. localhost does. Both will work.
@@ -29,23 +33,29 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         // URL without "http://".
         let displayURL = "\(localhostURL)/numberedPage.html?page=1".substring(from: url.index(url.startIndex, offsetBy: "http://".count))
 
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(url))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: url)
 
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "URL matches page URL")
 
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText("foobar"))
-        tester().tapView(withAccessibilityIdentifier: "goBack")
+        EarlGrey.selectElement(with: grey_accessibilityID("url"))
+            .inRoot(grey_kindOfClass(UITextField.self))
+            .perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("address"))
+            .inRoot(grey_kindOfClass(UITextField.self))
+            .perform(grey_replaceText("foobar"))
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after entering text")
 
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(" "))
+        EarlGrey.selectElement(with: grey_accessibilityID("url"))
+             .inRoot(grey_kindOfClass(UITextField.self))
+            .perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("address"))
+             .inRoot(grey_kindOfClass(UITextField.self))
+            .perform(grey_replaceText(" "))
 
-        EarlGrey.selectElement(with: grey_accessibilityID("goBack")).perform(grey_tap())
+        EarlGrey.selectElement(with: grey_accessibilityID("urlBar-cancel")).perform(grey_tap())
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after clearing text")
     }
@@ -55,17 +65,15 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         let urlWithUserInfo = "\(hostWithUsername)/numberedPage.html?page=1"
         let url = "\(webRoot!)/numberedPage.html?page=1"
 
-        let urlFieldAppeared = GREYCondition(name: "Wait for URL field", block: {
-            var errorOrNil: NSError?
-            EarlGrey.selectElement(with: grey_accessibilityID("url"))
-                .assert(grey_notNil(), error: &errorOrNil)
-            return errorOrNil == nil
-        }).wait(withTimeout: 10)
-        GREYAssertTrue(urlFieldAppeared, reason: "Failed to display URL field")
+//        let urlFieldAppeared = GREYCondition(name: "Wait for URL field", block: {
+//            var errorOrNil: NSError?
+//            EarlGrey.selectElement(with: grey_accessibilityID("url"))
+//                .assert(grey_notNil(), error: &errorOrNil)
+//            return errorOrNil == nil
+//        }).wait(withTimeout: 10)
+//        GREYAssertTrue(urlFieldAppeared, reason: "Failed to display URL field")
 
-        EarlGrey.selectElement(with: grey_accessibilityID("url")).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_replaceText(urlWithUserInfo))
-        EarlGrey.selectElement(with: grey_accessibilityID("address")).perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: urlWithUserInfo)
         tester().waitForAnimationsToFinish()
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 

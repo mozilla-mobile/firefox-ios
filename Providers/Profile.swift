@@ -164,6 +164,16 @@ extension Profile {
         }
         return clientID
     }
+    
+    // Returns false for when there is no account available and true if the account
+    // is not verified or has no password attached to it
+    var accountNeedsUserAction: Bool {
+        guard let account = self.getAccount() else { return false }
+        let actionNeeded = account.actionNeeded
+        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
+        
+        return needsVerification
+    }
 }
 
 open class BrowserProfile: Profile {
@@ -541,7 +551,19 @@ open class BrowserProfile: Profile {
 
     lazy var logins: RustLogins = {
         let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
-        return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey)
+
+        let salt: String
+        let key = "sqlcipher.key.logins.salt"
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
+        if keychain.hasValue(forKey: key), let val = keychain.string(forKey: key) {
+            salt = val
+        } else {
+            salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey)
+            keychain.set(salt, forKey: key, withAccessibility: .afterFirstUnlock)
+        }
+
+        return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey, salt: salt)
     }()
 
     static var isChinaEdition: Bool = {
@@ -1191,9 +1213,12 @@ open class BrowserProfile: Profile {
             return readyDeferred.bind { readyResult in
                 guard let success = readyResult.successValue else {
                     if let tokenServerError = readyResult.failureValue as? TokenServerError,
-                        case let TokenServerError.remote(code, _, _) = tokenServerError,
-                        code == 401 {
-                        self.profile.getAccount()?.makeSeparated()
+                        case let TokenServerError.remote(code, status, _) = tokenServerError,
+                        code == 401, let acct = self.profile.getAccount() {
+                        log.debug("401 error: \(tokenServerError) \(code) \(status ?? "")")
+                        if !acct.makeCohabitingWithoutKeyPair() {
+                            acct.makeSeparated()
+                        }
                     }
                     return deferMaybe(readyResult.failureValue!)
                 }

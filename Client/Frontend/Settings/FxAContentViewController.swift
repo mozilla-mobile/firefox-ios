@@ -7,6 +7,7 @@ import SnapKit
 import UIKit
 import WebKit
 import SwiftyJSON
+import Account
 
 protocol FxAContentViewControllerDelegate: AnyObject {
     func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags: FxALoginFlags)
@@ -36,12 +37,14 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     let profile: Profile
 
-    init(profile: Profile, fxaOptions: FxALaunchParams? = nil) {
+    private var helpBrowser: WKWebView?
+
+    init(profile: Profile, fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
         self.profile = profile
 
         super.init(backgroundColor: UIColor.Photon.Grey20, title: NSAttributedString(string: "Firefox Accounts"))
 
-        self.url = self.createFxAURLWith(fxaOptions, profile: profile)
+        self.url = self.createFxAURLWith(fxaOptions, profile: profile, isSignUpFlow: isSignUpFlow)
 
         NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
     }
@@ -52,6 +55,10 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // We check the fx account state and if its not verified or missing password
+        // then we allow the user to remove the account
+        shouldShowRemoveAccountBtn()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -62,9 +69,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         // If the FxAContentViewController was launched from a FxA deferred link
         // onboarding might not have been shown. Check to see if it needs to be
         // displayed and don't animate.
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.browserViewController.presentIntroViewController(false, animated: false)
-        }
+        BrowserViewController.foregroundBVC().presentIntroViewController(false, animated: false)
     }
 
     override func makeWebView() -> WKWebView {
@@ -92,6 +97,13 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
         // Don't allow overscrolling.
         webView.scrollView.bounces = false
+
+        // This is not shown full-screen, use mobile UA
+        webView.customUserAgent = UserAgent.mobileUserAgent()
+
+        webView.navigationDelegate = self
+        webView.uiDelegate = self
+
         return webView
     }
 
@@ -104,6 +116,47 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         let json = JSON(data).stringify() ?? ""
         let script = "window.postMessage(\(json), '\(self.url.absoluteString)');"
         settingsWebView.evaluateJavaScript(script, completionHandler: nil)
+    }
+    
+    // Show the remove button if the account isn't verfied or has no password attached to it
+    fileprivate func shouldShowRemoveAccountBtn() {
+        if profile.accountNeedsUserAction {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.FxARemoveAccountButton, style: .plain, closure: { (barButtonItem) in
+                self.showRemoveAccountAlert()
+            })
+            navigationItem.rightBarButtonItem?.tintColor = UIColor.red
+        }
+    }
+    
+    fileprivate func showRemoveAccountAlert() {
+
+        let alertController = UIAlertController(
+            title: Strings.FxARemoveAccountAlertTitle,
+            message: Strings.FxARemoveAccountAlertMessage,
+            preferredStyle: UIAlertController.Style.alert
+        )
+        
+        alertController.addAction(
+            UIAlertAction(
+            title: Strings.SettingsDisconnectCancelAction,
+            style: .cancel
+            ) { (action) in
+                // Do nothing.
+        })
+        
+        alertController.addAction(
+            UIAlertAction(
+            title: Strings.FxARemoveAccountButton,
+            style: .destructive
+            ) { (action) in
+                UnifiedTelemetry.recordEvent(
+                    category: .action,
+                    method: .tap,
+                    object: .removeUnVerifiedAccountButton
+                )
+                self.onDeleteAccount()
+        })
+        navigationController?.present(alertController, animated: true, completion: nil)
     }
 
     fileprivate func onCanLinkAccount(_ data: JSON) {
@@ -124,7 +177,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // The user has deleted their Firefox Account. Disconnect them!
-    fileprivate func onDeleteAccount(_ data: JSON) {
+    fileprivate func onDeleteAccount() {
         FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: profile.hasAccount()])
         dismiss(animated: true)
@@ -139,11 +192,12 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         helper.delegate = self
         helper.application(app, didReceiveAccountJSON: data)
 
-        if profile.hasAccount() {
-            LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+        if let engines = data["offeredSyncEngines"].array, engines.count > 0 {
+            LeanPlumClient.shared.track(event: .signsUpFxa)
+        } else {
+            LeanPlumClient.shared.track(event: .signsInFxa)
         }
-
-        LeanPlumClient.shared.track(event: .signsInFxa)
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
     }
 
     @objc fileprivate func userDidVerify(_ notification: Notification) {
@@ -160,6 +214,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         DispatchQueue.main.async {
             self.delegate?.contentViewControllerDidSignIn(self, withFlags: flags)
         }
+
+        helpBrowser?.removeFromSuperview()
+        helpBrowser = nil
     }
 
     // The content server page is ready to be shown.
@@ -189,7 +246,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
             case .signOut:
                 onSignOut(data)
             case .deleteAccount:
-                onDeleteAccount(data)
+                onDeleteAccount()
             }
         }
     }
@@ -214,8 +271,13 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
     }
 
     // Configure the FxA signin url based on any passed options.
-    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile) -> URL {
-        let profileUrl = profile.accountConfiguration.signInURL
+    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile, isSignUpFlow: Bool) -> URL {
+        var profileUrl = profile.accountConfiguration.signInURL
+
+        if isSignUpFlow {
+            let s = profileUrl.absoluteString.replaceFirstOccurrence(of: "signin", with: "signup")
+            profileUrl = URL(string: s)!
+        }
 
         guard let launchParams = fxaOptions else {
             return profileUrl
@@ -226,7 +288,9 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         params.removeValue(forKey: "service")
         params.removeValue(forKey: "context")
 
-        params["action"] = "email"
+        if !isSignUpFlow {
+            params["action"] = "email"
+        }
         params["style"] = "trailhead" // adds Trailhead banners to the page
 
         let queryURL = params.filter { ["action", "style", "signin", "entrypoint"].contains($0.key) || $0.key.range(of: "utm_") != nil }.map({
@@ -235,6 +299,50 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
 
         return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
+    }
+
+    override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let hideLongpress = "document.body.style.webkitTouchCallout='none';"
+        webView.evaluateJavaScript(hideLongpress)
+        guard webView !== helpBrowser else {
+            let isSecure = webView.hasOnlySecureContent
+            navigationItem.title = (isSecure ? "🔒 " : "") + (webView.url?.host ?? "")
+            return
+        }
+
+        navigationItem.title = nil
+    }
+}
+
+extension FxAContentViewController: WKUIDelegate {
+    // Blank target links (support  links) will create a 2nd webview to browse.
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        guard helpBrowser == nil else {
+            return nil
+        }
+        let f = webView.frame
+        let wv = WKWebView(frame: CGRect(width: f.width, height: f.height), configuration: configuration)
+        helpBrowser?.load(navigationAction.request)
+        webView.addSubview(wv)
+        helpBrowser = wv
+        helpBrowser?.navigationDelegate = self
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+
+        return helpBrowser
+    }
+
+    @objc func closeHelpBrowser() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.helpBrowser?.alpha = 0
+        }, completion: {_ in
+            self.helpBrowser?.removeFromSuperview()
+            self.helpBrowser = nil
+        })
+
+        navigationItem.title = nil
+        self.navigationItem.leftBarButtonItem = nil
+        self.navigationItem.hidesBackButton = false
     }
 }
 

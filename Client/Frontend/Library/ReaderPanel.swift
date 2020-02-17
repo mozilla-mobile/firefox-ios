@@ -193,8 +193,6 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
           Notification.Name.DatabaseWasReopened ].forEach {
             NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: $0, object: nil)
         }
-
-        applyTheme()
     }
 
     required init!(coder aDecoder: NSCoder) {
@@ -203,7 +201,8 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refreshReadingList()
+        // Note this will then call applyTheme() on this class, which reloads the tableview.
+        (navigationController as? ThemedNavigationController)?.applyTheme()
     }
 
     override func viewDidLoad() {
@@ -268,7 +267,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
         welcomeLabel.adjustsFontSizeToFitWidth = true
         welcomeLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(150)
+            make.top.equalToSuperview().offset(UIDevice.current.orientation.isLandscape ? 16 : 150)
             make.width.equalTo(ReadingListPanelUX.WelcomeScreenItemWidth + ReadingListPanelUX.WelcomeScreenCircleSpacer + ReadingListPanelUX.WelcomeScreenCircleWidth)
         }
 
@@ -415,7 +414,7 @@ extension ReadingListPanel: LibraryPanelContextMenu {
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         guard var actions = getDefaultContextMenuActions(for: site, libraryPanelDelegate: libraryPanelDelegate) else { return nil }
 
-        let removeAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { action in
+        let removeAction = PhotonActionSheetItem(title: Strings.RemoveContextMenuTitle, iconString: "action_remove", handler: { _, _ in
             self.deleteItem(atIndex: indexPath)
         })
 

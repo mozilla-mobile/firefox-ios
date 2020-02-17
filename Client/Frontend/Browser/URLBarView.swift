@@ -36,7 +36,7 @@ protocol URLBarDelegate: AnyObject {
     func urlBarDidLongPressLocation(_ urlBar: URLBarView)
     func urlBarDidPressQRButton(_ urlBar: URLBarView)
     func urlBarDidPressPageOptions(_ urlBar: URLBarView, from button: UIButton)
-    func urlBarDidTapShield(_ urlBar: URLBarView, from button: UIButton)
+    func urlBarDidTapShield(_ urlBar: URLBarView)
     func urlBarLocationAccessibilityActions(_ urlBar: URLBarView) -> [UIAccessibilityCustomAction]?
     func urlBarDidPressScrollToTop(_ urlBar: URLBarView)
     func urlBar(_ urlBar: URLBarView, didRestoreText text: String)
@@ -110,6 +110,7 @@ class URLBarView: UIView {
     lazy var tabsButton: TabsButton = {
         let tabsButton = TabsButton.tabTrayButton()
         tabsButton.accessibilityIdentifier = "URLBarView.tabsButton"
+        tabsButton.inTopTabs = false
         return tabsButton
     }()
 
@@ -133,7 +134,7 @@ class URLBarView: UIView {
         let button = InsetButton()
         button.setImage(UIImage.templateImageNamed("menu-ScanQRCode"), for: .normal)
         button.accessibilityIdentifier = "urlBar-scanQRCode"
-        cancelButton.accessibilityLabel = Strings.ScanQRCodeViewTitle
+        button.accessibilityLabel = Strings.ScanQRCodeViewTitle
         button.clipsToBounds = false
         button.addTarget(self, action: #selector(showQRScanner), for: .touchUpInside)
         button.setContentHuggingPriority(UILayoutPriority(rawValue: 1000), for: .horizontal)
@@ -181,7 +182,8 @@ class URLBarView: UIView {
     }
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
-    fileprivate let hideImagesBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
+    fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -202,7 +204,8 @@ class URLBarView: UIView {
         }
 
         privateModeBadge.add(toParent: self)
-        hideImagesBadge.add(toParent: self)
+        appMenuBadge.add(toParent: self)
+        warningMenuBadge.add(toParent: self)
 
         helper = TabToolbarHelper(toolbar: self)
         setupConstraints()
@@ -282,7 +285,8 @@ class URLBarView: UIView {
         }
         
         privateModeBadge.layout(onButton: tabsButton)
-        hideImagesBadge.layout(onButton: menuButton)
+        appMenuBadge.layout(onButton: menuButton)
+        warningMenuBadge.layout(onButton: menuButton)
     }
 
     override func updateConstraints() {
@@ -523,7 +527,7 @@ class URLBarView: UIView {
         stopReloadButton.isHidden = !toolbarIsShowing || inOverlayMode
 
         // badge isHidden is tied to private mode on/off, use alpha to hide in this case
-        [privateModeBadge, hideImagesBadge].forEach {
+        [privateModeBadge, appMenuBadge, warningMenuBadge].forEach {
             $0.badge.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : 1
             $0.backdrop.alpha = (!toolbarIsShowing || inOverlayMode) ? 0 : BadgeWithBackdrop.backdropAlpha
         }
@@ -569,8 +573,19 @@ extension URLBarView: TabToolbarProtocol {
         }
     }
 
-    func hideImagesBadge(visible: Bool) {
-        hideImagesBadge.show(visible)
+    func appMenuBadge(setVisible: Bool) {
+        // Warning badges should take priority over the standard badge
+        guard warningMenuBadge.badge.isHidden else {
+            return
+        }
+
+        appMenuBadge.show(setVisible)
+    }
+
+    func warningMenuBadge(setVisible: Bool) {
+        // Disable other menu badges before showing the warning.
+        if !appMenuBadge.badge.isHidden { appMenuBadge.show(false) }
+        warningMenuBadge.show(setVisible)
     }
 
     func updateBackStatus(_ canGoBack: Bool) {
@@ -666,7 +681,7 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView) {
-        delegate?.urlBarDidTapShield(self, from: tabLocationView.trackingProtectionButton)
+        delegate?.urlBarDidTapShield(self)
     }
 }
 
@@ -734,7 +749,8 @@ extension URLBarView: Themeable {
         locationContainer.backgroundColor = UIColor.theme.textField.background
 
         privateModeBadge.badge.tintBackground(color: UIColor.theme.browser.background)
-        hideImagesBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        appMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
+        warningMenuBadge.badge.tintBackground(color: UIColor.theme.browser.background)
     }
 }
 

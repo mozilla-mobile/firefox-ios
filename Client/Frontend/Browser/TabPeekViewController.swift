@@ -75,6 +75,38 @@ class TabPeekViewController: UIViewController, WKNavigationDelegate {
         return actions
     }()
 
+    @available(iOS 13, *)
+    func contextActions(defaultActions: [UIMenuElement]) -> UIMenu {
+        var actions = [UIAction]()
+
+        let urlIsTooLongToSave = self.tab?.urlIsTooLong ?? false
+        if !self.ignoreURL && !urlIsTooLongToSave {
+            if !self.isBookmarked {
+                actions.append(UIAction(title: TabPeekViewController.PreviewActionAddToBookmarks, image: UIImage.templateImageNamed("menu-Bookmark"), identifier: nil) { [weak self] _ in
+                    guard let wself = self, let tab = wself.tab else { return }
+                    wself.delegate?.tabPeekDidAddBookmark(tab)
+                    })
+            }
+            if self.hasRemoteClients {
+                actions.append(UIAction(title: Strings.SendToDeviceTitle, image: UIImage.templateImageNamed("menu-Send"), identifier: nil) { [weak self] _ in
+                    guard let wself = self, let clientPicker = wself.fxaDevicePicker else { return }
+                    wself.delegate?.tabPeekRequestsPresentationOf(clientPicker)
+                    })
+            }
+            actions.append(UIAction(title: TabPeekViewController.PreviewActionCopyURL, image: UIImage.templateImageNamed("menu-Copy-Link"), identifier: nil) {[weak self] _ in
+                guard let wself = self, let url = wself.tab?.canonicalURL else { return }
+                UIPasteboard.general.url = url
+                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: wself.view)
+            })
+        }
+        actions.append(UIAction(title: TabPeekViewController.PreviewActionCloseTab, image: UIImage.templateImageNamed("menu-CloseTabs"), identifier: nil) { [weak self] _ in
+            guard let wself = self, let tab = wself.tab else { return }
+            wself.delegate?.tabPeekDidCloseTab(tab)
+            })
+
+        return UIMenu(title: "", children: actions)
+    }
+
     init(tab: Tab, delegate: TabPeekDelegate?) {
         self.tab = tab
         self.delegate = delegate

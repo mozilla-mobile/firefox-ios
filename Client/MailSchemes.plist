@@ -52,9 +52,9 @@
 	</dict>
 	<dict>
 		<key>name</key>
-		<string>Inbox by Gmail</string>
+		<string>Fastmail</string>
 		<key>scheme</key>
-		<string>inbox-gmail://</string>
+		<string>fastmail://</string>
 	</dict>
 </array>
 </plist>

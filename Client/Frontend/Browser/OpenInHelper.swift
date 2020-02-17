@@ -89,15 +89,23 @@ class DownloadHelper: NSObject, OpenInHelper {
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 
-        let filenameItem: PhotonActionSheetItem
+        var filenameItem: PhotonActionSheetItem
         if let expectedSize = expectedSize {
             let expectedSizeAndHost = "\(expectedSize) — \(host)"
             filenameItem = PhotonActionSheetItem(title: download.filename, text: expectedSizeAndHost, iconString: "file", iconAlignment: .right, bold: true)
         } else {
             filenameItem = PhotonActionSheetItem(title: download.filename, text: host, iconString: "file", iconAlignment: .right, bold: true)
         }
+        filenameItem.customHeight = { _ in
+            return 80
+        }
+        filenameItem.customRender = { label, contentView in
+            label.numberOfLines = 2
+            label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+            label.lineBreakMode = .byCharWrapping
+        }
 
-        let downloadFileItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _ in
+        let downloadFileItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
             self.browserViewController.downloadQueue.enqueue(download)
             UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }

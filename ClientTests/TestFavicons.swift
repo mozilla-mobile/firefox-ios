@@ -49,12 +49,11 @@ class TestFavicons: ProfileTest {
     }
 
     func testDefaultFavicons() {
-        let icon = FaviconFetcher.getDefaultIconForURL(url: URL(string: "http://www.google.de")!)
-        XCTAssertNotNil(icon)
-        let gmailIcon = FaviconFetcher.getDefaultIconForURL(url: URL(string: "http://mail.google.com")!)
-        XCTAssertNotNil(gmailIcon)
-        let siteIcon = FaviconFetcher.getDefaultIconForURL(url: URL(string: "http://airbnb.com")!)
-        XCTAssertNotNil(siteIcon)
-
+        // The amazon case tests a special case for multi-reguin domain lookups
+        ["http://www.youtube.com", "https://www.taobao.com/", "https://www.amazon.ca"].forEach {
+            let url = URL(string: $0)!
+            let icon = FaviconFetcher.getBundledIcon(forUrl: url)
+            XCTAssertNotNil(icon)
+        }
     }
 }

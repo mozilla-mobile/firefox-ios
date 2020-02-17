@@ -22,14 +22,18 @@ class DownloadContentScript: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
-            let browserViewController = appDelegate.browserViewController,
+        guard let browserViewController = tab?.browserViewController,
             let dictionary = message.body as? [String: Any?],
+            let securityToken = dictionary["securityToken"] as? String,
             var filename = dictionary["filename"] as? String,
             let mimeType = dictionary["mimeType"] as? String,
             let size = dictionary["size"] as? Int64,
             let base64String = dictionary["base64String"] as? String,
             let data = Bytes.decodeBase64(base64String) else {
+            return
+        }
+
+        if securityToken != UserScriptManager.securityToken {
             return
         }
 
@@ -42,6 +46,6 @@ class DownloadContentScript: TabContentScript {
         }
 
         let download = BlobDownload(filename: filename, mimeType: mimeType, size: size, data: data)
-        appDelegate.browserViewController.downloadQueue.enqueue(download)
+        tab?.browserViewController?.downloadQueue.enqueue(download)
     }
 }

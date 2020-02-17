@@ -278,14 +278,14 @@ class BrowserUtils {
 		var error: NSError?
 
 		let matcher = grey_allOf([
-			grey_accessibilityID("IntroViewController.scrollView"), grey_sufficientlyVisible()])
+			grey_accessibilityID("nextOnboardingButton"), grey_sufficientlyVisible()])
 
         EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &error)
 
 		if error == nil {
-            EarlGrey.selectElement(with: matcher).perform(grey_swipeFastInDirection(GREYDirection.left))
+            EarlGrey.selectElement(with: matcher).perform(grey_tap())
             let buttonMatcher = grey_allOf([
-                grey_accessibilityID("IntroViewController.startBrowsingButton"), grey_sufficientlyVisible()])
+                grey_accessibilityID("startBrowsingOnboardingButton"), grey_sufficientlyVisible()])
 
             EarlGrey.selectElement(with: buttonMatcher).assert(grey_notNil(), error: &error)
 
@@ -294,6 +294,18 @@ class BrowserUtils {
             }
 		}
 	}
+
+    class func enterUrlAddressBar(typeUrl: String) {
+        EarlGrey.selectElement(with: grey_accessibilityID("url"))
+                .inRoot(grey_kindOfClass(UITextField.self))
+                .perform(grey_tap())
+            EarlGrey.selectElement(with: grey_accessibilityID("address"))
+                .inRoot(grey_kindOfClass(UITextField.self))
+                .perform(grey_replaceText(typeUrl))
+            EarlGrey.selectElement(with: grey_accessibilityID("address"))
+                .inRoot(grey_kindOfClass(UITextField.self))
+                .perform(grey_typeText("\n"))
+    }
 
     class func iPad() -> Bool {
         return UIDevice.current.userInterfaceIdiom == .pad
@@ -515,6 +527,7 @@ class SimplePageServer {
                         tester.onload = imageFound;
                         tester.onerror = imageNotFound;
                         tester.src = URL;
+                        document.body.appendChild(tester);
                     }
 
                     function imageFound() {

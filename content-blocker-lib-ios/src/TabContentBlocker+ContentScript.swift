@@ -11,9 +11,12 @@ extension TabContentBlocker {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard isEnabled,
-            let body = message.body as? [String: String],
-            let urlString = body["url"],
-            let mainDocumentUrl = tab?.currentURL() else {
+            let body = message.body as? [String: Any],
+            let urls = body["urls"] as? [String],
+            let mainDocumentUrl = tab?.currentURL(),
+            let token = body["securityToken"] as? String,
+            token == UserScriptManager.securityToken
+        else {
             return
         }
 
@@ -22,15 +25,17 @@ extension TabContentBlocker {
             clearPageStats()
             return
         }
-        guard var components = URLComponents(string: urlString) else { return }
-        components.scheme = "http"
-        guard let url = components.url else { return }
 
-        let enabledLists = currentlyEnabledLists()
+        // The JS sends the urls in batches for better performance. Iterate the batch and check the urls.
+        for urlString in urls {
+            guard var components = URLComponents(string: urlString) else { return }
+            components.scheme = "http"
+            guard let url = components.url else { return }
 
-        TPStatsBlocklistChecker.shared.isBlocked(url: url, enabledBlocklists: enabledLists).uponQueue(.main) { listItem in
-            if let listItem = listItem {
-                self.stats = self.stats.create(byAddingListItem: listItem)
+            TPStatsBlocklistChecker.shared.isBlocked(url: url, mainDocumentURL: mainDocumentUrl).uponQueue(.main) { listItem in
+                if let listItem = listItem {
+                    self.stats = self.stats.create(matchingBlocklist: listItem, host: url.host ?? "")
+                }
             }
         }
     }

@@ -7,7 +7,7 @@ import WebKit
 class UserScriptManager {
 
     // Scripts can use this to verify the *app* (not JS on the web) is calling into them.
-    public static let securityToken = UUID()
+    public static let securityToken = UUID().uuidString
 
     // Singleton instance.
     public static let shared = UserScriptManager()

@@ -140,8 +140,8 @@ class GoogleGmailIntegration: MailProvider {
     }
 }
 
-class GoogleInboxIntegration: MailProvider {
-    var beginningScheme = "inbox-gmail://co?"
+class FastmailIntegration: MailProvider {
+    var beginningScheme = "fastmail://mail/compose?"
     var supportedHeaders = [
         "to",
         "cc",

@@ -199,11 +199,9 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
         headerView.titleLabel.text = sectionSetting.title?.string
 
         switch section {
-        // Hide the bottom border for the FxA custom server notes.
         case 1, 3:
             headerView.titleAlignment = .top
             headerView.titleLabel.numberOfLines = 0
-            headerView.showBottomBorder = false
         default:
             return super.tableView(tableView, viewForHeaderInSection: section)
         }
@@ -232,7 +230,7 @@ class CustomSyncTokenServerEnableSetting: BoolSetting {
 }
 
 class CustomURLSetting: WebPageSetting {
-    override init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, settingDidChange: ((String?) -> Void)? = nil) {
+    override init(prefs: Prefs, prefKey: String, defaultValue: String? = nil, placeholder: String, accessibilityIdentifier: String, isChecked: @escaping () -> Bool = { return false }, settingDidChange: ((String?) -> Void)? = nil) {
         super.init(prefs: prefs,
                    prefKey: prefKey,
                    defaultValue: defaultValue,

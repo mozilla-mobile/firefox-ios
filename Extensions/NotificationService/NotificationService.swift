@@ -62,7 +62,7 @@ class NotificationService: UNNotificationServiceExtension {
         display.messageDelivered = false
         display.displayNotification(what, profile: profile, with: error)
         if !display.messageDelivered {
-            display.displayUnknownMessageNotification()
+            display.displayUnknownMessageNotification(debugInfo: "Not delivered")
         }
     }
 
@@ -86,11 +86,12 @@ class SyncDataDisplay {
         self.notificationContent = content
         self.sentTabs = []
         self.tabQueue = tabQueue
+        Sentry.shared.setup(sendUsageData: true)
     }
 
     func displayNotification(_ message: PushMessage? = nil, profile: ExtensionProfile?, with error: PushMessageError? = nil) {
         guard let message = message, error == nil else {
-            return displayUnknownMessageNotification()
+            return displayUnknownMessageNotification(debugInfo: "Error \(error?.description ?? "")")
         }
 
         switch message {
@@ -108,10 +109,10 @@ class SyncDataDisplay {
             if collections.contains("clients") {
                 displayOldSentTabNotification()
             } else {
-                displayUnknownMessageNotification()
+                displayUnknownMessageNotification(debugInfo: "collection changed")
             }
         default:
-            displayUnknownMessageNotification()
+            displayUnknownMessageNotification(debugInfo: "Unknown: \(message)")
             break
         }
     }
@@ -142,10 +143,19 @@ extension SyncDataDisplay {
     }
 
     func displayAccountVerifiedNotification() {
+        #if MOZ_CHANNEL_BETA
+            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
+            return
+        #endif
         presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
     }
 
-    func displayUnknownMessageNotification() {
+    func displayUnknownMessageNotification(debugInfo: String) {
+        #if MOZ_CHANNEL_BETA
+            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
+            Sentry.shared.send(message: "SentTab error: \(debugInfo)")
+            return
+        #endif
         // if, by any change we haven't dealt with the message, then perhaps we
         // can recycle it as a sent tab message.
         if sentTabs.count > 0 {
@@ -240,7 +250,12 @@ extension SyncDataDisplay {
 
         if tabs.count == 0 {
             title = Strings.SentTab_NoTabArrivingNotification_title
-            body = Strings.SentTab_NoTabArrivingNotification_body
+            #if MOZ_CHANNEL_BETA
+                body = "DEBUG: Sent Tabs with no tab"
+                Sentry.shared.send(message: "SentTab error: no tab")
+            #else
+                body = Strings.SentTab_NoTabArrivingNotification_body
+            #endif
         } else {
             let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {

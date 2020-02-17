@@ -48,7 +48,6 @@ class TabTrayController: UIViewController {
     var collectionView: UICollectionView!
 
     let statusBarBG = UIView()
-
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(didTapToolbarAddTab), for: .touchUpInside)
@@ -131,12 +130,17 @@ class TabTrayController: UIViewController {
         self.view.layoutIfNeeded()
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        // When the app enters split screen mode we refresh the collection view layout to show the proper grid
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
     deinit {
         tabManager.removeDelegate(self.tabDisplayManager)
         tabManager.removeDelegate(self)
         tabDisplayManager = nil
     }
-
+    
     func focusTab() {
         guard let currentTab = tabManager.selectedTab, let index = self.tabDisplayManager.dataStore.index(of: currentTab), let rect = self.collectionView.layoutAttributesForItem(at: IndexPath(item: index, section: 0))?.frame else {
             return
@@ -275,10 +279,10 @@ class TabTrayController: UIViewController {
             fromView = emptyPrivateTabsView
         }
 
-        tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
-
         tabManager.willSwitchTabMode(leavingPBM: tabDisplayManager.isPrivate)
-
+        
+        tabDisplayManager.togglePrivateMode(isOn: !tabDisplayManager.isPrivate, createTabOnEmptyPrivateMode: false)
+        
         if tabDisplayManager.isPrivate, privateTabsAreEmpty() {
             UIView.animate(withDuration: 0.2) {
                 self.searchBarHolder.alpha = 0
@@ -444,7 +448,8 @@ extension TabTrayController: UITextFieldDelegate {
     func clearSearch() {
         tabDisplayManager.searchedTabs = nil
         searchBar.text = ""
-        tabDisplayManager.refreshStore()
+        // Use evenIfHidden to workaround a refresh bug (#4969)
+        tabDisplayManager.refreshStore(evenIfHidden: true)
     }
 }
 

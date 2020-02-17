@@ -6,7 +6,7 @@ import XCTest
 
 let defaultSearchEngine1 = "Google"
 let defaultSearchEngine2 = "Amazon.com"
-let customSearchEngine = ["name": "youtube", "url": "http://youtube.com/search?q=%s"]
+let customSearchEngine = ["name": "youtube", "url": "https://youtube.com/search?q=%s"]
 
 class SearchSettingsUITests: BaseTestCase {
     func testDefaultSearchEngine() {

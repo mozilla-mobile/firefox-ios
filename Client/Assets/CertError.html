@@ -15,10 +15,9 @@
         if (fresh)
           fresh = false;
         else
-          webkit.messageHandlers.localRequestHelper.postMessage({ type: "reload" });
+          webkit.messageHandlers.localRequestHelper.postMessage({ securitytoken: SECURITY_TOKEN, type: "reload" });
       });
-      
-      %reloader%
+
     </script>
   </head>
 

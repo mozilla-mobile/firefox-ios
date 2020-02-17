@@ -98,8 +98,7 @@ class ActivityStreamTest: BaseTestCase {
         // Open a new page and wait for the completion
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL(newTopSite["url"]!)
-        waitUntilPageLoad()
-        waitForTabsButton()
+        navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -191,9 +190,11 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in New Tab")
-        waitUntilPageLoad()
-
         // Check that two tabs are open and one of them is the default top site one
+        // Needed for BB to work after iOS 13.3 update
+        sleep(1)
+        waitForNoExistence(app.tables["Context Menu"], timeoutValue: 15)
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
         let numTabsOpen = app.collectionViews.cells.count
@@ -238,6 +239,11 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Open in New Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
+        // Workaroud needed after xcode 11.3 update Issue 5937
+        sleep(3)
+        navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
+
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
@@ -300,11 +306,14 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it
         selectOptionFromContextMenu(option: "Share")
-        if !iPad() {
-            app.buttons["Cancel"].tap()
-        }
+        // Comenting out until share sheet can be managed with automated tests issue #5477
+        //if !iPad() {
+        //    app.buttons["Cancel"].tap()
+        //}
     }
 
+    // Disable #5554
+    /*
     func testTopSitesShareNewTopSite() {
         navigator.goto(HomePanelsScreen)
         let topSiteCells = TopSiteCellgroup.cells
@@ -313,10 +322,11 @@ class ActivityStreamTest: BaseTestCase {
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it....
         selectOptionFromContextMenu(option: "Share")
-        if !iPad() {
-            app.buttons["Cancel"].tap()
-        }
-    }
+        // Comenting out until share sheet can be managed with automated tests issue #5477
+        //if !iPad() {
+        //    app.buttons["Cancel"].tap()
+        //}
+    }*/
 
     private func selectOptionFromContextMenu(option: String) {
         XCTAssertTrue(app.tables["Context Menu"].cells[option].exists)

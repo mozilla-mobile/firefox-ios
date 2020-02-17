@@ -16,7 +16,6 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.SettingsNewTabTitle
-        hasSectionSeparatorLine = false
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,19 +28,18 @@ class NewTabContentSettingsViewController: SettingsTableViewController {
 
         let onFinished = {
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
-            self.prefs.removeObjectForKey(HomePageConstants.NewTabCustomUrlPrefKey)
             self.tableView.reloadData()
         }
 
-        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "NewTabAsFirefoxHome", isEnabled: {return self.currentChoice == NewTabPage.topSites}, onChanged: {
+        let showTopSites = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabTopSites), subtitle: nil, accessibilityIdentifier: "NewTabAsFirefoxHome", isChecked: {return self.currentChoice == NewTabPage.topSites}, onChecked: {
             self.currentChoice = NewTabPage.topSites
             onFinished()
         })
-        let showBlankPage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBlankPage), subtitle: nil, accessibilityIdentifier: "NewTabAsBlankPage", isEnabled: {return self.currentChoice == NewTabPage.blankPage}, onChanged: {
+        let showBlankPage = CheckmarkSetting(title: NSAttributedString(string: Strings.SettingsNewTabBlankPage), subtitle: nil, accessibilityIdentifier: "NewTabAsBlankPage", isChecked: {return self.currentChoice == NewTabPage.blankPage}, onChecked: {
             self.currentChoice = NewTabPage.blankPage
             onFinished()
         })
-        let showWebPage = WebPageSetting(prefs: prefs, prefKey: HomePageConstants.NewTabCustomUrlPrefKey, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "NewTabAsCustomURL", settingDidChange: { (string) in
+        let showWebPage = WebPageSetting(prefs: prefs, prefKey: HomePageConstants.NewTabCustomUrlPrefKey, defaultValue: nil, placeholder: Strings.CustomNewPageURL, accessibilityIdentifier: "NewTabAsCustomURL", isChecked: {return !showTopSites.isChecked() && !showBlankPage.isChecked()}, settingDidChange: { (string) in
             self.currentChoice = NewTabPage.homePage
             self.prefs.setString(self.currentChoice.rawValue, forKey: NewTabAccessors.NewTabPrefKey)
             self.tableView.reloadData()

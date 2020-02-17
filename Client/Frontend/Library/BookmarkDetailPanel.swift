@@ -383,6 +383,11 @@ class BookmarkDetailPanel: SiteTableViewController {
 
         return BookmarkDetailPanelUX.FieldRowHeight
     }
+
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as? SiteTableViewHeader
+        header?.showBorder(for: .top, section != 0)
+    }
 }
 
 extension BookmarkDetailPanel: TextFieldTableViewCellDelegate {

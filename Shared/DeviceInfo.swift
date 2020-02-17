@@ -72,4 +72,10 @@ open class DeviceInfo {
             return false
         }
     }
+
+    // Reports portrait screen size regardless of the current orientation.
+    open class func screenSizeOrientationIndependent() -> CGSize {
+        let screenSize = UIScreen.main.bounds.size
+        return CGSize(width: min(screenSize.width, screenSize.height), height: max(screenSize.width, screenSize.height))
+    }
 }

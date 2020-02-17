@@ -106,8 +106,8 @@ class FxALoginStateMachine {
                                 log.error("Unsuccessful HTTP request: \(error.description)!  Assuming error is transient and not transitioning.")
                                 return same
                             } else {
-                                log.error("Unknown error: \(error.description).  Transitioning to Separated.")
-                                return separated
+                                log.error("Unknown error: \(error.description).  Assuming error is transient and not transitioning.")
+                                return same
                             }
                         case let .local(localError) where localError.domain == NSURLErrorDomain:
                             log.warning("Local networking error: \(result.failureValue!).  Assuming transient and not transitioning.")
@@ -116,8 +116,8 @@ class FxALoginStateMachine {
                             break
                         }
                     }
-                    log.error("Unknown error: \(result.failureValue!).  Transitioning to Separated.")
-                    return separated
+                    log.error("Unknown error: \(result.failureValue!).  Assuming error is transient and not transitioning.")
+                    return same
                 }
             }
 
@@ -156,8 +156,8 @@ class FxALoginStateMachine {
                                 log.error("Unsuccessful HTTP request: \(error.description)!  Assuming error is transient and not transitioning.")
                                 return same
                             } else {
-                                log.error("Unknown error: \(error.description).  Transitioning to Separated.")
-                                return separated
+                                log.error("Unknown error: \(error.description).  Assuming error is transient and not transitioning.")
+                                return same
                             }
                         case let .local(localError) where localError.domain == NSURLErrorDomain:
                             log.warning("Local networking error: \(result.failureValue!).  Assuming transient and not transitioning.")
@@ -166,8 +166,8 @@ class FxALoginStateMachine {
                             break
                         }
                     }
-                    log.error("Unknown error: \(result.failureValue!).  Transitioning to Separated.")
-                    return separated
+                    log.error("Unknown error: \(result.failureValue!).  Assuming error is transient and not transitioning.")
+                    return same
                 }
             }
 

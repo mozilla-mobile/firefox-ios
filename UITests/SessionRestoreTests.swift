@@ -7,8 +7,8 @@ import WebKit
 import Shared
 import EarlGrey
 import SwiftyJSON
+@testable import Client
 
-/// This test should be disabled since session restore does not seem to work
 class SessionRestoreTests: KIFTestCase {
     fileprivate var webRoot: String!
 
@@ -30,18 +30,13 @@ class SessionRestoreTests: KIFTestCase {
         let json = JSON(jsonDict)
         let escapedJSON = json.stringify()?.addingPercentEncoding(withAllowedCharacters: .URLAllowed)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
-        let restoreURL = URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?history=\(escapedJSON!)")
+        let restoreURL = PrivilegedRequest(url: URL(string: "\(InternalURL.baseUrl)/\(InternalURL.Path.sessionrestore.rawValue)?history=\(escapedJSON!)")!).url
 
         // Enter the restore URL and verify the back/forward history.
         // After triggering the restore, the session should look like this:
         //   about:home, page1, *page2*, page3
         // where page2 is active.
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .perform(grey_replaceText(restoreURL!.absoluteString))
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .perform(grey_typeText("\n"))
+        BrowserUtils.enterUrlAddressBar(typeUrl: restoreURL!.absoluteString)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 2")
         EarlGrey.selectElement(with: grey_accessibilityLabel("Back"))
             .perform(grey_tap())
@@ -74,6 +69,7 @@ class SessionRestoreTests: KIFTestCase {
             .perform(grey_tap())
         EarlGrey.selectElement(with: grey_accessibilityLabel("Forward"))
             .perform(grey_tap())
+        tester().waitForAnimationsToFinish()
         tester().waitForWebViewElementWithAccessibilityLabel("Page 3")
         let canGoForward: Bool
         do {

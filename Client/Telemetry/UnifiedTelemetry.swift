@@ -64,6 +64,7 @@ class UnifiedTelemetry {
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.normalbrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.privatebrowsing", withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: "profile.prefkey.trackingprotection.strength", withDefaultValue: "basic")
+        telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.systemThemeIsOn.rawValue, withDefaultValue: true)
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSwitchIsOn.rawValue, withDefaultValue: false)
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.automaticSliderValue.rawValue, withDefaultValue: 0)
         telemetryConfig.measureUserDefaultsSetting(forKey: ThemeManagerPrefs.themeName.rawValue, withDefaultValue: "normal")
@@ -89,6 +90,12 @@ class UnifiedTelemetry {
             self.crashedLastLaunch = false
 
             outputDict["settings"] = settings
+            
+            var userInterfaceStyle = "unknown" // unknown implies that device is on pre-iOS 13
+            if #available(iOS 13.0, *) {
+                userInterfaceStyle = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
+            }
+            outputDict["systemTheme"] = userInterfaceStyle
 
             return outputDict
         }
@@ -181,8 +188,17 @@ extension UnifiedTelemetry {
         case tab = "tab"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionWhitelist = "tracking-protection-whitelist"
+        case trackingProtectionMenu = "tracking-protection-menu"
         case url = "url"
         case searchText = "searchText"
+        case whatsNew = "whats-new"
+        case dismissUpdateCoverSheetAndStartBrowsing = "dismissed-update-cover_sheet_and_start_browsing"
+        case dismissedUpdateCoverSheet = "dismissed-update-cover-sheet"
+        case dismissedOnboarding = "dismissed-onboarding"
+        case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
+        case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
+        case privateBrowsingButton = "private-browsing-button"
+        case removeUnVerifiedAccountButton = "remove-unverified-account-button"
     }
 
     public enum EventValue: String {
@@ -205,13 +221,20 @@ extension UnifiedTelemetry {
         case shareMenu = "share-menu"
         case tabTray = "tab-tray"
         case topTabs = "top-tabs"
+        case systemThemeSwitch = "system-theme-switch"
+        case themeModeManually = "theme-manually"
+        case themeModeAutomatically = "theme-automatically"
+        case themeLight = "theme-light"
+        case themeDark = "theme-dark"
+        case privateTab = "private-tab"
+        case normalTab = "normal-tab"
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any?]? = nil) {
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any]? = nil) {
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value.rawValue, extras: extras)
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String: Any?]? = nil) {
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String: Any]? = nil) {
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value, extras: extras)
     }
 }

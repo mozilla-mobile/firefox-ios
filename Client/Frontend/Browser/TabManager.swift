@@ -73,7 +73,6 @@ class TabManager: NSObject {
         if isPrivate {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         }
-
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
     }
@@ -210,7 +209,7 @@ class TabManager: NSObject {
         }
         if let tab = selectedTab {
             TabEvent.post(.didGainFocus, for: tab)
-            UITextField.appearance().keyboardAppearance = tab.isPrivate ? .dark : .light
+            tab.applyTheme()
         }
     }
 
@@ -225,7 +224,7 @@ class TabManager: NSObject {
         recentlyClosedForUndo.removeAll()
 
         // Clear every time entering/exiting this mode.
-        Tab.DesktopSites.privateModeHostList = Set<String>()
+        Tab.ChangeUserAgent.privateModeHostList = Set<String>()
 
         if shouldClearPrivateTabs() && leavingPBM {
             removeAllPrivateTabs()
@@ -240,8 +239,8 @@ class TabManager: NSObject {
         }
     }
 
-    func addPopupForParentTab(_ parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
-        let popup = Tab(configuration: configuration, isPrivate: parentTab.isPrivate)
+    func addPopupForParentTab(bvc: BrowserViewController, parentTab: Tab, configuration: WKWebViewConfiguration) -> Tab {
+        let popup = Tab(bvc: bvc, configuration: configuration, isPrivate: parentTab.isPrivate)
         configureTab(popup, request: nil, afterTab: parentTab, flushToDisk: true, zombie: false, isPopup: true)
 
         // Wait momentarily before selecting the new tab, otherwise the parent tab
@@ -285,7 +284,8 @@ class TabManager: NSObject {
         // Take the given configuration. Or if it was nil, take our default configuration for the current browsing mode.
         let configuration: WKWebViewConfiguration = configuration ?? (isPrivate ? privateConfiguration : self.configuration)
 
-        let tab = Tab(configuration: configuration, isPrivate: isPrivate)
+        let bvc = BrowserViewController.foregroundBVC()
+        let tab = Tab(bvc: bvc, configuration: configuration, isPrivate: isPrivate)
         configureTab(tab, request: request, afterTab: afterTab, flushToDisk: flushToDisk, zombie: zombie)
         return tab
     }
@@ -316,6 +316,10 @@ class TabManager: NSObject {
     func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false) {
         assert(Thread.isMainThread)
 
+        // If network is not available webView(_:didCommit:) is not going to be called
+        // We should set request url in order to show url in url bar even no network
+        tab.url = request?.url
+        
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
         } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {
@@ -360,6 +364,10 @@ class TabManager: NSObject {
                 }
             }
         }
+
+        tab.nightMode = NightModeHelper.isActivated(profile.prefs)
+        tab.noImageMode = NoImageModeHelper.isActivated(profile.prefs)
+
         if flushToDisk {
         	storeChanges()
         }

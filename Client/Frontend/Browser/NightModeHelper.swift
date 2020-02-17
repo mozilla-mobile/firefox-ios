@@ -40,6 +40,7 @@ class NightModeHelper: TabContentScript {
         prefs.setBool(enabled, forKey: NightModePrefsKey.NightModeStatus)
         for tab in tabManager.tabs {
             tab.nightMode = enabled
+            tab.webView?.scrollView.indicatorStyle = enabled ? .white : .default
         }
     }
 

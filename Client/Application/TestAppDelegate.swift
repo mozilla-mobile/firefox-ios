@@ -62,7 +62,7 @@ class TestAppDelegate: AppDelegate {
 
         // Don't show the What's New page.
         if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            profile.prefs.setInt(1, forKey: PrefsKeys.KeyLastVersionNumber)
         }
 
         // Skip the intro when requested by for example tests or automation
@@ -85,7 +85,7 @@ class TestAppDelegate: AppDelegate {
             resetApplication()
         }
 
-        try? FileManager.default.removeItem(at: Tab.DesktopSites.file)
+        Tab.ChangeUserAgent.clear()
 
         return super.application(application, willFinishLaunchingWithOptions: launchOptions)
     }

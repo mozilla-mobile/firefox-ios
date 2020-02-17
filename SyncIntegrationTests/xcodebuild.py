@@ -2,7 +2,7 @@ import logging
 import os
 import subprocess
 
-from xcrun import XCRun
+from .xcrun import XCRun
 
 here = os.path.dirname(__file__)
 logging.getLogger(__name__).addHandler(logging.NullHandler())
@@ -10,7 +10,7 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 class XCodeBuild(object):
     binary = 'xcodebuild'
-    destination = 'platform=iOS Simulator,name=iPhone X'
+    destination = 'platform=iOS Simulator,name=iPhone 11,OS=13.2.2'
     logger = logging.getLogger()
     scheme = 'Fennec_Enterprise_XCUITests_Integration'
     xcrun = XCRun()
@@ -37,4 +37,4 @@ class XCodeBuild(object):
             raise
         finally:
             with open(self.log, 'w') as f:
-                f.writelines(out)
+                f.writelines(str(out))

@@ -23,6 +23,7 @@ class DownloadFilesTests: BaseTestCase {
 
     private func deleteItem(itemName: String) {
         app.tables.cells.staticTexts[itemName].swipeLeft()
+        waitForExistence(app.tables.cells.buttons["Delete"], timeout: 3)
         app.tables.cells.buttons["Delete"].tap()
     }
 
@@ -83,14 +84,14 @@ class DownloadFilesTests: BaseTestCase {
 
         XCTAssertTrue(app.tables.cells.buttons["Share"].exists)
         XCTAssertTrue(app.tables.cells.buttons["Delete"].exists)
-
-        app.tables.cells.buttons["Share"].tap()
-        waitForExistence(app.otherElements["ActivityListView"])
-        if iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
-        } else {
-            app.buttons["Cancel"].tap()
-        }
+        //Comenting out until share sheet can be managed with automated tests issue #5477
+        //app.tables.cells.buttons["Share"].tap()
+        //waitForExistence(app.otherElements["ActivityListView"])
+        //if iPad() {
+        //    app.otherElements["PopoverDismissRegion"].tap()
+        //} else {
+        //    app.buttons["Cancel"].tap()
+        //}
     }
 
     func testLongPressOnDownloadedFile() {
@@ -99,13 +100,14 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(LibraryPanel_Downloads)
 
         waitForExistence(app.tables["DownloadsTable"])
-        app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
-        waitForExistence(app.otherElements["ActivityListView"])
-        if iPad() {
-            app.otherElements["PopoverDismissRegion"].tap()
-        } else {
-            app.buttons["Cancel"].tap()
-        }
+        //Comenting out until share sheet can be managed with automated tests issue #5477
+        //app.tables.cells.staticTexts[testFileName].press(forDuration: 2)
+        //waitForExistence(app.otherElements["ActivityListView"])
+        //if iPad() {
+        //    app.otherElements["PopoverDismissRegion"].tap()
+        //} else {
+        //    app.buttons["Cancel"].tap()
+        //}
      }
 
     private func downloadFile(fileName: String, numberOfDownlowds: Int) {
