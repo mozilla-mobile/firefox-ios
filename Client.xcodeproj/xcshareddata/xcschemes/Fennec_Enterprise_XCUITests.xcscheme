@@ -225,6 +225,9 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "BookmarkingTests/testBookmarkLibraryAddDeleteBookmark()">
+               </Test>
+               <Test
                   Identifier = "BookmarkingTests/testBookmarksAwesomeBar()">
                </Test>
                <Test
