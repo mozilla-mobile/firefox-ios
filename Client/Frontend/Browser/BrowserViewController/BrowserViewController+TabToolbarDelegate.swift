@@ -79,7 +79,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             actions.append(optionalActions)
         }
 
-        actions.append(getLibraryActions(vcDelegate: self))
+        let successCallback: (String) -> Void = { (successMessage) in
+            SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
+        }
+
+        actions.append(getLibraryActions(vcDelegate: self, success: successCallback))
         actions.append(getOtherPanelActions(vcDelegate: self))
         // force a modal if the menu is being displayed in compact split screen
         let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad

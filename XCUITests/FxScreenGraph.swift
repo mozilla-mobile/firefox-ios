@@ -173,6 +173,7 @@ class Action {
     static let SelectTopSitesRows = "SelectTopSitesRows"
 
     static let GoToHomePage = "GoToHomePage"
+    static let GotoHomePage = "BookmarkAll"
 
     static let OpenSiriFromSettings = "OpenSiriFromSettings"
 
@@ -1091,6 +1092,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
 
         screenState.tap(app.tables.cells["menu-Home"], forAction: Action.GoToHomePage) { userState in
+        }
+        screenState.tap(app.tables.cells["menu-Bookmark"], forAction: Action.BookmarkAll) { userState in
         }
 
         screenState.dismissOnUse = true

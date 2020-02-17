@@ -40,7 +40,7 @@ extension PhotonActionSheetProtocol {
 
     //Returns a list of actions which is used to build a menu
     //OpenURL is a closure that can open a given URL in some view controller. It is up to the class using the menu to know how to open it
-    func getLibraryActions(vcDelegate: PageOptionsVC) -> [PhotonActionSheetItem] {
+    func getLibraryActions(vcDelegate: PageOptionsVC, success: @escaping (string) -> Void) -> [PhotonActionSheetItem] {
         guard let tab = self.tabManager.selectedTab else { return [] }
 
         let openLibrary = PhotonActionSheetItem(title: Strings.AppMenuLibraryTitleString, iconString: "menu-library") { action in
@@ -56,8 +56,22 @@ extension PhotonActionSheetProtocol {
                 tab.loadRequest(PrivilegedRequest(url: homePanelURL) as URLRequest)
             }
         }
+        
+        let bookmarkAll = PhotonActionSheetItem(title: Strings.AppMenuBookmarkAllSitesString, iconString: "menu-Bookmark") { _, _ in
+            for tab in self.tabManager.tabs{
+            guard let url = tab.canonicalURL?.displayURL,
+                 let bvc = vcDelegate as? BrowserViewController else {
+                     return
+             }
+             bvc.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
+             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
+                
+            }
+            success(Strings.AppMenuAddBookmarkConfirmMessage)
+        }
 
-        return [openHomePage, openLibrary]
+
+        return [openHomePage, openLibrary, bookmarkAll]
     }
 
     /*
