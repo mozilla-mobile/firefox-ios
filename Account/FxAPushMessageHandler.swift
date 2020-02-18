@@ -61,7 +61,7 @@ extension FxAPushMessageHandler {
         let deferred = PushMessageResult()
         RustFirefoxAccounts.startup() { fxa in
             fxa.accountManager.deviceConstellation()?.processRawIncomingAccountEvent(pushPayload: string) {
-                [weak self] result in
+                result in
                 guard case .success(let events) = result else {
                     deferred.fill(Maybe(failure: PushMessageError.messageIncomplete))
                     return
@@ -79,33 +79,34 @@ extension FxAPushMessageHandler {
                     case .deviceConnected(let deviceName):
                         let message = PushMessage.deviceConnected(deviceName)
                         deferred.fill(Maybe(success: message))
-                    case .deviceDisconnected(let isLocalDevice):
-                        if isLocalDevice {
+                    case .deviceDisconnected(let deviceInfo):
+                        if deviceInfo.isLocalDevice {
                             // We can't disconnect the device from the account until we have access to the application, so we'll handle this properly in the AppDelegate (as this code in an extension),
                             // by calling the FxALoginHelper.applicationDidDisonnect(application).
-                            self?.profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
+                            self.profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
                             let message = PushMessage.thisDeviceDisconnected
                             deferred.fill(Maybe(success: message))
                             return
                         }
 
-                        guard let _ = self?.profile as? BrowserProfile else {
+                        guard let profile = self.profile as? BrowserProfile else {
                             // We can't look up a name in testing, so this is the same as not knowing about it.
                             let message = PushMessage.deviceDisconnected(nil)
                             deferred.fill(Maybe(success: message))
                             return
                         }
 
-//                        let clients = profile.remoteClientsAndTabs
-//                        clients.getClient(fxaDeviceId: deviceId).uponQueue(.main) { device in
-//                            let message = PushMessage.deviceDisconnected(device?.name)
-////                            if let id = device?.guid {
-////                                clients.deleteClient(guid: id) { _ in
-////                                    print("Client deleted")
-////                                }
-////                            }
-//
-//                            deferred.fill(Maybe(success: message))
+                        profile.remoteClientsAndTabs.getClient(fxaDeviceId: deviceInfo.deviceId).uponQueue(.main) { result in
+                            guard let device = result.successValue else { return }
+                            let message = PushMessage.deviceDisconnected(device?.name)
+                            if let id = device?.guid {
+                                profile.remoteClientsAndTabs.deleteClient(guid: id).uponQueue(.main) { _ in
+                                    print("deleted client")
+                                }
+                            }
+
+                            deferred.fill(Maybe(success: message))
+                        }
                     }
                 }
             }

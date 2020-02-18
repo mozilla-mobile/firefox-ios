@@ -34,7 +34,6 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
     var dismissType: DismissType = .dismiss
     let pageType: FxAPageType
     fileprivate var baseURL: URL?
-    let settingsURL = "https://accounts.firefox.com/settings?service=sync&context=oauth_webchannel_v1"
     private var helpBrowser: WKWebView?
 
     init(pageType: FxAPageType) {
@@ -72,7 +71,8 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
         view = webView
 
-        if pageType == .settingsPage, let url = URL(string: settingsURL) {
+        let settingsURL = RustFirefoxAccounts.shared.accountManager.getManageAccountURL(entrypoint: "ios_settings_manage")
+        if pageType == .settingsPage, case .success(let url) = settingsURL {
             baseURL = url
             webView.load(URLRequest(url: url))
         } else {
