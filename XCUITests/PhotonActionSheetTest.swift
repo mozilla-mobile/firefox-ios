@@ -110,6 +110,7 @@ class PhotonActionSheetTest: BaseTestCase {
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
+        waitForExistence(app.staticTexts["Open in Firefox"], timeout: 10)
         XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
         XCTAssertTrue(app.staticTexts["Load in Background"].exists)
         XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
