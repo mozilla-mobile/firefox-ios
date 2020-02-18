@@ -87,6 +87,10 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
         }
 
         // TODO: get the token URL by calling into the manager.
+//        guard case .success(let tokenServerEndpointURL) = RustFirefoxAccounts.shared.accountManager.getTokenServerEndpointURL() else {
+//            return deferMaybe(FxAClientError.local(NSError()))
+//        }
+
         let tokenServerEndpointURL = URL(string: "https://token.services.mozilla.com/1.0/sync/1.5")!
         let client = TokenServerClient(url: tokenServerEndpointURL)
         let deferred = Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>()
