@@ -1048,8 +1048,6 @@ open class BrowserProfile: Profile {
         }
 
         func takeActionsOnEngineStateChanges<T: EngineStateChanges>(_ changes: T) -> Deferred<Maybe<T>> {
-            // TODO: for some reason the reset on logins/bookmarks end up badly. Disable for now.
-            return deferMaybe(changes)
             var needReset = Set<String>(changes.collectionsThatNeedLocalReset())
             needReset.formUnion(changes.enginesDisabled())
             needReset.formUnion(changes.enginesEnabled())
@@ -1146,14 +1144,12 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func engineEnablementChangesForAccount(account: Account.FirefoxAccount, profile: Profile) -> [String: Bool]? {
+        func engineEnablementChangesForAccount() -> [String: Bool]? {
             var enginesEnablements: [String: Bool] = [:]
             // We just created the account, the user went through the Choose What to Sync screen on FxA.
-            if let declined = account.declinedEngines {
+            if let declined = UserDefaults.standard.stringArray(forKey: "fxa.cwts.declinedSyncEngines") {
                 declined.forEach { enginesEnablements[$0] = false }
-                account.declinedEngines = nil
-                // Persist account changes so we don't try to decline engines on the next sync.
-                profile.flushAccount()
+                UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
             } else {
                 // Bundle in authState the engines the user activated/disabled since the last sync.
                 TogglableEngines.forEach { engine in
@@ -1172,15 +1168,15 @@ open class BrowserProfile: Profile {
         fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
                                   statsSession: SyncOperationStatsSession, why: SyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
-            let authState = RustFirefoxAccounts.shared.syncAuthState
+            var authState = RustFirefoxAccounts.shared.syncAuthState
             let delegate = self.profile.getSyncDelegate()
             // TODO
-//            if let enginesEnablements = self.engineEnablementChangesForAccount(account: account, profile: profile),
-//               !enginesEnablements.isEmpty {
-//                authState?.enginesEnablements = enginesEnablements
-//                log.debug("engines to enable: \(enginesEnablements.compactMap { $0.value ? $0.key : nil })")
-//                log.debug("engines to disable: \(enginesEnablements.compactMap { !$0.value ? $0.key : nil })")
-//            }
+            if let enginesEnablements = self.engineEnablementChangesForAccount(),
+               !enginesEnablements.isEmpty {
+                authState.enginesEnablements = enginesEnablements
+                log.debug("engines to enable: \(enginesEnablements.compactMap { $0.value ? $0.key : nil })")
+                log.debug("engines to disable: \(enginesEnablements.compactMap { !$0.value ? $0.key : nil })")
+            }
 
             // TODO
 //            authState?.clientName = account.deviceName

@@ -168,6 +168,11 @@ extension FxAWebView: WKScriptMessageHandler {
             return
         }
 
+        if let declinedSyncEngines = data["declinedSyncEngines"] as? [String] {
+            // Stash the declined engines so on first sync we can disable them!
+            UserDefaults.standard.set(declinedSyncEngines, forKey: "fxa.cwts.declinedSyncEngines")
+        }
+
         if let engines = data["offeredSyncEngines"] as? [String], engines.count > 0 {
             LeanPlumClient.shared.track(event: .signsUpFxa)
         } else {
