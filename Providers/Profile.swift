@@ -978,8 +978,16 @@ open class BrowserProfile: Profile {
                 }
             }
 
-            profile.rustAccount.deviceConstellation()?.refreshState()
-            return deferMaybe(.notStarted(.unknown))
+            let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
+            return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info, notifier: self) >>== { result in
+                guard case .completed = result else {
+                    return deferMaybe(result)
+                }
+                log.debug("Updating FxA devices list.")
+
+                self.profile.rustAccount.deviceConstellation()?.refreshState()
+                return deferMaybe(result)
+            }
         }
 
         fileprivate func syncTabsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
