@@ -18,7 +18,7 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
     func testURLContextMenu() {
 
         let urlBarTextField = app.textFields["URLBar.urlText"]
-        loadWebPage("fast.com")
+        loadWebPage("reddit.com")
 
         urlBarTextField.press(forDuration: 1.0)
         waitforHittable(element: app.cells["Add Custom URL"])
@@ -26,13 +26,13 @@ class QuickAddAutocompleteURLTest: BaseTestCase {
 
         waitforHittable(element: app.textFields["URLBar.urlText"])
         urlBarTextField.tap()
-        urlBarTextField.typeText("fast.c\n")
+        urlBarTextField.typeText("reddit.c\n")
 
         guard let text = urlBarTextField.value as? String else {
             XCTFail()
             return
         }
 
-        XCTAssert(text == "fast.com")
+        XCTAssert(text == "www.reddit.com")
     }
 }

@@ -171,6 +171,7 @@ class SettingAppearanceTest: BaseTestCase {
 
         // Edit Text Field
         let urlInput = app.textFields["urlInput"]
+        urlInput.tap()
         urlInput.typeText("mozilla.org")
         waitforHittable(element: app.navigationBars.buttons["saveButton"])
         app.navigationBars.buttons["saveButton"].tap()

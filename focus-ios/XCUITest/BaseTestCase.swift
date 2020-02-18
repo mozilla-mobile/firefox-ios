@@ -161,10 +161,7 @@ class BaseTestCase: XCTestCase {
         if waitForLoadToFinish {
             let finishLoadingTimeout: TimeInterval = 30
             let progressIndicator = app.progressIndicators.element(boundBy: 0)
-            waitFor(progressIndicator,
-                    with: "exists != true",
-                    description: "Problem loading \(url)",
-                timeout: finishLoadingTimeout)
+            waitFor(progressIndicator, with: "exists != true", description: "Problem loading \(url)", timeout: finishLoadingTimeout)
         }
         UIPasteboard.general.string = storedUrl
     }

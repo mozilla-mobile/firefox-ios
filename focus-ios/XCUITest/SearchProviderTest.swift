@@ -17,24 +17,35 @@ class SearchProviderTest: BaseTestCase {
         super.tearDown()
     }
 
-    func testSearchProvider() {
-		// Removing Twitter since it seems to be blocked from BB devices
-		let searchEngines = ["Google", "DuckDuckGo", "Wikipedia", "Amazon.com"]
+    func testGoogleSearchProvider() {
+        searchProviderTestHelper(provider: "Google")
+    }
 
-		for searchEngine in searchEngines {
-			changeSearchProvider(provider: searchEngine)
-			doSearch(searchWord: "mozilla", provider: searchEngine)
-            waitforEnable(element: app.buttons["URLBar.deleteButton"])
-			app.buttons["URLBar.deleteButton"].tap()
-            checkForHomeScreen()
-		}
+    func testDuckDuckGoSearchProvider() {
+        searchProviderTestHelper(provider: "DuckDuckGo")
+    }
+
+    func testWikipediaSearchProvider() {
+        searchProviderTestHelper(provider: "Wikipedia")
+    }
+    
+    func testAmazonSearchProvider() {
+        searchProviderTestHelper(provider: "Amazon.com")
+    }
+    
+    func searchProviderTestHelper(provider:String) {
+        changeSearchProvider(provider: provider)
+        doSearch(searchWord: "mozilla", provider: provider)
+        waitforEnable(element: app.buttons["URLBar.deleteButton"])
+        app.buttons["URLBar.deleteButton"].tap()
+        checkForHomeScreen()
 	}
 
     func testAddRemoveCustomSearchProvider() {
         app.buttons["Settings"].tap()
         app.tables.cells["SettingsViewController.searchCell"].tap()
         app.tables.cells["addSearchEngine"].tap()
-
+        app.textFields["nameInput"].tap()
         app.textFields["nameInput"].typeText("MDN")
         app.textViews["templateInput"].tap()
         app.textViews["templateInput"].typeText("https://developer.mozilla.org/en-US/search?q=%s")
@@ -89,7 +100,6 @@ class SearchProviderTest: BaseTestCase {
         let urlbarUrltextTextField = app.textFields["URLBar.urlText"]
         let cancelButton = app.buttons["URLBar.cancelButton"]
 		urlbarUrltextTextField.tap()
-
 		urlbarUrltextTextField.typeText(searchWord)
 		waitforExistence(element: app.buttons[searchForText])
 		app.buttons[searchForText].tap()

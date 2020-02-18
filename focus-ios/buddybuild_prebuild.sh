@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+echo "Running swift package to generate content blockers"
+(cd content-blocker-lib-ios/ContentBlockerGen && swift run)
+
 # Run linting
 chruby 2.3.1
 bundle install

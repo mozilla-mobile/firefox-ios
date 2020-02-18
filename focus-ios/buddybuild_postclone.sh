@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-./build-disconnect2.py
-
 # Update existing locales. This will only update locales that are already
 # imported to the application. It will not include new locales, that
 # remains a manual action.
