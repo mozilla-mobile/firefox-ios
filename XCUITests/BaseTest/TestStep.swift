@@ -19,6 +19,17 @@ class TestStep: CommonStepFlows {
         XCTAssertTrue(element.waitForExistence(timeout: maxTimeOut), "The element to tap on was not found. Error in file \(file) at line \(line).")
         element.tap()
     }
+    
+    /**
+     Taps on the UI element for th especified number of seconds
+     - Parameter element: the UI element to long tap on
+     - Parameter forSeconds: the number of seconds to keep tapping on the UI element
+     - Parameter maxTimeOut: (optional) the maximum amount of time to wait for the UI element until the assertion fails
+     */
+    static func longTapOnElement(_ element: XCUIElement, forSeconds: Double, maxTimeOut: Double = 5, file: String = #file, line: Int = #line) {
+        XCTAssertTrue(element.waitForExistence(timeout: maxTimeOut), "The element to tap on was not found. Error in file \(file) at line \(line).")
+        element.press(forDuration: forSeconds)
+    }
 
     /**
      Types text into the specified textfield UI element
@@ -30,6 +41,11 @@ class TestStep: CommonStepFlows {
         XCTAssertTrue(textFieldElement.waitForExistence(timeout: maxTimeOut), "The textfield element was not found. Error in file \(file) at line \(line).")
         textFieldElement.tap()
         textFieldElement.typeText(text)
+    }
+    
+    static func selectOptionFromContextMenu(option: String) {
+        TestCheck.elementIsPresent(Base.app.tables["Context Menu"].cells[option])
+        TestStep.tapOnElement(Base.app.tables["Context Menu"].cells[option])
     }
     
 }

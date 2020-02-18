@@ -15,8 +15,8 @@ class TestCheck: CommonCheckFlows {
      - Parameter element: the UI element to look for
      - Parameter timeout: (optional) the maximum timeout to wait for the element ; default value is 5 seconds
      */
-    static func checkUIElementIsPresent(_ element: XCUIElement, timeout: Double = 5, file: String = #file, line: Int = #line) {
-        XCTAssertTrue(element.waitForExistence(timeout: timeout), "The expected UI element was not found. Error in file \(file) at line \(line).")
+    static func elementIsPresent(_ element: XCUIElement, timeout: Double = Constants.smallWaitTime, file: String = #file, line: Int = #line) {
+        XCTAssertTrue(element.waitForExistence(timeout: timeout), "The UI element was not found: \(element.debugDescription).\nError in file \(file) at line \(line).")
     }
     
     /**
@@ -25,8 +25,18 @@ class TestCheck: CommonCheckFlows {
      - Parameter forTableWithUIElement: the UI element for the table to get the number of cells from
      */
     static func numberOfItemsInTable(isEqualWith: Int, forTableWithUIElement: XCUIElement) {
-        XCTAssertTrue(forTableWithUIElement.waitForExistence(timeout: 5), "The table element was not found.")
+        XCTAssertTrue(forTableWithUIElement.waitForExistence(timeout: Constants.smallWaitTime), "The table element was not found.")
         XCTAssertEqual(forTableWithUIElement.cells.count, isEqualWith, "The existent number of items was not the expected one.")
+    }
+
+    /**
+     Checks the number of expected top sites
+     - Parameter numberOfExpectedTopSites: the expected number of top sites
+     */
+    static func checkNumberOfExpectedTopSites(numberOfExpectedTopSites: Int) {
+        TestCheck.elementIsPresent(Base.app.cells["TopSitesCell"])
+        let numberOfTopSites = UIElements.topSiteCellGroup.cells.matching(identifier: "TopSite").count
+        XCTAssertEqual(numberOfTopSites, numberOfExpectedTopSites, "The number of Top Sites is not the expected one.")
     }
     
 }

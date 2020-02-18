@@ -688,9 +688,9 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         case .pocket:
             presentContextMenu(for: indexPath)
         case .topSites:
-            let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as! ASHorizontalScrollCell
-            let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell.collectionView)
-            guard let topSiteIndexPath = topSiteCell.collectionView.indexPathForItem(at: pointInTopSite) else { return }
+            let topSiteCell = self.collectionView?.cellForItem(at: indexPath) as? ASHorizontalScrollCell
+            let pointInTopSite = longPressGestureRecognizer.location(in: topSiteCell?.collectionView)
+            guard let topSiteIndexPath = topSiteCell?.collectionView.indexPathForItem(at: pointInTopSite) else { return }
             presentContextMenu(for: topSiteIndexPath)
         case .libraryShortcuts:
             return

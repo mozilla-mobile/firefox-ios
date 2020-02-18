@@ -46,4 +46,15 @@ class CommonStepFlows {
         Base.app.textFields["address"].typeText(text)
     }
     
+    /**
+     Removes all default top sites
+     */
+    static func removeAllDefaultTopSites() {
+        Base.helper.waitForExistence(UIElements.facebookCell)
+        
+        for element in Constants.allDefaultTopSites {
+            TestStep.longTapOnElement(UIElements.topSiteCellGroup.cells[element], forSeconds: 1)
+            TestStep.selectOptionFromContextMenu(option: "Remove")
+        }
+    }
 }
