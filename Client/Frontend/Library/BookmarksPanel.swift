@@ -84,16 +84,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.allowsSelectionDuringEditing = true
 
         self.editBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit) { _ in
-            self.tableView.setEditing(true, animated: true)
-            self.navigationItem.leftBarButtonItem = self.newBarButtonItem
-            self.navigationItem.rightBarButtonItem = self.doneBarButtonItem
+            self.enableEditMode()
         }
 
         self.doneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
-            self.tableView.setEditing(false, animated: true)
-            self.navigationItem.leftBarButtonItem = nil
-            self.navigationItem.rightBarButtonItem = self.editBarButtonItem
-            self.setupBackButtonGestureRecognizer()
+            self.disableEditMode()
         }
 
         self.newBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add) { _ in
@@ -151,6 +146,13 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
         setupBackButtonGestureRecognizer()
     }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if tableView.isEditing {
+            disableEditMode()
+        }
+        super.viewWillTransition(to: size, with: coordinator)
+    }
 
     override func applyTheme() {
         super.applyTheme()
@@ -193,6 +195,19 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 }
             }
         }
+    }
+    
+    fileprivate func enableEditMode() {
+        self.tableView.setEditing(true, animated: true)
+        self.navigationItem.leftBarButtonItem = self.newBarButtonItem
+        self.navigationItem.rightBarButtonItem = self.doneBarButtonItem
+    }
+    
+    fileprivate func disableEditMode() {
+        self.tableView.setEditing(false, animated: true)
+        self.navigationItem.leftBarButtonItem = nil
+        self.navigationItem.rightBarButtonItem = self.editBarButtonItem
+        self.setupBackButtonGestureRecognizer()
     }
 
     fileprivate func setupBackButtonGestureRecognizer() {
