@@ -170,9 +170,28 @@
       buildConfiguration = "Fennec"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "NO"
       language = "en"
-      region = "US"
-      shouldUseLaunchSchemeArgsEnv = "NO">
+      region = "US">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
+            BuildableName = "Client.app"
+            BlueprintName = "Client"
+            ReferencedContainer = "container:Client.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "FIREFOX_CLEAR_PROFILE"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "FIREFOX_TEST"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -206,6 +225,9 @@
                   Identifier = "BaseTestCase">
                </Test>
                <Test
+                  Identifier = "BookmarkingTests/testBookmarkLibraryAddDeleteBookmark()">
+               </Test>
+               <Test
                   Identifier = "BookmarkingTests/testBookmarksAwesomeBar()">
                </Test>
                <Test
@@ -221,6 +243,9 @@
                   Identifier = "DomainAutocompleteTest/testDeletingCharsUpdateTheResults()">
                </Test>
                <Test
+                  Identifier = "DownloadFilesTests/testToastButtonToGoToDownloads()">
+               </Test>
+               <Test
                   Identifier = "DragAndDropTestIpad/testTryDragAndDropBookmarkToURLBar()">
                </Test>
                <Test
@@ -234,6 +259,9 @@
                </Test>
                <Test
                   Identifier = "HistoryTests/testClearPrivateDataButtonDisabled()">
+               </Test>
+               <Test
+                  Identifier = "HistoryTests/testDeleteHistoryEntryBySwiping()">
                </Test>
                <Test
                   Identifier = "HomePageSettingsTest">
@@ -272,6 +300,9 @@
                   Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowBlankPage()">
                </Test>
                <Test
+                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowCustomURL()">
+               </Test>
+               <Test
                   Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowYourBookmarks()">
                </Test>
                <Test
@@ -282,9 +313,6 @@
                </Test>
                <Test
                   Identifier = "NewTabSettingsTest/testToggleOffOnAdditionalContentBookmarks()">
-               </Test>
-	       <Test
-                  Identifier = "NewTabSettingsTest/testChangeNewTabSettingsShowCustomURL()">
                </Test>
                <Test
                   Identifier = "NoImageTests">
@@ -311,16 +339,25 @@
                   Identifier = "PrivateBrowsingTest/testiPadDirectAccessPrivateModeBrowserTab()">
                </Test>
                <Test
+                  Identifier = "PrivateBrowsingTestIpad/testiPadDirectAccessPrivateMode()">
+               </Test>
+               <Test
+                  Identifier = "ReaderViewTest/testAddToReaderListOptions()">
+               </Test>
+               <Test
                   Identifier = "ReaderViewTest/testAddToReadingList()">
                </Test>
                <Test
                   Identifier = "ReaderViewTest/testLoadReaderContent()">
                </Test>
                <Test
-                  Identifier = "SaveLoginTest/testSavedLoginAutofilled()">
+                  Identifier = "SaveLoginTest/testEditOneLoginEntry()">
                </Test>
                <Test
-                  Identifier = "SaveLoginTest/testSavedLoginSelectUnselect()">
+                  Identifier = "SaveLoginTest/testSaveLogin()">
+               </Test>
+               <Test
+                  Identifier = "SaveLoginTest/testSavedLoginAutofilled()">
                </Test>
                <Test
                   Identifier = "ScreenGraphTest/testUserStateChanges()">
@@ -374,6 +411,15 @@
                   Identifier = "TopTabsTest/testSwitchBetweenTabsToastButton()">
                </Test>
                <Test
+                  Identifier = "TopTabsTestIphone/testAddPrivateTabByLongPressTabsButton()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIphone/testAddTabByLongPressTabsButton()">
+               </Test>
+               <Test
+                  Identifier = "TopTabsTestIphone/testCloseTabFromLongPressTabsButton()">
+               </Test>
+               <Test
                   Identifier = "TopTabsTestIphone/testSwitchBetweenTabsNoPrivatePrivateToastButton()">
                </Test>
                <Test
@@ -388,27 +434,6 @@
             </SkippedTests>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "F84B21BD1A090F8100AAB793"
-            BuildableName = "Client.app"
-            BlueprintName = "Client"
-            ReferencedContainer = "container:Client.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "FIREFOX_CLEAR_PROFILE"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "FIREFOX_TEST"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Fennec"
@@ -437,8 +462,6 @@
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Fennec"

@@ -37,7 +37,7 @@ class TestBookmarks: ProfileTest {
 
             // This'll do.
             _ = profile.places.forceClose()
-            try? profile.files.remove("mock_places.db")
+            try? profile.files.remove("profile-test_places.db")
         }
     }
 }
