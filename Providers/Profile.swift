@@ -570,7 +570,7 @@ open class BrowserProfile: Profile {
     }
 
     func hasSyncableAccount() -> Bool {
-        return hasAccount() && !rustAccount.accountNeedsReauth() 
+        return hasAccount() && !rustAccount.accountNeedsReauth()
     }
 
     func getAccount() -> Account.FirefoxAccount? {
@@ -1212,9 +1212,7 @@ open class BrowserProfile: Profile {
 
         @discardableResult public func syncEverything(why: SyncReason) -> Success {
             if RustFirefoxAccounts.shared.accountManager.accountMigrationInFlight() {
-                RustFirefoxAccounts.shared.accountManager.retryMigration() { result in
-                    print(result)
-                }
+                RustFirefoxAccounts.shared.accountManager.retryMigration() { _ in }
                 return Success()
             }
 

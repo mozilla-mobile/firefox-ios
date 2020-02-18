@@ -186,19 +186,19 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
     // The user has signed in to a Firefox Account.  We're done!
     fileprivate func onLogin(_ data: JSON) {
-        injectData("message", content: ["status": "login"])
-
-        let app = UIApplication.shared
-        let helper = FxALoginHelper.sharedInstance
-        helper.delegate = self
-        helper.application(app, didReceiveAccountJSON: data)
-
-        if let engines = data["offeredSyncEngines"].array, engines.count > 0 {
-            LeanPlumClient.shared.track(event: .signsUpFxa)
-        } else {
-            LeanPlumClient.shared.track(event: .signsInFxa)
-        }
-        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+//        injectData("message", content: ["status": "login"])
+//
+//        let app = UIApplication.shared
+//        let helper = FxALoginHelper.sharedInstance
+//        helper.delegate = self
+//        helper.application(app, didReceiveAccountJSON: data)
+//
+//        if let engines = data["offeredSyncEngines"].array, engines.count > 0 {
+//            LeanPlumClient.shared.track(event: .signsUpFxa)
+//        } else {
+//            LeanPlumClient.shared.track(event: .signsInFxa)
+//        }
+//        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
     }
 
 //    @objc fileprivate func userDidVerify(_ notification: Notification) {

@@ -9,6 +9,7 @@ import SwiftyJSON
 import Sync
 import UserNotifications
 import XCGLogger
+import SwiftKeychainWrapper
 
 let applicationDidRequestUserNotificationPermissionPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 
@@ -120,77 +121,6 @@ class FxALoginHelper {
 //        }
     }
 
-    // This is called when the user logs into a new FxA account.
-    // It manages the asking for user permission for notification and registration
-    // for APNS and WebPush notifications.
-    func application(_ application: UIApplication, didReceiveAccountJSON data: JSON) {
-        guard data["keyFetchToken"].string != nil, data["unwrapBKey"].string != nil else {
-            // The /settings endpoint sends a partial "login"; ignore it entirely.
-            log.error("Ignoring didSignIn with keyFetchToken or unwrapBKey missing.")
-            return self.loginDidFail()
-        }
-
-        assert(profile != nil, "Profile should still exist and be loaded into this FxAPushLoginStateMachine")
-
-        guard let profile = profile,
-            let account = FirefoxAccount.from(profile.accountConfiguration, andJSON: data) else {
-                return self.loginDidFail()
-        }
-        accountVerified = data["verified"].bool ?? false
-        self.account = account
-
-        account.updateProfile()
-
-        let leanplum = LeanPlumClient.shared
-        if leanplum.isLPEnabled() && leanplum.isFxAPrePushEnabled() {
-            // If Leanplum A/B push notification tests are enabled, defer to them for
-            // displaying the pre-push permission dialog. If user dismisses it, we will still have
-            // another chance to prompt them. Afterwards, Leanplum calls `apnsRegisterDidSucceed` or
-            // `apnsRegisterDidFail` to finish setting up Autopush.
-            return readyForSyncing()
-        }
-
-        requestUserNotifications(application)
-    }
-
-    func requestUserNotifications(_ application: UIApplication) {
-        if let deferred = self.apnsTokenDeferred, deferred.isFilled,
-            let token = deferred.value.successValue {
-            // If we have an account, then it'll go through ahead and register
-            // with autopush here.
-            // If not we'll just bail. The Deferred will do the rest.
-            return self.apnsRegisterDidSucceed(token)
-        }
-        DispatchQueue.main.async {
-            self.requestUserNotificationsMainThreadOnly(application)
-        }
-    }
-
-    fileprivate func requestUserNotificationsMainThreadOnly(_ application: UIApplication) {
-        assert(Thread.isMainThread, "requestAuthorization should be run on the main thread")
-        let center = UNUserNotificationCenter.current()
-        return center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-            guard error == nil else {
-                return self.application(application, canDisplayUserNotifications: false)
-            }
-            self.application(application, canDisplayUserNotifications: granted)
-        }
-    }
-
-    func application(_ application: UIApplication, canDisplayUserNotifications allowed: Bool) {
-        guard allowed else {
-            apnsTokenDeferred?.fillIfUnfilled(Maybe.failure(PushNotificationError.userDisallowed))
-            return readyForSyncing()
-        }
-
-        // Record that we have asked the user, and they have given an answer.
-        profile?.prefs.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
-
-        DispatchQueue.main.async {
-            application.registerForRemoteNotifications()
-        }
-    }
-
     func getPushConfiguration() -> PushConfiguration? {
         let label = PushConfigurationLabel(rawValue: AppConstants.scheme)
         return label?.toConfiguration()
@@ -300,6 +230,8 @@ class FxALoginHelper {
 
 extension FxALoginHelper {
     func disconnect() {
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
+
         // According to https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications
         // we should be calling:
         UIApplication.shared.unregisterForRemoteNotifications()
@@ -313,6 +245,8 @@ extension FxALoginHelper {
             let pushClient = self.pushClient {
             _ = pushClient.unregister(pushRegistration)
         }
+
+        KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
 
         // TODO: fix Bug 1168690, to tell Sync to delete this client and its tabs.
         // i.e. upload a {deleted: true} client record.

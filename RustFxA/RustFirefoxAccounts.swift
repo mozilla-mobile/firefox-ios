@@ -11,6 +11,15 @@ open class RustFirefoxAccounts {
     private static var startupCalled = false
     public let syncAuthState: SyncAuthState
 
+    public var accountMigrationFailed: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: "fxaccount-migration-failed")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "fxaccount-migration-failed")
+        }
+    }
+
     public static func startup(completion: ((RustFirefoxAccounts) -> Void)? = nil) {
         if startupCalled {
             completion?(shared)
@@ -22,17 +31,15 @@ open class RustFirefoxAccounts {
             let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
             if Bundle.main.bundleURL.pathExtension != "appex", let tokens = migrationTokens(), !hasAttemptedMigration {
                 UserDefaults.standard.set(true, forKey: "hasAttemptedMigration")
-                shared.accountManager.migrationAuthentication(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { result in
-                    // handle failure case
-                    switch result {
-                    case .success:
-                        break
-                    case .failure:
-                        break
-                    case .willRetry:
-                        break
+
+                let prefs = NSUserDefaultsPrefs(prefix: "profile")
+                ["bookmarks", "history", "passwords", "tabs"].forEach {
+                    if let val = prefs.boolForKey("sync.engine.\($0).enabled"), !val {
+                        // is disabled
                     }
                 }
+
+                shared.accountManager.migrationAuthentication(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
             }
 
             completion?(shared)
@@ -54,16 +61,31 @@ open class RustFirefoxAccounts {
                                             withLabel: "bobo" /* TODO: we probably want a random string associated with the current account here*/,
                 factory: syncAuthStateCachefromJSON))
 
-        NotificationCenter.default.addObserver(forName: Notification.Name.accountAuthenticated,  object: nil, queue: nil) { notification in
-            self.update()
+        NotificationCenter.default.addObserver(forName: .accountAuthenticated,  object: nil, queue: .main) { [weak self] notification in
+            if let type = notification.userInfo?["authType"] as? FxaAuthType, case .migrated = type {
+                KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
+                NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            }
+
+            self?.update()
         }
         
-        NotificationCenter.default.addObserver(forName: Notification.Name.accountProfileUpdate,  object: nil, queue: nil) { notification in
-            self.update()
+        NotificationCenter.default.addObserver(forName: .accountProfileUpdate,  object: nil, queue: .main) { [weak self] notification in
+            self?.update()
+        }
+
+        NotificationCenter.default.addObserver(forName: .accountMigrationFailed, object: nil, queue: .main) { [weak self] notification in
+            var info = ""
+            if let error = notification.userInfo?["error"] as? Error {
+                info = error.localizedDescription
+            }
+            Sentry.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
+            self?.accountMigrationFailed = true
+            NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
         }
     }
 
-    class func migrationTokens() -> (session: String, ksync: String, kxcs: String)? {
+    private class func migrationTokens() -> (session: String, ksync: String, kxcs: String)? {
         // Keychain forKey("profile.account"), return dictionary, from there
         // forKey("account.state.<guid>"), guid is dictionary["stateKeyLabel"]
         // that returns JSON string.
@@ -92,6 +114,7 @@ open class RustFirefoxAccounts {
     }
 
     public var isActionNeeded: Bool {
+        if accountManager.accountMigrationInFlight() || accountMigrationFailed { return true }
         if !accountManager.hasAccount() { return false }
         return accountManager.accountNeedsReauth()
     }
