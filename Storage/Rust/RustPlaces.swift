@@ -255,6 +255,12 @@ public class RustPlaces {
         }
     }
 
+    public func resetBookmarksMetadata() -> Success {
+        return withWriter { connection in
+            return try connection.resetBookmarkSyncMetadata()
+        }
+    }
+
     public func reopenIfClosed() -> NSError? {
         var error: NSError?  = nil
 
@@ -308,26 +314,6 @@ public class RustPlaces {
                 }
 
                 deferred.fill(Maybe(failure: err))
-            }
-        }
-
-        return deferred
-    }
-
-    public func resetBookmarksMetadata() -> Success {
-        let deferred = Success()
-
-        writerQueue.async {
-            guard self.isOpen else {
-                deferred.fill(Maybe(failure: PlacesError.connUseAfterAPIClosed as MaybeErrorType))
-                return
-            }
-
-            do {
-                try self.api?.resetBookmarksMetadata()
-                deferred.fill(Maybe(success: ()))
-            } catch let error {
-                deferred.fill(Maybe(failure: error as MaybeErrorType))
             }
         }
 
