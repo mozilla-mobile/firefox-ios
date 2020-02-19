@@ -1105,6 +1105,11 @@ open class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
 
+            let fxa = RustFirefoxAccounts.shared.accountManager
+            guard let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
+                return deferMaybe(NoAccountError())
+            }
+
             // TODO: we should check if we can sync!
 
             // TODO: Invoke `account.commandsClient.fetchMissedRemoteCommands()` to
@@ -1112,8 +1117,7 @@ open class BrowserProfile: Profile {
 
             if !isSyncing {
                 // TODO: needs lots of clean-up
-                let uid = RustFirefoxAccounts.shared.accountManager.accountProfile()!.uid
-                let deviceID = RustFirefoxAccounts.shared.accountManager.deviceConstellation()!.state()!.localDevice!.id
+                let uid = profile.uid
                 // A sync isn't already going on, so start another one.
                 let statsSession = SyncOperationStatsSession(why: why, uid: uid, deviceID: deviceID)
                 let reducer = AsyncReducer<EngineResults, EngineTasks>(initialValue: [], queue: syncQueue) { (statuses, synchronizers)  in
