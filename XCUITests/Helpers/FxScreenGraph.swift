@@ -340,6 +340,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 }
             }
         }
+        
         makeURLBarAvailable(screenState)
         screenState.tap(Base.app.buttons["TabToolbar.menuButton"], to: BrowserTabMenu)
 
@@ -355,7 +356,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            menu.cells["menu-PasteAndGo"].firstMatch.tap()
+            TestStep.tapOnElement(menu.cells["menu-PasteAndGo"].firstMatch)
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in

@@ -8,6 +8,10 @@
 
 import XCTest
 
+enum Orientation {
+    case portrait, landscapeLeft, landscapeRight, upsideDown;
+}
+
 class TestStep: CommonStepFlows {
     
     /**
@@ -43,9 +47,30 @@ class TestStep: CommonStepFlows {
         textFieldElement.typeText(text)
     }
     
+    /**
+     Selects an option from the contect menu
+     - Parameter option: the contect menu option to select
+     */
     static func selectOptionFromContextMenu(option: String) {
         TestCheck.elementIsPresent(Base.app.tables["Context Menu"].cells[option])
         TestStep.tapOnElement(Base.app.tables["Context Menu"].cells[option])
+    }
+    
+    /**
+     Changes the orientation of the device screen
+     - Parameter orientation: the desired orientation to change device screen to
+     */
+    static func changeDeviceOrientation(_ orientation: Orientation) {
+        switch orientation {
+        case .portrait:
+            XCUIDevice.shared.orientation = .portrait
+        case .landscapeLeft:
+            XCUIDevice.shared.orientation = .landscapeLeft
+        case .landscapeRight:
+            XCUIDevice.shared.orientation = .landscapeRight
+        case .upsideDown:
+            XCUIDevice.shared.orientation = .portraitUpsideDown
+        }
     }
     
 }
