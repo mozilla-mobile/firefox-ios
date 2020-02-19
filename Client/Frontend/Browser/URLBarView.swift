@@ -362,6 +362,10 @@ class URLBarView: UIView {
         locationTextField.snp.remakeConstraints { make in
             make.edges.equalTo(self.locationView)
         }
+        // Disable dragging urls on iPhones because it conflicts with editing the text
+        if UIDevice.current.userInterfaceIdiom != .pad {
+            locationTextField.textDragInteraction?.isEnabled = false
+        }
 
         locationTextField.applyTheme()
         locationTextField.backgroundColor = UIColor.theme.textField.backgroundInOverlay
