@@ -134,7 +134,7 @@ protocol Profile: AnyObject {
     func hasSyncableAccount() -> Bool
 
     func getAccount() -> Account.FirefoxAccount?
-    var rustAccount: FxaAccountManager { get }
+    var rustAccount: FxAccountManager { get }
 
     func removeAccount()
     func setAccount(_ account: Account.FirefoxAccount)
@@ -577,7 +577,7 @@ open class BrowserProfile: Profile {
         return account
     }
 
-    var rustAccount: FxaAccountManager {
+    var rustAccount: FxAccountManager {
         return RustFirefoxAccounts.shared.accountManager
     }
 

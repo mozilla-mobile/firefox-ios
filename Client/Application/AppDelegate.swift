@@ -622,9 +622,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         openURLsInNewTabs(response.notification)
     }
 
-    // Called when the user receives a tab while in foreground.
+    // Called when the user receives a tab (or any other notification) while in foreground.
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        openURLsInNewTabs(notification)
+
+        if profile?.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
+            FxALoginHelper.sharedInstance.disconnect()
+            // show the notification
+            completionHandler([.alert, .sound])
+        } else {
+            openURLsInNewTabs(notification)
+        }
     }
 }
 
