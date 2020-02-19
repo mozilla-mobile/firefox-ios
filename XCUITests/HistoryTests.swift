@@ -278,7 +278,9 @@ class HistoryTests: BaseTestCase {
         // Tapping everything removes both current data and older data.
         tapOnClearRecentHistoryOption(optionSelected: "Everything")
         for entry in oldHistoryEntries {
-            XCTAssertFalse(app.tables.cells.staticTexts[entry].exists)
+            waitForNoExistence(app.tables.cells.staticTexts[entry], timeoutValue: 10)
+
+        XCTAssertFalse(app.tables.cells.staticTexts[entry].exists, "History not removed")
         }
         XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
         
