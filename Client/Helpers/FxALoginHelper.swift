@@ -84,7 +84,7 @@ class FxALoginHelper {
     // if already logged in, checking if anything needs to be done in response
     // to changing of user settings and push notifications.
     func application(_ application: UIApplication, didLoadProfile profile: Profile) {
-//        self.profile = profile
+        self.profile = profile
 //        self.account = profile.getAccount()
 //
 //        self.apnsTokenDeferred = Deferred()
@@ -230,6 +230,7 @@ class FxALoginHelper {
 
 extension FxALoginHelper {
     func disconnect() {
+        RustFirefoxAccounts.shared.accountManager.logout() { _ in }
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
 
         // According to https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications

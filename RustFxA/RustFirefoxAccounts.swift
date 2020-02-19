@@ -6,7 +6,7 @@ open class RustFirefoxAccounts {
     private let ClientID =  "a2270f727f45f648" // actual one is "1b1a3e44c54fbb58"
     public let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     public static var shared = RustFirefoxAccounts()
-    public let accountManager: FxaAccountManager
+    public let accountManager: FxAccountManager
     public var avatar: Avatar? = nil
     private static var startupCalled = false
     public let syncAuthState: SyncAuthState
@@ -39,7 +39,7 @@ open class RustFirefoxAccounts {
                     }
                 }
 
-                shared.accountManager.migrationAuthentication(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
+                shared.accountManager.authenticateViaMigration(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
             }
 
             completion?(shared)
@@ -54,7 +54,7 @@ open class RustFirefoxAccounts {
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
-        accountManager = FxaAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
+        accountManager = FxAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
 
         syncAuthState = FirefoxAccountSyncAuthState(
             cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",

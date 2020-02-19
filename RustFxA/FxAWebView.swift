@@ -7,6 +7,7 @@ import UIKit
 import Account
 import MozillaAppServices
 import Shared
+import SwiftKeychainWrapper
 
 enum DismissType {
     case dismiss
@@ -183,6 +184,7 @@ extension FxAWebView: WKScriptMessageHandler {
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
         RustFirefoxAccounts.shared.accountManager.finishAuthentication(authData: auth) { _ in
             // ask for push notification
+            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
             let center = UNUserNotificationCenter.current()
             center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 guard error == nil else {

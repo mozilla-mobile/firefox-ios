@@ -93,8 +93,8 @@ class SyncDataDisplay {
         }
 
         switch message {
-        case .commandReceived(let tab):
-            displayNewSentTabNotification(tab: tab)
+//        case .commandReceived(let tab):
+//            displayNewSentTabNotification(tab: tab)
         case .deviceConnected(let deviceName):
             displayDeviceConnectedNotification(deviceName)
         case .deviceDisconnected(let deviceName):
