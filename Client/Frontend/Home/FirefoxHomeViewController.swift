@@ -1044,7 +1044,7 @@ class LibraryShortcutView: UIView {
         }
         title.adjustsFontSizeToFitWidth = true
         title.minimumScaleFactor = 0.7
-        title.numberOfLines = 2
+        title.lineBreakMode = .byTruncatingTail
         title.font = DynamicFontHelper.defaultHelper.SmallSizeRegularWeightAS
         title.textAlignment = .center
         title.snp.makeConstraints { make in
@@ -1099,6 +1099,8 @@ class ASLibraryCell: UICollectionViewCell, Themeable {
             let view = LibraryShortcutView()
             view.button.setImage(item.image, for: .normal)
             view.title.text = item.title
+            let words = view.title.text?.components(separatedBy: NSCharacterSet.whitespacesAndNewlines).count
+            view.title.numberOfLines = words == 1 ? 1 :2
             view.button.backgroundColor = item.color
             view.button.setTitleColor(UIColor.theme.homePanel.topSiteDomain, for: .normal)
             view.accessibilityLabel = item.title

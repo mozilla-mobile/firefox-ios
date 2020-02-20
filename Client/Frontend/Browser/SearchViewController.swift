@@ -56,6 +56,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
+    fileprivate let searchEngineContainerView = UIView()
     fileprivate let searchEngineScrollView = ButtonScrollView()
     fileprivate let searchEngineScrollViewContent = UIView()
 
@@ -87,15 +88,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        searchEngineScrollView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
-        searchEngineScrollView.layer.shadowRadius = 0
-        searchEngineScrollView.layer.shadowOpacity = 100
-        searchEngineScrollView.layer.shadowOffset = CGSize(width: 0, height: -SearchViewControllerUX.SearchEngineTopBorderWidth)
-        searchEngineScrollView.layer.shadowColor = SearchViewControllerUX.SearchEngineScrollViewBorderColor
-        searchEngineScrollView.clipsToBounds = false
+        searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
+        searchEngineContainerView.layer.shadowRadius = 0
+        searchEngineContainerView.layer.shadowOpacity = 100
+        searchEngineContainerView.layer.shadowOffset = CGSize(width: 0, height: -SearchViewControllerUX.SearchEngineTopBorderWidth)
+        searchEngineContainerView.layer.shadowColor = SearchViewControllerUX.SearchEngineScrollViewBorderColor
+        searchEngineContainerView.clipsToBounds = false
 
         searchEngineScrollView.decelerationRate = UIScrollView.DecelerationRate.fast
-        view.addSubview(searchEngineScrollView)
+        searchEngineContainerView.addSubview(searchEngineScrollView)
+        view.addSubview(searchEngineContainerView)
 
         searchEngineScrollViewContent.layer.backgroundColor = UIColor.clear.cgColor
         searchEngineScrollView.addSubview(searchEngineScrollViewContent)
@@ -119,6 +121,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         blur.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
+    
+        searchEngineContainerView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+        }
 
         suggestionCell.delegate = self
 
@@ -140,8 +146,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate func layoutSearchEngineScrollView() {
         let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
         searchEngineScrollView.snp.remakeConstraints { make in
-            make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            make.left.right.top.equalToSuperview()
+            if keyboardHeight == 0 {
+                make.bottom.equalTo(view.safeArea.bottom)
+            } else {
+                make.bottom.equalTo(view).offset(-keyboardHeight)
+            }
         }
     }
 

@@ -13,6 +13,10 @@ class UpdateViewModel {
     // Constants
     let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(Strings.CoverSheetV22DarkModeTitle)\n\n\(Strings.CoverSheetV22DarkModeDescription)")]
     
+    // We only show coversheet for specific app updates and not all. The list below is for the version(s)
+    // we would like to show the coversheet for.
+    static let coverSheetSupportedAppVersion = ["22.0"]
+    
     init() {
         setupUpdateModel()
     }
@@ -28,29 +32,31 @@ class UpdateViewModel {
         return false
     }
     
-    static func shouldShow(userPrefs: Prefs, currentAppVersion: String = VersionSetting.appVersion, isCleanInstall: Bool) -> Bool {
+    static func shouldShowUpdateSheet(userPrefs: Prefs, currentAppVersion: String = VersionSetting.appVersion, isCleanInstall: Bool, supportedAppVersions:[String] = []) -> Bool {
+        var willShow = false
         if isCleanInstall {
             // We don't show it but save the currentVersion number
             userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
-            return false
+            willShow = false
         } else {
             // Its not a new install so first we check if there is a version number already saved
             if let savedVersion = userPrefs.stringForKey(PrefsKeys.KeyLastVersionNumber) {
                // Version number saved in user prefs is not the same as current version, return true
                if savedVersion != currentAppVersion {
                    userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
-                   return true
+                   willShow = true
                  // Version number saved in user prefs matches the current version, return false
                } else if savedVersion == currentAppVersion {
-                   return false
+                   willShow = false
                }
             } else {
                 // Only way the version is not saved if the user is coming from an app that didn't have this feature
                 // as its not a clean install. Hence we should still show the update screen but save the version
                 userPrefs.setString(currentAppVersion, forKey: PrefsKeys.KeyLastVersionNumber)
-                return true
+                willShow = true
             }
         }
-        return false
+        // Final version check to only show for specific app versions
+        return willShow && supportedAppVersions.contains(currentAppVersion)
     }
 }

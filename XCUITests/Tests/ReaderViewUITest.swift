@@ -46,7 +46,7 @@ class ReaderViewTest: BaseTestCase {
         // Check to make sure the reading list is empty
         checkReadingListNumberOfItems(items: 0)
         
-        // Add item to reading list and check that it appears
+        // Add item to reading list and check that it Base.appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
@@ -72,7 +72,7 @@ class ReaderViewTest: BaseTestCase {
         // Initially reading list is empty
         checkReadingListNumberOfItems(items: 0)
 
-        // Add item to reading list and check that it appears
+        // Add item to reading list and check that it Base.appears
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
         navigator.goto(LibraryPanel_ReadingList)
@@ -84,7 +84,7 @@ class ReaderViewTest: BaseTestCase {
         XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)
 
-        // Check that it appears on regular mode
+        // Check that it Base.appears on regular mode
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
@@ -93,11 +93,11 @@ class ReaderViewTest: BaseTestCase {
     func testMarkAsReadAndUreadFromReaderView() {
         addContentToReaderView()
 
-        // Mark the content as read, so the mark as unread buttons appear
+        // Mark the content as read, so the mark as unread buttons Base.appear
         Base.app.buttons["Mark as Read"].tap()
         Base.helper.waitForExistence(Base.app.buttons["Mark as Unread"])
 
-        // Mark the content as unread, so the mark as read button appear
+        // Mark the content as unread, so the mark as read button Base.appear
         Base.app.buttons["Mark as Unread"].tap()
         Base.helper.waitForExistence(Base.app.buttons["Mark as Read"])
     }
@@ -210,5 +210,14 @@ class ReaderViewTest: BaseTestCase {
         // Verify the item has been removed
         Base.helper.waitForNoExistence(Base.app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
         XCTAssertFalse(Base.app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
+    }
+
+    // Smoketest
+    func testAddToReaderListOptions() {
+        addContentToReaderView()
+        // Check that Settings layouts options are shown
+        Base.helper.waitForExistence(Base.app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)
+        Base.app.buttons["ReaderModeBarView.settingsButton"].tap()
+        XCTAssertTrue(Base.app.buttons["Light"].exists)
     }
 }

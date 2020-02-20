@@ -38,7 +38,7 @@ class HistoryTests: BaseTestCase {
     func testOpenSyncDevices() {
         navigator.goto(LibraryPanel_SyncedTabs)
         Base.helper.waitForExistence(Base.app.tables.cells.staticTexts["Firefox Sync"])
-        XCTAssertTrue(Base.app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not appear")
+        XCTAssertTrue(Base.app.tables.buttons["Sign in to Sync"].exists, "Sing in button does not Base.appear")
     }
 
     func testClearHistoryFromSettings() {
@@ -62,7 +62,7 @@ class HistoryTests: BaseTestCase {
         Base.app.tables.cells["ClearPrivateData"].tap()
         Base.app.alerts.buttons["OK"].tap()
         
-        //Wait for OK pop-up to disappear after confirming
+        //Wait for OK pop-up to disBase.appear after confirming
         Base.helper.waitForNoExistence(Base.app.alerts.buttons["OK"], timeoutValue:5)
         
         //Try to tap on the disabled Clear Private Data button
@@ -125,7 +125,7 @@ class HistoryTests: BaseTestCase {
         navigator.nowAt(NewTabScreen)
         navigator.goto(BrowserTabMenu)
         navigator.goto(HistoryRecentlyClosed)
-        // Once the website is visited and closed it will appear in Recently Closed Tabs list
+        // Once the website is visited and closed it will Base.appear in Recently Closed Tabs list
         Base.helper.waitForExistence(Base.app.tables["Recently Closed Tabs List"])
         XCTAssertTrue(Base.app.tables.cells.staticTexts[closedWebPageLabel].exists)
 
@@ -200,7 +200,7 @@ class HistoryTests: BaseTestCase {
         XCTAssertEqual(numTabsOpen, 1)
     }
 
-    func testPrivateClosedSiteDoesNotAppearOnRecentlyClosed() {
+    func testPrivateClosedSiteDoesNotappearOnRecentlyClosed() {
         Base.helper.waitForTabsButton()
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         // Open the default website
@@ -263,7 +263,7 @@ class HistoryTests: BaseTestCase {
         // Go to 'goolge.com' to create a recent history entry.
         navigateToGoogle()
         navigator.performAction(Action.ClearRecentHistory)
-        // Tapping "Today and Yesterday" will remove recent data (from yesterday and today).
+        // TBase.apping "Today and Yesterday" will remove recent data (from yesterday and today).
         // Older data will not be removed
         tapOnClearRecentHistoryOption(optionSelected: "Today and Yesterday")
         for entry in oldHistoryEntries {
@@ -275,7 +275,7 @@ class HistoryTests: BaseTestCase {
         // Go to 'goolge.com' to create a recent history entry.
         navigateToGoogle()
         navigator.performAction(Action.ClearRecentHistory)
-        // Tapping everything removes both current data and older data.
+        // TBase.apping everything removes both current data and older data.
         tapOnClearRecentHistoryOption(optionSelected: "Everything")
         for entry in oldHistoryEntries {
             XCTAssertFalse(Base.app.tables.cells.staticTexts[entry].exists)
@@ -291,5 +291,17 @@ class HistoryTests: BaseTestCase {
         for option in clearRecentHistoryOptions {
             XCTAssertTrue(Base.app.sheets.buttons[option].exists)
         }
+    }
+
+    // Smoketest
+    func testDeleteHistoryEntryBySwiping() {
+        navigateToGoogle()
+        navigator.goto(LibraryPanel_History)
+        print(Base.app.debugDescription)
+        Base.helper.waitForExistence(Base.app.cells.staticTexts["http://example.com/"], timeout: 10)
+        Base.app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
+        Base.helper.waitForExistence(Base.app.buttons["Delete"], timeout: 10)
+        Base.app.buttons["Delete"].tap()
+        Base.helper.waitForNoExistence(Base.app.staticTexts["http://example.com"])
     }
 }

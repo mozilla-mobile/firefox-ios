@@ -87,7 +87,7 @@ class NavigationTest: BaseTestCase {
     func testTapSigninShowsFxAFromSettings() {
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
-        let signInToFirefoxStaticText = Base.app.tables["AppSettingsTableViewController.tableView"].staticTexts["Sign in to Sync"]
+        let signInToFirefoxStaticText = Base.app.tables["Base.appSettingsTableViewController.tableView"].staticTexts["Sign in to Sync"]
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
@@ -172,12 +172,16 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testLongPressLinkOptions() {
         navigator.openURL(Base.helper.path(forTestPage: "test-example.html"))
+        Base.helper.waitForExistence(Base.app.webViews.links[website_2["link"]!], timeout: 30)
         Base.app.webViews.links[website_2["link"]!].press(forDuration: 2)
         Base.helper.waitForExistence(Base.app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
+
         XCTAssertTrue(Base.app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(Base.app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(Base.app.buttons["Copy Link"].exists, "The option is not shown")
         XCTAssertTrue(Base.app.buttons["Download Link"].exists, "The option is not shown")
+        XCTAssertTrue(Base.app.buttons["Share Link"].exists, "The option is not shown")
+        XCTAssertTrue(Base.app.buttons["Bookmark Link"].exists, "The option is not shown")
     }
 
     func testLongPressLinkOptionsPrivateMode() {
@@ -224,7 +228,7 @@ class NavigationTest: BaseTestCase {
         Base.app.textFields["url"].press(forDuration:3)
         Base.app.tables.cells["menu-Copy-Link"].tap()
         Base.app.textFields["url"].tap()
-        // Since the textField value appears all selected first time is clicked
+        // Since the textField value Base.appears all selected first time is clicked
         // this workaround is necessary
         Base.app.textFields["address"].tap()
         Base.app.textFields["address"].tap()
@@ -240,7 +244,7 @@ class NavigationTest: BaseTestCase {
         //Tap on Select option and make sure Copy, Cut, Paste, and Look Up are shown
         Base.app.menuItems["Select"].tap()
         Base.helper.waitForExistence(Base.app.menuItems["Copy"])
-        if iPad() {
+        if Base.helper.iPad() {
             XCTAssertTrue(Base.app.menuItems["Copy"].exists)
             XCTAssertTrue(Base.app.menuItems["Cut"].exists)
             XCTAssertTrue(Base.app.menuItems["Look Up"].exists)
@@ -262,7 +266,7 @@ class NavigationTest: BaseTestCase {
         //Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
         Base.app.menuItems["Select All"].tap()
         Base.helper.waitForExistence(Base.app.menuItems["Copy"])
-        if iPad() {
+        if Base.helper.iPad() {
             XCTAssertTrue(Base.app.menuItems["Copy"].exists)
             XCTAssertTrue(Base.app.menuItems["Cut"].exists)
             XCTAssertTrue(Base.app.menuItems["Look Up"].exists)
@@ -322,14 +326,14 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(website_2["url"]!)
         Base.app.webViews.links[website_2["link"]!].press(forDuration: 2)
         
-        if iPad() {
+        if Base.helper.iPad() {
             // For iPad there is no Cancel, so we tap to dismiss the menu
-            app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            Base.app/*@START_MENU_TOKEN@*/.otherElements["PopoverDismissRegion"]/*[[".otherElements[\"dismiss popup\"]",".otherElements[\"PopoverDismissRegion\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         } else {
             Base.app.buttons["Cancel"].tap()
         }
 
-        Base.helper.waitForNoExistence(Base.app.sheets[website_2["moreLinkLongPressInfo"]!])
+        waitForNoExistence(Base.app.sheets[website_2["moreLinkLongPressInfo"]!])
         XCTAssertEqual(Base.app.textFields["url"].value! as? String, "www.example.com/", "After canceling the menu user is in a different website")
     }*/
 
@@ -337,7 +341,7 @@ class NavigationTest: BaseTestCase {
     func testPopUpBlocker() {
         // Check that it is enabled by default
         navigator.goto(SettingsScreen)
-        Base.helper.waitForExistence(Base.app.tables["AppSettingsTableViewController.tableView"])
+        Base.helper.waitForExistence(Base.app.tables["Base.appSettingsTableViewController.tableView"])
         let switchBlockPopUps = Base.app.tables.cells.switches["blockPopups"]
         let switchValue = switchBlockPopUps.value!
         XCTAssertEqual(switchValue as? String, "1")
@@ -380,7 +384,7 @@ class NavigationTest: BaseTestCase {
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testWriteToChildPopupTab() {
         navigator.goto(SettingsScreen)
-        Base.helper.waitForExistence(Base.app.tables["AppSettingsTableViewController.tableView"])
+        Base.helper.waitForExistence(Base.app.tables["Base.appSettingsTableViewController.tableView"])
         let switchBlockPopUps = Base.app.tables.cells.switches["blockPopups"]
         switchBlockPopUps.tap()
         let switchValueAfter = switchBlockPopUps.value!
