@@ -146,9 +146,9 @@ open class LiveAccountTest: XCTestCase {
         print("Got test account.")
         return account.map { result in
             print("Result was successful? \(result.isSuccess)")
-            if let account = result.successValue {
-                return Maybe(success: account.syncAuthState)
-            }
+//            if let account = result.successValue {
+//                return Maybe(success: account.syncAuthState)
+//            }
             return Maybe(failure: result.failureValue!)
         }
     }
