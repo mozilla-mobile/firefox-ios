@@ -106,7 +106,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
                 // Set the prefIntroVersion viewed number in the same context as the presentation.
                 UserDefaults.standard.set(AppDelegate.prefIntroVersion, forKey: AppDelegate.prefIntroDone)
                 UserDefaults.standard.set(AppInfo.shortVersion, forKey: AppDelegate.prefWhatsNewDone)
-                self.browserViewController.present(IntroViewController(), animated: false, completion: nil)
+                let introViewController = IntroViewController()
+                introViewController.modalPresentationStyle = .fullScreen
+                self.browserViewController.present(introViewController, animated: false, completion: nil)
             }
         }
 
