@@ -99,6 +99,10 @@ class MockFiles: FileAccessor {
 }
 
 open class MockProfile: Client.Profile {
+    public var rustAccount: FxAccountManager {
+        return RustFirefoxAccounts.shared.accountManager
+    }
+
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: RustPlaces
