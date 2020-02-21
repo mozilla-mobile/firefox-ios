@@ -84,34 +84,19 @@ class ShareViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkTheme()
         setupUI()
     }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        checkTheme()
-        setupUI()
-    }
-    
-    func checkTheme() {
-        if #available(iOS 13, *) {
-            ThemeManager.instance.current = traitCollection.userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
-        } else {
-            ThemeManager.instance.current = NormalTheme()
-        }
-    }
-    
+
     func setupUI() {
-        view.backgroundColor = UIColor.theme.defaultBackground
+        view.backgroundColor = Theme.defaultBackground.color
         view.subviews.forEach({ $0.removeFromSuperview() })
-        
+
         setupNavBar()
         setupStackView()
         setupRows()
-        
+
         guard let shareItem = shareItem else { return }
-        
+
         switch shareItem {
         case .shareItem(let item):
             self.pageInfoRowUrlLabel?.text = item.url
@@ -158,7 +143,7 @@ class ShareViewController: UIViewController {
 
     private func makeSeparator(addTo parent: UIStackView) {
         let view = UIView()
-        view.backgroundColor = UIColor.theme.separatorColor
+        view.backgroundColor = Theme.separator.color
         parent.addArrangedSubview(view)
         view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -221,12 +206,12 @@ class ShareViewController: UIViewController {
 
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
         icon.contentMode = .scaleAspectFit
-        icon.tintColor = UIColor.theme.actionRowTextAndIconColor
+        icon.tintColor = Theme.actionRowTextAndIcon.color
 
         let title = UILabel()
         title.font = UX.baseFont
         title.handleLongLabels()
-        title.textColor = UIColor.theme.actionRowTextAndIconColor
+        title.textColor = Theme.actionRowTextAndIcon.color
         title.text = label
         [icon, title].forEach { row.addArrangedSubview($0) }
 
@@ -237,7 +222,7 @@ class ShareViewController: UIViewController {
         if hasNavigation {
             let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
             navButton.contentMode = .scaleAspectFit
-            navButton.tintColor = UIColor.theme.actionRowTextAndIconColor
+            navButton.tintColor = Theme.actionRowTextAndIcon.color
             row.addArrangedSubview(navButton)
             navButton.snp.makeConstraints { make in
                 make.width.equalTo(14)
@@ -274,7 +259,7 @@ class ShareViewController: UIViewController {
     private func makeActionDoneRow(addTo parent: UIStackView) -> (row: UIStackView, label: UILabel) {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.addBackground(color: UIColor.theme.doneLabelBackgroundColor)
+        stackView.addBackground(color: Theme.doneLabelBackground.color)
         stackView.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(stackView)
 
@@ -308,7 +293,7 @@ class ShareViewController: UIViewController {
         navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
         navigationItem.titleView?.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SendToCancelButton, style: .plain, target: self, action: #selector(finish))
-        navigationController?.navigationBar.barTintColor = UIColor.theme.defaultBackground
+        navigationController?.navigationBar.barTintColor = Theme.defaultBackground.color
     }
 
     private func setupStackView() {
