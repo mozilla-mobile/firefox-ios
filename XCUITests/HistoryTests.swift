@@ -292,4 +292,16 @@ class HistoryTests: BaseTestCase {
             XCTAssertTrue(app.sheets.buttons[option].exists)
         }
     }
+
+    // Smoketest
+    func testDeleteHistoryEntryBySwiping() {
+        navigateToGoogle()
+        navigator.goto(LibraryPanel_History)
+        print(app.debugDescription)
+        waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: 10)
+        app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
+        waitForExistence(app.buttons["Delete"], timeout: 10)
+        app.buttons["Delete"].tap()
+        waitForNoExistence(app.staticTexts["http://example.com"])
+    }
 }
