@@ -278,7 +278,8 @@ class HistoryTests: BaseTestCase {
         // TBase.apping everything removes both current data and older data.
         tapOnClearRecentHistoryOption(optionSelected: "Everything")
         for entry in oldHistoryEntries {
-            XCTAssertFalse(Base.app.tables.cells.staticTexts[entry].exists)
+            Base.helper.waitForNoExistence(Base.app.tables.cells.staticTexts[entry], timeoutValue: 10)
+        	XCTAssertFalse(Base.app.tables.cells.staticTexts[entry].exists, "History not removed")
         }
         XCTAssertFalse(Base.app.tables.cells.staticTexts["Google"].exists)
         

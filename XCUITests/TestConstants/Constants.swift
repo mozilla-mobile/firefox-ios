@@ -33,4 +33,16 @@ public struct Constants {
     static let url_3 = "localhost:\(serverPort)/test-fixture/test-example.html"
     static let urlLabelExample_4 = "Example Login Page 2"
     static let url_4 = "test-password-2.html"
+    
+    // MARK: - Constants for NavigationTest
+    static let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
+    static let website_2 = ["url": "www.example.com", "label": "Example", "value": "example", "link": "More information...", "moreLinkLongPressUrl": "http://www.iana.org/domains/example", "moreLinkLongPressInfo": "iana"]
+
+    static let urlAddons = "addons.mozilla.org"
+    static let urlGoogle = "www.google.com"
+    static let popUpTestUrl = Base.helper.path(forTestPage: "test-popup-blocker.html")
+
+    static let requestMobileSiteLabel = "Request Mobile Site"
+    static let requestDesktopSiteLabel = "Request Desktop Site"
+
 }

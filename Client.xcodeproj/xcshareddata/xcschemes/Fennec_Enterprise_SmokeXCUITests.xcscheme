@@ -546,6 +546,9 @@
                   Identifier = "NavigationTest/testToggleBetweenMobileAndDesktopSiteFromSite()">
                </Test>
                <Test
+                  Identifier = "NavigationTest/testWriteToChildPopupTab()">
+               </Test>
+               <Test
                   Identifier = "NewTabSettingsTest/testChangeNewTabSettingsLabel()">
                </Test>
                <Test

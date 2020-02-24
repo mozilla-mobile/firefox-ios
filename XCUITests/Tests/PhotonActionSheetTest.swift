@@ -30,12 +30,12 @@ class PhotonActionSheetTest: BaseTestCase {
         Base.helper.waitForExistence(Base.app.cells["action_pin"])
     }
     // Disable issue #5554
-    /*
+
     func testShareOptionIsShown() {
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
-        Base.helper.waitForExistence(Base.app.buttons["Copy"])
+        Base.helper.waitForExistence(Base.app.cells["Copy"], timeout: 10)
     }
 
     // Smoketest
@@ -48,8 +48,8 @@ class PhotonActionSheetTest: BaseTestCase {
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
         pageObjectButtonCenter.press(forDuration: 1)
 
-        Base.helper.waitForExistence(Base.app.buttons["Copy"], timeout: 10)
-    }*/
+        Base.helper.waitForExistence(Base.app.cells["Copy"], timeout: 10)
+    }
 
     func testSendToDeviceFromPageOptionsMenu() {
         // User not logged in
@@ -57,14 +57,14 @@ class PhotonActionSheetTest: BaseTestCase {
         Base.helper.waitForExistence(Base.app.navigationBars["Client.InstructionsView"])
         XCTAssertTrue(Base.app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
-    // Disable issue #5554
+    // Disable issue #5554, More button is not accessible
     /*
     // Test disabled due to new implementation Bug 1449708 - new share sheet
     func testSendToDeviceFromShareOption() {
         // Open and Wait to see the Share options sheet
         navigator.browserPerformAction(.shareOption)
         Base.helper.waitForExistence(Base.app.buttons["More"])
-        Base.helper.waitForNoExistence(Base.app.buttons["Send Tab"])
+        waitForNoExistence(Base.app.buttons["Send Tab"])
         Base.app.collectionViews.cells/*@START_MENU_TOKEN@*/.collectionViews.containing(.button, identifier:"Copy")/*[[".collectionViews.containing(.button, identifier:\"Create PDF\")",".collectionViews.containing(.button, identifier:\"Print\")",".collectionViews.containing(.button, identifier:\"Copy\")"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.buttons["More"].tap()
 
         // Enable Send Tab
@@ -85,19 +85,9 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.openURL("example.com")
         navigator.goto(PageOptionsMenu)
         Base.app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        Base.helper.waitForExistence(Base.app.buttons["Copy"], timeout: 5)
-        let countButtons = Base.app.collectionViews.cells.collectionViews.buttons.count
-        let fennecElement = Base.app.collectionViews.cells.collectionViews.buttons.element(boundBy: 1)
-        // If Fennec has not been configured there are 5 buttons, 6 if it is there already
-        if (countButtons <= 6) {
-            let moreElement = Base.app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
-            moreElement.tap()
-            Base.helper.waitForExistence(Base.app.switches["Reminders"])
-            // Tap on Fennec switch
-            Base.app.switches.element(boundBy: 1).tap()
-            Base.app.buttons["Done"].tap()
-            Base.helper.waitForExistence(Base.app.buttons["Copy"])
-        }
+        Base.helper.waitForExistence(Base.app.cells["Copy"], timeout: 5)
+        let fennecElement = Base.app.collectionViews.scrollViews.cells.element(boundBy: 1)
+
         fennecElement.tap()
         Base.helper.waitForExistence(Base.app.navigationBars["ShareTo.ShareView"], timeout: 5)
     }
@@ -116,28 +106,25 @@ class PhotonActionSheetTest: BaseTestCase {
         Base.app.buttons["Done"].tap()
         Base.helper.waitForExistence(Base.app.buttons["Copy"], timeout: 3)
     }
-    // Disable issue #5554
-    /*
+
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
+        Base.helper.waitForExistence(Base.app.staticTexts["Open in Firefox"], timeout: 10)
         XCTAssertTrue(Base.app.staticTexts["Open in Firefox"].exists)
         XCTAssertTrue(Base.app.staticTexts["Load in Background"].exists)
         XCTAssertTrue(Base.app.staticTexts["Bookmark This Page"].exists)
         XCTAssertTrue(Base.app.staticTexts["Add to Reading List"].exists)
         XCTAssertTrue(Base.app.staticTexts["Send to Device"].exists)
-        Base.app.buttons["Cancel"].tap()
-        disableFennec()
     }
 
     func testShareSheetSendToDevice() {
         openNewShareSheet()
         Base.app.staticTexts["Send to Device"].tap()
-        XCTAssertTrue(Base.app.images["emptySync"].exists)
+        Base.helper.waitForExistence(Base.app.navigationBars.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"], timeout: 10)
+
         XCTAssertTrue(Base.app.staticTexts["You are not signed in to your Firefox Account."].exists)
-        Base.helper.waitForExistence(Base.app.navigationBars.buttons["Close"], timeout: 3)
-        Base.app.navigationBars.buttons["Close"].tap()
-        disableFennec()
+        Base.app.navigationBars.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].tap()
     }
 
     func testShareSheetOpenAndCancel() {
@@ -146,6 +133,5 @@ class PhotonActionSheetTest: BaseTestCase {
         // User is back to the BrowserTab where the sharesheet was launched
         Base.helper.waitForExistence(Base.app.textFields["url"])
         Base.helper.waitForValueContains(Base.app.textFields["url"], value:"example.com/")
-        disableFennec()
-    }*/
+    }
 }
