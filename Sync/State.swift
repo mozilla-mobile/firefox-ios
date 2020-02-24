@@ -97,7 +97,16 @@ public enum LocalCommand: CustomStringConvertible, Hashable {
     }
 
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(description)
+        switch self {
+        case let .resetAllEngines(except):
+            return hasher.combine("resetAllEngines\(except.sorted().joined())")
+        case let .resetEngine(engine):
+            return hasher.combine("resetEngine\(engine)")
+        case let .enableEngine(engine):
+            return hasher.combine("enableEngine\(engine)")
+        case let .disableEngine(engine):
+            return hasher.combine("disableEngine\(engine)")
+        }
     }
 }
 
