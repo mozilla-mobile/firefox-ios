@@ -163,7 +163,7 @@ extension PhotonActionSheetProtocol {
             self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.cryptomining])
         }
 
-        var addToWhitelist = PhotonActionSheetItem(title: Strings.TPBlockingSiteEnabled, isEnabled: !isWhitelisted, accessory: .Switch) { _, cell in
+        var addToWhitelist = PhotonActionSheetItem(title: Strings.ETPOn, isEnabled: !isWhitelisted, accessory: .Switch) { _, cell in
             LeanPlumClient.shared.track(event: .trackingProtectionWhiteList)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
             ContentBlocker.shared.whitelist(enable: tab.contentBlocker?.status != .Whitelisted, url: currentURL) {
@@ -174,9 +174,9 @@ extension PhotonActionSheetProtocol {
         }
         addToWhitelist.customRender = { title, _ in
             if tab.contentBlocker?.status == .Whitelisted {
-                title.text = Strings.TPBlockingSiteDisabled
+                title.text = Strings.ETPOff
             } else {
-                title.text = Strings.TPBlockingSiteEnabled
+                title.text = Strings.ETPOn
             }
         }
         addToWhitelist.accessibilityId = "tp.add-to-whitelist"

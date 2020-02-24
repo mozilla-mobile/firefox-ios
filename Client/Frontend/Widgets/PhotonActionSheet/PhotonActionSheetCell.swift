@@ -22,7 +22,7 @@ private struct PhotonActionSheetCellUX {
 
 class PhotonActionSheetCell: UITableViewCell {
     static let Padding: CGFloat = 16
-    static let HorizontalPadding: CGFloat = 10
+    static let HorizontalPadding: CGFloat = 1
     static let VerticalPadding: CGFloat = 2
     static let IconSize = 16
 
@@ -176,7 +176,7 @@ class PhotonActionSheetCell: UITableViewCell {
         titleLabel.text = action.title
         titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
-        titleLabel.numberOfLines = 1
+        titleLabel.lineBreakMode = .byWordWrapping
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.5
 
