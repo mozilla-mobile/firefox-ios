@@ -99,21 +99,7 @@ extension BrowserViewController: WKUIDelegate {
 
     @available(iOS 13.0, *)
     func webView(_ webView: WKWebView, contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo, completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
-        completionHandler(UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            guard let url = elementInfo.linkURL else { return nil }
-            let previewViewController = UIViewController()
-            previewViewController.view.isUserInteractionEnabled = false
-            let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
-
-            previewViewController.view.addSubview(clonedWebView)
-            clonedWebView.snp.makeConstraints { make in
-                make.edges.equalTo(previewViewController.view)
-            }
-
-            clonedWebView.load(URLRequest(url: url))
-
-            return previewViewController
-        }, actionProvider: { (suggested) -> UIMenu? in
+        completionHandler(UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { (suggested) -> UIMenu? in
             guard let url = elementInfo.linkURL, let currentTab = self.tabManager.selectedTab,
                 let contextHelper = currentTab.getContentScript(name: ContextMenuHelper.name()) as? ContextMenuHelper,
                 let elements = contextHelper.elements else { return nil }
