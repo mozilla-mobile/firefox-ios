@@ -3,7 +3,7 @@ import MozillaAppServices
 import SwiftKeychainWrapper
 
 open class RustFirefoxAccounts {
-    private let ClientID =  "a2270f727f45f648" // actual one is "1b1a3e44c54fbb58"
+    private let ClientID = "1b1a3e44c54fbb58"
     public let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     public static var shared = RustFirefoxAccounts()
     public let accountManager: FxAccountManager
