@@ -28,6 +28,7 @@ Object.defineProperty(window.__firefox__, "download", {
 
         blobToBase64String(blob, function(base64String) {
           webkit.messageHandlers.downloadManager.postMessage({
+            securityToken: securityToken,
             filename: filename,
             mimeType: blob.type,
             size: blob.size,

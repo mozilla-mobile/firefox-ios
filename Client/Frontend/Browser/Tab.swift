@@ -161,13 +161,12 @@ class Tab: NSObject {
     /// Whether or not the desktop site was requested with the last request, reload or navigation.
     var changedUserAgent: Bool = false {
         didSet {
-            webView?.customUserAgent = changedUserAgent ? UserAgent.oppositeUserAgent() : nil
             if changedUserAgent != oldValue {
                 TabEvent.post(.didToggleDesktopMode, for: self)
             }
         }
     }
-
+    
     var readerModeAvailableOrActive: Bool {
         if let readerMode = self.getContentScript(name: "ReaderMode") as? ReaderMode {
             return readerMode.state != .unavailable
@@ -189,7 +188,7 @@ class Tab: NSObject {
     /// tab instance, queue it for later until we become foregrounded.
     fileprivate var alertQueue = [JSAlertInfo]()
 
-    weak var browserViewController:BrowserViewController?
+    weak var browserViewController: BrowserViewController?
 
     init(bvc: BrowserViewController, configuration: WKWebViewConfiguration, isPrivate: Bool = false) {
         self.configuration = configuration
@@ -200,6 +199,8 @@ class Tab: NSObject {
         self.isPrivate = isPrivate
 
         debugTabCount += 1
+
+        UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -253,7 +254,6 @@ class Tab: NSObject {
             } else {
                 webView.allowsLinkPreview = false
             }
-
 
             // Night mode enables this by toggling WKWebView.isOpaque, otherwise this has no effect.
             webView.backgroundColor = .black
@@ -346,11 +346,7 @@ class Tab: NSObject {
     }
 
     func removeAllBrowsingData(completionHandler: @escaping () -> Void = {}) {
-        let dataTypes = Set([WKWebsiteDataTypeCookies,
-                             WKWebsiteDataTypeLocalStorage,
-                             WKWebsiteDataTypeSessionStorage,
-                             WKWebsiteDataTypeWebSQLDatabases,
-                             WKWebsiteDataTypeIndexedDBDatabases])
+        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
 
         webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
                                                      modifiedSince: Date.distantPast,
@@ -398,7 +394,7 @@ class Tab: NSObject {
         }
 
         //lets double check the sessionData in case this is a non-restored new tab
-        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1,  InternalURL(firstURL)?.isAboutHomeURL ?? false {
+        if let firstURL = sessionData?.urls.first, sessionData?.urls.count == 1, InternalURL(firstURL)?.isAboutHomeURL ?? false {
             return Strings.AppMenuOpenHomePageTitleString
         }
 
@@ -460,6 +456,12 @@ class Tab: NSObject {
     }
 
     func reload() {
+        // If the current page is an error page, and the reload button is tapped, load the original URL
+        if let url = webView?.url, let internalUrl = InternalURL(url), let page = internalUrl.originalURLFromErrorPage {
+            webView?.evaluateJavaScript("location.replace('\(page)')", completionHandler: nil)
+            return
+        }
+        
         if let _ = webView?.reloadFromOrigin() {
             print("reloaded zombified tab from origin")
             return
@@ -502,6 +504,7 @@ class Tab: NSObject {
     }
 
     func addSnackbar(_ bar: SnackBar) {
+        if bars.count > 2 { return } // maximum 3 snackbars allowed on a tab
         bars.append(bar)
         tabDelegate?.tab(self, didAddSnackbar: bar)
     }

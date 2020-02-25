@@ -6,6 +6,9 @@ import XCTest
 
 let website = ["url": "www.mozilla.org", "value": "www.mozilla.org", "subDomain": "https://www.mozilla.org/en-US/firefox/products"]
 
+let websiteExample = ["url": "www.example.com", "value": "www.example.com"]
+
+
 class DomainAutocompleteTest: BaseTestCase {
 
     let testWithDB = ["testAutocomplete","testAutocompleteDeletingChars","testDeleteEntireString","testNoMatches","testMixedCaseAutocompletion", "testDeletingCharsUpdateTheResults"]
@@ -73,17 +76,17 @@ class DomainAutocompleteTest: BaseTestCase {
 
     // Ensure that the scheme is included in the autocompletion.
     func testEnsureSchemeIncludedAutocompletion() {
-        navigator.openURL(website["url"]!)
+        navigator.openURL(websiteExample["url"]!)
         waitUntilPageLoad()
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("https")
-        waitForValueContains(app.textFields["address"], value: "mozilla")
+        app.textFields["address"].typeText("http")
+        waitForValueContains(app.textFields["address"], value: "example")
         let value = app.textFields["address"].value
-        XCTAssertEqual(value as? String, "https://www.mozilla.org", "Wrong autocompletion")
+        XCTAssertEqual(value as? String, "http://www.example.com", "Wrong autocompletion")
     }
     // Non-matches.
     func testNoMatches() {
-        navigator.openURL(website["subDomain"]!)
+        navigator.openURL("twitter.com/login")
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("baz")
         let value = app.textFields["address"].value
@@ -92,10 +95,10 @@ class DomainAutocompleteTest: BaseTestCase {
 
         // Ensure we don't match against TLDs.
         app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("org")
+        app.textFields["address"].typeText(".com")
         let value2 = app.textFields["address"].value
         // Check there is not more text added, just what user typed
-        XCTAssertEqual(value2 as? String, "org", "Wrong autocompletion")
+        XCTAssertEqual(value2 as? String, ".com", "Wrong autocompletion")
 
         // Ensure we don't match other characters ie: ., :, /
         app.buttons["Clear text"].tap()
@@ -115,15 +118,15 @@ class DomainAutocompleteTest: BaseTestCase {
 
         // Ensure we don't match strings that don't start a word.
         app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("ozilla")
+        app.textFields["address"].typeText("tter")
         let value6 = app.textFields["address"].value
-        XCTAssertEqual(value6 as? String, "ozilla", "Wrong autocompletion")
+        XCTAssertEqual(value6 as? String, "tter", "Wrong autocompletion")
 
         // Ensure we don't match words outside of the domain
         app.buttons["Clear text"].tap()
-        app.textFields["address"].typeText("products")
+        app.textFields["address"].typeText("login")
         let value7 = app.textFields["address"].value
-        XCTAssertEqual(value7 as? String, "products", "Wrong autocompletion")
+        XCTAssertEqual(value7 as? String, "login", "Wrong autocompletion")
     }
     // Test default domains.
     func testDefaultDomains() {

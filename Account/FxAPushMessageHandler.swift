@@ -28,7 +28,7 @@ extension FxAPushMessageHandler {
     /// and then effects changes on the logged in account.
     @discardableResult func handle(userInfo: [AnyHashable: Any]) -> PushMessageResult {
         guard let subscription = profile.getAccount()?.pushRegistration?.defaultSubscription else {
-            return deferMaybe(PushMessageError.notDecrypted)
+            return deferMaybe(PushMessageError.subscriptionOutOfDate)
         }
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
@@ -311,6 +311,7 @@ enum PushMessageError: MaybeErrorType {
     case timeout
     case accountError
     case noProfile
+    case subscriptionOutOfDate
 
     public var description: String {
         switch self {
@@ -320,6 +321,7 @@ enum PushMessageError: MaybeErrorType {
         case .timeout: return "timeout"
         case .accountError: return "accountError"
         case .noProfile: return "noProfile"
+        case .subscriptionOutOfDate: return "subscriptionOutOfDate"
         }
     }
 }

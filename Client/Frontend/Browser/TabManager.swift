@@ -73,13 +73,6 @@ class TabManager: NSObject {
         if isPrivate {
             configuration.websiteDataStore = WKWebsiteDataStore.nonPersistent()
         }
-
-        // Append FxiOS/version Mobile/version Safari/version to the built-in user agent
-        let desktop = UserAgent.isDesktop(ua: UserAgent.defaultUserAgent())
-        configuration.applicationNameForUserAgent = "FxiOS/\(AppInfo.appVersion) " +
-             (desktop ? "\(UserAgent.uaBitGoogleIpad) " : "\(UserAgent.uaBitMobile) ") +
-             "\(UserAgent.uaBitSafari)"
-
         configuration.setURLSchemeHandler(InternalSchemeHandler(), forURLScheme: InternalURL.scheme)
         return configuration
     }
@@ -323,6 +316,10 @@ class TabManager: NSObject {
     func configureTab(_ tab: Tab, request: URLRequest?, afterTab parent: Tab? = nil, flushToDisk: Bool, zombie: Bool, isPopup: Bool = false) {
         assert(Thread.isMainThread)
 
+        // If network is not available webView(_:didCommit:) is not going to be called
+        // We should set request url in order to show url in url bar even no network
+        tab.url = request?.url
+        
         if parent == nil || parent?.isPrivate != tab.isPrivate {
             tabs.append(tab)
         } else if let parent = parent, var insertIndex = tabs.firstIndex(of: parent) {

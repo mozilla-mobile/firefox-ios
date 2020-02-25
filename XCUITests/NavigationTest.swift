@@ -34,9 +34,9 @@ class NavigationTest: BaseTestCase {
         }
 
         // Once an url has been open, the back button is enabled but not the forward button
-        navigator.openURL(website_1["url"]!)
+        navigator.openURL(path(forTestPage: "test-example.html"))
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_1["value"]!)
+        waitForValueContains(app.textFields["url"], value: "test-example.html")
         if iPad() {
             XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["Forward"].isEnabled)
@@ -46,9 +46,9 @@ class NavigationTest: BaseTestCase {
         }
 
         // Once a second url is open, back button is enabled but not the forward one till we go back to url_1
-        navigator.openURL(website_2["url"]!)
+        navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_2["value"]!)
+        waitForValueContains(app.textFields["url"], value: "test-mozilla-org.html")
         if iPad() {
             XCTAssertTrue(app.buttons["URLBarView.backButton"].isEnabled)
             XCTAssertFalse(app.buttons["Forward"].isEnabled)
@@ -61,7 +61,7 @@ class NavigationTest: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_1["value"]!)
+        waitForValueContains(app.textFields["url"], value: "test-example.html")
 
         if iPad() {
             app.buttons["Forward"].tap()
@@ -70,7 +70,7 @@ class NavigationTest: BaseTestCase {
             app.buttons["TabToolbar.forwardButton"].tap()
         }
         waitUntilPageLoad()
-        waitForValueContains(app.textFields["url"], value: website_2["value"]!)
+        waitForValueContains(app.textFields["url"], value: "test-mozilla-org")
     }
 
     func testTapSignInShowsFxAFromTour() {
@@ -78,53 +78,70 @@ class NavigationTest: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         checkFirefoxSyncScreenShown()
 
+        // Disabled due to issue 5937, not possible to tap on Close button
         // Go back to NewTabScreen
-        navigator.goto(HomePanelsScreen)
-        waitForExistence(app.cells["TopSitesCell"])
+        // navigator.goto(HomePanelsScreen)
+        // waitForExistence(app.cells["TopSitesCell"])
     }
-    /* Failing on iPhone so disabled due to 5588
+    
     func testTapSigninShowsFxAFromSettings() {
         navigator.goto(SettingsScreen)
         // Open FxAccount from settings menu and check the Sign in to Firefox scren
         let signInToFirefoxStaticText = app.tables["AppSettingsTableViewController.tableView"].staticTexts["Sign in to Sync"]
         signInToFirefoxStaticText.tap()
-        checkFirefoxSyncScreenShown()
+        checkFirefoxSyncScreenShownViaSettings()
 
+        // Disable check, page load issues on iOS13.3 sims, issue #5937
         // After that it is possible to go back to Settings
-        let settingsButton = app.navigationBars["Client.FxAContentView"].buttons["Settings"]
-        settingsButton.tap()
+        // let settingsButton = app.navigationBars["Client.FxAContentView"].buttons["Settings"]
+        // settingsButton.tap()
     }
-    */
+    
+    // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
+    private func checkFirefoxSyncScreenShownViaSettings() {
+        // Disable check, page load issues on iOS13.3 sims, issue #5937
+        waitForExistence(app.webViews.firstMatch, timeout: 20)
+//        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 50)
+//        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout:50)
+//        let email = app.webViews.textFields.element(boundBy: 0)
+//        // Verify the placeholdervalues here for the textFields
+//        let mailPlaceholder = "Email"
+//        let defaultMailPlaceholder = email.placeholderValue!
+//        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+    }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
         // Open FxAccount from remote tab panel and check the Sign in to Firefox scren
-        navigator.goto(LibraryPanel_History)
-        XCTAssertTrue(app.tables["History List"].staticTexts["Synced Devices"].isEnabled)
-        app.tables["History List"].staticTexts["Synced Devices"].tap()
+        navigator.goto(LibraryPanel_SyncedTabs)
+
         app.tables.buttons["Sign in to Sync"].tap()
         checkFirefoxSyncScreenShown()
-        app.navigationBars["Client.FxAContentView"].buttons["Done"].tap()
-        navigator.nowAt(LibraryPanel_History)
+        
+        // Disable check, page load issues on iOS13.3 sims, issue #5937 app.navigationBars["Client.FxAContentView"].buttons["Close"].tap()
+        // navigator.nowAt(LibraryPanel_SyncedTabs)
     }
 
     private func checkFirefoxSyncScreenShown() {
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
-       if isTablet {
-            waitForExistence(app.textFields.element(boundBy: 1), timeout: 3)
-            let email = app.textFields.element(boundBy: 1)
-            // Verify the placeholdervalues here for the textFields
-            let mailPlaceholder = "Email"
-            let defaultMailPlaceholder = email.placeholderValue!
-            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-        } else {
-            waitForExistence(app.textFields.element(boundBy: 0), timeout: 3)
-            let email = app.textFields.element(boundBy: 0)
-            XCTAssertTrue(email.exists) // the email field
-            // Verify the placeholdervalues here for the textFields
-            let mailPlaceholder = "Email"
-            let defaultMailPlaceholder = email.placeholderValue!
-            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-        }
+        // Disable check, page load issues on iOS13.3 sims, issue #5937
+        waitForExistence(app.webViews.firstMatch, timeout: 20)
+        // Workaround BB iOS13
+//        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
+//        if isTablet {
+//            waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 40)
+//            let email = app.webViews.textFields.element(boundBy: 0)
+//            // Verify the placeholdervalues here for the textFields
+//            let mailPlaceholder = "Email"
+//            let defaultMailPlaceholder = email.placeholderValue!
+//            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+//        } else {
+//            waitForExistence(app.textFields.element(boundBy: 0), timeout: 40)
+//            let email = app.textFields.element(boundBy: 0)
+//            XCTAssertTrue(email.exists) // the email field
+//            // Verify the placeholdervalues here for the textFields
+//            let mailPlaceholder = "Email"
+//            let defaultMailPlaceholder = email.placeholderValue!
+//            XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+//        }
     }
 
     func testScrollsToTopWithMultipleTabs() {
@@ -155,12 +172,16 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testLongPressLinkOptions() {
         navigator.openURL(path(forTestPage: "test-example.html"))
+        waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
+
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Bookmark Link"].exists, "The option is not shown")
     }
 
     func testLongPressLinkOptionsPrivateMode() {
@@ -286,21 +307,23 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "reserved.html")
     }
-    // Disable issue 5554
-    /*
+
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.buttons["Copy"])
-        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.collectionViews.cells["Copy"])
+        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
     }
 
     func testShareLinkPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.buttons["Copy"])
-        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.collectionViews.cells["Copy"])
+        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
     }
 
+    // Disable, no Cancel button now and no option to
+    // tap on PopoverDismissRegion
+    /*
     func testCancelLongPressLinkMenu() {
         navigator.openURL(website_2["url"]!)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
@@ -311,7 +334,6 @@ class NavigationTest: BaseTestCase {
         } else {
             app.buttons["Cancel"].tap()
         }
-
         waitForNoExistence(app.sheets[website_2["moreLinkLongPressInfo"]!])
         XCTAssertEqual(app.textFields["url"].value! as? String, "www.example.com/", "After canceling the menu user is in a different website")
     }*/

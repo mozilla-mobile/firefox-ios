@@ -90,7 +90,9 @@ class LoginsHelper: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let res = message.body as? [String: Any],
-            let type = res["type"] as? String else {
+            let type = res["type"] as? String,
+            let token = res["securityToken"] as? String,
+            token == UserScriptManager.securityToken else {
             return
         }
 
@@ -173,8 +175,9 @@ class LoginsHelper: TabContentScript {
         let promptMessage: String
         let https = "^https:\\/\\/"
         let url = login.hostname.replacingOccurrences(of: https, with: "", options: .regularExpression, range: nil)
-        if let username = login.username, !username.isEmpty {
-            promptMessage = String(format: Strings.SaveLoginUsernamePrompt, username, url)
+        let userName = login.username
+        if !userName.isEmpty {
+            promptMessage = String(format: Strings.SaveLoginUsernamePrompt, userName, url)
         } else {
             promptMessage = String(format: Strings.SaveLoginPrompt, url)
         }
@@ -208,8 +211,9 @@ class LoginsHelper: TabContentScript {
         new.id = old.id
 
         let formatted: String
-        if let username = new.username {
-            formatted = String(format: Strings.UpdateLoginUsernamePrompt, username, new.hostname)
+        let userName = new.username
+        if !userName.isEmpty {
+            formatted = String(format: Strings.UpdateLoginUsernamePrompt, userName, new.hostname)
         } else {
             formatted = String(format: Strings.UpdateLoginPrompt, new.hostname)
         }

@@ -32,7 +32,9 @@ extension BrowserViewController: ReaderModeStyleViewControllerDelegate {
             if let tab = tabManager[tabIndex] {
                 if let readerMode = tab.getContentScript(name: "ReaderMode") as? ReaderMode {
                     if readerMode.state == ReaderModeState.active {
-                        readerMode.style = style
+                        readerMode.style = ReaderModeStyle(theme: style.theme,
+                                                           fontType: ReaderModeFontType(type: style.fontType.rawValue),
+                                                           fontSize: style.fontSize)
                     }
                 }
             }

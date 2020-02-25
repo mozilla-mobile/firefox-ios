@@ -54,14 +54,6 @@ class BrowserViewController: UIViewController {
 
     lazy var mailtoLinkHandler = MailtoLinkHandler()
 
-    lazy fileprivate var customSearchEngineButton: UIButton = {
-        let searchButton = UIButton()
-        searchButton.setImage(UIImage(named: "AddSearch")?.withRenderingMode(.alwaysTemplate), for: [])
-        searchButton.addTarget(self, action: #selector(addCustomSearchEngineForFocusedElement), for: .touchUpInside)
-        searchButton.accessibilityIdentifier = "BrowserViewController.customSearchEngineButton"
-        return searchButton
-    }()
-
     fileprivate var customSearchBarButton: UIBarButtonItem?
 
     // popover rotation handling
@@ -217,6 +209,19 @@ class BrowserViewController: UIViewController {
         make.right.bottom.left.equalToSuperview()
     }
 
+    @objc fileprivate func appMenuBadgeUpdate() {
+        let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
+        let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
+        let actionNeeded = profile.getAccount()?.actionNeeded
+        let showWarningBadge = actionNeeded != nil && actionNeeded != FxAActionNeeded.none
+        let showMenuBadge = showWarningBadge ? false : hideImagesOn || showWhatsNew
+
+        urlBar.warningMenuBadge(setVisible: showWarningBadge)
+        urlBar.appMenuBadge(setVisible: showMenuBadge)
+        toolbar?.warningMenuBadge(setVisible: showWarningBadge)
+        toolbar?.appMenuBadge(setVisible: showMenuBadge)
+    }
+
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
@@ -224,12 +229,6 @@ class BrowserViewController: UIViewController {
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
 
-        let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
-        let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
-
-        let showMenuBadge = hideImagesOn || showWhatsNew
-        
-        urlBar.appMenuBadge(setVisible: showMenuBadge)
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         toolbar = nil
@@ -240,9 +239,10 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
-            toolbar?.appMenuBadge(setVisible: showMenuBadge)
             updateTabCountUsingTabManager(self.tabManager)
         }
+
+        appMenuBadgeUpdate()
 
         if showTopTabs {
             if topTabsViewController == nil {
@@ -450,6 +450,8 @@ class BrowserViewController: UIViewController {
                 }
             }
         }
+
+        NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
     }
 
     fileprivate func setupConstraints() {
@@ -574,7 +576,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-
+        presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
 
@@ -1287,6 +1289,8 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = self.tabManager.selectedTab {
             let trackingProtectionMenu = self.getTrackingSubMenu(for: tab)
             let title = String.localizedStringWithFormat(Strings.TPPageMenuTitle, tab.url?.host ?? "")
+            LeanPlumClient.shared.track(event: .trackingProtectionMenu)
+            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .trackingProtectionMenu)
             self.presentSheetWith(title: title, actions: trackingProtectionMenu, on: self, from: urlBar)
         }
     }
@@ -1524,9 +1528,6 @@ extension BrowserViewController: TabDelegate {
 
         let printHelper = PrintHelper(tab: tab)
         tab.addContentScript(printHelper, name: PrintHelper.name())
-
-        let customSearchHelper = CustomSearchHelper(tab: tab)
-        tab.addContentScript(customSearchHelper, name: CustomSearchHelper.name())
 
         let nightModeHelper = NightModeHelper(tab: tab)
         tab.addContentScript(nightModeHelper, name: NightModeHelper.name())
@@ -1906,7 +1907,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
             introViewController.delegate = self
             // On iPad we present it modally in a controller
             if topTabsVisible {
-                introViewController.preferredContentSize = CGSize(width: IntroViewController.preferredSize.width, height: IntroViewController.preferredSize.height)
+                introViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
                 introViewController.modalPresentationStyle = .formSheet
             } else {
                 introViewController.modalPresentationStyle = .fullScreen
@@ -1921,6 +1922,41 @@ extension BrowserViewController: IntroViewControllerDelegate {
             return true
         }
 
+        return false
+    }
+    
+    @discardableResult func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
+        let cleanInstall = UpdateViewModel.isCleanInstall(userPrefs: profile.prefs)
+        let coverSheetSupportedAppVersion = UpdateViewModel.coverSheetSupportedAppVersion
+        if force || UpdateViewModel.shouldShowUpdateSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall, supportedAppVersions: coverSheetSupportedAppVersion) {
+            let updateViewController = UpdateViewController()
+            
+            updateViewController.viewModel.shouldStartBrowsing = {
+                updateViewController.dismiss(animated: true) {
+                if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                    _ = self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
+            }
+            
+            if topTabsVisible {
+                updateViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
+                updateViewController.modalPresentationStyle = .formSheet
+            } else {
+                updateViewController.modalPresentationStyle = .fullScreen
+            }
+            
+            // On iPad we present it modally in a controller
+            present(updateViewController, animated: animated) {
+                // On first run (and forced) open up the homepage in the background.
+                if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
+                    tab.loadRequest(URLRequest(url: homePageURL))
+                }
+            }
+
+            return true
+        }
+        
         return false
     }
 
@@ -1963,11 +1999,12 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
         let vcToPresent = getSignInViewController(fxaOptions, isSignUpFlow: isSignUpFlow)
-        vcToPresent.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissSignInViewController))
+        let closeBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .plain, target: self, action: #selector(dismissSignInViewController))
+        vcToPresent.navigationItem.leftBarButtonItem = closeBarButtonItem
         let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
         themedNavigationController.navigationBar.isTranslucent = false
         if topTabsVisible {
-            themedNavigationController.preferredContentSize = CGSize(width: IntroViewController.preferredSize.width, height: IntroViewController.preferredSize.height)
+            themedNavigationController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
             themedNavigationController.modalPresentationStyle = .formSheet
         } else {
             themedNavigationController.modalPresentationStyle = .fullScreen
@@ -2195,116 +2232,6 @@ extension BrowserViewController {
     }
 }
 
-/**
- A third party search engine Browser extension
-**/
-extension BrowserViewController {
-
-    func addCustomSearchButtonToWebView(_ webView: WKWebView) {
-        //check if the search engine has already been added.
-        let domain = webView.url?.domainURL.host
-        let matches = self.profile.searchEngines.orderedEngines.filter {$0.shortName == domain}
-        if !matches.isEmpty {
-            self.customSearchEngineButton.tintColor = UIColor.Photon.Grey50
-            self.customSearchEngineButton.isUserInteractionEnabled = false
-        } else {
-            self.customSearchEngineButton.tintColor = UIConstants.SystemBlueColor
-            self.customSearchEngineButton.isUserInteractionEnabled = true
-        }
-
-        /*
-         This is how we access hidden views in the WKContentView
-         Using the public headers we can find the keyboard accessoryView which is not usually available.
-         Specific values here are from the WKContentView headers.
-         https://github.com/JaviSoto/iOS9-Runtime-Headers/blob/master/Frameworks/WebKit.framework/WKContentView.h
-        */
-        guard let webContentView = UIView.findSubViewWithFirstResponder(webView) else {
-            /*
-             In some cases the URL bar can trigger the keyboard notification. In that case the webview isnt the first responder
-             and a search button should not be added.
-             */
-            return
-        }
-
-        guard let input = webContentView.perform(#selector(getter: UIResponder.inputAccessoryView)),
-            let inputView = input.takeUnretainedValue() as? UIInputView,
-            let nextButton = inputView.value(forKey: "_nextItem") as? UIBarButtonItem,
-            let nextButtonView = nextButton.value(forKey: "view") as? UIView else {
-                //failed to find the inputView instead lets use the inputAssistant
-                addCustomSearchButtonToInputAssistant(webContentView)
-                return
-            }
-            inputView.addSubview(self.customSearchEngineButton)
-            self.customSearchEngineButton.snp.remakeConstraints { make in
-                make.leading.equalTo(nextButtonView.snp.trailing).offset(20)
-                make.width.equalTo(inputView.snp.height)
-                make.top.equalTo(nextButtonView.snp.top)
-                make.height.equalTo(inputView.snp.height)
-            }
-    }
-
-    /**
-     This adds the customSearchButton to the inputAssistant
-     for cases where the inputAccessoryView could not be found for example
-     on the iPad where it does not exist. However this only works on iOS9
-     **/
-    func addCustomSearchButtonToInputAssistant(_ webContentView: UIView) {
-        guard customSearchBarButton == nil else {
-            return //The searchButton is already on the keyboard
-        }
-        let inputAssistant = webContentView.inputAssistantItem
-        let item = UIBarButtonItem(customView: customSearchEngineButton)
-        customSearchBarButton = item
-        inputAssistant.trailingBarButtonGroups.last?.barButtonItems.append(item)
-    }
-
-    @objc func addCustomSearchEngineForFocusedElement() {
-        guard let webView = tabManager.selectedTab?.webView else {
-            return
-        }
-        webView.evaluateJavaScript("__firefox__.searchQueryForField && __firefox__.searchQueryForField()") { (result, _) in
-            guard let searchQuery = result as? String, let favicon = self.tabManager.selectedTab!.displayFavicon else {
-                //Javascript responded with an incorrectly formatted message. Show an error.
-                let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
-                self.present(alert, animated: true, completion: nil)
-                return
-            }
-            self.addSearchEngine(searchQuery, favicon: favicon)
-            self.customSearchEngineButton.tintColor = UIColor.Photon.Grey50
-            self.customSearchEngineButton.isUserInteractionEnabled = false
-        }
-    }
-
-    func addSearchEngine(_ searchQuery: String, favicon: Favicon) {
-        guard !searchQuery.isEmpty,
-            let iconURL = URL(string: favicon.url),
-            let url = URL(string: searchQuery.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed)!),
-            let shortName = url.domainURL.host else {
-                let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
-                self.present(alert, animated: true, completion: nil)
-                return
-        }
-
-        let alert = ThirdPartySearchAlerts.addThirdPartySearchEngine { alert in
-            self.customSearchEngineButton.tintColor = UIColor.Photon.Grey50
-            self.customSearchEngineButton.isUserInteractionEnabled = false
-            SDWebImageManager.shared.loadImage(with: iconURL, options: .continueInBackground, progress: nil) { (image, _, _, _, _, _) in
-                guard let image = image else {
-                    let alert = ThirdPartySearchAlerts.failedToAddThirdPartySearch()
-                    self.present(alert, animated: true, completion: nil)
-                    return
-                }
-
-                self.profile.searchEngines.addSearchEngine(OpenSearchEngine(engineID: nil, shortName: shortName, image: image, searchTemplate: searchQuery, suggestTemplate: nil, isCustomEngine: true))
-                let Toast = SimpleToast()
-                Toast.showAlertWithText(Strings.ThirdPartySearchEngineAdded, bottomContainer: self.webViewContainer)
-            }
-        }
-
-        self.present(alert, animated: true, completion: {})
-    }
-}
-
 extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillShowWithState state: KeyboardState) {
         keyboardState = state
@@ -2313,16 +2240,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
         UIView.animate(withDuration: state.animationDuration) {
             UIView.setAnimationCurve(state.animationCurve)
             self.alertStackView.layoutIfNeeded()
-        }
-
-        guard let webView = tabManager.selectedTab?.webView else {
-            return
-        }
-        webView.evaluateJavaScript("__firefox__.searchQueryForField && __firefox__.searchQueryForField()") { (result, _) in
-            guard let _ = result as? String else {
-                return
-            }
-            self.addCustomSearchButtonToWebView(webView)
         }
     }
 
@@ -2333,15 +2250,6 @@ extension BrowserViewController: KeyboardHelperDelegate {
     func keyboardHelper(_ keyboardHelper: KeyboardHelper, keyboardWillHideWithState state: KeyboardState) {
         keyboardState = nil
         updateViewConstraints()
-        //If the searchEngineButton exists remove it form the keyboard
-        if let buttonGroup = customSearchBarButton?.buttonGroup {
-            buttonGroup.barButtonItems = buttonGroup.barButtonItems.filter { $0 != customSearchBarButton }
-            customSearchBarButton = nil
-        }
-
-        if self.customSearchEngineButton.superview != nil {
-            self.customSearchEngineButton.removeFromSuperview()
-        }
 
         UIView.animate(withDuration: state.animationDuration) {
             UIView.setAnimationCurve(state.animationCurve)

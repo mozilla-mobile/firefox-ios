@@ -101,12 +101,14 @@ let LibraryPanel_Bookmarks = "LibraryPanel.Bookmarks.1"
 let LibraryPanel_History = "LibraryPanel.History.2"
 let LibraryPanel_ReadingList = "LibraryPanel.ReadingList.3"
 let LibraryPanel_Downloads = "LibraryPanel.Downloads.4"
+let LibraryPanel_SyncedTabs = "LibraryPanel.SyncedTabs.5"
 
 let allHomePanels = [
     LibraryPanel_Bookmarks,
     LibraryPanel_History,
     LibraryPanel_ReadingList,
-    LibraryPanel_Downloads
+    LibraryPanel_Downloads,
+    LibraryPanel_SyncedTabs
 ]
 
 class Action {
@@ -201,12 +203,16 @@ class Action {
     static let DisableTranslation = "DisableTranlation"
     static let SelectGoogle = "SelectGoogle"
     static let SelectBing = "SelectBing"
+    
+    static let AddCustomSearchEngine = "AddCustomSearchEngine"
+    static let RemoveCustomSearchEngine = "RemoveCustomSearchEngine"
 
     static let ExitMobileBookmarksFolder = "ExitMobileBookmarksFolder"
     static let CloseBookmarkPanel = "CloseBookmarkPanel"
     static let CloseReadingListPanel = "CloseReadingListPanel"
     static let CloseHistoryListPanel = "CloseHistoryListPanel"
     static let CloseDownloadsPanel = "CloseDownloadsPanel"
+    static let CloseSyncedTabsPanel = "CloseSyncedTabsPanel"
 
     static let AddNewBookmark = "AddNewBookmark"
     static let AddNewFolder = "AddNewFolder"
@@ -300,22 +306,15 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     // Add the intro screens.
     var i = 0
     let introLast = allIntroPages.count - 1
-    let introPager = app.scrollViews["IntroViewController.scrollView"]
     for intro in allIntroPages {
         let prev = i == 0 ? nil : allIntroPages[i - 1]
         let next = i == introLast ? nil : allIntroPages[i + 1]
 
         map.addScreenState(intro) { screenState in
-            if let prev = prev {
-                screenState.swipeRight(introPager, to: prev)
-            }
-
             if let next = next {
-                screenState.swipeLeft(introPager, to: next)
-            }
-
-            if i > 0 {
-                let startBrowsingButton = app.buttons["IntroViewController.startBrowsingButton"]
+                screenState.tap(app.buttons["nextOnboardingButton"], to: next)
+            }  else {
+                let startBrowsingButton = app.buttons["startBrowsingOnboardingButton"]
                 screenState.tap(startBrowsingButton, to: BrowserTab)
             }
         }
@@ -411,14 +410,22 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(URLBarOpen) { screenState in
         // This is used for opening BrowserTab with default mozilla URL
         // For custom URL, should use Navigator.openNewURL or Navigator.openURL.
-        screenState.gesture(forAction: Action.LoadURLByTyping, Action.LoadURL) { userState in
+        screenState.gesture(forAction: Action.LoadURLByTyping) { userState in
             let url = userState.url ?? defaultURL
-            app.textFields["address"].typeText("\(url)\r")
+            // Workaround BB iOS13 be sure tap happens on url bar
+            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.typeText(url)
+            app.textFields.firstMatch.typeText("\r")
         }
 
         screenState.gesture(forAction: Action.SetURLByTyping, Action.SetURL) { userState in
             let url = userState.url ?? defaultURL
-            app.textFields["address"].typeText("\(url)")
+            // Workaround BB iOS13 be sure tap happens on url bar
+            sleep(1)
+            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.tap()
+            app.textFields.firstMatch.typeText("\(url)")
         }
 
         screenState.noop(to: HomePanelsScreen)
@@ -538,7 +545,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(LibraryPanel_History) { screenState in
-        screenState.press(app.tables["History List"].cells.element(boundBy: 3), to: HistoryPanelContextMenu)
+        screenState.press(app.tables["History List"].cells.element(boundBy: 2), to: HistoryPanelContextMenu)
         screenState.tap(app.cells["HistoryPanel.recentlyClosedCell"], to: HistoryRecentlyClosed)
         screenState.gesture(forAction: Action.ClearRecentHistory) { userState in
             app.tables["History List"].cells.matching(identifier: "HistoryPanel.clearHistory").element(boundBy: 0).tap()
@@ -549,6 +556,18 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.buttons["TabToolbar.libraryButton"].tap()
             } else {
                 historyListElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.History"])
+            }
+        }
+    }
+
+    map.addScreenState(LibraryPanel_SyncedTabs) { screenState in
+        screenState.dismissOnUse = true
+        let syncedTabsElement = app.navigationBars["Synced Tabs"]
+        screenState.gesture(forAction: Action.CloseSyncedTabsPanel, transitionTo: HomePanelsScreen) { userState in
+            if isTablet {
+                app.buttons["TabToolbar.libraryButton"].tap()
+            } else {
+                syncedTabsElement.press(forDuration: 2, thenDragTo: app.buttons["LibraryPanels.SyncedTabs"])
             }
         }
     }
@@ -649,6 +668,13 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let table = app.tables.element(boundBy: 0)
         screenState.tap(table.cells["customEngineViewButton"], to: AddCustomSearchSettings)
         screenState.backAction = navigationControllerBackAction
+        screenState.gesture(forAction: Action.RemoveCustomSearchEngine) {userSTate in
+            // Screengraph will go back to main Settings screen. Manually tap on settings
+            app.tables["AppSettingsTableViewController.tableView"].staticTexts["Google"].tap()
+            app.navigationBars["Search"].buttons["Edit"].tap()
+            app.tables.buttons["Delete Mozilla Engine"].tap()
+            app.tables.buttons["Delete"].tap()
+        }
     }
 
     map.addScreenState(SiriSettings) { screenState in
@@ -668,8 +694,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
             if isTablet {
-                app.textFields.element(boundBy: 1).tap()
-                app.textFields.element(boundBy: 1).typeText(userState.fxaUsername!)
+                app.webViews.textFields.element(boundBy: 0).tap()
+                app.webViews.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
             } else {
                 app.textFields.element(boundBy: 0).tap()
                 app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
@@ -693,6 +719,19 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(AddCustomSearchSettings) { screenState in
+        screenState.gesture(forAction: Action.AddCustomSearchEngine) { userState in
+            app.tables.textViews["customEngineTitle"].staticTexts["Search Engine"].tap()
+            app.typeText("Mozilla Engine")
+            app.tables.textViews["customEngineUrl"].tap()
+            
+            UIPasteboard.general.string = "https://developer.mozilla.org/search?q=%s"
+            
+            let tablesQuery = app.tables
+            let customengineurlTextView = tablesQuery.textViews["customEngineUrl"]
+            sleep(1)
+            customengineurlTextView.press(forDuration: 1.0)
+            app.staticTexts["Paste"].tap()
+        }
         screenState.backAction = navigationControllerBackAction
     }
 
@@ -907,14 +946,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.backAction = cancelBackAction
     }
 
-    let lastButtonIsCancel = {
-        let lastIndex = app.sheets.element(boundBy: 0).buttons.count - 1
-        app.sheets.element(boundBy: 0).buttons.element(boundBy: lastIndex).tap()
-    }
-
     func makeURLBarAvailable(_ screenState: MMScreenStateNode<FxUserState>) {
         screenState.tap(app.textFields["url"], to: URLBarOpen)
         screenState.gesture(to: URLBarLongPressMenu) {
+            sleep(1)
             app.textFields["url"].press(forDuration: 1.0)
         }
     }
@@ -1007,14 +1042,14 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
     }
 
-    map.addScreenState(WebImageContextMenu) { screenState in
-        screenState.dismissOnUse = true
-        screenState.backAction = lastButtonIsCancel
-    }
-
-    map.addScreenState(WebLinkContextMenu) { screenState in
-        screenState.dismissOnUse = true
-        screenState.backAction = lastButtonIsCancel
+    [WebImageContextMenu, WebLinkContextMenu].forEach { item in
+        map.addScreenState(item) { screenState in
+            screenState.dismissOnUse = true
+            screenState.backAction = {
+                let window = XCUIApplication().windows.element(boundBy: 0)
+                window.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+            }
+        }
     }
 
     // make sure after the menu action, navigator.nowAt() is used to set the current state
@@ -1046,6 +1081,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["LibraryPanels.History"], to: LibraryPanel_History)
         screenState.tap(app.buttons["LibraryPanels.ReadingList"], to: LibraryPanel_ReadingList)
         screenState.tap(app.buttons["LibraryPanels.Downloads"], to: LibraryPanel_Downloads)
+        screenState.tap(app.buttons["LibraryPanels.SyncedTabs"], to: LibraryPanel_SyncedTabs)
     }
 
     map.addScreenState(BrowserTabMenu) { screenState in

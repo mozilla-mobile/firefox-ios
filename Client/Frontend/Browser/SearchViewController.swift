@@ -14,7 +14,7 @@ private enum SearchListSection: Int {
 }
 
 private struct SearchViewControllerUX {
-    static let SearchEngineScrollViewBackgroundColor = UIColor.Photon.White100.withAlphaComponent(0.8).cgColor
+    static var SearchEngineScrollViewBackgroundColor: CGColor { return UIColor.theme.homePanel.toolbarBackground.withAlphaComponent(0.8).cgColor }
     static let SearchEngineScrollViewBorderColor = UIColor.black.withAlphaComponent(0.2).cgColor
 
     // TODO: This should use ToolbarHeight in BVC. Fix this when we create a shared theming file.
@@ -56,6 +56,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
     // Views for displaying the bottom scrollable search engine list. searchEngineScrollView is the
     // scrollable container; searchEngineScrollViewContent contains the actual set of search engine buttons.
+    fileprivate let searchEngineContainerView = UIView()
     fileprivate let searchEngineScrollView = ButtonScrollView()
     fileprivate let searchEngineScrollViewContent = UIView()
 
@@ -87,15 +88,16 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         KeyboardHelper.defaultHelper.addDelegate(self)
 
-        searchEngineScrollView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
-        searchEngineScrollView.layer.shadowRadius = 0
-        searchEngineScrollView.layer.shadowOpacity = 100
-        searchEngineScrollView.layer.shadowOffset = CGSize(width: 0, height: -SearchViewControllerUX.SearchEngineTopBorderWidth)
-        searchEngineScrollView.layer.shadowColor = SearchViewControllerUX.SearchEngineScrollViewBorderColor
-        searchEngineScrollView.clipsToBounds = false
+        searchEngineContainerView.layer.backgroundColor = SearchViewControllerUX.SearchEngineScrollViewBackgroundColor
+        searchEngineContainerView.layer.shadowRadius = 0
+        searchEngineContainerView.layer.shadowOpacity = 100
+        searchEngineContainerView.layer.shadowOffset = CGSize(width: 0, height: -SearchViewControllerUX.SearchEngineTopBorderWidth)
+        searchEngineContainerView.layer.shadowColor = SearchViewControllerUX.SearchEngineScrollViewBorderColor
+        searchEngineContainerView.clipsToBounds = false
 
         searchEngineScrollView.decelerationRate = UIScrollView.DecelerationRate.fast
-        view.addSubview(searchEngineScrollView)
+        searchEngineContainerView.addSubview(searchEngineScrollView)
+        view.addSubview(searchEngineContainerView)
 
         searchEngineScrollViewContent.layer.backgroundColor = UIColor.clear.cgColor
         searchEngineScrollView.addSubview(searchEngineScrollViewContent)
@@ -119,6 +121,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         blur.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
+    
+        searchEngineContainerView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+        }
 
         suggestionCell.delegate = self
 
@@ -140,8 +146,12 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
     fileprivate func layoutSearchEngineScrollView() {
         let keyboardHeight = KeyboardHelper.defaultHelper.currentState?.intersectionHeightForView(self.view) ?? 0
         searchEngineScrollView.snp.remakeConstraints { make in
-            make.left.right.equalTo(self.view)
-            make.bottom.equalTo(self.view).offset(-keyboardHeight)
+            make.left.right.top.equalToSuperview()
+            if keyboardHeight == 0 {
+                make.bottom.equalTo(view.safeArea.bottom)
+            } else {
+                make.bottom.equalTo(view).offset(-keyboardHeight)
+            }
         }
     }
 
@@ -221,6 +231,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             let engineButton = UIButton()
             engineButton.setImage(engine.image, for: [])
             engineButton.imageView?.contentMode = .scaleAspectFit
+            engineButton.imageView?.layer.cornerRadius = 4
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
             engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
             engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
@@ -390,13 +401,10 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
                     cell.setRightBadge(isBookmark ? self.bookmarkedBadge : nil)
                     cell.imageView?.layer.borderColor = SearchViewControllerUX.IconBorderColor.cgColor
                     cell.imageView?.layer.borderWidth = SearchViewControllerUX.IconBorderWidth
-                    cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
-                        if site.tileURL == url {
-                            cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
-                            cell.imageView?.contentMode = .center
-                            cell.imageView?.backgroundColor = color
-                        }
-                    })
+                    cell.imageView?.contentMode = .center
+                    cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
+                        cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: SearchViewControllerUX.IconSize, height: SearchViewControllerUX.IconSize))
+                    }
                 }
             }
             return cell

@@ -69,6 +69,7 @@ class SessionRestoreTests: KIFTestCase {
             .perform(grey_tap())
         EarlGrey.selectElement(with: grey_accessibilityLabel("Forward"))
             .perform(grey_tap())
+        tester().waitForAnimationsToFinish()
         tester().waitForWebViewElementWithAccessibilityLabel("Page 3")
         let canGoForward: Bool
         do {

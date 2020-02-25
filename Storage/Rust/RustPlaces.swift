@@ -267,6 +267,10 @@ public class RustPlaces {
         return error
     }
 
+    public func interrupt() {
+        api?.interrupt()
+    }
+
     public func forceClose() -> NSError? {
         var error: NSError? = nil
 
@@ -291,7 +295,7 @@ public class RustPlaces {
             }
 
             do {
-                try self.api?.syncBookmarks(unlockInfo: unlockInfo)
+                try _ = self.api?.syncBookmarks(unlockInfo: unlockInfo)
                 deferred.fill(Maybe(success: ()))
             } catch let err as NSError {
                 if let placesError = err as? PlacesError {

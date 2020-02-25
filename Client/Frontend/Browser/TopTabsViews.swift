@@ -185,13 +185,14 @@ class TopTabCell: UICollectionViewCell, PrivateModeUI {
 
         self.selectedTab = isSelected
         if let siteURL = tab.url?.displayURL {
-            self.favicon.setIcon(tab.displayFavicon, forURL: siteURL, completed: { (color, url) in
-                if siteURL == url {
-                    self.favicon.image = self.favicon.image?.createScaled(CGSize(width: 15, height: 15))
-                    self.favicon.backgroundColor = color == .clear ? .white : color
-                    self.favicon.contentMode = .center
+            self.favicon.contentMode = .center
+            self.favicon.setImageAndBackground(forIcon: tab.displayFavicon, website: siteURL) { [weak self] in
+                guard let self = self else { return }
+                self.favicon.image = self.favicon.image?.createScaled(CGSize(width: 15, height: 15))
+                if self.favicon.backgroundColor == .clear {
+                    self.favicon.backgroundColor = .white
                 }
-            })
+            }
         } else {
             self.favicon.image = UIImage(named: "defaultFavicon")
             self.favicon.contentMode = .scaleAspectFit

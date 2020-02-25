@@ -32,11 +32,4 @@ carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
 npm install
 npm run build
 
-
-cd content-blocker-lib-ios
-./build-disconnect.py block
-./build-disconnect.py block-cookies
-rm -f Lists/disconnect-block-content.json 
-rm -f Lists/disconnect-block-cookies-cryptomining.json
-rm -f Lists/disconnect-block-cookies-fingerprinting.json
-cd ..
+(cd content-blocker-lib-ios/ContentBlockerGen && swift run)

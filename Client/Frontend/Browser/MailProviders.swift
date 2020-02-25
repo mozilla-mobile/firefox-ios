@@ -139,3 +139,18 @@ class GoogleGmailIntegration: MailProvider {
         return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
     }
 }
+
+class FastmailIntegration: MailProvider {
+    var beginningScheme = "fastmail://mail/compose?"
+    var supportedHeaders = [
+        "to",
+        "cc",
+        "bcc",
+        "subject",
+        "body"
+    ]
+
+    func newEmailURLFromMetadata(_ metadata: MailToMetadata) -> URL? {
+        return constructEmailURLString(beginningScheme, metadata: metadata, supportedHeaders: supportedHeaders).asURL
+    }
+}

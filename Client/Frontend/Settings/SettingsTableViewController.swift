@@ -71,7 +71,7 @@ class Setting: NSObject {
         cell.detailTextLabel?.numberOfLines = 0
         cell.textLabel?.assign(attributed: title)
         cell.textLabel?.textAlignment = textAlignment
-        cell.textLabel?.numberOfLines = 1
+        cell.textLabel?.numberOfLines = 0
         cell.textLabel?.lineBreakMode = .byTruncatingTail
         cell.accessoryType = accessoryType
         cell.accessoryView = accessoryView

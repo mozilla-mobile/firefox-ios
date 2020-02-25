@@ -165,9 +165,8 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced Tabs
-        navigator.goto(LibraryPanel_History)
-        waitForExistence(app.cells["HistoryPanel.syncedDevicesCell"], timeout: 5)
-        app.cells["HistoryPanel.syncedDevicesCell"].tap()
+        navigator.goto(LibraryPanel_SyncedTabs)
+
         // Need to swipe to get the data on the screen on focus
         app.swipeDown()
         waitForExistence(app.tables.otherElements["profile1"], timeout: 10)

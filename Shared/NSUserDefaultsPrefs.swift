@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import Shared
 
 open class NSUserDefaultsPrefs: Prefs {
 
@@ -14,12 +13,12 @@ open class NSUserDefaultsPrefs: Prefs {
         return self.prefixWithDot
     }
 
-    init(prefix: String, userDefaults: UserDefaults) {
+    public init(prefix: String, userDefaults: UserDefaults) {
         self.prefixWithDot = prefix + (prefix.hasSuffix(".") ? "" : ".")
         self.userDefaults = userDefaults
     }
 
-    init(prefix: String) {
+    public init(prefix: String) {
         self.prefixWithDot = prefix + (prefix.hasSuffix(".") ? "" : ".")
         self.userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
     }

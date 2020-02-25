@@ -188,12 +188,17 @@ extension UnifiedTelemetry {
         case tab = "tab"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionWhitelist = "tracking-protection-whitelist"
+        case trackingProtectionMenu = "tracking-protection-menu"
         case url = "url"
         case searchText = "searchText"
         case whatsNew = "whats-new"
+        case dismissUpdateCoverSheetAndStartBrowsing = "dismissed-update-cover_sheet_and_start_browsing"
+        case dismissedUpdateCoverSheet = "dismissed-update-cover-sheet"
         case dismissedOnboarding = "dismissed-onboarding"
         case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
         case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
+        case privateBrowsingButton = "private-browsing-button"
+        case removeUnVerifiedAccountButton = "remove-unverified-account-button"
     }
 
     public enum EventValue: String {
@@ -221,13 +226,15 @@ extension UnifiedTelemetry {
         case themeModeAutomatically = "theme-automatically"
         case themeLight = "theme-light"
         case themeDark = "theme-dark"
+        case privateTab = "private-tab"
+        case normalTab = "normal-tab"
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any?]? = nil) {
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any]? = nil) {
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value.rawValue, extras: extras)
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String: Any?]? = nil) {
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String: Any]? = nil) {
         Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value, extras: extras)
     }
 }

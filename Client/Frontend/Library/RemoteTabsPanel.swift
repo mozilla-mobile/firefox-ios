@@ -37,20 +37,13 @@ private struct RemoteTabsPanelUX {
 private let RemoteClientIdentifier = "RemoteClient"
 private let RemoteTabIdentifier = "RemoteTab"
 
-class RemoteTabsPanel: UIViewController, LibraryPanel {
-    weak var libraryPanelDelegate: LibraryPanelDelegate?
+class RemoteTabsPanel: SiteTableViewController, LibraryPanel {
+    var libraryPanelDelegate: LibraryPanelDelegate?
     fileprivate lazy var tableViewController = RemoteTabsTableViewController()
-    fileprivate lazy var historyBackButton: HistoryBackButton = {
-        let button = HistoryBackButton()
-        button.addTarget(self, action: #selector(historyBackButtonWasTapped), for: .touchUpInside)
-        return button
-    }()
 
-    let profile: Profile
 
-    init(profile: Profile) {
-        self.profile = profile
-        super.init(nibName: nil, bundle: nil)
+    override init(profile: Profile) {
+        super.init(profile: profile)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .FirefoxAccountChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(notificationReceived), name: .ProfileDidFinishSyncing, object: nil)
     }
@@ -69,20 +62,20 @@ class RemoteTabsPanel: UIViewController, LibraryPanel {
         tableViewController.tableView.backgroundColor = .clear
         addChild(tableViewController)
         self.view.addSubview(tableViewController.view)
-        self.view.addSubview(historyBackButton)
-
-        historyBackButton.snp.makeConstraints { make in
-            make.top.left.right.equalTo(self.view)
-            make.height.equalTo(50)
-            make.bottom.equalTo(tableViewController.view.snp.top)
-        }
 
         tableViewController.view.snp.makeConstraints { make in
-            make.top.equalTo(historyBackButton.snp.bottom)
-            make.left.right.bottom.equalTo(self.view)
+            make.top.left.right.bottom.equalTo(self.view)
         }
 
         tableViewController.didMove(toParent: self)
+    }
+    
+    override func applyTheme() {
+        super.applyTheme()
+        tableViewController.tableView.backgroundColor = UIColor.theme.tableView.rowBackground
+        tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
+        tableViewController.tableView.reloadData()
+        tableViewController.refreshTabs()
     }
 
     @objc func notificationReceived(_ notification: Notification) {
@@ -97,10 +90,6 @@ class RemoteTabsPanel: UIViewController, LibraryPanel {
             log.warning("Received unexpected notification \(notification.name)")
             break
         }
-    }
-
-    @objc fileprivate func historyBackButtonWasTapped(_ gestureRecognizer: UITapGestureRecognizer) {
-        _ = self.navigationController?.popViewController(animated: true)
     }
 }
 
@@ -377,7 +366,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         contentView.addSubview(instructionsLabel)
 
         signInButton.setTitle(Strings.FxASignInToSync, for: [])
-        signInButton.titleLabel?.textColor = .white
+        signInButton.setTitleColor(UIColor.Photon.White100, for: [])
         signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
@@ -421,7 +410,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
         instructionsLabel.textColor = UIColor.theme.tableView.headerTextDark
         signInButton.backgroundColor = RemoteTabsPanelUX.EmptyStateSignInButtonColor
-        signInButton.setTitleColor(UIColor.theme.tableView.headerTextDark, for: [])
         backgroundColor = UIColor.theme.homePanel.panelBackground
     }
 
@@ -507,11 +495,14 @@ fileprivate class RemoteTabsTableViewController: UITableViewController {
         tableView.dataSource = nil
 
         tableView.separatorColor = UIColor.theme.tableView.separator
+
+        tableView.accessibilityIdentifier = "Synced Tabs"
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        (navigationController as? ThemedNavigationController)?.applyTheme()
+        
         // Add a refresh control if the user is logged in and the control was not added before. If the user is not
         // logged in, remove any existing control.
         if profile.hasSyncableAccount() && refreshControl == nil {
@@ -631,14 +622,5 @@ extension RemoteTabsTableViewController: LibraryPanelContextMenu {
 
     func getContextMenuActions(for site: Site, with indexPath: IndexPath) -> [PhotonActionSheetItem]? {
         return getDefaultContextMenuActions(for: site, libraryPanelDelegate: remoteTabsPanel?.libraryPanelDelegate)
-    }
-}
-
-extension RemoteTabsPanel: Themeable {
-    func applyTheme() {
-        historyBackButton.applyTheme()
-        tableViewController.tableView.separatorColor = UIColor.theme.tableView.separator
-        tableViewController.tableView.reloadData()
-        tableViewController.refreshTabs()
     }
 }

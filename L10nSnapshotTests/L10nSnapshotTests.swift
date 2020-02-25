@@ -4,8 +4,8 @@
 
 import XCTest
 
-let testPageBase = "http://wopr.norad.org/~sarentz/fxios/testpages"
-let loremIpsumURL = "\(testPageBase)/index.html"
+let testPageBase = "http://www.example.com"
+let loremIpsumURL = "\(testPageBase)"
 
 class L10nSnapshotTests: L10nBaseSnapshotTests {
     func test02DefaultTopSites() {
@@ -44,27 +44,30 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test06PanelsEmptyState() {
-        var i = 0
-        allHomePanels.forEach { nodeName in
-            navigator.goto(nodeName)
-            snapshot("06PanelsEmptyState-\(i)-\(nodeName)")
-            i += 1
+        let libraryPanels = [
+            "LibraryPanels.History",
+            "LibraryPanels.ReadingList",
+            "LibraryPanels.Downloads",
+            "LibraryPanels.SyncedTabs"
+        ]
+        navigator.goto(LibraryPanel_Bookmarks)
+        snapshot("06PanelsEmptyState-LibraryPanels.Bookmarks")
+        libraryPanels.forEach { panel in
+            app.buttons[panel].tap()
+            snapshot("06PanelsEmptyState-\(panel)")
         }
     }
 
     // From here on it is fine to load pages
+    func test07LongPressOnTextOptions() {
+        navigator.openURL(loremIpsumURL)
 
-    func test07AddSearchProvider() {
-        navigator.openURL("\(testPageBase)/addSearchProvider.html")
-        app.webViews.element(boundBy: 0).buttons["focus"].tap()
-        snapshot("07AddSearchProvider-01", waitForLoadingIndicator: false)
-        app.buttons["BrowserViewController.customSearchEngineButton"].tap()
-        snapshot("07AddSearchProvider-02", waitForLoadingIndicator: false)
-
-        let alert = XCUIApplication().alerts.element(boundBy: 0)
-        expectation(for: NSPredicate(format: "exists == 1"), evaluatedWith: alert, handler: nil)
-        waitForExpectations(timeout: 3, handler: nil)
-        alert.buttons.element(boundBy: 0).tap()
+        // Select some text and long press to find the option
+        app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
+        snapshot("07LongPressTextOptions-01")
+        waitForExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
+        app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
+        snapshot("07LongPressTextOptions-02")
     }
 
     func test08URLBar() {
@@ -108,22 +111,26 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test11WebViewContextMenu() {
+        // Drag the context menu up to show all the options
+        func drag() {
+            let window = XCUIApplication().windows.element(boundBy: 0)
+            let start = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.95))
+            let finish = window.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5))
+            start.press(forDuration: 0.01, thenDragTo: finish)
+        }
+
         // Link
         navigator.openURL("http://wikipedia.org")
         navigator.goto(WebLinkContextMenu)
+        drag()
         snapshot("11WebViewContextMenu-01-link")
         navigator.back()
 
         // Image
         navigator.openURL("http://wikipedia.org")
         navigator.goto(WebImageContextMenu)
+        drag()
         snapshot("11WebViewContextMenu-02-image")
-        navigator.back()
-
-        // Image inside Link
-        navigator.openURL("http://wikipedia.org")
-        navigator.goto(WebLinkContextMenu)
-        snapshot("11WebViewContextMenu-03-imageWithLink")
         navigator.back()
     }
 
@@ -193,7 +200,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test21ReaderModeSettingsMenu() {
-        loadWebPage(url: loremIpsumURL, waitForOtherElementWithAriaLabel: "body")
+        loadWebPage(url: "en.m.wikipedia.org/wiki/Main_Page")
         app.buttons["TabLocationView.readerModeButton"].tap()
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         snapshot("21ReaderModeSettingsMenu-01")
@@ -208,7 +215,7 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         snapshot("22TrackingProtectionDisabledPerSite-02")
 
         // Website with blocked elements
-        navigator.openNewURL(urlString: "mozilla.org")
+        navigator.openNewURL(urlString: "twitter.com")
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
         snapshot("22TrackingProtectionBlockedElements-01")
@@ -219,13 +226,18 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
 
     func test23SettingsETP() {
         navigator.goto(TrackingProtectionSettings)
-        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons["More Info"].tap()
+        
+        app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
         snapshot("23TrackingProtectionBasicMoreInfo-01")
+
+        waitForExistence(app.navigationBars["Client.TPAccessoryInfo"])
         // Go back to TP settings
-        app.buttons["Tracking Protection"].tap()
+        app.navigationBars["Client.TPAccessoryInfo"].buttons.firstMatch.tap()
 
         // See Strict mode info
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons["More Info"].tap()
+        waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListStrict"])
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.tap()
+        app.tables.cells.staticTexts.firstMatch.swipeUp()
         snapshot("23TrackingProtectionStrictMoreInfo-02")
     }
 }

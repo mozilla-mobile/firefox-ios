@@ -236,8 +236,8 @@ public struct ResponseMetadata {
         })
 
         self.status = status
-        alert = headers["x-weave-alert"] as? String
-        nextOffset = headers["x-weave-next-offset"] as? String
+        alert = headers["x-weave-alert"]
+        nextOffset = headers["x-weave-next-offset"]
         records = optionalUIntegerHeader(headers["x-weave-records"] as AnyObject?)
         quotaRemaining = optionalIntegerHeader(headers["x-weave-quota-remaining"] as AnyObject?)
         timestampMilliseconds = optionalSecondsHeader(headers["x-weave-timestamp"] as AnyObject?) ?? 0
@@ -637,7 +637,7 @@ open class Sync15StorageClient {
 private let DefaultInfoConfiguration = InfoConfiguration(maxRequestBytes: 1_048_576,
                                                          maxPostRecords: 100,
                                                          maxPostBytes: 1_048_576,
-                                                         maxTotalRecords: 10_000,
+                                                         maxTotalRecords: 1666,
                                                          maxTotalBytes: 104_857_600)
 
 /**
