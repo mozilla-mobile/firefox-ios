@@ -86,11 +86,11 @@ public struct FirefoxStagingPushConfiguration: PushConfiguration {
 public struct XRViewerPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.xrviewer
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/xrviewer")!
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/xvr")!
 }
 
 public struct XRViewerStagingPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.xrviewer
-    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/xrviewer")!
+    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/xvr")!
 }
