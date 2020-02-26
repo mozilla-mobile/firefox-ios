@@ -20,13 +20,15 @@ enum FxAPageType {
     case settingsPage
 }
 
+// See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
+// For details on message types.
 fileprivate enum RemoteCommand: String {
     //case canLinkAccount = "can_link_account"
     // case loaded = "fxaccounts:loaded"
     case status = "fxaccounts:fxa_status"
     case login = "fxaccounts:oauth_login"
     case changePassword = "fxaccounts:change_password"
-    //case signOut = "sign_out"
+    case signOut = "fxaccounts:logout"
     case deleteAccount = "fxaccounts:delete_account"
 }
 
@@ -114,7 +116,7 @@ extension FxAWebView: WKScriptMessageHandler {
                 if let id = id {
                     onSessionStatus(id: id)
                 }
-            case .deleteAccount:
+            case .deleteAccount, .signOut:
                 FxALoginHelper.sharedInstance.disconnect()
                 dismiss(animated: true)
             }
