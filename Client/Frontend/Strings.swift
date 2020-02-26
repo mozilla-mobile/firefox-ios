@@ -577,8 +577,8 @@ extension Strings {
     public static let PageActionMenuTitle = NSLocalizedString("Menu.PageActions.Title", value: "Page Actions", comment: "Label for title in page action menu.")
     public static let WhatsNewString = NSLocalizedString("Menu.WhatsNew.Title", value: "What's New", comment: "The title for the option to view the What's new page.")
     public static let AppMenuShowPageSourceString = NSLocalizedString("Menu.PageSourceAction.Title", tableName: "Menu", value: "View Page Source", comment: "Label for the button, displayed in the menu, used to show the html page source")
-     public static let NoConnectivityAlertTitle = NSLocalizedString("", value: "No Internet", comment: "" )
-    public static let NoConnectivityAlertMessage = NSLocalizedString("", value: "Checking your data connection or try eeconnecting to Wi-Fi", comment: "" )
+     public static let NoConnectivityAlertTitle = NSLocalizedString("TabManager.AlertView.Title", value: "No Internet", comment: "Title for no internet connection in the alert controller")
+    public static let NoConnectivityAlertMessage = NSLocalizedString("TabManager.AlertView.Message", value: "Please check your connection and try again.", comment: "Message for no internet connection in the alert controller")
 }
 
 // Snackbar shown when tapping app store link
