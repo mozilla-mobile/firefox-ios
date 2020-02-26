@@ -74,23 +74,23 @@ public struct FirefoxNightlyEnterprisePushConfiguration: PushConfiguration {
 public struct FirefoxPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.firefox
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/xvr")!
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/xrv")!
 }
 
 public struct FirefoxStagingPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.firefox
-    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/xvr")!
+    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/xrv")!
 }
 
 public struct XRViewerPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.xrviewer
-    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/xvr")!
+    public let endpointURL = NSURL(string: "https://updates.push.services.mozilla.com/v1/apns/xrv")!
 }
 
 public struct XRViewerStagingPushConfiguration: PushConfiguration {
     public init() {}
     public let label = PushConfigurationLabel.xrviewer
-    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/xvr")!
+    public let endpointURL = NSURL(string: "https://updates-autopush.stage.mozaws.net/v1/apns/xrv")!
 }
