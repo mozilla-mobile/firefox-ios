@@ -111,7 +111,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
-
+        
         let imageStore = DiskImageStore(files: profile.files, namespace: "TabManagerScreenshots", quality: UIConstants.ScreenshotQuality)
 
         // Temporary fix for Bug 1390871 - NSInvalidArgumentException: -[WKContentView menuHelperFindInPage]: unrecognized selector
@@ -270,6 +270,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
                 }
             }
         }
+
+        #if XRVIEWERDEV
+             let server = WebServerXrViewer.sharedInstance
+             do {
+                 try server.start()
+             } catch let err as NSError {
+                 print("Error: Unable to start Local WebServer in WebXR Viewer \(err)")
+             }
+        #endif
 
         return shouldPerformAdditionalDelegateHandling
     }
