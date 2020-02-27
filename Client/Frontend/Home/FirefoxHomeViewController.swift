@@ -982,7 +982,7 @@ class ASHeaderView: UICollectionReusableView {
         super.prepareForReuse()
         moreButton.isHidden = true
         moreButton.setTitle(nil, for: .normal)
-        moreButton.accessibilityIdentifier = nil;
+        moreButton.accessibilityIdentifier = nil
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
         iconView.isHidden = true
