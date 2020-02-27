@@ -171,7 +171,13 @@ class CustomSearchViewController: SettingsTableViewController {
 class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
     fileprivate let Padding: CGFloat = 8
+    
     fileprivate let TextLabelHeight: CGFloat = 44
+    fileprivate var TextLabelWidth: CGFloat {
+        let width = textField.frame.width == 0 ? 360 : textField.frame.width
+        return width
+    }
+    
     fileprivate var TextFieldHeight: CGFloat = 44
 
     fileprivate let defaultValue: String?
@@ -203,7 +209,7 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         placeholderLabel.adjustsFontSizeToFitWidth = true
         placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder ?? UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
         placeholderLabel.text = placeholder
-        placeholderLabel.frame = CGRect(width: textField.frame.width, height: TextLabelHeight)
+        placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
         textField.font = placeholderLabel.font
 
         textField.textContainer.lineFragmentPadding = 0
