@@ -30,12 +30,12 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.cells["action_pin"])
     }
     // Disable issue #5554
-    /*
+
     func testShareOptionIsShown() {
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
-        waitForExistence(app.buttons["Copy"])
+        waitForExistence(app.cells["Copy"], timeout: 10)
     }
 
     // Smoketest
@@ -48,8 +48,8 @@ class PhotonActionSheetTest: BaseTestCase {
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
         pageObjectButtonCenter.press(forDuration: 1)
 
-        waitForExistence(app.buttons["Copy"], timeout: 10)
-    }*/
+        waitForExistence(app.cells["Copy"], timeout: 10)
+    }
 
     func testSendToDeviceFromPageOptionsMenu() {
         // User not logged in
@@ -57,7 +57,7 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.navigationBars["Client.InstructionsView"])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
-    // Disable issue #5554
+    // Disable issue #5554, More button is not accessible
     /*
     // Test disabled due to new implementation Bug 1449708 - new share sheet
     func testSendToDeviceFromShareOption() {
@@ -85,19 +85,9 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.openURL("example.com")
         navigator.goto(PageOptionsMenu)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        waitForExistence(app.buttons["Copy"], timeout: 5)
-        let countButtons = app.collectionViews.cells.collectionViews.buttons.count
-        let fennecElement = app.collectionViews.cells.collectionViews.buttons.element(boundBy: 1)
-        // If Fennec has not been configured there are 5 buttons, 6 if it is there already
-        if (countButtons <= 6) {
-            let moreElement = app.collectionViews.cells.collectionViews.containing(.button, identifier:"Reminders").buttons["More"]
-            moreElement.tap()
-            waitForExistence(app.switches["Reminders"])
-            // Tap on Fennec switch
-            app.switches.element(boundBy: 1).tap()
-            app.buttons["Done"].tap()
-            waitForExistence(app.buttons["Copy"])
-        }
+        waitForExistence(app.cells["Copy"], timeout: 5)
+        let fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+
         fennecElement.tap()
         waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 5)
     }
@@ -116,28 +106,25 @@ class PhotonActionSheetTest: BaseTestCase {
         app.buttons["Done"].tap()
         waitForExistence(app.buttons["Copy"], timeout: 3)
     }
-    // Disable issue #5554
-    /*
+
     // Smoketest
     func testSharePageWithShareSheetOptions() {
         openNewShareSheet()
+        waitForExistence(app.staticTexts["Open in Firefox"], timeout: 10)
         XCTAssertTrue(app.staticTexts["Open in Firefox"].exists)
         XCTAssertTrue(app.staticTexts["Load in Background"].exists)
         XCTAssertTrue(app.staticTexts["Bookmark This Page"].exists)
         XCTAssertTrue(app.staticTexts["Add to Reading List"].exists)
         XCTAssertTrue(app.staticTexts["Send to Device"].exists)
-        app.buttons["Cancel"].tap()
-        disableFennec()
     }
 
     func testShareSheetSendToDevice() {
         openNewShareSheet()
         app.staticTexts["Send to Device"].tap()
-        XCTAssertTrue(app.images["emptySync"].exists)
+        waitForExistence(app.navigationBars.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"], timeout: 10)
+
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
-        waitForExistence(app.navigationBars.buttons["Close"], timeout: 3)
-        app.navigationBars.buttons["Close"].tap()
-        disableFennec()
+        app.navigationBars.buttons["InstructionsViewController.navigationItem.leftBarButtonItem"].tap()
     }
 
     func testShareSheetOpenAndCancel() {
@@ -146,6 +133,5 @@ class PhotonActionSheetTest: BaseTestCase {
         // User is back to the BrowserTab where the sharesheet was launched
         waitForExistence(app.textFields["url"])
         waitForValueContains(app.textFields["url"], value:"example.com/")
-        disableFennec()
-    }*/
+    }
 }

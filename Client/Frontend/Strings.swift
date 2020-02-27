@@ -602,6 +602,14 @@ extension Strings {
     public static let TrackingProtectionReloadWith = NSLocalizedString("Menu.ReloadWithTrackingProtection.Title", value: "Reload With Tracking Protection", comment: "Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled")
 
     public static let TrackingProtectionProtectionStrictInfoFooter = NSLocalizedString("Settings.TrackingProtection.StrictLevelInfoFooter", value: "Blocking trackers could impact the functionality of some websites.", comment: "Additional information about the strict level setting")
+    public static let TrackingProtectionCellFooter = NSLocalizedString("Settings.TrackingProtection.ProtectionCellFooter", value: "Reduces targeted ads and helps stop advertisers from tracking your browsing.", comment: "Additional information about your Enhanced Tracking Protection")
+    public static let TrackingProtectionStandardLevelDescription = NSLocalizedString("Settings.TrackingProtection.ProtectionLevelStandard.Description", value: "Allows some ad tracking so websites function properly.", comment: "Description for standard level tracker protection")
+    public static let TrackingProtectionStrictLevelDescription = NSLocalizedString("Settings.TrackingProtection.ProtectionLevelStrict.Description", value: "Blocks more trackers, ads, and popups. Pages load faster, but some functionality may not work.", comment: "Description for strict level tracker protection")
+    public static let TrackingProtectionLevelFooter = NSLocalizedString("Settings.TrackingProtection.ProtectionLevel.Footer", value: "If a site doesn’t work as expected, tap the shield in the address bar and turn off Enhanced Tracking Protection for that page.", comment: "Footer information for tracker protection level.")
+    public static let TrackerProtectionLearnMore = NSLocalizedString("Settings.TrackingProtection.LearnMore", value: "Learn more", comment: "'Learn more' info link on the Tracking Protection settings screen.")
+    public static let TrackerProtectionAlertTitle =  NSLocalizedString("Settings.TrackingProtection.Alert.Title", value: "Heads up!", comment: "Title for the tracker protection alert.")
+    public static let TrackerProtectionAlertDescription =  NSLocalizedString("Settings.TrackingProtection.Alert.Description", value: "If a site doesn’t work as expected, tap the shield in the address bar and turn off Enhanced Tracking Protection for that page.", comment: "Decription for the tracker protection alert.")
+    public static let TrackerProtectionAlertButton =  NSLocalizedString("Settings.TrackingProtection.Alert.Button", value: "OK, Got It", comment: "Dismiss button for the tracker protection alert.")
 }
 
 // Tracking Protection menu
@@ -788,6 +796,12 @@ extension Strings {
 
 // Cover Sheet
 extension Strings {
+    // Dark Mode Cover Sheet
     public static let CoverSheetV22DarkModeTitle = NSLocalizedString("CoverSheet.v22.DarkMode.Title", value: "Dark theme now includes a dark keyboard and dark splash screen.", comment: "Title for the new dark mode change in the version 22 app release.")
     public static let CoverSheetV22DarkModeDescription = NSLocalizedString("CoverSheet.v22.DarkMode.Description", value: "For iOS 13 users, Firefox now automatically switches to a dark theme when your phone is set to Dark Mode. To change this behavior, go to Settings > Theme.", comment: "Description for the new dark mode change in the version 22 app release. It describes the new automatic dark theme and how to change the theme settings.")
+    
+    // ETP Cover Sheet
+    public static let CoverSheetETPTitle = NSLocalizedString("CoverSheet.v24.ETP.Title", value: "Protection Against Ad Tracking", comment: "Title for the new ETP mode i.e. standard vs strict")
+    public static let CoverSheetETPDescription = NSLocalizedString("CoverSheet.v24.ETP.Description", value: "Built-in Enhanced Tracking Protection helps stop ads from following you around. Turn on Strict to block even more trackers, ads, and popups.", comment: "Description for the new ETP mode i.e. standard vs strict")
+    public static let CoverSheetETPSettingsButton = NSLocalizedString("CoverSheet.v24.ETP.Settings.Button", value: "Go to Settings", comment: "Text for the new ETP settings button")
 }

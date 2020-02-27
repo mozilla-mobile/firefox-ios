@@ -307,21 +307,23 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "reserved.html")
     }
-    // Disable issue 5554
-    /*
+
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.buttons["Copy"])
-        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.collectionViews.cells["Copy"])
+        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
     }
 
     func testShareLinkPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.buttons["Copy"])
-        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.collectionViews.cells["Copy"])
+        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
     }
 
+    // Disable, no Cancel button now and no option to
+    // tap on PopoverDismissRegion
+    /*
     func testCancelLongPressLinkMenu() {
         navigator.openURL(website_2["url"]!)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
@@ -332,7 +334,6 @@ class NavigationTest: BaseTestCase {
         } else {
             app.buttons["Cancel"].tap()
         }
-
         waitForNoExistence(app.sheets[website_2["moreLinkLongPressInfo"]!])
         XCTAssertEqual(app.textFields["url"].value! as? String, "www.example.com/", "After canceling the menu user is in a different website")
     }*/
