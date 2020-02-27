@@ -9,9 +9,9 @@ import CoreSpotlight
 import MobileCoreServices
 import WebKit
 
-private let browsingActivityType: String = "org.mozilla.ios.xrviewer.browsing"
+private let browsingActivityType: String = "org.mozilla.ios.XRViewer.browsing"
 
-private let searchableIndex = CSSearchableIndex(name: "xrviewer")
+private let searchableIndex = CSSearchableIndex(name: "XRViewer")
 
 class UserActivityHandler {
     init() {
