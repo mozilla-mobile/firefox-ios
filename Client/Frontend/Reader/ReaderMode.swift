@@ -160,10 +160,6 @@ struct ReaderModeStyle {
         return ["theme": theme.rawValue, "fontType": fontType.rawValue, "fontSize": fontSize.rawValue]
     }
 
-    init() {
-        self.init(theme: ReaderModeTheme.preferredTheme(), fontType: .sansSerif, fontSize: ReaderModeFontSize.defaultSize)
-    }
-
     init(theme: ReaderModeTheme, fontType: ReaderModeFontType, fontSize: ReaderModeFontSize) {
         self.theme = theme
         self.fontType = fontType
