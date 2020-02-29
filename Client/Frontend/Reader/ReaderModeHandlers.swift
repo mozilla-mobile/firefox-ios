@@ -42,7 +42,7 @@ struct ReaderModeHandlers {
                                 style.ensurePreferredColorThemeIfNeeded()
                                 readerModeStyle = style
                         } else {
-                            readerModeStyle.theme = ReaderModeTheme()
+                            readerModeStyle.theme = ReaderModeTheme.preferredTheme()
                         }
                         if let html = ReaderModeUtils.generateReaderContent(readabilityResult, initialStyle: readerModeStyle),
                             let response = GCDWebServerDataResponse(html: html) {

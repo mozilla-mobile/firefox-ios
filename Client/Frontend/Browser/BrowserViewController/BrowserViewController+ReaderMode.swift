@@ -158,7 +158,9 @@ extension BrowserViewController {
             }
         }
         readerModeStyle.fontSize = ReaderModeFontSize.defaultSize
-        self.readerModeStyleViewController(ReaderModeStyleViewController(), didConfigureStyle: readerModeStyle)
+        self.readerModeStyleViewController(ReaderModeStyleViewController(), 
+                                           didConfigureStyle: readerModeStyle, 
+                                           isUsingUserDefinedColor: false)
     }
     
     func appyThemeForPreferences(_ preferences: Prefs, contentScript: TabContentScript) {

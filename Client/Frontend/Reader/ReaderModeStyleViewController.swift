@@ -28,21 +28,11 @@ private struct ReaderModeStyleViewControllerUX {
 
 // MARK: -
 
-protocol ReaderModeStyleViewControllerDelegate {
-    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, 
-                                       didConfigureStyle style: ReaderModeStyle)
-    
+protocol ReaderModeStyleViewControllerDelegate {    
+    // isUsingUserDefinedColor should be false by default unless we need to override the default color 
     func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, 
                                        didConfigureStyle style: ReaderModeStyle,
                                        isUsingUserDefinedColor: Bool)
-}
-
-extension ReaderModeStyleViewControllerDelegate {
-    // Can't use default values in protocols, using chained method calls instead
-    func readerModeStyleViewController(_ readerModeStyleViewController: ReaderModeStyleViewController, 
-                                       didConfigureStyle style: ReaderModeStyle) {
-        self.readerModeStyleViewController(readerModeStyleViewController, didConfigureStyle: style, isUsingUserDefinedColor: false)
-    }
 }
 
 // MARK: -
