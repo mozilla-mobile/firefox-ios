@@ -22,6 +22,8 @@ public struct PrefsKeys {
     public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
     public static let LoginsSaveEnabled = "saveLogins"
     public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
+    public static let KeyInstallSession = "installSessionNumber"
+    public static let KeyETPCoverSheetShowType = "etpCoverSheetShowType"
 
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     //Activity Stream

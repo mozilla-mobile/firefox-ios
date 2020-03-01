@@ -13,7 +13,7 @@ class ScreenGraphTest: XCTestCase {
         app = XCUIApplication()
         navigator = createTestGraph(for: self, with: app).navigator()
         app.terminate()
-        app.launchArguments = [LaunchArguments.Test, LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew]
+        app.launchArguments = [LaunchArguments.Test, LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
         app.activate()
     }
 }
