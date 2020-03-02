@@ -49,7 +49,7 @@ open class MockSyncManager: SyncManager {
     open func onAddedAccount() -> Success {
         return succeed()
     }
-    open func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
+    open func onRemovedAccount() -> Success {
         return succeed()
     }
 
@@ -229,9 +229,7 @@ open class MockProfile: Client.Profile {
     public func flushAccount() {}
 
     public func removeAccount() {
-        let old = self.account
-        self.account = nil
-        self.syncManager.onRemovedAccount(old)
+        self.syncManager.onRemovedAccount()
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {

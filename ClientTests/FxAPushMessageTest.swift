@@ -11,18 +11,7 @@ import XCTest
 
 class FxAPushMessageTest: XCTestCase {
     func createHandler(_ profile: Profile = MockProfile()) -> FxAPushMessageHandler {
-        let account = Account.FirefoxAccount(
-            configuration: FirefoxAccountConfigurationLabel.production.toConfiguration(prefs: profile.prefs),
-            email: "testtest@test.com",
-            uid: "uid",
-            deviceRegistration: nil,
-            declinedEngines: nil,
-            stateKeyLabel: "xxx",
-            state: SeparatedState(),
-            deviceName: "My iPhone")
-
-        profile.setAccount(account)
-
+        
         return FxAPushMessageHandler(with: profile)
     }
 }
