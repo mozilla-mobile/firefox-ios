@@ -1,9 +1,15 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 import Shared
 import MozillaAppServices
 import SwiftKeychainWrapper
 
+fileprivate let prefs = NSUserDefaultsPrefs(prefix: "profile")
+
 open class RustFirefoxAccounts {
-    private let ClientID = "1b1a3e44c54fbb58"
+    private let clientID = "1b1a3e44c54fbb58"
     public let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     public static var shared = RustFirefoxAccounts()
     public let accountManager: FxAccountManager
@@ -11,6 +17,8 @@ open class RustFirefoxAccounts {
     private static var startupCalled = false
     public let syncAuthState: SyncAuthState
 
+    public let pushNotifications = PushNotificationSetup()
+    
     public var accountMigrationFailed: Bool {
         get {
             return UserDefaults.standard.bool(forKey: "fxaccount-migration-failed")
@@ -32,7 +40,6 @@ open class RustFirefoxAccounts {
             if Bundle.main.bundleURL.pathExtension != "appex", let tokens = migrationTokens(), !hasAttemptedMigration {
                 UserDefaults.standard.set(true, forKey: "hasAttemptedMigration")
 
-                let prefs = NSUserDefaultsPrefs(prefix: "profile")
                 ["bookmarks", "history", "passwords", "tabs"].forEach {
                     if let val = prefs.boolForKey("sync.engine.\($0).enabled"), !val {
                         // is disabled
@@ -47,7 +54,13 @@ open class RustFirefoxAccounts {
     }
 
     private init() {
-        let config = FxAConfig.release(clientId: ClientID, redirectUri: redirectURL)
+        let config: MozillaAppServices.FxAConfig
+        if prefs.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition {
+             config = FxAConfig(contentUrl: "https://accounts.firefox.com.cn", clientId: clientID, redirectUri: redirectURL)
+         } else {
+             config = FxAConfig.release(clientId: clientID, redirectUri: redirectURL)
+         }
+
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
         let deviceConfig = DeviceConfig(name:  DeviceInfo.defaultClientName(), type: type, capabilities: [.sendTab])
 
