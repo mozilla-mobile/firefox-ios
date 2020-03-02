@@ -65,18 +65,6 @@ class FxALoginHelper {
 
     fileprivate var accountVerified = false
 
-    fileprivate var pushClient: PushClient? {
-        guard let pushConfiguration = self.getPushConfiguration() ?? self.profile?.accountConfiguration.pushConfiguration,
-            let accountConfiguration = self.profile?.accountConfiguration else {
-                log.error("Push server endpoint could not be found")
-                return nil
-        }
-
-        // Experimental mode needs: a) the scheme to be Fennec, and b) the accountConfiguration to be flipped in debug mode.
-        let experimentalMode = (pushConfiguration.label == .fennec && accountConfiguration.label == .latestDev)
-        return PushClient(endpointURL: pushConfiguration.endpointURL, experimentalMode: experimentalMode)
-    }
-
     fileprivate var apnsTokenDeferred: Deferred<Maybe<String>>?
 
     // This should be called when the application has started.
@@ -119,72 +107,6 @@ class FxALoginHelper {
 //            // the notification in the Settings app.
 //            self.requestUserNotifications(application)
 //        }
-    }
-
-    func getPushConfiguration() -> PushConfiguration? {
-        let label = PushConfigurationLabel(rawValue: AppConstants.scheme)
-        return label?.toConfiguration()
-    }
-
-    func apnsRegisterDidSucceed(_ deviceToken: Data) {
-        let apnsToken = deviceToken.hexEncodedString
-        self.apnsTokenDeferred?.fillIfUnfilled(Maybe(success: apnsToken))
-        self.apnsRegisterDidSucceed(apnsToken)
-    }
-
-    fileprivate func apnsRegisterDidSucceed(_ apnsToken: String) {
-        guard let _ = self.account else {
-            // If we aren't logged in to FxA at this point
-            // we should bail.
-            return loginDidFail()
-        }
-
-        guard let pushClient = self.pushClient else {
-            return pushRegistrationDidFail()
-        }
-
-        guard let pushRegistration = account?.pushRegistration else {
-            pushClient.register(apnsToken).upon { res in
-                guard let pushRegistration = res.successValue else {
-                    return self.pushRegistrationDidFail()
-                }
-                return self.pushRegistrationDidSucceed(apnsToken: apnsToken, pushRegistration: pushRegistration)
-            }
-            return
-        }
-
-        // If we've already registered this push subscription,
-        // we don't need to do it again.
-        guard KeychainStore.shared.string(forKey: "apnsToken") != apnsToken else {
-            return
-        }
-
-        _ = pushClient.updateUAID(apnsToken, withRegistration: pushRegistration)
-    }
-
-    func apnsRegisterDidFail() {
-        self.apnsTokenDeferred?.fillIfUnfilled(Maybe(failure: PushNotificationError.registrationFailed))
-        readyForSyncing()
-    }
-
-    fileprivate func pushRegistrationDidSucceed(apnsToken: String, pushRegistration: PushRegistration) {
-        account?.pushRegistration = pushRegistration
-        readyForSyncing()
-    }
-
-    fileprivate func pushRegistrationDidFail() {
-        readyForSyncing()
-    }
-
-    func readyForSyncing() {
-        guard let profile = self.profile, let account = self.account else {
-            return loginDidFail()
-        }
-
-        profile.setAccount(account)
-
-        awaitVerification()
-        loginDidSucceed()
     }
 
     fileprivate func awaitVerification(_ attemptsLeft: Int = verificationMaxRetries) {
@@ -240,12 +162,8 @@ extension FxALoginHelper {
         // a 24h period after unregistering where re-registering fails. This doesn't seem to be the case (for me)
         // but this may be useful to know if QA/user-testing find this a problem.
 
-        // Whatever, we should unregister from the autopush server. That means we definitely won't be getting any
-        // messages.
-        if let pushRegistration = self.account?.pushRegistration,
-            let pushClient = self.pushClient {
-            _ = pushClient.unregister(pushRegistration)
-        }
+        // Whatever, we should unregister from the autopush server. That means we definitely won't be getting any messages.
+        RustFirefoxAccounts.shared.pushNotifications.unregister()
 
         KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
 
