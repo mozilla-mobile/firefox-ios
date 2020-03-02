@@ -244,7 +244,6 @@ public struct SyncPing: SyncTelemetryPing {
     public private(set) var payload: JSON
 
     public static func from(result: SyncOperationResult,
-                            account: Account.FirefoxAccount,
                             remoteClientsAndTabs: RemoteClientsAndTabs,
                             prefs: Prefs,
                             why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {

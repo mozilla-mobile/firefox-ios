@@ -303,13 +303,8 @@ class LeanPlumClient {
                 return false
             }
 
-            guard let context = context else {
-                return false
-            }
-
             // Don't display permission screen if they have already allowed/disabled push permissions
             if self.prefs?.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? false {
-                FxALoginHelper.sharedInstance.readyForSyncing()
                 return false
             }
 

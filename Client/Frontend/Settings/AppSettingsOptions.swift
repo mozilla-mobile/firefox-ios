@@ -847,7 +847,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         let control = UISwitchThemed()
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? BrowserProfile.isChinaEdition
+        control.isOn = prefs.boolForKey(prefKey) ?? AppInfo.isChinaEdition
         cell.accessoryView = control
         cell.selectionStyle = .none
     }
@@ -877,11 +877,6 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
 
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Debug: use stage servers", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        let configurationURL = profile.accountConfiguration.authEndpointURL
-        return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
