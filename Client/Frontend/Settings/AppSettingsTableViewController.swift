@@ -66,7 +66,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
 
         let accountChinaSyncSetting: [Setting]
-        if !BrowserProfile.isChinaEdition {
+        if !AppInfo.isChinaEdition {
             accountChinaSyncSetting = []
         } else {
             accountChinaSyncSetting = [

@@ -133,10 +133,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        NotificationCenter.default.addObserver(forName: .FirefoxAccountDeviceRegistrationUpdated, object: nil, queue: nil) { _ in
-            profile.flushAccount()
-        }
-
         adjustIntegration = AdjustIntegration(profile: profile)
 
         self.updateAuthenticationInfo()
@@ -637,30 +633,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension AppDelegate {
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        // If we've already registered this push subscription, we don't need to do it again.
-        let apnsToken = deviceToken.hexEncodedString
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
-        guard keychain.string(forKey: "apnsToken") != apnsToken else {
-            return
-        }
-
-        let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
-        let client = PushClient(endpointURL: config.endpointURL, experimentalMode: false)
-        client.register(apnsToken).uponQueue(.main) { result in
-            guard let pushReg = result.successValue else { return }
-            keychain.set(apnsToken, forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
-
-            let subscription = pushReg.defaultSubscription
-            let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
-            RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
-
-            keychain.set(pushReg as NSCoding, forKey: "account.push-registration", withAccessibility: .afterFirstUnlock)
-        }
+        RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken)
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("failed to register. \(error)")
-        FxALoginHelper.sharedInstance.apnsRegisterDidFail()
+        Sentry.shared.send(message: "Failed to register for APNS")
     }
 }
 

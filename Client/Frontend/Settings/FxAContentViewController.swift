@@ -44,9 +44,7 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
 
         super.init(backgroundColor: UIColor.Photon.Grey20, title: NSAttributedString(string: "Firefox Accounts"))
 
-        self.url = self.createFxAURLWith(fxaOptions, profile: profile, isSignUpFlow: isSignUpFlow)
-
-      //  NotificationCenter.default.addObserver(self, selector: #selector(userDidVerify), name: .FirefoxAccountVerified, object: nil)
+        self.url = URL(string: "https://notused.org")!
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -271,36 +269,6 @@ class FxAContentViewController: SettingsContentViewController, WKScriptMessageHa
         }
     }
 
-    // Configure the FxA signin url based on any passed options.
-    public func createFxAURLWith(_ fxaOptions: FxALaunchParams?, profile: Profile, isSignUpFlow: Bool) -> URL {
-        var profileUrl = profile.accountConfiguration.signInURL
-
-        if isSignUpFlow {
-            let s = profileUrl.absoluteString.replaceFirstOccurrence(of: "signin", with: "signup")
-            profileUrl = URL(string: s)!
-        }
-
-        guard let launchParams = fxaOptions else {
-            return profileUrl
-        }
-
-        // Only append certain parameters. Note that you can't override the service and context params.
-        var params = launchParams.query
-        params.removeValue(forKey: "service")
-        params.removeValue(forKey: "context")
-
-        if !isSignUpFlow {
-            params["action"] = "email"
-        }
-        params["style"] = "trailhead" // adds Trailhead banners to the page
-
-        let queryURL = params.filter { ["action", "style", "signin", "entrypoint"].contains($0.key) || $0.key.range(of: "utm_") != nil }.map({
-            return "\($0.key)=\($0.value)"
-        }).joined(separator: "&")
-
-
-        return  URL(string: "\(profileUrl)&\(queryURL)") ?? profileUrl
-    }
 
     override func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"

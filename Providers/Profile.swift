@@ -47,7 +47,7 @@ public protocol SyncManager {
     func applicationDidBecomeActive()
 
     func onNewProfile()
-    @discardableResult func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success
+    @discardableResult func onRemovedAccount() -> Success
     @discardableResult func onAddedAccount() -> Success
 }
 
@@ -124,9 +124,6 @@ protocol Profile: AnyObject {
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
     func localName() -> String
 
-    // URLs and account configuration.
-    var accountConfiguration: FirefoxAccountConfiguration { get }
-
     // Do we have an account at all?
     func hasAccount() -> Bool
 
@@ -137,8 +134,6 @@ protocol Profile: AnyObject {
     var rustAccount: FxAccountManager { get }
 
     func removeAccount()
-    func setAccount(_ account: Account.FirefoxAccount)
-    func flushAccount()
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getCachedClients()-> Deferred<Maybe<[RemoteClient]>>
@@ -302,7 +297,7 @@ open class BrowserProfile: Profile {
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
-        if BrowserProfile.isChinaEdition {
+        if AppInfo.isChinaEdition {
 
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
@@ -530,41 +525,6 @@ open class BrowserProfile: Profile {
         return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey, salt: salt)
     }()
 
-    static var isChinaEdition: Bool = {
-        return Locale.current.identifier == "zh_CN"
-    }()
-
-    var accountConfiguration: FirefoxAccountConfiguration {
-        if prefs.boolForKey("useCustomSyncService") ?? false {
-            return CustomFirefoxAccountConfiguration(prefs: self.prefs)
-        }
-        if prefs.boolForKey("useChinaSyncService") ?? BrowserProfile.isChinaEdition {
-            return ChinaEditionFirefoxAccountConfiguration(prefs: self.prefs)
-        }
-        if prefs.boolForKey("useStageSyncService") ?? false {
-            return StageFirefoxAccountConfiguration(prefs: self.prefs)
-        }
-        return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
-    }
-
-    fileprivate lazy var account: Account.FirefoxAccount? = {
-        let key = name + ".account"
-        keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
-        if let dictionary = keychain.object(forKey: key) as? [String: AnyObject] {
-            let account =  Account.FirefoxAccount.fromDictionary(dictionary, withPrefs: prefs)
-
-            // Check to see if the account configuration set is a custom service
-            // and update it to use the custom servers.
-            if let configuration = account?.configuration as? CustomFirefoxAccountConfiguration {
-                account?.configuration = CustomFirefoxAccountConfiguration(prefs: prefs)
-            }
-            account?.updateProfile()
-
-            return account
-        }
-        return nil
-    }()
-
     func hasAccount() -> Bool {
         return rustAccount.hasAccount()
     }
@@ -574,7 +534,7 @@ open class BrowserProfile: Profile {
     }
 
     func getAccount() -> Account.FirefoxAccount? {
-        return account
+        return nil
     }
 
     var rustAccount: FxAccountManager {
@@ -591,39 +551,14 @@ open class BrowserProfile: Profile {
     }
 
     func removeAccount() {
-        let old = self.account
         removeAccountMetadata()
-        self.account = nil
 
         // Tell any observers that our account has changed.
         NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil)
 
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
-        self.syncManager.onRemovedAccount(old)
-    }
-
-    func setAccount(_ account: Account.FirefoxAccount) {
-        self.account = account
-
-        flushAccount()
-
-        // tell any observers that our account has changed
-        DispatchQueue.main.async {
-            // Many of the observers for this notifications are on the main thread,
-            // so we should post the notification there, just in case we're not already
-            // on the main thread.
-            let userInfo = [Notification.Name.UserInfoKeyHasSyncableAccount: self.hasSyncableAccount()]
-            NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil, userInfo: userInfo)
-        }
-
-        self.syncManager.onAddedAccount()
-    }
-
-    func flushAccount() {
-        if let account = account {
-            self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account", withAccessibility: .afterFirstUnlock)
-        }
+        self.syncManager.onRemovedAccount()
     }
 
     class NoAccountError: MaybeErrorType {
@@ -718,9 +653,8 @@ open class BrowserProfile: Profile {
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
 
             #if MOZ_TARGET_CLIENT
-                if let account = profile.account, canSendUsageData() {
+                if canSendUsageData() {
                     SyncPing.from(result: result,
-                                  account: account,
                                   remoteClientsAndTabs: profile.remoteClientsAndTabs,
                                   prefs: prefs,
                                   why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
@@ -906,7 +840,7 @@ open class BrowserProfile: Profile {
             SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
         }
 
-        public func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
+        public func onRemovedAccount() -> Success {
             let profile = self.profile
 
             // Run these in order, because they might write to the same DB!
@@ -1338,17 +1272,11 @@ open class BrowserProfile: Profile {
         }
 
         public func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {
-            guard let account = self.profile.account else {
-                return deferMaybe(NoAccountError())
-            }
-            return account.notify(deviceIDs: deviceIDs, collectionsChanged: collections, reason: reason)
+           return succeed()
         }
 
         public func notifyAll(collectionsChanged collections: [String], reason: String) -> Success {
-            guard let account = self.profile.account else {
-                return deferMaybe(NoAccountError())
-            }
-            return account.notifyAll(collectionsChanged: collections, reason: reason)
+            return succeed()
         }
     }
 }
