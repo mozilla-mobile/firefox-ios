@@ -108,9 +108,13 @@ extension FxAWebView: WKScriptMessageHandler {
     private func handleRemote(command rawValue: String, id: Int?, data: Any?) {
         if let command = RemoteCommand(rawValue: rawValue) {
             switch command {
-            case .login, .changePassword:
+            case .login:
                 if let data = data {
                     onLogin(data: data)
+                }
+            case .changePassword:
+                if let data = data {
+                    onPasswordChange(data: data)
                 }
             case .status:
                 if let id = id {
@@ -205,6 +209,21 @@ extension FxAWebView: WKScriptMessageHandler {
         }
     }
 
+    private func onPasswordChange(data: Any) {
+        guard let data = data as? [String: Any], let sessionToken = data["sessionToken"] as? String else {
+            return
+        }
+
+        RustFirefoxAccounts.shared.accountManager.handlePasswordChanged(newSessionToken: sessionToken) {
+            NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+        }
+
+        if dismissType == .dismiss {
+            dismiss(animated: true)
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+        }
+    }
 
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         guard let url = baseURL else { return }
