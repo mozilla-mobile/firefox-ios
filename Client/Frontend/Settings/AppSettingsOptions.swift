@@ -46,9 +46,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
-        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
-        viewController.delegate = self
+        let viewController = FxAWebView(pageType: .emailLoginFlow)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
