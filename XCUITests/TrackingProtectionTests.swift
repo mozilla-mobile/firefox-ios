@@ -21,8 +21,8 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.openNewURL(urlString: websiteWithBlockedElements)
         Base.helper.waitUntilPageLoad()
         navigator.goto(TrackingProtectionContextMenuDetails)
-        if (Base.app.cells.staticTexts["Disabled for this site"].exists) {
-            Base.app.cells.staticTexts["Disabled for this site"].tap()
+        if (Base.app.cells.staticTexts["Enhanced Tracking Protection is OFF for this site"].exists) {
+            Base.app.cells.staticTexts["Enhanced Tracking Protection is OFF for this site"].tap()
         }
     }
 
@@ -67,13 +67,13 @@ class TrackingProtectionTests: BaseTestCase {
 
     private func checkTrackingProtectionDisabledForSite() {
         Base.app.buttons["TabLocationView.trackingProtectionButton"].tap()
-        Base.helper.waitForExistence(Base.app.cells.staticTexts["Disabled for this site"], timeout: 5)
+        Base.helper.waitForExistence(Base.app.cells.staticTexts["Enhanced Tracking Protection is OFF for this site."], timeout: 5)
         navigator.nowAt(TrackingProtectionContextMenuDetails)
     }
 
     private func checkTrackingProtectionEnabledForSite() {
         navigator.goto(TrackingProtectionContextMenuDetails)
-        Base.helper.waitForExistence(Base.app.cells.staticTexts["Enabled for this site"])
+        Base.helper.waitForExistence(Base.app.cells.staticTexts["Enhanced Tracking Protection is ON for this site."])
     }
 
     func testMenuWhenThereAreBlockedElements() {
