@@ -67,22 +67,31 @@ private extension TrayToBrowserAnimator {
         // Re-calculate the starting transforms for header/footer views in case we switch orientation
         resetTransformsForViews([bvc.header, bvc.readerModeBar, bvc.footer])
         transformHeaderFooterForBVC(bvc, toFrame: startingFrame, container: container)
+        
+        let frameResizeClosure = {
+            // Scale up the cell and reset the transforms for the header/footers
+            cell.frame = finalFrame
+            container.layoutIfNeeded()
+            cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
+            bvc.tabTrayDidDismiss(tabTray)
+            tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
+            tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9) 
+        }
+
+        if UIAccessibility.isReduceMotionEnabled {
+            frameResizeClosure()
+        }
 
         UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
             delay: 0, usingSpringWithDamping: 1,
             initialSpringVelocity: 0,
             options: [],
             animations: {
-            // Scale up the cell and reset the transforms for the header/footers
-            cell.frame = finalFrame
-            container.layoutIfNeeded()
-            cell.title.transform = CGAffineTransform(translationX: 0, y: -cell.title.frame.height)
-
-            bvc.tabTrayDidDismiss(tabTray)
+            if !UIAccessibility.isReduceMotionEnabled {
+                frameResizeClosure()
+            }
             UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.browser.background
             tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
-            tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
-            tabCollectionViewSnapshot.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             tabCollectionViewSnapshot.alpha = 0
             tabTray.statusBarBG.alpha = 0
             tabTray.searchBarHolder.alpha = 0
@@ -180,20 +189,27 @@ private extension BrowserToTrayAnimator {
             let finalFrame = calculateCollapsedCellFrameUsingCollectionView(tabTray.collectionView,
                 atIndex: scrollToIndex)
             tabTray.toolbar.transform = CGAffineTransform(translationX: 0, y: UIConstants.BottomToolbarHeight)
+            
+            let frameResizeClosure = {
+                cell.frame = finalFrame
+                cell.layoutIfNeeded()
+                transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
+                resetTransformsForViews([tabCollectionViewSnapshot])
+            }
+            
+            if UIAccessibility.isReduceMotionEnabled {
+                frameResizeClosure()
+            }
 
             UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
                 delay: 0, usingSpringWithDamping: 1,
                 initialSpringVelocity: 0,
                 options: [],
                 animations: {
-                cell.frame = finalFrame
                 cell.title.transform = .identity
-                cell.layoutIfNeeded()
 
                 UIApplication.shared.windows.first?.backgroundColor = UIColor.theme.tabTray.background
                 tabTray.navigationController?.setNeedsStatusBarAppearanceUpdate()
-
-                transformHeaderFooterForBVC(bvc, toFrame: finalFrame, container: container)
 
                 bvc.urlBar.updateAlphaForSubviews(0)
                 bvc.footer.alpha = 0
@@ -202,7 +218,11 @@ private extension BrowserToTrayAnimator {
                 tabTray.statusBarBG.alpha = 1
                 tabTray.searchBarHolder.alpha = 1
                 tabTray.toolbar.transform = .identity
-                resetTransformsForViews([tabCollectionViewSnapshot])
+                
+                if !UIAccessibility.isReduceMotionEnabled {
+                    frameResizeClosure()
+                }
+                    
             }, completion: { finished in
                 // Remove any of the views we used for the animation
                 cell.removeFromSuperview()
