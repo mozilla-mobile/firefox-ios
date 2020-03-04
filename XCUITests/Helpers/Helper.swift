@@ -104,6 +104,23 @@ class Helper {
             XCTFail("\(message) - Error in file \(file) at line \(line).")
         }
     }
+ 
+    /**
+     Gets test case name from test name string. Test name looks like: "[Class testFunc]"  so this method will parse out the function name
+     
+     - Parameter fromTest: the test to extract the test case name from
+     */
+    func getTestName(fromTest: String) -> String {
+        let parts = fromTest.replacingOccurrences(of: "]", with: "").split(separator: " ")
+        return String(parts[1])
+    }
+    
+    /**
+     Returns the list of launch arguments for the given test name
+     */
+    func launchArgumentsForTest(name: String, arguments: [String]) -> [String] {
+        return Constants.testWithDB.contains(getTestName(fromTest: name)) ? arguments : []
+    }
     
 }
 

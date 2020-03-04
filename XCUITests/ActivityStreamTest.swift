@@ -7,11 +7,7 @@ import XCTest
 class ActivityStreamTest: BaseTestCase {
 
     override func setUp() {
-        // Test name looks like: "[Class testFunc]", parse out the function name
-        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
-        let key = String(parts[1])
-        
-        if Constants.testWithDB.contains(key) {
+        if Constants.testWithDB.contains(Base.helper.getTestName(fromTest: name)) {
             // for the current test name, add the db fixture used
             let pagesVisitedDB = Base.helper.iPad() ? LaunchArguments.LoadDatabasePrefix + Constants.pagesVisitediPad : LaunchArguments.LoadDatabasePrefix + Constants.pagesVisitediPhone
             launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, pagesVisitedDB]

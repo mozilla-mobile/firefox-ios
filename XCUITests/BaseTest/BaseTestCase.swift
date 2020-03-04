@@ -14,7 +14,7 @@ var navigator: MMNavigator<FxUserState>!
 var userState: FxUserState!
 
 class BaseTestCase: XCTestCase {
-    
+
     // These are used during setUp(). Change them prior to setUp() for the app to launch with different args,
     // or, use restart() to re-launch with custom args.
     var launchArguments = [LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.StageServer, LaunchArguments.DeviceName, "\(LaunchArguments.ServerPort)\(serverPort)"]
@@ -26,6 +26,7 @@ class BaseTestCase: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        
         continueAfterFailure = false
         Base.app.launchArguments = [LaunchArguments.Test] + launchArguments
         Base.app.launch()

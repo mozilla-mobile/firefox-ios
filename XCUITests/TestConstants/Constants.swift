@@ -15,6 +15,7 @@ public struct Constants {
     public static let smallWaitTime: Double = 5
     public static let mediumWaitTime: Double = 10
     public static let longWaitTime: Double = 15
+    public static let pagesVisitedDB = Base.helper.iPad() ? LaunchArguments.LoadDatabasePrefix + Constants.pagesVisitediPad : LaunchArguments.LoadDatabasePrefix + Constants.pagesVisitediPhone
     
     // MARK: - Constants for ActivityStreamTests
     static let urlMozilla = "www.mozilla.org"
