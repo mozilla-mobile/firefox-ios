@@ -939,6 +939,10 @@ open class BrowserProfile: Profile {
         public class ScopedKeyError: MaybeErrorType {
             public var description = "No key data found for scope."
         }
+        
+        public class SyncUnlockGetURLError: MaybeErrorType {
+            public var description = "Failed to get token server endpoint url."
+        }
 
         fileprivate func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
             let d = Deferred<Maybe<SyncUnlockInfo>>()
@@ -947,8 +951,13 @@ open class BrowserProfile: Profile {
                     d.fill(Maybe(failure: ScopedKeyError()))
                     return
                 }
-                // @TODO remove hard-coded URL
-                d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: "https://token.services.mozilla.com/")))
+
+                guard case .success(let tokenServerEndpointURL) = RustFirefoxAccounts.shared.accountManager.getTokenServerEndpointURL() else {
+                    d.fill(Maybe(failure: SyncUnlockGetURLError()))
+                    return
+                }
+
+                d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString)))
             }
             return d
         }
