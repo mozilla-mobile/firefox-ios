@@ -33,14 +33,17 @@ fileprivate enum RemoteCommand: String {
 }
 
 class FxAWebView: UIViewController, WKNavigationDelegate {
-    private var webView: WKWebView
     var dismissType: DismissType = .dismiss
-    let pageType: FxAPageType
-    fileprivate var baseURL: URL?
-    private var helpBrowser: WKWebView?
 
-    init(pageType: FxAPageType) {
+    fileprivate var webView: WKWebView
+    fileprivate let pageType: FxAPageType
+    fileprivate var baseURL: URL?
+    fileprivate var helpBrowser: WKWebView?
+    fileprivate let profile: Profile
+
+    init(pageType: FxAPageType, profile: Profile) {
         self.pageType = pageType
+        self.profile = profile
 
         let contentController = WKUserContentController()
         if let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) {
@@ -178,6 +181,11 @@ extension FxAWebView: WKScriptMessageHandler {
         if let declinedSyncEngines = data["declinedSyncEngines"] as? [String] {
             // Stash the declined engines so on first sync we can disable them!
             UserDefaults.standard.set(declinedSyncEngines, forKey: "fxa.cwts.declinedSyncEngines")
+
+            for engineName in declinedSyncEngines {
+                let prefName = "sync.engine.\(engineName).enabled"
+                profile.prefs.setBool(false, forKey: prefName)
+            }
         }
 
         if let engines = data["offeredSyncEngines"] as? [String], engines.count > 0 {
@@ -189,6 +197,8 @@ extension FxAWebView: WKScriptMessageHandler {
 
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
         RustFirefoxAccounts.shared.accountManager.finishAuthentication(authData: auth) { _ in
+            self.profile.syncManager.onAddedAccount()
+            
             // ask for push notification
             KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
             let center = UNUserNotificationCenter.current()
