@@ -142,12 +142,13 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         // https://github.com/mozilla-mobile/firefox-ios/pull/5274#issuecomment-516111508
         EarlGrey.selectElement(with: grey_accessibilityID("Settings.TrackingProtectionOption.BlockListStrict")).perform(grey_tap())
 
+        // Accept the warning alert when Strict mode is enabled
+        tester().waitForAnimationsToFinish()
+        tester().tapView(withAccessibilityLabel: "OK, Got It")
         closeTPSetting()
     }
 
     func testStrictTrackingProtection() {
-        enableStrictMode()
-
         openTPSetting()
         EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
         closeTPSetting()
@@ -169,7 +170,12 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         // Now with the TP enabled, the image should be blocked
         checkStrictTrackingProtection(isBlocking: true)
         openTPSetting()
+        disableStrictTP()
         closeTPSetting()
+    }
+
+    func disableStrictTP() {
+        EarlGrey.selectElement(with: grey_accessibilityID("Settings.TrackingProtectionOption.BlockListBasic")).perform(grey_tap())
     }
 
     func testWhitelist() {
