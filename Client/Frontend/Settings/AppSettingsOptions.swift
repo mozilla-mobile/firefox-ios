@@ -46,7 +46,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAWebView(pageType: .emailLoginFlow)
+        let viewController = FxAWebView(pageType: .emailLoginFlow, profile: profile)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
