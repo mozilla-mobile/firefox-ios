@@ -1987,7 +1987,7 @@ extension BrowserViewController: IntroViewControllerDelegate {
     func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         guard profile.hasSyncableAccount() else {
-            let vc = FxAWebView(pageType: flowType)
+            let vc = FxAWebView(pageType: flowType, profile: profile)
             vc.dismissType = .dismiss
             return vc
         }
