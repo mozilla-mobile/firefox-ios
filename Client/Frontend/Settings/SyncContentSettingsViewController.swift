@@ -55,11 +55,6 @@ class DisconnectSetting: Setting {
         })
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
-                RustFirefoxAccounts.shared.accountManager.logout() { _ in
-                    assert(RustFirefoxAccounts.shared.accountManager.accountProfile() == nil)
-                    assert(RustFirefoxAccounts.shared.accountManager.hasAccount() == false)
-                }
-
                 FxALoginHelper.sharedInstance.disconnect()
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
 
