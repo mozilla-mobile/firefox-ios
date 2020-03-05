@@ -181,11 +181,6 @@ extension FxAWebView: WKScriptMessageHandler {
         if let declinedSyncEngines = data["declinedSyncEngines"] as? [String] {
             // Stash the declined engines so on first sync we can disable them!
             UserDefaults.standard.set(declinedSyncEngines, forKey: "fxa.cwts.declinedSyncEngines")
-
-            for engineName in declinedSyncEngines {
-                let prefName = "sync.engine.\(engineName).enabled"
-                profile.prefs.setBool(false, forKey: prefName)
-            }
         }
 
         if let engines = data["offeredSyncEngines"] as? [String], engines.count > 0 {
