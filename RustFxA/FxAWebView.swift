@@ -33,17 +33,17 @@ fileprivate enum RemoteCommand: String {
 }
 
 class FxAWebView: UIViewController, WKNavigationDelegate {
-    var dismissType: DismissType = .dismiss
-
+    fileprivate let dismissType: DismissType
     fileprivate var webView: WKWebView
     fileprivate let pageType: FxAPageType
     fileprivate var baseURL: URL?
     fileprivate var helpBrowser: WKWebView?
     fileprivate let profile: Profile
 
-    init(pageType: FxAPageType, profile: Profile) {
+    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType) {
         self.pageType = pageType
         self.profile = profile
+        self.dismissType = dismissalStyle
 
         let contentController = WKUserContentController()
         if let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) {
@@ -221,12 +221,6 @@ extension FxAWebView: WKScriptMessageHandler {
 
         RustFirefoxAccounts.shared.accountManager.handlePasswordChanged(newSessionToken: sessionToken) {
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-        }
-
-        if dismissType == .dismiss {
-            dismiss(animated: true)
-        } else {
-            navigationController?.popToRootViewController(animated: true)
         }
     }
 
