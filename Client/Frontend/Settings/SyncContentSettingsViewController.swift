@@ -22,7 +22,7 @@ class ManageFxAccountSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAWebView(pageType: .settingsPage, profile: profile)
+        let viewController = FxAWebView(pageType: .settingsPage, profile: profile, dismissalStyle: .popToRootVC)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
