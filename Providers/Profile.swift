@@ -505,7 +505,7 @@ open class BrowserProfile: Profile {
                 constellation.sendEventToDevice(targetDeviceId: id, e: .sendTab(title: title, url: item.url))
             }
         }
-        return Success()
+        return succeed()
     }
 
     lazy var logins: RustLogins = {
