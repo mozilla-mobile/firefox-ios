@@ -70,6 +70,10 @@ class DevicePickerViewController: UITableViewController {
             self?.refreshControl?.endRefreshing()
         }
 
+        RustFirefoxAccounts.startup() { shared in
+            shared.accountManager.deviceConstellation()?.refreshState()
+        }
+
         loadList()
     }
 
@@ -86,6 +90,13 @@ class DevicePickerViewController: UITableViewController {
                 return
             }
             guard let self = self else { return }
+
+            let currentIds = self.devices.map { $0.id ?? "" }.sorted()
+            let newIds = state.remoteDevices.map { $0.id }.sorted()
+            if currentIds.count > 0, currentIds == newIds {
+                return
+            }
+
             self.devices = state.remoteDevices.map { d in
                 let t = "\(d.deviceType)"
                 return RemoteDevice(id: d.id, name: d.displayName, type: t, isCurrentDevice: d.isCurrentDevice, lastAccessTime: d.lastAccessTime, availableCommands: nil)
