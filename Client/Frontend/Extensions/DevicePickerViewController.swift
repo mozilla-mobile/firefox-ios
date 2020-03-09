@@ -70,7 +70,9 @@ class DevicePickerViewController: UITableViewController {
             self?.refreshControl?.endRefreshing()
         }
 
-        loadList()
+        RustFirefoxAccounts.startup() { shared in
+            shared.accountManager.deviceConstellation()?.refreshState()
+        }
     }
 
     deinit {
