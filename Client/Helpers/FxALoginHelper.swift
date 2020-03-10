@@ -152,7 +152,10 @@ class FxALoginHelper {
 
 extension FxALoginHelper {
     func disconnect() {
-        RustFirefoxAccounts.shared.accountManager.logout() { _ in }
+        RustFirefoxAccounts.shared.accountManager.logout() { _ in
+            self.profile?.prefs.removeObjectForKey(RustFirefoxAccounts.PrefKeySyncAuthStateUniqueID)
+        }
+
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
 
         // According to https://developer.apple.com/documentation/uikit/uiapplication/1623093-unregisterforremotenotifications
