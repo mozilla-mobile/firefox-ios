@@ -8,7 +8,7 @@ import Shared
 class UpdateViewModel {
     //  Internal vars
     var updateCoverSheetModel: UpdateCoverSheetModel?
-    var shouldStartBrowsing: (() -> Void)?
+    var startBrowsing: (() -> Void)?
     
     // Constants
     let updates: [Update] = [Update(updateImage: #imageLiteral(resourceName: "darkModeUpdate"), updateText: "\(Strings.CoverSheetV22DarkModeTitle)\n\n\(Strings.CoverSheetV22DarkModeDescription)")]

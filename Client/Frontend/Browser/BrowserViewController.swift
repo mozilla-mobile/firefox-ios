@@ -85,7 +85,7 @@ class BrowserViewController: UIViewController {
     var scrollController = TabScrollingController()
 
     fileprivate var keyboardState: KeyboardState?
-
+    fileprivate var hasTriedToPresentETPAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -444,7 +444,7 @@ class BrowserViewController: UIViewController {
 
         if !NightModeHelper.isActivated(profile.prefs) {
             if #available(iOS 13.0, *) {
-                if (ThemeManager.instance.systemThemeIsOn) {
+                if ThemeManager.instance.systemThemeIsOn {
                     let userInterfaceStyle = traitCollection.userInterfaceStyle
                     ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
                 }
@@ -576,6 +576,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
+        presentETPCoverSheetViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
         screenshotHelper.takePendingScreenshots(tabManager.tabs)
@@ -1138,7 +1139,7 @@ class BrowserViewController: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if #available(iOS 13.0, *) {
-            if (ThemeManager.instance.systemThemeIsOn) {
+            if ThemeManager.instance.systemThemeIsOn {
                 let userInterfaceStyle = traitCollection.userInterfaceStyle
                 ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
             }
@@ -1925,13 +1926,49 @@ extension BrowserViewController: IntroViewControllerDelegate {
         return false
     }
     
+    func presentETPCoverSheetViewController(_ force: Bool = false) {
+        guard !hasTriedToPresentETPAlready else {
+            return
+        }
+        hasTriedToPresentETPAlready = true
+        let cleanInstall = UpdateViewModel.isCleanInstall(userPrefs: profile.prefs)
+        let shouldShow = ETPViewModel.shouldShowETPCoverSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall)
+        guard force || shouldShow else {
+            return
+        }
+        let etpCoverSheetViewController = ETPCoverSheetViewController()
+        if topTabsVisible {
+            etpCoverSheetViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
+            etpCoverSheetViewController.modalPresentationStyle = .formSheet
+        } else {
+            etpCoverSheetViewController.modalPresentationStyle = .fullScreen
+        }
+        etpCoverSheetViewController.viewModel.startBrowsing = {
+            etpCoverSheetViewController.dismiss(animated: true) {
+            if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                _ = self.navigationController?.popToRootViewController(animated: true)
+                }
+            }
+        }
+        etpCoverSheetViewController.viewModel.goToSettings = {
+            etpCoverSheetViewController.dismiss(animated: true) {
+                let settingsTableViewController = ContentBlockerSettingViewController(prefs: self.profile.prefs)
+                settingsTableViewController.profile = self.profile
+                settingsTableViewController.tabManager = self.tabManager
+                settingsTableViewController.settingsDelegate = self
+                self.presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: settingsTableViewController)
+            }
+        }
+        present(etpCoverSheetViewController, animated: true, completion: nil)
+    }
+    
     @discardableResult func presentUpdateViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
         let cleanInstall = UpdateViewModel.isCleanInstall(userPrefs: profile.prefs)
         let coverSheetSupportedAppVersion = UpdateViewModel.coverSheetSupportedAppVersion
         if force || UpdateViewModel.shouldShowUpdateSheet(userPrefs: profile.prefs, isCleanInstall: cleanInstall, supportedAppVersions: coverSheetSupportedAppVersion) {
             let updateViewController = UpdateViewController()
             
-            updateViewController.viewModel.shouldStartBrowsing = {
+            updateViewController.viewModel.startBrowsing = {
                 updateViewController.dismiss(animated: true) {
                 if self.navigationController?.viewControllers.count ?? 0 > 1 {
                     _ = self.navigationController?.popToRootViewController(animated: true)
@@ -1996,20 +2033,10 @@ extension BrowserViewController: IntroViewControllerDelegate {
         settingsTableViewController.profile = profile
         return settingsTableViewController
     }
-
+    
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
-        let vcToPresent = getSignInViewController(fxaOptions, isSignUpFlow: isSignUpFlow)
-        let closeBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .plain, target: self, action: #selector(dismissSignInViewController))
-        vcToPresent.navigationItem.leftBarButtonItem = closeBarButtonItem
-        let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
-        themedNavigationController.navigationBar.isTranslucent = false
-        if topTabsVisible {
-            themedNavigationController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            themedNavigationController.modalPresentationStyle = .formSheet
-        } else {
-            themedNavigationController.modalPresentationStyle = .fullScreen
-        }
-        self.present(themedNavigationController, animated: true, completion: nil)
+        let signInViewController = getSignInViewController(fxaOptions, isSignUpFlow: isSignUpFlow)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: signInViewController)
     }
 
     @objc func dismissSignInViewController() {
@@ -2150,7 +2177,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 pasteboard.url = url as URL
                 let changeCount = pasteboard.changeCount
                 let application = UIApplication.shared
-                var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
+                var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
                 taskId = application.beginBackgroundTask (expirationHandler: {
                     application.endBackgroundTask(taskId)
                 })
@@ -2229,6 +2256,26 @@ extension BrowserViewController {
         if error == nil {
             LeanPlumClient.shared.track(event: .saveImage)
         }
+    }
+    
+    func presentThemedViewController(navItemLocation: NavigationItemLocation, navItemText: NavigationItemText, vcBeingPresented: UIViewController) {
+        let vcToPresent = vcBeingPresented
+        let buttonItem = UIBarButtonItem(title: navItemText.localizedString(), style: .plain, target: self, action: #selector(dismissSignInViewController))
+        switch navItemLocation {
+        case .Left:
+            vcToPresent.navigationItem.leftBarButtonItem = buttonItem
+        case .Right:
+            vcToPresent.navigationItem.rightBarButtonItem = buttonItem
+        }
+        let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
+        themedNavigationController.navigationBar.isTranslucent = false
+        if topTabsVisible {
+            themedNavigationController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
+            themedNavigationController.modalPresentationStyle = .formSheet
+        } else {
+            themedNavigationController.modalPresentationStyle = .fullScreen
+        }
+        self.present(themedNavigationController, animated: true, completion: nil)
     }
 }
 
