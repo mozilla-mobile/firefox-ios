@@ -658,7 +658,6 @@
 		E67D57031D527449003917B1 /* BatchingClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E67D57021D527449003917B1 /* BatchingClient.swift */; };
 		E683F0A61E92E0820035D990 /* MockableHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E683F0A51E92E0820035D990 /* MockableHistory.swift */; };
 		E683F0C21E93D4E90035D990 /* DictionaryExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */; };
-		E689C6FA1E0C6E98008BAADB /* FxAContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */; };
 		E689C7301E0C7617008BAADB /* NSAttributedStringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E689C72F1E0C7617008BAADB /* NSAttributedStringExtensions.swift */; };
 		E68AEDB01B18F81A00133D99 /* SwipeAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */; };
 		E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */; };
@@ -1796,7 +1795,6 @@
 		E67D57021D527449003917B1 /* BatchingClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatchingClient.swift; sourceTree = "<group>"; };
 		E683F0A51E92E0820035D990 /* MockableHistory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockableHistory.swift; sourceTree = "<group>"; };
 		E683F0C11E93D4E90035D990 /* DictionaryExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryExtensions.swift; sourceTree = "<group>"; };
-		E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAContentViewController.swift; sourceTree = "<group>"; };
 		E689C72F1E0C7617008BAADB /* NSAttributedStringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSAttributedStringExtensions.swift; path = Extensions/NSAttributedStringExtensions.swift; sourceTree = "<group>"; };
 		E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeAnimator.swift; sourceTree = "<group>"; };
 		E68E39BD1C46F42000B85F42 /* AppSettingsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppSettingsTableViewController.swift; sourceTree = "<group>"; };
@@ -2318,7 +2316,6 @@
 				0B62EFD11AD63CD100ACB9CD /* Clearables.swift */,
 				D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */,
 				3B39EDCA1E16E1AA00EF029F /* CustomSearchViewController.swift */,
-				E689C6F91E0C6E98008BAADB /* FxAContentViewController.swift */,
 				D8AA923321A602DC002605C0 /* HomePageSettingViewController.swift */,
 				D81E45121F82C56C004EFFBA /* NewTabContentSettingsViewController.swift */,
 				2F44FCCA1A9E972E00FD20CC /* SearchEnginePicker.swift */,
@@ -5142,7 +5139,6 @@
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
 				E60D03181D511398002FE3F6 /* SyncStatusResolver.swift in Sources */,
 				435D660723D7962C0046EFA2 /* UpdateCoverSheetTableViewCell.swift in Sources */,
-				E689C6FA1E0C6E98008BAADB /* FxAContentViewController.swift in Sources */,
 				C4E3983D1D21F1E7004E89BA /* TopTabsViews.swift in Sources */,
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,
 				E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */,
