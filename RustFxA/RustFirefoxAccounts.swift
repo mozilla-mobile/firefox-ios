@@ -53,6 +53,19 @@ open class RustFirefoxAccounts {
         }
     }
 
+    public static let PrefKeySyncAuthStateUniqueID = "PrefKeySyncAuthStateUniqueID"
+    private static var syncAuthStateUniqueId: String {
+        let id: String
+        let key = RustFirefoxAccounts.PrefKeySyncAuthStateUniqueID
+        if let _id = prefs.stringForKey(key) {
+            id = _id
+        } else {
+            id = UUID().uuidString
+            prefs.setString(id, forKey: key)
+        }
+        return id
+    }
+
     private init() {
         let config: MozillaAppServices.FxAConfig
         if prefs.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition {
@@ -71,7 +84,7 @@ open class RustFirefoxAccounts {
 
         syncAuthState = FirefoxAccountSyncAuthState(
             cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",
-                                            withLabel: "bobo" /* TODO: we probably want a random string associated with the current account here*/,
+                                            withLabel: RustFirefoxAccounts.syncAuthStateUniqueId,
                 factory: syncAuthStateCachefromJSON))
 
         NotificationCenter.default.addObserver(forName: .accountAuthenticated,  object: nil, queue: .main) { [weak self] notification in
