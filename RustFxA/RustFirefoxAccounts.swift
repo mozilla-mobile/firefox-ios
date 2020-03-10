@@ -56,10 +56,10 @@ open class RustFirefoxAccounts {
     private init() {
         let config: MozillaAppServices.FxAConfig
         if prefs.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition {
-             config = FxAConfig(contentUrl: "https://accounts.firefox.com.cn", clientId: clientID, redirectUri: redirectURL)
-         } else {
-             config = FxAConfig.release(clientId: clientID, redirectUri: redirectURL)
-         }
+            config = FxAConfig.china(clientId: clientID, redirectUri: redirectURL)
+        } else {
+            config = FxAConfig.release(clientId: clientID, redirectUri: redirectURL)
+        }
 
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
         let deviceConfig = DeviceConfig(name:  DeviceInfo.defaultClientName(), type: type, capabilities: [.sendTab])
