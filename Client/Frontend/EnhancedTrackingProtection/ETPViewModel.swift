@@ -29,48 +29,41 @@ class ETPViewModel {
         let maxSessionCount = 2
         var shouldShow = false
         // Default type is upgrade as in user is upgrading from a different version of the app
-        var type: ETPCoverSheetShowType = .Upgrade
+        var type: ETPCoverSheetShowType = isCleanInstall ? .CleanInstall : .Upgrade
         var sessionCount: Int32 = 0
         if let etpShowType = userPrefs.stringForKey(PrefsKeys.KeyETPCoverSheetShowType) {
             type = ETPCoverSheetShowType(rawValue: etpShowType) ?? .Unknown
-            if type == .DoNotShow {
-                return false
-            }
         }
         // Get the session count from preferences
         if let currentSessionCount = userPrefs.intForKey(PrefsKeys.KeyInstallSession) {
             sessionCount = currentSessionCount
         }
         // Two flows: Coming from clean install or otherwise upgrade flow
-        if isCleanInstall {
+        switch type {
+        case .CleanInstall:
             // We don't show it but save the 1st clean install session number
-            userPrefs.setInt(1, forKey: PrefsKeys.KeyInstallSession)
-            userPrefs.setString(ETPCoverSheetShowType.CleanInstall.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
-        } else {
-            switch type {
-            case .CleanInstall:
-                if sessionCount < maxSessionCount {
-                    // Increment the session number 
-                    userPrefs.setInt(sessionCount + 1, forKey: PrefsKeys.KeyInstallSession)
-                } else if sessionCount == maxSessionCount {
-                    userPrefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
-                    shouldShow = true
-                }
-                break
-            case .Upgrade:
-                // This will happen if its not a clean install and we are upgrading from another version.
-                // This is where we tag it as an upgrade flow and try to present it for specific version(s) Eg. v24.0
-                userPrefs.setString(ETPCoverSheetShowType.Upgrade.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
-                if supportedAppVersions.contains(currentAppVersion) {
-                    userPrefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
-                    shouldShow = true
-                }
-                break
-            case .DoNotShow:
-                break
-            case .Unknown:
-                break
+            if sessionCount < maxSessionCount {
+                // Increment the session number
+                userPrefs.setInt(sessionCount + 1, forKey: PrefsKeys.KeyInstallSession)
+                userPrefs.setString(ETPCoverSheetShowType.CleanInstall.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+            } else if sessionCount == maxSessionCount {
+                userPrefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+                shouldShow = true
             }
+            break
+        case .Upgrade:
+            // This will happen if its not a clean install and we are upgrading from another version.
+            // This is where we tag it as an upgrade flow and try to present it for specific version(s) Eg. v24.0
+            userPrefs.setString(ETPCoverSheetShowType.Upgrade.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+            if supportedAppVersions.contains(currentAppVersion) {
+                userPrefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+                shouldShow = true
+            }
+            break
+        case .DoNotShow:
+            break
+        case .Unknown:
+            break
         }
         
         return shouldShow
