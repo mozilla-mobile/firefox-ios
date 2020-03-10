@@ -194,7 +194,7 @@ extension UnifiedTelemetry {
         case whatsNew = "whats-new"
         case dismissUpdateCoverSheetAndStartBrowsing = "dismissed-update-cover_sheet_and_start_browsing"
         case dismissedUpdateCoverSheet = "dismissed-update-cover-sheet"
-        case dismissedETPCoverSheet = "dismissed-enhanced-tracking-protection-sheet"
+        case dismissedETPCoverSheet = "dismissed-etp-sheet"
         case dismissETPCoverSheetAndStartBrowsing = "dismissed-etp-cover-sheet-and-start-browsing"
         case dismissETPCoverSheetAndGoToSettings = "dismissed-update-cover-sheet-and-go-to-settings"
         case dismissedOnboarding = "dismissed-onboarding"
