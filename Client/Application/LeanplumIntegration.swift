@@ -42,7 +42,7 @@ enum LPEvent: String {
     case dismissUpdateCoverSheetAndStartBrowsing = "E_Dismissed_Update_Cover_Sheet_And_Start_Browsing"
     case dismissETPCoverSheetAndGoToSettings = "E_Dismissed_Update_Cover_Sheet_And_Go_To_Settings"
     case dismissedUpdateCoverSheet = "E_Dismissed_Update_Cover_Sheet"
-    case dismissedETPCoverSheet = "E_Dismissed_Enhanced_Tracking_Protection_Sheet"
+    case dismissedETPCoverSheet = "E_Dismissed_ETP_Sheet"
     case dismissETPCoverSheetAndStartBrowsing = "E_Dismissed_ETP_Cover_Sheet_And_Start_Browsing"
     case dismissedOnboarding = "E_Dismissed_Onboarding"
     case dismissedOnboardingShowLogin = "E_Dismissed_Onboarding_Showed_Login"
