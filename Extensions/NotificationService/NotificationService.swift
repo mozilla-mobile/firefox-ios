@@ -133,7 +133,7 @@ extension SyncDataDisplay {
     }
 
     func displayAccountVerifiedNotification() {
-        #if MOZ_CHANNEL_BETA
+        #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
             return
         #endif
@@ -141,7 +141,7 @@ extension SyncDataDisplay {
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
-        #if MOZ_CHANNEL_BETA
+        #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
             Sentry.shared.send(message: "SentTab error: \(debugInfo)")
             return
@@ -179,7 +179,7 @@ extension SyncDataDisplay {
 
         if tabs.count == 0 {
             title = Strings.SentTab_NoTabArrivingNotification_title
-            #if MOZ_CHANNEL_BETA
+            #if MOZ_CHANNEL_BETA || DEBUG
                 body = "DEBUG: Sent Tabs with no tab"
                 Sentry.shared.send(message: "SentTab error: no tab")
             #else
