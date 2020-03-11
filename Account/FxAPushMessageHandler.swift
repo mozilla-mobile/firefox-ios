@@ -38,7 +38,7 @@ extension FxAPushMessageHandler {
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
             let payload = userInfo["body"] as? String else {
-                return deferMaybe(PushMessageError.messageIncomplete)
+                return deferMaybe(PushMessageError.messageIncomplete("missing con or body"))
         }
         // ver == endpointURL path, chid == channel id, aps == alert text and content_available.
 
@@ -63,7 +63,10 @@ extension FxAPushMessageHandler {
             fxa.accountManager.deviceConstellation()?.processRawIncomingAccountEvent(pushPayload: string) {
                 result in
                 guard case .success(let events) = result else {
-                    deferred.fill(Maybe(failure: PushMessageError.messageIncomplete))
+                    if case .failure(let error) = result {
+                        let err = PushMessageError.messageIncomplete(error.localizedDescription)
+                        deferred.fill(Maybe(failure: err))
+                    }
                     return
                 }
                 events.forEach { event in
@@ -174,7 +177,7 @@ typealias PushMessageResult = Deferred<Maybe<PushMessage>>
 
 enum PushMessageError: MaybeErrorType {
     case notDecrypted
-    case messageIncomplete
+    case messageIncomplete(String)
     case unimplemented(PushMessageType)
     case timeout
     case accountError
@@ -184,7 +187,7 @@ enum PushMessageError: MaybeErrorType {
     public var description: String {
         switch self {
         case .notDecrypted: return "notDecrypted"
-        case .messageIncomplete: return "messageIncomplete"
+        case .messageIncomplete(let message): return "messageIncomplete=\(message)"
         case .unimplemented(let what): return "unimplemented=\(what)"
         case .timeout: return "timeout"
         case .accountError: return "accountError"
