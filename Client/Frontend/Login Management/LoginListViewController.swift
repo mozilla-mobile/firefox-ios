@@ -192,9 +192,14 @@ class LoginListViewController: SensitiveViewController {
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
 
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            searchController.searchBar.barStyle = .black
+         if let textFieldInsideSearchBar = self.searchController.searchBar.value(forKey: "searchField") as? UITextField,
+            let glassIconView = textFieldInsideSearchBar.leftView as? UIImageView {
+            //Magnifying glass
+            glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+            glassIconView.tintColor = UIColor.theme.tableView.headerTextLight
+            
+            let isDarkTheme = ThemeManager.instance.currentName == .dark
+            textFieldInsideSearchBar.defaultTextAttributes = isDarkTheme  ? [NSAttributedString.Key.foregroundColor: UIColor.white] : [NSAttributedString.Key.foregroundColor: UIColor.black]
         }
     }
 
