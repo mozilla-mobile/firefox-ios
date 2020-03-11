@@ -152,6 +152,7 @@ open class RustFirefoxAccounts {
         }
         
         NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
+        NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: self)
     }
 }
 
