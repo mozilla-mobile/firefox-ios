@@ -1,0 +1,121 @@
+{
+    "license": "Copyright 2010-2015 Disconnect, Inc. / This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. / This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. / You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.",
+    "categories": {
+        "Disconnect": [
+            {
+                "Facebook": {
+                    "dnt": "bogus",
+                    "http://www.facebook.com/": [
+                        "facebook.com",
+                        "facebook.de",
+                        "facebook.fr",
+                        "facebook.net",
+                        "fb.com",
+                        "atlassolutions.com",
+                        "friendfeed.com"
+                    ]
+                }
+            },
+            {
+                "Google": {
+                    "dnt": "eff",
+                    "http://www.google.com/": [
+                        "2mdn.net",
+                        "admeld.com",
+                        "admob.com",
+                        "cc-dt.com",
+                        "destinationurl.com",
+                        "developers.google.com",
+                        "doubleclick.net",
+                        "gmail.com",
+                        "google-analytics.com",
+                        "adwords.google.com",
+                        "mail.google.com",
+                        "inbox.google.com",
+                        "plus.google.com",
+                        "plusone.google.com",
+                        "voice.google.com",
+                        "wave.google.com",
+                        "googleadservices.com",
+                        "googlemail.com",
+                        "googlesyndication.com",
+                        "googletagservices.com",
+                        "invitemedia.com",
+                        "orkut.com",
+                        "postrank.com",
+                        "smtad.net",
+                        "teracent.com",
+                        "teracent.net",
+                        "ytsa.net"
+                    ]
+                }
+            },
+            {
+                "ItIsATracker": {
+                    "dnt": "",
+                    "https://itisatracker.com/": [
+                        "itisatracker.com"
+                    ]
+                }
+            },
+            {
+                "Twitter": {
+                    "https://twitter.com/": [
+                        "backtype.com",
+                        "crashlytics.com",
+                        "tweetdeck.com",
+                        "twimg.com",
+                        "twitter.com",
+                        "twitter.jp"
+                    ]
+                }
+            }
+        ],
+        "Advertising": [
+            {
+                "[x+1]": {
+                    "http://www.xplusone.com/": [
+                        "ru4.com",
+                        "xplusone.com"
+                    ]
+                }
+            },
+            {
+                "2leep.com": {
+                    "http://2leep.com/": [
+                        "2leep.com"
+                    ]
+                }
+            }
+        ]
+    },
+    "filteringRules": {
+        "apis.google.com": [
+            "\\/js\\/plusone\\.js",
+            "Disconnect"
+        ],
+        "www.google.com": [
+            "\\/uds\\/afs",
+            "Disconnect"
+        ],
+        "msg.yahoo.com": [
+            "insider\\.msg\\.yahoo\\.com",
+            "Advertising"
+        ]
+    },
+    "hardeningRules": [],
+    "moreRules": [
+        [
+            "^https?:\\/\\/www\\.google\\.com\\/search\\?q=(.*?)&.*?sourceid=chrome&ie=.*",
+            "https://proxy.disconnect.me/search?s=d2hhdGlmaWRpZHRoaXMx&q=$1"
+        ],
+        [
+            "^http:\\/\\/www\\.bing\\.com\\/search\\?setmkt=.*?&q=(.*)",
+            "https://proxy.disconnect.me/search?s=d2hhdGlmaWRpZHRoaXMx&q=$1"
+        ],
+        [
+            "^http:\\/\\/search\\.yahoo\\.com\\/search\\?ei=.*?&fr=crmas&p=(.*)",
+            "https://proxy.disconnect.me/search?s=d2hhdGlmaWRpZHRoaXMx&q=$1"
+        ]
+    ]
+}

@@ -1,0 +1,170 @@
+<!doctype html>
+<html><head>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<style type='text/css'>
+		html { font-family:Helvetica; color:#222; }
+		h1 { color:steelblue; font-size:24px; margin-top:0px; }
+		button { margin:0 3px 10px; font-size:12px; }
+		.logLine { border-bottom:1px solid #ccc; padding:4px 2px; font-family:courier; font-size:11px; }
+	</style>
+</head><body>
+	<h1 style="width:300px;height:35px;text-align:center;">Adjust Web View Demo</h1>
+
+    <script>
+	window.onerror = function(err) { }
+
+    function setupWebViewJavascriptBridge(callback) {
+        if (window.WebViewJavascriptBridge) { return callback(WebViewJavascriptBridge); }
+        if (window.WVJBCallbacks) { return window.WVJBCallbacks.push(callback); }
+        window.WVJBCallbacks = [callback];
+        var WVJBIframe = document.createElement('iframe');
+        WVJBIframe.style.display = 'none';
+        WVJBIframe.src = 'https://__bridge_loaded__';
+        document.documentElement.appendChild(WVJBIframe);
+        setTimeout(function() { document.documentElement.removeChild(WVJBIframe) }, 0)
+    }
+
+    setupWebViewJavascriptBridge(function(bridge) {
+        // Set up Facebook Pixel stuff.
+        let config = {};
+        config = {
+            fbid: '891530151031248',
+            appid: '308873563017393',
+            domain: null,
+            fbqq: null
+        };
+
+        let fbqu = 'https://'
+        + (config.domain || 'connect.facebook.net')
+        + '/en_US/fbevents.js?'
+        + (config.fbqq || '');
+
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script',fbqu);
+
+        // Please make sure to call 'init' method first.
+        config.fbid && fbq('init', config.fbid.toString());
+        // And right after 'init', make a call to 'set' method BEFORE performing any tracking!
+        config.fbid && fbq('set', 'mobileBridge', config.fbid.toString(), config.appid.toString());
+
+        let adjustConfig = new AdjustConfig('2fm9gkqubvpc', AdjustConfig.EnvironmentSandbox);
+        adjustConfig.setLogLevel(AdjustConfig.LogLevelVerbose);
+
+        // Set up Facebook Pixel mappings.
+        adjustConfig.addFbPixelMapping('fb_mobile_search', 'g3mfiw');
+        adjustConfig.addFbPixelMapping('fb_mobile_purchase', 'a4fd35');
+        adjustConfig.setFbPixelDefaultEventToken('34vgg9');
+
+        Adjust.appDidLaunch(adjustConfig);
+
+        var btnTrackSimpleEvent = document.getElementById('btnTrackSimpleEvent')
+        btnTrackSimpleEvent.onclick = function(e) {
+            e.preventDefault()
+                                 config.fbid && fbq('track', 'Search', {
+                                                    search_string: 'search_string_value',
+                                                    content_ids: ['123', '456'],
+                                                    content_type: 'content_type_value'
+                                                    });
+        }
+
+        var btnTrackRevenueEvent = document.getElementById('btnTrackRevenueEvent')
+        btnTrackRevenueEvent.onclick = function(e) {
+            e.preventDefault()
+            // Track FB 'Purchase' event.
+            config.fbid && fbq('track', 'Purchase', {
+                                contents: [{
+                                     id: 'content_id_value_2q_10p',
+                                     quantity: 1,
+                                     item_price: 10}],});
+        }
+
+        var btnTrackCallbackEvent = document.getElementById('btnTrackNonExistingEventOne')
+        btnTrackCallbackEvent.onclick = function(e) {
+            e.preventDefault()
+            // Track non existing FB event with no mapping (should default to predefined Adjust event token).
+            config.fbid && fbq('track', 'fb_no_mapping', config.fbid.toString());
+        }
+
+        var btnTrackPartnerEvent = document.getElementById('btnTrackNonExistingEventTwo')
+        btnTrackPartnerEvent.onclick = function(e) {
+            e.preventDefault()
+            // Track non existing FB event with no mapping (should default to predefined Adjust event token).
+            config.fbid && fbq('track', 'fb_no_mapping_again', config.fbid.toString());
+        }
+
+        var btnEnableOfflineMode = document.getElementById('btnEnableOfflineMode')
+        btnEnableOfflineMode.onclick = function(e) {
+            e.preventDefault()
+            Adjust.setOfflineMode(true)
+        }
+
+        var btnDisableOfflineMode = document.getElementById('btnDisableOfflineMode')
+        btnDisableOfflineMode.onclick = function(e) {
+            e.preventDefault()
+            Adjust.setOfflineMode(false)
+        }
+
+        var btnEnableSdk = document.getElementById('btnEnableSdk')
+        btnEnableSdk.onclick = function(e) {
+            e.preventDefault()
+            Adjust.setEnabled(true)
+        }
+
+        var btnDisableSdk = document.getElementById('btnDisableSdk')
+        btnDisableSdk.onclick = function(e) {
+            e.preventDefault()
+            Adjust.setEnabled(false)
+        }
+
+        var btnIsSdkEnabled = document.getElementById('btnIsSdkEnabled')
+        btnIsSdkEnabled.onclick = function(e) {
+            e.preventDefault()
+            Adjust.isEnabled(function(isEnabled) {
+                alert('Is SDK enabled? ' + isEnabled)
+            })
+        }
+
+        var btnGetIdfa = document.getElementById('btnGetIdfa')
+        btnGetIdfa.onclick = function(e) {
+            e.preventDefault()
+            Adjust.getIdfa(function(idfa) {
+                alert('IDFA\n' + idfa)
+            })
+        }
+	})
+	</script>
+    <div id='buttons'>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnTrackSimpleEvent'>Track Simple event</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnTrackRevenueEvent'>Track Revenue event</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnTrackNonExistingEventOne'>Track Non-Existing Event</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnTrackNonExistingEventTwo'>Track Non-Existing Event</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnEnableOfflineMode'>Enable Offline mode</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnDisableOfflineMode'>Disable Offline mode</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnEnableSdk'>Enable SDK</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnDisableSdk'>Disable SDK</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnIsSdkEnabled'>Is SDK Enabled?</button>
+        </div>
+        <div style="width:300px;height:35px;text-align:center;">
+            <button id='btnGetIdfa'>Get IDFA</button>
+        </div>
+    </div>
+</body></html>

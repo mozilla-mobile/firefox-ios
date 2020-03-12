@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="NO">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FTRRotatedViewsViewController">
+            <connections>
+                <outlet property="lastTappedLabel" destination="mzq-BR-fSp" id="6fP-2i-6Kw"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nqm-2m-Upo">
+                    <rect key="frame" x="8" y="83" width="57" height="30"/>
+                    <state key="normal" title="Top Left">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onTopLeftTapped:" destination="-1" eventType="touchUpInside" id="V3W-P0-Cwj"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dNe-9e-MDT">
+                    <rect key="frame" x="8" y="629" width="81" height="30"/>
+                    <state key="normal" title="Bottom Left">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onBottomLeftTapped:" destination="-1" eventType="touchUpInside" id="1wJ-x8-qMy"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Fj-bt-b1h">
+                    <rect key="frame" x="277" y="629" width="90" height="30"/>
+                    <state key="normal" title="Bottom Right">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onBottomRightTapped:" destination="-1" eventType="touchUpInside" id="n3Z-G2-wjp"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IPy-36-loq">
+                    <rect key="frame" x="164" y="318.5" width="47" height="30"/>
+                    <state key="normal" title="Center">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onCenterTapped:" destination="-1" eventType="touchUpInside" id="LXD-Tq-ao4"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hqc-zD-3FI">
+                    <rect key="frame" x="301" y="83" width="66" height="30"/>
+                    <state key="normal" title="Top Right">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onTopRightTapped:" destination="-1" eventType="touchUpInside" id="0ub-tT-TuL"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Last tapped: None" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mzq-BR-fSp">
+                    <rect key="frame" x="117" y="414.5" width="141" height="21"/>
+                    <accessibility key="accessibilityConfiguration" label="lastTapped"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lzd-Q7-hq7">
+                    <rect key="frame" x="169.5" y="443.5" width="36" height="30"/>
+                    <state key="normal" title="Clear">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="clearTapped:" destination="-1" eventType="touchUpInside" id="xbh-WZ-ylF"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="centerY" secondItem="IPy-36-loq" secondAttribute="centerY" id="351-es-Mbq"/>
+                <constraint firstAttribute="bottom" secondItem="dNe-9e-MDT" secondAttribute="bottom" constant="8" id="A4E-aC-Xdu"/>
+                <constraint firstItem="Hqc-zD-3FI" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="83" id="D8o-ap-ZCb"/>
+                <constraint firstAttribute="centerY" secondItem="mzq-BR-fSp" secondAttribute="centerY" constant="-91.5" id="EvU-ly-6B8"/>
+                <constraint firstAttribute="bottom" secondItem="3Fj-bt-b1h" secondAttribute="bottom" constant="8" id="Ezb-Rg-gG8"/>
+                <constraint firstItem="nqm-2m-Upo" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="83" id="Jx9-0M-KHx"/>
+                <constraint firstItem="Lzd-Q7-hq7" firstAttribute="top" secondItem="mzq-BR-fSp" secondAttribute="bottom" constant="8" id="VPl-nu-Gle"/>
+                <constraint firstItem="nqm-2m-Upo" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="bTp-08-7Ub"/>
+                <constraint firstAttribute="centerX" secondItem="IPy-36-loq" secondAttribute="centerX" id="cXk-OZ-aBc"/>
+                <constraint firstAttribute="centerX" secondItem="Lzd-Q7-hq7" secondAttribute="centerX" id="iaF-GO-fra"/>
+                <constraint firstAttribute="trailing" secondItem="3Fj-bt-b1h" secondAttribute="trailing" constant="8" id="ikJ-PQ-oGN"/>
+                <constraint firstAttribute="trailing" secondItem="Hqc-zD-3FI" secondAttribute="trailing" constant="8" id="n6E-ql-XkK"/>
+                <constraint firstItem="dNe-9e-MDT" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="8" id="tVA-Qa-efm"/>
+                <constraint firstAttribute="centerX" secondItem="mzq-BR-fSp" secondAttribute="centerX" id="wdG-rG-ysm"/>
+            </constraints>
+            <point key="canvasLocation" x="140" y="155"/>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

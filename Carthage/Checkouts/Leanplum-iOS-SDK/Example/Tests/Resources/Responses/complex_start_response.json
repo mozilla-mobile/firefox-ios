@@ -1,0 +1,255 @@
+{
+    "response": [
+                 {
+                 "uploadUrl": "https:\/\/www.leanplum.com\/_ah\/upload\/AMmfu6a15D4VSJZ2A-e3RKZEc8g9WKloYEB-xPFxmXDIy0wBEizSSGK0hTb530CtzLv1FErtPrTJevGlZGRjbKLCHdRp91XxqXWJAOkfS4pSdYVsLzb5FMN9S0PfE_jlX0-0sPBy1ful\/ALBNUaYAAAAAWATOk-q46IF3wHhqcfvlw6lbX-LeGXqV\/",
+                 "interfaceRules": [
+
+                 ],
+                 "actionDefinitions": {
+                 "Confirm": {
+                 "values": {
+                 "Accept action": {
+                 "__name__": ""
+                 },
+                 "Message": "Confirmation message goes here.",
+                 "Cancel action": {
+                 "__name__": ""
+                 },
+                 "Accept text": "Yes",
+                 "Cancel text": "No",
+                 "Title": "LeanplumSample"
+                 },
+                 "kinds": {
+                 "Accept action": "ACTION",
+                 "Message": "TEXT",
+                 "Cancel action": "ACTION",
+                 "Accept text": "TEXT",
+                 "Cancel text": "TEXT",
+                 "Title": "TEXT"
+                 },
+                 "kind": 30000,
+                 "options": null
+                 },
+                 "Center Popup": {
+                 "values": {
+                 "Layout": {
+                 "Height": 250,
+                 "Width": 300
+                 },
+                 "Accept action": {
+                 "__name__": ""
+                 },
+                 "Message": {
+                 "Text": "Popup message goes here.",
+                 "Color": 4278190080
+                 },
+                 "Accept button": {
+                 "Text": "OK",
+                 "Text color": 4278221311,
+                 "Background color": 4294967295
+                 },
+                 "Background color": 4294967295,
+                 "Title": {
+                 "Text": "LeanplumSample",
+                 "Color": 4278190080
+                 },
+                 "Background image": ""
+                 },
+                 "kinds": {
+                 "Layout.Width": "NUMBER",
+                 "Accept action": "ACTION",
+                 "Message": "GROUP",
+                 "Message.Color": "COLOR",
+                 "Accept button": "GROUP",
+                 "Title": "GROUP",
+                 "Background color": "COLOR",
+                 "Layout.Height": "NUMBER",
+                 "Layout": "GROUP",
+                 "Message.Text": "TEXT",
+                 "Accept button.Text": "TEXT",
+                 "Accept button.Background color": "COLOR",
+                 "Title.Color": "COLOR",
+                 "Accept button.Text color": "COLOR",
+                 "Title.Text": "TEXT",
+                 "Background image": "FILE"
+                 },
+                 "kind": 3,
+                 "options": null
+                 },
+                 "Alert": {
+                 "values": {
+                 "Dismiss action": {
+                 "__name__": ""
+                 },
+                 "Message": "Alert message goes here.",
+                 "Dismiss text": "OK",
+                 "Title": "LeanplumSample"
+                 },
+                 "kinds": {
+                 "Dismiss action": "ACTION",
+                 "Message": "TEXT",
+                 "Dismiss text": "TEXT",
+                 "Title": "TEXT"
+                 },
+                 "kind": 3,
+                 "options": null
+                 },
+                 "Web Interstitial": {
+                 "values": {
+                 "Has dismiss button": true,
+                 "Close URL": "http:\/\/leanplum:close",
+                 "URL": "http:\/\/www.example.com"
+                 },
+                 "kinds": {
+                 "Has dismiss button": "BOOLEAN",
+                 "Close URL": "TEXT",
+                 "URL": "TEXT"
+                 },
+                 "kind": 3,
+                 "options": null
+                 },
+                 "Register For Push": {
+                 "values": {
+
+                 },
+                 "kinds": {
+
+                 },
+                 "kind": 2,
+                 "options": null
+                 },
+                 "Push Ask to Ask": {
+                 "values": {
+                 "Layout": {
+                 "Height": 250,
+                 "Width": 300
+                 },
+                 "Message": {
+                 "Text": "Tap OK to receive important notifications from our app.",
+                 "Color": 4278190080
+                 },
+                 "Cancel action": {
+                 "__name__": ""
+                 },
+                 "Accept button": {
+                 "Text": "OK",
+                 "Text color": 4278221311,
+                 "Background color": 4294967295
+                 },
+                 "Cancel button": {
+                 "Text": "Maybe Later",
+                 "Text color": 4286545791,
+                 "Background color": 4294967295
+                 },
+                 "Background color": 4294967295,
+                 "Title": {
+                 "Text": "LeanplumSample",
+                 "Color": 4278190080
+                 },
+                 "Background image": ""
+                 },
+                 "kinds": {
+                 "Layout.Width": "NUMBER",
+                 "Cancel button.Background color": "COLOR",
+                 "Message": "GROUP",
+                 "Message.Color": "COLOR",
+                 "Accept button": "GROUP",
+                 "Cancel button": "GROUP",
+                 "Title": "GROUP",
+                 "Background color": "COLOR",
+                 "Layout.Height": "NUMBER",
+                 "Layout": "GROUP",
+                 "Cancel action": "ACTION",
+                 "Message.Text": "TEXT",
+                 "Accept button.Text": "TEXT",
+                 "Accept button.Background color": "COLOR",
+                 "Title.Color": "COLOR",
+                 "Cancel button.Text": "TEXT",
+                 "Accept button.Text color": "COLOR",
+                 "Cancel button.Text color": "COLOR",
+                 "Title.Text": "TEXT",
+                 "Background image": "FILE"
+                 },
+                 "kind": 3,
+                 "options": null
+                 },
+                 "Interstitial": {
+                 "values": {
+                 "Accept action": {
+                 "__name__": ""
+                 },
+                 "Message": {
+                 "Text": "Interstitial message goes here.",
+                 "Color": 4278190080
+                 },
+                 "Accept button": {
+                 "Text": "OK",
+                 "Text color": 4278221311,
+                 "Background color": 4294967295
+                 },
+                 "Background color": 4294967295,
+                 "Title": {
+                 "Text": "LeanplumSample",
+                 "Color": 4278190080
+                 },
+                 "Background image": ""
+                 },
+                 "kinds": {
+                 "Accept action": "ACTION",
+                 "Message": "GROUP",
+                 "Accept button.Background color": "COLOR",
+                 "Accept button.Text": "TEXT",
+                 "Message.Text": "TEXT",
+                 "Title.Color": "COLOR",
+                 "Message.Color": "COLOR",
+                 "Accept button.Text color": "COLOR",
+                 "Accept button": "GROUP",
+                 "Background color": "COLOR",
+                 "Title": "GROUP",
+                 "Background image": "FILE",
+                 "Title.Text": "TEXT"
+                 },
+                 "kind": 3,
+                 "options": null
+                 },
+                 "Open URL": {
+                 "values": {
+                 "URL": "http:\/\/www.example.com"
+                 },
+                 "kinds": {
+                 "URL": "TEXT"
+                 },
+                 "kind": 2,
+                 "options": null
+                 }
+                 },
+                 "isRegistered": true,
+                 "regions": {
+
+                 },
+                 "messages": {
+
+                 },
+                 "varsFromCode": {
+
+                 },
+                 "latestVersion": "1.4.0.2",
+                 "vars": {
+
+                 },
+                 "fileAttributes": {
+
+                 },
+                 "token": "bpS1IbQARlaEfEhXt1IQ63Z7yBwJNk9llRmmzqqoSlY",
+                 "variants": [
+
+                 ],
+                 "syncNewsfeed": false,
+                 "success": true,
+                 "interfaceEvents": [
+
+                 ],
+                 "isRegisteredFromOtherApp": false
+                 }
+                 ]
+}

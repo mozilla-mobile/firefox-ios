@@ -1,0 +1,69 @@
+# Mac OS X
+.DS_Store
+tmp
+
+# Xcode
+
+## Build generated
+build/
+DerivedData
+
+## Various settings
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+
+## Other
+.idea
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
+*.dSYM.zip
+
+## Playgrounds
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+.build/
+Packages
+
+# Carthage
+Carthage/Build
+Carthage/Checkouts
+Carthage
+
+# CocoaPods
+Examples/**/Pods
+Pods
+
+# Fastlane
+fastlane/test_output/
+fastlane/README.md
+report.xml
+.env
+cobertura.xml
+Sentry.framework.zip
+
+# DepTest
+DependencyManagerTests/*/*/Cartfile
+DependencyManagerTests/*/*/Cartfile.resolved
+DependencyManagerTests/*/*/Carthage/
+DependencyManagerTests/*/*/Podfile
+DependencyManagerTests/*/*/Podfile.lock
+DependencyManagerTests/*/*/Pods
+compile_commands.json
+oclint_report.html
+xcodebuild.log
+Package.resolved

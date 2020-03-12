@@ -1,0 +1,32 @@
+[package]
+name = "places-ffi"
+edition = "2018"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+license = "MPL-2.0"
+
+[lib]
+name = "places_ffi"
+crate-type = ["lib"]
+
+[features]
+reqwest = ["viaduct/reqwest", "places/reqwest"]
+default = []
+
+[dependencies]
+serde_json = "1.0.44"
+log = "0.4"
+url = "2.1.1"
+ffi-support = { path = "../../support/ffi" }
+lazy_static = "1.4.0"
+prost = "0.6.1"
+viaduct = { path = "../../viaduct" }
+interrupt = { path = "../../support/interrupt" }
+sql-support = { path = "../../support/sql" }
+sync-guid = { path = "../../support/guid" }
+
+[dependencies.sync15]
+path = "../../sync15"
+
+[dependencies.places]
+path = ".."

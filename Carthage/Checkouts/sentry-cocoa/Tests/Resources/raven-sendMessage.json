@@ -1,0 +1,31 @@
+{
+  "logger": "javascript",
+  "extra": {
+    "session:duration": 6344,
+    "float": 2.4300000000000002,
+    "a_thing": 3,
+    "react": true,
+    "some_things": {
+      "green": "red"
+    },
+    "foobar": ["a", "b", "c"]
+  },
+  "platform": "javascript",
+  "level": "warning",
+  "message": "TEST message",
+  "request": {},
+  "project": "148053",
+  "event_id": "b7276a3dfa69441dacde1c57447058f7",
+  "tags": {
+    "react": true,
+    "environment": "production"
+  },
+  "user": {
+    "email": "john@apple.com",
+    "username": "username",
+    "userID": "12341",
+    "extra": {
+      "is_admin": false
+    }
+  }
+}

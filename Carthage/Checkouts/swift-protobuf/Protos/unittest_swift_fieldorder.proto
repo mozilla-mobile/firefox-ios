@@ -1,0 +1,79 @@
+// Protos/unittest_swift_fieldorder.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2016 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// Check that fields get properly ordered when serializing
+///
+// -----------------------------------------------------------------------------
+
+syntax = "proto2";
+
+package swift.protobuf;
+
+message TestFieldOrderings {
+  optional string my_string = 11;
+  extensions 2 to 8;
+  optional int64 my_int = 1;
+  extensions 12 to 55;
+  optional float my_float = 101;
+  message NestedMessage {
+          optional int64 oo = 2;
+          optional int32 bb = 1;
+  }
+
+  oneof options {
+        int64 oneof_int64 = 60;
+        bool oneof_bool = 9;
+        string oneof_string = 150;
+        int32 oneof_int32 = 10;
+  }
+
+  optional NestedMessage optional_nested_message  = 200;
+}
+
+
+extend TestFieldOrderings {
+  optional string my_extension_string = 50;
+  optional int32 my_extension_int = 5;
+}
+
+
+// These checks how the traverse() generated for a oneof
+// deals with field orders.  Currently requires inspecting the code.
+message OneofTraversalGeneration {
+  // Gaps, not no issues, no start:end: on traverse().
+  oneof o_Good {
+    int32 a = 1;
+    int32 b = 26;
+  }
+
+  // Gaps with a field in the middle of the range.
+  oneof o_Conflict_Field {
+    int32 a2 = 101;
+    int32 b2 = 126;
+  }
+  // In the middle of previous oneof field ranges.
+  optional int32 m = 113;
+
+  // Gaps with an extension range in the middle of the range.
+  oneof o_Conflict_ExtensionsStart {
+    int32 a3 = 201;
+    int32 b3 = 226;
+  }
+  extensions 202;
+
+  // Gaps with an extension range in the middle of the range.
+  oneof o_Conflict_ExtensionsEnd {
+    int32 a4 = 301;
+    int32 b4 = 326;
+  }
+  extensions 325;
+}

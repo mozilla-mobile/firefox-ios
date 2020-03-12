@@ -1,0 +1,6 @@
+# Definitions for jobs that run periodically.  For details on the format, see
+# `taskcluster/taskgraph/cron/schema.py`.  For documentation, see
+# `taskcluster/docs/cron.rst`.
+---
+
+jobs: []

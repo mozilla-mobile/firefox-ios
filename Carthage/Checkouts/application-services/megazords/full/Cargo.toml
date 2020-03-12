@@ -1,0 +1,19 @@
+[package]
+name = "megazord"
+version = "0.1.0"
+authors = ["application-services <application-services@mozilla.com>"]
+edition = "2018"
+license = "MPL-2.0"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+fxaclient_ffi = { path = "../../components/fxa-client/ffi" }
+logins_ffi = { path = "../../components/logins/ffi" }
+places-ffi = { path = "../../components/places/ffi" }
+push-ffi = { path = "../../components/push/ffi" }
+rc_log_ffi = { path = "../../components/rc_log" }
+viaduct = { path = "../../components/viaduct", default_features = false }
+sync_manager_ffi = { path = "../../components/sync_manager/ffi" }
+lazy_static = "1.4.0"

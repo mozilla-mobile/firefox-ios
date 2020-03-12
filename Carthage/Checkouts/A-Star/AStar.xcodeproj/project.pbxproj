@@ -1,0 +1,610 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		742513631D679CCC005E198C /* AStar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 742513591D679CCC005E198C /* AStar.framework */; };
+		742513681D679CCC005E198C /* AStarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742513671D679CCC005E198C /* AStarTests.swift */; };
+		7425136A1D679CCC005E198C /* AStar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7425135C1D679CCC005E198C /* AStar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		742513761D679D12005E198C /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742513751D679D12005E198C /* Node.swift */; };
+		742513781D69DEDC005E198C /* SortedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742513771D69DEDC005E198C /* SortedArray.swift */; };
+		7443FCF01E26D449005EA77C /* AStar.h in Headers */ = {isa = PBXBuildFile; fileRef = 7443FCEE1E26D449005EA77C /* AStar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7443FCF41E26D465005EA77C /* Node.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742513751D679D12005E198C /* Node.swift */; };
+		7443FCF51E26D468005EA77C /* SortedArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742513771D69DEDC005E198C /* SortedArray.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		742513641D679CCC005E198C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 742513501D679CCC005E198C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 742513581D679CCC005E198C;
+			remoteInfo = aStar;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		742513591D679CCC005E198C /* AStar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AStar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7425135C1D679CCC005E198C /* AStar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AStar.h; sourceTree = "<group>"; };
+		7425135D1D679CCC005E198C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		742513621D679CCC005E198C /* AStarTests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "AStarTests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		742513671D679CCC005E198C /* AStarTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AStarTests.swift; sourceTree = "<group>"; };
+		742513691D679CCC005E198C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		742513751D679D12005E198C /* Node.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Node.swift; sourceTree = "<group>"; };
+		742513771D69DEDC005E198C /* SortedArray.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortedArray.swift; sourceTree = "<group>"; };
+		7443FCEC1E26D448005EA77C /* AStar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AStar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7443FCEE1E26D449005EA77C /* AStar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AStar.h; sourceTree = "<group>"; };
+		7443FCEF1E26D449005EA77C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7446343A20AAFB3A00B63771 /* Playground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Playground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		74D2FBD01F4EFBFB00A48C44 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		74DF854C22AA9DB20051BE5D /* XCTestManifests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCTestManifests.swift; sourceTree = "<group>"; };
+		74DF854E22AA9DB90051BE5D /* LinuxMain.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinuxMain.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		742513551D679CCC005E198C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7425135F1D679CCC005E198C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742513631D679CCC005E198C /* AStar.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7443FCE81E26D448005EA77C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		7425134F1D679CCC005E198C = {
+			isa = PBXGroup;
+			children = (
+				74D2FBD01F4EFBFB00A48C44 /* README.md */,
+				7446343A20AAFB3A00B63771 /* Playground.playground */,
+				7425135B1D679CCC005E198C /* Sources */,
+				742513661D679CCC005E198C /* Tests */,
+				7443FCED1E26D449005EA77C /* AStar iOS */,
+				7425135A1D679CCC005E198C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7425135A1D679CCC005E198C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				742513591D679CCC005E198C /* AStar.framework */,
+				742513621D679CCC005E198C /* AStarTests macOS.xctest */,
+				7443FCEC1E26D448005EA77C /* AStar.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7425135B1D679CCC005E198C /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				7425135C1D679CCC005E198C /* AStar.h */,
+				74DF855022AAA1B30051BE5D /* AStar */,
+				7425135D1D679CCC005E198C /* Info.plist */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		742513661D679CCC005E198C /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				74DF854E22AA9DB90051BE5D /* LinuxMain.swift */,
+				74DF854B22AA9D620051BE5D /* AStarTests */,
+				742513691D679CCC005E198C /* Info.plist */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		7443FCED1E26D449005EA77C /* AStar iOS */ = {
+			isa = PBXGroup;
+			children = (
+				7443FCEE1E26D449005EA77C /* AStar.h */,
+				7443FCEF1E26D449005EA77C /* Info.plist */,
+			);
+			path = "AStar iOS";
+			sourceTree = "<group>";
+		};
+		74DF854B22AA9D620051BE5D /* AStarTests */ = {
+			isa = PBXGroup;
+			children = (
+				742513671D679CCC005E198C /* AStarTests.swift */,
+				74DF854C22AA9DB20051BE5D /* XCTestManifests.swift */,
+			);
+			path = AStarTests;
+			sourceTree = "<group>";
+		};
+		74DF855022AAA1B30051BE5D /* AStar */ = {
+			isa = PBXGroup;
+			children = (
+				742513751D679D12005E198C /* Node.swift */,
+				742513771D69DEDC005E198C /* SortedArray.swift */,
+			);
+			path = AStar;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		742513561D679CCC005E198C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7425136A1D679CCC005E198C /* AStar.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7443FCE91E26D448005EA77C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7443FCF01E26D449005EA77C /* AStar.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		742513581D679CCC005E198C /* AStar macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7425136D1D679CCC005E198C /* Build configuration list for PBXNativeTarget "AStar macOS" */;
+			buildPhases = (
+				742513541D679CCC005E198C /* Sources */,
+				742513551D679CCC005E198C /* Frameworks */,
+				742513561D679CCC005E198C /* Headers */,
+				742513571D679CCC005E198C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AStar macOS";
+			productName = aStar;
+			productReference = 742513591D679CCC005E198C /* AStar.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		742513611D679CCC005E198C /* AStarTests macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 742513701D679CCC005E198C /* Build configuration list for PBXNativeTarget "AStarTests macOS" */;
+			buildPhases = (
+				7425135E1D679CCC005E198C /* Sources */,
+				7425135F1D679CCC005E198C /* Frameworks */,
+				742513601D679CCC005E198C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				742513651D679CCC005E198C /* PBXTargetDependency */,
+			);
+			name = "AStarTests macOS";
+			productName = aStarTests;
+			productReference = 742513621D679CCC005E198C /* AStarTests macOS.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		7443FCEB1E26D448005EA77C /* AStar iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7443FCF31E26D449005EA77C /* Build configuration list for PBXNativeTarget "AStar iOS" */;
+			buildPhases = (
+				7443FCE71E26D448005EA77C /* Sources */,
+				7443FCE81E26D448005EA77C /* Frameworks */,
+				7443FCE91E26D448005EA77C /* Headers */,
+				7443FCEA1E26D448005EA77C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "AStar iOS";
+			productName = aStarMobile;
+			productReference = 7443FCEC1E26D448005EA77C /* AStar.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		742513501D679CCC005E198C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0800;
+				LastUpgradeCheck = 1100;
+				ORGANIZATIONNAME = "Damiaan Dufaux";
+				TargetAttributes = {
+					742513581D679CCC005E198C = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 7TD9A665TC;
+						LastSwiftMigration = 1100;
+						ProvisioningStyle = Automatic;
+					};
+					742513611D679CCC005E198C = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = 7TD9A665TC;
+						LastSwiftMigration = 1100;
+						ProvisioningStyle = Automatic;
+					};
+					7443FCEB1E26D448005EA77C = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 7TD9A665TC;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 742513531D679CCC005E198C /* Build configuration list for PBXProject "AStar" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7425134F1D679CCC005E198C;
+			productRefGroup = 7425135A1D679CCC005E198C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				742513581D679CCC005E198C /* AStar macOS */,
+				742513611D679CCC005E198C /* AStarTests macOS */,
+				7443FCEB1E26D448005EA77C /* AStar iOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		742513571D679CCC005E198C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		742513601D679CCC005E198C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7443FCEA1E26D448005EA77C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		742513541D679CCC005E198C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742513781D69DEDC005E198C /* SortedArray.swift in Sources */,
+				742513761D679D12005E198C /* Node.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7425135E1D679CCC005E198C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				742513681D679CCC005E198C /* AStarTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7443FCE71E26D448005EA77C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7443FCF51E26D468005EA77C /* SortedArray.swift in Sources */,
+				7443FCF41E26D465005EA77C /* Node.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		742513651D679CCC005E198C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 742513581D679CCC005E198C /* AStar macOS */;
+			targetProxy = 742513641D679CCC005E198C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		7425136B1D679CCC005E198C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		7425136C1D679CCC005E198C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		7425136E1D679CCC005E198C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7TD9A665TC;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devian.aStar;
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		7425136F1D679CCC005E198C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7TD9A665TC;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = Sources/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devian.aStar;
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		742513711D679CCC005E198C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7TD9A665TC;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devian.aStarTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		742513721D679CCC005E198C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = 7TD9A665TC;
+				INFOPLIST_FILE = Tests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devian.aStarTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		7443FCF11E26D449005EA77C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7TD9A665TC;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "AStar iOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devian.aStarMobile;
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7443FCF21E26D449005EA77C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7TD9A665TC;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "AStar iOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.devian.aStarMobile;
+				PRODUCT_NAME = "$(PROJECT_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		742513531D679CCC005E198C /* Build configuration list for PBXProject "AStar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7425136B1D679CCC005E198C /* Debug */,
+				7425136C1D679CCC005E198C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7425136D1D679CCC005E198C /* Build configuration list for PBXNativeTarget "AStar macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7425136E1D679CCC005E198C /* Debug */,
+				7425136F1D679CCC005E198C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		742513701D679CCC005E198C /* Build configuration list for PBXNativeTarget "AStarTests macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				742513711D679CCC005E198C /* Debug */,
+				742513721D679CCC005E198C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7443FCF31E26D449005EA77C /* Build configuration list for PBXNativeTarget "AStar iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7443FCF11E26D449005EA77C /* Debug */,
+				7443FCF21E26D449005EA77C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 742513501D679CCC005E198C /* Project object */;
+}

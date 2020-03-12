@@ -1,0 +1,46 @@
+// Protos/unittest_swift_oneof_merging.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// This is based on unittest.proto's TestParsingMerge & RepeatedFieldsGenerator,
+/// but focused on oneofs to ensure the behaviors around merging/replaces on
+/// oneofs is correct.
+///
+// -----------------------------------------------------------------------------
+
+syntax = "proto2";
+
+package swift_unittest;
+
+message TestMessage {
+  message NestedMessage {
+    optional int32 a = 1;
+    optional int32 b = 2;
+    optional int32 c = 3;
+  }
+
+  oneof oneof_field {
+    uint32 oneof_uint32 = 111;
+    NestedMessage oneof_nested_message = 112;
+    string oneof_string = 113;
+    bytes oneof_bytes = 114;
+  }
+}
+
+message TestParsingMerge {
+  message RepeatedFieldsGenerator {
+    repeated TestMessage field1 = 1;
+    repeated TestMessage field2 = 2;
+  }
+
+  optional TestMessage optional_message = 1;
+  repeated TestMessage repeated_message = 2;
+}

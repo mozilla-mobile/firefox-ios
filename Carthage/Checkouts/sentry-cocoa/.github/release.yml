@@ -1,0 +1,5 @@
+store: zeus
+targets:
+  - github
+  - name: pods
+    spec: Sentry.podspec

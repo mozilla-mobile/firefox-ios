@@ -1,0 +1,90 @@
+{
+    "response": [{
+        "success": true,
+        "newsfeedMessages": {
+            "5231495977893888##1": {
+                "deliveryTimestamp": 1477487057651,
+                "isRead": false,
+                "messageData": {
+                    "action": "__Newsfeed Message",
+                    "whenLimits": {
+                        "subject": null,
+                        "objects": [
+
+                        ],
+                        "children": [
+
+                        ]
+                    },
+                    "unlessTriggers": {
+                        "subject": null,
+                        "objects": [
+
+                        ],
+                        "children": [
+
+                        ]
+                    },
+                    "priority": 1000,
+                    "countdown": 86400,
+                    "vars": {
+                        "Data": {
+                            "Group": {
+                                "number": 7,
+                                "text": "Sample text",
+                                "bool": true
+                            },
+                            "test": "test string"
+                        },
+                        "Subtitle": "This is a subtitle",
+                        "Open action": {
+                            "__name__": ""
+                        },
+                        "Title": "This is a test inbox message",
+                        "Image": "https://test.png",
+                        "__name__": "__Newsfeed Message"
+                    }
+                }
+            },
+            "4682943996362752##2": {
+                "deliveryTimestamp": 1477487084415,
+                "isRead": false,
+                "messageData": {
+                    "action": "__Newsfeed Message",
+                    "whenLimits": {
+                        "subject": null,
+                        "objects": [
+
+                        ],
+                        "children": [
+
+                        ]
+                    },
+                    "unlessTriggers": {
+                        "subject": null,
+                        "objects": [
+
+                        ],
+                        "children": [
+
+                        ]
+                    },
+                    "priority": 1000,
+                    "countdown": 86400,
+                    "vars": {
+                        "Subtitle": "This is a second test message subtitle",
+                        "Open action": {
+                            "__name__": ""
+                        },
+                        "Title": "This is a second test message",
+                        "Image": "",
+                        "Data": {
+
+                        },
+                        "__name__": "__Newsfeed Message"
+                    }
+                }
+            }
+        }
+    }]
+}

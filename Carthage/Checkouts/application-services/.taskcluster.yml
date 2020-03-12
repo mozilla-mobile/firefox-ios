@@ -1,0 +1,187 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+version: 1
+policy:
+  pullRequests: public
+tasks:
+  $let:
+    decision_task_id: {$eval: as_slugid("decision_task")}
+    expires_in: {$fromNow: '1 year'}
+    # We define the following variable at the very top, because they are used in the
+    # default definition
+    head_branch:
+      $if: 'tasks_for == "github-pull-request"'
+      then: ${event.pull_request.head.ref}
+      else:
+        $if: 'tasks_for == "github-push"'
+        then: ${event.ref}
+        else: ${event.release.target_commitish}
+
+    head_rev:
+      $if: 'tasks_for == "github-pull-request"'
+      then: ${event.pull_request.head.sha}
+      else:
+        $if: 'tasks_for == "github-push"'
+        then: ${event.after}
+        else: ${event.release.tag_name}
+
+    repository:
+      $if: 'tasks_for == "github-pull-request"'
+      then: ${event.pull_request.head.repo.html_url}
+      else: ${event.repository.html_url}
+
+    is_repo_trusted:
+      # Pull requests on main repository can't be trusted because anybody can open a PR on it, without a review
+      $if: 'tasks_for in ["github-push", "github-release"] && event.repository.html_url == "https://github.com/mozilla/application-services"'
+      then: true
+      else: false
+
+    user:
+      # dependabot-preview[bot]@users.noreply.github.com doesn't validate as email.
+      # It would be easier if TC simply didn't enforce an email format for "owner".
+      $if: 'event.sender.login == "dependabot-preview[bot]"'
+      then: dependabot
+      else: ${event.sender.login}
+  in:
+    $let:
+      provisioner_id:
+        $if: 'is_repo_trusted'
+        then: 'app-services-3'
+        else: 'app-services-1'
+      # TODO: revisit once bug 1533314 is done to possibly infer better priorities
+      tasks_priority: highest
+    in:
+      $let:
+        default_task_definition:
+          taskId: ${decision_task_id}
+          taskGroupId: ${decision_task_id}
+          # because we're not using `reporting: checks-v1`, we need to keep using taskcluster-github as scheduler_id.
+          # This will change in the near future when https://github.com/mozilla/application-services/pull/1945 lands
+          schedulerId: taskcluster-github
+          created: {$fromNow: ''}
+          deadline: {$fromNow: '4 hours'}
+          expires: ${expires_in}
+          provisionerId: ${provisioner_id}
+          workerType: 'decision'
+          priority: ${tasks_priority}
+          requires: all-completed
+          retries: 5
+          scopes:
+            - queue:scheduler-id:taskcluster-github
+          routes:
+            - statuses
+          metadata:
+            owner: &task_owner ${user}@users.noreply.github.com
+            source: &task_source ${repository}/raw/${head_rev}/.taskcluster.yml
+          extra:
+            tasks_for: ${tasks_for}
+          payload:
+            artifacts:
+              public/task-graph.json:
+                type: file
+                path: /repo/task-graph.json
+                expires: ${expires_in}
+              public/actions.json:
+                type: file
+                path: /repo/actions.json
+                expires: ${expires_in}
+              public/parameters.yml:
+                type: file
+                path: /repo/parameters.yml
+                expires: ${expires_in}
+            maxRunTime: {$eval: '20 * 60'}
+            # https://github.com/servo/taskcluster-bootstrap-docker-images#decision-task
+            image: "servobrowser/taskcluster-bootstrap:decision-task@sha256:28045b7ec0485ef363f8cb14f194008b47e9ede99f2ea40a1e945e921fce976e"
+            command: # TODO: servo decision-task image doesn't include pyyaml.
+              - /bin/bash
+              - --login
+              - -cx
+              - >-
+                python3 -m pip install --upgrade pip &&
+                python3 -m pip install pyyaml &&
+                git init repo &&
+                cd repo &&
+                git fetch --tags ${repository} ${head_branch} &&
+                git reset --hard ${head_rev} &&
+                python3 automation/taskcluster/decision_task.py
+            env:
+              APPSERVICES_HEAD_REPOSITORY: ${repository}
+              APPSERVICES_HEAD_BRANCH: ${head_branch}
+              APPSERVICES_HEAD_REV: ${head_rev}
+              BUILD_WORKER_TYPE: b-linux
+              IMAGES_WORKER_TYPE: images
+              TASK_FOR: ${tasks_for}
+              TASK_OWNER: *task_owner
+              TASK_SOURCE: *task_source
+              SCHEDULER_ID: taskcluster-github
+              PROVISIONER_ID: ${provisioner_id}
+            features:
+              taskclusterProxy: true
+      in:
+        $match:
+          "tasks_for == 'github-pull-request' && event['action'] in ['opened', 'reopened', 'edited', 'synchronize']":
+            $let:
+              pull_request_title: ${event.pull_request.title}
+              pull_request_number: ${event.pull_request.number}
+              pull_request_url: ${event.pull_request.html_url}
+            in:
+              $mergeDeep:
+                - {$eval: 'default_task_definition'}
+                - scopes:
+                   - assume:repo:${event.repository.html_url[8:]}:pull-request
+                - payload:
+                    env:
+                      GITHUB_PR_TITLE: ${pull_request_title}
+                - metadata:
+                    name: 'Application Services - Decision task (Pull Request #${pull_request_number})'
+                    description: 'Building and testing Application Services - triggered by [#${pull_request_number}](${pull_request_url})'
+          "tasks_for == 'github-push' && head_branch == 'refs/heads/master'":
+            $mergeDeep:
+              - {$eval: 'default_task_definition'}
+              - scopes:
+                - assume:repo:${event.repository.html_url[8:]}:branch:master
+              - metadata:
+                  name: Application Services - Decision task (master)
+                  description: Schedules the build and test tasks for Application Services.
+          "tasks_for == 'github-release' && event['action'] == 'published'":
+            $let:
+              is_staging:
+                $if: 'event.repository.html_url != "https://github.com/mozilla/application-services"'
+                then: true
+                else: false
+            in:
+              $let:
+                beetmover_worker_type:
+                  $if: 'is_staging'
+                  then: appservices-1-beetmover
+                  else: appservices-3-beetmover
+                beetmover_bucket:
+                  $if: 'is_staging'
+                  then: maven-staging
+                  else: maven-production
+                beetmover_bucket_public_url:
+                  $if: 'is_staging'
+                  then: https://maven-default.stage.mozaws.net/
+                  else: https://maven.mozilla.org/
+                tag: ${event.release.tag_name}
+                release_task_definition:
+                  payload:
+                    features:
+                      chainOfTrust: true
+              in:
+                $mergeDeep:
+                  - {$eval: 'default_task_definition'}
+                  - {$eval: 'release_task_definition'}
+                  - scopes:
+                    - assume:repo:${event.repository.html_url[8:]}:release
+                  - payload:
+                      env:
+                        IS_STAGING: ${is_staging}
+                        BEETMOVER_WORKER_TYPE: ${beetmover_worker_type}
+                        BEETMOVER_BUCKET: ${beetmover_bucket}
+                        BEETMOVER_BUCKET_PUBLIC_URL: ${beetmover_bucket_public_url}
+                  - metadata:
+                      name: Application Services - Decision task (${tag})
+                      description: Build and publish release versions.

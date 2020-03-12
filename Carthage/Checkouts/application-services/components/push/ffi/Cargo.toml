@@ -1,0 +1,31 @@
+[package]
+name = "push-ffi"
+edition = "2018"
+version = "0.1.0"
+authors = ["jrconlin <me+crypt@jrconlin.com>", "Phil Jenvey <pjenvey@underboss.org>"]
+license = "MPL-2.0"
+
+[lib]
+name = "push_ffi"
+crate-type = ["lib"]
+
+[dependencies]
+serde_json = "1.0.44"
+log = "0.4"
+url = "2.1.1"
+ffi-support = { path = "../../support/ffi" }
+lazy_static = "1.4.0"
+base64 = "0.11"
+push = { path = ".." }
+viaduct = { path = "../../viaduct" }
+prost = "0.6.1"
+
+[dependencies.rusqlite]
+version = "0.21.0"
+features = ["limits", "functions"]
+
+[dependencies.sync15]
+path = "../../sync15"
+
+[features]
+reqwest = ["viaduct/reqwest", "push/reqwest"]

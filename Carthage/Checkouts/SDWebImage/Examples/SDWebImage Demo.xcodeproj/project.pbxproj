@@ -1,0 +1,1115 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		32892E311FAE898C00BE8320 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 32892E301FAE898C00BE8320 /* Assets.xcassets */; };
+		32892E351FAE89FE00BE8320 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 32892E341FAE89FD00BE8320 /* LaunchScreen.storyboard */; };
+		3E75A9861742DBE700DA412D /* CustomPathImages in Resources */ = {isa = PBXBuildFile; fileRef = 3E75A9851742DBE700DA412D /* CustomPathImages */; };
+		4314D1AA1D0E1181004B36C9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4314D1A91D0E1181004B36C9 /* main.m */; };
+		4314D1AD1D0E1181004B36C9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4314D1AC1D0E1181004B36C9 /* AppDelegate.m */; };
+		4314D1B01D0E1182004B36C9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4314D1AF1D0E1182004B36C9 /* ViewController.m */; };
+		4314D1B31D0E1182004B36C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4314D1B11D0E1182004B36C9 /* Main.storyboard */; };
+		4314D1B51D0E1182004B36C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4314D1B41D0E1182004B36C9 /* Assets.xcassets */; };
+		43A629D31D0DFD000089D7DD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A629D21D0DFD000089D7DD /* AppDelegate.m */; };
+		43A629D61D0DFD000089D7DD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A629D51D0DFD000089D7DD /* main.m */; };
+		43A629D91D0DFD000089D7DD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A629D81D0DFD000089D7DD /* ViewController.m */; };
+		43A629DB1D0DFD000089D7DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A629DA1D0DFD000089D7DD /* Assets.xcassets */; };
+		43A629DE1D0DFD000089D7DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43A629DC1D0DFD000089D7DD /* Main.storyboard */; };
+		43A629F21D0E07600089D7DD /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 43A629F01D0E07600089D7DD /* Interface.storyboard */; };
+		43A629F41D0E07600089D7DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A629F31D0E07600089D7DD /* Assets.xcassets */; };
+		43A629FB1D0E07600089D7DD /* SDWebImage Watch Demo Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 43A629FA1D0E07600089D7DD /* SDWebImage Watch Demo Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		43A62A031D0E07600089D7DD /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A62A021D0E07600089D7DD /* InterfaceController.m */; };
+		43A62A061D0E07600089D7DD /* ExtensionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A62A051D0E07600089D7DD /* ExtensionDelegate.m */; };
+		43A62A091D0E07600089D7DD /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 43A62A081D0E07600089D7DD /* NotificationController.m */; };
+		43A62A0B1D0E07600089D7DD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A62A0A1D0E07600089D7DD /* Assets.xcassets */; };
+		43A62A0F1D0E07600089D7DD /* SDWebImage Watch Demo.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 43A629EE1D0E07600089D7DD /* SDWebImage Watch Demo.app */; platformFilter = ios; };
+		531041C1157EAC8F00BBABC3 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537612E6155ABA44005750A4 /* ImageIO.framework */; };
+		5376129A155AB74D005750A4 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53761299155AB74D005750A4 /* UIKit.framework */; };
+		5376129C155AB74D005750A4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5376129B155AB74D005750A4 /* Foundation.framework */; };
+		5376129E155AB74D005750A4 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5376129D155AB74D005750A4 /* CoreGraphics.framework */; };
+		537612A6155AB74D005750A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 537612A5155AB74D005750A4 /* main.m */; };
+		537612AA155AB74D005750A4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 537612A9155AB74D005750A4 /* AppDelegate.m */; };
+		537612AD155AB74D005750A4 /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537612AC155AB74D005750A4 /* MasterViewController.m */; };
+		537612B0155AB74D005750A4 /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 537612AF155AB74D005750A4 /* DetailViewController.m */; };
+		537612B3155AB74D005750A4 /* MasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 537612B1155AB74D005750A4 /* MasterViewController.xib */; };
+		537612B6155AB74D005750A4 /* DetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 537612B4155AB74D005750A4 /* DetailViewController.xib */; };
+		95616EF6906FA4C794E780E4 /* Pods_SDWebImage_OSX_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1299D5267E136DCF87A1A21A /* Pods_SDWebImage_OSX_Demo.framework */; };
+		AE96B96B254FB4A6A222D71E /* Pods_SDWebImage_TV_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEDA5EB5742642C924545A48 /* Pods_SDWebImage_TV_Demo.framework */; };
+		CF64B1471621CF4AAEC747B7 /* Pods_SDWebImage_iOS_Demo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 225ECB6E7CB8DB707B498522 /* Pods_SDWebImage_iOS_Demo.framework */; };
+		DA248D44195470FD00390AB0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 537612E3155ABA3C005750A4 /* MapKit.framework */; };
+		FB25FF804FC7C7868E4F9364 /* Pods_SDWebImage_Watch_Demo_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DBF9DAE0F88B4C7B529C575 /* Pods_SDWebImage_Watch_Demo_Extension.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		43A629FC1D0E07600089D7DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5376128C155AB74D005750A4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43A629F91D0E07600089D7DD;
+			remoteInfo = "SDWebImage Watch Demo Extension";
+		};
+		43A62A0D1D0E07600089D7DD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5376128C155AB74D005750A4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43A629ED1D0E07600089D7DD;
+			remoteInfo = "SDWebImage Watch Demo";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		327E2DD11FAF0D6A00EF52C2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		327E2DD61FAF0D7000EF52C2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		327E2DDB1FAF0D7A00EF52C2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		327E2DE01FAF0D8000EF52C2 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A62A131D0E07600089D7DD /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				43A629FB1D0E07600089D7DD /* SDWebImage Watch Demo Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A62A171D0E07600089D7DD /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				43A62A0F1D0E07600089D7DD /* SDWebImage Watch Demo.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0829378FA7103DD8649CCCF3 /* Pods-SDWebImage iOS Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImage iOS Demo.release.xcconfig"; path = "../Pods/Target Support Files/Pods-SDWebImage iOS Demo/Pods-SDWebImage iOS Demo.release.xcconfig"; sourceTree = "<group>"; };
+		0DBF9DAE0F88B4C7B529C575 /* Pods_SDWebImage_Watch_Demo_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SDWebImage_Watch_Demo_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1299D5267E136DCF87A1A21A /* Pods_SDWebImage_OSX_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SDWebImage_OSX_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		225ECB6E7CB8DB707B498522 /* Pods_SDWebImage_iOS_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SDWebImage_iOS_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		28B8C1BB2DCC32E213DA3DAD /* Pods-SDWebImage TV Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImage TV Demo.release.xcconfig"; path = "../Pods/Target Support Files/Pods-SDWebImage TV Demo/Pods-SDWebImage TV Demo.release.xcconfig"; sourceTree = "<group>"; };
+		327E1C604113A7CEC9AC02DB /* Pods-SDWebImage Watch Demo Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImage Watch Demo Extension.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-SDWebImage Watch Demo Extension/Pods-SDWebImage Watch Demo Extension.debug.xcconfig"; sourceTree = "<group>"; };
+		32892E301FAE898C00BE8320 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		32892E341FAE89FD00BE8320 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		3E75A9851742DBE700DA412D /* CustomPathImages */ = {isa = PBXFileReference; lastKnownFileType = folder; path = CustomPathImages; sourceTree = SOURCE_ROOT; };
+		4314D1A61D0E1181004B36C9 /* SDWebImage TV Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SDWebImage TV Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4314D1A91D0E1181004B36C9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4314D1AB1D0E1181004B36C9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4314D1AC1D0E1181004B36C9 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4314D1AE1D0E1181004B36C9 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4314D1AF1D0E1182004B36C9 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4314D1B21D0E1182004B36C9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4314D1B41D0E1182004B36C9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4314D1B61D0E1182004B36C9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43A629CF1D0DFD000089D7DD /* SDWebImage OSX Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SDWebImage OSX Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		43A629D11D0DFD000089D7DD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		43A629D21D0DFD000089D7DD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		43A629D51D0DFD000089D7DD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		43A629D71D0DFD000089D7DD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		43A629D81D0DFD000089D7DD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		43A629DA1D0DFD000089D7DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		43A629DD1D0DFD000089D7DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		43A629DF1D0DFD000089D7DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43A629EE1D0E07600089D7DD /* SDWebImage Watch Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SDWebImage Watch Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		43A629F11D0E07600089D7DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		43A629F31D0E07600089D7DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		43A629F51D0E07600089D7DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		43A629FA1D0E07600089D7DD /* SDWebImage Watch Demo Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "SDWebImage Watch Demo Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		43A62A001D0E07600089D7DD /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		43A62A011D0E07600089D7DD /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		43A62A021D0E07600089D7DD /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		43A62A041D0E07600089D7DD /* ExtensionDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtensionDelegate.h; sourceTree = "<group>"; };
+		43A62A051D0E07600089D7DD /* ExtensionDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionDelegate.m; sourceTree = "<group>"; };
+		43A62A071D0E07600089D7DD /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		43A62A081D0E07600089D7DD /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
+		43A62A0A1D0E07600089D7DD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		43A62A0C1D0E07600089D7DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		53761295155AB74D005750A4 /* SDWebImage iOS Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SDWebImage iOS Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		53761299155AB74D005750A4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		5376129B155AB74D005750A4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5376129D155AB74D005750A4 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		537612A1155AB74D005750A4 /* SDWebImage Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SDWebImage Demo-Info.plist"; sourceTree = "<group>"; };
+		537612A5155AB74D005750A4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		537612A7155AB74D005750A4 /* SDWebImage Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SDWebImage Demo-Prefix.pch"; sourceTree = "<group>"; };
+		537612A8155AB74D005750A4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		537612A9155AB74D005750A4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		537612AB155AB74D005750A4 /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
+		537612AC155AB74D005750A4 /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
+		537612AE155AB74D005750A4 /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
+		537612AF155AB74D005750A4 /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
+		537612B2155AB74D005750A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MasterViewController.xib; sourceTree = "<group>"; };
+		537612B5155AB74D005750A4 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/DetailViewController.xib; sourceTree = "<group>"; };
+		537612E3155ABA3C005750A4 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		537612E6155ABA44005750A4 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		5992BFDBF29AB5CBCAC896FB /* Pods-SDWebImage OSX Demo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImage OSX Demo.release.xcconfig"; path = "../Pods/Target Support Files/Pods-SDWebImage OSX Demo/Pods-SDWebImage OSX Demo.release.xcconfig"; sourceTree = "<group>"; };
+		5A56E15AF819F64FBF1F65A9 /* Pods-SDWebImage TV Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImage TV Demo.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-SDWebImage TV Demo/Pods-SDWebImage TV Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		789EDF4244C66933FDF3E181 /* Pods-SDWebImage iOS Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImage iOS Demo.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-SDWebImage iOS Demo/Pods-SDWebImage iOS Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		80C26B77F46D9332F328204E /* Pods-SDWebImage OSX Demo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImage OSX Demo.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-SDWebImage OSX Demo/Pods-SDWebImage OSX Demo.debug.xcconfig"; sourceTree = "<group>"; };
+		9A205232F437C77F45A2EBD1 /* Pods-SDWebImage Watch Demo Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SDWebImage Watch Demo Extension.release.xcconfig"; path = "../Pods/Target Support Files/Pods-SDWebImage Watch Demo Extension/Pods-SDWebImage Watch Demo Extension.release.xcconfig"; sourceTree = "<group>"; };
+		BEDA5EB5742642C924545A48 /* Pods_SDWebImage_TV_Demo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SDWebImage_TV_Demo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA9E0C74219598B400AFB434 /* Module-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Module-Release.xcconfig"; sourceTree = "<group>"; };
+		EA9E0C75219598B400AFB434 /* App-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "App-Debug.xcconfig"; sourceTree = "<group>"; };
+		EA9E0C76219598B400AFB434 /* App-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "App-Release.xcconfig"; sourceTree = "<group>"; };
+		EA9E0C77219598B400AFB434 /* Module-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Module-Debug.xcconfig"; sourceTree = "<group>"; };
+		EA9E0C78219598B400AFB434 /* App-Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "App-Shared.xcconfig"; sourceTree = "<group>"; };
+		EA9E0C79219598B400AFB434 /* Module-Shared.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Module-Shared.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4314D1A31D0E1181004B36C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AE96B96B254FB4A6A222D71E /* Pods_SDWebImage_TV_Demo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A629CC1D0DFD000089D7DD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				95616EF6906FA4C794E780E4 /* Pods_SDWebImage_OSX_Demo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A629F71D0E07600089D7DD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB25FF804FC7C7868E4F9364 /* Pods_SDWebImage_Watch_Demo_Extension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53761292155AB74D005750A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DA248D44195470FD00390AB0 /* MapKit.framework in Frameworks */,
+				531041C1157EAC8F00BBABC3 /* ImageIO.framework in Frameworks */,
+				5376129A155AB74D005750A4 /* UIKit.framework in Frameworks */,
+				5376129C155AB74D005750A4 /* Foundation.framework in Frameworks */,
+				5376129E155AB74D005750A4 /* CoreGraphics.framework in Frameworks */,
+				CF64B1471621CF4AAEC747B7 /* Pods_SDWebImage_iOS_Demo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A3F8A0092FB9960BF0FFE3E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4314D1A71D0E1181004B36C9 /* SDWebImage TV Demo */ = {
+			isa = PBXGroup;
+			children = (
+				4314D1AB1D0E1181004B36C9 /* AppDelegate.h */,
+				4314D1AC1D0E1181004B36C9 /* AppDelegate.m */,
+				4314D1AE1D0E1181004B36C9 /* ViewController.h */,
+				4314D1AF1D0E1182004B36C9 /* ViewController.m */,
+				4314D1B11D0E1182004B36C9 /* Main.storyboard */,
+				4314D1B41D0E1182004B36C9 /* Assets.xcassets */,
+				4314D1B61D0E1182004B36C9 /* Info.plist */,
+				4314D1A81D0E1181004B36C9 /* Supporting Files */,
+			);
+			path = "SDWebImage TV Demo";
+			sourceTree = "<group>";
+		};
+		4314D1A81D0E1181004B36C9 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4314D1A91D0E1181004B36C9 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		43A629D01D0DFD000089D7DD /* SDWebImage OSX Demo */ = {
+			isa = PBXGroup;
+			children = (
+				43A629D11D0DFD000089D7DD /* AppDelegate.h */,
+				43A629D21D0DFD000089D7DD /* AppDelegate.m */,
+				43A629D71D0DFD000089D7DD /* ViewController.h */,
+				43A629D81D0DFD000089D7DD /* ViewController.m */,
+				43A629DA1D0DFD000089D7DD /* Assets.xcassets */,
+				43A629DC1D0DFD000089D7DD /* Main.storyboard */,
+				43A629DF1D0DFD000089D7DD /* Info.plist */,
+				43A629D41D0DFD000089D7DD /* Supporting Files */,
+			);
+			path = "SDWebImage OSX Demo";
+			sourceTree = "<group>";
+		};
+		43A629D41D0DFD000089D7DD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				43A629D51D0DFD000089D7DD /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		43A629EF1D0E07600089D7DD /* SDWebImage Watch Demo */ = {
+			isa = PBXGroup;
+			children = (
+				43A629F01D0E07600089D7DD /* Interface.storyboard */,
+				43A629F31D0E07600089D7DD /* Assets.xcassets */,
+				43A629F51D0E07600089D7DD /* Info.plist */,
+			);
+			path = "SDWebImage Watch Demo";
+			sourceTree = "<group>";
+		};
+		43A629FE1D0E07600089D7DD /* SDWebImage Watch Demo Extension */ = {
+			isa = PBXGroup;
+			children = (
+				43A62A011D0E07600089D7DD /* InterfaceController.h */,
+				43A62A021D0E07600089D7DD /* InterfaceController.m */,
+				43A62A041D0E07600089D7DD /* ExtensionDelegate.h */,
+				43A62A051D0E07600089D7DD /* ExtensionDelegate.m */,
+				43A62A071D0E07600089D7DD /* NotificationController.h */,
+				43A62A081D0E07600089D7DD /* NotificationController.m */,
+				43A62A0A1D0E07600089D7DD /* Assets.xcassets */,
+				43A62A0C1D0E07600089D7DD /* Info.plist */,
+				43A629FF1D0E07600089D7DD /* Supporting Files */,
+			);
+			path = "SDWebImage Watch Demo Extension";
+			sourceTree = "<group>";
+		};
+		43A629FF1D0E07600089D7DD /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				43A62A001D0E07600089D7DD /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5376128A155AB74D005750A4 = {
+			isa = PBXGroup;
+			children = (
+				EA9E0C73219598B400AFB434 /* Configs */,
+				5376129F155AB74D005750A4 /* SDWebImage Demo */,
+				43A629D01D0DFD000089D7DD /* SDWebImage OSX Demo */,
+				43A629EF1D0E07600089D7DD /* SDWebImage Watch Demo */,
+				43A629FE1D0E07600089D7DD /* SDWebImage Watch Demo Extension */,
+				4314D1A71D0E1181004B36C9 /* SDWebImage TV Demo */,
+				53761298155AB74D005750A4 /* Frameworks */,
+				53761296155AB74D005750A4 /* Products */,
+				75D6E1708C75E4AC2FA214EC /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		53761296155AB74D005750A4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				53761295155AB74D005750A4 /* SDWebImage iOS Demo.app */,
+				43A629CF1D0DFD000089D7DD /* SDWebImage OSX Demo.app */,
+				43A629EE1D0E07600089D7DD /* SDWebImage Watch Demo.app */,
+				43A629FA1D0E07600089D7DD /* SDWebImage Watch Demo Extension.appex */,
+				4314D1A61D0E1181004B36C9 /* SDWebImage TV Demo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		53761298155AB74D005750A4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				537612E6155ABA44005750A4 /* ImageIO.framework */,
+				537612E3155ABA3C005750A4 /* MapKit.framework */,
+				53761299155AB74D005750A4 /* UIKit.framework */,
+				5376129B155AB74D005750A4 /* Foundation.framework */,
+				5376129D155AB74D005750A4 /* CoreGraphics.framework */,
+				1299D5267E136DCF87A1A21A /* Pods_SDWebImage_OSX_Demo.framework */,
+				BEDA5EB5742642C924545A48 /* Pods_SDWebImage_TV_Demo.framework */,
+				0DBF9DAE0F88B4C7B529C575 /* Pods_SDWebImage_Watch_Demo_Extension.framework */,
+				225ECB6E7CB8DB707B498522 /* Pods_SDWebImage_iOS_Demo.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5376129F155AB74D005750A4 /* SDWebImage Demo */ = {
+			isa = PBXGroup;
+			children = (
+				3E75A9851742DBE700DA412D /* CustomPathImages */,
+				537612A8155AB74D005750A4 /* AppDelegate.h */,
+				537612A9155AB74D005750A4 /* AppDelegate.m */,
+				537612AB155AB74D005750A4 /* MasterViewController.h */,
+				537612AC155AB74D005750A4 /* MasterViewController.m */,
+				537612AE155AB74D005750A4 /* DetailViewController.h */,
+				537612AF155AB74D005750A4 /* DetailViewController.m */,
+				537612B1155AB74D005750A4 /* MasterViewController.xib */,
+				537612B4155AB74D005750A4 /* DetailViewController.xib */,
+				32892E341FAE89FD00BE8320 /* LaunchScreen.storyboard */,
+				32892E301FAE898C00BE8320 /* Assets.xcassets */,
+				537612A0155AB74D005750A4 /* Supporting Files */,
+			);
+			path = "SDWebImage Demo";
+			sourceTree = "<group>";
+		};
+		537612A0155AB74D005750A4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				537612A1155AB74D005750A4 /* SDWebImage Demo-Info.plist */,
+				537612A5155AB74D005750A4 /* main.m */,
+				537612A7155AB74D005750A4 /* SDWebImage Demo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		75D6E1708C75E4AC2FA214EC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				80C26B77F46D9332F328204E /* Pods-SDWebImage OSX Demo.debug.xcconfig */,
+				5992BFDBF29AB5CBCAC896FB /* Pods-SDWebImage OSX Demo.release.xcconfig */,
+				5A56E15AF819F64FBF1F65A9 /* Pods-SDWebImage TV Demo.debug.xcconfig */,
+				28B8C1BB2DCC32E213DA3DAD /* Pods-SDWebImage TV Demo.release.xcconfig */,
+				327E1C604113A7CEC9AC02DB /* Pods-SDWebImage Watch Demo Extension.debug.xcconfig */,
+				9A205232F437C77F45A2EBD1 /* Pods-SDWebImage Watch Demo Extension.release.xcconfig */,
+				789EDF4244C66933FDF3E181 /* Pods-SDWebImage iOS Demo.debug.xcconfig */,
+				0829378FA7103DD8649CCCF3 /* Pods-SDWebImage iOS Demo.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		EA9E0C73219598B400AFB434 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				EA9E0C75219598B400AFB434 /* App-Debug.xcconfig */,
+				EA9E0C76219598B400AFB434 /* App-Release.xcconfig */,
+				EA9E0C78219598B400AFB434 /* App-Shared.xcconfig */,
+				EA9E0C77219598B400AFB434 /* Module-Debug.xcconfig */,
+				EA9E0C74219598B400AFB434 /* Module-Release.xcconfig */,
+				EA9E0C79219598B400AFB434 /* Module-Shared.xcconfig */,
+			);
+			name = Configs;
+			path = ../Configs;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4314D1A51D0E1181004B36C9 /* SDWebImage TV Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4314D1B71D0E1182004B36C9 /* Build configuration list for PBXNativeTarget "SDWebImage TV Demo" */;
+			buildPhases = (
+				B58F48B09636942C94CB9C9F /* [CP] Check Pods Manifest.lock */,
+				4314D1A21D0E1181004B36C9 /* Sources */,
+				4314D1A31D0E1181004B36C9 /* Frameworks */,
+				4314D1A41D0E1181004B36C9 /* Resources */,
+				327E2DE01FAF0D8000EF52C2 /* Embed Frameworks */,
+				FB94446B4DACAF8F385EB57C /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SDWebImage TV Demo";
+			productName = "SDWebImage TV Demo";
+			productReference = 4314D1A61D0E1181004B36C9 /* SDWebImage TV Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		43A629CE1D0DFD000089D7DD /* SDWebImage OSX Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43A629E81D0DFD000089D7DD /* Build configuration list for PBXNativeTarget "SDWebImage OSX Demo" */;
+			buildPhases = (
+				A50199B809E737E017D7DF1C /* [CP] Check Pods Manifest.lock */,
+				43A629CB1D0DFD000089D7DD /* Sources */,
+				43A629CC1D0DFD000089D7DD /* Frameworks */,
+				43A629CD1D0DFD000089D7DD /* Resources */,
+				327E2DD61FAF0D7000EF52C2 /* Embed Frameworks */,
+				597F887D0D1A778333E020BA /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SDWebImage OSX Demo";
+			productName = "SDWebImage OSX Demo";
+			productReference = 43A629CF1D0DFD000089D7DD /* SDWebImage OSX Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		43A629ED1D0E07600089D7DD /* SDWebImage Watch Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43A62A141D0E07600089D7DD /* Build configuration list for PBXNativeTarget "SDWebImage Watch Demo" */;
+			buildPhases = (
+				43A629EC1D0E07600089D7DD /* Resources */,
+				43A62A131D0E07600089D7DD /* Embed App Extensions */,
+				A3F8A0092FB9960BF0FFE3E0 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43A629FD1D0E07600089D7DD /* PBXTargetDependency */,
+			);
+			name = "SDWebImage Watch Demo";
+			productName = "SDWebImage Watch Demo";
+			productReference = 43A629EE1D0E07600089D7DD /* SDWebImage Watch Demo.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		43A629F91D0E07600089D7DD /* SDWebImage Watch Demo Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43A62A101D0E07600089D7DD /* Build configuration list for PBXNativeTarget "SDWebImage Watch Demo Extension" */;
+			buildPhases = (
+				B65A37AE44E8F76BEB656502 /* [CP] Check Pods Manifest.lock */,
+				43A629F61D0E07600089D7DD /* Sources */,
+				43A629F71D0E07600089D7DD /* Frameworks */,
+				43A629F81D0E07600089D7DD /* Resources */,
+				327E2DDB1FAF0D7A00EF52C2 /* Embed Frameworks */,
+				85F5B7F46D00990FBEBF0377 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "SDWebImage Watch Demo Extension";
+			productName = "SDWebImage Watch Demo Extension";
+			productReference = 43A629FA1D0E07600089D7DD /* SDWebImage Watch Demo Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+		53761294155AB74D005750A4 /* SDWebImage iOS Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 537612B9155AB74D005750A4 /* Build configuration list for PBXNativeTarget "SDWebImage iOS Demo" */;
+			buildPhases = (
+				FA507C7A3DC5CD9451511EB7 /* [CP] Check Pods Manifest.lock */,
+				53761291155AB74D005750A4 /* Sources */,
+				53761292155AB74D005750A4 /* Frameworks */,
+				53761293155AB74D005750A4 /* Resources */,
+				43A62A171D0E07600089D7DD /* Embed Watch Content */,
+				327E2DD11FAF0D6A00EF52C2 /* Embed Frameworks */,
+				8425DD76050A8A49F8DAF736 /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43A62A0E1D0E07600089D7DD /* PBXTargetDependency */,
+			);
+			name = "SDWebImage iOS Demo";
+			productName = "SDWebImage Demo";
+			productReference = 53761295155AB74D005750A4 /* SDWebImage iOS Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5376128C155AB74D005750A4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = Dailymotion;
+				TargetAttributes = {
+					4314D1A51D0E1181004B36C9 = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					43A629CE1D0DFD000089D7DD = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					43A629ED1D0E07600089D7DD = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+					43A629F91D0E07600089D7DD = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = 5376128F155AB74D005750A4 /* Build configuration list for PBXProject "SDWebImage Demo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 5376128A155AB74D005750A4;
+			productRefGroup = 53761296155AB74D005750A4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				53761294155AB74D005750A4 /* SDWebImage iOS Demo */,
+				43A629CE1D0DFD000089D7DD /* SDWebImage OSX Demo */,
+				43A629ED1D0E07600089D7DD /* SDWebImage Watch Demo */,
+				43A629F91D0E07600089D7DD /* SDWebImage Watch Demo Extension */,
+				4314D1A51D0E1181004B36C9 /* SDWebImage TV Demo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4314D1A41D0E1181004B36C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4314D1B51D0E1182004B36C9 /* Assets.xcassets in Resources */,
+				4314D1B31D0E1182004B36C9 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A629CD1D0DFD000089D7DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43A629DB1D0DFD000089D7DD /* Assets.xcassets in Resources */,
+				43A629DE1D0DFD000089D7DD /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A629EC1D0E07600089D7DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43A629F41D0E07600089D7DD /* Assets.xcassets in Resources */,
+				43A629F21D0E07600089D7DD /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A629F81D0E07600089D7DD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43A62A0B1D0E07600089D7DD /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53761293155AB74D005750A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				537612B3155AB74D005750A4 /* MasterViewController.xib in Resources */,
+				537612B6155AB74D005750A4 /* DetailViewController.xib in Resources */,
+				32892E311FAE898C00BE8320 /* Assets.xcassets in Resources */,
+				32892E351FAE89FE00BE8320 /* LaunchScreen.storyboard in Resources */,
+				3E75A9861742DBE700DA412D /* CustomPathImages in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		597F887D0D1A778333E020BA /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SDWebImage OSX Demo/Pods-SDWebImage OSX Demo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage-Core-MapKit-macOS/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImageWebPCoder-macOS/SDWebImageWebPCoder.framework",
+				"${BUILT_PRODUCTS_DIR}/libwebp-macOS/libwebp.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageWebPCoder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libwebp.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SDWebImage OSX Demo/Pods-SDWebImage OSX Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8425DD76050A8A49F8DAF736 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SDWebImage iOS Demo/Pods-SDWebImage iOS Demo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage-Core-MapKit-iOS/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImageWebPCoder-iOS/SDWebImageWebPCoder.framework",
+				"${BUILT_PRODUCTS_DIR}/libwebp-iOS/libwebp.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageWebPCoder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libwebp.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SDWebImage iOS Demo/Pods-SDWebImage iOS Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		85F5B7F46D00990FBEBF0377 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SDWebImage Watch Demo Extension/Pods-SDWebImage Watch Demo Extension-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage-Core/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImageWebPCoder-watchOS/SDWebImageWebPCoder.framework",
+				"${BUILT_PRODUCTS_DIR}/libwebp-watchOS/libwebp.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageWebPCoder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libwebp.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SDWebImage Watch Demo Extension/Pods-SDWebImage Watch Demo Extension-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A50199B809E737E017D7DF1C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SDWebImage OSX Demo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B58F48B09636942C94CB9C9F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SDWebImage TV Demo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B65A37AE44E8F76BEB656502 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SDWebImage Watch Demo Extension-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FA507C7A3DC5CD9451511EB7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SDWebImage iOS Demo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FB94446B4DACAF8F385EB57C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SDWebImage TV Demo/Pods-SDWebImage TV Demo-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage-Core-MapKit-tvOS/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImageWebPCoder-tvOS/SDWebImageWebPCoder.framework",
+				"${BUILT_PRODUCTS_DIR}/libwebp-tvOS/libwebp.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImageWebPCoder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/libwebp.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SDWebImage TV Demo/Pods-SDWebImage TV Demo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4314D1A21D0E1181004B36C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4314D1B01D0E1182004B36C9 /* ViewController.m in Sources */,
+				4314D1AD1D0E1181004B36C9 /* AppDelegate.m in Sources */,
+				4314D1AA1D0E1181004B36C9 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A629CB1D0DFD000089D7DD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43A629D91D0DFD000089D7DD /* ViewController.m in Sources */,
+				43A629D61D0DFD000089D7DD /* main.m in Sources */,
+				43A629D31D0DFD000089D7DD /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43A629F61D0E07600089D7DD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43A62A061D0E07600089D7DD /* ExtensionDelegate.m in Sources */,
+				43A62A031D0E07600089D7DD /* InterfaceController.m in Sources */,
+				43A62A091D0E07600089D7DD /* NotificationController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		53761291155AB74D005750A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				537612A6155AB74D005750A4 /* main.m in Sources */,
+				537612AA155AB74D005750A4 /* AppDelegate.m in Sources */,
+				537612AD155AB74D005750A4 /* MasterViewController.m in Sources */,
+				537612B0155AB74D005750A4 /* DetailViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		43A629FD1D0E07600089D7DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43A629F91D0E07600089D7DD /* SDWebImage Watch Demo Extension */;
+			targetProxy = 43A629FC1D0E07600089D7DD /* PBXContainerItemProxy */;
+		};
+		43A62A0E1D0E07600089D7DD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 43A629ED1D0E07600089D7DD /* SDWebImage Watch Demo */;
+			targetProxy = 43A62A0D1D0E07600089D7DD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4314D1B11D0E1182004B36C9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4314D1B21D0E1182004B36C9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		43A629DC1D0DFD000089D7DD /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43A629DD1D0DFD000089D7DD /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		43A629F01D0E07600089D7DD /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				43A629F11D0E07600089D7DD /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
+		537612B1155AB74D005750A4 /* MasterViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				537612B2155AB74D005750A4 /* en */,
+			);
+			name = MasterViewController.xib;
+			sourceTree = "<group>";
+		};
+		537612B4155AB74D005750A4 /* DetailViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				537612B5155AB74D005750A4 /* en */,
+			);
+			name = DetailViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4314D1B81D0E1182004B36C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5A56E15AF819F64FBF1F65A9 /* Pods-SDWebImage TV Demo.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = "SDWebImage TV Demo/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dailymotion.SDWebImage-TV-Demo";
+				SDKROOT = appletvos;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Debug;
+		};
+		4314D1B91D0E1182004B36C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 28B8C1BB2DCC32E213DA3DAD /* Pods-SDWebImage TV Demo.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				INFOPLIST_FILE = "SDWebImage TV Demo/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dailymotion.SDWebImage-TV-Demo";
+				SDKROOT = appletvos;
+				SUPPORTED_PLATFORMS = "appletvsimulator appletvos";
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Release;
+		};
+		43A629E01D0DFD000089D7DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 80C26B77F46D9332F328204E /* Pods-SDWebImage OSX Demo.debug.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "SDWebImage OSX Demo/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = macosx;
+				TARGETED_DEVICE_FAMILY = "";
+			};
+			name = Debug;
+		};
+		43A629E11D0DFD000089D7DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5992BFDBF29AB5CBCAC896FB /* Pods-SDWebImage OSX Demo.release.xcconfig */;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = "SDWebImage OSX Demo/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				SDKROOT = "";
+				SUPPORTED_PLATFORMS = macosx;
+				TARGETED_DEVICE_FAMILY = "";
+			};
+			name = Release;
+		};
+		43A62A111D0E07600089D7DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 327E1C604113A7CEC9AC02DB /* Pods-SDWebImage Watch Demo Extension.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				INFOPLIST_FILE = "SDWebImage Watch Demo Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dailymotion.SDWebImage-iOS-Demo.watchkitapp.watchkitextension";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		43A62A121D0E07600089D7DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9A205232F437C77F45A2EBD1 /* Pods-SDWebImage Watch Demo Extension.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				INFOPLIST_FILE = "SDWebImage Watch Demo Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dailymotion.SDWebImage-iOS-Demo.watchkitapp.watchkitextension";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		43A62A151D0E07600089D7DD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IBSC_MODULE = SDWebImage_Watch_Demo_Extension;
+				INFOPLIST_FILE = "SDWebImage Watch Demo/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dailymotion.SDWebImage-iOS-Demo.watchkitapp";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		43A62A161D0E07600089D7DD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				IBSC_MODULE = SDWebImage_Watch_Demo_Extension;
+				INFOPLIST_FILE = "SDWebImage Watch Demo/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.dailymotion.SDWebImage-iOS-Demo.watchkitapp";
+				SDKROOT = watchos;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		537612B7155AB74D005750A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA9E0C75219598B400AFB434 /* App-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		537612B8155AB74D005750A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EA9E0C76219598B400AFB434 /* App-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		537612BA155AB74D005750A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 789EDF4244C66933FDF3E181 /* Pods-SDWebImage iOS Demo.debug.xcconfig */;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SDWebImage Demo/SDWebImage Demo-Prefix.pch";
+				INFOPLIST_FILE = "SDWebImage Demo/SDWebImage Demo-Info.plist";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		537612BB155AB74D005750A4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0829378FA7103DD8649CCCF3 /* Pods-SDWebImage iOS Demo.release.xcconfig */;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "SDWebImage Demo/SDWebImage Demo-Prefix.pch";
+				INFOPLIST_FILE = "SDWebImage Demo/SDWebImage Demo-Info.plist";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4314D1B71D0E1182004B36C9 /* Build configuration list for PBXNativeTarget "SDWebImage TV Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4314D1B81D0E1182004B36C9 /* Debug */,
+				4314D1B91D0E1182004B36C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43A629E81D0DFD000089D7DD /* Build configuration list for PBXNativeTarget "SDWebImage OSX Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43A629E01D0DFD000089D7DD /* Debug */,
+				43A629E11D0DFD000089D7DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43A62A101D0E07600089D7DD /* Build configuration list for PBXNativeTarget "SDWebImage Watch Demo Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43A62A111D0E07600089D7DD /* Debug */,
+				43A62A121D0E07600089D7DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43A62A141D0E07600089D7DD /* Build configuration list for PBXNativeTarget "SDWebImage Watch Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43A62A151D0E07600089D7DD /* Debug */,
+				43A62A161D0E07600089D7DD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5376128F155AB74D005750A4 /* Build configuration list for PBXProject "SDWebImage Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				537612B7155AB74D005750A4 /* Debug */,
+				537612B8155AB74D005750A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		537612B9155AB74D005750A4 /* Build configuration list for PBXNativeTarget "SDWebImage iOS Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				537612BA155AB74D005750A4 /* Debug */,
+				537612BB155AB74D005750A4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5376128C155AB74D005750A4 /* Project object */;
+}

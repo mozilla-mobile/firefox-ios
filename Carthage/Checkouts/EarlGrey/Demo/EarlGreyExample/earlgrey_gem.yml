@@ -1,0 +1,4 @@
+EarlGreyExampleSwiftTests:
+ - add_swift: true
+ - add_build_phase: true
+ - add_framework: true

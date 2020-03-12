@@ -1,0 +1,29 @@
+included: # paths to include during linting. `--path` is ignored if present.
+  - megazords
+  - components/places/ios
+  - components/support/ios
+  - components/logins/ios
+  - components/fxa-client/ios
+excluded:
+  - Carthage
+  - "megazords/ios/MozillaAppServicesTests"
+
+disabled_rules:
+  - file_length
+  # We're pretty careful about this already, but it's a pain to disable
+  # and reenable in the cases where we're sure.
+  - force_try
+  # `switch`es, like the ones we have in error conversion, get hit by
+  # this hard, and it's a dodgy metric to begin with.
+  - cyclomatic_complexity
+  # We'll get to these when we get to them!
+  - todo
+  # It disagrees with swiftformat on this, and thinks trailing commas are bad...
+  - trailing_comma
+
+identifier_name:
+  # Turn off it complaining about `id` or `let t = title`, etc, but keep
+  # warnings around e.g. enum names.
+  min_length:
+    warning: 0
+    error: 0

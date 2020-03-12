@@ -1,0 +1,92 @@
+// Protos/unittest_swift_naming_no_prefix.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// Test Swift reserved words used as enum or message names
+///
+// -----------------------------------------------------------------------------
+
+syntax = "proto2";
+
+// No package or Swift prefix.
+
+import "unittest_swift_naming.proto";
+
+// No prefix, so these end up with global names and directly added to the message they
+// extend.
+
+extend swift_unittest.names.ExtensionNamingInitialsLowers {
+  optional int32 http = 101;
+  optional int32 http_request = 102;
+  optional int32 the_http_request = 103;
+  optional int32 the_http = 104;
+
+  optional int32 https = 111;
+  optional int32 https_request = 112;
+  optional int32 the_https_request = 113;
+  optional int32 the_https = 114;
+
+  optional int32 url = 121;
+  optional int32 url_value = 122;
+  optional int32 the_url_value = 123;
+  optional int32 the_url = 124;
+
+  optional int32 a_b_c = 131;
+
+  optional int32 id = 141;
+  optional int32 id_number = 142;
+  optional int32 the_id_number = 143;
+  optional int32 request_id = 144;
+}
+
+extend swift_unittest.names.ExtensionNamingInitialsUppers {
+  optional int32 HTTP = 101;
+  optional int32 HTTP_request = 102;
+  optional int32 the_HTTP_request = 103;
+  optional int32 the_HTTP = 104;
+
+  optional int32 HTTPS = 111;
+  optional int32 HTTPS_request = 112;
+  optional int32 the_HTTPS_request = 113;
+  optional int32 the_HTTPS = 114;
+
+  optional int32 URL = 121;
+  optional int32 URL_value = 122;
+  optional int32 the_URL_value = 123;
+  optional int32 the_URL = 124;
+
+  optional int32 ID = 141;
+  optional int32 ID_number = 142;
+  optional int32 the_ID_number = 143;
+  optional int32 request_ID = 144;
+}
+
+extend swift_unittest.names.ExtensionNamingInitialsWordCase {
+  optional int32 Http = 101;
+  optional int32 HttpRequest = 102;
+  optional int32 TheHttpRequest = 103;
+  optional int32 TheHttp = 104;
+
+  optional int32 Https = 111;
+  optional int32 HttpsRequest = 112;
+  optional int32 TheHttpsRequest = 113;
+  optional int32 TheHttps = 114;
+
+  optional int32 Url = 121;
+  optional int32 UrlValue = 122;
+  optional int32 TheUrlValue = 123;
+  optional int32 TheUrl = 124;
+
+  optional int32 Id = 141;
+  optional int32 IdNumber = 142;
+  optional int32 TheIdNumber = 143;
+  optional int32 RequestId = 144;
+}

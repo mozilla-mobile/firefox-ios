@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vmap:VMAP version="1.0" xmlns:uo="uo" xmlns:vmap="http://www.iab.net/vmap-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <vmap:Extensions>
+    <uo:unicornOnce/>
+    <uo:contentImpressions/>
+    <uo:requestParameters/>
+  </vmap:Extensions>
+</vmap:VMAP>

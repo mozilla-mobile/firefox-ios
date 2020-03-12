@@ -1,0 +1,10 @@
+# Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
+version: 2.1
+
+jobs:
+  build:
+    docker: # use the docker executor type; machine and macos executors are also supported
+      - image: swift:latest # the primary container, where your job's commands are run
+    steps:
+      - checkout # check out the code in the project directory
+      - run: swift test

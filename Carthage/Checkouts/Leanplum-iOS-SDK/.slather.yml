@@ -1,0 +1,9 @@
+coverage_service: cobertura_xml
+xcodeproj: Example/Leanplum-SDK.xcodeproj
+workspace: Example/Leanplum-SDK.xcworkspace
+scheme: Leanplum-SDK-Example
+source_directory: Leanplum-SDK/
+output_directory: coverage-report
+binary_file: DerivedData/Build/Products/Debug-iphonesimulator/Leanplum-SDK_Example.app/PlugIns/Leanplum-SDK_Tests.xctest/Frameworks/Leanplum.framework/Leanplum
+ignore:
+  - Leanplum-SDK/Classes/Vendor/**

@@ -1,0 +1,56 @@
+#
+#  Copyright 2016 Google Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+require 'rubygems'
+require 'bundler'
+Bundler::GemHelper.install_tasks name: 'earlgrey', dir: __dir__
+require 'rubocop/rake_task'
+require 'rspec/core/rake_task'
+require_relative 'support/bump'
+
+# Skip tagging the repo on Gem releases because that'll
+# conflict with EarlGrey carthage tagged releases.
+raise "Can't find tag_version to patch" unless Bundler::GemHelper.instance.method(:tag_version)
+
+module Bundler
+  class GemHelper
+    def tag_version
+      nil
+    end
+  end
+end
+
+task default: %i[spec rubocop warn]
+
+# rake spec
+RSpec::Core::RakeTask.new do |task|
+  task.verbose = false
+end
+
+# rake rubocop
+RuboCop::RakeTask.new do |task|
+  task.options = ['-D']
+end
+
+# alias for rubocop task
+task cop: [:rubocop]
+
+desc 'Check for warnings'
+task :warn do
+  # backticks only capture stdout so we have to redirect stderr
+  result = `env RUBYOPT=W2 ruby -W2 support/gem_warnings.rb 2>&1`
+  puts result
+  abort('warnings detected!') unless result.empty?
+end

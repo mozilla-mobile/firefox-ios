@@ -1,0 +1,30 @@
+body {
+  margin: 16px;
+}
+
+p.info-text {
+  padding: 16px;
+}
+
+h3 > small {
+  float: right;
+}
+
+table.numeric td {
+  text-align: right;
+}
+
+table.numeric th {
+  background-color: #eee;
+  text-align: center;
+}
+
+table.numeric tfoot td {
+  font-size: 12px;
+  font-style: italic;
+}
+
+table.numeric td:first-child,
+table.numeric th:first-child {
+  text-align: left;
+}

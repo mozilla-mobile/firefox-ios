@@ -1,0 +1,13 @@
+# Downloaded sources archives.
+*.tar.gz
+*.7z
+
+# Intermediate folders leftover on build failures.
+sqlcipher*
+nss*
+dist
+
+# Final artifacts
+/android
+/desktop
+/ios

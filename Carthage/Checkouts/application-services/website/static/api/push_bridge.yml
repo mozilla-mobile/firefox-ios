@@ -1,0 +1,324 @@
+swagger: "2.0"
+info:
+  title: Push Third-Party Bridge API
+  description: |
+    Push allows for remote devices to perform some functions using an HTTP
+    interface. This is mostly used by devices that are bridging via an
+    external protocol like
+    [GCM](https://developers.google.com/cloud-messaging/), [FCM](https://firebase.google.com/docs/cloud-messaging/>) or
+    [APNs](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Introduction.html#//apple_ref/doc/uid/TP40008196-CH1-SW1). All message bodies must be UTF-8 encoded.
+    \
+    \
+    API methods requiring Authorization must provide the Authorization
+    header containing the registration secret. The registration secret is
+    returned as "secret" in the registration response.
+    \
+    \
+    Error codes and `errno` results can be [found in the Error Codes section](../docs/push/design.html#error-codes).
+    \
+    \
+    **NOTE**: This is not intended to be used by app developers. Please see the
+    [Web Push API on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Push_API)
+    for how to use WebPush.
+  version: "1.0"
+
+host: updates.push.services.mozilla.com
+basePath: /v1/
+schemes:
+  - https
+
+securityDefinitions:
+  AuthApiKey:
+    type: apiKey
+    in: header
+    name: Authorization
+    description: |
+      Registration "secret" returned in the registration response.
+
+      An example of the Authorization header would be:
+
+      ```Authorization: Bearer 00secret00```
+
+parameters:
+  typeParam:
+    in: path
+    name: type
+    description: |
+      Allowed bridges are `gcm` (Google Cloud Messaging), `fcm` (Firebase Cloud
+      Messaging), `adm` (Amazon Device Messaging) and `apns` (Apple Push Notification system).
+    type: string
+    required: true
+    enum:
+      - gcm
+      - fcm
+      - adm
+      - apns
+  appIdParam:
+    in: path
+    name: app_id
+    type: string
+    description: |
+      Each bridge may require a unique token that addresses the remote application.
+
+      For GCM/FCM, this is the `SenderID` (or 'project number') and is pre-negotiated
+      outside of the push service. You can find this number using the
+      [Google developer console](https://console.developers.google.com/iam-admin/settings/project>).
+
+      For APNS, this value is the "platform" or "channel" of development (e.g.
+      "firefox", "beta", "gecko", etc.).
+
+      For our examples, we will use a client token of "33clienttoken33".
+    required: true
+  uaidParam:
+    in: path
+    name: uaid
+    type: string
+    required: true
+    description: |
+      The Push User Agent Registration ID
+
+      Push assigns each remote recipient a unique identifier. {UAID}s are UUIDs in
+      lower case, undashed format. (e.g. '01234567abcdabcdabcd01234567abcd') This
+      value is assigned during **Registration**.
+  chidParam:
+    in: path
+    name: chid
+    type: string
+    required: true
+    description: |
+      The Channel Subscription ID
+
+      Push assigns a unique identifier for each subscription for a given UAID.
+      Like UAIDs, CHIDs are UUIDs, but in lower case, dashed format( e.g.
+      '01234567-abcd-abcd-abcd-0123456789ab'). The User Agent usually creates this
+      value and passes it as part of the **Channel Subscription**. If no value is
+      supplied, the server will create and return one.
+
+paths:
+  /{type}/{app_id}/registration:
+    post:
+      summary: Register for WebPush delivery.
+      tags:
+        - Registration
+      description: |
+        Request a new UAID registration, Channel ID, and set a bridge
+        type and 3rd party bridge instance ID token for this client.
+        \
+        \
+        **NOTE**: This call is designed for devices to register endpoints to be
+        used by bridge protocols. Please see [Web Push API](https://developer.mozilla.org/en-US/docs/Web/API/Push_API) for how to use
+        Web Push in your application.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - $ref: '#/parameters/typeParam'
+        - $ref: '#/parameters/appIdParam'
+        - in: body
+          name: root
+          schema:
+            $ref: '#/definitions/Token'
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              uaid:
+                $ref: "#/definitions/UAID"
+              channelID:
+                $ref: "#/definitions/CHID"
+              secret:
+                type: string
+                description:
+                  Secret to use for authenticating for other API calls.
+                example: 00secret00
+              endpoint:
+                $ref: '#/definitions/WebPushEndpoint'
+  /{type}/{app_id}/registration/{uaid}:
+    put:
+      summary: Update bridge token
+      tags:
+        - Registration
+      description: |
+        Update the current bridge token value. Note, this is a **PUT** call, since
+        we are updating existing information.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthApiKey: []
+      parameters:
+        - $ref: '#/parameters/typeParam'
+        - $ref: '#/parameters/appIdParam'
+        - $ref: '#/parameters/uaidParam'
+        - in: body
+          name: root
+          schema:
+            $ref: '#/definitions/Token'
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+    delete:
+      summary: Delete the UAID and all subscriptions
+      tags:
+        - Registration
+      description: |
+        Indicate that the UAID, and by extension all associated subscriptions,
+        is no longer valid.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthApiKey: []
+      parameters:
+        - $ref: '#/parameters/typeParam'
+        - $ref: '#/parameters/appIdParam'
+        - $ref: '#/parameters/uaidParam'
+        - in: body
+          name: root
+          schema:
+            type: object
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+  /{type}/{app_id}/registration/{uaid}/:
+    get:
+      summary: Get all subscriptions
+      tags:
+        - Subscriptions
+      description: |
+        Fetch the known ChannelIDs for a given bridged endpoint. This is useful to check link status.
+        If no channelIDs are present for a given UAID, an empty set of channelIDs will be returned.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthApiKey: []
+      parameters:
+        - $ref: '#/parameters/typeParam'
+        - $ref: '#/parameters/appIdParam'
+        - $ref: '#/parameters/uaidParam'
+        - in: body
+          name: root
+          schema:
+            type: object
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              uaid:
+                $ref: '#/definitions/UAID'
+              channelIDS:
+                type: array
+                items:
+                  type: string
+                description: Channel Subscription ID's
+                example:
+                  - 01234567-0000-1111-2222-0123456789ab
+                  - 76543210-0000-1111-2222-0123456789ab
+  /{type}/{app_id}/registration/{uaid}/subscription:
+    post:
+      summary: Acquire a new ChannelID for a given UAID.
+      tags:
+        - Subscriptions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthApiKey: []
+      parameters:
+        - $ref: '#/parameters/typeParam'
+        - $ref: '#/parameters/appIdParam'
+        - $ref: '#/parameters/uaidParam'
+        - in: body
+          name: root
+          schema:
+            type: object
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              channelID:
+                $ref: '#/definitions/CHID'
+              endpoint:
+                $ref: '#/definitions/WebPushEndpoint'
+  /{type}/{app_id}/registration/{uaid}/subscription/{chid}:
+    delete:
+      summary: Subscription delete.
+      description: Remove a given ChannelID subscription from a UAID.
+      tags:
+        - Subscriptions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+        - AuthApiKey: []
+      parameters:
+        - $ref: '#/parameters/typeParam'
+        - $ref: '#/parameters/appIdParam'
+        - $ref: '#/parameters/uaidParam'
+        - $ref: '#/parameters/chidParam'
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+
+definitions:
+  UAID:
+    type: string
+    description: |
+      The Push User Agent Registration ID
+
+      Push assigns each remote recipient a unique identifier. {UAID}s are UUIDs in
+      lower case, undashed format. (e.g. '01234567abcdabcdabcd01234567abcd') This
+      value is assigned during **Registration**.
+    example: 01234567-0000-1111-2222-0123456789ab
+  CHID:
+    type: string
+    description: |
+      The Channel Subscription ID
+
+      Push assigns a unique identifier for each subscription for a given UAID.
+      Like UAIDs, CHIDs are UUIDs, but in lower case, dashed format( e.g.
+      '01234567-abcd-abcd-abcd-0123456789ab'). The User Agent usually creates this
+      value and passes it as part of the **Channel Subscription**. If no value is
+      supplied, the server will create and return one.
+    example: 00000000-0000-1111-2222-0123456789ab
+  Token:
+    type: object
+    required:
+      - token
+    properties:
+      token:
+        type: string
+        description: |
+          Each bridge requires a unique token that addresses the
+          application on a given user's device. This is the
+          "[Registration Token](https://firebase.google.com/docs/cloud-messaging/android/client#sample-register)" for
+          GCM/FCM or "[Device Token](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/IPhoneOSClientImp.html#//apple_ref/doc/uid/TP40008194-CH103-SW2)"
+          for APNS.
+
+          This is usually the product of the application registering the {token} with the native bridge via the user
+          agent.
+    example:
+      token: 11-token-11
+  WebPushEndpoint:
+    type: string
+    description:  WebPush compatible endpoint.
+    example: https://updates-push.services.mozaws.net/push/...

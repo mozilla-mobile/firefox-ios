@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package msg_types;
+
+option java_package = "mozilla.appservices.logins";
+option java_outer_classname = "MsgTypes";
+
+message PasswordInfo {
+    required string id = 1;
+    required string hostname = 2;
+    required string password = 3;
+    required string username = 4;
+    optional string httpRealm = 5;
+    optional string formSubmitURL = 6;
+    required string usernameField = 7;
+    required string passwordField = 8;
+    required int64 timesUsed = 9;
+    required int64 timeCreated = 10;
+    required int64 timeLastUsed = 11;
+    required int64 timePasswordChanged = 12;
+}
+
+message PasswordInfos {
+    repeated PasswordInfo infos = 1;
+}

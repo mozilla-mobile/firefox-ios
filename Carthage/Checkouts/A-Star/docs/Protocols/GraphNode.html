@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>GraphNode Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset='utf-8'>
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+    <a name="//apple_ref/swift/Protocol/GraphNode" class="dashAnchor"></a>
+    <a title="GraphNode Protocol Reference"></a>
+    <header>
+      <div class="content-wrapper">
+        <p><a href="../index.html"> Docs</a> (91% documented)</p>
+        <p class="header-right"><a href="https://github.com/Dev1an/A-Star"><img src="../img/gh.png"/>View on GitHub</a></p>
+      </div>
+    </header>
+    <div class="content-wrapper">
+      <p id="breadcrumbs">
+        <a href="../index.html"> Reference</a>
+        <img id="carat" src="../img/carat.png" />
+        GraphNode Protocol Reference
+      </p>
+    </div>
+    <div class="content-wrapper">
+      <nav class="sidebar">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a href="../Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Extensions/Step.html">Step</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a href="../Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a href="../Protocols/GraphNode.html">GraphNode</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+        <section>
+          <section class="section">
+            <h1>GraphNode</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">GraphNode</span> <span class="p">:</span> <span class="kt">Hashable</span></code></pre>
+
+                </div>
+              </div>
+            <p>This protocol declares the requirements for optimal pathfinding in a directed graph of nodes and implements the A* algorithm via an extension.</p>
+
+          </section>
+          <section class="section task-group-section">
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Optimal%20pathfinding%20requirements"></a>
+                <a name="//apple_ref/swift/Section/Optimal pathfinding requirements" class="dashAnchor"></a>
+                <a href="#/Optimal%20pathfinding%20requirements">
+                  <h3 class="section-name">Optimal pathfinding requirements</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5AStar9GraphNodeP14connectedNodesShyxGvp"></a>
+                    <a name="//apple_ref/swift/Property/connectedNodes" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5AStar9GraphNodeP14connectedNodesShyxGvp">connectedNodes</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>List of other graph nodes that this node has an edge leading to.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">connectedNodes</span><span class="p">:</span> <span class="kt">Set</span><span class="o">&lt;</span><span class="k">Self</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Dev1an/A-Star/blob/master//Sources/AStar/Node.swift#L17">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5AStar9GraphNodeP13estimatedCost2toSfx_tF"></a>
+                    <a name="//apple_ref/swift/Method/estimatedCost(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5AStar9GraphNodeP13estimatedCost2toSfx_tF">estimatedCost(to:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Returns the estimated heuristic cost to reach the indicated node from this node</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">estimatedCost</span><span class="p">(</span><span class="n">to</span> <span class="nv">node</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Float</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>node</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the end point of the edge who&rsquo;s cost is to be estimated</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>the heuristic cost</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Dev1an/A-Star/blob/master//Sources/AStar/Node.swift#L24">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5AStar9GraphNodeP4cost2toSfx_tF"></a>
+                    <a name="//apple_ref/swift/Method/cost(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5AStar9GraphNodeP4cost2toSfx_tF">cost(to:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">cost</span><span class="p">(</span><span class="n">to</span> <span class="nv">node</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Float</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>node</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the destination node</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>the actual cost to reach the indicated node from this node</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Dev1an/A-Star/blob/master//Sources/AStar/Node.swift#L29">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/A*%20Implementation"></a>
+                <a name="//apple_ref/swift/Section/A* Implementation" class="dashAnchor"></a>
+                <a href="#/A*%20Implementation">
+                  <h3 class="section-name">A* Implementation</h3>
+                </a>
+              </div>
+              <ul>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5AStar9GraphNodePAAE8findPath2toSayxGx_tF"></a>
+                    <a name="//apple_ref/swift/Method/findPath(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5AStar9GraphNodePAAE8findPath2toSayxGx_tF">findPath(to:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Attempts to find the optimal path between this node and the indicated goal node.
+If such a path exists, it is returned in start to end order.
+If it doesn&rsquo;t exist, the array returned will be empty.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">findPath</span><span class="p">(</span><span class="n">to</span> <span class="nv">goalNode</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="k">Self</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>goalNode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the goal node of the pathfinding attempt</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>the optimal path between this node and the indicated goal node</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Dev1an/A-Star/blob/master//Sources/AStar/Node.swift#L95-L133">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5AStar9GraphNodePAAE8findPath4fromSayxGx_tF"></a>
+                    <a name="//apple_ref/swift/Method/findPath(from:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5AStar9GraphNodePAAE8findPath4fromSayxGx_tF">findPath(from:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>As with findPathToNode: except this node is the goal node and a startNode is specified</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">findPath</span><span class="p">(</span><span class="n">from</span> <span class="nv">startNode</span><span class="p">:</span> <span class="k">Self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">[</span><span class="k">Self</span><span class="p">]</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>startNode</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>the start node of the pathfinding attempt</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>the optimal path between the indicated start node and this node</p>
+                      </div>
+                      <div class="slightly-smaller">
+                        <a href="https://github.com/Dev1an/A-Star/blob/master//Sources/AStar/Node.swift#L140-L142">Show on GitHub</a>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </section>
+        <section id="footer">
+          <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-06-08)</p>
+          <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+        </section>
+      </article>
+    </div>
+  </body>
+</div>
+</html>

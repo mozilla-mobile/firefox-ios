@@ -1,0 +1,39 @@
+<!--
+  Copyright 2016 Google Inc.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+!-->
+
+<!-- A test page for verifying the loading of local HTML content. -->
+<!DOCTYPE html>
+<html>
+  <body>
+    <a id="link_to_next_test" href="testpage_rich.html">Link to Next Test</a>
+    <div id="table_holder"></div>
+    <!-- Margin at the bottom of the page -->
+    <br/><br/>
+  </body>
+  <script>
+    // Returns a HTML for a table of |rowCount| rows.
+    function HTMLForTableWithRowCount(rowCount) {
+      var rows = [];
+      for (var i = 0; i < rowCount; i++) {
+        rows.push('<tr><td>Row ' + (i + 1) + '</td></tr>');
+      }
+      return '<table border=1>' + rows.join('') + '</table>';
+    }
+    // Generate a table of 50 rows and place it in div#table_holder.
+    document.getElementById('table_holder').innerHTML = HTMLForTableWithRowCount(50);
+  </script>
+</html>
+

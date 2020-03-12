@@ -1,0 +1,150 @@
+{
+  "logger": "javascript",
+  "trimHeadFrames": 0,
+  "breadcrumbs": [
+    {
+      "message": "test",
+      "timestamp": 1521803806.9159999,
+      "level": "error",
+      "category": "sentry",
+      "event_id": "1a6d79cfe32c40cb98c6498217d91b77"
+    },
+    {
+      "message": "Ionic Native: deviceready event fired after 183 ms",
+      "timestamp": 1521803807.053,
+      "level": "log",
+      "category": "console"
+    },
+    {
+      "message": "Native: tried calling StatusBar.styleDefault, but the StatusBar plugin is not installed.",
+      "timestamp": 1521803807.0539999,
+      "level": "warning",
+      "category": "console"
+    },
+    {
+      "message": "Install the StatusBar plugin: 'ionic cordova plugin add cordova-plugin-statusbar'",
+      "timestamp": 1521803807.0550001,
+      "level": "warning",
+      "category": "console"
+    },
+    {
+      "message": "ion-icon.tab-button-icon.icon.icon-ios.ion-ios-information-circle-outline",
+      "category": "ui.click",
+      "timestamp": 1521803810.526
+    },
+    {
+      "message": "span.button-inner",
+      "category": "ui.click",
+      "timestamp": 1521803811.6489999
+    },
+    {
+      "message": "throwError",
+      "timestamp": 1521803811.6489999,
+      "level": "log",
+      "category": "console"
+    },
+    {
+      "message": "ERROR Error: dafuq",
+      "timestamp": 1521803811.6500001,
+      "level": "error",
+      "category": "console"
+    }
+  ],
+  "culprit": "app:\/\/\/main.js",
+  "platform": "javascript",
+  "extra": {
+    "session:duration": 4776
+  },
+  "release": "da39a3ee5e6b4b0d3255",
+  "request": {
+    "headers": {
+      "User-Agent": "Mozilla\/5.0 (iPhone; CPU iPhone OS 11_2 like Mac OS X) AppleWebKit\/604.4.7 (KHTML, like Gecko) Mobile\/15C107"
+    },
+    "url": "http:\/\/localhost:8080\/Users\/haza\/Library\/Developer\/CoreSimulator\/Devices\/DECDEEA6-45C0-4FCC-BD7C-BC8924DF3D5B\/data\/Containers\/Bundle\/Application\/B461E900-85D0-4485-823C-1D6DEB1F1FF7\/MyApp.app\/www\/index.html"
+  },
+  "project": "304324",
+  "exception": [
+    {
+      "type": "Error",
+      "value": "dafuq",
+      "stacktrace": {
+        "frames": [
+          {
+            "colno": 27894,
+            "filename": "app:\/\/\/polyfills.js",
+            "function": "v",
+            "lineno": 2,
+            "in_app": true
+          },
+          {
+            "colno": 27654,
+            "filename": "app:\/\/\/polyfills.js",
+            "function": "p",
+            "lineno": 2,
+            "in_app": true
+          },
+          {
+            "colno": 16801,
+            "filename": "app:\/\/\/polyfills.js",
+            "function": "invokeTask",
+            "lineno": 3,
+            "in_app": true
+          },
+          {
+            "colno": 10844,
+            "filename": "app:\/\/\/polyfills.js",
+            "function": "runTask",
+            "lineno": 3,
+            "in_app": true
+          },
+          {
+            "colno": 67115,
+            "filename": "app:\/\/\/vendor.js",
+            "function": "onInvokeTask",
+            "lineno": 1,
+            "in_app": true
+          },
+          {
+            "colno": 534490,
+            "filename": "app:\/\/\/vendor.js",
+            "function": "r",
+            "lineno": 1,
+            "in_app": true
+          },
+          {
+            "colno": 258294,
+            "filename": "app:\/\/\/vendor.js",
+            "function": "?",
+            "lineno": 1,
+            "in_app": true
+          },
+          {
+            "colno": 13252,
+            "filename": "app:\/\/\/vendor.js",
+            "function": "Tt",
+            "lineno": 1,
+            "in_app": true
+          },
+          {
+            "colno": 6224,
+            "filename": "app:\/\/\/main.js",
+            "function": "?",
+            "lineno": 1,
+            "in_app": true
+          },
+          {
+            "colno": 12681,
+            "filename": "app:\/\/\/main.js",
+            "function": "throwError",
+            "lineno": 1,
+            "in_app": true
+          }
+        ]
+      }
+    }
+  ],
+  "sdk": {
+    "name": "sentry-cordova",
+    "version": "0.7.0"
+  }
+}

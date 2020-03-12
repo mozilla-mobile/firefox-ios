@@ -1,0 +1,143 @@
+/* your custom css */
+
+@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+
+}
+
+@media only screen and (max-width: 550px) {
+  .navigationSlider .slidingNav li.navSearchWrapper {
+    display:none;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+
+}
+
+@media only screen and (max-width: 1023px) {
+
+}
+
+@media only screen and (min-width: 1400px) {
+}
+
+@media only screen and (min-width: 1500px) {
+}
+
+h2 {
+  font-weight: bold;
+}
+
+h5, h6 {
+  font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif;
+  font-weight: 300;
+  color: #424c55;
+}
+
+.mainContainer .wrapper .post h6 {
+  font-weight: 300;
+  font-style: italic;
+}
+
+.navigationWrapper .slidingNav .nav-site ul li a {
+  font-weight: bold;
+}
+
+
+.blogBlock {
+  padding: 20px 0;
+}
+
+.indexPostTitle {
+  font-size: 24px;
+}
+
+.mainContainer .wrapper a {
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+.mainContainer .wrapper .post .postHeader h1 a,
+.mainContainer .wrapper .post .postHeader h2 a,
+.mainContainer .wrapper .post .postHeader h3 a {
+  text-decoration: none;
+}
+
+.productShowcaseSection .button {
+  background: rgba(0,0,0,.8);
+}
+
+.homeContainer {
+  background: #424c55;
+  background: url('../img/tail.png') top -40px center no-repeat,linear-gradient(to bottom,#424c55 0,#000000 100%);
+  background-size: cover;
+}
+
+.homeContainer *, .customFeatureCallout *, .customFeatureCallout h2 {
+  color: white;
+}
+
+.homeContainer .homeWrapper .projectLogo {
+  position: relative;
+  width: 150px;
+  padding: 0;
+  margin: 0 auto;
+  display: block;
+}
+
+.gridBlock .blockElement {
+  cursor: pointer;
+  padding: 20px;
+  transition: box-shadow .2s ease,transform .2s ease;
+}
+
+.gridBlock .blockElement:hover {
+  border-radius: 2px;
+  box-shadow: 0 2px 3px rgba(0,0,0,.2);
+  transform: translateY(-3px);
+}
+
+.gridBlock .fourByGridBlock img {
+  width: 50px;
+}
+
+.wrapper .gridBlock a, .wrapper .gridBlock a:hover {
+  text-decoration: none;
+}
+
+.customFeatureCallout {
+  background: #424c55;
+  background-image: url('../img/mobile-63635-unsplash.jpg');
+  background-size: cover;
+  min-height: 220px;
+  padding-top: 20px;
+}
+
+footer.nav-footer {
+  background: #424c55;
+}
+
+footer.nav-footer h5 {
+  text-align: left;
+  font-weight: bold;
+}
+
+footer.nav-footer a {
+  text-align: left;
+}
+
+footer .copyright {
+  padding: 40px 0 10px 0;
+}
+
+dl dt {
+  display: inline-block;
+  margin: 6px 0;
+  background: rgba(66, 76, 85, 0.1);
+  border-top: solid 3px rgb(66, 76, 85);
+  padding: 6px;
+}
+
+dl dd {
+  margin: 0 0 12px 24px;
+}

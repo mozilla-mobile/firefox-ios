@@ -1,0 +1,68 @@
+syntax = "proto2";
+
+// Note: this file name must be unique due to how the iOS megazord works :(
+
+package msg_types;
+
+option java_package = "mozilla.appservices.syncmanager";
+option java_outer_classname = "MsgTypes";
+
+enum SyncReason {
+    SCHEDULED = 1;
+    USER = 2;
+    PRE_SLEEP = 3;
+    STARTUP = 4;
+    ENABLED_CHANGE = 5;
+}
+
+enum DeviceType {
+    DESKTOP = 1;
+    MOBILE = 2;
+    TABLET = 3;
+    VR = 4;
+    TV = 5;
+}
+
+message SyncParams {
+    repeated string engines_to_sync = 1;
+    required bool sync_all_engines = 2;
+
+    required SyncReason reason = 3;
+
+    map<string, bool> engines_to_change_state = 4;
+
+    optional string persisted_state = 5;
+
+    // These conceptually are a nested type, but exposing them as such would add
+    // needless complexity to the FFI.
+    required string acct_key_id = 6;
+    required string acct_access_token = 7;
+    required string acct_tokenserver_url = 8;
+    required string acct_sync_key = 9;
+
+    required string fxa_device_id = 10;
+    required string device_name = 11;
+    required DeviceType device_type = 12;
+}
+
+enum ServiceStatus {
+    OK = 1;
+    NETWORK_ERROR = 2;
+    SERVICE_ERROR = 3;
+    AUTH_ERROR = 4;
+    BACKED_OFF = 5;
+    OTHER_ERROR = 6;
+}
+
+message SyncResult {
+    required ServiceStatus status = 1;
+    map<string, string> results = 2; // empty string used for 'no error'
+
+    repeated string declined = 3;
+    // false if we didn't manage to check declined.
+    required bool have_declined = 4;
+
+    optional int64 next_sync_allowed_at = 5;
+    required string persisted_state = 6;
+    optional string telemetry_json = 7;
+}

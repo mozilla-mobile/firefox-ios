@@ -1,0 +1,24 @@
+# OCLint config example
+
+rules:
+disable-rules:
+  - GotoStatement
+  - UnusedMethodParameter
+  - PreferEarlyExit
+  - TooFewBranchesInSwitchStatement
+  - EmptyIfStatement
+  - SwitchStatementsDon'TNeedDefaultWhenFullyCovered
+
+rule-configurations:
+  - key: LONG_LINE
+    value: 300
+  - key: SHORT_VARIABLE_NAME
+    value: 1
+  - key: LONG_VARIABLE_NAME
+    value: 64
+
+max-priority-1: 0
+max-priority-2: 20
+max-priority-3: 30
+
+enable-clang-static-analyzer: false

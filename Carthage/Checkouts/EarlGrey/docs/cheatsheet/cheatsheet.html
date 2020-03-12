@@ -1,0 +1,194 @@
+<!--
+Copyright 2017 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!DOCTYPE html>
+<!--
+Only renders in Chrome.
+
+cheatsheet.pdf: Save as PDF from Chrome
+cheatsheet.png: Save as image from Chrome using https://chrome.google.com/webstore/detail/full-page-screen-capture/fdpohaocaechififmbbbbbknoalclacl
+-->
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="cheatsheet.css">
+</head>
+<body>
+
+<div class="header">
+<div class="usage">
+<span class="one">EarlGrey.select(</span>elementWithMatcher:<span class="two">Matcher</span>)
+                  .perform(<span class="three">Action</span>)
+                  .assert(<span class="two">Matcher</span>)
+</div>
+<div class="EarlGreyTitle">
+EarlGrey 1.14
+</div>
+</div>
+
+<div class="body">
+<ul>
+  <li>Matchers</li>
+  <li>Accessibility Properties
+    <ul>
+      <li>grey_accessibilityElement()</li>
+      <li>grey_accessibilityFocused()</li>
+      <li>grey_accessibilityHint(...)</li>
+      <li>grey_accessibilityID(...)</li>
+      <li>grey_accessibilityLabel(...)</li>
+      <li>grey_accessibilityTrait(...)</li>
+      <li>grey_accessibilityValue(...)</li>
+    </ul>
+  </li>
+  <li>UI Properties
+    <ul>
+      <li>grey_buttonTitle(...)</li>
+      <li>grey_datePickerValue(...)</li>
+      <li>grey_enabled()</li>
+      <li>grey_firstResponder()</li>
+      <li>grey_interactable()</li>
+      <li>grey_layout(...)</li>
+      <li>grey_minimumVisiblePercent(...)</li>
+      <li>grey_notVisible()</li>
+      <li>grey_pickerColumnSetToValue(...)</li>
+      <li>grey_progress(...)</li>
+      <li>grey_scrollViewContentOffset(...)</li>
+      <li>grey_selected(...)</li>
+      <li>grey_sliderValueMatcher(...)</li>
+      <li>grey_stepperValue(...)</li>
+      <li>grey_sufficientlyVisible()</li>
+      <li>grey_switchWithOnState(...)</li>
+      <li>grey_text(...)</li>
+      <li>grey_textFieldValue(...)</li>
+      <li>grey_userInteractionEnabled()</li>
+    </ul>
+  </li>
+  <li>Hierarchy
+    <ul>
+      <li>grey_ancestor(...)</li>
+      <li>grey_descendant(...)</li>
+    </ul>
+  </li>
+  <li>Class
+    <ul>
+      <li>grey_kindOfClass(...)</li>
+      <li>grey_respondsToSelector(...)</li>
+      <li>grey_conformsToProtocol(...)</li>
+    </ul>
+  </li>
+  <li>Comparison
+    <ul>
+      <li>grey_closeTo(...)</li>
+      <li>grey_equalTo(...)</li>
+      <li>grey_lessThan(...)</li>
+      <li>grey_greaterThan(...)</li>
+    </ul>
+  </li>
+  <li>Other
+    <ul>
+      <li>grey_anything()</li>
+      <li>grey_keyWindow()</li>
+      <li>grey_nil()</li>
+      <li>grey_notNil()</li>
+      <li>grey_systemAlertViewShown()</li>
+    </ul>
+  </li>
+  <li>Object Matchers - Objective-C
+  <ul>
+    <li>grey_allOf(...)</li>
+    <li>grey_anyOf(...)</li>
+    <li>grey_not(...)</li>
+    <li class="swift">Object Matchers - Swift</li>
+    <li>grey_allOfMatchers(...)</li>
+    <li>grey_anyOfMatchers(...)</li>
+  </ul>
+  </li>
+</ul>
+
+<ul>
+  <li>Actions</li>
+  <li>Click/Press
+    <ul>
+      <li>grey_tap()</li>
+      <li>grey_tapAtPoint(...)</li>
+      <li>grey_doubleTap()</li>
+      <li>grey_doubleTapAtPoint(...)</li>
+      <li>grey_longPress()</li>
+      <li>grey_longPressAtPointWithDuration(...)</li>
+      <li>grey_longPressWithDuration(...)</li>
+      <li>grey_multipleTapsWithCount(...)</li>
+    </ul>
+  </li>
+  <li>Gestures
+    <ul>
+      <li>grey_multiFingerSwipeFastInDirection(...)</li>
+      <li>grey_multiFingerSwipeSlowInDirection(...)</li>
+      <li>grey_multiFingerSwipeFastInDirectionWithStartPoint(...)</li>
+      <li>grey_multiFingerSwipeSlowInDirectionWithStartPoint(...)</li>
+      <li>grey_pinchFastInDirectionAndAngle(...)</li>
+      <li>grey_pinchSlowInDirectionAndAngle(...)</li>
+      <li>grey_scrollInDirection(...)</li>
+      <li>grey_scrollInDirectionWithStartPoint(...)</li>
+      <li>grey_scrollToContentEdge(...)</li>
+      <li>grey_scrollToContentEdgeWithStartPoint(...)</li>
+      <li>grey_swipeFastInDirection(...)</li>
+      <li>grey_swipeFastInDirectionWithStartPoint(...)</li>
+      <li>grey_swipeSlowInDirection(...)</li>
+      <li>grey_swipeSlowInDirectionWithStartPoint(...)</li>
+    </ul>
+  </li>
+  <li>Text
+    <ul>
+      <li>grey_replaceText(...)</li>
+      <li>grey_typeText(...)</li>
+      <li>grey_clearText()</li>
+    </ul>
+  </li>
+  <li>Other
+    <ul>
+      <li>grey_moveSliderToValue(...)</li>
+      <li>grey_setStepperValue(...)</li>
+      <li>grey_turnSwitchOn(...)</li>
+      <li>grey_setDate(...)</li>
+      <li>grey_setPickerColumnToValue(...)</li>
+      <li>grey_javaScriptExecution(...)</li>
+      <li>grey_snapshot(...)</li>
+    </ul>
+  </li>
+</ul>
+
+<ul>
+  <li>Assertions</li>
+  <li>Assertions
+    <ul>
+      <li>GREYAssert(...)</li>
+      <li>GREYAssertEqual(...)</li>
+      <li>GREYAssertEqualObjects(...)</li>
+      <li>GREYAssertFalse(...)</li>
+      <li>GREYAssertNil(...)</li>
+      <li>GREYAssertNotEqual(...)</li>
+      <li>GREYAssertNotEqualObjects(...)</li>
+      <li>GREYAssertNotNil(...)</li>
+      <li>GREYAssertTrue(...)</li>
+      <li>GREYFail(...)</li>
+      <li>GREYFailWithDetails(...)</li>
+    </ul>
+  </li>
+  <li class="hide"></li>
+</ul>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+[package]
+name = "force-viaduct-reqwest"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+edition = "2018"
+license = "MPL-2.0"
+
+# This is a hack we use to allow tests to force-enable the "reqwest" feature of
+# viaduct. You should only depend on it as a dev-dependency, and only if your
+# tests need to make network requests.
+
+[dependencies]
+viaduct = { path = "../../viaduct", features = ["reqwest"] }

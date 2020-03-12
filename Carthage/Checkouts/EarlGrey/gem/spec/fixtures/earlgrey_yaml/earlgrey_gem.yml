@@ -1,0 +1,4 @@
+SampleEarlGreySwiftTests:
+ - add_swift: false
+ - add_build_phase: false
+ - add_framework: false

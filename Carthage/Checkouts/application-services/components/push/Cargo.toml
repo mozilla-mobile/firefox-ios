@@ -1,0 +1,39 @@
+[package]
+name = "push"
+edition = "2018"
+version = "0.1.0"
+authors = ["jrconlin <me+crypt@jrconlin.com>", "Phil Jenvey <pjenvey@underboss.org>"]
+license = "MPL-2.0"
+
+[features]
+reqwest = ["viaduct/reqwest"]
+default = []
+
+[dependencies]
+serde = "1.0.104"
+serde_derive = "1.0.104"
+serde_json = "1.0.44"
+bincode = "1.1.4"
+lazy_static = "1.4.0"
+base64 = "0.11.0"
+failure = "0.1.6"
+failure_derive = "0.1.5"
+log = "0.4.8"
+rusqlite = { version = "0.21.0", features = ["bundled"] }
+url = "2.1.1"
+viaduct = { path = "../viaduct" }
+ffi-support = { path = "../support/ffi" }
+sql-support = { path = "../support/sql" }
+error-support = { path = "../support/error" }
+rc_crypto = { path = "../support/rc_crypto", features = ["ece"] }
+prost = "0.6.1"
+prost-derive = "0.6.1"
+
+[dev-dependencies]
+env_logger = "0.7.0"
+mockito = "0.23.1"
+hex = "0.4.0"
+force-viaduct-reqwest = { path = "../support/force-viaduct-reqwest" }
+
+[build-dependencies]
+prost-build = "0.6.1"

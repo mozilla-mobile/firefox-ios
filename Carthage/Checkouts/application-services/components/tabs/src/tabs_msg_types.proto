@@ -1,0 +1,28 @@
+syntax = "proto2";
+
+// Note: this file name must be unique due to how the iOS megazord works :(
+
+package msg_types;
+
+option java_package = "mozilla.appservices.remotetabs";
+option java_outer_classname = "MsgTypes";
+
+message ClientTabs {
+    required string client_id = 1;
+    repeated RemoteTab remote_tabs = 2;
+}
+
+message ClientsTabs {
+    repeated ClientTabs clients_tabs = 1;
+}
+
+message RemoteTab {
+    required string title = 1;
+    repeated string url_history = 2;
+    optional string icon = 3;
+    required int64 last_used = 4;
+}
+
+message RemoteTabs {
+    repeated RemoteTab remote_tabs = 1;
+}

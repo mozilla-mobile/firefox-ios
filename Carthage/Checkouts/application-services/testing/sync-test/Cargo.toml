@@ -1,0 +1,19 @@
+[package]
+name = "sync-test"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+edition = "2018"
+license = "MPL-2.0"
+
+[dependencies]
+logins = { path = "../../components/logins", features = ["reqwest"] }
+sync15 = { path = "../../components/sync15", features = ["reqwest"] }
+tabs = { path = "../../components/tabs", features = ["reqwest"] }
+fxa-client = { path = "../../components/fxa-client", features = ["reqwest"] }
+url = "2.1.1"
+env_logger = "0.7.0"
+log = "0.4.8"
+failure = "0.1.6"
+rand = "0.7.2"
+lazy_static = "1.4.0"
+structopt = "0.3.11"

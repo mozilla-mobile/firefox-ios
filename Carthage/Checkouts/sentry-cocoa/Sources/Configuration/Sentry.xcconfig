@@ -1,0 +1,48 @@
+//
+//  Sentry.xcconfig
+//  Sentry
+//
+//  Created by Daniel Griesser on 02/05/2017.
+//  Copyright © 2017 Sentry. All rights reserved.
+//
+
+SUPPORTED_PLATFORMS = macosx iphoneos iphonesimulator watchos watchsimulator appletvos appletvsimulator
+TARGETED_DEVICE_FAMILY = 1,2,3,4
+SKIP_INSTALL = YES
+
+DEFINES_MODULE = YES
+DYLIB_COMPATIBILITY_VERSION = 1
+DYLIB_CURRENT_VERSION = 1
+DYLIB_INSTALL_NAME_BASE = @rpath
+MACH_O_TYPE = mh_dylib
+FRAMEWORK_VERSION = A
+
+PRODUCT_NAME = Sentry
+CURRENT_PROJECT_VERSION = 4.4.3
+INFOPLIST_FILE = Sources/Sentry/Info.plist
+PRODUCT_BUNDLE_IDENTIFIER = io.sentry.Sentry
+ALWAYS_SEARCH_USER_PATHS = NO
+CLANG_ENABLE_OBJC_ARC = YES
+CLANG_ENABLE_MODULES = YES
+//OTHER_CFLAGS = -Wall -Wextra -Wpedantic -Wno-gnu-conditional-omitted-operand
+
+ONLY_ACTIVE_ARCH[config=Debug] = YES
+GCC_OPTIMIZATION_LEVEL[config=Debug] = 0
+COPY_PHASE_STRIP[config=Debug] = NO
+
+MACOSX_DEPLOYMENT_TARGET = 10.9
+IPHONEOS_DEPLOYMENT_TARGET = 8.0
+WATCHOS_DEPLOYMENT_TARGET = 2.0
+TVOS_DEPLOYMENT_TARGET = 9.0
+
+LD_RUNPATH_SEARCH_PATHS[sdk=macosx*] = $(inherited) @executable_path/../Frameworks @loader_path/../Frameworks;
+LD_RUNPATH_SEARCH_PATHS[sdk=iphone*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;
+LD_RUNPATH_SEARCH_PATHS[sdk=watch*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;
+LD_RUNPATH_SEARCH_PATHS[sdk=appletv*] = $(inherited) @executable_path/Frameworks @loader_path/Frameworks;
+
+MODULEMAP_FILE = $(SRCROOT)/Sources/Sentry/Sentry.modulemap
+//SWIFT_INCLUDE_PATHS = $(SRCROOT)/Sources/Sentry
+
+// SWIFT_VERSION is only recognized by Xcode 8 and higher.
+// Prior versions of Xcode support only one Swift version.
+// SWIFT_VERSION = 3.1

@@ -1,0 +1,427 @@
+<licenses>
+<!--
+Binary distributions of this software incorporate code from a number of third-party dependencies.
+These dependencies are available under a variety of free and open source licenses,
+the details of which are reproduced below.
+-->
+  <license>
+    <name>Mozilla Public License 2.0: NSPR</name>
+    <url>https://hg.mozilla.org/projects/nspr/raw-file/tip/LICENSE</url>
+  </license>
+  <license>
+    <name>Mozilla Public License 2.0: NSS</name>
+    <url>https://hg.mozilla.org/projects/nss/raw-file/tip/COPYING</url>
+  </license>
+  <license>
+    <name>Mozilla Public License 2.0: ece</name>
+    <url>https://github.com/mozilla/rust-ece/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>Mozilla Public License 2.0: hawk</name>
+    <url>https://github.com/taskcluster/rust-hawk/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: anyhow</name>
+    <url>https://github.com/dtolnay/anyhow/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: autocfg</name>
+    <url>https://github.com/cuviper/autocfg/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: backtrace</name>
+    <url>https://github.com/rust-lang/backtrace-rs/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: backtrace-sys</name>
+    <url>https://github.com/rust-lang/backtrace-rs/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: base64</name>
+    <url>https://github.com/alicemaz/rust-base64/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: base64</name>
+    <url>https://github.com/marshallpierce/rust-base64/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: bitflags</name>
+    <url>https://github.com/bitflags/bitflags/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: c2-chacha</name>
+    <url>https://github.com/cryptocorrosion/cryptocorrosion/blob/master/stream-ciphers/chacha/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: cc</name>
+    <url>https://github.com/alexcrichton/cc-rs/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: cexpr</name>
+    <url>https://github.com/jethrogb/rust-cexpr/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: cfg-if</name>
+    <url>https://github.com/alexcrichton/cfg-if/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: clang-sys</name>
+    <url>https://github.com/KyleMayes/clang-sys/blob/master/LICENSE.txt</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: either</name>
+    <url>https://github.com/bluss/either/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: env_logger</name>
+    <url>https://github.com/sebasmagri/env_logger/blob//master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: failure</name>
+    <url>https://github.com/rust-lang-nursery/failure/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: failure_derive</name>
+    <url>https://github.com/rust-lang-nursery/failure/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: fallible-iterator</name>
+    <url>https://github.com/sfackler/rust-fallible-iterator/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: fallible-streaming-iterator</name>
+    <url>https://github.com/sfackler/fallible-streaming-iterator/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: fixedbitset</name>
+    <url>https://github.com/bluss/fixedbitset/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: getrandom</name>
+    <url>https://github.com/rust-random/getrandom/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: glob</name>
+    <url>https://github.com/rust-lang/glob/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: heck</name>
+    <url>https://github.com/withoutboats/heck/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: hex</name>
+    <url>https://github.com/KokaKiwi/rust-hex/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: humantime</name>
+    <url>https://github.com/tailhook/humantime/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: idna</name>
+    <url>https://github.com/servo/rust-url/blob//master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: indexmap</name>
+    <url>https://github.com/bluss/indexmap/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: itertools</name>
+    <url>https://github.com/bluss/rust-itertools/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: itoa</name>
+    <url>https://github.com/dtolnay/itoa/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: jna</name>
+    <url>https://github.com/java-native-access/jna/blob/master/AL2.0</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: lazy_static</name>
+    <url>https://github.com/rust-lang-nursery/lazy-static.rs/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: lazycell</name>
+    <url>https://github.com/indiv0/lazycell/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: libc</name>
+    <url>https://github.com/rust-lang/libc/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: linked-hash-map</name>
+    <url>https://github.com/contain-rs/linked-hash-map/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: log</name>
+    <url>https://github.com/rust-lang/log/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: lru-cache</name>
+    <url>https://github.com/contain-rs/lru-cache/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: multimap</name>
+    <url>https://github.com/havarnov/multimap/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: once_cell</name>
+    <url>https://github.com/matklad/once_cell/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: peeking_take_while</name>
+    <url>https://github.com/fitzgen/peeking_take_while/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: percent-encoding</name>
+    <url>https://github.com/servo/rust-url/blob//master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: petgraph</name>
+    <url>https://github.com/petgraph/petgraph/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: pkg-config</name>
+    <url>https://github.com/rust-lang/pkg-config-rs/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: ppv-lite86</name>
+    <url>https://github.com/cryptocorrosion/cryptocorrosion/blob/master/utils-simd/ppv-lite86/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: proc-macro2</name>
+    <url>https://github.com/alexcrichton/proc-macro2/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: prost</name>
+    <url>https://github.com/danburkert/prost/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: prost-build</name>
+    <url>https://github.com/danburkert/prost/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: prost-derive</name>
+    <url>https://github.com/danburkert/prost/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: prost-types</name>
+    <url>https://github.com/danburkert/prost/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: quick-error</name>
+    <url>https://github.com/tailhook/quick-error/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: quote</name>
+    <url>https://github.com/dtolnay/quote/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: rand</name>
+    <url>https://github.com/rust-random/rand/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: rand_chacha</name>
+    <url>https://github.com/rust-random/rand/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: rand_core</name>
+    <url>https://github.com/rust-random/rand/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: regex</name>
+    <url>https://github.com/rust-lang/regex/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: regex-syntax</name>
+    <url>https://github.com/rust-lang/regex/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: remove_dir_all</name>
+    <url>https://github.com/XAMPPRocky/remove_dir_all/blob/master/LICENCE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: rustc-demangle</name>
+    <url>https://github.com/alexcrichton/rustc-demangle/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: rustc-hash</name>
+    <url>https://github.com/rust-lang-nursery/rustc-hash/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: ryu</name>
+    <url>https://github.com/dtolnay/ryu/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: serde</name>
+    <url>https://github.com/serde-rs/serde/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: serde_derive</name>
+    <url>https://github.com/serde-rs/serde/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: serde_json</name>
+    <url>https://github.com/serde-rs/json/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: shlex</name>
+    <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: smallvec</name>
+    <url>https://github.com/servo/rust-smallvec/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: syn</name>
+    <url>https://github.com/dtolnay/syn/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: tempfile</name>
+    <url>https://github.com/Stebalien/tempfile/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: thread_local</name>
+    <url>https://github.com/Amanieu/thread_local-rs/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: time</name>
+    <url>https://github.com/time-rs/time/blob/master/LICENSE-Apache</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: toml</name>
+    <url>https://github.com/alexcrichton/toml-rs/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: unicode-bidi</name>
+    <url>https://github.com/servo/unicode-bidi/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: unicode-normalization</name>
+    <url>https://github.com/unicode-rs/unicode-normalization/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: unicode-segmentation</name>
+    <url>https://github.com/unicode-rs/unicode-segmentation/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: unicode-width</name>
+    <url>https://github.com/unicode-rs/unicode-width/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: unicode-xid</name>
+    <url>https://github.com/unicode-rs/unicode-xid/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: url</name>
+    <url>https://github.com/servo/rust-url/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: vec_map</name>
+    <url>https://github.com/contain-rs/vec-map/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: version_check</name>
+    <url>https://github.com/SergioBenitez/version_check/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: winapi</name>
+    <url>https://github.com/retep998/winapi-rs/blob/master/LICENSE-MIT</url>
+  </license>
+  <license>
+    <name>Apache License 2.0: winapi-x86_64-pc-windows-gnu</name>
+    <url>https://github.com/retep998/winapi-rs/blob/master/LICENSE-APACHE</url>
+  </license>
+  <license>
+    <name>MIT License: aho-corasick</name>
+    <url>https://github.com/BurntSushi/aho-corasick/blob/master/LICENSE-MIT</url>
+  </license>
+  <license>
+    <name>MIT License: byteorder</name>
+    <url>https://github.com/BurntSushi/byteorder/blob/master/LICENSE-MIT</url>
+  </license>
+  <license>
+    <name>MIT License: memchr</name>
+    <url>https://github.com/BurntSushi/rust-memchr/blob/master/LICENSE-MIT</url>
+  </license>
+  <license>
+    <name>MIT License: termcolor</name>
+    <url>https://github.com/BurntSushi/termcolor/blob/master/LICENSE-MIT</url>
+  </license>
+  <license>
+    <name>MIT License: ansi_term</name>
+    <url>https://github.com/ogham/rust-ansi-term/blob/master/LICENCE</url>
+  </license>
+  <license>
+    <name>MIT License: atty</name>
+    <url>https://github.com/softprops/atty/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: bytes</name>
+    <url>https://github.com/tokio-rs/bytes/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: clap</name>
+    <url>https://github.com/clap-rs/clap/blob/master/LICENSE-MIT</url>
+  </license>
+  <license>
+    <name>MIT License: libsqlite3-sys</name>
+    <url>https://github.com/jgallagher/rusqlite/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: rusqlite</name>
+    <url>https://github.com/jgallagher/rusqlite/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: matches</name>
+    <url>https://github.com/SimonSapin/rust-std-candidates/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: nom</name>
+    <url>https://github.com/Geal/nom/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: strsim</name>
+    <url>https://github.com/dguo/strsim-rs/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: synstructure</name>
+    <url>https://github.com/mystor/synstructure/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: textwrap</name>
+    <url>https://github.com/mgeisler/textwrap/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>MIT License: which</name>
+    <url>https://github.com/harryfei/which-rs/blob/master/LICENSE.txt</url>
+  </license>
+  <license>
+    <name>CC0-1.0 License: base16</name>
+    <url>https://github.com/thomcc/rust-base16/blob/master/LICENSE-CC0</url>
+  </license>
+  <license>
+    <name>ISC License: libloading</name>
+    <url>https://github.com/nagisa/rust_libloading/blob//master/LICENSE</url>
+  </license>
+  <license>
+    <name>ISC License: ring</name>
+    <url>https://github.com/briansmith/ring/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>BSD-3-Clause License: bindgen</name>
+    <url>https://github.com/rust-lang/rust-bindgen/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>BSD-3-Clause License: protobuf</name>
+    <url>https://github.com/protocolbuffers/protobuf/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>BSD-3-Clause License: sqlcipher</name>
+    <url>https://github.com/sqlcipher/sqlcipher/blob/master/LICENSE</url>
+  </license>
+  <license>
+    <name>Optional Notice: SQLite</name>
+    <url>https://sqlite.org/copyright.html</url>
+  </license>
+</licenses>

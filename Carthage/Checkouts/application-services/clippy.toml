@@ -1,0 +1,6 @@
+# Right now we just use the defaults. This file exists should we
+# want to change that, and to indicate to contributors that they
+# might want to run clippy.
+#
+# See https://rust-lang.github.io/rust-clippy/master/index.html for
+# the complete list of lints.

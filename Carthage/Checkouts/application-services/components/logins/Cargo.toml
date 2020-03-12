@@ -1,0 +1,46 @@
+[package]
+name = "logins"
+edition = "2018"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+license = "MPL-2.0"
+
+[features]
+log_query_plans = ["sql-support/log_query_plans"]
+reqwest = ["sync15/reqwest"]
+default = []
+
+[dependencies]
+sync15 = { path = "../sync15" }
+serde = "1.0.104"
+serde_derive = "1.0.104"
+serde_json = "1.0.44"
+log = "0.4.8"
+lazy_static = "1.4.0"
+url = "2.1.1"
+failure = "0.1.6"
+sql-support = { path = "../support/sql" }
+ffi-support = { path = "../support/ffi" }
+interrupt = { path = "../support/interrupt" }
+error-support = { path = "../support/error" }
+sync-guid = { path = "../support/guid", features = ["rusqlite_support", "random"] }
+prost = "0.6.1"
+prost-derive = "0.6.1"
+
+[dependencies.rusqlite]
+version = "0.21.0"
+features = ["sqlcipher", "limits"]
+
+[dev-dependencies]
+more-asserts = "0.2.1"
+env_logger = "0.7.0"
+prettytable-rs = "0.8.0"
+fxa-client = { path = "../fxa-client" }
+chrono = "0.4.8"
+clap = "2.32.0"
+cli-support = { path = "../support/cli" }
+force-viaduct-reqwest = { path = "../support/force-viaduct-reqwest" }
+tempdir = "0.3.7"
+
+[build-dependencies]
+prost-build = "0.6.1"

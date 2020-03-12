@@ -1,0 +1,106 @@
+{
+  "extra": {
+    "session:duration": 4391,
+    "float": 2.4300000000000002,
+    "a_thing": 3,
+    "react": true,
+    "some_things": {"green": "red"},
+    "foobar": ["a", "b", "c"]
+  },
+  "message": "Boom promise",
+  "project": "148053",
+  "timestamp": 1508840416.888,
+  "tags": {"react": true, "environment": "production"},
+  "type": "Unhandled Promise Rejection",
+  "stacktrace": {
+    "frames": [
+      {
+        "colno": 20,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "callFunctionReturnFlushedQueue",
+        "lineno": 1887,
+        "in_app": true
+      },
+      {
+        "colno": 11,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "__guard",
+        "lineno": 2043,
+        "in_app": true
+      },
+      {
+        "colno": 29,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "?",
+        "lineno": 1888,
+        "in_app": true
+      },
+      {
+        "colno": 47,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "__callFunction",
+        "lineno": 2072,
+        "in_app": true
+      },
+      {
+        "colno": 17,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "callTimers",
+        "lineno": 12865,
+        "in_app": true
+      },
+      {
+        "colno": 15,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "_callTimer",
+        "lineno": 12671,
+        "in_app": true
+      },
+      {
+        "colno": null,
+        "filename": "[native code]",
+        "function": "onUnhandled",
+        "lineno": null,
+        "in_app": true
+      },
+      {
+        "colno": 28,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "onUnhandled",
+        "lineno": 11684,
+        "in_app": true
+      },
+      {
+        "colno": 29,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "onUnhandled",
+        "lineno": 61198,
+        "in_app": true
+      },
+      {
+        "colno": 33,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "captureException",
+        "lineno": 59271,
+        "in_app": true
+      },
+      {
+        "colno": 22,
+        "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+        "function": "captureMessage",
+        "lineno": 59305,
+        "in_app": false
+      }
+    ]
+  },
+  "platform": "javascript",
+  "request": {},
+  "logger": "javascript",
+  "event_id": "4e2242e2fe954901943df14f82330ca8",
+  "user": {
+    "email": "john@apple.com",
+    "username": "username",
+    "userID": "12341",
+    "extra": {"is_admin": false}
+  }
+}

@@ -1,0 +1,18 @@
+//
+//  Sentry.xcconfig
+//  Sentry
+//
+//  Created by Daniel Griesser on 02/05/2017.
+//  Copyright © 2017 Sentry. All rights reserved.
+//
+
+#include "../../Sources/Configuration/Sentry.xcconfig"
+
+PRODUCT_NAME = Tests
+INFOPLIST_FILE = Tests/SentryTests/Info.plist
+PRODUCT_BUNDLE_IDENTIFIER = io.sentry.Sentry.tests
+ALWAYS_SEARCH_USER_PATHS = NO
+CLANG_ENABLE_OBJC_ARC = YES
+CLANG_ENABLE_MODULES = YES
+OTHER_CFLAGS = -Wall -Wextra
+APPLICATION_EXTENSION_API_ONLY = NO

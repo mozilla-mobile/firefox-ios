@@ -1,0 +1,102 @@
+{
+  "1": {
+    "action": "Alert",
+    "countdown": 86400,
+    "vars": {
+      "Dismiss action": "",
+      "Message": "priority-10-a",
+      "Title": "priority-10-a",
+      "Dismiss text": "OK",
+      "__name__": "Alert"
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "priority": 10,
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  },
+  "2": {
+    "action": "Confirm",
+    "countdown": 86400,
+    "vars": {
+      "Cancel action": "",
+      "Message": "priority-30-b",
+      "Title": "priority-30-b",
+      "__name__": "Confirm",
+      "Accept text": "Yes",
+      "Cancel text": "No",
+      "Accept action": ""
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "priority": 30,
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  },
+  "3": {
+    "action": "Alert",
+    "countdown": 86400,
+    "vars": {
+      "Dismiss action": "",
+      "Message": "NO-priority",
+      "Title": "NO-priority",
+      "Dismiss text": "OK",
+      "__name__": "Alert"
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  }
+}

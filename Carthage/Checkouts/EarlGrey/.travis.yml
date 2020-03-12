@@ -1,0 +1,87 @@
+#  Copyright 2016 Google Inc.
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+language: objective-c
+sudo: false
+osx_image: xcode8.3
+matrix:
+  global:
+    rvm:
+      - 2.5.3
+  include:
+    - env:
+        - DESTINATION="OS=8.1,name=iPhone 4s" SDK=iphonesimulator10.3 TYPE="FUNCTIONAL"
+    - env:
+        - DESTINATION="OS=8.1,name=iPhone 4s" SDK=iphonesimulator10.3 TYPE="UNIT"
+    - env:
+        - DESTINATION="OS=8.1,name=iPhone 5" SDK=iphonesimulator10.3 TYPE="UNIT"
+    - env:
+        - DESTINATION="OS=8.2,name=iPhone 5s" SDK=iphonesimulator10.3 TYPE="FUNCTIONAL"
+    - osx_image: xcode7.3
+      env:
+        - DESTINATION="OS=8.3,name=iPhone 6" SDK=iphonesimulator9.3 TYPE="CONTRIB"
+    - env:
+        - DESTINATION="OS=8.4,name=iPad Retina" SDK=iphonesimulator10.3 TYPE="FUNCTIONAL"
+    - env:
+        - DESTINATION="OS=9.0,name=iPhone 6s Plus" SDK=iphonesimulator10.3 TYPE="FUNCTIONAL"
+    - env:
+        - DESTINATION="OS=9.0,name=iPhone 4s" SDK=iphonesimulator10.3 TYPE="CONTRIB_SWIFT"
+    - env:
+        - DESTINATION="OS=9.1,name=iPhone 6s" SDK=iphonesimulator10.3 TYPE="UNIT"
+    - env:
+        - DESTINATION="OS=9.3,name=iPhone 6s Plus" SDK=iphonesimulator10.3 TYPE="FUNCTIONAL"
+    - osx_image: xcode9.2
+      env:
+        - DESTINATION="OS=10.1,name=iPhone 6s" SDK=iphonesimulator11.2 TYPE="CARTHAGE"
+    - osx_image: xcode9.2
+      env:
+        - DESTINATION="OS=10.2,name=iPhone 7 Plus" SDK=iphonesimulator11.2 TYPE="EXAMPLE_PODS"
+    - osx_image: xcode9.2
+      env:
+        - DESTINATION="OS=10.3.1,name=iPhone 7 Plus" SDK=iphonesimulator11.2 TYPE="EXAMPLE_PODS_SWIFT"
+    - osx_image: xcode9.2
+      env:
+        - DESTINATION="OS=11.0.1,name=iPhone 7" SDK=iphonesimulator11.2 TYPE="FUNCTIONAL"
+    - osx_image: xcode9.2
+      env:
+        - DESTINATION="OS=11.2,name=iPad Air" SDK=iphonesimulator11.2 TYPE="FUNCTIONAL_SWIFT"
+    - osx_image: xcode9.2
+      env:
+        - DESTINATION="OS=11.2,name=iPhone 7 Plus" SDK=iphonesimulator11.2 TYPE="UNIT"
+    - env:
+      - TYPE="RUBY"
+    - osx_image: xcode9.2
+      env:
+      - TYPE="PACKAGE"
+before_install:
+  - |
+      echo "Checking if a CI run is needed post commit: ${TRAVIS_COMMIT_RANGE}"
+      if ! git diff --name-only ${TRAVIS_COMMIT_RANGE} | grep -qvE '(\.md$)|(\.png$)|(\.pdf$)|(\.html$)|^(LICENSE)|^(docs)/'
+      then
+        echo "Only doc files were updated, not running the CI."
+        exit
+      fi
+  - rvm install ruby-2.5.3
+  - rvm use 2.5.3
+  - gem update --system
+  - gem install xcpretty --no-document --quiet
+before_script:
+  - Scripts/setup-earlgrey.sh
+script:
+  - Scripts/travis.sh
+after_failure:
+  - tail -n 200 xcodebuild.log
+branches:
+  only:
+    - master

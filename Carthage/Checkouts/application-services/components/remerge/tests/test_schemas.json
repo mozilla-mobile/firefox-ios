@@ -1,0 +1,497 @@
+[
+    {
+        "error": "WrongFormatVersion",
+        "remote": true,
+        "schema": {
+            "name": "test",
+            "format_version": 5
+        }
+    },
+    {
+        "error": "VersionParseFailed",
+        "schema": {
+            "name": "test",
+            "version": "garbage",
+            "fields": []
+        }
+    },
+    {
+        "error": "VersionReqParseFailed",
+        "schema": {
+            "name": "test",
+            "version": "1.0.0",
+            "required_version": "garbage",
+            "fields": []
+        }
+    },
+    {
+        "error": "LocalRequiredVersionNotCompatible",
+        "schema": {
+            "name": "test",
+            "version": "1.0.0",
+            "required_version": "2.0.0",
+            "fields": []
+        }
+    },
+    {
+        "error": "MissingRemergeFeature",
+        "schema": {
+            "name": "test",
+            "version": "1.0.0",
+            "fields": [],
+            "remerge_features_used": ["example"]
+        }
+    },
+    {
+        "error": "DuplicateField",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "text"
+                },
+                {
+                    "name": "example",
+                    "type": "text"
+                }
+            ]
+        }
+    },
+    {
+        "error": "IllegalMergeForType",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "text",
+                    "merge": "take_max"
+                }
+            ]
+        }
+    },
+    {
+        "error": "IllegalMergeForType",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "timestamp",
+                    "merge": "take_sum"
+                }
+            ]
+        }
+    },
+    {
+        "error": "UnknownCompositeRoot",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "text",
+                    "composite_root": "nothing"
+                }
+            ]
+        }
+    },
+    {
+        "error": "TypeForbidsMergeStrat",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "own_guid",
+                    "merge": "take_newest"
+                }
+            ]
+        }
+    },
+    {
+        "error": "TypeNotComposite",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "own_guid",
+                    "composite_root": "something"
+                },
+                {
+                    "name": "something",
+                    "type": "text"
+                }
+            ]
+        }
+    },
+    {
+        "error": "DeprecatedRequiredConflict",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "text",
+                    "deprecated": true,
+                    "required": true
+                }
+            ]
+        }
+    },
+    {
+        "error": "NoBoundsCheckInfo",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "integer",
+                    "max": 1000,
+                    "min": 0
+                }
+            ]
+        }
+    },
+    {
+        "error": "BadNumBounds",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "integer",
+                    "min": 1000,
+                    "max": 0,
+                    "if_out_of_bounds": "clamp"
+                }
+            ]
+        }
+    },
+    {
+        "error": "BadNumDefault",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "example",
+                    "type": "integer",
+                    "min": 0,
+                    "max": 1000,
+                    "if_out_of_bounds": "clamp",
+                    "default": 4000
+                }
+            ]
+        }
+    },
+    {
+        "error": "NumberClampOnCompositeRoot",
+        "skip": true,
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "integer",
+                    "min": 0,
+                    "max": 1000,
+                    "if_out_of_bounds": "clamp"
+                },
+                {
+                    "name": "field2",
+                    "type": "text",
+                    "composite_root": "field1"
+                }
+            ]
+        }
+    },
+    {
+        "error": "CompositeRecursion",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "integer",
+                    "composite_root": "field2"
+                },
+                {
+                    "name": "field2",
+                    "type": "text",
+                    "composite_root": "field1"
+                }
+            ]
+        }
+    },
+    {
+        "error": "BadDefaultUrl",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "url",
+                    "default": "not a url"
+                }
+            ]
+        }
+    },
+    {
+        "error": "BadDefaultOrigin",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "url",
+                    "is_origin": true,
+                    "default": "http://www.example.com/not-a-origin"
+                }
+            ]
+        }
+    },
+    {
+        "error": "MergeTakeSumNoMax",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "integer",
+                    "merge": "take_sum",
+                    "max": 30,
+                    "min": 0,
+                    "if_out_of_bounds": "clamp"
+                }
+            ]
+        }
+    },
+    {
+        "error": "DefaultTimestampTooOld",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "timestamp",
+                    "default": 0
+                }
+            ]
+        }
+    },
+    {
+        "error": "DedupeOnWithDuplicateField",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "text"
+                },
+                {
+                    "name": "field2",
+                    "type": "text",
+                    "merge": "duplicate"
+                }
+            ],
+            "dedupe_on": ["field1"]
+        }
+    },
+    {
+        "error": "UnknownDedupeOnField",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "text"
+                }
+            ],
+            "dedupe_on": [
+                "field2"
+            ]
+        }
+    },
+    {
+        "error": "PartialCompositeDedupeOn",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "text"
+                },
+                {
+                    "name": "field2",
+                    "type": "text",
+                    "composite_root": "field1"
+                }
+            ],
+            "dedupe_on": [
+                "field2"
+            ]
+        }
+    },
+    {
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "text",
+                    "merge": "take_newest"
+                },
+                {
+                    "name": "field2",
+                    "type": "text",
+                    "composite_root": "field1"
+                }
+            ],
+            "dedupe_on": [
+                "field1",
+                "field2"
+            ]
+        }
+    },
+    {
+        "error": "MultipleOwnGuid",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "own_guid"
+                },
+                {
+                    "name": "field2",
+                    "type": "own_guid"
+
+                }
+            ]
+        }
+    },
+    {
+        "error": "MultipleUpdateAt",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "fields": [
+                {
+                    "name": "field1",
+                    "type": "timestamp",
+                    "semantic": "updated_at"
+                },
+                {
+                    "name": "field2",
+                    "type": "timestamp",
+                    "semantic": "updated_at"
+                }
+            ]
+        }
+    },
+    {
+        "error": "LegacyMissingId",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "legacy": true,
+            "fields": [
+                {
+                    "name": "stuff",
+                    "type": "text"
+                }
+            ]
+        }
+    },
+    {
+        "error": "DeprecatedFieldDedupeOn",
+        "schema": {
+            "version": "1.0.0",
+            "name": "test",
+            "legacy": true,
+            "fields": [
+                {
+                    "name": "stuff",
+                    "type": "text",
+                    "deprecated": true
+                }
+            ],
+            "dedupe_on": [
+                "stuff"
+            ]
+        }
+    },
+
+    {
+        "schema": {
+            "version": "1.0.0",
+            "name": "logins-example",
+            "legacy": true,
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "own_guid"
+                },
+                {
+                    "name": "formSubmitUrl",
+                    "type": "url",
+                    "is_origin": true,
+                    "local_name": "formActionOrigin"
+                },
+                {
+                    "name": "httpRealm",
+                    "type": "text",
+                    "composite_root": "formSubmitUrl"
+                },
+                {
+                    "name": "timesUsed",
+                    "type": "integer",
+                    "merge": "take_sum"
+                },
+                {
+                    "name": "hostname",
+                    "type": "url",
+                    "is_origin": true,
+                    "required": true
+                },
+                {
+                    "name": "password",
+                    "type": "text",
+                    "required": true
+                },
+                {
+                    "name": "username",
+                    "type": "text"
+                }
+            ],
+            "dedupe_on": [
+                "username",
+                "password",
+                "hostname"
+            ]
+        }
+    }
+]

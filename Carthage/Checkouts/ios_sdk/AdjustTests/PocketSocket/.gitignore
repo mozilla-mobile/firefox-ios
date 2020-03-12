@@ -1,0 +1,6 @@
+.DS_Store
+xcuserdata/
+/pages/
+/build/
+fuzzingserver.json
+reports

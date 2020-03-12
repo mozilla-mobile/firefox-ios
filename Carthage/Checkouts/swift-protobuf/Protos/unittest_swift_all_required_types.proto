@@ -1,0 +1,140 @@
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// An addition to unittest.proto
+syntax = "proto2";
+
+import "google/protobuf/unittest_import.proto";
+import "google/protobuf/unittest.proto";
+
+package protobuf_unittest;
+
+message TestAllRequiredTypes {
+  message NestedMessage {
+    // The field name "b" fails to compile in proto1 because it conflicts with
+    // a local variable named "b" in one of the generated methods.  Doh.
+    // This file needs to compile in proto1 to test backwards-compatibility.
+    required int32 bb = 1;
+  }
+
+  enum NestedEnum {
+    FOO = 1;
+    BAR = 2;
+    BAZ = 3;
+    NEG = -1;  // Intentionally negative.
+  }
+
+  // Singular
+  required    int32 required_int32    =  1;
+  required    int64 required_int64    =  2;
+  required   uint32 required_uint32   =  3;
+  required   uint64 required_uint64   =  4;
+  required   sint32 required_sint32   =  5;
+  required   sint64 required_sint64   =  6;
+  required  fixed32 required_fixed32  =  7;
+  required  fixed64 required_fixed64  =  8;
+  required sfixed32 required_sfixed32 =  9;
+  required sfixed64 required_sfixed64 = 10;
+  required    float required_float    = 11;
+  required   double required_double   = 12;
+  required     bool required_bool     = 13;
+  required   string required_string   = 14;
+  required    bytes required_bytes    = 15;
+
+  required group RequiredGroup = 16 {
+    required int32 a = 17;
+  }
+
+  required NestedMessage                        required_nested_message  = 18;
+  required ForeignMessage                       required_foreign_message = 19;
+  required protobuf_unittest_import.ImportMessage required_import_message  = 20;
+
+  required NestedEnum                           required_nested_enum     = 21;
+  required ForeignEnum                          required_foreign_enum    = 22;
+  required protobuf_unittest_import.ImportEnum    required_import_enum     = 23;
+
+  required string required_string_piece = 24 [ctype=STRING_PIECE];
+  required string required_cord = 25 [ctype=CORD];
+
+  // Defined in unittest_import_public.proto
+  required protobuf_unittest_import.PublicImportMessage
+      required_public_import_message = 26;
+
+  required NestedMessage required_lazy_message = 27 [lazy=true];
+
+  // Singular with defaults
+  required    int32 default_int32    = 61 [default =  41    ];
+  required    int64 default_int64    = 62 [default =  42    ];
+  required   uint32 default_uint32   = 63 [default =  43    ];
+  required   uint64 default_uint64   = 64 [default =  44    ];
+  required   sint32 default_sint32   = 65 [default = -45    ];
+  required   sint64 default_sint64   = 66 [default =  46    ];
+  required  fixed32 default_fixed32  = 67 [default =  47    ];
+  required  fixed64 default_fixed64  = 68 [default =  48    ];
+  required sfixed32 default_sfixed32 = 69 [default =  49    ];
+  required sfixed64 default_sfixed64 = 70 [default = -50    ];
+  required    float default_float    = 71 [default =  51.5  ];
+  required   double default_double   = 72 [default =  52e3  ];
+  required     bool default_bool     = 73 [default = true   ];
+  required   string default_string   = 74 [default = "hello"];
+  required    bytes default_bytes    = 75 [default = "world"];
+
+  required NestedEnum  default_nested_enum  = 81 [default = BAR        ];
+  required ForeignEnum default_foreign_enum = 82 [default = FOREIGN_BAR];
+  required protobuf_unittest_import.ImportEnum
+      default_import_enum = 83 [default = IMPORT_BAR];
+
+  required string default_string_piece = 84 [ctype=STRING_PIECE,default="abc"];
+  required string default_cord = 85 [ctype=CORD,default="123"];
+
+  // For oneof test
+  oneof oneof_field {
+    uint32 oneof_uint32 = 111;
+    NestedMessage oneof_nested_message = 112;
+    string oneof_string = 113;
+    bytes oneof_bytes = 114;
+  }
+}
+
+
+message TestSomeRequiredTypes {
+  enum NestedEnum {
+    FOO = 1;
+  }
+
+  // Singular
+  required    int32 required_int32    =  1;
+  required    float required_float    =  2;
+  required     bool required_bool     =  3;
+  required   string required_string   =  4;
+  required    bytes required_bytes    =  5;
+
+  required NestedEnum required_nested_enum     = 6;
+}

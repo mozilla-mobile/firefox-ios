@@ -1,0 +1,164 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that will be gathered for the "logins" storage component.
+# These are emitted for all users of the component.  Additional metrics specific to the
+# *syncing* of logins are defined in a separate "sync_ping" package.
+#
+# Changes to these metrics require data review, which should take into consideration
+# the following known consumers of the logins component Android bindings:
+#
+#  * Firefox Preview
+#  * Firefox Lockwise for Android
+
+$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+
+logins_store:
+
+  # These help us understand how much the logins store is being used, and whether it's succeeding
+  # in the duties asked of it.  We'll use them to graph e.g. the error rate of applications trying
+  # to use the logins store, and identify application or platform features that lead to unusually
+  # high error rates.
+
+  unlock_count:
+    type: counter
+    description: >
+      The number of times the login store was unlocked.
+      It is intended to be used together with `unlock_error_count` to measure the overall 
+      error rate of unlocking the logins store.
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"
+
+  unlock_error_count:
+    type: labeled_counter
+    description: >
+      The number of errors encountered when unlocking the logins store, labeled by type.
+      It is intended to be used together with `unlock_count` to measure the overall error
+      rate of unlocking the logins store.
+    labels:
+      - invalid_key
+      - mismatched_lock
+      - storage_error
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"
+
+  read_query_count:
+    type: counter
+    description: >
+      The total number of read operations performed on the logins store.
+      The count only includes operations triggered by the application, not e.g. incidental reads performed
+      as part of a sync. It is intended to be used together with `read_query_error_count` to measure the 
+      overall error rate of read operations on the logins store.
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"
+
+  read_query_error_count:
+    type: labeled_counter
+    description: >
+      The total number of errors encountered during read operations on the logins store, labeled by type.
+      It is intended to be used together with `read_query_count` to measure the overall error rate
+      of read operations on the logins store.
+    labels:
+      - interrupted
+      - storage_error
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"
+
+  write_query_count:
+    type: counter
+    description: >
+      The total number of write operations performed on the logins store.
+      The count only includes operations triggered by the application, not e.g. incidental writes performed
+      as part of a sync. It is intended to be used together with `write_query_error_count` to measure the 
+      overall error rate of write operations on the logins store.
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"
+
+  write_query_error_count:
+    type: labeled_counter
+    description: >
+      The total number of errors encountered during write operations on the logins store, labeled by type.
+      It is intended to be used together with `write_query_count` to measure the overall error rate
+      of write operations on the logins store.
+    labels:
+      - no_such_record
+      - id_collision
+      - interrupted
+      - invalid_record
+      - storage_error
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"
+
+  # These help us understand the performance of the logins store in the wild.
+  # We'll use them to identify any application or platform features that are leading to unacceptably
+  # slow performance of the store, and eventually for comparison with other logins store implementations
+  # (such as the one in Desktop).
+
+  unlock_time:
+    type: timing_distribution
+    description: >
+      The time taken to open the logins store on startup, or after locking it due to user inactivity.
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"
+
+  read_query_time:
+    type: timing_distribution
+    description: >
+      The time taken to execute a read query on the logins store (such as listing all logins, or finding a
+      specific login by id).
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"
+
+  write_query_time:
+    type: timing_distribution
+    description: >
+      The time taken to execute a write query on the logins store (such as adding, updating, or deleting
+      a login record).
+    bugs:
+      - https://github.com/mozilla/application-services/issues/2225
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1597895
+    notification_emails:
+      - synced-client-integrations@mozilla.com
+    expires: "2020-07-01"

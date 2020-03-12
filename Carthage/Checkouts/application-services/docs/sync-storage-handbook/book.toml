@@ -1,0 +1,8 @@
+[book]
+title = "Sync and Storage Handbook"
+author = "Mozilla Application Services Team"
+description = "An overview of the Application Services sync and storage libraries."
+
+[build]
+build-dir = "book"
+create-missing = true

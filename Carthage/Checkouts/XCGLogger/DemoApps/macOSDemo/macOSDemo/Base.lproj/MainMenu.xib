@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12118"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
+            <connections>
+                <outlet property="delegate" destination="Voe-Tx-rLC" id="GzC-gU-4Uq"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="macOSDemo" customModuleProvider="target">
+            <connections>
+                <outlet property="currentLogLevelTextField" destination="N7c-0c-rmu" id="YT6-zm-ffe"/>
+                <outlet property="generateTestLogTextField" destination="4Bc-zj-lM9" id="Qti-fk-tNx"/>
+                <outlet property="logLevelSlider" destination="jgm-VS-e8T" id="Zoi-8C-ZNb"/>
+                <outlet property="logLevelTextField" destination="ucO-Qd-aGf" id="fVt-b5-f7W"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
+            </connections>
+        </customObject>
+        <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
+        <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
+            <items>
+                <menuItem title="macOSDemo" id="1Xt-HY-uBw" userLabel="Menu Item - macOSDemo">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="macOSDemo" systemMenu="apple" id="uQy-DD-JDr">
+                        <items>
+                            <menuItem title="About macOSDemo" id="5kV-Vb-QxS">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="orderFrontStandardAboutPanel:" target="-1" id="Exp-CZ-Vem"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
+                            <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
+                            <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
+                            <menuItem title="Services" id="NMo-om-nkz">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
+                            <menuItem title="Hide macOSDemo" keyEquivalent="h" id="Olw-nP-bQN">
+                                <connections>
+                                    <action selector="hide:" target="-1" id="PnN-Uc-m68"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Hide Others" keyEquivalent="h" id="Vdr-fp-XzO">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="hideOtherApplications:" target="-1" id="VT4-aY-XCT"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Show All" id="Kd2-mp-pUS">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="unhideAllApplications:" target="-1" id="Dhg-Le-xox"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
+                            <menuItem title="Quit macOSDemo" keyEquivalent="q" id="4sb-4s-VLi">
+                                <connections>
+                                    <action selector="terminate:" target="-1" id="Te7-pn-YzF"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+                <menuItem title="Window" id="aUF-d1-5bR">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Window" systemMenu="window" id="Td7-aD-5lo">
+                        <items>
+                            <menuItem title="Minimize" keyEquivalent="m" id="OY7-WF-poV">
+                                <connections>
+                                    <action selector="performMiniaturize:" target="-1" id="VwT-WD-YPe"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Zoom" id="R4o-n2-Eq4">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="performZoom:" target="-1" id="DIl-cC-cCs"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="eu3-7i-yIM"/>
+                            <menuItem title="Bring All to Front" id="LE2-aR-0XJ">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="arrangeInFront:" target="-1" id="DRN-fu-gQh"/>
+                                </connections>
+                            </menuItem>
+                        </items>
+                    </menu>
+                </menuItem>
+            </items>
+        </menu>
+        <window title="macOSDemo" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" frameAutosaveName="" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="335" y="390" width="500" height="471"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <view key="contentView" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="500" height="471"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ucO-Qd-aGf">
+                        <rect key="frame" x="18" y="434" width="112" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="FOO-Fw-iPD"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Current Log Level" id="eqM-oM-IJ3">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Bc-zj-lM9">
+                        <rect key="frame" x="18" y="384" width="464" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="8Hh-2Q-Tf1"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Generate Test Log" id="CX9-bW-BA3">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N7c-0c-rmu">
+                        <rect key="frame" x="134" y="434" width="348" height="17"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="gMX-YL-FgI"/>
+                        </constraints>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Debug" id="gMs-fY-ZUK">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jgm-VS-e8T">
+                        <rect key="frame" x="18" y="407" width="464" height="21"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="1Qr-Lp-utg"/>
+                        </constraints>
+                        <sliderCell key="cell" state="on" alignment="left" maxValue="6" doubleValue="1" tickMarkPosition="above" allowsTickMarkValuesOnly="YES" sliderType="linear" id="HQH-Oa-kJz"/>
+                        <connections>
+                            <action selector="logLevelSliderValueChanged:" target="Voe-Tx-rLC" id="f3m-Xk-MXz"/>
+                        </connections>
+                    </slider>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="Oqt-uH-bUP">
+                        <rect key="frame" x="18" y="343" width="464" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="FhI-Xm-6Vl"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" title="Verbose" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="18u-Vb-PCy">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="verboseButtonTouchUpInside:" target="Voe-Tx-rLC" id="9hc-ad-GGO"/>
+                        </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="cJV-r2-NVU">
+                        <rect key="frame" x="18" y="305" width="464" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="fSI-1p-gR3"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" title="Debug" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="K0h-57-yYI">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="debugButtonTouchUpInside:" target="Voe-Tx-rLC" id="0Ks-GC-c0W"/>
+                        </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="Bmd-xL-cy5">
+                        <rect key="frame" x="18" y="267" width="464" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="ZVa-47-nds"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" title="Info" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="DNU-dG-7NA">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="infoButtonTouchUpInside:" target="Voe-Tx-rLC" id="JvO-oT-qop"/>
+                        </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="PvH-ob-p5o">
+                        <rect key="frame" x="18" y="229" width="464" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="c9F-HU-aLF"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" title="Warning" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="43E-4m-3wn">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="warningButtonTouchUpInside:" target="Voe-Tx-rLC" id="zcb-yS-gTA"/>
+                        </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="lxL-cx-amI">
+                        <rect key="frame" x="18" y="191" width="464" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="cWs-qq-euG"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" title="Error" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="P3t-ee-zvy">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="errorButtonTouchUpInside:" target="Voe-Tx-rLC" id="hxV-x0-Hjj"/>
+                        </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="51c-ck-4h8">
+                        <rect key="frame" x="18" y="153" width="464" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="1zd-NB-iQA"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" title="Severe" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="to7-kl-Qc9">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="severeButtonTouchUpInside:" target="Voe-Tx-rLC" id="rP1-al-h6i"/>
+                        </connections>
+                    </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LIO-Xd-f4A">
+                        <rect key="frame" x="20" y="58" width="460" height="90"/>
+                        <constraints>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="90" id="IyT-30-Vjg"/>
+                        </constraints>
+                        <textFieldCell key="cell" refusesFirstResponder="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="9rj-vS-1ZB">
+                            <font key="font" metaFont="system"/>
+                            <string key="title">XCGLogger will only log messages that are set for the same or higher log level. So when the current log level is set to Info for example, neither Verbose nor Debug logs will be displayed, but Info, Warning, Error and Severe logs will be displayed.</string>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="Emz-JL-XES">
+                        <rect key="frame" x="18" y="17" width="464" height="35"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="cgO-pa-VS7"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" title="Rotate Log File" bezelStyle="regularSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pHi-3C-wtF">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="rotateLogFileButtonTouchUpInside:" target="Voe-Tx-rLC" id="aYi-MP-ibC"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="LIO-Xd-f4A" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="0Dg-h3-2Qc"/>
+                    <constraint firstItem="4Bc-zj-lM9" firstAttribute="top" secondItem="jgm-VS-e8T" secondAttribute="bottom" constant="8" symbolic="YES" id="0My-CC-9dr"/>
+                    <constraint firstItem="4Bc-zj-lM9" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="0zM-Ul-8G1"/>
+                    <constraint firstItem="lxL-cx-amI" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="1GQ-WT-1FM"/>
+                    <constraint firstAttribute="trailing" secondItem="51c-ck-4h8" secondAttribute="trailing" constant="20" symbolic="YES" id="5Jk-U6-p9T"/>
+                    <constraint firstItem="LIO-Xd-f4A" firstAttribute="top" secondItem="51c-ck-4h8" secondAttribute="bottom" constant="8" symbolic="YES" id="AIr-f1-tiq"/>
+                    <constraint firstItem="Emz-JL-XES" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="AdW-Sw-Kg9"/>
+                    <constraint firstItem="ucO-Qd-aGf" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="BLL-f4-JC0"/>
+                    <constraint firstItem="ucO-Qd-aGf" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="DiF-aU-mgH"/>
+                    <constraint firstItem="jgm-VS-e8T" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="Kfk-9U-Pws"/>
+                    <constraint firstItem="PvH-ob-p5o" firstAttribute="top" secondItem="Bmd-xL-cy5" secondAttribute="bottom" constant="8" symbolic="YES" id="NeP-kq-PTy"/>
+                    <constraint firstAttribute="trailing" secondItem="PvH-ob-p5o" secondAttribute="trailing" constant="20" symbolic="YES" id="OSh-dx-ndK"/>
+                    <constraint firstItem="N7c-0c-rmu" firstAttribute="leading" secondItem="ucO-Qd-aGf" secondAttribute="trailing" constant="8" symbolic="YES" id="PVQ-ik-Hvk"/>
+                    <constraint firstItem="51c-ck-4h8" firstAttribute="top" secondItem="lxL-cx-amI" secondAttribute="bottom" constant="8" symbolic="YES" id="Plt-0z-awf"/>
+                    <constraint firstItem="lxL-cx-amI" firstAttribute="top" secondItem="PvH-ob-p5o" secondAttribute="bottom" constant="8" symbolic="YES" id="PtT-VK-w2e"/>
+                    <constraint firstItem="cJV-r2-NVU" firstAttribute="top" secondItem="Oqt-uH-bUP" secondAttribute="bottom" constant="8" symbolic="YES" id="QC5-5M-EY8"/>
+                    <constraint firstItem="N7c-0c-rmu" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" constant="20" symbolic="YES" id="R6D-Q6-bqc"/>
+                    <constraint firstItem="PvH-ob-p5o" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="RxX-5x-srX"/>
+                    <constraint firstItem="Oqt-uH-bUP" firstAttribute="top" secondItem="4Bc-zj-lM9" secondAttribute="bottom" constant="8" symbolic="YES" id="YFS-ha-hQE"/>
+                    <constraint firstAttribute="trailing" secondItem="LIO-Xd-f4A" secondAttribute="trailing" constant="20" symbolic="YES" id="Yyw-L0-b6b"/>
+                    <constraint firstItem="51c-ck-4h8" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="a5s-X4-PQ6"/>
+                    <constraint firstItem="Emz-JL-XES" firstAttribute="top" secondItem="LIO-Xd-f4A" secondAttribute="bottom" constant="8" symbolic="YES" id="aIP-t5-hRu"/>
+                    <constraint firstAttribute="trailing" secondItem="Bmd-xL-cy5" secondAttribute="trailing" constant="20" symbolic="YES" id="cMW-WF-6eK"/>
+                    <constraint firstAttribute="trailing" secondItem="jgm-VS-e8T" secondAttribute="trailing" constant="20" symbolic="YES" id="cbq-5Q-adU"/>
+                    <constraint firstItem="Oqt-uH-bUP" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="eZn-nT-Umi"/>
+                    <constraint firstAttribute="trailing" secondItem="Emz-JL-XES" secondAttribute="trailing" constant="20" symbolic="YES" id="i38-lD-2FJ"/>
+                    <constraint firstAttribute="trailing" secondItem="lxL-cx-amI" secondAttribute="trailing" constant="20" symbolic="YES" id="jWk-cb-Bp0"/>
+                    <constraint firstAttribute="bottom" secondItem="Emz-JL-XES" secondAttribute="bottom" constant="20" symbolic="YES" id="n1m-TE-v4W"/>
+                    <constraint firstAttribute="trailing" secondItem="4Bc-zj-lM9" secondAttribute="trailing" constant="20" symbolic="YES" id="qB5-ii-973"/>
+                    <constraint firstItem="Bmd-xL-cy5" firstAttribute="top" secondItem="cJV-r2-NVU" secondAttribute="bottom" constant="8" symbolic="YES" id="qiG-WB-Dbd"/>
+                    <constraint firstItem="jgm-VS-e8T" firstAttribute="top" secondItem="N7c-0c-rmu" secondAttribute="bottom" constant="8" symbolic="YES" id="th5-HX-sic"/>
+                    <constraint firstAttribute="trailing" secondItem="cJV-r2-NVU" secondAttribute="trailing" constant="20" symbolic="YES" id="tvh-hq-Zow"/>
+                    <constraint firstItem="cJV-r2-NVU" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="uWz-hu-Tvp"/>
+                    <constraint firstItem="Bmd-xL-cy5" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" constant="20" symbolic="YES" id="v6X-O5-ElS"/>
+                    <constraint firstAttribute="trailing" secondItem="N7c-0c-rmu" secondAttribute="trailing" constant="20" symbolic="YES" id="vXD-aH-lU0"/>
+                    <constraint firstAttribute="trailing" secondItem="Oqt-uH-bUP" secondAttribute="trailing" constant="20" symbolic="YES" id="xs7-Nl-elZ"/>
+                </constraints>
+            </view>
+            <point key="canvasLocation" x="863" y="627.5"/>
+        </window>
+    </objects>
+</document>
