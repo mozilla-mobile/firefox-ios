@@ -29,6 +29,26 @@ enum ReaderModeTheme: String {
     case light = "light"
     case dark = "dark"
     case sepia = "sepia"
+
+    static func preferredTheme(for theme: ReaderModeTheme? = nil) -> ReaderModeTheme {
+        // If there is no reader theme provided than we default to light theme
+        let readerTheme = theme ?? .light
+        // Get current Firefox theme (Dark vs Normal)
+        // Normal means light theme. This is the overall theme used
+        // by Firefox iOS app
+        let appWideTheme = ThemeManager.instance.currentName
+        // We check for 3 basic themes we have Light / Dark / Sepia
+        // Theme: Dark - app-wide dark overrides all
+        if appWideTheme == .dark {
+            return .dark
+        // Theme: Sepia - special case for when the theme is sepia.
+        // For this we only check the them supplied and not the app wide theme
+        } else if readerTheme == .sepia {
+            return .sepia
+        }
+        // Theme: Light - Default case for when there is no theme supplied i.e. nil and we revert to light
+        return readerTheme
+    }
 }
 
 private struct FontFamily {
@@ -162,9 +182,13 @@ struct ReaderModeStyle {
             return nil
         }
 
-        self.theme = theme!
+        self.theme = theme ?? ReaderModeTheme.preferredTheme()
         self.fontType = fontType
         self.fontSize = fontSize!
+    }
+    
+    mutating func ensurePreferredColorThemeIfNeeded() {
+        self.theme = ReaderModeTheme.preferredTheme(for: self.theme)
     }
 }
 

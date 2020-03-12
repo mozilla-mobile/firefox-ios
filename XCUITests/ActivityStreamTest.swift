@@ -10,7 +10,7 @@ class ActivityStreamTest: BaseTestCase {
         if Constants.testWithDB.contains(Base.helper.getTestName(fromTest: name)) {
             // for the current test name, add the db fixture used
             let pagesVisitedDB = Base.helper.iPad() ? LaunchArguments.LoadDatabasePrefix + Constants.pagesVisitediPad : LaunchArguments.LoadDatabasePrefix + Constants.pagesVisitediPhone
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, pagesVisitedDB]
+            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, pagesVisitedDB]
         }
         
         super.setUp()

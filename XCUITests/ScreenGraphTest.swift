@@ -12,9 +12,9 @@ class ScreenGraphTest: XCTestCase {
     override func setUp() {
         app = XCUIApplication()
         navigator = createTestGraph(for: self, with: app).navigator()
-        Base.app.terminate()
-        Base.app.launchArguments = [LaunchArguments.Test, LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew]
-        Base.app.activate()
+        app.terminate()
+        app.launchArguments = [LaunchArguments.Test, LaunchArguments.ClearProfile, LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+        app.activate()
     }
 }
 

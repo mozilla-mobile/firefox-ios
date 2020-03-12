@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (master)
 -----------
 
-This branch only works with [Xcode 11.3](https://apps.apple.com/app/xcode/id497799835), Swift 5.1.3 and supports iOS 11.0 and above.
+This branch only works with [Xcode 11.3.1](https://apps.apple.com/app/xcode/id497799835), Swift 5.1.3 and supports iOS 12.0 and above.
 
 Please make sure you aim your pull requests in the right direction.
 

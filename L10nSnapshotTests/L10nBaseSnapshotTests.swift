@@ -21,7 +21,7 @@ class L10nBaseSnapshotTests: XCTestCase {
         app = XCUIApplication()
         setupSnapshot(app)
         app.terminate()
-        var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew]
+        var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
         if skipIntro {
             args.append(LaunchArguments.SkipIntro)
         }

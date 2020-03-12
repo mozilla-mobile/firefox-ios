@@ -25,7 +25,7 @@ pipeline {
             steps {
                 dir('SyncIntegrationTests') {
                     sh 'pipenv install'
-                    sh 'pipenv check'
+                    sh 'pipenv check -i 37752 // Ignoring vulnerability due to https://github.com/pypa/pipenv/issues/4147'
                     sh 'pipenv run pytest ' +
                         '--color=yes ' +
                         '--junit-xml=results/junit.xml ' +

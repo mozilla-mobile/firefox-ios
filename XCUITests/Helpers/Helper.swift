@@ -12,7 +12,7 @@ class Helper {
     
     // leave empty for non-specific tests
     var specificForPlatform: UIUserInterfaceIdiom?
-    
+
     var skipPlatform: Bool {
         guard let platform = specificForPlatform else { return false }
         return UIDevice.current.userInterfaceIdiom != platform
