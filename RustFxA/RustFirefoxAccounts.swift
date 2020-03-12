@@ -9,6 +9,8 @@ import SwiftKeychainWrapper
 fileprivate let prefs = NSUserDefaultsPrefs(prefix: "profile")
 
 open class RustFirefoxAccounts {
+    public static let prefKeyLastDeviceName = "prefKeyLastDeviceName"
+
     private let clientID = "1b1a3e44c54fbb58"
     public let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     public static var shared = RustFirefoxAccounts()
@@ -53,10 +55,10 @@ open class RustFirefoxAccounts {
         }
     }
 
-    public static let PrefKeySyncAuthStateUniqueID = "PrefKeySyncAuthStateUniqueID"
+    private static let prefKeySyncAuthStateUniqueID = "PrefKeySyncAuthStateUniqueID"
     private static var syncAuthStateUniqueId: String {
         let id: String
-        let key = RustFirefoxAccounts.PrefKeySyncAuthStateUniqueID
+        let key = RustFirefoxAccounts.prefKeySyncAuthStateUniqueID
         if let _id = prefs.stringForKey(key) {
             id = _id
         } else {
@@ -150,9 +152,58 @@ open class RustFirefoxAccounts {
         if let str = avatarUrl, let url = URL(string: str) {
             avatar = Avatar(url: url)
         }
+        // Accessing the profile will trigger a cache update if needed
+        let _ = userProfile
+
+        // Update the device name cache
+        if let deviceName = accountManager.deviceConstellation()?.state()?.localDevice?.displayName {
+            UserDefaults.standard.set(deviceName, forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
+        }
         
         NotificationCenter.default.post(name: .FirefoxAccountProfileChanged, object: self)
         NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: self)
     }
+
+    private let prefKeyCachedUserProfile = "prefKeyCachedUserProfile"
+    private var cachedUserProfile: FxAUserProfile?
+    public var userProfile: FxAUserProfile? {
+        get {
+            if let profile = accountManager.accountProfile() {
+                if let p = cachedUserProfile, FxAUserProfile(profile: profile) == p {
+                    return cachedUserProfile
+                }
+
+                cachedUserProfile = FxAUserProfile(profile: profile)
+                if let data = try? JSONEncoder().encode(cachedUserProfile!) {
+                    prefs.setObject(data, forKey: prefKeyCachedUserProfile)
+                }
+            } else if cachedUserProfile == nil {
+                if let data: Data = prefs.objectForKey(prefKeyCachedUserProfile) {
+                    cachedUserProfile = try? JSONDecoder().decode(FxAUserProfile.self, from: data)
+                }
+            }
+
+            return cachedUserProfile
+        }
+    }
+
+    public func disconnect() {
+        accountManager.logout() { _ in }
+        prefs.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
+        prefs.removeObjectForKey(prefKeyCachedUserProfile)
+    }
 }
 
+public struct FxAUserProfile: Codable, Equatable {
+    public let uid: String
+    public let email: String
+    public let avatarUrl: String?
+    public let displayName: String?
+
+    init(profile: MozillaAppServices.Profile) {
+        uid = profile.uid
+        email = profile.email
+        avatarUrl = profile.avatar?.url
+        displayName = profile.displayName
+    }
+}

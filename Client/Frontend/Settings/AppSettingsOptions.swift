@@ -310,11 +310,11 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        if let displayName = RustFirefoxAccounts.shared.accountManager.accountProfile()?.displayName {
+        if let displayName = RustFirefoxAccounts.shared.userProfile?.displayName {
             return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
-        if let email = RustFirefoxAccounts.shared.accountManager.accountProfile()?.email {
+        if let email = RustFirefoxAccounts.shared.userProfile?.email {
             return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
@@ -335,7 +335,7 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let account = profile.rustAccount
+        let account = profile.rustFxA.accountManager
         guard !account.accountNeedsReauth() else {
             let view = FxAWebView(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
             navigationController?.pushViewController(view, animated: true)

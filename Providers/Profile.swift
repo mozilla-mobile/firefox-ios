@@ -131,7 +131,7 @@ protocol Profile: AnyObject {
     func hasSyncableAccount() -> Bool
 
     func getAccount() -> Account.FirefoxAccount?
-    var rustAccount: FxAccountManager { get }
+    var rustFxA: RustFirefoxAccounts { get }
 
     func removeAccount()
 
@@ -526,19 +526,19 @@ open class BrowserProfile: Profile {
     }()
 
     func hasAccount() -> Bool {
-        return rustAccount.hasAccount()
+        return rustFxA.accountManager.hasAccount()
     }
 
     func hasSyncableAccount() -> Bool {
-        return hasAccount() && !rustAccount.accountNeedsReauth()
+        return hasAccount() && !rustFxA.accountManager.accountNeedsReauth()
     }
 
     func getAccount() -> Account.FirefoxAccount? {
         return nil
     }
 
-    var rustAccount: FxAccountManager {
-        return RustFirefoxAccounts.shared.accountManager
+    var rustFxA: RustFirefoxAccounts {
+        return RustFirefoxAccounts.shared
     }
 
     func removeAccountMetadata() {
@@ -900,7 +900,7 @@ open class BrowserProfile: Profile {
 
             if constellationStateUpdate == nil {
                 constellationStateUpdate = NotificationCenter.default.addObserver(forName: .constellationStateUpdate, object: nil, queue: .main) { [weak self] notification in
-                    guard let state = self?.profile.rustAccount.deviceConstellation()?.state() else {
+                    guard let state = self?.profile.rustFxA.accountManager.deviceConstellation()?.state() else {
                         return
                     }
                     guard let self = self else { return }
@@ -919,7 +919,7 @@ open class BrowserProfile: Profile {
                 }
                 log.debug("Updating FxA devices list.")
 
-                self.profile.rustAccount.deviceConstellation()?.refreshState()
+                self.profile.rustFxA.accountManager.deviceConstellation()?.refreshState()
                 return deferMaybe(result)
             }
         }
