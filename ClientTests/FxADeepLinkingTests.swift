@@ -8,19 +8,5 @@ import XCTest
 import Shared
 
 class FxADeepLinkingTests: XCTestCase {
-    var profile: MockProfile!
-    var vc: FxAContentViewController!
-    var expectUrl = URL(string: "https://accounts.firefox.com/signin?service=sync&context=fx_ios_v1&signin=test&utm_source=somesource&entrypoint=one")
-
-    override func setUp() {
-        super.setUp()
-        self.profile = MockProfile()
-        self.vc = FxAContentViewController(profile: self.profile)
-    }
-
-    override func tearDown() {
-        self.profile._shutdown()
-        super.tearDown()
-    }
-
+  
 }
