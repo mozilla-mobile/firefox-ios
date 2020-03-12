@@ -83,26 +83,27 @@ extension PhotonActionSheetProtocol {
             showFxA(fxaParams, .emailLoginFlow)
         }
 
-        let rustAccount = RustFirefoxAccounts.shared.accountManager
+        let rustAccount = RustFirefoxAccounts.shared
+        let needsReauth = rustAccount.accountManager.accountNeedsReauth()
 
-        guard let rustProfile = rustAccount.accountProfile() else {
+        guard let userProfile = rustAccount.userProfile else {
             return PhotonActionSheetItem(title: Strings.FxASignInToSync, iconString: "menu-sync", handler: action)
         }
         let title: String = {
-            if rustAccount.accountNeedsReauth() {
+            if rustAccount.accountManager.accountNeedsReauth() {
                 return Strings.FxAAccountVerifyPassword
             }
-            return rustProfile.displayName ?? rustProfile.email
+            return userProfile.displayName ?? userProfile.email
         }()
 
-        let iconString = rustAccount.accountNeedsReauth() ? "menu-warning" : "placeholder-avatar"
+        let iconString = needsReauth ? "menu-warning" : "placeholder-avatar"
 
         var iconURL: URL? = nil
-        if let str = rustAccount.accountProfile()?.avatar?.url, let url = URL(string: str) {
+        if let str = rustAccount.userProfile?.avatarUrl, let url = URL(string: str) {
             iconURL = url
         }
-        let iconType: PhotonActionSheetIconType = rustAccount.accountNeedsReauth() ? .Image : .URL
-        let iconTint: UIColor? = rustAccount.accountNeedsReauth() ? UIColor.Photon.Yellow60 : nil
+        let iconType: PhotonActionSheetIconType = needsReauth ? .Image : .URL
+        let iconTint: UIColor? = needsReauth ? UIColor.Photon.Yellow60 : nil
         let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, iconType: iconType, iconTint: iconTint, accessory: .Sync, handler: action)
         return syncOption
     }

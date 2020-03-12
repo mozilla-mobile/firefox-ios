@@ -152,9 +152,7 @@ class FxALoginHelper {
 
 extension FxALoginHelper {
     func disconnect() {
-        RustFirefoxAccounts.shared.accountManager.logout() { _ in
-            self.profile?.prefs.removeObjectForKey(RustFirefoxAccounts.PrefKeySyncAuthStateUniqueID)
-        }
+        RustFirefoxAccounts.shared.disconnect() 
 
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
 
