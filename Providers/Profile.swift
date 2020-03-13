@@ -952,12 +952,14 @@ open class BrowserProfile: Profile {
                     return
                 }
 
-                guard case .success(let tokenServerEndpointURL) = RustFirefoxAccounts.shared.accountManager.getTokenServerEndpointURL() else {
-                    d.fill(Maybe(failure: SyncUnlockGetURLError()))
-                    return
-                }
+                RustFirefoxAccounts.shared.accountManager.getTokenServerEndpointURL() { result in
+                    guard case .success(let tokenServerEndpointURL) = result else {
+                        d.fill(Maybe(failure: SyncUnlockGetURLError()))
+                        return
+                    }
 
-                d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString)))
+                    d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString)))
+                }
             }
             return d
         }

@@ -77,15 +77,18 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
         view = webView
 
-        let settingsURL = RustFirefoxAccounts.shared.accountManager.getManageAccountURL(entrypoint: "ios_settings_manage")
-        if pageType == .settingsPage, case .success(let url) = settingsURL {
-            baseURL = url
-            webView.load(URLRequest(url: url))
-        } else {
-            RustFirefoxAccounts.shared.accountManager.beginAuthentication() { [weak self] result in
-                if case .success(let url) = result {
-                    self?.baseURL = url
-                    self?.webView.load(URLRequest(url: url))
+        let accountManager = RustFirefoxAccounts.shared.accountManager
+        accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
+            guard let self = self else { return }
+            if self.pageType == .settingsPage, case .success(let url) = result {
+                self.baseURL = url
+                self.webView.load(URLRequest(url: url))
+            } else {
+                accountManager.beginAuthentication() { [weak self] result in
+                    if case .success(let url) = result {
+                        self?.baseURL = url
+                        self?.webView.load(URLRequest(url: url))
+                    }
                 }
             }
         }
