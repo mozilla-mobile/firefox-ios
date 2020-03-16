@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="NO">
+    <dependencies>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FTRNetworkTestViewController">
+            <connections>
+                <outlet property="requestCompletedLabel" destination="5ew-SP-2TH" id="yyD-1q-hkw"/>
+                <outlet property="responseVerifiedLabel" destination="JrE-Fn-4nL" id="cKy-Ad-dag"/>
+                <outlet property="retryIndicator" destination="nG6-bQ-LiZ" id="QCN-5e-7Mi"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Retry Detected" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nG6-bQ-LiZ">
+                    <rect key="frame" x="129.5" y="573" width="116" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Request completed" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5ew-SP-2TH">
+                    <rect key="frame" x="113" y="621" width="149" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="FTRRequestCompletedLabel"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Response Verified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JrE-Fn-4nL">
+                    <rect key="frame" x="118" y="537" width="139" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="FTRResponseVerifiedLabel"/>
+                    </userDefinedRuntimeAttributes>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IY4-Z9-CL1">
+                    <rect key="frame" x="123.5" y="123" width="128" height="30"/>
+                    <state key="normal" title="NSURLConnection">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="NSURLConnectionTest"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="testNetworkClick:" destination="-1" eventType="touchUpInside" id="xep-rS-Xbd"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DLm-KL-uJZ">
+                    <rect key="frame" x="136" y="161" width="103" height="30"/>
+                    <state key="normal" title="NSURLSession">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="NSURLSessionTest"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="userDidTapNSURLSessionTest:" destination="-1" eventType="touchUpInside" id="uY0-VC-Lgx"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K1j-Ud-aT7">
+                    <rect key="frame" x="93" y="199" width="189" height="30"/>
+                    <state key="normal" title="NSURLSession + Delegates">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="NSURLSessionDelegateTest"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="userDidTapNSURLSessionDelegateTest:" destination="-1" eventType="touchUpInside" id="xkq-0o-fXe"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RT5-ns-7Ck">
+                    <rect key="frame" x="86" y="237" width="203" height="30"/>
+                    <state key="normal" title="NSURLSession + No Callback">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="NSURLSessionNoCallbackTest"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="userDidTapNSURLSessionNoCallbackTest:" destination="-1" eventType="touchUpInside" id="l9e-BD-m7k"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="RT5-ns-7Ck" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="1Ai-zp-maS"/>
+                <constraint firstItem="K1j-Ud-aT7" firstAttribute="top" secondItem="DLm-KL-uJZ" secondAttribute="bottom" constant="8" id="1Tp-vV-8PX"/>
+                <constraint firstAttribute="bottom" secondItem="5ew-SP-2TH" secondAttribute="bottom" constant="25" id="1d5-Nx-YXb"/>
+                <constraint firstItem="IY4-Z9-CL1" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="123" id="8Co-mI-fmZ"/>
+                <constraint firstItem="nG6-bQ-LiZ" firstAttribute="top" secondItem="JrE-Fn-4nL" secondAttribute="bottom" constant="15" id="Ahj-bh-fMV"/>
+                <constraint firstAttribute="centerX" secondItem="5ew-SP-2TH" secondAttribute="centerX" id="IUr-p0-WPV"/>
+                <constraint firstItem="RT5-ns-7Ck" firstAttribute="top" secondItem="K1j-Ud-aT7" secondAttribute="bottom" constant="8" id="Q6R-po-bdF"/>
+                <constraint firstItem="5ew-SP-2TH" firstAttribute="top" secondItem="nG6-bQ-LiZ" secondAttribute="bottom" constant="27" id="fRg-ie-AON"/>
+                <constraint firstAttribute="centerX" secondItem="JrE-Fn-4nL" secondAttribute="centerX" id="ft2-fA-F1V"/>
+                <constraint firstItem="K1j-Ud-aT7" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="g6a-oN-fNU"/>
+                <constraint firstAttribute="centerX" secondItem="nG6-bQ-LiZ" secondAttribute="centerX" id="hLl-iO-q2F"/>
+                <constraint firstAttribute="centerX" secondItem="IY4-Z9-CL1" secondAttribute="centerX" id="oFl-Fw-iVK"/>
+                <constraint firstItem="DLm-KL-uJZ" firstAttribute="top" secondItem="IY4-Z9-CL1" secondAttribute="bottom" constant="8" id="rXD-a1-kjQ"/>
+                <constraint firstAttribute="centerX" secondItem="DLm-KL-uJZ" secondAttribute="centerX" id="wHX-5C-XgP"/>
+            </constraints>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

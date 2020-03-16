@@ -1,0 +1,17 @@
+[package]
+name = "sync_manager_ffi"
+version = "0.1.0"
+authors = ["application-services <application-services@mozilla.com>"]
+edition = "2018"
+license = "MPL-2.0"
+
+
+[dependencies]
+sync_manager = { path = ".." }
+sync15 = { path = "../../sync15" }
+ffi-support = { path = "../../support/ffi" }
+places-ffi = { path = "../../places/ffi" }
+logins_ffi = { path = "../../logins/ffi" }
+tabs_ffi = { path = "../../tabs/ffi" }
+prost = "0.6.1"
+log = "0.4.7"

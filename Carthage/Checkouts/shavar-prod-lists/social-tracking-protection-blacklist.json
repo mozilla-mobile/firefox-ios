@@ -1,0 +1,62 @@
+{
+ "license": "https://www.mozilla.org/MPL/",
+ "categories": {
+     "Facebook": [
+         {
+             "facebook.com": {
+                 "facebook.com": [
+                     "atlassolutions.com",
+
+                     "facebook.com",
+                     "facebook.net",
+                     "facebook.de",
+                     "facebook.fr",
+                     "fb.com",
+                     "fbcdn.net",
+                     "fbsbx.com",
+                     "friendfeed.com",
+
+                     "instagram.com",
+
+                     "messenger.com",
+
+                     "atdmt.com"
+                 ]
+             }
+         }
+     ],
+     "Twitter": [
+         {
+             "twitter.com": {
+                 "twitter.com": [
+                     "ads-twitter.com",
+                     "crashlytics.com",
+                     "tweetdeck.com",
+                     "twimg.com",
+                     "twitter.com",
+                     "twitter.jp"
+                 ]
+             }
+         }
+     ],
+     "LinkedIn": [
+        {
+            "linkedin.com": {
+                "linkedin.com": [
+                    "licdn.com",
+                    "linkedin.com"
+                ]
+            }
+        }
+     ],
+     "YouTube": [
+         {
+             "youtube.com": {
+                 "youtube.com": [
+                     "youtube.com"
+                 ]
+             }
+         }
+     ]
+ }
+}

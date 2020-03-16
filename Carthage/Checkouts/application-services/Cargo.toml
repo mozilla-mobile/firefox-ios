@@ -1,0 +1,40 @@
+[workspace]
+members = [
+    "components/fxa-client",
+    "components/fxa-client/ffi",
+    "components/logins",
+    "components/logins/ffi",
+    "components/places",
+    "components/places/ffi",
+    "components/push",
+    "components/push/ffi",
+    "components/rc_log",
+    "components/remerge",
+    "components/support/cli",
+    "components/support/error",
+    "components/support/ffi",
+    "components/support/force-viaduct-reqwest",
+    "components/support/guid",
+    "components/support/interrupt",
+    "components/support/rc_crypto",
+    "components/support/rc_crypto/nss",
+    "components/support/rc_crypto/nss/nss_build_common",
+    "components/support/rc_crypto/nss/nss_sys",
+    "components/support/sql",
+    "components/support/sync15-traits",
+    "components/sync_manager",
+    "components/sync_manager/ffi",
+    "components/sync15",
+    "components/tabs",
+    "components/tabs/ffi",
+    "components/viaduct",
+    "megazords/full",
+    "megazords/ios/rust",
+    "megazords/lockbox",
+    "testing/sync-test",
+]
+
+[profile.release]
+opt-level = "s"
+debug = true
+lto = "thin"

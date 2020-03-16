@@ -1,0 +1,6282 @@
+{
+ "license": "https://easylist.to/pages/licence.html",
+ "categories": {
+  "adGuard": [
+   {
+    "banners-slb.mobile.yandex.net": {
+     "banners-slb.mobile.yandex.net": [
+      "banners-slb.mobile.yandex.net"
+     ]
+    }
+   },
+   {
+    "banners.mobile.yandex.net": {
+     "banners.mobile.yandex.net": [
+      "banners.mobile.yandex.net"
+     ]
+    }
+   },
+   {
+    "coinhive.com": {
+     "coinhive.com": [
+      "coinhive.com"
+     ]
+    }
+   },
+   {
+    "coin-hive.com": {
+     "coin-hive.com": [
+      "coin-hive.com"
+     ]
+    }
+   },
+   {
+    "bu1.duba.com": {
+     "bu1.duba.com": [
+      "bu1.duba.com"
+     ]
+    }
+   },
+   {
+    "behacdn.ksmobile.net": {
+     "behacdn.ksmobile.net": [
+      "behacdn.ksmobile.net"
+     ]
+    }
+   },
+   {
+    "cmdts.ksmobile.com": {
+     "cmdts.ksmobile.com": [
+      "cmdts.ksmobile.com"
+     ]
+    }
+   },
+   {
+    "p-behacdn.ksmobile.net": {
+     "p-behacdn.ksmobile.net": [
+      "p-behacdn.ksmobile.net"
+     ]
+    }
+   },
+   {
+    "m.yap.yahoo.com": {
+     "m.yap.yahoo.com": [
+      "m.yap.yahoo.com"
+     ]
+    }
+   },
+   {
+    "crosspromotion.weplayer.cc": {
+     "crosspromotion.weplayer.cc": [
+      "crosspromotion.weplayer.cc"
+     ]
+    }
+   },
+   {
+    "ad.weplayer.cc": {
+     "ad.weplayer.cc": [
+      "ad.weplayer.cc"
+     ]
+    }
+   },
+   {
+    "mobile-campaigns.avast.com": {
+     "mobile-campaigns.avast.com": [
+      "mobile-campaigns.avast.com"
+     ]
+    }
+   },
+   {
+    "advs2sonline.goforandroid.com": {
+     "advs2sonline.goforandroid.com": [
+      "advs2sonline.goforandroid.com"
+     ]
+    }
+   },
+   {
+    "adpush.goforandroid.com": {
+     "adpush.goforandroid.com": [
+      "adpush.goforandroid.com"
+     ]
+    }
+   },
+   {
+    "advonline.goforandroid.com": {
+     "advonline.goforandroid.com": [
+      "advonline.goforandroid.com"
+     ]
+    }
+   },
+   {
+    "dzpu6za66svjl.cloudfront.net": {
+     "dzpu6za66svjl.cloudfront.net": [
+      "dzpu6za66svjl.cloudfront.net"
+     ]
+    }
+   },
+   {
+    "ad.api.kaffnet.com": {
+     "ad.api.kaffnet.com": [
+      "ad.api.kaffnet.com"
+     ]
+    }
+   },
+   {
+    "ad.flipboard.com": {
+     "ad.flipboard.com": [
+      "ad.flipboard.com"
+     ]
+    }
+   },
+   {
+    "adserver.shadow.snapads.com": {
+     "adserver.shadow.snapads.com": [
+      "adserver.shadow.snapads.com"
+     ]
+    }
+   },
+   {
+    "ads-chunks.prod.ihrhls.com": {
+     "ads-chunks.prod.ihrhls.com": [
+      "ads-chunks.prod.ihrhls.com"
+     ]
+    }
+   },
+   {
+    "api.ads.watchabc.go.com": {
+     "api.ads.watchabc.go.com": [
+      "api.ads.watchabc.go.com"
+     ]
+    }
+   },
+   {
+    "ad.prismamediadigital.com": {
+     "ad.prismamediadigital.com": [
+      "ad.prismamediadigital.com"
+     ]
+    }
+   },
+   {
+    "ad2play.ftv-publicite.fr": {
+     "ad2play.ftv-publicite.fr": [
+      "ad2play.ftv-publicite.fr"
+     ]
+    }
+   },
+   {
+    "mblapi.ssl2.duapps.com": {
+     "mblapi.ssl2.duapps.com": [
+      "mblapi.ssl2.duapps.com"
+     ]
+    }
+   },
+   {
+    "api.mobula.ds.duapps.com": {
+     "api.mobula.ds.duapps.com": [
+      "api.mobula.ds.duapps.com"
+     ]
+    }
+   },
+   {
+    "noxagile.duapp.com": {
+     "noxagile.duapp.com": [
+      "noxagile.duapp.com"
+     ]
+    }
+   },
+   {
+    "common.duapps.com": {
+     "common.duapps.com": [
+      "common.duapps.com"
+     ]
+    }
+   },
+   {
+    "pasta.esfile.duapps.com": {
+     "pasta.esfile.duapps.com": [
+      "pasta.esfile.duapps.com"
+     ]
+    }
+   },
+   {
+    "api.mobula.sdk.duapps.com": {
+     "api.mobula.sdk.duapps.com": [
+      "api.mobula.sdk.duapps.com"
+     ]
+    }
+   },
+   {
+    "mobula.ssl2.duapps.com": {
+     "mobula.ssl2.duapps.com": [
+      "mobula.ssl2.duapps.com"
+     ]
+    }
+   },
+   {
+    "ad.duapps.com": {
+     "ad.duapps.com": [
+      "ad.duapps.com"
+     ]
+    }
+   },
+   {
+    "sync.mobojoy.baidu.com": {
+     "sync.mobojoy.baidu.com": [
+      "sync.mobojoy.baidu.com"
+     ]
+    }
+   },
+   {
+    "api.mobojoy.baidu.com": {
+     "api.mobojoy.baidu.com": [
+      "api.mobojoy.baidu.com"
+     ]
+    }
+   },
+   {
+    "js.mobojoy.baidu.com": {
+     "js.mobojoy.baidu.com": [
+      "js.mobojoy.baidu.com"
+     ]
+    }
+   },
+   {
+    "ufz.doesxyz.com": {
+     "ufz.doesxyz.com": [
+      "ufz.doesxyz.com"
+     ]
+    }
+   },
+   {
+    "id1.cn": {
+     "id1.cn": [
+      "id1.cn"
+     ]
+    }
+   },
+   {
+    "xdrig.com": {
+     "xdrig.com": [
+      "xdrig.com"
+     ]
+    }
+   },
+   {
+    "usp1.baidu.com": {
+     "usp1.baidu.com": [
+      "usp1.baidu.com"
+     ]
+    }
+   },
+   {
+    "i2.myapkcdn.in": {
+     "i2.myapkcdn.in": [
+      "i2.myapkcdn.in"
+     ]
+    }
+   },
+   {
+    "admin.appnext.com": {
+     "admin.appnext.com": [
+      "admin.appnext.com"
+     ]
+    }
+   },
+   {
+    "c3.myapkcdn.in": {
+     "c3.myapkcdn.in": [
+      "c3.myapkcdn.in"
+     ]
+    }
+   },
+   {
+    "54.222.186.106": {
+     "54.222.186.106": [
+      "54.222.186.106"
+     ]
+    }
+   },
+   {
+    "plugin.mobopay.baidu.com": {
+     "plugin.mobopay.baidu.com": [
+      "plugin.mobopay.baidu.com"
+     ]
+    }
+   },
+   {
+    "mo.freeindoapp.com": {
+     "mo.freeindoapp.com": [
+      "mo.freeindoapp.com"
+     ]
+    }
+   },
+   {
+    "a.6d47c1118927cf53ba9654931df80e8d.com": {
+     "a.6d47c1118927cf53ba9654931df80e8d.com": [
+      "a.6d47c1118927cf53ba9654931df80e8d.com"
+     ]
+    }
+   },
+   {
+    "rtb.appbid.com": {
+     "rtb.appbid.com": [
+      "rtb.appbid.com"
+     ]
+    }
+   },
+   {
+    "rtapi.abbi.io": {
+     "rtapi.abbi.io": [
+      "rtapi.abbi.io"
+     ]
+    }
+   },
+   {
+    "ade.clmbtech.com": {
+     "ade.clmbtech.com": [
+      "ade.clmbtech.com"
+     ]
+    }
+   },
+   {
+    "i.mxplayer.j2inter.com": {
+     "i.mxplayer.j2inter.com": [
+      "i.mxplayer.j2inter.com"
+     ]
+    }
+   },
+   {
+    "online-prod.zenmxapps.com": {
+     "online-prod.zenmxapps.com": [
+      "online-prod.zenmxapps.com"
+     ]
+    }
+   },
+   {
+    "look.kfiopkln.com": {
+     "look.kfiopkln.com": [
+      "look.kfiopkln.com"
+     ]
+    }
+   },
+   {
+    "studcat.infra.systems": {
+     "studcat.infra.systems": [
+      "studcat.infra.systems"
+     ]
+    }
+   },
+   {
+    "adplex.co.kr": {
+     "adplex.co.kr": [
+      "adplex.co.kr"
+     ]
+    }
+   },
+   {
+    "tveta.naver.net": {
+     "tveta.naver.net": [
+      "tveta.naver.net"
+     ]
+    }
+   },
+   {
+    "opr.formulas.jp": {
+     "opr.formulas.jp": [
+      "opr.formulas.jp"
+     ]
+    }
+   },
+   {
+    "deliveryengine.adswizz.com": {
+     "deliveryengine.adswizz.com": [
+      "deliveryengine.adswizz.com"
+     ]
+    }
+   },
+   {
+    "sitemaji.com": {
+     "sitemaji.com": [
+      "sitemaji.com"
+     ]
+    }
+   },
+   {
+    "h5.wannaplay.cn": {
+     "h5.wannaplay.cn": [
+      "h5.wannaplay.cn"
+     ]
+    }
+   },
+   {
+    "adsapi.manhuaren.com": {
+     "adsapi.manhuaren.com": [
+      "adsapi.manhuaren.com"
+     ]
+    }
+   },
+   {
+    "euadsapi.manhuaren.com": {
+     "euadsapi.manhuaren.com": [
+      "euadsapi.manhuaren.com"
+     ]
+    }
+   },
+   {
+    "cdn1.ettoday.net": {
+     "cdn1.ettoday.net": [
+      "cdn1.ettoday.net"
+     ]
+    }
+   },
+   {
+    "msg.ettoday.net": {
+     "msg.ettoday.net": [
+      "msg.ettoday.net"
+     ]
+    }
+   },
+   {
+    "d1zkodo2u3p4pe.cloudfront.net": {
+     "d1zkodo2u3p4pe.cloudfront.net": [
+      "d1zkodo2u3p4pe.cloudfront.net"
+     ]
+    }
+   },
+   {
+    "ad-ettoday.cdn.hinet.net": {
+     "ad-ettoday.cdn.hinet.net": [
+      "ad-ettoday.cdn.hinet.net"
+     ]
+    }
+   },
+   {
+    "adv-ettoday.cdn.hinet.net": {
+     "adv-ettoday.cdn.hinet.net": [
+      "adv-ettoday.cdn.hinet.net"
+     ]
+    }
+   },
+   {
+    "adv.ettoday.net": {
+     "adv.ettoday.net": [
+      "adv.ettoday.net"
+     ]
+    }
+   },
+   {
+    "startappservice.com": {
+     "startappservice.com": [
+      "startappservice.com"
+     ]
+    }
+   },
+   {
+    "x.appbaqend.com": {
+     "x.appbaqend.com": [
+      "x.appbaqend.com"
+     ]
+    }
+   },
+   {
+    "tkcatwalk.aotter.net": {
+     "tkcatwalk.aotter.net": [
+      "tkcatwalk.aotter.net"
+     ]
+    }
+   },
+   {
+    "tkmedia.aotter.net": {
+     "tkmedia.aotter.net": [
+      "tkmedia.aotter.net"
+     ]
+    }
+   },
+   {
+    "tkmedia-cache.aotter.net": {
+     "tkmedia-cache.aotter.net": [
+      "tkmedia-cache.aotter.net"
+     ]
+    }
+   },
+   {
+    "tkportal.aotter.net": {
+     "tkportal.aotter.net": [
+      "tkportal.aotter.net"
+     ]
+    }
+   },
+   {
+    "client.midosoo.com": {
+     "client.midosoo.com": [
+      "client.midosoo.com"
+     ]
+    }
+   },
+   {
+    "sc.smardroid.com": {
+     "sc.smardroid.com": [
+      "sc.smardroid.com"
+     ]
+    }
+   },
+   {
+    "tnkfactory.com": {
+     "tnkfactory.com": [
+      "tnkfactory.com"
+     ]
+    }
+   },
+   {
+    "iqzone.com": {
+     "iqzone.com": [
+      "iqzone.com"
+     ]
+    }
+   },
+   {
+    "postitial.com": {
+     "postitial.com": [
+      "postitial.com"
+     ]
+    }
+   },
+   {
+    "pssvc.iqzone.com": {
+     "pssvc.iqzone.com": [
+      "pssvc.iqzone.com"
+     ]
+    }
+   },
+   {
+    "cdn-cf.postitial.com": {
+     "cdn-cf.postitial.com": [
+      "cdn-cf.postitial.com"
+     ]
+    }
+   },
+   {
+    "ad.adapter.kaffnet.com": {
+     "ad.adapter.kaffnet.com": [
+      "ad.adapter.kaffnet.com"
+     ]
+    }
+   },
+   {
+    "opt8.co": {
+     "opt8.co": [
+      "opt8.co"
+     ]
+    }
+   },
+   {
+    "ads-bidder-api.twitter.com": {
+     "ads-bidder-api.twitter.com": [
+      "ads-bidder-api.twitter.com"
+     ]
+    }
+   },
+   {
+    "speee-ad.akamaized.net": {
+     "speee-ad.akamaized.net": [
+      "speee-ad.akamaized.net"
+     ]
+    }
+   },
+   {
+    "config.unityads.unity3d.com": {
+     "config.unityads.unity3d.com": [
+      "config.unityads.unity3d.com"
+     ]
+    }
+   },
+   {
+    "m-shes.ru": {
+     "m-shes.ru": [
+      "m-shes.ru"
+     ]
+    }
+   },
+   {
+    "init.startappservice.com": {
+     "init.startappservice.com": [
+      "init.startappservice.com"
+     ]
+    }
+   },
+   {
+    "valshara.com": {
+     "valshara.com": [
+      "valshara.com"
+     ]
+    }
+   },
+   {
+    "theship.club": {
+     "theship.club": [
+      "theship.club"
+     ]
+    }
+   },
+   {
+    "ads.jianchiapp.com": {
+     "ads.jianchiapp.com": [
+      "ads.jianchiapp.com"
+     ]
+    }
+   },
+   {
+    "abroad-ad.kingsoft-office-service.com": {
+     "abroad-ad.kingsoft-office-service.com": [
+      "abroad-ad.kingsoft-office-service.com"
+     ]
+    }
+   },
+   {
+    "cdn.adbert.info": {
+     "cdn.adbert.info": [
+      "cdn.adbert.info"
+     ]
+    }
+   },
+   {
+    "agent.tamedia.com.tw": {
+     "agent.tamedia.com.tw": [
+      "agent.tamedia.com.tw"
+     ]
+    }
+   },
+   {
+    "www.adbert.com.tw": {
+     "www.adbert.com.tw": [
+      "www.adbert.com.tw"
+     ]
+    }
+   },
+   {
+    "tw.api.vpon.com": {
+     "tw.api.vpon.com": [
+      "tw.api.vpon.com"
+     ]
+    }
+   },
+   {
+    "sdk.adtiming.com": {
+     "sdk.adtiming.com": [
+      "sdk.adtiming.com"
+     ]
+    }
+   },
+   {
+    "adsmogo.net": {
+     "adsmogo.net": [
+      "adsmogo.net"
+     ]
+    }
+   },
+   {
+    "adsmogo.org": {
+     "adsmogo.org": [
+      "adsmogo.org"
+     ]
+    }
+   },
+   {
+    "adsmogo.mobi": {
+     "adsmogo.mobi": [
+      "adsmogo.mobi"
+     ]
+    }
+   },
+   {
+    "adbetnet.advertserve.com": {
+     "adbetnet.advertserve.com": [
+      "adbetnet.advertserve.com"
+     ]
+    }
+   },
+   {
+    "chartboosts.com": {
+     "chartboosts.com": [
+      "chartboosts.com"
+     ]
+    }
+   },
+   {
+    "mobpowertech.com": {
+     "mobpowertech.com": [
+      "mobpowertech.com"
+     ]
+    }
+   },
+   {
+    "ap.smardroid.com": {
+     "ap.smardroid.com": [
+      "ap.smardroid.com"
+     ]
+    }
+   },
+   {
+    "aclickoooo.host": {
+     "aclickoooo.host": [
+      "aclickoooo.host"
+     ]
+    }
+   },
+   {
+    "api.ampiri.com": {
+     "api.ampiri.com": [
+      "api.ampiri.com"
+     ]
+    }
+   },
+   {
+    "httpkafka.unityads.unity3d.com": {
+     "httpkafka.unityads.unity3d.com": [
+      "httpkafka.unityads.unity3d.com"
+     ]
+    }
+   },
+   {
+    "amazonaws.com": {
+     "amazonaws.com": [
+      "amazonaws.com/cp4pox",
+      "amazonaws.com"
+     ]
+    }
+   },
+   {
+    "rtb.kds.media": {
+     "rtb.kds.media": [
+      "rtb.kds.media"
+     ]
+    }
+   },
+   {
+    "splicky.com": {
+     "splicky.com": [
+      "splicky.com"
+     ]
+    }
+   },
+   {
+    "auction.unityads.unity3d.com": {
+     "auction.unityads.unity3d.com": [
+      "auction.unityads.unity3d.com"
+     ]
+    }
+   },
+   {
+    "cdn-highwinds.unityads.unity3d.com": {
+     "cdn-highwinds.unityads.unity3d.com": [
+      "cdn-highwinds.unityads.unity3d.com"
+     ]
+    }
+   },
+   {
+    "dsp.batmobil.net": {
+     "dsp.batmobil.net": [
+      "dsp.batmobil.net/ads-dsp"
+     ]
+    }
+   },
+   {
+    "batmobi.net": {
+     "batmobi.net": [
+      "batmobi.net"
+     ]
+    }
+   },
+   {
+    "cdn.batmobi.net": {
+     "cdn.batmobi.net": [
+      "cdn.batmobi.net"
+     ]
+    }
+   },
+   {
+    "batmobil.net": {
+     "batmobil.net": [
+      "batmobil.net"
+     ]
+    }
+   },
+   {
+    "adn.insight.ucweb.com": {
+     "adn.insight.ucweb.com": [
+      "adn.insight.ucweb.com"
+     ]
+    }
+   },
+   {
+    "us.3zs0.date": {
+     "us.3zs0.date": [
+      "us.3zs0.date"
+     ]
+    }
+   },
+   {
+    "tkmftc.aotter.net": {
+     "tkmftc.aotter.net": [
+      "tkmftc.aotter.net"
+     ]
+    }
+   },
+   {
+    "d32z5ni8t5127x.cloudfront.net": {
+     "d32z5ni8t5127x.cloudfront.net": [
+      "d32z5ni8t5127x.cloudfront.net"
+     ]
+    }
+   },
+   {
+    "sumatoad.com": {
+     "sumatoad.com": [
+      "sumatoad.com"
+     ]
+    }
+   },
+   {
+    "upsight-api.com": {
+     "upsight-api.com": [
+      "upsight-api.com"
+     ]
+    }
+   },
+   {
+    "gdn.bigfishgames.com": {
+     "gdn.bigfishgames.com": [
+      "gdn.bigfishgames.com"
+     ]
+    }
+   },
+   {
+    "883.engine.mobileapptracking.com": {
+     "883.engine.mobileapptracking.com": [
+      "883.engine.mobileapptracking.com"
+     ]
+    }
+   },
+   {
+    "ads.cricbuzz.com": {
+     "ads.cricbuzz.com": [
+      "ads.cricbuzz.com"
+     ]
+    }
+   },
+   {
+    "adops.cricbuzz.com": {
+     "adops.cricbuzz.com": [
+      "adops.cricbuzz.com"
+     ]
+    }
+   },
+   {
+    "ad.daum.net": {
+     "ad.daum.net": [
+      "ad.daum.net"
+     ]
+    }
+   },
+   {
+    "etcodes.com": {
+     "etcodes.com": [
+      "etcodes.com"
+     ]
+    }
+   },
+   {
+    "onedrive.su": {
+     "onedrive.su": [
+      "onedrive.su"
+     ]
+    }
+   },
+   {
+    "cdn.hdat.xyz": {
+     "cdn.hdat.xyz": [
+      "cdn.hdat.xyz"
+     ]
+    }
+   },
+   {
+    "nickhel.com": {
+     "nickhel.com": [
+      "nickhel.com"
+     ]
+    }
+   },
+   {
+    "redtram.com": {
+     "redtram.com": [
+      "redtram.com"
+     ]
+    }
+   },
+   {
+    "goyetteconnelly.bid": {
+     "goyetteconnelly.bid": [
+      "goyetteconnelly.bid"
+     ]
+    }
+   },
+   {
+    "oconner.biz": {
+     "oconner.biz": [
+      "oconner.biz"
+     ]
+    }
+   },
+   {
+    "cdn7.rocks": {
+     "cdn7.rocks": [
+      "cdn7.rocks"
+     ]
+    }
+   },
+   {
+    "bgrndi.com": {
+     "bgrndi.com": [
+      "bgrndi.com"
+     ]
+    }
+   },
+   {
+    "et-code.ru": {
+     "et-code.ru": [
+      "et-code.ru"
+     ]
+    }
+   },
+   {
+    "gocdn.ru": {
+     "gocdn.ru": [
+      "gocdn.ru"
+     ]
+    }
+   },
+   {
+    "gynax.com": {
+     "gynax.com": [
+      "gynax.com"
+     ]
+    }
+   },
+   {
+    "m.mixadvert.com": {
+     "m.mixadvert.com": [
+      "m.mixadvert.com"
+     ]
+    }
+   },
+   {
+    "nasdfg.com": {
+     "nasdfg.com": [
+      "nasdfg.com"
+     ]
+    }
+   },
+   {
+    "fastmap33.com": {
+     "fastmap33.com": [
+      "fastmap33.com"
+     ]
+    }
+   },
+   {
+    "avazunativeads.com": {
+     "avazunativeads.com": [
+      "avazunativeads.com"
+     ]
+    }
+   },
+   {
+    "mobilebanner.ru": {
+     "mobilebanner.ru": [
+      "mobilebanner.ru"
+     ]
+    }
+   },
+   {
+    "api.ad-locus.com": {
+     "api.ad-locus.com": [
+      "api.ad-locus.com"
+     ]
+    }
+   },
+   {
+    "m.nbhaosheng168.com": {
+     "m.nbhaosheng168.com": [
+      "m.nbhaosheng168.com"
+     ]
+    }
+   },
+   {
+    "m.jakc0.com": {
+     "m.jakc0.com": [
+      "m.jakc0.com"
+     ]
+    }
+   },
+   {
+    "s.nvrentao8.com": {
+     "s.nvrentao8.com": [
+      "s.nvrentao8.com"
+     ]
+    }
+   },
+   {
+    "xz15801.com": {
+     "xz15801.com": [
+      "xz15801.com"
+     ]
+    }
+   },
+   {
+    "023hysj.com": {
+     "023hysj.com": [
+      "023hysj.com"
+     ]
+    }
+   },
+   {
+    "lxqcgj.com": {
+     "lxqcgj.com": [
+      "lxqcgj.com"
+     ]
+    }
+   },
+   {
+    "betsonsport.ru": {
+     "betsonsport.ru": [
+      "betsonsport.ru"
+     ]
+    }
+   },
+   {
+    "m.mrsasharingspace.com": {
+     "m.mrsasharingspace.com": [
+      "m.mrsasharingspace.com"
+     ]
+    }
+   },
+   {
+    "holder.com.ua": {
+     "holder.com.ua": [
+      "holder.com.ua"
+     ]
+    }
+   },
+   {
+    "crosspromotion-us.avosapps.us": {
+     "crosspromotion-us.avosapps.us": [
+      "crosspromotion-us.avosapps.us"
+     ]
+    }
+   },
+   {
+    "ad.period-calendar.com": {
+     "ad.period-calendar.com": [
+      "ad.period-calendar.com"
+     ]
+    }
+   },
+   {
+    "dc.altamob.com": {
+     "dc.altamob.com": [
+      "dc.altamob.com"
+     ]
+    }
+   },
+   {
+    "cpactions.com": {
+     "cpactions.com": [
+      "cpactions.com"
+     ]
+    }
+   },
+   {
+    "native.cli.bz": {
+     "native.cli.bz": [
+      "native.cli.bz"
+     ]
+    }
+   },
+   {
+    "adplatform.vrtcal.com": {
+     "adplatform.vrtcal.com": [
+      "adplatform.vrtcal.com"
+     ]
+    }
+   },
+   {
+    "appodealx.com": {
+     "appodealx.com": [
+      "appodealx.com"
+     ]
+    }
+   },
+   {
+    "go.vrvm.com": {
+     "go.vrvm.com": [
+      "go.vrvm.com"
+     ]
+    }
+   },
+   {
+    "c.vrvm.com": {
+     "c.vrvm.com": [
+      "c.vrvm.com"
+     ]
+    }
+   },
+   {
+    "cls.vrvm.com": {
+     "cls.vrvm.com": [
+      "cls.vrvm.com"
+     ]
+    }
+   },
+   {
+    "nycp-hlb.dvgtm.akadns.net": {
+     "nycp-hlb.dvgtm.akadns.net": [
+      "nycp-hlb.dvgtm.akadns.net"
+     ]
+    }
+   },
+   {
+    "abbott.vo.llnwd.net": {
+     "abbott.vo.llnwd.net": [
+      "abbott.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "advantech.vo.llnwd.net": {
+     "advantech.vo.llnwd.net": [
+      "advantech.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "atkins.vo.llnwd.net": {
+     "atkins.vo.llnwd.net": [
+      "atkins.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "bandai.hs.llnwd.net": {
+     "bandai.hs.llnwd.net": [
+      "bandai.hs.llnwd.net"
+     ]
+    }
+   },
+   {
+    "behance.vo.llnwd.net": {
+     "behance.vo.llnwd.net": [
+      "behance.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "edwlifes.vo.llnwd.net": {
+     "edwlifes.vo.llnwd.net": [
+      "edwlifes.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "embanet.vo.llnwd.net": {
+     "embanet.vo.llnwd.net": [
+      "embanet.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "eyewond.hs.llnwd.net": {
+     "eyewond.hs.llnwd.net": [
+      "eyewond.hs.llnwd.net"
+     ]
+    }
+   },
+   {
+    "finedesign.vo.llnwd.net": {
+     "finedesign.vo.llnwd.net": [
+      "finedesign.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "gulfstream.vo.llnwd.net": {
+     "gulfstream.vo.llnwd.net": [
+      "gulfstream.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "gymboree.hs.llnwd.net": {
+     "gymboree.hs.llnwd.net": [
+      "gymboree.hs.llnwd.net"
+     ]
+    }
+   },
+   {
+    "harvardbp.vo.llnwd.net": {
+     "harvardbp.vo.llnwd.net": [
+      "harvardbp.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "hbpub.vo.llnwd.net": {
+     "hbpub.vo.llnwd.net": [
+      "hbpub.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "icvdm.vo.llnwd.net": {
+     "icvdm.vo.llnwd.net": [
+      "icvdm.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "inskin.vo.llnwd.net": {
+     "inskin.vo.llnwd.net": [
+      "inskin.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "kjos.vo.llnwd.net": {
+     "kjos.vo.llnwd.net": [
+      "kjos.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "msbmopod.vo.llnwd.net": {
+     "msbmopod.vo.llnwd.net": [
+      "msbmopod.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "msbrandent.vo.llnwd.net": {
+     "msbrandent.vo.llnwd.net": [
+      "msbrandent.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "navigon.vo.llnwd.net": {
+     "navigon.vo.llnwd.net": [
+      "navigon.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "nytelecom.vo.llnwd.net": {
+     "nytelecom.vo.llnwd.net": [
+      "nytelecom.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "rbb.ic.llnwd.net": {
+     "rbb.ic.llnwd.net": [
+      "rbb.ic.llnwd.net"
+     ]
+    }
+   },
+   {
+    "responsys.hs.llnwd.net": {
+     "responsys.hs.llnwd.net": [
+      "responsys.hs.llnwd.net"
+     ]
+    }
+   },
+   {
+    "surveyor.vo.llnwd.net": {
+     "surveyor.vo.llnwd.net": [
+      "surveyor.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "synthes.vo.llnwd.net": {
+     "synthes.vo.llnwd.net": [
+      "synthes.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "teachscape.vo.llnwd.net": {
+     "teachscape.vo.llnwd.net": [
+      "teachscape.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "textron.vo.llnwd.net": {
+     "textron.vo.llnwd.net": [
+      "textron.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "tmz.vo.llnwd.net": {
+     "tmz.vo.llnwd.net": [
+      "tmz.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "toyota.vo.llnwd.net": {
+     "toyota.vo.llnwd.net": [
+      "toyota.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "usarmy.vo.llnwd.net": {
+     "usarmy.vo.llnwd.net": [
+      "usarmy.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "videoplus.vo.llnwd.net": {
+     "videoplus.vo.llnwd.net": [
+      "videoplus.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "wdig.vo.llnwd.net": {
+     "wdig.vo.llnwd.net": [
+      "wdig.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "xmpie.vo.llnwd.net": {
+     "xmpie.vo.llnwd.net": [
+      "xmpie.vo.llnwd.net"
+     ]
+    }
+   },
+   {
+    "appnext.hs.llnwd.net": {
+     "appnext.hs.llnwd.net": [
+      "appnext.hs.llnwd.net"
+     ]
+    }
+   },
+   {
+    "sdk.adincube.com": {
+     "sdk.adincube.com": [
+      "sdk.adincube.com"
+     ]
+    }
+   },
+   {
+    "ads.avocarrot.com": {
+     "ads.avocarrot.com": [
+      "ads.avocarrot.com"
+     ]
+    }
+   },
+   {
+    "adsdk.vrvm.com": {
+     "adsdk.vrvm.com": [
+      "adsdk.vrvm.com"
+     ]
+    }
+   },
+   {
+    "moatads.com.edgekey.net": {
+     "moatads.com.edgekey.net": [
+      "moatads.com.edgekey.net"
+     ]
+    }
+   },
+   {
+    "nexage.akadns.net": {
+     "nexage.akadns.net": [
+      "nexage.akadns.net"
+     ]
+    }
+   },
+   {
+    "a.applvn.com": {
+     "a.applvn.com": [
+      "a.applvn.com"
+     ]
+    }
+   },
+   {
+    "listat.biz": {
+     "listat.biz": [
+      "listat.biz"
+     ]
+    }
+   },
+   {
+    "buzzad.io": {
+     "buzzad.io": [
+      "buzzad.io"
+     ]
+    }
+   },
+   {
+    "adslot.uc.cn": {
+     "adslot.uc.cn": [
+      "adslot.uc.cn"
+     ]
+    }
+   },
+   {
+    "disqusads.com": {
+     "disqusads.com": [
+      "disqusads.com"
+     ]
+    }
+   },
+   {
+    "mobsrv.in": {
+     "mobsrv.in": [
+      "mobsrv.in"
+     ]
+    }
+   },
+   {
+    "jssdk.rayjump.com": {
+     "jssdk.rayjump.com": [
+      "jssdk.rayjump.com"
+     ]
+    }
+   },
+   {
+    "dc.altmob.com": {
+     "dc.altmob.com": [
+      "dc.altmob.com"
+     ]
+    }
+   },
+   {
+    "rtb.adentifi.com": {
+     "rtb.adentifi.com": [
+      "rtb.adentifi.com"
+     ]
+    }
+   },
+   {
+    "adtheorent.com": {
+     "adtheorent.com": [
+      "adtheorent.com"
+     ]
+    }
+   },
+   {
+    "qgss8.com": {
+     "qgss8.com": [
+      "qgss8.com"
+     ]
+    }
+   },
+   {
+    "api.cloudmobi.net": {
+     "api.cloudmobi.net": [
+      "api.cloudmobi.net"
+     ]
+    }
+   },
+   {
+    "polymorphicads.jp": {
+     "polymorphicads.jp": [
+      "polymorphicads.jp"
+     ]
+    }
+   },
+   {
+    "cdns.lodeo.io": {
+     "cdns.lodeo.io": [
+      "cdns.lodeo.io"
+     ]
+    }
+   },
+   {
+    "ingamesads.gameloft.com": {
+     "ingamesads.gameloft.com": [
+      "ingamesads.gameloft.com"
+     ]
+    }
+   },
+   {
+    "i2ad.jp": {
+     "i2ad.jp": [
+      "i2ad.jp"
+     ]
+    }
+   },
+   {
+    "mxvp-ad-config-prod-1.zenmxapps.com": {
+     "mxvp-ad-config-prod-1.zenmxapps.com": [
+      "mxvp-ad-config-prod-1.zenmxapps.com"
+     ]
+    }
+   },
+   {
+    "mxvp-feature-toggle-prod-1.zenmxapps.com": {
+     "mxvp-feature-toggle-prod-1.zenmxapps.com": [
+      "mxvp-feature-toggle-prod-1.zenmxapps.com"
+     ]
+    }
+   },
+   {
+    "js4386.fujianryt.com": {
+     "js4386.fujianryt.com": [
+      "js4386.fujianryt.com"
+     ]
+    }
+   },
+   {
+    "m.12306media.com": {
+     "m.12306media.com": [
+      "m.12306media.com"
+     ]
+    }
+   },
+   {
+    "zzhengre.com": {
+     "zzhengre.com": [
+      "zzhengre.com"
+     ]
+    }
+   },
+   {
+    "wmhlch.com": {
+     "wmhlch.com": [
+      "wmhlch.com"
+     ]
+    }
+   },
+   {
+    "fjrkn.com": {
+     "fjrkn.com": [
+      "fjrkn.com"
+     ]
+    }
+   },
+   {
+    "tongqing2015.com": {
+     "tongqing2015.com": [
+      "tongqing2015.com"
+     ]
+    }
+   },
+   {
+    "m.jsqinvest.com": {
+     "m.jsqinvest.com": [
+      "m.jsqinvest.com"
+     ]
+    }
+   },
+   {
+    "sube.puwangkj.com": {
+     "sube.puwangkj.com": [
+      "sube.puwangkj.com"
+     ]
+    }
+   },
+   {
+    "pw.lpsxssm.com": {
+     "pw.lpsxssm.com": [
+      "pw.lpsxssm.com"
+     ]
+    }
+   },
+   {
+    "go.admost.com": {
+     "go.admost.com": [
+      "go.admost.com"
+     ]
+    }
+   },
+   {
+    "med-api.admost.com": {
+     "med-api.admost.com": [
+      "med-api.admost.com"
+     ]
+    }
+   },
+   {
+    "cdn-api.admost.com": {
+     "cdn-api.admost.com": [
+      "cdn-api.admost.com"
+     ]
+    }
+   },
+   {
+    "webview.unityads.unity3d.com": {
+     "webview.unityads.unity3d.com": [
+      "webview.unityads.unity3d.com"
+     ]
+    }
+   },
+   {
+    "clickkydsp.com": {
+     "clickkydsp.com": [
+      "clickkydsp.com"
+     ]
+    }
+   },
+   {
+    "bidsopt.com": {
+     "bidsopt.com": [
+      "bidsopt.com"
+     ]
+    }
+   },
+   {
+    "tpbid.com": {
+     "tpbid.com": [
+      "tpbid.com"
+     ]
+    }
+   },
+   {
+    "exe.bid": {
+     "exe.bid": [
+      "exe.bid"
+     ]
+    }
+   },
+   {
+    "ssphwy.com": {
+     "ssphwy.com": [
+      "ssphwy.com"
+     ]
+    }
+   },
+   {
+    "hyperadx.com": {
+     "hyperadx.com": [
+      "hyperadx.com"
+     ]
+    }
+   },
+   {
+    "admarvel.com": {
+     "admarvel.com": [
+      "admarvel.com"
+     ]
+    }
+   },
+   {
+    "mopub-win-us-east.bksn.se": {
+     "mopub-win-us-east.bksn.se": [
+      "mopub-win-us-east.bksn.se"
+     ]
+    }
+   },
+   {
+    "nativead.s3.amazonaws.com": {
+     "nativead.s3.amazonaws.com": [
+      "nativead.s3.amazonaws.com"
+     ]
+    }
+   },
+   {
+    "yahoodns.net": {
+     "yahoodns.net": [
+      "yahoodns.net"
+     ]
+    }
+   },
+   {
+    "eu-ma.sam4m.com": {
+     "eu-ma.sam4m.com": [
+      "eu-ma.sam4m.com"
+     ]
+    }
+   },
+   {
+    "eu-ad.sam4m.com": {
+     "eu-ad.sam4m.com": [
+      "eu-ad.sam4m.com"
+     ]
+    }
+   },
+   {
+    "c2i.startappnetwork.com": {
+     "c2i.startappnetwork.com": [
+      "c2i.startappnetwork.com"
+     ]
+    }
+   },
+   {
+    "c2s.startappnetwork.com": {
+     "c2s.startappnetwork.com": [
+      "c2s.startappnetwork.com"
+     ]
+    }
+   },
+   {
+    "apptornado.com": {
+     "apptornado.com": [
+      "apptornado.com"
+     ]
+    }
+   },
+   {
+    "api.pingstart.com": {
+     "api.pingstart.com": [
+      "api.pingstart.com"
+     ]
+    }
+   },
+   {
+    "setting.rayjump.com": {
+     "setting.rayjump.com": [
+      "setting.rayjump.com"
+     ]
+    }
+   },
+   {
+    "ad.myinstashot.com": {
+     "ad.myinstashot.com": [
+      "ad.myinstashot.com"
+     ]
+    }
+   },
+   {
+    "net.rayjump.com": {
+     "net.rayjump.com": [
+      "net.rayjump.com"
+     ]
+    }
+   },
+   {
+    "95.213.231.34": {
+     "95.213.231.34": [
+      "95.213.231.34"
+     ]
+    }
+   },
+   {
+    "ad.cauly.co.kr": {
+     "ad.cauly.co.kr": [
+      "ad.cauly.co.kr"
+     ]
+    }
+   },
+   {
+    "config.appjolt.com": {
+     "config.appjolt.com": [
+      "config.appjolt.com"
+     ]
+    }
+   },
+   {
+    "rtb.platform.glispa.com": {
+     "rtb.platform.glispa.com": [
+      "rtb.platform.glispa.com"
+     ]
+    }
+   },
+   {
+    "ads.yemonisoni.com": {
+     "ads.yemonisoni.com": [
+      "ads.yemonisoni.com"
+     ]
+    }
+   },
+   {
+    "adflake.com": {
+     "adflake.com": [
+      "adflake.com"
+     ]
+    }
+   },
+   {
+    "ads.aitype.net": {
+     "ads.aitype.net": [
+      "ads.aitype.net"
+     ]
+    }
+   },
+   {
+    "ero-advertising.com": {
+     "ero-advertising.com": [
+      "ero-advertising.com"
+     ]
+    }
+   },
+   {
+    "ad-creatives-public.commondatastorage.googleapis.com": {
+     "ad-creatives-public.commondatastorage.googleapis.com": [
+      "ad-creatives-public.commondatastorage.googleapis.com"
+     ]
+    }
+   },
+   {
+    "1mp.mobi": {
+     "1mp.mobi": [
+      "1mp.mobi"
+     ]
+    }
+   },
+   {
+    "247realmedia.com": {
+     "247realmedia.com": [
+      "247realmedia.com"
+     ]
+    }
+   },
+   {
+    "31.14.252.148": {
+     "31.14.252.148": [
+      "31.14.252.148"
+     ]
+    }
+   },
+   {
+    "360yield.com": {
+     "360yield.com": [
+      "360yield.com"
+     ]
+    }
+   },
+   {
+    "a2dfp.net": {
+     "a2dfp.net": [
+      "a2dfp.net"
+     ]
+    }
+   },
+   {
+    "a2pub.com": {
+     "a2pub.com": [
+      "a2pub.com"
+     ]
+    }
+   },
+   {
+    "abnad.net": {
+     "abnad.net": [
+      "abnad.net"
+     ]
+    }
+   },
+   {
+    "abtest.swrve.com": {
+     "abtest.swrve.com": [
+      "abtest.swrve.com"
+     ]
+    }
+   },
+   {
+    "nexage.com": {
+     "nexage.com": [
+      "nexage.com"
+     ]
+    }
+   },
+   {
+    "ad-brix.com": {
+     "ad-brix.com": [
+      "ad-brix.com"
+     ]
+    }
+   },
+   {
+    "ad-maven.com": {
+     "ad-maven.com": [
+      "ad-maven.com"
+     ]
+    }
+   },
+   {
+    "ad-stir.com": {
+     "ad-stir.com": [
+      "ad-stir.com"
+     ]
+    }
+   },
+   {
+    "ad-x.co.uk": {
+     "ad-x.co.uk": [
+      "ad-x.co.uk"
+     ]
+    }
+   },
+   {
+    "ad.apps.fm": {
+     "ad.apps.fm": [
+      "ad.apps.fm"
+     ]
+    }
+   },
+   {
+    "ad.apsalar.com": {
+     "ad.apsalar.com": [
+      "ad.apsalar.com"
+     ]
+    }
+   },
+   {
+    "ad.doubleclick.net": {
+     "ad.doubleclick.net": [
+      "ad.doubleclick.net"
+     ]
+    }
+   },
+   {
+    "ad.jorte.com": {
+     "ad.jorte.com": [
+      "ad.jorte.com"
+     ]
+    }
+   },
+   {
+    "ad.kixer.com": {
+     "ad.kixer.com": [
+      "ad.kixer.com"
+     ]
+    }
+   },
+   {
+    "ad.leadbolt.net": {
+     "ad.leadbolt.net": [
+      "ad.leadbolt.net"
+     ]
+    }
+   },
+   {
+    "ad.leadboltapps.net": {
+     "ad.leadboltapps.net": [
+      "ad.leadboltapps.net"
+     ]
+    }
+   },
+   {
+    "ad.madvertise.de": {
+     "ad.madvertise.de": [
+      "ad.madvertise.de"
+     ]
+    }
+   },
+   {
+    "ad.mail.ru": {
+     "ad.mail.ru": [
+      "ad.mail.ru"
+     ]
+    }
+   },
+   {
+    "ad.ohmyad.co": {
+     "ad.ohmyad.co": [
+      "ad.ohmyad.co"
+     ]
+    }
+   },
+   {
+    "ad.smaad.jp": {
+     "ad.smaad.jp": [
+      "ad.smaad.jp"
+     ]
+    }
+   },
+   {
+    "ad.vrvm.com": {
+     "ad.vrvm.com": [
+      "ad.vrvm.com"
+     ]
+    }
+   },
+   {
+    "ad120m.com": {
+     "ad120m.com": [
+      "ad120m.com"
+     ]
+    }
+   },
+   {
+    "ad127m.com": {
+     "ad127m.com": [
+      "ad127m.com"
+     ]
+    }
+   },
+   {
+    "ad132m.com": {
+     "ad132m.com": [
+      "ad132m.com"
+     ]
+    }
+   },
+   {
+    "ad6media.fr": {
+     "ad6media.fr": [
+      "ad6media.fr"
+     ]
+    }
+   },
+   {
+    "adadvisor.net": {
+     "adadvisor.net": [
+      "adadvisor.net"
+     ]
+    }
+   },
+   {
+    "adback.tango.me": {
+     "adback.tango.me": [
+      "adback.tango.me"
+     ]
+    }
+   },
+   {
+    "adblade.com": {
+     "adblade.com": [
+      "adblade.com"
+     ]
+    }
+   },
+   {
+    "adbrau.com": {
+     "adbrau.com": [
+      "adbrau.com"
+     ]
+    }
+   },
+   {
+    "adbuddiz.com": {
+     "adbuddiz.com": [
+      "adbuddiz.com"
+     ]
+    }
+   },
+   {
+    "adcamp.ru": {
+     "adcamp.ru": [
+      "adcamp.ru"
+     ]
+    }
+   },
+   {
+    "adcash.com": {
+     "adcash.com": [
+      "adcash.com"
+     ]
+    }
+   },
+   {
+    "adcel.vrvm.com": {
+     "adcel.vrvm.com": [
+      "adcel.vrvm.com"
+     ]
+    }
+   },
+   {
+    "adcolony.com": {
+     "adcolony.com": [
+      "adcolony.com"
+     ]
+    }
+   },
+   {
+    "addapptr.com": {
+     "addapptr.com": [
+      "addapptr.com"
+     ]
+    }
+   },
+   {
+    "adextent.com": {
+     "adextent.com": [
+      "adextent.com"
+     ]
+    }
+   },
+   {
+    "adforgames.com": {
+     "adforgames.com": [
+      "adforgames.com"
+     ]
+    }
+   },
+   {
+    "adform.com": {
+     "adform.com": [
+      "adform.com"
+     ]
+    }
+   },
+   {
+    "adfox.ru": {
+     "adfox.ru": [
+      "adfox.ru"
+     ]
+    }
+   },
+   {
+    "adgear.com": {
+     "adgear.com": [
+      "adgear.com"
+     ]
+    }
+   },
+   {
+    "adgrx.com": {
+     "adgrx.com": [
+      "adgrx.com"
+     ]
+    }
+   },
+   {
+    "adhitzads.com": {
+     "adhitzads.com": [
+      "adhitzads.com"
+     ]
+    }
+   },
+   {
+    "adhood.com": {
+     "adhood.com": [
+      "adhood.com"
+     ]
+    }
+   },
+   {
+    "adinfo.tango.me": {
+     "adinfo.tango.me": [
+      "adinfo.tango.me"
+     ]
+    }
+   },
+   {
+    "adinfuse.com": {
+     "adinfuse.com": [
+      "adinfuse.com"
+     ]
+    }
+   },
+   {
+    "aditic.net": {
+     "aditic.net": [
+      "aditic.net"
+     ]
+    }
+   },
+   {
+    "adition.com": {
+     "adition.com": [
+      "adition.com"
+     ]
+    }
+   },
+   {
+    "adkmob.com": {
+     "adkmob.com": [
+      "adkmob.com"
+     ]
+    }
+   },
+   {
+    "adleads.com": {
+     "adleads.com": [
+      "adleads.com"
+     ]
+    }
+   },
+   {
+    "adlibr.com": {
+     "adlibr.com": [
+      "adlibr.com"
+     ]
+    }
+   },
+   {
+    "admail.am": {
+     "admail.am": [
+      "admail.am"
+     ]
+    }
+   },
+   {
+    "adman.gr": {
+     "adman.gr": [
+      "adman.gr"
+     ]
+    }
+   },
+   {
+    "admarketing.yahoo.net": {
+     "admarketing.yahoo.net": [
+      "admarketing.yahoo.net"
+     ]
+    }
+   },
+   {
+    "admarvel.s3.amazonaws.com": {
+     "admarvel.s3.amazonaws.com": [
+      "admarvel.s3.amazonaws.com"
+     ]
+    }
+   },
+   {
+    "admedia.com": {
+     "admedia.com": [
+      "admedia.com"
+     ]
+    }
+   },
+   {
+    "admicro1.vcmedia.vn": {
+     "admicro1.vcmedia.vn": [
+      "admicro1.vcmedia.vn"
+     ]
+    }
+   },
+   {
+    "admicro2.vcmedia.vn": {
+     "admicro2.vcmedia.vn": [
+      "admicro2.vcmedia.vn"
+     ]
+    }
+   },
+   {
+    "admitad.com": {
+     "admitad.com": [
+      "admitad.com"
+     ]
+    }
+   },
+   {
+    "admixer.co.kr": {
+     "admixer.co.kr": [
+      "admixer.co.kr"
+     ]
+    }
+   },
+   {
+    "admixer.net": {
+     "admixer.net": [
+      "admixer.net"
+     ]
+    }
+   },
+   {
+    "admob.com": {
+     "admob.com": [
+      "admob.com"
+     ]
+    }
+   },
+   {
+    "admulti.com": {
+     "admulti.com": [
+      "admulti.com"
+     ]
+    }
+   },
+   {
+    "adnxs.com": {
+     "adnxs.com": [
+      "adnxs.com"
+     ]
+    }
+   },
+   {
+    "adocean.pl": {
+     "adocean.pl": [
+      "adocean.pl"
+     ]
+    }
+   },
+   {
+    "adonly.com": {
+     "adonly.com": [
+      "adonly.com"
+     ]
+    }
+   },
+   {
+    "adotsolution.com": {
+     "adotsolution.com": [
+      "adotsolution.com"
+     ]
+    }
+   },
+   {
+    "adotube.com": {
+     "adotube.com": [
+      "adotube.com"
+     ]
+    }
+   },
+   {
+    "adplay.vm5apis.com": {
+     "adplay.vm5apis.com": [
+      "adplay.vm5apis.com"
+     ]
+    }
+   },
+   {
+    "adprotected.com": {
+     "adprotected.com": [
+      "adprotected.com"
+     ]
+    }
+   },
+   {
+    "adpublisher.s3.amazonaws.com": {
+     "adpublisher.s3.amazonaws.com": [
+      "adpublisher.s3.amazonaws.com"
+     ]
+    }
+   },
+   {
+    "adquota.com": {
+     "adquota.com": [
+      "adquota.com"
+     ]
+    }
+   },
+   {
+    "ads.ad2iction.com": {
+     "ads.ad2iction.com": [
+      "ads.ad2iction.com"
+     ]
+    }
+   },
+   {
+    "ads.admarvel.com": {
+     "ads.admarvel.com": [
+      "ads.admarvel.com"
+     ]
+    }
+   },
+   {
+    "ads.admoda.com": {
+     "ads.admoda.com": [
+      "ads.admoda.com"
+     ]
+    }
+   },
+   {
+    "ads.aerserv.com": {
+     "ads.aerserv.com": [
+      "ads.aerserv.com"
+     ]
+    }
+   },
+   {
+    "ads.fotoable.com": {
+     "ads.fotoable.com": [
+      "ads.fotoable.com"
+     ]
+    }
+   },
+   {
+    "ads.glispa.com": {
+     "ads.glispa.com": [
+      "ads.glispa.com"
+     ]
+    }
+   },
+   {
+    "ads.marvel.com": {
+     "ads.marvel.com": [
+      "ads.marvel.com"
+     ]
+    }
+   },
+   {
+    "ads.matomymobile.com": {
+     "ads.matomymobile.com": [
+      "ads.matomymobile.com"
+     ]
+    }
+   },
+   {
+    "ads.mdotm.com": {
+     "ads.mdotm.com": [
+      "ads.mdotm.com"
+     ]
+    }
+   },
+   {
+    "ads.mobilefuse.net": {
+     "ads.mobilefuse.net": [
+      "ads.mobilefuse.net"
+     ]
+    }
+   },
+   {
+    "ads.mobilityware.com": {
+     "ads.mobilityware.com": [
+      "ads.mobilityware.com"
+     ]
+    }
+   },
+   {
+    "ads.mobvertising.net": {
+     "ads.mobvertising.net": [
+      "ads.mobvertising.net"
+     ]
+    }
+   },
+   {
+    "ads.mopub.com": {
+     "ads.mopub.com": [
+      "ads.mopub.com"
+     ]
+    }
+   },
+   {
+    "ads.n-ws.org": {
+     "ads.n-ws.org": [
+      "ads.n-ws.org"
+     ]
+    }
+   },
+   {
+    "ads.ookla.com": {
+     "ads.ookla.com": [
+      "ads.ookla.com"
+     ]
+    }
+   },
+   {
+    "ads.pdbarea.com": {
+     "ads.pdbarea.com": [
+      "ads.pdbarea.com"
+     ]
+    }
+   },
+   {
+    "ads.pinger.com": {
+     "ads.pinger.com": [
+      "ads.pinger.com"
+     ]
+    }
+   },
+   {
+    "ads.reward.rakuten.jp": {
+     "ads.reward.rakuten.jp": [
+      "ads.reward.rakuten.jp"
+     ]
+    }
+   },
+   {
+    "ads.taptapnetworks.com": {
+     "ads.taptapnetworks.com": [
+      "ads.taptapnetworks.com"
+     ]
+    }
+   },
+   {
+    "ads.tremorhub.com": {
+     "ads.tremorhub.com": [
+      "ads.tremorhub.com"
+     ]
+    }
+   },
+   {
+    "ads.xlxtra.com": {
+     "ads.xlxtra.com": [
+      "ads.xlxtra.com"
+     ]
+    }
+   },
+   {
+    "ads.yahoo.com": {
+     "ads.yahoo.com": [
+      "ads.yahoo.com"
+     ]
+    }
+   },
+   {
+    "ads.youtube.com": {
+     "ads.youtube.com": [
+      "ads.youtube.com"
+     ]
+    }
+   },
+   {
+    "adsafeprotected.com": {
+     "adsafeprotected.com": [
+      "adsafeprotected.com"
+     ]
+    }
+   },
+   {
+    "adsame.com": {
+     "adsame.com": [
+      "adsame.com"
+     ]
+    }
+   },
+   {
+    "adscale.de": {
+     "adscale.de": [
+      "adscale.de"
+     ]
+    }
+   },
+   {
+    "adsee.jp": {
+     "adsee.jp": [
+      "adsee.jp"
+     ]
+    }
+   },
+   {
+    "adserver.goforandroid.com": {
+     "adserver.goforandroid.com": [
+      "adserver.goforandroid.com"
+     ]
+    }
+   },
+   {
+    "adserver.kimia.es": {
+     "adserver.kimia.es": [
+      "adserver.kimia.es"
+     ]
+    }
+   },
+   {
+    "adserver.mobillex.com": {
+     "adserver.mobillex.com": [
+      "adserver.mobillex.com"
+     ]
+    }
+   },
+   {
+    "adserver.pandora.com": {
+     "adserver.pandora.com": [
+      "adserver.pandora.com"
+     ]
+    }
+   },
+   {
+    "adserver.ubiyoo.com": {
+     "adserver.ubiyoo.com": [
+      "adserver.ubiyoo.com"
+     ]
+    }
+   },
+   {
+    "adserver.unityads.unity3d.com": {
+     "adserver.unityads.unity3d.com": [
+      "adserver.unityads.unity3d.com"
+     ]
+    }
+   },
+   {
+    "adshost2.com": {
+     "adshost2.com": [
+      "adshost2.com"
+     ]
+    }
+   },
+   {
+    "adsmo.ru": {
+     "adsmo.ru": [
+      "adsmo.ru"
+     ]
+    }
+   },
+   {
+    "adsmoloco.com": {
+     "adsmoloco.com": [
+      "adsmoloco.com"
+     ]
+    }
+   },
+   {
+    "adsniper.ru": {
+     "adsniper.ru": [
+      "adsniper.ru"
+     ]
+    }
+   },
+   {
+    "adspirit.de": {
+     "adspirit.de": [
+      "adspirit.de"
+     ]
+    }
+   },
+   {
+    "adspynet.com": {
+     "adspynet.com": [
+      "adspynet.com"
+     ]
+    }
+   },
+   {
+    "adsrvmedia.net": {
+     "adsrvmedia.net": [
+      "adsrvmedia.net"
+     ]
+    }
+   },
+   {
+    "adsrvr.org": {
+     "adsrvr.org": [
+      "adsrvr.org"
+     ]
+    }
+   },
+   {
+    "adsx.greystripe.com": {
+     "adsx.greystripe.com": [
+      "adsx.greystripe.com"
+     ]
+    }
+   },
+   {
+    "adsymptotic.com": {
+     "adsymptotic.com": [
+      "adsymptotic.com"
+     ]
+    }
+   },
+   {
+    "adtaily.pl": {
+     "adtaily.pl": [
+      "adtaily.pl"
+     ]
+    }
+   },
+   {
+    "adtech.de": {
+     "adtech.de": [
+      "adtech.de"
+     ]
+    }
+   },
+   {
+    "adtilt.com": {
+     "adtilt.com": [
+      "adtilt.com"
+     ]
+    }
+   },
+   {
+    "adtrack.king.com": {
+     "adtrack.king.com": [
+      "adtrack.king.com"
+     ]
+    }
+   },
+   {
+    "adultadworld.com": {
+     "adultadworld.com": [
+      "adultadworld.com"
+     ]
+    }
+   },
+   {
+    "adups.com": {
+     "adups.com": [
+      "adups.com"
+     ]
+    }
+   },
+   {
+    "adv.mxmcdn.net": {
+     "adv.mxmcdn.net": [
+      "adv.mxmcdn.net"
+     ]
+    }
+   },
+   {
+    "adversal.com": {
+     "adversal.com": [
+      "adversal.com"
+     ]
+    }
+   },
+   {
+    "adverticum.net": {
+     "adverticum.net": [
+      "adverticum.net"
+     ]
+    }
+   },
+   {
+    "advertise.com": {
+     "advertise.com": [
+      "advertise.com"
+     ]
+    }
+   },
+   {
+    "advertiser.fyber.com": {
+     "advertiser.fyber.com": [
+      "advertiser.fyber.com"
+     ]
+    }
+   },
+   {
+    "advertising.com": {
+     "advertising.com": [
+      "advertising.com"
+     ]
+    }
+   },
+   {
+    "advertur.ru": {
+     "advertur.ru": [
+      "advertur.ru"
+     ]
+    }
+   },
+   {
+    "advombat.ru": {
+     "advombat.ru": [
+      "advombat.ru"
+     ]
+    }
+   },
+   {
+    "adwhirl.com": {
+     "adwhirl.com": [
+      "adwhirl.com"
+     ]
+    }
+   },
+   {
+    "adwired.mobi": {
+     "adwired.mobi": [
+      "adwired.mobi"
+     ]
+    }
+   },
+   {
+    "adwods.com": {
+     "adwods.com": [
+      "adwods.com"
+     ]
+    }
+   },
+   {
+    "adz.mobi": {
+     "adz.mobi": [
+      "adz.mobi"
+     ]
+    }
+   },
+   {
+    "adzerk.net": {
+     "adzerk.net": [
+      "adzerk.net"
+     ]
+    }
+   },
+   {
+    "adzmedia.com": {
+     "adzmedia.com": [
+      "adzmedia.com"
+     ]
+    }
+   },
+   {
+    "adzmobi.com": {
+     "adzmobi.com": [
+      "adzmobi.com"
+     ]
+    }
+   },
+   {
+    "adzworld.in": {
+     "adzworld.in": [
+      "adzworld.in"
+     ]
+    }
+   },
+   {
+    "affinity.com": {
+     "affinity.com": [
+      "affinity.com"
+     ]
+    }
+   },
+   {
+    "affiz.net": {
+     "affiz.net": [
+      "affiz.net"
+     ]
+    }
+   },
+   {
+    "airpush.com": {
+     "airpush.com": [
+      "airpush.com"
+     ]
+    }
+   },
+   {
+    "altitude-arena.com": {
+     "altitude-arena.com": [
+      "altitude-arena.com"
+     ]
+    }
+   },
+   {
+    "am15.net": {
+     "am15.net": [
+      "am15.net"
+     ]
+    }
+   },
+   {
+    "amazon-adsystem.com": {
+     "amazon-adsystem.com": [
+      "amazon-adsystem.com"
+     ]
+    }
+   },
+   {
+    "amoad.com": {
+     "amoad.com": [
+      "amoad.com"
+     ]
+    }
+   },
+   {
+    "amobee.com": {
+     "amobee.com": [
+      "amobee.com"
+     ]
+    }
+   },
+   {
+    "andomedia.com": {
+     "andomedia.com": [
+      "andomedia.com"
+     ]
+    }
+   },
+   {
+    "api.adflake.com": {
+     "api.adflake.com": [
+      "api.adflake.com",
+      "api.adflake.com/custom"
+     ]
+    }
+   },
+   {
+    "api.appfireworks.com": {
+     "api.appfireworks.com": [
+      "api.appfireworks.com"
+     ]
+    }
+   },
+   {
+    "api.appodeal.com": {
+     "api.appodeal.com": [
+      "api.appodeal.com/show",
+      "api.appodeal.com/stats"
+     ]
+    }
+   },
+   {
+    "api.fusepowered.com": {
+     "api.fusepowered.com": [
+      "api.fusepowered.com"
+     ]
+    }
+   },
+   {
+    "api.kiip.me": {
+     "api.kiip.me": [
+      "api.kiip.me"
+     ]
+    }
+   },
+   {
+    "api.leadbolt.net": {
+     "api.leadbolt.net": [
+      "api.leadbolt.net"
+     ]
+    }
+   },
+   {
+    "api.usebutton.com": {
+     "api.usebutton.com": [
+      "api.usebutton.com"
+     ]
+    }
+   },
+   {
+    "app-trackings.com": {
+     "app-trackings.com": [
+      "app-trackings.com"
+     ]
+    }
+   },
+   {
+    "appads.com": {
+     "appads.com": [
+      "appads.com"
+     ]
+    }
+   },
+   {
+    "appclick.co": {
+     "appclick.co": [
+      "appclick.co"
+     ]
+    }
+   },
+   {
+    "appclick.net": {
+     "appclick.net": [
+      "appclick.net"
+     ]
+    }
+   },
+   {
+    "appintop.com": {
+     "appintop.com": [
+      "appintop.com"
+     ]
+    }
+   },
+   {
+    "applifier.com": {
+     "applifier.com": [
+      "applifier.com"
+     ]
+    }
+   },
+   {
+    "applift.com": {
+     "applift.com": [
+      "applift.com/empty"
+     ]
+    }
+   },
+   {
+    "applovin.com": {
+     "applovin.com": [
+      "applovin.com"
+     ]
+    }
+   },
+   {
+    "appnext-a.akamaihd.net": {
+     "appnext-a.akamaihd.net": [
+      "appnext-a.akamaihd.net"
+     ]
+    }
+   },
+   {
+    "appodeal.com": {
+     "appodeal.com": [
+      "appodeal.com"
+     ]
+    }
+   },
+   {
+    "appsdt.com": {
+     "appsdt.com": [
+      "appsdt.com"
+     ]
+    }
+   },
+   {
+    "appserver-ap.com": {
+     "appserver-ap.com": [
+      "appserver-ap.com"
+     ]
+    }
+   },
+   {
+    "appserver-cp.com": {
+     "appserver-cp.com": [
+      "appserver-cp.com"
+     ]
+    }
+   },
+   {
+    "appshelf.ttpsdk.info": {
+     "appshelf.ttpsdk.info": [
+      "appshelf.ttpsdk.info"
+     ]
+    }
+   },
+   {
+    "appwall.tv2phone.cn": {
+     "appwall.tv2phone.cn": [
+      "appwall.tv2phone.cn"
+     ]
+    }
+   },
+   {
+    "apxadtracking.net": {
+     "apxadtracking.net": [
+      "apxadtracking.net"
+     ]
+    }
+   },
+   {
+    "as.adfonic.net": {
+     "as.adfonic.net": [
+      "as.adfonic.net"
+     ]
+    }
+   },
+   {
+    "asrety.com": {
+     "asrety.com": [
+      "asrety.com"
+     ]
+    }
+   },
+   {
+    "assoc-amazon.com": {
+     "assoc-amazon.com": [
+      "assoc-amazon.com"
+     ]
+    }
+   },
+   {
+    "astrsk.net": {
+     "astrsk.net": [
+      "astrsk.net"
+     ]
+    }
+   },
+   {
+    "atdmt.com": {
+     "atdmt.com": [
+      "atdmt.com"
+     ]
+    }
+   },
+   {
+    "atemda.com": {
+     "atemda.com": [
+      "atemda.com"
+     ]
+    }
+   },
+   {
+    "ato.mx": {
+     "ato.mx": [
+      "ato.mx"
+     ]
+    }
+   },
+   {
+    "atti.com": {
+     "atti.com": [
+      "atti.com"
+     ]
+    }
+   },
+   {
+    "auditude.com": {
+     "auditude.com": [
+      "auditude.com"
+     ]
+    }
+   },
+   {
+    "avazutracking.net": {
+     "avazutracking.net": [
+      "avazutracking.net"
+     ]
+    }
+   },
+   {
+    "awltovhc.com": {
+     "awltovhc.com": [
+      "awltovhc.com"
+     ]
+    }
+   },
+   {
+    "axonix.com": {
+     "axonix.com": [
+      "axonix.com"
+     ]
+    }
+   },
+   {
+    "b.cpiera.com": {
+     "b.cpiera.com": [
+      "b.cpiera.com"
+     ]
+    }
+   },
+   {
+    "bannerflow.com": {
+     "bannerflow.com": [
+      "bannerflow.com"
+     ]
+    }
+   },
+   {
+    "banners.etermax.com": {
+     "banners.etermax.com": [
+      "banners.etermax.com"
+     ]
+    }
+   },
+   {
+    "bannersnack.com": {
+     "bannersnack.com": [
+      "bannersnack.com"
+     ]
+    }
+   },
+   {
+    "bannerwall.herewetest.com": {
+     "bannerwall.herewetest.com": [
+      "bannerwall.herewetest.com"
+     ]
+    }
+   },
+   {
+    "bannerwall.s3.appcnt.com": {
+     "bannerwall.s3.appcnt.com": [
+      "bannerwall.s3.appcnt.com"
+     ]
+    }
+   },
+   {
+    "base-cdn.admarvel.com": {
+     "base-cdn.admarvel.com": [
+      "base-cdn.admarvel.com"
+     ]
+    }
+   },
+   {
+    "bayctrk.com": {
+     "bayctrk.com": [
+      "bayctrk.com"
+     ]
+    }
+   },
+   {
+    "bcfads.com": {
+     "bcfads.com": [
+      "bcfads.com"
+     ]
+    }
+   },
+   {
+    "beatchucknorris.com": {
+     "beatchucknorris.com": [
+      "beatchucknorris.com"
+     ]
+    }
+   },
+   {
+    "begun.ru": {
+     "begun.ru": [
+      "begun.ru"
+     ]
+    }
+   },
+   {
+    "bepolite.eu": {
+     "bepolite.eu": [
+      "bepolite.eu"
+     ]
+    }
+   },
+   {
+    "bet365affiliates.com": {
+     "bet365affiliates.com": [
+      "bet365affiliates.com"
+     ]
+    }
+   },
+   {
+    "betaffs.com": {
+     "betaffs.com": [
+      "betaffs.com"
+     ]
+    }
+   },
+   {
+    "betrad.com": {
+     "betrad.com": [
+      "betrad.com"
+     ]
+    }
+   },
+   {
+    "bigmobileads.com": {
+     "bigmobileads.com": [
+      "bigmobileads.com"
+     ]
+    }
+   },
+   {
+    "bizographics.com": {
+     "bizographics.com": [
+      "bizographics.com"
+     ]
+    }
+   },
+   {
+    "black6adv.com": {
+     "black6adv.com": [
+      "black6adv.com"
+     ]
+    }
+   },
+   {
+    "blogads.com": {
+     "blogads.com": [
+      "blogads.com"
+     ]
+    }
+   },
+   {
+    "boostads.net": {
+     "boostads.net": [
+      "boostads.net"
+     ]
+    }
+   },
+   {
+    "brainient.com": {
+     "brainient.com": [
+      "brainient.com"
+     ]
+    }
+   },
+   {
+    "brealtime.com": {
+     "brealtime.com": [
+      "brealtime.com"
+     ]
+    }
+   },
+   {
+    "bridgetrack.com": {
+     "bridgetrack.com": [
+      "bridgetrack.com"
+     ]
+    }
+   },
+   {
+    "brokerbabe.com": {
+     "brokerbabe.com": [
+      "brokerbabe.com"
+     ]
+    }
+   },
+   {
+    "bttn.io": {
+     "bttn.io": [
+      "bttn.io"
+     ]
+    }
+   },
+   {
+    "bubblesmedia.ru": {
+     "bubblesmedia.ru": [
+      "bubblesmedia.ru"
+     ]
+    }
+   },
+   {
+    "burstnet.com": {
+     "burstnet.com": [
+      "burstnet.com"
+     ]
+    }
+   },
+   {
+    "buzzcity.net": {
+     "buzzcity.net": [
+      "buzzcity.net"
+     ]
+    }
+   },
+   {
+    "buzzonclick.com": {
+     "buzzonclick.com": [
+      "buzzonclick.com"
+     ]
+    }
+   },
+   {
+    "c8.net.ua": {
+     "c8.net.ua": [
+      "c8.net.ua"
+     ]
+    }
+   },
+   {
+    "casalemedia.com": {
+     "casalemedia.com": [
+      "casalemedia.com"
+     ]
+    }
+   },
+   {
+    "cashprom.ru": {
+     "cashprom.ru": [
+      "cashprom.ru"
+     ]
+    }
+   },
+   {
+    "castplatform.com": {
+     "castplatform.com": [
+      "castplatform.com"
+     ]
+    }
+   },
+   {
+    "cdn-image.com": {
+     "cdn-image.com": [
+      "cdn-image.com"
+     ]
+    }
+   },
+   {
+    "cdn.ads.fotoable.net": {
+     "cdn.ads.fotoable.net": [
+      "cdn.ads.fotoable.net"
+     ]
+    }
+   },
+   {
+    "cdn.cpiera.com": {
+     "cdn.cpiera.com": [
+      "cdn.cpiera.com"
+     ]
+    }
+   },
+   {
+    "cdn.unityads.unity3d.com": {
+     "cdn.unityads.unity3d.com": [
+      "cdn.unityads.unity3d.com"
+     ]
+    }
+   },
+   {
+    "cell.zhybzp.cn": {
+     "cell.zhybzp.cn": [
+      "cell.zhybzp.cn"
+     ]
+    }
+   },
+   {
+    "celtra.com": {
+     "celtra.com": [
+      "celtra.com"
+     ]
+    }
+   },
+   {
+    "ceppartner.com": {
+     "ceppartner.com": [
+      "ceppartner.com"
+     ]
+    }
+   },
+   {
+    "cf-ads.pinger.com": {
+     "cf-ads.pinger.com": [
+      "cf-ads.pinger.com"
+     ]
+    }
+   },
+   {
+    "chango.com": {
+     "chango.com": [
+      "chango.com"
+     ]
+    }
+   },
+   {
+    "chartboost.com": {
+     "chartboost.com": [
+      "chartboost.com"
+     ]
+    }
+   },
+   {
+    "chitika.net": {
+     "chitika.net": [
+      "chitika.net"
+     ]
+    }
+   },
+   {
+    "clk.taptica.com": {
+     "clk.taptica.com": [
+      "clk.taptica.com"
+     ]
+    }
+   },
+   {
+    "cnt.my": {
+     "cnt.my": [
+      "cnt.my"
+     ]
+    }
+   },
+   {
+    "cntcash.ru": {
+     "cntcash.ru": [
+      "cntcash.ru"
+     ]
+    }
+   },
+   {
+    "comscore.com": {
+     "comscore.com": [
+      "comscore.com"
+     ]
+    }
+   },
+   {
+    "config.tremorhub.com": {
+     "config.tremorhub.com": [
+      "config.tremorhub.com"
+     ]
+    }
+   },
+   {
+    "content.ad": {
+     "content.ad": [
+      "content.ad"
+     ]
+    }
+   },
+   {
+    "contextweb.com": {
+     "contextweb.com": [
+      "contextweb.com"
+     ]
+    }
+   },
+   {
+    "cp.pushwoosh.com": {
+     "cp.pushwoosh.com": [
+      "cp.pushwoosh.com"
+     ]
+    }
+   },
+   {
+    "cpmrocket.com": {
+     "cpmrocket.com": [
+      "cpmrocket.com"
+     ]
+    }
+   },
+   {
+    "cpmstar.com": {
+     "cpmstar.com": [
+      "cpmstar.com"
+     ]
+    }
+   },
+   {
+    "cpxinteractive.com": {
+     "cpxinteractive.com": [
+      "cpxinteractive.com"
+     ]
+    }
+   },
+   {
+    "crispadvertising.com": {
+     "crispadvertising.com": [
+      "crispadvertising.com"
+     ]
+    }
+   },
+   {
+    "crossboardmobile.com": {
+     "crossboardmobile.com": [
+      "crossboardmobile.com"
+     ]
+    }
+   },
+   {
+    "crossrider.com": {
+     "crossrider.com": [
+      "crossrider.com"
+     ]
+    }
+   },
+   {
+    "csi.gstatic.com": {
+     "csi.gstatic.com": [
+      "csi.gstatic.com"
+     ]
+    }
+   },
+   {
+    "ctl.buyt.in": {
+     "ctl.buyt.in": [
+      "ctl.buyt.in"
+     ]
+    }
+   },
+   {
+    "d2nrdy2pg3k168.cloudfront.net": {
+     "d2nrdy2pg3k168.cloudfront.net": [
+      "d2nrdy2pg3k168.cloudfront.net"
+     ]
+    }
+   },
+   {
+    "d60y8cj1tje2a.cloudfront.net": {
+     "d60y8cj1tje2a.cloudfront.net": [
+      "d60y8cj1tje2a.cloudfront.net"
+     ]
+    }
+   },
+   {
+    "d830x8j3o1b2k.cloudfront.net": {
+     "d830x8j3o1b2k.cloudfront.net": [
+      "d830x8j3o1b2k.cloudfront.net"
+     ]
+    }
+   },
+   {
+    "da-ads.com": {
+     "da-ads.com": [
+      "da-ads.com"
+     ]
+    }
+   },
+   {
+    "dante2007.com": {
+     "dante2007.com": [
+      "dante2007.com"
+     ]
+    }
+   },
+   {
+    "debojuagug1sf.cloudfront.net": {
+     "debojuagug1sf.cloudfront.net": [
+      "debojuagug1sf.cloudfront.net"
+     ]
+    }
+   },
+   {
+    "dev.appboy.com": {
+     "dev.appboy.com": [
+      "dev.appboy.com"
+     ]
+    }
+   },
+   {
+    "dispatcher.mng-ads.com": {
+     "dispatcher.mng-ads.com": [
+      "dispatcher.mng-ads.com"
+     ]
+    }
+   },
+   {
+    "dpstack.com": {
+     "dpstack.com": [
+      "dpstack.com"
+     ]
+    }
+   },
+   {
+    "dumedia.ru": {
+     "dumedia.ru": [
+      "dumedia.ru"
+     ]
+    }
+   },
+   {
+    "e-planning.net": {
+     "e-planning.net": [
+      "e-planning.net"
+     ]
+    }
+   },
+   {
+    "e.apsalar.com": {
+     "e.apsalar.com": [
+      "e.apsalar.com"
+     ]
+    }
+   },
+   {
+    "e.qq.com": {
+     "e.qq.com": [
+      "e.qq.com"
+     ]
+    }
+   },
+   {
+    "ebz.io": {
+     "ebz.io": [
+      "ebz.io"
+     ]
+    }
+   },
+   {
+    "ecpmrocks.com": {
+     "ecpmrocks.com": [
+      "ecpmrocks.com"
+     ]
+    }
+   },
+   {
+    "effectivemeasure.net": {
+     "effectivemeasure.net": [
+      "effectivemeasure.net"
+     ]
+    }
+   },
+   {
+    "ektezis.ru": {
+     "ektezis.ru": [
+      "ektezis.ru"
+     ]
+    }
+   },
+   {
+    "eltrafiko.com": {
+     "eltrafiko.com": [
+      "eltrafiko.com"
+     ]
+    }
+   },
+   {
+    "emediate.eu": {
+     "emediate.eu": [
+      "emediate.eu"
+     ]
+    }
+   },
+   {
+    "emediate.se": {
+     "emediate.se": [
+      "emediate.se"
+     ]
+    }
+   },
+   {
+    "epom.com": {
+     "epom.com": [
+      "epom.com"
+     ]
+    }
+   },
+   {
+    "etargetnet.com": {
+     "etargetnet.com": [
+      "etargetnet.com"
+     ]
+    }
+   },
+   {
+    "exp.glispa.com": {
+     "exp.glispa.com": [
+      "exp.glispa.com"
+     ]
+    }
+   },
+   {
+    "exponential.com": {
+     "exponential.com": [
+      "exponential.com"
+     ]
+    }
+   },
+   {
+    "fastclick.net": {
+     "fastclick.net": [
+      "fastclick.net"
+     ]
+    }
+   },
+   {
+    "fiksu.com": {
+     "fiksu.com": [
+      "fiksu.com"
+     ]
+    }
+   },
+   {
+    "findbestsolution.net": {
+     "findbestsolution.net": [
+      "findbestsolution.net"
+     ]
+    }
+   },
+   {
+    "fizcell.mobi": {
+     "fizcell.mobi": [
+      "fizcell.mobi"
+     ]
+    }
+   },
+   {
+    "flashtalking.com": {
+     "flashtalking.com": [
+      "flashtalking.com"
+     ]
+    }
+   },
+   {
+    "fluentmobile.com": {
+     "fluentmobile.com": [
+      "fluentmobile.com"
+     ]
+    }
+   },
+   {
+    "flurry.cachefly.net": {
+     "flurry.cachefly.net": [
+      "flurry.cachefly.net"
+     ]
+    }
+   },
+   {
+    "flurry.com": {
+     "flurry.com": [
+      "flurry.com"
+     ]
+    }
+   },
+   {
+    "flygo.ru": {
+     "flygo.ru": [
+      "flygo.ru"
+     ]
+    }
+   },
+   {
+    "fmpub.net": {
+     "fmpub.net": [
+      "fmpub.net"
+     ]
+    }
+   },
+   {
+    "focas.jp": {
+     "focas.jp": [
+      "focas.jp"
+     ]
+    }
+   },
+   {
+    "friendlyduck.com": {
+     "friendlyduck.com": [
+      "friendlyduck.com"
+     ]
+    }
+   },
+   {
+    "ftjcfx.com": {
+     "ftjcfx.com": [
+      "ftjcfx.com"
+     ]
+    }
+   },
+   {
+    "fusionads.net": {
+     "fusionads.net": [
+      "fusionads.net"
+     ]
+    }
+   },
+   {
+    "fyber.com": {
+     "fyber.com": [
+      "fyber.com"
+     ]
+    }
+   },
+   {
+    "g.doubleclick.net": {
+     "g.doubleclick.net": [
+      "g.doubleclick.net"
+     ]
+    }
+   },
+   {
+    "geede.info": {
+     "geede.info": [
+      "geede.info"
+     ]
+    }
+   },
+   {
+    "gigamega.su": {
+     "gigamega.su": [
+      "gigamega.su"
+     ]
+    }
+   },
+   {
+    "go.mobstitial.com": {
+     "go.mobstitial.com": [
+      "go.mobstitial.com"
+     ]
+    }
+   },
+   {
+    "go.mobstitialtag.com": {
+     "go.mobstitialtag.com": [
+      "go.mobstitialtag.com"
+     ]
+    }
+   },
+   {
+    "go.mobtrks.com": {
+     "go.mobtrks.com": [
+      "go.mobtrks.com"
+     ]
+    }
+   },
+   {
+    "go.pushnative.com": {
+     "go.pushnative.com": [
+      "go.pushnative.com"
+     ]
+    }
+   },
+   {
+    "goodadvert.ru": {
+     "goodadvert.ru": [
+      "goodadvert.ru"
+     ]
+    }
+   },
+   {
+    "googleadservices.com": {
+     "googleadservices.com": [
+      "googleadservices.com"
+     ]
+    }
+   },
+   {
+    "greystripe.com": {
+     "greystripe.com": [
+      "greystripe.com"
+     ]
+    }
+   },
+   {
+    "grt02.com": {
+     "grt02.com": [
+      "grt02.com"
+     ]
+    }
+   },
+   {
+    "grt03.com": {
+     "grt03.com": [
+      "grt03.com"
+     ]
+    }
+   },
+   {
+    "gsmtop.net": {
+     "gsmtop.net": [
+      "gsmtop.net"
+     ]
+    }
+   },
+   {
+    "gts-ads.twistbox.com": {
+     "gts-ads.twistbox.com": [
+      "gts-ads.twistbox.com"
+     ]
+    }
+   },
+   {
+    "gumgum.com": {
+     "gumgum.com": [
+      "gumgum.com"
+     ]
+    }
+   },
+   {
+    "gwallet.com": {
+     "gwallet.com": [
+      "gwallet.com"
+     ]
+    }
+   },
+   {
+    "h12-media.com": {
+     "h12-media.com": [
+      "h12-media.com"
+     ]
+    }
+   },
+   {
+    "ha-api.pushwoosh.com": {
+     "ha-api.pushwoosh.com": [
+      "ha-api.pushwoosh.com"
+     ]
+    }
+   },
+   {
+    "heyzap.com": {
+     "heyzap.com": [
+      "heyzap.com"
+     ]
+    }
+   },
+   {
+    "himediads.com": {
+     "himediads.com": [
+      "himediads.com"
+     ]
+    }
+   },
+   {
+    "hostgrater.com": {
+     "hostgrater.com": [
+      "hostgrater.com"
+     ]
+    }
+   },
+   {
+    "houseads-prod.elasticbeanstalk.com": {
+     "houseads-prod.elasticbeanstalk.com": [
+      "houseads-prod.elasticbeanstalk.com"
+     ]
+    }
+   },
+   {
+    "houseads.ttpsdk.info": {
+     "houseads.ttpsdk.info": [
+      "houseads.ttpsdk.info"
+     ]
+    }
+   },
+   {
+    "httpool.com": {
+     "httpool.com": [
+      "httpool.com"
+     ]
+    }
+   },
+   {
+    "huntmad.com": {
+     "huntmad.com": [
+      "huntmad.com"
+     ]
+    }
+   },
+   {
+    "i-mobile.co.jp": {
+     "i-mobile.co.jp": [
+      "i-mobile.co.jp"
+     ]
+    }
+   },
+   {
+    "i-vengo.com": {
+     "i-vengo.com": [
+      "i-vengo.com"
+     ]
+    }
+   },
+   {
+    "i.skimresources.com": {
+     "i.skimresources.com": [
+      "i.skimresources.com"
+     ]
+    }
+   },
+   {
+    "i.tapit.com": {
+     "i.tapit.com": [
+      "i.tapit.com"
+     ]
+    }
+   },
+   {
+    "iad.appboy.com": {
+     "iad.appboy.com": [
+      "iad.appboy.com"
+     ]
+    }
+   },
+   {
+    "iadsdk.apple.com": {
+     "iadsdk.apple.com": [
+      "iadsdk.apple.com"
+     ]
+    }
+   },
+   {
+    "iamediaserve.com": {
+     "iamediaserve.com": [
+      "iamediaserve.com"
+     ]
+    }
+   },
+   {
+    "imasdk.googleapis.com": {
+     "imasdk.googleapis.com": [
+      "imasdk.googleapis.com"
+     ]
+    }
+   },
+   {
+    "imwx.com": {
+     "imwx.com": [
+      "imwx.com/mobile/adconfig/"
+     ]
+    }
+   },
+   {
+    "infolinks.com": {
+     "infolinks.com": [
+      "infolinks.com"
+     ]
+    }
+   },
+   {
+    "inmobi.com": {
+     "inmobi.com": [
+      "inmobi.com"
+     ]
+    }
+   },
+   {
+    "inmobi.net": {
+     "inmobi.net": [
+      "inmobi.net"
+     ]
+    }
+   },
+   {
+    "inmobi.cn": {
+     "inmobi.cn": [
+      "inmobi.cn"
+     ]
+    }
+   },
+   {
+    "inmobicdn.net": {
+     "inmobicdn.net": [
+      "inmobicdn.net"
+     ]
+    }
+   },
+   {
+    "inmobisdk-a.akamaihd.net": {
+     "inmobisdk-a.akamaihd.net": [
+      "inmobisdk-a.akamaihd.net"
+     ]
+    }
+   },
+   {
+    "inner-active.com": {
+     "inner-active.com": [
+      "inner-active.com"
+     ]
+    }
+   },
+   {
+    "inner-active.mobi": {
+     "inner-active.mobi": [
+      "inner-active.mobi"
+     ]
+    }
+   },
+   {
+    "innity.net": {
+     "innity.net": [
+      "innity.net"
+     ]
+    }
+   },
+   {
+    "innovid.com": {
+     "innovid.com": [
+      "innovid.com"
+     ]
+    }
+   },
+   {
+    "insightexpressai.com": {
+     "insightexpressai.com": [
+      "insightexpressai.com"
+     ]
+    }
+   },
+   {
+    "integral-marketing.com": {
+     "integral-marketing.com": [
+      "integral-marketing.com"
+     ]
+    }
+   },
+   {
+    "intellitxt.com": {
+     "intellitxt.com": [
+      "intellitxt.com"
+     ]
+    }
+   },
+   {
+    "intermarkets.net": {
+     "intermarkets.net": [
+      "intermarkets.net"
+     ]
+    }
+   },
+   {
+    "intowow.com": {
+     "intowow.com": [
+      "intowow.com"
+     ]
+    }
+   },
+   {
+    "investingchannel.com": {
+     "investingchannel.com": [
+      "investingchannel.com"
+     ]
+    }
+   },
+   {
+    "javacript.gq": {
+     "javacript.gq": [
+      "javacript.gq"
+     ]
+    }
+   },
+   {
+    "jmp9.com": {
+     "jmp9.com": [
+      "jmp9.com"
+     ]
+    }
+   },
+   {
+    "jsc.marketgid.com": {
+     "jsc.marketgid.com": [
+      "jsc.marketgid.com"
+     ]
+    }
+   },
+   {
+    "jscount.com": {
+     "jscount.com": [
+      "jscount.com"
+     ]
+    }
+   },
+   {
+    "juiceadv.com": {
+     "juiceadv.com": [
+      "juiceadv.com"
+     ]
+    }
+   },
+   {
+    "jumptap.com": {
+     "jumptap.com": [
+      "jumptap.com"
+     ]
+    }
+   },
+   {
+    "justad.mobi": {
+     "justad.mobi": [
+      "justad.mobi"
+     ]
+    }
+   },
+   {
+    "kavanga.ru": {
+     "kavanga.ru": [
+      "kavanga.ru"
+     ]
+    }
+   },
+   {
+    "keydot.net": {
+     "keydot.net": [
+      "keydot.net"
+     ]
+    }
+   },
+   {
+    "kiosked.com": {
+     "kiosked.com": [
+      "kiosked.com"
+     ]
+    }
+   },
+   {
+    "kochava.com": {
+     "kochava.com": [
+      "kochava.com"
+     ]
+    }
+   },
+   {
+    "komoona.com": {
+     "komoona.com": [
+      "komoona.com"
+     ]
+    }
+   },
+   {
+    "krutilka.net": {
+     "krutilka.net": [
+      "krutilka.net"
+     ]
+    }
+   },
+   {
+    "l0-secure.videohub.tv": {
+     "l0-secure.videohub.tv": [
+      "l0-secure.videohub.tv"
+     ]
+    }
+   },
+   {
+    "l3op.info": {
+     "l3op.info": [
+      "l3op.info"
+     ]
+    }
+   },
+   {
+    "lb.usemaxserver.de": {
+     "lb.usemaxserver.de": [
+      "lb.usemaxserver.de"
+     ]
+    }
+   },
+   {
+    "lduhtrp.net": {
+     "lduhtrp.net": [
+      "lduhtrp.net"
+     ]
+    }
+   },
+   {
+    "leadboltads.net": {
+     "leadboltads.net": [
+      "leadboltads.net"
+     ]
+    }
+   },
+   {
+    "leadzu.com": {
+     "leadzu.com": [
+      "leadzu.com"
+     ]
+    }
+   },
+   {
+    "leanplum.com": {
+     "leanplum.com": [
+      "leanplum.com"
+     ]
+    }
+   },
+   {
+    "lfstmedia.com": {
+     "lfstmedia.com": [
+      "lfstmedia.com"
+     ]
+    }
+   },
+   {
+    "lgse.com": {
+     "lgse.com": [
+      "lgse.com"
+     ]
+    }
+   },
+   {
+    "liftdna.com": {
+     "liftdna.com": [
+      "liftdna.com"
+     ]
+    }
+   },
+   {
+    "ligatus.com": {
+     "ligatus.com": [
+      "ligatus.com"
+     ]
+    }
+   },
+   {
+    "live.hyprmx.com": {
+     "live.hyprmx.com": [
+      "live.hyprmx.com"
+     ]
+    }
+   },
+   {
+    "loopme.me": {
+     "loopme.me": [
+      "loopme.me"
+     ]
+    }
+   },
+   {
+    "luxadv.com": {
+     "luxadv.com": [
+      "luxadv.com"
+     ]
+    }
+   },
+   {
+    "luxup.ru": {
+     "luxup.ru": [
+      "luxup.ru"
+     ]
+    }
+   },
+   {
+    "ma-code.ru": {
+     "ma-code.ru": [
+      "ma-code.ru"
+     ]
+    }
+   },
+   {
+    "mad.mobisky.pl": {
+     "mad.mobisky.pl": [
+      "mad.mobisky.pl"
+     ]
+    }
+   },
+   {
+    "madadsmedia.com": {
+     "madadsmedia.com": [
+      "madadsmedia.com"
+     ]
+    }
+   },
+   {
+    "madnet.ru": {
+     "madnet.ru": [
+      "madnet.ru"
+     ]
+    }
+   },
+   {
+    "mads.bz": {
+     "mads.bz": [
+      "mads.bz"
+     ]
+    }
+   },
+   {
+    "mainadv.com": {
+     "mainadv.com": [
+      "mainadv.com"
+     ]
+    }
+   },
+   {
+    "manage.com": {
+     "manage.com": [
+      "manage.com"
+     ]
+    }
+   },
+   {
+    "hyprmx.com": {
+     "hyprmx.com": [
+      "hyprmx.com"
+     ]
+    }
+   },
+   {
+    "maudau.com": {
+     "maudau.com": [
+      "maudau.com"
+     ]
+    }
+   },
+   {
+    "mbn.com.ua": {
+     "mbn.com.ua": [
+      "mbn.com.ua"
+     ]
+    }
+   },
+   {
+    "mc.yandex.ru": {
+     "mc.yandex.ru": [
+      "mc.yandex.ru"
+     ]
+    }
+   },
+   {
+    "mdotm.com": {
+     "mdotm.com": [
+      "mdotm.com"
+     ]
+    }
+   },
+   {
+    "media.motrixi.com": {
+     "media.motrixi.com": [
+      "media.motrixi.com"
+     ]
+    }
+   },
+   {
+    "media6degrees.com": {
+     "media6degrees.com": [
+      "media6degrees.com"
+     ]
+    }
+   },
+   {
+    "mediaforge.com": {
+     "mediaforge.com": [
+      "mediaforge.com"
+     ]
+    }
+   },
+   {
+    "medialand.ru": {
+     "medialand.ru": [
+      "medialand.ru"
+     ]
+    }
+   },
+   {
+    "medleyads.com": {
+     "medleyads.com": [
+      "medleyads.com"
+     ]
+    }
+   },
+   {
+    "meendocash.com": {
+     "meendocash.com": [
+      "meendocash.com"
+     ]
+    }
+   },
+   {
+    "metamx.com": {
+     "metamx.com": [
+      "metamx.com"
+     ]
+    }
+   },
+   {
+    "metavertising.com": {
+     "metavertising.com": [
+      "metavertising.com"
+     ]
+    }
+   },
+   {
+    "mgage.com": {
+     "mgage.com": [
+      "mgage.com"
+     ]
+    }
+   },
+   {
+    "mi.gdt.qq.com": {
+     "mi.gdt.qq.com": [
+      "mi.gdt.qq.com"
+     ]
+    }
+   },
+   {
+    "microad.net": {
+     "microad.net": [
+      "microad.net"
+     ]
+    }
+   },
+   {
+    "millennialmedia.com": {
+     "millennialmedia.com": [
+      "millennialmedia.com"
+     ]
+    }
+   },
+   {
+    "mixadvert.com": {
+     "mixadvert.com": [
+      "mixadvert.com"
+     ]
+    }
+   },
+   {
+    "mixmarket.biz": {
+     "mixmarket.biz": [
+      "mixmarket.biz"
+     ]
+    }
+   },
+   {
+    "mmnetwork.mobi": {
+     "mmnetwork.mobi": [
+      "mmnetwork.mobi"
+     ]
+    }
+   },
+   {
+    "moatads.com": {
+     "moatads.com": [
+      "moatads.com"
+     ]
+    }
+   },
+   {
+    "mob.huimee.net": {
+     "mob.huimee.net": [
+      "mob.huimee.net"
+     ]
+    }
+   },
+   {
+    "moba8.net": {
+     "moba8.net": [
+      "moba8.net"
+     ]
+    }
+   },
+   {
+    "mobad.ijinshan.com": {
+     "mobad.ijinshan.com": [
+      "mobad.ijinshan.com"
+     ]
+    }
+   },
+   {
+    "mobads.baidu.com": {
+     "mobads.baidu.com": [
+      "mobads.baidu.com"
+     ]
+    }
+   },
+   {
+    "mobads4app.com": {
+     "mobads4app.com": [
+      "mobads4app.com"
+     ]
+    }
+   },
+   {
+    "mobalert.net": {
+     "mobalert.net": [
+      "mobalert.net"
+     ]
+    }
+   },
+   {
+    "mobclix.com": {
+     "mobclix.com": [
+      "mobclix.com"
+     ]
+    }
+   },
+   {
+    "mobfox.com": {
+     "mobfox.com": [
+      "mobfox.com"
+     ]
+    }
+   },
+   {
+    "mobiads.ru": {
+     "mobiads.ru": [
+      "mobiads.ru"
+     ]
+    }
+   },
+   {
+    "mobicow.com": {
+     "mobicow.com": [
+      "mobicow.com"
+     ]
+    }
+   },
+   {
+    "mobile-click.biz": {
+     "mobile-click.biz": [
+      "mobile-click.biz"
+     ]
+    }
+   },
+   {
+    "mobile.mng-ads.com": {
+     "mobile.mng-ads.com": [
+      "mobile.mng-ads.com"
+     ]
+    }
+   },
+   {
+    "mobile333.com": {
+     "mobile333.com": [
+      "mobile333.com"
+     ]
+    }
+   },
+   {
+    "mobileads.msn.com": {
+     "mobileads.msn.com": [
+      "mobileads.msn.com"
+     ]
+    }
+   },
+   {
+    "mobilecore.com": {
+     "mobilecore.com": [
+      "mobilecore.com"
+     ]
+    }
+   },
+   {
+    "mobiledl.adboe.com": {
+     "mobiledl.adboe.com": [
+      "mobiledl.adboe.com"
+     ]
+    }
+   },
+   {
+    "moboland.net": {
+     "moboland.net": [
+      "moboland.net"
+     ]
+    }
+   },
+   {
+    "mobon.com": {
+     "mobon.com": [
+      "mobon.com"
+     ]
+    }
+   },
+   {
+    "mobpartner.mobi": {
+     "mobpartner.mobi": [
+      "mobpartner.mobi"
+     ]
+    }
+   },
+   {
+    "mobred.net": {
+     "mobred.net": [
+      "mobred.net"
+     ]
+    }
+   },
+   {
+    "mobytrks.com": {
+     "mobytrks.com": [
+      "mobytrks.com"
+     ]
+    }
+   },
+   {
+    "mobzver.ru": {
+     "mobzver.ru": [
+      "mobzver.ru"
+     ]
+    }
+   },
+   {
+    "mocean.mobi": {
+     "mocean.mobi": [
+      "mocean.mobi"
+     ]
+    }
+   },
+   {
+    "mofox.com": {
+     "mofox.com": [
+      "mofox.com"
+     ]
+    }
+   },
+   {
+    "mojiva.com": {
+     "mojiva.com": [
+      "mojiva.com"
+     ]
+    }
+   },
+   {
+    "mologiq.net": {
+     "mologiq.net": [
+      "mologiq.net"
+     ]
+    }
+   },
+   {
+    "mookie1.com": {
+     "mookie1.com": [
+      "mookie1.com"
+     ]
+    }
+   },
+   {
+    "mopub.web107-east.manage.com": {
+     "mopub.web107-east.manage.com": [
+      "mopub.web107-east.manage.com"
+     ]
+    }
+   },
+   {
+    "morgdm.ru": {
+     "morgdm.ru": [
+      "morgdm.ru"
+     ]
+    }
+   },
+   {
+    "mprezchc.com": {
+     "mprezchc.com": [
+      "mprezchc.com"
+     ]
+    }
+   },
+   {
+    "mpx.mopub.com": {
+     "mpx.mopub.com": [
+      "mpx.mopub.com"
+     ]
+    }
+   },
+   {
+    "msads.net": {
+     "msads.net": [
+      "msads.net"
+     ]
+    }
+   },
+   {
+    "msntest.serving-sys.com": {
+     "msntest.serving-sys.com": [
+      "msntest.serving-sys.com"
+     ]
+    }
+   },
+   {
+    "mtburn.com": {
+     "mtburn.com": [
+      "mtburn.com"
+     ]
+    }
+   },
+   {
+    "mtburn.jp": {
+     "mtburn.jp": [
+      "mtburn.jp"
+     ]
+    }
+   },
+   {
+    "mtrcss.com": {
+     "mtrcss.com": [
+      "mtrcss.com"
+     ]
+    }
+   },
+   {
+    "mxtads.com": {
+     "mxtads.com": [
+      "mxtads.com"
+     ]
+    }
+   },
+   {
+    "mxttrf.com": {
+     "mxttrf.com": [
+      "mxttrf.com"
+     ]
+    }
+   },
+   {
+    "mydas.mobi": {
+     "mydas.mobi": [
+      "mydas.mobi"
+     ]
+    }
+   },
+   {
+    "myinfotopia.com": {
+     "myinfotopia.com": [
+      "myinfotopia.com"
+     ]
+    }
+   },
+   {
+    "mythings.com": {
+     "mythings.com": [
+      "mythings.com"
+     ]
+    }
+   },
+   {
+    "n4403ad.doubleclick.net": {
+     "n4403ad.doubleclick.net": [
+      "n4403ad.doubleclick.net"
+     ]
+    }
+   },
+   {
+    "nanigans.com": {
+     "nanigans.com": [
+      "nanigans.com"
+     ]
+    }
+   },
+   {
+    "nativex.com": {
+     "nativex.com": [
+      "nativex.com"
+     ]
+    }
+   },
+   {
+    "nearbyad.com": {
+     "nearbyad.com": [
+      "nearbyad.com"
+     ]
+    }
+   },
+   {
+    "nend.net": {
+     "nend.net": [
+      "nend.net"
+     ]
+    }
+   },
+   {
+    "netavenir.com": {
+     "netavenir.com": [
+      "netavenir.com"
+     ]
+    }
+   },
+   {
+    "netseer.com": {
+     "netseer.com": [
+      "netseer.com"
+     ]
+    }
+   },
+   {
+    "netshelter.net": {
+     "netshelter.net": [
+      "netshelter.net"
+     ]
+    }
+   },
+   {
+    "networld.hk": {
+     "networld.hk": [
+      "networld.hk"
+     ]
+    }
+   },
+   {
+    "newsnet.in.ua": {
+     "newsnet.in.ua": [
+      "newsnet.in.ua"
+     ]
+    }
+   },
+   {
+    "nexac.com": {
+     "nexac.com": [
+      "nexac.com"
+     ]
+    }
+   },
+   {
+    "njs.manhuahome.com": {
+     "njs.manhuahome.com": [
+      "njs.manhuahome.com"
+     ]
+    }
+   },
+   {
+    "nkredir.com": {
+     "nkredir.com": [
+      "nkredir.com"
+     ]
+    }
+   },
+   {
+    "nmcdn.us": {
+     "nmcdn.us": [
+      "nmcdn.us"
+     ]
+    }
+   },
+   {
+    "nomalleadzuaff.com": {
+     "nomalleadzuaff.com": [
+      "nomalleadzuaff.com"
+     ]
+    }
+   },
+   {
+    "nonmoves.date": {
+     "nonmoves.date": [
+      "nonmoves.date"
+     ]
+    }
+   },
+   {
+    "novostimira.biz": {
+     "novostimira.biz": [
+      "novostimira.biz"
+     ]
+    }
+   },
+   {
+    "numbers.md": {
+     "numbers.md": [
+      "numbers.md"
+     ]
+    }
+   },
+   {
+    "nxtck.com": {
+     "nxtck.com": [
+      "nxtck.com"
+     ]
+    }
+   },
+   {
+    "oclaserver.com": {
+     "oclaserver.com": [
+      "oclaserver.com"
+     ]
+    }
+   },
+   {
+    "onclickads.net": {
+     "onclickads.net": [
+      "onclickads.net"
+     ]
+    }
+   },
+   {
+    "ongkidcasarv.com": {
+     "ongkidcasarv.com": [
+      "ongkidcasarv.com"
+     ]
+    }
+   },
+   {
+    "optimatic.com": {
+     "optimatic.com": [
+      "optimatic.com"
+     ]
+    }
+   },
+   {
+    "os.scmpacdn.com": {
+     "os.scmpacdn.com": [
+      "os.scmpacdn.com"
+     ]
+    }
+   },
+   {
+    "owap.su": {
+     "owap.su": [
+      "owap.su"
+     ]
+    }
+   },
+   {
+    "pagead46.l.doubleclick.net": {
+     "pagead46.l.doubleclick.net": [
+      "pagead46.l.doubleclick.net"
+     ]
+    }
+   },
+   {
+    "pagefair.net": {
+     "pagefair.net": [
+      "pagefair.net"
+     ]
+    }
+   },
+   {
+    "partner.googleadservices.com": {
+     "partner.googleadservices.com": [
+      "partner.googleadservices.com"
+     ]
+    }
+   },
+   {
+    "partnerad.l.doubleclick.net": {
+     "partnerad.l.doubleclick.net": [
+      "partnerad.l.doubleclick.net"
+     ]
+    }
+   },
+   {
+    "partnerearning.com": {
+     "partnerearning.com": [
+      "partnerearning.com"
+     ]
+    }
+   },
+   {
+    "perf-events.cloud.unity3d.com": {
+     "perf-events.cloud.unity3d.com": [
+      "perf-events.cloud.unity3d.com"
+     ]
+    }
+   },
+   {
+    "pflexads.com": {
+     "pflexads.com": [
+      "pflexads.com"
+     ]
+    }
+   },
+   {
+    "phluant.com": {
+     "phluant.com": [
+      "phluant.com"
+     ]
+    }
+   },
+   {
+    "pixel.admobclick.com": {
+     "pixel.admobclick.com": [
+      "pixel.admobclick.com"
+     ]
+    }
+   },
+   {
+    "pixfuture.net": {
+     "pixfuture.net": [
+      "pixfuture.net"
+     ]
+    }
+   },
+   {
+    "pl.263gmail.org": {
+     "pl.263gmail.org": [
+      "pl.263gmail.org"
+     ]
+    }
+   },
+   {
+    "playhaven.com": {
+     "playhaven.com": [
+      "playhaven.com"
+     ]
+    }
+   },
+   {
+    "plugin.mediavoice.com": {
+     "plugin.mediavoice.com": [
+      "plugin.mediavoice.com"
+     ]
+    }
+   },
+   {
+    "polyad.net": {
+     "polyad.net": [
+      "polyad.net"
+     ]
+    }
+   },
+   {
+    "pontiflex.com": {
+     "pontiflex.com": [
+      "pontiflex.com"
+     ]
+    }
+   },
+   {
+    "popads.net": {
+     "popads.net": [
+      "popads.net"
+     ]
+    }
+   },
+   {
+    "popander.mobi": {
+     "popander.mobi": [
+      "popander.mobi"
+     ]
+    }
+   },
+   {
+    "popcash.net": {
+     "popcash.net": [
+      "popcash.net"
+     ]
+    }
+   },
+   {
+    "popmarker.com": {
+     "popmarker.com": [
+      "popmarker.com"
+     ]
+    }
+   },
+   {
+    "poptm.com": {
+     "poptm.com": [
+      "poptm.com"
+     ]
+    }
+   },
+   {
+    "popularitish.com": {
+     "popularitish.com": [
+      "popularitish.com"
+     ]
+    }
+   },
+   {
+    "popunderz.com": {
+     "popunderz.com": [
+      "popunderz.com"
+     ]
+    }
+   },
+   {
+    "pos.baidu.com": {
+     "pos.baidu.com": [
+      "pos.baidu.com"
+     ]
+    }
+   },
+   {
+    "postrelease.com": {
+     "postrelease.com": [
+      "postrelease.com"
+     ]
+    }
+   },
+   {
+    "projectwonderful.com": {
+     "projectwonderful.com": [
+      "projectwonderful.com"
+     ]
+    }
+   },
+   {
+    "prosperent.com": {
+     "prosperent.com": [
+      "prosperent.com"
+     ]
+    }
+   },
+   {
+    "prre.ru": {
+     "prre.ru": [
+      "prre.ru"
+     ]
+    }
+   },
+   {
+    "pub1.co": {
+     "pub1.co": [
+      "pub1.co"
+     ]
+    }
+   },
+   {
+    "pubmatic.com": {
+     "pubmatic.com": [
+      "pubmatic.com"
+     ]
+    }
+   },
+   {
+    "pubnative.net": {
+     "pubnative.net": [
+      "pubnative.net"
+     ]
+    }
+   },
+   {
+    "puhtml.com": {
+     "puhtml.com": [
+      "puhtml.com"
+     ]
+    }
+   },
+   {
+    "qservz.com": {
+     "qservz.com": [
+      "qservz.com"
+     ]
+    }
+   },
+   {
+    "questionmarket.com": {
+     "questionmarket.com": [
+      "questionmarket.com"
+     ]
+    }
+   },
+   {
+    "rbnt.org": {
+     "rbnt.org": [
+      "rbnt.org"
+     ]
+    }
+   },
+   {
+    "reate.info": {
+     "reate.info": [
+      "reate.info"
+     ]
+    }
+   },
+   {
+    "rek.mobi": {
+     "rek.mobi": [
+      "rek.mobi"
+     ]
+    }
+   },
+   {
+    "reklamz.com": {
+     "reklamz.com": [
+      "reklamz.com"
+     ]
+    }
+   },
+   {
+    "relap.io": {
+     "relap.io": [
+      "relap.io"
+     ]
+    }
+   },
+   {
+    "reporo.net": {
+     "reporo.net": [
+      "reporo.net"
+     ]
+    }
+   },
+   {
+    "revcontent.com": {
+     "revcontent.com": [
+      "revcontent.com"
+     ]
+    }
+   },
+   {
+    "revmob.com": {
+     "revmob.com": [
+      "revmob.com"
+     ]
+    }
+   },
+   {
+    "richpays.com": {
+     "richpays.com": [
+      "richpays.com"
+     ]
+    }
+   },
+   {
+    "robocat.me": {
+     "robocat.me": [
+      "robocat.me"
+     ]
+    }
+   },
+   {
+    "rotaban.ru": {
+     "rotaban.ru": [
+      "rotaban.ru"
+     ]
+    }
+   },
+   {
+    "rtb.nexage.com": {
+     "rtb.nexage.com": [
+      "rtb.nexage.com"
+     ]
+    }
+   },
+   {
+    "rtbpop.com": {
+     "rtbpop.com": [
+      "rtbpop.com"
+     ]
+    }
+   },
+   {
+    "rubiconproject.com": {
+     "rubiconproject.com": [
+      "rubiconproject.com"
+     ]
+    }
+   },
+   {
+    "s.innovid.com": {
+     "s.innovid.com": [
+      "s.innovid.com"
+     ]
+    }
+   },
+   {
+    "sas816.ujikdd041o.cn": {
+     "sas816.ujikdd041o.cn": [
+      "sas816.ujikdd041o.cn"
+     ]
+    }
+   },
+   {
+    "saymedia.com": {
+     "saymedia.com": [
+      "saymedia.com"
+     ]
+    }
+   },
+   {
+    "scorecardresearch.com": {
+     "scorecardresearch.com": [
+      "scorecardresearch.com"
+     ]
+    }
+   },
+   {
+    "sdk.native123.com": {
+     "sdk.native123.com": [
+      "sdk.native123.com"
+     ]
+    }
+   },
+   {
+    "sdk.starbolt.io": {
+     "sdk.starbolt.io": [
+      "sdk.starbolt.io"
+     ]
+    }
+   },
+   {
+    "sekindo.com": {
+     "sekindo.com": [
+      "sekindo.com"
+     ]
+    }
+   },
+   {
+    "serve-sys.com": {
+     "serve-sys.com": [
+      "serve-sys.com"
+     ]
+    }
+   },
+   {
+    "servebom.com": {
+     "servebom.com": [
+      "servebom.com"
+     ]
+    }
+   },
+   {
+    "serving-sys.com": {
+     "serving-sys.com": [
+      "serving-sys.com"
+     ]
+    }
+   },
+   {
+    "sessionm.com": {
+     "sessionm.com": [
+      "sessionm.com"
+     ]
+    }
+   },
+   {
+    "shareasale.com": {
+     "shareasale.com": [
+      "shareasale.com"
+     ]
+    }
+   },
+   {
+    "shared.iad.appboy.com": {
+     "shared.iad.appboy.com": [
+      "shared.iad.appboy.com"
+     ]
+    }
+   },
+   {
+    "sharethrough.com": {
+     "sharethrough.com": [
+      "sharethrough.com"
+     ]
+    }
+   },
+   {
+    "show.niqiu99.org": {
+     "show.niqiu99.org": [
+      "show.niqiu99.org"
+     ]
+    }
+   },
+   {
+    "silvermob.com": {
+     "silvermob.com": [
+      "silvermob.com"
+     ]
+    }
+   },
+   {
+    "singular.net": {
+     "singular.net": [
+      "singular.net"
+     ]
+    }
+   },
+   {
+    "sitescout.com": {
+     "sitescout.com": [
+      "sitescout.com"
+     ]
+    }
+   },
+   {
+    "slb.gedawang.com": {
+     "slb.gedawang.com": [
+      "slb.gedawang.com"
+     ]
+    }
+   },
+   {
+    "smaato.net": {
+     "smaato.net": [
+      "smaato.net"
+     ]
+    }
+   },
+   {
+    "smaclick.com": {
+     "smaclick.com": [
+      "smaclick.com"
+     ]
+    }
+   },
+   {
+    "smartadserver.com": {
+     "smartadserver.com": [
+      "smartadserver.com"
+     ]
+    }
+   },
+   {
+    "smarttds.ru": {
+     "smarttds.ru": [
+      "smarttds.ru"
+     ]
+    }
+   },
+   {
+    "sociomantic.com": {
+     "sociomantic.com": [
+      "sociomantic.com"
+     ]
+    }
+   },
+   {
+    "solocpm.com": {
+     "solocpm.com": [
+      "solocpm.com"
+     ]
+    }
+   },
+   {
+    "sonobi.com": {
+     "sonobi.com": [
+      "sonobi.com"
+     ]
+    }
+   },
+   {
+    "splash.appsgeyser.com": {
+     "splash.appsgeyser.com": [
+      "splash.appsgeyser.com"
+     ]
+    }
+   },
+   {
+    "sponsorpay.com": {
+     "sponsorpay.com": [
+      "sponsorpay.com"
+     ]
+    }
+   },
+   {
+    "spotxchange.com": {
+     "spotxchange.com": [
+      "spotxchange.com"
+     ]
+    }
+   },
+   {
+    "sscefsol.com": {
+     "sscefsol.com": [
+      "sscefsol.com"
+     ]
+    }
+   },
+   {
+    "startappexchange.com": {
+     "startappexchange.com": [
+      "startappexchange.com"
+     ]
+    }
+   },
+   {
+    "stat.kika-backend.com": {
+     "stat.kika-backend.com": [
+      "stat.kika-backend.com"
+     ]
+    }
+   },
+   {
+    "static.doubleclick.net": {
+     "static.doubleclick.net": [
+      "static.doubleclick.net"
+     ]
+    }
+   },
+   {
+    "stickyadstv.com": {
+     "stickyadstv.com": [
+      "stickyadstv.com"
+     ]
+    }
+   },
+   {
+    "supersonicads-a.akamaihd.net": {
+     "supersonicads-a.akamaihd.net": [
+      "supersonicads-a.akamaihd.net"
+     ]
+    }
+   },
+   {
+    "supersonicads.com": {
+     "supersonicads.com": [
+      "supersonicads.com"
+     ]
+    }
+   },
+   {
+    "swelen.com": {
+     "swelen.com": [
+      "swelen.com"
+     ]
+    }
+   },
+   {
+    "switchadhub.com": {
+     "switchadhub.com": [
+      "switchadhub.com"
+     ]
+    }
+   },
+   {
+    "syndication.trafficreps.com": {
+     "syndication.trafficreps.com": [
+      "syndication.trafficreps.com"
+     ]
+    }
+   },
+   {
+    "t3q7af0z.com": {
+     "t3q7af0z.com": [
+      "t3q7af0z.com"
+     ]
+    }
+   },
+   {
+    "tap-nexus.appspot.com": {
+     "tap-nexus.appspot.com": [
+      "tap-nexus.appspot.com"
+     ]
+    }
+   },
+   {
+    "tapad.com": {
+     "tapad.com": [
+      "tapad.com"
+     ]
+    }
+   },
+   {
+    "tapcreatives.net": {
+     "tapcreatives.net": [
+      "tapcreatives.net"
+     ]
+    }
+   },
+   {
+    "tapit.com": {
+     "tapit.com": [
+      "tapit.com"
+     ]
+    }
+   },
+   {
+    "tapjoyads.com": {
+     "tapjoyads.com": [
+      "tapjoyads.com"
+     ]
+    }
+   },
+   {
+    "tapone.jp": {
+     "tapone.jp": [
+      "tapone.jp"
+     ]
+    }
+   },
+   {
+    "tappx.com": {
+     "tappx.com": [
+      "tappx.com"
+     ]
+    }
+   },
+   {
+    "tapsense.com": {
+     "tapsense.com": [
+      "tapsense.com"
+     ]
+    }
+   },
+   {
+    "tapstat.ru": {
+     "tapstat.ru": [
+      "tapstat.ru"
+     ]
+    }
+   },
+   {
+    "targetspot.com": {
+     "targetspot.com": [
+      "targetspot.com"
+     ]
+    }
+   },
+   {
+    "teads.tv": {
+     "teads.tv": [
+      "teads.tv"
+     ]
+    }
+   },
+   {
+    "telemetryverification.net": {
+     "telemetryverification.net": [
+      "telemetryverification.net"
+     ]
+    }
+   },
+   {
+    "teracreative.com": {
+     "teracreative.com": [
+      "teracreative.com"
+     ]
+    }
+   },
+   {
+    "terraclicks.com": {
+     "terraclicks.com": [
+      "terraclicks.com"
+     ]
+    }
+   },
+   {
+    "thetrafficstat.net": {
+     "thetrafficstat.net": [
+      "thetrafficstat.net"
+     ]
+    }
+   },
+   {
+    "theylike.org": {
+     "theylike.org": [
+      "theylike.org"
+     ]
+    }
+   },
+   {
+    "thoughtleadr.com": {
+     "thoughtleadr.com": [
+      "thoughtleadr.com"
+     ]
+    }
+   },
+   {
+    "thoughtsondance.info": {
+     "thoughtsondance.info": [
+      "thoughtsondance.info"
+     ]
+    }
+   },
+   {
+    "tidaltv.com": {
+     "tidaltv.com": [
+      "tidaltv.com"
+     ]
+    }
+   },
+   {
+    "tizerclik.com": {
+     "tizerclik.com": [
+      "tizerclik.com"
+     ]
+    }
+   },
+   {
+    "tm1.hoiplay.com": {
+     "tm1.hoiplay.com": [
+      "tm1.hoiplay.com"
+     ]
+    }
+   },
+   {
+    "tonefuse.com": {
+     "tonefuse.com": [
+      "tonefuse.com"
+     ]
+    }
+   },
+   {
+    "tpc.googlesyndication.com": {
+     "tpc.googlesyndication.com": [
+      "tpc.googlesyndication.com"
+     ]
+    }
+   },
+   {
+    "trackimpression.com": {
+     "trackimpression.com": [
+      "trackimpression.com"
+     ]
+    }
+   },
+   {
+    "tracking.acekoala.com": {
+     "tracking.acekoala.com": [
+      "tracking.acekoala.com"
+     ]
+    }
+   },
+   {
+    "tracking.applift.com": {
+     "tracking.applift.com": [
+      "tracking.applift.com"
+     ]
+    }
+   },
+   {
+    "tradeadexchange.com": {
+     "tradeadexchange.com": [
+      "tradeadexchange.com"
+     ]
+    }
+   },
+   {
+    "traff10wap.com": {
+     "traff10wap.com": [
+      "traff10wap.com"
+     ]
+    }
+   },
+   {
+    "trafficjunky.net": {
+     "trafficjunky.net": [
+      "trafficjunky.net"
+     ]
+    }
+   },
+   {
+    "trafmag.com": {
+     "trafmag.com": [
+      "trafmag.com"
+     ]
+    }
+   },
+   {
+    "traktum.com": {
+     "traktum.com": [
+      "traktum.com"
+     ]
+    }
+   },
+   {
+    "trax-ad.jp": {
+     "trax-ad.jp": [
+      "trax-ad.jp"
+     ]
+    }
+   },
+   {
+    "trc.taboola.com": {
+     "trc.taboola.com": [
+      "trc.taboola.com"
+     ]
+    }
+   },
+   {
+    "tribalfusion.com": {
+     "tribalfusion.com": [
+      "tribalfusion.com"
+     ]
+    }
+   },
+   {
+    "trk.glispa.com": {
+     "trk.glispa.com": [
+      "trk.glispa.com"
+     ]
+    }
+   },
+   {
+    "tubemogul.com": {
+     "tubemogul.com": [
+      "tubemogul.com"
+     ]
+    }
+   },
+   {
+    "turn.com": {
+     "turn.com": [
+      "turn.com"
+     ]
+    }
+   },
+   {
+    "u-ad.info": {
+     "u-ad.info": [
+      "u-ad.info"
+     ]
+    }
+   },
+   {
+    "u1hw38x0.com": {
+     "u1hw38x0.com": [
+      "u1hw38x0.com"
+     ]
+    }
+   },
+   {
+    "ultraadserver.com": {
+     "ultraadserver.com": [
+      "ultraadserver.com"
+     ]
+    }
+   },
+   {
+    "umbel.com": {
+     "umbel.com": [
+      "umbel.com"
+     ]
+    }
+   },
+   {
+    "underclick.ru": {
+     "underclick.ru": [
+      "underclick.ru"
+     ]
+    }
+   },
+   {
+    "unicume.com": {
+     "unicume.com": [
+      "unicume.com"
+     ]
+    }
+   },
+   {
+    "update.sdk.batmobi.net": {
+     "update.sdk.batmobi.net": [
+      "update.sdk.batmobi.net"
+     ]
+    }
+   },
+   {
+    "upsight.com": {
+     "upsight.com": [
+      "upsight.com"
+     ]
+    }
+   },
+   {
+    "usekahuna.com": {
+     "usekahuna.com": [
+      "usekahuna.com"
+     ]
+    }
+   },
+   {
+    "utarget.ru": {
+     "utarget.ru": [
+      "utarget.ru"
+     ]
+    }
+   },
+   {
+    "velti.com": {
+     "velti.com": [
+      "velti.com"
+     ]
+    }
+   },
+   {
+    "vidasys.ru": {
+     "vidasys.ru": [
+      "vidasys.ru"
+     ]
+    }
+   },
+   {
+    "vidout.net": {
+     "vidout.net": [
+      "vidout.net"
+     ]
+    }
+   },
+   {
+    "viewclc.com": {
+     "viewclc.com": [
+      "viewclc.com"
+     ]
+    }
+   },
+   {
+    "vindicosuite.com": {
+     "vindicosuite.com": [
+      "vindicosuite.com"
+     ]
+    }
+   },
+   {
+    "vipcpms.com": {
+     "vipcpms.com": [
+      "vipcpms.com"
+     ]
+    }
+   },
+   {
+    "visitweb.com": {
+     "visitweb.com": [
+      "visitweb.com"
+     ]
+    }
+   },
+   {
+    "vogo-vogo.ru": {
+     "vogo-vogo.ru": [
+      "vogo-vogo.ru"
+     ]
+    }
+   },
+   {
+    "vserv.mobi": {
+     "vserv.mobi": [
+      "vserv.mobi"
+     ]
+    }
+   },
+   {
+    "vungle.com": {
+     "vungle.com": [
+      "vungle.com"
+     ]
+    }
+   },
+   {
+    "waiads.com": {
+     "waiads.com": [
+      "waiads.com"
+     ]
+    }
+   },
+   {
+    "wap-click.com": {
+     "wap-click.com": [
+      "wap-click.com"
+     ]
+    }
+   },
+   {
+    "wapstart.ru": {
+     "wapstart.ru": [
+      "wapstart.ru"
+     ]
+    }
+   },
+   {
+    "wbn.su": {
+     "wbn.su": [
+      "wbn.su"
+     ]
+    }
+   },
+   {
+    "websexy.mobi": {
+     "websexy.mobi": [
+      "websexy.mobi"
+     ]
+    }
+   },
+   {
+    "west.bidtellect.com": {
+     "west.bidtellect.com": [
+      "west.bidtellect.com"
+     ]
+    }
+   },
+   {
+    "widespace.com": {
+     "widespace.com": [
+      "widespace.com"
+     ]
+    }
+   },
+   {
+    "wordego.com": {
+     "wordego.com": [
+      "wordego.com"
+     ]
+    }
+   },
+   {
+    "presage.io": {
+     "presage.io": [
+      "presage.io"
+     ]
+    }
+   },
+   {
+    "wtraff.com": {
+     "wtraff.com": [
+      "wtraff.com"
+     ]
+    }
+   },
+   {
+    "ximad.com": {
+     "ximad.com": [
+      "ximad.com"
+     ]
+    }
+   },
+   {
+    "yandexadexchange.net": {
+     "yandexadexchange.net": [
+      "yandexadexchange.net"
+     ]
+    }
+   },
+   {
+    "yc-ads.s3.amazonaws.com": {
+     "yc-ads.s3.amazonaws.com": [
+      "yc-ads.s3.amazonaws.com"
+     ]
+    }
+   },
+   {
+    "yeabble.com": {
+     "yeabble.com": [
+      "yeabble.com"
+     ]
+    }
+   },
+   {
+    "yemonisoni.com": {
+     "yemonisoni.com": [
+      "yemonisoni.com"
+     ]
+    }
+   },
+   {
+    "yhdichan.com": {
+     "yhdichan.com": [
+      "yhdichan.com"
+     ]
+    }
+   },
+   {
+    "yieldkit.com": {
+     "yieldkit.com": [
+      "yieldkit.com"
+     ]
+    }
+   },
+   {
+    "yieldlab.net": {
+     "yieldlab.net": [
+      "yieldlab.net"
+     ]
+    }
+   },
+   {
+    "yieldmanager.net": {
+     "yieldmanager.net": [
+      "yieldmanager.net"
+     ]
+    }
+   },
+   {
+    "yieldmo.com": {
+     "yieldmo.com": [
+      "yieldmo.com"
+     ]
+    }
+   },
+   {
+    "yldbt.com": {
+     "yldbt.com": [
+      "yldbt.com"
+     ]
+    }
+   },
+   {
+    "yllix.com": {
+     "yllix.com": [
+      "yllix.com"
+     ]
+    }
+   },
+   {
+    "youlamedia.com": {
+     "youlamedia.com": [
+      "youlamedia.com"
+     ]
+    }
+   },
+   {
+    "youmi.net": {
+     "youmi.net": [
+      "youmi.net"
+     ]
+    }
+   },
+   {
+    "youradexchange.com": {
+     "youradexchange.com": [
+      "youradexchange.com"
+     ]
+    }
+   },
+   {
+    "yuhuads.com": {
+     "yuhuads.com": [
+      "yuhuads.com"
+     ]
+    }
+   },
+   {
+    "zedo.com": {
+     "zedo.com": [
+      "zedo.com"
+     ]
+    }
+   },
+   {
+    "ziffdavis.com": {
+     "ziffdavis.com": [
+      "ziffdavis.com"
+     ]
+    }
+   },
+   {
+    "zoglafi.info": {
+     "zoglafi.info": [
+      "zoglafi.info"
+     ]
+    }
+   },
+   {
+    "recreativ.ru": {
+     "recreativ.ru": [
+      "recreativ.ru"
+     ]
+    }
+   },
+   {
+    "hqsjc.com": {
+     "hqsjc.com": [
+      "hqsjc.com"
+     ]
+    }
+   },
+   {
+    "jfduv7.com": {
+     "jfduv7.com": [
+      "jfduv7.com"
+     ]
+    }
+   },
+   {
+    "n152adserv.com": {
+     "n152adserv.com": [
+      "n152adserv.com"
+     ]
+    }
+   },
+   {
+    "retarget.ssl-services.com": {
+     "retarget.ssl-services.com": [
+      "retarget.ssl-services.com"
+     ]
+    }
+   },
+   {
+    "rg.yottos.com": {
+     "rg.yottos.com": [
+      "rg.yottos.com"
+     ]
+    }
+   },
+   {
+    "smilered.com": {
+     "smilered.com": [
+      "smilered.com"
+     ]
+    }
+   },
+   {
+    "weboohost.com": {
+     "weboohost.com": [
+      "weboohost.com"
+     ]
+    }
+   }
+  ]
+ }
+}

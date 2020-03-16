@@ -1,0 +1,93 @@
+{
+  "1": {
+    "action": "Alert",
+    "countdown": 86400,
+    "vars": {
+      "Dismiss action": "",
+      "Message": "no-priority-a",
+      "Title": "no-priority-a",
+      "Dismiss text": "OK",
+      "__name__": "Alert"
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  },
+  "2": {
+    "action": "Alert",
+    "countdown": 86400,
+    "vars": {
+      "Dismiss action": "",
+      "Message": "no-priority-c",
+      "Title": "no-priority-c",
+      "Dismiss text": "OK",
+      "__name__": "Alert"
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  },
+  "3": {
+    "action": "Alert",
+    "countdown": 86400,
+    "vars": {
+      "Dismiss action": "",
+      "Message": "no-priority-b",
+      "Title": "no-priority-b",
+      "Dismiss text": "OK",
+      "__name__": "Alert"
+    },
+    "whenLimits": {
+      "objects": [],
+      "subject": null,
+      "children": []
+    },
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "noun": "Nowhere",
+          "subject": "enterRegion",
+          "verb": ""
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,8 @@
+[package]
+name = "nss_build_common"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+edition = "2018"
+license = "MPL-2.0"
+
+[dependencies]

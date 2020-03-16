@@ -1,0 +1,40 @@
+[package]
+name = "fxa-client"
+edition = "2018"
+version = "0.1.0"
+authors = ["Edouard Oger <eoger@fastmail.com>"]
+license = "MPL-2.0"
+
+[dependencies]
+base64 = "0.11.0"
+byteorder = "1.3.2"
+failure = "0.1.6"
+hex = "0.4.0"
+lazy_static = "1.4.0"
+log = "0.4"
+prost = "0.6.1"
+prost-derive = "0.6.1"
+serde = { version = "1.0.104", features = ["rc"] }
+serde_derive = "1.0.104"
+serde_json = "1.0.44"
+sync15 = { path = "../sync15" }
+url = "2.1.1"
+ffi-support = { path = "../support/ffi" }
+viaduct = { path = "../viaduct" }
+rc_crypto = { path = "../support/rc_crypto", features = ["ece", "hawk"] }
+error-support = { path = "../support/error" }
+
+[dev-dependencies]
+ring = "0.16.9"
+cli-support = { path = "../support/cli" }
+force-viaduct-reqwest = { path = "../support/force-viaduct-reqwest" }
+dialoguer = "0.5.0"
+webbrowser = "0.5.1"
+mockiato = "0.9.5"
+
+[build-dependencies]
+prost-build = "0.6.1"
+
+[features]
+reqwest = ["viaduct/reqwest"]
+default = []

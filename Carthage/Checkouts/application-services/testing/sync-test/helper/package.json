@@ -1,0 +1,15 @@
+{
+  "name": "logins-integration-test-helper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thom Chiovoloni <tchiovoloni@mozilla.com>",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "nightmare": "^3.0.1"
+  }
+}

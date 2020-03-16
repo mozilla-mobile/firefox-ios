@@ -1,0 +1,84 @@
+// Protos/unittest_swift_reserved.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2016 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// Test Swift reserved words used as enum or message names
+///
+// -----------------------------------------------------------------------------
+
+syntax = "proto2";
+
+package protobuf_unittest;
+
+message SwiftReservedTest {
+    enum Enum {
+        DOUBLE = 1;
+        JSON = 2;
+        CLASS = 3;
+        _ = 4;
+        SELF = 5;
+        TYPE = 6;
+    }
+
+    enum Protocol { a = 1; }
+
+    message class {
+      extensions 1000 to 2000;
+    }
+    message Type {
+      extensions 1000 to 2000;
+    }
+    message isEqual {}
+
+    // static r/o properties on Message, ensure they still work as fields.
+    optional int32 proto_message_name = 10;
+    optional int32 proto_package_name = 11;
+    optional int32 any_type_prefix = 12;
+    optional int32 any_type_url = 13;
+
+    // r/o properties on Message, ensure it gets remapped.
+    optional string is_initialized = 20;
+    optional string hash_value = 21;
+    optional int32 debug_description = 22;
+
+    // Prompt code generator to build an 'isInitialized' test
+    required int32 required_int = 30;
+}
+
+extend SwiftReservedTest.class {
+    // Won't get _p added because it is fully qualified.
+    optional bool debug_description = 1000;
+
+    // These are scoped to the file, so the package prefix (or a Swift prefix)
+    // will get added to them to they aren't going to get renamed.
+    optional bool as = 1012;
+    optional bool var = 1013;
+    optional bool try = 1014;
+    optional bool do = 1015;
+    optional bool nil = 1016;
+}
+
+message SwiftReservedTestExt {
+    extend SwiftReservedTest.class {
+        // This will end up in the "enum Extensions" to scope it, but there
+        // the raw form is used ("hash_value", not the Swift one "hashValue"),
+        // so there is no conflict, and no renaming happens.
+        optional bool hash_value = 1001;
+
+        // Reserved words, since these end up in the "struct Extensions", they
+        // can't just be get their names, and sanitation kicks.
+        optional bool as = 1022;
+        optional bool var = 1023;
+        optional bool try = 1024;
+        optional bool do = 1025;
+        optional bool nil = 1026;
+    }
+}

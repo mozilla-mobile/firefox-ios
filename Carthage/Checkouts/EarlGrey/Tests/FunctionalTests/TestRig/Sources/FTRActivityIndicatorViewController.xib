@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="NO">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FTRActivityIndicatorViewController">
+            <connections>
+                <outlet property="activityIndicator" destination="eFS-mI-aHT" id="8Qa-CC-zv5"/>
+                <outlet property="status" destination="Oz9-kR-hEf" id="fFS-wG-fPx"/>
+                <outlet property="view" destination="1" id="TU7-JN-PIM"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Status" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oz9-kR-hEf">
+                    <rect key="frame" x="182" y="136" width="50" height="21"/>
+                    <accessibility key="accessibilityConfiguration" label="Status"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="eFS-mI-aHT">
+                    <rect key="frame" x="197" y="79" width="20" height="20"/>
+                    <color key="color" red="1" green="0.0" blue="0.011788656139999999" alpha="1" colorSpace="calibratedRGB"/>
+                </activityIndicatorView>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zk7-0a-419">
+                    <rect key="frame" x="174" y="174" width="66" height="30"/>
+                    <state key="normal" title="StartStop"/>
+                    <connections>
+                        <action selector="startAndStopActivity:" destination="-1" eventType="touchUpInside" id="hWt-Ll-QNB"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c0r-GD-5VS">
+                    <rect key="frame" x="162.66666666666666" y="255" width="89" height="30"/>
+                    <state key="normal" title="StartRemove"/>
+                    <connections>
+                        <action selector="startAndRemoveFromSuperView:" destination="-1" eventType="touchUpInside" id="d3K-8q-qy9"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="16Z-nn-Cx9">
+                    <rect key="frame" x="174" y="211" width="66" height="30"/>
+                    <state key="normal" title="StartHide"/>
+                    <connections>
+                        <action selector="startAndHideActivity:" destination="-1" eventType="touchUpInside" id="fnN-3q-chc"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hide when stopped:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OWE-Dh-YnB">
+                    <rect key="frame" x="8" y="352" width="154" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bV8-Qh-syJ">
+                    <rect key="frame" x="158" y="300" width="98" height="30"/>
+                    <state key="normal" title="HideStartStop"/>
+                    <connections>
+                        <action selector="startHiddenAndThenStopActivity:" destination="-1" eventType="touchUpInside" id="pBo-8F-ARB"/>
+                    </connections>
+                </button>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZCh-dv-oBh">
+                    <rect key="frame" x="170" y="347" width="51" height="31"/>
+                    <accessibility key="accessibilityConfiguration" label="HidesWhenStopped"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="49" id="Xe9-xj-UWa"/>
+                        <constraint firstAttribute="height" constant="31" id="xVi-Gv-IEu"/>
+                    </constraints>
+                    <connections>
+                        <action selector="toggleHidesWhenStopped:" destination="-1" eventType="valueChanged" id="FF2-p8-mz0"/>
+                    </connections>
+                </switch>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="c0r-GD-5VS" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="0N6-9i-4iv"/>
+                <constraint firstItem="eFS-mI-aHT" firstAttribute="top" secondItem="1" secondAttribute="top" constant="79" id="4ah-tq-7b3"/>
+                <constraint firstItem="OWE-Dh-YnB" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="6oJ-Sl-yVO"/>
+                <constraint firstItem="16Z-nn-Cx9" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="BFF-CX-CjC"/>
+                <constraint firstItem="bV8-Qh-syJ" firstAttribute="top" secondItem="Oz9-kR-hEf" secondAttribute="bottom" constant="143" id="E3f-kF-rsS"/>
+                <constraint firstItem="Oz9-kR-hEf" firstAttribute="top" secondItem="1" secondAttribute="top" constant="136" id="EhY-Hq-Jkv"/>
+                <constraint firstItem="Zk7-0a-419" firstAttribute="top" secondItem="Oz9-kR-hEf" secondAttribute="bottom" constant="17" id="LuQ-16-Rqy"/>
+                <constraint firstItem="bV8-Qh-syJ" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="PMe-OG-SNe"/>
+                <constraint firstItem="OWE-Dh-YnB" firstAttribute="top" secondItem="Oz9-kR-hEf" secondAttribute="bottom" constant="195" id="RRB-5X-Xlg"/>
+                <constraint firstItem="Oz9-kR-hEf" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="T66-t8-cTg"/>
+                <constraint firstItem="16Z-nn-Cx9" firstAttribute="top" secondItem="Zk7-0a-419" secondAttribute="bottom" constant="7" id="dfK-Ki-hfZ"/>
+                <constraint firstItem="Zk7-0a-419" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="eyO-Iu-cq1"/>
+                <constraint firstItem="eFS-mI-aHT" firstAttribute="centerX" secondItem="1" secondAttribute="centerX" id="gbC-wB-NCi"/>
+                <constraint firstItem="ZCh-dv-oBh" firstAttribute="leading" secondItem="OWE-Dh-YnB" secondAttribute="trailing" constant="8" id="lHz-yH-Tdg"/>
+                <constraint firstItem="c0r-GD-5VS" firstAttribute="top" secondItem="16Z-nn-Cx9" secondAttribute="bottom" constant="14" id="vXG-0e-LTu"/>
+                <constraint firstItem="ZCh-dv-oBh" firstAttribute="top" secondItem="Oz9-kR-hEf" secondAttribute="bottom" constant="190" id="wkB-iJ-Jau"/>
+            </constraints>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

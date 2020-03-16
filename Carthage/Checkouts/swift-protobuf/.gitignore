@@ -1,0 +1,15 @@
+.DS_Store
+/.build
+/Packages
+*~
+xcuserdata
+xcbaselines
+/_test
+/docs
+/build
+mined_words.txt
+/DescriptorTestData.bin
+
+# Intermediate conformance test outputs
+failing_tests.txt
+nonexistent_tests.txt

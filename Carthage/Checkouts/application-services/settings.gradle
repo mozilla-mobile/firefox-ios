@@ -1,0 +1,60 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+import org.yaml.snakeyaml.Yaml
+buildscript {
+    dependencies {
+        classpath 'org.yaml:snakeyaml:1.23'
+    }
+    repositories {
+        jcenter()
+    }
+}
+rootProject.name = "appservices"
+
+// See https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:deferred_configuration.
+enableFeaturePreview('STABLE_PUBLISHING')
+
+def setupProject(name, projectProps) {
+    def path = projectProps.path
+    def description = projectProps.description
+    def artifactId = projectProps.artifactId
+
+    // TODO: Can we remove artifactId?
+    if (name != artifactId) {
+        throw new GradleException("Project name should match artifactId: $name != $artifactId")
+    }
+
+    settings.include(":$name")
+
+    project(":$name").projectDir = new File(rootDir, path)
+
+    // project(...) gives us a skeleton project that we can't set ext.* on
+    gradle.beforeProject { project ->
+        // However, the "afterProject" listener iterates over every project and gives us the actual project
+        // So, once we filter for the project we care about, we can set whatever we want
+        if (project.name == name) {
+            project.ext.description = description
+            project.ext.artifactId = artifactId
+            // Expose the rest of the project properties, mostly for validation reasons.
+            project.ext.configProps = projectProps
+        }
+    }
+}
+
+def yaml = new Yaml()
+def buildconfig = yaml.load(new File(rootDir, '.buildconfig-android.yml').newInputStream())
+buildconfig.projects.each { project ->
+    setupProject(project.key, project.value)
+}
+
+gradle.projectsLoaded { ->
+    // Wait until root project is "loaded" before we set "config"
+    // Note that since this is set on "rootProject.ext", it will be "in scope" during the evaluation of all projects'
+    // gradle files. This means that they can just access "config.<value>", and it'll function properly
+    gradle.rootProject.ext.library = [
+        version: buildconfig.libraryVersion,
+        groupId: buildconfig.groupId,
+    ]
+}

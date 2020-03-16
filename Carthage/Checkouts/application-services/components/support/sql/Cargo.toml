@@ -1,0 +1,20 @@
+[package]
+name = "sql-support"
+edition = "2018"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+license = "MPL-2.0"
+
+[features]
+default = []
+log_query_plans = []
+
+[dependencies]
+log = "0.4"
+lazy_static = "1.4.0"
+interrupt = { path = "../interrupt" }
+ffi-support = { path = "../ffi" }
+
+[dependencies.rusqlite]
+version = "0.21.0"
+features = ["functions", "limits", "bundled"]

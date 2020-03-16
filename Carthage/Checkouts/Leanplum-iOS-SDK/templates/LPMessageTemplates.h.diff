@@ -1,0 +1,15 @@
+--- a/AppleSDK/Leanplum-SDK/Leanplum-SDK/Classes/LPMessageTemplates.h
++++ b/AppleSDK/Leanplum-SDK/Leanplum-SDK/Classes/LPMessageTemplates.h
+@@ -29,7 +29,11 @@
+ // That's it!
+ 
+ #import <Foundation/Foundation.h>
+-#import "Leanplum.h"
++#import "Leanplum/Leanplum.h"
++
++#ifndef LPMessageTemplatesClass
++#define LPMessageTemplatesClass LPMessageTemplates
++#endif
+ 
+ @interface LPMessageTemplatesClass : NSObject
+ #if LP_NOT_TV

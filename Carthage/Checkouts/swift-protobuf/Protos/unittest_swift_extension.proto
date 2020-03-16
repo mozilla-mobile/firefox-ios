@@ -1,0 +1,86 @@
+// Protos/unittest_swift_extension.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2016 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// Test handling of extensions to deeply nested messages.
+///
+// -----------------------------------------------------------------------------
+
+syntax = "proto2";
+
+package protobuf_unittest.extend;
+
+message Foo {
+    message Bar {
+        message Baz {
+            optional int32 a = 1;
+            extensions 100 to 1000;
+        }
+    }
+}
+
+extend Foo.Bar.Baz {
+   optional string b = 100;
+   optional group C = 101 {
+      optional int64 c = 999;
+//      extensions 10 to 20;
+   }
+}
+
+/*
+extend Foo.Bar.Baz.C {
+   optional bool d = 12;
+}
+*/
+
+// If this compiles then it means we deal with unique proto names that
+// could end up with naming collisions when remapped to Swifty names.
+
+message Msg1 {
+  extensions 1 to 1000;
+}
+message Msg2 {
+  extensions 1 to 1000;
+}
+
+extend Msg1 {
+  optional int32 a_b = 1;
+}
+
+extend Msg2 {
+  optional int32 aB = 1;
+}
+
+// These allow testing where a StorageClass is and isn't used.
+
+message MsgNoStorage {
+  optional int32 x = 1;
+
+  extensions 100 to 200;
+}
+
+message MsgUsesStorage {
+  optional int32 x = 1;
+  // Recursive class (i.e. - can build a graph), forces _StorageClass.
+  optional MsgUsesStorage y = 2;
+
+  extensions 100 to 200;
+}
+
+extend MsgNoStorage {
+  optional int32 ext_a = 100;
+  optional int32 ext_b = 101;
+}
+
+extend MsgUsesStorage {
+  optional int32 ext_c = 100;
+  optional int32 ext_d = 101;
+}

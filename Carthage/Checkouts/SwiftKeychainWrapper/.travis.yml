@@ -1,0 +1,5 @@
+language: objective-c
+osx_image: xcode10
+
+script:
+    - xcodebuild test -scheme SwiftKeychainWrapper -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone SE,OS=10.1"

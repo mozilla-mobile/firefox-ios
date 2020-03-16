@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="NO">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FTRCollectionViewController">
+            <connections>
+                <outlet property="collectionView" destination="peq-Aq-0NN" id="a70-lG-gES"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H9m-aZ-YD6">
+                    <rect key="frame" x="0.0" y="32" width="414" height="62"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <bool key="isElement" value="YES"/>
+                    </accessibility>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="layoutPicker"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="2iQ-tX-itT"/>
+                        <outlet property="delegate" destination="-1" id="RZI-PS-JAy"/>
+                    </connections>
+                </pickerView>
+                <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="peq-Aq-0NN">
+                    <rect key="frame" x="12" y="126" width="390" height="602"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="y5h-eh-czb">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <cells/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="Alphabets"/>
+                    </userDefinedRuntimeAttributes>
+                </collectionView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="peq-Aq-0NN" secondAttribute="trailing" constant="12" id="0qG-8n-iPS"/>
+                <constraint firstItem="peq-Aq-0NN" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="12" id="E4V-hR-ee5"/>
+                <constraint firstItem="H9m-aZ-YD6" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="F2Y-ah-3NI"/>
+                <constraint firstItem="peq-Aq-0NN" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="126" id="KDq-yW-nbO"/>
+                <constraint firstAttribute="trailing" secondItem="H9m-aZ-YD6" secondAttribute="trailing" id="h9A-XK-sgL"/>
+                <constraint firstAttribute="bottom" secondItem="peq-Aq-0NN" secondAttribute="bottom" constant="8" id="hUc-U6-3GT"/>
+                <constraint firstItem="peq-Aq-0NN" firstAttribute="top" secondItem="H9m-aZ-YD6" secondAttribute="bottom" constant="32" id="o16-Vs-TJ6"/>
+                <constraint firstItem="H9m-aZ-YD6" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="32" id="r8d-Gw-r23"/>
+            </constraints>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

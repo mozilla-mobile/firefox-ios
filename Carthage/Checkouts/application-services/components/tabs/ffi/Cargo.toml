@@ -1,0 +1,31 @@
+[package]
+name = "tabs_ffi"
+edition = "2018"
+version = "0.1.0"
+authors = ["application-services@mozilla.com"]
+license = "MPL-2.0"
+
+[lib]
+name = "tabs_ffi"
+crate-type = ["lib"]
+
+[features]
+reqwest = ["viaduct/reqwest", "tabs/reqwest"]
+
+[dependencies]
+serde_json = "1.0.44"
+log = "0.4"
+url = "2.1.1"
+base16 = "0.2.1"
+lazy_static = "1.4.0"
+prost = "0.6.1"
+viaduct = { path = "../../viaduct" }
+
+[dependencies.tabs]
+path = ".."
+
+[dependencies.sync15]
+path = "../../sync15"
+
+[dependencies.ffi-support]
+path = "../../support/ffi"

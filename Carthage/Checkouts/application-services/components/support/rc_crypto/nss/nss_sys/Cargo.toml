@@ -1,0 +1,16 @@
+[package]
+name = "nss_sys"
+version = "0.1.0"
+authors = ["application-services@mozilla.com"]
+edition = "2018"
+license = "MPL-2.0"
+
+[lib]
+crate-type = ["lib"]
+
+[build-dependencies]
+bindgen = "0.53.1"
+serde = "1.0.104"
+serde_derive = "1.0.104"
+toml = "0.5.3"
+nss_build_common = {path = "../nss_build_common"}

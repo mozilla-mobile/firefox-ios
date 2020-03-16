@@ -1,0 +1,28 @@
+{
+    "response": [{
+        "success": true
+    }, {
+        "success": true
+    }, {
+        "vars": {
+
+        },
+        "interfaceRules": [
+
+        ],
+        "variants": [
+
+        ],
+        "regions": {
+
+        },
+        "syncNewsfeed": true,
+        "success": true,
+        "messages": {
+
+        },
+        "interfaceEvents": [
+
+        ]
+    }]
+}

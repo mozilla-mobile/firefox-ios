@@ -1,0 +1,6 @@
+language: objective-c
+osx_image: xcode11.2
+xcode_project: Telemetry.xcodeproj 
+xcode_scheme: Telemetry
+script:
+  - xcodebuild clean test -scheme Telemetry -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 8"

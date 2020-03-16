@@ -1,0 +1,82 @@
+// Protos/pluginlib_descriptor_test.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// Test proto for Tests/SwiftProtobufPluginLibraryTests/Test_Descriptor.swift
+///
+// -----------------------------------------------------------------------------
+
+syntax = "proto2";
+
+package swift_descriptor_test;
+
+// Use the option to test swift name generation.
+option swift_prefix = "SDT";
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/compiler/plugin.proto";
+
+enum TopLevelEnum {
+  VALUE_ZERO = 0;
+  VALUE_ONE = 1;
+  VALUE_TWO = 2;
+}
+
+message TopLevelMessage {
+
+  enum SubEnum {
+    SUB_VALUE_0 = 0;
+    SUB_VALUE_1 = 1;
+    SUB_VALUE_2 = 2;
+  }
+
+  message SubMessage {
+    optional int32 field1 = 1;
+    optional string field2 = 2;
+    optional SubMessage field3 = 3;
+  }
+
+  optional string field1 = 1;
+  optional int32 field2 = 2;
+
+  oneof o {
+    TopLevelEnum field3 = 3;
+    SubEnum field4 = 4;
+    SubMessage field5 = 5;
+    TopLevelMessage2 field6 = 6;
+  }
+}
+
+message TopLevelMessage2 {
+  optional TopLevelMessage left = 1;
+  optional TopLevelMessage2 right = 2;
+}
+
+message ExternalRefs {
+  optional google.protobuf.DescriptorProto desc = 1;
+  optional google.protobuf.compiler.Version ver = 2;
+}
+
+extend google.protobuf.FieldOptions {
+  optional string ext_str = 90000;
+}
+
+message ScoperForExt {
+  extend google.protobuf.MessageOptions {
+    optional TopLevelEnum ext_enum = 99001;
+    optional TopLevelMessage2 ext_msg = 99002;
+  }
+}
+
+service SomeService {
+  rpc Foo(google.protobuf.DescriptorProto) returns (google.protobuf.compiler.Version);
+  rpc Bar(TopLevelMessage) returns (TopLevelMessage2);
+}

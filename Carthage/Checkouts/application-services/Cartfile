@@ -1,0 +1,2 @@
+github "apple/swift-protobuf" ~> 1.0
+github "jrendel/SwiftKeychainWrapper" ~> 3.2.0

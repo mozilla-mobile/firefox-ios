@@ -1,0 +1,14 @@
+minVersion: '0.6.0'
+github:
+  owner: getsentry
+  repo: sentry-cocoa
+changelogPolicy: simple
+preReleaseCommand: bash .travis/bump.sh
+targets:
+  - name: github
+  - name: cocoapods
+    specPath: Sentry.podspec
+  - name: registry
+    type: sdk
+    config:
+      canonical: 'cocoapods:sentry-cocoa'

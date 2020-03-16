@@ -1,0 +1,4 @@
+module EarlGrey {
+    header "EarlGrey.h"
+    export *
+}

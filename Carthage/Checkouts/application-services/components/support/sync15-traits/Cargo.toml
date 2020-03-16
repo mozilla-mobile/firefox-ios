@@ -1,0 +1,18 @@
+[package]
+name = "sync15-traits"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+license = "MPL-2.0"
+edition = "2018"
+
+[features]
+random-guid = ["sync-guid/random"]
+
+[dependencies]
+sync-guid = { path = "../guid" }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+log = "0.4"
+ffi-support = {path = "../ffi"}
+url = "2.1"
+failure = "0.1.6"

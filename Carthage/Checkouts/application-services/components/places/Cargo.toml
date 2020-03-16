@@ -1,0 +1,72 @@
+[package]
+name = "places"
+edition = "2018"
+version = "0.1.0"
+authors = ["application-services@mozilla.com"]
+license = "MPL-2.0"
+
+[features]
+log_query_plans = ["sql-support/log_query_plans"]
+reqwest = ["sync15/reqwest"]
+default = []
+
+[dependencies]
+sync15 = { path = "../sync15" }
+serde = "1.0.104"
+serde_derive = "1.0.104"
+serde_json = "1.0.44"
+log = "0.4"
+lazy_static = "1.4.0"
+url = { version = "2.1.1", features = ["serde"] }
+percent-encoding = "2.1.0"
+failure = "0.1.6"
+caseless = "0.2.1"
+sql-support = { path = "../support/sql" }
+ffi-support = { path = "../support/ffi" }
+bitflags = "1.2.1"
+idna = "0.2.0"
+memchr = "2.2.1"
+prost = "0.6.1"
+prost-derive = "0.6.1"
+dogear = "0.4.0"
+interrupt = { path = "../support/interrupt" }
+error-support = { path = "../support/error" }
+sync-guid = { path = "../support/guid", features = ["rusqlite_support", "random"]}
+
+
+[dependencies.rusqlite]
+version = "0.21.0"
+features = ["functions", "bundled"]
+
+[dev-dependencies]
+more-asserts = "0.2.1"
+env_logger = "0.7.0"
+find-places-db = "0.1.0"
+clap = "2.32.0"
+structopt = "0.3.11"
+tempfile = "3.0.8"
+rand = "0.7.2"
+fxa-client = { path = "../fxa-client" }
+criterion = "0.3.0"
+tempdir = "0.3.7"
+cli-support = { path = "../support/cli" }
+pretty_assertions = "0.6.1"
+force-viaduct-reqwest = { path = "../support/force-viaduct-reqwest" }
+ctrlc = "3.1.4"
+
+[build-dependencies]
+prost-build = "0.6.1"
+
+# While we don't have a replacement for termion on Windows yet (and thus
+# our example doesn't work on Windows), it does get further in the compilation
+# such that "cargo test" etc shows errors in our code rather than in termion.
+[target.'cfg(not(windows))'.dev-dependencies]
+termion = "1.5.4"
+
+[[bench]]
+name = "match_impl"
+harness = false
+
+[[bench]]
+name = "search"
+harness = false

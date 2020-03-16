@@ -1,0 +1,31 @@
+language: objective-c
+osx_image: xcode10
+
+xcode_workspace: Example/Leanplum-SDK.xcworkspace
+xcode_scheme: Leanplum-SDK-Example
+xcode_destination: platform=iOS Simulator,OS=12.0,name=iPhone X
+
+cache: cocoapods
+podfile: Example/Podfile
+before_install:
+- gem install cocoapods # Since Travis is not always on latest version
+- pod install --project-directory=Example
+
+before_deploy:
+- ./Tools/verifyTag.sh
+- ./Tools/build.sh
+
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: $GITHUB_TOKEN
+    file: Leanplum.framework.zip
+    draft: true
+    on:
+      tags: true
+  - provider: script
+    skip_cleanup: true
+    script: ./Tools/push.sh
+    on:
+      tags: true

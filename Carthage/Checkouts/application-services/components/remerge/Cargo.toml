@@ -1,0 +1,36 @@
+[package]
+name = "remerge"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+edition = "2018"
+license = "MPL-2.0"
+
+[dependencies]
+serde = { version = "1.0.104", features = ["derive", "rc"] }
+failure = { version = "0.1.6" }
+url = "2.1.1"
+serde_json = { version = "1.0.44", features = ["preserve_order"] }
+log = "0.4.8"
+semver = { version = "0.9.0", features = ["serde"] }
+lazy_static = "1.4.0"
+index_vec = "0.1.0"
+sql-support = {path = "../support/sql"}
+error-support = {path = "../support/error"}
+sync-guid = {path = "../support/guid", features = ["random", "rusqlite_support"]}
+# it's not clear if we should actually use these deps (they're fine and not
+# uncommon or anything, but we could avoid them at the cost of slightly more
+# code).
+matches = "0.1.8"
+num-traits = "0.2.8"
+
+# A *direct* dep on the -sys crate is required for our build.rs
+# to see the DEP_SQLITE3_LINK_TARGET env var that cargo sets
+# on its behalf.
+libsqlite3-sys = "0.17.1"
+
+[dependencies.rusqlite]
+version = "0.21.0"
+features = ["functions", "bundled", "serde_json"]
+
+[build-dependencies]
+nss_build_common = { path = "../support/rc_crypto/nss/nss_build_common" }

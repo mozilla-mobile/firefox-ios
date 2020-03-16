@@ -1,0 +1,144 @@
+plugins {
+    id "com.jetbrains.python.envs" version "0.0.26"
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.protobuf'
+
+android {
+    compileSdkVersion rootProject.ext.build.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.build['minSdkVersion']
+        targetSdkVersion rootProject.ext.build['targetSdkVersion']
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "LIBRARY_VERSION", "\"${rootProject.ext.library.version}\"")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles "$rootDir/proguard-rules-consumer-jna.pro"
+        }
+    }
+
+    sourceSets {
+        test.resources.srcDirs += "$buildDir/rustJniLibs/desktop"
+        // Add the full-megazord's build directory to our resource path so that
+        // we can actually find it during tests. (Unfortunately, each project
+        // has their own build dir)
+        test.resources.srcDirs += "${project(':full-megazord').buildDir}/rustJniLibs/desktop"
+
+        main {
+            proto {
+                srcDir '../src'
+            }
+        }
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
+configurations {
+    // There's an interaction between Gradle's resolution of dependencies with different types
+    // (@jar, @aar) for `implementation` and `testImplementation` and with Android Studio's built-in
+    // JUnit test runner.  The runtime classpath in the built-in JUnit test runner gets the
+    // dependency from the `implementation`, which is type @aar, and therefore the JNA dependency
+    // doesn't provide the JNI dispatch libraries in the correct Java resource directories.  I think
+    // what's happening is that @aar type in `implementation` resolves to the @jar type in
+    // `testImplementation`, and that it wins the dependency resolution battle.
+    //
+    // A workaround is to add a new configuration which depends on the @jar type and to reference
+    // the underlying JAR file directly in `testImplementation`.  This JAR file doesn't resolve to
+    // the @aar type in `implementation`.  This works when invoked via `gradle`, but also sets the
+    // correct runtime classpath when invoked with Android Studio's built-in JUnit test runner.
+    // Success!
+    jnaForTest
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.0.0'
+    }
+    plugins {
+        javalite {
+            artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.plugins {
+                javalite { }
+            }
+        }
+    }
+}
+
+dependencies {
+    // Part of the public API.
+    api project(':sync15')
+
+    jnaForTest "net.java.dev.jna:jna:$jna_version@jar"
+    implementation "net.java.dev.jna:jna:$jna_version@aar"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "org.mozilla.components:service-glean:$android_components_version"
+
+    implementation 'com.google.protobuf:protobuf-lite:3.0.0'
+    api project(":full-megazord")
+    implementation project(":native-support")
+
+    // For reasons unknown, resolving the jnaForTest configuration directly
+    // trips a nasty issue with the Android-Gradle plugin 3.2.1, like `Cannot
+    // change attributes of configuration ':PROJECT:kapt' after it has been
+    // resolved`.  I think that the configuration is being made a
+    // super-configuration of the testImplementation and then the `.files` is
+    // causing it to be resolved.  Cloning first dissociates the configuration,
+    // avoiding other configurations from being resolved.  Tricky!
+    testImplementation files(configurations.jnaForTest.copyRecursive().files)
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:4.2.1'
+    testImplementation 'org.mockito:mockito-core:2.21.0'
+    testImplementation 'androidx.test:core-ktx:1.2.0'
+    testImplementation 'androidx.work:work-testing:2.2.0'
+    testImplementation "org.mozilla.telemetry:glean-forUnitTests:$glean_version"
+
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+evaluationDependsOn(":full-megazord")
+afterEvaluate {
+    // The `cargoBuild` task isn't available until after evaluation.
+    android.libraryVariants.all { variant ->
+        def productFlavor = ""
+        variant.productFlavors.each {
+            productFlavor += "${it.name.capitalize()}"
+        }
+        def buildType = "${variant.buildType.name.capitalize()}"
+        tasks["generate${productFlavor}${buildType}Assets"].dependsOn(project(':full-megazord').tasks["cargoBuild"])
+
+        // For unit tests.
+        tasks["process${productFlavor}${buildType}UnitTestJavaRes"].dependsOn(project(':full-megazord').tasks["cargoBuild"])
+    }
+}
+
+apply from: "$rootDir/publish.gradle"
+ext.configurePublish()
+
+ext.gleanGenerateMarkdownDocs = true
+ext.gleanDocsDirectory = "$rootDir/docs/metrics/logins"
+apply from: "https://github.com/mozilla-mobile/android-components/raw/v${android_components_version}/components/service/glean/scripts/sdk_generator.gradle"
+

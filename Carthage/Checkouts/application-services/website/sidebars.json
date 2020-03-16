@@ -1,0 +1,61 @@
+{
+  "docs": {
+    "Accounts": ["accounts/welcome"],
+    "Sync": ["sync/welcome"],
+    "Applications": ["applications/welcome"],
+    "Push": ["push/welcome"]
+  },
+  "accounts": {
+    "Firefox Accounts": [
+      "accounts/welcome",
+      "accounts/project-details",
+      "accounts/faq",
+      "accounts/dev-process",
+      "accounts/metrics",
+      "accounts/local-development"
+    ],
+    "Mobile SDKs": [
+      "accounts/fxa-client-ios",
+      "accounts/fxa-client-android"
+    ],
+    "Other Features": [
+      "accounts/end-to-end-encryption",
+      "accounts/50000-most-common-passwords"
+    ]
+  },
+  "applications": {
+    "Applications": [
+      "applications/welcome",
+      "applications/signing-android-apps",
+      "applications/android-components",
+      "applications/consuming-megazord-libraries",
+      "applications/working-with-reference-browser"
+    ]
+  },
+  "sync": {
+    "Firefox Sync": [
+      "sync/welcome",
+      "sync/file-desktop-bug",
+      "sync/faq"
+    ],
+    "Testing": [
+      "sync/tps"
+    ],
+    "Design Docs": [
+      "sync/extension-storage",
+      "sync/state-machines"
+    ],
+    "Team": [
+      "sync/canned-bug-responses",
+      "sync/redash"
+    ]
+  },
+  "push": {
+    "Push": [
+      "push/welcome",
+      "push/development",
+      "push/design",
+      "push/history"
+    ]
+  }
+}

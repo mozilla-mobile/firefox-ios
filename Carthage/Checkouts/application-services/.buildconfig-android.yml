@@ -1,0 +1,93 @@
+libraryVersion: 0.54.0
+groupId: org.mozilla.appservices
+projects:
+  fxaclient:
+    path: components/fxa-client/android
+    artifactId: fxaclient
+    publications:
+    - name: fxaclient
+      type: aar
+    description: Firefox Accounts client.
+  logins:
+    path: components/logins/android
+    artifactId: logins
+    publications:
+    - name: logins
+      type: aar
+    description: Sync 1.5 logins implementation.
+  places:
+    path: components/places/android
+    artifactId: places
+    publications:
+    - name: places
+      type: aar
+    description: Low level places storage implementation.
+  rustlog:
+    path: components/rc_log/android
+    artifactId: rustlog
+    publications:
+    - name: rustlog
+      type: aar
+    description: Android hook into the log crate.
+  httpconfig:
+    path: components/viaduct/android
+    artifactId: httpconfig
+    publications:
+    - name: httpconfig
+      type: aar
+    description: Component allowing the configuration of Rust HTTP stack.
+  native-support:
+    path: components/support/android
+    artifactId: native-support
+    publications:
+    - name: native-support
+      type: aar
+    description: Shared native code utilities for rust component kotlin.
+  push:
+    path: components/push/android
+    artifactId: push
+    publications:
+    - name: push
+      type: aar
+    description: Low level WebPush handler implementation.
+  sync15:
+    path: components/sync15/android
+    artifactId: sync15
+    publications:
+    - name: sync15
+      type: aar
+    description: Shared Sync types for Kotlin.
+  syncmanager:
+    path: components/sync_manager/android
+    artifactId: syncmanager
+    publications:
+    - name: syncmanager
+      type: aar
+    description: Sync manager implementation
+  tabs:
+    path: components/tabs/android
+    artifactId: tabs
+    publications:
+    - name: tabs
+      type: aar
+    description: Sync 1.5 remote tabs implementation.
+  lockbox-megazord:
+    uploadSymbols: true
+    path: megazords/lockbox/android
+    artifactId: lockbox-megazord
+    publications:
+    - name: lockbox-megazord
+      type: aar
+    - name: lockbox-megazord-forUnitTests
+      type: jar
+    description: Megazord of [fxaclient, logins, logging].
+  full-megazord:
+    uploadSymbols: true
+    path: megazords/full/android
+    artifactId: full-megazord
+    publications:
+    - name: full-megazord
+      type: aar
+    - name: full-megazord-forUnitTests
+      type: jar
+    description: Megazord containing all features

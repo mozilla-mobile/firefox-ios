@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FTRWebViewController">
+            <connections>
+                <outlet property="_activityIndicator" destination="Dow-02-PiP" id="a9e-VB-xYz"/>
+                <outlet property="_webView" destination="8B3-Zu-4Xm" id="WY1-Bm-LLD"/>
+                <outlet property="_webViewBounceSwitch" destination="qUg-34-n03" id="kS5-Ox-Nqf"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <webView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8B3-Zu-4Xm">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="619"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <connections>
+                        <outlet property="delegate" destination="-1" id="OUR-2i-ber"/>
+                    </connections>
+                </webView>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Dow-02-PiP">
+                    <rect key="frame" x="177.5" y="367.5" width="20" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="lmI-6V-z28"/>
+                        <constraint firstAttribute="width" constant="20" id="xMr-uO-BLq"/>
+                    </constraints>
+                </activityIndicatorView>
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IM9-Gf-dmX">
+                    <rect key="frame" x="0.0" y="619" width="375" height="48"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k27-It-B2V">
+                            <rect key="frame" x="8" y="8" width="50" height="30"/>
+                            <accessibility key="accessibilityConfiguration" label="loadGoogle"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="3v8-fB-og8"/>
+                                <constraint firstAttribute="width" constant="50" id="AYj-fv-6sH"/>
+                            </constraints>
+                            <state key="normal" title="Google">
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="userDidTapLoadGoogle" destination="-1" eventType="touchUpInside" id="grk-8L-GPA"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ci5-c5-vzb">
+                            <rect key="frame" x="66" y="8" width="38" height="30"/>
+                            <accessibility key="accessibilityConfiguration" label="loadLocalFile"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="VZf-oV-D8a"/>
+                                <constraint firstAttribute="width" constant="38" id="d0B-cz-tgJ"/>
+                            </constraints>
+                            <state key="normal" title="Local">
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="userDidTapLoadLocalTestPage" destination="-1" eventType="touchUpInside" id="XLr-qj-4O5"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vpc-AG-Y4W">
+                            <rect key="frame" x="111" y="8" width="81" height="30"/>
+                            <accessibility key="accessibilityConfiguration" label="loadHTMLString"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="81" id="huu-lE-3GF"/>
+                                <constraint firstAttribute="height" constant="30" id="zfW-E8-fBo"/>
+                            </constraints>
+                            <state key="normal" title="LoadHTML:">
+                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="userDidTapLoadHTMLUsingLoadHTMLString" destination="-1" eventType="touchUpInside" id="21Q-20-srs"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NMd-uP-vFD">
+                            <rect key="frame" x="192" y="8" width="62" height="33"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration" label="loadPDF"/>
+                            <state key="normal" title="LoadPDF"/>
+                            <connections>
+                                <action selector="userDidTapLoadPDF" destination="-1" eventType="touchUpInside" id="NoG-d2-3uq"/>
+                            </connections>
+                        </button>
+                        <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qUg-34-n03">
+                            <rect key="frame" x="318" y="9" width="51" height="31"/>
+                            <accessibility key="accessibilityConfiguration" label="bounceSwitch"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="49" id="CFC-j2-1vl"/>
+                                <constraint firstAttribute="height" constant="31" id="F4n-mG-nWQ"/>
+                            </constraints>
+                            <connections>
+                                <action selector="userDidToggleBounce:" destination="-1" eventType="valueChanged" id="53t-tN-4ku"/>
+                            </connections>
+                        </switch>
+                    </subviews>
+                    <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="GLr-vA-GE7"/>
+                        <constraint firstItem="ci5-c5-vzb" firstAttribute="centerY" secondItem="vpc-AG-Y4W" secondAttribute="centerY" id="OeS-pN-79u"/>
+                        <constraint firstItem="vpc-AG-Y4W" firstAttribute="leading" secondItem="ci5-c5-vzb" secondAttribute="trailing" constant="7" id="Sc7-Bz-nZp"/>
+                        <constraint firstItem="k27-It-B2V" firstAttribute="leading" secondItem="IM9-Gf-dmX" secondAttribute="leading" constant="8" id="Z9c-oF-bJN"/>
+                        <constraint firstAttribute="trailing" secondItem="qUg-34-n03" secondAttribute="trailing" constant="8" id="c8y-5B-caN"/>
+                        <constraint firstItem="k27-It-B2V" firstAttribute="top" secondItem="IM9-Gf-dmX" secondAttribute="top" constant="8" id="eNP-5H-5aq"/>
+                        <constraint firstItem="qUg-34-n03" firstAttribute="top" secondItem="IM9-Gf-dmX" secondAttribute="top" constant="9" id="fSx-0E-t7P"/>
+                        <constraint firstItem="ci5-c5-vzb" firstAttribute="leading" secondItem="k27-It-B2V" secondAttribute="trailing" constant="8" id="r0X-Hq-dEt"/>
+                        <constraint firstItem="ci5-c5-vzb" firstAttribute="centerY" secondItem="k27-It-B2V" secondAttribute="centerY" id="uBh-R0-SRo"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="8B3-Zu-4Xm" firstAttribute="centerX" secondItem="Dow-02-PiP" secondAttribute="centerX" id="2OT-na-w3X"/>
+                <constraint firstItem="8B3-Zu-4Xm" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="6Zj-5x-vk4"/>
+                <constraint firstItem="IM9-Gf-dmX" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="JCk-4e-brk"/>
+                <constraint firstAttribute="trailing" secondItem="IM9-Gf-dmX" secondAttribute="trailing" id="bcH-zU-zgY"/>
+                <constraint firstItem="IM9-Gf-dmX" firstAttribute="top" secondItem="8B3-Zu-4Xm" secondAttribute="bottom" id="d0R-re-Rjd"/>
+                <constraint firstAttribute="trailing" secondItem="8B3-Zu-4Xm" secondAttribute="trailing" id="hGI-OX-Oip"/>
+                <constraint firstItem="8B3-Zu-4Xm" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="mDX-y9-UOe"/>
+                <constraint firstItem="8B3-Zu-4Xm" firstAttribute="centerY" secondItem="Dow-02-PiP" secondAttribute="centerY" constant="-68" id="o57-El-CUU"/>
+                <constraint firstAttribute="bottom" secondItem="IM9-Gf-dmX" secondAttribute="bottom" id="oCj-92-WEE"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

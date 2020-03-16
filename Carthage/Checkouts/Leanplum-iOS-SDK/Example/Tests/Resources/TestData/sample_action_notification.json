@@ -1,0 +1,24 @@
+{
+    "aps": {
+        "alert": "Message Push With Test Data",
+        "content-available": 1
+    },
+    "_lpx": {
+        "bool_argument": true,
+        "string_argument": "test_string_2",
+        "__name__": "test_action",
+        "color_argument": -16777216,
+        "dictionary_argument": {
+            "test_value": "test_value_2"
+        },
+        "array_argument": {
+            "[2]": 7,
+            "[0]": 9,
+            "[3]": 6,
+            "[1]": 8
+        },
+        "file_argument": "back.pdf",
+        "number_argument": 15
+    },
+    "_lpm": 5.571215811412e+15
+}

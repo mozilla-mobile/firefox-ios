@@ -1,0 +1,35 @@
+{
+  "1": {
+    "action": "Alert",
+    "countdown": 86400,
+    "vars": {
+      "Dismiss action": "",
+      "Message": "priority-10-a",
+      "Title": "priority-10-a",
+      "Dismiss text": "OK",
+      "__name__": "Alert"
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "priority": 10,
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  }
+}

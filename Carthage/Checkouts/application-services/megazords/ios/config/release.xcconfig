@@ -1,0 +1,2 @@
+buildvariant = release
+#include "base.xcconfig"

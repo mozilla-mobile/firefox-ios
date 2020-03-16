@@ -1,0 +1,473 @@
+version: 2.1
+
+commands:
+  setup-sccache:
+    steps:
+      - run:
+          name: Install sccache
+          command: |
+            SCCACHE_VERSION=0.2.11
+            if [ "$(uname)" == "Darwin" ]; then
+              SCCACHE="sccache-${SCCACHE_VERSION}-x86_64-apple-darwin"
+            else
+              SCCACHE="sccache-${SCCACHE_VERSION}-x86_64-unknown-linux-musl"
+            fi
+            SCCACHE_ARCHIVE="${SCCACHE}.tar.gz"
+            SCCACHE_URL="https://github.com/mozilla/sccache/releases/download/${SCCACHE_VERSION}/${SCCACHE_ARCHIVE}"
+            curl -sfSL --retry 5 --retry-delay 10 "${SCCACHE_URL}" | sudo tar -xz --strip-components=1 -C /usr/local/bin/ "${SCCACHE}/sccache"
+            sudo chmod +x /usr/local/bin/sccache
+            # Do not forget to re-export these variables in xc-universal-binary.sh!
+            echo 'export "RUSTC_WRAPPER"="sccache"' >> $BASH_ENV
+            echo 'export "SCCACHE_IDLE_TIMEOUT"="1200"' >> $BASH_ENV
+            echo 'export "SCCACHE_CACHE_SIZE"="2G"' >> $BASH_ENV
+            echo 'export "SCCACHE_ERROR_LOG"="/tmp/sccache.log"' >> $BASH_ENV
+            echo 'export "RUST_LOG"="sccache=info"' >> $BASH_ENV
+            # Incremental compilation isn't supported by sccache.
+            echo 'export "CARGO_INCREMENTAL"="0"' >> $BASH_ENV
+            sccache --version
+  install-xcpretty:
+    steps:
+      - run:
+          name: Install xcpretty
+          command: |
+            gem install --user-install xcpretty
+            echo 'export PATH="$HOME/.gem/ruby/2.3.0/bin:$PATH"' >> $BASH_ENV
+  install-mdbook:
+    steps:
+      - run:
+          name: Install mdBook
+          command: |
+            mkdir -p $HOME/.bin
+            pushd $HOME/.bin
+            curl -sfSL --retry 5 --retry-delay 10 https://github.com/rust-lang-nursery/mdBook/releases/download/v0.2.1/mdbook-v0.2.1-x86_64-unknown-linux-gnu.tar.gz | tar xz
+            echo 'export PATH="$HOME/.bin:$PATH"' >> $BASH_ENV
+            popd
+  install-rust:
+    steps:
+      - run:
+          name: Install Rust
+          command: |
+            RUSTUP_PLATFORM=x86_64-apple-darwin
+            RUSTUP_VERSION=1.18.3
+            RUSTUP_SHA256=16734a9a2d87a3054bd4eea962642687e50a34b6e73e17df6f3361c2c534dc30
+            curl -sfSL --retry 5 --retry-delay 10 -O "https://static.rust-lang.org/rustup/archive/${RUSTUP_VERSION}/${RUSTUP_PLATFORM}/rustup-init"
+            echo "${RUSTUP_SHA256} *rustup-init" | shasum -a 256 -c -
+            chmod +x rustup-init
+            ./rustup-init -y --no-modify-path
+            rm rustup-init
+            echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $BASH_ENV
+  setup-rust-toolchain:
+    parameters:
+      rust-version:
+        type: string
+        default: "stable"
+    steps:
+      - run:
+          name: Setup Rust toolchain
+          command: |
+            rustup install <<parameters.rust-version>>
+            rustup default <<parameters.rust-version>>
+            rustup update
+            rustc --version
+  install-clang: # Used by bindgen for nss_sys.
+    steps:
+      - run: sudo apt-get install clang
+  build-libs:
+    parameters:
+      platform:
+        type: string
+    steps:
+      - run:
+          name: Compute libs/ checksum
+          command: echo "$(git rev-parse HEAD:libs)" >| libs_sha
+      - restore_cache:
+          name: Restore libs/ cache
+          key: libs-cache-{{ arch }}-{{ checksum "libs_sha" }}
+      - run:
+          name: Build libs
+          command: pushd libs && ./build-all.sh <<parameters.platform>> && popd
+      - save_cache:
+          name: Save libs/ cache
+          key: libs-cache-{{ arch }}-{{ checksum "libs_sha" }}
+          paths:
+            - libs/<<parameters.platform>>
+  build-desktop-libs:
+    steps:
+      - run: sudo apt-get install tcl
+      - run:
+          name: Install NSS build system dependencies
+          command: sudo apt-get install ninja-build gyp zlib1g-dev
+      - build-libs:
+          platform: desktop
+  build-ios-libs:
+    steps:
+      - run:
+          name: Install NSS build system dependencies
+          command: |
+            brew install ninja
+            pushd ..
+            git clone https://chromium.googlesource.com/external/gyp.git
+            pushd gyp
+            python3 setup.py install
+            popd
+            popd
+      - build-libs:
+          platform: ios
+  test-setup:
+    parameters:
+      rust-version:
+        type: string
+        default: "stable"
+    steps:
+      - checkout
+      - build-desktop-libs
+      - setup-rust-toolchain:
+          rust-version: <<parameters.rust-version>>
+      - setup-sccache
+      - install-clang
+      # clipboard crate depends on some x11 libs.
+      - run: sudo apt-get install libxcb-shape0-dev libxcb-xfixes0-dev
+      - run: |
+          echo 'export NSS_STATIC=1' >> $BASH_ENV
+          echo 'export NSS_DIR=$(pwd)/libs/desktop/linux-x86-64/nss' >> $BASH_ENV
+          echo 'export SQLCIPHER_LIB_DIR=$(pwd)/libs/desktop/linux-x86-64/sqlcipher/lib' >> $BASH_ENV
+          echo 'export SQLCIPHER_INCLUDE_DIR=$(pwd)/libs/desktop/linux-x86-64/sqlcipher/include' >> $BASH_ENV
+      - run:
+          name: Verify the build environment
+          command: ./libs/verify-desktop-environment.sh
+  rust-tests:
+    parameters:
+      rust-version:
+        type: string
+        default: "stable"
+    steps:
+      - test-setup:
+          rust-version: <<parameters.rust-version>>
+      # Test with 1. only default features on, 2. all features on, 3. no features on.
+      # This is not perfect (really we want the cartesian product), but is good enough in practice.
+      - run: sccache --zero-stats
+      - run:
+          name: Test (default features, no features, and all features)
+          command: bash automation/all_rust_tests.sh --verbose
+      - run: sccache --show-stats
+  dependency-checks:
+    steps:
+      - run:
+          name: Check for security vulnerabilities in dependencies
+          command: |
+            cargo install cargo-audit
+            cargo audit
+      - run:
+          name: Check for any unrecorded changes in our dependency trees
+          command: |
+            pip3 install --require-hashes -r ./tools/requirements.txt
+            rustup install nightly
+            cargo metadata --locked > /dev/null
+            python3 ./tools/dependency_summary.py --check ./DEPENDENCIES.md
+            python3 ./tools/dependency_summary.py --all-ios-targets --package megazord_ios --check megazords/ios/DEPENDENCIES.md
+            python3 ./tools/dependency_summary.py --all-android-targets --package megazord --check megazords/full/DEPENDENCIES.md
+            python3 ./tools/dependency_summary.py --all-android-targets --package megazord --format pom --check megazords/full/android/dependency-licenses.xml
+            python3 ./tools/dependency_summary.py --all-android-targets --package lockbox --check megazords/lockbox/DEPENDENCIES.md
+            python3 ./tools/dependency_summary.py --all-android-targets --package lockbox --format pom --check megazords/lockbox/android/dependency-licenses.xml
+
+  sync-bugzilla-to-github:
+    steps:
+      - checkout
+      - run:
+          name: Mirror Bugzilla issues into GitHub
+          command: |
+            sudo pip3 install --require-hashes -r ./tools/requirements.txt
+            python3 ./tools/sync_bugzilla_to_github.py
+  sync-tests:
+    steps:
+      - test-setup
+      - run:
+          name: Install Node.js
+          command: |
+            curl -sfSL --retry 5 --retry-delay 10 https://deb.nodesource.com/setup_10.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+      - run:
+          name: Sync Integration Test Suite
+          command: cargo run -p sync-test -- --oauth-retries 5
+  bench-all:
+    steps:
+      - test-setup
+      - run:
+          name: Build and Run Benchmarks
+          command: cargo bench --all
+  restore-sccache-cache:
+    steps:
+      - restore_cache:
+          name: Restore sccache cache
+          key: sccache-cache-stable-{{ arch }}-{{ .Environment.CIRCLE_JOB }}
+  save-sccache-cache:
+    steps:
+      - save_cache:
+          name: Save sccache cache
+          # We use {{ epoch }} to always upload a fresh cache:
+          # Of course, restore_cache will not find this exact key,
+          # but it will fall back to the closest key (aka the most recent).
+          # See https://discuss.circleci.com/t/add-mechanism-to-update-existing-cache-key/9014/13
+          key: sccache-cache-stable-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ epoch }}
+          paths:
+            - "~/.cache/sccache"
+      - store-sccache-logs
+  store-sccache-logs:
+    steps:
+      - store_artifacts:
+          path: /tmp/sccache.log
+          destination: logs/sccache.log
+
+jobs:
+  Check Swift formatting:
+    macos:
+      xcode: "11.3.1"
+    steps:
+      - checkout
+      - run: brew install swiftlint swiftformat
+      - run: swiftlint --strict
+      - run: swiftformat megazords components/*/ios --lint --swiftversion 4 --verbose
+  Check Rust formatting:
+    docker:
+      - image: circleci/rust:latest
+    steps:
+      - checkout
+      - setup-rust-toolchain
+      - run: rustup component add rustfmt
+      - run: rustfmt --version
+      - run: cargo fmt -- --check
+  Lint Rust with clippy:
+    docker:
+      - image: circleci/rust:latest
+    steps:
+      - test-setup
+      - run: rustup component add clippy
+      - run: cargo clippy --version
+      - run: bash automation/all_clippy_checks.sh
+  Lint Bash scripts:
+    docker:
+      - image: koalaman/shellcheck-alpine:stable
+    steps:
+      - checkout
+      - run:
+          name: Lint Bash scripts with shellcheck
+          command: sh automation/lint_bash_scripts.sh
+  Check Rust dependencies:
+    docker:
+      - image: circleci/rust:latest
+    steps:
+      - run: sudo apt-get install python3-pip
+      - setup-rust-toolchain
+      - checkout
+      - dependency-checks
+  Mirror Bugzilla issues into GitHub:
+    docker:
+      - image: circleci/python:latest
+    steps:
+      - sync-bugzilla-to-github
+  Rust tests:
+    docker:
+      - image: circleci/rust:latest
+    # We have to use a machine with more RAM for tests so we don't run out of memory.
+    resource_class: xlarge
+    steps:
+      - restore-sccache-cache
+      - rust-tests
+      - save-sccache-cache
+  Sync integration tests:
+    docker:
+      - image: circleci/rust:latest-browsers
+    steps:
+      - restore-sccache-cache
+      - sync-tests
+      - save-sccache-cache
+  Rust benchmarks:
+    docker:
+      - image: circleci/rust:latest
+    resource_class: large
+    steps:
+      - restore-sccache-cache
+      - bench-all
+      - save-sccache-cache
+  iOS build and test:
+    macos:
+      xcode: "11.3.1"
+    steps:
+      - install-rust
+      - setup-rust-toolchain
+      - checkout
+      - setup-sccache
+      - build-ios-libs
+      # We do not use the ssccache cache helper commands as
+      # the macOS cache is in a different folder.
+      - restore_cache:
+          name: Restore sccache cache
+          key: sccache-cache-macos-{{ arch }}
+      - run:
+          name: Setup build environment
+          command: |
+            rustup target add aarch64-apple-ios x86_64-apple-ios
+            if [ -z "${CIRCLE_TAG}" ]; then
+              # On non-release builds do not update brew (takes ages).
+              echo 'export HOMEBREW_NO_AUTO_UPDATE=1' >> $BASH_ENV
+            fi
+            brew outdated carthage || brew upgrade carthage
+            carthage bootstrap --platform iOS
+            brew install swift-protobuf
+            # See https://circleci.com/docs/2.0/testing-ios/#pre-starting-the-simulator
+            xcrun instruments -w "iPhone 8 (13.0) [" || true
+      - run:
+          name: Verify the build environment
+          command: ./libs/verify-ios-environment.sh
+      - run:
+          name: Run XCode tests
+          command: bash automation/run_ios_tests.sh
+      - store_artifacts:
+          path: raw_xcodetest.log
+          destination: logs/raw_xcodetest.log
+      - run:
+          name: Build Carthage archive
+          no_output_timeout: 20m
+          command: |
+            if [ -z "${CIRCLE_TAG}" ]; then
+              # XCode tests build in Debug configuration, save us a full
+              # Rust rebuild in Release mode by forcing Debug mode on
+              # non-release builds.
+              bash build-carthage.sh --out MozillaAppServices.framework.zip --configuration Debug
+            else
+              bash build-carthage.sh --out MozillaAppServices.framework.zip
+            fi
+      - store_artifacts:
+          path: raw_xcodebuild.log
+          destination: logs/raw_xcodebuild.log
+      - save_cache:
+          name: Save sccache cache
+          key: sccache-cache-macos-{{ arch }}-{{ epoch }}
+          paths:
+            - "~/Library/Caches/Mozilla.sccache"
+      - store-sccache-logs
+      - run:
+          name: "Create Carthage bin-only project specification"
+          command: |
+            ZIP_URL=https://circleci.com/api/v1.1/project/github/mozilla/application-services/$CIRCLE_BUILD_NUM/artifacts/0/dist/MozillaAppServices.framework.zip
+            echo "{\"0.0.1\":\"$ZIP_URL\"}" > mozilla.app-services.json
+      - store_artifacts:
+          path: MozillaAppServices.framework.zip
+          destination: dist/MozillaAppServices.framework.zip
+      - store_artifacts:
+          path: mozilla.app-services.json
+          destination: dist/mozilla.app-services.json
+      - run:
+          name: "Carthage binary snapshot URL"
+          command: |
+            JSON_URL=https://circleci.com/api/v1.1/project/github/mozilla/application-services/$CIRCLE_BUILD_NUM/artifacts/0/dist/mozilla.app-services.json
+            echo "Add the following line to your Cartfile:"
+            echo "binary \"$JSON_URL\" ~> 0.0.1-snapshot # mozilla/application-services@$CIRCLE_SHA1"
+      - persist_to_workspace:
+          root: .
+          paths:
+            - MozillaAppServices.framework.zip
+  Carthage release:
+    macos:
+      xcode: "11.3.1"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Release Carthage archive on GitHub
+          command: |
+            GHR=ghr_v0.12.0_darwin_amd64
+            GHR_SHA256=c868ef9fc5dd8c8a397b74d84051d83693c42dd59041cb17b66f90f563477249
+            curl -sfSL --retry 5 --retry-delay 10 -O "https://github.com/tcnksm/ghr/releases/download/v0.12.0/${GHR}.zip"
+            echo "${GHR_SHA256} *${GHR}.zip" | shasum -a 256 -c -
+            unzip "${GHR}.zip"
+            ./${GHR}/ghr -replace "${CIRCLE_TAG}" MozillaAppServices.framework.zip
+  Deploy website:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "f1:3e:05:3a:66:69:60:4f:1f:9f:8f:af:6e:1f:0f:53"
+      - install-mdbook
+      - checkout
+      - run:
+          name: Build and publish books and product portal
+          command: |
+            pushd docs/sync-storage-handbook
+            mdbook build
+            popd
+            pushd docs/synconomicon
+            mdbook build
+            popd
+            pushd website
+            npm install
+            cp -R ../docs/sync-storage-handbook/book static/sync-storage-handbook
+            cp -R ../docs/synconomicon/book static/synconomicon
+            git config --global user.name "Application Services"
+            git config --global user.email "application-services@mozilla.com"
+            USE_SSH=true npm run publish-gh-pages
+            popd
+workflows:
+  version: 2
+  swiftlint:
+    jobs:
+      - Check Swift formatting
+  check-formating:
+    jobs:
+      - Check Rust formatting
+  clippy:
+    jobs:
+      - Lint Rust with clippy
+  check-dependencies:
+    jobs:
+      - Check Rust dependencies
+  bash-lint:
+    jobs:
+      - Lint Bash scripts
+  deploy-website:
+    jobs:
+      - Deploy website:
+          filters:
+            branches:
+              only: master
+  check-dependencies-periodically:
+    jobs:
+      - Check Rust dependencies
+    triggers:
+      - schedule:
+          cron: "0 7 * * *"
+          filters:
+            branches:
+              only:
+                - master
+  mirror-bugzilla-to-github-periodically:
+    jobs:
+      - Mirror Bugzilla issues into GitHub
+    triggers:
+      - schedule:
+          cron: "0,30 * * * *"
+          filters:
+            branches:
+              only:
+                - master
+  run-tests:
+    jobs:
+      - Rust tests
+      - Rust benchmarks
+      - Sync integration tests
+  carthage-framework:
+    jobs:
+      - iOS build and test:
+          filters:  # required since `Release` has tag filters AND requires `Build`
+            tags:
+              only: /.*/
+      - Carthage release:
+          requires:
+            - iOS build and test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/

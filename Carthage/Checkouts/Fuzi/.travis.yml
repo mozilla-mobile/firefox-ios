@@ -1,0 +1,17 @@
+language: objective-c
+
+os: osx
+osx_image: xcode10.2
+
+env:
+  global:
+    - XCWORKSPACE="Fuzi.xcworkspace"
+    - SCHEME="Fuzi"
+  matrix:
+    - DESTINATION="platform=macOS,arch=x86_64" SDK="macosx" ACTION="test"
+    - DESTINATION="platform=iOS Simulator,name=iPhone 7" SDK="iphonesimulator" ACTION="test"
+    - DESTINATION="platform=tvOS Simulator,name=Apple TV 4K" SDK="appletvsimulator" ACTION="test"
+    - DESTINATION="name=Apple Watch - 38mm" SDK="watchsimulator" ACTION="build"
+
+script:
+  - xcodebuild -workspace "$XCWORKSPACE" -scheme "$SCHEME" -destination "$DESTINATION" -sdk $SDK $ACTION

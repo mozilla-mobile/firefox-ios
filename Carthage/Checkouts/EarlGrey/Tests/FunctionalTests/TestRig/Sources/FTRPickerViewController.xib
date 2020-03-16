@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FTRPickerViewController">
+            <connections>
+                <outlet property="attributedTitleForRowDelegateSwitch" destination="sRa-80-jCG" id="WV3-ZQ-ECi"/>
+                <outlet property="clearLabelButton" destination="Q2B-5N-PzE" id="MPX-g1-hob"/>
+                <outlet property="customPicker" destination="pY3-tM-fNr" id="G1k-8Q-Cbo"/>
+                <outlet property="dateLabel" destination="XMm-0B-uOK" id="z5c-bW-3XC"/>
+                <outlet property="datePicker" destination="nsh-tZ-mIw" id="ZAa-Ka-SLh"/>
+                <outlet property="datePickerSegmentedControl" destination="SKZ-9B-Fzx" id="JO0-1t-WVj"/>
+                <outlet property="interactionDisabledPicker" destination="337-zK-QgX" id="PhU-x0-W3V"/>
+                <outlet property="noDelegateMethodDefinedSwitch" destination="Dlf-7G-KvE" id="yFD-Tw-pDh"/>
+                <outlet property="titleForRowDelegateSwitch" destination="jB4-yt-cfB" id="GUk-Lc-y7x"/>
+                <outlet property="view" destination="1" id="NcN-en-NCW"/>
+                <outlet property="viewForRowDelegateSwitch" destination="SMU-6C-J30" id="64d-bT-AiD"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="nsh-tZ-mIw">
+                    <rect key="frame" x="0.0" y="129" width="320" height="162"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <date key="date" timeIntervalSinceReferenceDate="417508172.06960303">
+                        <!--2014-03-26 06:29:32 +0000-->
+                    </date>
+                </datePicker>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" translatesAutoresizingMaskIntoConstraints="NO" id="SKZ-9B-Fzx">
+                    <rect key="frame" x="5" y="93" width="310" height="29"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <segments>
+                        <segment title="Date"/>
+                        <segment title="Time"/>
+                        <segment title="DateTime"/>
+                        <segment title="Counter"/>
+                        <segment title="Custom"/>
+                        <segment title="Disabled"/>
+                    </segments>
+                    <connections>
+                        <action selector="valueChanged:" destination="-1" eventType="valueChanged" id="nWS-n6-KYk"/>
+                    </connections>
+                </segmentedControl>
+                <pickerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pY3-tM-fNr">
+                    <rect key="frame" x="0.0" y="129" width="320" height="162"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Rb1-cs-qRN"/>
+                        <outlet property="delegate" destination="-1" id="ZFr-dS-eGQ"/>
+                    </connections>
+                </pickerView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XMm-0B-uOK">
+                    <rect key="frame" x="110" y="347" width="101" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q2B-5N-PzE">
+                    <rect key="frame" x="124" y="376" width="73" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" title="Clear label">
+                        <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="clearDateLabelButtonTapped:" destination="-1" eventType="touchUpInside" id="mvT-Ug-LOM"/>
+                    </connections>
+                </button>
+                <pickerView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="337-zK-QgX">
+                    <rect key="frame" x="0.0" y="129" width="320" height="162"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="XRm-Up-6D1"/>
+                        <outlet property="delegate" destination="-1" id="LO7-do-cDW"/>
+                    </connections>
+                </pickerView>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="SMU-6C-J30" userLabel="viewForRow Delegate Switch">
+                    <rect key="frame" x="5" y="318" width="51" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="viewForRowDelegateSwitchToggled:" destination="-1" eventType="valueChanged" id="9RF-5E-nGQ"/>
+                    </connections>
+                </switch>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="sRa-80-jCG" userLabel="attributedTitleForRow Delegate Switch">
+                    <rect key="frame" x="5" y="347" width="51" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="attributedTitleForRowDelegateSwitchToggled:" destination="-1" eventType="valueChanged" id="4hy-fx-yT3"/>
+                    </connections>
+                </switch>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="jB4-yt-cfB" userLabel="titleForRow Delegate Switch">
+                    <rect key="frame" x="5" y="376" width="51" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="titleForRowDelegateSwitchToggled:" destination="-1" eventType="valueChanged" id="1lM-yc-Frh"/>
+                    </connections>
+                </switch>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Dlf-7G-KvE" userLabel="No Delegate Method Defined Switch">
+                    <rect key="frame" x="5" y="406" width="51" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <connections>
+                        <action selector="noDelegateMethodDefinedSwitchToggled:" destination="-1" eventType="valueChanged" id="W7a-Q4-vaJ"/>
+                    </connections>
+                </switch>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </view>
+    </objects>
+</document>

@@ -1,0 +1,103 @@
+apply plugin: 'com.android.library'
+apply plugin: 'org.mozilla.rust-android-gradle.rust-android'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion rootProject.ext.build.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.build['minSdkVersion']
+        targetSdkVersion rootProject.ext.build['targetSdkVersion']
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "LIBRARY_VERSION", "\"${rootProject.ext.library.version}\"")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles "$rootDir/proguard-rules-consumer-jna.pro"
+        }
+    }
+
+    sourceSets {
+        test.jniLibs.srcDirs += "$buildDir/rustJniLibs/desktop"
+    }
+
+    // Uncomment to include debug symbols in native library builds.
+    // packagingOptions { doNotStrip "**/*.so" }
+}
+
+configurations {
+    // There's an interaction between Gradle's resolution of dependencies with different types
+    // (@jar, @aar) for `implementation` and `testImplementation` and with Android Studio's built-in
+    // JUnit test runner.  The runtime classpath in the built-in JUnit test runner gets the
+    // dependency from the `implementation`, which is type @aar, and therefore the JNA dependency
+    // doesn't provide the JNI dispatch libraries in the correct Java resource directories.  I think
+    // what's happening is that @aar type in `implementation` resolves to the @jar type in
+    // `testImplementation`, and that it wins the dependency resolution battle.
+    //
+    // A workaround is to add a new configuration which depends on the @jar type and to reference
+    // the underlying JAR file directly in `testImplementation`.  This JAR file doesn't resolve to
+    // the @aar type in `implementation`.  This works when invoked via `gradle`, but also sets the
+    // correct runtime classpath when invoked with Android Studio's built-in JUnit test runner.
+    // Success!
+    jnaForTest
+}
+
+cargo {
+    // The directory of the Cargo.toml to build.
+    module = '..'
+
+    // The Android NDK API level to target.
+    apiLevel = 21
+
+    // Where Cargo writes its outputs.
+    targetDirectory = '../../../target'
+
+    libname = 'megazord'
+
+    // The Cargo targets to invoke.  The mapping from short name to target
+    // triple is defined by the `rust-android-gradle` plugin.
+    targets = rootProject.ext.rustTargets
+
+    // Perform release builds (which should have debug info, due to
+    // `debug = true` in Cargo.toml).
+    profile = "release"
+
+    exec = { spec, toolchain ->
+        rootProject.ext.cargoExecWithSQLCipher(spec, toolchain)
+        // Only used in the full megazord (that is, in this project) at build time.
+        spec.environment("MEGAZORD_VERSION", rootProject.ext.library.version)
+    }
+
+    extraCargoBuildArguments = rootProject.ext.extraCargoBuildArguments
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    jnaForTest "net.java.dev.jna:jna:$jna_version@jar"
+}
+
+afterEvaluate {
+    // The `cargoBuild` task isn't available until after evaluation.
+    android.libraryVariants.all { variant ->
+        def productFlavor = ""
+        variant.productFlavors.each {
+            productFlavor += "${it.name.capitalize()}"
+        }
+        def buildType = "${variant.buildType.name.capitalize()}"
+        tasks["merge${productFlavor}${buildType}JniLibFolders"].dependsOn(tasks["cargoBuild"])
+    }
+}
+
+apply from: "$rootDir/publish.gradle"
+// If using jnaForTestConfiguration or variantWithoutLib,
+// please also update the corresponding .buildconfig-android.yml
+// `publications` property.
+ext.configurePublish(
+        /* jnaForTestConfiguration= */ configurations.jnaForTest,
+)

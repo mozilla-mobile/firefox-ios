@@ -1,0 +1,126 @@
+syntax = "proto2";
+
+// Note: this file name must be unique due to how the iOS megazord works :(
+
+package msg_types;
+
+option java_package = "mozilla.appservices.fxaclient";
+option java_outer_classname = "MsgTypes";
+
+message Profile {
+    optional string uid = 1;
+    optional string email = 2;
+    optional string avatar = 3;
+    optional bool avatar_default = 4;
+    optional string display_name = 5;
+}
+
+message AccessTokenInfo {
+    required string scope = 1;
+    required string token = 2;
+    optional ScopedKey key = 3;
+    required uint64 expires_at = 4;
+}
+
+message IntrospectInfo {
+    required bool active = 1;
+    required string token_type = 2;
+    optional string scope = 3;
+    optional uint64 exp = 4;
+    optional string iss = 5;
+}
+
+message ScopedKey {
+    required string kty = 1;
+    required string scope = 2;
+    required string k = 3;
+    required string kid = 4;
+}
+
+message Device {
+    message PushSubscription {
+        required string endpoint = 1;
+        required string public_key = 2;
+        required string auth_key = 3;
+    }
+    enum Capability {
+        SEND_TAB = 1;
+    }
+    enum Type {
+        DESKTOP = 1;
+        MOBILE = 2;
+        TABLET = 3;
+        VR = 4;
+        TV = 5;
+        UNKNOWN = 6;
+    }
+    required string id = 1;
+    required string display_name = 2;
+    required Type type = 3;
+    optional PushSubscription push_subscription = 4;
+    required bool push_endpoint_expired = 5;
+    required bool is_current_device = 6;
+    optional uint64 last_access_time = 7;
+    repeated Capability capabilities = 8;
+}
+
+message Devices {
+    repeated Device devices = 1;
+}
+
+message Capabilities {
+    repeated Device.Capability capability = 1;
+}
+
+message IncomingDeviceCommand {
+    enum IncomingDeviceCommandType {
+        TAB_RECEIVED = 1; // `data` set to `tab_received_data`.
+    }
+    required IncomingDeviceCommandType type = 1;
+
+    message SendTabData {
+        message TabHistoryEntry {
+            required string title = 1;
+            required string url = 2;
+        }
+        optional Device from = 1;
+        repeated TabHistoryEntry entries = 2;
+    }
+
+    oneof data {
+        SendTabData tab_received_data = 2;
+    };
+}
+
+message IncomingDeviceCommands {
+    repeated IncomingDeviceCommand commands = 1;
+}
+
+// This is basically an enum with associated values,
+// but it's a bit harder to model in proto2.
+message AccountEvent {
+    enum AccountEventType {
+        INCOMING_DEVICE_COMMAND = 1; // `data` set to `device_command`.
+        PROFILE_UPDATED = 2;
+        DEVICE_CONNECTED = 3; // `data` set to `device_connected_name`.
+        ACCOUNT_AUTH_STATE_CHANGED = 4;
+        DEVICE_DISCONNECTED = 5; // `data` set to `device_disconnected_data`.
+        ACCOUNT_DESTROYED = 6;
+    }
+    required AccountEventType type = 1;
+
+    message DeviceDisconnectedData {
+        required string device_id = 1;
+        required bool is_local_device = 2;
+    }
+
+    oneof data {
+        IncomingDeviceCommand device_command = 2;
+        string device_connected_name = 3;
+        DeviceDisconnectedData device_disconnected_data = 4;
+    }
+}
+
+message AccountEvents {
+    repeated AccountEvent events = 1;
+}

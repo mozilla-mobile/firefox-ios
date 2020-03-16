@@ -1,0 +1,1151 @@
+// Protos/unittest_swift_reserved.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2016 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// Test Swift reserved words used as enum or message names
+///
+// -----------------------------------------------------------------------------
+
+// proto2 syntax is used so the has*/clear* names also get generated.
+syntax = "proto2";
+package swift_unittest.names;
+
+// TODO: Build a MessageNames message with a submessage of every name below
+// TODO: Create tests that access every field, enum, message to verify the name is generated correctly
+
+message Foo {
+  extensions 1 to 5000;
+}
+
+message FieldNames {
+  extend Foo { optional int32 foo1 = 1; }
+  optional int32 String = 1;
+  optional int32 Int = 2;
+  optional int32 Double = 3;
+  optional int32 Float = 4;
+  optional int32 UInt = 5;
+  optional int32 hashValue = 6;
+  optional int32 description = 7;
+  optional int32 debugDescription = 8;
+  optional int32 Swift = 9;
+  optional int32 UNRECOGNIZED = 10;
+  optional int32 class = 11;
+  optional int32 deinit = 12;
+  optional int32 enum = 13;
+  optional int32 func = 15;
+  optional int32 import = 16;
+  optional int32 init = 17;
+  optional int32 inout = 18;
+  optional int32 internal = 19;
+  optional int32 let = 20;
+  optional int32 operator = 21;
+  optional int32 private = 22;
+  optional int32 protocol = 23;
+  optional int32 public = 24;
+  optional int32 static = 25;
+  optional int32 struct = 26;
+  optional int32 subscript = 27;
+  optional int32 typealias = 28;
+  optional int32 var = 29;
+  optional int32 break = 30;
+  optional int32 case = 31;
+  optional int32 continue = 32;
+  optional int32 default = 33;
+  optional int32 defer = 34;
+  optional int32 do = 35;
+  optional int32 else = 36;
+  optional int32 fallthrough = 37;
+  optional int32 for = 38;
+  optional int32 guard = 39;
+  optional int32 if = 40;
+  optional int32 in = 41;
+  optional int32 repeat = 42;
+  optional int32 return = 43;
+  optional int32 switch = 44;
+  optional int32 where = 45;
+  optional int32 while = 46;
+  optional int32 as = 47;
+  optional int32 catch = 48;
+  optional int32 dynamicType = 49;
+  optional int32 false = 50;
+  optional int32 is = 51;
+  optional int32 nil = 52;
+  optional int32 rethrows = 53;
+  optional int32 super = 54;
+  optional int32 self = 55;
+  optional int32 throw = 57;
+  optional int32 throws = 58;
+  optional int32 true = 59;
+  optional int32 try = 60;
+  optional int32 __COLUMN__ = 61;
+  optional int32 __FILE__ = 62;
+  optional int32 __FUNCTION__ = 63;
+  optional int32 __LINE__ = 64;
+  optional int32 _ = 65;
+  optional int32 associativity = 66;
+  optional int32 convenience = 67;
+  optional int32 dynamic = 68;
+  optional int32 didSet = 69;
+  optional int32 final = 70;
+  optional int32 get = 71;
+  optional int32 infix = 72;
+  optional int32 indirect = 73;
+  optional int32 lazy = 74;
+  optional int32 left = 75;
+  optional int32 mutating = 76;
+  optional int32 none = 77;
+  optional int32 nonmutating = 78;
+  optional int32 optional = 79;
+  optional int32 override = 80;
+  optional int32 postfix = 81;
+  optional int32 precedence = 82;
+  optional int32 prefix = 83;
+  optional int32 required = 85;
+  optional int32 right = 86;
+  optional int32 set = 87;
+  optional int32 Type = 88;
+  optional int32 unowned = 89;
+  optional int32 weak = 90;
+  optional int32 willSet = 91;
+  optional int32 id = 92;
+  optional int32 _cmd = 93;
+  optional int32 out = 96;
+  optional int32 bycopy = 98;
+  optional int32 byref = 99;
+  optional int32 oneway = 100;
+  optional int32 and = 102;
+  optional int32 and_eq = 103;
+  optional int32 alignas = 104;
+  optional int32 alignof = 105;
+  optional int32 asm = 106;
+  optional int32 auto = 107;
+  optional int32 bitand = 108;
+  optional int32 bitor = 109;
+  optional int32 bool = 110;
+  optional int32 char = 114;
+  optional int32 char16_t = 115;
+  optional int32 char32_t = 116;
+  optional int32 compl = 118;
+  optional int32 const = 119;
+  optional int32 constexpr = 120;
+  optional int32 const_cast = 121;
+  optional int32 decltype = 123;
+  optional int32 delete = 125;
+  optional int32 dynamic_cast = 127;
+  optional int32 explicit = 130;
+  optional int32 export = 131;
+  optional int32 extern  = 132;
+  optional int32 friend = 136;
+  optional int32 goto = 137;
+  optional int32 inline = 139;
+  optional int32 long = 141;
+  optional int32 mutable = 142;
+  optional int32 namespace = 143;
+  optional int32 new = 144;
+  optional int32 noexcept = 145;
+  optional int32 not = 146;
+  optional int32 not_eq = 147;
+  optional int32 nullptr = 148;
+  optional int32 or = 150;
+  optional int32 or_eq = 151;
+  optional int32 protected = 153;
+  optional int32 register = 155;
+  optional int32 reinterpret_cast = 156;
+  optional int32 short = 158;
+  optional int32 signed = 159;
+  optional int32 sizeof = 160;
+  optional int32 static_assert = 162;
+  optional int32 static_cast = 163;
+  optional int32 template = 166;
+  optional int32 this = 167;
+  optional int32 thread_local = 168;
+  optional int32 typedef = 172;
+  optional int32 typeid = 173;
+  optional int32 typename = 174;
+  optional int32 union = 175;
+  optional int32 unsigned = 176;
+  optional int32 using = 177;
+  optional int32 virtual = 178;
+  optional int32 void = 179;
+  optional int32 volatile = 180;
+  optional int32 wchar_t = 181;
+  optional int32 xor = 183;
+  optional int32 xor_eq = 184;
+  optional int32 restrict = 185;
+  optional int32 Category = 186;
+  optional int32 Ivar = 187;
+  optional int32 Method = 188;
+  optional int32 finalize = 192;
+  optional int32 hash = 193;
+  optional int32 dealloc = 194;
+  optional int32 superclass = 197;
+  optional int32 retain = 198;
+  optional int32 release = 199;
+  optional int32 autorelease = 200;
+  optional int32 retainCount = 201;
+  optional int32 zone = 202;
+  optional int32 isProxy = 203;
+  optional int32 copy = 204;
+  optional int32 mutableCopy = 205;
+  optional int32 classForCoder = 206;
+  optional int32 clear = 207;
+  optional int32 data = 208;
+  optional int32 delimitedData = 209;
+  optional int32 descriptor = 210;
+  optional int32 extensionRegistry = 211;
+  optional int32 extensionsCurrentlySet = 212;
+  optional int32 isInitialized = 213;
+  optional int32 serializedSize = 214;
+  optional int32 sortedExtensionsInUse = 215;
+  optional int32 unknownFields = 216;
+  optional int32 Fixed = 217;
+  optional int32 Fract = 218;
+  optional int32 Size = 219;
+  optional int32 LogicalAddress = 220;
+  optional int32 PhysicalAddress = 221;
+  optional int32 ByteCount = 222;
+  optional int32 ByteOffset = 223;
+  optional int32 Duration = 224;
+  optional int32 AbsoluteTime = 225;
+  optional int32 OptionBits = 226;
+  optional int32 ItemCount = 227;
+  optional int32 PBVersion = 228;
+  optional int32 ScriptCode = 229;
+  optional int32 LangCode = 230;
+  optional int32 RegionCode = 231;
+  optional int32 OSType = 232;
+  optional int32 ProcessSerialNumber = 233;
+  optional int32 Point = 234;
+  optional int32 Rect = 235;
+  optional int32 FixedPoint = 236;
+  optional int32 FixedRect = 237;
+  optional int32 Style = 238;
+  optional int32 StyleParameter = 239;
+  optional int32 StyleField = 240;
+  optional int32 TimeScale = 241;
+  optional int32 TimeBase = 242;
+  optional int32 TimeRecord = 243;
+  optional int32 json_should_be_overriden = 244 [json_name = "json_was_overridden"];
+  optional int32 Any = 245;
+  optional int32 Int32 = 246;
+  optional int32 Int64 = 247;
+
+// TODO: protoc permits fields that differ only in capitalization, but
+// our conversion of protoc fields to Swift names is non-reversible,
+// and always forces the first character to lowercase, which causes
+// "protocol" and "Protocol" to collide.
+//
+//  optional int32 Protocol = 248;
+//  optional int32 Self = 249;
+
+  optional int32 UInt32 = 250;
+  optional int32 UInt64 = 251;
+  optional int32 associatedtype = 252;
+  optional int32 fileprivate = 253;
+  optional int32 open = 254;
+  optional int32 serializedData = 255;
+  optional int32 hasSerializedData = 256;
+  optional int32 clearSerializedData = 257;
+  optional int32 jsonUTF8Data = 258;
+  optional int32 jsonString = 259;
+  optional int32 Extension = 260;
+  optional int32 Extensions = 261;
+}
+
+message MessageNames {
+    extend Foo { optional int32 foo2 = 2; }
+    message String { extend Foo { optional int32 foo3 = 3; }; optional int32 String = 1; }
+    message Protocol { optional int32 Protocol = 1; }
+    message Int { optional int32 Int = 1; }
+    message Double { optional int32 Double = 1; }
+    message Float { optional int32 Float = 1; }
+    message UInt { optional int32 UInt = 1; }
+    message hashValue { optional int32 hashValue = 1; }
+    message description { optional int32 description = 1; }
+    message debugDescription { optional int32 debugDescription = 1; }
+    message Swift { optional int32 Swift = 1; }
+    message UNRECOGNIZED { optional int32 UNRECOGNIZED = 1; }
+    message class { optional int32 class = 1; }
+    message deinit { optional int32 deinit = 1; }
+    message enum { optional int32 enum = 1; }
+    message extension { optional int32 extension = 1; }
+    message func { optional int32 func = 1; }
+    message import { optional int32 import = 1; }
+    message init { optional int32 init = 1; }
+    message inout { optional int32 inout = 1; }
+    message internal { optional int32 internal = 1; }
+    message let { optional int32 let = 1; }
+    message operator { optional int32 operator = 1; }
+    message private { optional int32 private = 1; }
+    message protocol { optional int32 protocol = 1; }
+    message public { optional int32 public = 1; }
+    message static { optional int32 static = 1; }
+    message struct { optional int32 struct = 1; }
+    message subscript { optional int32 subscript = 1; }
+    message typealias { optional int32 typealias = 1; }
+    message var { optional int32 var = 1; }
+    message break { optional int32 break = 1; }
+    message case { optional int32 case = 1; }
+    message continue { optional int32 continue = 1; }
+    message default { optional int32 default = 1; }
+    message defer { optional int32 defer = 1; }
+    message do { optional int32 do = 1; }
+    message else { optional int32 else = 1; }
+    message fallthrough { optional int32 fallthrough = 1; }
+    message for { optional int32 for = 1; }
+    message guard { optional int32 guard = 1; }
+    message if { optional int32 if = 1; }
+    message in { optional int32 in = 1; }
+    message repeat { optional int32 repeat = 1; }
+    message return { optional int32 return = 1; }
+    message switch { optional int32 switch = 1; }
+    message where { optional int32 where = 1; }
+    message while { optional int32 while = 1; }
+    message as { optional int32 as = 1; }
+    message catch { optional int32 catch = 1; }
+    message dynamicType { optional int32 dynamicType = 1; }
+    message false { optional int32 false = 1; }
+    message is { optional int32 is = 1; }
+    message nil { optional int32 nil = 1; }
+    message rethrows { optional int32 rethrows = 1; }
+    message super { optional int32 super = 1; }
+    message self { optional int32 self = 1; }
+    message throw { optional int32 throw = 1; }
+    message throws { optional int32 throws = 1; }
+    message true { optional int32 true = 1; }
+    message try { optional int32 try = 1; }
+    message __COLUMN__ { optional int32 __COLUMN__ = 1; }
+    message __FILE__ { optional int32 __FILE__ = 1; }
+    message __FUNCTION__ { optional int32 __FUNCTION__ = 1; }
+    message __LINE__ { optional int32 __LINE__ = 1; }
+    message _ { optional int32 _ = 1; }
+    message __ { optional int32 __ = 1; }
+    message associativity { optional int32 associativity = 1; }
+    message convenience { optional int32 convenience = 1; }
+    message dynamic { optional int32 dynamic = 1; }
+    message didSet { optional int32 didSet = 1; }
+    message final { optional int32 final = 1; }
+    message get { optional int32 get = 1; }
+    message infix { optional int32 infix = 1; }
+    message indirect { optional int32 indirect = 1; }
+    message lazy { optional int32 lazy = 1; }
+    message left { optional int32 left = 1; }
+    message mutating { optional int32 mutating = 1; }
+    message none { optional int32 none = 1; }
+    message nonmutating { optional int32 nonmutating = 1; }
+    message optional { optional int32 optional = 1; }
+    message override { optional int32 override = 1; }
+    message postfix { optional int32 postfix = 1; }
+    message precedence { optional int32 precedence = 1; }
+    message prefix { optional int32 prefix = 1; }
+    message required { optional int32 required = 1; }
+    message right { optional int32 right = 1; }
+    message set { optional int32 set = 1; }
+    message Type { optional int32 Type = 1; }
+    message unowned { optional int32 unowned = 1; }
+    message weak { optional int32 weak = 1; }
+    message willSet { optional int32 willSet = 1; }
+    message id { optional int32 id = 1; }
+    message _cmd { optional int32 _cmd = 1; }
+    message out { optional int32 out = 1; }
+    message bycopy { optional int32 bycopy = 1; }
+    message byref { optional int32 byref = 1; }
+    message oneway { optional int32 oneway = 1; }
+    message and { optional int32 and = 1; }
+    message and_eq { optional int32 and_eq = 1; }
+    message alignas { optional int32 alignas = 1; }
+    message alignof { optional int32 alignof = 1; }
+    message asm { optional int32 asm = 1; }
+    message auto { optional int32 auto = 1; }
+    message bitand { optional int32 bitand = 1; }
+    message bitor { optional int32 bitor = 1; }
+    message bool { optional int32 bool = 1; }
+    message char { optional int32 char = 1; }
+    message char16_t { optional int32 char16_t = 1; }
+    message char32_t { optional int32 char32_t = 1; }
+    message compl { optional int32 compl = 1; }
+    message const { optional int32 const = 1; }
+    message constexpr { optional int32 constexpr = 1; }
+    message const_cast { optional int32 const_cast = 1; }
+    message decltype { optional int32 decltype = 1; }
+    message delete { optional int32 delete = 1; }
+    message dynamic_cast { optional int32 dynamic_cast = 1; }
+    message explicit { optional int32 explicit = 1; }
+    message export { optional int32 export = 1; }
+    message extern  { optional int32 extern  = 1; }
+    message friend { optional int32 friend = 1; }
+    message goto { optional int32 goto = 1; }
+    message inline { optional int32 inline = 1; }
+    message long { optional int32 long = 1; }
+    message mutable { optional int32 mutable = 1; }
+    message namespace { optional int32 namespace = 1; }
+    message new { optional int32 new = 1; }
+    message noexcept { optional int32 noexcept = 1; }
+    message not { optional int32 not = 1; }
+    message not_eq { optional int32 not_eq = 1; }
+    message nullptr { optional int32 nullptr = 1; }
+    message or { optional int32 or = 1; }
+    message or_eq { optional int32 or_eq = 1; }
+    message protected { optional int32 protected = 1; }
+    message register { optional int32 register = 1; }
+    message reinterpret_cast { optional int32 reinterpret_cast = 1; }
+    message short { optional int32 short = 1; }
+    message signed { optional int32 signed = 1; }
+    message sizeof { optional int32 sizeof = 1; }
+    message static_assert { optional int32 static_assert = 1; }
+    message static_cast { optional int32 static_cast = 1; }
+    message template { optional int32 template = 1; }
+    message this { optional int32 this = 1; }
+    message thread_local { optional int32 thread_local = 1; }
+    message typedef { optional int32 typedef = 1; }
+    message typeid { optional int32 typeid = 1; }
+    message typename { optional int32 typename = 1; }
+    message union { optional int32 union = 1; }
+    message unsigned { optional int32 unsigned = 1; }
+    message using { optional int32 using = 1; }
+    message virtual { optional int32 virtual = 1; }
+    message void { optional int32 void = 1; }
+    message volatile { optional int32 volatile = 1; }
+    message wchar_t { optional int32 wchar_t = 1; }
+    message xor { optional int32 xor = 1; }
+    message xor_eq { optional int32 xor_eq = 1; }
+    message restrict { optional int32 restrict = 1; }
+    message Category { optional int32 Category = 1; }
+    message Ivar { optional int32 Ivar = 1; }
+    message Method { optional int32 Method = 1; }
+    message finalize { optional int32 finalize = 1; }
+    message hash { optional int32 hash = 1; }
+    message dealloc { optional int32 dealloc = 1; }
+    message superclass { optional int32 superclass = 1; }
+    message retain { optional int32 retain = 1; }
+    message release { optional int32 release = 1; }
+    message autorelease { optional int32 autorelease = 1; }
+    message retainCount { optional int32 retainCount = 1; }
+    message zone { optional int32 zone = 1; }
+    message isProxy { optional int32 isProxy = 1; }
+    message copy { optional int32 copy = 1; }
+    message mutableCopy { optional int32 mutableCopy = 1; }
+    message classForCoder { optional int32 classForCoder = 1; }
+    message clear { optional int32 clear = 1; }
+    message data { optional int32 data = 1; }
+    message delimitedData { optional int32 delimitedData = 1; }
+    message descriptor { optional int32 descriptor = 1; }
+    message extensionRegistry { optional int32 extensionRegistry = 1; }
+    message extensionsCurrentlySet { optional int32 extensionsCurrentlySet = 1; }
+    message isInitialized { optional int32 isInitialized = 1; }
+    message serializedSize { optional int32 serializedSize = 1; }
+    message sortedExtensionsInUse { optional int32 sortedExtensionsInUse = 1; }
+    message unknownFields { optional int32 unknownFields = 1; }
+    message Fixed { optional int32 Fixed = 1; }
+    message Fract { optional int32 Fract = 1; }
+    message Size { optional int32 Size = 1; }
+    message LogicalAddress { optional int32 LogicalAddress = 1; }
+    message PhysicalAddress { optional int32 PhysicalAddress = 1; }
+    message ByteCount { optional int32 ByteCount = 1; }
+    message ByteOffset { optional int32 ByteOffset = 1; }
+    message Duration { optional int32 Duration = 1; }
+    message AbsoluteTime { optional int32 AbsoluteTime = 1; }
+    message OptionBits { optional int32 OptionBits = 1; }
+    message ItemCount { optional int32 ItemCount = 1; }
+    message PBVersion { optional int32 PBVersion = 1; }
+    message ScriptCode { optional int32 ScriptCode = 1; }
+    message LangCode { optional int32 LangCode = 1; }
+    message RegionCode { optional int32 RegionCode = 1; }
+    message OSType { optional int32 OSType = 1; }
+    message ProcessSerialNumber { optional int32 ProcessSerialNumber = 1; }
+    message Point { optional int32 Point = 1; }
+    message Rect { optional int32 Rect = 1; }
+    message FixedPoint { optional int32 FixedPoint = 1; }
+    message FixedRect { optional int32 FixedRect = 1; }
+    message Style { optional int32 Style = 1; }
+    message StyleParameter { optional int32 StyleParameter = 1; }
+    message StyleField { optional int32 StyleField = 1; }
+    message TimeScale { optional int32 TimeScale = 1; }
+    message TimeBase { optional int32 TimeBase = 1; }
+    message TimeRecord { optional int32 TimeRecord = 1; }
+    message serializedData { optional int32 serializedData = 1; }
+    message jsonUTF8Data { optional int32 jsonUTF8Data = 1; }
+    message jsonString { optional int32 jsonString = 1; }
+    message Extension {optional int32 Extension = 1; }
+    message Extensions {optional int32 Extensions = 1; }
+    extend Foo { optional int32 foo4 = 4; }
+}
+
+message EnumNames {
+    enum String { aString = 0; }
+    enum Protocol { aProtocol = 0; }
+    enum Int { aInt = 0; }
+    enum Double { aDouble = 0; }
+    enum Float { aFloat = 0; }
+    enum UInt { aUInt = 0; }
+    enum hashValue { ahashValue = 0; }
+    enum description { adescription = 0; }
+    enum debugDescription { adebugDescription = 0; }
+    enum Swift { aSwift = 0; }
+    enum UNRECOGNIZED { aUNRECOGNIZED = 0; }
+    enum class { aclass = 0; }
+    enum deinit { adeinit = 0; }
+    enum enum { aenum = 0; }
+    enum extension { aextension = 0; }
+    enum func { afunc = 0; }
+    enum import { aimport = 0; }
+    enum init { ainit = 0; }
+    enum inout { ainout = 0; }
+    enum internal { ainternal = 0; }
+    enum let { alet = 0; }
+    enum operator { aoperator = 0; }
+    enum private { aprivate = 0; }
+    enum protocol { aprotocol = 0; }
+    enum public { apublic = 0; }
+    enum static { astatic = 0; }
+    enum struct { astruct = 0; }
+    enum subscript { asubscript = 0; }
+    enum typealias { atypealias = 0; }
+    enum var { avar = 0; }
+    enum break { abreak = 0; }
+    enum case { acase = 0; }
+    enum continue { acontinue = 0; }
+    enum default { adefault = 0; }
+    enum defer { adefer = 0; }
+    enum do { ado = 0; }
+    enum else { aelse = 0; }
+    enum fallthrough { afallthrough = 0; }
+    enum for { afor = 0; }
+    enum guard { aguard = 0; }
+    enum if { aif = 0; }
+    enum in { ain = 0; }
+    enum repeat { arepeat = 0; }
+    enum return { areturn = 0; }
+    enum switch { aswitch = 0; }
+    enum where { awhere = 0; }
+    enum while { awhile = 0; }
+    enum as { aas = 0; }
+    enum catch { acatch = 0; }
+    enum dynamicType { adynamicType = 0; }
+    enum false { afalse = 0; }
+    enum is { ais = 0; }
+    enum nil { anil = 0; }
+    enum rethrows { arethrows = 0; }
+    enum super { asuper = 0; }
+    enum self { aself = 0; }
+    enum throw { athrow = 0; }
+    enum throws { athrows = 0; }
+    enum true { atrue = 0; }
+    enum try { atry = 0; }
+    enum __COLUMN__ { a__COLUMN__ = 0; }
+    enum __FILE__ { a__FILE__ = 0; }
+    enum __FUNCTION__ { a__FUNCTION__ = 0; }
+    enum __LINE__ { a__LINE__ = 0; }
+    enum _ { a_ = 0; }
+    enum __ { a__ = 0; }
+    enum associativity { aassociativity = 0; }
+    enum convenience { aconvenience = 0; }
+    enum dynamic { adynamic = 0; }
+    enum didSet { adidSet = 0; }
+    enum final { afinal = 0; }
+    enum get { aget = 0; }
+    enum infix { ainfix = 0; }
+    enum indirect { aindirect = 0; }
+    enum lazy { alazy = 0; }
+    enum left { aleft = 0; }
+    enum mutating { amutating = 0; }
+    enum none { anone = 0; }
+    enum nonmutating { anonmutating = 0; }
+    enum optional { aoptional = 0; }
+    enum override { aoverride = 0; }
+    enum postfix { apostfix = 0; }
+    enum precedence { aprecedence = 0; }
+    enum prefix { aprefix = 0; }
+    enum required { arequired = 0; }
+    enum right { aright = 0; }
+    enum set { aset = 0; }
+    enum Type { aType = 0; }
+    enum unowned { aunowned = 0; }
+    enum weak { aweak = 0; }
+    enum willSet { awillSet = 0; }
+    enum id { aid = 0; }
+    enum _cmd { a_cmd = 0; }
+    enum out { aout = 0; }
+    enum bycopy { abycopy = 0; }
+    enum byref { abyref = 0; }
+    enum oneway { aoneway = 0; }
+    enum and { aand = 0; }
+    enum and_eq { aand_eq = 0; }
+    enum alignas { aalignas = 0; }
+    enum alignof { aalignof = 0; }
+    enum asm { aasm = 0; }
+    enum auto { aauto = 0; }
+    enum bitand { abitand = 0; }
+    enum bitor { abitor = 0; }
+    enum bool { abool = 0; }
+    enum char { achar = 0; }
+    enum char16_t { achar16_t = 0; }
+    enum char32_t { achar32_t = 0; }
+    enum compl { acompl = 0; }
+    enum const { aconst = 0; }
+    enum constexpr { aconstexpr = 0; }
+    enum const_cast { aconst_cast = 0; }
+    enum decltype { adecltype = 0; }
+    enum delete { adelete = 0; }
+    enum dynamic_cast { adynamic_cast = 0; }
+    enum explicit { aexplicit = 0; }
+    enum export { aexport = 0; }
+    enum extern  { aextern  = 0; }
+    enum friend { afriend = 0; }
+    enum goto { agoto = 0; }
+    enum inline { ainline = 0; }
+    enum long { along = 0; }
+    enum mutable { amutable = 0; }
+    enum namespace { anamespace = 0; }
+    enum new { anew = 0; }
+    enum noexcept { anoexcept = 0; }
+    enum not { anot = 0; }
+    enum not_eq { anot_eq = 0; }
+    enum nullptr { anullptr = 0; }
+    enum or { aor = 0; }
+    enum or_eq { aor_eq = 0; }
+    enum protected { aprotected = 0; }
+    enum register { aregister = 0; }
+    enum reinterpret_cast { areinterpret_cast = 0; }
+    enum short { ashort = 0; }
+    enum signed { asigned = 0; }
+    enum sizeof { asizeof = 0; }
+    enum static_assert { astatic_assert = 0; }
+    enum static_cast { astatic_cast = 0; }
+    enum template { atemplate = 0; }
+    enum this { athis = 0; }
+    enum thread_local { athread_local = 0; }
+    enum typedef { atypedef = 0; }
+    enum typeid { atypeid = 0; }
+    enum typename { atypename = 0; }
+    enum union { aunion = 0; }
+    enum unsigned { aunsigned = 0; }
+    enum using { ausing = 0; }
+    enum virtual { avirtual = 0; }
+    enum void { avoid = 0; }
+    enum volatile { avolatile = 0; }
+    enum wchar_t { awchar_t = 0; }
+    enum xor { axor = 0; }
+    enum xor_eq { axor_eq = 0; }
+    enum restrict { arestrict = 0; }
+    enum Category { aCategory = 0; }
+    enum Ivar { aIvar = 0; }
+    enum Method { aMethod = 0; }
+    enum finalize { afinalize = 0; }
+    enum hash { ahash = 0; }
+    enum dealloc { adealloc = 0; }
+    enum superclass { asuperclass = 0; }
+    enum retain { aretain = 0; }
+    enum release { arelease = 0; }
+    enum autorelease { aautorelease = 0; }
+    enum retainCount { aretainCount = 0; }
+    enum zone { azone = 0; }
+    enum isProxy { aisProxy = 0; }
+    enum copy { acopy = 0; }
+    enum mutableCopy { amutableCopy = 0; }
+    enum classForCoder { aclassForCoder = 0; }
+    enum clear { aclear = 0; }
+    enum data { adata = 0; }
+    enum delimitedData { adelimitedData = 0; }
+    enum descriptor { adescriptor = 0; }
+    enum extensionRegistry { aextensionRegistry = 0; }
+    enum extensionsCurrentlySet { aextensionsCurrentlySet = 0; }
+    enum isInitialized { aisInitialized = 0; }
+    enum serializedSize { aserializedSize = 0; }
+    enum sortedExtensionsInUse { asortedExtensionsInUse = 0; }
+    enum unknownFields { aunknownFields = 0; }
+    enum Fixed { aFixed = 0; }
+    enum Fract { aFract = 0; }
+    enum Size { aSize = 0; }
+    enum LogicalAddress { aLogicalAddress = 0; }
+    enum PhysicalAddress { aPhysicalAddress = 0; }
+    enum ByteCount { aByteCount = 0; }
+    enum ByteOffset { aByteOffset = 0; }
+    enum Duration { aDuration = 0; }
+    enum AbsoluteTime { aAbsoluteTime = 0; }
+    enum OptionBits { aOptionBits = 0; }
+    enum ItemCount { aItemCount = 0; }
+    enum PBVersion { aPBVersion = 0; }
+    enum ScriptCode { aScriptCode = 0; }
+    enum LangCode { aLangCode = 0; }
+    enum RegionCode { aRegionCode = 0; }
+    enum OSType { aOSType = 0; }
+    enum ProcessSerialNumber { aProcessSerialNumber = 0; }
+    enum Point { aPoint = 0; }
+    enum Rect { aRect = 0; }
+    enum FixedPoint { aFixedPoint = 0; }
+    enum FixedRect { aFixedRect = 0; }
+    enum Style { aStyle = 0; }
+    enum StyleParameter { aStyleParameter = 0; }
+    enum StyleField { aStyleField = 0; }
+    enum TimeScale { aTimeScale = 0; }
+    enum TimeBase { aTimeBase = 0; }
+    enum TimeRecord { aTimeRecord = 0; }
+    enum Extension { aExtension = 0; }
+    enum Extensions { aExtensions = 0; }
+}
+
+enum EnumFieldNames {
+    A = 0;
+    String = 1;
+    Int = 2;
+    Double = 3;
+    Float = 4;
+    UInt = 5;
+    hashValue = 6;
+    description = 7;
+    debugDescription = 8;
+    Swift = 9;
+    UNRECOGNIZED = 10;
+    class = 11;
+    deinit = 12;
+    enum = 13;
+    extension = 14;
+    func = 15;
+    import = 16;
+    init = 17;
+    inout = 18;
+    internal = 19;
+    let = 20;
+    operator = 21;
+    private = 22;
+    protocol = 23;
+    public = 24;
+    static = 25;
+    struct = 26;
+    subscript = 27;
+    typealias = 28;
+    var = 29;
+    break = 30;
+    case = 31;
+    continue = 32;
+    default = 33;
+    defer = 34;
+    do = 35;
+    else = 36;
+    fallthrough = 37;
+    for = 38;
+    guard = 39;
+    if = 40;
+    in = 41;
+    repeat = 42;
+    return = 43;
+    switch = 44;
+    where = 45;
+    while = 46;
+    as = 47;
+    catch = 48;
+    dynamicType = 49;
+    false = 50;
+    is = 51;
+    nil = 52;
+    rethrows = 53;
+    super = 54;
+    self = 55;
+    throw = 57;
+    throws = 58;
+    true = 59;
+    try = 60;
+    __COLUMN__ = 61;
+    __FILE__ = 62;
+    __FUNCTION__ = 63;
+    __LINE__ = 64;
+    _ = 65;
+    associativity = 66;
+    convenience = 67;
+    dynamic = 68;
+    didSet = 69;
+    final = 70;
+    get = 71;
+    infix = 72;
+    indirect = 73;
+    lazy = 74;
+    left = 75;
+    mutating = 76;
+    none = 77;
+    nonmutating = 78;
+    optional = 79;
+    override = 80;
+    postfix = 81;
+    precedence = 82;
+    prefix = 83;
+    required = 85;
+    right = 86;
+    set = 87;
+    Type = 88;
+    unowned = 89;
+    weak = 90;
+    willSet = 91;
+//    id = 92;
+    _cmd = 93;
+    out = 96;
+    bycopy = 98;
+    byref = 99;
+    oneway = 100;
+    and = 102;
+    and_eq = 103;
+    alignas = 104;
+    alignof = 105;
+    asm = 106;
+    auto = 107;
+    bitand = 108;
+    bitor = 109;
+    bool = 110;
+    char = 114;
+    char16_t = 115;
+    char32_t = 116;
+    compl = 118;
+    const = 119;
+    constexpr = 120;
+    const_cast = 121;
+    decltype = 123;
+    delete = 125;
+    dynamic_cast = 127;
+    explicit = 130;
+    export = 131;
+    extern  = 132;
+    friend = 136;
+    goto = 137;
+    inline = 139;
+    long = 141;
+    mutable = 142;
+    namespace = 143;
+    new = 144;
+    noexcept = 145;
+    not = 146;
+    not_eq = 147;
+    nullptr = 148;
+    or = 150;
+    or_eq = 151;
+    protected = 153;
+    register = 155;
+    reinterpret_cast = 156;
+    short = 158;
+    signed = 159;
+    sizeof = 160;
+    static_assert = 162;
+    static_cast = 163;
+    template = 166;
+    this = 167;
+    thread_local = 168;
+    typedef = 172;
+    typeid = 173;
+    typename = 174;
+    union = 175;
+    unsigned = 176;
+    using = 177;
+    virtual = 178;
+    void = 179;
+    volatile = 180;
+    wchar_t = 181;
+    xor = 183;
+    xor_eq = 184;
+    restrict = 185;
+    Category = 186;
+    Ivar = 187;
+    Method = 188;
+    finalize = 192;
+    hash = 193;
+    dealloc = 194;
+    superclass = 197;
+    retain = 198;
+    release = 199;
+    autorelease = 200;
+    retainCount = 201;
+    zone = 202;
+    isProxy = 203;
+    copy = 204;
+    mutableCopy = 205;
+    classForCoder = 206;
+    clear = 207;
+    data = 208;
+    delimitedData = 209;
+    descriptor = 210;
+    extensionRegistry = 211;
+    extensionsCurrentlySet = 212;
+    isInitialized = 213;
+    serializedSize = 214;
+    sortedExtensionsInUse = 215;
+    unknownFields = 216;
+    Fixed = 217;
+    Fract = 218;
+    Size = 219;
+    LogicalAddress = 220;
+    PhysicalAddress = 221;
+    ByteCount = 222;
+    ByteOffset = 223;
+    Duration = 224;
+    AbsoluteTime = 225;
+    OptionBits = 226;
+    ItemCount = 227;
+    PBVersion = 228;
+    ScriptCode = 229;
+    LangCode = 230;
+    RegionCode = 231;
+    OSType = 232;
+    ProcessSerialNumber = 233;
+    Point = 234;
+    Rect = 235;
+    FixedPoint = 236;
+    FixedRect = 237;
+    Style = 238;
+    StyleParameter = 239;
+    StyleField = 240;
+    TimeScale = 241;
+    TimeBase = 242;
+    TimeRecord = 243;
+    Extensions = 244;
+}
+
+enum EnumFieldNames2 {
+    AA = 0;
+
+    // protoc no longer allows enum naming that would differ only in underscores.
+    // Initial commit:
+    //   https://github.com/protocolbuffers/protobuf/commit/cc8ca5b6a5478b40546d4206392eb1471454460d
+    // Change keep proto3 as error, but proto2 to just a warning:
+    //   https://github.com/protocolbuffers/protobuf/pull/2204
+    // So this is in a second enum so it won't cause issues with the '_' one;
+    // but still ensure things generator correctly.
+    __ = 1065;
+}
+
+message FieldNamingInitials {
+
+  message Lowers {
+    optional int32 http = 1;
+    optional int32 http_request = 2;
+    optional int32 the_http_request = 3;
+    optional int32 the_http = 4;
+
+    optional int32 https = 11;
+    optional int32 https_request = 12;
+    optional int32 the_https_request = 13;
+    optional int32 the_https = 14;
+
+    optional int32 url = 21;
+    optional int32 url_value = 22;
+    optional int32 the_url_value = 23;
+    optional int32 the_url = 24;
+
+    optional int32 a_b_c = 31;
+
+    optional int32 id = 41;
+    optional int32 id_number = 42;
+    optional int32 the_id_number = 43;
+    optional int32 request_id = 44;
+  }
+
+  message Uppers {
+    optional int32 HTTP = 1;
+    optional int32 HTTP_request = 2;
+    optional int32 the_HTTP_request = 3;
+    optional int32 the_HTTP = 4;
+
+    optional int32 HTTPS = 11;
+    optional int32 HTTPS_request = 12;
+    optional int32 the_HTTPS_request = 13;
+    optional int32 the_HTTPS = 14;
+
+    optional int32 URL = 21;
+    optional int32 URL_value = 22;
+    optional int32 the_URL_value = 23;
+    optional int32 the_URL = 24;
+
+    optional int32 ID = 41;
+    optional int32 ID_number = 42;
+    optional int32 the_ID_number = 43;
+    optional int32 request_ID = 44;
+  }
+
+  message WordCase {
+    optional int32 Http = 1;
+    optional int32 HttpRequest = 2;
+    optional int32 TheHttpRequest = 3;
+    optional int32 TheHttp = 4;
+
+    optional int32 Https = 11;
+    optional int32 HttpsRequest = 12;
+    optional int32 TheHttpsRequest = 13;
+    optional int32 TheHttps = 14;
+
+    optional int32 Url = 21;
+    optional int32 UrlValue = 22;
+    optional int32 TheUrlValue = 23;
+    optional int32 TheUrl = 24;
+
+    optional int32 Id = 41;
+    optional int32 IdNumber = 42;
+    optional int32 TheIdNumber = 43;
+    optional int32 RequestId = 44;
+  }
+
+}
+
+// For message scoped extensions.
+
+message ExtensionNamingInitials {
+  extensions 1 to 1000;
+}
+
+message Lowers {
+  extend ExtensionNamingInitials {
+    optional int32 http = 1;
+    optional int32 http_request = 2;
+    optional int32 the_http_request = 3;
+    optional int32 the_http = 4;
+
+    optional int32 https = 11;
+    optional int32 https_request = 12;
+    optional int32 the_https_request = 13;
+    optional int32 the_https = 14;
+
+    optional int32 url = 21;
+    optional int32 url_value = 22;
+    optional int32 the_url_value = 23;
+    optional int32 the_url = 24;
+
+    optional int32 a_b_c = 31;
+
+    optional int32 id = 41;
+    optional int32 id_number = 42;
+    optional int32 the_id_number = 43;
+    optional int32 request_id = 44;
+  }
+}
+
+message Uppers {
+  extend ExtensionNamingInitials {
+    optional int32 HTTP = 101;
+    optional int32 HTTP_request = 102;
+    optional int32 the_HTTP_request = 103;
+    optional int32 the_HTTP = 104;
+
+    optional int32 HTTPS = 111;
+    optional int32 HTTPS_request = 112;
+    optional int32 the_HTTPS_request = 113;
+    optional int32 the_HTTPS = 114;
+
+    optional int32 URL = 121;
+    optional int32 URL_value = 122;
+    optional int32 the_URL_value = 123;
+    optional int32 the_URL = 124;
+
+    optional int32 ID = 141;
+    optional int32 ID_number = 142;
+    optional int32 the_ID_number = 143;
+    optional int32 request_ID = 144;
+  }
+}
+
+message WordCase {
+  extend ExtensionNamingInitials {
+    optional int32 Http = 201;
+    optional int32 HttpRequest = 202;
+    optional int32 TheHttpRequest = 203;
+    optional int32 TheHttp = 204;
+
+    optional int32 Https = 211;
+    optional int32 HttpsRequest = 212;
+    optional int32 TheHttpsRequest = 213;
+    optional int32 TheHttps = 214;
+
+    optional int32 Url = 221;
+    optional int32 UrlValue = 222;
+    optional int32 TheUrlValue = 223;
+    optional int32 TheUrl = 224;
+
+    optional int32 Id = 241;
+    optional int32 IdNumber = 242;
+    optional int32 TheIdNumber = 243;
+    optional int32 RequestId = 244;
+  }
+}
+
+// For global scoped extensions.
+
+message ExtensionNamingInitialsLowers {
+  extensions 1 to 1000;
+}
+message ExtensionNamingInitialsUppers {
+  extensions 1 to 1000;
+}
+message ExtensionNamingInitialsWordCase {
+  extensions 1 to 1000;
+}
+
+extend ExtensionNamingInitialsLowers {
+  optional int32 http = 1;
+  optional int32 http_request = 2;
+  optional int32 the_http_request = 3;
+  optional int32 the_http = 4;
+
+  optional int32 https = 11;
+  optional int32 https_request = 12;
+  optional int32 the_https_request = 13;
+  optional int32 the_https = 14;
+
+  optional int32 url = 21;
+  optional int32 url_value = 22;
+  optional int32 the_url_value = 23;
+  optional int32 the_url = 24;
+
+  optional int32 a_b_c = 31;
+
+  optional int32 id = 41;
+  optional int32 id_number = 42;
+  optional int32 the_id_number = 43;
+  optional int32 request_id = 44;
+}
+
+extend ExtensionNamingInitialsUppers {
+  optional int32 HTTP = 1;
+  optional int32 HTTP_request = 2;
+  optional int32 the_HTTP_request = 3;
+  optional int32 the_HTTP = 4;
+
+  optional int32 HTTPS = 11;
+  optional int32 HTTPS_request = 12;
+  optional int32 the_HTTPS_request = 13;
+  optional int32 the_HTTPS = 14;
+
+  optional int32 URL = 21;
+  optional int32 URL_value = 22;
+  optional int32 the_URL_value = 23;
+  optional int32 the_URL = 24;
+
+  optional int32 ID = 41;
+  optional int32 ID_number = 42;
+  optional int32 the_ID_number = 43;
+  optional int32 request_ID = 44;
+}
+
+extend ExtensionNamingInitialsWordCase {
+  optional int32 Http = 1;
+  optional int32 HttpRequest = 2;
+  optional int32 TheHttpRequest = 3;
+  optional int32 TheHttp = 4;
+
+  optional int32 Https = 11;
+  optional int32 HttpsRequest = 12;
+  optional int32 TheHttpsRequest = 13;
+  optional int32 TheHttps = 14;
+
+  optional int32 Url = 21;
+  optional int32 UrlValue = 22;
+  optional int32 TheUrlValue = 23;
+  optional int32 TheUrl = 24;
+
+  optional int32 Id = 41;
+  optional int32 IdNumber = 42;
+  optional int32 TheIdNumber = 43;
+  optional int32 RequestId = 44;
+}

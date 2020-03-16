@@ -1,0 +1,22 @@
+[package]
+name = "sync-guid"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+license = "MPL-2.0"
+edition = "2018"
+
+[dependencies]
+rusqlite = { version = "0.21.0", optional = true }
+serde = { version = "1.0.104", optional = true }
+rand = { version = "0.7", optional = true }
+base64 = { version = "0.11.0", optional = true }
+
+[features]
+random = ["rand", "base64"]
+rusqlite_support = ["rusqlite"]
+serde_support = ["serde"]
+# By default we support serde, but not rusqlite.
+default = ["serde_support"]
+
+[dev-dependencies]
+serde_test = "1.0.104"

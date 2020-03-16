@@ -1,0 +1,221 @@
+/*
+Copyright 2016 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+@import url(https://fonts.googleapis.com/css?family=Droid+Sans+Mono|Ubuntu:400,700,300);
+
+ol, ul {
+  list-style:none;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-weight: bold;
+  font-family: 'Droid Sans Mono';
+  background-color: #eee;
+}
+
+p, ul {
+  padding: 1em;
+}
+
+ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background: #eee;
+  max-width: var(--max-width);
+}
+
+li:nth-child(1) {
+  background: inherit;
+  flex-basis: 100%;
+  border: none;
+  box-shadow: none;
+}
+
+ul li {
+  flex-basis: 40%;
+  text-transform: uppercase;
+}
+
+li:nth-child(even) {
+  margin-right: 0.5em;
+}
+
+.body > ul:nth-child(1) > li:nth-child(1) {
+  text-transform: initial;
+  padding-bottom: 0;
+  padding-top: 0;
+  font-size: 3em;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.body > ul:nth-child(1) li {
+  color: var(--pink-color);
+  border-color: var(--pink-color);
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.body > ul li:last-child {
+  margin-right: 0;
+}
+
+.body > ul:nth-child(2) > li:nth-child(1) {
+  text-transform: initial;
+  padding-bottom: 0;
+  padding-top: 0;
+  margin: 0;
+  font-size: 3em;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.body > ul:nth-child(2) li {
+  color: var(--blue-color);
+  border-color: var(--blue-color);
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.body > ul:nth-child(3) > li:nth-child(1) {
+  text-transform: initial;
+  padding-bottom: 0;
+  padding-top: 0;
+  margin: 0;
+  font-size: 3em;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.body > ul:nth-child(3) li {
+  color: var(--green-color);
+  border-color: var(--green-color);
+  font-family: 'Ubuntu', sans-serif;
+}
+
+:root {
+  --pink-color: #e92663;
+  --green-color: #57bb8a;
+  --blue-color: #4285f4;
+  --max-width: 60em;
+}
+
+ul > li > ul > li {
+  text-transform: initial !important;
+  color: black !important;
+  border: none;
+  box-shadow: none;
+  font-weight: normal;
+  padding: 0;
+  margin: 0.2em 0 0 0;
+  flex-basis: 100%;
+  font-family: 'Droid Sans Mono' !important;
+}
+
+ul > li > ul {
+  padding: 0;
+  margin: 0;
+  background: white;
+}
+
+li {
+  flex: 4em 1 0;
+  padding: 0.6em;
+  background: white;
+  box-sizing: border-box;
+  border: solid 0.13em #666;
+  border-radius: 1em;
+  box-shadow: 0.3em 0.3em 0px 0px #dcdcdc;
+  text-align: left;
+  margin-top: 0.5em;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-width: var(--max-width);
+}
+
+.usage {
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: normal;
+  white-space: pre;
+  height: 5em;
+  padding-left: 1em;
+}
+
+.usage .one {
+  font-weight: bold;
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.usage .two {
+  font-weight: bold;
+  color: var(--pink-color);
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.usage .three {
+  font-weight: bold;
+  color: var(--blue-color);
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.EarlGreyTitle {
+  height: 0.5em;
+  font-weight: 300;
+  padding-right: 1em;
+  padding-top: 1em;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 2em;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.swift {
+  text-transform: uppercase !important;
+  padding-top: 1em;
+  color: var(--pink-color) !important;
+  font-weight: bold;
+  font-family: 'Ubuntu', sans-serif !important;
+}
+
+@media print {
+  body {
+    font-size: 55%;
+  }
+
+  ul {
+    max-width: 100%;
+  }
+
+  .header {
+    max-width: 100%;
+  }
+
+  li {
+    max-width: 60%;
+    /* chrome can't handle box shadows in PDF : https://bugs.chromium.org/p/chromium/issues/detail?id=174583 */
+    box-shadow: none;
+  }
+}

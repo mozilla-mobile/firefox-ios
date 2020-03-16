@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="NO">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FTRActionSheetViewController">
+            <connections>
+                <outlet property="actionLabel" destination="zO9-cH-YJW" id="gXg-j4-686"/>
+                <outlet property="multipleButtonActionSheetButton" destination="rbH-eF-pyb" id="GMg-GJ-2bd"/>
+                <outlet property="simpleActionSheetButton" destination="QDx-Q8-egH" id="iAs-1u-B0m"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QDx-Q8-egH">
+                    <rect key="frame" x="63" y="285" width="194" height="30"/>
+                    <accessibility key="accessibilityConfiguration" label="simpleActionSheetButton">
+                        <bool key="isElement" value="YES"/>
+                    </accessibility>
+                    <state key="normal" title="Open Simple Action Sheet"/>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Actions Verified Here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zO9-cH-YJW" userLabel="ActionLabel">
+                    <rect key="frame" x="80" y="69" width="161.5" height="21"/>
+                    <accessibility key="accessibilityConfiguration" label="actionLabel"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="42" id="4fk-WQ-qW6"/>
+                        <constraint firstAttribute="height" constant="21" id="csC-5k-t4M"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rbH-eF-pyb">
+                    <rect key="frame" x="65" y="338" width="190" height="30"/>
+                    <accessibility key="accessibilityConfiguration" label="multipleActionSheetButton"/>
+                    <state key="normal" title="Open Multiple Option Sheet"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="QDx-Q8-egH" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="0Tc-jQ-Sf7"/>
+                <constraint firstItem="rbH-eF-pyb" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="DOI-fY-1BV"/>
+                <constraint firstItem="rbH-eF-pyb" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" constant="113" id="aje-Nz-RWK"/>
+                <constraint firstItem="zO9-cH-YJW" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="69" id="iJ3-Ko-O18"/>
+                <constraint firstItem="QDx-Q8-egH" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="jrT-8p-2H2"/>
+                <constraint firstItem="rbH-eF-pyb" firstAttribute="top" relation="greaterThanOrEqual" secondItem="QDx-Q8-egH" secondAttribute="bottom" constant="10" id="kOp-aN-rAB"/>
+                <constraint firstItem="QDx-Q8-egH" firstAttribute="leading" secondItem="rbH-eF-pyb" secondAttribute="leading" constant="-2" id="n0w-2Q-Mgm"/>
+                <constraint firstItem="QDx-Q8-egH" firstAttribute="top" relation="greaterThanOrEqual" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="20" id="vZx-kc-QW4"/>
+                <constraint firstItem="zO9-cH-YJW" firstAttribute="centerX" secondItem="QDx-Q8-egH" secondAttribute="centerX" id="w0D-V9-fQf"/>
+                <constraint firstItem="QDx-Q8-egH" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="285" id="xlk-5F-6pC"/>
+            </constraints>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="0Tc-jQ-Sf7"/>
+                    <exclude reference="vZx-kc-QW4"/>
+                </mask>
+            </variation>
+        </view>
+    </objects>
+</document>

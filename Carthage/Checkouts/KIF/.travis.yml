@@ -1,0 +1,21 @@
+language: objective-c
+matrix:
+  include:
+    - osx_image: xcode9.2
+      env: 'SIMULATOR="name=iPad Pro (12.9-inch) (2nd generation),OS=11.2"'
+    - osx_image: xcode9.2
+      env: 'SIMULATOR="name=iPhone 7 Plus,OS=10.3.1"'
+    - osx_image: xcode9.2
+      env: 'SIMULATOR="name=iPad (5th generation),OS=10.3.1"'
+    - osx_image: xcode8.3
+      env: 'SIMULATOR="name=iPhone 5,OS=9.3"'
+
+before_install:
+  - xcrun simctl list
+  - brew update || brew update
+  - gem install bundler
+install:
+  - if [ -z "$(brew ls --versions coreutils)" ] ; then brew install coreutils ; fi
+  - gem install xcpretty --no-rdoc --no-ri --no-document --quiet
+script:
+  - ./scripts/ci.sh "${SIMULATOR}"

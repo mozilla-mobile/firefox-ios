@@ -1,0 +1,37 @@
+syntax = "proto2";
+
+package msg_types;
+
+option java_package = "mozilla.appservices.push";
+option java_outer_classname = "MsgTypes";
+
+message DispatchInfo {
+    required string uaid = 1;
+    required string scope = 2;
+    required string endpoint = 3;
+    optional string app_server_key = 4;
+}
+
+message KeyInfo {
+    required string auth = 1;
+    required string p256dh = 2;
+}
+
+message SubscriptionInfo {
+    required string endpoint = 1;
+    required KeyInfo keys = 2;
+}
+
+message SubscriptionResponse {
+    required string channelID = 1;
+    required SubscriptionInfo subscriptionInfo = 2;
+}
+
+message PushSubscriptionChanged {
+    required string channelID = 1;
+    required string scope = 2;
+}
+
+message PushSubscriptionsChanged {
+    repeated PushSubscriptionChanged subs = 1;
+}

@@ -1,0 +1,37 @@
+{
+  "NYC": {
+    "lat": "40.7564",
+    "lon": "-73.9854",
+    "name": "NYC",
+    "radius": "500",
+    "version": "4"
+  },
+  "Las Vegas": {
+    "lat": "36.1699",
+    "lon": "-115.1398",
+    "name": "Las Vegas",
+    "radius": "500",
+    "version": "0"
+  },
+  "Chicago": {
+    "lat": "41.8781",
+    "lon": "-87.6231",
+    "name": "Chicago",
+    "radius": "500",
+    "version": "100"
+  },
+  "SF": {
+    "lat": "37.7749",
+    "lon": "-122.4194",
+    "name": "SF",
+    "radius": "700",
+    "version": "0"
+  },
+  "Philadelphia": {
+    "lat": "39.9526",
+    "lon": "-75.1652",
+    "name": "Philadelphia",
+    "radius": "100",
+    "version": "0"
+  }
+}

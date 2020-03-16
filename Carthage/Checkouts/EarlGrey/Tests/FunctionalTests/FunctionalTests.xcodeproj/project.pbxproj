@@ -1,0 +1,1245 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		39175F1E2028CDC80096E2E1 /* FTRShakeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 39175F1D2028CDC80096E2E1 /* FTRShakeTest.m */; };
+		3FBDDF9A1F3D61870055E8F9 /* FTRLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FBDDF981F3D61870055E8F9 /* FTRLayoutViewController.m */; };
+		3FBDDF9B1F3D61870055E8F9 /* FTRLayoutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3FBDDF991F3D61870055E8F9 /* FTRLayoutViewController.xib */; };
+		59467DF91C9373A50089498B /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 59467D801C9373A50089498B /* LICENSE */; };
+		59467DFB1C9373A50089498B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D851C9373A50089498B /* Default-568h@2x.png */; };
+		59467DFC1C9373A50089498B /* Default-667@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D861C9373A50089498B /* Default-667@2x.png */; };
+		59467DFD1C9373A50089498B /* Default-736h@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D871C9373A50089498B /* Default-736h@3x.png */; };
+		59467DFE1C9373A50089498B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D881C9373A50089498B /* Default.png */; };
+		59467DFF1C9373A50089498B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D891C9373A50089498B /* Default@2x.png */; };
+		59467E001C9373A50089498B /* Default@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D8A1C9373A50089498B /* Default@3x.png */; };
+		59467E011C9373A50089498B /* ic_local_cafe_48pt.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D8B1C9373A50089498B /* ic_local_cafe_48pt.png */; };
+		59467E021C9373A50089498B /* ic_local_cafe_48pt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D8C1C9373A50089498B /* ic_local_cafe_48pt@2x.png */; };
+		59467E031C9373A50089498B /* ic_local_cafe_48pt@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 59467D8D1C9373A50089498B /* ic_local_cafe_48pt@3x.png */; };
+		59467E041C9373A50089498B /* testpage.html in Resources */ = {isa = PBXBuildFile; fileRef = 59467D8F1C9373A50089498B /* testpage.html */; };
+		59467E061C9373A50089498B /* FTRAccessibilityViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467D931C9373A50089498B /* FTRAccessibilityViewController.xib */; };
+		59467E091C9373A50089498B /* FTRActionSheetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467D981C9373A50089498B /* FTRActionSheetViewController.xib */; };
+		59467E0B1C9373A50089498B /* FTRActivityIndicatorViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467D9B1C9373A50089498B /* FTRActivityIndicatorViewController.xib */; };
+		59467E0D1C9373A50089498B /* FTRAlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467D9E1C9373A50089498B /* FTRAlertViewController.xib */; };
+		59467E0F1C9373A50089498B /* FTRAnimationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DA11C9373A50089498B /* FTRAnimationViewController.xib */; };
+		59467E121C9373A50089498B /* FTRBasicViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DA61C9373A50089498B /* FTRBasicViewController.xib */; };
+		59467E141C9373A50089498B /* FTRCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DA91C9373A50089498B /* FTRCollectionViewCell.xib */; };
+		59467E161C9373A50089498B /* FTRCollectionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DAC1C9373A50089498B /* FTRCollectionViewController.xib */; };
+		59467E191C9373A50089498B /* FTRGestureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DB11C9373A50089498B /* FTRGestureViewController.xib */; };
+		59467E1B1C9373A50089498B /* FTRMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DB41C9373A50089498B /* FTRMainViewController.xib */; };
+		59467E1E1C9373A50089498B /* FTRNetworkTestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DB91C9373A50089498B /* FTRNetworkTestViewController.xib */; };
+		59467E201C9373A50089498B /* FTRPickerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DBC1C9373A50089498B /* FTRPickerViewController.xib */; };
+		59467E221C9373A50089498B /* FTRPresentedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DBF1C9373A50089498B /* FTRPresentedViewController.xib */; };
+		59467E241C9373A50089498B /* FTRRotatedViewsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DC21C9373A50089498B /* FTRRotatedViewsViewController.xib */; };
+		59467E261C9373A50089498B /* FTRScrollViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DC51C9373A50089498B /* FTRScrollViewController.xib */; };
+		59467E281C9373A50089498B /* FTRSliderViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DC81C9373A50089498B /* FTRSliderViewController.xib */; };
+		59467E2B1C9373A50089498B /* FTRTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DCD1C9373A50089498B /* FTRTableViewController.xib */; };
+		59467E2D1C9373A50089498B /* FTRTypingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DD01C9373A50089498B /* FTRTypingViewController.xib */; };
+		59467E2F1C9373A50089498B /* FTRVisibilityTestViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DD31C9373A50089498B /* FTRVisibilityTestViewController.xib */; };
+		59467E311C9373A50089498B /* FTRWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59467DD61C9373A50089498B /* FTRWebViewController.xib */; };
+		59467E331C9373B90089498B /* FTRAccessibilityTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D5B1C9373A50089498B /* FTRAccessibilityTest.m */; };
+		59467E341C9373B90089498B /* FTRActionSheetTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D5C1C9373A50089498B /* FTRActionSheetTest.m */; };
+		59467E351C9373B90089498B /* FTRActivityIndicatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D5D1C9373A50089498B /* FTRActivityIndicatorTest.m */; };
+		59467E361C9373B90089498B /* FTRAlertViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D5E1C9373A50089498B /* FTRAlertViewTest.m */; };
+		59467E371C9373B90089498B /* FTRAnalyticsTearDownOptOutTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D5F1C9373A50089498B /* FTRAnalyticsTearDownOptOutTest.m */; };
+		59467E381C9373B90089498B /* FTRAnalyticsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D601C9373A50089498B /* FTRAnalyticsTest.m */; };
+		59467E391C9373B90089498B /* FTRAnalyticsTestCaseSetupOptOutTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D611C9373A50089498B /* FTRAnalyticsTestCaseSetupOptOutTest.m */; };
+		59467E3A1C9373B90089498B /* FTRAnalyticsTestMethodOptOutTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D621C9373A50089498B /* FTRAnalyticsTestMethodOptOutTest.m */; };
+		59467E3B1C9373B90089498B /* FTRAnalyticsTestSuiteSetupOptOutTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D631C9373A50089498B /* FTRAnalyticsTestSuiteSetupOptOutTest.m */; };
+		59467E3C1C9373B90089498B /* FTRAnimationsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D641C9373A50089498B /* FTRAnimationsTest.m */; };
+		59467E3E1C9373B90089498B /* FTRBaseAnalyticsTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D661C9373A50089498B /* FTRBaseAnalyticsTest.m */; };
+		59467E401C9373B90089498B /* FTRBaseIntegrationTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D681C9373A50089498B /* FTRBaseIntegrationTest.m */; };
+		59467E411C9373B90089498B /* FTRBasicInteractionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D691C9373A50089498B /* FTRBasicInteractionTest.m */; };
+		59467E421C9373B90089498B /* FTRCollectionViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D6A1C9373A50089498B /* FTRCollectionViewTest.m */; };
+		59467E431C9373B90089498B /* FTRErrorAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D6B1C9373A50089498B /* FTRErrorAPITest.m */; };
+		59467E451C9373B90089498B /* FTRFailureHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D6D1C9373A50089498B /* FTRFailureHandler.m */; };
+		59467E461C9373B90089498B /* FTRGeometryTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D6E1C9373A50089498B /* FTRGeometryTest.m */; };
+		59467E471C9373B90089498B /* FTRGestureTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D6F1C9373A50089498B /* FTRGestureTest.m */; };
+		59467E481C9373B90089498B /* FTRKeyboardKeysTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D701C9373A50089498B /* FTRKeyboardKeysTest.m */; };
+		59467E491C9373B90089498B /* FTRLocalUIWebViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D711C9373A50089498B /* FTRLocalUIWebViewTest.m */; };
+		59467E4A1C9373B90089498B /* FTRMatcherTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D721C9373A50089498B /* FTRMatcherTest.m */; };
+		59467E4B1C9373B90089498B /* FTRNetworkTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D731C9373A50089498B /* FTRNetworkTest.m */; };
+		59467E4C1C9373B90089498B /* FTROrientationChangeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D741C9373A50089498B /* FTROrientationChangeTest.m */; };
+		59467E4D1C9373B90089498B /* FTROrientationPortraitOnlyChangeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D751C9373A50089498B /* FTROrientationPortraitOnlyChangeTest.m */; };
+		59467E4E1C9373B90089498B /* FTRPickerViewInteractionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D761C9373A50089498B /* FTRPickerViewInteractionTest.m */; };
+		59467E4F1C9373B90089498B /* FTRPresentedViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D771C9373A50089498B /* FTRPresentedViewTest.m */; };
+		59467E501C9373B90089498B /* FTRScreenshotTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D781C9373A50089498B /* FTRScreenshotTest.m */; };
+		59467E511C9373B90089498B /* FTRScrollViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D791C9373A50089498B /* FTRScrollViewTest.m */; };
+		59467E521C9373B90089498B /* FTRSlideTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D7A1C9373A50089498B /* FTRSlideTest.m */; };
+		59467E531C9373B90089498B /* FTRSyncAPITest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D7B1C9373A50089498B /* FTRSyncAPITest.m */; };
+		59467E541C9373B90089498B /* FTRUITableViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D7C1C9373A50089498B /* FTRUITableViewTest.m */; };
+		59467E551C9373B90089498B /* FTRUIWebViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D7D1C9373A50089498B /* FTRUIWebViewTest.m */; };
+		59467E561C9373B90089498B /* FTRVisibilityTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D7E1C9373A50089498B /* FTRVisibilityTest.m */; };
+		59467E581C9373F00089498B /* FTRAccessibilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D921C9373A50089498B /* FTRAccessibilityViewController.m */; };
+		59467E5B1C9373F00089498B /* FTRAccessibleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D951C9373A50089498B /* FTRAccessibleView.m */; };
+		59467E5D1C9373F00089498B /* FTRActionSheetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D971C9373A50089498B /* FTRActionSheetViewController.m */; };
+		59467E601C9373F00089498B /* FTRActivityIndicatorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D9A1C9373A50089498B /* FTRActivityIndicatorViewController.m */; };
+		59467E631C9373F00089498B /* FTRAlertViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467D9D1C9373A50089498B /* FTRAlertViewController.m */; };
+		59467E661C9373F00089498B /* FTRAnimationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DA01C9373A50089498B /* FTRAnimationViewController.m */; };
+		59467E691C9373F00089498B /* FTRAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DA31C9373A50089498B /* FTRAppDelegate.m */; };
+		59467E6B1C9373F00089498B /* FTRBasicViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DA51C9373A50089498B /* FTRBasicViewController.m */; };
+		59467E6E1C9373F00089498B /* FTRCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DA81C9373A50089498B /* FTRCollectionViewCell.m */; };
+		59467E711C9373F00089498B /* FTRCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DAB1C9373A50089498B /* FTRCollectionViewController.m */; };
+		59467E741C9373F00089498B /* FTRCollectionViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DAE1C9373A50089498B /* FTRCollectionViewLayout.m */; };
+		59467E761C9373F00089498B /* FTRGestureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DB01C9373A50089498B /* FTRGestureViewController.m */; };
+		59467E791C9373F00089498B /* FTRMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DB31C9373A50089498B /* FTRMainViewController.m */; };
+		59467E7C1C9373F00089498B /* FTRNetworkProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DB61C9373A50089498B /* FTRNetworkProxy.m */; };
+		59467E7E1C9373F00089498B /* FTRNetworkTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DB81C9373A50089498B /* FTRNetworkTestViewController.m */; };
+		59467E811C9373F00089498B /* FTRPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DBB1C9373A50089498B /* FTRPickerViewController.m */; };
+		59467E841C9373F00089498B /* FTRPresentedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DBE1C9373A50089498B /* FTRPresentedViewController.m */; };
+		59467E871C9373F00089498B /* FTRRotatedViewsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DC11C9373A50089498B /* FTRRotatedViewsViewController.m */; };
+		59467E8A1C9373F00089498B /* FTRScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DC41C9373A50089498B /* FTRScrollViewController.m */; };
+		59467E8D1C9373F00089498B /* FTRSliderViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DC71C9373A50089498B /* FTRSliderViewController.m */; };
+		59467E901C9373F00089498B /* FTRSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DCA1C9373A50089498B /* FTRSplashViewController.m */; };
+		59467E921C9373F00089498B /* FTRTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DCC1C9373A50089498B /* FTRTableViewController.m */; };
+		59467E951C9373F00089498B /* FTRTypingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DCF1C9373A50089498B /* FTRTypingViewController.m */; };
+		59467E981C9373F00089498B /* FTRVisibilityTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DD21C9373A50089498B /* FTRVisibilityTestViewController.m */; };
+		59467E9B1C9373F00089498B /* FTRWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DD51C9373A50089498B /* FTRWebViewController.m */; };
+		59467E9D1C9373F00089498B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 59467DD71C9373A50089498B /* main.m */; };
+		596D89BF1C05AB1600025714 /* EarlGrey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 596D89BE1C05AB0600025714 /* EarlGrey.framework */; };
+		61192E411DB18A6500C74371 /* FTRAnalyticsPostSuperTearDownOptOutTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 61192E3F1DB18A6500C74371 /* FTRAnalyticsPostSuperTearDownOptOutTest.m */; };
+		61192E421DB18A6500C74371 /* FTRAnalyticsNoEarlGreyUsageTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 61192E401DB18A6500C74371 /* FTRAnalyticsNoEarlGreyUsageTest.m */; };
+		6122AEB11DB7EF65006A094A /* FTRAnalyticsTestHarnessTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6122AEB01DB7EF65006A094A /* FTRAnalyticsTestHarnessTest.m */; };
+		61784D7C1DB6F4AB00054372 /* FTRAssertionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 61784D7B1DB6F4AB00054372 /* FTRAssertionHandler.m */; };
+		61E4E0B31D7559A9007F9EE6 /* FTRImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 61E4E0B11D7559A9007F9EE6 /* FTRImageViewController.m */; };
+		61E4E0B41D7559A9007F9EE6 /* FTRImageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 61E4E0B21D7559A9007F9EE6 /* FTRImageViewController.xib */; };
+		61E4E0C31D755A9B007F9EE6 /* FTRPinchViewTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 61E4E0C11D755A5C007F9EE6 /* FTRPinchViewTest.m */; };
+		D210ED941E72214A00978B9E /* FTRMultiFingerSwipeTest.m in Sources */ = {isa = PBXBuildFile; fileRef = D210ED931E72214A00978B9E /* FTRMultiFingerSwipeTest.m */; };
+		D210ED9D1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D210ED9B1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.m */; };
+		D210ED9E1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D210ED9C1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.xib */; };
+		FD193FF21BBDDBE800153959 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF11BBDDBE800153959 /* CoreFoundation.framework */; };
+		FD193FF41BBDDBED00153959 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF31BBDDBED00153959 /* Foundation.framework */; };
+		FD193FF61BBDDBF500153959 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF51BBDDBF500153959 /* CoreGraphics.framework */; };
+		FD193FF81BBDDBFB00153959 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF71BBDDBFB00153959 /* UIKit.framework */; };
+		FD193FFA1BBDDC0000153959 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF91BBDDC0000153959 /* QuartzCore.framework */; };
+		FD387B4C1CA9C65100958AEE /* FTRSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD387B391CA9C5E200958AEE /* FTRSwiftTests.swift */; };
+		FD387B4F1CA9C69C00958AEE /* EarlGrey.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 596D89BE1C05AB0600025714 /* EarlGrey.framework */; };
+		FD387B501CA9C6AB00958AEE /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD5470D61BBDE0A9000661FD /* IOKit.framework */; };
+		FD387B511CA9C6B300958AEE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF91BBDDC0000153959 /* QuartzCore.framework */; };
+		FD387B521CA9C6B800958AEE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF71BBDDBFB00153959 /* UIKit.framework */; };
+		FD387B531CA9C6BE00958AEE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF51BBDDBF500153959 /* CoreGraphics.framework */; };
+		FD387B541CA9C6C500958AEE /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF11BBDDBE800153959 /* CoreFoundation.framework */; };
+		FD387B551CA9C6C500958AEE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF31BBDDBED00153959 /* Foundation.framework */; };
+		FD387B571CA9C6DA00958AEE /* EarlGrey.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 596D89BE1C05AB0600025714 /* EarlGrey.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		FD5471351BBDF990000661FD /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF11BBDDBE800153959 /* CoreFoundation.framework */; };
+		FD5471361BBDF995000661FD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF31BBDDBED00153959 /* Foundation.framework */; };
+		FD5471371BBDF99B000661FD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF51BBDDBF500153959 /* CoreGraphics.framework */; };
+		FD5471381BBDF9A1000661FD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF71BBDDBFB00153959 /* UIKit.framework */; };
+		FD5471391BBDF9AC000661FD /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD193FF91BBDDC0000153959 /* QuartzCore.framework */; };
+		FD54713A1BBDF9C0000661FD /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD5470D61BBDE0A9000661FD /* IOKit.framework */; };
+		FD60CB611C5B5B1B00F8E318 /* EarlGrey.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 596D89BE1C05AB0600025714 /* EarlGrey.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		FD771E761DC1D9F500E199A1 /* FTRCustomTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = FD771E751DC1D9F500E199A1 /* FTRCustomTextView.m */; };
+		FD983D6C1D67E8B40059F4CC /* EarlGrey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD8277DE1D677D9F00C7C2AD /* EarlGrey.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		596D89BD1C05AB0600025714 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 596D89B91C05AB0600025714 /* EarlGrey.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = FDE4FFA91BE831AA001C172E;
+			remoteInfo = EarlGrey;
+		};
+		596D89C01C05AB8A00025714 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 596D89B91C05AB0600025714 /* EarlGrey.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FD1000E81C5B466F00B2DB0A;
+			remoteInfo = EarlGrey;
+		};
+		FD387B461CA9C63900958AEE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FD193F241BBDDA4F00153959 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FD193F2B1BBDDA4F00153959;
+			remoteInfo = FunctionalTestRig;
+		};
+		FD387B4D1CA9C67A00958AEE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 596D89B91C05AB0600025714 /* EarlGrey.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = FD1000E81C5B466F00B2DB0A;
+			remoteInfo = EarlGrey;
+		};
+		FD5470F71BBDECBB000661FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FD193F241BBDDA4F00153959 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FD193F2B1BBDDA4F00153959;
+			remoteInfo = FunctionalTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FD387B561CA9C6CA00958AEE /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(TEST_HOST)/..";
+			dstSubfolderSpec = 0;
+			files = (
+				FD387B571CA9C6DA00958AEE /* EarlGrey.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD60CB601C5B5AFB00F8E318 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "$(TEST_HOST)/..";
+			dstSubfolderSpec = 0;
+			files = (
+				FD60CB611C5B5B1B00F8E318 /* EarlGrey.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		39175F1D2028CDC80096E2E1 /* FTRShakeTest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FTRShakeTest.m; sourceTree = "<group>"; };
+		3FBDDF971F3D61870055E8F9 /* FTRLayoutViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTRLayoutViewController.h; sourceTree = "<group>"; };
+		3FBDDF981F3D61870055E8F9 /* FTRLayoutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FTRLayoutViewController.m; sourceTree = "<group>"; };
+		3FBDDF991F3D61870055E8F9 /* FTRLayoutViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FTRLayoutViewController.xib; sourceTree = "<group>"; };
+		59467D5B1C9373A50089498B /* FTRAccessibilityTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAccessibilityTest.m; sourceTree = "<group>"; };
+		59467D5C1C9373A50089498B /* FTRActionSheetTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRActionSheetTest.m; sourceTree = "<group>"; };
+		59467D5D1C9373A50089498B /* FTRActivityIndicatorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRActivityIndicatorTest.m; sourceTree = "<group>"; };
+		59467D5E1C9373A50089498B /* FTRAlertViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAlertViewTest.m; sourceTree = "<group>"; };
+		59467D5F1C9373A50089498B /* FTRAnalyticsTearDownOptOutTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnalyticsTearDownOptOutTest.m; sourceTree = "<group>"; };
+		59467D601C9373A50089498B /* FTRAnalyticsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnalyticsTest.m; sourceTree = "<group>"; };
+		59467D611C9373A50089498B /* FTRAnalyticsTestCaseSetupOptOutTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnalyticsTestCaseSetupOptOutTest.m; sourceTree = "<group>"; };
+		59467D621C9373A50089498B /* FTRAnalyticsTestMethodOptOutTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnalyticsTestMethodOptOutTest.m; sourceTree = "<group>"; };
+		59467D631C9373A50089498B /* FTRAnalyticsTestSuiteSetupOptOutTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnalyticsTestSuiteSetupOptOutTest.m; sourceTree = "<group>"; };
+		59467D641C9373A50089498B /* FTRAnimationsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnimationsTest.m; sourceTree = "<group>"; };
+		59467D651C9373A50089498B /* FTRBaseAnalyticsTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRBaseAnalyticsTest.h; sourceTree = "<group>"; };
+		59467D661C9373A50089498B /* FTRBaseAnalyticsTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRBaseAnalyticsTest.m; sourceTree = "<group>"; };
+		59467D671C9373A50089498B /* FTRBaseIntegrationTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRBaseIntegrationTest.h; sourceTree = "<group>"; };
+		59467D681C9373A50089498B /* FTRBaseIntegrationTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRBaseIntegrationTest.m; sourceTree = "<group>"; };
+		59467D691C9373A50089498B /* FTRBasicInteractionTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRBasicInteractionTest.m; sourceTree = "<group>"; };
+		59467D6A1C9373A50089498B /* FTRCollectionViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRCollectionViewTest.m; sourceTree = "<group>"; };
+		59467D6B1C9373A50089498B /* FTRErrorAPITest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRErrorAPITest.m; sourceTree = "<group>"; };
+		59467D6C1C9373A50089498B /* FTRFailureHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRFailureHandler.h; sourceTree = "<group>"; };
+		59467D6D1C9373A50089498B /* FTRFailureHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRFailureHandler.m; sourceTree = "<group>"; };
+		59467D6E1C9373A50089498B /* FTRGeometryTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRGeometryTest.m; sourceTree = "<group>"; };
+		59467D6F1C9373A50089498B /* FTRGestureTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRGestureTest.m; sourceTree = "<group>"; };
+		59467D701C9373A50089498B /* FTRKeyboardKeysTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRKeyboardKeysTest.m; sourceTree = "<group>"; };
+		59467D711C9373A50089498B /* FTRLocalUIWebViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRLocalUIWebViewTest.m; sourceTree = "<group>"; };
+		59467D721C9373A50089498B /* FTRMatcherTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRMatcherTest.m; sourceTree = "<group>"; };
+		59467D731C9373A50089498B /* FTRNetworkTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRNetworkTest.m; sourceTree = "<group>"; };
+		59467D741C9373A50089498B /* FTROrientationChangeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTROrientationChangeTest.m; sourceTree = "<group>"; };
+		59467D751C9373A50089498B /* FTROrientationPortraitOnlyChangeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTROrientationPortraitOnlyChangeTest.m; sourceTree = "<group>"; };
+		59467D761C9373A50089498B /* FTRPickerViewInteractionTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRPickerViewInteractionTest.m; sourceTree = "<group>"; };
+		59467D771C9373A50089498B /* FTRPresentedViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRPresentedViewTest.m; sourceTree = "<group>"; };
+		59467D781C9373A50089498B /* FTRScreenshotTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRScreenshotTest.m; sourceTree = "<group>"; };
+		59467D791C9373A50089498B /* FTRScrollViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRScrollViewTest.m; sourceTree = "<group>"; };
+		59467D7A1C9373A50089498B /* FTRSlideTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRSlideTest.m; sourceTree = "<group>"; };
+		59467D7B1C9373A50089498B /* FTRSyncAPITest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRSyncAPITest.m; sourceTree = "<group>"; };
+		59467D7C1C9373A50089498B /* FTRUITableViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRUITableViewTest.m; sourceTree = "<group>"; };
+		59467D7D1C9373A50089498B /* FTRUIWebViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRUIWebViewTest.m; sourceTree = "<group>"; };
+		59467D7E1C9373A50089498B /* FTRVisibilityTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRVisibilityTest.m; sourceTree = "<group>"; };
+		59467D7F1C9373A50089498B /* FunctionalTests.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FunctionalTests.pch; sourceTree = "<group>"; };
+		59467D801C9373A50089498B /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		59467D821C9373A50089498B /* FunctionalTestRig-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "FunctionalTestRig-Info.plist"; sourceTree = "<group>"; };
+		59467D831C9373A50089498B /* FunctionalTestRig.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FunctionalTestRig.pch; sourceTree = "<group>"; };
+		59467D851C9373A50089498B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		59467D861C9373A50089498B /* Default-667@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-667@2x.png"; sourceTree = "<group>"; };
+		59467D871C9373A50089498B /* Default-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h@3x.png"; sourceTree = "<group>"; };
+		59467D881C9373A50089498B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		59467D891C9373A50089498B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		59467D8A1C9373A50089498B /* Default@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@3x.png"; sourceTree = "<group>"; };
+		59467D8B1C9373A50089498B /* ic_local_cafe_48pt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_local_cafe_48pt.png; sourceTree = "<group>"; };
+		59467D8C1C9373A50089498B /* ic_local_cafe_48pt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_local_cafe_48pt@2x.png"; sourceTree = "<group>"; };
+		59467D8D1C9373A50089498B /* ic_local_cafe_48pt@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_local_cafe_48pt@3x.png"; sourceTree = "<group>"; };
+		59467D8F1C9373A50089498B /* testpage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = testpage.html; sourceTree = "<group>"; };
+		59467D911C9373A50089498B /* FTRAccessibilityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRAccessibilityViewController.h; sourceTree = "<group>"; };
+		59467D921C9373A50089498B /* FTRAccessibilityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAccessibilityViewController.m; sourceTree = "<group>"; };
+		59467D931C9373A50089498B /* FTRAccessibilityViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRAccessibilityViewController.xib; sourceTree = "<group>"; };
+		59467D941C9373A50089498B /* FTRAccessibleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRAccessibleView.h; sourceTree = "<group>"; };
+		59467D951C9373A50089498B /* FTRAccessibleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAccessibleView.m; sourceTree = "<group>"; };
+		59467D961C9373A50089498B /* FTRActionSheetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRActionSheetViewController.h; sourceTree = "<group>"; };
+		59467D971C9373A50089498B /* FTRActionSheetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRActionSheetViewController.m; sourceTree = "<group>"; };
+		59467D981C9373A50089498B /* FTRActionSheetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRActionSheetViewController.xib; sourceTree = "<group>"; };
+		59467D991C9373A50089498B /* FTRActivityIndicatorViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRActivityIndicatorViewController.h; sourceTree = "<group>"; };
+		59467D9A1C9373A50089498B /* FTRActivityIndicatorViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRActivityIndicatorViewController.m; sourceTree = "<group>"; };
+		59467D9B1C9373A50089498B /* FTRActivityIndicatorViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRActivityIndicatorViewController.xib; sourceTree = "<group>"; };
+		59467D9C1C9373A50089498B /* FTRAlertViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRAlertViewController.h; sourceTree = "<group>"; };
+		59467D9D1C9373A50089498B /* FTRAlertViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAlertViewController.m; sourceTree = "<group>"; };
+		59467D9E1C9373A50089498B /* FTRAlertViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRAlertViewController.xib; sourceTree = "<group>"; };
+		59467D9F1C9373A50089498B /* FTRAnimationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRAnimationViewController.h; sourceTree = "<group>"; };
+		59467DA01C9373A50089498B /* FTRAnimationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnimationViewController.m; sourceTree = "<group>"; };
+		59467DA11C9373A50089498B /* FTRAnimationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRAnimationViewController.xib; sourceTree = "<group>"; };
+		59467DA21C9373A50089498B /* FTRAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRAppDelegate.h; sourceTree = "<group>"; };
+		59467DA31C9373A50089498B /* FTRAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAppDelegate.m; sourceTree = "<group>"; };
+		59467DA41C9373A50089498B /* FTRBasicViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRBasicViewController.h; sourceTree = "<group>"; };
+		59467DA51C9373A50089498B /* FTRBasicViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRBasicViewController.m; sourceTree = "<group>"; };
+		59467DA61C9373A50089498B /* FTRBasicViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRBasicViewController.xib; sourceTree = "<group>"; };
+		59467DA71C9373A50089498B /* FTRCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRCollectionViewCell.h; sourceTree = "<group>"; };
+		59467DA81C9373A50089498B /* FTRCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRCollectionViewCell.m; sourceTree = "<group>"; };
+		59467DA91C9373A50089498B /* FTRCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRCollectionViewCell.xib; sourceTree = "<group>"; };
+		59467DAA1C9373A50089498B /* FTRCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRCollectionViewController.h; sourceTree = "<group>"; };
+		59467DAB1C9373A50089498B /* FTRCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRCollectionViewController.m; sourceTree = "<group>"; };
+		59467DAC1C9373A50089498B /* FTRCollectionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRCollectionViewController.xib; sourceTree = "<group>"; };
+		59467DAD1C9373A50089498B /* FTRCollectionViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRCollectionViewLayout.h; sourceTree = "<group>"; };
+		59467DAE1C9373A50089498B /* FTRCollectionViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRCollectionViewLayout.m; sourceTree = "<group>"; };
+		59467DAF1C9373A50089498B /* FTRGestureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRGestureViewController.h; sourceTree = "<group>"; };
+		59467DB01C9373A50089498B /* FTRGestureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRGestureViewController.m; sourceTree = "<group>"; };
+		59467DB11C9373A50089498B /* FTRGestureViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRGestureViewController.xib; sourceTree = "<group>"; };
+		59467DB21C9373A50089498B /* FTRMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRMainViewController.h; sourceTree = "<group>"; };
+		59467DB31C9373A50089498B /* FTRMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRMainViewController.m; sourceTree = "<group>"; };
+		59467DB41C9373A50089498B /* FTRMainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRMainViewController.xib; sourceTree = "<group>"; };
+		59467DB51C9373A50089498B /* FTRNetworkProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRNetworkProxy.h; sourceTree = "<group>"; };
+		59467DB61C9373A50089498B /* FTRNetworkProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRNetworkProxy.m; sourceTree = "<group>"; };
+		59467DB71C9373A50089498B /* FTRNetworkTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRNetworkTestViewController.h; sourceTree = "<group>"; };
+		59467DB81C9373A50089498B /* FTRNetworkTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRNetworkTestViewController.m; sourceTree = "<group>"; };
+		59467DB91C9373A50089498B /* FTRNetworkTestViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRNetworkTestViewController.xib; sourceTree = "<group>"; };
+		59467DBA1C9373A50089498B /* FTRPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRPickerViewController.h; sourceTree = "<group>"; };
+		59467DBB1C9373A50089498B /* FTRPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRPickerViewController.m; sourceTree = "<group>"; };
+		59467DBC1C9373A50089498B /* FTRPickerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRPickerViewController.xib; sourceTree = "<group>"; };
+		59467DBD1C9373A50089498B /* FTRPresentedViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRPresentedViewController.h; sourceTree = "<group>"; };
+		59467DBE1C9373A50089498B /* FTRPresentedViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRPresentedViewController.m; sourceTree = "<group>"; };
+		59467DBF1C9373A50089498B /* FTRPresentedViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRPresentedViewController.xib; sourceTree = "<group>"; };
+		59467DC01C9373A50089498B /* FTRRotatedViewsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRRotatedViewsViewController.h; sourceTree = "<group>"; };
+		59467DC11C9373A50089498B /* FTRRotatedViewsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRRotatedViewsViewController.m; sourceTree = "<group>"; };
+		59467DC21C9373A50089498B /* FTRRotatedViewsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRRotatedViewsViewController.xib; sourceTree = "<group>"; };
+		59467DC31C9373A50089498B /* FTRScrollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRScrollViewController.h; sourceTree = "<group>"; };
+		59467DC41C9373A50089498B /* FTRScrollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRScrollViewController.m; sourceTree = "<group>"; };
+		59467DC51C9373A50089498B /* FTRScrollViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRScrollViewController.xib; sourceTree = "<group>"; };
+		59467DC61C9373A50089498B /* FTRSliderViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRSliderViewController.h; sourceTree = "<group>"; };
+		59467DC71C9373A50089498B /* FTRSliderViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRSliderViewController.m; sourceTree = "<group>"; };
+		59467DC81C9373A50089498B /* FTRSliderViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRSliderViewController.xib; sourceTree = "<group>"; };
+		59467DC91C9373A50089498B /* FTRSplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRSplashViewController.h; sourceTree = "<group>"; };
+		59467DCA1C9373A50089498B /* FTRSplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRSplashViewController.m; sourceTree = "<group>"; };
+		59467DCB1C9373A50089498B /* FTRTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRTableViewController.h; sourceTree = "<group>"; };
+		59467DCC1C9373A50089498B /* FTRTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRTableViewController.m; sourceTree = "<group>"; };
+		59467DCD1C9373A50089498B /* FTRTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRTableViewController.xib; sourceTree = "<group>"; };
+		59467DCE1C9373A50089498B /* FTRTypingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRTypingViewController.h; sourceTree = "<group>"; };
+		59467DCF1C9373A50089498B /* FTRTypingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRTypingViewController.m; sourceTree = "<group>"; };
+		59467DD01C9373A50089498B /* FTRTypingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRTypingViewController.xib; sourceTree = "<group>"; };
+		59467DD11C9373A50089498B /* FTRVisibilityTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRVisibilityTestViewController.h; sourceTree = "<group>"; };
+		59467DD21C9373A50089498B /* FTRVisibilityTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRVisibilityTestViewController.m; sourceTree = "<group>"; };
+		59467DD31C9373A50089498B /* FTRVisibilityTestViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRVisibilityTestViewController.xib; sourceTree = "<group>"; };
+		59467DD41C9373A50089498B /* FTRWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRWebViewController.h; sourceTree = "<group>"; };
+		59467DD51C9373A50089498B /* FTRWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRWebViewController.m; sourceTree = "<group>"; };
+		59467DD61C9373A50089498B /* FTRWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRWebViewController.xib; sourceTree = "<group>"; };
+		59467DD71C9373A50089498B /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		596D89B91C05AB0600025714 /* EarlGrey.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = EarlGrey.xcodeproj; path = ../../EarlGrey.xcodeproj; sourceTree = "<group>"; };
+		61192E3F1DB18A6500C74371 /* FTRAnalyticsPostSuperTearDownOptOutTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnalyticsPostSuperTearDownOptOutTest.m; sourceTree = "<group>"; };
+		61192E401DB18A6500C74371 /* FTRAnalyticsNoEarlGreyUsageTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnalyticsNoEarlGreyUsageTest.m; sourceTree = "<group>"; };
+		6122AEB01DB7EF65006A094A /* FTRAnalyticsTestHarnessTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAnalyticsTestHarnessTest.m; sourceTree = "<group>"; };
+		61784D7A1DB6F4AB00054372 /* FTRAssertionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRAssertionHandler.h; sourceTree = "<group>"; };
+		61784D7B1DB6F4AB00054372 /* FTRAssertionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRAssertionHandler.m; sourceTree = "<group>"; };
+		61E4E0B01D7559A9007F9EE6 /* FTRImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRImageViewController.h; sourceTree = "<group>"; };
+		61E4E0B11D7559A9007F9EE6 /* FTRImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRImageViewController.m; sourceTree = "<group>"; };
+		61E4E0B21D7559A9007F9EE6 /* FTRImageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRImageViewController.xib; sourceTree = "<group>"; };
+		61E4E0C11D755A5C007F9EE6 /* FTRPinchViewTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRPinchViewTest.m; sourceTree = "<group>"; };
+		D210ED931E72214A00978B9E /* FTRMultiFingerSwipeTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRMultiFingerSwipeTest.m; sourceTree = "<group>"; };
+		D210ED9A1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRMultiFingerSwipeGestureRecognizerViewController.h; sourceTree = "<group>"; };
+		D210ED9B1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = FTRMultiFingerSwipeGestureRecognizerViewController.m; sourceTree = "<group>"; tabWidth = 2; };
+		D210ED9C1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FTRMultiFingerSwipeGestureRecognizerViewController.xib; sourceTree = "<group>"; };
+		FD193F2C1BBDDA4F00153959 /* FunctionalTestRig.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FunctionalTestRig.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD193FF11BBDDBE800153959 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		FD193FF31BBDDBED00153959 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		FD193FF51BBDDBF500153959 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		FD193FF71BBDDBFB00153959 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		FD193FF91BBDDC0000153959 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		FD387B391CA9C5E200958AEE /* FTRSwiftTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FTRSwiftTests.swift; path = Sources/FTRSwiftTests.swift; sourceTree = "<group>"; };
+		FD387B411CA9C63900958AEE /* EarlGreyFunctionalSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EarlGreyFunctionalSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD5470D61BBDE0A9000661FD /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = ../../../../../../../../../System/Library/Frameworks/IOKit.framework; sourceTree = "<group>"; };
+		FD5470F11BBDECBB000661FD /* EarlGreyFunctionalTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EarlGreyFunctionalTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FD771E741DC1D9F500E199A1 /* FTRCustomTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTRCustomTextView.h; sourceTree = "<group>"; };
+		FD771E751DC1D9F500E199A1 /* FTRCustomTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTRCustomTextView.m; sourceTree = "<group>"; };
+		FD8277DE1D677D9F00C7C2AD /* EarlGrey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EarlGrey.swift; path = "../../gem/lib/earlgrey/files/Swift-4.0/EarlGrey.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FD193F291BBDDA4F00153959 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD193FFA1BBDDC0000153959 /* QuartzCore.framework in Frameworks */,
+				FD193FF81BBDDBFB00153959 /* UIKit.framework in Frameworks */,
+				FD193FF61BBDDBF500153959 /* CoreGraphics.framework in Frameworks */,
+				FD193FF41BBDDBED00153959 /* Foundation.framework in Frameworks */,
+				FD193FF21BBDDBE800153959 /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD387B3E1CA9C63900958AEE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD387B541CA9C6C500958AEE /* CoreFoundation.framework in Frameworks */,
+				FD387B551CA9C6C500958AEE /* Foundation.framework in Frameworks */,
+				FD387B531CA9C6BE00958AEE /* CoreGraphics.framework in Frameworks */,
+				FD387B521CA9C6B800958AEE /* UIKit.framework in Frameworks */,
+				FD387B511CA9C6B300958AEE /* QuartzCore.framework in Frameworks */,
+				FD387B501CA9C6AB00958AEE /* IOKit.framework in Frameworks */,
+				FD387B4F1CA9C69C00958AEE /* EarlGrey.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD5470EE1BBDECBB000661FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				596D89BF1C05AB1600025714 /* EarlGrey.framework in Frameworks */,
+				FD54713A1BBDF9C0000661FD /* IOKit.framework in Frameworks */,
+				FD5471391BBDF9AC000661FD /* QuartzCore.framework in Frameworks */,
+				FD5471381BBDF9A1000661FD /* UIKit.framework in Frameworks */,
+				FD5471371BBDF99B000661FD /* CoreGraphics.framework in Frameworks */,
+				FD5471361BBDF995000661FD /* Foundation.framework in Frameworks */,
+				FD5471351BBDF990000661FD /* CoreFoundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C0731EECC191DBA6FF23E1E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FD5470D61BBDE0A9000661FD /* IOKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		59467D5A1C9373A50089498B /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				59467D5B1C9373A50089498B /* FTRAccessibilityTest.m */,
+				59467D5C1C9373A50089498B /* FTRActionSheetTest.m */,
+				59467D5D1C9373A50089498B /* FTRActivityIndicatorTest.m */,
+				59467D5E1C9373A50089498B /* FTRAlertViewTest.m */,
+				59467D5F1C9373A50089498B /* FTRAnalyticsTearDownOptOutTest.m */,
+				61192E3F1DB18A6500C74371 /* FTRAnalyticsPostSuperTearDownOptOutTest.m */,
+				61192E401DB18A6500C74371 /* FTRAnalyticsNoEarlGreyUsageTest.m */,
+				59467D601C9373A50089498B /* FTRAnalyticsTest.m */,
+				59467D611C9373A50089498B /* FTRAnalyticsTestCaseSetupOptOutTest.m */,
+				6122AEB01DB7EF65006A094A /* FTRAnalyticsTestHarnessTest.m */,
+				59467D621C9373A50089498B /* FTRAnalyticsTestMethodOptOutTest.m */,
+				59467D631C9373A50089498B /* FTRAnalyticsTestSuiteSetupOptOutTest.m */,
+				59467D641C9373A50089498B /* FTRAnimationsTest.m */,
+				61784D7A1DB6F4AB00054372 /* FTRAssertionHandler.h */,
+				61784D7B1DB6F4AB00054372 /* FTRAssertionHandler.m */,
+				59467D651C9373A50089498B /* FTRBaseAnalyticsTest.h */,
+				59467D661C9373A50089498B /* FTRBaseAnalyticsTest.m */,
+				59467D671C9373A50089498B /* FTRBaseIntegrationTest.h */,
+				59467D681C9373A50089498B /* FTRBaseIntegrationTest.m */,
+				59467D691C9373A50089498B /* FTRBasicInteractionTest.m */,
+				59467D6A1C9373A50089498B /* FTRCollectionViewTest.m */,
+				59467D6B1C9373A50089498B /* FTRErrorAPITest.m */,
+				59467D6C1C9373A50089498B /* FTRFailureHandler.h */,
+				59467D6D1C9373A50089498B /* FTRFailureHandler.m */,
+				59467D6E1C9373A50089498B /* FTRGeometryTest.m */,
+				59467D6F1C9373A50089498B /* FTRGestureTest.m */,
+				59467D701C9373A50089498B /* FTRKeyboardKeysTest.m */,
+				59467D711C9373A50089498B /* FTRLocalUIWebViewTest.m */,
+				59467D721C9373A50089498B /* FTRMatcherTest.m */,
+				59467D731C9373A50089498B /* FTRNetworkTest.m */,
+				59467D741C9373A50089498B /* FTROrientationChangeTest.m */,
+				59467D751C9373A50089498B /* FTROrientationPortraitOnlyChangeTest.m */,
+				59467D761C9373A50089498B /* FTRPickerViewInteractionTest.m */,
+				59467D771C9373A50089498B /* FTRPresentedViewTest.m */,
+				61E4E0C11D755A5C007F9EE6 /* FTRPinchViewTest.m */,
+				59467D781C9373A50089498B /* FTRScreenshotTest.m */,
+				59467D791C9373A50089498B /* FTRScrollViewTest.m */,
+				59467D7A1C9373A50089498B /* FTRSlideTest.m */,
+				59467D7B1C9373A50089498B /* FTRSyncAPITest.m */,
+				59467D7C1C9373A50089498B /* FTRUITableViewTest.m */,
+				59467D7D1C9373A50089498B /* FTRUIWebViewTest.m */,
+				59467D7E1C9373A50089498B /* FTRVisibilityTest.m */,
+				D210ED931E72214A00978B9E /* FTRMultiFingerSwipeTest.m */,
+				39175F1D2028CDC80096E2E1 /* FTRShakeTest.m */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		59467D811C9373A50089498B /* TestRig */ = {
+			isa = PBXGroup;
+			children = (
+				59467D821C9373A50089498B /* FunctionalTestRig-Info.plist */,
+				59467D831C9373A50089498B /* FunctionalTestRig.pch */,
+				59467D841C9373A50089498B /* Resources */,
+				59467D901C9373A50089498B /* Sources */,
+			);
+			path = TestRig;
+			sourceTree = "<group>";
+		};
+		59467D841C9373A50089498B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				59467D851C9373A50089498B /* Default-568h@2x.png */,
+				59467D861C9373A50089498B /* Default-667@2x.png */,
+				59467D871C9373A50089498B /* Default-736h@3x.png */,
+				59467D881C9373A50089498B /* Default.png */,
+				59467D891C9373A50089498B /* Default@2x.png */,
+				59467D8A1C9373A50089498B /* Default@3x.png */,
+				59467D8B1C9373A50089498B /* ic_local_cafe_48pt.png */,
+				59467D8C1C9373A50089498B /* ic_local_cafe_48pt@2x.png */,
+				59467D8D1C9373A50089498B /* ic_local_cafe_48pt@3x.png */,
+				59467D8E1C9373A50089498B /* www */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		59467D8E1C9373A50089498B /* www */ = {
+			isa = PBXGroup;
+			children = (
+				59467D8F1C9373A50089498B /* testpage.html */,
+			);
+			path = www;
+			sourceTree = "<group>";
+		};
+		59467D901C9373A50089498B /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				59467D911C9373A50089498B /* FTRAccessibilityViewController.h */,
+				59467D921C9373A50089498B /* FTRAccessibilityViewController.m */,
+				59467D931C9373A50089498B /* FTRAccessibilityViewController.xib */,
+				59467D941C9373A50089498B /* FTRAccessibleView.h */,
+				59467D951C9373A50089498B /* FTRAccessibleView.m */,
+				59467D961C9373A50089498B /* FTRActionSheetViewController.h */,
+				59467D971C9373A50089498B /* FTRActionSheetViewController.m */,
+				59467D981C9373A50089498B /* FTRActionSheetViewController.xib */,
+				59467D991C9373A50089498B /* FTRActivityIndicatorViewController.h */,
+				59467D9A1C9373A50089498B /* FTRActivityIndicatorViewController.m */,
+				59467D9B1C9373A50089498B /* FTRActivityIndicatorViewController.xib */,
+				59467D9C1C9373A50089498B /* FTRAlertViewController.h */,
+				59467D9D1C9373A50089498B /* FTRAlertViewController.m */,
+				59467D9E1C9373A50089498B /* FTRAlertViewController.xib */,
+				59467D9F1C9373A50089498B /* FTRAnimationViewController.h */,
+				59467DA01C9373A50089498B /* FTRAnimationViewController.m */,
+				59467DA11C9373A50089498B /* FTRAnimationViewController.xib */,
+				59467DA21C9373A50089498B /* FTRAppDelegate.h */,
+				59467DA31C9373A50089498B /* FTRAppDelegate.m */,
+				59467DA41C9373A50089498B /* FTRBasicViewController.h */,
+				59467DA51C9373A50089498B /* FTRBasicViewController.m */,
+				59467DA61C9373A50089498B /* FTRBasicViewController.xib */,
+				59467DA71C9373A50089498B /* FTRCollectionViewCell.h */,
+				59467DA81C9373A50089498B /* FTRCollectionViewCell.m */,
+				59467DA91C9373A50089498B /* FTRCollectionViewCell.xib */,
+				59467DAA1C9373A50089498B /* FTRCollectionViewController.h */,
+				59467DAB1C9373A50089498B /* FTRCollectionViewController.m */,
+				59467DAC1C9373A50089498B /* FTRCollectionViewController.xib */,
+				59467DAD1C9373A50089498B /* FTRCollectionViewLayout.h */,
+				59467DAE1C9373A50089498B /* FTRCollectionViewLayout.m */,
+				FD771E741DC1D9F500E199A1 /* FTRCustomTextView.h */,
+				FD771E751DC1D9F500E199A1 /* FTRCustomTextView.m */,
+				59467DAF1C9373A50089498B /* FTRGestureViewController.h */,
+				59467DB01C9373A50089498B /* FTRGestureViewController.m */,
+				59467DB11C9373A50089498B /* FTRGestureViewController.xib */,
+				61E4E0B01D7559A9007F9EE6 /* FTRImageViewController.h */,
+				61E4E0B11D7559A9007F9EE6 /* FTRImageViewController.m */,
+				61E4E0B21D7559A9007F9EE6 /* FTRImageViewController.xib */,
+				3FBDDF971F3D61870055E8F9 /* FTRLayoutViewController.h */,
+				3FBDDF981F3D61870055E8F9 /* FTRLayoutViewController.m */,
+				3FBDDF991F3D61870055E8F9 /* FTRLayoutViewController.xib */,
+				59467DB21C9373A50089498B /* FTRMainViewController.h */,
+				59467DB31C9373A50089498B /* FTRMainViewController.m */,
+				59467DB41C9373A50089498B /* FTRMainViewController.xib */,
+				59467DB51C9373A50089498B /* FTRNetworkProxy.h */,
+				59467DB61C9373A50089498B /* FTRNetworkProxy.m */,
+				59467DB71C9373A50089498B /* FTRNetworkTestViewController.h */,
+				59467DB81C9373A50089498B /* FTRNetworkTestViewController.m */,
+				59467DB91C9373A50089498B /* FTRNetworkTestViewController.xib */,
+				59467DBA1C9373A50089498B /* FTRPickerViewController.h */,
+				59467DBB1C9373A50089498B /* FTRPickerViewController.m */,
+				59467DBC1C9373A50089498B /* FTRPickerViewController.xib */,
+				59467DBD1C9373A50089498B /* FTRPresentedViewController.h */,
+				59467DBE1C9373A50089498B /* FTRPresentedViewController.m */,
+				59467DBF1C9373A50089498B /* FTRPresentedViewController.xib */,
+				59467DC01C9373A50089498B /* FTRRotatedViewsViewController.h */,
+				59467DC11C9373A50089498B /* FTRRotatedViewsViewController.m */,
+				59467DC21C9373A50089498B /* FTRRotatedViewsViewController.xib */,
+				59467DC31C9373A50089498B /* FTRScrollViewController.h */,
+				59467DC41C9373A50089498B /* FTRScrollViewController.m */,
+				59467DC51C9373A50089498B /* FTRScrollViewController.xib */,
+				59467DC61C9373A50089498B /* FTRSliderViewController.h */,
+				59467DC71C9373A50089498B /* FTRSliderViewController.m */,
+				59467DC81C9373A50089498B /* FTRSliderViewController.xib */,
+				59467DC91C9373A50089498B /* FTRSplashViewController.h */,
+				59467DCA1C9373A50089498B /* FTRSplashViewController.m */,
+				59467DCB1C9373A50089498B /* FTRTableViewController.h */,
+				59467DCC1C9373A50089498B /* FTRTableViewController.m */,
+				59467DCD1C9373A50089498B /* FTRTableViewController.xib */,
+				59467DCE1C9373A50089498B /* FTRTypingViewController.h */,
+				59467DCF1C9373A50089498B /* FTRTypingViewController.m */,
+				59467DD01C9373A50089498B /* FTRTypingViewController.xib */,
+				59467DD11C9373A50089498B /* FTRVisibilityTestViewController.h */,
+				59467DD21C9373A50089498B /* FTRVisibilityTestViewController.m */,
+				59467DD31C9373A50089498B /* FTRVisibilityTestViewController.xib */,
+				59467DD41C9373A50089498B /* FTRWebViewController.h */,
+				59467DD51C9373A50089498B /* FTRWebViewController.m */,
+				59467DD61C9373A50089498B /* FTRWebViewController.xib */,
+				59467DD71C9373A50089498B /* main.m */,
+				D210ED9A1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.h */,
+				D210ED9B1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.m */,
+				D210ED9C1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.xib */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		596D89BA1C05AB0600025714 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				596D89BE1C05AB0600025714 /* EarlGrey.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FD193F231BBDDA4F00153959 = {
+			isa = PBXGroup;
+			children = (
+				FD387B351CA9C5B500958AEE /* SwiftSources */,
+				59467D5A1C9373A50089498B /* Sources */,
+				59467D7F1C9373A50089498B /* FunctionalTests.pch */,
+				59467D801C9373A50089498B /* LICENSE */,
+				59467D811C9373A50089498B /* TestRig */,
+				596D89B91C05AB0600025714 /* EarlGrey.xcodeproj */,
+				FD193FF91BBDDC0000153959 /* QuartzCore.framework */,
+				FD193FF71BBDDBFB00153959 /* UIKit.framework */,
+				FD193FF51BBDDBF500153959 /* CoreGraphics.framework */,
+				FD193FF31BBDDBED00153959 /* Foundation.framework */,
+				FD193FF11BBDDBE800153959 /* CoreFoundation.framework */,
+				FD193F2D1BBDDA4F00153959 /* Products */,
+				4C0731EECC191DBA6FF23E1E /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		FD193F2D1BBDDA4F00153959 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FD193F2C1BBDDA4F00153959 /* FunctionalTestRig.app */,
+				FD5470F11BBDECBB000661FD /* EarlGreyFunctionalTests.xctest */,
+				FD387B411CA9C63900958AEE /* EarlGreyFunctionalSwiftTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FD387B351CA9C5B500958AEE /* SwiftSources */ = {
+			isa = PBXGroup;
+			children = (
+				FD8277DE1D677D9F00C7C2AD /* EarlGrey.swift */,
+				FD387B391CA9C5E200958AEE /* FTRSwiftTests.swift */,
+			);
+			name = SwiftSources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FD193F2B1BBDDA4F00153959 /* FunctionalTestRig */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FD193F4F1BBDDA4F00153959 /* Build configuration list for PBXNativeTarget "FunctionalTestRig" */;
+			buildPhases = (
+				FD193F281BBDDA4F00153959 /* Sources */,
+				FD193F291BBDDA4F00153959 /* Frameworks */,
+				FD193F2A1BBDDA4F00153959 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FunctionalTestRig;
+			productName = FunctionalTests;
+			productReference = FD193F2C1BBDDA4F00153959 /* FunctionalTestRig.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FD387B401CA9C63900958AEE /* EarlGreyFunctionalSwiftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FD387B481CA9C63900958AEE /* Build configuration list for PBXNativeTarget "EarlGreyFunctionalSwiftTests" */;
+			buildPhases = (
+				FD387B3D1CA9C63900958AEE /* Sources */,
+				FD387B3E1CA9C63900958AEE /* Frameworks */,
+				FD387B3F1CA9C63900958AEE /* Resources */,
+				FD387B561CA9C6CA00958AEE /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FD387B4E1CA9C67A00958AEE /* PBXTargetDependency */,
+				FD387B471CA9C63900958AEE /* PBXTargetDependency */,
+			);
+			name = EarlGreyFunctionalSwiftTests;
+			productName = EarlGreyFunctionalSwiftTests;
+			productReference = FD387B411CA9C63900958AEE /* EarlGreyFunctionalSwiftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		FD5470F01BBDECBB000661FD /* EarlGreyFunctionalTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FD5470F91BBDECBB000661FD /* Build configuration list for PBXNativeTarget "EarlGreyFunctionalTests" */;
+			buildPhases = (
+				FD5470ED1BBDECBB000661FD /* Sources */,
+				FD5470EE1BBDECBB000661FD /* Frameworks */,
+				FD5470EF1BBDECBB000661FD /* Resources */,
+				FD60CB601C5B5AFB00F8E318 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				596D89C11C05AB8A00025714 /* PBXTargetDependency */,
+				FD5470F81BBDECBB000661FD /* PBXTargetDependency */,
+			);
+			name = EarlGreyFunctionalTests;
+			productName = EarlGreyFunctionalTests;
+			productReference = FD5470F11BBDECBB000661FD /* EarlGreyFunctionalTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FD193F241BBDDA4F00153959 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = "Google Inc.";
+				TargetAttributes = {
+					FD193F2B1BBDDA4F00153959 = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					FD387B401CA9C63900958AEE = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = FD193F2B1BBDDA4F00153959;
+					};
+					FD5470F01BBDECBB000661FD = {
+						CreatedOnToolsVersion = 6.4;
+						TestTargetID = FD193F2B1BBDDA4F00153959;
+					};
+				};
+			};
+			buildConfigurationList = FD193F271BBDDA4F00153959 /* Build configuration list for PBXProject "FunctionalTests" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FD193F231BBDDA4F00153959;
+			productRefGroup = FD193F2D1BBDDA4F00153959 /* Products */;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 596D89BA1C05AB0600025714 /* Products */;
+					ProjectRef = 596D89B91C05AB0600025714 /* EarlGrey.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				FD193F2B1BBDDA4F00153959 /* FunctionalTestRig */,
+				FD5470F01BBDECBB000661FD /* EarlGreyFunctionalTests */,
+				FD387B401CA9C63900958AEE /* EarlGreyFunctionalSwiftTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		596D89BE1C05AB0600025714 /* EarlGrey.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = EarlGrey.framework;
+			remoteRef = 596D89BD1C05AB0600025714 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FD193F2A1BBDDA4F00153959 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				59467E0F1C9373A50089498B /* FTRAnimationViewController.xib in Resources */,
+				3FBDDF9B1F3D61870055E8F9 /* FTRLayoutViewController.xib in Resources */,
+				59467DFC1C9373A50089498B /* Default-667@2x.png in Resources */,
+				59467E031C9373A50089498B /* ic_local_cafe_48pt@3x.png in Resources */,
+				59467E001C9373A50089498B /* Default@3x.png in Resources */,
+				59467DFE1C9373A50089498B /* Default.png in Resources */,
+				59467E201C9373A50089498B /* FTRPickerViewController.xib in Resources */,
+				59467E1E1C9373A50089498B /* FTRNetworkTestViewController.xib in Resources */,
+				59467E041C9373A50089498B /* testpage.html in Resources */,
+				59467E161C9373A50089498B /* FTRCollectionViewController.xib in Resources */,
+				D210ED9E1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.xib in Resources */,
+				59467DFD1C9373A50089498B /* Default-736h@3x.png in Resources */,
+				59467E2B1C9373A50089498B /* FTRTableViewController.xib in Resources */,
+				59467DF91C9373A50089498B /* LICENSE in Resources */,
+				59467E011C9373A50089498B /* ic_local_cafe_48pt.png in Resources */,
+				59467E191C9373A50089498B /* FTRGestureViewController.xib in Resources */,
+				59467E281C9373A50089498B /* FTRSliderViewController.xib in Resources */,
+				59467E241C9373A50089498B /* FTRRotatedViewsViewController.xib in Resources */,
+				59467DFF1C9373A50089498B /* Default@2x.png in Resources */,
+				59467E311C9373A50089498B /* FTRWebViewController.xib in Resources */,
+				59467E091C9373A50089498B /* FTRActionSheetViewController.xib in Resources */,
+				59467E141C9373A50089498B /* FTRCollectionViewCell.xib in Resources */,
+				59467E261C9373A50089498B /* FTRScrollViewController.xib in Resources */,
+				59467E221C9373A50089498B /* FTRPresentedViewController.xib in Resources */,
+				59467E2F1C9373A50089498B /* FTRVisibilityTestViewController.xib in Resources */,
+				59467E121C9373A50089498B /* FTRBasicViewController.xib in Resources */,
+				59467E061C9373A50089498B /* FTRAccessibilityViewController.xib in Resources */,
+				61E4E0B41D7559A9007F9EE6 /* FTRImageViewController.xib in Resources */,
+				59467DFB1C9373A50089498B /* Default-568h@2x.png in Resources */,
+				59467E1B1C9373A50089498B /* FTRMainViewController.xib in Resources */,
+				59467E2D1C9373A50089498B /* FTRTypingViewController.xib in Resources */,
+				59467E0B1C9373A50089498B /* FTRActivityIndicatorViewController.xib in Resources */,
+				59467E0D1C9373A50089498B /* FTRAlertViewController.xib in Resources */,
+				59467E021C9373A50089498B /* ic_local_cafe_48pt@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD387B3F1CA9C63900958AEE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD5470EF1BBDECBB000661FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FD193F281BBDDA4F00153959 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				59467E581C9373F00089498B /* FTRAccessibilityViewController.m in Sources */,
+				59467E5B1C9373F00089498B /* FTRAccessibleView.m in Sources */,
+				59467E5D1C9373F00089498B /* FTRActionSheetViewController.m in Sources */,
+				59467E601C9373F00089498B /* FTRActivityIndicatorViewController.m in Sources */,
+				59467E631C9373F00089498B /* FTRAlertViewController.m in Sources */,
+				59467E661C9373F00089498B /* FTRAnimationViewController.m in Sources */,
+				61E4E0B31D7559A9007F9EE6 /* FTRImageViewController.m in Sources */,
+				59467E691C9373F00089498B /* FTRAppDelegate.m in Sources */,
+				59467E6B1C9373F00089498B /* FTRBasicViewController.m in Sources */,
+				3FBDDF9A1F3D61870055E8F9 /* FTRLayoutViewController.m in Sources */,
+				59467E6E1C9373F00089498B /* FTRCollectionViewCell.m in Sources */,
+				59467E711C9373F00089498B /* FTRCollectionViewController.m in Sources */,
+				59467E741C9373F00089498B /* FTRCollectionViewLayout.m in Sources */,
+				FD771E761DC1D9F500E199A1 /* FTRCustomTextView.m in Sources */,
+				59467E761C9373F00089498B /* FTRGestureViewController.m in Sources */,
+				59467E791C9373F00089498B /* FTRMainViewController.m in Sources */,
+				59467E7C1C9373F00089498B /* FTRNetworkProxy.m in Sources */,
+				59467E7E1C9373F00089498B /* FTRNetworkTestViewController.m in Sources */,
+				D210ED9D1E733EE400978B9E /* FTRMultiFingerSwipeGestureRecognizerViewController.m in Sources */,
+				59467E811C9373F00089498B /* FTRPickerViewController.m in Sources */,
+				59467E841C9373F00089498B /* FTRPresentedViewController.m in Sources */,
+				59467E871C9373F00089498B /* FTRRotatedViewsViewController.m in Sources */,
+				59467E8A1C9373F00089498B /* FTRScrollViewController.m in Sources */,
+				59467E8D1C9373F00089498B /* FTRSliderViewController.m in Sources */,
+				59467E901C9373F00089498B /* FTRSplashViewController.m in Sources */,
+				59467E921C9373F00089498B /* FTRTableViewController.m in Sources */,
+				59467E951C9373F00089498B /* FTRTypingViewController.m in Sources */,
+				59467E981C9373F00089498B /* FTRVisibilityTestViewController.m in Sources */,
+				59467E9B1C9373F00089498B /* FTRWebViewController.m in Sources */,
+				59467E9D1C9373F00089498B /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD387B3D1CA9C63900958AEE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD983D6C1D67E8B40059F4CC /* EarlGrey.swift in Sources */,
+				FD387B4C1CA9C65100958AEE /* FTRSwiftTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FD5470ED1BBDECBB000661FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				59467E331C9373B90089498B /* FTRAccessibilityTest.m in Sources */,
+				59467E341C9373B90089498B /* FTRActionSheetTest.m in Sources */,
+				59467E351C9373B90089498B /* FTRActivityIndicatorTest.m in Sources */,
+				59467E361C9373B90089498B /* FTRAlertViewTest.m in Sources */,
+				59467E371C9373B90089498B /* FTRAnalyticsTearDownOptOutTest.m in Sources */,
+				61192E411DB18A6500C74371 /* FTRAnalyticsPostSuperTearDownOptOutTest.m in Sources */,
+				59467E381C9373B90089498B /* FTRAnalyticsTest.m in Sources */,
+				59467E391C9373B90089498B /* FTRAnalyticsTestCaseSetupOptOutTest.m in Sources */,
+				59467E3A1C9373B90089498B /* FTRAnalyticsTestMethodOptOutTest.m in Sources */,
+				59467E3B1C9373B90089498B /* FTRAnalyticsTestSuiteSetupOptOutTest.m in Sources */,
+				59467E3C1C9373B90089498B /* FTRAnimationsTest.m in Sources */,
+				59467E3E1C9373B90089498B /* FTRBaseAnalyticsTest.m in Sources */,
+				59467E401C9373B90089498B /* FTRBaseIntegrationTest.m in Sources */,
+				59467E411C9373B90089498B /* FTRBasicInteractionTest.m in Sources */,
+				59467E421C9373B90089498B /* FTRCollectionViewTest.m in Sources */,
+				59467E431C9373B90089498B /* FTRErrorAPITest.m in Sources */,
+				59467E451C9373B90089498B /* FTRFailureHandler.m in Sources */,
+				39175F1E2028CDC80096E2E1 /* FTRShakeTest.m in Sources */,
+				59467E461C9373B90089498B /* FTRGeometryTest.m in Sources */,
+				59467E471C9373B90089498B /* FTRGestureTest.m in Sources */,
+				59467E481C9373B90089498B /* FTRKeyboardKeysTest.m in Sources */,
+				59467E491C9373B90089498B /* FTRLocalUIWebViewTest.m in Sources */,
+				59467E4A1C9373B90089498B /* FTRMatcherTest.m in Sources */,
+				59467E4B1C9373B90089498B /* FTRNetworkTest.m in Sources */,
+				61E4E0C31D755A9B007F9EE6 /* FTRPinchViewTest.m in Sources */,
+				D210ED941E72214A00978B9E /* FTRMultiFingerSwipeTest.m in Sources */,
+				59467E4C1C9373B90089498B /* FTROrientationChangeTest.m in Sources */,
+				61784D7C1DB6F4AB00054372 /* FTRAssertionHandler.m in Sources */,
+				59467E4D1C9373B90089498B /* FTROrientationPortraitOnlyChangeTest.m in Sources */,
+				59467E4E1C9373B90089498B /* FTRPickerViewInteractionTest.m in Sources */,
+				61192E421DB18A6500C74371 /* FTRAnalyticsNoEarlGreyUsageTest.m in Sources */,
+				59467E4F1C9373B90089498B /* FTRPresentedViewTest.m in Sources */,
+				59467E501C9373B90089498B /* FTRScreenshotTest.m in Sources */,
+				59467E511C9373B90089498B /* FTRScrollViewTest.m in Sources */,
+				6122AEB11DB7EF65006A094A /* FTRAnalyticsTestHarnessTest.m in Sources */,
+				59467E521C9373B90089498B /* FTRSlideTest.m in Sources */,
+				59467E531C9373B90089498B /* FTRSyncAPITest.m in Sources */,
+				59467E541C9373B90089498B /* FTRUITableViewTest.m in Sources */,
+				59467E551C9373B90089498B /* FTRUIWebViewTest.m in Sources */,
+				59467E561C9373B90089498B /* FTRVisibilityTest.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		596D89C11C05AB8A00025714 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EarlGrey;
+			targetProxy = 596D89C01C05AB8A00025714 /* PBXContainerItemProxy */;
+		};
+		FD387B471CA9C63900958AEE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FD193F2B1BBDDA4F00153959 /* FunctionalTestRig */;
+			targetProxy = FD387B461CA9C63900958AEE /* PBXContainerItemProxy */;
+		};
+		FD387B4E1CA9C67A00958AEE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EarlGrey;
+			targetProxy = FD387B4D1CA9C67A00958AEE /* PBXContainerItemProxy */;
+		};
+		FD5470F81BBDECBB000661FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FD193F2B1BBDDA4F00153959 /* FunctionalTestRig */;
+			targetProxy = FD5470F71BBDECBB000661FD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FD193F4D1BBDDA4F00153959 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ../../EarlGrey/;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				WARNING_CFLAGS = (
+					"-Werror",
+					"-Wall",
+					"-Wextra",
+					"-Wconstant-conversion",
+					"-Wconversion",
+					"-Wdocumentation",
+					"-Wenum-conversion",
+					"-Wint-conversion",
+					"-Wmissing-prototypes",
+					"-Wno-unused-parameter",
+					"-Wnull-dereference",
+					"-Wshorten-64-to-32",
+					"-Wsign-conversion",
+					"-Wundeclared-selector",
+				);
+			};
+			name = Debug;
+		};
+		FD193F4E1BBDDA4F00153959 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				HEADER_SEARCH_PATHS = ../../EarlGrey/;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "$(inherited)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
+				WARNING_CFLAGS = (
+					"-Werror",
+					"-Wall",
+					"-Wconstant-conversion",
+					"-Wconversion",
+					"-Wdocumentation",
+					"-Wenum-conversion",
+					"-Wextra",
+					"-Wint-conversion",
+					"-Wmissing-prototypes",
+					"-Wno-unused-parameter",
+					"-Wnull-dereference",
+					"-Wshorten-64-to-32",
+					"-Wsign-conversion",
+					"-Wundeclared-selector",
+				);
+			};
+			name = Release;
+		};
+		FD193F501BBDDA4F00153959 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				GCC_PREFIX_HEADER = TestRig/FunctionalTestRig.pch;
+				INFOPLIST_FILE = "TestRig/FunctionalTestRig-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				New_Setting = "";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		FD193F511BBDDA4F00153959 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_BITCODE = NO;
+				GCC_PREFIX_HEADER = TestRig/FunctionalTestRig.pch;
+				INFOPLIST_FILE = "TestRig/FunctionalTestRig-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				New_Setting = "";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Release;
+		};
+		FD387B491CA9C63900958AEE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "TestRig/FunctionalTestRig-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-framework",
+					IOKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FunctionalTestRig.app/FunctionalTestRig";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		FD387B4A1CA9C63900958AEE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = "TestRig/FunctionalTestRig-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-framework",
+					IOKit,
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FunctionalTestRig.app/FunctionalTestRig";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Release;
+		};
+		FD5470FA1BBDECBB000661FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PREFIX_HEADER = FunctionalTests.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "TestRig/FunctionalTestRig-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-framework",
+					IOKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FunctionalTestRig.app/FunctionalTestRig";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Debug;
+		};
+		FD5470FB1BBDECBB000661FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				GCC_PREFIX_HEADER = FunctionalTests.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
+				HEADER_SEARCH_PATHS = "$(inherited)";
+				INFOPLIST_FILE = "TestRig/FunctionalTestRig-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.4;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_CFLAGS = "$(inherited)";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-framework",
+					IOKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FunctionalTestRig.app/FunctionalTestRig";
+				WARNING_CFLAGS = "$(inherited)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FD193F271BBDDA4F00153959 /* Build configuration list for PBXProject "FunctionalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD193F4D1BBDDA4F00153959 /* Debug */,
+				FD193F4E1BBDDA4F00153959 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FD193F4F1BBDDA4F00153959 /* Build configuration list for PBXNativeTarget "FunctionalTestRig" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD193F501BBDDA4F00153959 /* Debug */,
+				FD193F511BBDDA4F00153959 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FD387B481CA9C63900958AEE /* Build configuration list for PBXNativeTarget "EarlGreyFunctionalSwiftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD387B491CA9C63900958AEE /* Debug */,
+				FD387B4A1CA9C63900958AEE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FD5470F91BBDECBB000661FD /* Build configuration list for PBXNativeTarget "EarlGreyFunctionalTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FD5470FA1BBDECBB000661FD /* Debug */,
+				FD5470FB1BBDECBB000661FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FD193F241BBDDA4F00153959 /* Project object */;
+}

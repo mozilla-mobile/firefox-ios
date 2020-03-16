@@ -1,0 +1,247 @@
+{
+  "extra": {
+    "session:duration": 4363,
+    "float": 2.4300000000000002,
+    "a_thing": 3,
+    "react": true,
+    "some_things": {"green": "red"},
+    "foobar": ["a", "b", "c"]
+  },
+  "exception": {
+    "values": [
+      {
+        "type": "Error",
+        "value": "Sentry: Test throw error",
+        "stacktrace": {
+          "frames": [
+            {
+              "colno": 20,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "callFunctionReturnFlushedQueue",
+              "lineno": 1887,
+              "in_app": true
+            },
+            {
+              "colno": 11,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "__guard",
+              "lineno": 2043,
+              "in_app": true
+            },
+            {
+              "colno": 29,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "?",
+              "lineno": 1888,
+              "in_app": true
+            },
+            {
+              "colno": 47,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "__callFunction",
+              "lineno": 2072,
+              "in_app": true
+            },
+            {
+              "colno": 249,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "receiveTouches",
+              "lineno": 6572,
+              "in_app": true
+            },
+            {
+              "colno": 50,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "_receiveRootNodeIDEvent",
+              "lineno": 6557,
+              "in_app": true
+            },
+            {
+              "colno": 34,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "batchedUpdatesWithControlledComponents",
+              "lineno": 2706,
+              "in_app": true
+            },
+            {
+              "colno": 26,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "batchedUpdates",
+              "lineno": 5637,
+              "in_app": true
+            },
+            {
+              "colno": 55,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "?",
+              "lineno": 6558,
+              "in_app": true
+            },
+            {
+              "colno": 33,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "handleTopLevel",
+              "lineno": 6530,
+              "in_app": true
+            },
+            {
+              "colno": 83,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "runEventQueueInBatch",
+              "lineno": 6526,
+              "in_app": true
+            },
+            {
+              "colno": 147,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "processEventQueue",
+              "lineno": 6282,
+              "in_app": true
+            },
+            {
+              "colno": 41,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "forEachAccumulated",
+              "lineno": 6211,
+              "in_app": true
+            },
+            {
+              "colno": null,
+              "filename": "[native code]",
+              "function": "forEach",
+              "lineno": null,
+              "in_app": true
+            },
+            {
+              "colno": 62,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "executeDispatchesAndRelease",
+              "lineno": 6216,
+              "in_app": true
+            },
+            {
+              "colno": 52,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "executeDispatchesInOrder",
+              "lineno": 2606,
+              "in_app": true
+            },
+            {
+              "colno": 132,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "executeDispatch",
+              "lineno": 2599,
+              "in_app": true
+            },
+            {
+              "colno": 60,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "invokeGuardedCallbackAndCatchFirstError",
+              "lineno": 2516,
+              "in_app": true
+            },
+            {
+              "colno": 41,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "invokeGuardedCallback",
+              "lineno": 2513,
+              "in_app": true
+            },
+            {
+              "colno": 23,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "_invokeGuardedCallback",
+              "lineno": 2539,
+              "in_app": true
+            },
+            {
+              "colno": null,
+              "filename": "[native code]",
+              "function": "touchableHandleResponderRelease",
+              "lineno": null,
+              "in_app": true
+            },
+            {
+              "colno": 24,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "touchableHandleResponderRelease",
+              "lineno": 37971,
+              "in_app": true
+            },
+            {
+              "colno": null,
+              "filename": "[native code]",
+              "function": "_receiveSignal",
+              "lineno": null,
+              "in_app": true
+            },
+            {
+              "colno": 44,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "_receiveSignal",
+              "lineno": 38082,
+              "in_app": true
+            },
+            {
+              "colno": null,
+              "filename": "[native code]",
+              "function": "_performSideEffectsForTransition",
+              "lineno": null,
+              "in_app": true
+            },
+            {
+              "colno": 34,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "_performSideEffectsForTransition",
+              "lineno": 38145,
+              "in_app": true
+            },
+            {
+              "colno": null,
+              "filename": "[native code]",
+              "function": "touchableHandlePress",
+              "lineno": null,
+              "in_app": true
+            },
+            {
+              "colno": 45,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "touchableHandlePress",
+              "lineno": 38588,
+              "in_app": true
+            },
+            {
+              "colno": 38,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "onPress",
+              "lineno": 58531,
+              "in_app": true
+            },
+            {
+              "colno": 22,
+              "filename": "app:///index.bundle?platform=ios&dev=true&minify=false",
+              "function": "_throwError",
+              "lineno": 58449,
+              "in_app": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "project": "148053",
+  "timestamp": 1508840157.4920001,
+  "tags": {"react": true, "environment": "production"},
+  "level": "fatal",
+  "platform": "javascript",
+  "culprit": "app:///index.bundle?platform=ios&dev=true&minify=false",
+  "request": {},
+  "logger": "javascript",
+  "event_id": "fd3ace0800f941b292562f0b96ba9f71",
+  "user": {
+    "email": "john@apple.com",
+    "username": "username",
+    "userID": "12341",
+    "extra": {"is_admin": false}
+  }
+}

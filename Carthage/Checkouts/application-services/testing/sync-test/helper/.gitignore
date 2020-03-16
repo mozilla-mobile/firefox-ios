@@ -1,0 +1,4 @@
+node_modules
+# I'm not sure if we should ignore this or not -- I'm doing so
+# mainly to avoid conflicts if people on windows run `npm install`.
+package-lock.json

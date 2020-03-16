@@ -1,0 +1,32 @@
+[package]
+name = "ffi-support"
+edition = "2018"
+version = "0.4.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+description = "A crate to help expose Rust functions over the FFI."
+repository = "https://github.com/mozilla/application-services"
+readme = "README.md"
+keywords = ["ffi", "bindings"]
+categories = ["development-tools::ffi"]
+license = "Apache-2.0 / MIT"
+
+[badges]
+travis-ci = { repository = "mozilla/application-services" }
+
+[features]
+default = []
+log_panics = []
+log_backtraces = ["log_panics", "backtrace"]
+
+[dependencies]
+log = "0.4"
+lazy_static = "1.4.0"
+
+[dependencies.backtrace]
+optional = true
+version = "0.3.38"
+
+[dev-dependencies]
+rand = "0.7.2"
+rayon = "1.3.0"
+env_logger = "0.7.0"

@@ -1,0 +1,48 @@
+// Protos/unittest_swift_reserved_ext.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// Test Swift reserved words used as enum or message names
+///
+// -----------------------------------------------------------------------------
+
+syntax = "proto2";
+
+// No package or swift prefix to control naming on these.
+
+import "unittest_swift_reserved.proto";
+
+extend protobuf_unittest.SwiftReservedTest.Type {
+    // Will get _p added because it has no package/swift prefix to scope and
+    // would otherwise be a problem when added to the message.
+    optional bool debugDescription = 1000;
+
+    // These will get _p added for the same reasoning.
+    optional bool as = 1012;
+    optional bool var = 1013;
+    optional bool try = 1014;
+    optional bool do = 1015;
+    optional bool nil = 1016;
+}
+
+message SwiftReservedTestExt2 {
+    extend protobuf_unittest.SwiftReservedTest.Type {
+        optional bool hashValue = 1001;
+
+        // Reserved words, since these end up in the "enum Extensions", they
+        // can't just be get their names, and sanitation kicks.
+        optional bool as = 1022;
+        optional bool var = 1023;
+        optional bool try = 1024;
+        optional bool do = 1025;
+        optional bool nil = 1026;
+    }
+}

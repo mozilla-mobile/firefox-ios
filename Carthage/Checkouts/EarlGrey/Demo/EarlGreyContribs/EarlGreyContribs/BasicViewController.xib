@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BasicViewController">
+            <connections>
+                <outlet property="button" destination="hpF-WH-1hZ" id="Sgm-hj-D6g"/>
+                <outlet property="textField" destination="oFs-fO-EQ7" id="KiK-7M-oBY"/>
+                <outlet property="textLabel" destination="lfb-TG-BdN" id="NFx-fa-4Zq"/>
+                <outlet property="titleLabel" destination="IH3-lx-BCl" id="5ZK-dd-lhU"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="EarlGrey Contribs Basic VC" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IH3-lx-BCl">
+                    <rect key="frame" x="174" y="85" width="252" height="21"/>
+                    <accessibility key="accessibilityConfiguration" label="titleLabel"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="252" id="LrI-kS-kXZ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Text" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="oFs-fO-EQ7">
+                    <rect key="frame" x="144" y="152" width="312" height="30"/>
+                    <accessibility key="accessibilityConfiguration" label="textField"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lfb-TG-BdN">
+                    <rect key="frame" x="159" y="274" width="283" height="91"/>
+                    <color key="backgroundColor" red="0.63464951830000005" green="1" blue="0.34803896569999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <accessibility key="accessibilityConfiguration" label="textLabel"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="283" id="AMt-0r-LmY"/>
+                        <constraint firstAttribute="height" constant="91" id="kJo-d3-Clx"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hpF-WH-1hZ">
+                    <rect key="frame" x="219" y="214" width="162" height="30"/>
+                    <accessibility key="accessibilityConfiguration" label="showButton"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="162" id="PXT-3W-KYy"/>
+                    </constraints>
+                    <state key="normal" title="Click To Show Text"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="IH3-lx-BCl" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="85" id="2au-Od-Z5i"/>
+                <constraint firstItem="hpF-WH-1hZ" firstAttribute="top" secondItem="oFs-fO-EQ7" secondAttribute="bottom" constant="32" id="4IO-Ea-t6L"/>
+                <constraint firstItem="lfb-TG-BdN" firstAttribute="centerX" secondItem="hpF-WH-1hZ" secondAttribute="centerX" id="IJp-06-cki"/>
+                <constraint firstItem="oFs-fO-EQ7" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="144" id="Jyj-T4-7mT"/>
+                <constraint firstItem="oFs-fO-EQ7" firstAttribute="top" secondItem="IH3-lx-BCl" secondAttribute="bottom" constant="46" id="NYr-Wu-AMZ"/>
+                <constraint firstItem="IH3-lx-BCl" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="Nfu-wd-Vik"/>
+                <constraint firstItem="lfb-TG-BdN" firstAttribute="top" secondItem="hpF-WH-1hZ" secondAttribute="bottom" constant="30" id="civ-V7-wb8"/>
+                <constraint firstItem="oFs-fO-EQ7" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="xUW-JQ-7LX"/>
+                <constraint firstItem="hpF-WH-1hZ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="yeu-Mc-AjY"/>
+            </constraints>
+        </view>
+    </objects>
+</document>

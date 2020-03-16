@@ -1,0 +1,29 @@
+[package]
+name = "viaduct"
+version = "0.1.0"
+authors = ["Thom Chiovoloni <tchiovoloni@mozilla.com>"]
+edition = "2018"
+license = "MPL-2.0"
+
+[lib]
+crate-type = ["lib"]
+
+[features]
+default = []
+
+[dependencies]
+failure = "0.1.6"
+failure_derive = "0.1.5"
+url = "2.1.1"
+log = "0.4"
+lazy_static = "1.4.0"
+serde = "1.0.104"
+serde_json = "1.0.44"
+prost = "0.6.1"
+prost-derive = "0.6.1"
+ffi-support = { path = "../support/ffi" }
+reqwest = { version = "0.10.1", features = ["blocking", "native-tls-vendored"], optional = true }
+
+
+[build-dependencies]
+prost-build = "0.6.1"

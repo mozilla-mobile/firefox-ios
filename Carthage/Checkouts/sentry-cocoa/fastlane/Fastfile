@@ -1,0 +1,34 @@
+before_all do
+  clear_derived_data if is_ci?
+  # reset_simulators if is_ci?
+end
+
+lane :localcoverage do
+    test
+    sh('cd ..; slather coverage --input-format profdata Sentry.xcodeproj')
+end
+
+lane :oc_lint do
+  sh('cd ..; xcodebuild clean build -project Sentry.xcodeproj -scheme Sentry -configuration Debug | tee xcodebuild.log; oclint-xcodebuild -output compile_commands.json xcodebuild.log')
+  oclint
+end
+
+lane :lint do
+    if ENV["DANGER_GITHUB_API_TOKEN"]
+        danger(
+            github_api_token: ENV["DANGER_GITHUB_API_TOKEN"],
+            danger_id: "github",
+            dangerfile: "./Dangerfile",
+            verbose: true
+        )
+    end
+    sh('cd ..; swiftlint')
+end
+
+lane :test do
+    scan(scheme: "Sentry", code_coverage: true)
+end
+
+lane :pod do
+    sh('cd ..; pod lib lint')
+end

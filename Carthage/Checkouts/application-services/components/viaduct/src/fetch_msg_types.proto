@@ -1,0 +1,40 @@
+syntax = "proto2";
+
+// Note: this file name must be unique due to how the iOS megazord works :(
+
+package msg_types;
+
+option java_package = "mozilla.appservices.httpconfig";
+option java_outer_classname = "MsgTypes";
+
+message Request {
+    enum Method {
+        GET = 0;
+        HEAD = 1;
+        POST = 2;
+        PUT = 3;
+        DELETE = 4;
+        CONNECT = 5;
+        OPTIONS = 6;
+        TRACE = 7;
+    }
+    required Method method = 1;
+    required string url = 2;
+    optional bytes body = 3;
+    map<string, string> headers = 4;
+    required bool follow_redirects = 5;
+    required bool include_cookies = 6;
+    required bool use_caches = 7;
+    required int32 connect_timeout_secs = 8;
+    required int32 read_timeout_secs = 9;
+}
+
+message Response {
+    // If this is present, nothing else is.
+    optional string exception_message = 1;
+    optional string url = 2;
+    optional int32 status = 3;
+    optional bytes body = 4;
+    map<string, string> headers = 5;
+}
+

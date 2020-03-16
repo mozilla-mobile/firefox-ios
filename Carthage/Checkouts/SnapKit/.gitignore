@@ -1,0 +1,9 @@
+.build/
+project.xcworkspace
+xcuserdata
+Examples/
+.DS_Store
+Gemfile
+Gemfile.lock
+*.sketch
+.swiftpm

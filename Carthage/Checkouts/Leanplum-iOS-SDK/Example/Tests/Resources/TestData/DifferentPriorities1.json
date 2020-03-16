@@ -1,0 +1,103 @@
+{
+  "1": {
+    "action": "Alert",
+    "countdown": 86400,
+    "vars": {
+      "Dismiss action": "",
+      "Message": "priority-1-a",
+      "Title": "priority-1-a",
+      "Dismiss text": "OK",
+      "__name__": "Alert"
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "priority": 1,
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  },
+  "2": {
+    "action": "Confirm",
+    "countdown": 86400,
+    "vars": {
+      "Cancel action": "",
+      "Message": "priority-2-a",
+      "Title": "priority-2-a",
+      "__name__": "Confirm",
+      "Accept text": "Yes",
+      "Cancel text": "No",
+      "Accept action": ""
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "priority": 2,
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  },
+  "3": {
+    "action": "Alert",
+    "countdown": 86400,
+    "vars": {
+      "Dismiss action": "",
+      "Message": "priority-3-a",
+      "Title": "priority-3-a",
+      "Dismiss text": "OK",
+      "__name__": "Alert"
+    },
+    "whenLimits": {
+      "verb": "AND",
+      "children": [
+        {
+          "objects": [],
+          "noun": "999",
+          "subject": "times",
+          "verb": "limitUser"
+        }
+      ]
+    },
+    "priority": 3,
+    "whenTriggers": {
+      "verb": "OR",
+      "children": [
+        {
+          "objects": [],
+          "subject": "start",
+          "verb": ""
+        }
+      ]
+    }
+  }
+}

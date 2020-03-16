@@ -1,0 +1,39 @@
+// Protos/unittest_swift_extension2.proto - test proto
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2016 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+// -----------------------------------------------------------------------------
+///
+/// Test naming of extensions that differ only in proto package. This is a
+/// clone of unittest_swift_extension3.proto, but with a different proto package
+/// and different extension numbers.
+///
+// -----------------------------------------------------------------------------
+
+syntax = "proto2";
+
+package protobuf_unittest.extend2;
+
+import "unittest_swift_extension.proto";
+
+message MyMessage {
+  extend protobuf_unittest.extend.Foo.Bar.Baz {
+     optional string b = 210;
+     optional group C = 211 {
+        optional int64 c = 1210;
+     }
+  }
+}
+
+extend protobuf_unittest.extend.Foo.Bar.Baz {
+  optional string b = 220;
+  optional group C = 221 {
+    optional int64 c = 1220;
+  }
+}

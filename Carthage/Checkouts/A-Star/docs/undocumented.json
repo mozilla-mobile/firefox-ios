@@ -1,0 +1,12 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/damiaan/Documents/Projecten/A-Star/Sources/AStar/Node.swift",
+      "line": null,
+      "symbol": "Step",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/damiaan/Documents/Projecten/A-Star"
+}

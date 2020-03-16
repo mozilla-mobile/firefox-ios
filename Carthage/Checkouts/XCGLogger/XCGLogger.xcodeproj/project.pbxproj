@@ -1,0 +1,2003 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5501A3841D761F9A00CB8ABE /* BaseDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3831D761F9A00CB8ABE /* BaseDestination.swift */; };
+		5501A3851D761F9A00CB8ABE /* BaseDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3831D761F9A00CB8ABE /* BaseDestination.swift */; };
+		5501A3861D761F9A00CB8ABE /* BaseDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3831D761F9A00CB8ABE /* BaseDestination.swift */; };
+		5501A3871D761F9A00CB8ABE /* BaseDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3831D761F9A00CB8ABE /* BaseDestination.swift */; };
+		5501A3891D7624B900CB8ABE /* DestinationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3881D7624B900CB8ABE /* DestinationProtocol.swift */; };
+		5501A38A1D7624B900CB8ABE /* DestinationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3881D7624B900CB8ABE /* DestinationProtocol.swift */; };
+		5501A38B1D7624B900CB8ABE /* DestinationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3881D7624B900CB8ABE /* DestinationProtocol.swift */; };
+		5501A38C1D7624B900CB8ABE /* DestinationProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3881D7624B900CB8ABE /* DestinationProtocol.swift */; };
+		5501A38E1D76250600CB8ABE /* ConsoleDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A38D1D76250600CB8ABE /* ConsoleDestination.swift */; };
+		5501A38F1D76250600CB8ABE /* ConsoleDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A38D1D76250600CB8ABE /* ConsoleDestination.swift */; };
+		5501A3901D76250600CB8ABE /* ConsoleDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A38D1D76250600CB8ABE /* ConsoleDestination.swift */; };
+		5501A3911D76250600CB8ABE /* ConsoleDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A38D1D76250600CB8ABE /* ConsoleDestination.swift */; };
+		5501A3931D76251600CB8ABE /* AppleSystemLogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3921D76251600CB8ABE /* AppleSystemLogDestination.swift */; };
+		5501A3941D76251600CB8ABE /* AppleSystemLogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3921D76251600CB8ABE /* AppleSystemLogDestination.swift */; };
+		5501A3951D76251600CB8ABE /* AppleSystemLogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3921D76251600CB8ABE /* AppleSystemLogDestination.swift */; };
+		5501A3961D76251600CB8ABE /* AppleSystemLogDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3921D76251600CB8ABE /* AppleSystemLogDestination.swift */; };
+		5501A3981D76256500CB8ABE /* FileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3971D76256500CB8ABE /* FileDestination.swift */; };
+		5501A3991D76256500CB8ABE /* FileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3971D76256500CB8ABE /* FileDestination.swift */; };
+		5501A39A1D76256500CB8ABE /* FileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3971D76256500CB8ABE /* FileDestination.swift */; };
+		5501A39B1D76256500CB8ABE /* FileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3971D76256500CB8ABE /* FileDestination.swift */; };
+		5501A3A51D7625D900CB8ABE /* TestDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A39C1D76258600CB8ABE /* TestDestination.swift */; };
+		5501A3A61D7625D900CB8ABE /* TestDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A39C1D76258600CB8ABE /* TestDestination.swift */; };
+		5501A3A71D7625D900CB8ABE /* TestDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A39C1D76258600CB8ABE /* TestDestination.swift */; };
+		5501A3A81D7625DA00CB8ABE /* TestDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A39C1D76258600CB8ABE /* TestDestination.swift */; };
+		5501A3AA1D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3A91D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift */; };
+		5501A3AB1D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3A91D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift */; };
+		5501A3AC1D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3A91D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift */; };
+		5501A3AD1D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3A91D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift */; };
+		5501A3B51D762DD500CB8ABE /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3B41D762DD500CB8ABE /* HelperFunctions.swift */; };
+		5501A3B61D762DD500CB8ABE /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3B41D762DD500CB8ABE /* HelperFunctions.swift */; };
+		5501A3B71D762DD500CB8ABE /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3B41D762DD500CB8ABE /* HelperFunctions.swift */; };
+		5501A3B81D762DD500CB8ABE /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3B41D762DD500CB8ABE /* HelperFunctions.swift */; };
+		5501A3BA1D762E1B00CB8ABE /* LogDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3B91D762E1B00CB8ABE /* LogDetails.swift */; };
+		5501A3BB1D762E1B00CB8ABE /* LogDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3B91D762E1B00CB8ABE /* LogDetails.swift */; };
+		5501A3BC1D762E1B00CB8ABE /* LogDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3B91D762E1B00CB8ABE /* LogDetails.swift */; };
+		5501A3BD1D762E1B00CB8ABE /* LogDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3B91D762E1B00CB8ABE /* LogDetails.swift */; };
+		5501A3E81D77506F00CB8ABE /* ANSIColorLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E51D77506F00CB8ABE /* ANSIColorLogFormatter.swift */; };
+		5501A3E91D77506F00CB8ABE /* ANSIColorLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E51D77506F00CB8ABE /* ANSIColorLogFormatter.swift */; };
+		5501A3EA1D77506F00CB8ABE /* ANSIColorLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E51D77506F00CB8ABE /* ANSIColorLogFormatter.swift */; };
+		5501A3EB1D77506F00CB8ABE /* ANSIColorLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E51D77506F00CB8ABE /* ANSIColorLogFormatter.swift */; };
+		5501A3EC1D77506F00CB8ABE /* LogFormatterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E61D77506F00CB8ABE /* LogFormatterProtocol.swift */; };
+		5501A3ED1D77506F00CB8ABE /* LogFormatterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E61D77506F00CB8ABE /* LogFormatterProtocol.swift */; };
+		5501A3EE1D77506F00CB8ABE /* LogFormatterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E61D77506F00CB8ABE /* LogFormatterProtocol.swift */; };
+		5501A3EF1D77506F00CB8ABE /* LogFormatterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E61D77506F00CB8ABE /* LogFormatterProtocol.swift */; };
+		5501A3F01D77506F00CB8ABE /* XcodeColorsLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E71D77506F00CB8ABE /* XcodeColorsLogFormatter.swift */; };
+		5501A3F11D77506F00CB8ABE /* XcodeColorsLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E71D77506F00CB8ABE /* XcodeColorsLogFormatter.swift */; };
+		5501A3F21D77506F00CB8ABE /* XcodeColorsLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E71D77506F00CB8ABE /* XcodeColorsLogFormatter.swift */; };
+		5501A3F31D77506F00CB8ABE /* XcodeColorsLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5501A3E71D77506F00CB8ABE /* XcodeColorsLogFormatter.swift */; };
+		554DF41019D76FA9005708BE /* XCGLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DF40F19D76FA9005708BE /* XCGLogger.swift */; };
+		554DF43319D77155005708BE /* XCGLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DF40F19D76FA9005708BE /* XCGLogger.swift */; };
+		556DA17F1D78B41600C7E546 /* FileNameFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556DA17D1D78B41600C7E546 /* FileNameFilter.swift */; };
+		556DA1801D78B41600C7E546 /* FileNameFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556DA17D1D78B41600C7E546 /* FileNameFilter.swift */; };
+		556DA1811D78B41600C7E546 /* FileNameFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556DA17D1D78B41600C7E546 /* FileNameFilter.swift */; };
+		556DA1821D78B41600C7E546 /* FileNameFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556DA17D1D78B41600C7E546 /* FileNameFilter.swift */; };
+		556DA1831D78B41600C7E546 /* FilterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556DA17E1D78B41600C7E546 /* FilterProtocol.swift */; };
+		556DA1841D78B41600C7E546 /* FilterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556DA17E1D78B41600C7E546 /* FilterProtocol.swift */; };
+		556DA1851D78B41600C7E546 /* FilterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556DA17E1D78B41600C7E546 /* FilterProtocol.swift */; };
+		556DA1861D78B41600C7E546 /* FilterProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556DA17E1D78B41600C7E546 /* FilterProtocol.swift */; };
+		557C47E41BA125F800C9A174 /* XCGLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DF40F19D76FA9005708BE /* XCGLogger.swift */; };
+		558A04531E95A6A200D975BD /* AutoRotatingFileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A04521E95A6A200D975BD /* AutoRotatingFileDestination.swift */; };
+		558A04541E95A6A200D975BD /* AutoRotatingFileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A04521E95A6A200D975BD /* AutoRotatingFileDestination.swift */; };
+		558A04551E95A6A200D975BD /* AutoRotatingFileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A04521E95A6A200D975BD /* AutoRotatingFileDestination.swift */; };
+		558A04561E95A6A200D975BD /* AutoRotatingFileDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A04521E95A6A200D975BD /* AutoRotatingFileDestination.swift */; };
+		558A04581E95A6AF00D975BD /* URL+XCGAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A04571E95A6AF00D975BD /* URL+XCGAdditions.swift */; };
+		558A04591E95A6AF00D975BD /* URL+XCGAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A04571E95A6AF00D975BD /* URL+XCGAdditions.swift */; };
+		558A045A1E95A6AF00D975BD /* URL+XCGAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A04571E95A6AF00D975BD /* URL+XCGAdditions.swift */; };
+		558A045B1E95A6AF00D975BD /* URL+XCGAdditions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A04571E95A6AF00D975BD /* URL+XCGAdditions.swift */; };
+		558A045D1E95A6E600D975BD /* BaseQueuedDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A045C1E95A6E600D975BD /* BaseQueuedDestination.swift */; };
+		558A045E1E95A6E600D975BD /* BaseQueuedDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A045C1E95A6E600D975BD /* BaseQueuedDestination.swift */; };
+		558A045F1E95A6E600D975BD /* BaseQueuedDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A045C1E95A6E600D975BD /* BaseQueuedDestination.swift */; };
+		558A04601E95A6E600D975BD /* BaseQueuedDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558A045C1E95A6E600D975BD /* BaseQueuedDestination.swift */; };
+		558EEB7E1D6BAC61006A9C7A /* XCGLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3EE5719D76F280068C3A7 /* XCGLoggerTests.swift */; };
+		558EEB801D6BAC61006A9C7A /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55E3EE4519D76F280068C3A7 /* XCGLogger.framework */; };
+		558EEB8B1D6BAC66006A9C7A /* XCGLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3EE5719D76F280068C3A7 /* XCGLoggerTests.swift */; };
+		558EEB8D1D6BAC66006A9C7A /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55E3EE4519D76F280068C3A7 /* XCGLogger.framework */; };
+		55A4B4E91D7A99FB0006463B /* TagFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4E81D7A99FB0006463B /* TagFilter.swift */; };
+		55A4B4EA1D7A99FB0006463B /* TagFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4E81D7A99FB0006463B /* TagFilter.swift */; };
+		55A4B4EB1D7A99FB0006463B /* TagFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4E81D7A99FB0006463B /* TagFilter.swift */; };
+		55A4B4EC1D7A99FB0006463B /* TagFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4E81D7A99FB0006463B /* TagFilter.swift */; };
+		55A4B4EE1D7AADA00006463B /* UserInfoFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4ED1D7AADA00006463B /* UserInfoFilter.swift */; };
+		55A4B4EF1D7AADA00006463B /* UserInfoFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4ED1D7AADA00006463B /* UserInfoFilter.swift */; };
+		55A4B4F01D7AADA00006463B /* UserInfoFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4ED1D7AADA00006463B /* UserInfoFilter.swift */; };
+		55A4B4F11D7AADA00006463B /* UserInfoFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4ED1D7AADA00006463B /* UserInfoFilter.swift */; };
+		55A4B4F31D7AB0980006463B /* DevFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4F21D7AB0980006463B /* DevFilter.swift */; };
+		55A4B4F41D7AB0980006463B /* DevFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4F21D7AB0980006463B /* DevFilter.swift */; };
+		55A4B4F51D7AB0980006463B /* DevFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4F21D7AB0980006463B /* DevFilter.swift */; };
+		55A4B4F61D7AB0980006463B /* DevFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A4B4F21D7AB0980006463B /* DevFilter.swift */; };
+		55AC33DF1D8FB4FE00614D28 /* UserInfoHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AC33DE1D8FB4FE00614D28 /* UserInfoHelpers.swift */; };
+		55AC33E01D8FB4FE00614D28 /* UserInfoHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AC33DE1D8FB4FE00614D28 /* UserInfoHelpers.swift */; };
+		55AC33E11D8FB4FE00614D28 /* UserInfoHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AC33DE1D8FB4FE00614D28 /* UserInfoHelpers.swift */; };
+		55AC33E21D8FB4FE00614D28 /* UserInfoHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AC33DE1D8FB4FE00614D28 /* UserInfoHelpers.swift */; };
+		55BB1EFA1B79DC7500709779 /* XCGLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3EE5719D76F280068C3A7 /* XCGLoggerTests.swift */; };
+		55BB1EFC1B79DC7500709779 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55E3EE4519D76F280068C3A7 /* XCGLogger.framework */; };
+		55C4DD5C1D781D850074C21F /* Base64LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4DD5B1D781D850074C21F /* Base64LogFormatter.swift */; };
+		55C4DD5D1D781D850074C21F /* Base64LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4DD5B1D781D850074C21F /* Base64LogFormatter.swift */; };
+		55C4DD5E1D781D850074C21F /* Base64LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4DD5B1D781D850074C21F /* Base64LogFormatter.swift */; };
+		55C4DD5F1D781D850074C21F /* Base64LogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C4DD5B1D781D850074C21F /* Base64LogFormatter.swift */; };
+		55DD51981D915C2C0025B5AD /* PrePostFixLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD51971D915C2C0025B5AD /* PrePostFixLogFormatter.swift */; };
+		55DD51991D915C2C0025B5AD /* PrePostFixLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD51971D915C2C0025B5AD /* PrePostFixLogFormatter.swift */; };
+		55DD519A1D915C2C0025B5AD /* PrePostFixLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD51971D915C2C0025B5AD /* PrePostFixLogFormatter.swift */; };
+		55DD519B1D915C2C0025B5AD /* PrePostFixLogFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD51971D915C2C0025B5AD /* PrePostFixLogFormatter.swift */; };
+		55E3EE5119D76F280068C3A7 /* XCGLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55E3EE4519D76F280068C3A7 /* XCGLogger.framework */; };
+		55E3EE5819D76F280068C3A7 /* XCGLoggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3EE5719D76F280068C3A7 /* XCGLoggerTests.swift */; };
+		70CB94181B99E728007802FF /* XCGLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DF40F19D76FA9005708BE /* XCGLogger.swift */; };
+		7573B4CD1DE4173E00726CE1 /* ObjcExceptionBridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 7573B4C01DE4146300726CE1 /* ObjcExceptionBridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7573B4D01DE4182B00726CE1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7573B4CF1DE4182B00726CE1 /* Foundation.framework */; };
+		7573B4DA1DE41AC200726CE1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7573B4CF1DE4182B00726CE1 /* Foundation.framework */; };
+		7573B4DC1DE41AC200726CE1 /* ObjcExceptionBridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 7573B4C01DE4146300726CE1 /* ObjcExceptionBridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7573B4E91DE41B1800726CE1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7573B4CF1DE4182B00726CE1 /* Foundation.framework */; };
+		7573B4EB1DE41B1800726CE1 /* ObjcExceptionBridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 7573B4C01DE4146300726CE1 /* ObjcExceptionBridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7573B4F41DE41B3B00726CE1 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7573B4F01DE41B1800726CE1 /* ObjcExceptionBridging.framework */; };
+		7573B4F51DE41B4500726CE1 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7573B4E11DE41AC200726CE1 /* ObjcExceptionBridging.framework */; };
+		7573B4F61DE41B4C00726CE1 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7573B4BE1DE4146300726CE1 /* ObjcExceptionBridging.framework */; };
+		7573B4FA1DE41B5000726CE1 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7573B4CF1DE4182B00726CE1 /* Foundation.framework */; };
+		7573B4FC1DE41B5000726CE1 /* ObjcExceptionBridging.h in Headers */ = {isa = PBXBuildFile; fileRef = 7573B4C01DE4146300726CE1 /* ObjcExceptionBridging.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7573B5051DE41B7000726CE1 /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7573B5011DE41B5000726CE1 /* ObjcExceptionBridging.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		550F31521D6C270E00919165 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55E3EE3C19D76F280068C3A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 554DF41619D76FE7005708BE;
+			remoteInfo = "XCGLogger (OS X)";
+		};
+		550F31541D6C271600919165 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55E3EE3C19D76F280068C3A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 70CB94161B99E728007802FF;
+			remoteInfo = "XCGLogger (watchOS)";
+		};
+		550F31561D6C271F00919165 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55E3EE3C19D76F280068C3A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5515A3DE1BA119FA0047BA31;
+			remoteInfo = "XCGLogger (tvOS)";
+		};
+		55E3EE5219D76F280068C3A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55E3EE3C19D76F280068C3A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 55E3EE4419D76F280068C3A7;
+			remoteInfo = XCGLogger;
+		};
+		7573B4C81DE414CD00726CE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55E3EE3C19D76F280068C3A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7573B4BD1DE4146300726CE1;
+			remoteInfo = ObjcExceptionBridging;
+		};
+		7573B4E31DE41AF500726CE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55E3EE3C19D76F280068C3A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7573B4D71DE41AC200726CE1;
+			remoteInfo = "ObjcExceptionBridging (macOS)";
+		};
+		7573B4F21DE41B3100726CE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55E3EE3C19D76F280068C3A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7573B4E61DE41B1800726CE1;
+			remoteInfo = "ObjcExceptionBridging (watchOS)";
+		};
+		7573B5031DE41B6A00726CE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 55E3EE3C19D76F280068C3A7 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 7573B4F71DE41B5000726CE1;
+			remoteInfo = "ObjcExceptionBridging (tvOS)";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		5501A3831D761F9A00CB8ABE /* BaseDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseDestination.swift; sourceTree = "<group>"; };
+		5501A3881D7624B900CB8ABE /* DestinationProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DestinationProtocol.swift; sourceTree = "<group>"; };
+		5501A38D1D76250600CB8ABE /* ConsoleDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConsoleDestination.swift; sourceTree = "<group>"; };
+		5501A3921D76251600CB8ABE /* AppleSystemLogDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleSystemLogDestination.swift; sourceTree = "<group>"; };
+		5501A3971D76256500CB8ABE /* FileDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileDestination.swift; sourceTree = "<group>"; };
+		5501A39C1D76258600CB8ABE /* TestDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDestination.swift; sourceTree = "<group>"; };
+		5501A3A91D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+XCGAdditions.swift"; sourceTree = "<group>"; };
+		5501A3B41D762DD500CB8ABE /* HelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
+		5501A3B91D762E1B00CB8ABE /* LogDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogDetails.swift; sourceTree = "<group>"; };
+		5501A3E51D77506F00CB8ABE /* ANSIColorLogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ANSIColorLogFormatter.swift; sourceTree = "<group>"; };
+		5501A3E61D77506F00CB8ABE /* LogFormatterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogFormatterProtocol.swift; sourceTree = "<group>"; };
+		5501A3E71D77506F00CB8ABE /* XcodeColorsLogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeColorsLogFormatter.swift; sourceTree = "<group>"; };
+		5515A3DF1BA119FA0047BA31 /* XCGLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XCGLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		554DF40F19D76FA9005708BE /* XCGLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XCGLogger.swift; sourceTree = "<group>"; };
+		554DF41719D76FE7005708BE /* XCGLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XCGLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		556DA17D1D78B41600C7E546 /* FileNameFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileNameFilter.swift; sourceTree = "<group>"; };
+		556DA17E1D78B41600C7E546 /* FilterProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterProtocol.swift; sourceTree = "<group>"; };
+		558A04521E95A6A200D975BD /* AutoRotatingFileDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoRotatingFileDestination.swift; sourceTree = "<group>"; };
+		558A04571E95A6AF00D975BD /* URL+XCGAdditions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+XCGAdditions.swift"; sourceTree = "<group>"; };
+		558A045C1E95A6E600D975BD /* BaseQueuedDestination.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseQueuedDestination.swift; sourceTree = "<group>"; };
+		558EEB851D6BAC61006A9C7A /* XCGLoggerTests (watchOS).xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XCGLoggerTests (watchOS).xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		558EEB921D6BAC66006A9C7A /* XCGLoggerTests (tvOS).xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XCGLoggerTests (tvOS).xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55A4B4E81D7A99FB0006463B /* TagFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TagFilter.swift; sourceTree = "<group>"; };
+		55A4B4ED1D7AADA00006463B /* UserInfoFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoFilter.swift; sourceTree = "<group>"; };
+		55A4B4F21D7AB0980006463B /* DevFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevFilter.swift; sourceTree = "<group>"; };
+		55AC33DE1D8FB4FE00614D28 /* UserInfoHelpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserInfoHelpers.swift; sourceTree = "<group>"; };
+		55BB1F011B79DC7500709779 /* XCGLoggerTests (macOS).xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XCGLoggerTests (macOS).xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55C4DD5B1D781D850074C21F /* Base64LogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Base64LogFormatter.swift; sourceTree = "<group>"; };
+		55DD51971D915C2C0025B5AD /* PrePostFixLogFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PrePostFixLogFormatter.swift; sourceTree = "<group>"; };
+		55E37F5D1BFC646800392B9C /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
+		55E37F5E1BFC647400392B9C /* Info-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
+		55E37F601BFC648800392B9C /* Info-tvOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-tvOS.plist"; sourceTree = "<group>"; };
+		55E3EE4519D76F280068C3A7 /* XCGLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XCGLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		55E3EE5019D76F280068C3A7 /* XCGLoggerTests (iOS).xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "XCGLoggerTests (iOS).xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		55E3EE5619D76F280068C3A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55E3EE5719D76F280068C3A7 /* XCGLoggerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCGLoggerTests.swift; sourceTree = "<group>"; };
+		70CB94201B99E728007802FF /* XCGLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XCGLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7573B4BE1DE4146300726CE1 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjcExceptionBridging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7573B4C01DE4146300726CE1 /* ObjcExceptionBridging.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ObjcExceptionBridging.h; path = include/ObjcExceptionBridging.h; sourceTree = "<group>"; };
+		7573B4C11DE4146300726CE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7573B4CF1DE4182B00726CE1 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		7573B4E11DE41AC200726CE1 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjcExceptionBridging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7573B4F01DE41B1800726CE1 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjcExceptionBridging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7573B5011DE41B5000726CE1 /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ObjcExceptionBridging.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5515A3DB1BA119FA0047BA31 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B5051DE41B7000726CE1 /* ObjcExceptionBridging.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		554DF41319D76FE7005708BE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4F51DE41B4500726CE1 /* ObjcExceptionBridging.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		558EEB7F1D6BAC61006A9C7A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				558EEB801D6BAC61006A9C7A /* XCGLogger.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		558EEB8C1D6BAC66006A9C7A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				558EEB8D1D6BAC66006A9C7A /* XCGLogger.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55BB1EFB1B79DC7500709779 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55BB1EFC1B79DC7500709779 /* XCGLogger.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55E3EE4119D76F280068C3A7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4F61DE41B4C00726CE1 /* ObjcExceptionBridging.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55E3EE4D19D76F280068C3A7 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55E3EE5119D76F280068C3A7 /* XCGLogger.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70CB94191B99E728007802FF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4F41DE41B3B00726CE1 /* ObjcExceptionBridging.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4BA1DE4146300726CE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4D01DE4182B00726CE1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4D91DE41AC200726CE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4DA1DE41AC200726CE1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4E81DE41B1800726CE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4E91DE41B1800726CE1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4F91DE41B5000726CE1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4FA1DE41B5000726CE1 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5501A3801D761F4E00CB8ABE /* Destinations */ = {
+			isa = PBXGroup;
+			children = (
+				5501A3881D7624B900CB8ABE /* DestinationProtocol.swift */,
+				5501A3831D761F9A00CB8ABE /* BaseDestination.swift */,
+				558A045C1E95A6E600D975BD /* BaseQueuedDestination.swift */,
+				5501A38D1D76250600CB8ABE /* ConsoleDestination.swift */,
+				5501A3921D76251600CB8ABE /* AppleSystemLogDestination.swift */,
+				5501A3971D76256500CB8ABE /* FileDestination.swift */,
+				558A04521E95A6A200D975BD /* AutoRotatingFileDestination.swift */,
+				5501A39C1D76258600CB8ABE /* TestDestination.swift */,
+			);
+			path = Destinations;
+			sourceTree = "<group>";
+		};
+		5501A3811D761F4E00CB8ABE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5501A3A91D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift */,
+				558A04571E95A6AF00D975BD /* URL+XCGAdditions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		5501A3B31D762CDE00CB8ABE /* Misc */ = {
+			isa = PBXGroup;
+			children = (
+				55AC33D21D8FB4C700614D28 /* Optional */,
+				5501A3B91D762E1B00CB8ABE /* LogDetails.swift */,
+				5501A3B41D762DD500CB8ABE /* HelperFunctions.swift */,
+			);
+			path = Misc;
+			sourceTree = "<group>";
+		};
+		5501A3C41D76640F00CB8ABE /* ObjectiveC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ObjectiveC;
+			sourceTree = "<group>";
+		};
+		5501A3E41D77506F00CB8ABE /* LogFormatters */ = {
+			isa = PBXGroup;
+			children = (
+				55AC33D81D8FB4D100614D28 /* Optional */,
+				5501A3E61D77506F00CB8ABE /* LogFormatterProtocol.swift */,
+				5501A3E51D77506F00CB8ABE /* ANSIColorLogFormatter.swift */,
+				5501A3E71D77506F00CB8ABE /* XcodeColorsLogFormatter.swift */,
+				55DD51971D915C2C0025B5AD /* PrePostFixLogFormatter.swift */,
+				55C4DD5B1D781D850074C21F /* Base64LogFormatter.swift */,
+			);
+			path = LogFormatters;
+			sourceTree = "<group>";
+		};
+		556DA17C1D78B41600C7E546 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				556DA17E1D78B41600C7E546 /* FilterProtocol.swift */,
+				556DA17D1D78B41600C7E546 /* FileNameFilter.swift */,
+				55A4B4ED1D7AADA00006463B /* UserInfoFilter.swift */,
+				55A4B4E81D7A99FB0006463B /* TagFilter.swift */,
+				55A4B4F21D7AB0980006463B /* DevFilter.swift */,
+			);
+			path = Filters;
+			sourceTree = "<group>";
+		};
+		55AC33D21D8FB4C700614D28 /* Optional */ = {
+			isa = PBXGroup;
+			children = (
+				55AC33DE1D8FB4FE00614D28 /* UserInfoHelpers.swift */,
+			);
+			path = Optional;
+			sourceTree = "<group>";
+		};
+		55AC33D81D8FB4D100614D28 /* Optional */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Optional;
+			sourceTree = "<group>";
+		};
+		55DA396419D7737B0032F026 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				55E37F5D1BFC646800392B9C /* Info-iOS.plist */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		55DA396619D7737B0032F026 /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				55E37F5E1BFC647400392B9C /* Info-macOS.plist */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		55E37F5F1BFC648800392B9C /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				55E37F601BFC648800392B9C /* Info-tvOS.plist */,
+			);
+			path = tvOS;
+			sourceTree = "<group>";
+		};
+		55E3EE3B19D76F280068C3A7 = {
+			isa = PBXGroup;
+			children = (
+				55E3EE4719D76F280068C3A7 /* XCGLogger */,
+				55E3EE5419D76F280068C3A7 /* XCGLoggerTests */,
+				7573B4BF1DE4146300726CE1 /* ObjcExceptionBridging */,
+				55E3EE4619D76F280068C3A7 /* Products */,
+				7573B4CE1DE4182B00726CE1 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		55E3EE4619D76F280068C3A7 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				55E3EE4519D76F280068C3A7 /* XCGLogger.framework */,
+				55E3EE5019D76F280068C3A7 /* XCGLoggerTests (iOS).xctest */,
+				554DF41719D76FE7005708BE /* XCGLogger.framework */,
+				55BB1F011B79DC7500709779 /* XCGLoggerTests (macOS).xctest */,
+				70CB94201B99E728007802FF /* XCGLogger.framework */,
+				558EEB851D6BAC61006A9C7A /* XCGLoggerTests (watchOS).xctest */,
+				5515A3DF1BA119FA0047BA31 /* XCGLogger.framework */,
+				558EEB921D6BAC66006A9C7A /* XCGLoggerTests (tvOS).xctest */,
+				7573B4BE1DE4146300726CE1 /* ObjcExceptionBridging.framework */,
+				7573B4E11DE41AC200726CE1 /* ObjcExceptionBridging.framework */,
+				7573B4F01DE41B1800726CE1 /* ObjcExceptionBridging.framework */,
+				7573B5011DE41B5000726CE1 /* ObjcExceptionBridging.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		55E3EE4719D76F280068C3A7 /* XCGLogger */ = {
+			isa = PBXGroup;
+			children = (
+				554DF40F19D76FA9005708BE /* XCGLogger.swift */,
+				5501A3801D761F4E00CB8ABE /* Destinations */,
+				5501A3811D761F4E00CB8ABE /* Extensions */,
+				5501A3E41D77506F00CB8ABE /* LogFormatters */,
+				556DA17C1D78B41600C7E546 /* Filters */,
+				5501A3B31D762CDE00CB8ABE /* Misc */,
+				5501A3C41D76640F00CB8ABE /* ObjectiveC */,
+				55E3EE4819D76F280068C3A7 /* Supporting Files */,
+			);
+			name = XCGLogger;
+			path = Sources/XCGLogger;
+			sourceTree = "<group>";
+		};
+		55E3EE4819D76F280068C3A7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				55DA396419D7737B0032F026 /* iOS */,
+				55DA396619D7737B0032F026 /* macOS */,
+				55E37F5F1BFC648800392B9C /* tvOS */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		55E3EE5419D76F280068C3A7 /* XCGLoggerTests */ = {
+			isa = PBXGroup;
+			children = (
+				55E3EE5719D76F280068C3A7 /* XCGLoggerTests.swift */,
+				55E3EE5519D76F280068C3A7 /* Supporting Files */,
+			);
+			name = XCGLoggerTests;
+			path = Tests/XCGLoggerTests;
+			sourceTree = "<group>";
+		};
+		55E3EE5519D76F280068C3A7 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				55E3EE5619D76F280068C3A7 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7573B4BF1DE4146300726CE1 /* ObjcExceptionBridging */ = {
+			isa = PBXGroup;
+			children = (
+				7573B4C01DE4146300726CE1 /* ObjcExceptionBridging.h */,
+				7573B4C11DE4146300726CE1 /* Info.plist */,
+			);
+			name = ObjcExceptionBridging;
+			path = Sources/ObjcExceptionBridging;
+			sourceTree = "<group>";
+		};
+		7573B4CE1DE4182B00726CE1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7573B4CF1DE4182B00726CE1 /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		5515A3DC1BA119FA0047BA31 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		554DF41419D76FE7005708BE /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55E3EE4219D76F280068C3A7 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70CB941A1B99E728007802FF /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4BB1DE4146300726CE1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4CD1DE4173E00726CE1 /* ObjcExceptionBridging.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4DB1DE41AC200726CE1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4DC1DE41AC200726CE1 /* ObjcExceptionBridging.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4EA1DE41B1800726CE1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4EB1DE41B1800726CE1 /* ObjcExceptionBridging.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4FB1DE41B5000726CE1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7573B4FC1DE41B5000726CE1 /* ObjcExceptionBridging.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		5515A3DE1BA119FA0047BA31 /* XCGLogger (tvOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5515A3E61BA119FA0047BA31 /* Build configuration list for PBXNativeTarget "XCGLogger (tvOS)" */;
+			buildPhases = (
+				5515A3DA1BA119FA0047BA31 /* Sources */,
+				5515A3DB1BA119FA0047BA31 /* Frameworks */,
+				5515A3DC1BA119FA0047BA31 /* Headers */,
+				5515A3DD1BA119FA0047BA31 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7573B5041DE41B6A00726CE1 /* PBXTargetDependency */,
+			);
+			name = "XCGLogger (tvOS)";
+			productName = "XCGLogger (tvOS)";
+			productReference = 5515A3DF1BA119FA0047BA31 /* XCGLogger.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		554DF41619D76FE7005708BE /* XCGLogger (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 554DF42A19D76FE7005708BE /* Build configuration list for PBXNativeTarget "XCGLogger (macOS)" */;
+			buildPhases = (
+				554DF41219D76FE7005708BE /* Sources */,
+				554DF41319D76FE7005708BE /* Frameworks */,
+				554DF41419D76FE7005708BE /* Headers */,
+				554DF41519D76FE7005708BE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7573B4E41DE41AF500726CE1 /* PBXTargetDependency */,
+			);
+			name = "XCGLogger (macOS)";
+			productName = "XCGLogger (OS X)";
+			productReference = 554DF41719D76FE7005708BE /* XCGLogger.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		558EEB7A1D6BAC61006A9C7A /* XCGLoggerTests (watchOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 558EEB821D6BAC61006A9C7A /* Build configuration list for PBXNativeTarget "XCGLoggerTests (watchOS)" */;
+			buildPhases = (
+				558EEB7D1D6BAC61006A9C7A /* Sources */,
+				558EEB7F1D6BAC61006A9C7A /* Frameworks */,
+				558EEB811D6BAC61006A9C7A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				550F31551D6C271600919165 /* PBXTargetDependency */,
+			);
+			name = "XCGLoggerTests (watchOS)";
+			productName = XCGLoggerTests;
+			productReference = 558EEB851D6BAC61006A9C7A /* XCGLoggerTests (watchOS).xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		558EEB871D6BAC66006A9C7A /* XCGLoggerTests (tvOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 558EEB8F1D6BAC66006A9C7A /* Build configuration list for PBXNativeTarget "XCGLoggerTests (tvOS)" */;
+			buildPhases = (
+				558EEB8A1D6BAC66006A9C7A /* Sources */,
+				558EEB8C1D6BAC66006A9C7A /* Frameworks */,
+				558EEB8E1D6BAC66006A9C7A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				550F31571D6C271F00919165 /* PBXTargetDependency */,
+			);
+			name = "XCGLoggerTests (tvOS)";
+			productName = XCGLoggerTests;
+			productReference = 558EEB921D6BAC66006A9C7A /* XCGLoggerTests (tvOS).xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		55BB1EF51B79DC7500709779 /* XCGLoggerTests (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55BB1EFE1B79DC7500709779 /* Build configuration list for PBXNativeTarget "XCGLoggerTests (macOS)" */;
+			buildPhases = (
+				55BB1EF81B79DC7500709779 /* Sources */,
+				55BB1EFB1B79DC7500709779 /* Frameworks */,
+				55BB1EFD1B79DC7500709779 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				550F31531D6C270E00919165 /* PBXTargetDependency */,
+			);
+			name = "XCGLoggerTests (macOS)";
+			productName = XCGLoggerTests;
+			productReference = 55BB1F011B79DC7500709779 /* XCGLoggerTests (macOS).xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		55E3EE4419D76F280068C3A7 /* XCGLogger (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55E3EE5B19D76F280068C3A7 /* Build configuration list for PBXNativeTarget "XCGLogger (iOS)" */;
+			buildPhases = (
+				55E3EE4019D76F280068C3A7 /* Sources */,
+				55E3EE4119D76F280068C3A7 /* Frameworks */,
+				55E3EE4219D76F280068C3A7 /* Headers */,
+				55E3EE4319D76F280068C3A7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7573B4C91DE414CD00726CE1 /* PBXTargetDependency */,
+			);
+			name = "XCGLogger (iOS)";
+			productName = XCGLogger;
+			productReference = 55E3EE4519D76F280068C3A7 /* XCGLogger.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		55E3EE4F19D76F280068C3A7 /* XCGLoggerTests (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 55E3EE5E19D76F280068C3A7 /* Build configuration list for PBXNativeTarget "XCGLoggerTests (iOS)" */;
+			buildPhases = (
+				55E3EE4C19D76F280068C3A7 /* Sources */,
+				55E3EE4D19D76F280068C3A7 /* Frameworks */,
+				55E3EE4E19D76F280068C3A7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				55E3EE5319D76F280068C3A7 /* PBXTargetDependency */,
+			);
+			name = "XCGLoggerTests (iOS)";
+			productName = XCGLoggerTests;
+			productReference = 55E3EE5019D76F280068C3A7 /* XCGLoggerTests (iOS).xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		70CB94161B99E728007802FF /* XCGLogger (watchOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 70CB941D1B99E728007802FF /* Build configuration list for PBXNativeTarget "XCGLogger (watchOS)" */;
+			buildPhases = (
+				70CB94171B99E728007802FF /* Sources */,
+				70CB94191B99E728007802FF /* Frameworks */,
+				70CB941A1B99E728007802FF /* Headers */,
+				70CB941C1B99E728007802FF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7573B4F31DE41B3100726CE1 /* PBXTargetDependency */,
+			);
+			name = "XCGLogger (watchOS)";
+			productName = XCGLogger;
+			productReference = 70CB94201B99E728007802FF /* XCGLogger.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7573B4BD1DE4146300726CE1 /* ObjcExceptionBridging (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7573B4C31DE4146300726CE1 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging (iOS)" */;
+			buildPhases = (
+				7573B4B91DE4146300726CE1 /* Sources */,
+				7573B4BA1DE4146300726CE1 /* Frameworks */,
+				7573B4BB1DE4146300726CE1 /* Headers */,
+				7573B4BC1DE4146300726CE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ObjcExceptionBridging (iOS)";
+			productName = ObjcExceptionBridging;
+			productReference = 7573B4BE1DE4146300726CE1 /* ObjcExceptionBridging.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7573B4D71DE41AC200726CE1 /* ObjcExceptionBridging (macOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7573B4DE1DE41AC200726CE1 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging (macOS)" */;
+			buildPhases = (
+				7573B4D81DE41AC200726CE1 /* Sources */,
+				7573B4D91DE41AC200726CE1 /* Frameworks */,
+				7573B4DB1DE41AC200726CE1 /* Headers */,
+				7573B4DD1DE41AC200726CE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ObjcExceptionBridging (macOS)";
+			productName = ObjcExceptionBridging;
+			productReference = 7573B4E11DE41AC200726CE1 /* ObjcExceptionBridging.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7573B4E61DE41B1800726CE1 /* ObjcExceptionBridging (watchOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7573B4ED1DE41B1800726CE1 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging (watchOS)" */;
+			buildPhases = (
+				7573B4E71DE41B1800726CE1 /* Sources */,
+				7573B4E81DE41B1800726CE1 /* Frameworks */,
+				7573B4EA1DE41B1800726CE1 /* Headers */,
+				7573B4EC1DE41B1800726CE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ObjcExceptionBridging (watchOS)";
+			productName = ObjcExceptionBridging;
+			productReference = 7573B4F01DE41B1800726CE1 /* ObjcExceptionBridging.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		7573B4F71DE41B5000726CE1 /* ObjcExceptionBridging (tvOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7573B4FE1DE41B5000726CE1 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging (tvOS)" */;
+			buildPhases = (
+				7573B4F81DE41B5000726CE1 /* Sources */,
+				7573B4F91DE41B5000726CE1 /* Frameworks */,
+				7573B4FB1DE41B5000726CE1 /* Headers */,
+				7573B4FD1DE41B5000726CE1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ObjcExceptionBridging (tvOS)";
+			productName = ObjcExceptionBridging;
+			productReference = 7573B5011DE41B5000726CE1 /* ObjcExceptionBridging.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		55E3EE3C19D76F280068C3A7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 1020;
+				ORGANIZATIONNAME = "Cerebral Gardens";
+				TargetAttributes = {
+					5515A3DE1BA119FA0047BA31 = {
+						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
+					};
+					554DF41619D76FE7005708BE = {
+						CreatedOnToolsVersion = 6.1;
+						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
+					};
+					558EEB871D6BAC66006A9C7A = {
+						LastSwiftMigration = 0900;
+					};
+					55BB1EF51B79DC7500709779 = {
+						LastSwiftMigration = 0900;
+					};
+					55E3EE4419D76F280068C3A7 = {
+						CreatedOnToolsVersion = 6.1;
+						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
+					};
+					55E3EE4F19D76F280068C3A7 = {
+						CreatedOnToolsVersion = 6.1;
+						LastSwiftMigration = 1020;
+					};
+					70CB94161B99E728007802FF = {
+						LastSwiftMigration = 1020;
+						ProvisioningStyle = Automatic;
+					};
+					7573B4BD1DE4146300726CE1 = {
+						CreatedOnToolsVersion = 8.1;
+						ProvisioningStyle = Automatic;
+					};
+					7573B4D71DE41AC200726CE1 = {
+						ProvisioningStyle = Automatic;
+					};
+					7573B4E61DE41B1800726CE1 = {
+						ProvisioningStyle = Automatic;
+					};
+					7573B4F71DE41B5000726CE1 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 55E3EE3F19D76F280068C3A7 /* Build configuration list for PBXProject "XCGLogger" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 55E3EE3B19D76F280068C3A7;
+			productRefGroup = 55E3EE4619D76F280068C3A7 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				55E3EE4419D76F280068C3A7 /* XCGLogger (iOS) */,
+				554DF41619D76FE7005708BE /* XCGLogger (macOS) */,
+				70CB94161B99E728007802FF /* XCGLogger (watchOS) */,
+				5515A3DE1BA119FA0047BA31 /* XCGLogger (tvOS) */,
+				55E3EE4F19D76F280068C3A7 /* XCGLoggerTests (iOS) */,
+				55BB1EF51B79DC7500709779 /* XCGLoggerTests (macOS) */,
+				558EEB7A1D6BAC61006A9C7A /* XCGLoggerTests (watchOS) */,
+				558EEB871D6BAC66006A9C7A /* XCGLoggerTests (tvOS) */,
+				7573B4BD1DE4146300726CE1 /* ObjcExceptionBridging (iOS) */,
+				7573B4D71DE41AC200726CE1 /* ObjcExceptionBridging (macOS) */,
+				7573B4E61DE41B1800726CE1 /* ObjcExceptionBridging (watchOS) */,
+				7573B4F71DE41B5000726CE1 /* ObjcExceptionBridging (tvOS) */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5515A3DD1BA119FA0047BA31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		554DF41519D76FE7005708BE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		558EEB811D6BAC61006A9C7A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		558EEB8E1D6BAC66006A9C7A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55BB1EFD1B79DC7500709779 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55E3EE4319D76F280068C3A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55E3EE4E19D76F280068C3A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70CB941C1B99E728007802FF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4BC1DE4146300726CE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4DD1DE41AC200726CE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4EC1DE41B1800726CE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4FD1DE41B5000726CE1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5515A3DA1BA119FA0047BA31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55DD519B1D915C2C0025B5AD /* PrePostFixLogFormatter.swift in Sources */,
+				5501A3AD1D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift in Sources */,
+				5501A3911D76250600CB8ABE /* ConsoleDestination.swift in Sources */,
+				5501A38C1D7624B900CB8ABE /* DestinationProtocol.swift in Sources */,
+				558A04601E95A6E600D975BD /* BaseQueuedDestination.swift in Sources */,
+				55A4B4EC1D7A99FB0006463B /* TagFilter.swift in Sources */,
+				5501A3EB1D77506F00CB8ABE /* ANSIColorLogFormatter.swift in Sources */,
+				5501A3871D761F9A00CB8ABE /* BaseDestination.swift in Sources */,
+				55A4B4F11D7AADA00006463B /* UserInfoFilter.swift in Sources */,
+				5501A3A81D7625DA00CB8ABE /* TestDestination.swift in Sources */,
+				558A04561E95A6A200D975BD /* AutoRotatingFileDestination.swift in Sources */,
+				556DA1821D78B41600C7E546 /* FileNameFilter.swift in Sources */,
+				556DA1861D78B41600C7E546 /* FilterProtocol.swift in Sources */,
+				55AC33E21D8FB4FE00614D28 /* UserInfoHelpers.swift in Sources */,
+				5501A3BD1D762E1B00CB8ABE /* LogDetails.swift in Sources */,
+				5501A3F31D77506F00CB8ABE /* XcodeColorsLogFormatter.swift in Sources */,
+				5501A3B81D762DD500CB8ABE /* HelperFunctions.swift in Sources */,
+				55A4B4F61D7AB0980006463B /* DevFilter.swift in Sources */,
+				5501A3961D76251600CB8ABE /* AppleSystemLogDestination.swift in Sources */,
+				55C4DD5F1D781D850074C21F /* Base64LogFormatter.swift in Sources */,
+				5501A3EF1D77506F00CB8ABE /* LogFormatterProtocol.swift in Sources */,
+				558A045B1E95A6AF00D975BD /* URL+XCGAdditions.swift in Sources */,
+				5501A39B1D76256500CB8ABE /* FileDestination.swift in Sources */,
+				557C47E41BA125F800C9A174 /* XCGLogger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		554DF41219D76FE7005708BE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55DD51991D915C2C0025B5AD /* PrePostFixLogFormatter.swift in Sources */,
+				5501A3AB1D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift in Sources */,
+				5501A38F1D76250600CB8ABE /* ConsoleDestination.swift in Sources */,
+				5501A38A1D7624B900CB8ABE /* DestinationProtocol.swift in Sources */,
+				558A045E1E95A6E600D975BD /* BaseQueuedDestination.swift in Sources */,
+				55A4B4EA1D7A99FB0006463B /* TagFilter.swift in Sources */,
+				5501A3E91D77506F00CB8ABE /* ANSIColorLogFormatter.swift in Sources */,
+				5501A3851D761F9A00CB8ABE /* BaseDestination.swift in Sources */,
+				55A4B4EF1D7AADA00006463B /* UserInfoFilter.swift in Sources */,
+				5501A3A61D7625D900CB8ABE /* TestDestination.swift in Sources */,
+				558A04541E95A6A200D975BD /* AutoRotatingFileDestination.swift in Sources */,
+				556DA1801D78B41600C7E546 /* FileNameFilter.swift in Sources */,
+				556DA1841D78B41600C7E546 /* FilterProtocol.swift in Sources */,
+				55AC33E01D8FB4FE00614D28 /* UserInfoHelpers.swift in Sources */,
+				5501A3BB1D762E1B00CB8ABE /* LogDetails.swift in Sources */,
+				5501A3F11D77506F00CB8ABE /* XcodeColorsLogFormatter.swift in Sources */,
+				5501A3B61D762DD500CB8ABE /* HelperFunctions.swift in Sources */,
+				55A4B4F41D7AB0980006463B /* DevFilter.swift in Sources */,
+				5501A3941D76251600CB8ABE /* AppleSystemLogDestination.swift in Sources */,
+				55C4DD5D1D781D850074C21F /* Base64LogFormatter.swift in Sources */,
+				5501A3ED1D77506F00CB8ABE /* LogFormatterProtocol.swift in Sources */,
+				558A04591E95A6AF00D975BD /* URL+XCGAdditions.swift in Sources */,
+				5501A3991D76256500CB8ABE /* FileDestination.swift in Sources */,
+				554DF43319D77155005708BE /* XCGLogger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		558EEB7D1D6BAC61006A9C7A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				558EEB7E1D6BAC61006A9C7A /* XCGLoggerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		558EEB8A1D6BAC66006A9C7A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				558EEB8B1D6BAC66006A9C7A /* XCGLoggerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55BB1EF81B79DC7500709779 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55BB1EFA1B79DC7500709779 /* XCGLoggerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55E3EE4019D76F280068C3A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55DD51981D915C2C0025B5AD /* PrePostFixLogFormatter.swift in Sources */,
+				5501A3AA1D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift in Sources */,
+				5501A38E1D76250600CB8ABE /* ConsoleDestination.swift in Sources */,
+				5501A3891D7624B900CB8ABE /* DestinationProtocol.swift in Sources */,
+				558A045D1E95A6E600D975BD /* BaseQueuedDestination.swift in Sources */,
+				55A4B4E91D7A99FB0006463B /* TagFilter.swift in Sources */,
+				5501A3E81D77506F00CB8ABE /* ANSIColorLogFormatter.swift in Sources */,
+				5501A3841D761F9A00CB8ABE /* BaseDestination.swift in Sources */,
+				55A4B4EE1D7AADA00006463B /* UserInfoFilter.swift in Sources */,
+				5501A3A51D7625D900CB8ABE /* TestDestination.swift in Sources */,
+				558A04531E95A6A200D975BD /* AutoRotatingFileDestination.swift in Sources */,
+				556DA17F1D78B41600C7E546 /* FileNameFilter.swift in Sources */,
+				556DA1831D78B41600C7E546 /* FilterProtocol.swift in Sources */,
+				55AC33DF1D8FB4FE00614D28 /* UserInfoHelpers.swift in Sources */,
+				5501A3BA1D762E1B00CB8ABE /* LogDetails.swift in Sources */,
+				5501A3F01D77506F00CB8ABE /* XcodeColorsLogFormatter.swift in Sources */,
+				5501A3B51D762DD500CB8ABE /* HelperFunctions.swift in Sources */,
+				55A4B4F31D7AB0980006463B /* DevFilter.swift in Sources */,
+				5501A3931D76251600CB8ABE /* AppleSystemLogDestination.swift in Sources */,
+				55C4DD5C1D781D850074C21F /* Base64LogFormatter.swift in Sources */,
+				5501A3EC1D77506F00CB8ABE /* LogFormatterProtocol.swift in Sources */,
+				558A04581E95A6AF00D975BD /* URL+XCGAdditions.swift in Sources */,
+				5501A3981D76256500CB8ABE /* FileDestination.swift in Sources */,
+				554DF41019D76FA9005708BE /* XCGLogger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		55E3EE4C19D76F280068C3A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55E3EE5819D76F280068C3A7 /* XCGLoggerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		70CB94171B99E728007802FF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55DD519A1D915C2C0025B5AD /* PrePostFixLogFormatter.swift in Sources */,
+				5501A3AC1D76282F00CB8ABE /* DispatchQueue+XCGAdditions.swift in Sources */,
+				5501A3901D76250600CB8ABE /* ConsoleDestination.swift in Sources */,
+				5501A38B1D7624B900CB8ABE /* DestinationProtocol.swift in Sources */,
+				558A045F1E95A6E600D975BD /* BaseQueuedDestination.swift in Sources */,
+				55A4B4EB1D7A99FB0006463B /* TagFilter.swift in Sources */,
+				5501A3EA1D77506F00CB8ABE /* ANSIColorLogFormatter.swift in Sources */,
+				5501A3861D761F9A00CB8ABE /* BaseDestination.swift in Sources */,
+				55A4B4F01D7AADA00006463B /* UserInfoFilter.swift in Sources */,
+				5501A3A71D7625D900CB8ABE /* TestDestination.swift in Sources */,
+				558A04551E95A6A200D975BD /* AutoRotatingFileDestination.swift in Sources */,
+				556DA1811D78B41600C7E546 /* FileNameFilter.swift in Sources */,
+				556DA1851D78B41600C7E546 /* FilterProtocol.swift in Sources */,
+				55AC33E11D8FB4FE00614D28 /* UserInfoHelpers.swift in Sources */,
+				5501A3BC1D762E1B00CB8ABE /* LogDetails.swift in Sources */,
+				5501A3F21D77506F00CB8ABE /* XcodeColorsLogFormatter.swift in Sources */,
+				5501A3B71D762DD500CB8ABE /* HelperFunctions.swift in Sources */,
+				55A4B4F51D7AB0980006463B /* DevFilter.swift in Sources */,
+				5501A3951D76251600CB8ABE /* AppleSystemLogDestination.swift in Sources */,
+				55C4DD5E1D781D850074C21F /* Base64LogFormatter.swift in Sources */,
+				5501A3EE1D77506F00CB8ABE /* LogFormatterProtocol.swift in Sources */,
+				558A045A1E95A6AF00D975BD /* URL+XCGAdditions.swift in Sources */,
+				5501A39A1D76256500CB8ABE /* FileDestination.swift in Sources */,
+				70CB94181B99E728007802FF /* XCGLogger.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4B91DE4146300726CE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4D81DE41AC200726CE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4E71DE41B1800726CE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7573B4F81DE41B5000726CE1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		550F31531D6C270E00919165 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 554DF41619D76FE7005708BE /* XCGLogger (macOS) */;
+			targetProxy = 550F31521D6C270E00919165 /* PBXContainerItemProxy */;
+		};
+		550F31551D6C271600919165 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 70CB94161B99E728007802FF /* XCGLogger (watchOS) */;
+			targetProxy = 550F31541D6C271600919165 /* PBXContainerItemProxy */;
+		};
+		550F31571D6C271F00919165 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5515A3DE1BA119FA0047BA31 /* XCGLogger (tvOS) */;
+			targetProxy = 550F31561D6C271F00919165 /* PBXContainerItemProxy */;
+		};
+		55E3EE5319D76F280068C3A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 55E3EE4419D76F280068C3A7 /* XCGLogger (iOS) */;
+			targetProxy = 55E3EE5219D76F280068C3A7 /* PBXContainerItemProxy */;
+		};
+		7573B4C91DE414CD00726CE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7573B4BD1DE4146300726CE1 /* ObjcExceptionBridging (iOS) */;
+			targetProxy = 7573B4C81DE414CD00726CE1 /* PBXContainerItemProxy */;
+		};
+		7573B4E41DE41AF500726CE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7573B4D71DE41AC200726CE1 /* ObjcExceptionBridging (macOS) */;
+			targetProxy = 7573B4E31DE41AF500726CE1 /* PBXContainerItemProxy */;
+		};
+		7573B4F31DE41B3100726CE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7573B4E61DE41B1800726CE1 /* ObjcExceptionBridging (watchOS) */;
+			targetProxy = 7573B4F21DE41B3100726CE1 /* PBXContainerItemProxy */;
+		};
+		7573B5041DE41B6A00726CE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 7573B4F71DE41B5000726CE1 /* ObjcExceptionBridging (tvOS) */;
+			targetProxy = 7573B5031DE41B6A00726CE1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		5515A3E41BA119FA0047BA31 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/XCGLogger/tvOS/Info-tvOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger;
+				PRODUCT_NAME = XCGLogger;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Debug;
+		};
+		5515A3E51BA119FA0047BA31 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/XCGLogger/tvOS/Info-tvOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger;
+				PRODUCT_NAME = XCGLogger;
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Release;
+		};
+		554DF42B19D76FE7005708BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/XCGLogger/macOS/Info-macOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger;
+				PRODUCT_NAME = XCGLogger;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		554DF42C19D76FE7005708BE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/XCGLogger/macOS/Info-macOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger;
+				PRODUCT_NAME = XCGLogger;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		558EEB831D6BAC61006A9C7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/XCGLoggerTests/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.tests;
+				PRODUCT_MODULE_NAME = XCGLoggerTests_iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+			};
+			name = Debug;
+		};
+		558EEB841D6BAC61006A9C7A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/XCGLoggerTests/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.tests;
+				PRODUCT_MODULE_NAME = XCGLoggerTests_iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+			};
+			name = Release;
+		};
+		558EEB901D6BAC66006A9C7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/XCGLoggerTests/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.tests;
+				PRODUCT_MODULE_NAME = XCGLoggerTests_iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+			};
+			name = Debug;
+		};
+		558EEB911D6BAC66006A9C7A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/XCGLoggerTests/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.tests;
+				PRODUCT_MODULE_NAME = XCGLoggerTests_iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+			};
+			name = Release;
+		};
+		55BB1EFF1B79DC7500709779 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/XCGLoggerTests/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.tests;
+				PRODUCT_MODULE_NAME = XCGLoggerTests_macOS;
+				PRODUCT_NAME = "XCGLoggerTests (macOS)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		55BB1F001B79DC7500709779 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/XCGLoggerTests/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.tests;
+				PRODUCT_MODULE_NAME = XCGLoggerTests_macOS;
+				PRODUCT_NAME = "XCGLoggerTests (macOS)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		55E3EE5919D76F280068C3A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 7.0.0;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "${inherited} @executable_path/Frameworks @executable_path/../Frameworks @loader_path/Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		55E3EE5A19D76F280068C3A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "";
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 7.0.0;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "${inherited} @executable_path/Frameworks @executable_path/../Frameworks @loader_path/Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		55E3EE5C19D76F280068C3A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/XCGLogger/iOS/Info-iOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger;
+				PRODUCT_NAME = XCGLogger;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		55E3EE5D19D76F280068C3A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/XCGLogger/iOS/Info-iOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger;
+				PRODUCT_NAME = XCGLogger;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		55E3EE5F19D76F280068C3A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/XCGLoggerTests/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.tests;
+				PRODUCT_MODULE_NAME = XCGLoggerTests_iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		55E3EE6019D76F280068C3A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Tests/XCGLoggerTests/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.tests;
+				PRODUCT_MODULE_NAME = XCGLoggerTests_iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		70CB941E1B99E728007802FF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/XCGLogger/iOS/Info-iOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger;
+				PRODUCT_NAME = XCGLogger;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		70CB941F1B99E728007802FF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_BITCODE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/XCGLogger/iOS/Info-iOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger;
+				PRODUCT_NAME = XCGLogger;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		7573B4C41DE4146300726CE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/ObjcExceptionBridging/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.objcexceptionbridging;
+				PRODUCT_NAME = ObjcExceptionBridging;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		7573B4C51DE4146300726CE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/ObjcExceptionBridging/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.objcexceptionbridging;
+				PRODUCT_NAME = ObjcExceptionBridging;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		7573B4DF1DE41AC200726CE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/ObjcExceptionBridging/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.objcexceptionbridging;
+				PRODUCT_NAME = ObjcExceptionBridging;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		7573B4E01DE41AC200726CE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/ObjcExceptionBridging/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.objcexceptionbridging;
+				PRODUCT_NAME = ObjcExceptionBridging;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		7573B4EE1DE41B1800726CE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/ObjcExceptionBridging/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.objcexceptionbridging;
+				PRODUCT_NAME = ObjcExceptionBridging;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Debug;
+		};
+		7573B4EF1DE41B1800726CE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/ObjcExceptionBridging/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.objcexceptionbridging;
+				PRODUCT_NAME = ObjcExceptionBridging;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+			};
+			name = Release;
+		};
+		7573B4FF1DE41B5000726CE1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/ObjcExceptionBridging/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.objcexceptionbridging;
+				PRODUCT_NAME = ObjcExceptionBridging;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Debug;
+		};
+		7573B5001DE41B5000726CE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "iPhone Developer";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1.0.1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/ObjcExceptionBridging/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cerebralgardens.xcglogger.objcexceptionbridging;
+				PRODUCT_NAME = ObjcExceptionBridging;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = appletvos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 3;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5515A3E61BA119FA0047BA31 /* Build configuration list for PBXNativeTarget "XCGLogger (tvOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5515A3E41BA119FA0047BA31 /* Debug */,
+				5515A3E51BA119FA0047BA31 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		554DF42A19D76FE7005708BE /* Build configuration list for PBXNativeTarget "XCGLogger (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				554DF42B19D76FE7005708BE /* Debug */,
+				554DF42C19D76FE7005708BE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		558EEB821D6BAC61006A9C7A /* Build configuration list for PBXNativeTarget "XCGLoggerTests (watchOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				558EEB831D6BAC61006A9C7A /* Debug */,
+				558EEB841D6BAC61006A9C7A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		558EEB8F1D6BAC66006A9C7A /* Build configuration list for PBXNativeTarget "XCGLoggerTests (tvOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				558EEB901D6BAC66006A9C7A /* Debug */,
+				558EEB911D6BAC66006A9C7A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55BB1EFE1B79DC7500709779 /* Build configuration list for PBXNativeTarget "XCGLoggerTests (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55BB1EFF1B79DC7500709779 /* Debug */,
+				55BB1F001B79DC7500709779 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55E3EE3F19D76F280068C3A7 /* Build configuration list for PBXProject "XCGLogger" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55E3EE5919D76F280068C3A7 /* Debug */,
+				55E3EE5A19D76F280068C3A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55E3EE5B19D76F280068C3A7 /* Build configuration list for PBXNativeTarget "XCGLogger (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55E3EE5C19D76F280068C3A7 /* Debug */,
+				55E3EE5D19D76F280068C3A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		55E3EE5E19D76F280068C3A7 /* Build configuration list for PBXNativeTarget "XCGLoggerTests (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55E3EE5F19D76F280068C3A7 /* Debug */,
+				55E3EE6019D76F280068C3A7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		70CB941D1B99E728007802FF /* Build configuration list for PBXNativeTarget "XCGLogger (watchOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				70CB941E1B99E728007802FF /* Debug */,
+				70CB941F1B99E728007802FF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7573B4C31DE4146300726CE1 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7573B4C41DE4146300726CE1 /* Debug */,
+				7573B4C51DE4146300726CE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7573B4DE1DE41AC200726CE1 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging (macOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7573B4DF1DE41AC200726CE1 /* Debug */,
+				7573B4E01DE41AC200726CE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7573B4ED1DE41B1800726CE1 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging (watchOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7573B4EE1DE41B1800726CE1 /* Debug */,
+				7573B4EF1DE41B1800726CE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7573B4FE1DE41B5000726CE1 /* Build configuration list for PBXNativeTarget "ObjcExceptionBridging (tvOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7573B4FF1DE41B5000726CE1 /* Debug */,
+				7573B5001DE41B5000726CE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 55E3EE3C19D76F280068C3A7 /* Project object */;
+}

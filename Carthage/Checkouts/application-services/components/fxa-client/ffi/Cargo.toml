@@ -1,0 +1,25 @@
+[package]
+name = "fxaclient_ffi"
+edition = "2018"
+version = "0.1.0"
+authors = ["Edouard Oger <eoger@fastmail.com>"]
+license = "MPL-2.0"
+
+[lib]
+name = "fxaclient_ffi"
+crate-type = ["lib"]
+
+[dependencies]
+ffi-support = { path = "../../support/ffi" }
+log = "0.4.8"
+serde_json = "1.0.44"
+lazy_static = "1.4.0"
+url = "2.1.1"
+prost = "0.6.1"
+viaduct = { path = "../../viaduct" }
+
+[dependencies.fxa-client]
+path = "../"
+
+[features]
+reqwest = ["viaduct/reqwest", "fxa-client/reqwest"]

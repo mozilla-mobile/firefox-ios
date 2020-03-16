@@ -1,0 +1,26 @@
+[
+  {
+    "size": 34094283,
+    "visibility": "internal",
+    "digest": "8811050fe375bcc566c8b85173d86b8a87aa2148edfed93023735c2de44b66a5a28cbaa1cfd396032447fd803e03f308ed941a200c0e2a1ad9fbe16b5606ee7c",
+    "algorithm": "sha512",
+    "unpack": true,
+    "filename": "MacOSX10.11.sdk.tar.xz"
+  },
+  {
+    "size": 1549588,
+    "visibility": "public",
+    "digest": "3653886e5ea471f6089e526c8ae63063a7e032872c051d85f91389e40baef887e7452c93f0386e23c72875853cb9c2f46f282eec8015c53c6ab4c24e964e8620",
+    "algorithm": "sha512",
+    "unpack": true,
+    "filename": "cctools.tar.xz"
+  },
+  {
+    "size": 160611724,
+    "visibility": "public",
+    "digest": "82d300433526a0a008214a2b704f8de63617751001126b62a91239ce0f002e6504200988f42e25fff273d7228daa4de835d6fe82ef7e6ff8a4f667d8636abb99",
+    "algorithm": "sha512",
+    "unpack": true,
+    "filename": "clang.tar.xz"
+  }
+]

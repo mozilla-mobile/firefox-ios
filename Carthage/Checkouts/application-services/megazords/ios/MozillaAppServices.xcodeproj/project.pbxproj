@@ -1,0 +1,662 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 51;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1379D0692404BE1300AABD16 /* logins_msg_types.proto in Sources */ = {isa = PBXBuildFile; fileRef = 1379D0682404BE1300AABD16 /* logins_msg_types.proto */; };
+		137C5893240257340016932F /* Data+LoginsRustBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 137C5892240257340016932F /* Data+LoginsRustBuffer.swift */; };
+		C852EE9E220A283200A6E79A /* libsqlcipher.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C852EE9D220A283200A6E79A /* libsqlcipher.a */; };
+		C852EED3220A29FE00A6E79A /* String+Free_Logins.swift in Sources */ = {isa = PBXBuildFile; fileRef = C852EECA220A29FE00A6E79A /* String+Free_Logins.swift */; };
+		C852EED5220A29FE00A6E79A /* LoginRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = C852EECC220A29FE00A6E79A /* LoginRecord.swift */; };
+		C852EED6220A29FE00A6E79A /* LoginsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C852EECD220A29FE00A6E79A /* LoginsStorage.swift */; };
+		C852EED7220A29FE00A6E79A /* LoginStoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C852EECF220A29FE00A6E79A /* LoginStoreError.swift */; };
+		C852EED8220A29FE00A6E79A /* LockError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C852EED0220A29FE00A6E79A /* LockError.swift */; };
+		C852EEE7220A2A2B00A6E79A /* FirefoxAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = C852EEDD220A2A2B00A6E79A /* FirefoxAccount.swift */; };
+		C852EEE8220A2A2B00A6E79A /* String+Free_FxAClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C852EEDF220A2A2B00A6E79A /* String+Free_FxAClient.swift */; };
+		C852EEEB220A2A2B00A6E79A /* FxAError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C852EEE3220A2A2B00A6E79A /* FxAError.swift */; };
+		C852EEEF220A2E9400A6E79A /* libmegazord_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C852EEEE220A2E9400A6E79A /* libmegazord_ios.a */; };
+		CD02CF3922568BCC00124DA2 /* SyncUnlockInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD02CF3822568BCC00124DA2 /* SyncUnlockInfo.swift */; };
+		CD440A422238A08E003F004B /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB7DE84C2214D30B00E7CF17 /* SwiftProtobuf.framework */; };
+		CD440A452238A703003F004B /* SwiftProtobuf.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = EB7DE84C2214D30B00E7CF17 /* SwiftProtobuf.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CD4CFDD3221DFA5100EB3B33 /* LogTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD4CFDD2221DFA5100EB3B33 /* LogTest.swift */; };
+		CD85A45422361E890099BFA9 /* Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD85A44922361E880099BFA9 /* Places.swift */; };
+		CD85A45522361E890099BFA9 /* RustPlacesAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = CD85A44A22361E880099BFA9 /* RustPlacesAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CD85A45722361E890099BFA9 /* String+Free_Places.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD85A44D22361E880099BFA9 /* String+Free_Places.swift */; };
+		CD85A45822361E890099BFA9 /* Data+PlacesRustBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD85A44E22361E880099BFA9 /* Data+PlacesRustBuffer.swift */; };
+		CD85A45922361E890099BFA9 /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD85A44F22361E880099BFA9 /* Bookmark.swift */; };
+		CD85A45A22361E890099BFA9 /* PlacesError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD85A45122361E880099BFA9 /* PlacesError.swift */; };
+		CDC0089D2236CAB900893800 /* fxa_msg_types.proto in Sources */ = {isa = PBXBuildFile; fileRef = CDC0089C2236CAB900893800 /* fxa_msg_types.proto */; };
+		CDC0089F2236CAD100893800 /* places_msg_types.proto in Sources */ = {isa = PBXBuildFile; fileRef = CDC0089E2236CAD100893800 /* places_msg_types.proto */; };
+		CDC21B14221DCE3700AA71E5 /* RustLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDC21B12221DCE3700AA71E5 /* RustLog.swift */; };
+		CDC21B15221DCE3700AA71E5 /* RustLogFFI.h in Headers */ = {isa = PBXBuildFile; fileRef = CDC21B13221DCE3700AA71E5 /* RustLogFFI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CE13F19B23F330DF005187A7 /* FxAccountMigration.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE13F19A23F330DF005187A7 /* FxAccountMigration.swift */; };
+		CE13F19D23F448D0005187A7 /* FxAccountState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE13F19C23F448D0005187A7 /* FxAccountState.swift */; };
+		CE1445AC23D6058B00B1E808 /* FxAccountConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1445AB23D6058B00B1E808 /* FxAccountConfig.swift */; };
+		CE1445AF23D6315200B1E808 /* FxAccountLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1445AE23D6315200B1E808 /* FxAccountLogging.swift */; };
+		CE1ADA9722249FDA00E89714 /* Data+RustBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1ADA9622249FDA00E89714 /* Data+RustBuffer.swift */; };
+		CE1B09A3231863D7006226E1 /* KeychainWrapper+.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1B09A2231863D7006226E1 /* KeychainWrapper+.swift */; };
+		CE1B09A5231865BC006226E1 /* FxAccountStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1B09A4231865BC006226E1 /* FxAccountStorage.swift */; };
+		CE2D04C5231822AC00AF5722 /* FxAccountManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2D04C4231822AC00AF5722 /* FxAccountManager.swift */; };
+		CE3A2F38225BDE5300EA569C /* PlacesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3A2F37225BDE5300EA569C /* PlacesTests.swift */; };
+		CE90D1BB23D7570A00FD9A5F /* FxAccountManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE34DB3C23D0C9640027AD63 /* FxAccountManagerTests.swift */; };
+		CE96459923D7A77500B662F8 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE96459823D7A77500B662F8 /* SwiftKeychainWrapper.framework */; };
+		CE96459C23D7A7D500B662F8 /* SwiftKeychainWrapper.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = CE96459823D7A77500B662F8 /* SwiftKeychainWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		CEB1A06823D8A42D005BD4DD /* FxAccountMocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB1A06723D8A42D005BD4DD /* FxAccountMocks.swift */; };
+		CED443CB23CCF385007E5FA6 /* FxAccountDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED443CA23CCF385007E5FA6 /* FxAccountDevice.swift */; };
+		CED443CD23CD13E5007E5FA6 /* FxAccountDeviceConstellation.swift in Sources */ = {isa = PBXBuildFile; fileRef = CED443CC23CD13E5007E5FA6 /* FxAccountDeviceConstellation.swift */; };
+		CEDDBC8C23DB438F00CFF5AA /* RustFxAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDDBC8B23DB438F00CFF5AA /* RustFxAccount.swift */; };
+		CEDDBC8E23DB4CD600CFF5AA /* FxAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDDBC8D23DB4CD600CFF5AA /* FxAccount.swift */; };
+		CEDDBC9023DB4F7400CFF5AA /* FxAccountOAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDDBC8F23DB4F7400CFF5AA /* FxAccountOAuth.swift */; };
+		CEDDBC9223DB4F9A00CFF5AA /* FxAccountProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEDDBC9123DB4F9A00CFF5AA /* FxAccountProfile.swift */; };
+		CEFB1EB022EF708B0001E20F /* ResultError.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFB1EAF22EF708B0001E20F /* ResultError.swift */; };
+		D05434A1225680D900FDE4EF /* MozillaAppServices.h in Headers */ = {isa = PBXBuildFile; fileRef = C852EEF2220A3C6800A6E79A /* MozillaAppServices.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D05434A2225680F400FDE4EF /* RustFxAFFI.h in Headers */ = {isa = PBXBuildFile; fileRef = C852EEE0220A2A2B00A6E79A /* RustFxAFFI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D05434A32256810200FDE4EF /* RustPasswordAPI.h in Headers */ = {isa = PBXBuildFile; fileRef = C852EEC8220A29FE00A6E79A /* RustPasswordAPI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EB7DE84D2214D30B00E7CF17 /* SwiftProtobuf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EB7DE84C2214D30B00E7CF17 /* SwiftProtobuf.framework */; };
+		EB879D7F221234EB00753DC9 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE9D202020914D0D00F1C8FA /* MozillaAppServices.framework */; };
+		EB879D8B22123FD900753DC9 /* LoginsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB879D8A22123FD900753DC9 /* LoginsTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		EB7DE84A2214D28C00E7CF17 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.proto";
+			fileType = pattern.proxy;
+			inputFiles = (
+			);
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_FILE_DIR)/$(INPUT_FILE_BASE).pb.swift",
+			);
+			script = "protoc --proto_path=$INPUT_FILE_DIR --swift_out=$DERIVED_FILE_DIR $INPUT_FILE_PATH\n";
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXContainerItemProxy section */
+		EB879D80221234EB00753DC9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CE9D201720914D0D00F1C8FA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = CE9D201F20914D0D00F1C8FA;
+			remoteInfo = MozillaAppServices;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CD440A432238A095003F004B /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CE96459C23D7A7D500B662F8 /* SwiftKeychainWrapper.framework in CopyFiles */,
+				CD440A452238A703003F004B /* SwiftProtobuf.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1379D0682404BE1300AABD16 /* logins_msg_types.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.protobuf; name = logins_msg_types.proto; path = ../../src/logins_msg_types.proto; sourceTree = "<group>"; };
+		137C5892240257340016932F /* Data+LoginsRustBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Data+LoginsRustBuffer.swift"; path = "Extensions/Data+LoginsRustBuffer.swift"; sourceTree = "<group>"; };
+		C852EE9A220A26E600A6E79A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C852EE9D220A283200A6E79A /* libsqlcipher.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsqlcipher.a; path = ../../libs/ios/universal/sqlcipher/lib/libsqlcipher.a; sourceTree = "<group>"; };
+		C852EEC8220A29FE00A6E79A /* RustPasswordAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RustPasswordAPI.h; sourceTree = "<group>"; };
+		C852EECA220A29FE00A6E79A /* String+Free_Logins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Free_Logins.swift"; sourceTree = "<group>"; };
+		C852EECC220A29FE00A6E79A /* LoginRecord.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginRecord.swift; sourceTree = "<group>"; };
+		C852EECD220A29FE00A6E79A /* LoginsStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginsStorage.swift; sourceTree = "<group>"; };
+		C852EECF220A29FE00A6E79A /* LoginStoreError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginStoreError.swift; sourceTree = "<group>"; };
+		C852EED0220A29FE00A6E79A /* LockError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockError.swift; sourceTree = "<group>"; };
+		C852EEDD220A2A2B00A6E79A /* FirefoxAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirefoxAccount.swift; sourceTree = "<group>"; };
+		C852EEDF220A2A2B00A6E79A /* String+Free_FxAClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Free_FxAClient.swift"; sourceTree = "<group>"; };
+		C852EEE0220A2A2B00A6E79A /* RustFxAFFI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RustFxAFFI.h; sourceTree = "<group>"; };
+		C852EEE3220A2A2B00A6E79A /* FxAError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAError.swift; sourceTree = "<group>"; };
+		C852EEEE220A2E9400A6E79A /* libmegazord_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmegazord_ios.a; path = ../../target/universal/release/libmegazord_ios.a; sourceTree = "<group>"; };
+		C852EEF2220A3C6800A6E79A /* MozillaAppServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MozillaAppServices.h; sourceTree = "<group>"; };
+		CD02CF3822568BCC00124DA2 /* SyncUnlockInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncUnlockInfo.swift; sourceTree = "<group>"; };
+		CD4CFDD2221DFA5100EB3B33 /* LogTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogTest.swift; sourceTree = "<group>"; };
+		CD85A44922361E880099BFA9 /* Places.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Places.swift; sourceTree = "<group>"; };
+		CD85A44A22361E880099BFA9 /* RustPlacesAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RustPlacesAPI.h; sourceTree = "<group>"; };
+		CD85A44D22361E880099BFA9 /* String+Free_Places.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Free_Places.swift"; sourceTree = "<group>"; };
+		CD85A44E22361E880099BFA9 /* Data+PlacesRustBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+PlacesRustBuffer.swift"; sourceTree = "<group>"; };
+		CD85A44F22361E880099BFA9 /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		CD85A45122361E880099BFA9 /* PlacesError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlacesError.swift; sourceTree = "<group>"; };
+		CDC0089C2236CAB900893800 /* fxa_msg_types.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.protobuf; name = fxa_msg_types.proto; path = ../../src/fxa_msg_types.proto; sourceTree = "<group>"; };
+		CDC0089E2236CAD100893800 /* places_msg_types.proto */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.protobuf; name = places_msg_types.proto; path = ../../src/places_msg_types.proto; sourceTree = "<group>"; };
+		CDC21B12221DCE3700AA71E5 /* RustLog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustLog.swift; sourceTree = "<group>"; };
+		CDC21B13221DCE3700AA71E5 /* RustLogFFI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RustLogFFI.h; sourceTree = "<group>"; };
+		CE13F19A23F330DF005187A7 /* FxAccountMigration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountMigration.swift; sourceTree = "<group>"; };
+		CE13F19C23F448D0005187A7 /* FxAccountState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountState.swift; sourceTree = "<group>"; };
+		CE1445AB23D6058B00B1E808 /* FxAccountConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountConfig.swift; sourceTree = "<group>"; };
+		CE1445AE23D6315200B1E808 /* FxAccountLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountLogging.swift; sourceTree = "<group>"; };
+		CE1ADA9622249FDA00E89714 /* Data+RustBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+RustBuffer.swift"; sourceTree = "<group>"; };
+		CE1B09A2231863D7006226E1 /* KeychainWrapper+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KeychainWrapper+.swift"; sourceTree = "<group>"; };
+		CE1B09A4231865BC006226E1 /* FxAccountStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountStorage.swift; sourceTree = "<group>"; };
+		CE2D04C4231822AC00AF5722 /* FxAccountManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAccountManager.swift; sourceTree = "<group>"; };
+		CE34DB3C23D0C9640027AD63 /* FxAccountManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountManagerTests.swift; sourceTree = "<group>"; };
+		CE3A2F37225BDE5300EA569C /* PlacesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacesTests.swift; sourceTree = "<group>"; };
+		CE96459823D7A77500B662F8 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = ../../Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
+		CE9D202020914D0D00F1C8FA /* MozillaAppServices.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MozillaAppServices.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CEB1A06723D8A42D005BD4DD /* FxAccountMocks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountMocks.swift; sourceTree = "<group>"; };
+		CED443CA23CCF385007E5FA6 /* FxAccountDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountDevice.swift; sourceTree = "<group>"; };
+		CED443CC23CD13E5007E5FA6 /* FxAccountDeviceConstellation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountDeviceConstellation.swift; sourceTree = "<group>"; };
+		CEDDBC8B23DB438F00CFF5AA /* RustFxAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RustFxAccount.swift; sourceTree = "<group>"; };
+		CEDDBC8D23DB4CD600CFF5AA /* FxAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccount.swift; sourceTree = "<group>"; };
+		CEDDBC8F23DB4F7400CFF5AA /* FxAccountOAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountOAuth.swift; sourceTree = "<group>"; };
+		CEDDBC9123DB4F9A00CFF5AA /* FxAccountProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FxAccountProfile.swift; sourceTree = "<group>"; };
+		CEFB1EAF22EF708B0001E20F /* ResultError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultError.swift; sourceTree = "<group>"; };
+		EB7DE84C2214D30B00E7CF17 /* SwiftProtobuf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftProtobuf.framework; path = ../../Carthage/Build/iOS/SwiftProtobuf.framework; sourceTree = "<group>"; };
+		EB879D7A221234EB00753DC9 /* MozillaAppServicesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MozillaAppServicesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB879D7E221234EB00753DC9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EB879D8A22123FD900753DC9 /* LoginsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsTests.swift; sourceTree = "<group>"; };
+		EBA8770621F5FB9A004F63F0 /* base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = base.xcconfig; sourceTree = "<group>"; };
+		EBA8770721F5FB9A004F63F0 /* debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = debug.xcconfig; sourceTree = "<group>"; };
+		EBA8770821F5FB9A004F63F0 /* release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = release.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE9D201C20914D0D00F1C8FA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE96459923D7A77500B662F8 /* SwiftKeychainWrapper.framework in Frameworks */,
+				C852EEEF220A2E9400A6E79A /* libmegazord_ios.a in Frameworks */,
+				EB7DE84D2214D30B00E7CF17 /* SwiftProtobuf.framework in Frameworks */,
+				C852EE9E220A283200A6E79A /* libsqlcipher.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB879D77221234EB00753DC9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CD440A422238A08E003F004B /* SwiftProtobuf.framework in Frameworks */,
+				EB879D7F221234EB00753DC9 /* MozillaAppServices.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C852EEB2220A285B00A6E79A /* config */ = {
+			isa = PBXGroup;
+			children = (
+				C852EE9A220A26E600A6E79A /* Info.plist */,
+				EBA8770621F5FB9A004F63F0 /* base.xcconfig */,
+				EBA8770721F5FB9A004F63F0 /* debug.xcconfig */,
+				EBA8770821F5FB9A004F63F0 /* release.xcconfig */,
+			);
+			path = config;
+			sourceTree = "<group>";
+		};
+		C852EEC7220A29FE00A6E79A /* Logins */ = {
+			isa = PBXGroup;
+			children = (
+				1379D0682404BE1300AABD16 /* logins_msg_types.proto */,
+				137C5892240257340016932F /* Data+LoginsRustBuffer.swift */,
+				C852EEC8220A29FE00A6E79A /* RustPasswordAPI.h */,
+				C852EEC9220A29FE00A6E79A /* Extensions */,
+				C852EECC220A29FE00A6E79A /* LoginRecord.swift */,
+				C852EECD220A29FE00A6E79A /* LoginsStorage.swift */,
+				C852EECE220A29FE00A6E79A /* Errors */,
+			);
+			name = Logins;
+			path = ../../components/logins/ios/Logins;
+			sourceTree = "<group>";
+		};
+		C852EEC9220A29FE00A6E79A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C852EECA220A29FE00A6E79A /* String+Free_Logins.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C852EECE220A29FE00A6E79A /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				C852EECF220A29FE00A6E79A /* LoginStoreError.swift */,
+				C852EED0220A29FE00A6E79A /* LockError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		C852EEDA220A2A2B00A6E79A /* FxAClient */ = {
+			isa = PBXGroup;
+			children = (
+				CDC0089C2236CAB900893800 /* fxa_msg_types.proto */,
+				C852EEDD220A2A2B00A6E79A /* FirefoxAccount.swift */,
+				CEDDBC8B23DB438F00CFF5AA /* RustFxAccount.swift */,
+				CEDDBC8D23DB4CD600CFF5AA /* FxAccount.swift */,
+				CE1445AB23D6058B00B1E808 /* FxAccountConfig.swift */,
+				CED443CA23CCF385007E5FA6 /* FxAccountDevice.swift */,
+				CED443CC23CD13E5007E5FA6 /* FxAccountDeviceConstellation.swift */,
+				CE1445AE23D6315200B1E808 /* FxAccountLogging.swift */,
+				CE2D04C4231822AC00AF5722 /* FxAccountManager.swift */,
+				CE13F19A23F330DF005187A7 /* FxAccountMigration.swift */,
+				CEDDBC8F23DB4F7400CFF5AA /* FxAccountOAuth.swift */,
+				CEDDBC9123DB4F9A00CFF5AA /* FxAccountProfile.swift */,
+				CE13F19C23F448D0005187A7 /* FxAccountState.swift */,
+				CE1B09A4231865BC006226E1 /* FxAccountStorage.swift */,
+				C852EEDE220A2A2B00A6E79A /* Extensions */,
+				C852EEE0220A2A2B00A6E79A /* RustFxAFFI.h */,
+				C852EEE2220A2A2B00A6E79A /* Errors */,
+			);
+			name = FxAClient;
+			path = "../../components/fxa-client/ios/FxAClient";
+			sourceTree = "<group>";
+		};
+		C852EEDE220A2A2B00A6E79A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CE1ADA9622249FDA00E89714 /* Data+RustBuffer.swift */,
+				C852EEDF220A2A2B00A6E79A /* String+Free_FxAClient.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C852EEE2220A2A2B00A6E79A /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				C852EEE3220A2A2B00A6E79A /* FxAError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		CD85A44822361E880099BFA9 /* Places */ = {
+			isa = PBXGroup;
+			children = (
+				CDC0089E2236CAD100893800 /* places_msg_types.proto */,
+				CD85A44922361E880099BFA9 /* Places.swift */,
+				CD85A44A22361E880099BFA9 /* RustPlacesAPI.h */,
+				CD85A44C22361E880099BFA9 /* Extensions */,
+				CD85A44F22361E880099BFA9 /* Bookmark.swift */,
+				CD85A45022361E880099BFA9 /* Errors */,
+			);
+			name = Places;
+			path = ../../components/places/ios/Places;
+			sourceTree = "<group>";
+		};
+		CD85A44C22361E880099BFA9 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CD85A44D22361E880099BFA9 /* String+Free_Places.swift */,
+				CD85A44E22361E880099BFA9 /* Data+PlacesRustBuffer.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		CD85A45022361E880099BFA9 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				CD85A45122361E880099BFA9 /* PlacesError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		CDC21B11221DCE3700AA71E5 /* RustLog */ = {
+			isa = PBXGroup;
+			children = (
+				CDC21B12221DCE3700AA71E5 /* RustLog.swift */,
+				CDC21B13221DCE3700AA71E5 /* RustLogFFI.h */,
+			);
+			path = RustLog;
+			sourceTree = "<group>";
+		};
+		CE1B099D231862D5006226E1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CE1B09A2231863D7006226E1 /* KeychainWrapper+.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		CE9D201620914D0D00F1C8FA = {
+			isa = PBXGroup;
+			children = (
+				C852EEF2220A3C6800A6E79A /* MozillaAppServices.h */,
+				CD02CF3822568BCC00124DA2 /* SyncUnlockInfo.swift */,
+				CE1B099D231862D5006226E1 /* Extensions */,
+				CEFB1EB122EF70960001E20F /* Errors */,
+				CD85A44822361E880099BFA9 /* Places */,
+				CDC21B11221DCE3700AA71E5 /* RustLog */,
+				C852EEB2220A285B00A6E79A /* config */,
+				C852EEDA220A2A2B00A6E79A /* FxAClient */,
+				C852EEC7220A29FE00A6E79A /* Logins */,
+				EB879D7B221234EB00753DC9 /* MozillaAppServicesTests */,
+				CE9D202120914D0D00F1C8FA /* Products */,
+				CE9D203720914D4800F1C8FA /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		CE9D202120914D0D00F1C8FA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CE9D202020914D0D00F1C8FA /* MozillaAppServices.framework */,
+				EB879D7A221234EB00753DC9 /* MozillaAppServicesTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CE9D203720914D4800F1C8FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CE96459823D7A77500B662F8 /* SwiftKeychainWrapper.framework */,
+				EB7DE84C2214D30B00E7CF17 /* SwiftProtobuf.framework */,
+				C852EE9D220A283200A6E79A /* libsqlcipher.a */,
+				C852EEEE220A2E9400A6E79A /* libmegazord_ios.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CEFB1EB122EF70960001E20F /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				CEFB1EAF22EF708B0001E20F /* ResultError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		EB879D7B221234EB00753DC9 /* MozillaAppServicesTests */ = {
+			isa = PBXGroup;
+			children = (
+				EB879D7E221234EB00753DC9 /* Info.plist */,
+				CEB1A06723D8A42D005BD4DD /* FxAccountMocks.swift */,
+				CE34DB3C23D0C9640027AD63 /* FxAccountManagerTests.swift */,
+				EB879D8A22123FD900753DC9 /* LoginsTests.swift */,
+				CD4CFDD2221DFA5100EB3B33 /* LogTest.swift */,
+				CE3A2F37225BDE5300EA569C /* PlacesTests.swift */,
+			);
+			path = MozillaAppServicesTests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CE9D201D20914D0D00F1C8FA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D05434A1225680D900FDE4EF /* MozillaAppServices.h in Headers */,
+				D05434A2225680F400FDE4EF /* RustFxAFFI.h in Headers */,
+				D05434A32256810200FDE4EF /* RustPasswordAPI.h in Headers */,
+				CDC21B15221DCE3700AA71E5 /* RustLogFFI.h in Headers */,
+				CD85A45522361E890099BFA9 /* RustPlacesAPI.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		CE9D201F20914D0D00F1C8FA /* MozillaAppServices */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE9D202820914D0D00F1C8FA /* Build configuration list for PBXNativeTarget "MozillaAppServices" */;
+			buildPhases = (
+				CEEA12EF20AA1D630018998A /* Build Rust libraries */,
+				CE9D201B20914D0D00F1C8FA /* Sources */,
+				CE9D201C20914D0D00F1C8FA /* Frameworks */,
+				CE9D201D20914D0D00F1C8FA /* Headers */,
+				CE9D201E20914D0D00F1C8FA /* Resources */,
+			);
+			buildRules = (
+				EB7DE84A2214D28C00E7CF17 /* PBXBuildRule */,
+			);
+			dependencies = (
+			);
+			name = MozillaAppServices;
+			productName = Logins;
+			productReference = CE9D202020914D0D00F1C8FA /* MozillaAppServices.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		EB879D79221234EB00753DC9 /* MozillaAppServicesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EB879D84221234EB00753DC9 /* Build configuration list for PBXNativeTarget "MozillaAppServicesTests" */;
+			buildPhases = (
+				EB879D76221234EB00753DC9 /* Sources */,
+				EB879D77221234EB00753DC9 /* Frameworks */,
+				EB879D78221234EB00753DC9 /* Resources */,
+				CD440A432238A095003F004B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EB879D81221234EB00753DC9 /* PBXTargetDependency */,
+			);
+			name = MozillaAppServicesTests;
+			productName = MozillaAppServicesTests;
+			productReference = EB879D7A221234EB00753DC9 /* MozillaAppServicesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE9D201720914D0D00F1C8FA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1010;
+				LastUpgradeCheck = 1010;
+				ORGANIZATIONNAME = Mozilla;
+				TargetAttributes = {
+					CE9D201F20914D0D00F1C8FA = {
+						CreatedOnToolsVersion = 9.3;
+						LastSwiftMigration = 0930;
+					};
+					EB879D79221234EB00753DC9 = {
+						CreatedOnToolsVersion = 10.1;
+					};
+				};
+			};
+			buildConfigurationList = CE9D201A20914D0D00F1C8FA /* Build configuration list for PBXProject "MozillaAppServices" */;
+			compatibilityVersion = "Xcode 10.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CE9D201620914D0D00F1C8FA;
+			productRefGroup = CE9D202120914D0D00F1C8FA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE9D201F20914D0D00F1C8FA /* MozillaAppServices */,
+				EB879D79221234EB00753DC9 /* MozillaAppServicesTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CE9D201E20914D0D00F1C8FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB879D78221234EB00753DC9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		CEEA12EF20AA1D630018998A /* Build Rust libraries */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Rust libraries";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash $PWD/../../build-scripts/xc-universal-binary.sh libmegazord_ios.a megazord_ios $PWD/../.. $buildvariant\n\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CE9D201B20914D0D00F1C8FA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CEFB1EB022EF708B0001E20F /* ResultError.swift in Sources */,
+				CE1B09A5231865BC006226E1 /* FxAccountStorage.swift in Sources */,
+				1379D0692404BE1300AABD16 /* logins_msg_types.proto in Sources */,
+				CE13F19B23F330DF005187A7 /* FxAccountMigration.swift in Sources */,
+				CEDDBC9023DB4F7400CFF5AA /* FxAccountOAuth.swift in Sources */,
+				137C5893240257340016932F /* Data+LoginsRustBuffer.swift in Sources */,
+				CE1ADA9722249FDA00E89714 /* Data+RustBuffer.swift in Sources */,
+				C852EEE8220A2A2B00A6E79A /* String+Free_FxAClient.swift in Sources */,
+				CDC0089F2236CAD100893800 /* places_msg_types.proto in Sources */,
+				CEDDBC8E23DB4CD600CFF5AA /* FxAccount.swift in Sources */,
+				CEDDBC8C23DB438F00CFF5AA /* RustFxAccount.swift in Sources */,
+				CED443CD23CD13E5007E5FA6 /* FxAccountDeviceConstellation.swift in Sources */,
+				CEDDBC9223DB4F9A00CFF5AA /* FxAccountProfile.swift in Sources */,
+				C852EEEB220A2A2B00A6E79A /* FxAError.swift in Sources */,
+				C852EED7220A29FE00A6E79A /* LoginStoreError.swift in Sources */,
+				CD02CF3922568BCC00124DA2 /* SyncUnlockInfo.swift in Sources */,
+				CDC0089D2236CAB900893800 /* fxa_msg_types.proto in Sources */,
+				CD85A45A22361E890099BFA9 /* PlacesError.swift in Sources */,
+				CE1445AC23D6058B00B1E808 /* FxAccountConfig.swift in Sources */,
+				CD85A45422361E890099BFA9 /* Places.swift in Sources */,
+				CED443CB23CCF385007E5FA6 /* FxAccountDevice.swift in Sources */,
+				C852EED8220A29FE00A6E79A /* LockError.swift in Sources */,
+				CE2D04C5231822AC00AF5722 /* FxAccountManager.swift in Sources */,
+				CE1B09A3231863D7006226E1 /* KeychainWrapper+.swift in Sources */,
+				CD85A45722361E890099BFA9 /* String+Free_Places.swift in Sources */,
+				C852EED5220A29FE00A6E79A /* LoginRecord.swift in Sources */,
+				C852EEE7220A2A2B00A6E79A /* FirefoxAccount.swift in Sources */,
+				CD85A45822361E890099BFA9 /* Data+PlacesRustBuffer.swift in Sources */,
+				CDC21B14221DCE3700AA71E5 /* RustLog.swift in Sources */,
+				CE13F19D23F448D0005187A7 /* FxAccountState.swift in Sources */,
+				C852EED6220A29FE00A6E79A /* LoginsStorage.swift in Sources */,
+				C852EED3220A29FE00A6E79A /* String+Free_Logins.swift in Sources */,
+				CE1445AF23D6315200B1E808 /* FxAccountLogging.swift in Sources */,
+				CD85A45922361E890099BFA9 /* Bookmark.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB879D76221234EB00753DC9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE3A2F38225BDE5300EA569C /* PlacesTests.swift in Sources */,
+				CEB1A06823D8A42D005BD4DD /* FxAccountMocks.swift in Sources */,
+				CD4CFDD3221DFA5100EB3B33 /* LogTest.swift in Sources */,
+				EB879D8B22123FD900753DC9 /* LoginsTests.swift in Sources */,
+				CE90D1BB23D7570A00FD9A5F /* FxAccountManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EB879D81221234EB00753DC9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = CE9D201F20914D0D00F1C8FA /* MozillaAppServices */;
+			targetProxy = EB879D80221234EB00753DC9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		CE9D202620914D0D00F1C8FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBA8770721F5FB9A004F63F0 /* debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		CE9D202720914D0D00F1C8FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EBA8770821F5FB9A004F63F0 /* release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		CE9D202920914D0D00F1C8FA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.MozillaAppServices;
+			};
+			name = Debug;
+		};
+		CE9D202A20914D0D00F1C8FA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				MACH_O_TYPE = staticlib;
+				PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.MozillaAppServices;
+			};
+			name = Release;
+		};
+		EB879D82221234EB00753DC9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MozillaAppServicesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mozilla.org.MozillaAppServicesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EB879D83221234EB00753DC9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = MozillaAppServicesTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = mozilla.org.MozillaAppServicesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE9D201A20914D0D00F1C8FA /* Build configuration list for PBXProject "MozillaAppServices" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE9D202620914D0D00F1C8FA /* Debug */,
+				CE9D202720914D0D00F1C8FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE9D202820914D0D00F1C8FA /* Build configuration list for PBXNativeTarget "MozillaAppServices" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE9D202920914D0D00F1C8FA /* Debug */,
+				CE9D202A20914D0D00F1C8FA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EB879D84221234EB00753DC9 /* Build configuration list for PBXNativeTarget "MozillaAppServicesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EB879D82221234EB00753DC9 /* Debug */,
+				EB879D83221234EB00753DC9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE9D201720914D0D00F1C8FA /* Project object */;
+}

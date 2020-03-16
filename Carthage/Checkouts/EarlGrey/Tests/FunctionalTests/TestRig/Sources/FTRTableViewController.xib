@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="NO">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <development version="7000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FTRTableViewController">
+            <connections>
+                <outlet property="insetsValue" destination="C9l-0A-zww" id="neP-aJ-dlY"/>
+                <outlet property="mainTableView" destination="YKc-6C-Ui5" id="LOv-FF-4BV"/>
+                <outlet property="view" destination="1" id="3"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="YKc-6C-Ui5">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="620"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                </tableView>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="W7j-SG-pbJ">
+                    <rect key="frame" x="8" y="628" width="51" height="31"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="insets toggle"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="insetsToggled:" destination="-1" eventType="valueChanged" id="pRu-Jq-oJB"/>
+                    </connections>
+                </switch>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Insets" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8uT-c9-coK">
+                    <rect key="frame" x="65" y="633" width="46" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="{0,0,0,0}" borderStyle="roundedRect" clearsOnBeginEditing="YES" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C9l-0A-zww">
+                    <rect key="frame" x="119" y="629" width="248" height="30"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="accessibilityIdentifier" value="insets value"/>
+                    </userDefinedRuntimeAttributes>
+                </textField>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="8uT-c9-coK" firstAttribute="leading" secondItem="W7j-SG-pbJ" secondAttribute="trailing" constant="8" id="EoZ-te-zo4"/>
+                <constraint firstItem="C9l-0A-zww" firstAttribute="top" secondItem="YKc-6C-Ui5" secondAttribute="bottom" constant="9" id="KvJ-Au-zSF"/>
+                <constraint firstItem="YKc-6C-Ui5" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="MDR-oZ-2fv"/>
+                <constraint firstItem="C9l-0A-zww" firstAttribute="leading" secondItem="8uT-c9-coK" secondAttribute="trailing" constant="8" id="NU4-3n-pTb"/>
+                <constraint firstAttribute="bottom" secondItem="8uT-c9-coK" secondAttribute="bottom" constant="13" id="OoF-bl-Wec"/>
+                <constraint firstAttribute="trailing" secondItem="YKc-6C-Ui5" secondAttribute="trailing" id="P8Z-Qq-mjZ"/>
+                <constraint firstItem="W7j-SG-pbJ" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="Tn8-mG-Frq"/>
+                <constraint firstAttribute="trailing" secondItem="C9l-0A-zww" secondAttribute="trailing" constant="8" id="XA1-dF-wOx"/>
+                <constraint firstAttribute="bottom" secondItem="W7j-SG-pbJ" secondAttribute="bottom" constant="8" id="d3K-fF-0ht"/>
+                <constraint firstItem="W7j-SG-pbJ" firstAttribute="top" secondItem="YKc-6C-Ui5" secondAttribute="bottom" constant="8" id="oCd-Mj-PO4"/>
+                <constraint firstItem="YKc-6C-Ui5" firstAttribute="top" secondItem="1" secondAttribute="top" id="wzq-j8-vRb"/>
+            </constraints>
+        </view>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
+</document>

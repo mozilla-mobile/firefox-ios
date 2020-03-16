@@ -1,0 +1,34 @@
+[package]
+name = "tabs"
+edition = "2018"
+version = "0.1.0"
+authors = ["application-services@mozilla.com"]
+license = "MPL-2.0"
+
+[features]
+reqwest = ["sync15/reqwest"]
+default = []
+
+[dependencies]
+sync15 = { path = "../sync15" }
+serde = "1.0.104"
+serde_derive = "1.0.104"
+serde_json = "1.0.44"
+failure = "0.1.6"
+log = "0.4.8"
+url = "2.1.1"
+prost = "0.6.1"
+prost-derive = "0.6.1"
+ffi-support = { path = "../support/ffi" }
+error-support = { path = "../support/error" }
+interrupt = { path = "../support/interrupt" }
+sync-guid = { path = "../support/guid", features = ["random"] }
+
+[build-dependencies]
+prost-build = "0.6.1"
+
+[dev-dependencies]
+clipboard = "0.5.0"
+clap = "2.32.0"
+cli-support = { path = "../support/cli" }
+force-viaduct-reqwest = { path = "../support/force-viaduct-reqwest" }

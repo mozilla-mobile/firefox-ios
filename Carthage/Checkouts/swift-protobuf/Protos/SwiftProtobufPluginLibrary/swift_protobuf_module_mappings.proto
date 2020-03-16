@@ -1,0 +1,37 @@
+// Protos/SwiftProtobufPluginLibrary/swift_protobuf_module_mappings.proto - Swift Module mappings configuration
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2017 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+
+syntax = "proto3";
+
+package swift_protobuf.gen_swift;
+
+// Configuration used to define the mappings for generated proto files
+// to the Swift module they will be included in.
+message ModuleMappings {
+
+  // Individual listing of the module name and the files that will go
+  // into it.
+  message Entry {
+
+    // The Swift module name that will be imported and used to scope all
+    // the types from the given proto files.
+    string module_name = 1;
+
+    // The proto files that should be considered it this module.  The values
+    // should be the how they are expressed to the generated; i.e. - how they
+    // are used in import states to be used from other files, so `my_file.proto`
+    // or `path/to/file.proto`.
+    repeated string proto_file_path = 2;
+  }
+
+  // The mappings.
+  repeated Entry mapping = 1;
+}
