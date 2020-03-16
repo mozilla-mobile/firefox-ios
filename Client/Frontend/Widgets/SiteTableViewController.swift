@@ -119,6 +119,9 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
         if let _ = self as? HomePanelContextMenu {
             tableView.dragDelegate = self
         }
+        
+        // notification observer
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
 
     deinit {
@@ -143,6 +146,10 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
                 self.presentedViewController?.dismiss(animated: true, completion: nil)
             }
         }, completion: nil)
+    }
+    
+    @objc func applicationDidBecomeActive(){
+        reloadData()
     }
 
     func reloadData() {
