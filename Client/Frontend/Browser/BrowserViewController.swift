@@ -51,7 +51,7 @@ class BrowserViewController: UIViewController {
     fileprivate var searchLoader: SearchLoader?
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
-
+    private var onboardingUserResearch: OnboardingUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
 
     fileprivate var customSearchBarButton: UIBarButtonItem?
@@ -452,6 +452,10 @@ class BrowserViewController: UIViewController {
         }
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
+        
+        // Setup onboarding user research for A/A testing
+        onboardingUserResearch = OnboardingUserResearch()
+        onboardingUserResearch?.lpVariableObserver()
     }
 
     fileprivate func setupConstraints() {
@@ -1898,6 +1902,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController: IntroViewControllerDelegate {
     @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
+        onboardingUserResearchHelper()
         if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
             self.launchFxAFromDeeplinkURL(url)
             return true
@@ -1996,6 +2001,13 @@ extension BrowserViewController: IntroViewControllerDelegate {
         
         return false
     }
+    
+    func onboardingUserResearchHelper() {
+        print("lp initial value \(String(describing: onboardingUserResearch?.lpVariable?.boolValue()))")
+        onboardingUserResearch?.updatedLPVariables = {(lpVariable) -> () in
+            print("lpVariable \(String(describing: lpVariable?.boolValue()))")
+        }
+    }
 
     func launchFxAFromDeeplinkURL(_ url: URL) {
         self.profile.prefs.removeObjectForKey("AdjustDeeplinkKey")
@@ -2008,7 +2020,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
 
     func introViewControllerDidFinish(_ introViewController: IntroViewController, showLoginFlow: FxALoginFlow?) {
         self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-
         introViewController.dismiss(animated: true) {
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 _ = self.navigationController?.popToRootViewController(animated: true)

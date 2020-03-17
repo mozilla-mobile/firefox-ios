@@ -67,6 +67,5 @@ class UserScriptManager {
         if noImageMode {
             tab.webView?.configuration.userContentController.addUserScript(noImageModeUserScript)
         }
-        tab.reload()
     }
 }
