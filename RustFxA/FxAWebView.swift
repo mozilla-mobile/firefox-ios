@@ -32,14 +32,27 @@ fileprivate enum RemoteCommand: String {
     case deleteAccount = "fxaccounts:delete_account"
 }
 
+/**
+ Show the FxA web content for signing in, signing up, or showing FxA settings.
+ Messaging from the website to native is with WKScriptMessageHandler.
+ */
 class FxAWebView: UIViewController, WKNavigationDelegate {
     fileprivate let dismissType: DismissType
     fileprivate var webView: WKWebView
     fileprivate let pageType: FxAPageType
     fileprivate var baseURL: URL?
-    fileprivate var helpBrowser: WKWebView?
     fileprivate let profile: Profile
 
+    /// Used to show a second WKWebView to browse help links.
+    fileprivate var helpBrowser: WKWebView?
+
+    /**
+     init() FxAWebView.
+
+     - parameter pageType: Specify login flow or settings page if already logged in.
+     - parameter profile: a Profile.
+     - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part of a UINavigationController stack it will pop to the root.
+     */
     init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType) {
         self.pageType = pageType
         self.profile = profile
@@ -69,8 +82,7 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
     }
 
     override func viewDidLoad() {
-        // If accountMigrationFailed then the app menu has a caution icon, and at this point the user has taken
-        // sufficient action to clear the caution.
+        // If accountMigrationFailed then the app menu has a caution icon, and at this point the user has taken sufficient action to clear the caution.
         RustFirefoxAccounts.shared.accountMigrationFailed = false
 
         super.viewDidLoad()
@@ -80,6 +92,9 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
         let accountManager = RustFirefoxAccounts.shared.accountManager
         accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
             guard let self = self else { return }
+
+            // Either show the settings, or the authentication flow.
+
             if self.pageType == .settingsPage, case .success(let url) = result {
                 self.baseURL = url
                 self.webView.load(URLRequest(url: url))
@@ -94,8 +109,22 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
         }
     }
 
+    /**
+     Dismiss according the `dismissType`, depending on whether this view was presented modally or on navigation stack.
+     */
+    override func dismiss(animated: Bool, completion: (() -> Void)? = nil) {
+        if dismissType == .dismiss {
+            super.dismiss(animated: animated, completion: completion)
+        } else {
+            navigationController?.popToRootViewController(animated: true)
+            completion?()
+        }
+    }
+
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
+        // Cancel navigation that is happens after login to an account, which is when a redirect to `redirectURL` happens.
+        // The app handles this event fully in native UI.
         let redirectUrl = RustFirefoxAccounts.shared.redirectURL
         if let navigationURL = navigationAction.request.url {
             let expectedRedirectURL = URL(string: redirectUrl)!
@@ -133,6 +162,7 @@ extension FxAWebView: WKScriptMessageHandler {
         }
     }
 
+    /// Send a message to web content using the required message structure.
     private func runJS(typeId: String, messageId: Int, command: String, data: String = "{}") {
         let msg = """
             var msg = {
@@ -149,6 +179,7 @@ extension FxAWebView: WKScriptMessageHandler {
         webView.evaluateJavaScript(msg)
     }
 
+    /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int) {
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
@@ -186,6 +217,7 @@ extension FxAWebView: WKScriptMessageHandler {
             UserDefaults.standard.set(declinedSyncEngines, forKey: "fxa.cwts.declinedSyncEngines")
         }
 
+        // Use presence of key `offeredSyncEngines` to determine if this was a new sign-up.
         if let engines = data["offeredSyncEngines"] as? [String], engines.count > 0 {
             LeanPlumClient.shared.track(event: .signsUpFxa)
         } else {
@@ -210,11 +242,7 @@ extension FxAWebView: WKScriptMessageHandler {
             }
         }
 
-        if dismissType == .dismiss {
-            dismiss(animated: true)
-        } else {
-            navigationController?.popToRootViewController(animated: true)
-        }
+        dismiss(animated: true)
     }
 
     private func onPasswordChange(data: Any) {
@@ -251,6 +279,8 @@ extension FxAWebView{
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
         webView.evaluateJavaScript(hideLongpress)
+
+        //The helpBrowser shows the current URL in the navbar, the main fxa webview does not.
         guard webView !== helpBrowser else {
             let isSecure = webView.hasOnlySecureContent
             navigationItem.title = (isSecure ? "🔒 " : "") + (webView.url?.host ?? "")
@@ -262,7 +292,8 @@ extension FxAWebView{
 }
 
 extension FxAWebView: WKUIDelegate {
-    // Blank target links (support  links) will create a 2nd webview to browse.
+    
+    /// Blank target links (support  links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard helpBrowser == nil else {
             return nil
