@@ -261,6 +261,7 @@ extension TabDisplayManager: TabSelectionDelegate {
         if tabsToDisplay.firstIndex(of: tab) != nil {
             tabManager.selectTab(tab)
         }
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tab)
     }
 }
 
