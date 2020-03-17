@@ -195,3 +195,15 @@ class ETPCoverSheetViewController: UIViewController {
     }
 }
 
+// UIViewController setup to keep it in portrait mode
+extension ETPCoverSheetViewController {
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        // This actually does the right thing on iPad where the modally
+        // presented version happily rotates with the iPad orientation.
+        return .portrait
+    }
+}
