@@ -80,6 +80,8 @@ class QRCodeViewController: UIViewController {
             setupCamera()
         } else {
             view.backgroundColor = QRCodeViewControllerUX.viewBackgroundDeniedColor
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
+
             let alert = UIAlertController(title: "", message: Strings.ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
