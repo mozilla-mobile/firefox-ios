@@ -20,7 +20,7 @@ open class RustFirefoxAccounts {
     public let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     public static var shared = RustFirefoxAccounts()
     public let accountManager: FxAccountManager
-    public var avatar: Avatar? = nil
+    public var avatar: Avatar?
     private static var startupCalled = false
     public let syncAuthState: SyncAuthState
 
@@ -87,7 +87,7 @@ open class RustFirefoxAccounts {
 
         let config = FxAConfig(server: server, clientId: clientID, redirectUri: redirectURL)
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
-        let deviceConfig = DeviceConfig(name:  DeviceInfo.defaultClientName(), type: type, capabilities: [.sendTab])
+        let deviceConfig = DeviceConfig(name: DeviceInfo.defaultClientName(), type: type, capabilities: [.sendTab])
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
@@ -99,7 +99,7 @@ open class RustFirefoxAccounts {
                 factory: syncAuthStateCachefromJSON))
 
         // Called when account is logged in for the first time, on every app start when the account is found (even if offline), and when migration of an account is completed.
-        NotificationCenter.default.addObserver(forName: .accountAuthenticated,  object: nil, queue: .main) { [weak self] notification in
+        NotificationCenter.default.addObserver(forName: .accountAuthenticated, object: nil, queue: .main) { [weak self] notification in
             // Handle account migration completed successfully. Need to clear the old stored apnsToken and re-register push.
             if let type = notification.userInfo?["authType"] as? FxaAuthType, case .migrated = type {
                 KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
@@ -109,7 +109,7 @@ open class RustFirefoxAccounts {
             self?.update()
         }
         
-        NotificationCenter.default.addObserver(forName: .accountProfileUpdate,  object: nil, queue: .main) { [weak self] notification in
+        NotificationCenter.default.addObserver(forName: .accountProfileUpdate, object: nil, queue: .main) { [weak self] notification in
             self?.update()
         }
 
@@ -170,7 +170,7 @@ open class RustFirefoxAccounts {
         // The userProfile (email, display name, etc) and the device name need to be cached for when the app starts in an offline state. Now is a good time to update those caches.
 
         // Accessing the profile will trigger a cache update if needed
-        let _ = userProfile
+        _ = userProfile
 
         // Update the device name cache
         if let deviceName = accountManager.deviceConstellation()?.state()?.localDevice?.displayName {

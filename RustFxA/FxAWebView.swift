@@ -275,7 +275,7 @@ extension FxAWebView: WKScriptMessageHandler {
     }
 }
 
-extension FxAWebView{
+extension FxAWebView {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
         webView.evaluateJavaScript(hideLongpress)
