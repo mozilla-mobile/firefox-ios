@@ -11,8 +11,8 @@ fileprivate let prefs = NSUserDefaultsPrefs(prefix: "profile")
 /**
  A singleton that wraps the Rust FxA library.
  The singleton design is poor for testability through dependency injection and may need to be changed in future.
- To be renamed FirefoxAccounts.swift once the old code is removed fully.
  */
+// TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 open class RustFirefoxAccounts {
     public static let prefKeyLastDeviceName = "prefKeyLastDeviceName"
 

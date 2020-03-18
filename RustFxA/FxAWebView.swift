@@ -123,7 +123,7 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
 
-        // Cancel navigation that is happens after login to an account, which is when a redirect to `redirectURL` happens.
+        // Cancel navigation that happens after login to an account, which is when a redirect to `redirectURL` happens.
         // The app handles this event fully in native UI.
         let redirectUrl = RustFirefoxAccounts.shared.redirectURL
         if let navigationURL = navigationAction.request.url {
@@ -293,7 +293,7 @@ extension FxAWebView {
 
 extension FxAWebView: WKUIDelegate {
     
-    /// Blank target links (support  links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
+    /// Blank target links (support links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         guard helpBrowser == nil else {
             return nil

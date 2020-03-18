@@ -48,7 +48,6 @@ extension AppDelegate {
         }
     }
 
-
     private func openURLsInNewTabs(_ notification: UNNotification) {
         guard let urls = notification.request.content.userInfo["sentTabs"] as? [NSDictionary]  else { return }
         for sentURL in urls {
