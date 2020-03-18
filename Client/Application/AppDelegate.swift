@@ -198,8 +198,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
-        UNUserNotificationCenter.current().delegate = self
-        SentTabAction.registerActions()
         UIScrollView.doBadSwizzleStuff()
 
         window!.makeKeyAndVisible()
@@ -223,15 +221,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // that is an iOS bug or not.
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
-        NotificationCenter.default.addObserver(forName: .RegisterForPushNotifications, object: nil, queue: .main) { _ in
-            UNUserNotificationCenter.current().getNotificationSettings { settings in
-                DispatchQueue.main.async {
-                    if settings.authorizationStatus != .denied {
-                        application.registerForRemoteNotifications()
-                    }
-                }
-            }
-        }
+        pushNotificationSetup()
 
         RustFirefoxAccounts.startup() { shared in
             guard shared.accountManager.hasAccount() else { return }
@@ -543,21 +533,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return false
     }
 
-    fileprivate func openURLsInNewTabs(_ notification: UNNotification) {
-        guard let urls = notification.request.content.userInfo["sentTabs"] as? [NSDictionary]  else { return }
-        for sentURL in urls {
-            if let urlString = sentURL.value(forKey: "url") as? String, let url = URL(string: urlString) {
-                receivedURLs.append(url)
-            }
-        }
-
-        // Check if the app is foregrounded, _also_ verify the BVC is initialized. Most BVC functions depend on viewDidLoad() having run –if not, they will crash.
-        if UIApplication.shared.applicationState == .active && BrowserViewController.foregroundBVC().isViewLoaded {
-            BrowserViewController.foregroundBVC().loadQueuedTabs(receivedURLs: receivedURLs)
-            receivedURLs.removeAll()
-        }
-    }
-
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         let handledShortCutItem = QuickActions.sharedInstance.handleShortCutItem(shortcutItem, withBrowserViewController: BrowserViewController.foregroundBVC())
 
@@ -616,118 +591,8 @@ extension AppDelegate: MFMailComposeViewControllerDelegate {
     }
 }
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    // Called when the user taps on a sent-tab notification from the background.
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        openURLsInNewTabs(response.notification)
-    }
-
-    // Called when the user receives a tab (or any other notification) while in foreground.
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-
-        if profile?.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
-            FxALoginHelper.sharedInstance.disconnect()
-            // show the notification
-            completionHandler([.alert, .sound])
-        } else {
-            openURLsInNewTabs(notification)
-        }
-    }
-}
-
-extension AppDelegate {
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        RustFirefoxAccounts.shared.pushNotifications.didRegister(withDeviceToken: deviceToken)
-    }
-
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("failed to register. \(error)")
-        Sentry.shared.send(message: "Failed to register for APNS")
-    }
-}
-
 extension UIApplication {
-    var syncDelegate: SyncDelegate {
-        return AppSyncDelegate(app: self)
-    }
-
     static var isInPrivateMode: Bool {
         return BrowserViewController.foregroundBVC().tabManager.selectedTab?.isPrivate ?? false
-    }
-}
-
-class AppSyncDelegate: SyncDelegate {
-    let app: UIApplication
-
-    init(app: UIApplication) {
-        self.app = app
-    }
-
-    open func displaySentTab(for url: URL, title: String, from deviceName: String?) {
-        DispatchQueue.main.sync {
-            if app.applicationState == .active {
-                BrowserViewController.foregroundBVC().switchToTabForURLOrOpen(url)
-                return
-            }
-
-            // check to see what the current notification settings are and only try and send a notification if
-            // the user has agreed to them
-            UNUserNotificationCenter.current().getNotificationSettings { settings in
-                if settings.alertSetting == .enabled {
-                    if Logger.logPII {
-                        log.info("Displaying notification for URL \(url.absoluteString)")
-                    }
-
-                    let notificationContent = UNMutableNotificationContent()
-                    let title: String
-                    if let deviceName = deviceName {
-                        title = String(format: Strings.SentTab_TabArrivingNotification_WithDevice_title, deviceName)
-                    } else {
-                        title = Strings.SentTab_TabArrivingNotification_NoDevice_title
-                    }
-                    notificationContent.title = title
-                    notificationContent.body = url.absoluteDisplayExternalString
-                    notificationContent.userInfo = [SentTabAction.TabSendURLKey: url.absoluteString, SentTabAction.TabSendTitleKey: title]
-                    notificationContent.categoryIdentifier = "org.mozilla.ios.SentTab.placeholder"
-
-                    // `timeInterval` must be greater than zero
-                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
-
-                    // The identifier for each notification request must be unique in order to be created
-                    let requestIdentifier = "\(SentTabAction.TabSendCategory).\(url.absoluteString)"
-                    let request = UNNotificationRequest(identifier: requestIdentifier, content: notificationContent, trigger: trigger)
-
-                    UNUserNotificationCenter.current().add(request) { error in
-                        if let error = error {
-                            log.error(error.localizedDescription)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-/**
- * This exists because the Sync code is extension-safe, and thus doesn't get
- * direct access to UIApplication.sharedApplication, which it would need to
- * display a notification.
- * This will also likely be the extension point for wipes, resets, and
- * getting access to data sources during a sync.
- */
-
-enum SentTabAction: String {
-    case view = "TabSendViewAction"
-
-    static let TabSendURLKey = "TabSendURL"
-    static let TabSendTitleKey = "TabSendTitle"
-    static let TabSendCategory = "TabSendCategory"
-
-    static func registerActions() {
-        let viewAction = UNNotificationAction(identifier: SentTabAction.view.rawValue, title: Strings.SentTabViewActionTitle, options: .foreground)
-
-        // Register ourselves to handle the notification category set by NotificationService for APNS notifications
-        let sentTabCategory = UNNotificationCategory(identifier: "org.mozilla.ios.SentTab.placeholder", actions: [viewAction], intentIdentifiers: [], options: UNNotificationCategoryOptions(rawValue: 0))
-        UNUserNotificationCenter.current().setNotificationCategories([sentTabCategory])
     }
 }
