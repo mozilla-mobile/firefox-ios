@@ -62,7 +62,6 @@ class LoginListViewController: SensitiveViewController {
     fileprivate lazy var selectionButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = LoginListUX.selectionButtonFont
-        button.setTitle(self.selectAllTitle, for: [])
         button.addTarget(self, action: #selector(tappedSelectionButton), for: .touchUpInside)
         return button
     }()
@@ -286,6 +285,7 @@ private extension LoginListViewController {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelSelection))
         selectionButtonHeightConstraint?.update(offset: UIConstants.ToolbarHeight)
+        selectionButton.setTitle(selectAllTitle, for: [])
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
         tableView.reloadData()
@@ -296,6 +296,7 @@ private extension LoginListViewController {
         loginSelectionController.deselectAll()
         toggleSelectionTitle()
         selectionButtonHeightConstraint?.update(offset: 0)
+        selectionButton.setTitle(nil, for: [])
         self.view.layoutIfNeeded()
 
         tableView.setEditing(false, animated: true)
