@@ -116,9 +116,9 @@ class UnifiedTelemetry {
             outputDict["settings"] = settings
 
             let delegate = UIApplication.shared.delegate as? AppDelegate
-   
-            outputDict["tabs"] = delegate?.tabManager.count ?? 0
-            
+
+            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
+
             // App Extension telemetry requires reading events stored in prefs, then clearing them from prefs.
             if let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
                 var pingEvents = outputDict["events"] as? [[Any?]] {

@@ -58,7 +58,7 @@ The defaultMailClient field contains the URL scheme of the mail client that the 
 
 The defaultNewTabExperience field contains the name of the view that the user wants to see on new tabs. For example History, Homepage or Blank. It is used to measure usage of this feature, to see how effective feature promotion campaigns are and to establish a baseline number for when we introduce the new Activity Stream features. Duration: There is no intent to remove this field.
 
-- tabs
+- openTabCount
 
 The number of tabs the user had open during a unique session.
 
