@@ -443,6 +443,8 @@ extension TabTrayController: UITextFieldDelegate {
         tabDisplayManager.searchedTabs = filteredTabs
 
         tabDisplayManager.searchTabsAnimated()
+        
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tabSearch)
     }
 
     func clearSearch() {
