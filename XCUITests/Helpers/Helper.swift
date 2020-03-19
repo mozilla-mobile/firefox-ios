@@ -8,6 +8,10 @@
 
 import XCTest
 
+enum Orientation {
+    case portrait, landscapeLeft, landscapeRight, upsideDown
+}
+
 class Helper {
     
     // leave empty for non-specific tests
@@ -120,6 +124,65 @@ class Helper {
      */
     func launchArgumentsForTest(name: String, arguments: [String]) -> [String] {
         return Constants.testWithDB.contains(getTestName(fromTest: name)) ? arguments : []
+    }
+    
+    /**
+     Taps on the specified UI element
+     - Parameter element: the UI element to tap on
+     - Parameter maxTimeOut: (optional) the maximum amount of time to wait for the UI element until the assertion fails
+     */
+    func tapOnElement(_ element: XCUIElement, maxTimeOut: Double = 5, file: String = #file, line: Int = #line) {
+        XCTAssertTrue(element.waitForExistence(timeout: maxTimeOut), "The element to tap on was not found. Error in file \(file) at line \(line).")
+        element.tap()
+    }
+    
+    /**
+     Taps on the UI element for th especified number of seconds
+     - Parameter element: the UI element to long tap on
+     - Parameter forSeconds: the number of seconds to keep tapping on the UI element
+     - Parameter maxTimeOut: (optional) the maximum amount of time to wait for the UI element until the assertion fails
+     */
+    func longTapOnElement(_ element: XCUIElement, forSeconds: Double, maxTimeOut: Double = 5, file: String = #file, line: Int = #line) {
+        XCTAssertTrue(element.waitForExistence(timeout: maxTimeOut), "The element to tap on was not found. Error in file \(file) at line \(line).")
+        element.press(forDuration: forSeconds)
+    }
+
+    /**
+     Types text into the specified textfield UI element
+     - Parameter textFieldElement: the textfield element to type the text into
+     - Parameter text:the text to insert into the textfield
+     - Parameter maxTimeOut: (optional) the maximum amount of time to wait for the UI element until the assertion fails
+     */
+    func typeTextIntoTextField(textFieldElement: XCUIElement, text: String, maxTimeOut: Double = 5, file: String = #file, line: Int = #line) {
+        XCTAssertTrue(textFieldElement.waitForExistence(timeout: maxTimeOut), "The textfield element was not found. Error in file \(file) at line \(line).")
+        textFieldElement.tap()
+        textFieldElement.typeText(text)
+    }
+    
+    /**
+     Selects an option from the contect menu
+     - Parameter option: the contect menu option to select
+     */
+    func selectOptionFromContextMenu(option: String) {
+        TestCheck.elementIsPresent(Base.app.tables["Context Menu"].cells[option])
+        tapOnElement(Base.app.tables["Context Menu"].cells[option])
+    }
+    
+    /**
+     Changes the orientation of the device screen
+     - Parameter orientation: the desired orientation to change device screen to
+     */
+    func changeDeviceOrientation(_ orientation: Orientation) {
+        switch orientation {
+        case .portrait:
+            XCUIDevice.shared.orientation = .portrait
+        case .landscapeLeft:
+            XCUIDevice.shared.orientation = .landscapeLeft
+        case .landscapeRight:
+            XCUIDevice.shared.orientation = .landscapeRight
+        case .upsideDown:
+            XCUIDevice.shared.orientation = .portraitUpsideDown
+        }
     }
     
 }

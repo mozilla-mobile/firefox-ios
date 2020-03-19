@@ -53,8 +53,8 @@ class CommonStepFlows {
         Base.helper.waitForExistence(UIElements.facebookCell)
         
         for element in Constants.allDefaultTopSites {
-            TestStep.longTapOnElement(UIElements.topSiteCellGroup.cells[element], forSeconds: 1)
-            TestStep.selectOptionFromContextMenu(option: "Remove")
+            Base.helper.longTapOnElement(UIElements.topSiteCellGroup.cells[element], forSeconds: 1)
+            Base.helper.selectOptionFromContextMenu(option: "Remove")
         }
     }
 }

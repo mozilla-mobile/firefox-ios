@@ -356,7 +356,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.LoadURLByPasting, Action.LoadURL) { userState in
             UIPasteboard.general.string = userState.url ?? defaultURL
-            TestStep.tapOnElement(menu.cells["menu-PasteAndGo"].firstMatch)
+            Base.helper.tapOnElement(menu.cells["menu-PasteAndGo"].firstMatch)
         }
 
         screenState.gesture(forAction: Action.SetURLByPasting) { userState in

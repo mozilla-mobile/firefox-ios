@@ -41,31 +41,31 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesRemove() {
         Base.helper.loadWebPage(Constants.urlExample)
         Base.helper.waitForTabsButton()
-        Base.helper.iPad() ? TestStep.tapOnElement(UIElements.urlBarViewBackButton) : TestStep.tapOnElement(UIElements.tabToolbarBackButton)
+        Base.helper.iPad() ? Base.helper.tapOnElement(UIElements.urlBarViewBackButton) : Base.helper.tapOnElement(UIElements.tabToolbarBackButton)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         
         // A new site has been added to the top sites
         TestCheck.checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
         // example is the name of the domain. (example.com)
-        TestStep.longTapOnElement(UIElements.topSiteCellGroupExampleCell, forSeconds: 1)
-        TestStep.tapOnElement(UIElements.contextMenuRemoveButton)
+        Base.helper.longTapOnElement(UIElements.topSiteCellGroupExampleCell, forSeconds: 1)
+        Base.helper.tapOnElement(UIElements.contextMenuRemoveButton)
         
         // A top site has been removed
         TestCheck.checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
     }
 
     func testTopSitesRemoveDefaultTopSite() {
-        TestStep.longTapOnElement(UIElements.topSiteCellGroupTopSiteLabel, forSeconds: 1)
+        Base.helper.longTapOnElement(UIElements.topSiteCellGroupTopSiteLabel, forSeconds: 1)
 
         // Tap on Remove and check that now there should be only 4 default top sites
-        TestStep.selectOptionFromContextMenu(option: "Remove")
+        Base.helper.selectOptionFromContextMenu(option: "Remove")
         TestCheck.checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
     }
 
     func testTopSitesRemoveAllDefaultTopSitesAddNewOne() {
         // Remove all default Top Sites
-        TestStep.removeAllDefaultTopSites()
+        CommonStepFlows.removeAllDefaultTopSites()
 
         let numberOfTopSites = UIElements.topSiteCells.count
         Base.helper.waitForNoExistence(UIElements.topSiteCell)
@@ -130,8 +130,8 @@ class ActivityStreamTest: BaseTestCase {
         TestCheck.stringsAreEqual(UIElements.topSiteSecondCell.label, Constants.allDefaultTopSites[1])
 
         // Remove facebook top sites, first cell
-        TestStep.longTapOnElement(UIElements.firstTopSiteCell, forSeconds: 1)
-        TestStep.selectOptionFromContextMenu(option: "Remove")
+        Base.helper.longTapOnElement(UIElements.firstTopSiteCell, forSeconds: 1)
+        Base.helper.selectOptionFromContextMenu(option: "Remove")
 
         // Check top site in first cell now
         TestCheck.elementIsPresent(UIElements.topSiteFirstCell)
@@ -142,13 +142,13 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesOpenInNewTab() {
         navigator.goto(HomePanelsScreen)
-        TestStep.longTapOnElement(UIElements.topSiteCellGroupAppleLabel, forSeconds: 1)
-        TestStep.tapOnElement(UIElements.contexMenuOpenInNewTab)
+        Base.helper.longTapOnElement(UIElements.topSiteCellGroupAppleLabel, forSeconds: 1)
+        Base.helper.tapOnElement(UIElements.contexMenuOpenInNewTab)
         TestCheck.elementIsPresent(UIElements.topSiteCellGroup)
         TestCheck.elementIsNotPresent(UIElements.appleLabel)
 
         navigator.goto(TabTray)
-        TestStep.tapOnElement(UIElements.homeCollectionCell)
+        Base.helper.tapOnElement(UIElements.homeCollectionCell)
         TestCheck.elementIsPresent(UIElements.topSiteCellGroupAppleLabel)
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
@@ -158,8 +158,8 @@ class ActivityStreamTest: BaseTestCase {
     // Smoketest
     func testTopSitesOpenInNewTabDefaultTopSite() {
         // Open one of the sites from Topsites and wait until page is loaded
-        TestStep.longTapOnElement(UIElements.fourthTopSiteCell, forSeconds: 1)
-        TestStep.selectOptionFromContextMenu(option: "Open in New Tab")
+        Base.helper.longTapOnElement(UIElements.fourthTopSiteCell, forSeconds: 1)
+        Base.helper.selectOptionFromContextMenu(option: "Open in New Tab")
         
         // Check that two tabs are open and one of them is the default top site one
         // Needed for BB to work after iOS 13.3 update
@@ -175,8 +175,8 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewPrivateTab() {
         navigator.goto(HomePanelsScreen)
         // Long tap on apple top site, second cell
-        TestStep.longTapOnElement(UIElements.topSiteCellGroupAppleLabel, forSeconds: 1)
-        TestStep.selectOptionFromContextMenu(option: "Open in New Private Tab")
+        Base.helper.longTapOnElement(UIElements.topSiteCellGroupAppleLabel, forSeconds: 1)
+        Base.helper.selectOptionFromContextMenu(option: "Open in New Private Tab")
 
         TestCheck.elementIsPresent(UIElements.topSiteCellGroup)
         TestCheck.elementIsNotPresent(UIElements.appleLabel)
@@ -186,13 +186,13 @@ class ActivityStreamTest: BaseTestCase {
         Base.helper.waitForExistence(UIElements.firstCollectionCell)
         
         if !UIElements.appleCollectionView.waitForExistence(timeout: Constants.smallWaitTime) {
-            TestStep.tapOnElement(UIElements.firstCollectionCell)
+            Base.helper.tapOnElement(UIElements.firstCollectionCell)
             Base.helper.waitForValueContains(UIElements.urlTextInputField, value: "apple")
-            TestStep.tapOnElement(UIElements.showTabsButton)
+            Base.helper.tapOnElement(UIElements.showTabsButton)
         }
         
         navigator.nowAt(TabTray)
-        TestStep.tapOnElement(UIElements.appleCollectionCell)
+        Base.helper.tapOnElement(UIElements.appleCollectionCell)
 
         // The website is open
         TestCheck.elementIsNotPresent(UIElements.topSiteCellGroup)
@@ -204,8 +204,8 @@ class ActivityStreamTest: BaseTestCase {
     func testTopSitesOpenInNewPrivateTabDefaultTopSite() {
         // Open one of the sites from Topsites and wait until page is loaded
         // Long tap on apple top site, second cell
-        TestStep.longTapOnElement(UIElements.fourthTopSiteCell, forSeconds: 1)
-        TestStep.selectOptionFromContextMenu(option: "Open in New Private Tab")
+        Base.helper.longTapOnElement(UIElements.fourthTopSiteCell, forSeconds: 1)
+        Base.helper.selectOptionFromContextMenu(option: "Open in New Private Tab")
 
         // Check that two tabs are open and one of them is the default top site one
         // Workaroud needed after xcode 11.3 update Issue 5937
@@ -222,8 +222,8 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesBookmarkDefaultTopSite() {
         // Bookmark a default TopSite, Wikipedia, third top site
-        TestStep.longTapOnElement(UIElements.fourthTopSiteCell, forSeconds: 1)
-        TestStep.selectOptionFromContextMenu(option: "Bookmark")
+        Base.helper.longTapOnElement(UIElements.fourthTopSiteCell, forSeconds: 1)
+        Base.helper.selectOptionFromContextMenu(option: "Bookmark")
 
         // Check that it appears under Bookmarks menu
         navigator.goto(MobileBookmarks)
@@ -234,18 +234,18 @@ class ActivityStreamTest: BaseTestCase {
         navigator.nowAt(LibraryPanel_Bookmarks)
         navigator.performAction(Action.CloseBookmarkPanel)
 
-        TestStep.longTapOnElement(UIElements.wikipediaTopSiteCell, forSeconds: 2)
+        Base.helper.longTapOnElement(UIElements.wikipediaTopSiteCell, forSeconds: 2)
         TestCheck.elementIsPresent(UIElements.contextMenuRemoveBookmark)
 
         // Unbookmark it
-        TestStep.selectOptionFromContextMenu(option: "Remove Bookmark")
+        Base.helper.selectOptionFromContextMenu(option: "Remove Bookmark")
         navigator.goto(LibraryPanel_Bookmarks)
         TestCheck.elementIsNotPresent(UIElements.bookmarkListWikipedia)
     }
 
     func testTopSitesBookmarkNewTopSite() {
-        TestStep.longTapOnElement(UIElements.topSiteCellGroupMozillaCell, forSeconds: 1)
-        TestStep.selectOptionFromContextMenu(option: "Bookmark")
+        Base.helper.longTapOnElement(UIElements.topSiteCellGroupMozillaCell, forSeconds: 1)
+        Base.helper.selectOptionFromContextMenu(option: "Bookmark")
 
         // Check that it appears under Bookmarks menu
         navigator.nowAt(HomePanelsScreen)
@@ -255,19 +255,19 @@ class ActivityStreamTest: BaseTestCase {
         // Check that longtapping on the TopSite gives the option to remove it
         navigator.performAction(Action.ExitMobileBookmarksFolder)
         navigator.goto(HomePanelsScreen)
-        TestStep.longTapOnElement(UIElements.topSiteCellGroupMozillaCell, forSeconds: 1)
+        Base.helper.longTapOnElement(UIElements.topSiteCellGroupMozillaCell, forSeconds: 1)
 
         // Unbookmark it
-        TestStep.selectOptionFromContextMenu(option: "Remove Bookmark")
+        Base.helper.selectOptionFromContextMenu(option: "Remove Bookmark")
         navigator.goto(LibraryPanel_Bookmarks)
         TestCheck.elementIsNotPresent(UIElements.bookmarkListInternetForPeople)
     }
 
     func testTopSitesShareDefaultTopSite() {
-        TestStep.longTapOnElement(UIElements.topSiteCellGroupWikipediaCell, forSeconds: 1)
+        Base.helper.longTapOnElement(UIElements.topSiteCellGroupWikipediaCell, forSeconds: 1)
 
         // Tap on Share option and verify that the menu is shown and it is possible to cancel it
-        TestStep.selectOptionFromContextMenu(option: "Share")
+        Base.helper.selectOptionFromContextMenu(option: "Share")
         
         // Comenting out until share sheet can be managed with automated tests issue #5477
         //if !iPad() {
@@ -276,12 +276,12 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     func testContextMenuInLandscape() {
-        TestStep.changeDeviceOrientation(.landscapeLeft)
-        TestStep.longTapOnElement(UIElements.topSiteCellGroupAppleLabel, forSeconds: 1)
+        Base.helper.changeDeviceOrientation(.landscapeLeft)
+        Base.helper.longTapOnElement(UIElements.topSiteCellGroupAppleLabel, forSeconds: 1)
         XCTAssertLessThanOrEqual(UIElements.contextMenuTable.frame.size.height, Base.app.otherElements["Action Sheet"].frame.size.height)
 
         // Go back to portrait mode
-        TestStep.changeDeviceOrientation(.portrait)
+        Base.helper.changeDeviceOrientation(.portrait)
     }
     
     // MARK: - Commented test cases
