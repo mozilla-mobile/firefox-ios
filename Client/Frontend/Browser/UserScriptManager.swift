@@ -55,13 +55,11 @@ class UserScriptManager {
                 tab.webView?.configuration.userContentController.addUserScript(userScript)
             }
         }
-
         // If Night Mode is enabled, inject a small user script to ensure
         // that it gets enabled immediately when the DOM loads.
         if nightMode {
             tab.webView?.configuration.userContentController.addUserScript(nightModeUserScript)
         }
-
         // If No Image Mode is enabled, inject a small user script to ensure
         // that it gets enabled immediately when the DOM loads.
         if noImageMode {
