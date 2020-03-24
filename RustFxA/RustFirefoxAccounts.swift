@@ -21,7 +21,7 @@ open class RustFirefoxAccounts {
     public var avatar: Avatar?
     private static var startupCalled = false
     public let syncAuthState: SyncAuthState
-    fileprivate var prefs: Prefs?
+    fileprivate static var prefs: Prefs?
     public let pushNotifications = PushNotificationSetup()
 
     // This is used so that if a migration failed, show a UI indicator for the user to manually log in to their account.
@@ -43,8 +43,8 @@ open class RustFirefoxAccounts {
      The alternative implemention would be to have `shared` as a Deferred<RustFirefoxAccounts>. However that
      would require a significant rewrite of existing code, for minimal added benefit.
      */
-    public static func startup(prefs: Prefs, completion: ((RustFirefoxAccounts) -> Void)? = nil) {
-        shared.prefs = prefs
+    public static func startup(prefs _prefs: Prefs, completion: ((RustFirefoxAccounts) -> Void)? = nil) {
+        prefs = _prefs
         if startupCalled {
             completion?(shared)
             return
@@ -86,6 +86,8 @@ open class RustFirefoxAccounts {
     }
 
     private init() {
+        let prefs = RustFirefoxAccounts.prefs
+        assert(prefs != nil)
         let server = prefs?.intForKey(PrefsKeys.UseStageServer) == 1 ? FxAConfig.Server.dev :
             (prefs?.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release)
 
@@ -191,6 +193,8 @@ open class RustFirefoxAccounts {
     private var cachedUserProfile: FxAUserProfile?
     public var userProfile: FxAUserProfile? {
         get {
+            let prefs = RustFirefoxAccounts.prefs
+
             if let profile = accountManager.accountProfile() {
                 if let p = cachedUserProfile, FxAUserProfile(profile: profile) == p {
                     return cachedUserProfile
@@ -212,6 +216,7 @@ open class RustFirefoxAccounts {
 
     public func disconnect() {
         accountManager.logout() { _ in }
+        let prefs = RustFirefoxAccounts.prefs
         prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)
     }
