@@ -349,12 +349,9 @@ class StringSetting: Setting, UITextFieldDelegate {
         if let id = accessibilityIdentifier {
             textField.accessibilityIdentifier = id + "TextField"
         }
-        if let placeholderColor = UIColor.theme.general.settingsTextPlaceholder {
-            textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
-        } else {
-            textField.placeholder = placeholder
-        }
-
+        let placeholderColor = UIColor.theme.general.settingsTextPlaceholder
+        textField.attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: placeholderColor])
+        
         cell.tintColor = self.persister.readPersistedValue() != nil ? UIColor.theme.tableView.rowActionAccessory : UIColor.clear
         textField.textAlignment = .center
         textField.delegate = self
