@@ -12,6 +12,7 @@ private struct QRCodeViewControllerUX {
     static let navigationBarTitleColor = UIColor.Photon.White100
     static let maskViewBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
     static let isLightingNavigationItemColor = UIColor(red: 0.45, green: 0.67, blue: 0.84, alpha: 1)
+    static let viewBackgroundDeniedColor = UIColor.black
 }
 
 protocol QRCodeViewControllerDelegate {
@@ -78,6 +79,9 @@ class QRCodeViewController: UIViewController {
         if getAuthorizationStatus != .denied {
             setupCamera()
         } else {
+            view.backgroundColor = QRCodeViewControllerUX.viewBackgroundDeniedColor
+            self.navigationItem.rightBarButtonItem?.isEnabled = false
+
             let alert = UIAlertController(title: "", message: Strings.ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
