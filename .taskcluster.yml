@@ -165,14 +165,14 @@ tasks:
                                         - tc-treeherder.v2.${project}.${head_sha}
                                         - $if: 'tasks_for == "github-push"'
                                           then:
-                                              - index.mobile.${project}.v2.branch.${short_head_branch}.latest.taskgraph.decision
-                                              - index.mobile.${project}.v2.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
+                                              - index.mobile.v2.${project}.branch.${short_head_branch}.latest.taskgraph.decision
+                                              - index.mobile.v2.${project}.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
                                         - $if: 'tasks_for == "cron"'
                                           then:
                                               # cron context provides ${head_branch} as a short one
-                                              - index.mobile.${project}.v2.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
-                                              - index.mobile.${project}.v2.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
-                                              - index.mobile.${project}.v2.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
+                                              - index.mobile.v2.${project}.branch.${head_branch}.latest.taskgraph.decision-${cron.job_name}
+                                              - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.decision-${cron.job_name}
+                                              - index.mobile.v2.${project}.branch.${head_branch}.revision.${head_sha}.taskgraph.cron.${ownTaskId}
                           scopes:
                               $if: 'tasks_for == "github-push"'
                               then:
