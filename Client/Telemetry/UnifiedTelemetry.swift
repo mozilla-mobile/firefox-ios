@@ -115,6 +115,10 @@ class UnifiedTelemetry {
 
             outputDict["settings"] = settings
 
+            let delegate = UIApplication.shared.delegate as? AppDelegate
+
+            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
+
             // App Extension telemetry requires reading events stored in prefs, then clearing them from prefs.
             if let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
                 var pingEvents = outputDict["events"] as? [[Any?]] {
@@ -154,6 +158,7 @@ extension UnifiedTelemetry {
         case background = "background"
         case cancel = "cancel"
         case change = "change"
+        case close = "close"
         case delete = "delete"
         case deleteAll = "deleteAll"
         case drag = "drag"
@@ -194,11 +199,16 @@ extension UnifiedTelemetry {
         case whatsNew = "whats-new"
         case dismissUpdateCoverSheetAndStartBrowsing = "dismissed-update-cover_sheet_and_start_browsing"
         case dismissedUpdateCoverSheet = "dismissed-update-cover-sheet"
+        case dismissedETPCoverSheet = "dismissed-etp-sheet"
+        case dismissETPCoverSheetAndStartBrowsing = "dismissed-etp-cover-sheet-and-start-browsing"
+        case dismissETPCoverSheetAndGoToSettings = "dismissed-update-cover-sheet-and-go-to-settings"
         case dismissedOnboarding = "dismissed-onboarding"
         case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
         case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
         case privateBrowsingButton = "private-browsing-button"
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
+        case tabSearch = "tab-search"
+        case tabToolbar = "tab-toolbar"
     }
 
     public enum EventValue: String {
@@ -228,6 +238,7 @@ extension UnifiedTelemetry {
         case themeDark = "theme-dark"
         case privateTab = "private-tab"
         case normalTab = "normal-tab"
+        case tabView = "tab-view"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any]? = nil) {

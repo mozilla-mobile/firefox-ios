@@ -7,6 +7,7 @@ assignees: ''
 
 ---
 
+- [ ] Check for [security advisories](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist/#security-advisories) 
 - [ ] Update Version Number in code (Eng task)
 - [ ] Update `Client/Info.plist` MozWhatsNewTopic (Eng task)
 - [ ] Tag release in GitHub (Eng task)

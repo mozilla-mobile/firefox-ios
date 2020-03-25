@@ -227,6 +227,12 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
     func test23SettingsETP() {
         navigator.goto(TrackingProtectionSettings)
         
+       // Check the warning alert
+        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
+
+        snapshot("TrackingProtectionStrictWarning-01")
+        app.alerts.buttons.firstMatch.tap()
+        waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
         snapshot("23TrackingProtectionBasicMoreInfo-01")
 

@@ -216,7 +216,7 @@ class UpdateViewController: UIViewController {
     }
     
     @objc private func startBrowsing() {
-        viewModel.shouldStartBrowsing?()
+        viewModel.startBrowsing?()
         LeanPlumClient.shared.track(event: .dismissUpdateCoverSheetAndStartBrowsing)
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
     }

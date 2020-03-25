@@ -399,6 +399,8 @@ class TabManager: NSObject {
         removeTab(tab, flushToDisk: true, notify: true)
         updateIndexAfterRemovalOf(tab, deletedIndex: index)
         hideNetworkActivitySpinner()
+        
+        UnifiedTelemetry.recordEvent(category: .action, method: .close, object: .tab)
     }
 
     private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int) {
