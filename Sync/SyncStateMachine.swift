@@ -979,7 +979,7 @@ extension Ready: EngineStateChanges {
                 break
             }
         }
-        return Array(needReset).sorted()
+        return needReset.sorted()
     }
 
     public func enginesEnabled() -> [String] {
@@ -992,7 +992,7 @@ extension Ready: EngineStateChanges {
                 break
             }
         }
-        return Array(engines).sorted()
+        return engines.sorted()
     }
 
     public func enginesDisabled() -> [String] {
@@ -1005,7 +1005,7 @@ extension Ready: EngineStateChanges {
                 break
             }
         }
-        return Array(engines).sorted()
+        return engines.sorted()
     }
 
     public func clearLocalCommands() {
