@@ -1655,6 +1655,7 @@ extension BrowserViewController: LibraryPanelDelegate {
 extension BrowserViewController: HomePanelDelegate {
     func homePanelDidRequestToOpenLibrary(panel: LibraryPanelType) {
         showLibrary(panel: panel)
+        view.endEditing(true)
     }
 
     func homePanel(didSelectURL url: URL, visitType: VisitType) {
