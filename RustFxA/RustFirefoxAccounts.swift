@@ -210,6 +210,7 @@ open class RustFirefoxAccounts {
         accountManager.logout() { _ in }
         prefs.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs.removeObjectForKey(prefKeyCachedUserProfile)
+        cachedUserProfile = nil
     }
 }
 
