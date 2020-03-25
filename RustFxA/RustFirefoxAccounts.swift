@@ -219,6 +219,7 @@ open class RustFirefoxAccounts {
         let prefs = RustFirefoxAccounts.prefs
         prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)
+        cachedUserProfile = nil
     }
 }
 
