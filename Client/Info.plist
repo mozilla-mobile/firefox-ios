@@ -144,7 +144,6 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>audio</string>
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
