@@ -677,28 +677,6 @@ extension TabManager: WKNavigationDelegate {
     }
 }
 
-extension TabManager {
-    
-    func presentNoConnectivityAlertView(onto parent: UIViewController, completion: @escaping (Bool) -> Void) {
-        let alert = UIAlertController(
-            title: Strings.NoConnectivityAlertTitle,
-            message: Strings.NoConnectivityAlertMessage ,
-            preferredStyle: .alert
-        )
-        let cancelAction = UIAlertAction(title: Strings.CancelString, style: .default)
-        alert.addAction(cancelAction)
-        
-        if !DeviceInfo.hasConnectivity() {
-            parent.present(alert, animated: true, completion: nil)
-            completion(false)
-        } else {
-            completion(true)
-        }
-        
-    }
-}
-
-
 // WKNavigationDelegates must implement NSObjectProtocol
 class TabManagerNavDelegate: NSObject, WKNavigationDelegate {
     fileprivate var delegates = WeakList<WKNavigationDelegate>()

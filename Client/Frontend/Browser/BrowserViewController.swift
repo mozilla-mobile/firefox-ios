@@ -999,14 +999,8 @@ class BrowserViewController: UIViewController {
         } else {
             request = nil
         }
-        tabManager.presentNoConnectivityAlertView(onto: self) {[weak self] hasConnection in
-            guard let `self` = self else {  return }
-            if hasConnection {
-                self.switchToPrivacyMode(isPrivate: isPrivate)
-                self.tabManager.selectTab(self.tabManager.addTab(request, isPrivate: isPrivate))
-            }
-        }
-        
+        switchToPrivacyMode(isPrivate: isPrivate)
+        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 
     func focusLocationTextField(forTab tab: Tab?, setSearchText searchText: String? = nil) {
