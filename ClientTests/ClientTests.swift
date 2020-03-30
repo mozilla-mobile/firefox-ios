@@ -11,6 +11,7 @@ import WebKit
 @testable import Client
 
 class ClientTests: XCTestCase {
+    var webView: WKWebView?
 
     func testSyncUA() {
         let ua = UserAgent.syncUserAgent
@@ -33,8 +34,8 @@ class ClientTests: XCTestCase {
 
         let expectation = self.expectation(description: "Found Firefox user agent")
 
-        let webView = WKWebView()
-        webView.evaluateJavaScript("navigator.userAgent") { result, error in
+        webView = WKWebView()
+        webView!.evaluateJavaScript("navigator.userAgent") { result, error in
             let userAgent = result as! String
             if compare(userAgent) {
                 expectation.fulfill()
