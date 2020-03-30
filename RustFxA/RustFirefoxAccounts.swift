@@ -52,6 +52,10 @@ open class RustFirefoxAccounts {
         }
         startupCalled = true
 
+        // Set-up Rust network stack. Note that this has to be called
+        // before any Application Services component gets used.
+        Viaduct.shared.useReqwestBackend()
+
         shared.accountManager.initialize() { result in
             let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
 
