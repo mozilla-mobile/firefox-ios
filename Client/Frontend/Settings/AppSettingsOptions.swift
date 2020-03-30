@@ -46,9 +46,7 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
-        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
-        viewController.delegate = self
+        let viewController = FxAWebView(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -307,69 +305,25 @@ class AccountStatusSetting: WithAccountSetting {
         }
     }
 
-    override var image: UIImage? {
-        if let image = profile.getAccount()?.fxaProfile?.avatar.image {
-            return image.createScaled(CGSize(width: 30, height: 30))
-        }
-
-        let image = UIImage(named: "placeholder-avatar")
-        return image?.createScaled(CGSize(width: 30, height: 30))
-    }
-
     override var accessoryView: UIImageView? {
-        if let account = profile.getAccount() {
-            switch account.actionNeeded {
-            case .needsVerification:
-                // We link to the resend verification email page.
-                return disclosureIndicator
-            case .needsPassword:
-                 // We link to the re-enter password page.
-                return disclosureIndicator
-            case .none:
-                // We link to FxA web /settings.
-                return disclosureIndicator
-            case .needsUpgrade:
-                // In future, we'll want to link to an upgrade page.
-                return nil
-            }
-        }
         return disclosureIndicator
     }
 
     override var title: NSAttributedString? {
-        if let account = profile.getAccount() {
-
-            if let displayName = account.fxaProfile?.displayName {
-                return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
-            }
-
-            if let email = account.fxaProfile?.email {
-                return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
-            }
-
-            return NSAttributedString(string: account.email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
+        if let displayName = RustFirefoxAccounts.shared.userProfile?.displayName {
+            return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
+
+        if let email = RustFirefoxAccounts.shared.userProfile?.email {
+            return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
+        }
+
         return nil
     }
 
     override var status: NSAttributedString? {
-        if let account = profile.getAccount() {
-            var string: String
-
-            switch account.actionNeeded {
-            case .none:
-                return nil
-            case .needsVerification:
-                string = Strings.FxAAccountVerifyEmail
-                break
-            case .needsPassword:
-                string = Strings.FxAAccountVerifyPassword
-                break
-            case .needsUpgrade:
-                string = Strings.FxAAccountUpgradeFirefox
-                break
-            }
-
+        if RustFirefoxAccounts.shared.isActionNeeded {
+            let string = Strings.FxAAccountVerifyPassword
             let orange = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
             let attrs = [NSAttributedString.Key.foregroundColor: orange]
@@ -381,34 +335,15 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
-        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
-        viewController.delegate = self
-
-        if let account = profile.getAccount() {
-            switch account.actionNeeded {
-            case .none:
-                let viewController = SyncContentSettingsViewController()
-                viewController.profile = profile
-                navigationController?.pushViewController(viewController, animated: true)
-                return
-            case .needsVerification:
-                var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
-                cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                if let url = cs?.url {
-                    viewController.url = url
-                }
-            case .needsPassword:
-                var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
-                cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                if let url = cs?.url {
-                    viewController.url = url
-                }
-            case .needsUpgrade:
-                // In future, we'll want to link to an upgrade page.
-                return
-            }
+        let account = profile.rustFxA.accountManager
+        guard !account.accountNeedsReauth() else {
+            let view = FxAWebView(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
+            navigationController?.pushViewController(view, animated: true)
+            return
         }
+
+        let viewController = SyncContentSettingsViewController()
+        viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -419,74 +354,13 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.frame = CGRect(width: 30, height: 30)
             imageView.layer.cornerRadius = (imageView.frame.height) / 2
             imageView.layer.masksToBounds = true
-            imageView.image = image
+
+            imageView.image = UIImage(named: "placeholder-avatar")!.createScaled(CGSize(width: 30, height: 30))
+
+            RustFirefoxAccounts.shared.avatar?.image.uponQueue(.main) { image in
+                imageView.image = image.createScaled(CGSize(width: 30, height: 30))
+            }
         }
-    }
-}
-
-// For great debugging!
-class RequirePasswordDebugSetting: WithAccountSetting {
-    override var hidden: Bool {
-        if !ShowDebugSettings {
-            return true
-        }
-        if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.needsPassword {
-            return false
-        }
-        return true
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: require password", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        profile.getAccount()?.makeSeparated()
-        settings.tableView.reloadData()
-    }
-}
-
-// For great debugging!
-class RequireUpgradeDebugSetting: WithAccountSetting {
-    override var hidden: Bool {
-        if !ShowDebugSettings {
-            return true
-        }
-        if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.needsUpgrade {
-            return false
-        }
-        return true
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: require upgrade", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        profile.getAccount()?.makeDoghouse()
-        settings.tableView.reloadData()
-    }
-}
-
-// For great debugging!
-class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
-    override var hidden: Bool {
-        if !ShowDebugSettings {
-            return true
-        }
-        if let _ = profile.getAccount() {
-            return false
-        }
-        return true
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        profile.getAccount()?.syncAuthState.invalidate()
-        settings.tableView.reloadData()
     }
 }
 
@@ -962,7 +836,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         let control = UISwitchThemed()
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? BrowserProfile.isChinaEdition
+        control.isOn = prefs.boolForKey(prefKey) ?? AppInfo.isChinaEdition
         cell.accessoryView = control
         cell.selectionStyle = .none
     }
@@ -992,11 +866,6 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
 
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Debug: use stage servers", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        let configurationURL = profile.accountConfiguration.authEndpointURL
-        return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {

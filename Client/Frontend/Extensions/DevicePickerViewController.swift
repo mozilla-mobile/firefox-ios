@@ -7,6 +7,7 @@ import UIKit
 import Shared
 import Storage
 import SnapKit
+import Account
 
 protocol DevicePickerViewControllerDelegate {
     func devicePickerViewControllerDidCancel(_ devicePickerViewController: DevicePickerViewController)
@@ -25,53 +26,19 @@ private struct DevicePickerViewControllerUX {
     static let DeviceRowTextPaddingRight = CGFloat(50)
 }
 
-/// The DevicePickerViewController displays a list of clients associated with the provided Account.
-/// The user can select a number of devices and hit the Send button.
-/// This viewcontroller does not implement any specific business logic that needs to happen with the selected clients.
-/// That is up to it's delegate, who can listen for cancellation and success events.
-
-enum LoadingState {
-    case LoadingFromCache
-    case LoadingFromServer
-    case Loaded
+fileprivate enum LoadingState {
+    case loading
+    case loaded
 }
 
 class DevicePickerViewController: UITableViewController {
-    enum DeviceOrClient: Equatable {
-        case client(RemoteClient)
-        case device(RemoteDevice)
-
-        var identifier: String? {
-            switch self {
-            case .client(let c):
-                return c.fxaDeviceId
-            case .device(let d):
-                return d.id 
-            }
-        }
-
-        public static func == (lhs: DeviceOrClient, rhs: DeviceOrClient) -> Bool {
-            switch (lhs, rhs) {
-            case (.device(let a), .device(let b)):
-                return a.id == b.id && a.lastAccessTime == b.lastAccessTime
-            case (.client(let a), .client(let b)):
-                return a == b // is equatable
-            case (.device(_), .client(_)):
-                return false
-            case (.client(_), .device(_)):
-                return false
-            }
-        }
-    }
-    var devicesAndClients = [DeviceOrClient]()
-
+    private var devices = [RemoteDevice]()
     var profile: Profile?
     var profileNeedsShutdown = true
-
     var pickerDelegate: DevicePickerViewControllerDelegate?
-
-    var loadState = LoadingState.LoadingFromCache
-    var selectedIdentifiers = Set<String>() // Stores DeviceOrClient.identifier
+    private var selectedIdentifiers = Set<String>() // Stores Device.id
+    private var notification: Any?
+    private var loadingState = LoadingState.loading
 
     // ShareItem has been added as we are now using this class outside of the ShareTo extension to provide Share To functionality
     // And in this case we need to be able to store the item we are sharing as we may not have access to the
@@ -96,15 +63,59 @@ class DevicePickerViewController: UITableViewController {
         tableView.tableFooterView = UIView(frame: .zero)
 
         tableView.allowsSelection = true
+
+        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate
+        , object: nil, queue: .main) { [weak self ] _ in
+            self?.loadList()
+            self?.refreshControl?.endRefreshing()
+        }
+
+        RustFirefoxAccounts.startup() { shared in
+            shared.accountManager.deviceConstellation()?.refreshState()
+        }
+
+        loadList()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        loadCachedClients()
+    deinit {
+        if let obj = notification {
+            NotificationCenter.default.removeObserver(obj)
+        }
+    }
+
+    private func loadList() {
+        RustFirefoxAccounts.startup() { [weak self] shared in
+            guard let state = shared.accountManager.deviceConstellation()?.state() else {
+                self?.loadingState = .loaded
+                return
+            }
+            guard let self = self else { return }
+
+            let currentIds = self.devices.map { $0.id ?? "" }.sorted()
+            let newIds = state.remoteDevices.map { $0.id }.sorted()
+            if currentIds.count > 0, currentIds == newIds {
+                return
+            }
+
+            self.devices = state.remoteDevices.map { d in
+                let t = "\(d.deviceType)"
+                return RemoteDevice(id: d.id, name: d.displayName, type: t, isCurrentDevice: d.isCurrentDevice, lastAccessTime: d.lastAccessTime, availableCommands: nil)
+            }
+
+            if self.devices.isEmpty {
+                self.navigationItem.rightBarButtonItem = nil
+            } else {
+                self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SendToSendButtonTitle, style: .done, target: self, action: #selector(self.send))
+                self.navigationItem.rightBarButtonItem?.isEnabled = false
+            }
+
+            self.loadingState = .loaded
+            self.tableView.reloadData()
+        }
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if devicesAndClients.isEmpty {
+        if devices.isEmpty {
             return 1
         } else {
             return 2
@@ -112,13 +123,13 @@ class DevicePickerViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if devicesAndClients.isEmpty {
+        if devices.isEmpty {
             return 1
         } else {
             if section == 0 {
                 return 1
             } else {
-                return devicesAndClients.count
+                return devices.count
             }
         }
     }
@@ -126,28 +137,22 @@ class DevicePickerViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
 
-        if !devicesAndClients.isEmpty {
+        if !devices.isEmpty {
             if indexPath.section == 0 {
                 cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewHeaderCell.CellIdentifier, for: indexPath) as! DevicePickerTableViewHeaderCell
             } else {
                 let clientCell = tableView.dequeueReusableCell(withIdentifier: DevicePickerTableViewCell.CellIdentifier, for: indexPath) as! DevicePickerTableViewCell
-                let item = devicesAndClients[indexPath.row]
-                switch item {
-                case .client(let client):
-                    clientCell.nameLabel.text = client.name
-                    clientCell.clientType = ClientType.fromFxAType(client.type)
-                case .device(let device):
-                    clientCell.nameLabel.text = device.name
-                    clientCell.clientType = ClientType.fromFxAType(device.type)
-                }
+                let item = devices[indexPath.row]
+                clientCell.nameLabel.text = item.name
+                clientCell.clientType = ClientType.fromFxAType(item.type)
 
-                if let id = item.identifier {
+                if let id = item.id {
                     clientCell.checked = selectedIdentifiers.contains(id)
                 }
                 cell = clientCell
             }
         } else {
-            if self.loadState == .Loaded {
+            if loadingState == .loaded {
                 cell = tableView.dequeueReusableCell(withIdentifier: DevicePickerNoClientsTableViewCell.CellIdentifier, for: indexPath) as! DevicePickerNoClientsTableViewCell
             } else {
                 cell = UITableViewCell(style: .default, reuseIdentifier: "ClientCell")
@@ -162,13 +167,13 @@ class DevicePickerViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if devicesAndClients.isEmpty || indexPath.section != 1 {
+        if devices.isEmpty || indexPath.section != 1 {
             return
         }
 
         tableView.deselectRow(at: indexPath, animated: true)
 
-        guard let id = devicesAndClients[indexPath.row].identifier else { return }
+        guard let id = devices[indexPath.row].id else { return }
 
         if selectedIdentifiers.contains(id) {
             selectedIdentifiers.remove(id)
@@ -183,7 +188,7 @@ class DevicePickerViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if !devicesAndClients.isEmpty {
+        if !devices.isEmpty {
             if indexPath.section == 0 {
                 return DevicePickerViewControllerUX.TableHeaderRowHeight
             } else {
@@ -213,102 +218,13 @@ class DevicePickerViewController: UITableViewController {
         return profile
     }
 
-    // Load cached clients from the profile, triggering a sync to fetch newer data.
-    fileprivate func loadCachedClients() {
-        guard let profile = self.ensureOpenProfile() as? BrowserProfile else { return }
-       
-        self.loadState = .LoadingFromCache
-
-        // Load and display the cached clients.
-        // Don't shut down the profile here: we immediately call `reloadClients`.
-        profile.remoteClientsAndTabs.getRemoteDevices() >>== { devices in
-            profile.remoteClientsAndTabs.getClients().uponQueue(.main) { result in
-                withExtendedLifetime(profile) {
-                    guard let clients = result.successValue else { return }
-                    self.update(devices: devices, clients: clients, endRefreshing: false)
-                    self.reloadClients()
-                }
-            }
-        }
-    }
-
-    fileprivate func reloadClients() {
-        guard let profile = self.ensureOpenProfile() as? BrowserProfile, let account = profile.getAccount() else { return }
-        self.loadState = .LoadingFromServer
-
-        account.updateFxADevices(remoteDevices: profile.remoteClientsAndTabs) >>== {
-            profile.remoteClientsAndTabs.getRemoteDevices() >>== { devices in
-                profile.getClients().uponQueue(.main) { result in
-                    guard let clients = result.successValue else { return }
-                    withExtendedLifetime(profile) {
-                        self.loadState = .Loaded
-
-                        // If we are running from an app extension then make sure we shut down the profile as soon as we are
-                        // done with it.
-                        if self.profileNeedsShutdown {
-                            profile._shutdown()
-                        }
-
-                        self.loadState = .Loaded
-
-                        self.update(devices: devices, clients: clients, endRefreshing: true)
-                    }
-                }
-            }
-        }
-    }
-
-    fileprivate func update(devices: [RemoteDevice], clients: [RemoteClient], endRefreshing: Bool) {
-        assert(Thread.isMainThread)
-        guard let profile = self.ensureOpenProfile() as? BrowserProfile, let account = profile.getAccount() else { return }
-
-        let fxaDeviceIds = devices.compactMap { $0.id }
-        let newRemoteDevices = devices.filter { account.commandsClient.sendTab.isDeviceCompatible($0) }
-
-        func findClient(forDevice device: RemoteDevice) -> RemoteClient? {
-            return clients.find({ $0.fxaDeviceId == device.id })
-        }
-        let oldRemoteClients = devices.filter { !account.commandsClient.sendTab.isDeviceCompatible($0) }
-            .compactMap { findClient(forDevice: $0) }
-
-        let fullList = newRemoteDevices.sorted { $0.id ?? "" > $1.id ?? "" }.map { DeviceOrClient.device($0) }
-            + oldRemoteClients.sorted { $0.guid ?? "" > $1.guid ?? "" }.map { DeviceOrClient.client($0) }
-
-        // Sort the lists, and compare guids and modified, to see if the list has changed and tableview needs reloading.
-        let isSame = fullList.elementsEqual(devicesAndClients) { new, old in
-            new == old // equatable
-        }
-
-        guard !isSame else {
-            if endRefreshing {
-                refreshControl?.endRefreshing()
-            }
-            return
-        }
-
-        devicesAndClients = fullList
-
-        if devicesAndClients.isEmpty {
-            navigationItem.rightBarButtonItem = nil
-        } else {
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: Strings.SendToSendButtonTitle, style: .done, target: self, action: #selector(self.send))
-            navigationItem.rightBarButtonItem?.isEnabled = false
-        }
-
-        tableView.reloadData()
-        if endRefreshing {
-            refreshControl?.endRefreshing()
-        }
-    }
-
     @objc func refresh() {
+        RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.refreshState()
         if let refreshControl = self.refreshControl {
             refreshControl.beginRefreshing()
             let height = -(refreshControl.bounds.size.height + (self.navigationController?.navigationBar.bounds.size.height ?? 0))
             self.tableView.contentOffset = CGPoint(x: 0, y: height)
         }
-
-        reloadClients()
     }
 
     @objc func cancel() {
@@ -316,29 +232,14 @@ class DevicePickerViewController: UITableViewController {
     }
 
     @objc func send() {
-        guard let profile = self.ensureOpenProfile() as? BrowserProfile else { return }
-
-        var pickedItems = [DeviceOrClient]()
+        var pickedItems = [RemoteDevice]()
         for id in selectedIdentifiers {
-            if let item = devicesAndClients.find({ $0.identifier == id }) {
+            if let item = devices.find({ $0.id == id }) {
                 pickedItems.append(item)
             }
         }
 
-        profile.remoteClientsAndTabs.getRemoteDevices().uponQueue(.main) { result in
-            guard let devices = result.successValue else { return }
-
-            let pickedDevices: [RemoteDevice] = pickedItems.compactMap { item in
-                switch item {
-                case .client(let client):
-                    return devices.find { client.fxaDeviceId == $0.id }
-                case .device(let device):
-                    return device
-                }
-            }
-
-            self.pickerDelegate?.devicePickerViewController(self, didPickDevices: pickedDevices)
-        }
+        self.pickerDelegate?.devicePickerViewController(self, didPickDevices: pickedItems)
 
         // Replace the Send button with a loading indicator since it takes a while to sync
         // up our changes to the server.

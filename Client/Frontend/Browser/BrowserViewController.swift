@@ -212,8 +212,8 @@ class BrowserViewController: UIViewController {
     @objc fileprivate func appMenuBadgeUpdate() {
         let hideImagesOn = NoImageModeHelper.isActivated(profile.prefs)
         let showWhatsNew = shouldShowWhatsNew() && !(AppInfo.whatsNewTopic?.isEmpty ?? true)
-        let actionNeeded = profile.getAccount()?.actionNeeded
-        let showWarningBadge = actionNeeded != nil && actionNeeded != FxAActionNeeded.none
+        let actionNeeded = RustFirefoxAccounts.shared.isActionNeeded
+        let showWarningBadge = actionNeeded 
         let showMenuBadge = showWarningBadge ? false : hideImagesOn || showWhatsNew
 
         urlBar.warningMenuBadge(setVisible: showWarningBadge)
@@ -2019,54 +2019,40 @@ extension BrowserViewController: IntroViewControllerDelegate {
         self.presentSignInViewController(fxaParams)
     }
 
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, showLoginFlow: FxALoginFlow?) {
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxAPageType?) {
         self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
         introViewController.dismiss(animated: true) {
             if self.navigationController?.viewControllers.count ?? 0 > 1 {
                 _ = self.navigationController?.popToRootViewController(animated: true)
             }
 
-            if let flow = showLoginFlow {
+            if let flow = fxaLoginFlow {
                 let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
-                self.presentSignInViewController(fxaParams, isSignUpFlow: flow == .signUpFlow)
+                self.presentSignInViewController(fxaParams, flowType: flow)
             }
         }
     }
 
-    func getSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) -> UIViewController {
+    func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
-        guard profile.hasAccount(), let status = profile.getAccount()?.actionNeeded, status == .none else {
-            let signInVC = FxAContentViewController(profile: profile, fxaOptions: fxaOptions, isSignUpFlow: isSignUpFlow)
-            signInVC.delegate = self
-            return signInVC
+        guard profile.hasSyncableAccount() else {
+            return FxAWebView(pageType: flowType, profile: profile, dismissalStyle: .dismiss)
         }
 
         let settingsTableViewController = SyncContentSettingsViewController()
         settingsTableViewController.profile = profile
         return settingsTableViewController
     }
-    
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, isSignUpFlow: Bool = false) {
-        let signInViewController = getSignInViewController(fxaOptions, isSignUpFlow: isSignUpFlow)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: signInViewController)
+
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow) {
+        let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent)
     }
 
     @objc func dismissSignInViewController() {
         self.dismiss(animated: true, completion: nil)
     }
 
-}
-
-extension BrowserViewController: FxAContentViewControllerDelegate {
-    func contentViewControllerDidSignIn(_ viewController: FxAContentViewController, withFlags flags: FxALoginFlags) {
-        if flags.verified {
-            self.dismiss(animated: true, completion: nil)
-        }
-    }
-
-    func contentViewControllerDidCancel(_ viewController: FxAContentViewController) {
-        self.dismiss(animated: true, completion: nil)
-    }
 }
 
 extension BrowserViewController: ContextMenuHelperDelegate {

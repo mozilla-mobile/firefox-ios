@@ -86,4 +86,8 @@ open class AppInfo {
 
     // The port for the internal webserver, tests can change this
     public static var webserverPort = 6571
+
+    public static var isChinaEdition: Bool = {
+        return Locale.current.identifier == "zh_CN"
+    }()
 }

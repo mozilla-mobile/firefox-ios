@@ -6,13 +6,8 @@ import UIKit
 import SnapKit
 import Shared
 
-enum FxALoginFlow {
-    case emailFlow
-    case signUpFlow
-}
-
 protocol IntroViewControllerDelegate: AnyObject {
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, showLoginFlow: FxALoginFlow?)
+    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxAPageType?)
 }
 
 struct ViewControllerConsts {
@@ -219,19 +214,19 @@ class IntroViewController: UIViewController {
     }
 
     @objc func startBrowsing() {
-        delegate?.introViewControllerDidFinish(self, showLoginFlow: nil)
+        delegate?.introViewControllerDidFinish(self, fxaLoginFlow: nil)
         LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": String(currentPage)])
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": currentPage])
     }
 
     @objc func showEmailLoginFlow() {
-        delegate?.introViewControllerDidFinish(self, showLoginFlow: .emailFlow)
+        delegate?.introViewControllerDidFinish(self, fxaLoginFlow: .emailLoginFlow)
         LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": String(currentPage)])
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingEmailLogin, extras: ["slide-num": currentPage])
         }
 
     @objc func showSignUpFlow() {
-        delegate?.introViewControllerDidFinish(self, showLoginFlow: .signUpFlow)
+        delegate?.introViewControllerDidFinish(self, fxaLoginFlow: .signUpFlow)
         LeanPlumClient.shared.track(event: .dismissedOnboardingShowSignUp, withParameters: ["dismissedOnSlide": String(currentPage)])
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": currentPage])
         }

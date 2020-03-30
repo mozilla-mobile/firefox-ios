@@ -6,6 +6,7 @@ import UIKit
 import SnapKit
 import Shared
 import Storage
+import Account
 
 extension UIStackView {
     func addBackground(color: UIColor) {
@@ -104,6 +105,8 @@ class ShareViewController: UIViewController {
         case .rawText(let text):
             self.pageInfoRowTitleLabel?.text = text.quoted
         }
+
+        RustFirefoxAccounts.startup() { _ in }
     }
 
     private func setupRows() {

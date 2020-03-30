@@ -49,7 +49,7 @@ open class MockSyncManager: SyncManager {
     open func onAddedAccount() -> Success {
         return succeed()
     }
-    open func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
+    open func onRemovedAccount() -> Success {
         return succeed()
     }
 
@@ -99,6 +99,10 @@ class MockFiles: FileAccessor {
 }
 
 open class MockProfile: Client.Profile {
+    public var rustFxA: RustFirefoxAccounts {
+        return RustFirefoxAccounts.shared
+    }
+
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: RustPlaces
@@ -225,9 +229,7 @@ open class MockProfile: Client.Profile {
     public func flushAccount() {}
 
     public func removeAccount() {
-        let old = self.account
-        self.account = nil
-        self.syncManager.onRemovedAccount(old)
+        self.syncManager.onRemovedAccount()
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {

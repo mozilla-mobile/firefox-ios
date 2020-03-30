@@ -46,30 +46,4 @@ class ProfileTest: XCTestCase {
         XCTAssertNil(KeychainWrapper.sharedAppContainerKeychain.authenticationInfo())
     }
     
-    func testNeedsVerification() {
-        if profile == nil || account == nil {
-            XCTAssert(false)
-        }
-        
-        // Setting up the account and profile for needs verification state
-        account!.mockActionNeeded = .needsVerification
-        profile!.account = account
-        
-        // Should return true as we are setting up the account to be in needs verification state
-        XCTAssert(profile!.accountNeedsUserAction)
-    
-    }
-    
-    func testNeedsVerificationForPassword() {
-        if profile == nil || account == nil {
-            XCTAssert(false)
-        }
-    
-        // Setting up the account and profile for needs verification state
-        account!.mockActionNeeded = .needsPassword
-        profile!.account = account
-        
-        // Should return true as we are setting up the account to be in needs password state
-        XCTAssert(profile!.accountNeedsUserAction)
-    }
 }

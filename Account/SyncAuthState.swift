@@ -6,6 +6,7 @@ import Foundation
 import Shared
 import XCGLogger
 import SwiftyJSON
+import MozillaAppServices
 
 private let CurrentSyncAuthStateCacheVersion = 1
 
@@ -20,7 +21,6 @@ public struct SyncAuthStateCache {
 public protocol SyncAuthState {
     func invalidate()
     func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>
-    var deviceID: String? { get }
     var enginesEnablements: [String: Bool]? { get set }
     var clientName: String? { get set }
 }
@@ -53,16 +53,11 @@ extension SyncAuthStateCache: JSONLiteralConvertible {
 }
 
 open class FirefoxAccountSyncAuthState: SyncAuthState {
-    fileprivate let account: FirefoxAccount
     fileprivate let cache: KeychainCache<SyncAuthStateCache>
-    public var deviceID: String? {
-        return account.deviceRegistration?.id
-    }
     public var enginesEnablements: [String: Bool]?
     public var clientName: String?
 
-    init(account: FirefoxAccount, cache: KeychainCache<SyncAuthStateCache>) {
-        self.account = account
+    init(cache: KeychainCache<SyncAuthStateCache>) {
         self.cache = cache
     }
 
@@ -70,38 +65,6 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
     open func invalidate() {
         log.info("Invalidating cached token server token.")
         self.cache.value = nil
-    }
-
-    // Generate an assertion and try to fetch a token server token, retrying at most a fixed number
-    // of times.
-    //
-    // It's tricky to get Swift to recurse into a closure that captures from the environment without
-    // segfaulting the compiler, so we pass everything around, like barbarians.
-    fileprivate func generateAssertionAndFetchTokenAt(_ audience: String,
-                                                      client: TokenServerClient,
-                                                      clientState: String?,
-                                                      married: MarriedState,
-                                                      now: Timestamp,
-                                                      retryCount: Int) -> Deferred<Maybe<TokenServerToken>> {
-        let assertion = married.generateAssertionForAudience(audience, now: now)
-        return client.token(assertion, clientState: clientState).bind { result in
-            if retryCount > 0 {
-                if let tokenServerError = result.failureValue as? TokenServerError {
-                    switch tokenServerError {
-                    case let .remote(code, status, remoteTimestamp) where code == 401 && status == "invalid-timestamp":
-                        if let remoteTimestamp = remoteTimestamp {
-                            let skew = Int64(remoteTimestamp) - Int64(now) // Without casts, runtime crash due to overflow.
-                            log.info("Token server responded with 401/invalid-timestamp: retrying with remote timestamp \(remoteTimestamp), which is local timestamp + skew = \(now) + \(skew).")
-                            return self.generateAssertionAndFetchTokenAt(audience, client: client, clientState: clientState, married: married, now: remoteTimestamp, retryCount: retryCount - 1)
-                        }
-                    default:
-                        break
-                    }
-                }
-            }
-            // Fall-through.
-            return Deferred(value: result)
-        }
     }
 
     open func token(_ now: Timestamp, canBeExpired: Bool) -> Deferred<Maybe<(token: TokenServerToken, forKey: Data)>> {
@@ -123,30 +86,35 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
             }
         }
 
-        log.debug("Advancing Account state.")
-        return account.marriedState().bind { result in
-            if let married = result.successValue {
-                log.info("Account is in Married state; generating assertion.")
-                let tokenServerEndpointURL = self.account.configuration.sync15Configuration.tokenServerEndpointURL
-                let audience = TokenServerClient.getAudience(forURL: tokenServerEndpointURL)
-                let client = TokenServerClient(url: tokenServerEndpointURL)
-                let clientState = married.kXCS
-                log.debug("Fetching token server token.")
-                let deferred = self.generateAssertionAndFetchTokenAt(audience, client: client, clientState: clientState, married: married, now: now, retryCount: 1)
-                deferred.upon { result in
-                    // This could race to update the cache with multiple token results.
-                    // One racer will win -- that's fine, presumably she has the freshest token.
-                    // If not, that's okay, 'cuz the slightly dated token is still a valid token.
-                    if let token = result.successValue {
-                        let newCache = SyncAuthStateCache(token: token, forKey: married.kSync,
-                            expiresAt: now + 1000 * token.durationInSeconds)
+        let deferred = Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>()
+
+        RustFirefoxAccounts.shared.accountManager.getTokenServerEndpointURL() { result in
+            guard case .success(let tokenServerEndpointURL) = result else {
+                deferred.fill(Maybe(failure: FxAClientError.local(NSError())))
+                return
+            }
+
+            let client = TokenServerClient(url: tokenServerEndpointURL)
+            RustFirefoxAccounts.shared.accountManager.getAccessToken(scope: OAuthScope.oldSync) { res in
+                switch res {
+                    case .failure(let err):
+                        deferred.fill(Maybe(failure: err as MaybeErrorType))
+                    case .success(let accessToken):
+                        log.debug("Fetching token server token.")
+                        client.token(token: accessToken.token, kid: accessToken.key!.kid).upon { result in
+                        guard let token = result.successValue else {
+                            deferred.fill(Maybe(failure: result.failureValue!))
+                            return
+                        }
+                        let kSync = accessToken.key!.k.base64urlSafeDecodedData!
+                        let newCache = SyncAuthStateCache(token: token, forKey: kSync,expiresAt: now + 1000 * token.durationInSeconds)
                         log.debug("Fetched token server token!  Token expires at \(newCache.expiresAt).")
                         self.cache.value = newCache
+                        deferred.fill(Maybe(success: (token: token, forKey: kSync)))
                     }
                 }
-                return chain(deferred, f: { (token: $0, forKey: married.kSync) })
             }
-            return deferMaybe(result.failureValue!)
         }
+        return deferred
     }
 }
