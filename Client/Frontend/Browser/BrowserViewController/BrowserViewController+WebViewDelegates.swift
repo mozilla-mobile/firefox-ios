@@ -446,8 +446,9 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
 
-            // Allow plan text types
-            if url.hasPrefix("data:;") || url.hasPrefix("data:,") || url.hasPrefix("data:text/plain") {
+            // Allow plain text types.
+            // Note the format of data URLs is `data:[<media type>][;base64],<data>` with empty <media type> indicating plain text.
+            if url.hasPrefix("data:;base64,") || url.hasPrefix("data:,") || url.hasPrefix("data:text/plain,") || url.hasPrefix("data:text/plain;") {
                 decisionHandler(.allow)
                 return
             }

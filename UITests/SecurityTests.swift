@@ -140,7 +140,7 @@ class SecurityTests: KIFTestCase {
             beforeEach()
         }
 
-        // Check data url that is no allowed
+        // Check data url that is not allowed
         tester().tapWebViewElementWithAccessibilityLabel("data-url-html-bad")
         tester().wait(forTimeInterval: 1)
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
