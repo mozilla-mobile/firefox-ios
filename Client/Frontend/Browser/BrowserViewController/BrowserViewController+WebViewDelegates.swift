@@ -431,7 +431,27 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
         if url.scheme == "data" {
+            let url = url.absoluteString
+            // Allow certain image types
+            if url.hasPrefix("data:image/") && !url.hasPrefix("data:image/svg+xml") {
+                decisionHandler(.allow)
+                return
+            }
+
+            // Allow certain application types
+            if url.hasPrefix("data:application/pdf") || url.hasPrefix("data:application/json") {
+                decisionHandler(.allow)
+                return
+            }
+
+            // Allow plan text types
+            if url.hasPrefix("data:;") || url.hasPrefix("data:,") || url.hasPrefix("data:text/plain") {
+                decisionHandler(.allow)
+                return
+            }
+
             decisionHandler(.cancel)
             return
         }
