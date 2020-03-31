@@ -32,6 +32,7 @@ class PhotonActionSheetTest: BaseTestCase {
     // Disable issue #5554
 
     func testShareOptionIsShown() {
+        navigator.goto(BrowserTab)
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
@@ -86,7 +87,7 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.goto(PageOptionsMenu)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
         waitForExistence(app.cells["Copy"], timeout: 5)
-        let fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
+        let fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 2)
 
         fennecElement.tap()
         waitForExistence(app.navigationBars["ShareTo.ShareView"], timeout: 5)

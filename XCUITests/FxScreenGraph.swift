@@ -694,8 +694,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.gesture(forAction: Action.FxATypeEmail) { userState in
             if isTablet {
-                app.webViews.textFields.element(boundBy: 0).tap()
-                app.webViews.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
+                app.webViews.textFields.firstMatch.tap()
+                app.webViews.textFields.firstMatch.typeText(userState.fxaUsername!)
             } else {
                 app.textFields.element(boundBy: 0).tap()
                 app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
