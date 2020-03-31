@@ -431,10 +431,15 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        if url.scheme == "data" {
+            decisionHandler(.cancel)
+            return
+        }
+
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
-        if ["http", "https", "data", "blob", "file"].contains(url.scheme) {
+        if ["http", "https", "blob", "file"].contains(url.scheme) {
             if navigationAction.targetFrame?.isMainFrame ?? false {
                 tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url)
             }
