@@ -6,7 +6,7 @@ labels: ''
 assignees: ''
 
 ---
-
+- [ ] Ensure L10N box has been run (if needed) to do string export
 - [ ] Check for [security advisories](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist/#security-advisories) 
 - [ ] Update Version Number in code (Eng task)
 - [ ] Update `Client/Info.plist` MozWhatsNewTopic (Eng task)

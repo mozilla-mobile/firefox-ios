@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Shared
-
+import Account
 
 extension PhotonActionSheetProtocol {
 
@@ -75,48 +75,35 @@ extension PhotonActionSheetProtocol {
         return items
     }
 
-    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ isSignUpFlow: Bool) -> Void) -> PhotonActionSheetItem? {
-        profile.getAccount()?.updateProfile()
-        let account = profile.getAccount()
-
-        func title() -> String? {
-            guard let status = account?.actionNeeded else { return Strings.FxASignInToSync }
-            switch status {
-            case .none:
-                return account?.fxaProfile?.displayName ?? account?.fxaProfile?.email
-            case .needsVerification:
-                return Strings.FxAAccountVerifyEmail
-            case .needsPassword:
-                return Strings.FxAAccountVerifyPassword
-            case .needsUpgrade:
-                return Strings.FxAAccountUpgradeFirefox
-            }
-        }
-
-        func imageName() -> String? {
-            guard let status = account?.actionNeeded else { return "menu-sync" }
-            switch status {
-            case .none:
-                return "placeholder-avatar"
-            case .needsVerification, .needsPassword, .needsUpgrade:
-                return "menu-warning"
-            }
-        }
+    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ flowType: FxAPageType) -> Void) -> PhotonActionSheetItem? {
+        //profile.getAccount()?.updateProfile()
 
         let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
-            showFxA(fxaParams, false)
+            showFxA(fxaParams, .emailLoginFlow)
         }
 
-        guard let title = title(), let iconString = imageName() else { return nil }
-        guard let actionNeeded = account?.actionNeeded else {
-            let signInOption = PhotonActionSheetItem(title: title, iconString: iconString, handler: action)
-            return signInOption
-        }
+        let rustAccount = RustFirefoxAccounts.shared
+        let needsReauth = rustAccount.accountManager.accountNeedsReauth()
 
-        let iconURL = (actionNeeded == .none) ? account?.fxaProfile?.avatar.url : nil
-        let iconType: PhotonActionSheetIconType = (actionNeeded == .none) ? .URL : .Image
-        let iconTint = (actionNeeded != .none) ? UIColor.Photon.Yellow60 : nil
+        guard let userProfile = rustAccount.userProfile else {
+            return PhotonActionSheetItem(title: Strings.FxASignInToSync, iconString: "menu-sync", handler: action)
+        }
+        let title: String = {
+            if rustAccount.accountManager.accountNeedsReauth() {
+                return Strings.FxAAccountVerifyPassword
+            }
+            return userProfile.displayName ?? userProfile.email
+        }()
+
+        let iconString = needsReauth ? "menu-warning" : "placeholder-avatar"
+
+        var iconURL: URL? = nil
+        if let str = rustAccount.userProfile?.avatarUrl, let url = URL(string: str) {
+            iconURL = url
+        }
+        let iconType: PhotonActionSheetIconType = needsReauth ? .Image : .URL
+        let iconTint: UIColor? = needsReauth ? UIColor.Photon.Yellow60 : nil
         let syncOption = PhotonActionSheetItem(title: title, iconString: iconString, iconURL: iconURL, iconType: iconType, iconTint: iconTint, accessory: .Sync, handler: action)
         return syncOption
     }

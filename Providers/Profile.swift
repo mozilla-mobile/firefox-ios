@@ -47,7 +47,7 @@ public protocol SyncManager {
     func applicationDidBecomeActive()
 
     func onNewProfile()
-    @discardableResult func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success
+    @discardableResult func onRemovedAccount() -> Success
     @discardableResult func onAddedAccount() -> Success
 }
 
@@ -124,9 +124,6 @@ protocol Profile: AnyObject {
     // Similar to <http://stackoverflow.com/questions/26029317/exc-bad-access-when-indirectly-accessing-inherited-member-in-swift>.
     func localName() -> String
 
-    // URLs and account configuration.
-    var accountConfiguration: FirefoxAccountConfiguration { get }
-
     // Do we have an account at all?
     func hasAccount() -> Bool
 
@@ -134,9 +131,9 @@ protocol Profile: AnyObject {
     func hasSyncableAccount() -> Bool
 
     func getAccount() -> Account.FirefoxAccount?
+    var rustFxA: RustFirefoxAccounts { get }
+
     func removeAccount()
-    func setAccount(_ account: Account.FirefoxAccount)
-    func flushAccount()
 
     func getClients() -> Deferred<Maybe<[RemoteClient]>>
     func getCachedClients()-> Deferred<Maybe<[RemoteClient]>>
@@ -167,13 +164,13 @@ extension Profile {
     
     // Returns false for when there is no account available and true if the account
     // is not verified or has no password attached to it
-    var accountNeedsUserAction: Bool {
-        guard let account = self.getAccount() else { return false }
-        let actionNeeded = account.actionNeeded
-        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
-        
-        return needsVerification
-    }
+//    var accountNeedsUserAction: Bool {
+//        guard let account = self.getAccount() else { return false }
+//        let actionNeeded = account.actionNeeded
+//        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
+//
+//        return needsVerification
+//    }
 }
 
 open class BrowserProfile: Profile {
@@ -300,7 +297,7 @@ open class BrowserProfile: Profile {
         // side-effect of instantiating SQLiteHistory (and thus BrowserDB) on the main thread.
         prefs.setBool(false, forKey: PrefsKeys.KeyTopSitesCacheIsValid)
 
-        if BrowserProfile.isChinaEdition {
+        if AppInfo.isChinaEdition {
 
             // Set the default homepage.
             prefs.setString(PrefsDefaults.ChineseHomePageURL, forKey: PrefsKeys.KeyDefaultHomePageURL)
@@ -500,53 +497,15 @@ open class BrowserProfile: Profile {
     }
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
-        guard let account = self.getAccount() else {
+        guard let constellation = RustFirefoxAccounts.shared.accountManager.deviceConstellation() else {
             return deferMaybe(NoAccountError())
         }
-
-        let scratchpadPrefs = self.prefs.branch("sync.scratchpad")
-        let id = scratchpadPrefs.stringForKey("clientGUID") ?? ""
-        let command = SyncCommand.displayURIFromShareItem(item, asClient: id)
-        let fxaDeviceIds = devices.compactMap { $0.id }
-
-        let result = Success()
-
-        self.remoteClientsAndTabs.getClients() >>== { clients in
-            let newRemoteDevices = devices.filter { account.commandsClient.sendTab.isDeviceCompatible($0) }
-            var oldRemoteClients = devices.filter { !account.commandsClient.sendTab.isDeviceCompatible($0) }.compactMap { remoteDevice in
-                clients.find { $0.fxaDeviceId == remoteDevice.id }
-            }
-
-            func sendViaSyncFallback() {
-                if oldRemoteClients.isEmpty {
-                    result.fill(Maybe(success: ()))
-                } else {
-                    self.remoteClientsAndTabs.insertCommands([command], forClients: oldRemoteClients) >>> {
-                        self.syncManager.syncClients() >>> {
-                            account.notify(deviceIDs: fxaDeviceIds, collectionsChanged: ["clients"], reason: "sendtab")
-                            result.fill(Maybe(success: ()))
-                        }
-                    }
-                }
-            }
-
-            if !newRemoteDevices.isEmpty {
-                account.commandsClient.sendTab.send(to: newRemoteDevices, url: item.url, title: item.title ?? "") >>== { report in
-                    for failedRemoteDevice in report.failed {
-                        log.debug("Failed to send a tab with FxA commands for \(failedRemoteDevice.name). Falling back on the Sync back-end")
-                        if let oldRemoteClient = clients.find({ $0.fxaDeviceId == failedRemoteDevice.id }) {
-                            oldRemoteClients.append(oldRemoteClient)
-                        }
-                    }
-
-                    sendViaSyncFallback()
-                }
-            } else {
-                sendViaSyncFallback()
+        devices.forEach {
+            if let id = $0.id, let title = item.title {
+                constellation.sendEventToDevice(targetDeviceId: id, e: .sendTab(title: title, url: item.url))
             }
         }
-
-        return result
+        return succeed()
     }
 
     lazy var logins: RustLogins = {
@@ -566,51 +525,20 @@ open class BrowserProfile: Profile {
         return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey, salt: salt)
     }()
 
-    static var isChinaEdition: Bool = {
-        return Locale.current.identifier == "zh_CN"
-    }()
-
-    var accountConfiguration: FirefoxAccountConfiguration {
-        if prefs.boolForKey("useCustomSyncService") ?? false {
-            return CustomFirefoxAccountConfiguration(prefs: self.prefs)
-        }
-        if prefs.boolForKey("useChinaSyncService") ?? BrowserProfile.isChinaEdition {
-            return ChinaEditionFirefoxAccountConfiguration(prefs: self.prefs)
-        }
-        if prefs.boolForKey("useStageSyncService") ?? false {
-            return StageFirefoxAccountConfiguration(prefs: self.prefs)
-        }
-        return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
-    }
-
-    fileprivate lazy var account: Account.FirefoxAccount? = {
-        let key = name + ".account"
-        keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
-        if let dictionary = keychain.object(forKey: key) as? [String: AnyObject] {
-            let account =  Account.FirefoxAccount.fromDictionary(dictionary, withPrefs: prefs)
-
-            // Check to see if the account configuration set is a custom service
-            // and update it to use the custom servers.
-            if let configuration = account?.configuration as? CustomFirefoxAccountConfiguration {
-                account?.configuration = CustomFirefoxAccountConfiguration(prefs: prefs)
-            }
-            account?.updateProfile()
-
-            return account
-        }
-        return nil
-    }()
-
     func hasAccount() -> Bool {
-        return account != nil
+        return rustFxA.accountManager.hasAccount()
     }
 
     func hasSyncableAccount() -> Bool {
-        return account?.actionNeeded == FxAActionNeeded.none
+        return hasAccount() && !rustFxA.accountManager.accountNeedsReauth()
     }
 
     func getAccount() -> Account.FirefoxAccount? {
-        return account
+        return nil
+    }
+
+    var rustFxA: RustFirefoxAccounts {
+        return RustFirefoxAccounts.shared
     }
 
     func removeAccountMetadata() {
@@ -623,39 +551,14 @@ open class BrowserProfile: Profile {
     }
 
     func removeAccount() {
-        let old = self.account
         removeAccountMetadata()
-        self.account = nil
 
         // Tell any observers that our account has changed.
         NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil)
 
         // Trigger cleanup. Pass in the account in case we want to try to remove
         // client-specific data from the server.
-        self.syncManager.onRemovedAccount(old)
-    }
-
-    func setAccount(_ account: Account.FirefoxAccount) {
-        self.account = account
-
-        flushAccount()
-
-        // tell any observers that our account has changed
-        DispatchQueue.main.async {
-            // Many of the observers for this notifications are on the main thread,
-            // so we should post the notification there, just in case we're not already
-            // on the main thread.
-            let userInfo = [Notification.Name.UserInfoKeyHasSyncableAccount: self.hasSyncableAccount()]
-            NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil, userInfo: userInfo)
-        }
-
-        self.syncManager.onAddedAccount()
-    }
-
-    func flushAccount() {
-        if let account = account {
-            self.keychain.set(account.dictionary() as NSCoding, forKey: name + ".account", withAccessibility: .afterFirstUnlock)
-        }
+        self.syncManager.onRemovedAccount()
     }
 
     class NoAccountError: MaybeErrorType {
@@ -671,6 +574,7 @@ open class BrowserProfile: Profile {
         // safe as a strong reference, because there's no cycle.
         unowned fileprivate let profile: BrowserProfile
         fileprivate let prefs: Prefs
+        fileprivate var constellationStateUpdate: Any?
 
         let FifteenMinutes = TimeInterval(60 * 15)
         let OneMinute = TimeInterval(60)
@@ -681,6 +585,12 @@ open class BrowserProfile: Profile {
         public func applicationDidEnterBackground() {
             self.backgrounded = true
             self.endTimedSyncs()
+        }
+
+        deinit {
+            if let c = constellationStateUpdate {
+                NotificationCenter.default.removeObserver(c)
+            }
         }
 
         public func applicationDidBecomeActive() {
@@ -743,9 +653,8 @@ open class BrowserProfile: Profile {
             syncDisplayState = SyncStatusResolver(engineResults: result.engineResults).resolveResults()
 
             #if MOZ_TARGET_CLIENT
-                if let account = profile.account, canSendUsageData() {
+                if canSendUsageData() {
                     SyncPing.from(result: result,
-                                  account: account,
                                   remoteClientsAndTabs: profile.remoteClientsAndTabs,
                                   prefs: prefs,
                                   why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
@@ -931,7 +840,7 @@ open class BrowserProfile: Profile {
             SyncStateMachine.clearStateFromPrefs(self.prefsForSync)
         }
 
-        public func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
+        public func onRemovedAccount() -> Success {
             let profile = self.profile
 
             // Run these in order, because they might write to the same DB!
@@ -989,18 +898,29 @@ open class BrowserProfile: Profile {
         fileprivate func syncClientsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing clients to storage.")
 
+            if constellationStateUpdate == nil {
+                constellationStateUpdate = NotificationCenter.default.addObserver(forName: .constellationStateUpdate, object: nil, queue: .main) { [weak self] notification in
+                    guard let state = self?.profile.rustFxA.accountManager.deviceConstellation()?.state() else {
+                        return
+                    }
+                    guard let self = self else { return }
+                    let devices = state.remoteDevices.map { d -> RemoteDevice in
+                        let t = "\(d.deviceType)"
+                        return RemoteDevice(id: d.id, name: d.displayName, type: t, isCurrentDevice: d.isCurrentDevice, lastAccessTime: d.lastAccessTime, availableCommands: nil)
+                    }
+                    let _ = self.profile.remoteClientsAndTabs.replaceRemoteDevices(devices)
+                }
+            }
+
             let clientSynchronizer = ready.synchronizer(ClientsSynchronizer.self, delegate: delegate, prefs: prefs, why: why)
             return clientSynchronizer.synchronizeLocalClients(self.profile.remoteClientsAndTabs, withServer: ready.client, info: ready.info, notifier: self) >>== { result in
                 guard case .completed = result else {
                     return deferMaybe(result)
                 }
-                guard let account = self.profile.account else {
-                    return deferMaybe(result)
-                }
                 log.debug("Updating FxA devices list.")
-                return account.updateFxADevices(remoteDevices: self.profile.remoteClientsAndTabs).bind { _ in
-                    return deferMaybe(result)
-                }
+
+                self.profile.rustFxA.accountManager.deviceConstellation()?.refreshState()
+                return deferMaybe(result)
             }
         }
 
@@ -1016,13 +936,37 @@ open class BrowserProfile: Profile {
             return historySynchronizer.synchronizeLocalHistory(self.profile.history, withServer: ready.client, info: ready.info, greenLight: self.greenLight())
         }
 
-        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
-            guard let account = profile.account else {
-                return deferMaybe(SyncStatus.notStarted(.noAccount))
-            }
+        public class ScopedKeyError: MaybeErrorType {
+            public var description = "No key data found for scope."
+        }
+        
+        public class SyncUnlockGetURLError: MaybeErrorType {
+            public var description = "Failed to get token server endpoint url."
+        }
 
+        fileprivate func syncUnlockInfo() -> Deferred<Maybe<SyncUnlockInfo>> {
+            let d = Deferred<Maybe<SyncUnlockInfo>>()
+            RustFirefoxAccounts.shared.accountManager.getAccessToken(scope: OAuthScope.oldSync) { result in
+                guard let accessTokenInfo = try? result.get(), let key = accessTokenInfo.key else {
+                    d.fill(Maybe(failure: ScopedKeyError()))
+                    return
+                }
+
+                RustFirefoxAccounts.shared.accountManager.getTokenServerEndpointURL() { result in
+                    guard case .success(let tokenServerEndpointURL) = result else {
+                        d.fill(Maybe(failure: SyncUnlockGetURLError()))
+                        return
+                    }
+
+                    d.fill(Maybe(success: SyncUnlockInfo(kid: key.kid, fxaAccessToken: accessTokenInfo.token, syncKey: key.k, tokenserverURL: tokenServerEndpointURL.absoluteString)))
+                }
+            }
+            return d
+        }
+
+        fileprivate func syncLoginsWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
             log.debug("Syncing logins to storage.")
-            return account.syncUnlockInfo().bind({ result in
+            return syncUnlockInfo().bind({ result in
                 guard let syncUnlockInfo = result.successValue else {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
                 }
@@ -1039,12 +983,8 @@ open class BrowserProfile: Profile {
         }
 
         fileprivate func syncBookmarksWithDelegate(_ delegate: SyncDelegate, prefs: Prefs, ready: Ready, why: SyncReason) -> SyncResult {
-            guard let account = profile.account else {
-                return deferMaybe(SyncStatus.notStarted(.noAccount))
-            }
-
             log.debug("Syncing bookmarks to storage.")
-            return account.syncUnlockInfo().bind({ result in
+            return syncUnlockInfo().bind({ result in
                 guard let syncUnlockInfo = result.successValue else {
                     return deferMaybe(SyncStatus.notStarted(.unknown))
                 }
@@ -1110,20 +1050,21 @@ open class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
 
-            guard let account = self.profile.account else {
-                log.info("No account to sync with.")
-                let statuses = synchronizers.map {
-                    ($0.0, SyncStatus.notStarted(.noAccount))
-                }
-                return deferMaybe(statuses)
+            let fxa = RustFirefoxAccounts.shared.accountManager
+            guard let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
+                return deferMaybe(NoAccountError())
             }
+
+            // TODO: we should check if we can sync!
 
             // TODO: Invoke `account.commandsClient.fetchMissedRemoteCommands()` to
             // catch any missed FxA commands at time of Sync?
 
             if !isSyncing {
+                // TODO: needs lots of clean-up
+                let uid = profile.uid
                 // A sync isn't already going on, so start another one.
-                let statsSession = SyncOperationStatsSession(why: why, uid: account.uid, deviceID: account.deviceRegistration?.id)
+                let statsSession = SyncOperationStatsSession(why: why, uid: uid, deviceID: deviceID)
                 let reducer = AsyncReducer<EngineResults, EngineTasks>(initialValue: [], queue: syncQueue) { (statuses, synchronizers)  in
                     let done = Set(statuses.map { $0.0 })
                     let remaining = synchronizers.filter { !done.contains($0.0) }
@@ -1132,7 +1073,7 @@ open class BrowserProfile: Profile {
                         return deferMaybe(statuses)
                     }
 
-                    return self.syncWith(synchronizers: remaining, account: account, statsSession: statsSession, why: why) >>== { deferMaybe(statuses + $0) }
+                    return self.syncWith(synchronizers: remaining, statsSession: statsSession, why: why) >>== { deferMaybe(statuses + $0) }
                 }
 
                 reducer.terminal.upon { results in
@@ -1160,14 +1101,12 @@ open class BrowserProfile: Profile {
             }
         }
 
-        func engineEnablementChangesForAccount(account: Account.FirefoxAccount, profile: Profile) -> [String: Bool]? {
+        func engineEnablementChangesForAccount() -> [String: Bool]? {
             var enginesEnablements: [String: Bool] = [:]
             // We just created the account, the user went through the Choose What to Sync screen on FxA.
-            if let declined = account.declinedEngines {
+            if let declined = UserDefaults.standard.stringArray(forKey: "fxa.cwts.declinedSyncEngines") {
                 declined.forEach { enginesEnablements[$0] = false }
-                account.declinedEngines = nil
-                // Persist account changes so we don't try to decline engines on the next sync.
-                profile.flushAccount()
+                UserDefaults.standard.removeObject(forKey: "fxa.cwts.declinedSyncEngines")
             } else {
                 // Bundle in authState the engines the user activated/disabled since the last sync.
                 TogglableEngines.forEach { engine in
@@ -1184,21 +1123,22 @@ open class BrowserProfile: Profile {
 
         // This SHOULD NOT be called directly: use syncSeveral instead.
         fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
-                                  account: Account.FirefoxAccount,
                                   statsSession: SyncOperationStatsSession, why: SyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
-            var authState = account.syncAuthState
+            var authState = RustFirefoxAccounts.shared.syncAuthState
             let delegate = self.profile.getSyncDelegate()
-            if let enginesEnablements = self.engineEnablementChangesForAccount(account: account, profile: profile),
+            // TODO
+            if let enginesEnablements = self.engineEnablementChangesForAccount(),
                !enginesEnablements.isEmpty {
-                authState?.enginesEnablements = enginesEnablements
+                authState.enginesEnablements = enginesEnablements
                 log.debug("engines to enable: \(enginesEnablements.compactMap { $0.value ? $0.key : nil })")
                 log.debug("engines to disable: \(enginesEnablements.compactMap { !$0.value ? $0.key : nil })")
             }
 
-            authState?.clientName = account.deviceName
+            // TODO
+//            authState?.clientName = account.deviceName
 
-            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState!)
+            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
 
             let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in
                 let thunks = synchronizers.map { (i, f) in
@@ -1212,14 +1152,6 @@ open class BrowserProfile: Profile {
 
             return readyDeferred.bind { readyResult in
                 guard let success = readyResult.successValue else {
-                    if let tokenServerError = readyResult.failureValue as? TokenServerError,
-                        case let TokenServerError.remote(code, status, _) = tokenServerError,
-                        code == 401, let acct = self.profile.getAccount() {
-                        log.debug("401 error: \(tokenServerError) \(code) \(status ?? "")")
-                        if !acct.makeCohabitingWithoutKeyPair() {
-                            acct.makeSeparated()
-                        }
-                    }
                     return deferMaybe(readyResult.failureValue!)
                 }
                 return self.takeActionsOnEngineStateChanges(success) >>== { ready in
@@ -1236,6 +1168,11 @@ open class BrowserProfile: Profile {
         }
 
         @discardableResult public func syncEverything(why: SyncReason) -> Success {
+            if RustFirefoxAccounts.shared.accountManager.accountMigrationInFlight() {
+                RustFirefoxAccounts.shared.accountManager.retryMigration() { _ in }
+                return Success()
+            }
+
             let synchronizers = [
                 ("clients", self.syncClientsWithDelegate),
                 ("tabs", self.syncTabsWithDelegate),
@@ -1346,17 +1283,11 @@ open class BrowserProfile: Profile {
         }
 
         public func notify(deviceIDs: [GUID], collectionsChanged collections: [String], reason: String) -> Success {
-            guard let account = self.profile.account else {
-                return deferMaybe(NoAccountError())
-            }
-            return account.notify(deviceIDs: deviceIDs, collectionsChanged: collections, reason: reason)
+           return succeed()
         }
 
         public func notifyAll(collectionsChanged collections: [String], reason: String) -> Success {
-            guard let account = self.profile.account else {
-                return deferMaybe(NoAccountError())
-            }
-            return account.notifyAll(collectionsChanged: collections, reason: reason)
+            return succeed()
         }
     }
 }

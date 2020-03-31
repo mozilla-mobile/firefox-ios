@@ -4,6 +4,8 @@
 
 import Shared
 import SwiftyJSON
+import Account
+import SwiftKeychainWrapper
 
 private let log = Logger.syncLogger
 
@@ -27,13 +29,16 @@ extension FxAPushMessageHandler {
     /// This method then decrypts it according to the content-encoding (aes128gcm or aesgcm)
     /// and then effects changes on the logged in account.
     @discardableResult func handle(userInfo: [AnyHashable: Any]) -> PushMessageResult {
-        guard let subscription = profile.getAccount()?.pushRegistration?.defaultSubscription else {
-            return deferMaybe(PushMessageError.subscriptionOutOfDate)
+        let keychain = KeychainWrapper.sharedAppContainerKeychain
+        guard let pushReg = keychain.object(forKey: "account.push-registration") as? PushRegistration else {
+            return deferMaybe(PushMessageError.accountError)
         }
+
+        let subscription = pushReg.defaultSubscription
 
         guard let encoding = userInfo["con"] as? String, // content-encoding
             let payload = userInfo["body"] as? String else {
-                return handleVerification()
+                return deferMaybe(PushMessageError.messageIncomplete("missing con or body"))
         }
         // ver == endpointURL path, chid == channel id, aps == alert text and content_available.
 
@@ -52,186 +57,64 @@ extension FxAPushMessageHandler {
             return deferMaybe(PushMessageError.notDecrypted)
         }
 
-        return handle(plaintext: string)
-    }
+        // return handle(plaintext: string)
+        let deferred = PushMessageResult()
+        RustFirefoxAccounts.startup() { fxa in
+            fxa.accountManager.deviceConstellation()?.processRawIncomingAccountEvent(pushPayload: string) {
+                result in
+                guard case .success(let events) = result else {
+                    if case .failure(let error) = result {
+                        let err = PushMessageError.messageIncomplete(error.localizedDescription)
+                        deferred.fill(Maybe(failure: err))
+                    }
+                    return
+                }
+                events.forEach { event in
+                    switch event {
+                    case .incomingDeviceCommand(let deviceCommand):
+                        switch deviceCommand {
+                            case .tabReceived(_, let tabData):
+                                let title = tabData.last?.title ?? ""
+                                let url = tabData.last?.url ?? ""
+                                let message = PushMessage.commandReceived(tab: ["title": title, "url": url])
+                                deferred.fill(Maybe(success: message))
+                        }
+                    case .deviceConnected(let deviceName):
+                        let message = PushMessage.deviceConnected(deviceName)
+                        deferred.fill(Maybe(success: message))
+                    case .deviceDisconnected(let deviceInfo):
+                        if deviceInfo.isLocalDevice {
+                            // We can't disconnect the device from the account until we have access to the application, so we'll handle this properly in the AppDelegate (as this code in an extension),
+                            // by calling the FxALoginHelper.applicationDidDisonnect(application).
+                            self.profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
+                            let message = PushMessage.thisDeviceDisconnected
+                            deferred.fill(Maybe(success: message))
+                            return
+                        }
 
-    func handle(plaintext: String) -> PushMessageResult {
-        return handle(message: JSON(parseJSON: plaintext))
-    }
+                        guard let profile = self.profile as? BrowserProfile else {
+                            // We can't look up a name in testing, so this is the same as not knowing about it.
+                            let message = PushMessage.deviceDisconnected(nil)
+                            deferred.fill(Maybe(success: message))
+                            return
+                        }
 
-    /// The main entry point to the handler for decrypted messages.
-    func handle(message json: JSON) -> PushMessageResult {
-        if !json.isDictionary() || json.isEmpty {
-            return handleVerification()
-        }
+                        profile.remoteClientsAndTabs.getClient(fxaDeviceId: deviceInfo.deviceId).uponQueue(.main) { result in
+                            guard let device = result.successValue else { return }
+                            let message = PushMessage.deviceDisconnected(device?.name)
+                            if let id = device?.guid {
+                                profile.remoteClientsAndTabs.deleteClient(guid: id).uponQueue(.main) { _ in
+                                    print("deleted client")
+                                }
+                            }
 
-        let rawValue = json["command"].stringValue
-        guard let command = PushMessageType(rawValue: rawValue) else {
-            print("Command \(rawValue) received but not recognized")
-            return deferMaybe(PushMessageError.messageIncomplete)
-        }
-
-        let result: PushMessageResult
-        switch command {
-        case .commandReceived:
-            result = handleCommandReceived(json["data"])
-        case .deviceConnected:
-            result = handleDeviceConnected(json["data"])
-        case .deviceDisconnected:
-            result = handleDeviceDisconnected(json["data"])
-        case .profileUpdated:
-            result = handleProfileUpdated()
-        case .passwordChanged:
-            result = handlePasswordChanged()
-        case .passwordReset:
-            result = handlePasswordReset()
-        case .collectionChanged:
-            result = handleCollectionChanged(json["data"])
-        case .accountVerified:
-            result = handleVerification()
-        }
-        return result
-    }
-}
-
-extension FxAPushMessageHandler {
-    func handleVerification() -> PushMessageResult {
-        // What we'd really like to be able to start syncing immediately we receive this
-        // message, but this method is run by the extension, so we can't do it here.
-        return deferMaybe(.accountVerified)
-    }
-
-    // This will be executed by the app, not the extension.
-    // This isn't guaranteed to be run (when the app is backgrounded, and the user
-    // doesn't tap on the notification), but that's okay because:
-    // We'll naturally be syncing shortly after startup.
-    func postVerification() -> Success {
-        if let account = profile.getAccount(),
-            let syncManager = profile.syncManager {
-            return account.advance().bind { _ in
-                return syncManager.syncEverything(why: .didLogin)
-            } >>> succeed
-        }
-        return succeed()
-    }
-}
-
-/// An extension to handle each of the messages.
-extension FxAPushMessageHandler {
-    func handleCommandReceived(_ data: JSON?) -> PushMessageResult {
-        log.info("[FxA Commands] Push notification received: \(data?.stringify() ?? "nil")")
-
-        guard let index = data?["index"].int,
-            let account = profile.getAccount() else {
-            log.error("[FxA Commands] Push notification JSON is missing required 'index' value")
-            return messageIncomplete(.commandReceived)
-        }
-
-        return account.commandsClient.consumeRemoteCommand(index: index) >>== { items in
-            guard let item = items.first else {
-                log.error("[FxA Commands] Unable to consume remote command for index \(index)")
-                return self.messageIncomplete(.commandReceived)
+                            deferred.fill(Maybe(success: message))
+                        }
+                    }
+                }
             }
-
-            let message = PushMessage.commandReceived(tab: ["title": item.title, "url": item.url])
-            return deferMaybe(message)
         }
-    }
-}
-
-extension FxAPushMessageHandler {
-    func handleDeviceConnected(_ data: JSON?) -> PushMessageResult {
-        guard let deviceName = data?["deviceName"].string else {
-            return messageIncomplete(.deviceConnected)
-        }
-        let message = PushMessage.deviceConnected(deviceName)
-        return deferMaybe(message)
-    }
-}
-
-extension FxAPushMessageHandler {
-    func handleDeviceDisconnected(_ data: JSON?) -> PushMessageResult {
-        guard let deviceId = data?["id"].string else {
-            return messageIncomplete(.deviceDisconnected)
-        }
-
-        if let ourDeviceId = self.getOurDeviceId(), deviceId == ourDeviceId {
-            // We can't disconnect the device from the account until we have
-            // access to the application, so we'll handle this properly in the AppDelegate,
-            // by calling the FxALoginHelper.applicationDidDisonnect(application).
-            profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
-            return deferMaybe(PushMessage.thisDeviceDisconnected)
-        }
-
-        guard let profile = self.profile as? BrowserProfile else {
-            // We can't look up a name in testing, so this is the same as
-            // not knowing about it.
-            return deferMaybe(PushMessage.deviceDisconnected(nil))
-        }
-
-        let clients = profile.remoteClientsAndTabs
-        let getClient = clients.getClient(fxaDeviceId: deviceId)
-
-        return getClient >>== { device in
-            let message = PushMessage.deviceDisconnected(device?.name)
-            if let id = device?.guid {
-                return clients.deleteClient(guid: id) >>== { _ in deferMaybe(message) }
-            }
-
-            return deferMaybe(message)
-        }
-    }
-
-    fileprivate func getOurDeviceId() -> String? {
-        return profile.getAccount()?.deviceRegistration?.id
-    }
-}
-
-extension FxAPushMessageHandler {
-    func handleProfileUpdated() -> PushMessageResult {
-        return unimplemented(.profileUpdated)
-    }
-}
-
-extension FxAPushMessageHandler {
-    func handlePasswordChanged() -> PushMessageResult {
-        return unimplemented(.passwordChanged)
-    }
-}
-
-extension FxAPushMessageHandler {
-    func handlePasswordReset() -> PushMessageResult {
-        return unimplemented(.passwordReset)
-    }
-}
-
-extension FxAPushMessageHandler {
-    func handleCollectionChanged(_ data: JSON?) -> PushMessageResult {
-        guard let collections = data?["collections"].arrayObject as? [String] else {
-            print("collections_changed received but incomplete: \(data ?? "nil")")
-            return deferMaybe(PushMessageError.messageIncomplete)
-        }
-        // Possible values: "addons", "bookmarks", "history", "forms", "prefs", "tabs", "passwords", "clients"
-
-        // syncManager will only do a subset; others will be ignored.
-        return profile.syncManager.syncNamedCollections(why: .push, names: collections) >>== { deferMaybe(.collectionChanged(collections: collections)) }
-    }
-}
-
-/// Some utility methods
-fileprivate extension FxAPushMessageHandler {
-    func unimplemented(_ messageType: PushMessageType, with param: String? = nil) -> PushMessageResult {
-        if let param = param {
-            print("\(messageType) message received with parameter = \(param), but unimplemented")
-        } else {
-            print("\(messageType) message received, but unimplemented")
-        }
-        return deferMaybe(PushMessageError.unimplemented(messageType))
-    }
-
-    func messageIncomplete(_ messageType: PushMessageType) -> PushMessageResult {
-        print("\(messageType) message received, but incomplete")
-        return deferMaybe(PushMessageError.messageIncomplete)
+        return deferred
     }
 }
 
@@ -242,10 +125,6 @@ enum PushMessageType: String {
     case profileUpdated = "fxaccounts:profile_updated"
     case passwordChanged = "fxaccounts:password_changed"
     case passwordReset = "fxaccounts:password_reset"
-    case collectionChanged = "sync:collection_changed"
-
-    // This isn't a real message type, just the absence of one.
-    case accountVerified = "account_verified"
 }
 
 enum PushMessage: Equatable {
@@ -255,8 +134,6 @@ enum PushMessage: Equatable {
     case profileUpdated
     case passwordChanged
     case passwordReset
-    case collectionChanged(collections: [String])
-    case accountVerified
 
     // This is returned when we detect that it is us that has been disconnected.
     case thisDeviceDisconnected
@@ -277,10 +154,6 @@ enum PushMessage: Equatable {
             return .passwordChanged
         case .passwordReset:
             return .passwordReset
-        case .collectionChanged(collections: _):
-            return .collectionChanged
-        case .accountVerified:
-            return .accountVerified
         }
     }
 
@@ -294,8 +167,6 @@ enum PushMessage: Equatable {
             return lIndex == rIndex
         case (.deviceConnected(let lName), .deviceConnected(let rName)):
             return lName == rName
-        case (.collectionChanged(let lList), .collectionChanged(let rList)):
-            return lList == rList
         default:
             return true
         }
@@ -306,7 +177,7 @@ typealias PushMessageResult = Deferred<Maybe<PushMessage>>
 
 enum PushMessageError: MaybeErrorType {
     case notDecrypted
-    case messageIncomplete
+    case messageIncomplete(String)
     case unimplemented(PushMessageType)
     case timeout
     case accountError
@@ -316,7 +187,7 @@ enum PushMessageError: MaybeErrorType {
     public var description: String {
         switch self {
         case .notDecrypted: return "notDecrypted"
-        case .messageIncomplete: return "messageIncomplete"
+        case .messageIncomplete(let message): return "messageIncomplete=\(message)"
         case .unimplemented(let what): return "unimplemented=\(what)"
         case .timeout: return "timeout"
         case .accountError: return "accountError"

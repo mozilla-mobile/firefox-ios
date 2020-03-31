@@ -21,37 +21,19 @@ class ClientTests: XCTestCase {
         XCTAssertTrue(loc != nil, "Sync UA is as expected. Was \(ua)")
     }
 
-    // Simple test to make sure the WKWebView UA matches the expected FxiOS pattern.
-    func testUserAgent() {
+    func testMobileUserAgent() {
         let compare: (String) -> Bool = { ua in
             let range = ua.range(of: "^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\)", options: .regularExpression)
             return range != nil
         }
-
-        XCTAssertTrue(compare(UserAgent.getUserAgent()), "User agent computes correctly.")
-        //XCTAssertTrue(compare(UserAgent.cachedUserAgent(checkiOSVersion: true)!), "User agent is cached correctly.")
-
-        let expectation = self.expectation(description: "Found Firefox user agent")
-
-        let webView = WKWebView()
-        webView.evaluateJavaScript("navigator.userAgent") { result, error in
-            let userAgent = result as! String
-            if compare(userAgent) {
-                expectation.fulfill()
-            } else {
-                XCTFail("User agent did not match expected pattern! \(userAgent)")
-            }
-        }
-
-        waitForExpectations(timeout: 5, handler: nil)
+        XCTAssertTrue(compare(UserAgent.mobileUserAgent()), "User agent computes correctly.")
     }
-
+    
     func testDesktopUserAgent() {
         let compare: (String) -> Bool = { ua in
             let range = ua.range(of: "^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9\\.]+\\)", options: .regularExpression)
             return range != nil
         }
-
         XCTAssertTrue(compare(UserAgent.desktopUserAgent()), "Desktop user agent computes correctly.")
     }
 }

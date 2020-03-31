@@ -10,7 +10,7 @@ import Leanplum
 private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
-private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+//private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 private let FxaDevicesCountPrefKey = "FxaDevicesCount"
 
 // FxA Custom Leanplum message template for A/B testing push notifications.
@@ -303,34 +303,29 @@ class LeanPlumClient {
                 return false
             }
 
-            guard let context = context else {
-                return false
-            }
-
             // Don't display permission screen if they have already allowed/disabled push permissions
-            if self.prefs?.boolForKey(AppRequestedUserNotificationsPrefKey) ?? false {
-                FxALoginHelper.sharedInstance.readyForSyncing()
+            if self.prefs?.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? false {
                 return false
             }
 
             // Present Alert View onto the current top view controller
-            let rootViewController = UIApplication.topViewController()
-            let alert = UIAlertController(title: context.stringNamed(LPMessage.ArgTitleText), message: context.stringNamed(LPMessage.ArgMessageText), preferredStyle: .alert)
-
-            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgCancelButtonText), style: .cancel, handler: { (action) -> Void in
-                // Log cancel event and call ready for syncing
-                context.runTrackedActionNamed(LPMessage.ArgCancelAction)
-                FxALoginHelper.sharedInstance.readyForSyncing()
-            }))
-
-            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgAcceptButtonText), style: .default, handler: { (action) -> Void in
-                // Log accept event and present push permission modal
-                context.runTrackedActionNamed(LPMessage.ArgAcceptAction)
-                FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
-                self.prefs?.setBool(true, forKey: AppRequestedUserNotificationsPrefKey)
-            }))
-
-            rootViewController?.present(alert, animated: true, completion: nil)
+//            let rootViewController = UIApplication.topViewController()
+//            let alert = UIAlertController(title: context.stringNamed(LPMessage.ArgTitleText), message: context.stringNamed(LPMessage.ArgMessageText), preferredStyle: .alert)
+//
+//            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgCancelButtonText), style: .cancel, handler: { (action) -> Void in
+//                // Log cancel event and call ready for syncing
+//                context.runTrackedActionNamed(LPMessage.ArgCancelAction)
+//                FxALoginHelper.sharedInstance.readyForSyncing()
+//            }))
+//
+//            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgAcceptButtonText), style: .default, handler: { (action) -> Void in
+//                // Log accept event and present push permission modal
+//                context.runTrackedActionNamed(LPMessage.ArgAcceptAction)
+//                FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
+//                self.prefs?.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
+//            }))
+//
+//            rootViewController?.present(alert, animated: true, completion: nil)
             return true
         }
 
