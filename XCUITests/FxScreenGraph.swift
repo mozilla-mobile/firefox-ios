@@ -166,7 +166,7 @@ class Action {
     static let SelectTopSitesRows = "SelectTopSitesRows"
 
     static let GoToHomePage = "GoToHomePage"
-    static let GotoHomePage = "BookmarkAll"
+    static let BookmarkAll = "BookmarkAll"
 
     static let OpenSiriFromSettings = "OpenSiriFromSettings"
 
