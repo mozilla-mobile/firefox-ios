@@ -361,6 +361,8 @@ class StringSetting: Setting, UITextFieldDelegate {
         cell.accessibilityTraits = UIAccessibilityTraits.none
         cell.contentView.addSubview(textField)
 
+        textField.font = DynamicFontHelper.defaultHelper.DefaultStandardFont
+
         textField.snp.makeConstraints { make in
             make.height.equalTo(44)
             make.trailing.equalTo(cell.contentView).offset(-Padding)
