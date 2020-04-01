@@ -509,7 +509,7 @@ open class ServerConfigurationRequiredError: RecoverableSyncState {
         if let oldEngineConfiguration = s.engineConfiguration {
             metaGlobal = createMetaGlobalWithEngineConfiguration(oldEngineConfiguration, enginesEnablements: enginesEnablements)
         } else {
-            metaGlobal = createMetaGlobal(enginesEnablements: s.enginesEnablements)
+            metaGlobal = createMetaGlobal(enginesEnablements: enginesEnablements)
         }
         return client.uploadMetaGlobal(metaGlobal, ifUnmodifiedSince: nil)
             // ... and a new crypto/keys.
