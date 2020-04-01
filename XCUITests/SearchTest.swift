@@ -192,8 +192,8 @@ class SearchTests: BaseTestCase {
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
         if !iPad() {
-            waitForExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
-            app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
+            waitForExistence(app.menuItems["show.next.items.menu.button"], timeout: 5)
+            app.menuItems["show.next.items.menu.button"].tap()
         }
         waitForExistence(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()
