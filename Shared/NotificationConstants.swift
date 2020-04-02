@@ -13,6 +13,8 @@ extension Notification.Name {
     public static let RegisterForPushNotifications = Notification.Name("RegisterForPushNotifications")
 
     public static let FirefoxAccountProfileChanged = Notification.Name("FirefoxAccountProfileChanged")
+    
+    public static let FirefoxAccountProfilePictureChanged = Notification.Name("FirefoxWebViewProfilePictureChanged")
 
     public static let FirefoxAccountDeviceRegistrationUpdated = Notification.Name("FirefoxAccountDeviceRegistrationUpdated")
 
