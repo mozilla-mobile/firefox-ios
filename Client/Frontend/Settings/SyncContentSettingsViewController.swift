@@ -101,8 +101,6 @@ class DeviceNameSetting: StringSetting {
         let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
         super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(), settingIsValid: settingsIsValid)
 
-        RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.refreshState()
-
         notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: nil) { [weak self] notification in
             self?.tableView?.tableView.reloadData()
         }
@@ -128,6 +126,8 @@ class SyncContentSettingsViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.FxASettingsTitle
+
+        RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.refreshState()
     }
 
     required init?(coder aDecoder: NSCoder) {
