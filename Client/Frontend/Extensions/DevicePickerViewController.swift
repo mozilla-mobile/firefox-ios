@@ -70,7 +70,8 @@ class DevicePickerViewController: UITableViewController {
             self?.refreshControl?.endRefreshing()
         }
 
-        RustFirefoxAccounts.startup() { shared in
+        let profile = ensureOpenProfile()
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { shared in
             shared.accountManager.deviceConstellation()?.refreshState()
         }
 
@@ -84,7 +85,8 @@ class DevicePickerViewController: UITableViewController {
     }
 
     private func loadList() {
-        RustFirefoxAccounts.startup() { [weak self] shared in
+        let profile = ensureOpenProfile()
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { [weak self] shared in
             guard let state = shared.accountManager.deviceConstellation()?.state() else {
                 self?.loadingState = .loaded
                 return
