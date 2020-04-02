@@ -27,37 +27,30 @@ class SyncUITests: BaseTestCase {
         navigator.goto(FxASigninScreen)
         verifyFxASigninScreen()
 
-        // Disabling, xcode 11.3 update Issue 5937
-        /*
         // Check menu available from a website
         navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
         navigator.goto(FxASigninScreen)
-        verifyFxASigninScreen()*/
+        verifyFxASigninScreen()
     }
 
     private func verifyFxASigninScreen() {
-        // Disable check, page load issues on iOS13.3 sims, issue #5937
-        waitForExistence(app.webViews.firstMatch, timeout: 20)
-        // Workaround BB iOS13
-//        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
-//        waitForExistence(app.webViews.textFields["Email"], timeout: 60)
-//        XCTAssertTrue(app.navigationBars["Client.FxAContentView"].exists)
-//        XCTAssertTrue(app.webViews.textFields["Email"].exists)
-//
-//        // Verify the placeholdervalues here for the textFields
-//        let mailPlaceholder = "Email"
-//        let defaultMailPlaceholder = app.webViews.textFields["Email"].placeholderValue!
-//        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
-//        XCTAssertTrue(app.webViews.buttons["Continue"].exists)
+        waitForExistence(app.navigationBars["Client.FxAWebView"], timeout: 30)
+        waitForExistence(app.webViews.textFields["Email"], timeout: 10)
+        XCTAssertTrue(app.webViews.textFields["Email"].exists)
+
+        // Verify the placeholdervalues here for the textFields
+        let mailPlaceholder = "Email"
+        let defaultMailPlaceholder = app.webViews.textFields["Email"].placeholderValue!
+        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        XCTAssertTrue(app.webViews.buttons["Continue"].exists)
     }
-    // Disabling, xcode 11.3 update Issue 5937
-    /*
+
     func testTypeOnGivenFields() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
+        waitForExistence(app.navigationBars["Client.FxAWebView"], timeout: 60)
 
         // Tap Sign in without any value in email Password focus on Email
         navigator.performAction(Action.FxATapOnContinueButton)
@@ -69,7 +62,7 @@ class SyncUITests: BaseTestCase {
         navigator.performAction(Action.FxATapOnContinueButton)
         waitForExistence(app.webViews.staticTexts["Valid email required"])
 
-        userState.fxaUsername = "valid@gmail.com"
+        userState.fxaUsername = "foo1bar2@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
 
@@ -83,27 +76,22 @@ class SyncUITests: BaseTestCase {
         userState.fxaPassword = "atleasteight"
         navigator.performAction(Action.FxATypePassword)
         waitForExistence(app.secureTextFields["Repeat password"], timeout: 10)
-    }*/
+    }
 
     func testCreateAnAccountLink() {
         navigator.goto(FxASigninScreen)
-        // Disable check, page load issues on iOS13.3 sims, issue #5937
         waitForExistence(app.webViews.firstMatch, timeout: 20)
-//      waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
-//        waitForExistence(app.webViews.textFields["Email"], timeout: 40)
-//        userState.fxaUsername = "valid@gmail.com"
-//        navigator.performAction(Action.FxATypeEmail)
-//        navigator.performAction(Action.FxATapOnContinueButton)
-//        waitForExistence(app.webViews.buttons["Create account"])
+        waitForExistence(app.webViews.textFields["Email"], timeout: 40)
+        userState.fxaUsername = "foo1bar2@gmail.com"
+        navigator.performAction(Action.FxATypeEmail)
+        navigator.performAction(Action.FxATapOnContinueButton)
+        waitForExistence(app.webViews.buttons["Create account"])
     }
-    // Disabling, xcode 11.3 update Issue 5937
-    /*
+
     func testShowPassword() {
         // The aim of this test is to check if the option to show password is shown when user starts typing and dissapears when no password is typed
         navigator.goto(FxASigninScreen)
-        // Workaround BB iOS13
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 60)
-        waitForExistence(app.webViews.textFields["Email"], timeout: 50)
+        waitForExistence(app.webViews.textFields["Email"], timeout: 20)
         // Typing on Email should not show Show (password) option
         userState.fxaUsername = "iosmztest@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
@@ -111,11 +99,11 @@ class SyncUITests: BaseTestCase {
         // Typing on Password should show Show (password) option
         userState.fxaPassword = "f"
         navigator.performAction(Action.FxATypePassword)
-        waitForExistence(app.webViews.staticTexts["Show password"])
+        waitForExistence(app.webViews.otherElements["Show password"], timeout: 3)
         // Remove the password typed, Show (password) option should not be shown
         app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
         waitForNoExistence(app.webViews.staticTexts["Show password"])
-    }*/
+    }
 
     // Smoketest
     /*Disabled due to the new 6 digits authen code to verify account
