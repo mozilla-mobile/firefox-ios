@@ -93,7 +93,6 @@ class URLBarView: UIView {
         let locationView = TabLocationView()
         locationView.layer.cornerRadius = URLBarViewUX.TextFieldCornerRadius
         locationView.translatesAutoresizingMaskIntoConstraints = false
-        locationView.readerModeState = ReaderModeState.unavailable
         locationView.delegate = self
         return locationView
     }()
