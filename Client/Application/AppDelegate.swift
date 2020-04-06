@@ -224,13 +224,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         pushNotificationSetup()
 
         if let profile = profile as? BrowserProfile {
-            RustFirefoxAccounts.startup(prefs: profile.prefs) { shared in
-                if !shared.accountManager.hasAccount() {
-                    // Migrate bookmarks from old browser.db to new Rust places.db only
-                    // if this user is NOT signed into Sync (only migrates once if needed).
-                    profile.places.migrateBookmarksIfNeeded(fromBrowserDB: profile.db)
-                }
-            }
+            RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in }
         }
 
         // Leanplum usersearch variable setup for onboarding research
