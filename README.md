@@ -21,10 +21,11 @@ Building the code
 -----------------
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install Carthage
+1. Install Carthage and Node
     ```shell
     brew update
     brew install carthage
+    brew install node
     ```
 1. Clone the repository:
     ```shell
