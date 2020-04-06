@@ -20,56 +20,56 @@ class ShareExtensionHelper: NSObject {
     fileprivate func isFile(url: URL) -> Bool { url.scheme == "file" }
     fileprivate let profile = BrowserProfile(localName: "profile")
     var devicesActions = [DevicesShareSheet]()
-
-
-
+    
+    
+    
     // Can be a file:// or http(s):// url
     init(url: URL, tab: Tab?) {
         self.url = url
         self.selectedTab = tab
     }
-
+    
     func createActivityViewController(_ completionHandler: @escaping (_ completed: Bool, _ activityType: UIActivity.ActivityType?) -> Void) -> UIActivityViewController {
         var activityItems = [AnyObject]()
-
+        
         let printInfo = UIPrintInfo(dictionary: nil)
         printInfo.jobName = (url.absoluteString as NSString).lastPathComponent
         printInfo.outputType = .general
         activityItems.append(printInfo)
-
+        
         if let tab = selectedTab {
             activityItems.append(TabPrintPageRenderer(tab: tab))
         }
-
+        
         if let title = selectedTab?.title {
             activityItems.append(TitleActivityItemProvider(title: title))
         }
         activityItems.append(self)
         
-        if let devices = self.profile.remoteClientsAndTabs.getRemoteDevices().value.successValue?.count {
-            for i in 0 ... devices-1 {
-                let deviceShareItem = DevicesShareSheet(title: BrowserProfile(localName: "profile").remoteClientsAndTabs.getRemoteDevices().value.successValue![i].name, image: UIImage(named: "faviconFox")) { sharedItems in
-                    self.profile.sendItem(ShareItem(url: self.url.absoluteString, title: nil, favicon: nil), toDevices: [self.profile.remoteClientsAndTabs.getRemoteDevices().value.successValue![i]])
-            }
+        if let devices = self.profile.remoteClientsAndTabs.getRemoteDevices().value.successValue {
+            for device in devices {
+                let deviceShareItem = DevicesShareSheet(title: device.name, image: UIImage(named: "faviconFox")) { sharedItems in
+                    self.profile.sendItem(ShareItem(url: self.url.absoluteString, title: nil, favicon: nil), toDevices: [device])
+                }
                 devicesActions.append(deviceShareItem)
             }
         }
-
-
+        
+        
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: devicesActions)
-
+        
         // Hide 'Add to Reading List' which currently uses Safari.
         // We would also hide View Later, if possible, but the exclusion list doesn't currently support
         // third-party activity types (rdar://19430419).
         activityViewController.excludedActivityTypes = [
             UIActivity.ActivityType.addToReadingList,
         ]
-
+        
         // This needs to be ready by the time the share menu has been displayed and
         // activityViewController(activityViewController:, activityType:) is called,
         // which is after the user taps the button. So a million cycles away.
         findLoginExtensionItem()
-
+        
         activityViewController.completionWithItemsHandler = { activityType, completed, returnedItems, activityError in
             if !completed {
                 completionHandler(completed, activityType)
@@ -80,13 +80,13 @@ class ShareExtensionHelper: NSObject {
             if UIPasteboard.general.hasURLs, let url = UIPasteboard.general.urls?.first {
                 UIPasteboard.general.urls = [url]
             }
-
+            
             if self.isPasswordManager(activityType: activityType) {
                 if let logins = returnedItems {
                     self.fillPasswords(logins as [AnyObject])
                 }
             }
-
+            
             completionHandler(completed, activityType)
         }
         return activityViewController
@@ -97,7 +97,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return url
     }
-
+    
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         
         if isPasswordManager(activityType: activityType) {
@@ -105,22 +105,22 @@ extension ShareExtensionHelper: UIActivityItemSource {
         } else if isOpenByCopy(activityType: activityType) {
             return url
         }
-
+        
         // Return the URL for the selected tab. If we are in reader view then decode
         // it so that we copy the original and not the internal localhost one.
         return url.isReaderModeURL ? url.decodeReaderModeURL : url
     }
-
+    
     func activityViewController(_ activityViewController: UIActivityViewController, dataTypeIdentifierForActivityType activityType: UIActivity.ActivityType?) -> String {
         if isPasswordManager(activityType: activityType) {
             return browserFillIdentifier
         } else if isOpenByCopy(activityType: activityType) {
             return isFile(url: url) ? kUTTypeFileURL as String : kUTTypeURL as String
         }
-
+        
         return activityType == nil ? browserFillIdentifier : kUTTypeURL as String
     }
-
+    
     private func isPasswordManager(activityType: UIActivity.ActivityType?) -> Bool {
         guard let activityType = activityType?.rawValue else { return false }
         // A 'password' substring covers the most cases, such as pwsafe and 1Password.
@@ -133,7 +133,7 @@ extension ShareExtensionHelper: UIActivityItemSource {
             || (activityType == "com.8bit.bitwarden.find-login-action-extension")
             || (activityType == "me.mssun.passforios.find-login-action-extension")
     }
-
+    
     private func isOpenByCopy(activityType: UIActivity.ActivityType?) -> Bool {
         guard let activityType = activityType?.rawValue else { return false }
         return activityType.lowercased().range(of: "remoteopeninapplication-bycopy") != nil
@@ -145,25 +145,25 @@ private extension ShareExtensionHelper {
         guard let selectedWebView = selectedTab?.webView else {
             return
         }
-
+        
         // Add 1Password to share sheet
         OnePasswordExtension.shared().createExtensionItem(forWebView: selectedWebView, completion: {(extensionItem, error) -> Void in
             if extensionItem == nil {
                 log.error("Failed to create the password manager extension item: \(error.debugDescription).")
                 return
             }
-
+            
             // Set the 1Password extension item property
             self.onePasswordExtensionItem = extensionItem
         })
     }
     
-
+    
     func fillPasswords(_ returnedItems: [AnyObject]) {
         guard let selectedWebView = selectedTab?.webView else {
             return
         }
-
+        
         OnePasswordExtension.shared().fillReturnedItems(returnedItems, intoWebView: selectedWebView, completion: { (success, returnedItemsError) -> Void in
             if !success {
                 log.error("Failed to fill item into webview: \(returnedItemsError ??? "nil").")
