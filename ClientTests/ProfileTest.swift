@@ -18,14 +18,12 @@ import XCTest
 class ProfileTest: XCTestCase {
     
     var profile: MockProfile?
-    var account: MockAccount?
     
     override func setUp() {
         super.setUp()
         continueAfterFailure = false
         
-        // Setup mock profile and account
-        account = MockAccount.createMockFireFoxAccount()
+        // Setup mock profile 
         profile = MockProfile(databasePrefix: "profile-test")
     }
     

@@ -15,7 +15,7 @@ private let ProductionTokenServerEndpointURL = URL(string: "https://token.servic
 // requests; we would need a third, and a guarantee of the server state, to test this completely.
 // The rule is: if you turn up with a never-before-seen client state; you win.  If you turn up with
 // a seen-before client state, you lose.
-class TokenServerClientTests: LiveAccountTest {
+class TokenServerClientTests {
     func testErrorOutput() {
         // Make sure we don't hide error details.
         let error = NSError(domain: "test", code: 123, userInfo: nil)
