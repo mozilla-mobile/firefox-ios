@@ -162,7 +162,7 @@ class FindInPageTests: BaseTestCase {
         if (Base.app.menuItems["Find in Page"].exists) {
             Base.app.menuItems["Find in Page"].tap()
         } else {
-            Base.app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
+            Base.app.menuItems["show.next.items.menu.button"].tap()
             Base.helper.waitForExistence(Base.app.menuItems["Find in Page"])
             Base.app.menuItems["Find in Page"].tap()
         }

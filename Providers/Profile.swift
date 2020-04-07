@@ -244,12 +244,6 @@ open class BrowserProfile: Profile {
             prefs.clearAll()
         }
 
-        // Migrate bookmarks from old browser.db to new Rust places.db only
-        // if this user is NOT signed into Sync (only migrates once if needed).
-        if !self.hasAccount() {
-            self.places.migrateBookmarksIfNeeded(fromBrowserDB: self.db)
-        }
-
         // Log SQLite compile_options.
         // db.sqliteCompileOptions() >>== { compileOptions in
         //     log.debug("SQLite compile_options:\n\(compileOptions.joined(separator: "\n"))")

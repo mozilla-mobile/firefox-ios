@@ -431,10 +431,36 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
+        if url.scheme == "data" {
+            let url = url.absoluteString
+            // Allow certain image types
+            if url.hasPrefix("data:image/") && !url.hasPrefix("data:image/svg+xml") {
+                decisionHandler(.allow)
+                return
+            }
+
+            // Allow certain application types
+            if url.hasPrefix("data:application/pdf") || url.hasPrefix("data:application/json") {
+                decisionHandler(.allow)
+                return
+            }
+
+            // Allow plain text types.
+            // Note the format of data URLs is `data:[<media type>][;base64],<data>` with empty <media type> indicating plain text.
+            if url.hasPrefix("data:;base64,") || url.hasPrefix("data:,") || url.hasPrefix("data:text/plain,") || url.hasPrefix("data:text/plain;") {
+                decisionHandler(.allow)
+                return
+            }
+
+            decisionHandler(.cancel)
+            return
+        }
+
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
-        if ["http", "https", "data", "blob", "file"].contains(url.scheme) {
+        if ["http", "https", "blob", "file"].contains(url.scheme) {
             if navigationAction.targetFrame?.isMainFrame ?? false {
                 tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url)
             }

@@ -308,10 +308,10 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     func testSwitchBetweenTabsToastButton() {
         if Base.helper.skipPlatform { return }
 
-        navigator.openURL(toastUrl["url"]!)
+        navigator.openURL(urlExample)
         Base.helper.waitUntilPageLoad()
 
-        Base.app.webViews.links.staticTexts[toastUrl["link"]!].press(forDuration: 1)
+        Base.app.webViews.links.firstMatch.press(forDuration: 1)
         Base.helper.waitForExistence(Base.app.buttons["Open in New Tab"])
         Base.app.buttons["Open in New Tab"].press(forDuration: 1)
         Base.helper.waitForExistence(Base.app.buttons["Switch"])
@@ -319,8 +319,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
         // Check that the tab has changed
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForValueContains(Base.app.textFields["url"], value: toastUrl["urlLabel"]!)
-        XCTAssertTrue(Base.app.staticTexts[toastUrl["link"]!].exists)
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: "iana")
+        XCTAssertTrue(Base.app.links["RFC 2606"].exists)
         Base.helper.waitForExistence(Base.app.buttons["Show Tabs"])
         let numTab = Base.app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numTab)
@@ -328,10 +328,10 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
 
         // Go to Private mode and do the same
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-        navigator.openURL(toastUrl["url"]!)
+        navigator.openURL(urlExample)
         Base.helper.waitUntilPageLoad()
-        Base.helper.waitForExistence(Base.app.webViews.links[toastUrl["link"]!])
-        Base.app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
+        Base.helper.waitForExistence(Base.app.webViews.links.firstMatch)
+        Base.app.webViews.links.firstMatch.press(forDuration: 1)
         Base.helper.waitForExistence(Base.app.buttons["Open in New Private Tab"])
         Base.app.buttons["Open in New Private Tab"].press(forDuration: 1)
         Base.helper.waitForExistence(Base.app.buttons["Switch"])
@@ -340,8 +340,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         // Check that the tab has changed
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForExistence(Base.app.textFields["url"], timeout: 5)
-        Base.helper.waitForValueContains(Base.app.textFields["url"], value: toastUrl["urlLabel"]!)
-        XCTAssertTrue(Base.app.staticTexts[toastUrl["link"]!].exists)
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: "iana")
+        XCTAssertTrue(Base.app.links["RFC 2606"].exists)
         Base.helper.waitForExistence(Base.app.buttons["Show Tabs"])
         let numPrivTab = Base.app.buttons["Show Tabs"].value as? String
         XCTAssertEqual("2", numPrivTab)
@@ -352,10 +352,10 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
     func testSwitchBetweenTabsNoPrivatePrivateToastButton() {
         if Base.helper.skipPlatform { return }
 
-        navigator.openURL(toastUrl["url"]!)
+        navigator.openURL(urlExample)
         Base.helper.waitUntilPageLoad()
 
-        Base.app.webViews.links[toastUrl["link"]!].press(forDuration: 1)
+        Base.app.webViews.links.firstMatch.press(forDuration: 1)
         Base.helper.waitForExistence(Base.app.buttons["Open in New Tab"], timeout: 3)
         Base.app.buttons["Open in New Private Tab"].press(forDuration: 1)
         Base.helper.waitForExistence(Base.app.buttons["Switch"], timeout: 5)
@@ -364,8 +364,8 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         // Check that the tab has changed to the new open one and that the user is in private mode
         Base.helper.waitUntilPageLoad()
         Base.helper.waitForExistence(Base.app.textFields["url"], timeout: 5)
-        Base.helper.waitForValueContains(Base.app.textFields["url"], value: toastUrl["urlLabel"]!)
-        XCTAssertTrue(Base.app.staticTexts[toastUrl["link"]!].exists)
+        Base.helper.waitForValueContains(Base.app.textFields["url"], value: "iana")
+        XCTAssertTrue(Base.app.links["RFC 2606"].exists)
         navigator.goto(TabTray)
         XCTAssertTrue(Base.app.buttons["TabTrayController.maskButton"].isEnabled)
     }

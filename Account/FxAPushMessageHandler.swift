@@ -59,7 +59,7 @@ extension FxAPushMessageHandler {
 
         // return handle(plaintext: string)
         let deferred = PushMessageResult()
-        RustFirefoxAccounts.startup() { fxa in
+        RustFirefoxAccounts.startup(prefs: profile.prefs) { fxa in
             fxa.accountManager.deviceConstellation()?.processRawIncomingAccountEvent(pushPayload: string) {
                 result in
                 guard case .success(let events) = result else {

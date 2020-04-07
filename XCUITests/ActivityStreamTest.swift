@@ -142,10 +142,11 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesOpenInNewTab() {
         navigator.goto(HomePanelsScreen)
-        Base.helper.longTapOnElement(UIElements.topSiteCellGroupAppleLabel, forSeconds: 1)
-        Base.helper.tapOnElement(UIElements.contexMenuOpenInNewTab)
-        TestCheck.elementIsPresent(UIElements.topSiteCellGroup)
-        TestCheck.elementIsNotPresent(UIElements.appleLabel)
+        Base.helper.waitForExistence(UIElements.topSiteCellGroup.cells["apple"])
+        UIElements.topSiteCellGroup.cells["apple"].press(forDuration: 1)
+        Base.app.tables["Context Menu"].cells["Open in New Tab"].tap()
+        // The new tab is open but curren screen is still Homescreen
+        XCTAssert(UIElements.topSiteCellGroup.exists)
 
         navigator.goto(TabTray)
         Base.helper.tapOnElement(UIElements.homeCollectionCell)

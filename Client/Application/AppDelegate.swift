@@ -223,11 +223,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         pushNotificationSetup()
 
-        RustFirefoxAccounts.startup() { shared in
-            guard shared.accountManager.hasAccount() else { return }
-            NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+        if let profile = profile as? BrowserProfile {
+            RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in }
         }
-        
+
         // Leanplum usersearch variable setup for onboarding research
         _ = OnboardingUserResearch()
         // Leanplum setup

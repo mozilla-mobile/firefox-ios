@@ -6,8 +6,6 @@ import Shared
 import MozillaAppServices
 import SwiftKeychainWrapper
 
-fileprivate let prefs = NSUserDefaultsPrefs(prefix: "profile")
-
 /**
  A singleton that wraps the Rust FxA library.
  The singleton design is poor for testability through dependency injection and may need to be changed in future.
@@ -23,7 +21,7 @@ open class RustFirefoxAccounts {
     public var avatar: Avatar?
     private static var startupCalled = false
     public let syncAuthState: SyncAuthState
-
+    fileprivate static var prefs: Prefs?
     public let pushNotifications = PushNotificationSetup()
 
     // This is used so that if a migration failed, show a UI indicator for the user to manually log in to their account.
@@ -45,7 +43,8 @@ open class RustFirefoxAccounts {
      The alternative implemention would be to have `shared` as a Deferred<RustFirefoxAccounts>. However that
      would require a significant rewrite of existing code, for minimal added benefit.
      */
-    public static func startup(completion: ((RustFirefoxAccounts) -> Void)? = nil) {
+    public static func startup(prefs _prefs: Prefs, completion: ((RustFirefoxAccounts) -> Void)? = nil) {
+        prefs = _prefs
         if startupCalled {
             completion?(shared)
             return
@@ -69,25 +68,32 @@ open class RustFirefoxAccounts {
                 shared.accountManager.authenticateViaMigration(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
             }
 
+            if shared.accountManager.hasAccount() {
+                NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            }
+
             completion?(shared)
         }
     }
 
     private static let prefKeySyncAuthStateUniqueID = "PrefKeySyncAuthStateUniqueID"
-    private static var syncAuthStateUniqueId: String {
+    private static func syncAuthStateUniqueId(prefs: Prefs?) -> String {
         let id: String
         let key = RustFirefoxAccounts.prefKeySyncAuthStateUniqueID
-        if let _id = prefs.stringForKey(key) {
+        if let _id = prefs?.stringForKey(key) {
             id = _id
         } else {
             id = UUID().uuidString
-            prefs.setString(id, forKey: key)
+            prefs?.setString(id, forKey: key)
         }
         return id
     }
 
     private init() {
-        let server = prefs.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release
+        let prefs = RustFirefoxAccounts.prefs
+        assert(prefs != nil)
+        let server = prefs?.intForKey(PrefsKeys.UseStageServer) == 1 ? FxAConfig.Server.stage :
+            (prefs?.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release)
 
         let config = FxAConfig(server: server, clientId: clientID, redirectUri: redirectURL)
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
@@ -99,7 +105,7 @@ open class RustFirefoxAccounts {
 
         syncAuthState = FirefoxAccountSyncAuthState(
             cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",
-                                            withLabel: RustFirefoxAccounts.syncAuthStateUniqueId,
+                                            withLabel: RustFirefoxAccounts.syncAuthStateUniqueId(prefs: prefs),
                 factory: syncAuthStateCachefromJSON))
 
         // Called when account is logged in for the first time, on every app start when the account is found (even if offline), and when migration of an account is completed.
@@ -191,6 +197,8 @@ open class RustFirefoxAccounts {
     private var cachedUserProfile: FxAUserProfile?
     public var userProfile: FxAUserProfile? {
         get {
+            let prefs = RustFirefoxAccounts.prefs
+
             if let profile = accountManager.accountProfile() {
                 if let p = cachedUserProfile, FxAUserProfile(profile: profile) == p {
                     return cachedUserProfile
@@ -198,10 +206,10 @@ open class RustFirefoxAccounts {
 
                 cachedUserProfile = FxAUserProfile(profile: profile)
                 if let data = try? JSONEncoder().encode(cachedUserProfile!) {
-                    prefs.setObject(data, forKey: prefKeyCachedUserProfile)
+                    prefs?.setObject(data, forKey: prefKeyCachedUserProfile)
                 }
             } else if cachedUserProfile == nil {
-                if let data: Data = prefs.objectForKey(prefKeyCachedUserProfile) {
+                if let data: Data = prefs?.objectForKey(prefKeyCachedUserProfile) {
                     cachedUserProfile = try? JSONDecoder().decode(FxAUserProfile.self, from: data)
                 }
             }
@@ -212,8 +220,9 @@ open class RustFirefoxAccounts {
 
     public func disconnect() {
         accountManager.logout() { _ in }
-        prefs.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
-        prefs.removeObjectForKey(prefKeyCachedUserProfile)
+        let prefs = RustFirefoxAccounts.prefs
+        prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
+        prefs?.removeObjectForKey(prefKeyCachedUserProfile)
         cachedUserProfile = nil
     }
 }

@@ -81,23 +81,20 @@ class NavigationTest: BaseTestCase {
         signInToFirefoxStaticText.tap()
         checkFirefoxSyncScreenShownViaSettings()
 
-        // Disable check, page load issues on iOS13.3 sims, issue #5937
         // After that it is possible to go back to Settings
-        // let settingsButton = Base.app.navigationBars["Client.FxAContentView"].buttons["Settings"]
-        // settingsButton.tap()
+        let settingsButton = Base.app.navigationBars["Client.FxAWebView"].buttons["Settings"]
+        settingsButton.tap()
     }
     
     // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        // Disable check, page load issues on iOS13.3 sims, issue #5937
-        Base.helper.waitForExistence(Base.app.webViews.firstMatch, timeout: 20)
-//        Base.helper.waitForExistence(Base.app.navigationBars["Client.FxAContentView"], timeout: 50)
-//        Base.helper.waitForExistence(Base.app.webViews.textFields.element(boundBy: 0), timeout:50)
-//        let email = Base.app.webViews.textFields.element(boundBy: 0)
-//        // Verify the placeholdervalues here for the textFields
-//        let mailPlaceholder = "Email"
-//        let defaultMailPlaceholder = email.placeholderValue!
-//        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        Base.helper.waitForExistence(Base.app.navigationBars["Client.FxAWebView"], timeout: 20)
+        Base.helper.waitForExistence(Base.app.webViews.textFields.element(boundBy: 0), timeout:20)
+        let email = Base.app.webViews.textFields.element(boundBy: 0)
+        // Verify the placeholdervalues here for the textFields
+        let mailPlaceholder = "Email"
+        let defaultMailPlaceholder = email.placeholderValue!
+        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
     }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
@@ -107,8 +104,8 @@ class NavigationTest: BaseTestCase {
         Base.app.tables.buttons["Sign in to Sync"].tap()
         checkFirefoxSyncScreenShown()
         
-        // Disable check, page load issues on iOS13.3 sims, issue #5937 Base.app.navigationBars["Client.FxAContentView"].buttons["Close"].tap()
-        // navigator.nowAt(LibraryPanel_SyncedTabs)
+        Base.app.navigationBars["Client.FxAWebView"].buttons["Close"].tap()
+        navigator.nowAt(LibraryPanel_SyncedTabs)
     }
 
     private func checkFirefoxSyncScreenShown() {
