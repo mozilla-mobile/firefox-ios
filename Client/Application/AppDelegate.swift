@@ -138,9 +138,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
 
-        let fxaLoginHelper = FxALoginHelper.sharedInstance
-        fxaLoginHelper.application(application, didLoadProfile: profile)
-
         log.info("startApplication end")
         return true
     }
@@ -311,7 +308,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             profile._reopen()
 
             if profile.prefs.boolForKey(PendingAccountDisconnectedKey) ?? false {
-                FxALoginHelper.sharedInstance.disconnect()
+                profile.removeAccount()
             }
 
             profile.syncManager.applicationDidBecomeActive()

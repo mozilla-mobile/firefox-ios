@@ -8,6 +8,59 @@ import XCGLogger
 import SwiftyJSON
 import MozillaAppServices
 
+
+public let FxAClientErrorDomain = "org.mozilla.fxa.error"
+public let FxAClientUnknownError = NSError(domain: FxAClientErrorDomain, code: 999,
+    userInfo: [NSLocalizedDescriptionKey: "Invalid server response"])
+
+public struct FxAccountRemoteError {
+    static let AttemptToOperateOnAnUnverifiedAccount: Int32     = 104
+    static let InvalidAuthenticationToken: Int32                = 110
+    static let EndpointIsNoLongerSupported: Int32               = 116
+    static let IncorrectLoginMethodForThisAccount: Int32        = 117
+    static let IncorrectKeyRetrievalMethodForThisAccount: Int32 = 118
+    static let IncorrectAPIVersionForThisAccount: Int32         = 119
+    static let UnknownDevice: Int32                             = 123
+    static let DeviceSessionConflict: Int32                     = 124
+    static let UnknownError: Int32                              = 999
+}
+
+public enum FxAClientError: Error, CustomStringConvertible {
+    case remote(RemoteError)
+    case local(NSError)
+
+    public var description : String {
+        switch self {
+        case .remote(let err): return "FxA remote error: \(err)"
+        case .local(let err): return "FxA local error: \(err)"
+        }
+    }
+}
+
+public struct RemoteError {
+    let code: Int32
+    let errno: Int32
+    let error: String?
+    let message: String?
+    let info: String?
+
+    var isUpgradeRequired: Bool {
+        return errno == FxAccountRemoteError.EndpointIsNoLongerSupported
+            || errno == FxAccountRemoteError.IncorrectLoginMethodForThisAccount
+            || errno == FxAccountRemoteError.IncorrectKeyRetrievalMethodForThisAccount
+            || errno == FxAccountRemoteError.IncorrectAPIVersionForThisAccount
+    }
+
+    var isInvalidAuthentication: Bool {
+        return code == 401
+    }
+
+    var isUnverified: Bool {
+        return errno == FxAccountRemoteError.AttemptToOperateOnAnUnverifiedAccount
+    }
+}
+
+
 private let CurrentSyncAuthStateCacheVersion = 1
 
 private let log = Logger.syncLogger
