@@ -120,6 +120,35 @@ public class RustPlaces {
         return deferred
     }
 
+    public func migrateBookmarksIfNeeded(fromBrowserDB browserDB: BrowserDB) {
+        // Since we use the existence of places.db as an indication that we've
+        // already migrated bookmarks, assert that places.db is not open here.
+        assert(!isOpen, "Shouldn't attempt to migrate bookmarks after opening Rust places.db")
+
+        // We only need to migrate bookmarks here if the old browser.db file
+        // already exists AND the new Rust places.db file does NOT exist yet.
+        // This is to ensure that we only ever run this migration ONCE. In
+        // addition, it is the caller's (Profile.swift) responsibility to NOT
+        // use this migration API for users signed into a Firefox Account.
+        // Those users will automatically get all their bookmarks on next Sync.
+        guard FileManager.default.fileExists(atPath: browserDB.databasePath),
+            !FileManager.default.fileExists(atPath: databasePath) else {
+            return
+        }
+
+        // Ensure that the old BrowserDB schema is up-to-date before migrating.
+        _ = browserDB.touch().value
+
+        // Open the Rust places.db now for the first time.
+        _ = reopenIfClosed()
+
+        do {
+            try api?.migrateBookmarksFromBrowserDb(path: browserDB.databasePath)
+        } catch let err as NSError {
+            Sentry.shared.sendWithStacktrace(message: "Error encountered while migrating bookmarks from BrowserDB", tag: SentryTag.rustPlaces, severity: .error, description: err.localizedDescription)
+        }
+    }
+
     public func getBookmarksTree(rootGUID: GUID, recursive: Bool) -> Deferred<Maybe<BookmarkNode?>> {
         return withReader { connection in
             return try connection.getBookmarksTree(rootGUID: rootGUID, recursive: recursive)
