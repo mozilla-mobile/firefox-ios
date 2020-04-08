@@ -16,11 +16,13 @@ class DatabaseFixtureTest: BaseTestCase {
         super.setUp()
     }
 
+    /*Disabled due to issue 6390
     func testOneBookmark() {
         navigator.goto(MobileBookmarks)
         let list = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
-    }
+    }*/
+
     /*Disabled due to 5733 iOS 13
     func testBookmarksDatabaseFixture() {
         waitForTabsButton()

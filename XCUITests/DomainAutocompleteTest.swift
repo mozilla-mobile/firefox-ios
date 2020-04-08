@@ -27,6 +27,7 @@ class DomainAutocompleteTest: BaseTestCase {
         super.setUp()
     }
 
+    /*Disabled due to issue 6390
     func testAutocomplete() {
         // Basic autocompletion cases
         navigator.goto(URLBarOpen)
@@ -42,8 +43,10 @@ class DomainAutocompleteTest: BaseTestCase {
         waitForValueContains(app.textFields["address"], value: website["value"]!)
         let value2 = app.textFields["address"].value
         XCTAssertEqual(value2 as? String, website["value"]!, "Wrong autocompletion")
-    }
+    }*/
+
     // Test that deleting characters works correctly with autocomplete
+    /*Disabled due to issue 6390
     func testAutocompleteDeletingChars() {
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("www.moz")
@@ -59,7 +62,8 @@ class DomainAutocompleteTest: BaseTestCase {
 
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, website["value"]!, "Wrong autocompletion")
-    }
+    }*/
+
     // Delete the entire string and verify that the home panels are shown again.
     func testDeleteEntireString() {
         navigator.goto(URLBarOpen)
