@@ -57,6 +57,7 @@ def configure_run_commands_schema(config, job, taskdesc):
 
 def _generate_secret_command(secret):
     secret_command = [
+        "python3",  # XXX Other mobile projects run this script under python2
         "taskcluster/scripts/get-secret.py",
         "-s", secret["name"],
         "-k", secret["key"],
@@ -70,6 +71,7 @@ def _generate_secret_command(secret):
 
 def _generate_dummy_secret_command(secret):
     secret_command = [
+        "python3",  # XXX Other mobile projects run this script under python2
         "taskcluster/scripts/write-dummy-secret.py",
         "-f", secret["path"],
         "-c", secret["content"],

@@ -1,0 +1,50 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - ffios_taskgraph.transforms.screenshots:transforms
+    - ffios_taskgraph.transforms.secrets:transforms
+    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.task:transforms
+
+
+job-defaults:
+    description: Generate localized screenshots by delegating the work to bitrise.io
+    run:
+        using: run-commands
+        use-caches: false
+        secrets:
+            by-level:
+                '3':
+                    - name: project/mobile/firefox-ios/bitrise
+                      key: api_key
+                      path: .bitrise_token
+                default: []
+        dummy-secrets:
+            by-level:
+                '3': []
+                default:
+                      - content: "faketoken"
+                        path: .bitrise_token
+    run-on-tasks-for: []
+    worker:
+        artifacts:
+            - type: file
+              name: public/logs/bitrise.log
+              path: /builds/worker/checkouts/src/bitrise.log
+        docker-image: {in-tree: screenshots}
+        max-run-time: 3600
+    worker-type: b-linux
+
+jobs:
+    fr:
+        locale: fr
+        worker:
+            # TODO: Move artifacts in transforms once we start supporting all locales
+            artifacts:
+                - type: file
+                  name: public/screenshots/fr.zip
+                  path: /builds/worker/checkouts/src/fr.zip
