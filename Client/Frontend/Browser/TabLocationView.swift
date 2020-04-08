@@ -46,13 +46,12 @@ class TabLocationView: UIView {
         didSet { updateTextWithURL() }
     }
 
+    func showLockIcon(forSecureContent isSecure: Bool) {
+        lockImageView.isHidden = !isSecure
+    }
+
     var url: URL? {
         didSet {
-            let wasHidden = lockImageView.isHidden
-            lockImageView.isHidden = url?.scheme != "https"
-            if wasHidden != lockImageView.isHidden {
-                UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
-            }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
 
