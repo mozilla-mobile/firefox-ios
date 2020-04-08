@@ -531,6 +531,8 @@ open class BrowserProfile: Profile {
     }
 
     func removeAccount() {
+        RustFirefoxAccounts.shared.disconnect()
+
         // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
         if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
             application.unregisterForRemoteNotifications()
