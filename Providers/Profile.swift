@@ -331,6 +331,10 @@ open class BrowserProfile: Profile {
         log.debug("Reopening profile.")
         isShutdown = false
 
+        if !places.isOpen && !RustFirefoxAccounts.shared.accountManager.hasAccount() {
+            places.migrateBookmarksIfNeeded(fromBrowserDB: db)
+        }
+
         db.reopenIfClosed()
         _ = logins.reopenIfClosed()
         _ = places.reopenIfClosed()
@@ -427,10 +431,9 @@ open class BrowserProfile: Profile {
         return self.legacyPlaces
     }
 
-    lazy var places: RustPlaces = {
-        let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
-        return RustPlaces(databasePath: databasePath)
-    }()
+    lazy var placesDbPath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("places.db").path
+
+    lazy var places = RustPlaces(databasePath: placesDbPath)
 
     lazy var searchEngines: SearchEngines = {
         return SearchEngines(prefs: self.prefs, files: self.files)
