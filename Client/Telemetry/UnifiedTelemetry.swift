@@ -91,6 +91,10 @@ class UnifiedTelemetry {
 
             outputDict["settings"] = settings
             
+            let delegate = UIApplication.shared.delegate as? AppDelegate
+
+            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
+
             var userInterfaceStyle = "unknown" // unknown implies that device is on pre-iOS 13
             if #available(iOS 13.0, *) {
                 userInterfaceStyle = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
@@ -114,10 +118,6 @@ class UnifiedTelemetry {
             }
 
             outputDict["settings"] = settings
-
-            let delegate = UIApplication.shared.delegate as? AppDelegate
-
-            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
 
             // App Extension telemetry requires reading events stored in prefs, then clearing them from prefs.
             if let extensionEvents = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) as? [[String: String]],
