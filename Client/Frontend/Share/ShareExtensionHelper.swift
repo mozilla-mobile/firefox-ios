@@ -8,20 +8,18 @@ import OnePasswordExtension
 import ShareTo
 import Storage
 
-
 private let log = Logger.browserLogger
 
 class ShareExtensionHelper: NSObject {
-    
     fileprivate weak var selectedTab: Tab?
+    
     fileprivate let url: URL
     fileprivate var onePasswordExtensionItem: NSExtensionItem!
     fileprivate let browserFillIdentifier = "org.appextension.fill-browser-action"
+    
     fileprivate func isFile(url: URL) -> Bool { url.scheme == "file" }
     fileprivate let profile = BrowserProfile(localName: "profile")
     var devicesActions = [DevicesShareSheet]()
-    
-    
     
     // Can be a file:// or http(s):// url
     init(url: URL, tab: Tab?) {
@@ -54,7 +52,6 @@ class ShareExtensionHelper: NSObject {
                 devicesActions.append(deviceShareItem)
             }
         }
-        
         
         let activityViewController = UIActivityViewController(activityItems: activityItems, applicationActivities: devicesActions)
         
@@ -157,7 +154,6 @@ private extension ShareExtensionHelper {
             self.onePasswordExtensionItem = extensionItem
         })
     }
-    
     
     func fillPasswords(_ returnedItems: [AnyObject]) {
         guard let selectedWebView = selectedTab?.webView else {

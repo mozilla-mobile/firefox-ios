@@ -1,10 +1,6 @@
-//
-//  ContactsSharesheet.swift
-//  Client
-//
-//  Created by McNoor's  on 4/5/20.
-//  Copyright © 2020 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import UIKit
@@ -39,7 +35,6 @@ class DevicesShareSheet : UIActivity {
     override class var activityCategory: UIActivity.Category {
         return .share
     }
-    
     
     override func canPerform(withActivityItems activityItems: [Any]) -> Bool {
         return true
