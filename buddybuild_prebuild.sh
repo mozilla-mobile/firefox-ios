@@ -37,18 +37,6 @@ else
 fi
 
 #
-# Setup Sentry. We have different DSNs for Beta and Production.
-#
-
-if [ "$BUDDYBUILD_SCHEME" == FirefoxBeta ]; then
-  echo "Setting SentryDSN to $SENTRY_DSN_BETA"
-  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_BETA" "Client/Info.plist"
-elif [ "$BUDDYBUILD_SCHEME" == Firefox ]; then
-  echo "Setting SentryDSN to $SENTRY_DSN_RELEASE"
-  /usr/libexec/PlistBuddy -c "Set SentryDSN $SENTRY_DSN_RELEASE" "Client/Info.plist"
-fi
-
-#
 # Set the build number to match the Buddybuild number
 #
 
