@@ -6,6 +6,8 @@ import Shared
 import MozillaAppServices
 import SwiftKeychainWrapper
 
+let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
+
 /**
  A singleton that wraps the Rust FxA library.
  The singleton design is poor for testability through dependency injection and may need to be changed in future.
@@ -223,7 +225,10 @@ open class RustFirefoxAccounts {
         let prefs = RustFirefoxAccounts.prefs
         prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)
+        prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
         cachedUserProfile = nil
+        pushNotifications.unregister()
+        KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
     }
 }
 

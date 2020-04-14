@@ -156,7 +156,7 @@ extension FxAWebView: WKScriptMessageHandler {
                     onSessionStatus(id: id)
                 }
             case .deleteAccount, .signOut:
-                FxALoginHelper.sharedInstance.disconnect()
+                profile.removeAccount()
                 dismiss(animated: true)
             }
         }

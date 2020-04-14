@@ -6,6 +6,7 @@ import Foundation
 import AdSupport
 import Shared
 import Leanplum
+import Account
 
 private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
@@ -194,6 +195,12 @@ class LeanPlumClient {
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
             self.recordSyncedClients(with: self.profile)
         })
+
+        NotificationCenter.default.addObserver(forName: .FirefoxAccountChanged, object: nil, queue: .main) { _ in
+            if !RustFirefoxAccounts.shared.accountManager.hasAccount() {
+                LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
+            }
+        }
     }
 
     // Events
@@ -304,9 +311,9 @@ class LeanPlumClient {
             }
 
             // Don't display permission screen if they have already allowed/disabled push permissions
-            if self.prefs?.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? false {
-                return false
-            }
+//            if self.prefs?.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? false {
+//                return false
+//            }
 
             // Present Alert View onto the current top view controller
 //            let rootViewController = UIApplication.topViewController()

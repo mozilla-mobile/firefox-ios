@@ -130,7 +130,6 @@ protocol Profile: AnyObject {
     // Do we have an account that (as far as we know) is in a syncable state?
     func hasSyncableAccount() -> Bool
 
-    func getAccount() -> Account.FirefoxAccount?
     var rustFxA: RustFirefoxAccounts { get }
 
     func removeAccount()
@@ -530,25 +529,21 @@ open class BrowserProfile: Profile {
         return hasAccount() && !rustFxA.accountManager.accountNeedsReauth()
     }
 
-    func getAccount() -> Account.FirefoxAccount? {
-        return nil
-    }
-
     var rustFxA: RustFirefoxAccounts {
         return RustFirefoxAccounts.shared
     }
 
-    func removeAccountMetadata() {
-        self.prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        self.keychain.removeObject(forKey: self.name + ".account")
-    }
-
-    func removeExistingAuthenticationInfo() {
-        self.keychain.setAuthenticationInfo(nil)
-    }
-
     func removeAccount() {
-        removeAccountMetadata()
+        RustFirefoxAccounts.shared.disconnect()
+
+        // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
+        if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
+            application.unregisterForRemoteNotifications()
+        }
+
+        // remove Account Metadata
+        prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
+        keychain.removeObject(forKey: self.name + ".account")
 
         // Tell any observers that our account has changed.
         NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil)

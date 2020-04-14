@@ -858,9 +858,6 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         if !ShowDebugSettings {
             return true
         }
-        if let _ = profile.getAccount() {
-            return true
-        }
         return false
     }
 
