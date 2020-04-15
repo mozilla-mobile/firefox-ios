@@ -49,6 +49,7 @@ def sync_main(
     parser.add_argument("--token-file", required=True, type=argparse.FileType("r"), help="file that contains the bitrise.io token")
     parser.add_argument("--branch", required=True, help="the git branch to generate screenshots from")
     parser.add_argument("--commit", required=True, help="the git commit hash to generate screenshots from")
+    parser.add_argument("--workflow", required=True, help="the bitrise workflow to schedule")
     parser.add_argument("--locale", required=True, help="locale to generate the screenshots for")
 
     result = parser.parse_args()
@@ -60,7 +61,7 @@ def sync_main(
 
     loop = loop_function()
     loop.run_until_complete(_handle_asyncio_loop(
-        async_main, token, result.branch, result.commit, result.locale
+        async_main, token, result.branch, result.commit, result.workflow, result.locale
     ))
 
 
@@ -71,18 +72,18 @@ def _init_logging():
     )
 
 
-async def _handle_asyncio_loop(async_main, token, branch, commit, locale):
+async def _handle_asyncio_loop(async_main, *args):
     try:
-        await async_main(token, branch, commit, locale)
+        await async_main(*args)
     except TaskException as exc:
         log.exception("Failed to run task")
         sys.exit(exc.exit_code)
 
 
-async def async_main(token, branch, commit, locale):
+async def async_main(token, branch, commit, workflow, locale):
     headers = {"Authorization": token}
     async with RetryClient(headers=headers) as client:
-        build_slug = await schedule_build(client, branch, commit, locale)
+        build_slug = await schedule_build(client, branch, commit, workflow, locale)
         log.info("Created new job. Slug: {}".format(build_slug))
 
         try:
@@ -94,7 +95,7 @@ async def async_main(token, branch, commit, locale):
             await download_log(client, build_slug)
 
 
-async def schedule_build(client, branch, commit, locale):
+async def schedule_build(client, branch, commit, workflow, locale):
     url = BITRISE_URL_TEMPLATE.format(suffix="builds")
     data = {
         "hook_info": {
@@ -107,7 +108,7 @@ async def schedule_build(client, branch, commit, locale):
                 "mapped_to": "MOZ_LOCALE",
                 "value": locale,
             }],
-            "workflow_id": "jlorenzo_L10nScreenshotsTests",
+            "workflow_id": workflow,
         },
     }
 
