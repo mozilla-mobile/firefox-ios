@@ -10,17 +10,15 @@ transforms:
     - taskgraph.transforms.job:transforms
     - taskgraph.transforms.task:transforms
 
-kind-dependencies:
-    - build
-
-job-defaults:
-    bitrise-workflow: jlorenzo_L10nScreenshotsTests
-    build-derived-data-path: {artifact-reference: '<build/public/build/target.zip>'}
-    description: Generate localized screenshots by delegating the work to bitrise.io
-    dependencies:
-        build: build-screenshots
-    run-on-tasks-for: []
 
 jobs:
-    fr:
-        locale: fr
+    screenshots:
+        bitrise-workflow: jlorenzo_L10nBuild
+        description: Generate build instrumented for screenshots, including en-US pictures
+        locale: en-US
+        run-on-tasks-for: []
+        worker:
+            artifacts:
+                - type: file
+                  name: public/build/target.zip
+                  path: /builds/worker/checkouts/src/l10n-screenshots-dd.zip

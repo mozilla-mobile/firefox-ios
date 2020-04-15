@@ -1,5 +1,6 @@
 # Xcode
 build/
+!taskcluster/ci/build
 .build/
 *.pbxuser
 !default.pbxuser

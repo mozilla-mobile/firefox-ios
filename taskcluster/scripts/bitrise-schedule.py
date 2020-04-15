@@ -51,6 +51,7 @@ def sync_main(
     parser.add_argument("--commit", required=True, help="the git commit hash to generate screenshots from")
     parser.add_argument("--workflow", required=True, help="the bitrise workflow to schedule")
     parser.add_argument("--locale", required=True, help="locale to generate the screenshots for")
+    parser.add_argument("--derived-data-path", default=None, help="the URL to download an existing build")
 
     result = parser.parse_args()
 
@@ -61,7 +62,7 @@ def sync_main(
 
     loop = loop_function()
     loop.run_until_complete(_handle_asyncio_loop(
-        async_main, token, result.branch, result.commit, result.workflow, result.locale
+        async_main, token, result.branch, result.commit, result.workflow, result.locale, result.derived_data_path
     ))
 
 
@@ -80,10 +81,10 @@ async def _handle_asyncio_loop(async_main, *args):
         sys.exit(exc.exit_code)
 
 
-async def async_main(token, branch, commit, workflow, locale):
+async def async_main(token, *args):
     headers = {"Authorization": token}
     async with RetryClient(headers=headers) as client:
-        build_slug = await schedule_build(client, branch, commit, workflow, locale)
+        build_slug = await schedule_build(client, *args)
         log.info("Created new job. Slug: {}".format(build_slug))
 
         try:
@@ -95,8 +96,17 @@ async def async_main(token, branch, commit, workflow, locale):
             await download_log(client, build_slug)
 
 
-async def schedule_build(client, branch, commit, workflow, locale):
+async def schedule_build(client, branch, commit, workflow, locale, derived_data_path=None):
     url = BITRISE_URL_TEMPLATE.format(suffix="builds")
+
+    environment_variables = [{
+        "mapped_to": environment_variable_name,
+        "value": environment_variable_value,
+    } for environment_variable_name, environment_variable_value in (
+        ("MOZ_LOCALE", locale),
+        ("MOZ_DERIVED_DATA_PATH", derived_data_path),
+    ) if environment_variable_value]
+
     data = {
         "hook_info": {
             "type": "bitrise",
@@ -104,10 +114,7 @@ async def schedule_build(client, branch, commit, workflow, locale):
         "build_params": {
             "branch": branch,
             "commit_hash": commit,
-            "environments": [{
-                "mapped_to": "MOZ_LOCALE",
-                "value": locale,
-            }],
+            "environments": environment_variables,
             "workflow_id": workflow,
         },
     }
