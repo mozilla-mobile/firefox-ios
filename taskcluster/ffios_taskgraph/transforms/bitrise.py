@@ -18,12 +18,14 @@ def add_command(config, tasks):
     for task in tasks:
         commands = task["run"].setdefault("commands", [])
         locale = task.pop("locale")
+        workflow = task.pop("bitrise-workflow")
         commands.append([
             "python3",
-            "taskcluster/scripts/generate-screenshots.py",
+            "taskcluster/scripts/bitrise-schedule.py",
             "--token-file", ".bitrise_token",
             "--branch", config.params["head_ref"],
             "--commit", config.params["head_rev"],
+            "--workflow", workflow,
             "--locale", locale
         ])
 

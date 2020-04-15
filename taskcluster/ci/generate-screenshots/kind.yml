@@ -5,13 +5,14 @@
 loader: taskgraph.loader.transform:loader
 
 transforms:
-    - ffios_taskgraph.transforms.screenshots:transforms
+    - ffios_taskgraph.transforms.bitrise:transforms
     - ffios_taskgraph.transforms.secrets:transforms
     - taskgraph.transforms.job:transforms
     - taskgraph.transforms.task:transforms
 
 
 job-defaults:
+    bitrise-workflow: jlorenzo_L10nScreenshotsTests
     description: Generate localized screenshots by delegating the work to bitrise.io
     run:
         using: run-commands
