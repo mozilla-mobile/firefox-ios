@@ -166,6 +166,8 @@ async def download_log(client, build_slug):
 
     response = await do_http_request_json(client, url)
     download_url = response["expiring_raw_log_url"]
+    if not download_url:
+        raise TaskException("Bitrise has no log to offer for job {}. Please check https://app.bitrise.io/app/{}".format(build_slug, BITRISE_APP_SLUG_ID))
     await download_file(download_url, "bitrise.log")
 
 
