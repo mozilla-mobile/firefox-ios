@@ -160,7 +160,7 @@ extension FxAWebView: WKScriptMessageHandler {
                 profile.removeAccount()
                 dismiss(animated: true)
             case .profileChanged:
-                NotificationCenter.default.post(name: .FirefoxAccountProfilePictureChanged, object: nil)
+                RustFirefoxAccounts.shared.accountManager.refreshProfile()
             }
         }
     }
