@@ -65,8 +65,8 @@ class L10nSnapshotTests: L10nBaseSnapshotTests {
         // Select some text and long press to find the option
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
         snapshot("07LongPressTextOptions-01")
-        waitForExistence(app.menus.children(matching: .menuItem).element(boundBy: 3))
-        app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
+        waitForExistence(app.menuItems["show.next.items.menu.button"])
+        app.menuItems["show.next.items.menu.button"].tap()
         snapshot("07LongPressTextOptions-02")
     }
 
