@@ -40,11 +40,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
         var settings = [SettingSection]()
 
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
-        let accountDebugSettings = [
-            // Debug settings:
-            //ForgetSyncAuthStateDebugSetting(settings: self),
-            StageSyncServiceDebugSetting(settings: self),
-        ]
 
         let prefs = profile.prefs
         var generalSettings: [Setting] = [
@@ -95,7 +90,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
-            ] + accountChinaSyncSetting + accountDebugSettings)]
+            ] + accountChinaSyncSetting )]
 
         settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
 
@@ -136,6 +131,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 DeleteExportedDataSetting(settings: self),
                 ForceCrashSetting(settings: self),
                 SlowTheDatabase(settings: self),
+                ForgetSyncAuthStateDebugSetting(settings: self),
                 SentryIDSetting(settings: self),
             ])]
 

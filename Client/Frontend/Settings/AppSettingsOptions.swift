@@ -465,10 +465,21 @@ class SlowTheDatabase: HiddenSetting {
     }
 }
 
+class ForgetSyncAuthStateDebugSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        settings.profile.rustFxA.syncAuthState.invalidate()
+        settings.tableView.reloadData()
+    }
+}
+
 class SentryIDSetting: HiddenSetting {
     let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash") ?? "0000000000000000000000000000000000000000"
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: \(deviceAppHash)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
+        return NSAttributedString(string: "Sentry ID: \(deviceAppHash)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -843,41 +854,6 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
         prefs.setObject(toggle.isOn, forKey: prefKey)
-    }
-}
-
-class StageSyncServiceDebugSetting: WithoutAccountSetting {
-    override var accessoryType: UITableViewCell.AccessoryType { return .none }
-    var prefs: Prefs { return settings.profile.prefs }
-
-    var prefKey: String = "useStageSyncService"
-
-    override var accessibilityIdentifier: String? { return "DebugStageSync" }
-
-    override var hidden: Bool {
-        if !ShowDebugSettings {
-            return true
-        }
-        return false
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: use stage servers", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onConfigureCell(_ cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        let control = UISwitchThemed()
-        control.onTintColor = UIColor.theme.tableView.controlTint
-        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? false
-        cell.accessoryView = control
-        cell.selectionStyle = .none
-    }
-
-    @objc func switchValueChanged(_ toggle: UISwitch) {
-        prefs.setObject(toggle.isOn, forKey: prefKey)
-        settings.tableView.reloadData()
     }
 }
 
