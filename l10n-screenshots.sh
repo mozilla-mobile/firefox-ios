@@ -34,4 +34,5 @@ for lang in $LOCALES; do
         --devices "iPhone 8" --languages "$lang" \
         --output_directory "l10n-screenshots/$lang" \
         $EXTRA_FAST_LANE_ARGS
+    echo "Fastlane exited with code: $?"
 done
