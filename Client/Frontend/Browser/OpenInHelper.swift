@@ -109,8 +109,14 @@ class DownloadHelper: NSObject, OpenInHelper {
             self.browserViewController.downloadQueue.enqueue(download)
             UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
+        
+        let openInItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertOpenIn) { _,_ in
+            let helper = ShareExtensionHelper(url: self.request.url!, tab: nil)
+            let controller = helper.createActivityViewController { (_, _) in }
+            self.browserViewController.present(controller, animated: true, completion: nil)
+        }
 
-        let actions = [[filenameItem], [downloadFileItem]]
+        let actions = [[filenameItem], [downloadFileItem], [openInItem]]
 
         browserViewController.presentSheetWith(actions: actions, on: browserViewController, from: browserViewController.urlBar, closeButtonTitle: Strings.CancelString, suppressPopover: true)
     }

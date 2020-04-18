@@ -440,6 +440,7 @@ extension Strings {
 // Download Helper
 extension Strings {
     public static let OpenInDownloadHelperAlertDownloadNow = NSLocalizedString("Downloads.Alert.DownloadNow", value: "Download Now", comment: "The label of the button the user will press to start downloading a file")
+    public static let OpenInDownloadHelperAlertOpenIn = NSLocalizedString("Downloads.Alert.OpenIn", value: "Open In..", comment: "The label of the button the user will press to open a file with a certain app")
     public static let DownloadsButtonTitle = NSLocalizedString("Downloads.Toast.GoToDownloads.Button", value: "Downloads", comment: "The button to open a new tab with the Downloads home panel")
     public static let CancelDownloadDialogTitle = NSLocalizedString("Downloads.CancelDialog.Title", value: "Cancel Download", comment: "Alert dialog title when the user taps the cancel download icon.")
     public static let CancelDownloadDialogMessage = NSLocalizedString("Downloads.CancelDialog.Message", value: "Are you sure you want to cancel this download?", comment: "Alert dialog body when the user taps the cancel download icon.")
