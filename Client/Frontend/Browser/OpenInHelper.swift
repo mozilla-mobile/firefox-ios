@@ -81,10 +81,11 @@ class DownloadHelper: NSObject, OpenInHelper {
     }
 
     func open() {
-        guard let host = request.url?.host else {
+        
+        guard let url = request.url, let host = url.host else {
             return
         }
-
+        
         let download = HTTPDownload(preflightResponse: preflightResponse, request: request)
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
@@ -111,7 +112,7 @@ class DownloadHelper: NSObject, OpenInHelper {
         }
         
         let openInItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertOpenIn) { _,_ in
-            let helper = ShareExtensionHelper(url: self.request.url!, tab: nil)
+            let helper = ShareExtensionHelper(url: url, tab: nil)
             let controller = helper.createActivityViewController { (_, _) in }
             self.browserViewController.present(controller, animated: true, completion: nil)
         }
