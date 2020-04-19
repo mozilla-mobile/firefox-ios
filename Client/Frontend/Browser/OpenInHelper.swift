@@ -81,7 +81,6 @@ class DownloadHelper: NSObject, OpenInHelper {
     }
 
     func open() {
-        
         guard let url = request.url, let host = url.host else {
             return
         }
