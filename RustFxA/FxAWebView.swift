@@ -125,7 +125,7 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
 
         // Cancel navigation that happens after login to an account, which is when a redirect to `redirectURL` happens.
         // The app handles this event fully in native UI.
-        let redirectUrl = RustFirefoxAccounts.shared.redirectURL
+        let redirectUrl = RustFirefoxAccounts.redirectURL
         if let navigationURL = navigationAction.request.url {
             let expectedRedirectURL = URL(string: redirectUrl)!
             if navigationURL.scheme == expectedRedirectURL.scheme && navigationURL.host == expectedRedirectURL.host && navigationURL.path == expectedRedirectURL.path {
