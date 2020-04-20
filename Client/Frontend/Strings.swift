@@ -427,6 +427,12 @@ extension Strings {
     public static let SettingsOfferClipboardBarStatus = NSLocalizedString("Settings.OfferClipboardBar.Status", value: "When Opening Firefox", comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
 }
 
+// Link Previews
+extension Strings {
+    public static let SettingsShowLinkPreviewsTitle = NSLocalizedString("Settings.ShowLinkPreivews.Title", value: "Show Link Previews", comment: "Title of setting to enable link previews when long-pressing links.")
+    public static let SettingsShowLinkPreviewsStatus = NSLocalizedString("Settings.ShowLinkPreviews.Status", value: "When Long-pressing Links", comment: "Description displayed under the ”Show Link Previews” option")
+}
+
 // errors
 extension Strings {
     public static let UnableToDownloadError = NSLocalizedString("Downloads.Error.Message", value: "Downloads aren’t supported in Firefox yet.", comment: "The message displayed to a user when they try and perform the download of an asset that Firefox cannot currently handle.")
