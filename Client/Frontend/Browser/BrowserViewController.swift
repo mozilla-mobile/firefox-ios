@@ -2112,8 +2112,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let downloadAction = UIAlertAction(title: Strings.ContextMenuDownloadLink, style: .default) { _ in
                 self.pendingDownloadWebView = currentTab.webView
-                currentTab.webView?.evaluateJavaScript("window.__firefox__.download('\(url.absoluteString)', '\(UserScriptManager.securityToken)')")
-                UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
+                DownloadHelper.requestDownload(url: url, tab: currentTab)
             }
             actionSheetController.addAction(downloadAction, accessibilityIdentifier: "linkContextMenu.download")
 
