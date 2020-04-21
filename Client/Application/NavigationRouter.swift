@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import Glean
 
 struct FxALaunchParams {
     var query: [String: String]
@@ -65,6 +66,7 @@ enum NavigationPath {
     case fxa(params: FxALaunchParams)
     case deepLink(DeepLink)
     case text(String)
+    case glean(url: URL)
 
     init?(url: URL) {
         let urlString = url.absoluteString
@@ -95,7 +97,10 @@ enum NavigationPath {
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
             self = .text(text ?? "")
-        } else {
+        } else if urlString.starts(with: "\(scheme)://glean") {
+            self = .glean(url: url)
+        }
+        else {
             return nil
         }
     }
@@ -106,6 +111,7 @@ enum NavigationPath {
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
+        case .glean(let url): NavigationPath.handleGlean(url: url)
         }
     }
 
@@ -127,6 +133,10 @@ enum NavigationPath {
 
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
         bvc.presentSignInViewController(params)
+    }
+    
+    private static func handleGlean(url: URL) {
+        Glean.shared.handleCustomUrl(url: url)
     }
 
     private static func handleHomePanel(panel: HomePanelPath, with bvc: BrowserViewController) {
