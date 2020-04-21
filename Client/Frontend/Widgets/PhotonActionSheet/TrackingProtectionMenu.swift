@@ -181,7 +181,7 @@ extension PhotonActionSheetProtocol {
         }
         addToWhitelist.accessibilityId = "tp.add-to-whitelist"
         addToWhitelist.customHeight = { _ in
-            return PhotonActionSheetUX.RowHeight + 20
+            return PhotonActionSheetUX.RowHeight
         }
 
         let settings = PhotonActionSheetItem(title: Strings.TPProtectionSettings, iconString: "settings") { _, _ in

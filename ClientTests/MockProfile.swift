@@ -204,26 +204,12 @@ open class MockProfile: Client.Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
-    public lazy var accountConfiguration: FirefoxAccountConfiguration = {
-        return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
-    }()
-    var account: Account.FirefoxAccount?
-
     public func hasAccount() -> Bool {
-        return account != nil
+        return true
     }
 
     public func hasSyncableAccount() -> Bool {
-        return account?.actionNeeded == FxAActionNeeded.none
-    }
-
-    public func getAccount() -> Account.FirefoxAccount? {
-        return account
-    }
-
-    public func setAccount(_ account: Account.FirefoxAccount) {
-        self.account = account
-        self.syncManager.onAddedAccount()
+        return true
     }
 
     public func flushAccount() {}

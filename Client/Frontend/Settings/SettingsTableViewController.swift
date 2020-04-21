@@ -721,11 +721,6 @@ class SettingsTableViewController: ThemedTableViewController {
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let section = settings[indexPath.section]
-        // Workaround for calculating the height of default UITableViewCell cells with a subtitle under
-        // the title text label.
-        if let setting = section[indexPath.row], setting is BoolSetting && setting.status != nil {
-            return calculateStatusCellHeightForSetting(setting)
-        }
         if let setting = section[indexPath.row], let height = setting.cellHeight {
             return height
         }
@@ -740,18 +735,6 @@ class SettingsTableViewController: ThemedTableViewController {
         if let setting = section[indexPath.row], setting.enabled {
             setting.onClick(navigationController)
         }
-    }
-
-    fileprivate func calculateStatusCellHeightForSetting(_ setting: Setting) -> CGFloat {
-        dummyToggleCell.layoutSubviews()
-
-        let topBottomMargin: CGFloat = 10
-        let width = dummyToggleCell.contentView.frame.width - 2 * dummyToggleCell.separatorInset.left
-
-        return
-            heightForLabel(dummyToggleCell.textLabel!, width: width, text: setting.title?.string) +
-            heightForLabel(dummyToggleCell.detailTextLabel!, width: width, text: setting.status?.string) +
-            2 * topBottomMargin
     }
 
     fileprivate func heightForLabel(_ label: UILabel, width: CGFloat, text: String?) -> CGFloat {

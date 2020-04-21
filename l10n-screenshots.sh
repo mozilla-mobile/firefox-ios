@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 if [ -d l10n-screenshots ]; then
   echo "The l10n-screenshots directory already exists. You decide."
   exit 1
@@ -10,7 +12,12 @@ if [ ! -d firefoxios-l10n ]; then
     exit 1
 fi
 
-mkdir l10n-screenshots
+mkdir -p l10n-screenshots
+
+if [ "$1" = '--test-without-building' ]; then
+  EXTRA_FAST_LANE_ARGS='--test_without_building'
+  shift
+fi
 
 LOCALES=$*
 if [ $# -eq 0 ]; then
@@ -25,5 +32,7 @@ for lang in $LOCALES; do
         --derived_data_path l10n-screenshots-dd \
         --erase_simulator --localize_simulator \
         --devices "iPhone 8" --languages "$lang" \
-        --output_directory "l10n-screenshots/$lang" > "l10n-screenshots/$lang/snapshot.log" 2>&1
+        --output_directory "l10n-screenshots/$lang" \
+        $EXTRA_FAST_LANE_ARGS
+    echo "Fastlane exited with code: $?"
 done

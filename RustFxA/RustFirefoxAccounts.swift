@@ -6,6 +6,8 @@ import Shared
 import MozillaAppServices
 import SwiftKeychainWrapper
 
+let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
+
 /**
  A singleton that wraps the Rust FxA library.
  The singleton design is poor for testability through dependency injection and may need to be changed in future.
@@ -14,10 +16,10 @@ import SwiftKeychainWrapper
 open class RustFirefoxAccounts {
     public static let prefKeyLastDeviceName = "prefKeyLastDeviceName"
 
-    private let clientID = "1b1a3e44c54fbb58"
-    public let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
+    private static let clientID = "1b1a3e44c54fbb58"
+    public static let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     public static var shared = RustFirefoxAccounts()
-    public let accountManager: FxAccountManager
+    public var accountManager: FxAccountManager = createAccountManager()
     public var avatar: Avatar?
     private static var startupCalled = false
     public let syncAuthState: SyncAuthState
@@ -89,19 +91,45 @@ open class RustFirefoxAccounts {
         return id
     }
 
-    private init() {
+    public static func reconfig() {
+        shared.accountManager = createAccountManager()
+        shared.accountManager.initialize() { _ in
+            print("FxA reconfigured")
+        }
+    }
+
+    private static func createAccountManager() -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
         assert(prefs != nil)
         let server = prefs?.intForKey(PrefsKeys.UseStageServer) == 1 ? FxAConfig.Server.stage :
-            (prefs?.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release)
+           (prefs?.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release)
 
-        let config = FxAConfig(server: server, clientId: clientID, redirectUri: redirectURL)
+        let config: FxAConfig
+        let useCustom = prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false || prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
+        if useCustom {
+            let contentUrl: String
+            if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false, let url = prefs?.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
+                contentUrl = url
+            } else {
+                contentUrl = "https://stable.dev.lcip.org"
+            }
+
+            let tokenServer = prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false ? prefs?.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
+            config = FxAConfig(contentUrl: contentUrl, clientId: clientID, redirectUri: redirectURL, tokenServerUrlOverride: tokenServer)
+        } else {
+            config = FxAConfig(server: server, clientId: clientID, redirectUri: redirectURL)
+        }
+
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
         let deviceConfig = DeviceConfig(name: DeviceInfo.defaultClientName(), type: type, capabilities: [.sendTab])
         let accessGroupPrefix = Bundle.main.object(forInfoDictionaryKey: "MozDevelopmentTeam") as! String
         let accessGroupIdentifier = AppInfo.keychainAccessGroupWithPrefix(accessGroupPrefix)
 
-        accountManager = FxAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
+        return FxAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
+    }
+
+    private init() {
+        let prefs = RustFirefoxAccounts.prefs
 
         syncAuthState = FirefoxAccountSyncAuthState(
             cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",
@@ -223,7 +251,10 @@ open class RustFirefoxAccounts {
         let prefs = RustFirefoxAccounts.prefs
         prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
         prefs?.removeObjectForKey(prefKeyCachedUserProfile)
+        prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
         cachedUserProfile = nil
+        pushNotifications.unregister()
+        KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
     }
 }
 

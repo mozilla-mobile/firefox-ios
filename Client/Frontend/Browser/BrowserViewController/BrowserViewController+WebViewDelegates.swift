@@ -100,7 +100,7 @@ extension BrowserViewController: WKUIDelegate {
     @available(iOS 13.0, *)
     func webView(_ webView: WKWebView, contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo, completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
         completionHandler(UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            guard let url = elementInfo.linkURL else { return nil }
+            guard let url = elementInfo.linkURL, self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
             let previewViewController = UIViewController()
             previewViewController.view.isUserInteractionEnabled = false
             let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
@@ -440,8 +440,8 @@ extension BrowserViewController: WKNavigationDelegate {
                 return
             }
 
-            // Allow certain application types
-            if url.hasPrefix("data:application/pdf") || url.hasPrefix("data:application/json") {
+            // Allow video, and certain application types
+            if url.hasPrefix("data:video/") || url.hasPrefix("data:application/pdf") || url.hasPrefix("data:application/json") {
                 decisionHandler(.allow)
                 return
             }

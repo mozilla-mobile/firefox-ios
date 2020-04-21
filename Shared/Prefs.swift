@@ -25,6 +25,8 @@ public struct PrefsKeys {
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyETPCoverSheetShowType = "etpCoverSheetShowType"
 
+    public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
+
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"
@@ -37,13 +39,8 @@ public struct PrefsKeys {
 
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
-
-    public static let KeyUseCustomAccountAutoconfig = "useCustomSyncService"
-    public static let KeyCustomSyncToken = "customSyncTokenServer"
-    public static let KeyCustomSyncProfile = "customSyncProfileServer"
-    public static let KeyCustomSyncOauth = "customSyncOauthServer"
-    public static let KeyCustomSyncAuth = "customSyncAuthServer"
-    public static let KeyCustomSyncWeb = "customSyncWebServer"
+    public static let KeyUseCustomFxAContentServer = "useCustomFxAContentServer"
+    public static let KeyCustomFxAContentServer = "customFxAContentServer"
     public static let UseStageServer = "useStageSyncService"
     public static let KeyFxALastCommandIndex = "FxALastCommandIndex"
     public static let KeyFxAHandledCommands = "FxAHandledCommands"

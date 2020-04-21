@@ -215,7 +215,7 @@ extension Strings {
     public static let SaveLoginUsernamePrompt = NSLocalizedString("LoginsHelper.PromptSaveLogin.Title", value: "Save login %@ for %@?", comment: "Prompt for saving a login. The first parameter is the username being saved. The second parameter is the hostname of the site.")
     public static let SaveLoginPrompt = NSLocalizedString("LoginsHelper.PromptSavePassword.Title", value: "Save password for %@?", comment: "Prompt for saving a password with no username. The parameter is the hostname of the site.")
     public static let UpdateLoginUsernamePrompt = NSLocalizedString("LoginsHelper.PromptUpdateLogin.Title", value: "Update login %@ for %@?", comment: "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site.")
-    public static let UpdateLoginPrompt = NSLocalizedString("LoginsHelper.PromptUpdateLogin.Title", value: "Update login %@ for %@?", comment: "Prompt for updating a login. The first parameter is the username for which the password will be updated for. The second parameter is the hostname of the site.")
+    public static let UpdateLoginPrompt = NSLocalizedString("LoginsHelper.PromptUpdateLogin.Title", value: "Update login for %@?", comment: "Prompt for updating a login. The first parameter is the hostname for which the password will be updated for.")
 
     // Setting
     public static let SettingToSaveLogins = NSLocalizedString("Settings.SaveLogins.Title", value: "Save Logins", comment: "Setting to enable the built-in password manager")
@@ -306,56 +306,13 @@ extension Strings {
 
 }
 
-// Custom account settings - These strings did not make it for the v10 l10n deadline so we have turned them into regular strings. These strings will come back localized in a next version.
-
+// For 'Advanced Sync Settings' view, which is a debug setting. English only, there is little value in maintaining L10N strings for these.
 extension Strings {
-    // Settings.AdvancedAccount.AutoconfigSectionFooter
-    // Details for using custom Firefox Account service.
-    public static let SettingsAdvancedAccountAutoconfigSectionFooter = "To use custom Firefox Account/Sync servers via autoconfig, specify the root URL of the custom Firefox Account site. This will download the configuration and setup this device to use the new service. After the new service has been set, you will need to create a new Firefox Account or login with an existing one."
-
-    // Settings.AdvancedAccount.TokenServerSectionFooter
-    // Details for using custom Firefox Account service.
-    public static let SettingsAdvancedAccountTokenServerSectionFooter = "To override a custom Firefox Sync server, specify the URL of the custom Firefox Sync server. After the new server has been set, you will need to log-out and login again for the changes to take effect."
-
-    // Settings.AdvancedAccount.SectionName
-    // Title displayed in header of the setting panel.
     public static let SettingsAdvancedAccountTitle = "Advanced Sync Settings"
-
-    // Settings.AdvancedAccount.CustomAutoconfigURIPlaceholder
-    // Title displayed in header of the setting panel.
-    public static let SettingsAdvancedAccountCustomAutoconfigURIPlaceholder = "Custom Autoconfig URI"
-
-    // Settings.AdvancedAccount.ustomSyncTokenServerURIPlaceholder
-    // Title displayed in header of the setting panel.
-    public static let SettingsAdvancedAccountCustomSyncTokenServerURIPlaceholder = "Custom Sync Token Server URI"
-
-    // Settings.AdvancedAccount.UpdatedAlertMessage
-    // Messaged displayed when sync service has been successfully set.
-    public static let SettingsAdvancedAccountUrlUpdatedAlertMessage = "Firefox Account service updated. To begin using custom server, please log out and re-login."
-
-    // Settings.AdvancedAccount.ErrorAlertTitle
-    // Error alert message title.
-    public static let SettingsAdvancedAccountUrlErrorAlertTitle = "Error"
-
-    // Settings.AdvancedAccount.ErrorAlertMessage
-    // Messaged displayed when sync service has an error setting a custom sync url.
-    public static let SettingsAdvancedAccountUrlErrorAlertMessage = "There was an error while attempting to fetch the autoconfig. Please make sure that it is a valid Firefox Account root URL."
-
-    // Settings.AdvancedAccount.UseCustomAccountsServiceTitle
-    // Toggle switch to use custom FxA server
-    public static let SettingsAdvancedAccountUseCustomAccountsServiceTitle = "Use Custom Autoconfig"
-
-    // Settings.AdvancedAccount.EmptyAutoconfigURIErrorAlertMessage
-    // No custom service set.
-    public static let SettingsAdvancedAccountEmptyAutoconfigURIErrorAlertMessage = "Please enter a custom autoconfig URI before enabling."
-
-    // Settings.AdvancedAccount.UseCustomSyncTokenServerTitle
-    // Toggle switch to use custom FxA server
+    public static let SettingsAdvancedAccountCustomFxAContentServerURI = "Custom Firefox Account Content Server URI"
+    public static let SettingsAdvancedAccountUseCustomFxAContentServerURITitle = "Use Custom FxA Content Server"
+    public static let SettingsAdvancedAccountCustomSyncTokenServerURI = "Custom Sync Token Server URI"
     public static let SettingsAdvancedAccountUseCustomSyncTokenServerTitle = "Use Custom Sync Token Server"
-
-    // Settings.AdvancedAccount.EmptyTokenServerURIErrorAlertMessage
-    // No custom service set.
-    public static let SettingsAdvancedAccountEmptyTokenServerURIErrorAlertMessage = "Please enter a custom token server URI before enabling."
 }
 
 // Open With Settings
@@ -425,6 +382,12 @@ extension Strings {
 
     public static let SettingsOfferClipboardBarTitle = NSLocalizedString("Settings.OfferClipboardBar.Title", value: "Offer to Open Copied Links", comment: "Title of setting to enable the Go to Copied URL feature. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
     public static let SettingsOfferClipboardBarStatus = NSLocalizedString("Settings.OfferClipboardBar.Status", value: "When Opening Firefox", comment: "Description displayed under the ”Offer to Open Copied Link” option. See https://bug1223660.bmoattachments.org/attachment.cgi?id=8898349")
+}
+
+// Link Previews
+extension Strings {
+    public static let SettingsShowLinkPreviewsTitle = NSLocalizedString("Settings.ShowLinkPreivews.Title", value: "Show Link Previews", comment: "Title of setting to enable link previews when long-pressing links.")
+    public static let SettingsShowLinkPreviewsStatus = NSLocalizedString("Settings.ShowLinkPreviews.Status", value: "When Long-pressing Links", comment: "Description displayed under the ”Show Link Previews” option")
 }
 
 // errors
