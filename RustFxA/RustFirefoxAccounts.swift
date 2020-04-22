@@ -150,10 +150,6 @@ open class RustFirefoxAccounts {
         NotificationCenter.default.addObserver(forName: .accountProfileUpdate, object: nil, queue: .main) { [weak self] notification in
             self?.update()
         }
-        
-        NotificationCenter.default.addObserver(forName: .FirefoxAccountProfilePictureChanged, object: nil, queue: .main) { [weak self] notification in
-            self?.update()
-        }
 
         NotificationCenter.default.addObserver(forName: .accountMigrationFailed, object: nil, queue: .main) { [weak self] notification in
             var info = ""
