@@ -21,7 +21,7 @@ fi
 
 LOCALES=$*
 if [ $# -eq 0 ]; then
-  LOCALES="af ar ast az bg bn br bs ca cs cy da de dsb el en-GB en-US eo es es-CL es-MX eu fa fr ga-IE gd gl he hi-IN hsb hu hy-AM id is it ja kab kk km kn ko lo lt lv ml ms my nb-NO ne-NP nl nn-NO or pa-IN pl pt-BR pt-PT rm ro ru ses si sk sl sq sv-SE te th tl tn tr uk ur uz zh-CN zh-TW"
+  LOCALES="af an anp ar ast az bg bn bo br bs ca co cs cy da de dsb el en-CA en-GB en-US eo es-AR es-CL es-MX es eu fa fi fr ga-IE gd gl gu-IN he hi-IN hr hsb hu hy-AM ia id is it ja jv ka kab kk km kn ko lo lt lv ml mr ms my nb-NO ne-NP nl nn-NO oc or pa-IN pl pt-BR pt-PT rm ro ru ses si sk sl sq su sv-SE ta te th tl tr uk ur uz vi zgh zh-CN zh-TW"
 fi
 
 for lang in $LOCALES; do
