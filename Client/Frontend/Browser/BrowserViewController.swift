@@ -999,6 +999,7 @@ class BrowserViewController: UIViewController {
         } else {
             request = nil
         }
+
         switchToPrivacyMode(isPrivate: isPrivate)
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
