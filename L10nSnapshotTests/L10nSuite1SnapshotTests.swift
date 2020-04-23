@@ -33,21 +33,21 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.openURL("http://wikipedia.org")
         navigator.goto(WebLinkContextMenu)
         drag()
-        snapshot("1WebViewContextMenu-01-link")
+        snapshot("WebViewContextMenu-01-link")
         navigator.back()
 
         // Image
         navigator.openURL("http://wikipedia.org")
         navigator.goto(WebImageContextMenu)
         drag()
-        snapshot("1WebViewContextMenu-02-image")
+        snapshot("WebViewContextMenu-02-image")
         navigator.back()
     }
 
     func test2WebViewAuthenticationDialog() {
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
         navigator.goto(BasicAuthDialog)
-        snapshot("2WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
+        snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
         navigator.back()
     }
     
@@ -58,47 +58,47 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.openURL(loremIpsumURL2)
         navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
-        snapshot("3ContextMenuReloadButton-01")
+        snapshot("ContextMenuReloadButton-01")
         navigator.toggleOn(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
         navigator.goto(ReloadLongPressMenu)
-        snapshot("3ContextMenuReloadButton-02", waitForLoadingIndicator: false)
+        snapshot("ContextMenuReloadButton-02", waitForLoadingIndicator: false)
 
         navigator.toggleOff(userState.trackingProtectionPerTabEnabled, withAction: Action.ToggleTrackingProtectionPerTabEnabled)
         navigator.goto(ReloadLongPressMenu)
 
         // Snapshot of 'Reload *with* tracking protection' label, because trackingProtectionPerTabEnabled is false.
-        snapshot("3ContextMenuReloadButton-03", waitForLoadingIndicator: false)
+        snapshot("ContextMenuReloadButton-03", waitForLoadingIndicator: false)
     }
 
     func test4PasscodeSettings() {
         navigator.goto(SetPasscodeScreen)
-        snapshot("4SetPasscodeScreen-1-nopasscode")
+        snapshot("SetPasscodeScreen-1-nopasscode")
         userState.newPasscode = "111111"
         navigator.performAction(Action.SetPasscodeTypeOnce)
-        snapshot("4SetPasscodeScreen-2-typepasscode")
+        snapshot("SetPasscodeScreen-2-typepasscode")
 
         userState.newPasscode = "111112"
         navigator.performAction(Action.SetPasscodeTypeOnce)
-        snapshot("4SetPasscodeScreen-3-passcodesmustmatch")
+        snapshot("SetPasscodeScreen-3-passcodesmustmatch")
 
         userState.newPasscode = "111111"
         navigator.performAction(Action.SetPasscode)
-        snapshot("4SetPasscodeScreen-3")
+        snapshot("SetPasscodeScreen-3")
 
         navigator.goto(PasscodeIntervalSettings)
-        snapshot("4PasscodeIntervalScreen-1")
+        snapshot("PasscodeIntervalScreen-1")
     }
 
     func test5TopSitesMenu() {
         navigator.goto(HomePanel_TopSites)
         navigator.goto(TopSitesPanelContextMenu)
-        snapshot("5TopSitesMenu-01")
+        snapshot("TopSitesMenu-01")
     }
 
     func test6HistoryTableContextMenu() {
         navigator.openURL(loremIpsumURL2)
         navigator.goto(HistoryPanelContextMenu)
-        snapshot("6HistoryTableContextMenu-01")
+        snapshot("HistoryTableContextMenu-01")
     }
 
     func test7BookmarksTableContextMenu() {
@@ -106,7 +106,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.performAction(Action.Bookmark)
         navigator.createNewTab()
         navigator.goto(BookmarksPanelContextMenu)
-        snapshot("7BookmarksTableContextMenu-01")
+        snapshot("BookmarksTableContextMenu-01")
     }
 
     // Disable in parallel testing
@@ -123,18 +123,18 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         // Website without blocked elements
         navigator.openURL(loremIpsumURL2)
         navigator.goto(TrackingProtectionContextMenuDetails)
-        snapshot("8TrackingProtectionEnabledPerSite-01")
+        snapshot("TrackingProtectionEnabledPerSite-01")
         navigator.performAction(Action.TrackingProtectionperSiteToggle)
-        snapshot("8TrackingProtectionDisabledPerSite-02")
+        snapshot("TrackingProtectionDisabledPerSite-02")
 
         // Website with blocked elements
         navigator.openNewURL(urlString: "twitter.com")
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.goto(TrackingProtectionContextMenuDetails)
-        snapshot("8TrackingProtectionBlockedElements-01")
+        snapshot("TrackingProtectionBlockedElements-01")
         // Tap on the block element to get more details
         app.cells.element(boundBy: 2).tap()
-        snapshot("8TrackingProtectionBlockedElements-02")
+        snapshot("TrackingProtectionBlockedElements-02")
     }
 
     func test9SettingsETP() {
@@ -143,11 +143,11 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
        // Check the warning alert
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
 
-        snapshot("9TrackingProtectionStrictWarning-01")
+        snapshot("TrackingProtectionStrictWarning-01")
         app.alerts.buttons.firstMatch.tap()
         waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
-        snapshot("9TrackingProtectionBasicMoreInfo-01")
+        snapshot("TrackingProtectionBasicMoreInfo-01")
 
         waitForExistence(app.navigationBars["Client.TPAccessoryInfo"])
         // Go back to TP settings
@@ -157,7 +157,6 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListStrict"])
         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].buttons.firstMatch.tap()
         app.tables.cells.staticTexts.firstMatch.swipeUp()
-        snapshot("9TrackingProtectionStrictMoreInfo-02")
+        snapshot("TrackingProtectionStrictMoreInfo-02")
     }
-    
 }
