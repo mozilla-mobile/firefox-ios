@@ -30,6 +30,7 @@ fileprivate enum RemoteCommand: String {
     case changePassword = "fxaccounts:change_password"
     case signOut = "fxaccounts:logout"
     case deleteAccount = "fxaccounts:delete_account"
+    case profileChanged = "profile:change"
 }
 
 /**
@@ -158,6 +159,8 @@ extension FxAWebView: WKScriptMessageHandler {
             case .deleteAccount, .signOut:
                 profile.removeAccount()
                 dismiss(animated: true)
+            case .profileChanged:
+                RustFirefoxAccounts.shared.accountManager.refreshProfile(forceRefresh: true)
             }
         }
     }
