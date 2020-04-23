@@ -8,6 +8,14 @@ import SwiftKeychainWrapper
 
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
+// Used to ignore unknown classes when de-archiving
+final class Unknown: NSObject, NSCoding  {
+    func encode(with coder: NSCoder) {}
+    init(coder aDecoder: NSCoder) {
+        super.init();
+    }
+}
+
 /**
  A singleton that wraps the Rust FxA library.
  The singleton design is poor for testability through dependency injection and may need to be changed in future.
@@ -170,6 +178,10 @@ open class RustFirefoxAccounts {
         let keychain = KeychainWrapper.sharedAppContainerKeychain
         let key = "profile.account"
         keychain.ensureObjectItemAccessibility(.afterFirstUnlock, forKey: key)
+
+        // Ignore this class when de-archiving, it isn't needed.
+        NSKeyedUnarchiver.setClass(Unknown.self, forClassName: "Account.FxADeviceRegistration")
+
         guard let dict = keychain.object(forKey: key) as? [String: AnyObject], let guid = dict["stateKeyLabel"] else {
             return nil
         }
