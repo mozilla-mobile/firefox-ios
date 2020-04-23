@@ -25,8 +25,6 @@ public struct PrefsKeys {
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyETPCoverSheetShowType = "etpCoverSheetShowType"
 
-    public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
-
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     //Activity Stream
     public static let KeyTopSitesCacheIsValid = "topSitesCacheIsValid"

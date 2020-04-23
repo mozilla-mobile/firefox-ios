@@ -76,10 +76,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         generalSettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
                         titleText: Strings.SettingsOfferClipboardBarTitle,
-                        statusText: Strings.SettingsOfferClipboardBarStatus),
-            BoolSetting(prefs: prefs, prefKey: PrefsKeys.ContextMenuShowLinkPreviews, defaultValue: true,
-                        titleText: Strings.SettingsShowLinkPreviewsTitle,
-                        statusText: Strings.SettingsShowLinkPreviewsStatus)
+                        statusText: Strings.SettingsOfferClipboardBarStatus)
         ]
 
         let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
