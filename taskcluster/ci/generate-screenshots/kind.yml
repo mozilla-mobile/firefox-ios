@@ -2,7 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 ---
-loader: taskgraph.loader.transform:loader
+loader: ffios_taskgraph.loader.screenshots_locales:loader
 
 transforms:
     - ffios_taskgraph.transforms.bitrise:transforms
@@ -13,6 +13,11 @@ transforms:
 kind-dependencies:
     - build
 
+not-for-locales:
+    - en-US   # Already built as part of the build task
+
+locales-per-chunk: 6
+
 job-defaults:
     bitrise-workflow: jlorenzo_L10nScreenshotsTests
     build-derived-data-path: {artifact-reference: '<build/public/build/target.zip>'}
@@ -20,7 +25,3 @@ job-defaults:
     dependencies:
         build: build-screenshots
     run-on-tasks-for: []
-
-jobs:
-    fr:
-        locale: fr
