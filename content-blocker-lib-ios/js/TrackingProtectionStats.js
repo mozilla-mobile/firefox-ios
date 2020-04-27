@@ -59,7 +59,7 @@ function install() {
     sendUrlsTimeout = setTimeout(() => {
       sendUrlsTimeout = null;
       if (sendUrls.length < 1) return;
-      webkit.messageHandlers.trackingProtectionStats.postMessage({ securityToken: SECURITY_TOKEN, urls: sendUrls });
+      webkit.messageHandlers.trackingProtectionStats.postMessage({ urls: sendUrls });
       sendUrls = new Array();
     }, 200);
   }
