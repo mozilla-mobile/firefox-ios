@@ -28,12 +28,14 @@ class ClientTests: XCTestCase {
         }
         XCTAssertTrue(compare(UserAgent.mobileUserAgent()), "User agent computes correctly.")
     }
-    
-    func testDesktopUserAgent() {
-        let compare: (String) -> Bool = { ua in
-            let range = ua.range(of: "^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9\\.]+\\)", options: .regularExpression)
-            return range != nil
-        }
-        XCTAssertTrue(compare(UserAgent.desktopUserAgent()), "Desktop user agent computes correctly.")
-    }
+
+    // Disabling for now due to https://github.com/mozilla-mobile/firefox-ios/pull/6468
+    // This hard-codes the desktop UA, not much to test as a result of that
+//    func testDesktopUserAgent() {
+//        let compare: (String) -> Bool = { ua in
+//            let range = ua.range(of: "^Mozilla/5\\.0 \\(Macintosh; Intel Mac OS X [0-9\\.]+\\)", options: .regularExpression)
+//            return range != nil
+//        }
+//        XCTAssertTrue(compare(UserAgent.desktopUserAgent()), "Desktop user agent computes correctly.")
+//    }
 }
