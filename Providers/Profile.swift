@@ -543,7 +543,7 @@ open class BrowserProfile: Profile {
 
         // remove Account Metadata
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
-        keychain.removeObject(forKey: self.name + ".account")
+        keychain.removeAllKeys()
 
         // Tell any observers that our account has changed.
         NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil)
