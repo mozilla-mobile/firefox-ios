@@ -23,12 +23,11 @@ Object.defineProperty(window.__firefox__, "download", {
           return;
         }
 
-        var filename = getLastPathComponent(url);
         var blob = this.response;
 
         blobToBase64String(blob, function(base64String) {
           webkit.messageHandlers.downloadManager.postMessage({
-            filename: filename,
+            url: url,
             mimeType: blob.type,
             size: blob.size,
             base64String: base64String
