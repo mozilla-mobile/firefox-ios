@@ -283,7 +283,8 @@ class TabTrayV2ViewController: UIViewController {
         // We dismiss the tab tray once we are done. So no need to re-enable the toolbar
         toolbar.isUserInteractionEnabled = false
 
-        tabManager.selectTab(tabManager.addTab(request, isPrivate: tabTrayViewModel.isPrivate))
+        tabTrayViewModel.addTab(request)
+//        tabManager.selectTab(tabManager.addTab(request, isPrivate: tabTrayViewModel.isPrivate))
     }
 }
 
@@ -384,7 +385,8 @@ extension TabTrayV2ViewController {
 extension TabTrayV2ViewController: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabTrayViewModel.dataStore.at(index) {
-            tabManager.selectTab(tab)
+//            tabManager.selectTab(tab)
+            tabTrayViewModel.selectTab(tab)
             dismissTabTray()
         }
     }
@@ -527,7 +529,7 @@ extension TabTrayV2ViewController: TabDisplayCompletionDelegateV2 {
 extension TabTrayV2ViewController {
     func removeByButtonOrSwipe(tab: Tab, cell: TabCellV2) {
         tabTrayViewModel.tabDisplayCompletionDelegateV2 = self
-        tabTrayViewModel.closeActionPerformed(forCell: cell)
+        tabTrayViewModel.removeTab(forCell: cell)
     }
 }
 

@@ -30,10 +30,6 @@ protocol TabDisplayCompletionDelegateV2: AnyObject {
 
 // MARK: -
 
-@objc protocol TabSelectionDelegateV2: AnyObject {
-    func didSelectTabAtIndex(_ index: Int)
-}
-
 protocol TopTabCellDelegateV2: AnyObject {
     func tabCellDidClose(_ cell: UICollectionViewCell)
 }
@@ -196,7 +192,7 @@ class TabTrayV2ViewModel: NSObject {
     }
 
     // The user has tapped the close button or has swiped away the cell
-    func closeActionPerformed(forCell cell: UICollectionViewCell) {
+    func removeTab(forCell cell: UICollectionViewCell) {
         if isDragging {
             return
         }
@@ -230,6 +226,14 @@ class TabTrayV2ViewModel: NSObject {
                             completion()
                         })
     }
+    
+    func selectTab(_ tab: Tab) {
+        tabManager.selectTab(tab)
+    }
+    
+    func addTab(_ request: URLRequest! = nil) {
+        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
+    }
 }
 
 extension TabTrayV2ViewModel: UICollectionViewDataSource {
@@ -252,16 +256,6 @@ extension TabTrayV2ViewModel: UICollectionViewDataSource {
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderFooter", for: indexPath) as? TopTabsHeaderFooter else { return UICollectionReusableView() }
         view.arrangeLine(kind)
         return view
-    }
-}
-
-extension TabTrayV2ViewModel: TabSelectionDelegateV2 {
-    func didSelectTabAtIndex(_ index: Int) {
-        guard let tab = dataStore.at(index) else { return }
-        if tabsToDisplay.firstIndex(of: tab) != nil {
-            tabManager.selectTab(tab)
-        }
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tab)
     }
 }
 
