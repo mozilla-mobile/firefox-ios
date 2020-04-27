@@ -84,7 +84,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       // XXX - Allowing the page to set origin information in this message is a security problem. Right now its just ignored...
       // TODO: We need to designate what type of message we're sending here...
       var requestData = { form: form };
-      var messageData = { securityToken: SECURITY_TOKEN, type: "request", formOrigin: formOrigin, actionOrigin: actionOrigin };
+      var messageData = { type: "request", formOrigin: formOrigin, actionOrigin: actionOrigin };
       return this._sendRequest(requestData, messageData);
     },
 
@@ -367,7 +367,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
       var opener = win.opener ? win.opener.top : null;
 
       webkit.messageHandlers.loginsManagerMessageHandler.postMessage({
-        securityToken: SECURITY_TOKEN,
         type: "submit",
         hostname: hostname,
         username: mockUsername.value,
