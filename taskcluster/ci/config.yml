@@ -14,11 +14,11 @@ taskgraph:
 
 workers:
     aliases:
-        b-linux:
+        bitrise:
             provisioner: 'mobile-{level}'
             implementation: docker-worker
             os: linux
-            worker-type: 'b-linux'
+            worker-type: 'bitrise'
         images:
             provisioner: 'mobile-{level}'
             implementation: docker-worker

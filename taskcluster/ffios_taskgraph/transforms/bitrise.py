@@ -66,7 +66,7 @@ def set_worker_config(config, tasks):
         worker.setdefault("docker-image", {"in-tree": "screenshots"})
         worker.setdefault("max-run-time", 10800)
 
-        task.setdefault("worker-type", "b-linux")
+        task.setdefault("worker-type", "bitrise")
 
         yield task
 
