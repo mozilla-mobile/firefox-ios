@@ -99,10 +99,10 @@ open class RustFirefoxAccounts {
         return id
     }
 
-    public static func reconfig() {
+    public static func reconfig(_ completion: (() -> Void)? = nil) {
         shared.accountManager = createAccountManager()
         shared.accountManager.initialize() { _ in
-            print("FxA reconfigured")
+            completion?()
         }
     }
 
