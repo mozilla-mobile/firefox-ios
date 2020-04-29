@@ -160,16 +160,6 @@ extension Profile {
         }
         return clientID
     }
-    
-    // Returns false for when there is no account available and true if the account
-    // is not verified or has no password attached to it
-//    var accountNeedsUserAction: Bool {
-//        guard let account = self.getAccount() else { return false }
-//        let actionNeeded = account.actionNeeded
-//        let needsVerification = actionNeeded == FxAActionNeeded.needsPassword || actionNeeded == FxAActionNeeded.needsVerification
-//
-//        return needsVerification
-//    }
 }
 
 open class BrowserProfile: Profile {
@@ -183,19 +173,18 @@ open class BrowserProfile: Profile {
     let readingListDB: BrowserDB
     var syncManager: SyncManager!
 
-    private static var loginsKey: String {
-        let key = "sqlcipher.key.logins.db"
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
-        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
-        if keychain.hasValue(forKey: key), let secret = keychain.string(forKey: key) {
+    private let loginsSaltKeychainKey = "sqlcipher.key.logins.salt"
+    private let loginsUnlockKeychainKey = "sqlcipher.key.logins.db"
+    private lazy var loginsKey: String = {
+        if let secret = keychain.string(forKey: loginsUnlockKeychainKey) {
             return secret
         }
 
         let Length: UInt = 256
         let secret = Bytes.generateRandomBytes(Length).base64EncodedString
-        keychain.set(secret, forKey: key, withAccessibility: .afterFirstUnlock)
+        keychain.set(secret, forKey: loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
         return secret
-    }
+    }()
 
     var syncDelegate: SyncDelegate?
 
@@ -508,17 +497,14 @@ open class BrowserProfile: Profile {
         let databasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("logins.db").path
 
         let salt: String
-        let key = "sqlcipher.key.logins.salt"
-        let keychain = KeychainWrapper.sharedAppContainerKeychain
-        keychain.ensureStringItemAccessibility(.afterFirstUnlock, forKey: key)
-        if keychain.hasValue(forKey: key), let val = keychain.string(forKey: key) {
+        if let val = keychain.string(forKey: loginsSaltKeychainKey) {
             salt = val
         } else {
-            salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey)
-            keychain.set(salt, forKey: key, withAccessibility: .afterFirstUnlock)
+            salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: databasePath, encryptionKey: loginsKey)
+            keychain.set(salt, forKey: loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
         }
 
-        return RustLogins(databasePath: databasePath, encryptionKey: BrowserProfile.loginsKey, salt: salt)
+        return RustLogins(databasePath: databasePath, encryptionKey: loginsKey, salt: salt)
     }()
 
     func hasAccount() -> Bool {
@@ -543,7 +529,17 @@ open class BrowserProfile: Profile {
 
         // remove Account Metadata
         prefs.removeObjectForKey(PrefsKeys.KeyLastRemoteTabSyncTime)
+
+        // Save the keys that will be restored
+        let salt = keychain.string(forKey: loginsSaltKeychainKey)
+        let unlockKey = loginsKey
+        // Remove all items, removal is not key-by-key specific (due to the risk of failing to delete something), simply restore what is needed.
         keychain.removeAllKeys()
+        // Restore the keys that are still needed
+        if let salt = salt {
+            keychain.set(salt, forKey: loginsSaltKeychainKey, withAccessibility: .afterFirstUnlock)
+        }
+        keychain.set(unlockKey, forKey: loginsUnlockKeychainKey, withAccessibility: .afterFirstUnlock)
 
         // Tell any observers that our account has changed.
         NotificationCenter.default.post(name: .FirefoxAccountChanged, object: nil)
