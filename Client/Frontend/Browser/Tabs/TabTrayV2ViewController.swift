@@ -333,7 +333,7 @@ extension TabTrayV2ViewController {
     }
 
     func closeTabsForCurrentTray() {
-        tabTrayViewModel.hideDisplayedTabs() {
+        tabTrayViewModel.closeAllTabs() {
             self.tabManager.removeTabsWithUndoToast(self.tabTrayViewModel.dataStore.compactMap { $0 })
             if self.tabTrayViewModel.isPrivate {
                 self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()

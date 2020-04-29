@@ -210,7 +210,7 @@ class TabTrayV2ViewModel: NSObject {
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
-    func hideDisplayedTabs( completion: @escaping () -> Void) {
+    func closeAllTabs( completion: @escaping () -> Void) {
         let cells = collectionView.visibleCells
 
         UIView.animate(withDuration: 0.2,
