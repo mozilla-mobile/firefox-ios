@@ -168,7 +168,7 @@ extension BrowserViewController: WKUIDelegate {
 
             actions.append(UIAction(title: Strings.ContextMenuDownloadLink, image: UIImage.templateImageNamed("menu-panel-Downloads"), identifier: UIAction.Identifier("linkContextMenu.download")) {_ in
                 self.pendingDownloadWebView = currentTab.webView
-                DownloadHelper.requestDownload(url: url, tab: currentTab)
+                DownloadContentScript.requestDownload(url: url, tab: currentTab)
             })
 
             actions.append(UIAction(title: Strings.ContextMenuCopyLink, image: UIImage.templateImageNamed("menu-Copy-Link"), identifier: UIAction.Identifier("linkContextMenu.copyLink")) { _ in
