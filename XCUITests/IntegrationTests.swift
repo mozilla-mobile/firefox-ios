@@ -24,7 +24,9 @@ class IntegrationTests: BaseTestCase {
      let key = String(parts[1])
      if testWithDB.contains(key) {
      // for the current test name, add the db fixture used
-     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB]
+        launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.StageServer, LaunchArguments.LoadDatabasePrefix + historyDB]
+        
+        // LaunchArguments.StageServer
      }
      super.setUp()
      }
@@ -43,18 +45,20 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.navigationBars["Client.FxAWebView"], timeout: 20)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
+//        userState.fxaUsername = "test-256a5b5b18@restmail.net"
+//        userState.fxaPassword = "nPuPEcoj"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnContinueButton)
         navigator.performAction(Action.FxATypePassword)
         navigator.performAction(Action.FxATapOnSignInButton)
-        sleep(3)
+        sleep(5)
         allowNotifications()
     }
 
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 150)
     }
 
     func testFxASyncHistory () {
@@ -171,5 +175,59 @@ class IntegrationTests: BaseTestCase {
         app.swipeDown()
         waitForExistence(app.tables.otherElements["profile1"], timeout: 10)
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
+    }
+    
+    func testFxADisconnectConnect() {
+        // Sign into Firefox Accounts
+        signInFxAccounts()
+        sleep(5)
+        // Wait for initial sync to complete
+        //waitForInitialSyncComplete()
+        navigator.nowAt(BrowserTab)
+        
+        // Check Bookarks
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.tables["Bookmarks List"], timeout: 3)
+        
+        // Check Login
+        navigator.goto(SettingsScreen)
+        navigator.goto(LoginsSettings)
+        waitForExistence(app.tables["Login List"], timeout: 3)
+        
+        // Disconnect
+        navigator.goto(SettingsScreen)
+        app.tables.cells.element(boundBy: 0).tap()
+        waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
+        
+        app.cells["SignOut"].tap()
+        print(app.debugDescription)
+
+        waitForExistence(app.buttons["Disconnect"], timeout: 5)
+        app.buttons["Disconnect"].tap()
+        sleep(3)
+        
+        // Connect again
+        navigator.nowAt(SettingsScreen)
+        app.tables.cells.element(boundBy: 0).tap()
+        sleep(3)
+        
+        app.secureTextFields.element(boundBy: 0).tap()
+        app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+        
+        waitForExistence(app.webViews.buttons.element(boundBy: 0), timeout: 5)
+        app.webViews.buttons.element(boundBy: 0).tap()
+        
+        // navigator.performAction(Action.FxATapOnSignInButton)
+        // (We are in Settings screen)
+        sleep(5)
+        navigator.nowAt(SettingsScreen)
+        
+        // Check Bookmarks
+        navigator.goto(LibraryPanel_Bookmarks)
+        
+        // Check Logins
+        navigator.goto(SettingsScreen)
+        navigator.goto(LoginsSettings)
+        waitForExistence(app.tables["Login List"], timeout: 5)
     }
 }
