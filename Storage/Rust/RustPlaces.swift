@@ -243,6 +243,7 @@ public class RustPlaces {
         }
     }
 
+    @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
