@@ -657,7 +657,20 @@ extension Strings {
 
 // Intro Onboarding slides
 extension Strings {
+    // First Card
     public static let CardTitleWelcome = NSLocalizedString("Intro.Slides.Welcome.Title.v2", tableName: "Intro", value: "Welcome to Firefox", comment: "Title for the first panel 'Welcome' in the First Run tour.")
+    public static let CardTitleAutomaticPrivacy = NSLocalizedString("Intro.Slides.Automatic.Privacy.Title", tableName: "Intro", value: "Automatic Privacy", comment: "Title for the first item in the table related to automatic privacy")
+    public static let CardDescriptionAutomaticPrivacy = NSLocalizedString("Intro.Slides.Automatic.Privacy.Description", tableName: "Intro", value: "Privacy by default blocks malware and stops trackers.", comment: "Description for the first item in the table related to automatic privacy")
+    public static let CardTitleFastSearch = NSLocalizedString("Intro.Slides.Fast.Search.Title", tableName: "Intro", value: "Fast Search", comment: "Title for the second item in the table related to fast searching via address bar")
+    public static let CardDescriptionFastSearch = NSLocalizedString("Intro.Slides.Fast.Search.Description", tableName: "Intro", value: "Search suggestions get you to websites faster.", comment: "Description for the second item in the table related to fast searching via address bar")
+    public static let CardTitleSafeSync = NSLocalizedString("Intro.Slides.Safe.Sync.Title", tableName: "Intro", value: "Safe Sync", comment: "Title for the third item in the table related to safe syncing with a firefox account")
+    public static let CardDescriptionSafeSync = NSLocalizedString("Intro.Slides.Safe.Sync.Description", tableName: "Intro", value: "Protect your logins and data everywhere you use Firefox.", comment: "Description for the third item in the table related to safe syncing with a firefox account")
+    
+    // Second Card
+    public static let CardTitleFxASyncDevices = NSLocalizedString("Intro.Slides.Firefox.Account.Sync.Title", tableName: "Intro", value: "Sync Firefox Between Devices", comment: "Title for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices")
+    public static let CardDescriptionFxASyncDevices = NSLocalizedString("Intro.Slides.Firefox.Account.Sync.Description", tableName: "Intro", value: "Bring bookmarks, history, and passwords to Firefox on this device.", comment: "Description for the first item in the table related to syncing data (bookmarks, history) via firefox account between devices")
+    
+    //----Other----//
     public static let CardTitleSearch = NSLocalizedString("Intro.Slides.Search.Title", tableName: "Intro", value: "Your search, your way", comment: "Title for the second  panel 'Search' in the First Run tour.")
     public static let CardTitlePrivate = NSLocalizedString("Intro.Slides.Private.Title", tableName: "Intro", value: "Browse like no one’s watching", comment: "Title for the third panel 'Private Browsing' in the First Run tour.")
     public static let CardTitleMail = NSLocalizedString("Intro.Slides.Mail.Title", tableName: "Intro", value: "You’ve got mail… options", comment: "Title for the fourth panel 'Mail' in the First Run tour.")
@@ -673,7 +686,6 @@ extension Strings {
     public static let IntroNextButtonTitle = NSLocalizedString("Intro.Slides.Button.Next", tableName: "Intro", value: "Next", comment: "Next button on the first intro screen.")
     public static let IntroSignInButtonTitle = NSLocalizedString("Intro.Slides.Button.SignIn", tableName: "Intro", value: "Sign In", comment: "Sign in to Firefox account button on second intro screen.")
     public static let IntroSignUpButtonTitle = NSLocalizedString("Intro.Slides.Button.SignUp", tableName: "Intro", value: "Sign Up", comment: "Sign up to Firefox account button on second intro screen.")
-
 }
 
 // Keyboard short cuts
