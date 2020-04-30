@@ -30,7 +30,7 @@ extension FxAPushMessageHandler {
     /// and then effects changes on the logged in account.
     @discardableResult func handle(userInfo: [AnyHashable: Any]) -> PushMessageResult {
         let keychain = KeychainWrapper.sharedAppContainerKeychain
-        guard let pushReg = keychain.object(forKey: "account.push-registration") as? PushRegistration else {
+        guard let pushReg = keychain.object(forKey: KeychainKey.fxaPushRegistration) as? PushRegistration else {
             return deferMaybe(PushMessageError.accountError)
         }
 
@@ -54,6 +54,8 @@ extension FxAPushMessageHandler {
         }
 
         guard let string = plaintext else {
+            // The app will detect this missing, and re-register. see AppDelegate+PushNotifications.swift.
+            keychain.removeObject(forKey: KeychainKey.apnsToken)
             return deferMaybe(PushMessageError.notDecrypted)
         }
 
