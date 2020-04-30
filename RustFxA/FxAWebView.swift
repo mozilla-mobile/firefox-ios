@@ -233,7 +233,7 @@ extension FxAWebView: WKScriptMessageHandler {
             self.profile.syncManager.onAddedAccount()
             
             // ask for push notification
-            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
+            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
             let center = UNUserNotificationCenter.current()
             center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
                 guard error == nil else {

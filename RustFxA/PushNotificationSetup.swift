@@ -14,7 +14,7 @@ open class PushNotificationSetup {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
         let keychain = KeychainWrapper.sharedAppContainerKeychain
-        guard keychain.string(forKey: "apnsToken") != apnsToken else {
+        guard keychain.string(forKey: KeychainKey.apnsToken) != apnsToken else {
             return
         }
 
@@ -23,13 +23,13 @@ open class PushNotificationSetup {
         pushClient?.register(apnsToken).uponQueue(.main) { [weak self] result in
             guard let pushReg = result.successValue else { return }
             self?.pushRegistration = pushReg
-            keychain.set(apnsToken, forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
+            keychain.set(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
 
             let subscription = pushReg.defaultSubscription
             let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
             RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
 
-            keychain.set(pushReg as NSCoding, forKey: "account.push-registration", withAccessibility: .afterFirstUnlock)
+            keychain.set(pushReg as NSCoding, forKey: KeychainKey.fxaPushRegistration, withAccessibility: .afterFirstUnlock)
         }
     }
 
