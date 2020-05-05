@@ -47,8 +47,6 @@ public class Sentry {
             return
         }
 
-        guard let dsn = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
-
         var bundle = Bundle.main
         if bundle.bundleURL.pathExtension == "appex" {
             // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
