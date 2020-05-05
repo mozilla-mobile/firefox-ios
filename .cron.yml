@@ -8,4 +8,5 @@ jobs:
       job:
           type: decision-task
           target-tasks-method: l10n_screenshots
+          treeherder-symbol: l10-screenshots
       when: []  # Manual trigger only
