@@ -62,6 +62,10 @@ extension PhotonActionSheetProtocol {
             settingsTableViewController.settingsDelegate = vcDelegate
 
             let controller = ThemedNavigationController(rootViewController: settingsTableViewController)
+            // On iPhone iOS13 the WKWebview crashes while presenting file picker if its not full screen. Ref #6232
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                controller.modalPresentationStyle = .fullScreen
+            }
             controller.presentingModalViewControllerDelegate = vcDelegate
 
             // Wait to present VC in an async dispatch queue to prevent a case where dismissal

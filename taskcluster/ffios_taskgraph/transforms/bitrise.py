@@ -47,25 +47,26 @@ def set_run_config(config, tasks):
 @transforms.add
 def set_worker_config(config, tasks):
     for task in tasks:
-        locale = task["locale"]
-
         worker = task.setdefault("worker", {})
         artifacts = worker.setdefault("artifacts", [])
 
-        artifacts.extend([{
+        artifacts.append({
             "type": "file",
             "name": "public/logs/bitrise.log",
             "path": "/builds/worker/checkouts/src/bitrise.log",
-        }, {
-            "type": "file",
-            "name": "public/screenshots/{}.zip".format(locale),
-            "path": "/builds/worker/checkouts/src/{}.zip".format(locale),
-        }])
+        })
+
+        for locale in task["attributes"]["chunk_locales"]:
+            artifacts.append({
+                "type": "file",
+                "name": "public/screenshots/{}.zip".format(locale),
+                "path": "/builds/worker/checkouts/src/{}.zip".format(locale),
+            })
 
         worker.setdefault("docker-image", {"in-tree": "screenshots"})
-        worker.setdefault("max-run-time", 3600)
+        worker.setdefault("max-run-time", 10800)
 
-        task.setdefault("worker-type", "b-linux")
+        task.setdefault("worker-type", "bitrise")
 
         yield task
 
@@ -74,7 +75,6 @@ def set_worker_config(config, tasks):
 def add_command(config, tasks):
     for task in tasks:
         commands = task["run"].setdefault("commands", [])
-        locale = task.pop("locale")
         workflow = task.pop("bitrise-workflow")
 
         command = [
@@ -84,8 +84,10 @@ def add_command(config, tasks):
             "--branch", config.params["head_ref"],
             "--commit", config.params["head_rev"],
             "--workflow", workflow,
-            "--locale", locale
         ]
+
+        for locale in task["attributes"]["chunk_locales"]:
+            command.extend(["--locale", locale])
 
         derived_data_path = task.pop("build-derived-data-path", "")
         if derived_data_path:
