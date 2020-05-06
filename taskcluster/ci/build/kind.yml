@@ -15,7 +15,7 @@ jobs:
     screenshots:
         attributes:
             chunk_locales: ["en-US"]
-        bitrise-workflow: jlorenzo_L10nBuild
+        bitrise-workflow: L10nBuild
         description: Generate build instrumented for screenshots, including en-US pictures
         run-on-tasks-for: []
         worker:
