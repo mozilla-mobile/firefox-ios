@@ -189,12 +189,14 @@ extension FxAWebView: WKScriptMessageHandler {
         let data: String
         if pageType == .settingsPage {
             let fxa = RustFirefoxAccounts.shared.accountManager
-            let email = fxa.accountProfile()?.email ?? ""
+            let uid = fxa.accountProfile()?.uid ?? ""
             let token = (try? fxa.getSessionToken().get()) ?? ""
             data = """
-            {   signedInUser: {
+            {
+                capabilities: {},
+                signedInUser: {
                     sessionToken: "\(token)",
-                    email: "\(email)",
+                    uid: "\(uid)",
                     verified: true,
                 }
             }
