@@ -81,6 +81,9 @@ struct LPAttributeKey {
     static let telemetryOptIn = "Telemetry Opt In"
     static let fxaAccountVerified = "FxA account is verified"
     static let fxaDeviceCount = "Number of devices in FxA account"
+    static let experimentName = "Experiment name"
+    static let experimentId = "Experiment id"
+    static let experimentVariant = "Experiment variant"
 }
 
 struct MozillaAppSchemes {
