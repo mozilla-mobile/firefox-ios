@@ -854,6 +854,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
         prefs.setObject(toggle.isOn, forKey: prefKey)
+        RustFirefoxAccounts.reconfig()
     }
 }
 
