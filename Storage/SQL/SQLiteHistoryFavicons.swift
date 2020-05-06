@@ -363,29 +363,30 @@ extension SQLiteHistory: Favicons {
     // Generates a "default" favicon based on the first character in the
     // site's domain name or gets an already-generated icon from the cache.
     fileprivate func generateDefaultFaviconImage(forSite site: Site) -> Deferred<Maybe<UIImage>> {
-        guard let url = URL(string: site.url),
-            let character = url.baseDomain?.first else {
-            return deferMaybe(defaultFavicon)
-        }
-
-        let faviconLetter = String(character).uppercased()
-
-        if let cachedFavicon = defaultFaviconImageCache[faviconLetter] {
-            return deferMaybe(cachedFavicon)
-        }
-
-        func generateBackgroundColor(forURL url: URL) -> UIColor {
-            guard let hash = url.baseDomain?.hashValue else {
-                return UIColor.Photon.Grey50
-            }
-            let index = abs(hash) % (DefaultFaviconBackgroundColors.count - 1)
-            let colorHex = DefaultFaviconBackgroundColors[index]
-            return UIColor(colorString: colorHex)
-        }
-
         let deferred = Deferred<Maybe<UIImage>>()
 
         DispatchQueue.main.async {
+            guard let url = URL(string: site.url), let character = url.baseDomain?.first else {
+                deferred.fill(Maybe(success: defaultFavicon))
+                return
+            }
+
+            let faviconLetter = String(character).uppercased()
+
+            if let cachedFavicon = defaultFaviconImageCache[faviconLetter] {
+                deferred.fill(Maybe(success: cachedFavicon))
+                return
+            }
+
+            func generateBackgroundColor(forURL url: URL) -> UIColor {
+                guard let hash = url.baseDomain?.hashValue else {
+                    return UIColor.Photon.Grey50
+                }
+                let index = abs(hash) % (DefaultFaviconBackgroundColors.count - 1)
+                let colorHex = DefaultFaviconBackgroundColors[index]
+                return UIColor(colorString: colorHex)
+            }
+
             var image = UIImage()
             let label = UILabel(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
             label.text = faviconLetter
@@ -404,7 +405,6 @@ extension SQLiteHistory: Favicons {
             defaultFaviconImageCache[faviconLetter] = image
             deferred.fill(Maybe(success: image))
         }
-
         return deferred
     }
 }
