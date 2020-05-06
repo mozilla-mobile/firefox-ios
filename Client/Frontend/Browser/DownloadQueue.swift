@@ -4,8 +4,6 @@
 
 import Foundation
 
-private let downloadOperationQueue = OperationQueue()
-
 protocol DownloadDelegate {
     func download(_ download: Download, didCompleteWithError error: Error?)
     func download(_ download: Download, didDownloadBytes bytesDownloaded: Int64)
@@ -86,7 +84,7 @@ class HTTPDownload: Download {
 
         self.totalBytesExpected = preflightResponse.expectedContentLength > 0 ? preflightResponse.expectedContentLength : nil
 
-        self.session = URLSession(configuration: .default, delegate: self, delegateQueue: downloadOperationQueue)
+        self.session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
         self.task = session?.downloadTask(with: request)
     }
 
