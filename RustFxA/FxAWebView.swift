@@ -189,6 +189,8 @@ extension FxAWebView: WKScriptMessageHandler {
         let data: String
         if pageType == .settingsPage {
             let fxa = RustFirefoxAccounts.shared.accountManager
+            // Both email and uid are required at this time to properly link the FxA settings session
+            let email = fxa.accountProfile()?.email ?? ""
             let uid = fxa.accountProfile()?.uid ?? ""
             let token = (try? fxa.getSessionToken().get()) ?? ""
             data = """
@@ -196,6 +198,7 @@ extension FxAWebView: WKScriptMessageHandler {
                 capabilities: {},
                 signedInUser: {
                     sessionToken: "\(token)",
+                    email: "\(email)",
                     uid: "\(uid)",
                     verified: true,
                 }
