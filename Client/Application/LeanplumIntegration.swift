@@ -196,8 +196,8 @@ class LeanPlumClient {
             self.recordSyncedClients(with: self.profile)
         })
 
-        NotificationCenter.default.addObserver(forName: .FirefoxAccountChanged, object: nil, queue: .main) { _ in
-            if !RustFirefoxAccounts.shared.hasAccount() {
+        NotificationCenter.default.addObserver(forName: .FirefoxAccountChanged, object: nil, queue: .main) { [weak self] _ in
+            if !(self?.profile?.hasAccount() ?? false) {
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
             }
         }

@@ -109,8 +109,10 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
     fileprivate let cache: KeychainCache<SyncAuthStateCache>
     public var enginesEnablements: [String: Bool]?
     public var clientName: String?
+    private var fxa: RustFirefoxAccounts
 
-    init(cache: KeychainCache<SyncAuthStateCache>) {
+    init(fxa: RustFirefoxAccounts, cache: KeychainCache<SyncAuthStateCache>) {
+        self.fxa = fxa
         self.cache = cache
     }
 
@@ -141,7 +143,7 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
 
         let deferred = Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>()
 
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+        fxa.accountManager.uponQueue(.main) { accountManager in
             accountManager.getTokenServerEndpointURL() { result in
                 guard case .success(let tokenServerEndpointURL) = result else {
                     deferred.fill(Maybe(failure: FxAClientError.local(NSError())))

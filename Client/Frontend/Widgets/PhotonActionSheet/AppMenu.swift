@@ -87,14 +87,13 @@ extension PhotonActionSheetProtocol {
             showFxA(fxaParams, .emailLoginFlow)
         }
 
-        let rustAccount = RustFirefoxAccounts.shared
-        let needsReauth = rustAccount.accountNeedsReauth()
+        let needsReauth = profile.rustFxA.accountNeedsReauth()
 
-        guard let userProfile = rustAccount.userProfile else {
+        guard let userProfile = profile.rustFxA.userProfile else {
             return PhotonActionSheetItem(title: Strings.FxASignInToSync, iconString: "menu-sync", handler: action)
         }
         let title: String = {
-            if rustAccount.accountNeedsReauth() {
+            if profile.rustFxA.accountNeedsReauth() {
                 return Strings.FxAAccountVerifyPassword
             }
             return userProfile.displayName ?? userProfile.email
@@ -103,7 +102,7 @@ extension PhotonActionSheetProtocol {
         let iconString = needsReauth ? "menu-warning" : "placeholder-avatar"
 
         var iconURL: URL? = nil
-        if let str = rustAccount.userProfile?.avatarUrl, let url = URL(string: str) {
+        if let str = profile.rustFxA.userProfile?.avatarUrl, let url = URL(string: str) {
             iconURL = url
         }
         let iconType: PhotonActionSheetIconType = needsReauth ? .Image : .URL

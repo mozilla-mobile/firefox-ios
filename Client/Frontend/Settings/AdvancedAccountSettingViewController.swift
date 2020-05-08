@@ -55,7 +55,7 @@ class AdvancedAccountSettingViewController: SettingsTableViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        RustFirefoxAccounts.reconfig()
+        profile.rustFxA.reconfig()
     }
 
     override func generateSettings() -> [SettingSection] {

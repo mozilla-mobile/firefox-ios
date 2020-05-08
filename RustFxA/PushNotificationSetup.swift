@@ -10,7 +10,7 @@ open class PushNotificationSetup {
     private var pushClient: PushClient?
     private var pushRegistration: PushRegistration?
 
-    public func didRegister(withDeviceToken deviceToken: Data) {
+    public func didRegister(withDeviceToken deviceToken: Data, fxa: RustFirefoxAccounts) {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
         let keychain = KeychainWrapper.sharedAppContainerKeychain
@@ -18,7 +18,7 @@ open class PushNotificationSetup {
             return
         }
 
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+        fxa.accountManager.uponQueue(.main) { accountManager in
             let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
             self.pushClient = PushClient(endpointURL: config.endpointURL, experimentalMode: false)
             self.pushClient?.register(apnsToken).uponQueue(.main) { [weak self] result in

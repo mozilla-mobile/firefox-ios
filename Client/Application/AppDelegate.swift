@@ -144,7 +144,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
 
-        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
+        profile.rustFxA.accountManager.uponQueue(.main) { _ in
             print("RustFirefoxAccounts started")
         }
         log.info("startApplication end")

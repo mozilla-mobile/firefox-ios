@@ -9,9 +9,14 @@ import Storage
 class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
     var sharedItem: ShareItem?
     weak var delegate: ShareControllerDelegate?
+    var profile: BrowserProfile
+
+    init(profile: BrowserProfile) {
+        self.profile = profile
+    }
 
     func initialViewController() -> UIViewController {
-        if !hasAccount() {
+        if !profile.rustFxA.hasAccount() {
             let instructionsViewController = InstructionsViewController()
             instructionsViewController.delegate = self
             return instructionsViewController
@@ -31,12 +36,11 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControll
             return finish()
         }
 
-        let profile = BrowserProfile(localName: "profile")
         profile.sendItem(item, toDevices: devices).uponQueue(.main) { _ in
-            profile._shutdown()
+            self.profile._shutdown()
             self.finish()
 
-            addAppExtensionTelemetryEvent(forMethod: "send-to-device")
+            addAppExtensionTelemetryEvent(forMethod: "send-to-device", profile: self.profile)
         }
     }
 
@@ -46,13 +50,5 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControll
 
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         finish()
-    }
-
-    private func hasAccount() -> Bool {
-        let profile = BrowserProfile(localName: "profile")
-        defer {
-            profile._shutdown()
-        }
-        return profile.hasAccount()
     }
 }

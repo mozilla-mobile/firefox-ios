@@ -319,7 +319,7 @@ open class BrowserProfile: Profile {
         log.debug("Reopening profile.")
         isShutdown = false
 
-        if !places.isOpen && !RustFirefoxAccounts.shared.hasAccount() {
+        if !places.isOpen && !rustFxA.hasAccount() {
             places.migrateBookmarksIfNeeded(fromBrowserDB: db)
         }
 
@@ -483,7 +483,7 @@ open class BrowserProfile: Profile {
 
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         let deferred = Success()
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+        rustFxA.accountManager.uponQueue(.main) { accountManager in
             guard let constellation = accountManager.deviceConstellation() else {
                 deferred.fill(Maybe(failure: NoAccountError()))
                 return
@@ -520,12 +520,10 @@ open class BrowserProfile: Profile {
         return hasAccount() && !rustFxA.accountNeedsReauth()
     }
 
-    var rustFxA: RustFirefoxAccounts {
-        return RustFirefoxAccounts.shared
-    }
+    lazy var rustFxA: RustFirefoxAccounts = RustFirefoxAccounts(prefs: prefs)
 
     func removeAccount() {
-        RustFirefoxAccounts.shared.disconnect()
+        rustFxA.disconnect()
 
         // Profile exists in extensions, UIApp is unavailable there, make this code run for the main app only
         if let application = UIApplication.value(forKeyPath: #keyPath(UIApplication.shared)) as? UIApplication {
@@ -650,7 +648,8 @@ open class BrowserProfile: Profile {
                     SyncPing.from(result: result,
                                   remoteClientsAndTabs: profile.remoteClientsAndTabs,
                                   prefs: prefs,
-                                  why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
+                                  why: .schedule,
+                                  fxa: profile.rustFxA) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
                 } else {
                     log.debug("Profile isn't sending usage data. Not sending sync status event.")
                 }
@@ -1045,7 +1044,7 @@ open class BrowserProfile: Profile {
             syncLock.lock()
             defer { syncLock.unlock() }
 
-            guard let fxa = RustFirefoxAccounts.shared.accountManager.peek(), let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
+            guard let fxa = profile.rustFxA.accountManager.peek(), let profile = fxa.accountProfile(), let deviceID = fxa.deviceConstellation()?.state()?.localDevice?.id else {
                 return deferMaybe(NoAccountError())
             }
 
@@ -1119,7 +1118,7 @@ open class BrowserProfile: Profile {
         fileprivate func syncWith(synchronizers: [(EngineIdentifier, SyncFunction)],
                                   statsSession: SyncOperationStatsSession, why: SyncReason) -> Deferred<Maybe<[(EngineIdentifier, SyncStatus)]>> {
             log.info("Syncing \(synchronizers.map { $0.0 })")
-            var authState = RustFirefoxAccounts.shared.syncAuthState
+            var authState = profile.rustFxA.syncAuthState
             let delegate = self.profile.getSyncDelegate()
             // TODO
             if let enginesEnablements = self.engineEnablementChangesForAccount(),
@@ -1132,7 +1131,7 @@ open class BrowserProfile: Profile {
             // TODO
 //            authState?.clientName = account.deviceName
 
-            let readyDeferred = SyncStateMachine(prefs: self.prefsForSync).toReady(authState)
+            let readyDeferred = SyncStateMachine(fxa: profile.rustFxA, prefs: self.prefsForSync).toReady(authState)
 
             let function: (SyncDelegate, Prefs, Ready) -> Deferred<Maybe<[EngineStatus]>> = { delegate, syncPrefs, ready in
                 let thunks = synchronizers.map { (i, f) in
@@ -1162,7 +1161,7 @@ open class BrowserProfile: Profile {
         }
 
         @discardableResult public func syncEverything(why: SyncReason) -> Success {
-            if let accountManager = RustFirefoxAccounts.shared.accountManager.peek(), accountManager.accountMigrationInFlight() {
+            if let accountManager = profile.rustFxA.accountManager.peek(), accountManager.accountMigrationInFlight() {
                 accountManager.retryMigration() { _ in }
                 return Success()
             }

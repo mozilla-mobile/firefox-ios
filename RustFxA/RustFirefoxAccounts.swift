@@ -26,11 +26,10 @@ open class RustFirefoxAccounts {
 
     private static let clientID = "1b1a3e44c54fbb58"
     public static let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
-    public static var shared = RustFirefoxAccounts()
     public var accountManager = Deferred<FxAccountManager>()
     public var avatar: Avatar?
-    public let syncAuthState: SyncAuthState
-    fileprivate static var prefs: Prefs?
+    public lazy var syncAuthState: SyncAuthState = FirefoxAccountSyncAuthState(fxa: self, cache: KeychainCache.fromBranch("rustAccounts.syncAuthState", withLabel: RustFirefoxAccounts.syncAuthStateUniqueId(prefs: prefs), factory: syncAuthStateCachefromJSON))
+    fileprivate var prefs: Prefs
     public let pushNotifications = PushNotificationSetup()
 
     // This is used so that if a migration failed, show a UI indicator for the user to manually log in to their account.
@@ -43,84 +42,44 @@ open class RustFirefoxAccounts {
         }
     }
 
-    /** Must be called before this class is fully usable. Until this function is complete,
-     all methods in this class will behave as if there is no Fx account.
-     It will be called on app startup, and extensions must call this before using the class.
-     If it is possible code could access `shared` before initialize() is complete, these callers should also
-     hook into notifications like `.accountProfileUpdate` to refresh once initialize() is complete.
-     Or they can wait on the accountManager deferred to fill.
-     */
-    public static func startup(prefs _prefs: Prefs) -> Deferred<FxAccountManager> {
-        prefs = _prefs
-        if let manager = RustFirefoxAccounts.shared.accountManager.peek() {
-            return Deferred(value: manager)
-        }
-
-        let deferred = Deferred<FxAccountManager>()
-        let manager = RustFirefoxAccounts.shared.createAccountManager()
-        manager.initialize { result in
-            let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
-
-            // Note this checks if startup() is called in an app extensions, and if so, do not try account migration
-            if Bundle.main.bundleURL.pathExtension != "appex", let tokens = migrationTokens(), !hasAttemptedMigration {
-                UserDefaults.standard.set(true, forKey: "hasAttemptedMigration")
-
-                // The client app only needs to trigger this one time. If it fails due to offline state, the rust library
-                // will automatically re-try until success or permanent failure (notifications accountAuthenticated / accountMigrationFailed respectively).
-                // See also `init()` use of `.accountAuthenticated` below.
-                manager.authenticateViaMigration(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
-            }
-
-            RustFirefoxAccounts.shared.accountManager.fill(manager)
-            deferred.fill(manager)
-
-            // After everthing is setup, register for push notifications
-            if manager.hasAccount() {
-                NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-            }
-        }
-        return deferred
-    }
-
     private static let prefKeySyncAuthStateUniqueID = "PrefKeySyncAuthStateUniqueID"
-    private static func syncAuthStateUniqueId(prefs: Prefs?) -> String {
+    private static func syncAuthStateUniqueId(prefs: Prefs) -> String {
         let id: String
         let key = RustFirefoxAccounts.prefKeySyncAuthStateUniqueID
-        if let _id = prefs?.stringForKey(key) {
+        if let _id = prefs.stringForKey(key) {
             id = _id
         } else {
             id = UUID().uuidString
-            prefs?.setString(id, forKey: key)
+            prefs.setString(id, forKey: key)
         }
         return id
     }
 
-    public static func reconfig(_ completion: ((FxAccountManager) -> Void)? = nil) {
-        shared.accountManager = Deferred<FxAccountManager>()
-        let manager = shared.createAccountManager()
+    // Reconfigure FxAccountManager with the latest settings
+    public func reconfig(_ completion: ((FxAccountManager) -> Void)? = nil) {
+        accountManager = Deferred<FxAccountManager>()
+        let manager = createAccountManager()
         manager.initialize() { _ in
-            shared.accountManager.fill(manager)
+            self.accountManager.fill(manager)
             completion?(manager)
         }
     }
 
     private func createAccountManager() -> FxAccountManager {
-        let prefs = RustFirefoxAccounts.prefs
-        assert(prefs != nil)
-        let server = prefs?.intForKey(PrefsKeys.UseStageServer) == 1 ? FxAConfig.Server.stage :
-           (prefs?.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release)
+        let server = prefs.intForKey(PrefsKeys.UseStageServer) == 1 ? FxAConfig.Server.stage :
+           (prefs.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release)
 
         let config: FxAConfig
-        let useCustom = prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false || prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
+        let useCustom = prefs.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false || prefs.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
         if useCustom {
             let contentUrl: String
-            if prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false, let url = prefs?.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
+            if prefs.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false, let url = prefs.stringForKey(PrefsKeys.KeyCustomFxAContentServer) {
                 contentUrl = url
             } else {
                 contentUrl = "https://stable.dev.lcip.org"
             }
 
-            let tokenServer = prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false ? prefs?.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
+            let tokenServer = prefs.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false ? prefs.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
             config = FxAConfig(contentUrl: contentUrl, clientId: RustFirefoxAccounts.clientID, redirectUri: RustFirefoxAccounts.redirectURL, tokenServerUrlOverride: tokenServer)
         } else {
             config = FxAConfig(server: server, clientId: RustFirefoxAccounts.clientID, redirectUri: RustFirefoxAccounts.redirectURL)
@@ -134,17 +93,16 @@ open class RustFirefoxAccounts {
         return FxAccountManager(config: config, deviceConfig: deviceConfig, applicationScopes: [OAuthScope.profile, OAuthScope.oldSync, OAuthScope.session], keychainAccessGroup: accessGroupIdentifier)
     }
 
-    private init() {
+    public init(prefs: Prefs) {
+        let t = PerformanceTimer(thresholdSeconds: 0.01, label: "RustFirefoxAccounts init")
+        defer {
+            t.stopAndPrint()
+        }
+
+        self.prefs = prefs
         // Set-up Rust network stack. Note that this has to be called
         // before any Application Services component gets used.
         Viaduct.shared.useReqwestBackend()
-
-        let prefs = RustFirefoxAccounts.prefs
-
-        syncAuthState = FirefoxAccountSyncAuthState(
-            cache: KeychainCache.fromBranch("rustAccounts.syncAuthState",
-                                            withLabel: RustFirefoxAccounts.syncAuthStateUniqueId(prefs: prefs),
-                factory: syncAuthStateCachefromJSON))
 
         // Called when account is logged in for the first time, on every app start when the account is found (even if offline), and when migration of an account is completed.
         NotificationCenter.default.addObserver(forName: .accountAuthenticated, object: nil, queue: .main) { [weak self] notification in
@@ -169,6 +127,29 @@ open class RustFirefoxAccounts {
             Sentry.shared.send(message: "RustFxa failed account migration", tag: .rustLog, severity: .error, description: info)
             self?.accountMigrationFailed = true
             NotificationCenter.default.post(name: .FirefoxAccountStateChange, object: nil)
+        }
+
+        let t2 = PerformanceTimer(thresholdSeconds: 0.01, label: "RustFirefoxAccounts init account manager")
+        let manager = createAccountManager()
+        manager.initialize() { _ in
+            t2.stopAndPrint()
+            self.accountManager.fill(manager)
+
+            let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
+
+            // Note this checks if startup() is called in an app extensions, and if so, do not try account migration
+            if Bundle.main.bundleURL.pathExtension != "appex", let tokens = RustFirefoxAccounts.migrationTokens(), !hasAttemptedMigration {
+                UserDefaults.standard.set(true, forKey: "hasAttemptedMigration")
+
+                // The client app only needs to trigger this one time. If it fails due to offline state, the rust library
+                // will automatically re-try until success or permanent failure (notifications accountAuthenticated / accountMigrationFailed respectively).
+                // See also `init()` use of `.accountAuthenticated` below.
+                manager.authenticateViaMigration(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
+            }
+
+            if manager.hasAccount() {
+                NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
+            }
         }
     }
 
@@ -241,8 +222,6 @@ open class RustFirefoxAccounts {
     private var cachedUserProfile: FxAUserProfile?
     public var userProfile: FxAUserProfile? {
         get {
-            let prefs = RustFirefoxAccounts.prefs
-
             if let accountManager = accountManager.peek(), let profile = accountManager.accountProfile() {
                 if let p = cachedUserProfile, FxAUserProfile(profile: profile) == p {
                     return cachedUserProfile
@@ -250,10 +229,10 @@ open class RustFirefoxAccounts {
 
                 cachedUserProfile = FxAUserProfile(profile: profile)
                 if let data = try? JSONEncoder().encode(cachedUserProfile!) {
-                    prefs?.setObject(data, forKey: prefKeyCachedUserProfile)
+                    prefs.setObject(data, forKey: prefKeyCachedUserProfile)
                 }
             } else if cachedUserProfile == nil {
-                if let data: Data = prefs?.objectForKey(prefKeyCachedUserProfile) {
+                if let data: Data = prefs.objectForKey(prefKeyCachedUserProfile) {
                     cachedUserProfile = try? JSONDecoder().decode(FxAUserProfile.self, from: data)
                 }
             }
@@ -265,10 +244,9 @@ open class RustFirefoxAccounts {
     public func disconnect() {
         guard let accountManager = accountManager.peek() else { return }
         accountManager.logout() { _ in }
-        let prefs = RustFirefoxAccounts.prefs
-        prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
-        prefs?.removeObjectForKey(prefKeyCachedUserProfile)
-        prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
+        prefs.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
+        prefs.removeObjectForKey(prefKeyCachedUserProfile)
+        prefs.removeObjectForKey(PendingAccountDisconnectedKey)
         cachedUserProfile = nil
         pushNotifications.unregister()
         KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)

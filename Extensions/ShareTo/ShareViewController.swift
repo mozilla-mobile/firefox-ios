@@ -55,8 +55,7 @@ protocol ShareControllerDelegate: AnyObject {
 }
 
 // Telemetry events are written to NSUserDefaults, and then the host app reads and clears this list.
-func addAppExtensionTelemetryEvent(forMethod method: String) {
-    let profile = BrowserProfile(localName: "profile")
+func addAppExtensionTelemetryEvent(forMethod method: String, profile: BrowserProfile) {
     var events = profile.prefs.arrayForKey(PrefsKeys.AppExtensionTelemetryEventArray) ?? [[String]]()
     // Currently, only URL objects are shared.
     let event = ["method": method, "object": "url"]
@@ -74,7 +73,7 @@ class ShareViewController: UIViewController {
     private var actionRowHeights = [Constraint]()
     private var pageInfoRowTitleLabel: UILabel?
     private var pageInfoRowUrlLabel: UILabel?
-
+    lazy var profile = BrowserProfile(localName: "profile")
     weak var delegate: ShareControllerDelegate?
 
     override var extensionContext: NSExtensionContext? {
@@ -105,9 +104,6 @@ class ShareViewController: UIViewController {
         case .rawText(let text):
             self.pageInfoRowTitleLabel?.text = text.quoted
         }
-
-        let profile = BrowserProfile(localName: "profile")
-        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in }
     }
 
     private func setupRows() {
@@ -318,12 +314,11 @@ extension ShareViewController {
         animateToActionDoneView(withTitle: Strings.ShareLoadInBackgroundDone)
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
-            let profile = BrowserProfile(localName: "profile")
             profile.queue.addToQueue(item).uponQueue(.main) { _ in
-                profile._shutdown()
+                self.profile._shutdown()
             }
 
-            addAppExtensionTelemetryEvent(forMethod: "load-in-background")
+            addAppExtensionTelemetryEvent(forMethod: "load-in-background", profile: profile)
         }
 
         finish()
@@ -334,12 +329,11 @@ extension ShareViewController {
         animateToActionDoneView(withTitle: Strings.ShareBookmarkThisPageDone)
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
-            let profile = BrowserProfile(localName: "profile")
             profile._reopen()
             _ = profile.places.createBookmark(parentGUID: BookmarkRoots.MobileFolderGUID, url: item.url, title: item.title).value // Intentionally block thread with database call.
             profile._shutdown()
 
-            addAppExtensionTelemetryEvent(forMethod: "bookmark-this-page")
+            addAppExtensionTelemetryEvent(forMethod: "bookmark-this-page", profile: profile)
         }
 
         finish()
@@ -350,12 +344,11 @@ extension ShareViewController {
         animateToActionDoneView(withTitle: Strings.ShareAddToReadingListDone)
 
         if let shareItem = shareItem, case .shareItem(let item) = shareItem {
-            let profile = BrowserProfile(localName: "profile")
             profile._reopen()
             profile.readingList.createRecordWithURL(item.url, title: item.title ?? "", addedBy: UIDevice.current.name)
             profile._shutdown()
 
-            addAppExtensionTelemetryEvent(forMethod: "add-to-reading-list")
+            addAppExtensionTelemetryEvent(forMethod: "add-to-reading-list", profile: profile)
         }
 
         finish()
@@ -367,17 +360,18 @@ extension ShareViewController {
         }
 
         gesture.isEnabled = false
-        sendToDevice = SendToDevice()
-        guard let sendToDevice = sendToDevice else { return }
-        sendToDevice.sharedItem = item
-        sendToDevice.delegate = delegate
-        let vc = sendToDevice.initialViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        profile.rustFxA.accountManager.uponQueue(.main) { _ in
+            self.sendToDevice = SendToDevice(profile: self.profile)
+            guard let sendToDevice = self.sendToDevice else { return }
+            sendToDevice.sharedItem = item
+            sendToDevice.delegate = self.delegate
+            let vc = sendToDevice.initialViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
     func openFirefox(withUrl url: String, isSearch: Bool) {
         // Telemetry is handled in the app delegate that receives this event.
-        let profile = BrowserProfile(localName: "profile")
         profile.prefs.setBool(true, forKey: PrefsKeys.AppExtensionTelemetryOpenUrl)
 
        func firefoxUrl(_ url: String) -> String {

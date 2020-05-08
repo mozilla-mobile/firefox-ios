@@ -310,11 +310,11 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var title: NSAttributedString? {
-        if let displayName = RustFirefoxAccounts.shared.userProfile?.displayName {
+        if let displayName = settings.profile.rustFxA.userProfile?.displayName {
             return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
-        if let email = RustFirefoxAccounts.shared.userProfile?.email {
+        if let email = settings.profile.rustFxA.userProfile?.email {
             return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
 
@@ -322,7 +322,7 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override var status: NSAttributedString? {
-        if RustFirefoxAccounts.shared.isActionNeeded {
+        if settings.profile.rustFxA.isActionNeeded {
             let string = Strings.FxAAccountVerifyPassword
             let orange = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
@@ -356,7 +356,7 @@ class AccountStatusSetting: WithAccountSetting {
 
             imageView.image = UIImage(named: "placeholder-avatar")!.createScaled(CGSize(width: 30, height: 30))
 
-            RustFirefoxAccounts.shared.avatar?.image.uponQueue(.main) { image in
+            settings.profile.rustFxA.avatar?.image.uponQueue(.main) { image in
                 imageView.image = image.createScaled(CGSize(width: 30, height: 30))
             }
         }
@@ -853,7 +853,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
         prefs.setObject(toggle.isOn, forKey: prefKey)
-        RustFirefoxAccounts.reconfig()
+        settings.profile.rustFxA.reconfig()
     }
 }
 

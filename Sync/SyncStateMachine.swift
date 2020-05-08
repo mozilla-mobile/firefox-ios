@@ -95,7 +95,7 @@ open class SyncStateMachine {
     var stateLabelSequence = [SyncStateLabel]()
 
     let stateLabelsAllowed: Set<SyncStateLabel>
-
+    let fxa: RustFirefoxAccounts
     let scratchpadPrefs: Prefs
 
     /// Use this set of states to constrain the state machine to attempt the barest
@@ -107,7 +107,8 @@ open class SyncStateMachine {
     /// The default set of states that the state machine is allowed to use.
     public static let AllStates = Set(SyncStateLabel.allValues)
 
-    public init(prefs: Prefs, allowingStates labels: Set<SyncStateLabel> = SyncStateMachine.AllStates) {
+    public init(fxa: RustFirefoxAccounts, prefs: Prefs, allowingStates labels: Set<SyncStateLabel> = SyncStateMachine.AllStates) {
+        self.fxa = fxa
         self.scratchpadPrefs = prefs.branch("scratchpad")
         self.stateLabelsAllowed = labels
     }
@@ -144,7 +145,7 @@ open class SyncStateMachine {
 
     open func toReady(_ authState: SyncAuthState) -> ReadyDeferred {
         let readyDeferred = ReadyDeferred()
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+        fxa.accountManager.uponQueue(.main) { accountManager in
             authState.token(Date.now(), canBeExpired: false).uponQueue(.main) { success in
                 guard let (token, kSync) = success.successValue else {
                     assert(false)

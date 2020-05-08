@@ -71,8 +71,12 @@ class DisconnectSetting: Setting {
 }
 
 class DeviceNamePersister: SettingValuePersister {
+    let profile: Profile
+    init(profile: Profile) {
+        self.profile = profile
+    }
     func readPersistedValue() -> String? {
-        guard let val = RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?
+        guard let val = profile.rustFxA.accountManager.peek()?.deviceConstellation()?
             .state()?.localDevice?.displayName else {
                 return UserDefaults.standard.string(forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
         }
@@ -82,7 +86,7 @@ class DeviceNamePersister: SettingValuePersister {
 
     func writePersistedValue(value: String?) {
         guard let newName = value,
-            let deviceConstellation = RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation() else {
+            let deviceConstellation = profile.rustFxA.accountManager.peek()?.deviceConstellation() else {
             return
         }
         UserDefaults.standard.set(newName, forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
@@ -99,7 +103,7 @@ class DeviceNameSetting: StringSetting {
     init(settings: SettingsTableViewController) {
         tableView = settings
         let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
-        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(), settingIsValid: settingsIsValid)
+        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: settingsIsValid)
 
         notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: nil) { [weak self] notification in
             self?.tableView?.tableView.reloadData()
@@ -126,14 +130,17 @@ class SyncContentSettingsViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.FxASettingsTitle
-
-        RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        profile.rustFxA.accountManager.peek()?.deviceConstellation()?.refreshState()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         if !enginesToSyncOnExit.isEmpty {
             _ = self.profile.syncManager.syncNamedCollections(why: SyncReason.engineEnabled, names: Array(enginesToSyncOnExit))
