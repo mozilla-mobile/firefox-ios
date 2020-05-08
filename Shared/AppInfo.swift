@@ -4,6 +4,8 @@
 
 import Foundation
 
+public let debugPrefIsChinaEdition = "debugPrefIsChinaEdition"
+
 open class AppInfo {
     /// Return the main application bundle. If this is called from an extension, the containing app bundle is returned.
     public static var applicationBundle: Bundle {
@@ -88,6 +90,9 @@ open class AppInfo {
     public static var webserverPort = 6571
 
     public static var isChinaEdition: Bool = {
+        if UserDefaults.standard.bool(forKey: debugPrefIsChinaEdition) {
+            return true
+        }
         return Locale.current.identifier == "zh_CN"
     }()
 }
