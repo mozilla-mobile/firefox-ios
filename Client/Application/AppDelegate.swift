@@ -15,6 +15,7 @@ import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
+import Glean
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
@@ -46,6 +47,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var receivedURLs = [URL]()
     var unifiedTelemetry: UnifiedTelemetry?
+
+    var glean = Glean.shared
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
@@ -106,6 +109,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         Logger.browserLogger.newLogWithDate(logDate)
 
         let profile = getProfile(application)
+
+        // Initialize Glean telemetry
+        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue))
 
         unifiedTelemetry = UnifiedTelemetry(profile: profile)
 

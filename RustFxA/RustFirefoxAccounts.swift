@@ -99,10 +99,10 @@ open class RustFirefoxAccounts {
         return id
     }
 
-    public static func reconfig() {
+    public static func reconfig(_ completion: (() -> Void)? = nil) {
         shared.accountManager = createAccountManager()
         shared.accountManager.initialize() { _ in
-            print("FxA reconfigured")
+            completion?()
         }
     }
 
@@ -148,7 +148,7 @@ open class RustFirefoxAccounts {
         NotificationCenter.default.addObserver(forName: .accountAuthenticated, object: nil, queue: .main) { [weak self] notification in
             // Handle account migration completed successfully. Need to clear the old stored apnsToken and re-register push.
             if let type = notification.userInfo?["authType"] as? FxaAuthType, case .migrated = type {
-                KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
+                KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }
 
@@ -266,7 +266,7 @@ open class RustFirefoxAccounts {
         prefs?.removeObjectForKey(PendingAccountDisconnectedKey)
         cachedUserProfile = nil
         pushNotifications.unregister()
-        KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: "apnsToken", withAccessibility: .afterFirstUnlock)
+        KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
     }
 }
 

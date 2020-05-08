@@ -2,6 +2,16 @@
 
 set -ex
 
+
+function get_abs_path {
+    local file_path="$1"
+    echo "$( cd "$(dirname "$file_path")" >/dev/null 2>&1 ; pwd -P )"
+}
+
+CURRENT_DIR="$(get_abs_path $0)"
+PROJECT_DIR="$(get_abs_path $CURRENT_DIR/../../../..)"
+
+
 if [ -d l10n-screenshots ]; then
   echo "The l10n-screenshots directory already exists. You decide."
   exit 1
@@ -21,7 +31,7 @@ fi
 
 LOCALES=$*
 if [ $# -eq 0 ]; then
-  LOCALES="af an anp ar ast az bg bn bo br bs ca co cs cy da de dsb el en-CA en-GB en-US eo es-AR es-CL es-MX es eu fa fi fr ga-IE gd gl gu-IN he hi-IN hr hsb hu hy-AM ia id is it ja jv ka kab kk km kn ko lo lt lv ml mr ms my nb-NO ne-NP nl nn-NO oc or pa-IN pl pt-BR pt-PT rm ro ru ses si sk sl sq su sv-SE ta te th tl tr uk ur uz vi zgh zh-CN zh-TW"
+  LOCALES=$(cat "$PROJECT_DIR/l10n-screenshots-locales.txt")
 fi
 
 for lang in $LOCALES; do

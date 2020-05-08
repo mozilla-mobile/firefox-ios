@@ -8,6 +8,7 @@ import Sync
 import XCGLogger
 import UserNotifications
 import Account
+import SwiftKeychainWrapper
 
 private let log = Logger.browserLogger
 
@@ -44,6 +45,15 @@ extension AppDelegate {
                         UIApplication.shared.registerForRemoteNotifications()
                     }
                 }
+            }
+        }
+
+        // Use sync event as a periodic check for the apnsToken.
+        // The notification service extension can clear this token if there is an error, and the main app can detect this and re-register.
+        NotificationCenter.default.addObserver(forName: .ProfileDidStartSyncing, object: nil, queue: .main) { _ in
+            let kc = KeychainWrapper.sharedAppContainerKeychain
+            if kc.object(forKey: KeychainKey.apnsToken) == nil {
+                NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }
         }
     }

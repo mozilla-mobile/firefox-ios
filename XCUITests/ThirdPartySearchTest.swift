@@ -119,6 +119,7 @@ class ThirdPartySearchTest: BaseTestCase {
         let customengineurlTextView = tablesQuery.textViews["customEngineUrl"]
         customengineurlTextView.staticTexts["URL (Replace Query with %s)"].tap()
         customengineurlTextView.press(forDuration: 1.0)
+        Base.helper.waitForExistence(Base.app.staticTexts["Paste"], timeout: 5)
         Base.app.staticTexts["Paste"].tap()
         sleep(2)
         Base.app.navigationBars.buttons["customEngineSaveButton"].tap()
