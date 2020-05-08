@@ -72,7 +72,7 @@ class DisconnectSetting: Setting {
 
 class DeviceNamePersister: SettingValuePersister {
     func readPersistedValue() -> String? {
-        guard let val = RustFirefoxAccounts.shared.accountManager.deviceConstellation()?
+        guard let val = RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?
             .state()?.localDevice?.displayName else {
                 return UserDefaults.standard.string(forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
         }
@@ -82,7 +82,7 @@ class DeviceNamePersister: SettingValuePersister {
 
     func writePersistedValue(value: String?) {
         guard let newName = value,
-              let deviceConstellation = RustFirefoxAccounts.shared.accountManager.deviceConstellation() else {
+            let deviceConstellation = RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation() else {
             return
         }
         UserDefaults.standard.set(newName, forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
@@ -127,7 +127,7 @@ class SyncContentSettingsViewController: SettingsTableViewController {
 
         self.title = Strings.FxASettingsTitle
 
-        RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.refreshState()
+        RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
     }
 
     required init?(coder aDecoder: NSCoder) {

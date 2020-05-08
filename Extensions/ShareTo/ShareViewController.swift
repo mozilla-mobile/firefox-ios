@@ -107,7 +107,7 @@ class ShareViewController: UIViewController {
         }
 
         let profile = BrowserProfile(localName: "profile")
-        RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in }
+        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in }
     }
 
     private func setupRows() {
