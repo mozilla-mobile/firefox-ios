@@ -16,6 +16,7 @@ assignees: ''
 - [ ] File P.I. request
 - [ ] Release Notes updated
 - [ ] Submit build to Apple (Select YES to IDFA, 'Attribute this app installation to a previously served advertisement')
+- [ ] Get App Store screenshots and all locales if necessary
 - [ ] Release with 7-day rollout 
 
 See [Release build checklist wiki](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist) for more detailed instructions.

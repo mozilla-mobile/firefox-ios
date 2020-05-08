@@ -19,28 +19,28 @@
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
-	<string>23.1</string>
+	<string>0.0.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSExtension</key>
 	<dict>
- <key>NSExtensionAttributes</key>
-                <dict>
-                        <key>NSExtensionActivationRule</key>
-                        <dict>
-                                <key>NSExtensionActivationSupportsText</key>
-                                <true/>
-                                <key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
-                                <integer>1</integer>
-                                <key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
-                                <integer>1</integer>
-                        </dict>
-                </dict>
-                <key>NSExtensionPointIdentifier</key>
-                <string>com.apple.share-services</string>
-	<key>NSExtensionPrincipalClass</key>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>NSExtensionActivationRule</key>
+			<dict>
+				<key>NSExtensionActivationSupportsText</key>
+				<true/>
+				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
+				<integer>1</integer>
+				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.share-services</string>
+		<key>NSExtensionPrincipalClass</key>
 		<string>InitialViewController</string>
 	</dict>
 	<key>UIAppFonts</key>

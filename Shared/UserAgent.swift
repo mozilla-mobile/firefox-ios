@@ -43,7 +43,7 @@ open class UserAgent {
     }
     
     public static func desktopUserAgent() -> String {
-        return UserAgentBuilder.defaultDesktopUserAgent().userAgent()
+        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
     }
 
     public static func mobileUserAgent() -> String {
@@ -62,11 +62,7 @@ open class UserAgent {
     public static func getUserAgent(domain: String, platform: UserAgentPlatform) -> String {
         switch platform {
         case .Desktop:
-            if let customUA = CustomUserAgentConstant.desktopUserAgent[domain] {
-                return customUA
-            } else {
-                return desktopUserAgent()
-            }
+            return desktopUserAgent()
         case .Mobile:
             if let customUA = CustomUserAgentConstant.mobileUserAgent[domain] {
                 return customUA
@@ -98,11 +94,7 @@ public struct CustomUserAgentConstant {
     public static let mobileUserAgent = [
         "paypal.com": defaultMobileUA,
         "yahoo.com": defaultMobileUA ]
-    public static let desktopUserAgent = [
-        "paypal.com": customDesktopUA,
-        "yahoo.com": customDesktopUA,
-        "youtube.com": customDesktopUA,
-        "whatsapp.com": customDesktopUA ]
+
 }
 
 public struct UserAgentBuilder {

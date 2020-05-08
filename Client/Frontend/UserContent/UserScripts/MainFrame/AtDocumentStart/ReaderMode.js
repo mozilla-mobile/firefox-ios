@@ -29,7 +29,7 @@ function checkReadability() {
   setTimeout(function() {
     if (document.location.href.match(readerModeURL)) {
       debug({Type: "ReaderModeStateChange", Value: "Active"});
-      webkit.messageHandlers.readerModeMessageHandler.postMessage({securityToken: SECURITY_TOKEN, Type: "ReaderModeStateChange", Value: "Active"});
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Active"});
       return;
     }
 
@@ -38,8 +38,8 @@ function checkReadability() {
       // back/forward: the page will be cached and the result will still be there.
       if (readabilityResult && readabilityResult.content) {
         debug({Type: "ReaderModeStateChange", Value: "Available"});
-        webkit.messageHandlers.readerModeMessageHandler.postMessage({securityToken: SECURITY_TOKEN, Type: "ReaderModeStateChange", Value: "Available"});
-        webkit.messageHandlers.readerModeMessageHandler.postMessage({securityToken: SECURITY_TOKEN, Type: "ReaderContentParsed", Value: readabilityResult});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Available"});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderContentParsed", Value: readabilityResult});
         return;
       }
 
@@ -61,7 +61,7 @@ function checkReadability() {
       // element. This causes the WKWebView content process to crash (Bug 1489543).
       if (docStr.indexOf("<frameset ") > -1) {
         debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
-        webkit.messageHandlers.readerModeMessageHandler.postMessage({securityToken: SECURITY_TOKEN, Type: "ReaderModeStateChange", Value: "Unavailable"});
+        webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
         return;
       }
 
@@ -73,13 +73,13 @@ function checkReadability() {
       readabilityResult.title = escapeHTML(readabilityResult.title);
 
       debug({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
-      webkit.messageHandlers.readerModeMessageHandler.postMessage({securityToken: SECURITY_TOKEN, Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
-      webkit.messageHandlers.readerModeMessageHandler.postMessage({securityToken: SECURITY_TOKEN, Type: "ReaderContentParsed", Value: readabilityResult});
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: readabilityResult !== null ? "Available" : "Unavailable"});
+      webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderContentParsed", Value: readabilityResult});
       return;
     }
 
     debug({Type: "ReaderModeStateChange", Value: "Unavailable"});
-    webkit.messageHandlers.readerModeMessageHandler.postMessage({securityToken: SECURITY_TOKEN, Type: "ReaderModeStateChange", Value: "Unavailable"});
+    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderModeStateChange", Value: "Unavailable"});
   }, 100);
 }
 
@@ -229,6 +229,6 @@ window.addEventListener("load", function(event) {
 window.addEventListener("pageshow", function(event) {
   // If this is an about:reader page that we are showing, fire an event to the native code
   if (document.location.href.match(readerModeURL)) {
-    webkit.messageHandlers.readerModeMessageHandler.postMessage({securityToken: SECURITY_TOKEN, Type: "ReaderPageEvent", Value: "PageShow"});
+    webkit.messageHandlers.readerModeMessageHandler.postMessage({Type: "ReaderPageEvent", Value: "PageShow"});
   }
 });

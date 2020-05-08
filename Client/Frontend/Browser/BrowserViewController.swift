@@ -860,7 +860,7 @@ class BrowserViewController: UIViewController {
         }
 
         let shareItem = ShareItem(url: url, title: title, favicon: favicon)
-        _ = profile.places.createBookmark(parentGUID: "mobile______", url: shareItem.url, title: shareItem.title)
+        profile.places.createBookmark(parentGUID: "mobile______", url: shareItem.url, title: shareItem.title)
 
         var userData = [QuickActions.TabURLKey: shareItem.url]
         if let title = shareItem.title {
@@ -999,6 +999,7 @@ class BrowserViewController: UIViewController {
         } else {
             request = nil
         }
+
         switchToPrivacyMode(isPrivate: isPrivate)
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
@@ -1264,8 +1265,16 @@ extension BrowserViewController: URLBarDelegate {
             self.updateFindInPageVisibility(visible: true)
         }
 
-        let successCallback: (String) -> Void = { (successMessage) in
-            SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
+        let successCallback: (String, ButtonToastAction) -> Void = { (successMessage, toastAction) in
+            switch toastAction {
+            case .removeBookmark:
+                let toast = ButtonToast(labelText: successMessage, buttonText: Strings.UndoString, textAlignment: .left) { isButtonTapped in
+                    isButtonTapped ? self.addBookmark(url: urlString) : nil
+                }
+                self.show(toast: toast)
+            default:
+                SimpleToast().showAlertWithText(successMessage, bottomContainer: self.webViewContainer)
+            }
         }
 
         let deferredBookmarkStatus: Deferred<Maybe<Bool>> = fetchBookmarkStatus(for: urlString)
@@ -2112,7 +2121,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
 
             let downloadAction = UIAlertAction(title: Strings.ContextMenuDownloadLink, style: .default) { _ in
                 self.pendingDownloadWebView = currentTab.webView
-                DownloadHelper.requestDownload(url: url, tab: currentTab)
+                DownloadContentScript.requestDownload(url: url, tab: currentTab)
             }
             actionSheetController.addAction(downloadAction, accessibilityIdentifier: "linkContextMenu.download")
 
@@ -2135,22 +2144,26 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
             let saveImageAction = UIAlertAction(title: Strings.ContextMenuSaveImage, style: .default) { _ in
                 let handlePhotoLibraryAuthorized = {
-                    self.getImageData(url) { data in
-                        PHPhotoLibrary.shared().performChanges({
-                            PHAssetCreationRequest.forAsset().addResource(with: .photo, data: data, options: nil)
-                        })
+                    DispatchQueue.main.async {
+                        self.getImageData(url) { data in
+                            PHPhotoLibrary.shared().performChanges({
+                                PHAssetCreationRequest.forAsset().addResource(with: .photo, data: data, options: nil)
+                            })
+                        }
                     }
                 }
 
                 let handlePhotoLibraryDenied = {
-                    let accessDenied = UIAlertController(title: Strings.PhotoLibraryFirefoxWouldLikeAccessTitle, message: Strings.PhotoLibraryFirefoxWouldLikeAccessMessage, preferredStyle: .alert)
-                    let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
-                    accessDenied.addAction(dismissAction)
-                    let settingsAction = UIAlertAction(title: Strings.OpenSettingsString, style: .default ) { _ in
-                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+                    DispatchQueue.main.async {
+                        let accessDenied = UIAlertController(title: Strings.PhotoLibraryFirefoxWouldLikeAccessTitle, message: Strings.PhotoLibraryFirefoxWouldLikeAccessMessage, preferredStyle: .alert)
+                        let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
+                        accessDenied.addAction(dismissAction)
+                        let settingsAction = UIAlertAction(title: Strings.OpenSettingsString, style: .default ) { _ in
+                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+                        }
+                        accessDenied.addAction(settingsAction)
+                        self.present(accessDenied, animated: true, completion: nil)
                     }
-                    accessDenied.addAction(settingsAction)
-                    self.present(accessDenied, animated: true, completion: nil)
                 }
 
                 if photoAuthorizeStatus == .notDetermined {

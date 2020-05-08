@@ -50,7 +50,7 @@ def sync_main(
     parser.add_argument("--branch", required=True, help="the git branch to generate screenshots from")
     parser.add_argument("--commit", required=True, help="the git commit hash to generate screenshots from")
     parser.add_argument("--workflow", required=True, help="the bitrise workflow to schedule")
-    parser.add_argument("--locale", required=True, help="locale to generate the screenshots for")
+    parser.add_argument("--locale", dest="locales", metavar="LOCALE", action="append", required=True, help="locale to generate the screenshots for (can be repeated)")
     parser.add_argument("--derived-data-path", default=None, help="the URL to download an existing build")
 
     result = parser.parse_args()
@@ -62,7 +62,7 @@ def sync_main(
 
     loop = loop_function()
     loop.run_until_complete(_handle_asyncio_loop(
-        async_main, token, result.branch, result.commit, result.workflow, result.locale, result.derived_data_path
+        async_main, token, result.branch, result.commit, result.workflow, result.locales, result.derived_data_path
     ))
 
 
@@ -96,14 +96,16 @@ async def async_main(token, *args):
             await download_log(client, build_slug)
 
 
-async def schedule_build(client, branch, commit, workflow, locale, derived_data_path=None):
+async def schedule_build(client, branch, commit, workflow, locales, derived_data_path=None):
     url = BITRISE_URL_TEMPLATE.format(suffix="builds")
+
+    moz_locales_value = " ".join(locales)
 
     environment_variables = [{
         "mapped_to": environment_variable_name,
         "value": environment_variable_value,
     } for environment_variable_name, environment_variable_value in (
-        ("MOZ_LOCALE", locale),
+        ("MOZ_LOCALES", moz_locales_value),
         ("MOZ_DERIVED_DATA_PATH", derived_data_path),
     ) if environment_variable_value]
 
@@ -173,9 +175,11 @@ async def download_log(client, build_slug):
 
     response = await do_http_request_json(client, url)
     download_url = response["expiring_raw_log_url"]
-    if not download_url:
-        raise TaskException("Bitrise has no log to offer for job {}. Please check https://app.bitrise.io/app/{}".format(build_slug, BITRISE_APP_SLUG_ID))
-    await download_file(download_url, "bitrise.log")
+    if download_url:
+        await download_file(download_url, "bitrise.log")
+    else:
+        log.error("Bitrise has no log to offer for job {0}. Please check https://app.bitrise.io/build/{0}".format(build_slug))
+
 
 
 CHUNK_SIZE = 128

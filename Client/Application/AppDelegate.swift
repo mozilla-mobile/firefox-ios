@@ -110,6 +110,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let profile = getProfile(application)
 
+        // Initialize Glean telemetry
+        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue))
+
         unifiedTelemetry = UnifiedTelemetry(profile: profile)
         
         // Get legacy telemetry ID

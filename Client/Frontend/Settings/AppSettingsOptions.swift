@@ -456,6 +456,20 @@ class ForceCrashSetting: HiddenSetting {
     }
 }
 
+class ChangeToChinaSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: toggle China version (needs restart)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        if UserDefaults.standard.bool(forKey: debugPrefIsChinaEdition) {
+            UserDefaults.standard.removeObject(forKey: debugPrefIsChinaEdition)
+        } else {
+            UserDefaults.standard.set(true, forKey: debugPrefIsChinaEdition)
+        }
+    }
+}
+
 class SlowTheDatabase: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: simulate slow database operations", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -856,6 +870,7 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
         prefs.setObject(toggle.isOn, forKey: prefKey)
+        RustFirefoxAccounts.reconfig()
     }
 }
 
