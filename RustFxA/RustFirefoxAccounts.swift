@@ -27,9 +27,8 @@ open class RustFirefoxAccounts {
     private static let clientID = "1b1a3e44c54fbb58"
     public static let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     public static var shared = RustFirefoxAccounts()
-    public var accountManager: FxAccountManager = createAccountManager()
+    public var accountManager = Deferred<FxAccountManager>()
     public var avatar: Avatar?
-    private static var startupCalled = false
     public let syncAuthState: SyncAuthState
     fileprivate static var prefs: Prefs?
     public let pushNotifications = PushNotificationSetup()
@@ -49,23 +48,17 @@ open class RustFirefoxAccounts {
      It will be called on app startup, and extensions must call this before using the class.
      If it is possible code could access `shared` before initialize() is complete, these callers should also
      hook into notifications like `.accountProfileUpdate` to refresh once initialize() is complete.
-
-     The alternative implemention would be to have `shared` as a Deferred<RustFirefoxAccounts>. However that
-     would require a significant rewrite of existing code, for minimal added benefit.
+     Or they can wait on the accountManager deferred to fill.
      */
-    public static func startup(prefs _prefs: Prefs, completion: ((RustFirefoxAccounts) -> Void)? = nil) {
+    public static func startup(prefs _prefs: Prefs) -> Deferred<FxAccountManager> {
         prefs = _prefs
-        if startupCalled {
-            completion?(shared)
-            return
+        if let manager = RustFirefoxAccounts.shared.accountManager.peek() {
+            return Deferred(value: manager)
         }
-        startupCalled = true
 
-        // Set-up Rust network stack. Note that this has to be called
-        // before any Application Services component gets used.
-        Viaduct.shared.useReqwestBackend()
-
-        shared.accountManager.initialize() { result in
+        let deferred = Deferred<FxAccountManager>()
+        let manager = RustFirefoxAccounts.shared.createAccountManager()
+        manager.initialize { result in
             let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
 
             // Note this checks if startup() is called in an app extensions, and if so, do not try account migration
@@ -75,15 +68,18 @@ open class RustFirefoxAccounts {
                 // The client app only needs to trigger this one time. If it fails due to offline state, the rust library
                 // will automatically re-try until success or permanent failure (notifications accountAuthenticated / accountMigrationFailed respectively).
                 // See also `init()` use of `.accountAuthenticated` below.
-                shared.accountManager.authenticateViaMigration(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
+                manager.authenticateViaMigration(sessionToken: tokens.session, kSync: tokens.ksync, kXCS: tokens.kxcs) { _ in }
             }
 
-            if shared.accountManager.hasAccount() {
+            RustFirefoxAccounts.shared.accountManager.fill(manager)
+            deferred.fill(manager)
+
+            // After everthing is setup, register for push notifications
+            if manager.hasAccount() {
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }
-
-            completion?(shared)
         }
+        return deferred
     }
 
     private static let prefKeySyncAuthStateUniqueID = "PrefKeySyncAuthStateUniqueID"
@@ -99,14 +95,16 @@ open class RustFirefoxAccounts {
         return id
     }
 
-    public static func reconfig(_ completion: (() -> Void)? = nil) {
-        shared.accountManager = createAccountManager()
-        shared.accountManager.initialize() { _ in
-            completion?()
+    public static func reconfig(_ completion: ((FxAccountManager) -> Void)? = nil) {
+        shared.accountManager = Deferred<FxAccountManager>()
+        let manager = shared.createAccountManager()
+        manager.initialize() { _ in
+            shared.accountManager.fill(manager)
+            completion?(manager)
         }
     }
 
-    private static func createAccountManager() -> FxAccountManager {
+    private func createAccountManager() -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
         assert(prefs != nil)
         let server = prefs?.intForKey(PrefsKeys.UseStageServer) == 1 ? FxAConfig.Server.stage :
@@ -123,9 +121,9 @@ open class RustFirefoxAccounts {
             }
 
             let tokenServer = prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false ? prefs?.stringForKey(PrefsKeys.KeyCustomSyncTokenServerOverride) : nil
-            config = FxAConfig(contentUrl: contentUrl, clientId: clientID, redirectUri: redirectURL, tokenServerUrlOverride: tokenServer)
+            config = FxAConfig(contentUrl: contentUrl, clientId: RustFirefoxAccounts.clientID, redirectUri: RustFirefoxAccounts.redirectURL, tokenServerUrlOverride: tokenServer)
         } else {
-            config = FxAConfig(server: server, clientId: clientID, redirectUri: redirectURL)
+            config = FxAConfig(server: server, clientId: RustFirefoxAccounts.clientID, redirectUri: RustFirefoxAccounts.redirectURL)
         }
 
         let type = UIDevice.current.userInterfaceIdiom == .pad ? DeviceType.tablet : DeviceType.mobile
@@ -137,6 +135,10 @@ open class RustFirefoxAccounts {
     }
 
     private init() {
+        // Set-up Rust network stack. Note that this has to be called
+        // before any Application Services component gets used.
+        Viaduct.shared.useReqwestBackend()
+
         let prefs = RustFirefoxAccounts.prefs
 
         syncAuthState = FirefoxAccountSyncAuthState(
@@ -205,13 +207,15 @@ open class RustFirefoxAccounts {
 
     /// This is typically used to add a UI indicator that FxA needs attention (usually re-login manually).
     public var isActionNeeded: Bool {
+        guard let accountManager = accountManager.peek() else { return false }
         if accountManager.accountMigrationInFlight() || accountMigrationFailed { return true }
-        if !accountManager.hasAccount() { return false }
-        return accountManager.accountNeedsReauth()
+        if !hasAccount() { return false }
+        return accountNeedsReauth()
     }
 
     /// Rust FxA notification handlers can call this to update caches and the UI.
     private func update() {
+        guard let accountManager = accountManager.peek() else { return }
         let avatarUrl = accountManager.accountProfile()?.avatar?.url
         if let str = avatarUrl, let url = URL(string: str) {
             avatar = Avatar(url: url)
@@ -239,7 +243,7 @@ open class RustFirefoxAccounts {
         get {
             let prefs = RustFirefoxAccounts.prefs
 
-            if let profile = accountManager.accountProfile() {
+            if let accountManager = accountManager.peek(), let profile = accountManager.accountProfile() {
                 if let p = cachedUserProfile, FxAUserProfile(profile: profile) == p {
                     return cachedUserProfile
                 }
@@ -259,6 +263,7 @@ open class RustFirefoxAccounts {
     }
 
     public func disconnect() {
+        guard let accountManager = accountManager.peek() else { return }
         accountManager.logout() { _ in }
         let prefs = RustFirefoxAccounts.prefs
         prefs?.removeObjectForKey(RustFirefoxAccounts.prefKeySyncAuthStateUniqueID)
@@ -267,6 +272,16 @@ open class RustFirefoxAccounts {
         cachedUserProfile = nil
         pushNotifications.unregister()
         KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+    }
+
+    public func hasAccount() -> Bool {
+        guard let accountManager = accountManager.peek() else { return false }
+        return accountManager.hasAccount()
+    }
+
+    public func accountNeedsReauth() -> Bool {
+        guard let accountManager = accountManager.peek() else { return false }
+        return accountManager.accountNeedsReauth()
     }
 }
 
