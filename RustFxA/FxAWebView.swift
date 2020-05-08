@@ -90,20 +90,21 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
         view = webView
 
-        let accountManager = RustFirefoxAccounts.shared.accountManager
-        accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
-            guard let self = self else { return }
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+            accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
+                guard let self = self else { return }
 
-            // Either show the settings, or the authentication flow.
+                // Either show the settings, or the authentication flow.
 
-            if self.pageType == .settingsPage, case .success(let url) = result {
-                self.baseURL = url
-                self.webView.load(URLRequest(url: url))
-            } else {
-                accountManager.beginAuthentication() { [weak self] result in
-                    if case .success(let url) = result {
-                        self?.baseURL = url
-                        self?.webView.load(URLRequest(url: url))
+                if self.pageType == .settingsPage, case .success(let url) = result {
+                    self.baseURL = url
+                    self.webView.load(URLRequest(url: url))
+                } else {
+                    accountManager.beginAuthentication() { [weak self] result in
+                        if case .success(let url) = result {
+                            self?.baseURL = url
+                            self?.webView.load(URLRequest(url: url))
+                        }
                     }
                 }
             }
@@ -160,7 +161,7 @@ extension FxAWebView: WKScriptMessageHandler {
                 profile.removeAccount()
                 dismiss(animated: true)
             case .profileChanged:
-                RustFirefoxAccounts.shared.accountManager.refreshProfile(forceRefresh: true)
+                RustFirefoxAccounts.shared.accountManager.peek()?.refreshProfile(forceRefresh: true)
             }
         }
     }
@@ -184,11 +185,11 @@ extension FxAWebView: WKScriptMessageHandler {
 
     /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int) {
+        guard let fxa = RustFirefoxAccounts.shared.accountManager.peek() else { return }
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
         let data: String
         if pageType == .settingsPage {
-            let fxa = RustFirefoxAccounts.shared.accountManager
             // Both email and uid are required at this time to properly link the FxA settings session
             let email = fxa.accountProfile()?.email ?? ""
             let uid = fxa.accountProfile()?.uid ?? ""
@@ -234,7 +235,7 @@ extension FxAWebView: WKScriptMessageHandler {
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
 
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
-        RustFirefoxAccounts.shared.accountManager.finishAuthentication(authData: auth) { _ in
+        RustFirefoxAccounts.shared.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager.onAddedAccount()
             
             // ask for push notification
@@ -258,7 +259,7 @@ extension FxAWebView: WKScriptMessageHandler {
             return
         }
 
-        RustFirefoxAccounts.shared.accountManager.handlePasswordChanged(newSessionToken: sessionToken) {
+        RustFirefoxAccounts.shared.accountManager.peek()?.handlePasswordChanged(newSessionToken: sessionToken) {
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
         }
     }

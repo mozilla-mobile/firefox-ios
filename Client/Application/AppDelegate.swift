@@ -144,6 +144,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
 
+        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in
+            print("RustFirefoxAccounts started")
+        }
         log.info("startApplication end")
         return true
     }
@@ -225,10 +228,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         AutocompleteTextField.appearance().semanticContentAttribute = .forceLeftToRight
 
         pushNotificationSetup()
-
-        if let profile = profile as? BrowserProfile {
-            RustFirefoxAccounts.startup(prefs: profile.prefs) { _ in }
-        }
 
         // Leanplum usersearch variable setup for onboarding research
         _ = OnboardingUserResearch()

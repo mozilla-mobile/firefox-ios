@@ -18,18 +18,19 @@ open class PushNotificationSetup {
             return
         }
 
-        let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
-        pushClient = PushClient(endpointURL: config.endpointURL, experimentalMode: false)
-        pushClient?.register(apnsToken).uponQueue(.main) { [weak self] result in
-            guard let pushReg = result.successValue else { return }
-            self?.pushRegistration = pushReg
-            keychain.set(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+            let config = PushConfigurationLabel(rawValue: AppConstants.scheme)!.toConfiguration()
+            self.pushClient = PushClient(endpointURL: config.endpointURL, experimentalMode: false)
+            self.pushClient?.register(apnsToken).uponQueue(.main) { [weak self] result in
+                guard let pushReg = result.successValue else { return }
+                self?.pushRegistration = pushReg
+                keychain.set(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
 
-            let subscription = pushReg.defaultSubscription
-            let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
-            RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
-
-            keychain.set(pushReg as NSCoding, forKey: KeychainKey.fxaPushRegistration, withAccessibility: .afterFirstUnlock)
+                let subscription = pushReg.defaultSubscription
+                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
+                accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
+                keychain.set(pushReg as NSCoding, forKey: KeychainKey.fxaPushRegistration, withAccessibility: .afterFirstUnlock)
+            }
         }
     }
 
