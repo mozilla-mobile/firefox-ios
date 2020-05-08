@@ -20,7 +20,7 @@ extension GleanMetrics {
         static let clientId = UuidMetricType(
             category: "legacy.ids",
             name: "client_id",
-            sendInPings: ["deletion_request"],
+            sendInPings: ["deletion-request"],
             lifetime: .user,
             disabled: false
         )

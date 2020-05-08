@@ -7,6 +7,7 @@ import Shared
 import Account
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -645,6 +646,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
                 AdjustIntegration.setEnabled($0)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.telemetryOptIn: $0])
                 LeanPlumClient.shared.set(enabled: $0)
+                Glean.shared.setUploadEnabled($0)
             }
         )
     }
