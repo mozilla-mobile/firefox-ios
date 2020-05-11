@@ -44,6 +44,9 @@ def set_run_config(config, tasks):
         yield task
 
 
+_ARTIFACTS_DIRECTORY = "/builds/worker/artifacts"
+
+
 @transforms.add
 def set_worker_config(config, tasks):
     for task in tasks:
@@ -53,14 +56,14 @@ def set_worker_config(config, tasks):
         artifacts.append({
             "type": "file",
             "name": "public/logs/bitrise.log",
-            "path": "/builds/worker/checkouts/src/bitrise.log",
+            "path": "{}/bitrise.log".format(_ARTIFACTS_DIRECTORY),
         })
 
         for locale in task["attributes"]["chunk_locales"]:
             artifacts.append({
                 "type": "file",
                 "name": "public/screenshots/{}.zip".format(locale),
-                "path": "/builds/worker/checkouts/src/{}.zip".format(locale),
+                "path": "{}/{}.zip".format(_ARTIFACTS_DIRECTORY, locale),
             })
 
         worker.setdefault("docker-image", {"in-tree": "screenshots"})
@@ -84,6 +87,7 @@ def add_command(config, tasks):
             "--branch", config.params["head_ref"],
             "--commit", config.params["head_rev"],
             "--workflow", workflow,
+            "--artifacts-directory", _ARTIFACTS_DIRECTORY
         ]
 
         for locale in task["attributes"]["chunk_locales"]:
