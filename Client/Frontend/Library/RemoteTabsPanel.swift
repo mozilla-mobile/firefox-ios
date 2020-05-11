@@ -349,7 +349,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         selectionStyle = .none
 
         self.libraryPanel = libraryPanel
-        let createAnAccountButton = UIButton(type: .system)
 
         emptyStateImageView.image = UIImage.templateImageNamed(emptySyncImageName)
         contentView.addSubview(emptyStateImageView)
@@ -373,11 +372,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
 
-        createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: [])
-        createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
-        createAnAccountButton.addTarget(self, action: #selector(createAnAccount), for: .touchUpInside)
-        contentView.addSubview(createAnAccountButton)
-
         emptyStateImageView.snp.makeConstraints { (make) -> Void in
             make.centerX.equalTo(instructionsLabel)
 
@@ -391,11 +385,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(emptyStateImageView.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
             make.centerX.equalTo(emptyStateImageView)
-        }
-
-        createAnAccountButton.snp.makeConstraints { (make) -> Void in
-            make.centerX.equalTo(signInButton)
-            make.top.equalTo(signInButton.snp.bottom).offset(RemoteTabsPanelUX.EmptyStateTopPaddingInBetweenItems)
         }
 
         applyTheme()
