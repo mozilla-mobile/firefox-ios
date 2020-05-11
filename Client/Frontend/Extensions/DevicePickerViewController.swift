@@ -359,7 +359,10 @@ class DevicePickerNoClientsTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupHelpView(contentView,
             introText: Strings.SendToNoDevicesFound,
-            showMeText: "") // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
+            showMeText: "",
+            target: nil,
+            action: nil
+        ) // TODO We used to have a 'show me how to ...' text here. But, we cannot open web pages from the extension. So this is clear for now until we decide otherwise.
         // Move the separator off screen
         separatorInset = UIEdgeInsets(top: 0, left: 1000, bottom: 0, right: 0)
     }

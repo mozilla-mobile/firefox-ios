@@ -11,6 +11,11 @@ private struct InstructionsViewControllerUX {
     static let TextFont = UIFont.systemFont(ofSize: UIFont.labelFontSize)
     static let TextColor = UIColor.Photon.Grey60
     static let LinkColor = UIColor.Photon.Blue60
+    static let EmptyStateSignInButtonColor = UIColor.Photon.Blue40
+    static let EmptyStateSignInButtonHeight = 44
+    static let EmptyStateSignInButtonWidth = 200
+    static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15
+    static let EmptyStateSignInButtonCornerRadius: CGFloat = 8
 }
 
 protocol InstructionsViewControllerDelegate: AnyObject {
@@ -32,7 +37,7 @@ private func highlightLink(_ s: NSString, withColor color: UIColor) -> NSAttribu
     return a
 }
 
-func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
+func setupHelpView(_ view: UIView, introText: String, showMeText: String, target: Any?, action: Selector?) {
     let imageView = UIImageView()
     imageView.image = UIImage(named: "emptySync")
     view.addSubview(imageView)
@@ -68,6 +73,26 @@ func setupHelpView(_ view: UIView, introText: String, showMeText: String) {
         make.top.equalTo(label1.snp.bottom).offset(InstructionsViewControllerUX.TopPadding)
         make.centerX.equalTo(view)
     }
+    
+    if let target = target, let action = action {
+        let signInButton = UIButton()
+        signInButton.setTitle(Strings.FxASignInToFirefox, for: [])
+        signInButton.setTitleColor(UIColor.Photon.White100, for: [])
+        signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+        signInButton.layer.cornerRadius = InstructionsViewControllerUX.EmptyStateSignInButtonCornerRadius
+        signInButton.clipsToBounds = true
+        signInButton.addTarget(target, action: action, for: .touchUpInside)
+        view.addSubview(signInButton)
+        
+        signInButton.snp.makeConstraints { (make) -> Void in
+            make.width.equalTo(InstructionsViewControllerUX.EmptyStateSignInButtonWidth)
+            make.height.equalTo(InstructionsViewControllerUX.EmptyStateSignInButtonHeight)
+            make.top.equalTo(label2.snp.bottom).offset(InstructionsViewControllerUX.TopPadding)
+            make.centerX.equalTo(view)
+        }
+        
+        signInButton.backgroundColor = InstructionsViewControllerUX.EmptyStateSignInButtonColor
+    }
 }
 
 class InstructionsViewController: UIViewController {
@@ -78,12 +103,13 @@ class InstructionsViewController: UIViewController {
         edgesForExtendedLayout = []
         view.backgroundColor = UIColor.Photon.White100
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SendToCloseButton, style: .done, target: self, action: #selector(close))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SendToCancelButton, style: .done, target: self, action: #selector(close))
         navigationItem.leftBarButtonItem?.accessibilityIdentifier = "InstructionsViewController.navigationItem.leftBarButtonItem"
 
         setupHelpView(view,
             introText: Strings.SendToNotSignedInText,
-                showMeText: Strings.SendToNotSignedInMessage)
+                showMeText: Strings.SendToNotSignedInMessage,
+                target: self, action: #selector(signIn))
     }
 
     @objc func close() {
@@ -92,5 +118,9 @@ class InstructionsViewController: UIViewController {
 
     func showMeHow() {
         print("Show me how") // TODO Not sure what to do or if to keep this. Waiting for UX feedback.
+    }
+    
+    @objc fileprivate func signIn() {
+       
     }
 }
