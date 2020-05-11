@@ -75,7 +75,7 @@ def set_worker_config(config, tasks):
 
 
 @transforms.add
-def add_command(config, tasks):
+def add_bitrise_command(config, tasks):
     for task in tasks:
         commands = task["run"].setdefault("commands", [])
         workflow = task.pop("bitrise-workflow")
@@ -96,6 +96,29 @@ def add_command(config, tasks):
         derived_data_path = task.pop("build-derived-data-path", "")
         if derived_data_path:
             command.extend(["--derived-data-path", derived_data_path])
+
+        commands.append(command)
+
+        yield task
+
+
+_EXPECTED_NUMBER_OF_SCREENSHOTS_PER_LOCALE = 54
+
+
+@transforms.add
+def add_screenshot_checks_command(config, tasks):
+    for task in tasks:
+        commands = task["run"]["commands"]
+
+        command = [
+            "python3",
+            "taskcluster/scripts/check-screenshots.py",
+            "--artifacts-directory", _ARTIFACTS_DIRECTORY,
+            "--screenshots-per-locale", str(_EXPECTED_NUMBER_OF_SCREENSHOTS_PER_LOCALE),
+        ]
+
+        for locale in task["attributes"]["chunk_locales"]:
+            command.extend(["--locale", locale])
 
         commands.append(command)
 
