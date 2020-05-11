@@ -22,4 +22,4 @@ jobs:
             artifacts:
                 - type: file
                   name: public/build/target.zip
-                  path: /builds/worker/checkouts/src/l10n-screenshots-dd.zip
+                  path: /builds/worker/artifacts/l10n-screenshots-dd.zip
