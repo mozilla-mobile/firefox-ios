@@ -2412,6 +2412,12 @@ extension BrowserViewController: TopTabsDelegate {
 }
 
 extension BrowserViewController: DevicePickerViewControllerDelegate, InstructionsViewControllerDelegate {
+    func instructionsViewDidRequestToSignIn() {
+        self.dismissSignInViewController()
+        let fxaParams = FxALaunchParams(query: ["entrypoint": "homepanel"])
+        presentSignInViewController(fxaParams)
+    }
+    
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController) {
         self.popToBVC()
     }

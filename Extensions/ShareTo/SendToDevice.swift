@@ -21,6 +21,10 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControll
         devicePickerViewController.profile = nil // This means the picker will open and close the default profile
         return devicePickerViewController
     }
+    
+    func instructionsViewDidRequestToSignIn() {
+        
+    }
 
     func finish() {
         delegate?.finish(afterDelay: 0)

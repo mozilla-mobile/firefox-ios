@@ -20,6 +20,7 @@ private struct InstructionsViewControllerUX {
 
 protocol InstructionsViewControllerDelegate: AnyObject {
     func instructionsViewControllerDidClose(_ instructionsViewController: InstructionsViewController)
+    func instructionsViewDidRequestToSignIn()
 }
 
 private func highlightLink(_ s: NSString, withColor color: UIColor) -> NSAttributedString {
@@ -121,6 +122,6 @@ class InstructionsViewController: UIViewController {
     }
     
     @objc fileprivate func signIn() {
-       
+       delegate?.instructionsViewDidRequestToSignIn()
     }
 }
