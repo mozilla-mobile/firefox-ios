@@ -408,12 +408,6 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         }
     }
 
-    @objc fileprivate func createAnAccount() {
-        if let libraryPanel = self.libraryPanel {
-            libraryPanel.libraryPanelDelegate?.libraryPanelDidRequestToCreateAccount()
-        }
-    }
-
     override func updateConstraints() {
         if UIApplication.shared.statusBarOrientation.isLandscape && !(DeviceInfo.deviceModel().range(of: "iPad") != nil) {
             instructionsLabel.snp.remakeConstraints { make in
