@@ -7,6 +7,7 @@
 import argparse
 import asyncio
 import logging
+import os
 import sys
 
 from aiohttp_retry import RetryClient
@@ -50,6 +51,7 @@ def sync_main(
     parser.add_argument("--branch", required=True, help="the git branch to generate screenshots from")
     parser.add_argument("--commit", required=True, help="the git commit hash to generate screenshots from")
     parser.add_argument("--workflow", required=True, help="the bitrise workflow to schedule")
+    parser.add_argument("--artifacts-directory", required=True, help="The directory to store bitrise artifacts")
     parser.add_argument("--locale", dest="locales", metavar="LOCALE", action="append", required=True, help="locale to generate the screenshots for (can be repeated)")
     parser.add_argument("--derived-data-path", default=None, help="the URL to download an existing build")
 
@@ -62,7 +64,8 @@ def sync_main(
 
     loop = loop_function()
     loop.run_until_complete(_handle_asyncio_loop(
-        async_main, token, result.branch, result.commit, result.workflow, result.locales, result.derived_data_path
+        async_main, token, result.branch, result.commit, result.workflow,
+        result.artifacts_directory, result.locales, result.derived_data_path
     ))
 
 
@@ -81,19 +84,19 @@ async def _handle_asyncio_loop(async_main, *args):
         sys.exit(exc.exit_code)
 
 
-async def async_main(token, *args):
+async def async_main(token, branch, commit, workflow, artifacts_directory, locales, derived_data_path=None):
     headers = {"Authorization": token}
     async with RetryClient(headers=headers) as client:
-        build_slug = await schedule_build(client, *args)
+        build_slug = await schedule_build(client, branch, commit, workflow, locales, derived_data_path)
         log.info("Created new job. Slug: {}".format(build_slug))
 
         try:
             await wait_for_job_to_finish(client, build_slug)
             log.info("Job {} is successful. Retrieving artifacts...".format(build_slug))
-            await download_artifacts(client, build_slug)
+            await download_artifacts(client, build_slug, artifacts_directory)
         finally:
             log.info("Retrieving bitrise log...")
-            await download_log(client, build_slug)
+            await download_log(client, build_slug, artifacts_directory)
 
 
 async def schedule_build(client, branch, commit, workflow, locales, derived_data_path=None):
@@ -149,7 +152,7 @@ async def wait_for_job_to_finish(client, build_slug):
         raise TaskException("Job {} is finished but not successful. Got: {}".format(build_slug, response), exit_code=3)
 
 
-async def download_artifacts(client, build_slug):
+async def download_artifacts(client, build_slug, artifacts_directory):
     suffix = "builds/{}/artifacts".format(build_slug)
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
@@ -166,17 +169,17 @@ async def download_artifacts(client, build_slug):
 
         response = await do_http_request_json(client, url)
         download_url = response["data"]["expiring_download_url"]
-        await download_file(download_url, title)
+        await download_file(download_url, os.path.join(artifacts_directory, title))
 
 
-async def download_log(client, build_slug):
+async def download_log(client, build_slug, artifacts_directory):
     suffix = "builds/{}/log".format(build_slug)
     url = BITRISE_URL_TEMPLATE.format(suffix=suffix)
 
     response = await do_http_request_json(client, url)
     download_url = response["expiring_raw_log_url"]
     if download_url:
-        await download_file(download_url, "bitrise.log")
+        await download_file(download_url, os.path.join(artifacts_directory, "bitrise.log"))
     else:
         log.error("Bitrise has no log to offer for job {0}. Please check https://app.bitrise.io/build/{0}".format(build_slug))
 
