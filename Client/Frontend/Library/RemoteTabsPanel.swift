@@ -18,7 +18,7 @@ private struct RemoteTabsPanelUX {
     static let EmptyStateInstructionsWidth = 170
     static let EmptyStateTopPaddingInBetweenItems: CGFloat = 15 // UX TODO I set this to 8 so that it all fits on landscape
     static let EmptyStateSignInButtonColor = UIColor.Photon.Blue40
-    static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
+    static let EmptyStateSignInButtonCornerRadius: CGFloat = 8
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200
 
@@ -366,7 +366,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
 
         signInButton.setTitle(Strings.FxASignInToSync, for: [])
         signInButton.setTitleColor(UIColor.Photon.White100, for: [])
-        signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .subheadline)
+        signInButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
         signInButton.layer.cornerRadius = RemoteTabsPanelUX.EmptyStateSignInButtonCornerRadius
         signInButton.clipsToBounds = true
         signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
