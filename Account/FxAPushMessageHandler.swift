@@ -92,8 +92,8 @@ extension FxAPushMessageHandler {
                     case .deviceConnected(let deviceName):
                         let message = PushMessage.deviceConnected(deviceName)
                         deferred.fill(Maybe(success: message))
-                    case .deviceDisconnected(let deviceInfo):
-                        if deviceInfo.isLocalDevice {
+                    case let .deviceDisconnected(deviceId, isLocalDevice):
+                        if isLocalDevice {
                             // We can't disconnect the device from the account until we have access to the application, so we'll handle this properly in the AppDelegate (as this code in an extension),
                             // by calling the FxALoginHelper.applicationDidDisonnect(application).
                             self.profile.prefs.setBool(true, forKey: PendingAccountDisconnectedKey)
@@ -109,7 +109,7 @@ extension FxAPushMessageHandler {
                             return
                         }
                         
-                        profile.remoteClientsAndTabs.getClient(fxaDeviceId: deviceInfo.deviceId).uponQueue(.main) { result in
+                        profile.remoteClientsAndTabs.getClient(fxaDeviceId: deviceId).uponQueue(.main) { result in
                             guard let device = result.successValue else { return }
                             let message = PushMessage.deviceDisconnected(device?.name)
                             if let id = device?.guid {
@@ -117,7 +117,7 @@ extension FxAPushMessageHandler {
                                     print("deleted client")
                                 }
                             }
-                            
+
                             deferred.fill(Maybe(success: message))
                         }
                     }
