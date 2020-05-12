@@ -74,6 +74,14 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         navigator.goto(SetPasscodeScreen)
         snapshot("SetPasscodeScreen-1-nopasscode")
         userState.newPasscode = "111111"
+
+        // Workaround to be able to type numbers in right to left locales
+        waitForExistence(app.navigationBars["Set Passcode"])
+        if (app.keys["123"].exists) {
+            app.keys["123"].tap()
+        }
+        waitForExistence(app.keys["1"])
+
         navigator.performAction(Action.SetPasscodeTypeOnce)
         snapshot("SetPasscodeScreen-2-typepasscode")
 
