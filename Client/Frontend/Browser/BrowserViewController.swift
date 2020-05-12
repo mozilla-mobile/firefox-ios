@@ -1163,9 +1163,12 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 
 extension BrowserViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        guard let tab = tabManager.selectedTab else { return }
-        finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
-        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
+       // TODO: remove me, old code should be unchanged, this delegate for QR pairing goes elsewhere, for now just hack this in to show the qr pairing flow
+       let vc = FxAWebView(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .dismiss, qrUrl: url.absoluteString)
+        present(vc, animated: true, completion: nil)
+//        guard let tab = tabManager.selectedTab else { return }
+//        finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
+//        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
     }
 
     func didScanQRCodeWithText(_ text: String) {
@@ -2048,7 +2051,10 @@ extension BrowserViewController: IntroViewControllerDelegate {
     func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         guard profile.hasSyncableAccount() else {
-            return FxAWebView(pageType: flowType, profile: profile, dismissalStyle: .dismiss)
+            let qq = QRCodeViewController() // TODO: show new FirefoxAccountSignInVC, which will show either a QRCodeViewController or a FxAWebView()
+            qq.qrCodeDelegate = self // TODO: the FirefoxAccountSignInVC will be the delegate
+            return qq
+         //   return FxAWebView(pageType: flowType, profile: profile, dismissalStyle: .dismiss)
         }
 
         let settingsTableViewController = SyncContentSettingsViewController()

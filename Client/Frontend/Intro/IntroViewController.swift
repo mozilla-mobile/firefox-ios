@@ -87,12 +87,10 @@ class IntroViewController: UIViewController {
         imagePage2.isHidden = true
         imagePage2.contentMode = .center
 
-        let signUp = UIButton()
-        signUp.accessibilityIdentifier = "signUpOnboardingButton"
         let signIn = UIButton()
         signIn.accessibilityIdentifier = "signInOnboardingButton"
 
-        [heading, subtitlePage1, subtitlePage2, signUp, signIn, nextButton, startBrowsingButton].forEach {
+        [heading, subtitlePage1, subtitlePage2, signIn, nextButton, startBrowsingButton].forEach {
             bottomHolder.addSubview($0)
         }
 
@@ -127,18 +125,9 @@ class IntroViewController: UIViewController {
         let buttonSpacing = 16
         let buttonBlue = UIColor.Photon.Blue50
 
-        [signUp, signIn, nextButton, startBrowsingButton].forEach {
+        [signIn, nextButton, startBrowsingButton].forEach {
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .bold)
             $0.layer.cornerRadius = 10
-        }
-
-        signUp.backgroundColor = buttonBlue
-        signUp.setTitle(Strings.IntroSignUpButtonTitle, for: .normal)
-        signUp.addTarget(self, action: #selector(showSignUpFlow), for: .touchUpInside)
-        signUp.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(buttonEdgeInset)
-            make.bottom.equalTo(signIn.snp.top).offset(-buttonSpacing)
-            make.height.equalTo(buttonHeight)
         }
 
         signIn.backgroundColor = .clear
@@ -223,12 +212,6 @@ class IntroViewController: UIViewController {
         delegate?.introViewControllerDidFinish(self, fxaLoginFlow: .emailLoginFlow)
         LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": String(currentPage)])
         UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingEmailLogin, extras: ["slide-num": currentPage])
-        }
-
-    @objc func showSignUpFlow() {
-        delegate?.introViewControllerDidFinish(self, fxaLoginFlow: .signUpFlow)
-        LeanPlumClient.shared.track(event: .dismissedOnboardingShowSignUp, withParameters: ["dismissedOnSlide": String(currentPage)])
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": currentPage])
         }
 }
 

@@ -16,7 +16,6 @@ enum DismissType {
 
 enum FxAPageType {
     case emailLoginFlow
-    case signUpFlow
     case settingsPage
 }
 
@@ -43,7 +42,7 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
     fileprivate let pageType: FxAPageType
     fileprivate var baseURL: URL?
     fileprivate let profile: Profile
-
+    var qrUrl: String?
     /// Used to show a second WKWebView to browse help links.
     fileprivate var helpBrowser: WKWebView?
 
@@ -54,7 +53,8 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
      - parameter profile: a Profile.
      - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part of a UINavigationController stack it will pop to the root.
      */
-    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType) {
+    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, qrUrl: String? = nil) {
+        self.qrUrl = qrUrl
         self.pageType = pageType
         self.profile = profile
         self.dismissType = dismissalStyle
@@ -100,7 +100,9 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
                     self.baseURL = url
                     self.webView.load(URLRequest(url: url))
                 } else {
-                    accountManager.beginAuthentication() { [weak self] result in
+                     // if non-qr code flow do accountManager.beginAuthentication()
+                    accountManager.beginPairingAuthentication(pairingUrl: self.qrUrl ?? "") { [weak self] result in
+                  //  accountManager.beginAuthentication() { [weak self] result in
                         if case .success(let url) = result {
                             self?.baseURL = url
                             self?.webView.load(URLRequest(url: url))
