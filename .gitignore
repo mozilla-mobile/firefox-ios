@@ -85,3 +85,8 @@ __pycache__
 
 # Node.js
 node_modules
+Client/Assets/AllFramesAtDocumentStart.js
+Client/Assets/AllFramesAtDocumentEnd.js
+Client/Assets/MainFrameAtDocumentStart.js
+Client/Assets/MainFrameAtDocumentEnd.js
+Client/Assets/*.js.LICENSE.txt
