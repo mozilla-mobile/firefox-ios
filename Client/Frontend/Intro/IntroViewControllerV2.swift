@@ -9,15 +9,15 @@ import Shared
 import Leanplum
 
 class IntroViewControllerV2: UIViewController {
-    private lazy var welcomeCard: IntroScreenWelcomeView = {
-        let welcomeCardView = IntroScreenWelcomeView()
+    private lazy var welcomeCard: IntroScreenWelcomeViewV2 = {
+        let welcomeCardView = IntroScreenWelcomeViewV2()
         welcomeCardView.contentMode = .scaleAspectFit
         welcomeCardView.clipsToBounds = true
         welcomeCardView.tag = 0
         return welcomeCardView
     }()
-    private lazy var syncCard: IntroScreenSyncView = {
-        let syncCardView = IntroScreenSyncView()
+    private lazy var syncCard: IntroScreenSyncViewV2 = {
+        let syncCardView = IntroScreenSyncViewV2()
         syncCardView.contentMode = .scaleAspectFit
         syncCardView.clipsToBounds = true
         syncCardView.tag = 0

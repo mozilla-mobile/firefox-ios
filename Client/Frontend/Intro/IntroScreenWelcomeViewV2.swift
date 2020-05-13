@@ -40,7 +40,7 @@ in the middle of the screen.
 
 */
 
-class IntroScreenWelcomeView: UIView {
+class IntroScreenWelcomeViewV2: UIView {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
