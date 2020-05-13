@@ -10,7 +10,7 @@ taskgraph:
     repositories:
         mobile:
             name: "Firefox for iOS"
-    cached-task-prefix: mobile.firefox-ios
+    cached-task-prefix: mobile.v2.firefox-ios
 
 workers:
     aliases:
@@ -24,6 +24,11 @@ workers:
             implementation: docker-worker
             os: linux
             worker-type: 'images'
+        misc:
+            provisioner: 'mobile-{level}'
+            implementation: docker-worker
+            os: linux
+            worker-type: 'b-linux'
 
 scriptworker:
     scope-prefix: mobile:firefox-ios:releng
