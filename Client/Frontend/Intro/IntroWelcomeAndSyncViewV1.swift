@@ -25,18 +25,7 @@ import Shared
 
  */
 
-protocol IntroViewControllerDelegate: AnyObject {
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxAPageType?)
-}
-
-struct ViewControllerConsts {
-    struct PreferredSize {
-        static let IntroViewController = CGSize(width: 375, height: 667)
-        static let UpdateViewController = CGSize(width: 375, height: 667)
-    }
-}
-
-class IntroScreenSyncViewV1: UIView {
+class IntroWelcomeAndSyncViewV1: UIView {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
@@ -49,8 +38,14 @@ class IntroScreenSyncViewV1: UIView {
     private let screenHeight = UIScreen.main.bounds.size.height
     private let screenWidth = UIScreen.main.bounds.width
     // Views
-    private lazy var titleImageView: UIImageView = {
+    private lazy var titleImageViewPage1: UIImageView = {
         let imgView = UIImageView(image: UIImage(named: "tour-Welcome"))
+        imgView.contentMode = .center
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+    private lazy var titleImageViewPage2: UIImageView = {
+        let imgView = UIImageView(image: UIImage(named: "tour-Sync"))
         imgView.contentMode = .center
         imgView.clipsToBounds = true
         return imgView
@@ -64,7 +59,7 @@ class IntroScreenSyncViewV1: UIView {
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
-    private lazy var subTitleLabel: UILabel = {
+    private lazy var subTitleLabelPage1: UILabel = {
         let fontSize: CGFloat = screenWidth <= 320 ? 16 : 20
         let label = UILabel()
         label.text = Strings.CardTextWelcome
@@ -73,6 +68,17 @@ class IntroScreenSyncViewV1: UIView {
         label.textAlignment = .center
         label.adjustsFontSizeToFitWidth = true
         label.numberOfLines = 2
+        return label
+    }()
+    private lazy var subTitleLabelPage2: UILabel = {
+        let fontSize: CGFloat = screenWidth <= 320 ? 16 : 20
+        let label = UILabel()
+        label.text = Strings.CardTextSync
+        label.textColor = fxTextThemeColour
+        label.font = UIFont.systemFont(ofSize: fontSize)
+        label.textAlignment = .center
+        label.adjustsFontSizeToFitWidth = true
+        label.numberOfLines = 3
         return label
     }()
     private var closeButton: UIButton = {
@@ -117,6 +123,16 @@ class IntroScreenSyncViewV1: UIView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.titleLabel?.textAlignment = .center
+        button.accessibilityIdentifier = "nextOnboardingButton"
+        return button
+    }()
+    private lazy var startBrowsingButton: UIButton = {
+        let button = UIButton()
+        button.setTitle(Strings.StartBrowsingButtonTitle, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
+        button.titleLabel?.textAlignment = .center
+        button.accessibilityIdentifier = "startBrowsingOnboardingButton"
         return button
     }()
     // Helper views
@@ -128,6 +144,8 @@ class IntroScreenSyncViewV1: UIView {
     var nextClosure: (() -> Void)?
     var signUpClosure: (() -> Void)?
     var signInClosure: (() -> Void)?
+    // Basic variables
+    private var currentPage = 0
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -137,9 +155,6 @@ class IntroScreenSyncViewV1: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         initialViewSetup()
-        topViewSetup()
-        stackViewSetup()
-        combinedViewSetup()
     }
     
     // MARK: View setup
@@ -161,14 +176,15 @@ class IntroScreenSyncViewV1: UIView {
         }
         
         main2panel.addArrangedSubview(imageHolder)
-        imageHolder.addSubview(titleImageView)
-        
-        titleImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+        [titleImageViewPage1, titleImageViewPage2].forEach {
+            imageHolder.addSubview($0)
+            $0.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
         }
     
         main2panel.addArrangedSubview(bottomHolder)
-        [titleLabel, subTitleLabel, signUpButton, signInButton, nextButton].forEach {
+        [titleLabel, subTitleLabelPage1, subTitleLabelPage2, signUpButton, signInButton, nextButton, startBrowsingButton].forEach {
              bottomHolder.addSubview($0)
          }
         
@@ -177,14 +193,17 @@ class IntroScreenSyncViewV1: UIView {
             make.top.equalToSuperview()
         }
         
-        subTitleLabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(35)
-            make.top.equalTo(titleLabel.snp.bottom)
+        [subTitleLabelPage1, subTitleLabelPage2].forEach {
+            $0.snp.makeConstraints { make in
+               make.left.right.equalToSuperview().inset(35)
+               make.top.equalTo(titleLabel.snp.bottom)
+            }
         }
         
         let buttonEdgeInset = 15
         let buttonHeight = 46
         let buttonSpacing = 16
+        
         signUpButton.addTarget(self, action: #selector(showSignUpFlow), for: .touchUpInside)
         signUpButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(buttonEdgeInset)
@@ -198,12 +217,15 @@ class IntroScreenSyncViewV1: UIView {
             make.height.equalTo(buttonHeight)
         }
         nextButton.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
-        nextButton.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(buttonEdgeInset)
-            // On large iPhone screens, bump this up from the bottom
-            let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (screenHeight > 800 ? 60 : 20)
-            make.bottom.equalToSuperview().inset(offset)
-            make.height.equalTo(buttonHeight)
+        startBrowsingButton.addTarget(self, action: #selector(startBrowsing), for: .touchUpInside)
+        [nextButton, startBrowsingButton].forEach {
+            $0.snp.makeConstraints { make in
+                make.left.right.equalToSuperview().inset(buttonEdgeInset)
+                // On large iPhone screens, bump this up from the bottom
+                let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (screenHeight > 800 ? 60 : 20)
+                make.bottom.equalToSuperview().inset(offset)
+                make.height.equalTo(buttonHeight)
+            }
         }
         
         addSubview(closeButton)
@@ -217,41 +239,62 @@ class IntroScreenSyncViewV1: UIView {
         } else {
             closeButton.tintColor = .black
         }
-    }
-    
-    private func topViewSetup() {
         
+        // Initially hide page1
+        hidePage1()
     }
     
-    private func stackViewSetup() {
-        
+    private func hidePage1() {
+        [titleImageViewPage2, startBrowsingButton, subTitleLabelPage2].forEach {
+            $0.isHidden = true
+        }
     }
     
-    private func combinedViewSetup() {
-       
+    private func showPage2() {
+        currentPage = 1
+
+        [titleImageViewPage2, startBrowsingButton, subTitleLabelPage2].forEach {
+            $0.alpha = 0
+            $0.isHidden = false
+        }
+
+        UIView.animate(withDuration: 0.3, animations: {
+            self.titleImageViewPage1.alpha = 0
+            self.titleImageViewPage2.alpha = 1
+
+            self.nextButton.alpha = 0
+            self.startBrowsingButton.alpha = 1
+
+            self.titleLabel.alpha = 0
+            self.subTitleLabelPage1.alpha = 0
+            self.subTitleLabelPage2.alpha = 1
+        }) { _ in
+            self.nextButton.isHidden = true
+        }
     }
     
     // MARK: Button Actions
     @objc func startBrowsing() {
-        LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": "1"])
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": 1])
+        LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": String(currentPage)])
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": currentPage])
         closeClosure?()
     }
 
     @objc func showEmailLoginFlow() {
-        LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": "1"])
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingEmailLogin, extras: ["slide-num": 1])
+        LeanPlumClient.shared.track(event: .dismissedOnboardingShowLogin, withParameters: ["dismissedOnSlide": String(currentPage)])
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingEmailLogin, extras: ["slide-num": currentPage])
         signInClosure?()
     }
 
     @objc func showSignUpFlow() {
-        LeanPlumClient.shared.track(event: .dismissedOnboardingShowSignUp, withParameters: ["dismissedOnSlide": "1"])
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": 1])
+        LeanPlumClient.shared.track(event: .dismissedOnboardingShowSignUp, withParameters: ["dismissedOnSlide": String(currentPage)])
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboardingSignUp, extras: ["slide-num": currentPage])
         signUpClosure?()
     }
     
     @objc private func nextAction() {
         print("Next Action")
+        showPage2()
         nextClosure?()
     }
     
@@ -261,4 +304,3 @@ class IntroScreenSyncViewV1: UIView {
         closeClosure?()
     }
 }
-
