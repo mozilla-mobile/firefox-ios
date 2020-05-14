@@ -293,13 +293,11 @@ class IntroWelcomeAndSyncViewV1: UIView {
     }
     
     @objc private func nextAction() {
-        print("Next Action")
         showPage2()
         nextClosure?()
     }
     
     @objc private func dismissAnimated() {
-        print("Dismiss Action")
         startBrowsing()
         closeClosure?()
     }

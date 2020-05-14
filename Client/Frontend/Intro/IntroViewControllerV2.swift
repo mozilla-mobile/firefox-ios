@@ -46,10 +46,6 @@ class IntroViewControllerV2: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,7 +61,6 @@ class IntroViewControllerV2: UIViewController {
         case .versionV2:
             setupIntroViewV2()
         case .none:
-            print("Onboarding default Intro V1")
             setupIntroViewV1()
         }
     }
@@ -109,7 +104,6 @@ class IntroViewControllerV2: UIViewController {
         // Buton action closures
         // Next button action
         welcomeCard.nextClosure = {
-            print("Going to next screen")
             UIView.animate(withDuration: 0.3, animations: {
                 self.welcomeCard.alpha = 0
             }) { _ in

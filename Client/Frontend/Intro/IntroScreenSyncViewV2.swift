@@ -45,12 +45,11 @@ class IntroScreenSyncViewV2: UIView {
         return UpdateViewController.theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return UpdateViewController.theme == .dark ? UIColor(colorString: "242327") : .white
+        return UpdateViewController.theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
     }
     private lazy var titleImageView: UIImageView = {
         let imgView = UIImageView(image: #imageLiteral(resourceName: "tour-sync-v2"))
         imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
         return imgView
     }()
     private lazy var titleLabel: UILabel = {
@@ -91,8 +90,8 @@ class IntroScreenSyncViewV2: UIView {
     // Container and combined views
     private let topContainerView = UIView()
     private let combinedView = UIView()
-    // Screen constants
-    private let screenHeight = UIScreen.main.bounds.size.height
+    // Orientation independent screen size
+    private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
     // Closure delegates
     var signUp: (() -> Void)?
     var startBrowsing: (() -> Void)?
@@ -125,7 +124,7 @@ class IntroScreenSyncViewV2: UIView {
         // Height constants
         let titleLabelHeight = 100
         let descriptionLabelHeight = 100
-        let titleImageHeight = screenHeight > 600 ? 300 : 200
+        let titleImageHeight = screenSize.height > 600 ? 300 : 200
         // Title label constraints
         titleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(24)

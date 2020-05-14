@@ -47,12 +47,11 @@ class IntroScreenWelcomeViewV2: UIView {
         return UpdateViewController.theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return UpdateViewController.theme == .dark ? UIColor(colorString: "242327") : .white
+        return UpdateViewController.theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
     }
     private lazy var titleImageView: UIImageView = {
         let imgView = UIImageView(image: #imageLiteral(resourceName: "splash"))
         imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
         return imgView
     }()
     private lazy var titleLabel: UILabel = {
@@ -130,8 +129,8 @@ class IntroScreenWelcomeViewV2: UIView {
     private var safeSyncView = UIView()
     private var itemStackView = UIStackView()
     private var combinedView = UIView()
-    // Screen constants
-    private let screenHeight = UIScreen.main.bounds.size.height
+    // Orientation independent screen size
+    private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
     // Closure delegates
     var nextClosure: (() -> Void)?
     var closeClosure: (() -> Void)?
@@ -200,7 +199,7 @@ class IntroScreenWelcomeViewV2: UIView {
         titleImageView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             // changing offset for smaller screen Eg. iPhone 5
-            let offsetValue = screenHeight > 570 ? 40 : 10
+            let offsetValue = screenSize.height > 570 ? 40 : 10
             make.top.equalToSuperview().offset(offsetValue)
             make.height.equalToSuperview().dividedBy(2)
         }
@@ -218,10 +217,10 @@ class IntroScreenWelcomeViewV2: UIView {
             make.left.right.equalToSuperview()
             make.height.equalTo(320)
             // changing inset for smaller screen Eg. iPhone 5
-            let insetValue = screenHeight > 570 ? -10 : 4
+            let insetValue = screenSize.height > 570 ? -10 : 4
             make.top.equalTo(topView.snp.bottom).inset(insetValue)
         }
-        // Automaitc privacy
+        // Automatic privacy
         welcomeCardItems[0].titleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(20)
             make.top.equalToSuperview()
@@ -268,14 +267,12 @@ class IntroScreenWelcomeViewV2: UIView {
     
     // MARK: Button Actions
     @objc private func dismissAnimated() {
-        print("Dismiss Action")
         LeanPlumClient.shared.track(event: .dismissedOnboarding, withParameters: ["dismissedOnSlide": "0"])
          UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedOnboarding, extras: ["slide-num": 0])
         closeClosure?()
     }
     
     @objc private func nextAction() {
-        print("Next Action")
         nextClosure?()
     }
 }

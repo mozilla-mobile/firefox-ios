@@ -34,10 +34,10 @@ class OnboardingUserResearch {
             }
         }
         get {
-            guard let value = defaults.value(forKey: onboardingScreenTypeKey) else {
+            guard let value = defaults.value(forKey: onboardingScreenTypeKey) as? String else {
                 return nil
             }
-            return OnboardingScreenType(rawValue: value as! String) ?? nil
+            return OnboardingScreenType(rawValue: value)
         }
     }
     
@@ -62,22 +62,21 @@ class OnboardingUserResearch {
     }
     
     func updateTelemetry() {
+        // Printing variant is good to know all details of A/B test fields
         print("lp variant \(String(describing: Leanplum.variants()))")
-        if Leanplum.variants() != nil {
-            let lpVariants = Leanplum.variants()?.first
-            if let lpData = lpVariants as? Dictionary<String, AnyObject> {
-                var abTestId = ""
-                if let value = lpData["abTestId"] as? Int64 {
-                    abTestId = "\(value)"
-                }
-                let abTestName = lpData["abTestName"] as? String ?? ""
-                let abTestVariant = lpData["name"] as? String ?? ""
-                let attributesExtras = [LPAttributeKey.experimentId: abTestId, LPAttributeKey.experimentName: abTestName, LPAttributeKey.experimentVariant: abTestVariant]
-                // Leanplum telemetry
-                LeanPlumClient.shared.set(attributes: attributesExtras)
-                // Legacy telemetry
-                UnifiedTelemetry.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
-            }
+        guard let variants = Leanplum.variants(), let lpData = variants.first as? Dictionary<String, AnyObject> else {
+            return
         }
+        var abTestId = ""
+        if let value = lpData["abTestId"] as? Int64 {
+                abTestId = "\(value)"
+        }
+        let abTestName = lpData["abTestName"] as? String ?? ""
+        let abTestVariant = lpData["name"] as? String ?? ""
+        let attributesExtras = [LPAttributeKey.experimentId: abTestId, LPAttributeKey.experimentName: abTestName, LPAttributeKey.experimentVariant: abTestVariant]
+        // Leanplum telemetry
+        LeanPlumClient.shared.set(attributes: attributesExtras)
+        // Legacy telemetry
+        UnifiedTelemetry.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
     }
 }
