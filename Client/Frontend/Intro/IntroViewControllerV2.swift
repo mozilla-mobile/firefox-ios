@@ -9,26 +9,38 @@ import Shared
 import Leanplum
 
 class IntroViewControllerV2: UIViewController {
+    // Public constants
+    let viewModel:IntroViewModelV2 = IntroViewModelV2()
+    // private var
+    private var onboardingType: OnboardingScreenType?
+    // Private views
     private lazy var welcomeCard: IntroScreenWelcomeViewV2 = {
         let welcomeCardView = IntroScreenWelcomeViewV2()
-        welcomeCardView.contentMode = .scaleAspectFit
         welcomeCardView.clipsToBounds = true
-        welcomeCardView.tag = 0
         return welcomeCardView
     }()
     private lazy var syncCard: IntroScreenSyncViewV2 = {
         let syncCardView = IntroScreenSyncViewV2()
-        syncCardView.contentMode = .scaleAspectFit
         syncCardView.clipsToBounds = true
-        syncCardView.tag = 0
+        return syncCardView
+    }()
+    private lazy var introWelcomeSyncV1Views: IntroWelcomeAndSyncViewV1 = {
+        let syncCardView = IntroWelcomeAndSyncViewV1()
+        syncCardView.clipsToBounds = true
         return syncCardView
     }()
     // Closure delegate
-    var didFinishClosure: ((IntroViewControllerV2,FxAPageType?) -> Void)?
+    var didFinishClosure: ((IntroViewControllerV2, FxAPageType?) -> Void)?
     
     // MARK: Initializer
     init() {
         super.init(nibName: nil, bundle: nil)
+    }
+    
+
+    convenience init(onboardingType: OnboardingScreenType?) {
+        self.init()
+        self.onboardingType = onboardingType
     }
 
     required init?(coder: NSCoder) {
@@ -46,6 +58,41 @@ class IntroViewControllerV2: UIViewController {
     
     // MARK: View setup
     private func initialViewSetup() {
+        let screenType = onboardingType == nil ? viewModel.screenType : onboardingType
+        switch screenType {
+        case .versionV1:
+            setupIntroViewV1()
+        case .versionV2:
+            setupIntroViewV2()
+        case .none:
+            print("Onboarding default Intro V1")
+            setupIntroViewV1()
+        }
+    }
+    
+    // V1 of onboarding intro view
+    func setupIntroViewV1() {
+        view.addSubview(introWelcomeSyncV1Views)
+        // Constraints
+        introWelcomeSyncV1Views.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        // Close button closure
+        introWelcomeSyncV1Views.closeClosure = {
+            self.didFinishClosure?(self, nil)
+        }
+        // Sign in button closure
+        introWelcomeSyncV1Views.signInClosure = {
+            self.didFinishClosure?(self, .emailLoginFlow)
+        }
+        // Sign up button closure
+        introWelcomeSyncV1Views.signUpClosure = {
+            self.didFinishClosure?(self, .signUpFlow)
+        }
+    }
+    
+    // V2 of onboarding intro view
+    private func setupIntroViewV2() {
         // Initialize
         view.addSubview(syncCard)
         view.addSubview(welcomeCard)
@@ -53,7 +100,7 @@ class IntroViewControllerV2: UIViewController {
         setupWelcomeCard()
         setupSyncCard()
     }
-
+    
     private func setupWelcomeCard() {
         // Constraints
         welcomeCard.snp.makeConstraints { make in

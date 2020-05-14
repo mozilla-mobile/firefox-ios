@@ -453,7 +453,7 @@ class BrowserViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
         
-        // Setup onboarding user research for A/A testing
+        // Setup onboarding user research for A/B testing
         onboardingUserResearch = OnboardingUserResearch()
         onboardingUserResearch?.lpVariableObserver()
     }
@@ -1913,7 +1913,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     }
 }
 
-extension BrowserViewController: IntroViewControllerDelegate {
+extension BrowserViewController {
     func presentIntroViewController(_ forcedType: OnboardingScreenType? = nil) {
         if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
             self.launchFxAFromDeeplinkURL(url)
@@ -2018,28 +2018,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
     }
     
     private func showProperIntroVC(_ forcedType: OnboardingScreenType? = nil) {
-        var onboardingType = self.onboardingUserResearch?.onboardingScreenType
-        if forcedType != nil {
-            onboardingType = forcedType
-        }
-        switch onboardingType {
-        case .versionV1:
-            self.introVCHelper()
-        case .versionV2:
-            self.introVC2Helper()
-        case .none:
-            print("Onboarding screen un-avaialble")
-        }
-    }
+        let introViewController = forcedType == nil ? IntroViewControllerV2() : IntroViewControllerV2(onboardingType: forcedType)
 
-    private func introVCHelper() {
-        let introViewController = IntroViewController()
-        introViewController.delegate = self
-        self.introVCPresentHelper(introViewController: introViewController)
-    }
-    
-    private func introVC2Helper() {
-        let introViewController = IntroViewControllerV2()
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             controller.dismiss(animated: true) {
@@ -2078,20 +2058,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
         let fxaParams: FxALaunchParams
         fxaParams = FxALaunchParams(query: query)
         self.presentSignInViewController(fxaParams)
-    }
-
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxAPageType?) {
-        self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        introViewController.dismiss(animated: true) {
-            if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                _ = self.navigationController?.popToRootViewController(animated: true)
-            }
-
-            if let flow = fxaLoginFlow {
-                let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
-                self.presentSignInViewController(fxaParams, flowType: flow)
-            }
-        }
     }
 
     func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType) -> UIViewController {
