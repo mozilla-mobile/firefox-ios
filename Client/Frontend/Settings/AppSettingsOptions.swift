@@ -519,6 +519,34 @@ class SentryIDSetting: HiddenSetting {
     }
 }
 
+class ToggleOnboarding: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: Toggle onboarding type", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let onboardingResearch = OnboardingUserResearch()
+        let type = onboardingResearch.onboardingScreenType
+        var newOnboardingType: OnboardingScreenType = .versionV2
+        if type == nil {
+            newOnboardingType = .versionV1
+        } else if type == .versionV2 {
+            newOnboardingType = .versionV1
+        }
+        OnboardingUserResearch().onboardingScreenType = newOnboardingType
+    }
+}
+
+class SetOnboardingV2: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: Set onboarding type to v2", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        OnboardingUserResearch().onboardingScreenType = .versionV2
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
@@ -623,7 +651,11 @@ class ShowIntroductionSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {
-            BrowserViewController.foregroundBVC().presentIntroViewController(true)
+            let userResearch = OnboardingUserResearch()
+            var screenType = userResearch.onboardingScreenType
+            // We default to version V1 of onboarding if user research is nil
+            screenType = screenType == nil ? .versionV1 : screenType
+            BrowserViewController.foregroundBVC().presentIntroViewController(screenType)
         })
     }
 }

@@ -151,6 +151,7 @@ extension UnifiedTelemetry {
         case action = "action"
         case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
+        case enrollment = "enrollment"
     }
 
     public enum EventMethod: String {
@@ -209,6 +210,7 @@ extension UnifiedTelemetry {
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
         case tabSearch = "tab-search"
         case tabToolbar = "tab-toolbar"
+        case experimentEnrollment = "experiment-enrollment"
     }
 
     public enum EventValue: String {
