@@ -2002,7 +2002,17 @@ extension BrowserViewController {
             return
         }
         let screenType = onboardingUserResearch?.onboardingScreenType
-        if screenType == nil && !DeviceInfo.hasConnectivity() {
+        // Note: In production we will have to wait a few ms for leanplum to start fetching variables
+        // from the server. While in debugging we don't really need to fetch variables unless
+        // we are explicitly testing A/B test. Hence set waitForLeanplumToStart = false
+        //
+        // Debuging LP A/B Test: For this we should setup proper LP keys in the LeanplumIntegration file
+        // and comment out the #if DEBUG #endif code below so and only set waitForLeanplumToStart = true
+        var waitForLeanplumToStart = true
+        #if DEBUG
+            waitForLeanplumToStart = false
+        #endif
+        if (screenType == nil && !DeviceInfo.hasConnectivity()) || !waitForLeanplumToStart {
             self.onboardingUserResearch?.updateValue(value: true)
             showProperIntroVC()
             return
