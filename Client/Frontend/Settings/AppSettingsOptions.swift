@@ -651,11 +651,7 @@ class ShowIntroductionSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         navigationController?.dismiss(animated: true, completion: {
-            let userResearch = OnboardingUserResearch()
-            var screenType = userResearch.onboardingScreenType
-            // We default to version V1 of onboarding if user research is nil
-            screenType = screenType == nil ? .versionV1 : screenType
-            BrowserViewController.foregroundBVC().presentIntroViewController(screenType)
+            BrowserViewController.foregroundBVC().presentIntroViewController(true)
         })
     }
 }

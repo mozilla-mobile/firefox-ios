@@ -1914,13 +1914,13 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 }
 
 extension BrowserViewController {
-    func presentIntroViewController(_ forcedType: OnboardingScreenType? = nil) {
+    func presentIntroViewController(_ shouldShow: Bool = false) {
         if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
             self.launchFxAFromDeeplinkURL(url)
             return
         }
-        if forcedType != nil || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
-            onboardingUserResearchHelper(forcedType)
+        if shouldShow || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
+            onboardingUserResearchHelper(shouldShow)
         }
     }
     
@@ -1995,41 +1995,57 @@ extension BrowserViewController {
         return false
     }
     
-    private func onboardingUserResearchHelper(_ forcedType: OnboardingScreenType? = nil) {
-        print("lp initial value \(String(describing: onboardingUserResearch?.lpVariable?.boolValue()))")
-        if forcedType != nil {
-            showProperIntroVC(forcedType)
+    private func onboardingUserResearchHelper(_ shouldShow: Bool = false) {
+        // Condition: Want to see our 1st time launched onboarding again
+        // Our boolean variable shouldShow is used to present the onboarding
+        // that was presented to the user during first launch
+        if shouldShow {
+            showProperIntroVC()
             return
         }
-        let screenType = onboardingUserResearch?.onboardingScreenType
-        // Note: In production we will have to wait a few ms for leanplum to start fetching variables
-        // from the server. While in debugging we don't really need to fetch variables unless
-        // we are explicitly testing A/B test. Hence set waitForLeanplumToStart = false
-        //
-        // Debuging LP A/B Test: For this we should setup proper LP keys in the LeanplumIntegration file
-        // and comment out the #if DEBUG #endif code below so and only set waitForLeanplumToStart = true
-        var waitForLeanplumToStart = true
-        #if DEBUG
-            waitForLeanplumToStart = false
-        #endif
-        if (screenType == nil && !DeviceInfo.hasConnectivity()) || !waitForLeanplumToStart {
+        // Condition: Leanplum is disabled
+        // If leanplum is not enabled then we set the value of onboarding research to true
+        // True = .variant 1 which is our default Intro View
+        // False = .variant 2 which is our new Intro View that we are A/B testing against
+        // and get that from the server
+        if !LeanPlumClient.shared.isLPEnabled() {
             self.onboardingUserResearch?.updateValue(value: true)
             showProperIntroVC()
             return
         }
+        // Condition: Update from leanplum server
+        // Get the A/B test variant from leanplum server
+        // and update onboarding user reasearch
         onboardingUserResearch?.updatedLPVariables = {(lpVariable) -> () in
-            if screenType == nil {
-                print("lp Variable from server \(String(describing: lpVariable?.boolValue()))")
-                self.onboardingUserResearch?.updateTelemetry()
-                self.onboardingUserResearch?.updateValue(value: lpVariable?.boolValue() ?? true)
-                self.showProperIntroVC()
+            self.onboardingUserResearch?.updatedLPVariables = nil
+            print("lp Variable from server \(String(describing: lpVariable?.boolValue()))")
+            self.onboardingUserResearch?.updateTelemetry()
+            self.onboardingUserResearch?.updateValue(value: lpVariable?.boolValue() ?? true)
+            self.showProperIntroVC()
+        }
+        // Conditon: Leanplum server too slow
+        // We don't want our users to be stuck on Onboarding
+        // Wait 2 second and update the onboarding research variable
+        // with true (True = .variant 1)
+        // Ex. Internet connection is unstable due to which
+        // leanplum isn't loading or taking too much time
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            guard self.onboardingUserResearch?.updatedLPVariables != nil else {
+                return
             }
+            self.onboardingUserResearch?.updatedLPVariables = nil
+            self.onboardingUserResearch?.updateValue(value: true)
+            self.showProperIntroVC()
         }
     }
     
-    private func showProperIntroVC(_ forcedType: OnboardingScreenType? = nil) {
-        let introViewController = forcedType == nil ? IntroViewControllerV2() : IntroViewControllerV2(onboardingType: forcedType)
-
+    private func showProperIntroVC() {
+        // The onboarding screen type should always exist
+        // as
+        guard let onboardingScreenType = self.onboardingUserResearch?.onboardingScreenType else {
+            return
+        }
+        let introViewController = IntroViewControllerV2(onboardingType: onboardingScreenType)
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             controller.dismiss(animated: true) {
