@@ -2033,6 +2033,7 @@ extension BrowserViewController {
             guard self.onboardingUserResearch?.updatedLPVariables != nil else {
                 return
             }
+            Sentry.shared.send(message: "Failed to fetch A/B test variables from LP")
             self.onboardingUserResearch?.updatedLPVariables = nil
             self.onboardingUserResearch?.updateValue(value: true)
             self.showProperIntroVC()
