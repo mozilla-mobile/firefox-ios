@@ -2003,16 +2003,6 @@ extension BrowserViewController {
             showProperIntroVC()
             return
         }
-        // Condition: Leanplum is disabled
-        // If leanplum is not enabled then we set the value of onboarding research to true
-        // True = .variant 1 which is our default Intro View
-        // False = .variant 2 which is our new Intro View that we are A/B testing against
-        // and get that from the server
-        if !LeanPlumClient.shared.isLPEnabled() {
-            self.onboardingUserResearch?.updateValue(value: true)
-            showProperIntroVC()
-            return
-        }
         // Condition: Update from leanplum server
         // Get the A/B test variant from leanplum server
         // and update onboarding user reasearch
