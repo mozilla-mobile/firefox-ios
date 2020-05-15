@@ -98,7 +98,7 @@ private func isLocaleSupported() -> Bool {
     return supportedLocalePrefixes.contains(code)
 }
 
-private struct LPSettings {
+struct LPSettings {
     var appId: String
     var developmentKey: String
     var productionKey: String
@@ -281,7 +281,7 @@ class LeanPlumClient {
         return (prefs?.stringForKey(PrefsKeys.KeyMailToOption) ?? "mailto:") == "mailto:"
     }
 
-    private func getSettings() -> LPSettings? {
+    func getSettings() -> LPSettings? {
         let bundle = Bundle.main
         guard let appId = bundle.object(forInfoDictionaryKey: LPAppIdKey) as? String,
               let productionKey = bundle.object(forInfoDictionaryKey: LPProductionKeyKey) as? String,

@@ -1995,11 +1995,21 @@ extension BrowserViewController {
         return false
     }
     
-    private func onboardingUserResearchHelper(_ shouldShow: Bool = false) {
+    private func onboardingUserResearchHelper(_ alwaysShow: Bool = false) {
         // Condition: Want to see our 1st time launched onboarding again
         // Our boolean variable shouldShow is used to present the onboarding
         // that was presented to the user during first launch
-        if shouldShow {
+        if alwaysShow {
+            showProperIntroVC()
+            return
+        }
+        // Condition: Leanplum is disabled
+        // If leanplum is not enabled then we set the value of onboarding research to true
+        // True = .variant 1 which is our default Intro View
+        // False = .variant 2 which is our new Intro View that we are A/B testing against
+        // and get that from the server
+        guard LeanPlumClient.shared.getSettings() != nil else {
+            self.onboardingUserResearch?.updateValue(value: true)
             showProperIntroVC()
             return
         }
