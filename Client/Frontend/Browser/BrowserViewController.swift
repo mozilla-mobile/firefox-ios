@@ -1238,9 +1238,9 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
         }
-        
-        navigationController?.pushViewController(tabTrayController, animated: true)
-        self.tabTrayController = tabTrayController
+
+        navigationController?.pushViewController(TabTrayV2ViewController(), animated: false)
+//        self.tabTrayController = tabTrayController
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {

@@ -6,15 +6,6 @@ import Foundation
 import Shared
 import Storage
 
-extension UIGestureRecognizer {
-    func cancelV2() {
-        if isEnabled {
-            isEnabled = false
-            isEnabled = true
-        }
-    }
-}
-
 // MARK: Delegate for animation completion notifications.
 enum TabAnimationTypeV2 {
     case addTab
@@ -65,11 +56,11 @@ class TabTrayV2ViewModel: NSObject {
     weak var tabDisplayCompletionDelegateV2: TabDisplayCompletionDelegateV2?
 
     fileprivate let tabManager: TabManager
-    fileprivate let viewController: TabTrayController
+    fileprivate let viewController: TabTrayV2ViewController
 
     private(set) var isPrivate = false
 
-    init(viewController: TabTrayController) {
+    init(viewController: TabTrayV2ViewController) {
         self.viewController = viewController
         self.tabManager = BrowserViewController.foregroundBVC().tabManager //fixme
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false

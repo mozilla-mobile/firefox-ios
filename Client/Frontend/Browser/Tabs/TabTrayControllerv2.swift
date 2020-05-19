@@ -10,7 +10,7 @@ struct TabTrayV2ControllerUX {
     static let CornerRadius = CGFloat(4.0)
 }
 
-class TabTrayController: UIViewController{
+class TabTrayV2ViewController: UIViewController{
     let tableView = UITableView()
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
         fileprivate let SectionHeaderIdentifier2 = "SectionHeader"
@@ -33,7 +33,7 @@ class TabTrayController: UIViewController{
     
 }
 
-extension TabTrayController: UITableViewDataSource {
+extension TabTrayV2ViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSections()
@@ -79,7 +79,7 @@ extension TabTrayController: UITableViewDataSource {
     }
 }
 
-extension TabTrayController: UITableViewDelegate {
+extension TabTrayV2ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRowAt(index: indexPath)
         navigationController?.popViewController(animated: false)
