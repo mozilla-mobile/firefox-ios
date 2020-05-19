@@ -2124,7 +2124,7 @@
 		23F2C365244E44FA00FA4496 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				23F2C367244E460500FA4496 /* TabTrayV2ViewController.swift */,
+				238DC6282460850A00BC9EFF /* TabTrayControllerv2.swift */,
 				23F2C369244E463C00FA4496 /* TabTrayV2ViewModel.swift */,
 			);
 			path = Tabs;
@@ -5041,6 +5041,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
+				238DC6292460850A00BC9EFF /* TabTrayControllerv2.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
@@ -5203,7 +5204,6 @@
 				D03F8EB22004014E003C2224 /* FaviconHandler.swift in Sources */,
 				EBC486992195F46B00CDA48D /* InternalSchemeHandler.swift in Sources */,
 				2F44FCC51A9E85E900FD20CC /* SettingsTableViewController.swift in Sources */,
-				23F2C368244E460500FA4496 /* TabTrayV2ViewController.swift in Sources */,
 				A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */,
 				D8AA923421A602DC002605C0 /* HomePageSettingViewController.swift in Sources */,
 				EBC4869D2195F58300CDA48D /* ErrorPageHelper.swift in Sources */,
