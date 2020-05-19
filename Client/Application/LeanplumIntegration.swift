@@ -104,6 +104,12 @@ struct LPSettings {
     var productionKey: String
 }
 
+enum LPSetupType: String {
+    case debug
+    case production
+    case none
+}
+
 class LeanPlumClient {
     static let shared = LeanPlumClient()
 
@@ -111,7 +117,7 @@ class LeanPlumClient {
     private weak var profile: Profile?
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
-
+    private var setupType: LPSetupType = .none
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
@@ -128,6 +134,10 @@ class LeanPlumClient {
 
     func isLPEnabled() -> Bool {
         return enabled && Leanplum.hasStarted()
+    }
+    
+    func lpSetupType() -> LPSetupType {
+        return setupType
     }
 
     static func shouldEnable(profile: Profile) -> Bool {
@@ -155,6 +165,7 @@ class LeanPlumClient {
     fileprivate func start() {
         guard let settings = getSettings(), isLocaleSupported(), !Leanplum.hasStarted() else {
             enabled = false
+            Sentry.shared.send(message: "LeanplumIntegration - Could not be started")
             log.error("LeanplumIntegration - Could not be started")
             return
         }
@@ -163,9 +174,11 @@ class LeanPlumClient {
             log.info("LeanplumIntegration - Setting up for Development")
             Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
             Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.developmentKey)
+            setupType = .debug
         } else {
             log.info("LeanplumIntegration - Setting up for Production")
             Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
+            setupType = .production
         }
 
         Leanplum.syncResourcesAsync(true)
@@ -244,7 +257,11 @@ class LeanPlumClient {
     func isFxAPrePushEnabled() -> Bool {
         return AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST && (useFxAPrePush?.boolValue() ?? false)
     }
-
+    
+    func isRunning() -> Bool {
+        return Leanplum.hasStarted()
+    }
+    
     /*
      This is used to determine if an app was installed after firefox was installed
      */

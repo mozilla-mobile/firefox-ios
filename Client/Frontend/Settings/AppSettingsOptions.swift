@@ -537,6 +537,14 @@ class ToggleOnboarding: HiddenSetting {
     }
 }
 
+class LeanplumStatus: HiddenSetting {
+    let lplumSetupType = LeanPlumClient.shared.lpSetupType()
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Leamplum Status: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning())", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+}
+
 class SetOnboardingV2: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Debug: Set onboarding type to v2", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
