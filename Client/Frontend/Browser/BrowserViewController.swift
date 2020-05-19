@@ -2029,7 +2029,7 @@ extension BrowserViewController {
         // with true (True = .variant 1)
         // Ex. Internet connection is unstable due to which
         // leanplum isn't loading or taking too much time
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
             guard self.onboardingUserResearch?.updatedLPVariables != nil else {
                 return
             }
