@@ -24,6 +24,26 @@ enum TabAnimationTypeV2 {
     case moveTab
 }
 
+enum TabSection: Int, CaseIterable {
+    case today
+    case yesterday
+    case lastWeek
+    case older
+    
+    var description: String {
+        switch self {
+        case .today:
+            return "today"
+        case .yesterday:
+            return "yesterday"
+        case .lastWeek:
+            return "last week"
+        case .older:
+            return "older"
+        }
+    }
+}
+
 protocol TabDisplayCompletionDelegateV2: AnyObject {
     func completedAnimation(for: TabAnimationTypeV2)
 }
@@ -34,197 +54,74 @@ protocol TopTabCellDelegateV2: AnyObject {
     func tabCellDidClose(_ cell: UICollectionViewCell)
 }
 
-protocol TabDisplayerV2: AnyObject {
-    typealias TabCellIdentifer = String
-    var tabCellIdentifer: TabCellIdentifer { get set }
-
-    func focusSelectedTab()
-    func cellFactory(for cell: UICollectionViewCell, using tab: Tab) -> UICollectionViewCell
-}
-
 class TabTrayV2ViewModel: NSObject {
     var performingChainedOperations = false
 
-    var dataStore = WeakList<Tab>()
+    var dataStore: [TabSection: WeakList<Tab>] = [ .today: WeakList<Tab>(),
+                                                   .yesterday: WeakList<Tab>(),
+                                                   .lastWeek: WeakList<Tab>(),
+                                                   .older: WeakList<Tab>()]
     var operations = [(TabAnimationTypeV2, (() -> Void))]()
     weak var tabDisplayCompletionDelegateV2: TabDisplayCompletionDelegateV2?
 
     fileprivate let tabManager: TabManager
-    fileprivate let collectionView: UICollectionView
-    fileprivate weak var tabDisplayerV2: TabDisplayerV2?
-    private let tabReuseIdentifer: String
-
-    var searchedTabs: [Tab]?
-    var searchActive: Bool {
-        return searchedTabs != nil
-    }
-
-    private var tabsToDisplay: [Tab] {
-        if let searchedTabs = searchedTabs {
-            // tabs can be deleted while a search is active. Make sure the tab still exists in the tabmanager before displaying
-            return searchedTabs.filter({ tabManager.tabs.contains($0) })
-        }
-        return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
-    }
+    fileprivate let viewController: TabTrayController
 
     private(set) var isPrivate = false
 
-    // Sigh. Dragging on the collection view is either an 'active drag' where the item is moved, or
-    // that the item has been long pressed on (and not moved yet), and this gesture recognizer has been triggered
-    var isDragging: Bool {
-        return collectionView.hasActiveDrag || isLongPressGestureStarted
-    }
-
-    fileprivate var isLongPressGestureStarted: Bool {
-        var started = false
-        collectionView.gestureRecognizers?.forEach { recognizer in
-            if let _ = recognizer as? UILongPressGestureRecognizer, recognizer.state == .began || recognizer.state == .changed {
-                started = true
-            }
-        }
-        return started
-    }
-
-    @discardableResult
-    fileprivate func cancelDragAndGestures() -> Bool {
-        let isActive = collectionView.hasActiveDrag || isLongPressGestureStarted
-        collectionView.cancelInteractiveMovement()
-
-        // Long-pressing a cell to initiate dragging, but not actually moving the cell, will not trigger the collectionView's internal 'interactive movement' vars/funcs, and cancelInteractiveMovement() will not work. The gesture recognizer needs to be cancelled in this case.
-        collectionView.gestureRecognizers?.forEach { $0.cancelV2() }
-
-        return isActive
-    }
-
-    init(collectionView: UICollectionView, tabManager: TabManager, tabDisplayerV2: TabDisplayerV2, reuseID: String) {
-        self.collectionView = collectionView
-        self.tabDisplayerV2 = tabDisplayerV2
-        self.tabManager = tabManager
+    init(viewController: TabTrayController) {
+        self.viewController = viewController
+        self.tabManager = BrowserViewController.foregroundBVC().tabManager //fixme
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
-        self.tabReuseIdentifer = reuseID
         super.init()
 
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
 
-        tabsToDisplay.forEach {
-            self.dataStore.insert($0)
+        tabManager.tabs.forEach { tab in
+            let section = timestampToSection(tab)
+            dataStore[section]?.insert(tab)
         }
-        collectionView.reloadData()
+    
+        viewController.tableView.reloadData()
     }
 
-    func togglePrivateMode(isOn: Bool, createTabOnEmptyPrivateMode: Bool) {
-        guard isPrivate != isOn else { return }
+    func timestampToSection(_ tab: Tab) -> TabSection {
+        let tabDate =  Date.fromTimestamp(tab.lastExecutedTime ?? Date.now())
+        let now = Date()
 
-        isPrivate = isOn
-        UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
-
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
-
-        searchedTabs = nil
-        refreshStore()
-
-        if createTabOnEmptyPrivateMode {
-            //if private tabs is empty and we are transitioning to it add a tab
-            if tabManager.privateTabs.isEmpty && isPrivate {
-                tabManager.addTab(isPrivate: true)
-            }
+        if tabDate <= Date().lastWeek {
+            return .older
+        } else if tabDate <= Date.yesterday {
+            return .lastWeek
+        } else if tabDate <= now {
+            return .yesterday
+        } else if tabDate == now {
+            return .today
+        } else {
+            return .older
         }
-        
-        let tab = mostRecentTab(inTabs: tabsToDisplay) ?? tabsToDisplay.last
-        if let tab = tab {
-            tabManager.selectTab(tab)
-        }
-    }
-
-    // The collection is showing this Tab as selected
-    func indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: Tab) -> IndexPath? {
-        for i in 0..<collectionView.numberOfItems(inSection: 0) {
-            if let cell = collectionView.cellForItem(at: IndexPath(row: i, section: 0)) as? TopTabCell, cell.selectedTab {
-                if let tab = dataStore.at(i), tab != currentlySelected {
-                    return IndexPath(row: i, section: 0)
-                } else {
-                    return nil
-                }
-            }
-        }
-        return nil
     }
     
-    func searchTabsAnimated() {
-        let isUnchanged = (tabsToDisplay.count == dataStore.count) && tabsToDisplay.zip(dataStore).reduce(true) { $0 && $1.0 === $1.1 }
-        if !tabsToDisplay.isEmpty && isUnchanged {
-            return
-        }
-
-        operations.removeAll()
-        dataStore.removeAll()
-        tabsToDisplay.forEach {
-            self.dataStore.insert($0)
-        }
-
-        // animates the changes
-        collectionView.reloadSections(IndexSet(integer: 0))
-    }
-
-    func refreshStore(evenIfHidden: Bool = false) {
-        operations.removeAll()
-        dataStore.removeAll()
-        tabsToDisplay.forEach {
-            self.dataStore.insert($0)
-        }
-        collectionView.reloadData()
-
-        if evenIfHidden {
-            // reloadData() will reset the data for the collection view,
-            // but if called when offscreen it will not render properly,
-            // unless reloadItems is explicitly called on each item.
-            // Avoid calling with evenIfHidden=true, as it can cause a blink effect as the cell is updated.
-            // The cause of the blinking effect is unknown (and unusual).
-            var indexPaths = [IndexPath]()
-            for i in 0..<collectionView.numberOfItems(inSection: 0) {
-                indexPaths.append(IndexPath(item: i, section: 0))
-            }
-            collectionView.reloadItems(at: indexPaths)
-        }
-
-        tabDisplayerV2?.focusSelectedTab()
-    }
-
     // The user has tapped the close button or has swiped away the cell
-    func removeTab(forCell cell: UICollectionViewCell) {
-        if isDragging {
+    func removeTab(forIndex index: IndexPath) {
+        guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?.at(index.row) else {
             return
         }
-
-        guard let index = collectionView.indexPath(for: cell)?.item, let tab = dataStore.at(index) else {
-            return
-        }
+        
         tabManager.removeTabAndUpdateSelectedIndex(tab)
-    }
-
-    private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
-        let isTabTray = tabDisplayerV2 as? TabTrayController != nil
-        let eventValue = isTabTray ? UnifiedTelemetry.EventValue.tabTray : UnifiedTelemetry.EventValue.topTabs
-        UnifiedTelemetry.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
     func closeAllTabs( completion: @escaping () -> Void) {
-        let cells = collectionView.visibleCells
-
-        UIView.animate(withDuration: 0.2,
-                       animations: {
-                            cells.forEach {
-                                $0.alpha = 0
-                            }
-                        }, completion: { _ in
-                            cells.forEach {
-                                $0.alpha = 1
-                                $0.isHidden = true
-                            }
-                            completion()
-                        })
+       
+    }
+    
+    func didSelectRowAt (index: IndexPath) {
+        guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?.at(index.row) else {
+            return
+        }
+        selectTab(tab)
     }
     
     func selectTab(_ tab: Tab) {
@@ -234,152 +131,29 @@ class TabTrayV2ViewModel: NSObject {
     func addTab(_ request: URLRequest! = nil) {
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
-}
-
-extension TabTrayV2ViewModel: UICollectionViewDataSource {
-    @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataStore.count
+    
+    func numberOfSections() -> Int {
+        return TabSection.allCases.count
     }
-
-    @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let tab = dataStore.at(indexPath.row)!
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.tabReuseIdentifer, for: indexPath)
-        assert(tabDisplayerV2 != nil)
-        if let tabCell = tabDisplayerV2?.cellFactory(for: cell, using: tab) {
-            return tabCell
-        } else {
-            return cell
-        }
+    
+    func numberOfRowsInSection(section: Int) -> Int {
+        return dataStore[TabSection(rawValue: section) ?? .today]?.count ?? 0
     }
-
-    @objc func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "HeaderFooter", for: indexPath) as? TopTabsHeaderFooter else { return UICollectionReusableView() }
-        view.arrangeLine(kind)
-        return view
-    }
-}
-
-@available(iOS 11.0, *)
-extension TabTrayV2ViewModel: UIDropInteractionDelegate {
-    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        // Prevent tabs from being dragged and dropped onto the "New Tab" button.
-        if let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab {
-            return false
-        }
-
-        return session.canLoadObjects(ofClass: URL.self)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UIDropProposal(operation: .copy)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        recordEventAndBreadcrumb(object: .url, method: .drop)
-
-        _ = session.loadObjects(ofClass: URL.self) { urls in
-            guard let url = urls.first else {
-                return
-            }
-
-            self.tabManager.addTab(URLRequest(url: url), isPrivate: self.isPrivate)
-        }
-    }
-}
-
-extension TabTrayV2ViewModel: UICollectionViewDragDelegate {
-    // This is called when the user has long-pressed on a cell, please note that `collectionView.hasActiveDrag` is not true
-    // until the user's finger moves. This problem is mitigated by checking the collectionView for activated long press gesture recognizers.
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-
-        guard let tab = dataStore.at(indexPath.item) else { return [] }
-
-        // Get the tab's current URL. If it is `nil`, check the `sessionData` since
-        // it may be a tab that has not been restored yet.
-        var url = tab.url
-        if url == nil, let sessionData = tab.sessionData {
-            let urls = sessionData.urls
-            let index = sessionData.currentPage + urls.count - 1
-            if index < urls.count {
-                url = urls[index]
-            }
-        }
-
-        // Don't store the URL in the item as dragging a tab near the screen edge will prompt to open Safari with the URL
-        let itemProvider = NSItemProvider()
-
-        recordEventAndBreadcrumb(object: .tab, method: .drag)
-
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = tab
-        return [dragItem]
-    }
-}
-
-@available(iOS 11.0, *)
-extension TabTrayV2ViewModel: UICollectionViewDropDelegate {
-    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard collectionView.hasActiveDrag, let destinationIndexPath = coordinator.destinationIndexPath, let dragItem = coordinator.items.first?.dragItem, let tab = dragItem.localObject as? Tab, let sourceIndex = dataStore.index(of: tab) else {
+    
+    func configure(cell: TableViewCell, for index: IndexPath) {
+        guard let section = TabSection(rawValue: index.section), let data = dataStore[section]?.at(index.row) else {
             return
         }
-
-        recordEventAndBreadcrumb(object: .tab, method: .drop)
-
-        coordinator.drop(dragItem, toItemAt: destinationIndexPath)
-
-        self.tabManager.moveTab(isPrivate: self.isPrivate, fromIndex: sourceIndex, toIndex: destinationIndexPath.item)
-
-        _ = dataStore.remove(tab)
-        dataStore.insert(tab, at: destinationIndexPath.item)
-
-        let start = IndexPath(row: sourceIndex, section: 0)
-        let end = IndexPath(row: destinationIndexPath.item, section: 0)
-        updateWith(animationType: .moveTab) { [weak self] in
-            self?.collectionView.moveItem(at: start, to: end)
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        guard let localDragSession = session.localDragSession, let item = localDragSession.items.first, let _ = item.localObject as? Tab else {
-            return UICollectionViewDropProposal(operation: .forbidden)
-        }
-
-        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        cell.textLabel!.text = data.displayTitle
+        cell.detailTextLabel!.text = data.url?.baseDomain ?? " "
+        cell.imageView!.image = data.screenshot
+        cell.accessoryView = cell.closeButton
     }
 }
 
 extension TabTrayV2ViewModel: TabEventHandler {
     private func updateCellFor(tab: Tab, selectedTabChanged: Bool) {
-        let selectedTab = tabManager.selectedTab
-
-        updateWith(animationType: .updateTab) { [weak self] in
-            guard let index = self?.dataStore.index(of: tab) else { return }
-
-            var items = [IndexPath]()
-            items.append(IndexPath(row: index, section: 0))
-
-            if selectedTabChanged {
-                self?.tabDisplayerV2?.focusSelectedTab()
-
-                // Check if the selected tab has changed. This method avoids relying on the state of the "previous" selected tab,
-                // instead it iterates the displayed tabs to see which appears selected.
-                // See also `didSelectedTabChange` for more info on why this is a good approach.
-                if let selectedTab = selectedTab, let previousSelectedIndex = self?.indexOfCellDrawnAsPreviouslySelectedTab(currentlySelected: selectedTab) {
-                    items.append(previousSelectedIndex)
-                }
-            }
-
-            for item in items {
-                if let cell = self?.collectionView.cellForItem(at: item), let tab = self?.dataStore.at(item.row) {
-                    let isSelected = (item.row == index && tab == self?.tabManager.selectedTab)
-                    if let tabCell = cell as? TabCell {
-                        tabCell.configureWith(tab: tab, is: isSelected)
-                    } else if let tabCell = cell as? TopTabCell {
-                        tabCell.configureWith(tab: tab, isSelected: isSelected)
-                    }
-                }
-            }
-        }
+        
     }
 
     func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
@@ -393,102 +167,30 @@ extension TabTrayV2ViewModel: TabEventHandler {
 
 extension TabTrayV2ViewModel: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
-        cancelDragAndGestures()
 
-        if let selected = selected {
-            // A tab can be re-selected during deletion
-            let changed = selected != previous
-            updateCellFor(tab: selected, selectedTabChanged: changed)
-        }
-
-        // Rather than using 'previous' Tab to deselect, just check if the selected tab is different, and update the required cells.
-        // The refreshStore() cancels pending operations are reloads data, so we don't want functions that rely on
-        // any assumption of previous state of the view. Passing a previous tab (and relying on that to redraw the previous tab as unselected) would be making this assumption about the state of the view.
     }
 
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
-        if isRestoring {
-            return
-        }
+        
+    }
 
-        if cancelDragAndGestures() {
-            refreshStore()
-            return
-        }
-
-        if tab.isPrivate != self.isPrivate {
-            return
-        }
-
-        updateWith(animationType: .addTab) { [weak self] in
-            if let me = self, let index = me.tabsToDisplay.firstIndex(of: tab) {
-                me.dataStore.insert(tab, at: index)
-                me.collectionView.insertItems(at: [IndexPath(row: index, section: 0)])
+    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
+        for (section, tabs) in dataStore {
+             if let removed = tabs.remove(tab) {
+                viewController.tableView.deleteRows(at: [IndexPath(row: removed, section: section.rawValue)], with: .automatic)
             }
         }
     }
 
-    func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
-        if cancelDragAndGestures() {
-            refreshStore()
-            return
-        }
-
-        let type = tabManager.normalTabs.isEmpty ? TabAnimationTypeV2.removedLastTab : TabAnimationTypeV2.removedNonLastTab
-
-        updateWith(animationType: type) { [weak self] in
-            guard let removed = self?.dataStore.remove(tab) else { return }
-            self?.collectionView.deleteItems(at: [IndexPath(row: removed, section: 0)])
-        }
-    }
-
-    /* Function to take operations off the queue recursively, and perform them (i.e. performBatchUpdates) in sequence.
-     If this func is called while it (or performBatchUpdates) is running, it returns immediately.
-
-     The `refreshStore()` function will clear the queue and reload data, and the view will instantly match the tab manager.
-     Therefore, don't put operations on the queue that depend on previous operations on the queue. In these cases, just check
-     the current state on-demand in the operation (for example, don't assume that a previous tab is selected because that was the previous operation in queue).
-     
-     For app events where each operation should be animated for the user to see, performedChainedOperations() is the one to use,
-     and for bulk updates where it is ok to just redraw the entire view with the latest state, use `refreshStore()`.
-     */
-    private func performChainedOperations() {
-        guard !performingChainedOperations, let (type, operation) = operations.popLast() else {
-            return
-        }
-        performingChainedOperations = true
-        collectionView.performBatchUpdates({ [weak self] in
-            // Baseline animation speed is 1.0, which is too slow, this (odd) code sets it to 3x
-            self?.collectionView.forFirstBaselineLayout.layer.speed = 3.0
-            operation()
-            }, completion: { [weak self] (done) in
-                self?.performingChainedOperations = false
-                self?.tabDisplayCompletionDelegateV2?.completedAnimation(for: type)
-                self?.performChainedOperations()
-        })
-    }
-
-    private func updateWith(animationType: TabAnimationTypeV2, operation: (() -> Void)?) {
-        if let op = operation {
-            operations.insert((animationType, op), at: 0)
-        }
-
-        performChainedOperations()
-    }
-
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
-        cancelDragAndGestures()
-        refreshStore()
-
-        // Need scrollToCurrentTab and not focusTab; these exact params needed to focus (without using async dispatch).
-        (tabDisplayerV2 as? TopTabsViewController)?.scrollToCurrentTab(false, centerCell: true)
+       
     }
 
     func tabManagerDidAddTabs(_ tabManager: TabManager) {
-        cancelDragAndGestures()
+       
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        cancelDragAndGestures()
+        
     }
 }
