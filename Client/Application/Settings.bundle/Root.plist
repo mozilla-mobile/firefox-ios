@@ -14,7 +14,7 @@
 			<key>Key</key>
 			<string>homeURL</string>
 			<key>DefaultValue</key>
-			<string>https://develop.webxr-ios.webxrexperiments.com</string>
+			<string>https://webxr-ios.webxrexperiments.com/splash.html</string>
 			<key>IsSecure</key>
 			<false/>
 			<key>KeyboardType</key>
