@@ -48,9 +48,13 @@ class FirefoxAccountSignInViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
+        button.setImage(UIImage(named: "qr-code-icon-white"), for: .normal)
+        button.setImage(UIImage(named: "qr-code-icon-white"), for: .highlighted)
+        let imageWidth = button.imageView?.frame.width ?? 0.0
         button.setTitle(Strings.FxASignin_QRScanSignin, for: .normal)
-        button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
+        button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 0)
+        button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -66,6 +70,8 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         return button
     }()
+    
+    static let buttonWidth = 327
         
     private let profile: Profile
     
