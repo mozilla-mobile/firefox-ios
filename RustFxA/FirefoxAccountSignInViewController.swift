@@ -15,10 +15,13 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     // MARK: Class Variable Definitions
     
+    // Use fonts from DynamicFontHelper
     lazy var qrSignInLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.text = Strings.FirefoxAccount_CameraSignInPrompt
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.text = Strings.FxASignin_Subtitle
         return label
     }()
     
@@ -34,15 +37,15 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.attributedText = NSAttributedString(string: Strings.FirefoxAccount_PairInstructions + " " + "firefox.com/pair")
+        label.text = Strings.FxASignin_QRInstructions
         return label
     }()
     
     lazy var scanButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.Defaults.brightBlue
+        button.backgroundColor = UIColor.Photon.Blue50
         button.layer.cornerRadius = 8
-        button.setTitle(Strings.FirefoxAccount_ReadyToScan, for: .normal)
+        button.setTitle(Strings.FxASignin_QRScanSignin, for: .normal)
         button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
         return button
     }()
@@ -50,11 +53,11 @@ class FirefoxAccountSignInViewController: UIViewController {
     lazy var emailButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        button.setTitleColor(UIColor.Defaults.brightBlue, for: .normal)
+        button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 0.5
         button.layer.cornerRadius = 8
-        button.setTitle(Strings.FirefoxAccount_UseEmail, for: .normal)
+        button.setTitle(Strings.FxASignin_EmailSignin, for: .normal)
         button.addTarget(self, action: #selector(emailLoginTapped), for: .touchUpInside)
         return button
     }()
