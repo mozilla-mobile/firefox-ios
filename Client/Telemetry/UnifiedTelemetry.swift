@@ -176,6 +176,7 @@ extension UnifiedTelemetry {
         case applicationOpenUrl = "application-open-url"
         case emailLogin = "email"
         case qrPairing = "pairing"
+        case settings = "settings"
     }
 
     public enum EventObject: String {
