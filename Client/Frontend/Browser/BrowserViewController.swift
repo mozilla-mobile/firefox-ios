@@ -2013,6 +2013,12 @@ extension BrowserViewController {
             showProperIntroVC()
             return
         }
+        // forceVariableUpdate - Thie method from Leanplum is used
+        // to re-sync variable and ensures that if any variable
+        // has changed on the Leanplum server side we receive
+        // variable changed callback
+        // Ref: https://docs.leanplum.com/reference#callbacks
+        LeanPlumClient.shared.forceVariableUpdate()
         // Condition: Update from leanplum server
         // Get the A/B test variant from leanplum server
         // and update onboarding user reasearch
@@ -2029,7 +2035,7 @@ extension BrowserViewController {
         // with true (True = .variant 1)
         // Ex. Internet connection is unstable due to which
         // leanplum isn't loading or taking too much time
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             guard self.onboardingUserResearch?.updatedLPVariables != nil else {
                 return
             }
