@@ -878,10 +878,14 @@ class PrivacyPolicySetting: Setting {
     }
 }
 
-class ChinaSyncServiceSetting: WithoutAccountSetting {
+class ChinaSyncServiceSetting: Setting {
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
-    var prefs: Prefs { return settings.profile.prefs }
+    var prefs: Prefs { return profile.prefs }
     let prefKey = "useChinaSyncService"
+    let profile: Profile
+    let settings: UIViewController
+
+    override var hidden: Bool { return !AppInfo.isChinaEdition }
 
     override var title: NSAttributedString? {
         return NSAttributedString(string: "本地同步服务", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -889,6 +893,11 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
 
     override var status: NSAttributedString? {
         return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
+    }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        self.settings = settings
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -902,8 +911,28 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
-        prefs.setObject(toggle.isOn, forKey: prefKey)
-        RustFirefoxAccounts.reconfig()
+        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
+        guard profile.rustFxA.hasAccount() else {
+            prefs.setObject(toggle.isOn, forKey: prefKey)
+            RustFirefoxAccounts.reconfig()
+            return
+        }
+
+        // Show confirmation dialog for the user to sign out of FxA
+
+        let msg = "更改此设置后，再次登录您的帐户" // "Sign-in again to your account after changing this setting"
+        let alert = UIAlertController(title: "", message: msg, preferredStyle: .alert)
+        let ok = UIAlertAction(title: Strings.OKString, style: .default) { _ in
+            self.prefs.setObject(toggle.isOn, forKey: self.prefKey)
+            self.profile.removeAccount()
+            RustFirefoxAccounts.reconfig()
+        }
+        let cancel = UIAlertAction(title: Strings.CancelString, style: .default) { _ in
+            toggle.setOn(!toggle.isOn, animated: true)
+        }
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        settings.present(alert, animated: true)
     }
 }
 
