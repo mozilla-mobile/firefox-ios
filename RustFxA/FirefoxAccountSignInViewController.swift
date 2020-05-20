@@ -28,6 +28,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = Strings.FxASignin_Subtitle
+        label.font = DynamicFontHelper().LargeSizeHeavyFontAS
         return label
     }()
     
@@ -44,6 +45,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.text = Strings.FxASignin_QRInstructions
+        label.font = DynamicFontHelper().MediumSizeRegularWeightAS
         return label
     }()
     
@@ -53,6 +55,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.layer.cornerRadius = 8
         button.setTitle(Strings.FxASignin_QRScanSignin, for: .normal)
         button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
+        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         return button
     }()
     
@@ -60,11 +63,12 @@ class FirefoxAccountSignInViewController: UIViewController {
         let button = UIButton()
         button.backgroundColor = .white
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
-        button.layer.borderColor = UIColor.black.cgColor
-        button.layer.borderWidth = 0.5
+        button.layer.borderColor = UIColor.Photon.Grey30.cgColor
+        button.layer.borderWidth = 1
         button.layer.cornerRadius = 8
         button.setTitle(Strings.FxASignin_EmailSignin, for: .normal)
         button.addTarget(self, action: #selector(emailLoginTapped), for: .touchUpInside)
+        button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         return button
     }()
         
