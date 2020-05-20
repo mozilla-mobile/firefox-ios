@@ -911,7 +911,7 @@ class ChinaSyncServiceSetting: Setting {
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
-
+        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)
             RustFirefoxAccounts.reconfig()
