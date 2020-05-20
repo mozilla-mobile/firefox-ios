@@ -28,7 +28,7 @@ class OnboardingUserResearch {
     // Saving user defaults
     private let defaults = UserDefaults.standard
     // Publicly accessible onboarding screen type
-    var onboardingScreenType:OnboardingScreenType? {
+    var onboardingScreenType: OnboardingScreenType? {
         set(value) {
             if value == nil {
                 defaults.removeObject(forKey: onboardingScreenTypeKey)
