@@ -31,14 +31,14 @@ struct PrivateModeStrings {
 }
 
 protocol TabTrayDelegate: AnyObject {
-    func tabTrayDidDismiss(_ tabTray: TabTrayController)
-    func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab)
+    func tabTrayDidDismiss(_ tabTray: TabTrayControllerV1)
+    func tabTrayDidAddTab(_ tabTray: TabTrayControllerV1, tab: Tab)
     func tabTrayDidAddBookmark(_ tab: Tab)
     func tabTrayDidAddToReadingList(_ tab: Tab) -> ReadingListItem?
     func tabTrayRequestsPresentationOf(_ viewController: UIViewController)
 }
 
-class TabTrayController: UIViewController {
+class TabTrayControllerV1: UIViewController {
     let tabManager: TabManager
     let profile: Profile
     weak var delegate: TabTrayDelegate?
@@ -370,7 +370,7 @@ class TabTrayController: UIViewController {
     }
 }
 
-extension TabTrayController: TabManagerDelegate {
+extension TabTrayControllerV1: TabManagerDelegate {
     func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {}
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
@@ -400,7 +400,7 @@ extension TabTrayController: TabManagerDelegate {
     }
 }
 
-extension TabTrayController: UITextFieldDelegate {
+extension TabTrayControllerV1: UITextFieldDelegate {
 
     @objc func didPressCancel() {
         clearSearch()
@@ -455,7 +455,7 @@ extension TabTrayController: UITextFieldDelegate {
     }
 }
 
-extension TabTrayController: TabDisplayer {
+extension TabTrayControllerV1: TabDisplayer {
 
     func focusSelectedTab() {
         self.focusTab()
@@ -471,7 +471,7 @@ extension TabTrayController: TabDisplayer {
     }
 }
 
-extension TabTrayController {
+extension TabTrayControllerV1 {
 
     @objc func didTapLearnMore() {
         let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
@@ -515,7 +515,7 @@ extension TabTrayController {
 }
 
 // MARK: - App Notifications
-extension TabTrayController {
+extension TabTrayControllerV1 {
     @objc func appWillResignActiveNotification() {
         if tabDisplayManager.isPrivate {
             collectionView.alpha = 0
@@ -536,7 +536,7 @@ extension TabTrayController {
     }
 }
 
-extension TabTrayController: TabSelectionDelegate {
+extension TabTrayControllerV1: TabSelectionDelegate {
     func didSelectTabAtIndex(_ index: Int) {
         if let tab = tabDisplayManager.dataStore.at(index) {
             tabManager.selectTab(tab)
@@ -545,13 +545,13 @@ extension TabTrayController: TabSelectionDelegate {
     }
 }
 
-extension TabTrayController: PresentingModalViewControllerDelegate {
+extension TabTrayControllerV1: PresentingModalViewControllerDelegate {
     func dismissPresentedModalViewController(_ modalViewController: UIViewController, animated: Bool) {
         dismiss(animated: animated, completion: { self.collectionView.reloadData() })
     }
 }
 
-extension TabTrayController: UIScrollViewAccessibilityDelegate {
+extension TabTrayControllerV1: UIScrollViewAccessibilityDelegate {
     func accessibilityScrollStatus(for scrollView: UIScrollView) -> String? {
         guard var visibleCells = collectionView.visibleCells as? [TabCell] else { return nil }
         var bounds = collectionView.bounds
@@ -584,7 +584,7 @@ extension TabTrayController: UIScrollViewAccessibilityDelegate {
     }
 }
 
-extension TabTrayController: SwipeAnimatorDelegate {
+extension TabTrayControllerV1: SwipeAnimatorDelegate {
     func swipeAnimator(_ animator: SwipeAnimator, viewWillExitContainerBounds: UIView) {
         guard let tabCell = animator.animatingView as? TabCell, let indexPath = collectionView.indexPath(for: tabCell) else { return }
         if let tab = tabDisplayManager.dataStore.at(indexPath.item) {
@@ -599,7 +599,7 @@ extension TabTrayController: SwipeAnimatorDelegate {
     }
 }
 
-extension TabTrayController: TabCellDelegate {
+extension TabTrayControllerV1: TabCellDelegate {
     func tabCellDidClose(_ cell: TabCell) {
         if let indexPath = collectionView.indexPath(for: cell), let tab = tabDisplayManager.dataStore.at(indexPath.item) {
             removeByButtonOrSwipe(tab: tab, cell: cell)
@@ -607,7 +607,7 @@ extension TabTrayController: TabCellDelegate {
     }
 }
 
-extension TabTrayController: TabPeekDelegate {
+extension TabTrayControllerV1: TabPeekDelegate {
 
     func tabPeekDidAddBookmark(_ tab: Tab) {
         delegate?.tabTrayDidAddBookmark(tab)
@@ -629,7 +629,7 @@ extension TabTrayController: TabPeekDelegate {
     }
 }
 
-extension TabTrayController: UIViewControllerPreviewingDelegate {
+extension TabTrayControllerV1: UIViewControllerPreviewingDelegate {
 
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
 
@@ -659,7 +659,7 @@ extension TabTrayController: UIViewControllerPreviewingDelegate {
     }
 }
 
-extension TabTrayController: TabDisplayCompletionDelegate {
+extension TabTrayControllerV1: TabDisplayCompletionDelegate {
     func completedAnimation(for type: TabAnimationType) {
         emptyPrivateTabsView.isHidden = !privateTabsAreEmpty()
 
@@ -679,14 +679,14 @@ extension TabTrayController: TabDisplayCompletionDelegate {
     }
 }
 
-extension TabTrayController {
+extension TabTrayControllerV1 {
     func removeByButtonOrSwipe(tab: Tab, cell: TabCell) {
         tabDisplayManager.tabDisplayCompletionDelegate = self
         tabDisplayManager.closeActionPerformed(forCell: cell)
     }
 }
 
-extension TabTrayController {
+extension TabTrayControllerV1 {
     @objc func didTapToolbarDelete(_ sender: UIButton) {
         if tabDisplayManager.isDragging {
             return
@@ -913,7 +913,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
     }
 }
 
-extension TabTrayController: DevicePickerViewControllerDelegate {
+extension TabTrayControllerV1: DevicePickerViewControllerDelegate {
     func devicePickerViewController(_ devicePickerViewController: DevicePickerViewController, didPickDevices devices: [RemoteDevice]) {
         if let item = devicePickerViewController.shareItem {
             _ = self.profile.sendItem(item, toDevices: devices)
@@ -926,7 +926,7 @@ extension TabTrayController: DevicePickerViewControllerDelegate {
     }
 }
 
-extension TabTrayController: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
+extension TabTrayControllerV1: UIAdaptivePresentationControllerDelegate, UIPopoverPresentationControllerDelegate {
     // Returning None here makes sure that the Popover is actually presented as a Popover and
     // not as a full-screen modal, which is the default on compact device classes.
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
