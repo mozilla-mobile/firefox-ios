@@ -118,23 +118,23 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     func addViewConstraints() {
         qrSignInLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.snp_topMargin).offset(100)
+            make.top.equalTo(view.snp_topMargin).offset(50)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
         }
         pairImageView.snp.makeConstraints { make in
-            make.top.equalTo(qrSignInLabel.snp_bottomMargin).offset(20)
+            make.top.equalTo(qrSignInLabel.snp_bottomMargin)
             make.height.equalToSuperview().multipliedBy(0.3)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
         }
         instructionsLabel.snp.makeConstraints { make in
-            make.top.equalTo(pairImageView.snp_bottomMargin).offset(20)
+            make.top.equalTo(pairImageView.snp_bottomMargin)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview().multipliedBy(0.85)
         }
         scanButton.snp.makeConstraints { make in
-            make.top.equalTo(instructionsLabel.snp_bottomMargin).offset(100)
+            make.top.equalTo(instructionsLabel.snp_bottomMargin).offset(40)
             make.centerX.equalToSuperview()
             make.width.equalTo(327)
             make.height.equalTo(44)
