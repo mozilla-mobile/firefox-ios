@@ -2017,16 +2017,8 @@ extension BrowserViewController {
         // Get the A/B test variant from leanplum server
         // and update onboarding user reasearch
         onboardingUserResearch?.updatedLPVariables = {(lpVariable) -> () in
-//            self.onboardingUserResearch?.updatedLPVariables = nil
+            self.onboardingUserResearch?.updatedLPVariables = nil
             print("lp Variable from server \(String(describing: lpVariable?.boolValue()))")
-//            self.onboardingUserResearch?.updateTelemetry()
-//            self.onboardingUserResearch?.updateValue(value: lpVariable?.boolValue() ?? true)
-//            self.showProperIntroVC()
-        }
-        
-        onboardingUserResearch?.updatedLPVariables2 = {(lpVariable) -> () in
-            self.onboardingUserResearch?.updatedLPVariables2 = nil
-            print("lp Variable 2 from server \(String(describing: lpVariable?.boolValue()))")
             self.onboardingUserResearch?.updateTelemetry()
             self.onboardingUserResearch?.updateValue(value: lpVariable?.boolValue() ?? true)
             self.showProperIntroVC()
@@ -2038,7 +2030,7 @@ extension BrowserViewController {
         // Ex. Internet connection is unstable due to which
         // leanplum isn't loading or taking too much time
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            guard self.onboardingUserResearch?.updatedLPVariables2 != nil else {
+            guard self.onboardingUserResearch?.updatedLPVariables != nil else {
                 return
             }
             Sentry.shared.send(message: "Failed to fetch A/B test variables from LP")
