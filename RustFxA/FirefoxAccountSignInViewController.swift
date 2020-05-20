@@ -44,8 +44,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.text = Strings.FxASignin_QRInstructions
-        label.font = DynamicFontHelper().MediumSizeRegularWeightAS
+        label.attributedText = Strings.FxASignin_QRInstructions.attributedText(boldString: "firefox.com/pair", font: DynamicFontHelper().MediumSizeRegularWeightAS)
         return label
     }()
     
