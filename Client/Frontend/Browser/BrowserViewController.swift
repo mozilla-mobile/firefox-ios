@@ -67,7 +67,7 @@ class BrowserViewController: UIViewController {
     fileprivate var pasteAction: AccessibleAction!
     fileprivate var copyAddressAction: AccessibleAction!
 
-    fileprivate weak var tabTrayController: TabTrayController?
+    fileprivate weak var tabTrayController: TabTrayControllerV1?
     let profile: Profile
     let tabManager: TabManager
 
@@ -453,7 +453,7 @@ class BrowserViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
         
-        // Setup onboarding user research for A/A testing
+        // Setup onboarding user research for A/B testing
         onboardingUserResearch = OnboardingUserResearch()
         onboardingUserResearch?.lpVariableObserver()
     }
@@ -1233,12 +1233,12 @@ extension BrowserViewController: URLBarDelegate {
 
         updateFindInPageVisibility(visible: false)
 
-        let tabTrayController = TabTrayController(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
+        let tabTrayController = TabTrayControllerV1(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
         }
-
+        
         navigationController?.pushViewController(tabTrayController, animated: true)
         self.tabTrayController = tabTrayController
     }
@@ -1913,35 +1913,15 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
     }
 }
 
-extension BrowserViewController: IntroViewControllerDelegate {
-    @discardableResult func presentIntroViewController(_ force: Bool = false, animated: Bool = true) -> Bool {
-        onboardingUserResearchHelper()
+extension BrowserViewController {
+    func presentIntroViewController(_ alwaysShow: Bool = false) {
         if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
             self.launchFxAFromDeeplinkURL(url)
-            return true
+            return
         }
-
-        if force || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
-            let introViewController = IntroViewController()
-            introViewController.delegate = self
-            // On iPad we present it modally in a controller
-            if topTabsVisible {
-                introViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-                introViewController.modalPresentationStyle = .formSheet
-            } else {
-                introViewController.modalPresentationStyle = .fullScreen
-            }
-            present(introViewController, animated: animated) {
-                // On first run (and forced) open up the homepage in the background.
-                if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
-                    tab.loadRequest(URLRequest(url: homePageURL))
-                }
-            }
-
-            return true
+        if alwaysShow || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
+            onboardingUserResearchHelper(alwaysShow)
         }
-
-        return false
     }
     
     func presentETPCoverSheetViewController(_ force: Bool = false) {
@@ -2015,10 +1995,86 @@ extension BrowserViewController: IntroViewControllerDelegate {
         return false
     }
     
-    func onboardingUserResearchHelper() {
-        print("lp initial value \(String(describing: onboardingUserResearch?.lpVariable?.boolValue()))")
+    private func onboardingUserResearchHelper(_ alwaysShow: Bool = false) {
+        // Condition: Want to see our 1st time launched onboarding again
+        // Our boolean variable shouldShow is used to present the onboarding
+        // that was presented to the user during first launch
+        if alwaysShow {
+            showProperIntroVC()
+            return
+        }
+        // Condition: Leanplum is disabled
+        // If leanplum is not enabled then we set the value of onboarding research to true
+        // True = .variant 1 which is our default Intro View
+        // False = .variant 2 which is our new Intro View that we are A/B testing against
+        // and get that from the server
+        guard LeanPlumClient.shared.getSettings() != nil else {
+            self.onboardingUserResearch?.updateValue(value: true)
+            showProperIntroVC()
+            return
+        }
+        // Condition: Update from leanplum server
+        // Get the A/B test variant from leanplum server
+        // and update onboarding user reasearch
         onboardingUserResearch?.updatedLPVariables = {(lpVariable) -> () in
-            print("lpVariable \(String(describing: lpVariable?.boolValue()))")
+            self.onboardingUserResearch?.updatedLPVariables = nil
+            print("lp Variable from server \(String(describing: lpVariable?.boolValue()))")
+            self.onboardingUserResearch?.updateTelemetry()
+            self.onboardingUserResearch?.updateValue(value: lpVariable?.boolValue() ?? true)
+            self.showProperIntroVC()
+        }
+        // Conditon: Leanplum server too slow
+        // We don't want our users to be stuck on Onboarding
+        // Wait 2 second and update the onboarding research variable
+        // with true (True = .variant 1)
+        // Ex. Internet connection is unstable due to which
+        // leanplum isn't loading or taking too much time
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            guard self.onboardingUserResearch?.updatedLPVariables != nil else {
+                return
+            }
+            Sentry.shared.send(message: "Failed to fetch A/B test variables from LP")
+            self.onboardingUserResearch?.updatedLPVariables = nil
+            self.onboardingUserResearch?.updateValue(value: true)
+            self.showProperIntroVC()
+        }
+    }
+    
+    private func showProperIntroVC() {
+        // The onboarding screen type should always exist after
+        // the screen is presented for the 1st time
+        guard let onboardingScreenType = self.onboardingUserResearch?.onboardingScreenType else {
+            return
+        }
+        let introViewController = IntroViewControllerV2(onboardingType: onboardingScreenType)
+        introViewController.didFinishClosure = { controller, fxaLoginFlow in
+            self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+            controller.dismiss(animated: true) {
+                if self.navigationController?.viewControllers.count ?? 0 > 1 {
+                    _ = self.navigationController?.popToRootViewController(animated: true)
+                }
+                if let flow = fxaLoginFlow {
+                    let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
+                    self.presentSignInViewController(fxaParams, flowType: flow)
+                }
+            }
+        }
+        self.introVCPresentHelper(introViewController: introViewController)
+    }
+    
+    private func introVCPresentHelper(introViewController: UIViewController) {
+        // On iPad we present it modally in a controller
+        if topTabsVisible {
+            introViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
+            introViewController.modalPresentationStyle = .formSheet
+        } else {
+            introViewController.modalPresentationStyle = .fullScreen
+        }
+        present(introViewController, animated: true) {
+            // On first run (and forced) open up the homepage in the background.
+            if let homePageURL = NewTabHomePageAccessors.getHomePage(self.profile.prefs), let tab = self.tabManager.selectedTab, DeviceInfo.hasConnectivity() {
+                tab.loadRequest(URLRequest(url: homePageURL))
+            }
         }
     }
 
@@ -2029,20 +2085,6 @@ extension BrowserViewController: IntroViewControllerDelegate {
         let fxaParams: FxALaunchParams
         fxaParams = FxALaunchParams(query: query)
         self.presentSignInViewController(fxaParams)
-    }
-
-    func introViewControllerDidFinish(_ introViewController: IntroViewController, fxaLoginFlow: FxAPageType?) {
-        self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
-        introViewController.dismiss(animated: true) {
-            if self.navigationController?.viewControllers.count ?? 0 > 1 {
-                _ = self.navigationController?.popToRootViewController(animated: true)
-            }
-
-            if let flow = fxaLoginFlow {
-                let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
-                self.presentSignInViewController(fxaParams, flowType: flow)
-            }
-        }
     }
 
     func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType) -> UIViewController {
@@ -2315,11 +2357,11 @@ extension BrowserViewController: SessionRestoreHelperDelegate {
 extension BrowserViewController: TabTrayDelegate {
     // This function animates and resets the tab chrome transforms when
     // the tab tray dismisses.
-    func tabTrayDidDismiss(_ tabTray: TabTrayController) {
+    func tabTrayDidDismiss(_ tabTray: TabTrayControllerV1) {
         resetBrowserChrome()
     }
 
-    func tabTrayDidAddTab(_ tabTray: TabTrayController, tab: Tab) {}
+    func tabTrayDidAddTab(_ tabTray: TabTrayControllerV1, tab: Tab) {}
 
     func tabTrayDidAddBookmark(_ tab: Tab) {
         guard let url = tab.url?.absoluteString, !url.isEmpty else { return }

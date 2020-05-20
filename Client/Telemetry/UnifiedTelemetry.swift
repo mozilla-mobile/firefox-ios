@@ -151,6 +151,7 @@ extension UnifiedTelemetry {
         case action = "action"
         case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
+        case enrollment = "enrollment"
         case firefoxAccount = "firefox_account"
     }
 
@@ -212,6 +213,8 @@ extension UnifiedTelemetry {
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
         case tabSearch = "tab-search"
         case tabToolbar = "tab-toolbar"
+        case experimentEnrollment = "experiment-enrollment"
+        case chinaServerSwitch = "china-server-switch"
         case accountConnected = "connected"
         case accountDisconnected = "disconnected"
         case appMenu = "app_menu"

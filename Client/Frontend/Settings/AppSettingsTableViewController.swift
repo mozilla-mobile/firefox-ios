@@ -136,7 +136,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 SlowTheDatabase(settings: self),
                 ForgetSyncAuthStateDebugSetting(settings: self),
                 SentryIDSetting(settings: self),
-                ChangeToChinaSetting(settings: self)
+                ChangeToChinaSetting(settings: self),
+                ToggleOnboarding(settings: self),
+                LeanplumStatus(settings: self)
             ])]
 
         return settings

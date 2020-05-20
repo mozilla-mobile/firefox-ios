@@ -24,4 +24,6 @@ job-defaults:
     description: Generate localized screenshots by delegating the work to bitrise.io
     dependencies:
         build: build-screenshots
+    index:
+        type: l10n-screenshots
     run-on-tasks-for: []

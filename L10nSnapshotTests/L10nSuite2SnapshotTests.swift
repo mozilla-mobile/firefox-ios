@@ -65,9 +65,10 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         // Select some text and long press to find the option
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
         snapshot("LongPressTextOptions-01")
-        waitForExistence(app.menuItems["show.next.items.menu.button"])
-        app.menuItems["show.next.items.menu.button"].tap()
-        snapshot("LongPressTextOptions-02")
+        if(app.menuItems["show.next.items.menu.button"].exists) {
+            app.menuItems["show.next.items.menu.button"].tap()
+            snapshot("LongPressTextOptions-02")
+        }
     }
 
     func test7URLBar() {
