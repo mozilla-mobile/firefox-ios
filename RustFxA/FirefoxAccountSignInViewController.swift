@@ -165,7 +165,6 @@ class FirefoxAccountSignInViewController: UIViewController {
         UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: true)
     }
-    
 }
 
 // MARK: QRCodeViewControllerDelegate Functions
