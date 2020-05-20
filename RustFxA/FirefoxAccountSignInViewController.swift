@@ -70,9 +70,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         return button
     }()
-    
-    static let buttonWidth = 327
-        
+            
     private let profile: Profile
     
     /// This variable is used to track parent page that launched this sign in VC.
