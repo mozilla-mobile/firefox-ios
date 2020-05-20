@@ -147,6 +147,10 @@ class LeanPlumClient {
     func setup(profile: Profile) {
         self.profile = profile
     }
+    
+    func forceVariableUpdate() {
+        Leanplum.forceContentUpdate()
+    }
 
     func recordSyncedClients(with profile: Profile?) {
         guard let profile = profile as? BrowserProfile else {
@@ -180,7 +184,7 @@ class LeanPlumClient {
             Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
             setupType = .production
         }
-
+        
         Leanplum.syncResourcesAsync(true)
 
         let attributes: [AnyHashable: Any] = [

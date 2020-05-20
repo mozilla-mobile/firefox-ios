@@ -2016,6 +2016,7 @@ extension BrowserViewController {
         // Condition: Update from leanplum server
         // Get the A/B test variant from leanplum server
         // and update onboarding user reasearch
+        LeanPlumClient.shared.forceVariableUpdate()
         onboardingUserResearch?.updatedLPVariables = {(lpVariable) -> () in
             self.onboardingUserResearch?.updatedLPVariables = nil
             print("lp Variable from server \(String(describing: lpVariable?.boolValue()))")

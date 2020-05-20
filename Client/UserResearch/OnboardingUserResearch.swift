@@ -29,7 +29,7 @@ class OnboardingUserResearch {
     // Saving user defaults
     private let defaults = UserDefaults.standard
     // Publicly accessible onboarding screen type
-    var onboardingScreenType:OnboardingScreenType? {
+    var onboardingScreenType: OnboardingScreenType? {
         set(value) {
             if value == nil {
                 defaults.removeObject(forKey: onboardingScreenTypeKey)
@@ -46,7 +46,7 @@ class OnboardingUserResearch {
     }
     
     // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.showOnboardingScreenAB) {
+    init(lpVariable: LPVar? = LPVariables.showOnboardingScreenAA) {
         self.lpVariable = lpVariable
     }
     
