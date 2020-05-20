@@ -1,10 +1,6 @@
-//
-//  FirefoxAccountSignInVC.swift
-//  Client
-//
-//  Created by Kayla Galway on 5/19/20.
-//  Copyright © 2020 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import SnapKit
