@@ -7,7 +7,10 @@ import Leanplum
 import Shared
 
 struct LPVariables {
-    static var showOnboardingScreen = LPVar.define("showOnboardingScreen", with: true)
+    // Variable Used for AA test
+    static var showOnboardingScreenAA = LPVar.define("showOnboardingScreen", with: true)
+    // Variable Used for AB test
+    static var showOnboardingScreenAB = LPVar.define("showOnboardingScreen_2", with: true)
 }
 
 enum OnboardingScreenType: String {
@@ -42,7 +45,7 @@ class OnboardingUserResearch {
     }
     
     // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.showOnboardingScreen) {
+    init(lpVariable: LPVar? = LPVariables.showOnboardingScreenAB) {
         self.lpVariable = lpVariable
     }
     
