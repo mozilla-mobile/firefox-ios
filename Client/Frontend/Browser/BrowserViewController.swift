@@ -1163,9 +1163,9 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 
 extension BrowserViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-       // TODO: remove me, old code should be unchanged, this delegate for QR pairing goes elsewhere, for now just hack this in to show the qr pairing flow
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: .dismiss)
-        present(vc, animated: true, completion: nil)
+       guard let tab = tabManager.selectedTab else { return }
+       finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
+       UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
     }
 
     func didScanQRCodeWithText(_ text: String) {
