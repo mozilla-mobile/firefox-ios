@@ -8,6 +8,7 @@ import Shared
 
 struct LPVariables {
     static var showOnboardingScreen = LPVar.define("showOnboardingScreen", with: true)
+    static var showOnboardingScreen2 = LPVar.define("showOnboardingScreen_2", with: true)
 }
 
 enum OnboardingScreenType: String {
@@ -18,8 +19,10 @@ enum OnboardingScreenType: String {
 class OnboardingUserResearch {
     // Closure delegate
     var updatedLPVariables: ((LPVar?) -> Void)?
+    var updatedLPVariables2: ((LPVar?) -> Void)?
     // variable
     var lpVariable: LPVar?
+    var lpVariable2: LPVar?
     // Constants
     private let onboardingScreenTypeKey = "onboardingScreenTypeKey"
     // Saving user defaults
@@ -43,6 +46,7 @@ class OnboardingUserResearch {
     
     // MARK: Initializer
     init(lpVariable: LPVar? = LPVariables.showOnboardingScreen) {
+        self.lpVariable2 = LPVariables.showOnboardingScreen2
         self.lpVariable = lpVariable
     }
     
@@ -50,6 +54,7 @@ class OnboardingUserResearch {
     func lpVariableObserver() {
         Leanplum.onVariablesChanged {
             self.updatedLPVariables?(self.lpVariable)
+            self.updatedLPVariables2?(self.lpVariable2)
         }
     }
     
