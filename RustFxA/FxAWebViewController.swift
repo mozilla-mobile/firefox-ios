@@ -18,7 +18,6 @@ enum FxAPageType {
     case emailLoginFlow
     case qrCode(url: String)
     case settingsPage
-    case signUpFlow
 }
 
 // See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
@@ -96,7 +95,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
 
                 // Handle authentication with either the QR code login flow, email login flow, or settings page flow
                 switch self.pageType {
-                case .emailLoginFlow, .signUpFlow:
+                case .emailLoginFlow:
                     accountManager.beginAuthentication { [weak self] result in
                         if case .success(let url) = result {
                             self?.baseURL = url
@@ -217,7 +216,7 @@ extension FxAWebViewController: WKScriptMessageHandler {
                     }
                 }
             """
-            case .emailLoginFlow, .qrCode, .signUpFlow:
+            case .emailLoginFlow, .qrCode:
                 data = """
                     { capabilities:
                         { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
