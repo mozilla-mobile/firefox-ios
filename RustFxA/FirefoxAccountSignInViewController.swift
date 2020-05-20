@@ -24,6 +24,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     lazy var pairImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.image = UIImage(named: "qr-scan")
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
@@ -39,7 +40,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     lazy var scanButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .blue
+        button.backgroundColor = UIColor.Defaults.brightBlue
         button.setTitle(Strings.FirefoxAccount_ReadyToScan, for: .normal)
         button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
         return button
@@ -48,7 +49,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     lazy var emailButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .white
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(UIColor.Defaults.brightBlue, for: .normal)
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 0.5
         button.setTitle(Strings.FirefoxAccount_UseEmail, for: .normal)
@@ -94,9 +95,9 @@ class FirefoxAccountSignInViewController: UIViewController {
         }
         pairImageView.snp.makeConstraints { make in
             make.top.equalTo(qrSignInLabel.snp_bottomMargin).offset(20)
-            make.height.equalToSuperview().multipliedBy(0.25)
+            make.height.equalToSuperview().multipliedBy(0.3)
             make.centerX.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.80)
+            make.width.equalToSuperview()
         }
         instructionsLabel.snp.makeConstraints { make in
             make.top.equalTo(pairImageView.snp_bottomMargin).offset(20)

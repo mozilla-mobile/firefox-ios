@@ -14,6 +14,8 @@ extension UIColor {
         static let MobilePrivatePurple = UIColor.Photon.Purple60
     // Reader Mode Sepia
         static let LightBeige = UIColor(rgb: 0xf0e6dc)
+        //Firefox Sign In Colors
+        static let brightBlue = UIColor(red: 0, green: 144, blue: 237, alpha: 1)
     }
 }
 
