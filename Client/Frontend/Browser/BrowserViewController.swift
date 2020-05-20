@@ -1163,9 +1163,9 @@ extension BrowserViewController: ClipboardBarDisplayHandlerDelegate {
 
 extension BrowserViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-       guard let tab = tabManager.selectedTab else { return }
-       finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
-       UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
+        guard let tab = tabManager.selectedTab else { return }
+        finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
+        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
     }
 
     func didScanQRCodeWithText(_ text: String) {

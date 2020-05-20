@@ -337,9 +337,9 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
-            let view = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
+            let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
             UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
-            navigationController?.pushViewController(view, animated: true)
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
 
