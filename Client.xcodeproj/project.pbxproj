@@ -35,7 +35,7 @@
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
 		1FCF5C2524351CB4003AB95D /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCF5C2324351CB4003AB95D /* Glean.framework */; };
-		23F2C368244E460500FA4496 /* TabTrayV2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F2C367244E460500FA4496 /* TabTrayV2ViewController.swift */; };
+		23AE36632475A0EF00ACB7BA /* TabTrayV2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AE36612475A0EF00ACB7BA /* TabTrayV2ViewController.swift */; };
 		23F2C36A244E463C00FA4496 /* TabTrayV2ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F2C369244E463C00FA4496 /* TabTrayV2ViewModel.swift */; };
 		274A36C9239EB94000A21587 /* LibraryPanelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36C8239EB94000A21587 /* LibraryPanelButton.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
@@ -1188,7 +1188,7 @@
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
 		19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeanplumIntegration.swift; sourceTree = "<group>"; };
 		1FCF5C2324351CB4003AB95D /* Glean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Glean.framework; path = Carthage/Build/iOS/Glean.framework; sourceTree = "<group>"; };
-		23F2C367244E460500FA4496 /* TabTrayV2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayV2ViewController.swift; sourceTree = "<group>"; };
+		23AE36612475A0EF00ACB7BA /* TabTrayV2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayV2ViewController.swift; sourceTree = "<group>"; };
 		23F2C369244E463C00FA4496 /* TabTrayV2ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayV2ViewModel.swift; sourceTree = "<group>"; };
 		274A36C8239EB94000A21587 /* LibraryPanelButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelButton.swift; sourceTree = "<group>"; };
 		274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelContextMenu.swift; sourceTree = "<group>"; };
@@ -2124,7 +2124,7 @@
 		23F2C365244E44FA00FA4496 /* Tabs */ = {
 			isa = PBXGroup;
 			children = (
-				238DC6282460850A00BC9EFF /* TabTrayControllerv2.swift */,
+				23AE36612475A0EF00ACB7BA /* TabTrayV2ViewController.swift */,
 				23F2C369244E463C00FA4496 /* TabTrayV2ViewModel.swift */,
 			);
 			path = Tabs;
@@ -5041,7 +5041,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D04CD74A216CF86B004FF5B0 /* SiriShortcuts.swift in Sources */,
-				238DC6292460850A00BC9EFF /* TabTrayControllerv2.swift in Sources */,
 				EB9A179F20E6C1A200B12184 /* ThemedWidgets.swift in Sources */,
 				E68E39BE1C46F42000B85F42 /* AppSettingsTableViewController.swift in Sources */,
 				E640E86A1C73A47C00C5F072 /* PasscodeViews.swift in Sources */,
@@ -5073,6 +5072,7 @@
 				D3C3696E1CC6B78800348A61 /* LocalRequestHelper.swift in Sources */,
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
+				23AE36632475A0EF00ACB7BA /* TabTrayV2ViewController.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
 				D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */,
