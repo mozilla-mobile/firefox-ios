@@ -211,6 +211,7 @@ extension UnifiedTelemetry {
         case tabSearch = "tab-search"
         case tabToolbar = "tab-toolbar"
         case experimentEnrollment = "experiment-enrollment"
+        case chinaServerSwitch = "china-server-switch"
     }
 
     public enum EventValue: String {
