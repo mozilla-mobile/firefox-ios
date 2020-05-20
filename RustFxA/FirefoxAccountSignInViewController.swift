@@ -10,12 +10,18 @@ import Foundation
 import SnapKit
 import Shared
 
+/// Reflects parent page that launched FirefoxAccountSignInViewController
+enum FxASignInParentType {
+    case settings
+    case appMenu
+    case onboarding
+}
+
 /// ViewController handling Sign In through QR Code or Email address
 class FirefoxAccountSignInViewController: UIViewController {
     
     // MARK: Class Variable Definitions
     
-    // Use fonts from DynamicFontHelper
     lazy var qrSignInLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -64,15 +70,30 @@ class FirefoxAccountSignInViewController: UIViewController {
         
     private let profile: Profile
     
+    /// This variable is used to track parent page that launched this sign in VC.
+    /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
+    private let telemetryObject: UnifiedTelemetry.EventObject
+    
     // MARK: Init() and viewDidLoad()
     
-    init(profile: Profile) {
+    /// - Parameters:
+    ///   - profile: User Profile info
+    ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
+    init(profile: Profile, parentType: FxASignInParentType) {
         self.profile = profile
+        switch parentType {
+        case .appMenu:
+            self.telemetryObject = .appMenu
+        case .onboarding:
+            self.telemetryObject = .onboarding
+        case .settings:
+            self.telemetryObject = .settings
+        }
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
-        fatalError("Must init FirefoxAccountSignInVC with custom initializer and Profile")
+        fatalError("Must init FirefoxAccountSignInVC with custom initializer including Profile and ParentType parameters")
     }
     
     override func viewDidLoad() {
@@ -125,41 +146,19 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     // MARK: Button Tap Functions
     
-    // Scan QR code button tapped
+    /// Scan QR code button tapped
     @objc func scanbuttonTapped(_ sender: UIButton) {
         let qrCodeVC = QRCodeViewController()
         qrCodeVC.qrCodeDelegate = self
+        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .tap, object: telemetryObject, extras: ["flow_type": "pairing"])
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: qrCodeVC, topTabsVisible: true)
     }
     
-    // Use email login button tapped
+    /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .dismiss)
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
+        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: false)
-    }
-    
-    func presentThemedViewController(navItemLocation: NavigationItemLocation, navItemText: NavigationItemText, vcBeingPresented: UIViewController, topTabsVisible: Bool) {
-        let vcToPresent = vcBeingPresented
-        let buttonItem = UIBarButtonItem(title: navItemText.localizedString(), style: .plain, target: self, action: #selector(dismissSignInViewController))
-        switch navItemLocation {
-        case .Left:
-            vcToPresent.navigationItem.leftBarButtonItem = buttonItem
-        case .Right:
-            vcToPresent.navigationItem.rightBarButtonItem = buttonItem
-        }
-        let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
-        themedNavigationController.navigationBar.isTranslucent = false
-        if topTabsVisible {
-            themedNavigationController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            themedNavigationController.modalPresentationStyle = .formSheet
-        } else {
-            themedNavigationController.modalPresentationStyle = .fullScreen
-        }
-        self.present(themedNavigationController, animated: true, completion: nil)
-    }
-    
-    @objc func dismissSignInViewController() {
-           self.dismiss(animated: true, completion: nil)
     }
     
 }
@@ -167,7 +166,7 @@ class FirefoxAccountSignInViewController: UIViewController {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: .dismiss)
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: .popToRootVC)
         present(vc, animated: true, completion: nil)
     }
 
