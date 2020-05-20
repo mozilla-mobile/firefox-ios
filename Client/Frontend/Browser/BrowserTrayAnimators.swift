@@ -8,7 +8,7 @@ import Shared
 class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if let bvc = transitionContext.viewController(forKey: .to) as? BrowserViewController,
-           let tabTray = transitionContext.viewController(forKey: .from) as? TabTrayController {
+           let tabTray = transitionContext.viewController(forKey: .from) as? TabTrayControllerV1 {
             transitionFromTray(tabTray, toBrowser: bvc, usingContext: transitionContext)
         }
     }
@@ -19,7 +19,7 @@ class TrayToBrowserAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 }
 
 private extension TrayToBrowserAnimator {
-    func transitionFromTray(_ tabTray: TabTrayController, toBrowser bvc: BrowserViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
+    func transitionFromTray(_ tabTray: TabTrayControllerV1, toBrowser bvc: BrowserViewController, usingContext transitionContext: UIViewControllerContextTransitioning) {
         let container = transitionContext.containerView
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
 
@@ -114,7 +114,7 @@ private extension TrayToBrowserAnimator {
 class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         if let bvc = transitionContext.viewController(forKey: .from) as? BrowserViewController,
-           let tabTray = transitionContext.viewController(forKey: .to) as? TabTrayController {
+           let tabTray = transitionContext.viewController(forKey: .to) as? TabTrayControllerV1 {
             transitionFromBrowser(bvc, toTabTray: tabTray, usingContext: transitionContext)
         }
     }
@@ -125,7 +125,7 @@ class BrowserToTrayAnimator: NSObject, UIViewControllerAnimatedTransitioning {
 }
 
 private extension BrowserToTrayAnimator {
-    func transitionFromBrowser(_ bvc: BrowserViewController, toTabTray tabTray: TabTrayController, usingContext transitionContext: UIViewControllerContextTransitioning) {
+    func transitionFromBrowser(_ bvc: BrowserViewController, toTabTray tabTray: TabTrayControllerV1, usingContext transitionContext: UIViewControllerContextTransitioning) {
 
         let container = transitionContext.containerView
         guard let selectedTab = bvc.tabManager.selectedTab else { return }
