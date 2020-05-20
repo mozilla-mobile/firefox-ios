@@ -99,6 +99,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
                     accountManager.beginAuthentication { [weak self] result in
                         if case .success(let url) = result {
                             self?.baseURL = url
+                            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .emailLogin, object: .accountConnected)
                             self?.webView.load(URLRequest(url: url))
                         }
                     }
@@ -106,6 +107,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
                     accountManager.beginPairingAuthentication(pairingUrl: url) { [weak self] result in
                         if case .success(let url) = result {
                             self?.baseURL = url
+                            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: .accountConnected)
                             self?.webView.load(URLRequest(url: url))
                         }
                     }

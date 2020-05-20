@@ -23,6 +23,7 @@ class ManageFxAccountSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = FxAWebViewController(pageType: .settingsPage, profile: profile, dismissalStyle: .popToRootVC)
+        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .tap, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

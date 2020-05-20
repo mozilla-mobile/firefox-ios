@@ -1166,9 +1166,6 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
        // TODO: remove me, old code should be unchanged, this delegate for QR pairing goes elsewhere, for now just hack this in to show the qr pairing flow
         let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: .dismiss)
         present(vc, animated: true, completion: nil)
-//        guard let tab = tabManager.selectedTab else { return }
-//        finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
-//        UnifiedTelemetry.recordEvent(category: .action, method: .scan, object: .qrCodeURL)
     }
 
     func didScanQRCodeWithText(_ text: String) {
@@ -2052,13 +2049,8 @@ extension BrowserViewController: IntroViewControllerDelegate {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         guard profile.hasSyncableAccount() else {
             let signInVC = FirefoxAccountSignInViewController(profile: profile)
+            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .tap, object: .appMenu)
             return signInVC
-            /*
-            let qq = QRCodeViewController() // TODO: show new FirefoxAccountSignInVC, which will show either a QRCodeViewController or a FxAWebViewController()
-            qq.qrCodeDelegate = self // TODO: the FirefoxAccountSignInVC will be the delegate
-            return qq
-         //   return FxAWebViewController(pageType: flowType, profile: profile, dismissalStyle: .dismiss)
-            */
         }
 
         let settingsTableViewController = SyncContentSettingsViewController()

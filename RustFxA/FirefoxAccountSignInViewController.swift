@@ -126,13 +126,37 @@ class FirefoxAccountSignInViewController: UIViewController {
     @objc func scanbuttonTapped(_ sender: UIButton) {
         let qrCodeVC = QRCodeViewController()
         qrCodeVC.qrCodeDelegate = self
-        navigationController?.pushViewController(qrCodeVC, animated: true)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: qrCodeVC, topTabsVisible: true)
     }
     
     // Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .dismiss)
-        navigationController?.pushViewController(fxaWebVC, animated: true)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: false)
+    }
+    
+    func presentThemedViewController(navItemLocation: NavigationItemLocation, navItemText: NavigationItemText, vcBeingPresented: UIViewController, topTabsVisible: Bool) {
+        let vcToPresent = vcBeingPresented
+        let buttonItem = UIBarButtonItem(title: navItemText.localizedString(), style: .plain, target: self, action: #selector(dismissSignInViewController))
+        switch navItemLocation {
+        case .Left:
+            vcToPresent.navigationItem.leftBarButtonItem = buttonItem
+        case .Right:
+            vcToPresent.navigationItem.rightBarButtonItem = buttonItem
+        }
+        let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
+        themedNavigationController.navigationBar.isTranslucent = false
+        if topTabsVisible {
+            themedNavigationController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
+            themedNavigationController.modalPresentationStyle = .formSheet
+        } else {
+            themedNavigationController.modalPresentationStyle = .fullScreen
+        }
+        self.present(themedNavigationController, animated: true, completion: nil)
+    }
+    
+    @objc func dismissSignInViewController() {
+           self.dismiss(animated: true, completion: nil)
     }
     
 }

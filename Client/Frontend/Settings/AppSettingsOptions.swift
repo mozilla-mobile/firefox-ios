@@ -47,6 +47,7 @@ class ConnectSetting: WithoutAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = FirefoxAccountSignInViewController(profile: profile)
+        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .tap, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -337,6 +338,7 @@ class AccountStatusSetting: WithAccountSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
             let view = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
+            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .tap, object: .settings)
             navigationController?.pushViewController(view, animated: true)
             return
         }

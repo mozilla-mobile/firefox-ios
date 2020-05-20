@@ -151,6 +151,7 @@ extension UnifiedTelemetry {
         case action = "action"
         case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
+        case firefoxAccount = "firefox_account"
     }
 
     public enum EventMethod: String {
@@ -172,6 +173,8 @@ extension UnifiedTelemetry {
         case translate = "translate"
         case view = "view"
         case applicationOpenUrl = "application-open-url"
+        case emailLogin = "email"
+        case qrPairing = "pairing"
     }
 
     public enum EventObject: String {
@@ -209,6 +212,11 @@ extension UnifiedTelemetry {
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
         case tabSearch = "tab-search"
         case tabToolbar = "tab-toolbar"
+        case accountConnected = "connected"
+        case accountDisconnected = "disconnected"
+        case appMenu = "app_menu"
+        case settings = "settings"
+        case onboarding = "onboarding"
     }
 
     public enum EventValue: String {
