@@ -41,6 +41,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     lazy var scanButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = UIColor.Defaults.brightBlue
+        button.layer.cornerRadius = 8
         button.setTitle(Strings.FirefoxAccount_ReadyToScan, for: .normal)
         button.addTarget(self, action: #selector(scanbuttonTapped), for: .touchUpInside)
         return button
@@ -52,6 +53,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.setTitleColor(UIColor.Defaults.brightBlue, for: .normal)
         button.layer.borderColor = UIColor.black.cgColor
         button.layer.borderWidth = 0.5
+        button.layer.cornerRadius = 8
         button.setTitle(Strings.FirefoxAccount_UseEmail, for: .normal)
         button.addTarget(self, action: #selector(emailLoginTapped), for: .touchUpInside)
         return button
@@ -107,14 +109,14 @@ class FirefoxAccountSignInViewController: UIViewController {
         scanButton.snp.makeConstraints { make in
             make.top.equalTo(instructionsLabel.snp_bottomMargin).offset(100)
             make.centerX.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.75)
-            make.height.equalTo(30)
+            make.width.equalTo(327)
+            make.height.equalTo(44)
         }
         emailButton.snp.makeConstraints { make in
             make.top.equalTo(scanButton.snp_bottomMargin).offset(20)
             make.centerX.equalToSuperview()
-            make.width.equalToSuperview().multipliedBy(0.75)
-            make.height.equalTo(30)
+            make.width.equalTo(327)
+            make.height.equalTo(44)
         }
     }
     
