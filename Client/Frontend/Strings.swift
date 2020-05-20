@@ -795,3 +795,11 @@ extension Strings {
 extension String {
     public static let FxAQRCode_Instructions = NSLocalizedString("fxa.qr-scanning-view.instructions", value: "Scan the QR code shown at firefox.com/pair", comment: "Instructions shown on qr code scanning view")
 }
+
+// Firefox Account Sign In screen (Presents QR code or Email Sign In Options)
+extension Strings {
+    public static let FirefoxAccount_CameraSignInPrompt = NSLocalizedString("firefoxaccount.signin.camera", value: "Sign In with Your Camera", comment: "Text label prompt to sign in with QR code through phone camera")
+    public static let FirefoxAccount_PairInstructions = NSLocalizedString("firefoxaccount.signin.pair-instructions", value: "On your computer open Firefox and go to", comment: "Text label instructions for QR code sign in flow which direct you to go to 'firefox.com/pair' url")
+    public static let FirefoxAccount_ReadyToScan = NSLocalizedString("firefoxaccount.signin.ready-to-scan", value: "Ready To Scan", comment: "Ready to scan qr code button")
+    public static let FirefoxAccount_UseEmail = NSLocalizedString("firefoxaccount.signin.use-email", value: "Use Email Instead", comment: "Use email instead button")
+}
