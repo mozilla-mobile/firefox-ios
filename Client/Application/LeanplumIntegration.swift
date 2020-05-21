@@ -110,6 +110,14 @@ enum LPSetupType: String {
     case none
 }
 
+enum LPState: String {
+    case disabled
+    case willStart
+    case started
+    case startedFirstRun
+    case startedSecondRun
+}
+
 class LeanPlumClient {
     static let shared = LeanPlumClient()
 
@@ -121,6 +129,7 @@ class LeanPlumClient {
     var deviceId: String? {
         return Leanplum.deviceId()
     }
+    var lpState: LPState = .disabled
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
@@ -200,20 +209,21 @@ class LeanPlumClient {
         ]
 
         self.setupCustomTemplates()
-
+        lpState = .willStart
         Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
-
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
             if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
                 self.prefs?.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
                 self.track(event: .firstRun)
+                self.lpState = .startedFirstRun
             } else if self.prefs?.boolForKey("SecondRun") == nil {
                 self.prefs?.setBool(true, forKey: "SecondRun")
                 self.track(event: .secondRun)
+                self.lpState = .startedSecondRun
             }
-
+            self.lpState = .started
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
             self.recordSyncedClients(with: self.profile)
