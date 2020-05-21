@@ -62,7 +62,7 @@ class TPStatsBlocklistsTests: XCTestCase {
         XCTAssertEqual(blocklist("https://subadmeld.com"), nil)
         XCTAssertEqual(blocklist("https://aol.com.aolanswers.com", "https://foo.com", ["ers.com"]), nil)
         XCTAssertEqual(blocklist("https://sub.xiti.com/track"), .analytics)
-        XCTAssertEqual(blocklist("https://atlassolutions.com"), .social)
+        XCTAssertEqual(blocklist("https://atlassolutions.com"), .advertising)
         XCTAssertEqual(blocklist("https://atlassolutions.com", "https://foo.com", ["*solutions.com"]), nil)
     }
 }
