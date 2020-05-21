@@ -1,7 +1,7 @@
 github "mozilla-mobile/onepassword-app-extension" "68a9d932a6373ca045984fbf4fb9a25aee43284c"
 github "DaveWoodCom/XCGLogger" "7.0.0"
 github "Dev1an/A-Star" "3.0.0-beta-1"
-github "Leanplum/Leanplum-iOS-SDK" "2.6.4"
+github "Leanplum/Leanplum-iOS-SDK" "2.7.2"
 github "SDWebImage/SDWebImage" "5.4.0"
 github "SnapKit/SnapKit" "5.0.1"
 github "SwiftyJSON/SwiftyJSON" "5.0.0"
