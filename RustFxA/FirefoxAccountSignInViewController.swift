@@ -105,6 +105,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         title = Strings.FxASignin_Title
         addSubviews()
         addViewConstraints()
+        handleDarkMode()
     }
     
     // MARK: Subview Layout Functions
@@ -145,6 +146,13 @@ class FirefoxAccountSignInViewController: UIViewController {
             make.centerX.equalToSuperview()
             make.width.equalTo(327)
             make.height.equalTo(44)
+        }
+    }
+    
+    func handleDarkMode() {
+        [qrSignInLabel, instructionsLabel].forEach {
+            // UI is not currently themeable, enforce black
+            $0.textColor = .black
         }
     }
     
