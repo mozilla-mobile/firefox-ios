@@ -1954,7 +1954,7 @@ extension BrowserViewController {
                 settingsTableViewController.profile = self.profile
                 settingsTableViewController.tabManager = self.tabManager
                 settingsTableViewController.settingsDelegate = self
-                self.presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: settingsTableViewController)
+                self.presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: settingsTableViewController, topTabsVisible: self.topTabsVisible)
             }
         }
         present(etpCoverSheetViewController, animated: true, completion: nil)
@@ -2090,7 +2090,9 @@ extension BrowserViewController {
     func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         guard profile.hasSyncableAccount() else {
-            return FxAWebView(pageType: flowType, profile: profile, dismissalStyle: .dismiss)
+            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: .appMenu)
+            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .appMenu)
+            return signInVC
         }
 
         let settingsTableViewController = SyncContentSettingsViewController()
@@ -2100,7 +2102,7 @@ extension BrowserViewController {
 
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow) {
         let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: true)
     }
 
     @objc func dismissSignInViewController() {
@@ -2311,26 +2313,6 @@ extension BrowserViewController {
         if error == nil {
             LeanPlumClient.shared.track(event: .saveImage)
         }
-    }
-    
-    func presentThemedViewController(navItemLocation: NavigationItemLocation, navItemText: NavigationItemText, vcBeingPresented: UIViewController) {
-        let vcToPresent = vcBeingPresented
-        let buttonItem = UIBarButtonItem(title: navItemText.localizedString(), style: .plain, target: self, action: #selector(dismissSignInViewController))
-        switch navItemLocation {
-        case .Left:
-            vcToPresent.navigationItem.leftBarButtonItem = buttonItem
-        case .Right:
-            vcToPresent.navigationItem.rightBarButtonItem = buttonItem
-        }
-        let themedNavigationController = ThemedNavigationController(rootViewController: vcToPresent)
-        themedNavigationController.navigationBar.isTranslucent = false
-        if topTabsVisible {
-            themedNavigationController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.IntroViewController.width, height: ViewControllerConsts.PreferredSize.IntroViewController.height)
-            themedNavigationController.modalPresentationStyle = .formSheet
-        } else {
-            themedNavigationController.modalPresentationStyle = .fullScreen
-        }
-        self.present(themedNavigationController, animated: true, completion: nil)
     }
 }
 
