@@ -12,7 +12,7 @@ github "SwiftyJSON/SwiftyJSON"              ~> 5.0
 github "google/EarlGrey"                    "master"
 github "mozilla-mobile/telemetry-ios"      ~> 1.1
 github "mozilla-mobile/MappaMundi"          "master"
-github "Leanplum/Leanplum-iOS-SDK"          ~> 2.6.0
+github "Leanplum/Leanplum-iOS-SDK"          ~> 2.7.2
 github "mozilla-services/shavar-prod-lists" "72.0"
 # Use release version of application-services
 github "mozilla/application-services"      "v0.59.0"
