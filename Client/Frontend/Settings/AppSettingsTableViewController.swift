@@ -139,7 +139,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ChangeToChinaSetting(settings: self),
                 ToggleOnboarding(settings: self),
                 LeanplumStatus(settings: self),
-                ClearOnboardingDefaults(settings: self)
+                ClearOnboardingConstantValues(settings: self)
             ])]
 
         return settings
