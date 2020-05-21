@@ -367,7 +367,9 @@ extension ShareViewController {
         }
 
         gesture.isEnabled = false
+        view.isUserInteractionEnabled = false
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { _ in
+            self.view.isUserInteractionEnabled = true
             self.sendToDevice = SendToDevice()
             guard let sendToDevice = self.sendToDevice else { return }
             sendToDevice.sharedItem = item
