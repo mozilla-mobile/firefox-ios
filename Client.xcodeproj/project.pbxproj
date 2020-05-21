@@ -358,13 +358,14 @@
 		C8E18F22222EE11B00E30E52 /* MozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBCF403C221CBC9A00B38F28 /* MozillaAppServices.framework */; };
 		C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80823D20FB3005AACE6 /* Avatar.swift */; };
 		C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */; };
-		C8E2E80E23D20FD2005AACE6 /* FxAWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80723D20FB3005AACE6 /* FxAWebView.swift */; };
+		C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */; };
 		C8EB60C41F1FB12500F9B5B3 /* navigationDelegate.html in Resources */ = {isa = PBXBuildFile; fileRef = C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */; };
 		C8EB60DC1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EB60DB1F1FB9AD00F9B5B3 /* NavigationDelegateTests.swift */; };
 		C8F457A81F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A71F1FD75A000CB895 /* BrowserViewController+WebViewDelegates.swift */; };
 		C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
 		C8FB0C75232151BA00031088 /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FB0C74232151BA00031088 /* AppMenu.swift */; };
 		C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FB0C772321523D00031088 /* PageActionMenu.swift */; };
+		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */; };
 		D006F2E32283307B0004D3AB /* KIF.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 7B604F981C494F74006EEEC3 /* KIF.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -1491,7 +1492,7 @@
 		C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		C8E18F1D222EDE4400E30E52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C8E18F1F222EDED000E30E52 /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = System/Library/Frameworks/SafariServices.framework; sourceTree = SDKROOT; };
-		C8E2E80723D20FB3005AACE6 /* FxAWebView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAWebView.swift; sourceTree = "<group>"; };
+		C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FxAWebViewController.swift; sourceTree = "<group>"; };
 		C8E2E80823D20FB3005AACE6 /* Avatar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RustFirefoxAccounts.swift; sourceTree = "<group>"; };
 		C8EB60C31F1FB12500F9B5B3 /* navigationDelegate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = navigationDelegate.html; sourceTree = "<group>"; };
@@ -1500,6 +1501,7 @@
 		C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+KeyCommands.swift"; sourceTree = "<group>"; };
 		C8FB0C74232151BA00031088 /* AppMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
 		C8FB0C772321523D00031088 /* PageActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageActionMenu.swift; sourceTree = "<group>"; };
+		CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxAccountSignInViewController.swift; sourceTree = "<group>"; };
 		CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDevices.swift; sourceTree = "<group>"; };
 		CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContentSettingsViewController.swift; sourceTree = "<group>"; };
 		D000661320472890009BA6F6 /* __firefox__.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = __firefox__.js; sourceTree = "<group>"; };
@@ -2715,9 +2717,10 @@
 			isa = PBXGroup;
 			children = (
 				EB07F85E240D695F00924860 /* PushNotificationSetup.swift */,
-				C8E2E80723D20FB3005AACE6 /* FxAWebView.swift */,
+				C8E2E80723D20FB3005AACE6 /* FxAWebViewController.swift */,
 				C8E2E80823D20FB3005AACE6 /* Avatar.swift */,
 				C8E2E80923D20FB3005AACE6 /* RustFirefoxAccounts.swift */,
+				CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */,
 			);
 			path = RustFxA;
 			sourceTree = "<group>";
@@ -5126,6 +5129,7 @@
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,
 				EBA3B2C32268F16300728BDB /* PhotonActionSheetCell.swift in Sources */,
+				CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */,
 				D0EAE0E2228B3762001C875A /* DrawerViewController.swift in Sources */,
 				E689C7301E0C7617008BAADB /* NSAttributedStringExtensions.swift in Sources */,
 				D0C95E0E200FD3B200E4E51C /* PrintHelper.swift in Sources */,
@@ -5174,7 +5178,7 @@
 				E63ED7D81BFCD9990097D08E /* LoginTableViewCell.swift in Sources */,
 				66CE54A820FCF6CF00CC310B /* WebsiteDataManagementViewController.swift in Sources */,
 				C8FB0C75232151BA00031088 /* AppMenu.swift in Sources */,
-				C8E2E80E23D20FD2005AACE6 /* FxAWebView.swift in Sources */,
+				C8E2E80E23D20FD2005AACE6 /* FxAWebViewController.swift in Sources */,
 				3BB50E201D627539004B33DF /* FirefoxHomeViewController.swift in Sources */,
 				F84B22241A09122500AAB793 /* LibraryViewController.swift in Sources */,
 				39455F771FC83F430088A22C /* TabEventHandler.swift in Sources */,

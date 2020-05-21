@@ -46,7 +46,8 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAWebView(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
+        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
+        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -336,8 +337,9 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
-            let view = FxAWebView(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
-            navigationController?.pushViewController(view, animated: true)
+            let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
+            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
 

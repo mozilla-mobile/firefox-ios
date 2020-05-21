@@ -82,7 +82,7 @@ class IntroViewControllerV2: UIViewController {
         }
         // Sign up button closure
         introWelcomeSyncV1Views.signUpClosure = {
-            self.didFinishClosure?(self, .signUpFlow)
+            self.didFinishClosure?(self, .emailLoginFlow)
         }
     }
     
@@ -126,7 +126,7 @@ class IntroViewControllerV2: UIViewController {
         }
         // Sign-up browsing button action
         syncCard.signUp = {
-            self.didFinishClosure?(self, .signUpFlow)
+            self.didFinishClosure?(self, .emailLoginFlow)
         }
     }
 }
