@@ -367,12 +367,16 @@ extension ShareViewController {
         }
 
         gesture.isEnabled = false
-        sendToDevice = SendToDevice()
-        guard let sendToDevice = sendToDevice else { return }
-        sendToDevice.sharedItem = item
-        sendToDevice.delegate = delegate
-        let vc = sendToDevice.initialViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        view.isUserInteractionEnabled = false
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { _ in
+            self.view.isUserInteractionEnabled = true
+            self.sendToDevice = SendToDevice()
+            guard let sendToDevice = self.sendToDevice else { return }
+            sendToDevice.sharedItem = item
+            sendToDevice.delegate = self.delegate
+            let vc = sendToDevice.initialViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
     func openFirefox(withUrl url: String, isSearch: Bool) {
