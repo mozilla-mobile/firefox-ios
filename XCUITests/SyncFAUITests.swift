@@ -24,15 +24,8 @@ class SyncUITests: BaseTestCase {
         // Check menu available from HomeScreenPanel
         navigator.goto(BrowserTabMenu)
         waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
-        navigator.goto(FxASigninScreen)
-        verifyFxASigninScreen()
-
-        // Check menu available from a website
-        navigator.openURL("mozilla.org")
-        waitUntilPageLoad()
-        navigator.goto(BrowserTabMenu)
-        waitForExistence(app.tables["Context Menu"].cells["menu-sync"])
-        navigator.goto(FxASigninScreen)
+        navigator.goto(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
         verifyFxASigninScreen()
     }
 
@@ -57,12 +50,7 @@ class SyncUITests: BaseTestCase {
         waitForExistence(app.webViews.staticTexts["Valid email required"])
 
         // Enter only email, wrong and correct and tap sign in
-        userState.fxaUsername = "bademail"
-        navigator.performAction(Action.FxATypeEmail)
-        navigator.performAction(Action.FxATapOnContinueButton)
-        waitForExistence(app.webViews.staticTexts["Valid email required"])
-
-        userState.fxaUsername = "foo1bar2@gmail.com"
+        userState.fxaUsername = "foo1bar2baz3@gmail.com"
         navigator.performAction(Action.FxATypeEmail)
         navigator.performAction(Action.FxATapOnSignInButton)
 
@@ -103,6 +91,15 @@ class SyncUITests: BaseTestCase {
         // Remove the password typed, Show (password) option should not be shown
         app.secureTextFields.element(boundBy: 0).typeText(XCUIKeyboardKey.delete.rawValue)
         waitForNoExistence(app.webViews.staticTexts["Show password"])
+    }
+    
+    func testQRPairing() {
+        navigator.goto(Intro_FxASignin)
+        // QR does not work on sim but checking that the button works, no crash
+        navigator.performAction(Action.OpenEmailToQR)
+        waitForExistence(app.navigationBars["Client.FirefoxAccountSignInView"], timeout: 5)
+        app.navigationBars["Client.FirefoxAccountSignInView"].buttons["Close"].tap()
+        waitForExistence(app.collectionViews.cells["TopSitesCell"])
     }
 
     // Smoketest

@@ -38,7 +38,8 @@ class IntegrationTests: BaseTestCase {
     }
 
     private func signInFxAccounts() {
-        navigator.goto(FxASigninScreen)
+        navigator.goto(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
         waitForExistence(app.navigationBars["Client.FxAWebView"], timeout: 20)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
