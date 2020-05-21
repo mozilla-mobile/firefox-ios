@@ -102,6 +102,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        title = Strings.FxASignin_Title
         addSubviews()
         addViewConstraints()
     }
@@ -161,7 +162,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     @objc func emailLoginTapped(_ sender: UIButton) {
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
         UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: true)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: false)
     }
 }
 
