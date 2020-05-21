@@ -77,6 +77,10 @@ class FirefoxAccountSignInViewController: UIViewController {
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
     private let telemetryObject: UnifiedTelemetry.EventObject
     
+    /// Dismissal style for FxAWebViewController
+    /// Changes based on whether or not this VC is launched from the app menu or settings
+    private let fxaDismissStyle: DismissType
+    
     // MARK: Init() and viewDidLoad()
     
     /// - Parameters:
@@ -87,10 +91,13 @@ class FirefoxAccountSignInViewController: UIViewController {
         switch parentType {
         case .appMenu:
             self.telemetryObject = .appMenu
+            self.fxaDismissStyle = .dismiss
         case .onboarding:
             self.telemetryObject = .onboarding
+            self.fxaDismissStyle = .dismiss
         case .settings:
             self.telemetryObject = .settings
+            self.fxaDismissStyle = .popToRootVC
         }
         super.init(nibName: nil, bundle: nil)
     }
@@ -159,17 +166,17 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle)
         UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: true)
+        navigationController?.pushViewController(fxaWebVC, animated: true)
     }
 }
 
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: .popToRootVC)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vc, topTabsVisible: true)
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: fxaDismissStyle)
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func didScanQRCodeWithText(_ text: String) {
