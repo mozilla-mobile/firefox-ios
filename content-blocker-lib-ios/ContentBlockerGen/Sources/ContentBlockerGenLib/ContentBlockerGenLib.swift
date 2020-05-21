@@ -21,10 +21,8 @@ public enum CategoryTitle: String, CaseIterable {
 
 public class ContentBlockerGenLib {
     var companyToRelatedDomains = [String: [String]]()
-    let googleMappingJson: [String: Any]
 
-    public init(entityListJson: [String: Any], googleMappingJson: [String: Any]) {
-        self.googleMappingJson = googleMappingJson["categories"]! as! [String: Any]
+    public init(entityListJson: [String: Any]) {
         parseEntityList(json: entityListJson)
     }
 
@@ -81,25 +79,6 @@ public class ContentBlockerGenLib {
         let category = categories[categoryTitle.rawValue] as! [Any]
         category.forEach {
             result += handleCategoryItem($0, action: action)
-        }
-
-        // Special handling for Social, pull in lists from Disconnect category
-        if categoryTitle == .Social {
-            let category = categories[CategoryTitle.Disconnect.rawValue] as! [Any]
-            category.forEach {
-                let item = $0 as! [String: Any]
-                let companyName = item.first!.key
-                if ["Facebook", "Twitter"].contains(companyName) {
-                    result += handleCategoryItem($0, action: action)
-                }
-            }
-        }
-
-        // Google properties exist in a special list that gets appended per-category
-        if let cat = googleMappingJson[categoryTitle.rawValue] as? [Any] {
-            cat.forEach {
-                result += handleCategoryItem($0, action: action)
-            }
         }
 
         return result
