@@ -118,6 +118,9 @@ class LeanPlumClient {
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
     private var setupType: LPSetupType = .none
+    var deviceId: String? {
+        return Leanplum.deviceId()
+    }
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.

@@ -138,7 +138,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 SentryIDSetting(settings: self),
                 ChangeToChinaSetting(settings: self),
                 ToggleOnboarding(settings: self),
-                LeanplumStatus(settings: self)
+                LeanplumStatus(settings: self),
+                ClearOnboardingConstantValues(settings: self)
             ])]
 
         return settings

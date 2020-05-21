@@ -541,9 +541,41 @@ class ToggleOnboarding: HiddenSetting {
 
 class LeanplumStatus: HiddenSetting {
     let lplumSetupType = LeanPlumClient.shared.lpSetupType()
-
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Leamplum Status: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning())", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Leamplum Status: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning())\nLeanplum Devide ID - \(LeanPlumClient.shared.deviceId ?? "")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        copyLeanplumDeviceIDAndPresentAlert(by: navigationController)
+    }
+    
+    func copyLeanplumDeviceIDAndPresentAlert(by navigationController: UINavigationController?) {
+        let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
+        let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+        UIPasteboard.general.string = "\(LeanPlumClient.shared.deviceId ?? "")"
+        navigationController?.topViewController?.present(alert, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+}
+
+class ClearOnboardingConstantValues: HiddenSetting {
+    override var title: NSAttributedString? {
+        // Onboarding constant values are saved to not show the onboarding screen after user
+        // has already seen it and is dismissed. We however clear it here in this hidden setting
+        // so that when user reopens the app or when browser view controller is re-initialized
+        // we see the onboarding screen again.
+        //
+        // If we are running an A/B test this will also fetch the A/B test variables from
+        // leanplum.
+        return NSAttributedString(string: NSLocalizedString("Debug: Clear onboarding variables", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        settings.profile.prefs.removeObjectForKey(PrefsKeys.IntroSeen)
+        OnboardingUserResearch().onboardingScreenType = nil
     }
 }
 
