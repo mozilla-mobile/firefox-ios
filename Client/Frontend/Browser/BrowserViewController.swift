@@ -34,6 +34,14 @@ private struct BrowserViewControllerUX {
     fileprivate static let BookmarkStarAnimationOffset: CGFloat = 80
 }
 
+/// Enum used to track flow for telemetry events
+enum ReferringPage {
+    case onboarding
+    case appMenu
+    case settings
+    case none
+}
+
 class BrowserViewController: UIViewController {
     var firefoxHomeViewController: FirefoxHomeViewController?
     var libraryViewController: LibraryViewController?
@@ -2055,7 +2063,7 @@ extension BrowserViewController {
                 }
                 if let flow = fxaLoginFlow {
                     let fxaParams = FxALaunchParams(query: ["entrypoint": "firstrun"])
-                    self.presentSignInViewController(fxaParams, flowType: flow)
+                    self.presentSignInViewController(fxaParams, flowType: flow, referringPage: .onboarding)
                 }
             }
         }
@@ -2087,11 +2095,29 @@ extension BrowserViewController {
         self.presentSignInViewController(fxaParams)
     }
 
-    func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType) -> UIViewController {
+    /// This function is called to determine if FxA sign in flow or settings page should be shown
+    /// - Parameters:
+    ///     - fxaOptions: FxALaunchParams from deeplink query
+    ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
+    ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
+    func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
+        let parentType: FxASignInParentType
+        let object: UnifiedTelemetry.EventObject
         guard profile.hasSyncableAccount() else {
-            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: .appMenu)
-            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .appMenu)
+            switch referringPage {
+            case .appMenu, .none:
+                parentType = .appMenu
+                object = .appMenu
+            case .onboarding:
+                parentType = .onboarding
+                object = .onboarding
+            case .settings:
+                parentType = .settings
+                object = .settings
+            }
+            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType)
+            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC
         }
 
@@ -2100,8 +2126,8 @@ extension BrowserViewController {
         return settingsTableViewController
     }
 
-    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow) {
-        let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType)
+    func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
+        let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage)
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: true)
     }
 
