@@ -209,7 +209,7 @@ class LeanPlumClient {
         ]
 
         self.setupCustomTemplates()
-
+        lpState = .willStart
         Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
             // We need to check if the app is a clean install to use for
