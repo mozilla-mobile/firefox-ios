@@ -162,7 +162,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     @objc func emailLoginTapped(_ sender: UIButton) {
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
         UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: false)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: true)
     }
 }
 
