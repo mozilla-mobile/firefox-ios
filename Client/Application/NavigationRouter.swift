@@ -200,7 +200,7 @@ enum NavigationPath {
             viewController.tabManager = tabManager
             controller.pushViewController(viewController, animated: true)
         case .fxa:
-            let viewController = bvc.getSignInOrFxASettingsVC(flowType: .emailLoginFlow)
+            let viewController = bvc.getSignInOrFxASettingsVC(flowType: .emailLoginFlow, referringPage: .settings)
             controller.pushViewController(viewController, animated: true)
         case .theme:
             controller.pushViewController(ThemeSettingsController(), animated: true)

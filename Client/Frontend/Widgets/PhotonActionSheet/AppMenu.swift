@@ -79,12 +79,12 @@ extension PhotonActionSheetProtocol {
         return items
     }
 
-    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ flowType: FxAPageType) -> Void) -> PhotonActionSheetItem? {
+    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ flowType: FxAPageType,_ referringPage: ReferringPage) -> Void) -> PhotonActionSheetItem? {
         //profile.getAccount()?.updateProfile()
 
         let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
-            showFxA(fxaParams, .emailLoginFlow)
+            showFxA(fxaParams, .emailLoginFlow, .appMenu)
         }
 
         let rustAccount = RustFirefoxAccounts.shared
