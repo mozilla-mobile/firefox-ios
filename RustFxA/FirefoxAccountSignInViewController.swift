@@ -159,17 +159,17 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .dismiss)
         UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: fxaWebVC, topTabsVisible: true)
+        navigationController?.pushViewController(fxaWebVC, animated: true)
     }
 }
 
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: .popToRootVC)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vc, topTabsVisible: true)
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: .dismiss)
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func didScanQRCodeWithText(_ text: String) {
