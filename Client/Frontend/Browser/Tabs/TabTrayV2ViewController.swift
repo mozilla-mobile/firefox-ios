@@ -27,6 +27,9 @@ class TabTrayV2ViewController: UIViewController{
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: sectionHeaderIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.tableFooterView = UIView()
+        
+        navigationItem.title = "Open Tabs"
         
         tableView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
@@ -49,6 +52,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: TabTableViewCell.identifier, for: indexPath)
         guard let tabCell = cell as? TabTableViewCell else { return cell }
         tabCell.closeButton.addTarget(self, action: #selector(onCloseButton(_ :)), for: .touchUpInside)
+        tabCell.separatorInset = UIEdgeInsets.zero
         
         viewModel.configure(cell: tabCell, for: indexPath)
         
@@ -66,7 +70,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
 extension TabTrayV2ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRowAt(index: indexPath)
-        navigationController?.popViewController(animated: false)
+        navigationController?.dismiss(animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
