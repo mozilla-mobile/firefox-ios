@@ -11,6 +11,16 @@ struct ViewControllerConsts {
     }
 }
 
+protocol CardTheme {
+    var theme: BuiltinThemeName { get }
+}
+
+extension CardTheme {
+    var theme: BuiltinThemeName {
+        return BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    }
+}
+
 // MARK: Requires Work (Currently part of A/B test)
 // Intro View Model V2 - This is suppose to be the main view model for the
 // IntroView V2 however since we are running an onboarding A/B test
