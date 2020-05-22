@@ -110,4 +110,10 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
            snapshot("MenuOnWebPage-03")
            navigator.back()
        }
+
+    func test11FxASignInPage() {
+        navigator.goto(Intro_FxASignin)
+        waitForExistence(app.navigationBars["Client.FirefoxAccountSignInView"])
+        snapshot("FxASignInScreen-01")
+    }
 }
