@@ -2053,12 +2053,7 @@ extension BrowserViewController {
     }
     
     private func showProperIntroVC() {
-        // The onboarding screen type should always exist after
-        // the screen is presented for the 1st time
-        guard let onboardingScreenType = self.onboardingUserResearch?.onboardingScreenType else {
-            return
-        }
-        let introViewController = IntroViewControllerV2(onboardingType: onboardingScreenType)
+        let introViewController = IntroViewControllerV2()
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             controller.dismiss(animated: true) {
