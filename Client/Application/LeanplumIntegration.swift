@@ -11,6 +11,7 @@ import Account
 private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
+private let LPDeviceIDKey = "LeanplumDeviceIdKey"
 //private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 private let FxaDevicesCountPrefKey = "FxaDevicesCount"
 
@@ -126,9 +127,21 @@ class LeanPlumClient {
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
     private var setupType: LPSetupType = .none
-    var deviceId: String? {
+    var onStartResponseStatus: Bool = false
+    var leanplumDeviceId: String? {
         return Leanplum.deviceId()
     }
+    // Closure delegate for when leanplum start finishes
+    var onStartLPVariable: ((LPVar?) -> Void)?
+    var userDeviceId: String? {
+        set(value) {
+                UserDefaults.standard.set(value, forKey: LPDeviceIDKey)
+        }
+        get {
+            return UserDefaults.standard.string(forKey: LPDeviceIDKey) ?? ""
+        }
+    }
+    let onboardingABTestVariable = LPVariables.showOnboardingScreenAB
     var lpState: LPState = .disabled
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
@@ -185,7 +198,14 @@ class LeanPlumClient {
             log.error("LeanplumIntegration - Could not be started")
             return
         }
-
+        
+        // Adding a self generated user device id because on firefox beta
+        // device id always remains the same for iPhone
+        if userDeviceId == nil && UIDevice.current.userInterfaceIdiom == .phone {
+            userDeviceId = UUID().uuidString
+            Leanplum.setDeviceId(userDeviceId)
+        }
+        
         if UIDevice.current.name.contains("MozMMADev") {
             log.info("LeanplumIntegration - Setting up for Development")
             Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
@@ -196,7 +216,13 @@ class LeanPlumClient {
             Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
             setupType = .production
         }
-
+        
+        // Creating a beta user id for Leanplum testing as recommeded by LP Engineers
+        let userID = UUID().uuidString + "-Beta"
+        Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
+        Leanplum.setAppId(LP_AppID, withDevelopmentKey: LP_Key)
+        setupType = .debug
+        
         Leanplum.syncResourcesAsync(true)
 
         let attributes: [AnyHashable: Any] = [
@@ -210,8 +236,14 @@ class LeanPlumClient {
 
         self.setupCustomTemplates()
         lpState = .willStart
-        Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
+        Leanplum.start(withUserId: userID, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
+            self.onStartResponseStatus = true
+            // https://docs.leanplum.com/reference#callbacks
+            // According to the doc all variables should be when lp start finishes
+            // Relying on this fact and sending the updated AB test variable 
+            self.onStartLPVariable?(self.onboardingABTestVariable)
+            
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
             if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
