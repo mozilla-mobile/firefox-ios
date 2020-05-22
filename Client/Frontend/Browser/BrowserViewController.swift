@@ -1234,7 +1234,10 @@ extension BrowserViewController: URLBarDelegate {
         updateFindInPageVisibility(visible: false)
 
         if AppConstants.CHRONOLOGICAL_TABS {
-            navigationController?.pushViewController(TabTrayV2ViewController(), animated: false)
+            let tabTrayViewController = TabTrayV2ViewController()
+            let controller = ThemedNavigationController(rootViewController: tabTrayViewController)
+            controller.presentingModalViewControllerDelegate = self
+            self.present(controller, animated: true, completion: nil)
         } else {
             let tabTrayController = TabTrayControllerV1(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
             navigationController?.pushViewController(tabTrayController, animated: true)
