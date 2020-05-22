@@ -199,6 +199,7 @@ class LeanPlumClient {
             return
         }
         
+        // To be removed after beta testing
         // Adding a self generated user device id because on firefox beta
         // device id always remains the same for iPhone
         if userDeviceId == nil && UIDevice.current.userInterfaceIdiom == .phone {
@@ -217,7 +218,8 @@ class LeanPlumClient {
             setupType = .production
         }
         
-        // Creating a beta user id for Leanplum testing as recommeded by LP Engineers
+        // To be removed after beta testing
+        // Creating a beta user id for Leanplum testing as recommedded by LP Engineers
         let userID = UUID().uuidString + "-Beta"
         Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
         Leanplum.setAppId(LP_AppID, withDevelopmentKey: LP_Key)
@@ -236,6 +238,7 @@ class LeanPlumClient {
 
         self.setupCustomTemplates()
         lpState = .willStart
+        // To be removed after after beta testing - userID value
         Leanplum.start(withUserId: userID, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
             self.onStartResponseStatus = true
