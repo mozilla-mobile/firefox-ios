@@ -222,7 +222,6 @@ class LeanPlumClient {
         // Creating a beta user id for Leanplum testing as recommedded by LP Engineers
         let userID = UUID().uuidString + "-Beta"
         Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-        Leanplum.setAppId(LP_AppID, withDevelopmentKey: LP_Key)
         setupType = .debug
         
         Leanplum.syncResourcesAsync(true)
