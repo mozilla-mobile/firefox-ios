@@ -725,7 +725,7 @@
     "uk": {
       "default": {
         "visibleDefaultEngines": [
-          "google-b-m", "twitter", "wikipedia-uk", "yandex-market"
+          "google-b-m", "twitter", "wikipedia-uk", "hotline"
         ]
       }
     },
