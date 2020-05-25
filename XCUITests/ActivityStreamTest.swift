@@ -123,7 +123,6 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.goto(ClearPrivateDataSettings)
         navigator.performAction(Action.AcceptClearPrivateData)
-        navigator.goto(SettingsScreen)
         navigator.goto(HomePanelsScreen)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         XCTAssertFalse(app.collectionViews.cells["mozilla"].exists)

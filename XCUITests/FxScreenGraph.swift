@@ -922,6 +922,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["EmailSignIn.button"], forAction: Action.OpenEmailToSignIn, transitionTo: FxASigninScreen)
         screenState.tap(app.buttons["QRCodeSignIn.button"], forAction: Action.OpenEmailToQR, transitionTo: Intro_FxASignin)
 
+        screenState.tap(app.navigationBars["Turn on Sync"].buttons["Settings"], to: SettingsScreen)
         screenState.backAction = navigationControllerBackAction
     }
 
