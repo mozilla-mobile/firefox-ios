@@ -11,19 +11,6 @@ enum TabSection: Int, CaseIterable {
     case yesterday
     case lastWeek
     case older
-    
-    var description: String {
-        switch self {
-        case .today:
-            return "today"
-        case .yesterday:
-            return "yesterday"
-        case .lastWeek:
-            return "last week"
-        case .older:
-            return "older"
-        }
-    }
 }
 
 protocol TopTabCellDelegateV2: AnyObject {

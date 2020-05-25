@@ -3,6 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 import SnapKit
 import UIKit
 
@@ -29,7 +30,7 @@ class TabTrayV2ViewController: UIViewController{
         tableView.delegate = self
         tableView.tableFooterView = UIView()
         
-        navigationItem.title = "Open Tabs"
+        navigationItem.title = Strings.TabTrayV2Title
         
         tableView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
@@ -79,7 +80,38 @@ extension TabTrayV2ViewController: UITableViewDelegate {
         }
 
         let section = TabSection(rawValue: section)
-        headerView.titleLabel.text = section?.description.uppercased()
+        let sectionHeader: String
+        let date: String
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale(identifier: Locale.current.identifier)
+        
+        let dateIntervalFormatter = DateIntervalFormatter()
+        dateIntervalFormatter.dateStyle = .medium
+        dateIntervalFormatter.timeStyle = .none
+        dateIntervalFormatter.locale = Locale(identifier: Locale.current.identifier)
+        
+        switch section {
+        case .today:
+            sectionHeader = Strings.TabTrayV2TodayHeader
+            date = dateFormatter.string(from: Date())
+        case .yesterday:
+            sectionHeader = Strings.TabTrayV2YesterdayHeader
+            date = dateFormatter.string(from: Date.yesterday)
+        case .lastWeek:
+            sectionHeader = Strings.TabTrayV2LastWeekHeader
+            date = dateIntervalFormatter.string(from: Date().lastWeek, to: Date(timeInterval: 6.0 * 24.0 * 3600.0, since: Date().lastWeek))
+        case .older:
+            sectionHeader = Strings.TabTrayV2OlderHeader
+            date = ""
+        default:
+            sectionHeader = ""
+            date = ""
+        }
+        
+        headerView.titleLabel.text = (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
 
         headerView.applyTheme()
         return headerView
