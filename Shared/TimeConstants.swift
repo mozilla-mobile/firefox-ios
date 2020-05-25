@@ -41,7 +41,7 @@ extension Date {
     public static func now() -> Timestamp {
         return UInt64(1000 * Date().timeIntervalSince1970)
     }
-    
+
     public func toMicrosecondTimestamp() -> MicrosecondTimestamp {
         return UInt64(1_000_000 * timeIntervalSince1970)
     }
@@ -116,19 +116,19 @@ extension Date {
     public static var yesterday: Date { return Date().dayBefore }
     public static var tomorrow:  Date { return Date().dayAfter }
     public var lastWeek: Date {
-        return Calendar.current.date(byAdding: .day, value: -8, to: noon)!
+        return Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
     }
     public var older: Date {
-        return Calendar.current.date(byAdding: .day, value: -20, to: noon)!
+        return Calendar.current.date(byAdding: .day, value: -20, to: noon) ?? Date()
     }
     public var dayBefore: Date {
-        return Calendar.current.date(byAdding: .day, value: -1, to: noon)!
+        return Calendar.current.date(byAdding: .day, value: -1, to: noon) ?? Date()
     }
     public var dayAfter: Date {
-        return Calendar.current.date(byAdding: .day, value: 1, to: noon)!
+        return Calendar.current.date(byAdding: .day, value: 1, to: noon) ?? Date()
     }
     public var noon: Date {
-        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self)!
+        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self) ?? Date()
     }
 }
 

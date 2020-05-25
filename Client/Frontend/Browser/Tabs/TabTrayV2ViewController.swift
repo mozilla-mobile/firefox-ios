@@ -8,20 +8,23 @@ import UIKit
 
 struct TabTrayV2ControllerUX {
     static let CornerRadius = CGFloat(4.0)
+    static let ScreenshotMarginLeftRight = CGFloat(20.0)
+    static let ScreenshotMarginTopBottom = CGFloat(6.0)
+    static let TextMarginTopBottom = CGFloat(18.0)
 }
 
 class TabTrayV2ViewController: UIViewController{
     let tableView = UITableView()
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
-        fileprivate let SectionHeaderIdentifier2 = "SectionHeader"
+    fileprivate let sectionHeaderIdentifier = "SectionHeader"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.addSubview(tableView)
         
-        tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.identifier)
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: SectionHeaderIdentifier2)
+        tableView.register(TabTableViewCell.self, forCellReuseIdentifier: TabTableViewCell.identifier)
+        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: sectionHeaderIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -30,7 +33,6 @@ class TabTrayV2ViewController: UIViewController{
             make.leading.trailing.equalToSuperview()
         }
     }
-    
 }
 
 extension TabTrayV2ViewController: UITableViewDataSource {
@@ -38,36 +40,22 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSections()
     }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numberOfRowsInSection(section: section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.identifier, for: indexPath)
-        let tabCell = cell as! TableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TabTableViewCell.identifier, for: indexPath)
+        guard let tabCell = cell as? TabTableViewCell,
+            let imageView = tabCell.imageView,
+            let textLabel = tabCell.textLabel,
+            let detailTextLabel = tabCell.detailTextLabel
+            else { return cell }
         tabCell.closeButton.addTarget(self, action: #selector(onCloseButton(_ :)), for: .touchUpInside)
         
         viewModel.configure(cell: tabCell, for: indexPath)
-        tabCell.imageView?.snp.makeConstraints { make in
-            make.height.width.equalTo(68)
-            make.leading.equalToSuperview().offset(20)
-            make.top.equalToSuperview().offset(6)
-            make.bottom.equalToSuperview().offset(-6)
-        }
         
-        tabCell.textLabel?.snp.makeConstraints { make in
-            make.leading.equalTo(tabCell.imageView!.snp.trailing).offset(20)
-            make.top.equalToSuperview().offset(18)
-            make.bottom.equalTo(tabCell.detailTextLabel!.snp.top)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-        
-        tabCell.detailTextLabel?.snp.makeConstraints { make in
-            make.leading.equalTo(tabCell.imageView!.snp.trailing).offset(20)
-            make.trailing.equalToSuperview()
-            make.top.equalTo(tabCell.textLabel!.snp.bottom).offset(3)
-            make.bottom.equalToSuperview().offset(-18)
-        }
         return tabCell
     }
     
@@ -86,7 +74,7 @@ extension TabTrayV2ViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: SectionHeaderIdentifier2) as? ThemedTableSectionHeaderFooterView, viewModel.numberOfRowsInSection(section: section) != 0 else {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: sectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView, viewModel.numberOfRowsInSection(section: section) != 0 else {
             return nil
         }
 
@@ -102,9 +90,8 @@ extension TabTrayV2ViewController: UITableViewDelegate {
     }
 }
 
-class TableViewCell: UITableViewCell {
-    static let identifier = "cell"
-    static let BorderWidth: CGFloat = 3
+class TabTableViewCell: UITableViewCell {
+    static let identifier = "tabCell"
     
     lazy var closeButton: UIButton = {
         let button = UIButton()
@@ -114,31 +101,46 @@ class TableViewCell: UITableViewCell {
         return button
     }()
     
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-       
-        imageView?.contentMode = .scaleAspectFill
-        imageView?.clipsToBounds = true
-        imageView?.layer.cornerRadius = TabTrayV2ControllerUX.CornerRadius
-        imageView?.layer.borderWidth = 1
-        imageView?.layer.borderColor = UIColor.Photon.Grey30.cgColor
-        
-        textLabel?.lineBreakMode = .byWordWrapping
-
-        detailTextLabel?.textColor = UIColor.Photon.Grey40
-
-    }
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+        guard let screenshotView = imageView,
+            let websiteTitle = textLabel,
+            let url = detailTextLabel
+            else { return }
         
+        screenshotView.contentMode = .scaleAspectFill
+        screenshotView.clipsToBounds = true
+        screenshotView.layer.cornerRadius = TabTrayV2ControllerUX.CornerRadius
+        screenshotView.layer.borderWidth = 1
+        screenshotView.layer.borderColor = UIColor.Photon.Grey30.cgColor
         
+        websiteTitle.lineBreakMode = .byWordWrapping
+
+        url.textColor = UIColor.Photon.Grey40
+        
+        screenshotView.snp.makeConstraints { make in
+            make.height.width.equalTo(68)
+            make.leading.equalToSuperview().offset(TabTrayV2ControllerUX.ScreenshotMarginLeftRight)
+            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.ScreenshotMarginTopBottom)
+            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.ScreenshotMarginTopBottom)
+        }
+        
+        websiteTitle.snp.makeConstraints { make in
+            make.leading.equalTo(imageView!.snp.trailing).offset(TabTrayV2ControllerUX.ScreenshotMarginLeftRight)
+            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.TextMarginTopBottom)
+            make.bottom.equalTo(detailTextLabel!.snp.top)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+        
+        url.snp.makeConstraints { make in
+            make.leading.equalTo(imageView!.snp.trailing).offset(TabTrayV2ControllerUX.ScreenshotMarginLeftRight)
+            make.trailing.equalToSuperview()
+            make.top.equalTo(textLabel!.snp.bottom).offset(3)
+            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.TextMarginTopBottom)
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
 }

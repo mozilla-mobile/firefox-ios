@@ -6,15 +6,6 @@ import Foundation
 import Shared
 import Storage
 
-// MARK: Delegate for animation completion notifications.
-enum TabAnimationTypeV2 {
-    case addTab
-    case removedNonLastTab
-    case removedLastTab
-    case updateTab
-    case moveTab
-}
-
 enum TabSection: Int, CaseIterable {
     case today
     case yesterday
@@ -35,26 +26,15 @@ enum TabSection: Int, CaseIterable {
     }
 }
 
-protocol TabDisplayCompletionDelegateV2: AnyObject {
-    func completedAnimation(for: TabAnimationTypeV2)
-}
-
-// MARK: -
-
 protocol TopTabCellDelegateV2: AnyObject {
     func tabCellDidClose(_ cell: UICollectionViewCell)
 }
 
 class TabTrayV2ViewModel: NSObject {
-    var performingChainedOperations = false
-
-    var dataStore: [TabSection: WeakList<Tab>] = [ .today: WeakList<Tab>(),
+    fileprivate var dataStore: [TabSection: WeakList<Tab>] = [ .today: WeakList<Tab>(),
                                                    .yesterday: WeakList<Tab>(),
                                                    .lastWeek: WeakList<Tab>(),
                                                    .older: WeakList<Tab>()]
-    var operations = [(TabAnimationTypeV2, (() -> Void))]()
-    weak var tabDisplayCompletionDelegateV2: TabDisplayCompletionDelegateV2?
-
     fileprivate let tabManager: TabManager
     fileprivate let viewController: TabTrayV2ViewController
 
@@ -131,13 +111,16 @@ class TabTrayV2ViewModel: NSObject {
         return dataStore[TabSection(rawValue: section) ?? .today]?.count ?? 0
     }
     
-    func configure(cell: TableViewCell, for index: IndexPath) {
-        guard let section = TabSection(rawValue: index.section), let data = dataStore[section]?.at(index.row) else {
-            return
-        }
-        cell.textLabel!.text = data.displayTitle
-        cell.detailTextLabel!.text = data.url?.baseDomain ?? " "
-        cell.imageView!.image = data.screenshot
+    func configure(cell: TabTableViewCell, for index: IndexPath) {
+        guard let section = TabSection(rawValue: index.section),
+            let data = dataStore[section]?.at(index.row),
+            let textLabel = cell.textLabel,
+            let detailTextLabel = cell.detailTextLabel,
+            let imageView = cell.imageView
+            else { return }
+        textLabel.text = data.displayTitle
+        detailTextLabel.text = data.url?.baseDomain ?? " "
+        imageView.image = data.screenshot
         cell.accessoryView = cell.closeButton
     }
 }
