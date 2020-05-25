@@ -14,8 +14,8 @@ struct LPVariables {
 }
 
 enum OnboardingScreenType: String {
-    case versionV1 // Default
-    case versionV2 // New version 2
+    case versionV1 // V1 (Default)
+    case versionV2 // V2
 }
 
 class OnboardingUserResearch {
@@ -56,12 +56,12 @@ class OnboardingUserResearch {
         }
     }
     
-    func updateValue(value: Bool) {
+    func updateValue(onboardingScreenType: Bool) {
         // For LP variable below is the convention
         // we are going to follow
         // True = Current Onboarding Screen
         // False = New Onboarding Screen
-        onboardingScreenType = value ? .versionV1 : .versionV2
+        self.onboardingScreenType = onboardingScreenType ? .versionV1 : .versionV2
     }
     
     func updateTelemetry() {

@@ -2011,7 +2011,7 @@ extension BrowserViewController {
         // and get that from the server
         guard LeanPlumClient.shared.getSettings() != nil else {
             Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | Condition: Leanplum is disabled", tag: .leanplum, severity: .debug, description: "Condition: Leanplum is disabled")
-            self.onboardingUserResearch?.updateValue(value: true)
+            self.onboardingUserResearch?.updateValue(onboardingScreenType: true)
             showProperIntroVC()
             return
         }
@@ -2024,7 +2024,7 @@ extension BrowserViewController {
             LeanPlumClient.shared.onStartLPVariable = nil
             print("lp Variable from server \(lpVariableValue)")
             self.onboardingUserResearch?.updateTelemetry()
-            self.onboardingUserResearch?.updateValue(value: lpVariable?.boolValue() ?? true)
+            self.onboardingUserResearch?.updateValue(onboardingScreenType: lpVariable?.boolValue() ?? true)
             self.showProperIntroVC()
         }
         // Conditon: Leanplum server too slow
@@ -2037,18 +2037,19 @@ extension BrowserViewController {
             guard LeanPlumClient.shared.onStartLPVariable != nil else {
                 return
             }
-            let lpStartStatus = LeanPlumClient.shared.onStartResponseStatus
+            // Refactor: lpVariable value to be .varient1 
+            let lpStartStatus = LeanPlumClient.shared.didReceiveLPStartResponse
             var lpVariableValue = true
             // Condition: LP has already started but we missed onStartLPVariable callback
             if lpStartStatus, let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
                 lpVariableValue = boolValue
                 self.onboardingUserResearch?.updateTelemetry()
                 Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | missed onStartLPVariable callback", tag: .leanplum, severity: .debug, description: "missed onStartLPVariable callback")
-            }else {
+            } else {
                 Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | Leanplum server too slow", tag: .leanplum, severity: .debug, description: "Leanplum server too slow")
             }
             self.onboardingUserResearch?.updatedLPVariables = nil
-            self.onboardingUserResearch?.updateValue(value: lpVariableValue)
+            self.onboardingUserResearch?.updateValue(onboardingScreenType: lpVariableValue)
             self.showProperIntroVC()
         }
     }

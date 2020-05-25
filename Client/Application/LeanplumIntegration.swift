@@ -127,13 +127,18 @@ class LeanPlumClient {
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
     private var setupType: LPSetupType = .none
-    var onStartResponseStatus: Bool = false
+    var didReceiveLPStartResponse: Bool = false
+    // leanplumDeviceId is what comes directly from leanplum and
+    // should be used and kept for showing the device ID in the
+    // debug menu so we can easily find the user in LP dashboard
     var leanplumDeviceId: String? {
         return Leanplum.deviceId()
     }
     // Closure delegate for when leanplum start finishes
     var onStartLPVariable: ((LPVar?) -> Void)?
-    var userDeviceId: String? {
+    // This is only added for testing purpose for issue #6656.
+    // In general we get device ID from IDFV and #6656
+    var phoneDeviceId: String {
         set(value) {
                 UserDefaults.standard.set(value, forKey: LPDeviceIDKey)
         }
@@ -199,12 +204,18 @@ class LeanPlumClient {
             return
         }
         
-        // To be removed after beta testing
-        // Adding a self generated user device id because on firefox beta
+        // To be removed after beta testing and just use IDFV
+        // For now adding a self generated user device id because on firefox beta
         // device id always remains the same for iPhone
-        if userDeviceId == nil && UIDevice.current.userInterfaceIdiom == .phone {
-            userDeviceId = UUID().uuidString
-            Leanplum.setDeviceId(userDeviceId)
+        if phoneDeviceId.isEmpty && UIDevice.current.userInterfaceIdiom == .phone {
+            phoneDeviceId = UUID().uuidString
+            Leanplum.setDeviceId(phoneDeviceId)
+        } else {
+            // For any other device (iPad) we use IDFV and not the phone device ID
+            // on iPad the IDFV always changes on deleting and re-installing the app
+            // hence we don't need to have a newly generated UUID. Also, since IDFV is
+            // for app group it will always be same for when user re-launches the app.
+            Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
         }
         
         if UIDevice.current.name.contains("MozMMADev") {
@@ -221,7 +232,6 @@ class LeanPlumClient {
         // To be removed after beta testing
         // Creating a beta user id for Leanplum testing as recommedded by LP Engineers
         let userID = UUID().uuidString + "-Beta"
-        Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
         setupType = .debug
         
         Leanplum.syncResourcesAsync(true)
@@ -240,9 +250,9 @@ class LeanPlumClient {
         // To be removed after after beta testing - userID value
         Leanplum.start(withUserId: userID, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
-            self.onStartResponseStatus = true
+            self.didReceiveLPStartResponse = true
             // https://docs.leanplum.com/reference#callbacks
-            // According to the doc all variables should be when lp start finishes
+            // According to the doc all variables should be synced when lp start finishes
             // Relying on this fact and sending the updated AB test variable 
             self.onStartLPVariable?(self.onboardingABTestVariable)
             
