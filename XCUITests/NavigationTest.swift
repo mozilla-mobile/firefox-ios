@@ -93,16 +93,16 @@ class NavigationTest: BaseTestCase {
         checkFirefoxSyncScreenShownViaSettings()
 
         // After that it is possible to go back to Settings
-        let closeButton = app.navigationBars["Client.FxAWebView"].buttons["Close"]
+        let closeButton = app.navigationBars["Client.FxAWebView"].buttons["Turn on Sync"]
         closeButton.tap()
-
-        let closeButtonFxView = app.navigationBars["Client.FirefoxAccountSignInView"].buttons["Settings"]
+        
+        let closeButtonFxView = app.navigationBars["Turn on Sync"].buttons["Settings"]
         closeButtonFxView.tap()
     }
     
     // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        waitForExistence(app.navigationBars["Client.FirefoxAccountSignInView"], timeout: 20)
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
         app.buttons["EmailSignIn.button"].tap()
         waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout:20)
 
