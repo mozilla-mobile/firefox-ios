@@ -542,7 +542,7 @@ class ToggleOnboarding: HiddenSetting {
 class LeanplumStatus: HiddenSetting {
     let lplumSetupType = LeanPlumClient.shared.lpSetupType()
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Leamplum Status: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning())\nLeanplum Devide ID - \(LeanPlumClient.shared.deviceId ?? "")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Leamplum Status: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning())\nLeanplum Devide ID - \(LeanPlumClient.shared.leanplumDeviceId ?? "")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
@@ -552,7 +552,7 @@ class LeanplumStatus: HiddenSetting {
     func copyLeanplumDeviceIDAndPresentAlert(by navigationController: UINavigationController?) {
         let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
         let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
-        UIPasteboard.general.string = "\(LeanPlumClient.shared.deviceId ?? "")"
+        UIPasteboard.general.string = "\(LeanPlumClient.shared.leanplumDeviceId ?? "")"
         navigationController?.topViewController?.present(alert, animated: true) {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 alert.dismiss(animated: true)
