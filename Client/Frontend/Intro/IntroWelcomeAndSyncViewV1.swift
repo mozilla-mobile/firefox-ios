@@ -159,12 +159,9 @@ class IntroWelcomeAndSyncViewV1: UIView, CardTheme {
     
     // MARK: View setup
     private func initialViewSetup() {
-        if #available(iOS 13, *) {
-           backgroundColor = .systemBackground
-        } else {
-           backgroundColor = .white
-        }
-        
+        // Background colour setup
+        backgroundColor = fxBackgroundThemeColour
+        // View setup
         main2panel.axis = .vertical
         main2panel.distribution = .fillEqually
     
