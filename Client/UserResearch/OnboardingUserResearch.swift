@@ -56,12 +56,12 @@ class OnboardingUserResearch {
         }
     }
     
-    func updateValue(onboardingScreenType: Bool) {
+    func updateValue(onboardingScreenType: OnboardingScreenType) {
         // For LP variable below is the convention
         // we are going to follow
         // True = Current Onboarding Screen
         // False = New Onboarding Screen
-        self.onboardingScreenType = onboardingScreenType ? .versionV1 : .versionV2
+        self.onboardingScreenType = onboardingScreenType
     }
     
     func updateTelemetry() {

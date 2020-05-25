@@ -2011,7 +2011,7 @@ extension BrowserViewController {
         // and get that from the server
         guard LeanPlumClient.shared.getSettings() != nil else {
             Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | Condition: Leanplum is disabled", tag: .leanplum, severity: .debug, description: "Condition: Leanplum is disabled")
-            self.onboardingUserResearch?.updateValue(onboardingScreenType: true)
+            self.onboardingUserResearch?.updateValue(onboardingScreenType: .versionV1)
             showProperIntroVC()
             return
         }
@@ -2024,7 +2024,8 @@ extension BrowserViewController {
             LeanPlumClient.shared.onStartLPVariable = nil
             print("lp Variable from server \(lpVariableValue)")
             self.onboardingUserResearch?.updateTelemetry()
-            self.onboardingUserResearch?.updateValue(onboardingScreenType: lpVariable?.boolValue() ?? true)
+            let screenType: OnboardingScreenType = !(lpVariable?.boolValue() ?? false) ? .versionV2 : .versionV1
+            self.onboardingUserResearch?.updateValue(onboardingScreenType: screenType)
             self.showProperIntroVC()
         }
         // Conditon: Leanplum server too slow
@@ -2039,10 +2040,10 @@ extension BrowserViewController {
             }
             // Refactor: lpVariable value to be .varient1 
             let lpStartStatus = LeanPlumClient.shared.didReceiveLPStartResponse
-            var lpVariableValue = true
+            var lpVariableValue: OnboardingScreenType = .versionV1
             // Condition: LP has already started but we missed onStartLPVariable callback
             if lpStartStatus, let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
-                lpVariableValue = boolValue
+                lpVariableValue = boolValue ? .versionV1 : .versionV2
                 self.onboardingUserResearch?.updateTelemetry()
                 Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | missed onStartLPVariable callback", tag: .leanplum, severity: .debug, description: "missed onStartLPVariable callback")
             } else {
