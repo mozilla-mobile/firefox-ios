@@ -5,6 +5,7 @@
 import Foundation
 import SnapKit
 import Shared
+import Account
 
 /// Reflects parent page that launched FirefoxAccountSignInViewController
 enum FxASignInParentType {
@@ -40,7 +41,18 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.attributedText = Strings.FxASignin_QRInstructions.attributedText(boldString: "firefox.com/pair", font: DynamicFontHelper().MediumSizeRegularWeightAS)
+
+        let placeholder = "firefox.com/pair"
+
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { manager in
+            manager.getPairingAuthorityURL { result in
+                guard let url = try? result.get(), let host = url.host else { return }
+                let shortUrl = host + url.path // "firefox.com" + "/pair"
+                let msg = Strings.FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
+                label.attributedText = msg.attributedText(boldString: shortUrl, font: DynamicFontHelper().MediumSizeRegularWeightAS)
+            }
+        }
+
         return label
     }()
     

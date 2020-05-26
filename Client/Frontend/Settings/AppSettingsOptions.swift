@@ -883,7 +883,7 @@ class PrivacyPolicySetting: Setting {
 class ChinaSyncServiceSetting: Setting {
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
     var prefs: Prefs { return profile.prefs }
-    let prefKey = "useChinaSyncService"
+    let prefKey = PrefsKeys.KeyEnableChinaSyncService
     let profile: Profile
     let settings: UIViewController
 
