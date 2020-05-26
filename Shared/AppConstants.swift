@@ -127,4 +127,17 @@ public struct AppConstants {
         return true
         #endif
     }()
+    
+    public static let CHRONOLOGICAL_TABS: Bool = {
+        #if MOZ_CHANNEL_RELEASE
+        return false
+        #elseif MOZ_CHANNEL_BETA
+        return false
+        #elseif MOZ_CHANNEL_FENNEC
+        return true
+        #else
+        return false
+        #endif
+    }()
+
 }
