@@ -102,9 +102,6 @@ def add_bitrise_command(config, tasks):
         yield task
 
 
-_EXPECTED_NUMBER_OF_SCREENSHOTS_PER_LOCALE = 54
-
-
 @transforms.add
 def add_screenshot_checks_command(config, tasks):
     for task in tasks:
@@ -114,7 +111,7 @@ def add_screenshot_checks_command(config, tasks):
             "python3",
             "taskcluster/scripts/check-screenshots.py",
             "--artifacts-directory", _ARTIFACTS_DIRECTORY,
-            "--screenshots-per-locale", str(_EXPECTED_NUMBER_OF_SCREENSHOTS_PER_LOCALE),
+            "--screenshots-configuration", "l10n-screenshots-config.yml",
         ]
 
         for locale in task["attributes"]["chunk_locales"]:
