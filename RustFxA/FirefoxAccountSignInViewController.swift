@@ -42,20 +42,17 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
 
-        let globalUrl = "firefox.com/pair"
-        let chinaUrl = "firefox.com.cn/pair" // China uses a different pairing screen
+        let placeholder = "firefox.com/pair"
 
-        let msg: String
-        let boldString: String // for specifying the substring that becomes bold
-        if RustFirefoxAccounts.shared.isChinaSyncServiceEnabled {
-            msg = Strings.FxASignin_QRInstructions.replaceFirstOccurrence(of: globalUrl, with: chinaUrl)
-            boldString = chinaUrl
-        } else {
-            msg = Strings.FxASignin_QRInstructions
-            boldString = globalUrl
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { manager in
+            manager.getPairingAuthorityURL { result in
+                guard let url = try? result.get(), let host = url.host else { return }
+                let shortUrl = host + url.path // "firefox.com" + "/pair"
+                let msg = Strings.FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
+                label.attributedText = msg.attributedText(boldString: shortUrl, font: DynamicFontHelper().MediumSizeRegularWeightAS)
+            }
         }
 
-        label.attributedText = msg.attributedText(boldString: boldString, font: DynamicFontHelper().MediumSizeRegularWeightAS)
         return label
     }()
     
