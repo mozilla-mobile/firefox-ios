@@ -9,10 +9,10 @@ import SwiftKeychainWrapper
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 // Used to ignore unknown classes when de-archiving
-final class Unknown: NSObject, NSCoding  {
+final class Unknown: NSObject, NSCoding {
     func encode(with coder: NSCoder) {}
     init(coder aDecoder: NSCoder) {
-        super.init();
+        super.init()
     }
 }
 
@@ -104,11 +104,19 @@ open class RustFirefoxAccounts {
         }
     }
 
+    public var isChinaSyncServiceEnabled: Bool {
+        return RustFirefoxAccounts.prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
+    }
+
     private func createAccountManager() -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
         assert(prefs != nil)
-        let server = prefs?.intForKey(PrefsKeys.UseStageServer) == 1 ? FxAConfig.Server.stage :
-           (prefs?.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release)
+        let server: FxAConfig.Server
+        if prefs?.intForKey(PrefsKeys.UseStageServer) == 1 {
+            server = FxAConfig.Server.stage
+        } else {
+            server = isChinaSyncServiceEnabled ? FxAConfig.Server.china : FxAConfig.Server.release
+        }
 
         let config: FxAConfig
         let useCustom = prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false || prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false
