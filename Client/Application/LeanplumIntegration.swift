@@ -127,34 +127,23 @@ class LeanPlumClient {
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
     private var setupType: LPSetupType = .none
-    var didReceiveLPStartResponse: Bool = false
+    // Boolean variable to indicate whether leanplum has finished starting-up
+    var startCallFinished: Bool = false
+    // Closure delegate for when leanplum has finished starting-up
+    var finishedStartingLeanplum: (() -> Void)?
     // leanplumDeviceId is what comes directly from leanplum and
     // should be used and kept for showing the device ID in the
     // debug menu so we can easily find the user in LP dashboard
     var leanplumDeviceId: String? {
         return Leanplum.deviceId()
     }
-    // Closure delegate for when leanplum start finishes
-    var onStartLPVariable: ((LPVar?) -> Void)?
-    // This is only added for testing purpose for issue #6656.
-    // In general we get device ID from IDFV and #6656
-    var phoneDeviceId: String {
-        set(value) {
-                UserDefaults.standard.set(value, forKey: LPDeviceIDKey)
-        }
-        get {
-            return UserDefaults.standard.string(forKey: LPDeviceIDKey) ?? ""
-        }
-    }
-    let onboardingABTestVariable = LPVariables.showOnboardingScreenAB
+    // Used for sentry logging to know about the current state of leanplum execution
     var lpState: LPState = .disabled
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
     private var useFxAPrePush = LPVar.define("useFxAPrePush", with: false)
     var enablePocketVideo = LPVar.define("pocketVideo", with: false)
-
-   // var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
 
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
@@ -203,21 +192,6 @@ class LeanPlumClient {
             log.error("LeanplumIntegration - Could not be started")
             return
         }
-        
-        // To be removed after beta testing and just use IDFV
-        // For now adding a self generated user device id because on firefox beta
-        // device id always remains the same for iPhone
-        if phoneDeviceId.isEmpty && UIDevice.current.userInterfaceIdiom == .phone {
-            phoneDeviceId = UUID().uuidString
-            Leanplum.setDeviceId(phoneDeviceId)
-        } else {
-            // For any other device (iPad) we use IDFV and not the phone device ID
-            // on iPad the IDFV always changes on deleting and re-installing the app
-            // hence we don't need to have a newly generated UUID. Also, since IDFV is
-            // for app group it will always be same for when user re-launches the app.
-            Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
-        }
-        
         if UIDevice.current.name.contains("MozMMADev") {
             log.info("LeanplumIntegration - Setting up for Development")
             Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
@@ -228,11 +202,6 @@ class LeanPlumClient {
             Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
             setupType = .production
         }
-        
-        // To be removed after beta testing
-        // Creating a beta user id for Leanplum testing as recommedded by LP Engineers
-        let userID = UUID().uuidString + "-Beta"
-        setupType = .debug
         
         Leanplum.syncResourcesAsync(true)
 
@@ -248,13 +217,13 @@ class LeanPlumClient {
         self.setupCustomTemplates()
         lpState = .willStart
         // To be removed after after beta testing - userID value
-        Leanplum.start(withUserId: userID, userAttributes: attributes, responseHandler: { _ in
+        Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
-            self.didReceiveLPStartResponse = true
+            self.startCallFinished = true
             // https://docs.leanplum.com/reference#callbacks
             // According to the doc all variables should be synced when lp start finishes
             // Relying on this fact and sending the updated AB test variable 
-            self.onStartLPVariable?(self.onboardingABTestVariable)
+            self.finishedStartingLeanplum?()
             
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.

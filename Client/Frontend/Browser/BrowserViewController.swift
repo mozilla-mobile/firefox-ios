@@ -2018,13 +2018,13 @@ extension BrowserViewController {
         // Condition: Update from leanplum server
         // Get the A/B test variant from leanplum server
         // and update onboarding user reasearch
-        LeanPlumClient.shared.onStartLPVariable = {(lpVariable) -> () in
-            let lpVariableValue = "\(String(describing: lpVariable?.boolValue()))"
-            Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | Condition: Received update from LP server with variable value as - \(lpVariableValue)", tag: .leanplum, severity: .debug, description: "Condition: Received update from LP server with variable value as - \(lpVariableValue)")
-            LeanPlumClient.shared.onStartLPVariable = nil
-            print("lp Variable from server \(lpVariableValue)")
+        LeanPlumClient.shared.finishedStartingLeanplum = {
+            let lpVariableValue = LPVariables.showOnboardingScreenAB?.boolValue()
+            Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | Condition: Received update from LP server with variable value as - \(String(describing: lpVariableValue))", tag: .leanplum, severity: .debug, description: "Condition: Received update from LP server with variable value as - \(String(describing: lpVariableValue))")
+            LeanPlumClient.shared.finishedStartingLeanplum = nil
+            print("lp Variable from server \(String(describing: lpVariableValue))")
             self.onboardingUserResearch?.updateTelemetry()
-            let screenType: OnboardingScreenType = !(lpVariable?.boolValue() ?? false) ? .versionV2 : .versionV1
+            let screenType: OnboardingScreenType = !(lpVariableValue ?? false) ? .versionV2 : .versionV1
             self.onboardingUserResearch?.updateValue(onboardingScreenType: screenType)
             self.showProperIntroVC()
         }
@@ -2035,11 +2035,10 @@ extension BrowserViewController {
         // Ex. Internet connection is unstable due to which
         // leanplum isn't loading or taking too much time
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            guard LeanPlumClient.shared.onStartLPVariable != nil else {
+            guard LeanPlumClient.shared.finishedStartingLeanplum != nil else {
                 return
             }
-            // Refactor: lpVariable value to be .varient1 
-            let lpStartStatus = LeanPlumClient.shared.didReceiveLPStartResponse
+            let lpStartStatus = LeanPlumClient.shared.startCallFinished
             var lpVariableValue: OnboardingScreenType = .versionV1
             // Condition: LP has already started but we missed onStartLPVariable callback
             if lpStartStatus, let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
