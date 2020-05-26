@@ -61,8 +61,8 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     }
     
     @objc func onCloseButton(_ sender: UIButton) {
-        let buttonPosition = sender.convert(CGPoint(), to:tableView)
-        if let indexPath = tableView.indexPathForRow(at:buttonPosition) {
+        let buttonPosition = sender.convert(CGPoint(), to: tableView)
+        if let indexPath = tableView.indexPathForRow(at: buttonPosition) {
             viewModel.removeTab(forIndex: indexPath)
         }
     }
