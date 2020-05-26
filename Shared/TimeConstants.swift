@@ -57,6 +57,10 @@ extension Date {
     public static func fromTimestamp(_ timestamp: Timestamp) -> Date {
         return Date(timeIntervalSince1970: Double(timestamp) / 1000)
     }
+    
+    public func toTimestamp() -> Timestamp {
+        return UInt64(1000 * timeIntervalSince1970)
+    }
 
     public static func fromMicrosecondTimestamp(_ microsecondTimestamp: MicrosecondTimestamp) -> Date {
         return Date(timeIntervalSince1970: Double(microsecondTimestamp) / 1000000)
@@ -105,6 +109,26 @@ extension Date {
 
     public func toRFC822String() -> String {
         return rfc822DateFormatter.string(from: self)
+    }
+}
+
+extension Date {
+    public static var yesterday: Date { return Date().dayBefore }
+    public static var tomorrow: Date { return Date().dayAfter }
+    public var lastWeek: Date {
+        return Calendar.current.date(byAdding: .day, value: -8, to: noon) ?? Date()
+    }
+    public var older: Date {
+        return Calendar.current.date(byAdding: .day, value: -20, to: noon) ?? Date()
+    }
+    public var dayBefore: Date {
+        return Calendar.current.date(byAdding: .day, value: -1, to: noon) ?? Date()
+    }
+    public var dayAfter: Date {
+        return Calendar.current.date(byAdding: .day, value: 1, to: noon) ?? Date()
+    }
+    public var noon: Date {
+        return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self) ?? Date()
     }
 }
 
