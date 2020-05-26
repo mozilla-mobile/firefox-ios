@@ -1327,14 +1327,17 @@ extension BrowserViewController: URLBarDelegate {
 
         updateFindInPageVisibility(visible: false)
 
-        let tabTrayController = TabTrayControllerV1(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
+        if AppConstants.CHRONOLOGICAL_TABS {
+            navigationController?.pushViewController(TabTrayV2ViewController(), animated: false)
+        } else {
+            let tabTrayController = TabTrayControllerV1(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
+            navigationController?.pushViewController(tabTrayController, animated: true)
+            self.tabTrayController = tabTrayController
+        }
 
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
         }
-        
-        navigationController?.pushViewController(tabTrayController, animated: true)
-        self.tabTrayController = tabTrayController
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {

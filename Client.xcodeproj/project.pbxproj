@@ -73,6 +73,9 @@
 		23BEA769251A99ED00A014BF /* NewYorkMedium-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA763251A99E200A014BF /* NewYorkMedium-Regular.otf */; };
 		23BEA76A251A99ED00A014BF /* NewYorkMedium-RegularItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 23BEA764251A99E200A014BF /* NewYorkMedium-RegularItalic.otf */; };
 		266148AAA339653218990703 /* ErrorPages.strings in Resources */ = {isa = PBXBuildFile; fileRef = 904F48CABE595981535FCCEB /* ErrorPages.strings */; };
+		1FCF5C2524351CB4003AB95D /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCF5C2324351CB4003AB95D /* Glean.framework */; };
+		23AE36632475A0EF00ACB7BA /* TabTrayV2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23AE36612475A0EF00ACB7BA /* TabTrayV2ViewController.swift */; };
+		23F2C36A244E463C00FA4496 /* TabTrayV2ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23F2C369244E463C00FA4496 /* TabTrayV2ViewModel.swift */; };
 		274A36C9239EB94000A21587 /* LibraryPanelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36C8239EB94000A21587 /* LibraryPanelButton.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
 		274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */; };
@@ -1479,6 +1482,9 @@
 		26E54FFEAC16F93DEDBBE166 /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		26F9438EAC1F1D7449D42BB2 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/LoginManager.strings"; sourceTree = "<group>"; };
 		272F476F88D45C79446A586A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		1FCF5C2324351CB4003AB95D /* Glean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Glean.framework; path = Carthage/Build/iOS/Glean.framework; sourceTree = "<group>"; };
+		23AE36612475A0EF00ACB7BA /* TabTrayV2ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabTrayV2ViewController.swift; sourceTree = "<group>"; };
+		23F2C369244E463C00FA4496 /* TabTrayV2ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabTrayV2ViewModel.swift; sourceTree = "<group>"; };
 		274A36C8239EB94000A21587 /* LibraryPanelButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelButton.swift; sourceTree = "<group>"; };
 		274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelContextMenu.swift; sourceTree = "<group>"; };
 		274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryViewController+LibraryPanelDelegate.swift"; sourceTree = "<group>"; };
@@ -4221,6 +4227,15 @@
 			path = TopSites;
 			sourceTree = "<group>";
 		};
+		23F2C365244E44FA00FA4496 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				23AE36612475A0EF00ACB7BA /* TabTrayV2ViewController.swift */,
+				23F2C369244E463C00FA4496 /* TabTrayV2ViewModel.swift */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
 		274A36D1239EBAD600A21587 /* LibraryViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -5220,6 +5235,7 @@
 		D3A994941A368691008AD1AC /* Browser */ = {
 			isa = PBXGroup;
 			children = (
+				23F2C365244E44FA00FA4496 /* Tabs */,
 				D38F02D01C05127100175932 /* Authenticator.swift */,
 				C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */,
 				C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */,
@@ -7566,6 +7582,7 @@
 				E4B423DD1ABA0318007E66C8 /* ReaderModeHandlers.swift in Sources */,
 				D308E4E41A5306F500842685 /* SearchEngines.swift in Sources */,
 				048B4C8924A53F81001B56E8 /* UIButtonExtensions.swift in Sources */,
+				23AE36632475A0EF00ACB7BA /* TabTrayV2ViewController.swift in Sources */,
 				3BCE6D3C1CEB9E4D0080928C /* ThirdPartySearchAlerts.swift in Sources */,
 				745DAB301CDAAFAA00D44181 /* RecentlyClosedTabsPanel.swift in Sources */,
 				D0B9483D22A18B78002F4AA1 /* TextFieldTableViewCell.swift in Sources */,
@@ -7623,6 +7640,7 @@
 				74821FC51DB56A2500EEEA72 /* OpenWithSettingsViewController.swift in Sources */,
 				D3B6923D1B9F9444004B87A4 /* FindInPageBar.swift in Sources */,
 				2F44FC721A9E840300FD20CC /* SettingsNavigationController.swift in Sources */,
+				23F2C36A244E463C00FA4496 /* TabTrayV2ViewModel.swift in Sources */,
 				74821F8E1DAD8F1400EEEA72 /* FirefoxHomeHighlightCell.swift in Sources */,
 				E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */,
 				D0E89A2920910917001CE5C7 /* DownloadsPanel.swift in Sources */,
