@@ -216,9 +216,9 @@ class LeanPlumClient {
 
         self.setupCustomTemplates()
         lpState = .willStart
-        // To be removed after after beta testing - userID value
         Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
+            assert(Thread.isMainThread)
             self.startCallFinished = true
             // https://docs.leanplum.com/reference#callbacks
             // According to the doc all variables should be synced when lp start finishes
