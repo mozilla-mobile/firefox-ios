@@ -58,7 +58,7 @@ class TabTrayV2ViewModel: NSObject {
     }
 
     func timestampToSection(_ tab: Tab) -> TabSection {
-        let tabDate =  Date.fromTimestamp(tab.lastExecutedTime ?? Date.now())
+        let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? Date.now())
         let now = Date()
 
         if tabDate <= Date().lastWeek {

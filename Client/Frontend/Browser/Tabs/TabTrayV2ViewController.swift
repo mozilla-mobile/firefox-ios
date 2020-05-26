@@ -7,10 +7,10 @@ import SnapKit
 import UIKit
 
 struct TabTrayV2ControllerUX {
-    static let CornerRadius = CGFloat(4.0)
-    static let ScreenshotMarginLeftRight = CGFloat(20.0)
-    static let ScreenshotMarginTopBottom = CGFloat(6.0)
-    static let TextMarginTopBottom = CGFloat(18.0)
+    static let cornerRadius = CGFloat(4.0)
+    static let screenshotMarginLeftRight = CGFloat(20.0)
+    static let screenshotMarginTopBottom = CGFloat(6.0)
+    static let textMarginTopBottom = CGFloat(18.0)
 }
 
 class TabTrayV2ViewController: UIViewController{
@@ -47,11 +47,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TabTableViewCell.identifier, for: indexPath)
-        guard let tabCell = cell as? TabTableViewCell,
-            let imageView = tabCell.imageView,
-            let textLabel = tabCell.textLabel,
-            let detailTextLabel = tabCell.detailTextLabel
-            else { return cell }
+        guard let tabCell = cell as? TabTableViewCell else { return cell }
         tabCell.closeButton.addTarget(self, action: #selector(onCloseButton(_ :)), for: .touchUpInside)
         
         viewModel.configure(cell: tabCell, for: indexPath)
@@ -105,38 +101,38 @@ class TabTableViewCell: UITableViewCell {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         guard let screenshotView = imageView,
             let websiteTitle = textLabel,
-            let url = detailTextLabel
+            let urlLabel = detailTextLabel
             else { return }
         
         screenshotView.contentMode = .scaleAspectFill
         screenshotView.clipsToBounds = true
-        screenshotView.layer.cornerRadius = TabTrayV2ControllerUX.CornerRadius
+        screenshotView.layer.cornerRadius = TabTrayV2ControllerUX.cornerRadius
         screenshotView.layer.borderWidth = 1
         screenshotView.layer.borderColor = UIColor.Photon.Grey30.cgColor
         
         websiteTitle.lineBreakMode = .byWordWrapping
 
-        url.textColor = UIColor.Photon.Grey40
+        urlLabel.textColor = UIColor.Photon.Grey40
         
         screenshotView.snp.makeConstraints { make in
             make.height.width.equalTo(68)
-            make.leading.equalToSuperview().offset(TabTrayV2ControllerUX.ScreenshotMarginLeftRight)
-            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.ScreenshotMarginTopBottom)
-            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.ScreenshotMarginTopBottom)
+            make.leading.equalToSuperview().offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
+            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.screenshotMarginTopBottom)
+            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.screenshotMarginTopBottom)
         }
         
         websiteTitle.snp.makeConstraints { make in
-            make.leading.equalTo(imageView!.snp.trailing).offset(TabTrayV2ControllerUX.ScreenshotMarginLeftRight)
-            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.TextMarginTopBottom)
-            make.bottom.equalTo(detailTextLabel!.snp.top)
+            make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
+            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.textMarginTopBottom)
+            make.bottom.equalTo(urlLabel.snp.top)
             make.trailing.equalToSuperview().offset(-16)
         }
         
-        url.snp.makeConstraints { make in
-            make.leading.equalTo(imageView!.snp.trailing).offset(TabTrayV2ControllerUX.ScreenshotMarginLeftRight)
+        urlLabel.snp.makeConstraints { make in
+            make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
             make.trailing.equalToSuperview()
-            make.top.equalTo(textLabel!.snp.bottom).offset(3)
-            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.TextMarginTopBottom)
+            make.top.equalTo(websiteTitle.snp.bottom).offset(3)
+            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.textMarginTopBottom)
         }
     }
     
