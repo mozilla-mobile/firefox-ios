@@ -29,7 +29,6 @@ private extension UITableView {
 private let CellReuseIdentifier = "cell-reuse-id"
 private let SectionHeaderId = "section-header-id"
 private let LoginsSettingsSection = 0
-private let breachAlertsManager = BreachAlertsManager()
 
 class LoginListViewController: SensitiveViewController {
 
@@ -251,12 +250,6 @@ class LoginListViewController: SensitiveViewController {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
         profile.logins.searchLoginsWithQuery(query) >>== { logins in
             deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
-
-            // consider taking logins to breachalertsmanager from here
-            // which indexes need a special layout? to display breached login
-            breachAlertsManager.loadBreaches()
-            breachAlertsManager.compareToBreaches(logins.asArray())
-
             succeed()
         }
         return deferred
