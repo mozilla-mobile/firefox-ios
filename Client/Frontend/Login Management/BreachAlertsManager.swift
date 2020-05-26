@@ -9,6 +9,7 @@
 import Foundation
 import Storage // or whichever module has the LoginsRecord class
 
+/// Breach structure decoded from JSON
 struct BreachRecord: Codable {
     var name: String
     var title: String
@@ -27,8 +28,7 @@ struct BreachRecord: Codable {
     var logoUrl: String?
 }
 
-/* principles: modular and flexible */
-// class so that we don't make copies of large vars that might slow things down
+/// A manager for the user's breached login information, if any.
 public class BreachAlertsManager {
 
     //
@@ -41,9 +41,7 @@ public class BreachAlertsManager {
     //
     // MARK: - Internal Methods
     //
-    /**
-     Loads breaches from Monitor endpoint.
-     */
+    /// Loads breaches from Monitor endpoint.
     public func loadBreaches() {
         guard let url = URL(string: endpointURL) else {
             return
@@ -94,13 +92,9 @@ public class BreachAlertsManager {
 
     }
 
-
-    /**
-     Compares a list of logins to a list of breaches and returns breached logins.
-        @param logins: an array of Any login information classes.
-            Any is used for flexibility - if this file is placed in another project,
-            the function will be able to take any object structure in.
-    **/
+    /// Compares a list of logins to a list of breaches and returns breached logins.
+    ///    - Parameters:
+    ///         - logins: a list of logins to compare breaches to
     func compareToBreaches(_ logins: [Any])  {
 
         for entry in logins {
