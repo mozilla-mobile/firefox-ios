@@ -9,10 +9,10 @@ import SwiftKeychainWrapper
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 // Used to ignore unknown classes when de-archiving
-final class Unknown: NSObject, NSCoding  {
+final class Unknown: NSObject, NSCoding {
     func encode(with coder: NSCoder) {}
     init(coder aDecoder: NSCoder) {
-        super.init();
+        super.init()
     }
 }
 
