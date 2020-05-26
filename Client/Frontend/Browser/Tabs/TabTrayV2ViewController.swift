@@ -145,8 +145,6 @@ class TabTableViewCell: UITableViewCell {
         screenshotView.layer.cornerRadius = TabTrayV2ControllerUX.cornerRadius
         screenshotView.layer.borderWidth = 1
         screenshotView.layer.borderColor = UIColor.Photon.Grey30.cgColor
-        
-        websiteTitle.lineBreakMode = .byWordWrapping
 
         urlLabel.textColor = UIColor.Photon.Grey40
         
