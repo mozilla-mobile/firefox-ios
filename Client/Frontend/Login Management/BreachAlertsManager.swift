@@ -9,10 +9,6 @@
 import Foundation
 import Storage // or whichever module has the LoginsRecord class
 
-/* principles: modular and flexible */
-struct EndpointResponse: Codable {
-    var results: [BreachRecord]
-}
 struct BreachRecord: Codable {
     var name: String
     var title: String
@@ -31,19 +27,15 @@ struct BreachRecord: Codable {
     var logoUrl: String?
 }
 
-
+/* principles: modular and flexible */
 // class so that we don't make copies of large vars that might slow things down
 public class BreachAlertsManager {
-    //
-    // MARK: - Constants
-    //
-    let urlSession = URLSession(configuration: .default)
 
     //
     // MARK: - Variables and Properties
     //
     var dataTask: URLSessionDataTask?
-    var endpointComponents = URLComponents()
+    var endpointURL = "https://monitor.firefox.com/hibp/breaches"
     var breaches: [BreachRecord] = []
 
     //
@@ -53,7 +45,7 @@ public class BreachAlertsManager {
      Loads breaches from Monitor endpoint.
      */
     public func loadBreaches() {
-        guard let url = URL(string: "https://monitor.firefox.com/hibp/breaches") else {
+        guard let url = URL(string: endpointURL) else {
             return
         }
 
@@ -110,30 +102,35 @@ public class BreachAlertsManager {
         @param logins: an array of Any login information classes.
             Any is used for flexibility - if this file is placed in another project,
             the function will be able to take any object structure in.
-        !!! can be changed to [LoginRecords] or Deferred variants
-
-     ...for now, tries to read/return any object passed from LoginsListVC
     **/
-    func compareBreached(_ logins: [Any])  {
-
+    func compareToBreaches(_ logins: [Any])  {
 
         for entry in logins {
             let login = entry as! LoginRecord; // typecast for ease of use
-//            guard login.hasMalformedHostname else {
-//                return
-//            }
 
             for breach in breaches {
+                // host check
                 let loginHostURL = URL(string: login.hostname)
-
                 if loginHostURL?.baseDomain == breach.domain {
-                    print("compareBreached(): breach: \(breach.domain)")
+                    print("compareToBreaches(): breach: \(breach.domain)")
                 }
+
+                // date check
+                let pwLastChanged = Date.init(timeIntervalSince1970: TimeInterval(login.timePasswordChanged))
+
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                let breachDate = dateFormatter.date(from: breach.breachDate)!
+
+                if pwLastChanged < breachDate {
+                    print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
+                }
+
             }
 
         }
 
-        print("compareBreached(): fin")
+        print("compareToBreaches(): fin")
 
     }
 

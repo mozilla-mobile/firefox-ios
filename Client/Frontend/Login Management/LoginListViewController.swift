@@ -255,7 +255,7 @@ class LoginListViewController: SensitiveViewController {
             // consider taking logins to breachalertsmanager from here
             // which indexes need a special layout? to display breached login
             breachAlertsManager.loadBreaches()
-            breachAlertsManager.compareBreached(logins.asArray())
+            breachAlertsManager.compareToBreaches(logins.asArray())
 
             succeed()
         }
