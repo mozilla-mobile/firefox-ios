@@ -30,7 +30,7 @@ class SyncUITests: BaseTestCase {
     }
 
     private func verifyFxASigninScreen() {
-        waitForExistence(app.navigationBars["Client.FxAWebView"], timeout: 30)
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 30)
         waitForExistence(app.webViews.textFields["Email"], timeout: 10)
         XCTAssertTrue(app.webViews.textFields["Email"].exists)
 
@@ -43,7 +43,7 @@ class SyncUITests: BaseTestCase {
 
     func testTypeOnGivenFields() {
         navigator.goto(FxASigninScreen)
-        waitForExistence(app.navigationBars["Client.FxAWebView"], timeout: 60)
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 60)
 
         // Tap Sign in without any value in email Password focus on Email
         navigator.performAction(Action.FxATapOnContinueButton)
@@ -97,8 +97,8 @@ class SyncUITests: BaseTestCase {
         navigator.goto(Intro_FxASignin)
         // QR does not work on sim but checking that the button works, no crash
         navigator.performAction(Action.OpenEmailToQR)
-        waitForExistence(app.navigationBars["Client.FirefoxAccountSignInView"], timeout: 5)
-        app.navigationBars["Client.FirefoxAccountSignInView"].buttons["Close"].tap()
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 5)
+        app.navigationBars["Turn on Sync"].buttons["Close"].tap()
         waitForExistence(app.collectionViews.cells["TopSitesCell"])
     }
 
