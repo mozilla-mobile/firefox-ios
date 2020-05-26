@@ -5,6 +5,7 @@
 import Foundation
 import SnapKit
 import Shared
+import Account
 
 /// Reflects parent page that launched FirefoxAccountSignInViewController
 enum FxASignInParentType {
@@ -40,7 +41,21 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.attributedText = Strings.FxASignin_QRInstructions.attributedText(boldString: "firefox.com/pair", font: DynamicFontHelper().MediumSizeRegularWeightAS)
+
+        let globalUrl = "firefox.com/pair"
+        let chinaUrl = "firefox.com.cn/pair" // China uses a different pairing screen
+
+        let msg: String
+        let boldString: String // for specifying the substring that becomes bold
+        if RustFirefoxAccounts.shared.isChinaSyncServiceEnabled {
+            msg = Strings.FxASignin_QRInstructions.replaceFirstOccurrence(of: globalUrl, with: chinaUrl)
+            boldString = chinaUrl
+        } else {
+            msg = Strings.FxASignin_QRInstructions
+            boldString = globalUrl
+        }
+
+        label.attributedText = msg.attributedText(boldString: boldString, font: DynamicFontHelper().MediumSizeRegularWeightAS)
         return label
     }()
     
