@@ -87,9 +87,7 @@ public class BreachAlertsManager {
                 DispatchQueue.main.async {
                     self.breaches = decoded
                 }
-
             }
-
         }
 
         dataTask?.resume()
