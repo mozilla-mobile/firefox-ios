@@ -2019,12 +2019,12 @@ extension BrowserViewController {
         // Get the A/B test variant from leanplum server
         // and update onboarding user reasearch
         LeanPlumClient.shared.finishedStartingLeanplum = {
-            let lpVariableValue = LPVariables.showOnboardingScreenAB?.boolValue()
-            Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | Condition: Received update from LP server with variable value as - \(String(describing: lpVariableValue))", tag: .leanplum, severity: .debug, description: "Condition: Received update from LP server with variable value as - \(String(describing: lpVariableValue))")
+            let showScreenA = LPVariables.showOnboardingScreenAB?.boolValue()
+            Sentry.shared.send(message: "Onboarding Research: onStartLPVariable - LP State - \(LeanPlumClient.shared.lpState.rawValue) | Condition: Received update from LP server", tag: .leanplum, severity: .debug, description: "Received update from LP server with variable value as - \(String(describing: showScreenA))")
             LeanPlumClient.shared.finishedStartingLeanplum = nil
-            print("lp Variable from server \(String(describing: lpVariableValue))")
+            print("lp Variable from server \(String(describing: showScreenA))")
             self.onboardingUserResearch?.updateTelemetry()
-            let screenType: OnboardingScreenType = !(lpVariableValue ?? false) ? .versionV2 : .versionV1
+            let screenType: OnboardingScreenType = (showScreenA ?? true) ? .versionV1 : .versionV2
             self.onboardingUserResearch?.updateValue(onboardingScreenType: screenType)
             self.showProperIntroVC()
         }
