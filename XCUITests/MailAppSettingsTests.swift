@@ -29,6 +29,7 @@ class MailAppSettingsTests: BaseTestCase {
         XCTAssertFalse(app.tables.cells.staticTexts["Airmail"].isSelected)
 
         // Check that user can go back from that setting
-        navigator.goto(HomePanelsScreen)
+        navigator.nowAt(OpenWithSettings)
+        navigator.goto(SettingsScreen)
     }
 }

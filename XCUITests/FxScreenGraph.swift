@@ -25,6 +25,7 @@ let SyncSettings = "SyncSettings"
 let FxASigninScreen = "FxASigninScreen"
 let FxCreateAccount = "FxCreateAccount"
 let FxAccountManagementPage = "FxAccountManagementPage"
+let Intro_FxASigninEmail = "Intro_FxASigninEmail"
 let HomeSettings = "HomeSettings"
 let SiriSettings = "SiriSettings"
 let PasscodeSettings = "PasscodeSettings"
@@ -183,6 +184,9 @@ class Action {
 
     static let CloseTab = "CloseTab"
     static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
+
+    static let OpenEmailToSignIn = "OpenEmailToSignIn"
+    static let OpenEmailToQR = "OpenEmailToQR"
 
     static let FxATypeEmail = "FxATypeEmail"
     static let FxATypePassword = "FxATypePassword"
@@ -617,7 +621,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         let table = app.tables.element(boundBy: 0)
 
         screenState.tap(table.cells["Sync"], to: SyncSettings, if: "fxaUsername != nil")
-        screenState.tap(table.cells["SignInToSync"], to: FxASigninScreen, if: "fxaUsername == nil")
+        screenState.tap(table.cells["SignInToSync"], to: Intro_FxASignin, if: "fxaUsername == nil")
         screenState.tap(table.cells["Search"], to: SearchSettings)
         screenState.tap(table.cells["NewTab"], to: NewTabSettings)
         screenState.tap(table.cells["Home"], to: HomeSettings)
@@ -697,8 +701,8 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
                 app.webViews.textFields.firstMatch.tap()
                 app.webViews.textFields.firstMatch.typeText(userState.fxaUsername!)
             } else {
-                app.textFields.element(boundBy: 0).tap()
-                app.textFields.element(boundBy: 0).typeText(userState.fxaUsername!)
+                app.textFields["Email"].tap()
+                app.textFields["Email"].typeText(userState.fxaUsername!)
             }
         }
         screenState.gesture(forAction: Action.FxATypePassword) { userState in
@@ -914,7 +918,12 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(Intro_FxASignin) { screenState in
-        screenState.tap(app.navigationBars["Client.FxAContentView"].buttons.element(boundBy: 0), to: HomePanelsScreen)
+        screenState.tap(app.navigationBars["Client.FirefoxAccountSignInView"].buttons.element(boundBy: 0), to: HomePanelsScreen)
+        screenState.tap(app.buttons["EmailSignIn.button"], forAction: Action.OpenEmailToSignIn, transitionTo: FxASigninScreen)
+        screenState.tap(app.buttons["QRCodeSignIn.button"], forAction: Action.OpenEmailToQR, transitionTo: Intro_FxASignin)
+
+        screenState.tap(app.navigationBars["Turn on Sync"].buttons["Settings"], to: SettingsScreen)
+        screenState.backAction = navigationControllerBackAction
     }
 
     map.addScreenState(TabTray) { screenState in
@@ -1086,7 +1095,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(BrowserTabMenu) { screenState in
         screenState.tap(app.tables.cells["menu-Settings"], to: SettingsScreen)
-        screenState.tap(app.tables.cells["menu-sync"], to: FxASigninScreen, if: "fxaUsername == nil")
+        screenState.tap(app.tables.cells["menu-sync"], to: Intro_FxASignin, if: "fxaUsername == nil")
         screenState.tap(app.tables.cells["key"], to: LoginsSettings)
         screenState.tap(app.tables.cells["menu-library"], to: HomePanel_Library)
         screenState.tap(app.tables.cells["placeholder-avatar"], to: FxAccountManagementPage)

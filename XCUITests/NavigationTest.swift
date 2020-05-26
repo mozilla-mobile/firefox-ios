@@ -76,6 +76,7 @@ class NavigationTest: BaseTestCase {
     func testTapSignInShowsFxAFromTour() {
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
         navigator.goto(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
         checkFirefoxSyncScreenShown()
 
         // Disabled due to issue 5937, not possible to tap on Close button
@@ -92,14 +93,19 @@ class NavigationTest: BaseTestCase {
         checkFirefoxSyncScreenShownViaSettings()
 
         // After that it is possible to go back to Settings
-        let settingsButton = app.navigationBars["Client.FxAWebView"].buttons["Settings"]
-        settingsButton.tap()
+        let closeButton = app.navigationBars["Client.FxAWebView"].buttons["Turn on Sync"]
+        closeButton.tap()
+        
+        let closeButtonFxView = app.navigationBars["Turn on Sync"].buttons["Settings"]
+        closeButtonFxView.tap()
     }
     
     // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        waitForExistence(app.navigationBars["Client.FxAWebView"], timeout: 20)
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+        app.buttons["EmailSignIn.button"].tap()
         waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout:20)
+
         let email = app.webViews.textFields.element(boundBy: 0)
         // Verify the placeholdervalues here for the textFields
         let mailPlaceholder = "Email"
@@ -112,10 +118,9 @@ class NavigationTest: BaseTestCase {
         navigator.goto(LibraryPanel_SyncedTabs)
 
         app.tables.buttons["Sign in to Sync"].tap()
+        waitForExistence(app.buttons["EmailSignIn.button"], timeout: 10)
+        app.buttons["EmailSignIn.button"].tap()
         checkFirefoxSyncScreenShown()
-        
-        app.navigationBars["Client.FxAWebView"].buttons["Close"].tap()
-        navigator.nowAt(LibraryPanel_SyncedTabs)
     }
 
     private func checkFirefoxSyncScreenShown() {

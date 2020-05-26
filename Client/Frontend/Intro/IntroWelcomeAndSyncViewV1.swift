@@ -25,14 +25,14 @@ import Shared
 
  */
 
-class IntroWelcomeAndSyncViewV1: UIView {
+class IntroWelcomeAndSyncViewV1: UIView, CardTheme {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
-        return UpdateViewController.theme == .dark ? .white : .black
+        return theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return UpdateViewController.theme == .dark ? .black : .white
+        return theme == .dark ? .black : .white
     }
     // Screen constants
     private let screenHeight = UIScreen.main.bounds.size.height
@@ -159,12 +159,9 @@ class IntroWelcomeAndSyncViewV1: UIView {
     
     // MARK: View setup
     private func initialViewSetup() {
-        if #available(iOS 13, *) {
-           backgroundColor = .systemBackground
-        } else {
-           backgroundColor = .white
-        }
-        
+        // Background colour setup
+        backgroundColor = fxBackgroundThemeColour
+        // View setup
         main2panel.axis = .vertical
         main2panel.distribution = .fillEqually
     
