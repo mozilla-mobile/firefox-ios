@@ -19,13 +19,8 @@ struct BreachRecord: Codable {
     var modifiedDate: String
     var pwnCount: Int
     var description: String
-    var logoPath: String
     var isVerified: Bool
     var isFabricated: Bool
-    var isSensitive: Bool
-    var isRetired: Bool
-    var isSpamList: Bool
-    var logoUrl: String?
 }
 
 /// A manager for the user's breached login information, if any.
@@ -34,8 +29,8 @@ public class BreachAlertsManager {
     //
     // MARK: - Variables and Properties
     //
-    var dataTask: URLSessionDataTask?
-    var endpointURL = "https://monitor.firefox.com/hibp/breaches"
+    fileprivate var dataTask: URLSessionDataTask?
+    fileprivate var endpointURL = "https://monitor.firefox.com/hibp/breaches"
     var breaches: [BreachRecord] = []
 
     //
@@ -46,6 +41,8 @@ public class BreachAlertsManager {
         guard let url = URL(string: endpointURL) else {
             return
         }
+
+        print("loadBreaches(): called")
 
         dataTask?.cancel()
 
@@ -69,15 +66,16 @@ public class BreachAlertsManager {
 
             // .convertFromPascalCase
             decoder.keyDecodingStrategy = .custom { keys in
-                let key = keys.last! // make sure array not empty
+                if let key = keys.last {
 
-                // string manipulation
-                let keyStr = key.stringValue
-                let pascalToCamel = keyStr.prefix(1).lowercased() + keyStr.dropFirst()
+                    // string manipulation
+                    let keyStr = key.stringValue
+                    let pascalToCamel = keyStr.prefix(1).lowercased() + keyStr.dropFirst()
 
-                // CodingKey conformity
-                let codingKeyType = type(of: key)
-                return codingKeyType.init(stringValue: pascalToCamel)!
+                    // CodingKey conformity
+                    let codingKeyType = type(of: key)
+                    return codingKeyType.init(stringValue: pascalToCamel)!
+                }
 
             }
 
@@ -95,12 +93,10 @@ public class BreachAlertsManager {
     /// Compares a list of logins to a list of breaches and returns breached logins.
     ///    - Parameters:
     ///         - logins: a list of logins to compare breaches to
-    func compareToBreaches(_ logins: [Any])  {
+    func compareToBreaches(_ logins: [LoginRecord])  {
 
-        for entry in logins {
-            let login = entry as! LoginRecord; // typecast for ease of use
-
-            for breach in breaches {
+        for login in logins {
+            for breach in self.breaches {
                 // host check
                 let loginHostURL = URL(string: login.hostname)
                 if loginHostURL?.baseDomain == breach.domain {
@@ -112,9 +108,9 @@ public class BreachAlertsManager {
 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd"
-                let breachDate = dateFormatter.date(from: breach.breachDate)!
+                let breachDate = dateFormatter.date(from: breach.breachDate)
 
-                if pwLastChanged < breachDate {
+                if let breachDate = breachDate, pwLastChanged < breachDate {
                     print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
                 }
 
@@ -123,6 +119,7 @@ public class BreachAlertsManager {
         }
 
         print("compareToBreaches(): fin")
+        }
 
     }
 
