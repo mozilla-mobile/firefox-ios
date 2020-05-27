@@ -32,6 +32,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         super.viewDidLoad()
         title = Strings.SettingsWebsiteDataTitle
         navigationController?.setToolbarHidden(true, animated: false)
+        navigationController?.navigationBar.backgroundColor = UIColor.theme.tableView.headerBackground
 
         tableView = UITableView()
         tableView.dataSource = self
@@ -80,6 +81,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         self.searchController = searchController
 
         definesPresentationContext = true
+        addTopView()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -246,5 +248,21 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         siteRecords = []
         showMoreButtonEnabled = false
         tableView.reloadData()
+    }
+    
+    private func addTopView() {
+        
+        let topView: UIView = {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.backgroundColor = UIColor.theme.tableView.headerBackground
+            return view
+        }()
+        
+        view.addSubview(topView)
+        topView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        topView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        topView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        topView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor).isActive = true
     }
 }
