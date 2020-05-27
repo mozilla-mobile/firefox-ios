@@ -251,7 +251,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     }
     
     private func addTopView() {
-        
         let topView: UIView = {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = false
