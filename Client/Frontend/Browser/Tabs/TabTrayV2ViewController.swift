@@ -78,41 +78,7 @@ extension TabTrayV2ViewController: UITableViewDelegate {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: sectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView, viewModel.numberOfRowsInSection(section: section) != 0 else {
             return nil
         }
-
-        let section = TabSection(rawValue: section)
-        let sectionHeader: String
-        let date: String
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .none
-        dateFormatter.locale = Locale(identifier: Locale.current.identifier)
-        
-        let dateIntervalFormatter = DateIntervalFormatter()
-        dateIntervalFormatter.dateStyle = .medium
-        dateIntervalFormatter.timeStyle = .none
-        dateIntervalFormatter.locale = Locale(identifier: Locale.current.identifier)
-        
-        switch section {
-        case .today:
-            sectionHeader = Strings.TabTrayV2TodayHeader
-            date = dateFormatter.string(from: Date())
-        case .yesterday:
-            sectionHeader = Strings.TabTrayV2YesterdayHeader
-            date = dateFormatter.string(from: Date.yesterday)
-        case .lastWeek:
-            sectionHeader = Strings.TabTrayV2LastWeekHeader
-            date = dateIntervalFormatter.string(from: Date().lastWeek, to: Date(timeInterval: 6.0 * 24.0 * 3600.0, since: Date().lastWeek))
-        case .older:
-            sectionHeader = Strings.TabTrayV2OlderHeader
-            date = ""
-        default:
-            sectionHeader = ""
-            date = ""
-        }
-        
-        headerView.titleLabel.text = (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
-
+        headerView.titleLabel.text = viewModel.getSectionDateHeader(section)
         headerView.applyTheme()
         return headerView
     }

@@ -61,6 +61,42 @@ class TabTrayV2ViewModel: NSObject {
         }
     }
     
+    func getSectionDateHeader(_ section: Int) -> String {
+        let section = TabSection(rawValue: section)
+        let sectionHeader: String
+        let date: String
+        let dateFormatter = DateFormatter()
+        let dateIntervalFormatter = DateIntervalFormatter()
+        
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale(identifier: Locale.current.identifier)
+        
+        dateIntervalFormatter.dateStyle = .medium
+        dateIntervalFormatter.timeStyle = .none
+        dateIntervalFormatter.locale = Locale(identifier: Locale.current.identifier)
+        
+        switch section {
+        case .today:
+            sectionHeader = Strings.TabTrayV2TodayHeader
+            date = dateFormatter.string(from: Date())
+        case .yesterday:
+            sectionHeader = Strings.TabTrayV2YesterdayHeader
+            date = dateFormatter.string(from: Date.yesterday)
+        case .lastWeek:
+            sectionHeader = Strings.TabTrayV2LastWeekHeader
+            date = dateIntervalFormatter.string(from: Date().lastWeek, to: Date(timeInterval: 6.0 * 24.0 * 3600.0, since: Date().lastWeek))
+        case .older:
+            sectionHeader = Strings.TabTrayV2OlderHeader
+            date = ""
+        default:
+            sectionHeader = ""
+            date = ""
+        }
+        
+        return (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
+    }
+    
     // The user has tapped the close button or has swiped away the cell
     func removeTab(forIndex index: IndexPath) {
         guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?.at(index.row) else {
