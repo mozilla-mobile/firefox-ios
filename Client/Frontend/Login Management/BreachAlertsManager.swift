@@ -8,6 +8,7 @@
 
 import Foundation
 import Storage // or whichever module has the LoginsRecord class
+import Shared // or whichever module has the Maybe class
 
 /// Breach structure decoded from JSON
 struct BreachRecord: Codable {
@@ -15,79 +16,46 @@ struct BreachRecord: Codable {
     var title: String
     var domain: String
     var breachDate: String
-    var addedDate: String
-    var modifiedDate: String
-    var pwnCount: Int
     var description: String
-    var isVerified: Bool
-    var isFabricated: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case name = "Name"
+        case title = "Title"
+        case domain = "Domain"
+        case breachDate = "BreachDate"
+        case description = "Description"
+    }
 }
 
 /// A manager for the user's breached login information, if any.
-public class BreachAlertsManager {
-
-    //
-    // MARK: - Variables and Properties
-    //
-    fileprivate var dataTask: URLSessionDataTask?
-    fileprivate var endpointURL = "https://monitor.firefox.com/hibp/breaches"
+final public class BreachAlertsManager {
     var breaches: [BreachRecord] = []
+    var breachAlertsClient: BreachAlertsClientProtocol
 
-    //
-    // MARK: - Internal Methods
-    //
-    /// Loads breaches from Monitor endpoint.
-    public func loadBreaches() {
-        guard let url = URL(string: endpointURL) else {
-            return
-        }
+    init(_ client: BreachAlertsClientProtocol = BreachAlertsClient()) {
+        self.breachAlertsClient = client
+    }
 
+    /// Loads breaches from Monitor endpoint using BreachAlertsClient.
+    ///    - Parameters:
+    ///         - completion: a completion handler for the processed breaches
+    func loadBreaches(completion: @escaping (Maybe<[BreachRecord]>) -> Void) {
         print("loadBreaches(): called")
 
-        dataTask?.cancel()
+        DispatchQueue.global(qos: .background).async {
+            self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
+                if maybeData.isSuccess, let data = maybeData.successValue {
+                    let decoder = JSONDecoder()
 
-        dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard self.validatedHTTPResponse(response) != nil else {
-                print("loadBreaches(): invalid HTTP response")
-                return
-            }
-
-            if let error = error {
-                print("loadBreaches(): error: \(error)")
-                return
-            }
-
-            guard let data = data, !data.isEmpty else {
-                print("loadBreaches(): invalid data")
-                return
-            }
-
-            let decoder = JSONDecoder()
-
-            // .convertFromPascalCase
-            decoder.keyDecodingStrategy = .custom { keys in
-                if let key = keys.last {
-
-                    // string manipulation
-                    let keyStr = key.stringValue
-                    let pascalToCamel = keyStr.prefix(1).lowercased() + keyStr.dropFirst()
-
-                    // CodingKey conformity
-                    let codingKeyType = type(of: key)
-                    return codingKeyType.init(stringValue: pascalToCamel)!
-                }
-
-            }
-
-            if let decoded = try? decoder.decode([BreachRecord].self, from: data) {
-                DispatchQueue.main.async {
-                    self.breaches = decoded
+                    if let decoded = try? decoder.decode([BreachRecord].self, from: data) {
+                        self.breaches = decoded
+                        completion(Maybe(success: self.breaches))
+                    }
+                } else {
+                    completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches")))
                 }
             }
         }
-
-        dataTask?.resume()
-
     }
 
     /// Compares a list of logins to a list of breaches and returns breached logins.
@@ -95,52 +63,33 @@ public class BreachAlertsManager {
     ///         - logins: a list of logins to compare breaches to
     func compareToBreaches(_ logins: [LoginRecord])  {
 
+        if self.breaches.count <= 0 {
+            print("compareToBreaches(): empty breach list")
+            return
+        }
+
+        // TODO: optimize this loop
         for login in logins {
             for breach in self.breaches {
                 // host check
                 let loginHostURL = URL(string: login.hostname)
                 if loginHostURL?.baseDomain == breach.domain {
                     print("compareToBreaches(): breach: \(breach.domain)")
+
+                    // date check
+                    let pwLastChanged = Date.init(timeIntervalSince1970: TimeInterval(login.timePasswordChanged))
+
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    let breachDate = dateFormatter.date(from: breach.breachDate)
+                    print("compareToBreaches(): breach date: \(String(describing: breachDate))")
+
+                    if let breachDate = breachDate, pwLastChanged < breachDate {
+                        print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
+                    }
                 }
-
-                // date check
-                let pwLastChanged = Date.init(timeIntervalSince1970: TimeInterval(login.timePasswordChanged))
-
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                let breachDate = dateFormatter.date(from: breach.breachDate)
-
-                if let breachDate = breachDate, pwLastChanged < breachDate {
-                    print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
-                }
-
             }
-
         }
-
         print("compareToBreaches(): fin")
-        }
-
-    }
-
-
-    //
-    // MARK: - Internal Methods
-    //
-    // From firefox-ios/Shared/NetworkUtils.swift
-    private func validatedHTTPResponse(_ response: URLResponse?, contentType: String? = nil, statusCode: Range<Int>?  = nil) -> HTTPURLResponse? {
-        if let response = response as? HTTPURLResponse {
-            if let range = statusCode {
-                return range.contains(response.statusCode) ? response :  nil
-            }
-            if let type = contentType {
-                if let responseType = response.allHeaderFields["Content-Type"] as? String {
-                    return responseType.contains(type) ? response : nil
-                }
-                return nil
-            }
-            return response
-        }
-        return nil
     }
 }
