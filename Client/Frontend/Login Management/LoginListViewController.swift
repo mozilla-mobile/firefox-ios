@@ -50,7 +50,6 @@ class LoginListViewController: SensitiveViewController {
     fileprivate var selectionButtonHeightConstraint: Constraint?
     fileprivate var selectedIndexPaths = [IndexPath]()
     fileprivate let tableView = UITableView()
-    fileprivate let breachAlertsManager = BreachAlertsManager()
 
     weak var settingsDelegate: SettingsDelegate?
     var shownFromAppMenu: Bool = false
@@ -251,7 +250,6 @@ class LoginListViewController: SensitiveViewController {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
         profile.logins.searchLoginsWithQuery(query) >>== { logins in
             deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
-
             succeed()
         }
         return deferred

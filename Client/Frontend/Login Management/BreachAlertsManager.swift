@@ -42,18 +42,15 @@ final public class BreachAlertsManager {
     func loadBreaches(completion: @escaping (Maybe<[BreachRecord]>) -> Void) {
         print("loadBreaches(): called")
 
-        DispatchQueue.global(qos: .background).async {
-            self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
-                if maybeData.isSuccess, let data = maybeData.successValue {
-                    let decoder = JSONDecoder()
-
-                    if let decoded = try? decoder.decode([BreachRecord].self, from: data) {
-                        self.breaches = decoded
-                        completion(Maybe(success: self.breaches))
-                    }
-                } else {
-                    completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches")))
+        self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
+            if maybeData.isSuccess, let data = maybeData.successValue {
+                let decoder = JSONDecoder()
+                if let decoded = try? decoder.decode([BreachRecord].self, from: data) {
+                    self.breaches = decoded
+                    completion(Maybe(success: self.breaches))
                 }
+            } else {
+                completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches")))
             }
         }
     }
