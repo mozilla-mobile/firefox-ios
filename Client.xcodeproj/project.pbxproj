@@ -4609,7 +4609,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbash $PWD/sdk_generator.sh -m $SRCROOT/docs\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nbash $PWD/Carthage/Checkouts/glean/glean-core/ios/sdk_generator.sh -m $SRCROOT/docs\n";
 		};
 		E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
