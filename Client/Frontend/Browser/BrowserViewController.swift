@@ -1328,7 +1328,10 @@ extension BrowserViewController: URLBarDelegate {
         updateFindInPageVisibility(visible: false)
 
         if AppConstants.CHRONOLOGICAL_TABS {
-            navigationController?.pushViewController(TabTrayV2ViewController(), animated: false)
+            let tabTrayViewController = TabTrayV2ViewController()
+            let controller = ThemedNavigationController(rootViewController: tabTrayViewController)
+            controller.presentingModalViewControllerDelegate = self
+            self.present(controller, animated: true, completion: nil)
         } else {
             let tabTrayController = TabTrayControllerV1(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
             navigationController?.pushViewController(tabTrayController, animated: true)
@@ -2281,7 +2284,7 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 let changeCount = pasteboard.changeCount
                 let application = UIApplication.shared
                 var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
-                taskId = application.beginBackgroundTask (expirationHandler: {
+                taskId = application.beginBackgroundTask(expirationHandler: {
                     application.endBackgroundTask(taskId)
                 })
 

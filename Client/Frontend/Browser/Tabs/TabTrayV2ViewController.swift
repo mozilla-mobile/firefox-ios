@@ -3,6 +3,7 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
+import Shared
 import SnapKit
 import UIKit
 
@@ -27,6 +28,9 @@ class TabTrayV2ViewController: UIViewController{
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: sectionHeaderIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.tableFooterView = UIView()
+        
+        navigationItem.title = Strings.TabTrayV2Title
         
         tableView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
@@ -49,6 +53,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: TabTableViewCell.identifier, for: indexPath)
         guard let tabCell = cell as? TabTableViewCell else { return cell }
         tabCell.closeButton.addTarget(self, action: #selector(onCloseButton(_ :)), for: .touchUpInside)
+        tabCell.separatorInset = UIEdgeInsets.zero
         
         viewModel.configure(cell: tabCell, for: indexPath)
         
@@ -56,8 +61,8 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     }
     
     @objc func onCloseButton(_ sender: UIButton) {
-        let buttonPosition = sender.convert(CGPoint(), to:tableView)
-        if let indexPath = tableView.indexPathForRow(at:buttonPosition) {
+        let buttonPosition = sender.convert(CGPoint(), to: tableView)
+        if let indexPath = tableView.indexPathForRow(at: buttonPosition) {
             viewModel.removeTab(forIndex: indexPath)
         }
     }
@@ -66,17 +71,14 @@ extension TabTrayV2ViewController: UITableViewDataSource {
 extension TabTrayV2ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRowAt(index: indexPath)
-        navigationController?.popViewController(animated: false)
+        navigationController?.dismiss(animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: sectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView, viewModel.numberOfRowsInSection(section: section) != 0 else {
             return nil
         }
-
-        let section = TabSection(rawValue: section)
-        headerView.titleLabel.text = section?.description.uppercased()
-
+        headerView.titleLabel.text = viewModel.getSectionDateHeader(section)
         headerView.applyTheme()
         return headerView
     }
@@ -109,8 +111,6 @@ class TabTableViewCell: UITableViewCell {
         screenshotView.layer.cornerRadius = TabTrayV2ControllerUX.cornerRadius
         screenshotView.layer.borderWidth = 1
         screenshotView.layer.borderColor = UIColor.Photon.Grey30.cgColor
-        
-        websiteTitle.lineBreakMode = .byWordWrapping
 
         urlLabel.textColor = UIColor.Photon.Grey40
         

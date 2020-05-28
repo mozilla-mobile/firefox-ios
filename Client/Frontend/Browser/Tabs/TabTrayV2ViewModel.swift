@@ -11,19 +11,6 @@ enum TabSection: Int, CaseIterable {
     case yesterday
     case lastWeek
     case older
-    
-    var description: String {
-        switch self {
-        case .today:
-            return "today"
-        case .yesterday:
-            return "yesterday"
-        case .lastWeek:
-            return "last week"
-        case .older:
-            return "older"
-        }
-    }
 }
 
 protocol TopTabCellDelegateV2: AnyObject {
@@ -72,6 +59,42 @@ class TabTrayV2ViewModel: NSObject {
         } else {
             return .older
         }
+    }
+    
+    func getSectionDateHeader(_ section: Int) -> String {
+        let section = TabSection(rawValue: section)
+        let sectionHeader: String
+        let date: String
+        let dateFormatter = DateFormatter()
+        let dateIntervalFormatter = DateIntervalFormatter()
+        
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .none
+        dateFormatter.locale = Locale(identifier: Locale.current.identifier)
+        
+        dateIntervalFormatter.dateStyle = .medium
+        dateIntervalFormatter.timeStyle = .none
+        dateIntervalFormatter.locale = Locale(identifier: Locale.current.identifier)
+        
+        switch section {
+        case .today:
+            sectionHeader = Strings.TabTrayV2TodayHeader
+            date = dateFormatter.string(from: Date())
+        case .yesterday:
+            sectionHeader = Strings.TabTrayV2YesterdayHeader
+            date = dateFormatter.string(from: Date.yesterday)
+        case .lastWeek:
+            sectionHeader = Strings.TabTrayV2LastWeekHeader
+            date = dateIntervalFormatter.string(from: Date().lastWeek, to: Date(timeInterval: 6.0 * 24.0 * 3600.0, since: Date().lastWeek))
+        case .older:
+            sectionHeader = Strings.TabTrayV2OlderHeader
+            date = ""
+        default:
+            sectionHeader = ""
+            date = ""
+        }
+        
+        return (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
     }
     
     // The user has tapped the close button or has swiped away the cell
