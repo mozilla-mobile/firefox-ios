@@ -33,7 +33,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
         }
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard self.validatedHTTPResponse(response) != nil else {
+            guard validatedHTTPResponse(response) != nil else {
                 completion(Maybe(failure: BreachAlertsError(description: "invalid HTTP response")))
                 return
             }
@@ -48,23 +48,5 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
             completion(Maybe(success: data))
         }
         dataTask?.resume()
-    }
-
-
-    /// From firefox-ios/Shared/NetworkUtils.swift, to validate the HTTP response.
-    private func validatedHTTPResponse(_ response: URLResponse?, contentType: String? = nil, statusCode: Range<Int>?  = nil) -> HTTPURLResponse? {
-        if let response = response as? HTTPURLResponse {
-            if let range = statusCode {
-                return range.contains(response.statusCode) ? response :  nil
-            }
-            if let type = contentType {
-                if let responseType = response.allHeaderFields["Content-Type"] as? String {
-                    return responseType.contains(type) ? response : nil
-                }
-                return nil
-            }
-            return response
-        }
-        return nil
     }
 }
