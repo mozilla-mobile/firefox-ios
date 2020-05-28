@@ -19,10 +19,17 @@ class TabTrayV2ViewController: UIViewController{
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
     fileprivate let sectionHeaderIdentifier = "SectionHeader"
     
+    lazy var toolbar: TrayToolbar = {
+        let toolbar = TrayToolbar()
+        toolbar.addTabButton.addTarget(self, action: #selector(didTapToolbarAddTab), for: .touchUpInside)
+        return toolbar
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.addSubview(tableView)
+        view.addSubview(toolbar)
         
         tableView.register(TabTableViewCell.self, forCellReuseIdentifier: TabTableViewCell.identifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: sectionHeaderIdentifier)
@@ -33,8 +40,15 @@ class TabTrayV2ViewController: UIViewController{
         navigationItem.title = Strings.TabTrayV2Title
         
         tableView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
+            make.left.equalTo(view.safeArea.left)
+            make.right.equalTo(view.safeArea.right)
+            make.bottom.equalTo(toolbar.snp.top)
+            make.top.equalTo(self.view.safeArea.top)
+        }
+
+        toolbar.snp.makeConstraints { make in
+            make.left.right.bottom.equalTo(view)
+            make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
     }
 }
@@ -65,6 +79,11 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         if let indexPath = tableView.indexPathForRow(at: buttonPosition) {
             viewModel.removeTab(forIndex: indexPath)
         }
+    }
+    
+    @objc func didTapToolbarAddTab(_ sender: UIButton) {
+        viewModel.addTab()
+        navigationController?.dismiss(animated: true, completion: nil)
     }
 }
 
