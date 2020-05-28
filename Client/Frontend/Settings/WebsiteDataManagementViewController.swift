@@ -82,13 +82,6 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         definesPresentationContext = true
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        // Allows the search bar to be scrolled away even though we initially show it.
-        navigationItem.hidesSearchBarWhenScrolling = true
-    }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .default, reuseIdentifier: nil)
         let section = Section(rawValue: indexPath.section)!
