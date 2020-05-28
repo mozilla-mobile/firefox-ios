@@ -366,6 +366,8 @@
 		C8F457AA1F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */; };
 		C8FB0C75232151BA00031088 /* AppMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FB0C74232151BA00031088 /* AppMenu.swift */; };
 		C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FB0C772321523D00031088 /* PageActionMenu.swift */; };
+		CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */; };
+		CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */; };
 		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */; };
@@ -1503,6 +1505,8 @@
 		C8F457A91F1FDD9B000CB895 /* BrowserViewController+KeyCommands.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BrowserViewController+KeyCommands.swift"; sourceTree = "<group>"; };
 		C8FB0C74232151BA00031088 /* AppMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenu.swift; sourceTree = "<group>"; };
 		C8FB0C772321523D00031088 /* PageActionMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageActionMenu.swift; sourceTree = "<group>"; };
+		CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsClient.swift; sourceTree = "<group>"; };
+		CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsManager.swift; sourceTree = "<group>"; };
 		CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxAccountSignInViewController.swift; sourceTree = "<group>"; };
 		CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDevices.swift; sourceTree = "<group>"; };
 		CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContentSettingsViewController.swift; sourceTree = "<group>"; };
@@ -3135,6 +3139,8 @@
 				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
 				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
+				CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */,
+				CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */,
 			);
 			path = "Login Management";
 			sourceTree = "<group>";
@@ -5081,6 +5087,7 @@
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,
+				CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */,
 				43DDB96C240995A70058A068 /* ETPModel.swift in Sources */,
 				274A36C9239EB94000A21587 /* LibraryPanelButton.swift in Sources */,
 				435D660523D794B90046EFA2 /* UpdateViewModel.swift in Sources */,
@@ -5205,6 +5212,7 @@
 				7BA0601B1C0F4DE200DFADB6 /* TabPeekViewController.swift in Sources */,
 				6669B5E2211418A200CA117B /* WebsiteDataSearchResultsViewController.swift in Sources */,
 				E6D8D5E71B569D70009E5A58 /* BrowserTrayAnimators.swift in Sources */,
+				CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */,
 				EBC4869E2195F58300CDA48D /* AboutHomeHandler.swift in Sources */,
 				DDA24A431FD84D630098F159 /* DefaultSearchPrefs.swift in Sources */,
 				E65075611E37F77D006961AC /* MenuHelper.swift in Sources */,
