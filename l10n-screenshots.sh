@@ -13,8 +13,8 @@ PROJECT_DIR="$(get_abs_path $CURRENT_DIR/../../../..)"
 
 
 if [ -d l10n-screenshots ]; then
-  echo "The l10n-screenshots directory already exists. You decide."
-  exit 1
+    echo "The l10n-screenshots directory already exists. You decide."
+    exit 1
 fi
 
 if [ ! -d firefoxios-l10n ]; then
@@ -25,13 +25,14 @@ fi
 mkdir -p l10n-screenshots
 
 if [ "$1" = '--test-without-building' ]; then
-  EXTRA_FAST_LANE_ARGS='--test_without_building'
-  shift
+    EXTRA_FAST_LANE_ARGS='--test_without_building'
+    shift
 fi
 
 LOCALES=$*
 if [ $# -eq 0 ]; then
-  LOCALES=$(cat "$PROJECT_DIR/l10n-screenshots-locales.txt")
+    echo "Please provide locales to test. Available locales live in 'l10n-screenshots-config.yml'. E.g.: $0 af an anp ar"
+    exit 1
 fi
 
 for lang in $LOCALES; do

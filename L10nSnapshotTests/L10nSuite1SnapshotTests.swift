@@ -70,22 +70,35 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("ContextMenuReloadButton-03", waitForLoadingIndicator: false)
     }
 
+    private func typePasscode(n: Int, keyNumber: Int) {
+        for _ in 1...n {
+            app.keys.element(boundBy: keyNumber).tap()
+            sleep(1)
+        }
+    }
+
     func test4PasscodeSettings() {
-        navigator.goto(SetPasscodeScreen)
+        navigator.goto(PasscodeSettings)
+        app.tables.cells["TurnOnPasscode"].tap()
         snapshot("SetPasscodeScreen-1-nopasscode")
-        userState.newPasscode = "111111"
-        navigator.performAction(Action.SetPasscodeTypeOnce)
+        
+        // Type "111111 passcode"
+        typePasscode(n: 6, keyNumber: 2)
         snapshot("SetPasscodeScreen-2-typepasscode")
-
-        userState.newPasscode = "111112"
-        navigator.performAction(Action.SetPasscodeTypeOnce)
+        // Type incorrect passcode "111112"
+        typePasscode(n: 5, keyNumber: 2)
+        // Type once inkey "2"
+        typePasscode(n: 1, keyNumber: 1)
         snapshot("SetPasscodeScreen-3-passcodesmustmatch")
-
-        userState.newPasscode = "111111"
-        navigator.performAction(Action.SetPasscode)
+        
+        // Confitm passcode
+        typePasscode(n: 6, keyNumber: 2)
+        typePasscode(n: 6, keyNumber: 2)
         snapshot("SetPasscodeScreen-3")
-
-        navigator.goto(PasscodeIntervalSettings)
+        
+        // Go to interval settings
+        app.tables.cells["PasscodeInterval"].tap()
+        typePasscode(n: 6, keyNumber: 2)
         snapshot("PasscodeIntervalScreen-1")
     }
 

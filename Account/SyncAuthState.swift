@@ -141,29 +141,31 @@ open class FirefoxAccountSyncAuthState: SyncAuthState {
 
         let deferred = Deferred<Maybe<(token: TokenServerToken, forKey: Data)>>()
 
-        RustFirefoxAccounts.shared.accountManager.getTokenServerEndpointURL() { result in
-            guard case .success(let tokenServerEndpointURL) = result else {
-                deferred.fill(Maybe(failure: FxAClientError.local(NSError())))
-                return
-            }
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+            accountManager.getTokenServerEndpointURL() { result in
+                guard case .success(let tokenServerEndpointURL) = result else {
+                    deferred.fill(Maybe(failure: FxAClientError.local(NSError())))
+                    return
+                }
 
-            let client = TokenServerClient(url: tokenServerEndpointURL)
-            RustFirefoxAccounts.shared.accountManager.getAccessToken(scope: OAuthScope.oldSync) { res in
-                switch res {
-                    case .failure(let err):
-                        deferred.fill(Maybe(failure: err as MaybeErrorType))
-                    case .success(let accessToken):
-                        log.debug("Fetching token server token.")
-                        client.token(token: accessToken.token, kid: accessToken.key!.kid).upon { result in
-                        guard let token = result.successValue else {
-                            deferred.fill(Maybe(failure: result.failureValue!))
-                            return
+                let client = TokenServerClient(url: tokenServerEndpointURL)
+                accountManager.getAccessToken(scope: OAuthScope.oldSync) { res in
+                    switch res {
+                        case .failure(let err):
+                            deferred.fill(Maybe(failure: err as MaybeErrorType))
+                        case .success(let accessToken):
+                            log.debug("Fetching token server token.")
+                            client.token(token: accessToken.token, kid: accessToken.key!.kid).upon { result in
+                            guard let token = result.successValue else {
+                                deferred.fill(Maybe(failure: result.failureValue!))
+                                return
+                            }
+                            let kSync = accessToken.key!.k.base64urlSafeDecodedData!
+                            let newCache = SyncAuthStateCache(token: token, forKey: kSync,expiresAt: now + 1000 * token.durationInSeconds)
+                            log.debug("Fetched token server token!  Token expires at \(newCache.expiresAt).")
+                            self.cache.value = newCache
+                            deferred.fill(Maybe(success: (token: token, forKey: kSync)))
                         }
-                        let kSync = accessToken.key!.k.base64urlSafeDecodedData!
-                        let newCache = SyncAuthStateCache(token: token, forKey: kSync,expiresAt: now + 1000 * token.durationInSeconds)
-                        log.debug("Fetched token server token!  Token expires at \(newCache.expiresAt).")
-                        self.cache.value = newCache
-                        deferred.fill(Maybe(success: (token: token, forKey: kSync)))
                     }
                 }
             }

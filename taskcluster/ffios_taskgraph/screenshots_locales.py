@@ -14,8 +14,7 @@ def get_screenshots_locales():
     current_dir = os.path.dirname(os.path.realpath(__file__))
     project_dir = os.path.realpath(os.path.join(current_dir, '..', '..'))
 
-    with open(os.path.join(project_dir, 'l10n-screenshots-locales.txt')) as f:
-        lines = f.readlines()
+    with open(os.path.join(project_dir, 'l10n-screenshots-config.yml')) as f:
+        config = yaml.safe_load(f)
 
-    locales = [line.strip() for line in lines]
-    return locales
+    return config["locales"]

@@ -44,6 +44,9 @@ def set_run_config(config, tasks):
         yield task
 
 
+_ARTIFACTS_DIRECTORY = "/builds/worker/artifacts"
+
+
 @transforms.add
 def set_worker_config(config, tasks):
     for task in tasks:
@@ -53,14 +56,14 @@ def set_worker_config(config, tasks):
         artifacts.append({
             "type": "file",
             "name": "public/logs/bitrise.log",
-            "path": "/builds/worker/checkouts/src/bitrise.log",
+            "path": "{}/bitrise.log".format(_ARTIFACTS_DIRECTORY),
         })
 
         for locale in task["attributes"]["chunk_locales"]:
             artifacts.append({
                 "type": "file",
                 "name": "public/screenshots/{}.zip".format(locale),
-                "path": "/builds/worker/checkouts/src/{}.zip".format(locale),
+                "path": "{}/{}.zip".format(_ARTIFACTS_DIRECTORY, locale),
             })
 
         worker.setdefault("docker-image", {"in-tree": "screenshots"})
@@ -72,7 +75,7 @@ def set_worker_config(config, tasks):
 
 
 @transforms.add
-def add_command(config, tasks):
+def add_bitrise_command(config, tasks):
     for task in tasks:
         commands = task["run"].setdefault("commands", [])
         workflow = task.pop("bitrise-workflow")
@@ -84,6 +87,7 @@ def add_command(config, tasks):
             "--branch", config.params["head_ref"],
             "--commit", config.params["head_rev"],
             "--workflow", workflow,
+            "--artifacts-directory", _ARTIFACTS_DIRECTORY
         ]
 
         for locale in task["attributes"]["chunk_locales"]:
@@ -92,6 +96,26 @@ def add_command(config, tasks):
         derived_data_path = task.pop("build-derived-data-path", "")
         if derived_data_path:
             command.extend(["--derived-data-path", derived_data_path])
+
+        commands.append(command)
+
+        yield task
+
+
+@transforms.add
+def add_screenshot_checks_command(config, tasks):
+    for task in tasks:
+        commands = task["run"]["commands"]
+
+        command = [
+            "python3",
+            "taskcluster/scripts/check-screenshots.py",
+            "--artifacts-directory", _ARTIFACTS_DIRECTORY,
+            "--screenshots-configuration", "l10n-screenshots-config.yml",
+        ]
+
+        for locale in task["attributes"]["chunk_locales"]:
+            command.extend(["--locale", locale])
 
         commands.append(command)
 

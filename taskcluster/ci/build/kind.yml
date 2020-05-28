@@ -17,9 +17,11 @@ jobs:
             chunk_locales: ["en-US"]
         bitrise-workflow: L10nBuild
         description: Generate build instrumented for screenshots, including en-US pictures
+        index:
+            type: l10n-screenshots
         run-on-tasks-for: []
         worker:
             artifacts:
                 - type: file
                   name: public/build/target.zip
-                  path: /builds/worker/checkouts/src/l10n-screenshots-dd.zip
+                  path: /builds/worker/artifacts/l10n-screenshots-dd.zip

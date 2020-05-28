@@ -79,22 +79,22 @@ extension PhotonActionSheetProtocol {
         return items
     }
 
-    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ flowType: FxAPageType) -> Void) -> PhotonActionSheetItem? {
+    func syncMenuButton(showFxA: @escaping (_ params: FxALaunchParams?, _ flowType: FxAPageType,_ referringPage: ReferringPage) -> Void) -> PhotonActionSheetItem? {
         //profile.getAccount()?.updateProfile()
 
         let action: ((PhotonActionSheetItem, UITableViewCell) -> Void) = { action,_ in
             let fxaParams = FxALaunchParams(query: ["entrypoint": "browsermenu"])
-            showFxA(fxaParams, .emailLoginFlow)
+            showFxA(fxaParams, .emailLoginFlow, .appMenu)
         }
 
         let rustAccount = RustFirefoxAccounts.shared
-        let needsReauth = rustAccount.accountManager.accountNeedsReauth()
+        let needsReauth = rustAccount.accountNeedsReauth()
 
         guard let userProfile = rustAccount.userProfile else {
             return PhotonActionSheetItem(title: Strings.FxASignInToSync, iconString: "menu-sync", handler: action)
         }
         let title: String = {
-            if rustAccount.accountManager.accountNeedsReauth() {
+            if rustAccount.accountNeedsReauth() {
                 return Strings.FxAAccountVerifyPassword
             }
             return userProfile.displayName ?? userProfile.email

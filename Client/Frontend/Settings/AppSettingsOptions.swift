@@ -47,7 +47,10 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAWebView(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
+        let viewController = AppInfo.isChinaEdition ?
+            FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC) :
+            FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
+        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -336,10 +339,12 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let account = profile.rustFxA.accountManager
-        guard !account.accountNeedsReauth() else {
-            let view = FxAWebView(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC)
-            navigationController?.pushViewController(view, animated: true)
+        guard !profile.rustFxA.accountNeedsReauth() else {
+            let vc = AppInfo.isChinaEdition ?
+                FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC) :
+                FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
+            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+            navigationController?.pushViewController(vc, animated: true)
             return
         }
 
@@ -518,6 +523,42 @@ class SentryIDSetting: HiddenSetting {
         let tableView = (controller as? AppSettingsTableViewController)?.tableView
         guard let indexPath = tableView?.indexPathForSelectedRow else { return nil }
         return tableView?.cellForRow(at: indexPath)
+    }
+}
+
+class ToggleOnboarding: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: Toggle onboarding type", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let onboardingResearch = OnboardingUserResearch()
+        let type = onboardingResearch.onboardingScreenType
+        var newOnboardingType: OnboardingScreenType = .versionV2
+        if type == nil {
+            newOnboardingType = .versionV1
+        } else if type == .versionV2 {
+            newOnboardingType = .versionV1
+        }
+        OnboardingUserResearch().onboardingScreenType = newOnboardingType
+    }
+}
+
+class LeanplumStatus: HiddenSetting {
+    let lplumSetupType = LeanPlumClient.shared.lpSetupType()
+
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Leamplum Status: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning())", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+}
+
+class SetOnboardingV2: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: Set onboarding type to v2", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        OnboardingUserResearch().onboardingScreenType = .versionV2
     }
 }
 
@@ -845,10 +886,14 @@ class PrivacyPolicySetting: Setting {
     }
 }
 
-class ChinaSyncServiceSetting: WithoutAccountSetting {
+class ChinaSyncServiceSetting: Setting {
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
-    var prefs: Prefs { return settings.profile.prefs }
-    let prefKey = "useChinaSyncService"
+    var prefs: Prefs { return profile.prefs }
+    let prefKey = PrefsKeys.KeyEnableChinaSyncService
+    let profile: Profile
+    let settings: UIViewController
+
+    override var hidden: Bool { return !AppInfo.isChinaEdition }
 
     override var title: NSAttributedString? {
         return NSAttributedString(string: "本地同步服务", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -856,6 +901,11 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
 
     override var status: NSAttributedString? {
         return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
+    }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        self.settings = settings
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -869,8 +919,28 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
-        prefs.setObject(toggle.isOn, forKey: prefKey)
-        RustFirefoxAccounts.reconfig()
+        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
+        guard profile.rustFxA.hasAccount() else {
+            prefs.setObject(toggle.isOn, forKey: prefKey)
+            RustFirefoxAccounts.reconfig()
+            return
+        }
+
+        // Show confirmation dialog for the user to sign out of FxA
+
+        let msg = "更改此设置后，再次登录您的帐户" // "Sign-in again to your account after changing this setting"
+        let alert = UIAlertController(title: "", message: msg, preferredStyle: .alert)
+        let ok = UIAlertAction(title: Strings.OKString, style: .default) { _ in
+            self.prefs.setObject(toggle.isOn, forKey: self.prefKey)
+            self.profile.removeAccount()
+            RustFirefoxAccounts.reconfig()
+        }
+        let cancel = UIAlertAction(title: Strings.CancelString, style: .default) { _ in
+            toggle.setOn(!toggle.isOn, animated: true)
+        }
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        settings.present(alert, animated: true)
     }
 }
 

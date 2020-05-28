@@ -208,7 +208,7 @@ class TabDisplayManager: NSObject {
     }
 
     private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
-        let isTabTray = tabDisplayer as? TabTrayController != nil
+        let isTabTray = tabDisplayer as? TabTrayControllerV1 != nil
         let eventValue = isTabTray ? UnifiedTelemetry.EventValue.tabTray : UnifiedTelemetry.EventValue.topTabs
         UnifiedTelemetry.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }

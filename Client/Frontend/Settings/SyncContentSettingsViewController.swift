@@ -22,7 +22,7 @@ class ManageFxAccountSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAWebView(pageType: .settingsPage, profile: profile, dismissalStyle: .popToRootVC)
+        let viewController = FxAWebViewController(pageType: .settingsPage, profile: profile, dismissalStyle: .popToRootVC)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -56,6 +56,7 @@ class DisconnectSetting: Setting {
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
                 self.profile.removeAccount()
+                UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .settings, object: .accountDisconnected)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
 
                 // If there is more than one view controller in the navigation controller, we can pop.
@@ -72,7 +73,7 @@ class DisconnectSetting: Setting {
 
 class DeviceNamePersister: SettingValuePersister {
     func readPersistedValue() -> String? {
-        guard let val = RustFirefoxAccounts.shared.accountManager.deviceConstellation()?
+        guard let val = RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?
             .state()?.localDevice?.displayName else {
                 return UserDefaults.standard.string(forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
         }
@@ -82,7 +83,7 @@ class DeviceNamePersister: SettingValuePersister {
 
     func writePersistedValue(value: String?) {
         guard let newName = value,
-              let deviceConstellation = RustFirefoxAccounts.shared.accountManager.deviceConstellation() else {
+            let deviceConstellation = RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation() else {
             return
         }
         UserDefaults.standard.set(newName, forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
@@ -127,7 +128,7 @@ class SyncContentSettingsViewController: SettingsTableViewController {
 
         self.title = Strings.FxASettingsTitle
 
-        RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.refreshState()
+        RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
     }
 
     required init?(coder aDecoder: NSCoder) {

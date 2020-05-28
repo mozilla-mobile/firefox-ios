@@ -143,57 +143,67 @@ open class SyncStateMachine {
     }
 
     open func toReady(_ authState: SyncAuthState) -> ReadyDeferred {
-        let token = authState.token(Date.now(), canBeExpired: false)
-        return chainDeferred(token, f: { (token, kSync) in
-            log.debug("Got token from auth state.")
-            if Logger.logPII {
-                log.debug("Server is \(token.api_endpoint).")
+        let readyDeferred = ReadyDeferred()
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+            authState.token(Date.now(), canBeExpired: false).uponQueue(.main) { success in
+                guard let (token, kSync) = success.successValue else {
+                    assert(false)
+                    return
+                }
+                log.debug("Got token from auth state.")
+                if Logger.logPII {
+                   log.debug("Server is \(token.api_endpoint).")
+                }
+                let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync))
+                if prior == nil {
+                   log.info("No persisted Sync state. Starting over.")
+                }
+                var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKSync(kSync), persistingTo: self.scratchpadPrefs)
+
+                // Take the scratchpad and add the fxaDeviceId from the state, and hashedUID from the token
+                let b = Scratchpad.Builder(p: scratchpad)
+
+                if let deviceID = accountManager.deviceConstellation()?.state()?.localDevice?.id {
+                   b.fxaDeviceId = deviceID
+                } else {
+                   // Either deviceRegistration hasn't occurred yet (our bug) or
+                   // FxA has given us an UnknownDevice error.
+                   log.warning("Device registration has not taken place before sync.")
+                }
+                b.hashedUID = token.hashedFxAUID
+
+                if let enginesEnablements = authState.enginesEnablements,
+                  !enginesEnablements.isEmpty {
+                   b.enginesEnablements = enginesEnablements
+                }
+
+                if let clientName = authState.clientName {
+                   b.clientName = clientName
+                }
+
+                // Detect if we've changed anything in our client record from the last time we synced…
+                let ourClientUnchanged = (b.fxaDeviceId == scratchpad.fxaDeviceId)
+
+                // …and if so, trigger a reset of clients.
+                if !ourClientUnchanged {
+                   b.localCommands.insert(LocalCommand.resetEngine(engine: "clients"))
+                }
+
+                scratchpad = b.build()
+
+                log.info("Advancing to InitialWithLiveToken.")
+                let state = InitialWithLiveToken(scratchpad: scratchpad, token: token)
+
+                // Start with fresh visibility data.
+                self.stateLabelsSeen = [:]
+                self.stateLabelSequence = []
+
+                self.advanceFromState(state).uponQueue(.main) { success in
+                    readyDeferred.fill(success)
+                }
             }
-            let prior = Scratchpad.restoreFromPrefs(self.scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync))
-            if prior == nil {
-                log.info("No persisted Sync state. Starting over.")
-            }
-            var scratchpad = prior ?? Scratchpad(b: KeyBundle.fromKSync(kSync), persistingTo: self.scratchpadPrefs)
-
-            // Take the scratchpad and add the fxaDeviceId from the state, and hashedUID from the token
-            let b = Scratchpad.Builder(p: scratchpad)
-            if let deviceID = RustFirefoxAccounts.shared.accountManager.deviceConstellation()?.state()?.localDevice?.id {
-                b.fxaDeviceId = deviceID
-            } else {
-                // Either deviceRegistration hasn't occurred yet (our bug) or
-                // FxA has given us an UnknownDevice error.
-                log.warning("Device registration has not taken place before sync.")
-            }
-            b.hashedUID = token.hashedFxAUID
-
-            if let enginesEnablements = authState.enginesEnablements,
-               !enginesEnablements.isEmpty {
-                b.enginesEnablements = enginesEnablements
-            }
-
-            if let clientName = authState.clientName {
-                b.clientName = clientName
-            }
-
-            // Detect if we've changed anything in our client record from the last time we synced…
-            let ourClientUnchanged = (b.fxaDeviceId == scratchpad.fxaDeviceId)
-
-            // …and if so, trigger a reset of clients.
-            if !ourClientUnchanged {
-                b.localCommands.insert(LocalCommand.resetEngine(engine: "clients"))
-            }
-
-            scratchpad = b.build()
-
-            log.info("Advancing to InitialWithLiveToken.")
-            let state = InitialWithLiveToken(scratchpad: scratchpad, token: token)
-
-            // Start with fresh visibility data.
-            self.stateLabelsSeen = [:]
-            self.stateLabelSequence = []
-
-            return self.advanceFromState(state)
-        })
+        }
+        return readyDeferred
     }
 }
 

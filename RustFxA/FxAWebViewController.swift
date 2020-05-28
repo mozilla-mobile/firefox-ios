@@ -16,7 +16,7 @@ enum DismissType {
 
 enum FxAPageType {
     case emailLoginFlow
-    case signUpFlow
+    case qrCode(url: String)
     case settingsPage
 }
 
@@ -37,13 +37,12 @@ fileprivate enum RemoteCommand: String {
  Show the FxA web content for signing in, signing up, or showing FxA settings.
  Messaging from the website to native is with WKScriptMessageHandler.
  */
-class FxAWebView: UIViewController, WKNavigationDelegate {
+class FxAWebViewController: UIViewController, WKNavigationDelegate {
     fileprivate let dismissType: DismissType
     fileprivate var webView: WKWebView
     fileprivate let pageType: FxAPageType
     fileprivate var baseURL: URL?
     fileprivate let profile: Profile
-
     /// Used to show a second WKWebView to browse help links.
     fileprivate var helpBrowser: WKWebView?
 
@@ -90,20 +89,32 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
         view = webView
 
-        let accountManager = RustFirefoxAccounts.shared.accountManager
-        accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
-            guard let self = self else { return }
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
+            accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
+                guard let self = self else { return }
 
-            // Either show the settings, or the authentication flow.
-
-            if self.pageType == .settingsPage, case .success(let url) = result {
-                self.baseURL = url
-                self.webView.load(URLRequest(url: url))
-            } else {
-                accountManager.beginAuthentication() { [weak self] result in
+                // Handle authentication with either the QR code login flow, email login flow, or settings page flow
+                switch self.pageType {
+                case .emailLoginFlow:
+                    accountManager.beginAuthentication { [weak self] result in
+                        if case .success(let url) = result {
+                            self?.baseURL = url
+                            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .emailLogin, object: .accountConnected)
+                            self?.webView.load(URLRequest(url: url))
+                        }
+                    }
+                case let .qrCode(url):
+                    accountManager.beginPairingAuthentication(pairingUrl: url) { [weak self] result in
+                        if case .success(let url) = result {
+                            self?.baseURL = url
+                            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: .accountConnected)
+                            self?.webView.load(URLRequest(url: url))
+                        }
+                    }
+                case .settingsPage:
                     if case .success(let url) = result {
-                        self?.baseURL = url
-                        self?.webView.load(URLRequest(url: url))
+                        self.baseURL = url
+                        self.webView.load(URLRequest(url: url))
                     }
                 }
             }
@@ -139,7 +150,7 @@ class FxAWebView: UIViewController, WKNavigationDelegate {
     }
 }
 
-extension FxAWebView: WKScriptMessageHandler {
+extension FxAWebViewController: WKScriptMessageHandler {
     // Handle a message coming from the content server.
     private func handleRemote(command rawValue: String, id: Int?, data: Any?) {
         if let command = RemoteCommand(rawValue: rawValue) {
@@ -160,7 +171,7 @@ extension FxAWebView: WKScriptMessageHandler {
                 profile.removeAccount()
                 dismiss(animated: true)
             case .profileChanged:
-                RustFirefoxAccounts.shared.accountManager.refreshProfile(forceRefresh: true)
+                RustFirefoxAccounts.shared.accountManager.peek()?.refreshProfile(ignoreCache: true)
             }
         }
     }
@@ -184,32 +195,33 @@ extension FxAWebView: WKScriptMessageHandler {
 
     /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
     private func onSessionStatus(id: Int) {
+        guard let fxa = RustFirefoxAccounts.shared.accountManager.peek() else { return }
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
         let data: String
-        if pageType == .settingsPage {
-            let fxa = RustFirefoxAccounts.shared.accountManager
-            // Both email and uid are required at this time to properly link the FxA settings session
-            let email = fxa.accountProfile()?.email ?? ""
-            let uid = fxa.accountProfile()?.uid ?? ""
-            let token = (try? fxa.getSessionToken().get()) ?? ""
-            data = """
-            {
-                capabilities: {},
-                signedInUser: {
-                    sessionToken: "\(token)",
-                    email: "\(email)",
-                    uid: "\(uid)",
-                    verified: true,
-                }
-            }
-        """
-        } else {
-            data = """
-                { capabilities:
-                    { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
+        switch pageType {
+            case .settingsPage:
+                // Both email and uid are required at this time to properly link the FxA settings session
+                let email = fxa.accountProfile()?.email ?? ""
+                let uid = fxa.accountProfile()?.uid ?? ""
+                let token = (try? fxa.getSessionToken().get()) ?? ""
+                data = """
+                {
+                    capabilities: {},
+                    signedInUser: {
+                        sessionToken: "\(token)",
+                        email: "\(email)",
+                        uid: "\(uid)",
+                        verified: true,
+                    }
                 }
             """
+            case .emailLoginFlow, .qrCode:
+                data = """
+                    { capabilities:
+                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
+                    }
+                """
         }
 
         runJS(typeId: typeId, messageId: id, command: cmd, data: data)
@@ -234,7 +246,7 @@ extension FxAWebView: WKScriptMessageHandler {
         LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
 
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
-        RustFirefoxAccounts.shared.accountManager.finishAuthentication(authData: auth) { _ in
+        RustFirefoxAccounts.shared.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager.onAddedAccount()
             
             // ask for push notification
@@ -258,7 +270,7 @@ extension FxAWebView: WKScriptMessageHandler {
             return
         }
 
-        RustFirefoxAccounts.shared.accountManager.handlePasswordChanged(newSessionToken: sessionToken) {
+        RustFirefoxAccounts.shared.accountManager.peek()?.handlePasswordChanged(newSessionToken: sessionToken) {
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
         }
     }
@@ -283,7 +295,7 @@ extension FxAWebView: WKScriptMessageHandler {
     }
 }
 
-extension FxAWebView {
+extension FxAWebViewController {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
         webView.evaluateJavaScript(hideLongpress)
@@ -299,7 +311,7 @@ extension FxAWebView {
     }
 }
 
-extension FxAWebView: WKUIDelegate {
+extension FxAWebViewController: WKUIDelegate {
     
     /// Blank target links (support links) will create a 2nd webview (the `helpBrowser`) to browse. This webview will have a close button in the navigation bar to go back to the main fxa webview.
     func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
