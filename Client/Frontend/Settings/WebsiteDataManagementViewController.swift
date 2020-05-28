@@ -76,10 +76,14 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             searchController.searchBar.barStyle = .black
         }
         navigationItem.searchController = searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
         self.searchController = searchController
 
         definesPresentationContext = true
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        unfoldSearchbar()
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -239,5 +243,10 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         siteRecords = []
         showMoreButtonEnabled = false
         tableView.reloadData()
+    }
+    
+    private func unfoldSearchbar() {
+        guard let searchBarHeight = navigationItem.searchController?.searchBar.intrinsicContentSize.height else { return }
+        tableView.setContentOffset(CGPoint(x: 0, y: -searchBarHeight + tableView.contentOffset.y), animated: true)
     }
 }
