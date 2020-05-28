@@ -113,7 +113,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func test11FxASignInPage() {
         navigator.goto(Intro_FxASignin)
-        print(app.debugDescription)
         waitForExistence(app.navigationBars.staticTexts["FxASingin.navBar"])
         snapshot("FxASignInScreen-01")
     }
