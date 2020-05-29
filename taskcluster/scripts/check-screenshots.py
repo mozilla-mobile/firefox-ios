@@ -84,8 +84,7 @@ def _check_files(artifacts_directory, locales, number_of_screenshots_per_locale)
     if errors:
         error_list = "\n * ".join(errors)
         log.critical("Got {} error(s) while verifying screenshots: \n * {}".format(len(errors), error_list))
-        # TODO Uncomment the next line once screenshot tests are fixed on all locales.
-        # sys.exit(_FAILURE_EXIT_CODE)
+        sys.exit(_FAILURE_EXIT_CODE)
 
     log.info("No archive is missing and all of them contain the right number of screenshots!")
 
