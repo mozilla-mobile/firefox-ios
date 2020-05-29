@@ -57,11 +57,13 @@ final public class BreachAlertsManager {
     /// Compares a list of logins to a list of breaches and returns breached logins.
     ///    - Parameters:
     ///         - logins: a list of logins to compare breaches to
-    func compareToBreaches(_ logins: [LoginRecord])  {
+    func compareToBreaches(_ logins: [LoginRecord]) -> Maybe<[LoginRecord]> {
+        var result: [LoginRecord] = []
 
         if self.breaches.count <= 0 {
-            print("compareToBreaches(): empty breach list")
-            return
+            return Maybe(failure: BreachAlertsError(description: "cannot compare to an empty list of breaches"))
+        } else if logins.count <= 0 {
+            return Maybe(failure: BreachAlertsError(description: "cannot compare to an empty list of logins"))
         }
 
         // TODO: optimize this loop
@@ -82,10 +84,12 @@ final public class BreachAlertsManager {
 
                     if let breachDate = breachDate, pwLastChanged < breachDate {
                         print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
+                        result.append(login)
                     }
                 }
             }
         }
         print("compareToBreaches(): fin")
+        return Maybe(success: result)
     }
 }
