@@ -11,7 +11,7 @@ import Storage // or whichever module has the LoginsRecord class
 import Shared // or whichever module has the Maybe class
 
 /// Breach structure decoded from JSON
-struct BreachRecord: Codable {
+struct BreachRecord: Codable, Equatable {
     var name: String
     var title: String
     var domain: String
@@ -44,8 +44,7 @@ final public class BreachAlertsManager {
 
         self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
             if maybeData.isSuccess, let data = maybeData.successValue {
-                let decoder = JSONDecoder()
-                if let decoded = try? decoder.decode([BreachRecord].self, from: data) {
+                if let decoded = try? JSONDecoder().decode([BreachRecord].self, from: data) {
                     self.breaches = decoded
                     completion(Maybe(success: self.breaches))
                 }
