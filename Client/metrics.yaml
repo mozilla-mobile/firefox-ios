@@ -1,0 +1,26 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# This file defines the metrics that are recorded by the Glean SDK. They are
+# automatically converted to Kotlin code at build time using the `glean_parser`
+# PyPI package.
+
+---
+$schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
+
+legacy.ids:
+  client_id:
+    type: uuid
+    lifetime: user
+    description: |
+      The client id from legacy telemetry.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: never
