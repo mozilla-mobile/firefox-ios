@@ -43,6 +43,8 @@ final public class BreachAlertsManager {
                 if let decoded = try? JSONDecoder().decode([BreachRecord].self, from: data) {
                     self.breaches = decoded
                     completion(Maybe(success: self.breaches))
+                } else {
+                    completion(Maybe(failure: BreachAlertsError(description: "JSON data decode failure")))
                 }
             } else {
                 completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches")))
