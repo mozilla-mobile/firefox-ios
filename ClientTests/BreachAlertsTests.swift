@@ -58,7 +58,6 @@ class BreachAlertsTests: XCTestCase {
         }
 
         breachAlertsManager?.loadBreaches { maybeBreachList  in
-
             let emptyLoginsOpt = self.breachAlertsManager?.compareToBreaches([])
             XCTAssertNotNil(emptyLoginsOpt)
             if let emptyLogins = emptyLoginsOpt {
