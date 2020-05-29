@@ -40,12 +40,13 @@ final public class BreachAlertsManager {
 
         self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
             if maybeData.isSuccess, let data = maybeData.successValue {
-                if let decoded = try? JSONDecoder().decode([BreachRecord].self, from: data) {
-                    self.breaches = decoded
-                    completion(Maybe(success: self.breaches))
-                } else {
+                guard let decoded = try? JSONDecoder().decode([BreachRecord].self, from: data) else {
                     completion(Maybe(failure: BreachAlertsError(description: "JSON data decode failure")))
+                    return
                 }
+
+                self.breaches = decoded
+                completion(Maybe(success: self.breaches))
             } else {
                 completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches")))
             }
