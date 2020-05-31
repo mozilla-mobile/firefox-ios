@@ -14,11 +14,6 @@ enum DismissType {
     case popToRootVC
 }
 
-enum FxAPageType {
-    case emailLoginFlow
-    case qrCode(url: String)
-    case settingsPage
-}
 
 /**
  Show the FxA web content for signing in, signing up, or showing FxA settings.
@@ -50,8 +45,12 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         self.profile = profile
 =======
     init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType) {
+<<<<<<< HEAD
         self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile)
 >>>>>>> removing logic from controller
+=======
+        self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile, firefoxAccounts: RustFirefoxAccounts.shared)
+>>>>>>> removing webview within viewModel
         self.dismissType = dismissalStyle
         self.deepLinkParams = deepLinkParams
 
@@ -82,6 +81,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         super.viewDidLoad()
         webView.navigationDelegate = self
         view = webView
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         func makeRequest(_ url: URL) -> URLRequest {
@@ -130,10 +130,12 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
                 }
 =======
         viewModel.webView = webView
+=======
+>>>>>>> removing webview within viewModel
         
         viewModel.authenticate()
         
-        viewModel.onLoading = { [weak self] output in
+        viewModel.onEmittingNewState = { [weak self] output in
             let (request, method) = output
             
             if let _method = method {
@@ -143,9 +145,14 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
             self?.webView.load(request)
         }
         
-        viewModel.onDismiss = { [weak self] in
+        viewModel.onDismissController = { [weak self] in
             self?.dismiss(animated: true)
         }
+        
+        viewModel.onWantingToExecuteJSScriptString = { [weak self] msg in
+            self?.webView.evaluateJavaScript(msg)
+        }
+        
     }
 
     /**
@@ -161,41 +168,16 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-
-        // Cancel navigation that happens after login to an account, which is when a redirect to `redirectURL` happens.
-        // The app handles this event fully in native UI.
-        let redirectUrl = RustFirefoxAccounts.redirectURL
-        if let navigationURL = navigationAction.request.url {
-            let expectedRedirectURL = URL(string: redirectUrl)!
-            if navigationURL.scheme == expectedRedirectURL.scheme && navigationURL.host == expectedRedirectURL.host && navigationURL.path == expectedRedirectURL.path {
-                decisionHandler(.cancel)
-                return
-            }
-        }
-
-        decisionHandler(.allow)
+        let shouldAllow = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
+        let decision: WKNavigationActionPolicy = shouldAllow ? .allow : .cancel
+        decisionHandler(decision)
     }
 }
 
 extension FxAWebViewController: WKScriptMessageHandler {
    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let url = viewModel.baseURL else { return }
-
-        let origin = message.frameInfo.securityOrigin
-        guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
-            print("Ignoring message - \(origin) does not match expected origin: \(url.origin ?? "nil")")
-            return
-        }
-
-        guard message.name == "accountsCommandHandler" else { return }
-        guard let body = message.body as? [String: Any], let detail = body["detail"] as? [String: Any],
-        let msg = detail["message"] as? [String: Any], let cmd = msg["command"] as? String else {
-            return
-        }
-
-        let id = Int(msg["messageId"] as? String ?? "")
-        viewModel.handleRemote(command: cmd, id: id, data: msg["data"])
+        viewModel.parseOrignAndExecuteRemoteCommand(basedOn: message)
     }
 }
 
