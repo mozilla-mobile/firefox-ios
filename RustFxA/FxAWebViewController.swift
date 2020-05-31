@@ -20,19 +20,6 @@ enum FxAPageType {
     case settingsPage
 }
 
-// See https://mozilla.github.io/ecosystem-platform/docs/fxa-engineering/fxa-webchannel-protocol
-// For details on message types.
-fileprivate enum RemoteCommand: String {
-    //case canLinkAccount = "can_link_account"
-    // case loaded = "fxaccounts:loaded"
-    case status = "fxaccounts:fxa_status"
-    case login = "fxaccounts:oauth_login"
-    case changePassword = "fxaccounts:change_password"
-    case signOut = "fxaccounts:logout"
-    case deleteAccount = "fxaccounts:delete_account"
-    case profileChanged = "profile:change"
-}
-
 /**
  Show the FxA web content for signing in, signing up, or showing FxA settings.
  Messaging from the website to native is with WKScriptMessageHandler.
@@ -40,12 +27,14 @@ fileprivate enum RemoteCommand: String {
 class FxAWebViewController: UIViewController, WKNavigationDelegate {
     fileprivate let dismissType: DismissType
     fileprivate var webView: WKWebView
-    fileprivate let pageType: FxAPageType
-    fileprivate var baseURL: URL?
-    fileprivate let profile: Profile
     /// Used to show a second WKWebView to browse help links.
     fileprivate var helpBrowser: WKWebView?
+<<<<<<< HEAD
     fileprivate var deepLinkParams: FxALaunchParams?
+=======
+    
+    fileprivate let viewModel: FxAWebViewModel
+>>>>>>> removing logic from controller
 
     /**
      init() FxAWebView.
@@ -55,9 +44,14 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
      - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part of a UINavigationController stack it will pop to the root.
      - parameter: deepLinkParams: URL args passed in from deep link that propagate to FxA web view
      */
+<<<<<<< HEAD
     init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, deepLinkParams: FxALaunchParams?) {
         self.pageType = pageType
         self.profile = profile
+=======
+    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType) {
+        self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile)
+>>>>>>> removing logic from controller
         self.dismissType = dismissalStyle
         self.deepLinkParams = deepLinkParams
 
@@ -85,12 +79,10 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     }
 
     override func viewDidLoad() {
-        // If accountMigrationFailed then the app menu has a caution icon, and at this point the user has taken sufficient action to clear the caution.
-        RustFirefoxAccounts.shared.accountMigrationFailed = false
-
         super.viewDidLoad()
         webView.navigationDelegate = self
         view = webView
+<<<<<<< HEAD
 
         func makeRequest(_ url: URL) -> URLRequest {
             if let query = deepLinkParams?.query {
@@ -136,7 +128,23 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
                         self.webView.load(makeRequest(url))
                     }
                 }
+=======
+        viewModel.webView = webView
+        
+        viewModel.authenticate()
+        
+        viewModel.onLoading = { [weak self] output in
+            let (request, method) = output
+            
+            if let _method = method {
+                UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: _method, object: .accountConnected)
+>>>>>>> removing logic from controller
             }
+            self?.webView.load(request)
+        }
+        
+        viewModel.onDismiss = { [weak self] in
+            self?.dismiss(animated: true)
         }
     }
 
@@ -170,132 +178,9 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
 }
 
 extension FxAWebViewController: WKScriptMessageHandler {
-    // Handle a message coming from the content server.
-    private func handleRemote(command rawValue: String, id: Int?, data: Any?) {
-        if let command = RemoteCommand(rawValue: rawValue) {
-            switch command {
-            case .login:
-                if let data = data {
-                    onLogin(data: data)
-                }
-            case .changePassword:
-                if let data = data {
-                    onPasswordChange(data: data)
-                }
-            case .status:
-                if let id = id {
-                    onSessionStatus(id: id)
-                }
-            case .deleteAccount, .signOut:
-                profile.removeAccount()
-                dismiss(animated: true)
-            case .profileChanged:
-                RustFirefoxAccounts.shared.accountManager.peek()?.refreshProfile(ignoreCache: true)
-            }
-        }
-    }
-
-    /// Send a message to web content using the required message structure.
-    private func runJS(typeId: String, messageId: Int, command: String, data: String = "{}") {
-        let msg = """
-            var msg = {
-                id: "\(typeId)",
-                message: {
-                    messageId: \(messageId),
-                    command: "\(command)",
-                    data : \(data)
-                }
-            };
-            window.dispatchEvent(new CustomEvent('WebChannelMessageToContent', { detail: JSON.stringify(msg) }));
-        """
-
-        webView.evaluateJavaScript(msg)
-    }
-
-    /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
-    private func onSessionStatus(id: Int) {
-        guard let fxa = RustFirefoxAccounts.shared.accountManager.peek() else { return }
-        let cmd = "fxaccounts:fxa_status"
-        let typeId = "account_updates"
-        let data: String
-        switch pageType {
-            case .settingsPage:
-                // Both email and uid are required at this time to properly link the FxA settings session
-                let email = fxa.accountProfile()?.email ?? ""
-                let uid = fxa.accountProfile()?.uid ?? ""
-                let token = (try? fxa.getSessionToken().get()) ?? ""
-                data = """
-                {
-                    capabilities: {},
-                    signedInUser: {
-                        sessionToken: "\(token)",
-                        email: "\(email)",
-                        uid: "\(uid)",
-                        verified: true,
-                    }
-                }
-            """
-            case .emailLoginFlow, .qrCode:
-                data = """
-                    { capabilities:
-                        { choose_what_to_sync: true, engines: ["bookmarks", "history", "tabs", "passwords"] },
-                    }
-                """
-        }
-
-        runJS(typeId: typeId, messageId: id, command: cmd, data: data)
-    }
-
-    private func onLogin(data: Any) {
-        guard let data = data as? [String: Any], let code = data["code"] as? String, let state = data["state"] as? String else {
-            return
-        }
-
-        if let declinedSyncEngines = data["declinedSyncEngines"] as? [String] {
-            // Stash the declined engines so on first sync we can disable them!
-            UserDefaults.standard.set(declinedSyncEngines, forKey: "fxa.cwts.declinedSyncEngines")
-        }
-
-        // Use presence of key `offeredSyncEngines` to determine if this was a new sign-up.
-        if let engines = data["offeredSyncEngines"] as? [String], engines.count > 0 {
-            LeanPlumClient.shared.track(event: .signsUpFxa)
-        } else {
-            LeanPlumClient.shared.track(event: .signsInFxa)
-        }
-        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
-
-        let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
-        RustFirefoxAccounts.shared.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
-            self.profile.syncManager.onAddedAccount()
-            
-            // ask for push notification
-            KeychainWrapper.sharedAppContainerKeychain.removeObject(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
-            let center = UNUserNotificationCenter.current()
-            center.requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-                guard error == nil else {
-                    return
-                }
-                if granted {
-                    NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-                }
-            }
-        }
-
-        dismiss(animated: true)
-    }
-
-    private func onPasswordChange(data: Any) {
-        guard let data = data as? [String: Any], let sessionToken = data["sessionToken"] as? String else {
-            return
-        }
-
-        RustFirefoxAccounts.shared.accountManager.peek()?.handlePasswordChanged(newSessionToken: sessionToken) {
-            NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
-        }
-    }
-
+   
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        guard let url = baseURL else { return }
+        guard let url = viewModel.baseURL else { return }
 
         let origin = message.frameInfo.securityOrigin
         guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
@@ -310,7 +195,7 @@ extension FxAWebViewController: WKScriptMessageHandler {
         }
 
         let id = Int(msg["messageId"] as? String ?? "")
-        handleRemote(command: cmd, id: id, data: msg["data"])
+        viewModel.handleRemote(command: cmd, id: id, data: msg["data"])
     }
 }
 
