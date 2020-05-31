@@ -48,18 +48,26 @@ class FxAWebViewModel {
     fileprivate let pageType: FxAPageType
     fileprivate let profile: Profile
     fileprivate let firefoxAccounts: RustFirefoxAccounts
-    
+    fileprivate let leanPlumClient: LeanPlumClient
     /**
     init() FxAWebView.
 
     - parameter pageType: Specify login flow or settings page if already logged in.
     - parameter profile: a Profile.
-    - parameter firefoxAccounts:
+    - parameter firefoxAccounts: RustFirefoxAccounts singleton instance
+    - parameter leanPlumClient: LeanPlumClient singleton instance
+
     */
-    init(pageType: FxAPageType, profile: Profile, firefoxAccounts: RustFirefoxAccounts) {
+    required init(
+        pageType: FxAPageType,
+        profile: Profile,
+        firefoxAccounts: RustFirefoxAccounts,
+        leanPlumClient: LeanPlumClient
+    ) {
         self.pageType = pageType
         self.profile = profile
         self.firefoxAccounts = firefoxAccounts
+        self.leanPlumClient = leanPlumClient
         
         // If accountMigrationFailed then the app menu has a caution icon,
         // and at this point the user has taken sufficient action to clear the caution.
@@ -215,11 +223,11 @@ extension FxAWebViewModel {
         
         // Use presence of key `offeredSyncEngines` to determine if this was a new sign-up.
         if let engines = data["offeredSyncEngines"] as? [String], engines.count > 0 {
-            LeanPlumClient.shared.track(event: .signsUpFxa)
+            leanPlumClient.track(event: .signsUpFxa)
         } else {
-            LeanPlumClient.shared.track(event: .signsInFxa)
+            leanPlumClient.track(event: .signsInFxa)
         }
-        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
+        leanPlumClient.set(attributes: [LPAttributeKey.signedInSync: true])
         
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
         firefoxAccounts.accountManager.peek()?.finishAuthentication(authData: auth) { _ in

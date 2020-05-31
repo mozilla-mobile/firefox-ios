@@ -46,11 +46,21 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
 =======
     init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType) {
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile)
 >>>>>>> removing logic from controller
 =======
         self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile, firefoxAccounts: RustFirefoxAccounts.shared)
 >>>>>>> removing webview within viewModel
+=======
+        self.viewModel = FxAWebViewModel(
+            pageType: pageType,
+            profile: profile,
+            firefoxAccounts: RustFirefoxAccounts.shared,
+            leanPlumClient: LeanPlumClient.shared
+        )
+        
+>>>>>>> inject LeanPlumClient via init
         self.dismissType = dismissalStyle
         self.deepLinkParams = deepLinkParams
 
@@ -136,6 +146,8 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         viewModel.authenticate()
         
         viewModel.onEmittingNewState = { [weak self] output in
+            assert(Thread.isMainThread)
+            
             let (request, method) = output
             
             if let _method = method {
