@@ -9,6 +9,7 @@ import SnapKit
 import XCGLogger
 
 
+
 private let log = Logger.browserLogger
 
 struct TodayStrings {
@@ -117,7 +118,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     fileprivate var scheme: String {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
             // Something went wrong/weird, but we should fallback to the public one.
-            return "Firefox - Search"
+            return "Firefox"
         }
         return string
     }

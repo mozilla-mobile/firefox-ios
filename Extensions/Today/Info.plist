@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>MozDevelopmentTeam</key>
-	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>$(MOZ_BUNDLE_DISPLAY_NAME)</string>
+	<string>Firefox - Search</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -24,6 +22,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>MozDevelopmentTeam</key>
+	<string>$(DEVELOPMENT_TEAM)</string>
+	<key>MozInternalURLScheme</key>
+	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionPointIdentifier</key>
@@ -31,7 +33,5 @@
 		<key>NSExtensionPrincipalClass</key>
 		<string>TodayViewController</string>
 	</dict>
-	<key>MozInternalURLScheme</key>
-	<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
 </dict>
 </plist>
