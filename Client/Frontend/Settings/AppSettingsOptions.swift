@@ -922,7 +922,7 @@ class ChinaSyncServiceSetting: Setting {
         UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)
-            RustFirefoxAccounts.reconfig()
+            RustFirefoxAccounts.reconfig(prefs: profile.prefs)
             return
         }
 
@@ -933,7 +933,7 @@ class ChinaSyncServiceSetting: Setting {
         let ok = UIAlertAction(title: Strings.OKString, style: .default) { _ in
             self.prefs.setObject(toggle.isOn, forKey: self.prefKey)
             self.profile.removeAccount()
-            RustFirefoxAccounts.reconfig()
+            RustFirefoxAccounts.reconfig(prefs: self.profile.prefs)
         }
         let cancel = UIAlertAction(title: Strings.CancelString, style: .default) { _ in
             toggle.setOn(!toggle.isOn, animated: true)
