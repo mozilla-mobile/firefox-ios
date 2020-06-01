@@ -39,17 +39,17 @@ final public class BreachAlertsManager {
         print("loadBreaches(): called")
 
         self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
-            if maybeData.isSuccess, let data = maybeData.successValue {
-                guard let decoded = try? JSONDecoder().decode([BreachRecord].self, from: data) else {
-                    completion(Maybe(failure: BreachAlertsError(description: "JSON data decode failure")))
-                    return
-                }
-
-                self.breaches = decoded
-                completion(Maybe(success: self.breaches))
-            } else {
-                completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches")))
+            guard let data = maybeData.successValue else {
+                completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches data")))
+                return
             }
+            guard let decoded = try? JSONDecoder().decode([BreachRecord].self, from: data) else {
+                completion(Maybe(failure: BreachAlertsError(description: "JSON data decode failure")))
+                return
+            }
+
+            self.breaches = decoded
+            completion(Maybe(success: self.breaches))
         }
     }
 
@@ -74,14 +74,11 @@ final public class BreachAlertsManager {
                     print("compareToBreaches(): breach: \(breach.domain)")
 
                     // date check
-                    let pwLastChanged = Date.init(timeIntervalSince1970: TimeInterval(login.timePasswordChanged))
+                    let pwLastChanged = Date(timeIntervalSince1970: TimeInterval(login.timePasswordChanged))
 
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM-dd"
-                    let breachDate = dateFormatter.date(from: breach.breachDate)
-                    print("compareToBreaches(): breach date: \(String(describing: breachDate))")
-
-                    if let breachDate = breachDate, pwLastChanged < breachDate {
+                    if let breachDate = dateFormatter.date(from: breach.breachDate), pwLastChanged < breachDate {
                         print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
                         result.append(login)
                     }

@@ -10,14 +10,14 @@ import XCTest
 let mockRecord = BreachRecord(
  name: "MockBreach",
  title: "A Mock BreachRecord",
- domain: "foo.bar",
+ domain: "breached.com",
  breachDate: "1970-01-02",
  description: "A mock BreachRecord for testing purposes."
 )
 
 class MockBreachAlertsClient: BreachAlertsClientProtocol {
     func fetchData(endpoint: BreachAlertsClient.Endpoint, completion: @escaping (Maybe<Data>) -> Void) {
-        guard let mockData = try? JSONEncoder().encode(mockRecord.self) else {
+        guard let mockData = try? JSONEncoder().encode([mockRecord].self) else {
             completion(Maybe(failure: BreachAlertsError(description: "failed to encode mockRecord")))
             return
         }
@@ -28,10 +28,10 @@ class MockBreachAlertsClient: BreachAlertsClientProtocol {
 class BreachAlertsTests: XCTestCase {
     var breachAlertsManager: BreachAlertsManager?
     let unbreachedLogin = [
-        LoginRecord(fromJSONDict: ["hostname" : "http://foo.bar", "timePasswordChanged": 1590784648189])
+        LoginRecord(fromJSONDict: ["hostname" : "http://unbreached.com", "timePasswordChanged": 1590784648189])
     ]
     let breachedLogin = [
-        LoginRecord(fromJSONDict: ["hostname" : "http://foo.bar", "timePasswordChanged": 46800])
+        LoginRecord(fromJSONDict: ["hostname" : "http://breached.com", "timePasswordChanged": 1])
    ]
     override func setUp() {
         self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient())
