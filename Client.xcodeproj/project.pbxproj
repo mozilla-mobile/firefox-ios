@@ -166,7 +166,7 @@
 		39012F281F8ED262002E3D31 /* ScreenGraphTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */; };
 		3905274C1C874D35007E0BB7 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3905274B1C874D35007E0BB7 /* NotificationCenter.framework */; };
 		3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3905274E1C874D35007E0BB7 /* TodayViewController.swift */; };
-		390527561C874D35007E0BB7 /* Today.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3905274A1C874D35007E0BB7 /* Today.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		390527561C874D35007E0BB7 /* Firefox - Search.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3905274A1C874D35007E0BB7 /* Firefox - Search.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		39098DC41CAD5ACB00AE87F3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 391AEFD11C8F11ED00691F84 /* Images.xcassets */; };
 		391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39EB46981E26DDB4006346E8 /* FxScreenGraph.swift */; };
 		39236E721FCC600200A38F1B /* TabEventHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39236E711FCC600200A38F1B /* TabEventHandlerTests.swift */; };
@@ -1151,7 +1151,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				390527561C874D35007E0BB7 /* Today.appex in Embed App Extensions */,
+				390527561C874D35007E0BB7 /* Firefox - Search.appex in Embed App Extensions */,
 				397848E21ED86605004C0C0B /* NotificationService.appex in Embed App Extensions */,
 				F84B22541A0920C600AAB793 /* ShareTo.appex in Embed App Extensions */,
 			);
@@ -1313,7 +1313,7 @@
 		318FB6EA1DB5600D0004E40F /* SQLiteHistoryFactories.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHistoryFactories.swift; sourceTree = "<group>"; };
 		31ADB5D91E58CEC300E87909 /* ClipboardBarDisplayHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardBarDisplayHandler.swift; sourceTree = "<group>"; };
 		39012F271F8ED262002E3D31 /* ScreenGraphTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenGraphTest.swift; sourceTree = "<group>"; };
-		3905274A1C874D35007E0BB7 /* Today.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Today.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		3905274A1C874D35007E0BB7 /* Firefox - Search.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Firefox - Search.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3905274B1C874D35007E0BB7 /* NotificationCenter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NotificationCenter.framework; path = System/Library/Frameworks/NotificationCenter.framework; sourceTree = SDKROOT; };
 		3905274E1C874D35007E0BB7 /* TodayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewController.swift; sourceTree = "<group>"; };
 		390527531C874D35007E0BB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -3433,7 +3433,7 @@
 				E6F9650C1B2F1CF20034B023 /* SharedTests.xctest */,
 				7BEB644D1C7345600092C02E /* L10nSnapshotTests.xctest */,
 				7BEB645A1C7345990092C02E /* MarketingUITests.xctest */,
-				3905274A1C874D35007E0BB7 /* Today.appex */,
+				3905274A1C874D35007E0BB7 /* Firefox - Search.appex */,
 				3BFE4B071D342FB800DDF53F /* XCUITests.xctest */,
 				3B43E3D01D95C48D00BBA9DB /* StoragePerfTests.xctest */,
 				E69DB0751E97DEA9008A67E6 /* SyncTelemetry.framework */,
@@ -3866,7 +3866,7 @@
 			);
 			name = Today;
 			productName = Today;
-			productReference = 3905274A1C874D35007E0BB7 /* Today.appex */;
+			productReference = 3905274A1C874D35007E0BB7 /* Firefox - Search.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		397848DA1ED86605004C0C0B /* NotificationService */ = {
@@ -5791,7 +5791,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Today;
+				PRODUCT_NAME = "Firefox - Search";
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec Today Development";
 				SWIFT_VERSION = 5.0;
 			};
@@ -5811,7 +5811,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Today;
+				PRODUCT_NAME = "Firefox - Search";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Today Development";
 				SWIFT_VERSION = 5.0;
 			};
@@ -5831,7 +5831,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Today;
+				PRODUCT_NAME = "Firefox - Search";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Today Development";
 				SWIFT_VERSION = 5.0;
 			};
@@ -7431,7 +7431,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = Today;
+				PRODUCT_NAME = "Firefox - Search";
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise Today Development";
 				SWIFT_VERSION = 5.0;
 			};
