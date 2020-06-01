@@ -1,10 +1,6 @@
-//
-//  BreachAlertsClient.swift
-//  Client
-//
-//  Created by Vanna Phong on 5/27/20.
-//  Copyright © 2020 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -29,6 +25,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
     public func fetchData(endpoint: Endpoint, completion: @escaping (_ result: Maybe<Data>) -> Void) {
         // endpoint.rawValue is the url
         guard let url = URL(string: endpoint.rawValue) else {
+            completion(Maybe(failure: BreachAlertsError(description: "bad endpoint URL")))
             return
         }
         dataTask?.cancel()
