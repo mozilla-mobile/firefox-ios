@@ -61,7 +61,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
-
         let button = imageButton.button
         button.frame = CGRect(width: 60.0, height: 60.0)
         button.performGradient(colorOne: TodayUX.privateSearchButtonColorOne, colorTwo: TodayUX.privateSearchButtonColorTwo, colorThree: TodayUX.privateSearchButtonColorThree)

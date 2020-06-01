@@ -211,6 +211,8 @@ extension UnifiedTelemetry {
         case dismissedOnboardingEmailLogin = "dismissed-onboarding-email-login"
         case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
         case privateBrowsingButton = "private-browsing-button"
+        case TodayWidgetNewSearch = "today-widget-new-search"
+        case TodayWidgetPrivateSearch = "today-widget-private-search"
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
         case tabSearch = "tab-search"
         case tabToolbar = "tab-toolbar"
