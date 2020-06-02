@@ -190,13 +190,10 @@ extension FxAWebViewController: WKScriptMessageHandler {
 
 extension FxAWebViewController {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        let hideLongpress = "document.body.style.webkitTouchCallout='none';"
-        webView.evaluateJavaScript(hideLongpress)
-
+        viewModel.dispatchLongPressCommand()
         //The helpBrowser shows the current URL in the navbar, the main fxa webview does not.
         guard webView !== helpBrowser else {
-            let isSecure = webView.hasOnlySecureContent
-            navigationItem.title = (isSecure ? "🔒 " : "") + (webView.url?.host ?? "")
+            navigationItem.title = viewModel.composeTitle(basedOn: webView.url, hasOnlySecureContent: webView.hasOnlySecureContent)
             return
         }
 

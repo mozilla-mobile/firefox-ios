@@ -92,11 +92,19 @@ class FxAWebViewModel {
     
     fileprivate(set) var baseURL: URL?
     
-    /// onEmittingNewState carries out the new state computed from invoking `authenticate`
+    /// This closure will carry out the new success state created by invoking `authenticate` method within this viewModel.
     var onEmittingNewState: ((STATE) -> Void)?
     
     var onDismissController: (() -> Void)?
     var onWantingToExecuteJSScriptString: ((String) -> Void)?
+    
+    func composeTitle(basedOn url: URL?, hasOnlySecureContent: Bool) -> String {
+        return (hasOnlySecureContent ? "🔒 " : "") + (url?.host ?? "")
+    }
+}
+
+// MARK: - Authentication
+extension FxAWebViewModel {
     
     func authenticate() {
         firefoxAccounts.accountManager.uponQueue(.main) { accountManager in
@@ -130,7 +138,14 @@ class FxAWebViewModel {
     }
 }
 
+// MARK: - Commands
+
 extension FxAWebViewModel {
+    
+    func dispatchLongPressCommand() {
+        let hideLongpress = "document.body.style.webkitTouchCallout='none';"
+        onWantingToExecuteJSScriptString?(hideLongpress)
+    }
     
     func parseAndExecuteSuitableRemoteCommand(basedOn message: WKScriptMessage) {
         guard let url = baseURL else { return }
