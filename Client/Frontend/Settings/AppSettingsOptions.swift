@@ -530,7 +530,7 @@ class ShowEtpCoverSheet: HiddenSetting {
     let profile: Profile
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: Set ETP constants to show Cover Sheet", comment: "Debug option to show ETP Cover Sheet"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: NSLocalizedString("Debug: ETP Cover Sheet On", comment: "Debug option to show ETP Cover Sheet"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     override init(settings: SettingsTableViewController) {
