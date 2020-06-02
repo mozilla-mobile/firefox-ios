@@ -38,9 +38,17 @@ class TabTrayV2ViewModel: NSObject {
 
         tabManager.tabs.forEach { tab in
             let section = timestampToSection(tab)
-            dataStore[section]?.insert(tab)
+            dataStore[section]?.insert(tab, at: 0)
         }
     
+        for (section, list) in dataStore {
+            let sorted = list.sorted {
+                let firstTab = $0.lastExecutedTime ?? 0
+                let secondTab = $1.lastExecutedTime ?? 0
+                return firstTab > secondTab
+            }
+            _ = dataStore.updateValue(sorted, forKey: section)
+        }
         viewController.tableView.reloadData()
     }
 
@@ -115,6 +123,7 @@ class TabTrayV2ViewModel: NSObject {
         guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
             return
         }
+        tab.lastExecutedTime = Date.now()
         selectTab(tab)
     }
     
@@ -163,19 +172,15 @@ extension TabTrayV2ViewModel: TabEventHandler {
 }
 
 extension TabTrayV2ViewModel: TabManagerDelegate {
-    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) {
+    func tabManager(_ tabManager: TabManager, didSelectedTabChange selected: Tab?, previous: Tab?, isRestoring: Bool) { }
 
-    }
-
-    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) {
-        
-    }
-
+    func tabManager(_ tabManager: TabManager, didAddTab tab: Tab, isRestoring: Bool) { }
+    
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         for (section, tabs) in dataStore {
             if let removalIndex = tabs.firstIndex(where: { $0 === tab }) {
                 dataStore[section]?.remove(at: removalIndex)
-                viewController.tableView.deleteRows(at: [IndexPath(row: removalIndex, section: section.rawValue)], with: .fade)
+                viewController.tableView.deleteRows(at: [IndexPath(row: removalIndex, section: section.rawValue)], with: .automatic)
             }
         }
     }
