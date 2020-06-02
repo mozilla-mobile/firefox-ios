@@ -118,6 +118,15 @@ class TabTrayV2ViewModel: NSObject {
     func closeAllTabs( completion: @escaping () -> Void) {
        
     }
+    func closeTabsForCurrentTray() {
+        viewController.hideDisplayedTabs() {
+            self.tabManager.removeTabsWithUndoToast(self.dataStore.compactMap{ $0.1 }.flatMap{ $0 })
+                if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
+                self.tabManager.selectTab(tab)
+                    self.viewController.dismissTabTray()
+            }
+        }
+    }
     
     func didSelectRowAt (index: IndexPath) {
         guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?[index.row] else {

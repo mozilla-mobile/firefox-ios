@@ -22,6 +22,7 @@ class TabTrayV2ViewController: UIViewController{
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(didTapToolbarAddTab), for: .touchUpInside)
+        toolbar.deleteButton.addTarget(self, action: #selector(didTapToolbarDelete), for: .touchUpInside)
         return toolbar
     }()
     
@@ -83,6 +84,36 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     
     @objc func didTapToolbarAddTab(_ sender: UIButton) {
         viewModel.addTab()
+        dismissTabTray()
+    }
+    
+    @objc func didTapToolbarDelete(_ sender: UIButton) {
+        let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
+        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
+        controller.popoverPresentationController?.sourceView = sender
+        controller.popoverPresentationController?.sourceRect = sender.bounds
+        present(controller, animated: true, completion: nil)
+    }
+    
+    func hideDisplayedTabs( completion: @escaping () -> Void) {
+           let cells = tableView.visibleCells
+
+           UIView.animate(withDuration: 0.2,
+                          animations: {
+                               cells.forEach {
+                                   $0.alpha = 0
+                               }
+                           }, completion: { _ in
+                               cells.forEach {
+                                   $0.alpha = 1
+                                   $0.isHidden = true
+                               }
+                               completion()
+                           })
+       }
+    
+    func dismissTabTray() {
         navigationController?.dismiss(animated: true, completion: nil)
     }
 }
@@ -90,7 +121,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
 extension TabTrayV2ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.didSelectRowAt(index: indexPath)
-        navigationController?.dismiss(animated: true, completion: nil)
+        dismissTabTray()
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
