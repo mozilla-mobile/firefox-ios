@@ -5,9 +5,6 @@
 import WebKit
 import UIKit
 import Account
-import MozillaAppServices
-import Shared
-import SwiftKeychainWrapper
 
 enum DismissType {
     case dismiss
@@ -65,8 +62,8 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         self.deepLinkParams = deepLinkParams
 
         let contentController = WKUserContentController()
-        if let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) {
-            let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        
+        if let userScript = FxAWebViewModel.makeSignInUserScript() {
             contentController.addUserScript(userScript)
         }
         let config = WKWebViewConfiguration()
@@ -75,7 +72,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         webView.allowsLinkPreview = false
         webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
         webView.scrollView.bounces = false  // Don't allow overscrolling.
-        webView.customUserAgent = UserAgent.mobileUserAgent() // This is not shown full-screen, use mobile UA
+        webView.customUserAgent = FxAWebViewModel.MobileUserAgent
 
         super.init(nibName: nil, bundle: nil)
         contentController.add(self, name: "accountsCommandHandler")
@@ -146,8 +143,6 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         viewModel.authenticate()
         
         viewModel.onEmittingNewState = { [weak self] output in
-            assert(Thread.isMainThread)
-            
             let (request, method) = output
             
             if let _method = method {
@@ -189,7 +184,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
 extension FxAWebViewController: WKScriptMessageHandler {
    
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        viewModel.parseOrignAndExecuteRemoteCommand(basedOn: message)
+        viewModel.parseAndExecuteSuitableRemoteCommand(basedOn: message)
     }
 }
 
@@ -223,7 +218,7 @@ extension FxAWebViewController: WKUIDelegate {
         helpBrowser = wv
         helpBrowser?.navigationDelegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: FxAWebViewModel.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
 
         return helpBrowser
     }

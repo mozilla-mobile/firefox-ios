@@ -49,8 +49,24 @@ class FxAWebViewModel {
     fileprivate let profile: Profile
     fileprivate let firefoxAccounts: RustFirefoxAccounts
     fileprivate let leanPlumClient: LeanPlumClient
+    
+    // This is not shown full-screen, use mobile UA
+    static let MobileUserAgent = UserAgent.mobileUserAgent()
+    
+    static let FxSignInFilePath = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
+    
+    static let BackTitle = Strings.BackTitle
+    
+    static func makeSignInUserScript() -> WKUserScript? {
+        guard let path = FxAWebViewModel.FxSignInFilePath,
+              let source = try? String(contentsOfFile: path, encoding: .utf8)
+        else { return nil }
+        let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+        return userScript
+    }
+    
     /**
-    init() FxAWebView.
+    init() FxAWebViewModel.
 
     - parameter pageType: Specify login flow or settings page if already logged in.
     - parameter profile: a Profile.
@@ -116,7 +132,7 @@ class FxAWebViewModel {
 
 extension FxAWebViewModel {
     
-    func parseOrignAndExecuteRemoteCommand(basedOn message: WKScriptMessage) {
+    func parseAndExecuteSuitableRemoteCommand(basedOn message: WKScriptMessage) {
         guard let url = baseURL else { return }
         
         let origin = message.frameInfo.securityOrigin
@@ -156,6 +172,8 @@ extension FxAWebViewModel {
                 onDismissController?()
             case .profileChanged:
                 firefoxAccounts.accountManager.peek()?.refreshProfile(ignoreCache: true)
+                // dismiss keyboard after changing profile in order to see notification view
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
         }
     }
