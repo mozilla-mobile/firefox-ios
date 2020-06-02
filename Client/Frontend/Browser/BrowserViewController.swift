@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController {
     var scrollController = TabScrollingController()
 
     fileprivate var keyboardState: KeyboardState?
-    fileprivate var hasTriedToPresentETPAlready = false
+    var hasTriedToPresentETPAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 

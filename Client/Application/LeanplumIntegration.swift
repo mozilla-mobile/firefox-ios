@@ -165,7 +165,7 @@ class LeanPlumClient {
     fileprivate func start() {
         guard let settings = getSettings(), isLocaleSupported(), !Leanplum.hasStarted() else {
             enabled = false
-            Sentry.shared.send(message: "LeanplumIntegration - Could not be started")
+            Sentry.shared.send(message: "LeanplumIntegration - Could not be started | Settings: \(String(describing: getSettings())) | isLocaleSupported: \(isLocaleSupported()) | Leanplum has not started: \(!Leanplum.hasStarted())")
             log.error("LeanplumIntegration - Could not be started")
             return
         }
