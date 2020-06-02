@@ -18,10 +18,10 @@ protocol TopTabCellDelegateV2: AnyObject {
 }
 
 class TabTrayV2ViewModel: NSObject {
-    fileprivate var dataStore: [TabSection: WeakList<Tab>] = [ .today: WeakList<Tab>(),
-                                                   .yesterday: WeakList<Tab>(),
-                                                   .lastWeek: WeakList<Tab>(),
-                                                   .older: WeakList<Tab>()]
+    fileprivate var dataStore: [TabSection: [Tab]] = [ .today: Array<Tab>(),
+                                                   .yesterday: Array<Tab>(),
+                                                   .lastWeek: Array<Tab>(),
+                                                   .older: Array<Tab>()]
     fileprivate let tabManager: TabManager
     fileprivate let viewController: TabTrayV2ViewController
 
@@ -99,7 +99,7 @@ class TabTrayV2ViewModel: NSObject {
     
     // The user has tapped the close button or has swiped away the cell
     func removeTab(forIndex index: IndexPath) {
-        guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?.at(index.row) else {
+        guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
             return
         }
         
@@ -112,7 +112,7 @@ class TabTrayV2ViewModel: NSObject {
     }
     
     func didSelectRowAt (index: IndexPath) {
-        guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?.at(index.row) else {
+        guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
             return
         }
         selectTab(tab)
@@ -136,7 +136,7 @@ class TabTrayV2ViewModel: NSObject {
     
     func configure(cell: TabTableViewCell, for index: IndexPath) {
         guard let section = TabSection(rawValue: index.section),
-            let data = dataStore[section]?.at(index.row),
+            let data = dataStore[section]?[index.row],
             let textLabel = cell.textLabel,
             let detailTextLabel = cell.detailTextLabel,
             let imageView = cell.imageView
@@ -173,8 +173,9 @@ extension TabTrayV2ViewModel: TabManagerDelegate {
 
     func tabManager(_ tabManager: TabManager, didRemoveTab tab: Tab, isRestoring: Bool) {
         for (section, tabs) in dataStore {
-             if let removed = tabs.remove(tab) {
-                viewController.tableView.deleteRows(at: [IndexPath(row: removed, section: section.rawValue)], with: .automatic)
+            if let removalIndex = tabs.firstIndex(where: { $0 === tab }) {
+                dataStore[section]?.remove(at: removalIndex)
+                viewController.tableView.deleteRows(at: [IndexPath(row: removalIndex, section: section.rawValue)], with: .fade)
             }
         }
     }
