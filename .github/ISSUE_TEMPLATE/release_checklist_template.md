@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 Branch setup, steps typically done when creating new version branch
-- [ ] Update Version Number in code (Eng task)
+- [ ] Update Version Number in code (Eng task, use `update_version.sh`)
 - [ ] Update `Client/Info.plist` MozWhatsNewTopic (Eng task)
 - [ ] Create version specific Sentry project
 - [ ] Setup Sentry keys in BuddyBuild (per release)
