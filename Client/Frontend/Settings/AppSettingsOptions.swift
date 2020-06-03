@@ -598,7 +598,7 @@ class ClearOnboardingConstantValues: HiddenSetting {
         // leanplum.
         return NSAttributedString(string: NSLocalizedString("Debug: Clear onboarding variables", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
-    
+
     override func onClick(_ navigationController: UINavigationController?) {
         settings.profile.prefs.removeObjectForKey(PrefsKeys.IntroSeen)
         OnboardingUserResearch().onboardingScreenType = nil

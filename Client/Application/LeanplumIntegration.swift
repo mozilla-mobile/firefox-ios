@@ -147,11 +147,11 @@ class LeanPlumClient {
         assert(Thread.isMainThread)
         return UIApplication.isInPrivateMode
     }
-    
+
     func isLPEnabled() -> Bool {
         return enabled && Leanplum.hasStarted()
     }
-    
+
     func lpSetupType() -> LPSetupType {
         return setupType
     }
@@ -159,15 +159,15 @@ class LeanPlumClient {
     static func shouldEnable(profile: Profile) -> Bool {
         return AppConstants.MOZ_ENABLE_LEANPLUM && (profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
     }
-    
+
     func setup(profile: Profile) {
         self.profile = profile
     }
-    
+
     func forceVariableUpdate() {
         Leanplum.forceContentUpdate()
     }
-    
+
     func recordSyncedClients(with profile: Profile?) {
         guard let profile = profile as? BrowserProfile else {
             return
