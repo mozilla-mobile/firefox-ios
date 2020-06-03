@@ -90,7 +90,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     @objc func didTapToolbarDelete(_ sender: UIButton) {
         let controller = AlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         controller.addAction(UIAlertAction(title: Strings.AppMenuCloseAllTabsTitleString, style: .default, handler: { _ in self.viewModel.closeTabsForCurrentTray() }), accessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
-        controller.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
+        controller.addAction(UIAlertAction(title: Strings.CancelString, style: .cancel, handler: nil), accessibilityIdentifier: "TabTrayController.deleteButton.cancel")
         controller.popoverPresentationController?.sourceView = sender
         controller.popoverPresentationController?.sourceRect = sender.bounds
         present(controller, animated: true, completion: nil)
