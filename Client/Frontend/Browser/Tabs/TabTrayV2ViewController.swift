@@ -26,11 +26,11 @@ class TabTrayV2ViewController: UIViewController{
     }()
     lazy var tableView: UITableView = {
         let tableView = UITableView()
+        tableView.tableFooterView = UIView()
         tableView.register(TabTableViewCell.self, forCellReuseIdentifier: TabTableViewCell.identifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: sectionHeaderIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.tableFooterView = UIView()
         return tableView
     }()
     // Constants
@@ -50,6 +50,7 @@ class TabTrayV2ViewController: UIViewController{
         // Add Subviews
         view.addSubview(toolbar)
         view.addSubview(tableView)
+        
         // Constraints
         tableView.snp.makeConstraints { make in
             make.left.equalTo(view.safeArea.left)
