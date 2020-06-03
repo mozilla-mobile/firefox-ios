@@ -678,6 +678,9 @@
                   Identifier = "SyncUITests/testPlaceholderValues()">
                </Test>
                <Test
+                  Identifier = "SyncUITests/testQRPairing()">
+               </Test>
+               <Test
                   Identifier = "SyncUITests/testShowPassword()">
                </Test>
                <Test

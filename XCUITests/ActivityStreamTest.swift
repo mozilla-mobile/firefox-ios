@@ -172,8 +172,8 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(TopSiteCellgroup.cells["apple"])
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
+        // The new tab is open but curren screen is still Homescreen
         XCTAssert(TopSiteCellgroup.exists)
-        XCTAssertFalse(app.staticTexts["apple"].exists)
 
         navigator.goto(TabTray)
         app.collectionViews.cells["Home"].tap()

@@ -244,13 +244,12 @@ public struct SyncPing: SyncTelemetryPing {
     public private(set) var payload: JSON
 
     public static func from(result: SyncOperationResult,
-                            account: Account.FirefoxAccount,
                             remoteClientsAndTabs: RemoteClientsAndTabs,
                             prefs: Prefs,
                             why: SyncPingReason) -> Deferred<Maybe<SyncPing>> {
         // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for
         // our ping's identifiers
-        return account.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
+        return RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
             let scratchpadPrefs = prefs.branch("sync.scratchpad")
             guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else {
                 return deferMaybe(SyncPingError.failedToRestoreScratchpad)

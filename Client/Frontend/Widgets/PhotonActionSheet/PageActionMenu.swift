@@ -5,6 +5,14 @@
 import Shared
 import Storage
 
+enum ButtonToastAction {
+    case share
+    case addToReadingList
+    case bookmarkPage
+    case removeBookmark
+    case copyUrl
+}
+
 extension PhotonActionSheetProtocol {
     fileprivate func share(fileURL: URL, buttonView: UIView, presentableVC: PresentableVC) {
         let helper = ShareExtensionHelper(url: fileURL, tab: tabManager.selectedTab)
@@ -27,7 +35,7 @@ extension PhotonActionSheetProtocol {
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
                        isPinned: Bool,
-                       success: @escaping (String) -> Void) -> Array<[PhotonActionSheetItem]> {
+                       success: @escaping (String, ButtonToastAction) -> Void) -> Array<[PhotonActionSheetItem]> {
         if tab.url?.isFileURL ?? false {
             let shareFile = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { _, _ in
                 guard let url = tab.url else { return }
@@ -57,7 +65,7 @@ extension PhotonActionSheetProtocol {
 
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
-            success(Strings.AppMenuAddToReadingListConfirmMessage)
+            success(Strings.AppMenuAddToReadingListConfirmMessage, .addToReadingList)
         }
 
         let bookmarkPage = PhotonActionSheetItem(title: Strings.AppMenuAddBookmarkTitleString, iconString: "menu-Bookmark") { _, _ in
@@ -67,7 +75,7 @@ extension PhotonActionSheetProtocol {
             }
             bvc.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
             UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
-            success(Strings.AppMenuAddBookmarkConfirmMessage)
+            success(Strings.AppMenuAddBookmarkConfirmMessage, .bookmarkPage)
         }
 
         let removeBookmark = PhotonActionSheetItem(title: Strings.AppMenuRemoveBookmarkTitleString, iconString: "menu-Bookmark-Remove") { _, _ in
@@ -75,7 +83,7 @@ extension PhotonActionSheetProtocol {
 
             self.profile.places.deleteBookmarksWithURL(url: url.absoluteString).uponQueue(.main) { result in
                 if result.isSuccess {
-                    success(Strings.AppMenuRemoveBookmarkConfirmMessage)
+                    success(Strings.AppMenuRemoveBookmarkConfirmMessage, .removeBookmark)
                 }
             }
 
@@ -147,7 +155,7 @@ extension PhotonActionSheetProtocol {
         let copyURL = PhotonActionSheetItem(title: Strings.AppMenuCopyURLTitleString, iconString: "menu-Copy-Link") { _, _ in
             if let url = tab.canonicalURL?.displayURL {
                 UIPasteboard.general.url = url
-                success(Strings.AppMenuCopyURLConfirmMessage)
+                success(Strings.AppMenuCopyURLConfirmMessage, .copyUrl)
             }
         }
 

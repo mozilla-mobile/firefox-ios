@@ -7,6 +7,11 @@ import Shared
 import Storage
 import Sync
 import UserNotifications
+import os.log
+
+func consoleLog(_ msg: String) {
+    os_log("%{public}@", log: OSLog(subsystem: "org.mozilla.firefox", category: "firefoxnotificationservice"), type: OSLogType.debug, msg)
+}
 
 class NotificationService: UNNotificationServiceExtension {
     var display: SyncDataDisplay?
@@ -18,11 +23,10 @@ class NotificationService: UNNotificationServiceExtension {
     // AppDelegate.application(_:didReceiveRemoteNotification:completionHandler:)
     // Once the notification is tapped, then the same userInfo is passed to the same method in the AppDelegate.
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+        consoleLog("push received")
         let userInfo = request.content.userInfo
 
-        guard let content = (request.content.mutableCopy() as? UNMutableNotificationContent) else {
-            return self.didFinish(PushMessage.accountVerified)
-        }
+        let content = request.content.mutableCopy() as! UNMutableNotificationContent
 
         if self.profile == nil {
             self.profile = ExtensionProfile(localName: "profile")
@@ -46,6 +50,7 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     func didFinish(_ what: PushMessage? = nil, with error: PushMessageError? = nil) {
+        consoleLog("push didFinish start")
         defer {
             // We cannot use tabqueue after the profile has shutdown;
             // however, we can't use weak references, because TabQueue isn't a class.
@@ -53,6 +58,7 @@ class NotificationService: UNNotificationServiceExtension {
             self.display?.tabQueue = nil
 
             profile?._shutdown()
+            consoleLog("push didFinish end")
         }
 
         guard let display = self.display else {
@@ -97,20 +103,12 @@ class SyncDataDisplay {
         switch message {
         case .commandReceived(let tab):
             displayNewSentTabNotification(tab: tab)
-        case .accountVerified:
-            displayAccountVerifiedNotification()
         case .deviceConnected(let deviceName):
             displayDeviceConnectedNotification(deviceName)
         case .deviceDisconnected(let deviceName):
             displayDeviceDisconnectedNotification(deviceName)
         case .thisDeviceDisconnected:
             displayThisDeviceDisconnectedNotification()
-        case .collectionChanged(let collections):
-            if collections.contains("clients") {
-                displayOldSentTabNotification()
-            } else {
-                displayUnknownMessageNotification(debugInfo: "collection changed")
-            }
         default:
             displayUnknownMessageNotification(debugInfo: "Unknown: \(message)")
             break
@@ -143,7 +141,8 @@ extension SyncDataDisplay {
     }
 
     func displayAccountVerifiedNotification() {
-        #if MOZ_CHANNEL_BETA
+        Sentry.shared.send(message: "SentTab error: account not verified")
+        #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: Account Verified")
             return
         #endif
@@ -151,18 +150,13 @@ extension SyncDataDisplay {
     }
 
     func displayUnknownMessageNotification(debugInfo: String) {
-        #if MOZ_CHANNEL_BETA
+        Sentry.shared.send(message: "SentTab error: \(debugInfo)")
+        #if MOZ_CHANNEL_BETA || DEBUG
             presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: "DEBUG: " + debugInfo)
-            Sentry.shared.send(message: "SentTab error: \(debugInfo)")
             return
         #endif
-        // if, by any change we haven't dealt with the message, then perhaps we
-        // can recycle it as a sent tab message.
-        if sentTabs.count > 0 {
-            displayOldSentTabNotification()
-        } else {
-            presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
-        }
+
+        presentNotification(title: Strings.SentTab_NoTabArrivingNotification_title, body: Strings.SentTab_NoTabArrivingNotification_body)
     }
 }
 
@@ -188,74 +182,18 @@ extension SyncDataDisplay {
 }
 
 extension SyncDataDisplay {
-    func displayOldSentTabNotification() {
-        // We will need to be more precise about calling these SentTab alerts
-        // once we are a) detecting different types of notifications and b) adding actions.
-        // For now, we need to add them so we can handle zero-tab sent-tab-notifications.
-        notificationContent.categoryIdentifier = "org.mozilla.ios.SentTab.placeholder"
-
-        var userInfo = notificationContent.userInfo
-
-        // Add the tabs we've found to userInfo, so that the AppDelegate
-        // doesn't have to do it again.
-        let serializedTabs = sentTabs.compactMap { t -> NSDictionary? in
-            return [
-                "title": t.title,
-                "url": t.url.absoluteString,
-                "displayURL": t.url.absoluteDisplayExternalString,
-                "deviceName": t.deviceName as Any,
-                ] as NSDictionary
-        }
-
-        func present(_ tabs: [NSDictionary]) {
-            if !tabs.isEmpty {
-                userInfo["sentTabs"] = tabs as NSArray
-            }
-            notificationContent.userInfo = userInfo
-            presentSentTabsNotification(tabs)
-        }
-
-        let center = UNUserNotificationCenter.current()
-        center.getDeliveredNotifications { notifications in
-            // Let's deal with sent-tab-notifications
-            let sentTabNotifications = notifications.filter {
-                $0.request.content.categoryIdentifier == self.notificationContent.categoryIdentifier
-            }
-
-            // We can delete zero tab sent-tab-notifications
-            let emptyTabNotificationsIds = sentTabNotifications.filter {
-                $0.request.content.userInfo["sentTabs"] == nil
-                }.map { $0.request.identifier }
-            center.removeDeliveredNotifications(withIdentifiers: emptyTabNotificationsIds)
-
-            // The one we've just received (but not delivered) may not have any tabs in it either
-            // e.g. if the previous one consumed two tabs.
-            if serializedTabs.count == 0 {
-                // In that case, we try and recycle an existing notification (one that has a tab in it).
-                if let firstNonEmpty = sentTabNotifications.first(where: { $0.request.content.userInfo["sentTabs"] != nil }),
-                    let previouslyDeliveredTabs = firstNonEmpty.request.content.userInfo["sentTabs"] as? [NSDictionary] {
-                    center.removeDeliveredNotifications(withIdentifiers: [firstNonEmpty.request.identifier])
-                    return present(previouslyDeliveredTabs)
-                }
-            }
-
-            // We have tabs in this notification, or we couldn't recycle an existing one that does.
-            present(serializedTabs)
-        }
-    }
-
     func presentSentTabsNotification(_ tabs: [NSDictionary]) {
         let title: String
         let body: String
 
         if tabs.count == 0 {
             title = Strings.SentTab_NoTabArrivingNotification_title
-            #if MOZ_CHANNEL_BETA
+            #if MOZ_CHANNEL_BETA || DEBUG
                 body = "DEBUG: Sent Tabs with no tab"
-                Sentry.shared.send(message: "SentTab error: no tab")
             #else
                 body = Strings.SentTab_NoTabArrivingNotification_body
             #endif
+            Sentry.shared.send(message: "SentTab error: no tab")
         } else {
             let deviceNames = Set(tabs.compactMap { $0["deviceName"] as? String })
             if let deviceName = deviceNames.first, deviceNames.count == 1 {

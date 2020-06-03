@@ -1,0 +1,34 @@
+---
+trust-domain: mobile
+treeherder:
+    group-names: {}
+
+task-priority: highest
+
+taskgraph:
+    register: ffios_taskgraph:register
+    repositories:
+        mobile:
+            name: "Firefox for iOS"
+    cached-task-prefix: mobile.v2.firefox-ios
+
+workers:
+    aliases:
+        bitrise:
+            provisioner: 'mobile-{level}'
+            implementation: docker-worker
+            os: linux
+            worker-type: 'bitrise'
+        images:
+            provisioner: 'mobile-{level}'
+            implementation: docker-worker
+            os: linux
+            worker-type: 'images'
+        misc:
+            provisioner: 'mobile-{level}'
+            implementation: docker-worker
+            os: linux
+            worker-type: 'b-linux'
+
+scriptworker:
+    scope-prefix: mobile:firefox-ios:releng

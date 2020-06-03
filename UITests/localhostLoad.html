@@ -19,5 +19,14 @@
   <button onclick="window.open(errorURL)">Error exploit</button>
   <button onclick="newTabExploit()">New tab exploit</button>
   <button onclick="window.open('http://1.2.3.4:1234')">URL spoof</button>
+
+  <p>
+      Tries to open a window with the word test. Both should be ok to do.<br>
+      <button onclick="window.open('data:;base64,test')">data-url-ok-1</button><br>
+      <button onclick="window.open('data:text/plain,test')">data-url-ok-2</button>
+      <br>
+      Tries to open a html data URL, this is a no-no.<br>
+      <button onclick="window.open('data:text/html;base64,VGhpcyBpcyBhIHRlc3QK')">data-url-html-bad</button>
+  </p>
 </body>
 </html>

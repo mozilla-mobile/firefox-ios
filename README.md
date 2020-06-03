@@ -6,7 +6,7 @@ Download on the [App Store](https://itunes.apple.com/app/firefox-web-browser/id9
 This branch (master)
 -----------
 
-This branch only works with [Xcode 11.3.1](https://apps.apple.com/app/xcode/id497799835), Swift 5.1.3 and supports iOS 12.0 and above.
+This branch only works with [Xcode 11.4.1](https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_11.4.1/Xcode_11.4.1.xip), Swift 5.2 and supports iOS 12.0 and above.
 
 Please make sure you aim your pull requests in the right direction.
 
@@ -21,10 +21,11 @@ Building the code
 -----------------
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install Carthage
+1. Install Carthage and Node
     ```shell
     brew update
     brew install carthage
+    brew install node
     ```
 1. Clone the repository:
     ```shell

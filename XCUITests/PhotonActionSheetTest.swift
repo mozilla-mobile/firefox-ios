@@ -32,6 +32,7 @@ class PhotonActionSheetTest: BaseTestCase {
     // Disable issue #5554
 
     func testShareOptionIsShown() {
+        navigator.goto(BrowserTab)
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
@@ -86,6 +87,8 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.goto(PageOptionsMenu)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
         waitForExistence(app.cells["Copy"], timeout: 5)
+        // This is not ideal but only way to get the element on iPhone 8
+        // for iPhone 11, that would be boundBy: 2
         let fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
 
         fennecElement.tap()

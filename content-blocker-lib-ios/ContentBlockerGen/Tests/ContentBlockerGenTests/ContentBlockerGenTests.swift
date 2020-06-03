@@ -24,18 +24,11 @@ let entitylist = """
 }
 """
 
-let googlemapping = """
-{ "categories": {
-    "Analytics": [{"Google": {"http://www.google.com/": ["google-analytics.com", "postrank.com"]}}]
-}}
-"""
-
 final class ContentBlockerGenTests: XCTestCase {
     func testParsing() throws {
         let entityJson = try! JSONSerialization.jsonObject(with: entitylist.data(using: .utf8)!, options: []) as! [String: Any]
-        let googleJson = try! JSONSerialization.jsonObject(with: googlemapping.data(using: .utf8)!, options: []) as! [String: Any]
 
-        let contentBlocker = ContentBlockerGenLib(entityListJson: entityJson, googleMappingJson: googleJson)
+        let contentBlocker = ContentBlockerGenLib(entityListJson: entityJson)
 
         let json = try! JSONSerialization.jsonObject(with: blacklist.data(using: .utf8)!, options: []) as! [String: Any]
         let categories = json["categories"]! as! [String: Any]

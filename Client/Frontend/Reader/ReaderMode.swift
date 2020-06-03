@@ -311,8 +311,7 @@ class ReaderMode: TabContentScript {
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        guard let msg = message.body as? [String: Any], let type = msg["Type"] as? String, let messageType = ReaderModeMessageType(rawValue: type), let token = msg["securityToken"] as? String,
-            token == UserScriptManager.securityToken else { return }
+        guard let msg = message.body as? [String: Any], let type = msg["Type"] as? String, let messageType = ReaderModeMessageType(rawValue: type) else { return }
         
         switch messageType {
             case .pageEvent:

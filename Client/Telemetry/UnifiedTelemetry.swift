@@ -91,6 +91,10 @@ class UnifiedTelemetry {
 
             outputDict["settings"] = settings
             
+            let delegate = UIApplication.shared.delegate as? AppDelegate
+
+            outputDict["openTabCount"] = delegate?.tabManager.count ?? 0
+
             var userInterfaceStyle = "unknown" // unknown implies that device is on pre-iOS 13
             if #available(iOS 13.0, *) {
                 userInterfaceStyle = UITraitCollection.current.userInterfaceStyle == .dark ? "dark" : "light"
@@ -147,6 +151,8 @@ extension UnifiedTelemetry {
         case action = "action"
         case appExtensionAction = "app-extension-action"
         case prompt = "prompt"
+        case enrollment = "enrollment"
+        case firefoxAccount = "firefox_account"
     }
 
     public enum EventMethod: String {
@@ -154,6 +160,7 @@ extension UnifiedTelemetry {
         case background = "background"
         case cancel = "cancel"
         case change = "change"
+        case close = "close"
         case delete = "delete"
         case deleteAll = "deleteAll"
         case drag = "drag"
@@ -167,6 +174,9 @@ extension UnifiedTelemetry {
         case translate = "translate"
         case view = "view"
         case applicationOpenUrl = "application-open-url"
+        case emailLogin = "email"
+        case qrPairing = "pairing"
+        case settings = "settings"
     }
 
     public enum EventObject: String {
@@ -202,6 +212,15 @@ extension UnifiedTelemetry {
         case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
         case privateBrowsingButton = "private-browsing-button"
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
+        case tabSearch = "tab-search"
+        case tabToolbar = "tab-toolbar"
+        case experimentEnrollment = "experiment-enrollment"
+        case chinaServerSwitch = "china-server-switch"
+        case accountConnected = "connected"
+        case accountDisconnected = "disconnected"
+        case appMenu = "app_menu"
+        case settings = "settings"
+        case onboarding = "onboarding"
     }
 
     public enum EventValue: String {
@@ -231,6 +250,7 @@ extension UnifiedTelemetry {
         case themeDark = "theme-dark"
         case privateTab = "private-tab"
         case normalTab = "normal-tab"
+        case tabView = "tab-view"
     }
 
     public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any]? = nil) {

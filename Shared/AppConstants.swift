@@ -20,6 +20,11 @@ public enum KVOConstants: String {
     case contentSize = "contentSize"
 }
 
+public struct KeychainKey {
+    public static let fxaPushRegistration = "account.push-registration"
+    public static let apnsToken = "apnsToken"
+}
+
 public struct AppConstants {
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
 

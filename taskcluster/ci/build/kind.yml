@@ -1,0 +1,27 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: taskgraph.loader.transform:loader
+
+transforms:
+    - ffios_taskgraph.transforms.bitrise:transforms
+    - ffios_taskgraph.transforms.secrets:transforms
+    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.task:transforms
+
+
+jobs:
+    screenshots:
+        attributes:
+            chunk_locales: ["en-US"]
+        bitrise-workflow: L10nBuild
+        description: Generate build instrumented for screenshots, including en-US pictures
+        index:
+            type: l10n-screenshots
+        run-on-tasks-for: []
+        worker:
+            artifacts:
+                - type: file
+                  name: public/build/target.zip
+                  path: /builds/worker/artifacts/l10n-screenshots-dd.zip

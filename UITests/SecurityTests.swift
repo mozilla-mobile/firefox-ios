@@ -120,9 +120,35 @@ class SecurityTests: KIFTestCase {
         XCTAssertEqual(webView.url!.absoluteString, url)
     }
 
+      func closeAllTabs() {
+        let closeButtonMatchers: [GREYMatcher] =
+            [grey_accessibilityID("TabTrayController.deleteButton.closeAll"),
+            grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!)]
+
+          EarlGrey.selectElement(with: grey_accessibilityID("TabTrayController.removeTabsButton")).perform(grey_tap())
+          EarlGrey.selectElement(with: grey_allOf(closeButtonMatchers)).perform(grey_tap())
+      }
+
+    func testDataURL() {
+        // Check data urls that are valid
+        ["data-url-ok-1", "data-url-ok-2"].forEach { buttonName in
+            tester().tapWebViewElementWithAccessibilityLabel(buttonName)
+            tester().wait(forTimeInterval: 1)
+            let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
+            XCTAssert(webView.url!.absoluteString.hasPrefix("data:")) // indicates page loaded ok
+            BrowserUtils.resetToAboutHome()
+            beforeEach()
+        }
+
+        // Check data url that is not allowed
+        tester().tapWebViewElementWithAccessibilityLabel("data-url-html-bad")
+        tester().wait(forTimeInterval: 1)
+        let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
+        XCTAssert(webView.url == nil) // indicates page load was blocked
+    }
+
     override func tearDown() {
         BrowserUtils.resetToAboutHome()
-        BrowserUtils.clearPrivateData()
         super.tearDown()
     }
 }

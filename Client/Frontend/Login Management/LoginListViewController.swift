@@ -62,7 +62,6 @@ class LoginListViewController: SensitiveViewController {
     fileprivate lazy var selectionButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = LoginListUX.selectionButtonFont
-        button.setTitle(self.selectAllTitle, for: [])
         button.addTarget(self, action: #selector(tappedSelectionButton), for: .touchUpInside)
         return button
     }()
@@ -192,9 +191,24 @@ class LoginListViewController: SensitiveViewController {
         selectionButton.setTitleColor(UIColor.theme.tableView.rowBackground, for: [])
         selectionButton.backgroundColor = UIColor.theme.general.highlightBlue
 
-        let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
-        if theme == .dark {
-            searchController.searchBar.barStyle = .black
+        let isDarkTheme = ThemeManager.instance.currentName == .dark
+        var searchTextField: UITextField?
+        if #available(iOS 13.0, *) {
+            searchTextField = searchController.searchBar.searchTextField
+        } else {
+            searchTextField = searchController.searchBar.value(forKey: "searchField") as? UITextField
+        }
+        // Theme the search text field (Dark / Light)
+        if isDarkTheme {
+            searchTextField?.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.white
+        } else {
+            searchTextField?.defaultTextAttributes[NSAttributedString.Key.foregroundColor] = UIColor.black
+        }
+        // Theme the glass icon next to the search text field
+        if let glassIconView = searchTextField?.leftView as? UIImageView {
+            //Magnifying glass
+            glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+            glassIconView.tintColor = UIColor.theme.tableView.headerTextLight
         }
     }
 
@@ -286,6 +300,7 @@ private extension LoginListViewController {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelSelection))
         selectionButtonHeightConstraint?.update(offset: UIConstants.ToolbarHeight)
+        selectionButton.setTitle(selectAllTitle, for: [])
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
         tableView.reloadData()
@@ -296,6 +311,7 @@ private extension LoginListViewController {
         loginSelectionController.deselectAll()
         toggleSelectionTitle()
         selectionButtonHeightConstraint?.update(offset: 0)
+        selectionButton.setTitle(nil, for: [])
         self.view.layoutIfNeeded()
 
         tableView.setEditing(false, animated: true)

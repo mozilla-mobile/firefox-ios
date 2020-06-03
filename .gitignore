@@ -1,5 +1,6 @@
 # Xcode
 build/
+!taskcluster/ci/build
 .build/
 *.pbxuser
 !default.pbxuser
@@ -64,6 +65,9 @@ python-env/
 .idea
 
 Carthage/
+# Required for Glean
+/Client/Generated
+.venv/
 
 ThirdParty/google-breakpad
 
@@ -84,3 +88,8 @@ __pycache__
 
 # Node.js
 node_modules
+Client/Assets/AllFramesAtDocumentStart.js
+Client/Assets/AllFramesAtDocumentEnd.js
+Client/Assets/MainFrameAtDocumentStart.js
+Client/Assets/MainFrameAtDocumentEnd.js
+Client/Assets/*.js.LICENSE.txt
