@@ -16,7 +16,7 @@ legacy.ids:
     description: |
       The client id from legacy telemetry.
     send_in_pings:
-      - deletion-request
+      - deletion_request
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
     data_reviews:
