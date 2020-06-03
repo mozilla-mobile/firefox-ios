@@ -37,6 +37,10 @@ class IntroViewModelV2 {
     // Initializer
     init() {
         onboardingResearch = OnboardingUserResearch()
-        screenType = onboardingResearch?.onboardingScreenType
+        // Case: Older user who has updated to a newer version and is not a first time user
+        // When user updates from a version of app which didn't have the
+        // user research onboarding screen type and is trying to Always Show the screen
+        // from Show Tour, we default to our .version1 of the screen
+        screenType = onboardingResearch?.onboardingScreenType ?? .versionV1
     }
 }

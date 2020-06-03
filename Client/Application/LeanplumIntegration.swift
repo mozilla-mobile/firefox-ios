@@ -110,6 +110,13 @@ enum LPSetupType: String {
     case none
 }
 
+enum LPState: String {
+    case disabled
+    case willStart
+    case started
+    case startedFirstRun
+    case startedSecondRun
+}
 class LeanPlumClient {
     static let shared = LeanPlumClient()
 
@@ -118,20 +125,29 @@ class LeanPlumClient {
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
     private var setupType: LPSetupType = .none
+    // Boolean variable to indicate whether leanplum has finished starting-up
+    var startCallFinished: Bool = false
+    // Closure delegate for when leanplum has finished starting-up
+    var finishedStartingLeanplum: (() -> Void)?
+    // leanplumDeviceId is what comes directly from leanplum and
+    // should be used and kept for showing the device ID in the
+    // debug menu so we can easily find the user in LP dashboard
+    var leanplumDeviceId: String? {
+        return Leanplum.deviceId()
+    }
+    // Used for sentry logging to know about the current state of leanplum execution
+    var lpState: LPState = .disabled
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
     private var useFxAPrePush = LPVar.define("useFxAPrePush", with: false)
     var enablePocketVideo = LPVar.define("pocketVideo", with: false)
-
-   // var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
-
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
         assert(Thread.isMainThread)
         return UIApplication.isInPrivateMode
     }
-
+    
     func isLPEnabled() -> Bool {
         return enabled && Leanplum.hasStarted()
     }
@@ -143,11 +159,15 @@ class LeanPlumClient {
     static func shouldEnable(profile: Profile) -> Bool {
         return AppConstants.MOZ_ENABLE_LEANPLUM && (profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
     }
-
+    
     func setup(profile: Profile) {
         self.profile = profile
     }
-
+    
+    func forceVariableUpdate() {
+        Leanplum.forceContentUpdate()
+    }
+    
     func recordSyncedClients(with profile: Profile?) {
         guard let profile = profile as? BrowserProfile else {
             return
@@ -194,19 +214,29 @@ class LeanPlumClient {
 
         self.setupCustomTemplates()
 
+        lpState = .willStart
         Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
 
+            assert(Thread.isMainThread)
+            self.startCallFinished = true
+            // https://docs.leanplum.com/reference#callbacks
+            // According to the doc all variables should be synced when lp start finishes
+            // Relying on this fact and sending the updated AB test variable
+            self.finishedStartingLeanplum?()
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
             if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
                 self.prefs?.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
                 self.track(event: .firstRun)
+                self.lpState = .startedFirstRun
             } else if self.prefs?.boolForKey("SecondRun") == nil {
                 self.prefs?.setBool(true, forKey: "SecondRun")
                 self.track(event: .secondRun)
+                self.lpState = .startedSecondRun
             }
 
+            self.lpState = .started
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
             self.recordSyncedClients(with: self.profile)
@@ -301,8 +331,8 @@ class LeanPlumClient {
     func getSettings() -> LPSettings? {
         let bundle = Bundle.main
         guard let appId = bundle.object(forInfoDictionaryKey: LPAppIdKey) as? String, !appId.isEmpty,
-                let productionKey = bundle.object(forInfoDictionaryKey: LPProductionKeyKey) as? String, !productionKey.isEmpty,
-                let developmentKey = bundle.object(forInfoDictionaryKey: LPDevelopmentKeyKey) as? String, !developmentKey.isEmpty else {
+            let productionKey = bundle.object(forInfoDictionaryKey: LPProductionKeyKey) as? String, !productionKey.isEmpty,
+            let developmentKey = bundle.object(forInfoDictionaryKey: LPDevelopmentKeyKey) as? String, !developmentKey.isEmpty else {
             return nil
         }
         return LPSettings(appId: appId, developmentKey: developmentKey, productionKey: productionKey)
