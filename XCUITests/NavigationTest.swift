@@ -93,7 +93,7 @@ class NavigationTest: BaseTestCase {
         checkFirefoxSyncScreenShownViaSettings()
 
         // After that it is possible to go back to Settings
-        let closeButton = app.navigationBars["Client.FxAWebView"].buttons["Turn on Sync"]
+        let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
         closeButton.tap()
         
         let closeButtonFxView = app.navigationBars["Turn on Sync"].buttons["Settings"]
