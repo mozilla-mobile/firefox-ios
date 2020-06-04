@@ -183,10 +183,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     // MARK: Button behaviour
     @objc func onPressNewTab(_ view: UIView) {
         openContainingApp("?private=false")
+//        UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .press, object: .TodayWidgetNewSearch, value: .normalTab)
     }
 
     @objc func onPressNewPrivateTab(_ view: UIView) {
         openContainingApp("?private=true")
+//        UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .press, object: .TodayWidgetPrivateSearch, value: .privateTab)
     }
 
     fileprivate func openContainingApp(_ urlSuffix: String = "") {
