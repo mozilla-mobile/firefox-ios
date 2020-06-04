@@ -93,3 +93,7 @@ Client/Assets/AllFramesAtDocumentEnd.js
 Client/Assets/MainFrameAtDocumentStart.js
 Client/Assets/MainFrameAtDocumentEnd.js
 Client/Assets/*.js.LICENSE.txt
+Client/Assets/AllFramesAtDocumentEnd.js
+Client/Assets/AllFramesAtDocumentStart.js
+Client/Assets/MainFrameAtDocumentEnd.js
+Client/Assets/MainFrameAtDocumentStart.js
