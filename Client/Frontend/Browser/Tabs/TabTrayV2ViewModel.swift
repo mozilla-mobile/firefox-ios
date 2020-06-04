@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -53,17 +53,15 @@ class TabTrayV2ViewModel: NSObject {
     }
 
     func timestampToSection(_ tab: Tab) -> TabSection {
-        let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? Date.now())
+        let calendar = Calendar.current
         let now = Date()
-
-        if tabDate <= Date().lastWeek {
-            return .older
-        } else if tabDate <= Date.yesterday {
-            return .lastWeek
-        } else if tabDate <= now {
-            return .yesterday
-        } else if tabDate == now {
+        let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? Date.now())
+        if calendar.isDateInToday(tabDate) {
             return .today
+        } else if calendar.isDateInYesterday(tabDate) {
+            return .yesterday
+        } else if tabDate <= now.lastWeek {
+            return .lastWeek
         } else {
             return .older
         }
