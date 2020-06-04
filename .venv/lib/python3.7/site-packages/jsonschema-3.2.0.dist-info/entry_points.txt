@@ -1,3 +1,0 @@
-[console_scripts]
-jsonschema = jsonschema.cli:main
-
