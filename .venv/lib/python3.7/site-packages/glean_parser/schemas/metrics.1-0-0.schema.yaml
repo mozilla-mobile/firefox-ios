@@ -1,0 +1,520 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+---
+$schema: http://json-schema.org/draft-07/schema#
+title: Metrics
+description: |
+  Schema for the metrics.yaml files for Mozilla's Glean telemetry SDK.
+
+  The top-level of the `metrics.yaml` file has a key defining each category of
+  metrics. Categories must be snake_case, and they may also have dots `.` to
+  define subcategories.
+
+$id: moz://mozilla.org/schemas/glean/metrics/1-0-0
+
+definitions:
+  token:
+    type: string
+    pattern: "^[A-Za-z_][A-Za-z0-9_\\.]*$"
+
+  snake_case:
+    type: string
+    pattern: "^[a-z_][a-z0-9_]*$"
+
+  dotted_snake_case:
+    type: string
+    pattern: "^[a-z_][a-z0-9_]{0,29}(\\.[a-z_][a-z0-9_]{0,29})*$"
+    maxLength: 40
+
+  kebab_case:
+    type: string
+    # Bug 1601270; we allow 3 specific existing snake_cased ping names for now,
+    # but these special cases can be removed once the number of legacy clients
+    # sufficiently dwindles, likely in 2020H2.
+    pattern: "^[a-z][a-z0-9-]{0,29}$\
+      |^deletion_request$|^bookmarks_sync$|^history_sync$|^session_end$|^all_pings$|^glean_.*$"
+
+  long_id:
+    allOf:
+      - $ref: "#/definitions/snake_case"
+      - maxLength: 40
+
+  short_id:
+    allOf:
+      - $ref: "#/definitions/snake_case"
+      - maxLength: 30
+
+  labeled_metric_id:
+    type: string
+    pattern: "^[a-z_][a-z0-9_-]{0,29}(\\.[a-z_][a-z0-9_-]{0,29})*$"
+    maxLength: 71  # Note: this should be category + metric + 1
+
+  metric:
+    description: |
+      Describes a single metric.
+
+      See https://mozilla.github.io/glean_parser/metrics-yaml.html
+
+    type: object
+
+    additionalProperties: false
+
+    properties:
+      type:
+        title: Metric type
+        description: |
+          **Required.**
+
+          Specifies the type of a metric, like "counter" or "event". This
+          defines which operations are valid for the metric, how it is stored
+          and how data analysis tooling displays it.
+
+          The supported types are:
+            - `event`: Record a specific event (with optional metadata).
+              Additional properties: `extra_keys`.
+
+            - `boolean`: A metric storing values of true or false.
+
+            - `string`: A metric storing Unicode string values.
+
+            - `string_list`: a list of Unicode strings.
+
+            - `counter`: A numeric value that can only be incremented.
+
+            - `quantity`: A numeric value that is set directly. Only allowed for
+              metrics coming from GeckoView.
+
+            - `timespan`: Represents a time interval. Additional properties:
+              `time_unit`.
+
+            - `timing_distribution`: Record the distribution of multiple
+              timings. Additional properties: `time_unit`.
+
+            - `datetime`: A date/time value. Represented as an ISO datetime in
+              UTC. Additional properties: `time_unit`.
+
+            - `uuid`: Record a UUID v4.
+
+            - `memory_distribution`: A histogram for recording memory usage
+              values. Additional properties: `memory_unit`.
+
+            - `custom_distribution`: A histogram with a custom range and number
+              of buckets. This metric type is for legacy support only and is
+              only allowed for metrics coming from GeckoView. Additional
+              properties: `range_min`, `range_max`, `bucket_count`,
+              `histogram_type`.
+
+            - Additionally, labeled versions of many metric types are supported.
+              These support the `labels`_ parameter, allowing multiple instances
+              of the metric to be stored at a given set of labels. The labeled
+              metric types include:
+
+                `labeled_boolean`, `labeled_string`, `labeled_counter`.
+
+        type: string
+        enum:
+          - event
+          - boolean
+          - string
+          - string_list
+          - counter
+          - quantity
+          - timespan
+          - timing_distribution
+          - custom_distribution
+          - memory_distribution
+          - datetime
+          - uuid
+          - labeled_boolean
+          - labeled_string
+          - labeled_counter
+
+      description:
+        title: Description
+        description: |
+          **Required.**
+
+          A textual description of what this metric does, what it means, and its
+          edge cases or any other helpful information.
+
+          Descriptions may contain [markdown
+          syntax](https://www.markdownguide.org/basic-syntax/).
+        type: string
+
+      lifetime:
+        title: Lifetime
+        description: |
+          Defines the lifetime of the metric. It must be one of the following
+          values:
+
+          - `ping` (default): The metric is reset each time it is sent in a
+            ping.
+
+          - `user`: The metric contains a property that is part of the user's
+            profile and is never reset.
+
+          - `application`: The metric contains a property that is related to the
+            application, and is reset only at application restarts.
+        enum:
+          - ping
+          - user
+          - application
+        default: ping
+
+      send_in_pings:
+        title: Send in pings
+        description: |
+          Which pings the metric should be sent on. If not specified, the metric
+          is sent on the "default ping", which is the `events` ping for events,
+          and the `metrics` ping for everything else. Most metrics don't need to
+          specify this.
+
+          (There is an additional special value of `all-pings` for internal
+          Glean metrics only that is used to indicate that a metric may appear
+          in any ping.)
+        type: array
+        items:
+          $ref: "#/definitions/kebab_case"
+        default:
+          - default
+
+      notification_emails:
+        title: Notification emails
+        description: |
+          **Required.**
+
+          A list of email addresses to notify for important events with the
+          metric or when people with context or ownership for the metric need to
+          be contacted.
+        type: array
+        minItems: 1
+        items:
+          type: string
+          format: email
+
+      bugs:
+        title: Related bugs
+        description: |
+          **Required.**
+
+          A list of bug URLs (e.g. Bugzilla and Github) that are relevant to
+          this metric, e.g., tracking its original implementation or later
+          changes to it.
+
+          Using bug numbers alone is deprecated and will be an error in the
+          future. Each entry should be a full URL to the bug in its tracker.
+        type: array
+        minItems: 1
+        items:
+          anyOf:
+            - type: integer
+            - type: string
+              format: uri
+
+      data_reviews:
+        title: Review references
+        description: |
+          **Required.**
+
+          A list of URIs to any data collection reviews relevant to the metric.
+        type: array
+        items:
+          type: string
+          format: uri
+
+      disabled:
+        title: Disabled
+        description: |
+          If `true`, the metric is disabled, and any metric collection on it
+          will be silently ignored at runtime.
+        type: boolean
+        default: false
+
+      expires:
+        title: Expires
+        description: |
+          **Required.**
+
+          May be one of the following values:
+            - `<build date>`: An ISO date `yyyy-mm-dd` in UTC on which the
+              metric expires. For example, `2019-03-13`. This date is checked at
+              build time. Except in special cases, this form should be used so
+              that the metric automatically "sunsets" after a period of time.
+            - `never`: This metric never expires.
+            - `expired`: This metric is manually expired.
+        type: string
+        pattern: "(never)|(expired)|([0-9]{4}-[0-9]{2}-[0-9]{2})"
+
+      version:
+        title: Metric version
+        description: |
+          The version of the metric. A monotonically increasing value. If not
+          provided, defaults to 0.
+
+      time_unit:
+        title: Time unit
+        description: |
+          Specifies the unit that the metric will be stored and displayed in. If
+          not provided, it defaults to milliseconds. Time values are sent to the
+          backend as integers, so `time_unit`_ determines the maximum resolution
+          at which timespans are recorded. Times are always truncated, not
+          rounded, to the nearest time unit. For example, a measurement of 25 ns
+          will be returned as 0 ms if `time_unit` is `"millisecond"`.
+
+          Valid when `type`_ is `timespan`, `timing_distribution` or `datetime`.
+        enum:
+          - nanosecond
+          - microsecond
+          - millisecond
+          - second
+          - minute
+          - hour
+          - day
+
+      memory_unit:
+        title: Memory unit
+        description: |
+          The unit that the incoming memory size values are recorded in.
+
+          The units are the power-of-2 units, so "kilobyte" is correctly a
+          "kibibyte".
+
+          - kilobyte == 2^10 ==         1,024 bytes
+          - megabyte == 2^20 ==     1,048,576 bytes
+          - gigabyte == 2^30 == 1,073,741,824 bytes
+
+          Values are automatically converted to and transmitted as bytes.
+
+          Valid when `type`_ is `memory_distribution`.
+        enum:
+          - byte
+          - kilobyte
+          - megabyte
+          - gigabyte
+
+      labels:
+        title: Labels
+        description: |
+          A list of labels for a labeled metric.  If provided, the labels are
+          enforced at run time, and recording to an unknown label is recorded
+          to the special label `__other__`.  If not provided, the labels
+          may be anything, but using too many unique labels will put some
+          labels in the special label `__other__`.
+
+          Valid with any of the labeled metric types.
+        anyOf:
+          - type: array
+            uniqueItems: true
+            items:
+              $ref: "#/definitions/labeled_metric_id"
+            maxItems: 16
+          - type: "null"
+
+      extra_keys:
+        title: Extra keys
+        description: |
+          The acceptable keys on the "extra" object sent with events. This is an
+          object mapping the key to an object containing metadata about the key.
+          This metadata object has the following keys:
+
+            - `description`: **Required.** A description of the key.
+
+          Valid when `type`_ is `event`.
+        type: object
+        propertyNames:
+          $ref: "#/definitions/dotted_snake_case"
+        additionalProperties:
+          type: object
+          properties:
+            description:
+              type: string
+          required:
+            - description
+        default: {}
+
+      gecko_datapoint:
+        title: Gecko Datapoint
+        description: |
+          This is a Gecko-specific property. It is the name of the Gecko metric
+          to accumulate the data from, when using the Glean SDK in a product
+          using GeckoView. See bug 1566356 for more context.
+
+        type: string
+
+      range_min:
+        title: Range minimum
+        description: |
+          The minimum value of a custom distribution.
+
+          Valid when `type`_ is `custom_distribution`.
+        type: number
+        default: 1
+
+      range_max:
+        title: Range maximum
+        description: |
+          The maximum value of a custom distribution.
+
+          Required when `type`_ is `custom_distribution`.
+        type: number
+
+      bucket_count:
+        title: Bucket count
+        description: |
+          The number of buckets to include in a custom distribution.
+
+          Required when `type`_ is `custom_distribution`.
+        type: number
+        minimum: 1
+        maximum: 100
+
+      histogram_type:
+        title: Histogram type
+        description: |
+          The type of histogram bucketing to use:
+            - `linear`: The buckets are linearly spaced within the range.
+            - `exponential`: The buckets use the natural logarithmic so the
+              smaller-valued buckets are smaller in size than the higher-valued
+              buckets.
+
+          Required when `type`_ is `custom_distribution`.
+        enum:
+          - linear
+          - exponential
+
+      unit:
+        title: Unit
+        description: |
+          The unit of the metric, for metrics that don't already require a
+          meaningful unit, such as `time_unit`.
+          This is provided for informational purposes only and doesn't have any
+          effect on data collection.
+        type: string
+
+      no_lint:
+        title: Lint checks to skip
+        description: |
+          This parameter lists any lint checks to skip for this metric only.
+        type: array
+        items:
+          type: string
+
+    required:
+      - type
+      - bugs
+      - description
+      - notification_emails
+      - data_reviews
+      - expires
+
+type: object
+
+propertyNames:
+  anyOf:
+    - allOf:
+        - $ref: "#/definitions/dotted_snake_case"
+        - not:
+            description: "'pings' is reserved as a category name."
+            const: pings
+    - enum: ['$schema']
+
+properties:
+  $schema:
+    type: string
+    format: url
+
+  no_lint:
+    title: Lint checks to skip globally
+    description: |
+      This parameter lists any lint checks to skip for this whole file.
+    type: array
+    items:
+      type: string
+
+additionalProperties:
+  type: object
+  propertyNames:
+    anyOf:
+      - $ref: "#/definitions/short_id"
+  additionalProperties:
+    allOf:
+      - $ref: "#/definitions/metric"
+      -
+        if:
+          properties:
+            type:
+              const: event
+        then:
+          properties:
+            lifetime:
+              description: |
+                Event metrics must have ping lifetime.
+              const: ping
+      - if:
+          not:
+            properties:
+              type:
+                enum:
+                  - timing_distribution
+                  - custom_distribution
+                  - memory_distribution
+                  - quantity
+                  - boolean
+                  - string
+                  - labeled_counter
+        then:
+          properties:
+            gecko_datapoint:
+              description: |
+                `gecko_datapoint` is only allowed for `timing_distribution`,
+                `custom_distribution`, `memory_distribution`, `quantity`,
+                `boolean`, `string` and `labeled_counter`.
+              maxLength: 0
+      -
+        if:
+          properties:
+            type:
+              enum:
+                - custom_distribution
+                - quantity
+        then:
+          required:
+            - gecko_datapoint
+          description: |
+            `custom_distribution` and `quantity` is only allowed for Gecko
+            metrics.
+      -
+        if:
+          properties:
+            type:
+              const: custom_distribution
+        then:
+          required:
+            - range_max
+            - bucket_count
+            - histogram_type
+          description: |
+            `custom_distribution` is missing required parameters `range_max`,
+            `bucket_count` and `histogram_type`.
+      -
+        if:
+          properties:
+            type:
+              const: memory_distribution
+        then:
+          required:
+            - memory_unit
+          description: |
+            `memory_distribution` is missing required parameter `memory_unit`.
+      -
+        if:
+          properties:
+            type:
+              const: quantity
+        then:
+          required:
+            - unit
+          description: |
+            `quantity` is missing required parameter `unit`.
