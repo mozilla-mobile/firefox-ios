@@ -135,7 +135,6 @@ class CustomSearchViewController: SettingsTableViewController {
             }
             self.engineTitle = title
         })
-        titleField.textField.text = engineTitle
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
 
         let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 133,
@@ -147,7 +146,6 @@ class CustomSearchViewController: SettingsTableViewController {
         })
 
         urlField.textField.autocapitalizationType = .none
-        urlField.textField.text = urlString
         urlField.textField.accessibilityIdentifier = "customEngineUrl"
 
         let settings: [SettingSection] = [
@@ -174,10 +172,6 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
     fileprivate let Padding: CGFloat = 8
     fileprivate let TextLabelHeight: CGFloat = 44
-    fileprivate var TextLabelWidth: CGFloat {
-        let width = textField.frame.width == 0 ? 360 : textField.frame.width
-        return width
-    }
     fileprivate var TextFieldHeight: CGFloat = 44
 
     fileprivate let defaultValue: String?
@@ -207,10 +201,9 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
 
         placeholderLabel.adjustsFontSizeToFitWidth = true
-        placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder
+        placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder ?? UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
         placeholderLabel.text = placeholder
-        placeholderLabel.isHidden = !textField.text.isEmpty
-        placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
+        placeholderLabel.frame = CGRect(width: textField.frame.width, height: TextLabelHeight)
         textField.font = placeholderLabel.font
 
         textField.textContainer.lineFragmentPadding = 0

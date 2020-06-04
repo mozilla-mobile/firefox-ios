@@ -17,7 +17,7 @@ class ClipBoardTests: BaseTestCase {
     func copyUrl() {
         navigator.goto(URLBarOpen)
         waitForExistence(app.textFields["address"])
-        app.textFields["address"].tap()
+        app.textFields["address"].press(forDuration: 3)
         waitForExistence(app.menuItems["Copy"])
         app.menuItems["Copy"].tap()
         app.typeText("\r")

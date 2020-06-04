@@ -43,6 +43,7 @@ class PocketTest: BaseTestCase {
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         waitForExistence(app.textFields["url"], timeout: 15)
-        waitForValueContains(app.textFields["url"], value: "getpocket.com/explore")
+        let value = app.textFields["url"].value as! String
+        XCTAssertEqual(value, "getpocket.com/explore/trending?src=ff_ios&cdn=0")
     }
 }

@@ -47,16 +47,7 @@ public class Sentry {
             return
         }
 
-        var bundle = Bundle.main
-        if bundle.bundleURL.pathExtension == "appex" {
-            // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
-            let url = bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent()
-            if let extensionBundle = Bundle(url: url) {
-                bundle = extensionBundle
-            }
-        }
-
-        guard let dsn = bundle.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
+        guard let dsn = Bundle.main.object(forInfoDictionaryKey: SentryDSNKey) as? String, !dsn.isEmpty else {
             Logger.browserLogger.debug("Not enabling Sentry; Not configured in Info.plist")
             return
         }

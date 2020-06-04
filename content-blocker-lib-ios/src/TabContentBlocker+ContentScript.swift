@@ -13,7 +13,9 @@ extension TabContentBlocker {
         guard isEnabled,
             let body = message.body as? [String: Any],
             let urls = body["urls"] as? [String],
-            let mainDocumentUrl = tab?.currentURL()
+            let mainDocumentUrl = tab?.currentURL(),
+            let token = body["securityToken"] as? String,
+            token == UserScriptManager.securityToken
         else {
             return
         }

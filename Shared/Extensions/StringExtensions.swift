@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import UIKit
 
 public extension String {
     func escape() -> String? {
@@ -107,18 +106,5 @@ public extension String {
         }
         // Trim and check empty string
         return (self.trimmingCharacters(in: .whitespaces) == "")
-    }
-    
-    /// Handles logic to make part of string bold
-    /// - Parameters:
-    ///     - boldString: the portion of the string that should be bold. Current string must already include this string.
-    ///     - font: font for entire string, part of string will be converted to bold version of this font
-    func attributedText(boldString: String, font: UIFont) -> NSAttributedString {
-        let attributedString = NSMutableAttributedString(string: self,
-                                                     attributes: [NSAttributedString.Key.font: font])
-        let boldFontAttribute: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: font.pointSize)]
-        let range = (self as NSString).range(of: boldString)
-        attributedString.addAttributes(boldFontAttribute, range: range)
-        return attributedString
     }
 }

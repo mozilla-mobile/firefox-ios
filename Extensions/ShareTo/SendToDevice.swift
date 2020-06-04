@@ -16,6 +16,7 @@ class SendToDevice: DevicePickerViewControllerDelegate, InstructionsViewControll
             instructionsViewController.delegate = self
             return instructionsViewController
         }
+
         let devicePickerViewController = DevicePickerViewController()
         devicePickerViewController.pickerDelegate = self
         devicePickerViewController.profile = nil // This means the picker will open and close the default profile

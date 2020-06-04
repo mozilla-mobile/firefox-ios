@@ -110,7 +110,6 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {

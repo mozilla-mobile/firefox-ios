@@ -283,7 +283,6 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             self.profile.history.clearHistory().uponQueue(.main) { _ in
                 self.reloadData()
             }
-            self.profile.recentlyClosedTabs.clearTabs()
         }))
         let cancelAction = UIAlertAction(title: Strings.CancelString, style: .cancel)
         alert.addAction(cancelAction)

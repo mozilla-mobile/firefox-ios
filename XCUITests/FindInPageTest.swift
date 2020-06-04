@@ -156,13 +156,13 @@ class FindInPageTests: BaseTestCase {
         let stringToFind = app.webViews.staticTexts.matching(identifier: textToFind)
         let firstStringToFind = stringToFind.element(boundBy: 0)
         firstStringToFind.press(forDuration: 3)
-        waitForExistence(app.menuItems["Copy"], timeout: 5)
+        waitForExistence(app.menuItems["Copy"])
         // Find in page is correctly launched, bar with text pre-filled and
         // the buttons to find next and previous
         if (app.menuItems["Find in Page"].exists) {
             app.menuItems["Find in Page"].tap()
         } else {
-            app.menuItems["show.next.items.menu.button"].tap()
+            app.menus.children(matching: .menuItem).element(boundBy: 3).tap()
             waitForExistence(app.menuItems["Find in Page"])
             app.menuItems["Find in Page"].tap()
         }

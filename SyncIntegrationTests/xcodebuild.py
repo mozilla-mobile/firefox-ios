@@ -10,7 +10,7 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 class XCodeBuild(object):
     binary = 'xcodebuild'
-    destination = 'platform=iOS Simulator,name=iPhone 11'
+    destination = 'platform=iOS Simulator,name=iPhone 11,OS=13.2.2'
     logger = logging.getLogger()
     scheme = 'Fennec_Enterprise_XCUITests_Integration'
     xcrun = XCRun()
@@ -31,12 +31,10 @@ class XCodeBuild(object):
             out = subprocess.check_output(
                 args,
                 cwd=os.path.join(here, os.pardir),
-                stderr=subprocess.STDOUT,
-                universal_newlines=True)
+                stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             out = e.output
             raise
         finally:
             with open(self.log, 'w') as f:
-                f.write(out)
-
+                f.writelines(str(out))

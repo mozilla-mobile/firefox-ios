@@ -49,7 +49,7 @@ open class MockSyncManager: SyncManager {
     open func onAddedAccount() -> Success {
         return succeed()
     }
-    open func onRemovedAccount() -> Success {
+    open func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
         return succeed()
     }
 
@@ -99,10 +99,6 @@ class MockFiles: FileAccessor {
 }
 
 open class MockProfile: Client.Profile {
-    public var rustFxA: RustFirefoxAccounts {
-        return RustFirefoxAccounts.shared
-    }
-
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: RustPlaces
@@ -204,18 +200,34 @@ open class MockProfile: Client.Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
+    public lazy var accountConfiguration: FirefoxAccountConfiguration = {
+        return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
+    }()
+    var account: Account.FirefoxAccount?
+
     public func hasAccount() -> Bool {
-        return true
+        return account != nil
     }
 
     public func hasSyncableAccount() -> Bool {
-        return true
+        return account?.actionNeeded == FxAActionNeeded.none
+    }
+
+    public func getAccount() -> Account.FirefoxAccount? {
+        return account
+    }
+
+    public func setAccount(_ account: Account.FirefoxAccount) {
+        self.account = account
+        self.syncManager.onAddedAccount()
     }
 
     public func flushAccount() {}
 
     public func removeAccount() {
-        self.syncManager.onRemovedAccount()
+        let old = self.account
+        self.account = nil
+        self.syncManager.onRemovedAccount(old)
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {

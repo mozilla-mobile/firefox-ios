@@ -55,8 +55,8 @@ class SaveLoginTest: BaseTestCase {
     func testPasscodeLoginsListFromBrowserTabMenu() {
         navigator.performAction(Action.SetPasscode)
         navigator.nowAt(PasscodeSettings)
-        navigator.goto(SettingsScreen)
-
+        navigator.goto(HomePanelsScreen)
+        waitForTabsButton()
         //Make sure you can access empty Login List from Browser Tab Menu
         navigator.goto(LockedLoginsSettings)
         navigator.performAction(Action.UnlockLoginsSettings)

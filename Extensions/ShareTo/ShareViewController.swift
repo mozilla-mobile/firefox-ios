@@ -6,7 +6,6 @@ import UIKit
 import SnapKit
 import Shared
 import Storage
-import Account
 
 extension UIStackView {
     func addBackground(color: UIColor) {
@@ -85,18 +84,15 @@ class ShareViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
-    }
 
-    func setupUI() {
-        view.backgroundColor = Theme.defaultBackground.color
-        view.subviews.forEach({ $0.removeFromSuperview() })
+        view.backgroundColor = .white
 
         setupNavBar()
         setupStackView()
-        setupRows()
 
         guard let shareItem = shareItem else { return }
+
+        self.setupRows()
 
         switch shareItem {
         case .shareItem(let item):
@@ -105,9 +101,6 @@ class ShareViewController: UIViewController {
         case .rawText(let text):
             self.pageInfoRowTitleLabel?.text = text.quoted
         }
-
-        let profile = BrowserProfile(localName: "profile")
-        RustFirefoxAccounts.startup(prefs: profile.prefs).uponQueue(.main) { _ in }
     }
 
     private func setupRows() {
@@ -147,7 +140,7 @@ class ShareViewController: UIViewController {
 
     private func makeSeparator(addTo parent: UIStackView) {
         let view = UIView()
-        view.backgroundColor = Theme.separator.color
+        view.backgroundColor = UX.separatorColor
         parent.addArrangedSubview(view)
         view.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -210,12 +203,12 @@ class ShareViewController: UIViewController {
 
         let icon = UIImageView(image: UIImage(named: imageName)?.withRenderingMode(.alwaysTemplate))
         icon.contentMode = .scaleAspectFit
-        icon.tintColor = Theme.actionRowTextAndIcon.color
+        icon.tintColor = UX.actionRowTextAndIconColor
 
         let title = UILabel()
         title.font = UX.baseFont
         title.handleLongLabels()
-        title.textColor = Theme.actionRowTextAndIcon.color
+        title.textColor = UX.actionRowTextAndIconColor
         title.text = label
         [icon, title].forEach { row.addArrangedSubview($0) }
 
@@ -226,7 +219,7 @@ class ShareViewController: UIViewController {
         if hasNavigation {
             let navButton = UIImageView(image: UIImage(named: "menu-Disclosure")?.withRenderingMode(.alwaysTemplate))
             navButton.contentMode = .scaleAspectFit
-            navButton.tintColor = Theme.actionRowTextAndIcon.color
+            navButton.tintColor = UX.actionRowTextAndIconColor
             row.addArrangedSubview(navButton)
             navButton.snp.makeConstraints { make in
                 make.width.equalTo(14)
@@ -263,7 +256,7 @@ class ShareViewController: UIViewController {
     private func makeActionDoneRow(addTo parent: UIStackView) -> (row: UIStackView, label: UILabel) {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.addBackground(color: Theme.doneLabelBackground.color)
+        stackView.addBackground(color: UX.doneLabelBackgroundColor)
         stackView.rightLeftEdges(inset: UX.rowInset)
         parent.addArrangedSubview(stackView)
 
@@ -297,7 +290,6 @@ class ShareViewController: UIViewController {
         navigationItem.titleView = UIImageView(image: UIImage(named: "Icon-Small"))
         navigationItem.titleView?.contentMode = .scaleAspectFit
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.SendToCancelButton, style: .plain, target: self, action: #selector(finish))
-        navigationController?.navigationBar.barTintColor = Theme.defaultBackground.color
     }
 
     private func setupStackView() {
@@ -367,16 +359,12 @@ extension ShareViewController {
         }
 
         gesture.isEnabled = false
-        view.isUserInteractionEnabled = false
-        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { _ in
-            self.view.isUserInteractionEnabled = true
-            self.sendToDevice = SendToDevice()
-            guard let sendToDevice = self.sendToDevice else { return }
-            sendToDevice.sharedItem = item
-            sendToDevice.delegate = self.delegate
-            let vc = sendToDevice.initialViewController()
-            self.navigationController?.pushViewController(vc, animated: true)
-        }
+        sendToDevice = SendToDevice()
+        guard let sendToDevice = sendToDevice else { return }
+        sendToDevice.sharedItem = item
+        sendToDevice.delegate = delegate
+        let vc = sendToDevice.initialViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     func openFirefox(withUrl url: String, isSearch: Bool) {

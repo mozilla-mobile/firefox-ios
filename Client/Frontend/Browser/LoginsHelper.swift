@@ -90,7 +90,9 @@ class LoginsHelper: TabContentScript {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard let res = message.body as? [String: Any],
-            let type = res["type"] as? String else {
+            let type = res["type"] as? String,
+            let token = res["securityToken"] as? String,
+            token == UserScriptManager.securityToken else {
             return
         }
 

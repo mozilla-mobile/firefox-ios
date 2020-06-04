@@ -5,10 +5,8 @@
 import Foundation
 import Shared
 import Sync
-import Account
-import MozillaAppServices
 
-class ManageFxAccountSetting: Setting {
+class ManageSetting: Setting {
     let profile: Profile
 
     override var accessoryType: UITableViewCell.AccessoryType { return .disclosureIndicator }
@@ -22,7 +20,15 @@ class ManageFxAccountSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FxAWebViewController(pageType: .settingsPage, profile: profile, dismissalStyle: .popToRootVC)
+        let viewController = FxAContentViewController(profile: profile)
+
+        if let account = profile.getAccount() {
+            var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
+            cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
+            if let url = cs?.url {
+                viewController.url = url
+            }
+        }
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -55,8 +61,7 @@ class DisconnectSetting: Setting {
         })
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
-                self.profile.removeAccount()
-                UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .settings, object: .accountDisconnected)
+                FxALoginHelper.sharedInstance.applicationDidDisconnect(UIApplication.shared)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
 
                 // If there is more than one view controller in the navigation controller, we can pop.
@@ -72,39 +77,33 @@ class DisconnectSetting: Setting {
 }
 
 class DeviceNamePersister: SettingValuePersister {
+    let profile: Profile
+
+    init(profile: Profile) {
+        self.profile = profile
+    }
+
     func readPersistedValue() -> String? {
-        guard let val = RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?
-            .state()?.localDevice?.displayName else {
-                return UserDefaults.standard.string(forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
-        }
-        UserDefaults.standard.set(val, forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
-        return val
+        return self.profile.getAccount()?.deviceName
     }
 
     func writePersistedValue(value: String?) {
         guard let newName = value,
-            let deviceConstellation = RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation() else {
+              let account = self.profile.getAccount() else {
             return
         }
-        UserDefaults.standard.set(newName, forKey: RustFirefoxAccounts.prefKeyLastDeviceName)
-
-        deviceConstellation.setLocalDeviceName(name: newName)
+        account.updateDeviceName(newName)
+        self.profile.flushAccount()
+        _ = self.profile.syncManager.syncNamedCollections(why: .clientNameChanged, names: ["clients"])
     }
 }
 
 class DeviceNameSetting: StringSetting {
-    weak var tableView: UITableViewController?
-
-    private var notification: NSObjectProtocol?
 
     init(settings: SettingsTableViewController) {
-        tableView = settings
         let settingsIsValid: (String?) -> Bool = { !($0?.isEmpty ?? true) }
-        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(), settingIsValid: settingsIsValid)
+        super.init(defaultValue: DeviceInfo.defaultClientName(), placeholder: "", accessibilityIdentifier: "DeviceNameSetting", persister: DeviceNamePersister(profile: settings.profile), settingIsValid: settingsIsValid)
 
-        notification = NotificationCenter.default.addObserver(forName: Notification.Name.constellationStateUpdate, object: nil, queue: nil) { [weak self] notification in
-            self?.tableView?.tableView.reloadData()
-        }
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -112,13 +111,7 @@ class DeviceNameSetting: StringSetting {
         textField.textAlignment = .natural
     }
 
-    deinit {
-        if let notification = notification {
-            NotificationCenter.default.removeObserver(notification)
-        }
-    }
 }
-
 
 class SyncContentSettingsViewController: SettingsTableViewController {
     fileprivate var enginesToSyncOnExit: Set<String> = Set()
@@ -127,8 +120,6 @@ class SyncContentSettingsViewController: SettingsTableViewController {
         super.init(style: .grouped)
 
         self.title = Strings.FxASettingsTitle
-
-        RustFirefoxAccounts.shared.accountManager.peek()?.deviceConstellation()?.refreshState()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -157,7 +148,7 @@ class SyncContentSettingsViewController: SettingsTableViewController {
     }
 
     override func generateSettings() -> [SettingSection] {
-        let manage = ManageFxAccountSetting(settings: self)
+        let manage = ManageSetting(settings: self)
         let manageSection = SettingSection(title: nil, footerTitle: nil, children: [manage])
 
         let bookmarks = BoolSetting(prefs: profile.prefs, prefKey: "sync.engine.bookmarks.enabled", defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.FirefoxSyncBookmarksEngine), attributedStatusText: nil, settingDidChange: engineSettingChanged("bookmarks"))
