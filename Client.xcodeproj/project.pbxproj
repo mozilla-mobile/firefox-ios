@@ -4232,6 +4232,7 @@
 			children = (
 				23AE36612475A0EF00ACB7BA /* TabTrayV2ViewController.swift */,
 				23F2C369244E463C00FA4496 /* TabTrayV2ViewModel.swift */,
+				436715882488216A006D1D4E /* TabTableViewCell.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -7560,6 +7561,7 @@
 				5F130D2E2483508E00B0F7D0 /* FxAWebViewModel.swift in Sources */,
 				D0FCF7F51FE45842004A7995 /* UserScriptManager.swift in Sources */,
 				CA8226F324C11DB7008A6F38 /* LoginListTableViewCell.swift in Sources */,
+				436715892488216A006D1D4E /* TabTableViewCell.swift in Sources */,
 				E4A960061ABB9C450069AD6F /* ReaderModeUtils.swift in Sources */,
 				048B4C8324A53F26001B56E8 /* ButtonWithSublabel.swift in Sources */,
 				435D660323D793DF0046EFA2 /* UpdateModel.swift in Sources */,

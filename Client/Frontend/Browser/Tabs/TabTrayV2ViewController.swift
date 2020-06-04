@@ -15,31 +15,43 @@ struct TabTrayV2ControllerUX {
 }
 
 class TabTrayV2ViewController: UIViewController{
-    let tableView = UITableView()
+    // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
-    fileprivate let sectionHeaderIdentifier = "SectionHeader"
-    
+    // Views
     lazy var toolbar: TrayToolbar = {
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(didTapToolbarAddTab), for: .touchUpInside)
         toolbar.deleteButton.addTarget(self, action: #selector(didTapToolbarDelete), for: .touchUpInside)
         return toolbar
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.addSubview(tableView)
-        view.addSubview(toolbar)
-        
+    lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.tableFooterView = UIView()
         tableView.register(TabTableViewCell.self, forCellReuseIdentifier: TabTableViewCell.identifier)
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: sectionHeaderIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.tableFooterView = UIView()
-        
+        return tableView
+    }()
+    // Constants
+    fileprivate let sectionHeaderIdentifier = "SectionHeader"
+    
+    // Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        viewSetup()
+    }
+    
+    private func viewSetup() {
+        // MARK: TODO - Theme setup setup
+        // --- --- --- --- --- --- --- ---
+        // Title
         navigationItem.title = Strings.TabTrayV2Title
+        // Add Subviews
+        view.addSubview(toolbar)
+        view.addSubview(tableView)
         
+        // Constraints
         tableView.snp.makeConstraints { make in
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
@@ -54,6 +66,7 @@ class TabTrayV2ViewController: UIViewController{
     }
 }
 
+// MARK: Datastore
 extension TabTrayV2ViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -135,58 +148,5 @@ extension TabTrayV2ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == TabSection(rawValue: section)?.rawValue && viewModel.numberOfRowsInSection(section: section) != 0 ? UITableView.automaticDimension : 0
-    }
-}
-
-class TabTableViewCell: UITableViewCell {
-    static let identifier = "tabCell"
-    
-    lazy var closeButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
-        button.tintColor = UIColor.theme.tabTray.cellCloseButton
-        button.sizeToFit()
-        return button
-    }()
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-        guard let screenshotView = imageView,
-            let websiteTitle = textLabel,
-            let urlLabel = detailTextLabel
-            else { return }
-        
-        screenshotView.contentMode = .scaleAspectFill
-        screenshotView.clipsToBounds = true
-        screenshotView.layer.cornerRadius = TabTrayV2ControllerUX.cornerRadius
-        screenshotView.layer.borderWidth = 1
-        screenshotView.layer.borderColor = UIColor.Photon.Grey30.cgColor
-
-        urlLabel.textColor = UIColor.Photon.Grey40
-        
-        screenshotView.snp.makeConstraints { make in
-            make.height.width.equalTo(68)
-            make.leading.equalToSuperview().offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
-            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.screenshotMarginTopBottom)
-            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.screenshotMarginTopBottom)
-        }
-        
-        websiteTitle.snp.makeConstraints { make in
-            make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
-            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.textMarginTopBottom)
-            make.bottom.equalTo(urlLabel.snp.top)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-        
-        urlLabel.snp.makeConstraints { make in
-            make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
-            make.trailing.equalToSuperview()
-            make.top.equalTo(websiteTitle.snp.bottom).offset(3)
-            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.textMarginTopBottom)
-        }
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
