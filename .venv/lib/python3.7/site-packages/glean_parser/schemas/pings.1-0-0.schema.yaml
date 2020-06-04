@@ -1,0 +1,141 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+---
+$schema: http://json-schema.org/draft-07/schema#
+title: Pings
+description: |
+  Schema for the pings.yaml files for Mozilla's Glean telemetry SDK.
+
+  The top-level of the `pings.yaml` file has a key defining the name of each
+  ping. The values contain metadata about that ping. Ping names must be
+  kebab-case per https://docs.telemetry.mozilla.org/cookbooks/new_ping.html
+
+$id: moz://mozilla.org/schemas/glean/pings/1-0-0
+
+definitions:
+  dotted_snake_case:
+    type: string
+    pattern: "^[a-z_][a-z0-9_]{0,29}(\\.[a-z_][a-z0-9_]{0,29})*$"
+    maxLength: 40
+  kebab_case:
+    type: string
+    # Bug 1601270; we allow 3 specific existing snake_cased ping names for now,
+    # but these special cases can be removed once the number of legacy clients
+    # sufficiently dwindles, likely in 2020H2.
+    pattern: "^[a-z][a-z0-9-]{0,29}$\
+      |^deletion_request$|^bookmarks_sync$|^history_sync$|^session_end$|^all_pings$|^glean_.*$"
+
+type: object
+
+propertyNames:
+  allOf:
+    - anyOf:
+        - $ref: "#/definitions/kebab_case"
+        - enum: ['$schema']
+    - not:
+        enum: ['all-pings']
+
+properties:
+  $schema:
+    type: string
+    format: url
+
+additionalProperties:
+  type: object
+  properties:
+    description:
+      title: Description
+      description: |
+        **Required.**
+
+        A textual description of the purpose of this ping and what it contains.
+
+        Descriptions may contain [markdown
+        syntax](https://www.markdownguide.org/basic-syntax/).
+      type: string
+
+    include_client_id:
+      title: Include client id
+      description: |
+        **Required.**
+
+        When `true`, include the `client_id` value in the ping.
+      type: boolean
+
+    send_if_empty:
+      title: Send if empty
+      description: |
+        When `false` a ping is sent only if it contains data (the default).
+        When `true` a ping is sent even if it contains no data.
+      type: boolean
+
+    notification_emails:
+      title: Notification emails
+      description: |
+        **Required.**
+
+        A list of email addresses to notify for important events with the
+        ping or when people with context or ownership for the ping need to
+        be contacted.
+      type: array
+      minItems: 1
+      items:
+        type: string
+        format: email
+
+    bugs:
+      title: Related bugs
+      description: |
+        **Required.**
+
+        A list of bugs (e.g. Bugzilla and Github) that are relevant to this
+        ping, e.g., tracking its original implementation or later changes to
+        it.
+
+        If a number, it is an ID to an issue in the default tracker (e.g.
+        Mozilla's Bugzilla instance). If a string, it must be a URI to a bug
+        page in a tracker.
+      type: array
+      minItems: 1
+      items:
+        anyOf:
+          - type: integer
+          - type: string
+            format: uri
+
+    data_reviews:
+      title: Review references
+      description: |
+        **Required.**
+
+        A list of URIs to any data collection reviews relevant to the ping.
+      type: array
+      items:
+        type: string
+        format: uri
+
+    reasons:
+      title: The reasons this ping can be sent.
+      description: |
+        A list of reasons that the ping might be triggered. Sent in the ping's
+        `ping_info.reason` field.
+
+        Specified as a mapping from reason codes (which are short strings), to
+        a textual description of the reason.
+      type: object
+      propertyNames:
+        type: string
+        maxLength: 30
+      additionalProperties:
+        type: string
+
+  required:
+    - description
+    - include_client_id
+    - bugs
+    - notification_emails
+    - data_reviews
+
+  additionalProperties: false

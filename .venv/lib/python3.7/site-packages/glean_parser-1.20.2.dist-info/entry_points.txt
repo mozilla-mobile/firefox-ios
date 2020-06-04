@@ -1,0 +1,3 @@
+[console_scripts]
+glean_parser = glean_parser.__main__:main
+
