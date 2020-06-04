@@ -8,8 +8,6 @@ import Shared
 import SnapKit
 import XCGLogger
 
-
-
 private let log = Logger.browserLogger
 
 struct TodayStrings {
@@ -30,7 +28,6 @@ private struct TodayUX {
     static let privateSearchButtonColorThree = UIColor(red: 117.0/255.0, green: 41.0/255.0, blue: 167.0/255.0, alpha: 1.0)
     static let privateSearchButtonColorTwo = UIColor(red: 73.0/255.0, green: 46.0/255.0, blue: 133.0/255.0, alpha: 1.0)
     static let privateSearchButtonColorOne = UIColor(red: 56.0/255.0, green: 51.0/255.0, blue: 114.0/255.0, alpha: 1.0)
-
 }
 
 @objc (TodayViewController)
@@ -233,7 +230,6 @@ extension UIButton {
         gradientLayer.cornerRadius = self.frame.size.width/2
         layer.masksToBounds = true
         layer.insertSublayer(gradientLayer, below: self.imageView?.layer)
-
     }
 }
 
@@ -252,7 +248,6 @@ class ImageButtonWithLabel: UIView {
     }
 
     func performLayout() {
-        
         addSubview(button)
         addSubview(label)
         
@@ -262,7 +257,6 @@ class ImageButtonWithLabel: UIView {
             make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(30)
             make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(30)
             make.height.width.equalTo(60)
-            
         }
 
         label.snp.makeConstraints { make in
