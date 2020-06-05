@@ -37,7 +37,7 @@ fileprivate enum RemoteCommand: String {
  Show the FxA web content for signing in, signing up, or showing FxA settings.
  Messaging from the website to native is with WKScriptMessageHandler.
  */
-class FxAWebViewController: UIViewController, WKNavigationDelegate, PopoverPresenterDataProviderDelegate {
+class FxAWebViewController: UIViewController, WKNavigationDelegate {
     fileprivate let dismissType: DismissType
     fileprivate var webView: WKWebView
     fileprivate let pageType: FxAPageType
@@ -45,8 +45,6 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate, PopoverPrese
     fileprivate let profile: Profile
     /// Used to show a second WKWebView to browse help links.
     fileprivate var helpBrowser: WKWebView?
-
-    var popoverPresentationTapLocation: CGPoint = .zero
 
     /**
      init() FxAWebView.
@@ -77,10 +75,6 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate, PopoverPrese
         contentController.add(self, name: "accountsCommandHandler")
         webView.navigationDelegate = self
         webView.uiDelegate = self
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(webViewTapped(_:)) )
-        tapGesture.delegate = self
-        webView.addGestureRecognizer(tapGesture)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -137,11 +131,6 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate, PopoverPrese
             navigationController?.popToRootViewController(animated: true)
             completion?()
         }
-    }
-
-
-    @objc func webViewTapped(_ sender: UITapGestureRecognizer) {
-        popoverPresentationTapLocation = sender.location(in: view)
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
@@ -353,18 +342,4 @@ extension FxAWebViewController: WKUIDelegate {
         self.navigationItem.leftBarButtonItem = nil
         self.navigationItem.hidesBackButton = false
     }
-
-    override func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)? = nil) {
-      super.present(viewControllerToPresent, animated: flag, completion: completion)
-    }
-
-}
-
-extension FxAWebViewController: UIGestureRecognizerDelegate {
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                            shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-
 }
