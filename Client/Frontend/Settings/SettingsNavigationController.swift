@@ -27,7 +27,6 @@ class ThemedNavigationController: UINavigationController {
     }
 }
 
-
 extension ThemedNavigationController: Themeable {
     func applyTheme() {
         navigationBar.barTintColor = UIColor.theme.tableView.headerBackground
