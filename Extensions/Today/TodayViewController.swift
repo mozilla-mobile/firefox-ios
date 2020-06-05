@@ -25,9 +25,9 @@ private struct TodayUX {
     static let copyLinkImageWidth: CGFloat = 23
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
-    static let privateSearchButtonColorThree = UIColor(red: 117.0/255.0, green: 41.0/255.0, blue: 167.0/255.0, alpha: 1.0)
-    static let privateSearchButtonColorTwo = UIColor(red: 73.0/255.0, green: 46.0/255.0, blue: 133.0/255.0, alpha: 1.0)
-    static let privateSearchButtonColorOne = UIColor(red: 56.0/255.0, green: 51.0/255.0, blue: 114.0/255.0, alpha: 1.0)
+    static let privateSearchButtonColorBrightPurple = UIColor(red: 117.0/255.0, green: 41.0/255.0, blue: 167.0/255.0, alpha: 1.0)
+    static let privateSearchButtonColorDarkPurple = UIColor(red: 73.0/255.0, green: 46.0/255.0, blue: 133.0/255.0, alpha: 1.0)
+    static let privateSearchButtonColorFaintDarkPurple = UIColor(red: 56.0/255.0, green: 51.0/255.0, blue: 114.0/255.0, alpha: 1.0)
 }
 
 @objc (TodayViewController)
@@ -61,7 +61,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
         let button = imageButton.button
         button.frame = CGRect(width: 60.0, height: 60.0)
-        button.performGradient(colorOne: TodayUX.privateSearchButtonColorOne, colorTwo: TodayUX.privateSearchButtonColorTwo, colorThree: TodayUX.privateSearchButtonColorThree)
+        button.performGradient(colorOne: TodayUX.privateSearchButtonColorFaintDarkPurple, colorTwo: TodayUX.privateSearchButtonColorDarkPurple, colorThree: TodayUX.privateSearchButtonColorBrightPurple)
         button.layer.cornerRadius = button.frame.size.width/2
         button.clipsToBounds = true
         button.setImage(UIImage(named: "quick_action_new_private_tab")?.withRenderingMode(.alwaysTemplate), for: .normal)
@@ -115,7 +115,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     fileprivate var scheme: String {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
             // Something went wrong/weird, but we should fallback to the public one.
-            return "Firefox"
+            return "firefox"
         }
         return string
     }
@@ -218,7 +218,7 @@ extension UIButton {
 }
 
 extension UIButton {
-    func performGradient(colorOne: UIColor, colorTwo: UIColor, colorThree : UIColor) {
+    func performGradient(colorOne: UIColor, colorTwo: UIColor, colorThree: UIColor) {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = self.frame
         gradientLayer.colors = [colorOne.cgColor, colorTwo.cgColor, colorThree.cgColor]
