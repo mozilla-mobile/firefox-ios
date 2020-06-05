@@ -130,6 +130,46 @@ extension Date {
     public var noon: Date {
         return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self) ?? Date()
     }
+    public func yesterday() -> Date {
+       return Calendar.current.date(byAdding: .weekday, value: -1, to: Date()) ?? Date()
+    }
+
+    public func tomorrow() -> Date {
+        return Calendar.current.date(byAdding: .weekday, value: 1, to: Date()) ?? Date()
+    }
+
+    public func startOfWeek() -> Date {
+        let calendar = Calendar.current
+        return calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date())) ?? Date()
+    }
+
+    public func endOfWeek() -> Date {
+        return Calendar.current.date(byAdding: .weekday, value: 7, to: Date().startOfWeek()) ?? Date()
+    }
+
+    public func startOfLastWeek() -> Date {
+        return Calendar.current.date(byAdding: .weekday, value: -7, to: Date().startOfWeek()) ?? Date()
+    }
+
+    public func endOfLastWeek() -> Date {
+        return Calendar.current.date(byAdding: .weekday, value: -1, to: Date().startOfWeek()) ?? Date()
+    }
+
+    public func isInLastWeek() -> Bool {
+        return (self.startOfLastWeek() ... self.endOfLastWeek()).contains(self)
+    }
+
+    public func isInCurrentWeek() -> Bool {
+        return (self.startOfWeek() ... self.endOfWeek()).contains(self)
+    }
+
+    public func isToday() -> Bool {
+        return Calendar.current.isDateInToday(self)
+    }
+
+    public func isYesterday() -> Bool {
+        return Calendar.current.isDateInYesterday(self)
+    }
 }
 
 let MaxTimestampAsDouble = Double(UInt64.max)
