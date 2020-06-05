@@ -11,8 +11,8 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 struct TodayStrings {
-    static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "New Private Tab", comment: "New Private Tab button label")
-    static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Tab", comment: "New Tab button label")
+    static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "Private Search", comment: "New Private Tab button label")
+    static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Search", comment: "New Tab button label")
     static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
 }
 
@@ -25,6 +25,9 @@ private struct TodayUX {
     static let copyLinkImageWidth: CGFloat = 23
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
+    static let privateSearchButtonColorBrightPurple = UIColor(red: 117.0/255.0, green: 41.0/255.0, blue: 167.0/255.0, alpha: 1.0)
+    static let privateSearchButtonColorDarkPurple = UIColor(red: 73.0/255.0, green: 46.0/255.0, blue: 133.0/255.0, alpha: 1.0)
+    static let privateSearchButtonColorFaintDarkPurple = UIColor(red: 56.0/255.0, green: 51.0/255.0, blue: 114.0/255.0, alpha: 1.0)
 }
 
 @objc (TodayViewController)
@@ -38,11 +41,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.label.text = TodayStrings.NewTabButtonLabel
 
         let button = imageButton.button
-
-        button.setImage(UIImage(named: "new_tab_button_normal")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.setImage(UIImage(named: "new_tab_button_highlight")?.withRenderingMode(.alwaysTemplate), for: .highlighted)
-
+        button.frame = CGRect(width: 60.0, height: 60.0)
+        button.backgroundColor = UIColor.white
+        button.layer.cornerRadius = button.frame.size.width/2
+        button.clipsToBounds = true
+        button.setImage(UIImage(named: "search"), for: .normal)
         let label = imageButton.label
+        label.tintColor = UIColor(named: "widgetLabelColors")
+        label.textColor = UIColor(named: "widgetLabelColors")
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
 
         imageButton.sizeToFit()
@@ -53,14 +59,17 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
-
         let button = imageButton.button
-        button.setImage(UIImage(named: "new_private_tab_button_normal"), for: .normal)
-        button.setImage(UIImage(named: "new_private_tab_button_highlight"), for: .highlighted)
+        button.frame = CGRect(width: 60.0, height: 60.0)
+        button.performGradient(colorOne: TodayUX.privateSearchButtonColorFaintDarkPurple, colorTwo: TodayUX.privateSearchButtonColorDarkPurple, colorThree: TodayUX.privateSearchButtonColorBrightPurple)
+        button.layer.cornerRadius = button.frame.size.width/2
+        button.clipsToBounds = true
+        button.setImage(UIImage(named: "quick_action_new_private_tab")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.tintColor = UIColor.white
 
         let label = imageButton.label
-        label.tintColor = TodayUX.privateBrowsingColor
-        label.textColor = TodayUX.privateBrowsingColor
+        label.tintColor = UIColor(named: "widgetLabelColors")
+        label.textColor = UIColor(named: "widgetLabelColors")
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
         imageButton.sizeToFit()
         return imageButton
@@ -97,8 +106,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.spacing = 0
+        stackView.alignment = .center
+        stackView.spacing = 30
         stackView.distribution = UIStackView.Distribution.fillEqually
         return stackView
     }()
@@ -208,6 +217,20 @@ extension UIButton {
     }
 }
 
+extension UIButton {
+    func performGradient(colorOne: UIColor, colorTwo: UIColor, colorThree: UIColor) {
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = self.frame
+        gradientLayer.colors = [colorOne.cgColor, colorTwo.cgColor, colorThree.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
+        gradientLayer.locations = [0.0, 0.5, 1.0]
+        gradientLayer.cornerRadius = self.frame.size.width/2
+        layer.masksToBounds = true
+        layer.insertSublayer(gradientLayer, below: self.imageView?.layer)
+    }
+}
+
 class ImageButtonWithLabel: UIView {
 
     lazy var button = UIButton()
@@ -227,18 +250,21 @@ class ImageButtonWithLabel: UIView {
         addSubview(label)
 
         button.snp.makeConstraints { make in
-            make.top.left.centerX.equalTo(self)
+            make.centerX.equalTo(self)
+            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(30)
+            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(30)
+            make.height.width.equalTo(60)
         }
 
         label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom)
+            make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
         }
 
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
-        label.textColor = UIColor.white
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
