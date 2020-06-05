@@ -9,6 +9,7 @@ import Storage
 enum TabSection: Int, CaseIterable {
     case today
     case yesterday
+    case currentWeek
     case lastWeek
     case older
 }
@@ -50,17 +51,17 @@ class TabTrayV2ViewModel: NSObject {
             _ = dataStore.updateValue(sorted, forKey: section)
         }
         viewController.tableView.reloadData()
-    }
+    }   
 
     func timestampToSection(_ tab: Tab) -> TabSection {
-        let calendar = Calendar.current
-        let now = Date()
         let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? Date.now())
-        if calendar.isDateInToday(tabDate) {
+        if tabDate.isToday() {
             return .today
-        } else if calendar.isDateInYesterday(tabDate) {
+        } else if tabDate.isYesterday() {
             return .yesterday
-        } else if tabDate <= now.lastWeek {
+        } else if tabDate.isInCurrentWeek() {
+            return .currentWeek
+        } else if tabDate.isInLastWeek() {
             return .lastWeek
         } else {
             return .older
