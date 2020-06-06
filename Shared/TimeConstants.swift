@@ -171,6 +171,14 @@ extension Date {
     public func isYesterday() -> Bool {
         return Calendar.current.isDateInYesterday(self)
     }
+    
+    public func isPast7Days() -> Bool {
+        return self <= self.lastWeek
+    }
+    
+    public func isWithinLast7Days() -> Bool {
+        return (self.lastWeek ... Date()).contains(self)
+    }
 }
 
 let MaxTimestampAsDouble = Double(UInt64.max)

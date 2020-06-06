@@ -9,7 +9,6 @@ import Storage
 enum TabSection: Int, CaseIterable {
     case today
     case yesterday
-    case currentWeek
     case lastWeek
     case older
 }
@@ -44,8 +43,8 @@ class TabTrayV2ViewModel: NSObject {
     
         for (section, list) in dataStore {
             let sorted = list.sorted {
-                let firstTab = $0.lastExecutedTime ?? 0
-                let secondTab = $1.lastExecutedTime ?? 0
+                let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? 0
+                let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? 0
                 return firstTab > secondTab
             }
             _ = dataStore.updateValue(sorted, forKey: section)
@@ -54,14 +53,12 @@ class TabTrayV2ViewModel: NSObject {
     }   
 
     func timestampToSection(_ tab: Tab) -> TabSection {
-        let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? Date.now())
+        let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? Date.now())
         if tabDate.isToday() {
             return .today
         } else if tabDate.isYesterday() {
             return .yesterday
-        } else if tabDate.isInCurrentWeek() {
-            return .currentWeek
-        } else if tabDate.isInLastWeek() {
+        } else if tabDate.isWithinLast7Days() {
             return .lastWeek
         } else {
             return .older
