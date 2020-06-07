@@ -520,6 +520,7 @@ extension TabTrayControllerV1 {
         if tabDisplayManager.isPrivate {
             collectionView.alpha = 0
             searchBarHolder.alpha = 0
+            emptyPrivateTabsView.alpha = 0
         }
     }
 
@@ -528,7 +529,7 @@ extension TabTrayControllerV1 {
         // as part of a private mode tab
         UIView.animate(withDuration: 0.2) {
             self.collectionView.alpha = 1
-
+            self.emptyPrivateTabsView.alpha = 1
             if self.tabDisplayManager.isPrivate, !self.privateTabsAreEmpty() {
                 self.searchBarHolder.alpha = 1
             }
