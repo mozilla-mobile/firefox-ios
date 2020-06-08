@@ -50,7 +50,7 @@ class TabTrayV2ViewModel: NSObject {
             _ = dataStore.updateValue(sorted, forKey: section)
         }
         viewController.tableView.reloadData()
-    }   
+    }
 
     func timestampToSection(_ tab: Tab) -> TabSection {
         let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? Date.now())
