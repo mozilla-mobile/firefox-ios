@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -43,8 +43,8 @@ class TabTrayV2ViewModel: NSObject {
     
         for (section, list) in dataStore {
             let sorted = list.sorted {
-                let firstTab = $0.lastExecutedTime ?? 0
-                let secondTab = $1.lastExecutedTime ?? 0
+                let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? 0
+                let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? 0
                 return firstTab > secondTab
             }
             _ = dataStore.updateValue(sorted, forKey: section)
@@ -53,17 +53,13 @@ class TabTrayV2ViewModel: NSObject {
     }
 
     func timestampToSection(_ tab: Tab) -> TabSection {
-        let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? Date.now())
-        let now = Date()
-
-        if tabDate <= Date().lastWeek {
-            return .older
-        } else if tabDate <= Date.yesterday {
-            return .lastWeek
-        } else if tabDate <= now {
-            return .yesterday
-        } else if tabDate == now {
+        let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? Date.now())
+        if tabDate.isToday() {
             return .today
+        } else if tabDate.isYesterday() {
+            return .yesterday
+        } else if tabDate.isWithinLast7Days() {
+            return .lastWeek
         } else {
             return .older
         }

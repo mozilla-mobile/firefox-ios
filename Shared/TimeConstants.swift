@@ -130,6 +130,18 @@ extension Date {
     public var noon: Date {
         return Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: self) ?? Date()
     }
+    
+    public func isToday() -> Bool {
+        return Calendar.current.isDateInToday(self)
+    }
+    
+    public func isYesterday() -> Bool {
+        return Calendar.current.isDateInYesterday(self)
+    }
+    
+    public func isWithinLast7Days() -> Bool {
+        return (Date().lastWeek ... Date()).contains(self)
+    }
 }
 
 let MaxTimestampAsDouble = Double(UInt64.max)
