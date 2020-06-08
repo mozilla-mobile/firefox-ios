@@ -140,7 +140,7 @@ extension Date {
     }
     
     public func isWithinLast7Days() -> Bool {
-        return (self.lastWeek ... Date()).contains(self)
+        return (Date().lastWeek ... Date()).contains(self)
     }
 }
 
