@@ -22,6 +22,7 @@ class TabTrayV2ViewController: UIViewController{
         let toolbar = TrayToolbar()
         toolbar.addTabButton.addTarget(self, action: #selector(didTapToolbarAddTab), for: .touchUpInside)
         toolbar.deleteButton.addTarget(self, action: #selector(didTapToolbarDelete), for: .touchUpInside)
+        toolbar.maskButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
         return toolbar
     }()
     lazy var tableView: UITableView = {
@@ -107,6 +108,12 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         controller.popoverPresentationController?.sourceView = sender
         controller.popoverPresentationController?.sourceRect = sender.bounds
         present(controller, animated: true, completion: nil)
+    }
+    
+    @objc func didTogglePrivateMode(_ sender: UIButton) {
+        let alert = UIAlertController(title: "🚧 Under construction", message: "Private tabs not available yet.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        self.present(alert, animated: true)
     }
     
     func hideDisplayedTabs( completion: @escaping () -> Void) {
