@@ -342,6 +342,7 @@ class BrowserViewController: UIViewController {
             return
         }
 
+        view.bringSubviewToFront(webViewContainerBackdrop)
         webViewContainerBackdrop.alpha = 1
         webViewContainer.alpha = 0
         urlBar.locationContainer.alpha = 0
@@ -364,6 +365,7 @@ class BrowserViewController: UIViewController {
             self.view.backgroundColor = UIColor.clear
         }, completion: { _ in
             self.webViewContainerBackdrop.alpha = 0
+            self.view.sendSubviewToBack(self.webViewContainerBackdrop)
         })
 
         // Re-show toolbar which might have been hidden during scrolling (prior to app moving into the background)
@@ -378,7 +380,7 @@ class BrowserViewController: UIViewController {
         KeyboardHelper.defaultHelper.addDelegate(self)
 
         webViewContainerBackdrop = UIView()
-        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Grey50
+        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
         webViewContainerBackdrop.alpha = 0
         view.addSubview(webViewContainerBackdrop)
 
@@ -486,7 +488,7 @@ class BrowserViewController: UIViewController {
         }
 
         webViewContainerBackdrop.snp.makeConstraints { make in
-            make.edges.equalTo(webViewContainer)
+            make.edges.equalTo(self.view)
         }
     }
 
@@ -542,7 +544,6 @@ class BrowserViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
         // On iPhone, if we are about to show the On-Boarding, blank out the tab so that it does
         // not flash before we present. This change of alpha also participates in the animation when
         // the intro view is dismissed.
