@@ -13,8 +13,6 @@ class TodayWidgetViewModel {
 
     var AppearanceDelegate: TodayWidgetAppearanceDelegate?
 
-    init() {
-    }
     
     func setViewDelegate(todayViewDelegate:TodayWidgetAppearanceDelegate?) {
         self.AppearanceDelegate = todayViewDelegate
