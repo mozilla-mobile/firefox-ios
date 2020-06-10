@@ -10,7 +10,6 @@ protocol TodayWidgetAppearanceDelegate {
 }
 
 class TodayWidgetViewModel {
-
     var widgetModel: TodayModel?
     var AppearanceDelegate: TodayWidgetAppearanceDelegate?
 
