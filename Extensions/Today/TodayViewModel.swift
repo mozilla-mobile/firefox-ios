@@ -12,12 +12,6 @@ protocol TodayWidgetAppearanceDelegate {
 class TodayWidgetViewModel {
 
     var AppearanceDelegate: TodayWidgetAppearanceDelegate?
-
-    var AppearanceDelegate: TodayWidgetAppearanceDelegate?
-
-    init() {
-    }
-
     func setViewDelegate(todayViewDelegate:TodayWidgetAppearanceDelegate?) {
         self.AppearanceDelegate = todayViewDelegate
     }

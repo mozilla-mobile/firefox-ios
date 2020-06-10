@@ -158,3 +158,4 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         }
     }
 }
+
