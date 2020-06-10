@@ -42,8 +42,11 @@ private struct TodayUX {
 }
 
 @objc (TodayViewController)
-class TodayViewController: UIViewController, NCWidgetProviding {
-    var copiedURL: URL?
+class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
+
+    let viewModel = TodayWidgetViewModel()
+    let model = TodayModel()
+
 
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
@@ -108,7 +111,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         return stackView
     }()
 
-    fileprivate var scheme: String {
+    var scheme: String {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
             // Something went wrong/weird, but we should fallback to the public one.
             return "firefox"
@@ -118,6 +121,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel.setViewDelegate(todayViewDelegate: self)
         let widgetView: UIView!
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
 
@@ -148,7 +152,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        updateCopiedLink()
+        viewModel.updateCopiedLink()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -160,18 +164,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         return .zero
     }
 
-    func updateCopiedLink() {
-        UIPasteboard.general.asyncURL().uponQueue(.main) { res in
-            if let copiedURL: URL? = res.successValue,
-                let url = copiedURL {
-                self.openCopiedLinkButton.isHidden = false
-                self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
-                self.openCopiedLinkButton.subtitleLabel.text = url.absoluteDisplayString
-                self.copiedURL = url
-            } else {
-                self.openCopiedLinkButton.isHidden = true
-                self.copiedURL = nil
-            }
+    func updateCopiedLinkInView(clipboardURL: URL?) {
+        if let url = clipboardURL{
+            self.openCopiedLinkButton.isHidden = false
+            self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
+            self.openCopiedLinkButton.subtitleLabel.text = url.absoluteDisplayString
+        } else{
+            self.openCopiedLinkButton.isHidden = true
+            self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
         }
     }
 
@@ -192,7 +192,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     @objc func onPressOpenClibpoard(_ view: UIView) {
-        if let url = copiedURL,
+        if let url = model.copiedURL,
             let encodedString = url.absoluteString.escape() {
             openContainingApp("?url=\(encodedString)")
         }
