@@ -163,7 +163,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         return .zero
     }
     
-    
     func updateCopiedLinkInView(clipboardURL: URL?) {
         if let url = clipboardURL{
             self.openCopiedLinkButton.isHidden = false

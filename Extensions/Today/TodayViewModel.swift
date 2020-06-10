@@ -1,14 +1,9 @@
-//
-//  TodayViewModel.swift
-//  Client
-//
-//  Created by McNoor's  on 6/10/20.
-//  Copyright © 2020 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import NotificationCenter
-
 
 protocol TodayWidgetAppearanceDelegate {
     func updateCopiedLinkInView(clipboardURL: URL?)
@@ -16,23 +11,21 @@ protocol TodayWidgetAppearanceDelegate {
 
 class TodayWidgetViewModel {
 
-    var widgetModel : TodayModel?
-    var AppearanceDelegate : TodayWidgetAppearanceDelegate?
+    var widgetModel: TodayModel?
+    var AppearanceDelegate: TodayWidgetAppearanceDelegate?
 
     init() {
         intializeModel()
     }
     
-    func intializeModel(){
+    func intializeModel() {
         self.widgetModel = TodayModel(copiedURL: nil)
     }
     
-    
-    func setViewDelegate(todayViewDelegate:TodayWidgetAppearanceDelegate?){
+    func setViewDelegate(todayViewDelegate:TodayWidgetAppearanceDelegate?) {
         self.AppearanceDelegate = todayViewDelegate
     }
 
-    
     func updateCopiedLink() {
             UIPasteboard.general.asyncURL().uponQueue(.main) { res in
                 if let URL: URL? = res.successValue,
@@ -45,8 +38,5 @@ class TodayWidgetViewModel {
                 }
             }
         }
-    
-    
-    
     
 }

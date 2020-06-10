@@ -1,16 +1,12 @@
-//
-//  TodayModel.swift
-//  Client
-//
-//  Created by McNoor's  on 6/10/20.
-//  Copyright © 2020 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 
 import Foundation
 
 struct TodayModel {
-    
-    public var copiedURL : URL?
+    public var copiedURL: URL?
     
     var scheme: String {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
