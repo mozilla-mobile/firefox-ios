@@ -32,13 +32,15 @@ private let LoginsSettingsSection = 0
 
 class LoginListViewController: SensitiveViewController {
 
+    private let viewModel: LoginListViewModel
+
     fileprivate lazy var loginSelectionController: ListSelectionController = {
         return ListSelectionController(tableView: self.tableView)
     }()
 
     fileprivate lazy var loginDataSource: LoginDataSource = {
         let dataSource = LoginDataSource(profile: profile, searchController: searchController)
-        dataSource.dataObserver = self
+        dataSource.viewModel.dataObserver = self
         return dataSource
     }()
 
@@ -110,6 +112,7 @@ class LoginListViewController: SensitiveViewController {
 
     private init(profile: Profile) {
         self.profile = profile
+        self.viewModel = LoginListViewModel(profile: profile)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -244,16 +247,6 @@ class LoginListViewController: SensitiveViewController {
             selectionButton.setTitle(selectAllTitle, for: [])
         }
     }
-
-    // Wrap the SQLiteLogins method to allow us to cancel it from our end.
-    fileprivate func queryLogins(_ query: String) -> Deferred<Maybe<[LoginRecord]>> {
-        let deferred = Deferred<Maybe<[LoginRecord]>>()
-        profile.logins.searchLoginsWithQuery(query) >>== { logins in
-            deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
-            succeed()
-        }
-        return deferred
-    }
 }
 
 extension LoginListViewController: UISearchResultsUpdating {
@@ -289,11 +282,7 @@ private extension LoginListViewController {
 
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
-
-        // Fill in an in-flight query and re-query
-        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
-        activeLoginQuery = queryLogins(query ?? "")
-        activeLoginQuery! >>== loginDataSource.setLogins
+        viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 
     @objc func beginEditing() {
@@ -324,7 +313,7 @@ private extension LoginListViewController {
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.loginSelectionController.selectedIndexPaths.compactMap { indexPath in
-                    self.loginDataSource.loginAtIndexPath(indexPath)?.id
+                    self.loginDataSource.viewModel.loginAtIndexPath(indexPath)?.id
                 }
 
                 self.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
@@ -364,6 +353,9 @@ private extension LoginListViewController {
 }
 
 // MARK: - LoginDataSourceObserver
+protocol LoginDataSourceObserver: AnyObject {
+    func loginSectionsDidUpdate()
+}
 extension LoginListViewController: LoginDataSourceObserver {
     func loginSectionsDidUpdate() {
         loadingView.isHidden = true
@@ -419,7 +411,7 @@ extension LoginListViewController: UITableViewDelegate {
             loginSelectionController.selectIndexPath(indexPath)
             toggleSelectionTitle()
             toggleDeleteBarButton()
-        } else if let login = loginDataSource.loginAtIndexPath(indexPath) {
+        } else if let login = loginDataSource.viewModel.loginAtIndexPath(indexPath) {
             tableView.deselectRow(at: indexPath, animated: true)
             let detailViewController = LoginDetailViewController(profile: profile, login: login)
             detailViewController.settingsDelegate = settingsDelegate
@@ -516,17 +508,13 @@ fileprivate class ListSelectionController: NSObject {
     }
 }
 
-protocol LoginDataSourceObserver: AnyObject {
-    func loginSectionsDidUpdate()
-}
-
 /// Data source for handling LoginData objects from a Cursor
 class LoginDataSource: NSObject, UITableViewDataSource {
     var count = 0
-    weak var dataObserver: LoginDataSourceObserver?
     weak var searchController: UISearchController?
     fileprivate let emptyStateView = NoLoginsView()
     fileprivate var titles = [Character]()
+    let viewModel = LoginDataSourceViewModel()
 
     let boolSettings: (BoolSetting, BoolSetting)
 
@@ -538,54 +526,22 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         super.init()
     }
 
-    fileprivate var loginRecordSections = [Character: [LoginRecord]]() {
-        didSet {
-            assert(Thread.isMainThread)
-            self.dataObserver?.loginSectionsDidUpdate()
-        }
-    }
-
-    fileprivate func loginsForSection(_ section: Int) -> [LoginRecord]? {
-        guard section > 0 else {
-            assertionFailure()
-            return nil
-        }
-        let titleForSectionIndex = titles[section - 1]
-        return loginRecordSections[titleForSectionIndex]
-    }
-
-    func loginAtIndexPath(_ indexPath: IndexPath) -> LoginRecord? {
-        guard indexPath.section > 0 else {
-            assertionFailure()
-            return nil
-        }
-        let titleForSectionIndex = titles[indexPath.section - 1]
-        guard let section = loginRecordSections[titleForSectionIndex] else {
-            assertionFailure()
-            return nil
-        }
-
-        assert(indexPath.row <= section.count)
-
-        return section[indexPath.row]
-    }
-
     @objc func numberOfSections(in tableView: UITableView) -> Int {
-        if  loginRecordSections.isEmpty {
+        if viewModel.loginRecordSections.isEmpty {
             tableView.backgroundView = emptyStateView
             return 1
         }
 
         tableView.backgroundView = nil
         // Add one section for the settings section.
-        return loginRecordSections.count + 1
+        return viewModel.loginRecordSections.count + 1
     }
 
     @objc func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == LoginsSettingsSection {
             return 2
         }
-        return loginsForSection(section)?.count ?? 0
+        return viewModel.loginsForSection(section)?.count ?? 0
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -610,7 +566,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
                 }
             }
         } else {
-            guard let login = loginAtIndexPath(indexPath) else { return cell }
+            guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
             cell.textLabel?.text = login.hostname
             cell.detailTextColor = UIColor.theme.tableView.rowDetailText
             cell.detailTextLabel?.text = login.username
@@ -621,97 +577,6 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         cell.multipleSelectionBackgroundView = UIView()
         cell.applyTheme()
         return cell
-    }
-
-    func setLogins(_ logins: [LoginRecord]) {
-        // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
-        //     prevent race conditions between data/UI indexing.
-        return computeSectionsFromLogins(logins).uponQueue(.main) { result in
-            guard let (titles, sections) = result.successValue else {
-                self.count = 0
-                self.titles = []
-                self.loginRecordSections = [:]
-                return
-            }
-
-            self.count = logins.count
-            self.titles = titles
-            self.loginRecordSections = sections
-
-            // Disable the search controller if there are no logins saved
-            if !(self.searchController?.isActive ?? true) {
-                self.searchController?.searchBar.isUserInteractionEnabled = !logins.isEmpty
-                self.searchController?.searchBar.alpha = logins.isEmpty ? 0.5 : 1.0
-            }
-        }
-    }
-
-    fileprivate func computeSectionsFromLogins(_ logins: [LoginRecord]) -> Deferred<Maybe<([Character], [Character: [LoginRecord]])>> {
-        guard logins.count > 0 else {
-            return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
-        }
-
-        var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
-        var sections = [Character: [LoginRecord]]()
-        var titleSet = Set<Character>()
-
-        // Small helper method for using the precomputed base domain to determine the title/section of the
-        // given login.
-        func titleForLogin(_ login: LoginRecord) -> Character {
-            // Fallback to hostname if we can't extract a base domain.
-            let titleString = domainLookup[login.id]?.baseDomain?.uppercased() ?? login.hostname
-            return titleString.first ?? Character("")
-        }
-
-        // Rules for sorting login URLS:
-        // 1. Compare base domains
-        // 2. If bases are equal, compare hosts
-        // 3. If login URL was invalid, revert to full hostname
-        func sortByDomain(_ loginA: LoginRecord, loginB: LoginRecord) -> Bool {
-            guard let domainsA = domainLookup[loginA.id],
-                  let domainsB = domainLookup[loginB.id] else {
-                return false
-            }
-
-            guard let baseDomainA = domainsA.baseDomain,
-                  let baseDomainB = domainsB.baseDomain,
-                  let hostA = domainsA.host,
-                let hostB = domainsB.host else {
-                return domainsA.hostname < domainsB.hostname
-            }
-
-            if baseDomainA == baseDomainB {
-                return hostA < hostB
-            } else {
-                return baseDomainA < baseDomainB
-            }
-        }
-
-        return deferDispatchAsync(DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) {
-            // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
-            // baseDomain() is a costly call because of the ETLD lookup tables.
-            logins.forEach { login in
-                domainLookup[login.id] = (
-                    login.hostname.asURL?.baseDomain,
-                    login.hostname.asURL?.host,
-                    login.hostname
-                )
-            }
-
-            // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
-            logins.forEach { titleSet.insert(titleForLogin($0)) }
-
-            // 2. Setup an empty list for each title found.
-            titleSet.forEach { sections[$0] = [LoginRecord]() }
-
-            // 3. Go through our logins and put them in the right section.
-            logins.forEach { sections[titleForLogin($0)]?.append($0) }
-
-            // 4. Go through each section and sort.
-            sections.forEach { sections[$0] = $1.sorted(by: sortByDomain) }
-
-            return deferMaybe( (Array(titleSet).sorted(), sections) )
-        }
     }
 }
 
