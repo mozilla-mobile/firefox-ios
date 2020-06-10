@@ -7,7 +7,7 @@ import Foundation
 
 struct TodayModel {
     static var copiedURL: URL?
-
+    
     var scheme: String {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
             // Something went wrong/weird, but we should fallback to the public one.
