@@ -16,7 +16,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
 
-
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
@@ -153,7 +152,8 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }
 
     @objc func onPressOpenClibpoard(_ view: UIView) {
-        if let url = TodayModel.copiedURL,
+
+        if let url = model.copiedURL,
             let encodedString = url.absoluteString.escape() {
             openContainingApp("?url=\(encodedString)")
         }
