@@ -11,17 +11,11 @@ protocol TodayWidgetAppearanceDelegate {
 
 class TodayWidgetViewModel {
 
-    var widgetModel: TodayModel?
     var AppearanceDelegate: TodayWidgetAppearanceDelegate?
 
     init() {
-        intializeModel()
     }
-
-    func intializeModel() {
-        self.widgetModel = TodayModel(copiedURL: nil)
-    }
-
+    
     func setViewDelegate(todayViewDelegate:TodayWidgetAppearanceDelegate?) {
         self.AppearanceDelegate = todayViewDelegate
     }
@@ -30,10 +24,10 @@ class TodayWidgetViewModel {
             UIPasteboard.general.asyncURL().uponQueue(.main) { res in
                 if let URL: URL? = res.successValue,
                     let url = URL {
-                    self.widgetModel?.copiedURL = url
+                    TodayModel.copiedURL = url
                     self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: url)
                 } else {
-                    self.widgetModel?.copiedURL = nil
+                    TodayModel.copiedURL = nil
                     self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: nil)
                 }
             }
