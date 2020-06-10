@@ -6,13 +6,8 @@
 import Foundation
 
 struct TodayModel {
-<<<<<<< HEAD
-    static var copiedURL: URL?
-    
-=======
-    public var copiedURL: URL?
 
->>>>>>> 3c460f1a9... added ViewModel and Model files to widget extension and re-architect the widget
+    static var copiedURL: URL?
     var scheme: String {
         guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
             // Something went wrong/weird, but we should fallback to the public one.
