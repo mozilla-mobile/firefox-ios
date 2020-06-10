@@ -51,7 +51,7 @@ class TabTrayV2ViewController: UIViewController{
         // Add Subviews
         view.addSubview(toolbar)
         view.addSubview(tableView)
-        
+        viewModel.updateTabs()
         // Constraints
         tableView.snp.makeConstraints { make in
             make.left.equalTo(view.safeArea.left)
@@ -111,9 +111,16 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     }
     
     @objc func didTogglePrivateMode(_ sender: UIButton) {
-        let alert = UIAlertController(title: "🚧 Under construction", message: "Private tabs not available yet.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-        self.present(alert, animated: true)
+//        let alert = UIAlertController(title: "🚧 Under construction", message: "Private tabs not available yet.", preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+//        self.present(alert, animated: true)
+        
+        // Toggle private mode
+        viewModel.privateMode()
+        viewModel.togglePrivateMode()
+        
+        // Reload data
+        viewModel.updateTabs()
     }
     
     func hideDisplayedTabs( completion: @escaping () -> Void) {

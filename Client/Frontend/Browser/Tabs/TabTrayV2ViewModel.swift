@@ -26,17 +26,64 @@ class TabTrayV2ViewModel: NSObject {
     fileprivate let viewController: TabTrayV2ViewController
 
     private(set) var isPrivate = false
+    private var isPrivateMode = false // initially
 
     init(viewController: TabTrayV2ViewController) {
         self.viewController = viewController
         self.tabManager = BrowserViewController.foregroundBVC().tabManager //fixme
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        self.isPrivateMode = isPrivate
         super.init()
 
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
+//        updateTabs()
+//        let tabs = self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+//        tabs.forEach { tab in
+//            let section = timestampToSection(tab)
+//            dataStore[section]?.insert(tab, at: 0)
+//        }
+//
+//        for (section, list) in dataStore {
+//            let sorted = list.sorted {
+//                let firstTab = $0.lastExecutedTime ?? $0.sessionData?.lastUsedTime ?? 0
+//                let secondTab = $1.lastExecutedTime ?? $1.sessionData?.lastUsedTime ?? 0
+//                return firstTab > secondTab
+//            }
+//            _ = dataStore.updateValue(sorted, forKey: section)
+//        }
+//        viewController.tableView.reloadData()
+    }
 
-        tabManager.tabs.forEach { tab in
+    func togglePrivateMode () {
+        tabManager.willSwitchTabMode(leavingPBM: self.isPrivateMode)
+        self.isPrivateMode = !self.isPrivateMode
+//        dataStore.removeAll()
+        clearDataStoreTabs()
+//        updateTabs()
+        var tabs = self.isPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
+        
+//        if isPrivateMode {
+        let tab = mostRecentTab(inTabs: tabs) ?? tabs.last
+        if let tab = tab {
+            tabManager.selectTab(tab)
+        }
+//        }
+    }
+    
+    func updateTabs() {
+        var tabs = self.isPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
+        
+//        if isPrivateMode {
+//            let tab = mostRecentTab(inTabs: tabs) ?? tabs.last
+//            if let tab = tab {
+//                tabManager.selectTab(tab)
+//            }
+//        }
+        
+//        dataStore.removeAll()
+//        clearDataStoreTabs()
+        tabs.forEach { tab in
             let section = timestampToSection(tab)
             dataStore[section]?.insert(tab, at: 0)
         }
@@ -51,7 +98,15 @@ class TabTrayV2ViewModel: NSObject {
         }
         viewController.tableView.reloadData()
     }
-
+    
+    func clearDataStoreTabs() {
+        dataStore.removeAll()
+        dataStore = [ .today: Array<Tab>(),
+        .yesterday: Array<Tab>(),
+        .lastWeek: Array<Tab>(),
+        .older: Array<Tab>()]
+    }
+    
     func timestampToSection(_ tab: Tab) -> TabSection {
         let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? Date.now())
         if tabDate.isToday() {
@@ -99,6 +154,10 @@ class TabTrayV2ViewModel: NSObject {
         }
         
         return (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
+    }
+    
+    func privateMode() {
+        tabManager.willSwitchTabMode(leavingPBM: false)
     }
     
     // The user has tapped the close button or has swiped away the cell
