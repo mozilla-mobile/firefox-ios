@@ -113,14 +113,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         return stackView
     }()
 
-    var scheme: String {
-        guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
-            // Something went wrong/weird, but we should fallback to the public one.
-            return "firefox"
-        }
-        return string
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.setViewDelegate(todayViewDelegate: self)
@@ -184,14 +176,14 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }
 
     fileprivate func openContainingApp(_ urlSuffix: String = "") {
-        let urlString = "\(scheme)://open-url\(urlSuffix)"
+        let urlString = "\(model.scheme)://open-url\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
     }
 
     @objc func onPressOpenClibpoard(_ view: UIView) {
-        if let url = model.copiedURL,
+        if let url = TodayModel.copiedURL,
             let encodedString = url.absoluteString.escape() {
             openContainingApp("?url=\(encodedString)")
         }
