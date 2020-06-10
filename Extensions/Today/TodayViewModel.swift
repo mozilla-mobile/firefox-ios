@@ -24,7 +24,7 @@ class TodayWidgetViewModel {
     }
     
     func intializeModel(){
-        widgetModel = TodayModel(copiedURL: nil)
+        self.widgetModel = TodayModel(copiedURL: nil)
     }
     
     
@@ -38,10 +38,10 @@ class TodayWidgetViewModel {
                 if let URL: URL? = res.successValue,
                     let url = URL {
                     self.widgetModel?.copiedURL = url
-                    self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: self.widgetModel?.copiedURL)
+                    self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: url)
                 } else {
                     self.widgetModel?.copiedURL = nil
-                    self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: self.widgetModel?.copiedURL)
+                    self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: nil)
                 }
             }
         }
