@@ -7,9 +7,12 @@ import Storage
 import Shared
 
 final class LoginListViewModel {
+    
     let profile: Profile
-
     fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
+//    var searchControlHelper: HelperSearchController? = nil
+//    var tableViewHelper: HelperTableView? = nil
+//    var generalLonginHelper: HelperLoginList? = nil
 
     init(profile: Profile) {
         self.profile = profile
@@ -32,7 +35,13 @@ final class LoginListViewModel {
         return deferred
     }
 
-
+    struct LoginListUX {
+        static let RowHeight: CGFloat = 58
+        static let SearchHeight: CGFloat = 58
+        static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
+        static let NoResultsFont = UIFont.systemFont(ofSize: 16)
+        static let NoResultsTextColor = UIColor.Photon.Grey40
+    }
 }
 
 final class LoginDataSourceViewModel {

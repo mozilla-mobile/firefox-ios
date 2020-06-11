@@ -8,14 +8,6 @@ import Storage
 import Shared
 import SwiftKeychainWrapper
 
-private struct LoginListUX {
-    static let RowHeight: CGFloat = 58
-    static let SearchHeight: CGFloat = 58
-    static let selectionButtonFont = UIFont.systemFont(ofSize: 16)
-    static let NoResultsFont = UIFont.systemFont(ofSize: 16)
-    static let NoResultsTextColor = UIColor.Photon.Grey40
-}
-
 private extension UITableView {
     var allLoginIndexPaths: [IndexPath] {
         return ((LoginsSettingsSection + 1)..<self.numberOfSections).flatMap { sectionNum in
@@ -46,7 +38,6 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate let profile: Profile
     fileprivate let searchController = UISearchController(searchResultsController: nil)
-    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
     fileprivate let loadingView = SettingsLoadingView()
     fileprivate var deleteAlert: UIAlertController?
     fileprivate var selectionButtonHeightConstraint: Constraint?
@@ -63,7 +54,7 @@ class LoginListViewController: SensitiveViewController {
 
     fileprivate lazy var selectionButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = LoginListUX.selectionButtonFont
+        button.titleLabel?.font = LoginListViewModel.LoginListUX.selectionButtonFont
         button.addTarget(self, action: #selector(tappedSelectionButton), for: .touchUpInside)
         return button
     }()
@@ -360,7 +351,6 @@ extension LoginListViewController: LoginDataSourceObserver {
     func loginSectionsDidUpdate() {
         loadingView.isHidden = true
         tableView.reloadData()
-        activeLoginQuery = nil
         navigationItem.rightBarButtonItem?.isEnabled = loginDataSource.count > 0
         restoreSelectedRows()
     }
@@ -399,7 +389,7 @@ extension LoginListViewController: UITableViewDelegate {
         if indexPath.section == LoginsSettingsSection, searchController.isActive || tableView.isEditing {
             return 0
         }
-        return indexPath.section == LoginsSettingsSection ? 44 : LoginListUX.RowHeight
+        return indexPath.section == LoginsSettingsSection ? 44 : LoginListViewModel.LoginListUX.RowHeight
     }
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -572,47 +562,9 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.detailTextLabel?.text = login.username
             cell.accessoryType = .disclosureIndicator
         }
-        
         // Need to override the default background multi-select color to support theming
         cell.multipleSelectionBackgroundView = UIView()
         cell.applyTheme()
         return cell
-    }
-}
-
-// Empty state view when there is no logins to display.
-fileprivate class NoLoginsView: UIView {
-
-    // We use the search bar height to maintain visual balance with the whitespace on this screen. The
-    // title label is centered visually using the empty view + search bar height as the size to center with.
-    var searchBarHeight: CGFloat = 0 {
-        didSet {
-            setNeedsUpdateConstraints()
-        }
-    }
-
-    lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.font = LoginListUX.NoResultsFont
-        label.textColor = LoginListUX.NoResultsTextColor
-        label.text = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Label displayed when no logins are found after searching.")
-        return label
-    }()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(titleLabel)
-    }
-
-    fileprivate override func updateConstraints() {
-        super.updateConstraints()
-        titleLabel.snp.remakeConstraints { make in
-            make.centerX.equalTo(self)
-            make.centerY.equalTo(self).offset(-(searchBarHeight / 2))
-        }
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
