@@ -10,26 +10,6 @@ import XCGLogger
 
 private let log = Logger.browserLogger
 
-struct TodayStrings {
-    static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "Private Search", comment: "New Private Tab button label")
-    static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Search", comment: "New Tab button label")
-    static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
-}
-
-private struct TodayUX {
-    static let privateBrowsingColor = UIColor(rgb: 0xcf68ff)
-    static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
-    static let linkTextSize: CGFloat = 10.0
-    static let labelTextSize: CGFloat = 14.0
-    static let imageButtonTextSize: CGFloat = 14.0
-    static let copyLinkImageWidth: CGFloat = 23
-    static let margin: CGFloat = 8
-    static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
-    static let privateSearchButtonColorBrightPurple = UIColor(red: 117.0/255.0, green: 41.0/255.0, blue: 167.0/255.0, alpha: 1.0)
-    static let privateSearchButtonColorDarkPurple = UIColor(red: 73.0/255.0, green: 46.0/255.0, blue: 133.0/255.0, alpha: 1.0)
-    static let privateSearchButtonColorFaintDarkPurple = UIColor(red: 56.0/255.0, green: 51.0/255.0, blue: 114.0/255.0, alpha: 1.0)
-}
-
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
 
@@ -187,57 +167,5 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
             let encodedString = url.absoluteString.escape() {
             openContainingApp("?url=\(encodedString)")
         }
-    }
-}
-
-class ButtonWithSublabel: UIButton {
-    lazy var subtitleLabel = UILabel()
-    lazy var label = UILabel()
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    convenience init() {
-        self.init(frame: .zero)
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        performLayout()
-    }
-
-    fileprivate func performLayout() {
-        let titleLabel = self.label
-
-        self.titleLabel?.removeFromSuperview()
-        addSubview(titleLabel)
-
-        let imageView = self.imageView!
-        let subtitleLabel = self.subtitleLabel
-        subtitleLabel.textColor = UIColor.lightGray
-        self.addSubview(subtitleLabel)
-
-        imageView.snp.makeConstraints { make in
-            make.centerY.left.equalTo(self)
-            make.width.equalTo(TodayUX.copyLinkImageWidth)
-        }
-
-        titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(imageView.snp.right).offset(TodayUX.margin)
-            make.trailing.top.equalTo(self)
-        }
-
-        subtitleLabel.lineBreakMode = .byTruncatingTail
-        subtitleLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(self)
-            make.top.equalTo(titleLabel.snp.bottom)
-            make.leading.trailing.equalTo(titleLabel)
-        }
-    }
-
-    override func setTitle(_ text: String?, for state: UIControl.State) {
-        self.label.text = text
-        super.setTitle(text, for: state)
     }
 }
