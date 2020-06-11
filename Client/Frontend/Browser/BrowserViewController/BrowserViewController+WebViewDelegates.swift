@@ -390,7 +390,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Second special case are a set of URLs that look like regular http links, but should be handed over to iOS
         // instead of being loaded in the webview. Note that there is no point in calling canOpenURL() here, because
-        // iOS will always say yes. TODO Is this the same as isWhitelisted?
+        // iOS will always say yes.
 
         if isAppleMapsURL(url) {
             UIApplication.shared.open(url, options: [:])

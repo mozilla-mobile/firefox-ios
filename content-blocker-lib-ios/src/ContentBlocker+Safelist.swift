@@ -4,7 +4,7 @@
 
 import WebKit
 
-struct WhitelistedDomains {
+struct SafelistedDomains {
     var domainSet = Set<String>() {
         didSet {
             domainRegex = domainSet.compactMap { wildcardContentBlockerDomainToRegex(domain: "*" + $0) }
@@ -16,41 +16,41 @@ struct WhitelistedDomains {
 
 extension ContentBlocker {
 
-    func whitelistFileURL() -> URL? {
+    func safelistFileURL() -> URL? {
         guard let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
             return nil
         }
-        return dir.appendingPathComponent("whitelist")
+        return dir.appendingPathComponent("safelist")
     }
 
-    // Get the whitelist domain array as a JSON fragment that can be inserted at the end of a blocklist.
-    func whitelistAsJSON() -> String {
-        if whitelistedDomains.domainSet.isEmpty {
+    // Get the safelist domain array as a JSON fragment that can be inserted at the end of a blocklist.
+    func safelistAsJSON() -> String {
+        if safelistedDomains.domainSet.isEmpty {
             return ""
         }
         // Note that * is added to the front of domains, so foo.com becomes *foo.com
-        let list = "'*" + whitelistedDomains.domainSet.joined(separator: "','*") + "'"
+        let list = "'*" + safelistedDomains.domainSet.joined(separator: "','*") + "'"
         return ", {'action': { 'type': 'ignore-previous-rules' }, 'trigger': { 'url-filter': '.*', 'if-domain': [\(list)] }}".replacingOccurrences(of: "'", with: "\"")
     }
 
-    func whitelist(enable: Bool, url: URL, completion: (() -> Void)?) {
-        guard let domain = whitelistableDomain(fromUrl: url) else { return }
+    func safelist(enable: Bool, url: URL, completion: (() -> Void)?) {
+        guard let domain = safelistableDomain(fromUrl: url) else { return }
 
         if enable {
-            whitelistedDomains.domainSet.insert(domain)
+            safelistedDomains.domainSet.insert(domain)
         } else {
-            whitelistedDomains.domainSet.remove(domain)
+            safelistedDomains.domainSet.remove(domain)
         }
 
-        updateWhitelist(completion: completion)
+        updateSafelist(completion: completion)
     }
 
-    func clearWhitelist(completion: (() -> Void)?) {
-        whitelistedDomains.domainSet = Set<String>()
-        updateWhitelist(completion: completion)
+    func clearSafelist(completion: (() -> Void)?) {
+        safelistedDomains.domainSet = Set<String>()
+        updateSafelist(completion: completion)
     }
 
-    private func updateWhitelist(completion: (() -> Void)?) {
+    private func updateSafelist(completion: (() -> Void)?) {
         removeAllRulesInStore {
             self.compileListsNotInStore {
                 completion?()
@@ -59,36 +59,36 @@ extension ContentBlocker {
             }
         }
 
-        guard let fileURL = whitelistFileURL() else { return }
-        if whitelistedDomains.domainSet.isEmpty {
+        guard let fileURL = safelistFileURL() else { return }
+        if safelistedDomains.domainSet.isEmpty {
             try? FileManager.default.removeItem(at: fileURL)
             return
         }
 
-        let list = whitelistedDomains.domainSet.joined(separator: "\n")
+        let list = safelistedDomains.domainSet.joined(separator: "\n")
         do {
             try list.write(to: fileURL, atomically: true, encoding: .utf8)
         } catch {
-            print("Failed to save whitelist file: \(error)")
+            print("Failed to save safelist file: \(error)")
         }
     }
-    // Ensure domains used for whitelisting are standardized by using this function.
-    func whitelistableDomain(fromUrl url: URL) -> String? {
+    // Ensure domains used for safelisting are standardized by using this function.
+    func safelistableDomain(fromUrl url: URL) -> String? {
         guard let domain = url.host, !domain.isEmpty else {
             return nil
         }
         return domain
     }
 
-    func isWhitelisted(url: URL) -> Bool {
-        guard let domain = whitelistableDomain(fromUrl: url) else {
+    func isSafelisted(url: URL) -> Bool {
+        guard let domain = safelistableDomain(fromUrl: url) else {
             return false
         }
-        return whitelistedDomains.domainSet.contains(domain)
+        return safelistedDomains.domainSet.contains(domain)
     }
 
-    func readWhitelistFile() -> [String]? {
-        guard let fileURL = whitelistFileURL() else { return nil }
+    func readSafelistFile() -> [String]? {
+        guard let fileURL = safelistFileURL() else { return nil }
         let text = try? String(contentsOf: fileURL, encoding: .utf8)
         if let text = text, !text.isEmpty {
             return text.components(separatedBy: .newlines)
