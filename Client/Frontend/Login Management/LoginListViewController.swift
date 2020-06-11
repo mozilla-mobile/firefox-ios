@@ -510,7 +510,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
 
         if indexPath.section == LoginsSettingsSection {
-            let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
+            let hideSettings = viewModel.dataSourceViewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
             setting.onConfigureCell(cell)
             if hideSettings {
