@@ -54,7 +54,6 @@ class TabTrayV2ViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         viewModel.addPrivateTab()
-        print("DID DISAP")
     }
     
     private func viewSetup() {
