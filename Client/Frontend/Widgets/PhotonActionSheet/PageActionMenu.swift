@@ -11,6 +11,8 @@ enum ButtonToastAction {
     case bookmarkPage
     case removeBookmark
     case copyUrl
+    case pinPage
+    case removePinPage
 }
 
 extension PhotonActionSheetProtocol {
@@ -100,7 +102,7 @@ extension PhotonActionSheetProtocol {
                 return self.profile.history.addPinnedTopSite(site)
             }.uponQueue(.main) { result in
                 if result.isSuccess {
-                    success(Strings.AppMenuAddPinToTopSitesConfirmMessage)
+                    success(Strings.AppMenuAddPinToTopSitesConfirmMessage, .pinPage)
                 }
             }
         }
@@ -116,7 +118,7 @@ extension PhotonActionSheetProtocol {
                 return self.profile.history.removeFromPinnedTopSites(site)
             }.uponQueue(.main) { result in
                 if result.isSuccess {
-                    success(Strings.AppMenuAddPinToTopSitesConfirmMessage)
+                    success(Strings.AppMenuRemovePinFromTopSitesConfirmMessage, .removePinPage)
                 }
             }
         }
