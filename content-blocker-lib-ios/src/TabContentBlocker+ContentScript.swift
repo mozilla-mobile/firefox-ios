@@ -19,7 +19,7 @@ extension TabContentBlocker {
         }
 
         // Reset the pageStats to make sure the trackingprotection shield icon knows that a page was whitelisted
-        guard !ContentBlocker.shared.isWhitelisted(url: mainDocumentUrl) else {
+        guard !ContentBlocker.shared.isSafelisted(url: mainDocumentUrl) else {
             clearPageStats()
             return
         }

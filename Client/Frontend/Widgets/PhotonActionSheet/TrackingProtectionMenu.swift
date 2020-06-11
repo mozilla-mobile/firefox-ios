@@ -50,14 +50,14 @@ extension PhotonActionSheetProtocol {
             return []
         }
         switch blocker.status {
-        case .NoBlockedURLs:
+        case .noBlockedURLs:
             return menuActionsForTrackingProtectionEnabled(for: tab)
-        case .Blocking:
+        case .blocking:
             return menuActionsForTrackingProtectionEnabled(for: tab)
-        case .Disabled:
+        case .disabled:
             return menuActionsForTrackingProtectionDisabled(for: tab)
-        case .Whitelisted:
-            return menuActionsForTrackingProtectionEnabled(for: tab, isWhitelisted: true)
+        case .safelisted:
+            return menuActionsForTrackingProtectionEnabled(for: tab, isSafelisted: true)
         }
     }
 
@@ -133,7 +133,7 @@ extension PhotonActionSheetProtocol {
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForTrackingProtectionEnabled(for tab: Tab, isWhitelisted: Bool = false) -> [[PhotonActionSheetItem]] {
+    private func menuActionsForTrackingProtectionEnabled(for tab: Tab, isSafelisted: Bool = false) -> [[PhotonActionSheetItem]] {
         guard let blocker = tab.contentBlocker, let currentURL = tab.url else {
             return []
         }
@@ -163,24 +163,24 @@ extension PhotonActionSheetProtocol {
             self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.cryptomining])
         }
 
-        var addToWhitelist = PhotonActionSheetItem(title: Strings.ETPOn, isEnabled: !isWhitelisted, accessory: .Switch) { _, cell in
-            LeanPlumClient.shared.track(event: .trackingProtectionWhiteList)
-            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionWhitelist)
-            ContentBlocker.shared.whitelist(enable: tab.contentBlocker?.status != .Whitelisted, url: currentURL) {
+        var addToSafelist = PhotonActionSheetItem(title: Strings.ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
+            LeanPlumClient.shared.track(event: .trackingProtectionSafeList)
+            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
+            ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
                 tab.reload()
                 // trigger a call to customRender
                 cell.backgroundView?.setNeedsDisplay()
             }
         }
-        addToWhitelist.customRender = { title, _ in
-            if tab.contentBlocker?.status == .Whitelisted {
+        addToSafelist.customRender = { title, _ in
+            if tab.contentBlocker?.status == .safelisted {
                 title.text = Strings.ETPOff
             } else {
                 title.text = Strings.ETPOn
             }
         }
-        addToWhitelist.accessibilityId = "tp.add-to-whitelist"
-        addToWhitelist.customHeight = { _ in
+        addToSafelist.accessibilityId = "tp.add-to-safelist"
+        addToSafelist.customHeight = { _ in
             return PhotonActionSheetUX.RowHeight
         }
 
@@ -247,22 +247,22 @@ extension PhotonActionSheetProtocol {
             items = [[noblockeditems]]
         }
 
-        items = [[addToWhitelist]] + items + [[settings]]
+        items = [[addToSafelist]] + items + [[settings]]
         return items
     }
 
     @available(iOS 11.0, *)
-    private func menuActionsForWhitelistedSite(for tab: Tab) -> [[PhotonActionSheetItem]] {
+    private func menuActionsForSafelistedSite(for tab: Tab) -> [[PhotonActionSheetItem]] {
         guard let currentURL = tab.url else {
             return []
         }
 
-        let removeFromWhitelist = PhotonActionSheetItem(title: Strings.TPWhiteListRemove, iconString: "menu-TrackingProtection") { _, _ in
-            ContentBlocker.shared.whitelist(enable: false, url: currentURL) {
+        let removeFromSafelist = PhotonActionSheetItem(title: Strings.TPSafeListRemove, iconString: "menu-TrackingProtection") { _, _ in
+            ContentBlocker.shared.safelist(enable: false, url: currentURL) {
                 tab.reload()
             }
         }
-        return [[removeFromWhitelist]]
+        return [[removeFromSafelist]]
     }
 }
 

@@ -93,12 +93,12 @@ extension PhotonActionSheetProtocol {
         }
 
         if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled {
-            let isWhitelisted = helper.status == .Whitelisted
+            let isSafelisted = helper.status == .safelisted
 
-            let title = !isWhitelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+            let title = !isSafelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
             let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { _, _ in
-                ContentBlocker.shared.whitelist(enable: !isWhitelisted, url: url) {
+                ContentBlocker.shared.safelist(enable: !isSafelisted, url: url) {
                     tab.reload()
                 }
             }

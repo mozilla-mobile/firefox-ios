@@ -393,14 +393,14 @@ extension TabLocationView: TabEventHandler {
         guard let blocker = tab.contentBlocker else { return }
         trackingProtectionButton.alpha = 1.0
         switch blocker.status {
-        case .Blocking:
+        case .blocking:
             trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: "tracking-protection-active-block"), for: .normal)
-        case .NoBlockedURLs:
+        case .noBlockedURLs:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
             trackingProtectionButton.alpha = 0.5
-        case .Whitelisted:
+        case .safelisted:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
-        case .Disabled:
+        case .disabled:
             trackingProtectionButton.isHidden = true
         }
     }

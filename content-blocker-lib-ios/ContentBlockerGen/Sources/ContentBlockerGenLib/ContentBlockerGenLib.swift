@@ -73,7 +73,7 @@ public class ContentBlockerGenLib {
         return result
     }
 
-    public func parseBlacklist(json: [String: Any], action: Action, categoryTitle: CategoryTitle) -> [String] {
+    public func parseBlocklist(json: [String: Any], action: Action, categoryTitle: CategoryTitle) -> [String] {
         let categories = json["categories"]! as! [String: Any]
         var result = [String]()
         let category = categories[categoryTitle.rawValue] as! [Any]
