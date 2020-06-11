@@ -7,19 +7,16 @@ import Storage
 import Shared
 
 // MARK: - Main View Model
+/// View Model to handle logic for LoginListViewController.
 final class LoginListViewModel {
 
     let profile: Profile
     fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
-//    var searchControlHelper: HelperSearchController? = nil
-//    var tableViewHelper: HelperTableView? = nil
-//    var generalLonginHelper: HelperLoginList? = nil
-    var dataSourceViewModel = LoginListDataSourceViewModel()
-    var searchController: UISearchController?
+    var dataSourceViewModel: LoginListDataSourceViewModel
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
-        self.searchController = searchController
+        self.dataSourceViewModel = LoginListDataSourceViewModel(searchController)
     }
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
@@ -29,7 +26,8 @@ final class LoginListViewModel {
         activeLoginQuery! >>== dataSourceViewModel.setLogins
     }
 
-    // Wrap the SQLiteLogins method to allow us to cancel it from our end.
+    /// Searches SQLite database for logins that match query.
+    /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
     func queryLogins(_ query: String) -> Deferred<Maybe<[LoginRecord]>> {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
         profile.logins.searchLoginsWithQuery(query) >>== { logins in
@@ -61,6 +59,10 @@ final class LoginListViewModel {
         }
         fileprivate let helper = LoginListDataSourceHelper()
         weak var observer: LoginDataSourceObserver?
+
+        init(_ searchController: UISearchController) {
+            self.searchController = searchController
+        }
 
         func loginAtIndexPath(_ indexPath: IndexPath) -> LoginRecord? {
             guard indexPath.section > 0 else {
@@ -169,7 +171,6 @@ private class LoginListDataSourceHelper {
             return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
         }
 
-        var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
         var sections = [Character: [LoginRecord]]()
         var titleSet = Set<Character>()
 
@@ -177,7 +178,7 @@ private class LoginListDataSourceHelper {
             // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
             // baseDomain() is a costly call because of the ETLD lookup tables.
             logins.forEach { login in
-                domainLookup[login.id] = (
+                self.domainLookup[login.id] = (
                     login.hostname.asURL?.baseDomain,
                     login.hostname.asURL?.host,
                     login.hostname
