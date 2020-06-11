@@ -17,6 +17,10 @@
 		04B917DD249157C300FED84D /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */; };
 		04B917DF2491587700FED84D /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917DE2491587700FED84D /* UIButtonExtensions.swift */; };
 		04B917E02491587700FED84D /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917DE2491587700FED84D /* UIButtonExtensions.swift */; };
+		04B917E32492939700FED84D /* ButtonWithSublabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917E22492939700FED84D /* ButtonWithSublabel.swift */; };
+		04B917E42492939700FED84D /* ButtonWithSublabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917E22492939700FED84D /* ButtonWithSublabel.swift */; };
+		04B917E72492940100FED84D /* TodayUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917E62492940100FED84D /* TodayUX.swift */; };
+		04B917E82492940100FED84D /* TodayUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917E62492940100FED84D /* TodayUX.swift */; };
 		0B21E8061E26CCB7000C8779 /* EarlGrey.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0B21E8051E26CCB7000C8779 /* EarlGrey.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		0B305E1B1E3A98A900BE0767 /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305E1A1E3A98A900BE0767 /* BookmarkingTests.swift */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
@@ -1175,6 +1179,8 @@
 		04B917D824914E6B00FED84D /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
 		04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonWithLabel.swift; sourceTree = "<group>"; };
 		04B917DE2491587700FED84D /* UIButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
+		04B917E22492939700FED84D /* ButtonWithSublabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithSublabel.swift; sourceTree = "<group>"; };
+		04B917E62492940100FED84D /* TodayUX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayUX.swift; sourceTree = "<group>"; };
 		0B21E8051E26CCB7000C8779 /* EarlGrey.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EarlGrey.framework; path = Carthage/Build/iOS/EarlGrey.framework; sourceTree = "<group>"; };
 		0B305E1A1E3A98A900BE0767 /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
 		0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTest.swift; sourceTree = "<group>"; };
@@ -2470,6 +2476,8 @@
 				04B917D824914E6B00FED84D /* TodayViewModel.swift */,
 				04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */,
 				04B917DE2491587700FED84D /* UIButtonExtensions.swift */,
+				04B917E22492939700FED84D /* ButtonWithSublabel.swift */,
+				04B917E62492940100FED84D /* TodayUX.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -4907,11 +4915,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				04B917E42492939700FED84D /* ButtonWithSublabel.swift in Sources */,
 				04B917DA24914E6B00FED84D /* TodayViewModel.swift in Sources */,
 				04B917DD249157C300FED84D /* ImageButtonWithLabel.swift in Sources */,
 				315D05561E58DD60001F349B /* UIPasteboardExtensions.swift in Sources */,
 				04B917E02491587700FED84D /* UIButtonExtensions.swift in Sources */,
 				3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */,
+				04B917E82492940100FED84D /* TodayUX.swift in Sources */,
 				04B917D624914E5C00FED84D /* TodayModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5120,6 +5130,7 @@
 				C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				C892DA0D22D39A980080F1F7 /* TrackingProtectionMenu.swift in Sources */,
+				04B917E32492939700FED84D /* ButtonWithSublabel.swift in Sources */,
 				C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */,
 				39F819C61FD70F5D009E31E4 /* TabEventHandlers.swift in Sources */,
 				E65607611C08B4E200534B02 /* SearchInputView.swift in Sources */,
@@ -5190,6 +5201,7 @@
 				EB9854FF2422686F0040F24B /* AppDelegate+PushNotifications.swift in Sources */,
 				E64ED8FA1BC55AE300DAF864 /* UIAlertControllerExtensions.swift in Sources */,
 				39CE74F821A83105007AE4F2 /* TranslationSettingsController.swift in Sources */,
+				04B917E72492940100FED84D /* TodayUX.swift in Sources */,
 				435D7CC02461EFCB0043ACB9 /* IntroScreenWelcomeViewV2.swift in Sources */,
 				282DA4731A68C1E700A406E2 /* OpenSearch.swift in Sources */,
 				39CE74F421A72309007AE4F2 /* TranslationToastHandler.swift in Sources */,
