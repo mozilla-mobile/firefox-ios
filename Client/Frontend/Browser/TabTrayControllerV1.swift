@@ -838,8 +838,8 @@ private struct EmptyPrivateTabsViewUX {
 }
 
 // View we display when there are no private tabs created
-fileprivate class EmptyPrivateTabsView: UIView {
-    fileprivate lazy var titleLabel: UILabel = {
+class EmptyPrivateTabsView: UIView {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.Photon.White100
         label.font = EmptyPrivateTabsViewUX.TitleFont
@@ -847,7 +847,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
         return label
     }()
 
-    fileprivate var descriptionLabel: UILabel = {
+    var descriptionLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor.Photon.White100
         label.font = EmptyPrivateTabsViewUX.DescriptionFont
@@ -857,7 +857,7 @@ fileprivate class EmptyPrivateTabsView: UIView {
         return label
     }()
 
-    fileprivate var learnMoreButton: UIButton = {
+    var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(
             NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode"),

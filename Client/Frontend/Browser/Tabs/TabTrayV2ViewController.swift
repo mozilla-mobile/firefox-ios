@@ -14,7 +14,7 @@ struct TabTrayV2ControllerUX {
     static let textMarginTopBottom = CGFloat(18.0)
 }
 
-class TabTrayV2ViewController: UIViewController{
+class TabTrayV2ViewController: UIViewController {
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
     // Views
@@ -34,6 +34,14 @@ class TabTrayV2ViewController: UIViewController{
         tableView.delegate = self
         return tableView
     }()
+    lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
+        let emptyView = EmptyPrivateTabsView()
+        emptyView.titleLabel.textColor = .black
+        emptyView.descriptionLabel.textColor = .black
+        emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
+        return emptyView
+    }()
+    
     // Constants
     fileprivate let sectionHeaderIdentifier = "SectionHeader"
     
@@ -41,6 +49,12 @@ class TabTrayV2ViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        viewModel.addPrivateTab()
+        print("DID DISAP")
     }
     
     private func viewSetup() {
@@ -51,6 +65,7 @@ class TabTrayV2ViewController: UIViewController{
         // Add Subviews
         view.addSubview(toolbar)
         view.addSubview(tableView)
+        view.addSubview(emptyPrivateTabsView)
         viewModel.updateTabs()
         // Constraints
         tableView.snp.makeConstraints { make in
@@ -64,13 +79,26 @@ class TabTrayV2ViewController: UIViewController{
             make.left.right.bottom.equalTo(view)
             make.height.equalTo(UIConstants.BottomToolbarHeight)
         }
+        
+        emptyPrivateTabsView.snp.makeConstraints { make in
+            make.top.left.right.equalTo(view)
+            make.bottom.equalTo(self.toolbar.snp.top)
+        }
+        
+        emptyPrivateTabsView.isHidden = true
     }
+    
+    func shouldShowPrivateTabsView() {
+        emptyPrivateTabsView.isHidden = !viewModel.shouldShowPrivateView
+    }
+
 }
 
 // MARK: Datastore
 extension TabTrayV2ViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        shouldShowPrivateTabsView()
         return viewModel.numberOfSections()
     }
     
@@ -111,12 +139,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     }
     
     @objc func didTogglePrivateMode(_ sender: UIButton) {
-//        let alert = UIAlertController(title: "🚧 Under construction", message: "Private tabs not available yet.", preferredStyle: .alert)
-//        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
-//        self.present(alert, animated: true)
-        
         // Toggle private mode
-        viewModel.privateMode()
         viewModel.togglePrivateMode()
         
         // Reload data
@@ -141,7 +164,18 @@ extension TabTrayV2ViewController: UITableViewDataSource {
        }
     
     func dismissTabTray() {
+        // We check if there is private tab then add one if user dismisses
+        viewModel.addPrivateTab()
         navigationController?.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func didTapLearnMore() {
+        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+        if let langID = Locale.preferredLanguages.first {
+            let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion ?? "0.0")/iOS/\(langID)/private-browsing-ios".asURL!)
+            viewModel.openNewTab(learnMoreRequest)
+        }
+        self.dismissTabTray()
     }
 }
 
