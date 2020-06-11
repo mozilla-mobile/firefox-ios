@@ -48,8 +48,8 @@ class ConnectSetting: WithoutAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = AppInfo.isChinaEdition ?
-            FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC) :
-            FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
+            FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC, deepLinkParams: nil) :
+            FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
         UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -341,8 +341,8 @@ class AccountStatusSetting: WithAccountSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
             let vc = AppInfo.isChinaEdition ?
-                FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC) :
-                FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
+                FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC, deepLinkParams: nil) :
+                FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
             UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(vc, animated: true)
             return

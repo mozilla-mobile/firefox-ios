@@ -2097,10 +2097,10 @@ extension BrowserViewController {
 
     /// This function is called to determine if FxA sign in flow or settings page should be shown
     /// - Parameters:
-    ///     - fxaOptions: FxALaunchParams from deeplink query
+    ///     - deepLinkParams: FxALaunchParams from deeplink query
     ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
     ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
-    func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage) -> UIViewController {
+    func getSignInOrFxASettingsVC(_ deepLinkParams: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let parentType: FxASignInParentType
         let object: UnifiedTelemetry.EventObject
@@ -2118,8 +2118,8 @@ extension BrowserViewController {
             }
 
             let signInVC = AppInfo.isChinaEdition ?
-                FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .dismiss) :
-                FirefoxAccountSignInViewController(profile: profile, parentType: parentType)
+                FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .dismiss, deepLinkParams: deepLinkParams) :
+                FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
             UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC
         }
