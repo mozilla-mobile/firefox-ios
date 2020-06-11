@@ -5,7 +5,7 @@
 import XCTest
 @testable import ContentBlockerGenLib
 
-let blacklist = """
+let blocklist = """
 {
 "license": "Copyright 2010-2019 Disconnect, Inc.",
 "categories": {
@@ -30,7 +30,7 @@ final class ContentBlockerGenTests: XCTestCase {
 
         let contentBlocker = ContentBlockerGenLib(entityListJson: entityJson)
 
-        let json = try! JSONSerialization.jsonObject(with: blacklist.data(using: .utf8)!, options: []) as! [String: Any]
+        let json = try! JSONSerialization.jsonObject(with: blocklist.data(using: .utf8)!, options: []) as! [String: Any]
         let categories = json["categories"]! as! [String: Any]
         let category = categories[CategoryTitle.Advertising.rawValue] as! [Any]
         var result = [String]()
