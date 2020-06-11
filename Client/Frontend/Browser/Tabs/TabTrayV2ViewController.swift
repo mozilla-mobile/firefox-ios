@@ -46,8 +46,11 @@ class TabTrayV2ViewController: UIViewController{
     private func viewSetup() {
         // MARK: TODO - Theme setup setup
         // --- --- --- --- --- --- --- ---
-        // Title
+        // Navigation bar
         navigationItem.title = Strings.TabTrayV2Title
+        if #available(iOS 13.0, *) { } else {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .done, target: self, action: #selector(dismissTabTray))
+        }
         // Add Subviews
         view.addSubview(toolbar)
         view.addSubview(tableView)
@@ -133,7 +136,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
                            })
        }
     
-    func dismissTabTray() {
+    @objc func dismissTabTray() {
         navigationController?.dismiss(animated: true, completion: nil)
     }
 }
