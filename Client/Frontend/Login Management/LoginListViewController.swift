@@ -30,13 +30,7 @@ class LoginListViewController: SensitiveViewController {
         return ListSelectionController(tableView: self.tableView)
     }()
 
-    fileprivate lazy var loginDataSource: LoginDataSource = {
-        let dataSource = LoginDataSource(profile: profile, searchController: searchController)
-        dataSource.viewModel.dataObserver = self
-        return dataSource
-    }()
-
-    fileprivate let profile: Profile
+    fileprivate var loginDataSource: LoginDataSource
     fileprivate let searchController = UISearchController(searchResultsController: nil)
     fileprivate let loadingView = SettingsLoadingView()
     fileprivate var deleteAlert: UIAlertController?
@@ -102,8 +96,8 @@ class LoginListViewController: SensitiveViewController {
     }
 
     private init(profile: Profile) {
-        self.profile = profile
-        self.viewModel = LoginListViewModel(profile: profile)
+        self.viewModel = LoginListViewModel(profile: profile, searchController: searchController)
+        self.loginDataSource = LoginDataSource(viewModel: self.viewModel)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -232,7 +226,7 @@ class LoginListViewController: SensitiveViewController {
     }
 
     fileprivate func toggleSelectionTitle() {
-        if loginSelectionController.selectedCount == loginDataSource.count {
+        if loginSelectionController.selectedCount == viewModel.dataSourceViewModel.count {
             selectionButton.setTitle(deselectAllTitle, for: [])
         } else {
             selectionButton.setTitle(selectAllTitle, for: [])
@@ -300,14 +294,14 @@ private extension LoginListViewController {
     }
 
     @objc func tappedDelete() {
-        profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
+        viewModel.profile.logins.hasSyncedLogins().uponQueue(.main) { yes in
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.loginSelectionController.selectedIndexPaths.compactMap { indexPath in
-                    self.loginDataSource.viewModel.loginAtIndexPath(indexPath)?.id
+                    self.viewModel.dataSourceViewModel.loginAtIndexPath(indexPath)?.id
                 }
 
-                self.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
+                self.viewModel.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
                     self.cancelSelection()
                     self.loadLogins()
                 }
@@ -319,7 +313,7 @@ private extension LoginListViewController {
 
     @objc func tappedSelectionButton() {
         // If we haven't selected everything yet, select all
-        if loginSelectionController.selectedCount < loginDataSource.count {
+        if loginSelectionController.selectedCount < viewModel.dataSourceViewModel.count {
             // Find all unselected indexPaths
             let unselectedPaths = tableView.allLoginIndexPaths.filter { indexPath in
                 return !loginSelectionController.indexPathIsSelected(indexPath)
@@ -340,25 +334,6 @@ private extension LoginListViewController {
 
         toggleSelectionTitle()
         toggleDeleteBarButton()
-    }
-}
-
-// MARK: - LoginDataSourceObserver
-protocol LoginDataSourceObserver: AnyObject {
-    func loginSectionsDidUpdate()
-}
-extension LoginListViewController: LoginDataSourceObserver {
-    func loginSectionsDidUpdate() {
-        loadingView.isHidden = true
-        tableView.reloadData()
-        navigationItem.rightBarButtonItem?.isEnabled = loginDataSource.count > 0
-        restoreSelectedRows()
-    }
-
-    func restoreSelectedRows() {
-        for path in self.loginSelectionController.selectedIndexPaths {
-            tableView.selectRow(at: path, animated: false, scrollPosition: .none)
-        }
     }
 }
 
@@ -401,9 +376,9 @@ extension LoginListViewController: UITableViewDelegate {
             loginSelectionController.selectIndexPath(indexPath)
             toggleSelectionTitle()
             toggleDeleteBarButton()
-        } else if let login = loginDataSource.viewModel.loginAtIndexPath(indexPath) {
+        } else if let login = viewModel.dataSourceViewModel.loginAtIndexPath(indexPath) {
             tableView.deselectRow(at: indexPath, animated: true)
-            let detailViewController = LoginDetailViewController(profile: profile, login: login)
+            let detailViewController = LoginDetailViewController(profile: viewModel.profile, login: login)
             detailViewController.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(detailViewController, animated: true)
         }
@@ -500,45 +475,42 @@ fileprivate class ListSelectionController: NSObject {
 
 /// Data source for handling LoginData objects from a Cursor
 class LoginDataSource: NSObject, UITableViewDataSource {
-    var count = 0
-    weak var searchController: UISearchController?
     fileprivate let emptyStateView = NoLoginsView()
-    fileprivate var titles = [Character]()
-    let viewModel = LoginDataSourceViewModel()
+    fileprivate var viewModel: LoginListViewModel
 
     let boolSettings: (BoolSetting, BoolSetting)
 
-    init(profile: Profile, searchController: UISearchController) {
-        self.searchController = searchController
+    init(viewModel: LoginListViewModel) {
+        self.viewModel = viewModel
         boolSettings = (
-            BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.LoginsSaveEnabled, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToSaveLogins)),
-            BoolSetting(prefs: profile.prefs, prefKey: PrefsKeys.LoginsShowShortcutMenuItem, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToShowLoginsInAppMenu)))
+            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsSaveEnabled, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToSaveLogins)),
+            BoolSetting(prefs: viewModel.profile.prefs, prefKey: PrefsKeys.LoginsShowShortcutMenuItem, defaultValue: true, attributedTitleText: NSAttributedString(string: Strings.SettingToShowLoginsInAppMenu)))
         super.init()
     }
 
     @objc func numberOfSections(in tableView: UITableView) -> Int {
-        if viewModel.loginRecordSections.isEmpty {
+        if viewModel.dataSourceViewModel.loginRecordSections.isEmpty {
             tableView.backgroundView = emptyStateView
             return 1
         }
 
         tableView.backgroundView = nil
         // Add one section for the settings section.
-        return viewModel.loginRecordSections.count + 1
+        return viewModel.dataSourceViewModel.loginRecordSections.count + 1
     }
 
     @objc func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == LoginsSettingsSection {
             return 2
         }
-        return viewModel.loginsForSection(section)?.count ?? 0
+        return viewModel.dataSourceViewModel.loginsForSection(section)?.count ?? 0
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
 
         if indexPath.section == LoginsSettingsSection {
-            let hideSettings = searchController?.isActive ?? false || tableView.isEditing
+            let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
             setting.onConfigureCell(cell)
             if hideSettings {
@@ -556,7 +528,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
                 }
             }
         } else {
-            guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
+            guard let login = viewModel.dataSourceViewModel.loginAtIndexPath(indexPath) else { return cell }
             cell.textLabel?.text = login.hostname
             cell.detailTextColor = UIColor.theme.tableView.rowDetailText
             cell.detailTextLabel?.text = login.username
