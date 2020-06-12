@@ -24,19 +24,59 @@ class TabTrayV2ViewModel: NSObject {
                                                    .older: Array<Tab>()]
     fileprivate let tabManager: TabManager
     fileprivate let viewController: TabTrayV2ViewController
-
-    private(set) var isPrivate = false
+    private var isPrivate = false
+    var isInPrivateMode: Bool {
+        return isPrivate
+    }
+    var shouldShowPrivateView: Bool {
+        return isPrivate && getTabs().isEmpty
+    }
 
     init(viewController: TabTrayV2ViewController) {
         self.viewController = viewController
-        self.tabManager = BrowserViewController.foregroundBVC().tabManager //fixme
+        self.tabManager = BrowserViewController.foregroundBVC().tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         super.init()
-
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
+        setupPrivateModeBadge()
+    }
+    
+    // Returns tabs for the mode the current view model is in
+    func getTabs() -> [Tab] {
+        return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
+    }
+    
+    func setupPrivateModeBadge() {
+        viewController.toolbar.maskButton.setSelected(isPrivate, animated: true)
+        viewController.toolbar.applyUIMode(isPrivate: isPrivate)
+    }
 
-        tabManager.tabs.forEach { tab in
+    func togglePrivateMode () {
+        tabManager.willSwitchTabMode(leavingPBM: self.isPrivate)
+        self.isPrivate = !self.isPrivate
+        resetDataStoreTabs()
+        let tabs = getTabs()
+        let tab = mostRecentTab(inTabs: tabs) ?? tabs.last
+        if let tab = tab {
+            tabManager.selectTab(tab)
+        } else {
+            self.addTab()
+        }
+        setupPrivateModeBadge()
+    }
+    
+    func addPrivateTab() {
+        guard isPrivate && getTabs().isEmpty else {
+            return
+        }
+        self.addTab()
+        tabManager.selectTab(getTabs().last)
+    }
+    
+    func updateTabs() {
+        let tabs = getTabs()
+        tabs.forEach { tab in
             let section = timestampToSection(tab)
             dataStore[section]?.insert(tab, at: 0)
         }
@@ -51,7 +91,15 @@ class TabTrayV2ViewModel: NSObject {
         }
         viewController.tableView.reloadData()
     }
-
+    
+    func resetDataStoreTabs() {
+        dataStore.removeAll()
+        dataStore = [ .today: Array<Tab>(),
+        .yesterday: Array<Tab>(),
+        .lastWeek: Array<Tab>(),
+        .older: Array<Tab>()]
+    }
+    
     func timestampToSection(_ tab: Tab) -> TabSection {
         let tabDate = Date.fromTimestamp(tab.lastExecutedTime ?? tab.sessionData?.lastUsedTime ?? Date.now())
         if tabDate.isToday() {
@@ -117,7 +165,7 @@ class TabTrayV2ViewModel: NSObject {
     func closeTabsForCurrentTray() {
         viewController.hideDisplayedTabs() {
             self.tabManager.removeTabsWithUndoToast(self.dataStore.compactMap{ $0.1 }.flatMap{ $0 })
-                if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
+                if self.getTabs().count == 1, let tab = self.getTabs().first {
                 self.tabManager.selectTab(tab)
                     self.viewController.dismissTabTray()
             }
@@ -158,7 +206,7 @@ class TabTrayV2ViewModel: NSObject {
         let baseDomain = data.url?.baseDomain
         detailTextLabel.text = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
         textLabel.text = data.displayTitle
-        imageView.image = data.screenshot
+        imageView.image = data.screenshot ?? UIImage()
         cell.accessoryView = cell.closeButton
     }
 }
