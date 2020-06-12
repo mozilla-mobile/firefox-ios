@@ -172,10 +172,9 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     }
     
     @objc func didTapLearnMore() {
-        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
-        if let langID = Locale.preferredLanguages.first {
-            let learnMoreRequest = URLRequest(url: "https://support.mozilla.org/1/mobile/\(appVersion ?? "0.0")/iOS/\(langID)/private-browsing-ios".asURL!)
-            viewModel.openNewTab(learnMoreRequest)
+        if let privateBrowsingUrl = SupportUtils.URLForTopic("private-browsing-ios") {
+            let learnMoreRequest = URLRequest(url: privateBrowsingUrl)
+            viewModel.addTab(learnMoreRequest)
         }
         self.dismissTabTray()
     }

@@ -52,7 +52,7 @@ class TabTrayV2ViewModel: NSObject {
     func togglePrivateMode () {
         tabManager.willSwitchTabMode(leavingPBM: self.isPrivateMode)
         self.isPrivateMode = !self.isPrivateMode
-        clearDataStoreTabs()
+        resetDataStoreTabs()
         let tabs = getTabs()
         let tab = mostRecentTab(inTabs: tabs) ?? tabs.last
         if let tab = tab {
@@ -89,7 +89,7 @@ class TabTrayV2ViewModel: NSObject {
         viewController.tableView.reloadData()
     }
     
-    func clearDataStoreTabs() {
+    func resetDataStoreTabs() {
         dataStore.removeAll()
         dataStore = [ .today: Array<Tab>(),
         .yesterday: Array<Tab>(),
@@ -144,10 +144,6 @@ class TabTrayV2ViewModel: NSObject {
         }
         
         return (sectionHeader + (!date.isEmpty ? " — " : " ") + date).uppercased()
-    }
-    
-    func openNewTab(_ request: URLRequest? = nil) {
-        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivateMode))
     }
     
     // The user has tapped the close button or has swiped away the cell
