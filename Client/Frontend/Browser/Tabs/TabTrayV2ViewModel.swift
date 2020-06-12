@@ -206,7 +206,7 @@ class TabTrayV2ViewModel: NSObject {
         let baseDomain = data.url?.baseDomain
         detailTextLabel.text = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
         textLabel.text = data.displayTitle
-        imageView.image = data.screenshot
+        imageView.image = data.screenshot ?? UIImage()
         cell.accessoryView = cell.closeButton
     }
 }
