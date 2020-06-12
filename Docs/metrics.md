@@ -7,10 +7,14 @@ This means you might have to go searching through the dependency tree to get a f
 
 # Pings
 
- - [deletion-request](#deletion-request)
+ - [deletion_request](#deletion_request)
 
 
-## deletion-request
+## deletion_request
+
+This is a built-in ping that is assembled out of the box by the Glean SDK.
+
+See the Glean SDK documentation for the [`deletion_request` ping](https://mozilla.github.io/glean/book/user/pings/deletion_request.html).
 
 The following metrics are added to the ping:
 
