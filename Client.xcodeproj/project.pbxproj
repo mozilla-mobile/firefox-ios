@@ -371,6 +371,7 @@
 		CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */; };
 		CA7BD568248189E800A0A61B /* BreachAlertsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */; };
 		CA90753824929B22005B794D /* NoLoginsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA90753724929B22005B794D /* NoLoginsView.swift */; };
+		CAC458F1249429C20042561A /* ListSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* ListSelectionHelper.swift */; };
 		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */; };
@@ -1513,6 +1514,7 @@
 		CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsManager.swift; sourceTree = "<group>"; };
 		CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsTests.swift; sourceTree = "<group>"; };
 		CA90753724929B22005B794D /* NoLoginsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoLoginsView.swift; sourceTree = "<group>"; };
+		CAC458F0249429C20042561A /* ListSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectionHelper.swift; sourceTree = "<group>"; };
 		CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxAccountSignInViewController.swift; sourceTree = "<group>"; };
 		CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDevices.swift; sourceTree = "<group>"; };
 		CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContentSettingsViewController.swift; sourceTree = "<group>"; };
@@ -3145,6 +3147,7 @@
 				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
 				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
+				CAC458F0249429C20042561A /* ListSelectionHelper.swift */,
 				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
 				CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */,
 				CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */,
@@ -5279,6 +5282,7 @@
 				3B39EDCB1E16E1AA00EF029F /* CustomSearchViewController.swift in Sources */,
 				E65075571E37F714006961AC /* FaviconFetcher.swift in Sources */,
 				D863C8F21F68BFC20058D95F /* GradientProgressBar.swift in Sources */,
+				CAC458F1249429C20042561A /* ListSelectionHelper.swift in Sources */,
 				EB9A178E20E525DF00B12184 /* ThemeSettingsController.swift in Sources */,
 				D3C744CD1A687D6C004CE85D /* URIFixup.swift in Sources */,
 				E4A961181AC041C40069AD6F /* ReadabilityService.swift in Sources */,

@@ -26,8 +26,8 @@ class LoginListViewController: SensitiveViewController {
 
     private let viewModel: LoginListViewModel
 
-    fileprivate lazy var loginSelectionController: ListSelectionController = {
-        return ListSelectionController(tableView: self.tableView)
+    fileprivate lazy var loginSelectionController: ListSelectionHelper = {
+        return ListSelectionHelper(tableView: self.tableView)
     }()
 
     fileprivate var loginDataSource: LoginDataSource
@@ -428,48 +428,6 @@ extension LoginListViewController: SearchInputViewDelegate {
     @objc func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
         setupDefaultNavButtons()
         loadLogins()
-    }
-}
-
-/// Controller that keeps track of selected indexes
-fileprivate class ListSelectionController: NSObject {
-    private unowned let tableView: UITableView
-    private(set) var selectedIndexPaths = [IndexPath]()
-
-    var selectedCount: Int {
-        return selectedIndexPaths.count
-    }
-
-    init(tableView: UITableView) {
-        self.tableView = tableView
-        super.init()
-    }
-
-    func selectIndexPath(_ indexPath: IndexPath) {
-        selectedIndexPaths.append(indexPath)
-    }
-
-    func indexPathIsSelected(_ indexPath: IndexPath) -> Bool {
-        return selectedIndexPaths.contains(indexPath) { path1, path2 in
-            return path1.row == path2.row && path1.section == path2.section
-        }
-    }
-
-    func deselectIndexPath(_ indexPath: IndexPath) {
-        guard let foundSelectedPath = (selectedIndexPaths.filter { $0.row == indexPath.row && $0.section == indexPath.section }).first,
-              let indexToRemove = selectedIndexPaths.firstIndex(of: foundSelectedPath) else {
-            return
-        }
-
-        selectedIndexPaths.remove(at: indexToRemove)
-    }
-
-    func deselectAll() {
-        selectedIndexPaths.removeAll()
-    }
-
-    func selectIndexPaths(_ indexPaths: [IndexPath]) {
-        selectedIndexPaths += indexPaths
     }
 }
 
