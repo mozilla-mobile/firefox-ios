@@ -4613,7 +4613,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(SRCROOT)/Client/Generated/LegacyIds.swift",
+				"$(SRCROOT)/Client/Generated/Metrics.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
