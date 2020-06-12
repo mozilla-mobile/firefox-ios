@@ -11,7 +11,7 @@ import Shared
 final class LoginListViewModel {
     
     let profile: Profile
-    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
+    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>? = nil
     var dataSourceViewModel: LoginListDataSourceViewModel
 
     init(profile: Profile, searchController: UISearchController) {
@@ -54,11 +54,11 @@ final class LoginListViewModel {
         var loginRecordSections = [Character: [LoginRecord]]() {
             didSet {
                 assert(Thread.isMainThread)
-                observer?.loginSectionsDidUpdate() // based on Kayla's sample project
+                delegate?.loginSectionsDidUpdate() // based on Kayla's sample project
             }
         }
         fileprivate let helper = LoginListDataSourceHelper()
-        weak var observer: LoginDataSourceObserver?
+        weak var delegate: LoginDataSourceDelegate?
 
         init(_ searchController: UISearchController) {
             self.searchController = searchController
@@ -128,7 +128,7 @@ final class LoginListViewModel {
 }
 
 // MARK: - Helpers
-protocol LoginDataSourceObserver: AnyObject {
+protocol LoginDataSourceDelegate: AnyObject {
     func loginSectionsDidUpdate()
 }
 private class LoginListDataSourceHelper {
