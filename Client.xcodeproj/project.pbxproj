@@ -250,6 +250,7 @@
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
 		4334145424C63779001541F3 /* IntroScreenSyncViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */; };
 		4334145724C6378B001541F3 /* IntroScreenWelcomeViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */; };
+		3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
 		43446CEA2412066500F5C643 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CE92412066500F5C643 /* UIViewControllerExtension.swift */; };
 		43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */; };
@@ -1411,6 +1412,7 @@
 		3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
 		4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenSyncViewV1.swift; sourceTree = "<group>"; };
 		4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenWelcomeViewV1.swift; sourceTree = "<group>"; };
+		3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxATelemetryUtils.swift; path = Account/FxATelemetryUtils.swift; sourceTree = "<group>"; };
 		43446CE5240D9F3000F5C643 /* ETP.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ETP.xcassets; sourceTree = "<group>"; };
 		43446CE92412066500F5C643 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIViewControllerExtension.swift; path = Extensions/UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCoverSheetViewModelTests.swift; sourceTree = "<group>"; };
@@ -3448,6 +3450,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */,
 				C8E2E80623D20FB3005AACE6 /* RustFxA */,
 				E6C191D41E38F7B7000A213B /* Cartfile */,
 				E6C191D51E38F7B7000A213B /* Cartfile.resolved */,
@@ -4861,6 +4864,7 @@
 				EB07F860240D696000924860 /* PushNotificationSetup.swift in Sources */,
 				D047C55620E1640B001A3C07 /* KeyBundle.swift in Sources */,
 				39F99FE61E3A6F1700F353B4 /* PushRegistration.swift in Sources */,
+				3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */,
 				C8E2E80D23D20FB3005AACE6 /* RustFirefoxAccounts.swift in Sources */,
 				C8E2E80C23D20FB3005AACE6 /* Avatar.swift in Sources */,
 				2FDBCF611ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */,

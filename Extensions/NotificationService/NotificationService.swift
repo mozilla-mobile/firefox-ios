@@ -82,7 +82,6 @@ class NotificationService: UNNotificationServiceExtension {
 class SyncDataDisplay {
     var contentHandler: ((UNNotificationContent) -> Void)
     var notificationContent: UNMutableNotificationContent
-    var sentTabs: [SentTab]
 
     var tabQueue: TabQueue?
     var messageDelivered: Bool = false
@@ -90,7 +89,6 @@ class SyncDataDisplay {
     init(content: UNMutableNotificationContent, contentHandler: @escaping (UNNotificationContent) -> Void, tabQueue: TabQueue) {
         self.contentHandler = contentHandler
         self.notificationContent = content
-        self.sentTabs = []
         self.tabQueue = tabQueue
         Sentry.shared.setup(sendUsageData: true)
     }
@@ -239,8 +237,6 @@ extension SyncDataDisplay {
 extension SyncDataDisplay: SyncDelegate {
     func displaySentTab(for url: URL, title: String, from deviceName: String?) {
         if url.isWebPage() {
-            sentTabs.append(SentTab(url: url, title: title, deviceName: deviceName))
-
             let item = ShareItem(url: url.absoluteString, title: title, favicon: nil)
             _ = tabQueue?.addToQueue(item).value // Force synchronous.
         }
