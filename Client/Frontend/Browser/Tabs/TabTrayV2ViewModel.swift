@@ -24,15 +24,18 @@ class TabTrayV2ViewModel: NSObject {
                                                    .older: Array<Tab>()]
     fileprivate let tabManager: TabManager
     fileprivate let viewController: TabTrayV2ViewController
-    private var isPrivateMode = false
+    private var isPrivate = false
+    var isInPrivateMode: Bool {
+        return isPrivate
+    }
     var shouldShowPrivateView: Bool {
-        return isPrivateMode && getTabs().isEmpty
+        return isPrivate && getTabs().isEmpty
     }
 
     init(viewController: TabTrayV2ViewController) {
         self.viewController = viewController
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
-        self.isPrivateMode = tabManager.selectedTab?.isPrivate ?? false
+        self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         super.init()
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
@@ -41,17 +44,17 @@ class TabTrayV2ViewModel: NSObject {
     
     // Returns tabs for the mode the current view model is in
     func getTabs() -> [Tab] {
-        return self.isPrivateMode ? tabManager.privateTabs : tabManager.normalTabs
+        return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
     
     func setupPrivateModeBadge() {
-        viewController.toolbar.maskButton.setSelected(isPrivateMode, animated: true)
-        viewController.toolbar.applyUIMode(isPrivate: isPrivateMode)
+        viewController.toolbar.maskButton.setSelected(isPrivate, animated: true)
+        viewController.toolbar.applyUIMode(isPrivate: isPrivate)
     }
 
     func togglePrivateMode () {
-        tabManager.willSwitchTabMode(leavingPBM: self.isPrivateMode)
-        self.isPrivateMode = !self.isPrivateMode
+        tabManager.willSwitchTabMode(leavingPBM: self.isPrivate)
+        self.isPrivate = !self.isPrivate
         resetDataStoreTabs()
         let tabs = getTabs()
         let tab = mostRecentTab(inTabs: tabs) ?? tabs.last
@@ -64,7 +67,7 @@ class TabTrayV2ViewModel: NSObject {
     }
     
     func addPrivateTab() {
-        guard isPrivateMode && getTabs().isEmpty else {
+        guard isPrivate && getTabs().isEmpty else {
             return
         }
         self.addTab()
@@ -162,7 +165,7 @@ class TabTrayV2ViewModel: NSObject {
     func closeTabsForCurrentTray() {
         viewController.hideDisplayedTabs() {
             self.tabManager.removeTabsWithUndoToast(self.dataStore.compactMap{ $0.1 }.flatMap{ $0 })
-                if self.tabManager.normalTabs.count == 1, let tab = self.tabManager.normalTabs.first {
+                if self.getTabs().count == 1, let tab = self.getTabs().first {
                 self.tabManager.selectTab(tab)
                     self.viewController.dismissTabTray()
             }
@@ -182,7 +185,7 @@ class TabTrayV2ViewModel: NSObject {
     }
     
     func addTab(_ request: URLRequest! = nil) {
-        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivateMode))
+        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
     
     func numberOfSections() -> Int {

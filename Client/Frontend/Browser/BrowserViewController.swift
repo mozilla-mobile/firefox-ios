@@ -68,6 +68,7 @@ class BrowserViewController: UIViewController {
     fileprivate var copyAddressAction: AccessibleAction!
 
     fileprivate weak var tabTrayController: TabTrayControllerV1?
+    fileprivate weak var tabTrayControllerV2: TabTrayV2ViewController?
     let profile: Profile
     let tabManager: TabManager
 
@@ -1238,6 +1239,7 @@ extension BrowserViewController: URLBarDelegate {
             let controller = ThemedNavigationController(rootViewController: tabTrayViewController)
             controller.presentingModalViewControllerDelegate = self
             self.present(controller, animated: true, completion: nil)
+            self.tabTrayControllerV2 = tabTrayViewController
         } else {
             let tabTrayController = TabTrayControllerV1(tabManager: tabManager, profile: profile, tabTrayDelegate: self)
             navigationController?.pushViewController(tabTrayController, animated: true)
@@ -1886,7 +1888,9 @@ extension BrowserViewController: TabManagerDelegate {
     }
 
     func tabManagerDidRemoveAllTabs(_ tabManager: TabManager, toast: ButtonToast?) {
-        guard let toast = toast, !(tabTrayController?.tabDisplayManager.isPrivate  ?? false) else {
+        let tabTrayV2PrivateMode = tabTrayControllerV2?.viewModel.isInPrivateMode
+        let tabTrayV1PrivateMode = tabTrayController?.tabDisplayManager.isPrivate
+        guard let toast = toast, !(tabTrayV1PrivateMode ?? (tabTrayV2PrivateMode ?? false)) else {
             return
         }
         show(toast: toast, afterWaiting: ButtonToastUX.ToastDelay)
