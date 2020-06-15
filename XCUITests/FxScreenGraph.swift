@@ -380,7 +380,7 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
     map.addScreenState(TrackingProtectionContextMenuDetails) { screenState in
         screenState.gesture(forAction: Action.TrackingProtectionperSiteToggle) { userState in
-            app.tables.cells["tp.add-to-whitelist"].tap()
+            app.tables.cells["tp.add-to-safelist"].tap()
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
 
