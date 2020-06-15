@@ -19,10 +19,10 @@ struct TodayStrings {
 private struct TodayUX {
     static let privateBrowsingColor = UIColor(rgb: 0xcf68ff)
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
-    static let linkTextSize: CGFloat = 10.0
-    static let labelTextSize: CGFloat = 14.0
-    static let imageButtonTextSize: CGFloat = 14.0
-    static let copyLinkImageWidth: CGFloat = 23
+    static let linkTextSize: CGFloat = 9.0
+    static let labelTextSize: CGFloat = 12.0
+    static let imageButtonTextSize: CGFloat = 13.0
+    static let copyLinkImageWidth: CGFloat = 20
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
     static let privateSearchButtonColorBrightPurple = UIColor(red: 117.0/255.0, green: 41.0/255.0, blue: 167.0/255.0, alpha: 1.0)
@@ -41,16 +41,16 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.label.text = TodayStrings.NewTabButtonLabel
 
         let button = imageButton.button
-        button.frame = CGRect(width: 60.0, height: 60.0)
+        button.frame = CGRect(width: 40.0, height: 40.0)
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = button.frame.size.width/2
         button.clipsToBounds = true
         button.setImage(UIImage(named: "search"), for: .normal)
+        button.imageEdgeInsets =  UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
         let label = imageButton.label
         label.tintColor = UIColor(named: "widgetLabelColors")
         label.textColor = UIColor(named: "widgetLabelColors")
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
-
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -60,7 +60,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
         let button = imageButton.button
-        button.frame = CGRect(width: 60.0, height: 60.0)
+        button.frame = CGRect(width: 40.0, height: 40.0)
         button.performGradient(colorOne: TodayUX.privateSearchButtonColorFaintDarkPurple, colorTwo: TodayUX.privateSearchButtonColorDarkPurple, colorThree: TodayUX.privateSearchButtonColorBrightPurple)
         button.layer.cornerRadius = button.frame.size.width/2
         button.clipsToBounds = true
@@ -152,7 +152,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         super.viewWillAppear(animated)
         updateCopiedLink()
     }
-
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         let edge = size.width * TodayUX.buttonsHorizontalMarginPercentage
         buttonStackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
@@ -251,15 +251,16 @@ class ImageButtonWithLabel: UIView {
 
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.top.equalTo(self)
             make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(30)
             make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(30)
-            make.height.width.equalTo(60)
+            make.width.height.equalTo(40)
         }
 
         label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(10)
+            make.top.equalTo(button.snp.bottom).offset(5)
             make.leading.trailing.bottom.equalTo(self)
+            make.height.equalTo(15)
         }
 
         label.numberOfLines = 1
@@ -297,7 +298,7 @@ class ButtonWithSublabel: UIButton {
 
         let imageView = self.imageView!
         let subtitleLabel = self.subtitleLabel
-        subtitleLabel.textColor = UIColor.lightGray
+        subtitleLabel.textColor = UIColor(named: "subtitleLableColor")
         self.addSubview(subtitleLabel)
 
         imageView.snp.makeConstraints { make in
@@ -307,7 +308,9 @@ class ButtonWithSublabel: UIButton {
 
         titleLabel.snp.makeConstraints { make in
             make.left.equalTo(imageView.snp.right).offset(TodayUX.margin)
-            make.trailing.top.equalTo(self)
+            make.trailing.equalTo(self)
+            make.top.equalTo(self).offset(3)
+            make.height.equalTo(13)
         }
 
         subtitleLabel.lineBreakMode = .byTruncatingTail
@@ -315,6 +318,7 @@ class ButtonWithSublabel: UIButton {
             make.bottom.equalTo(self)
             make.top.equalTo(titleLabel.snp.bottom)
             make.leading.trailing.equalTo(titleLabel)
+            make.height.equalTo(13)
         }
     }
 
