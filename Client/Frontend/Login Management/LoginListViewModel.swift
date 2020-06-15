@@ -13,6 +13,7 @@ final class LoginListViewModel {
     let profile: Profile
     fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>? = nil
     var dataSourceViewModel: LoginListDataSourceViewModel
+    var isDuringSearchControllerDismiss = false
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
