@@ -159,6 +159,7 @@ class LoginListViewController: SensitiveViewController {
         applyTheme()
 
         KeyboardHelper.defaultHelper.addDelegate(self)
+        viewModel.dataSource.delegate = self
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -226,7 +227,7 @@ class LoginListViewController: SensitiveViewController {
     }
 
     fileprivate func toggleSelectionTitle() {
-        if loginSelectionController.selectedCount == viewModel.dataSourceViewModel.count {
+        if loginSelectionController.selectedCount == viewModel.dataSource.count {
             selectionButton.setTitle(deselectAllTitle, for: [])
         } else {
             selectionButton.setTitle(selectAllTitle, for: [])
@@ -296,7 +297,7 @@ private extension LoginListViewController {
             self.deleteAlert = UIAlertController.deleteLoginAlertWithDeleteCallback({ [unowned self] _ in
                 // Delete here
                 let guidsToDelete = self.loginSelectionController.selectedIndexPaths.compactMap { indexPath in
-                    self.viewModel.dataSourceViewModel.loginAtIndexPath(indexPath)?.id
+                    self.viewModel.dataSource.loginAtIndexPath(indexPath)?.id
                 }
 
                 self.viewModel.profile.logins.delete(ids: guidsToDelete).uponQueue(.main) { _ in
@@ -311,7 +312,7 @@ private extension LoginListViewController {
 
     @objc func tappedSelectionButton() {
         // If we haven't selected everything yet, select all
-        if loginSelectionController.selectedCount < viewModel.dataSourceViewModel.count {
+        if loginSelectionController.selectedCount < viewModel.dataSource.count {
             // Find all unselected indexPaths
             let unselectedPaths = tableView.allLoginIndexPaths.filter { indexPath in
                 return !loginSelectionController.indexPathIsSelected(indexPath)
@@ -374,7 +375,7 @@ extension LoginListViewController: UITableViewDelegate {
             loginSelectionController.selectIndexPath(indexPath)
             toggleSelectionTitle()
             toggleDeleteBarButton()
-        } else if let login = viewModel.dataSourceViewModel.loginAtIndexPath(indexPath) {
+        } else if let login = viewModel.dataSource.loginAtIndexPath(indexPath) {
             tableView.deselectRow(at: indexPath, animated: true)
             let detailViewController = LoginDetailViewController(profile: viewModel.profile, login: login)
             detailViewController.settingsDelegate = settingsDelegate
@@ -426,5 +427,22 @@ extension LoginListViewController: SearchInputViewDelegate {
     @objc func searchInputViewFinishedEditing(_ searchView: SearchInputView) {
         setupDefaultNavButtons()
         loadLogins()
+    }
+}
+
+// MARK: - LoginViewModelDelegate
+extension LoginListViewController: LoginDataSourceViewModelDelegate {
+
+    func loginSectionsDidUpdate() {
+        loadingView.isHidden = true
+        tableView.reloadData()
+        navigationItem.rightBarButtonItem?.isEnabled = viewModel.dataSource.count > 0
+        restoreSelectedRows()
+    }
+
+    func restoreSelectedRows() {
+        for path in self.loginSelectionController.selectedIndexPaths {
+            tableView.selectRow(at: path, animated: false, scrollPosition: .none)
+        }
     }
 }

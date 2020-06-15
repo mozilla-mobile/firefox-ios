@@ -12,19 +12,19 @@ final class LoginListViewModel {
     
     let profile: Profile
     fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>? = nil
-    var dataSourceViewModel: LoginListDataSourceViewModel
+    var dataSource: LoginListDataSourceViewModel
     var isDuringSearchControllerDismiss = false
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
-        self.dataSourceViewModel = LoginListDataSourceViewModel(searchController)
+        self.dataSource = LoginListDataSourceViewModel(searchController)
     }
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
-        activeLoginQuery! >>== dataSourceViewModel.setLogins
+        activeLoginQuery! >>== dataSource.setLogins
     }
     
     /// Searches SQLite database for logins that match query.
@@ -58,8 +58,8 @@ final class LoginListViewModel {
                 delegate?.loginSectionsDidUpdate() // based on Kayla's sample project
             }
         }
-        fileprivate let helper = LoginListDataSourceHelper()
-        weak var delegate: LoginDataSourceDelegate?
+        fileprivate let helper = LoginListDataSourceViewModelHelper()
+        weak var delegate: LoginDataSourceViewModelDelegate?
 
         init(_ searchController: UISearchController) {
             self.searchController = searchController
@@ -112,27 +112,15 @@ final class LoginListViewModel {
                 }
             }
         }
-
-        func loginSectionsDidUpdate() {
-    //        loadingView.isHidden = true
-    //        tableView.reloadData()
-    //        navigationItem.rightBarButtonItem?.isEnabled = loginDataSource.count > 0
-    //        restoreSelectedRows()
-        }
-
-        func restoreSelectedRows() {
-    //        for path in self.loginSelectionController.selectedIndexPaths {
-    //            tableView.selectRow(at: path, animated: false, scrollPosition: .none)
-    //        }
-        }
     }
+}
+// MARK: - LoginDataSourceViewModelDelegate
+protocol LoginDataSourceViewModelDelegate: AnyObject {
+    func loginSectionsDidUpdate()
 }
 
 // MARK: - Helpers
-protocol LoginDataSourceDelegate: AnyObject {
-    func loginSectionsDidUpdate()
-}
-private class LoginListDataSourceHelper {
+private class LoginListDataSourceViewModelHelper {
     var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
 
     // Small helper method for using the precomputed base domain to determine the title/section of the
