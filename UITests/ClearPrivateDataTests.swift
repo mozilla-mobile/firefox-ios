@@ -218,16 +218,16 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         return cookie
     }
 
-    func testClearsTrackingProtectionWhitelist() {
+    func testClearsTrackingProtectionSafelist() {
         let wait = expectation(description: "wait for file write")
-        ContentBlocker.shared.whitelist(enable: true, url: URL(string: "http://www.mozilla.com")!) {
+        ContentBlocker.shared.safelist(enable: true, url: URL(string: "http://www.mozilla.com")!) {
             wait.fulfill()
         }
         waitForExpectations(timeout: 5)
 
         BrowserUtils.clearPrivateData([BrowserUtils.Clearable.TrackingProtection], swipe: false)
 
-        let data = ContentBlocker.shared.readWhitelistFile()
+        let data = ContentBlocker.shared.readSafelistFile()
         XCTAssert(data == nil || data!.isEmpty)
     }
 
