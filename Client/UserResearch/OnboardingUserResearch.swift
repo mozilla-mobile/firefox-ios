@@ -13,9 +13,16 @@ struct LPVariables {
     static var showOnboardingScreenAB = LPVar.define("showOnboardingScreen_2", with: true)
 }
 
+// For LP variable below is the convention we follow
+// True = Current Onboarding Screen
+// False = New Onboarding Screen
 enum OnboardingScreenType: String {
-    case versionV1 // V1 (Default)
-    case versionV2 // V2
+    case versionV1
+    case versionV2 
+    
+    static func from(boolValue: Bool) -> OnboardingScreenType {
+        return boolValue ? .versionV1 : .versionV2
+    }
 }
 
 class OnboardingUserResearch {
@@ -51,56 +58,37 @@ class OnboardingUserResearch {
     
     // MARK: public
     func lpVariableObserver() {
-        // Condition: Leanplum is disabled
-        // If leanplum is not enabled then we set the value of onboarding research to true
-        // True = .variant 1 which is our default Intro View
-        // False = .variant 2 which is our new Intro View that we are A/B testing against
-        // and get that from the server
+        // Condition: Leanplum is disabled; use default intro view
         guard LeanPlumClient.shared.getSettings() != nil else {
-            self.updateValue(onboardingScreenType: .versionV1)
+            self.onboardingScreenType = .versionV1
             self.updatedLPVariable?()
             return
         }
-        // Condition: Update from leanplum server
-        // Get the A/B test variant from leanplum server
-        // and update onboarding user reasearch
+        // Condition: A/B test variables from leanplum server
         LeanPlumClient.shared.finishedStartingLeanplum = {
             let showScreenA = LPVariables.showOnboardingScreenAB?.boolValue()
             LeanPlumClient.shared.finishedStartingLeanplum = nil
             self.updateTelemetry()
-            let screenType: OnboardingScreenType = (showScreenA ?? true) ? .versionV1 : .versionV2
-            self.updateValue(onboardingScreenType: screenType)
+            let screenType = OnboardingScreenType.from(boolValue: (showScreenA ?? true))
+            self.onboardingScreenType = screenType
             self.updatedLPVariable?()
         }
-        // Conditon: Leanplum server too slow
-        // We don't want our users to be stuck on Onboarding
-        // Wait 2 second and update the onboarding research variable
-        // with true (True = .variant 1)
-        // Ex. Internet connection is unstable due to which
-        // leanplum isn't loading or taking too much time
+        // Condition: Leanplum server too slow; Show default onboarding.
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             guard LeanPlumClient.shared.finishedStartingLeanplum != nil else {
                 return
             }
-            let lpStartStatus = LeanPlumClient.shared.startCallFinished
+            let lpStartStatus = LeanPlumClient.shared.lpState
             var lpVariableValue: OnboardingScreenType = .versionV1
             // Condition: LP has already started but we missed onStartLPVariable callback
-            if lpStartStatus, let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
+            if lpStartStatus == .started, let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
                 lpVariableValue = boolValue ? .versionV1 : .versionV2
                 self.updateTelemetry()
             }
             self.updatedLPVariable = nil
-            self.updateValue(onboardingScreenType: lpVariableValue)
+            self.onboardingScreenType = lpVariableValue
             self.updatedLPVariable?()
         }
-    }
-    
-    func updateValue(onboardingScreenType: OnboardingScreenType) {
-        // For LP variable below is the convention
-        // we are going to follow
-        // True = Current Onboarding Screen
-        // False = New Onboarding Screen
-        self.onboardingScreenType = onboardingScreenType
     }
     
     func updateTelemetry() {

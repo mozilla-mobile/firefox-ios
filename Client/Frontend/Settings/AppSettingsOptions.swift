@@ -587,16 +587,10 @@ class LeanplumStatus: HiddenSetting {
     }
 }
 
-class ClearOnboardingConstantValues: HiddenSetting {
+class ClearOnboardingABVariables: HiddenSetting {
     override var title: NSAttributedString? {
-        // Onboarding constant values are saved to not show the onboarding screen after user
-        // has already seen it and is dismissed. We however clear it here in this hidden setting
-        // so that when user reopens the app or when browser view controller is re-initialized
-        // we see the onboarding screen again.
-        //
-        // If we are running an A/B test this will also fetch the A/B test variables from
-        // leanplum.
-        return NSAttributedString(string: NSLocalizedString("Debug: Clear onboarding variables", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        // If we are running an A/B test this will also fetch the A/B test variables from leanplum. Re-open app to see the effect.
+        return NSAttributedString(string: NSLocalizedString("Debug: Clear onboarding AB variables", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {

@@ -117,6 +117,7 @@ enum LPState: String {
     case startedFirstRun
     case startedSecondRun
 }
+
 class LeanPlumClient {
     static let shared = LeanPlumClient()
 
@@ -126,12 +127,10 @@ class LeanPlumClient {
     private var enabled: Bool = true
     private var setupType: LPSetupType = .none
     // Boolean variable to indicate whether leanplum has finished starting-up
-    var startCallFinished: Bool = false
+//    var startCallFinished: Bool = false
     // Closure delegate for when leanplum has finished starting-up
     var finishedStartingLeanplum: (() -> Void)?
-    // leanplumDeviceId is what comes directly from leanplum and
-    // should be used and kept for showing the device ID in the
-    // debug menu so we can easily find the user in LP dashboard
+    // Comes from LeanPlum, used to show device ID in debug menu and finding user in LP dashboard"
     var leanplumDeviceId: String? {
         return Leanplum.deviceId()
     }
@@ -219,7 +218,8 @@ class LeanPlumClient {
             self.track(event: .openedApp)
 
             assert(Thread.isMainThread)
-            self.startCallFinished = true
+//            self.startCallFinished = true
+            self.lpState = .started
             // https://docs.leanplum.com/reference#callbacks
             // According to the doc all variables should be synced when lp start finishes
             // Relying on this fact and sending the updated AB test variable
@@ -236,7 +236,7 @@ class LeanPlumClient {
                 self.lpState = .startedSecondRun
             }
 
-            self.lpState = .started
+//            self.lpState = .started
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
             self.recordSyncedClients(with: self.profile)
