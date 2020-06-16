@@ -81,7 +81,7 @@ class OnboardingUserResearch {
             let lpStartStatus = LeanPlumClient.shared.lpState
             var lpVariableValue: OnboardingScreenType = .versionV1
             // Condition: LP has already started but we missed onStartLPVariable callback
-            if lpStartStatus == .started, let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
+            if case .started(startedState: _) = lpStartStatus , let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
                 lpVariableValue = boolValue ? .versionV1 : .versionV2
                 self.updateTelemetry()
             }

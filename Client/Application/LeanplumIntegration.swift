@@ -110,12 +110,16 @@ enum LPSetupType: String {
     case none
 }
 
-enum LPState: String {
+enum LPState {
     case disabled
     case willStart
-    case started
-    case startedFirstRun
-    case startedSecondRun
+    case started(startedState: LPStartedState)
+}
+
+enum LPStartedState {
+    case firstRun
+    case secondRun
+    case normalRun
 }
 
 class LeanPlumClient {
@@ -126,8 +130,6 @@ class LeanPlumClient {
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
     private var setupType: LPSetupType = .none
-    // Boolean variable to indicate whether leanplum has finished starting-up
-//    var startCallFinished: Bool = false
     // Closure delegate for when leanplum has finished starting-up
     var finishedStartingLeanplum: (() -> Void)?
     // Comes from LeanPlum, used to show device ID in debug menu and finding user in LP dashboard"
@@ -218,8 +220,7 @@ class LeanPlumClient {
             self.track(event: .openedApp)
 
             assert(Thread.isMainThread)
-//            self.startCallFinished = true
-            self.lpState = .started
+            self.lpState = .started(startedState: .normalRun)
             // https://docs.leanplum.com/reference#callbacks
             // According to the doc all variables should be synced when lp start finishes
             // Relying on this fact and sending the updated AB test variable
@@ -229,14 +230,13 @@ class LeanPlumClient {
             if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
                 self.prefs?.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
                 self.track(event: .firstRun)
-                self.lpState = .startedFirstRun
+                self.lpState = .started(startedState: .firstRun)
             } else if self.prefs?.boolForKey("SecondRun") == nil {
                 self.prefs?.setBool(true, forKey: "SecondRun")
                 self.track(event: .secondRun)
-                self.lpState = .startedSecondRun
+                self.lpState = .started(startedState: .secondRun)
             }
 
-//            self.lpState = .started
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
             self.recordSyncedClients(with: self.profile)

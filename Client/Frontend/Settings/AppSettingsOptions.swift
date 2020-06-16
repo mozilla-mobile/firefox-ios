@@ -568,7 +568,7 @@ class ToggleOnboarding: HiddenSetting {
 class LeanplumStatus: HiddenSetting {
     let lplumSetupType = LeanPlumClient.shared.lpSetupType()
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Leamplum Status: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning())\nLeanplum Devide ID - \(LeanPlumClient.shared.leanplumDeviceId ?? "")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "LP Setup: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning()) | Device ID: \(LeanPlumClient.shared.leanplumDeviceId ?? "")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     override func onClick(_ navigationController: UINavigationController?) {
