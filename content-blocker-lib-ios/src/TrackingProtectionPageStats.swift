@@ -206,7 +206,7 @@ class TPStatsBlocklists {
                     }
                 }
 
-                // Check the whitelist.
+                // Check the safelist.
                 if let baseDomain = url.baseDomain, !safelistedDomains.isEmpty {
                     for ignoreDomain in safelistedDomains {
                         if baseDomain.range(of: ignoreDomain, options: .regularExpression) != nil {
