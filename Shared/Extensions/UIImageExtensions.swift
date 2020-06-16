@@ -35,22 +35,16 @@ extension UIImage {
     }
 
     public static func createWithColor(_ size: CGSize, color: UIColor) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        let context = UIGraphicsGetCurrentContext()
-        let rect = CGRect(size: size)
-        color.setFill()
-        context!.fill(rect)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image!
+        UIGraphicsImageRenderer(size: size).image { (ctx) in
+            color.setFill()
+            ctx.fill(CGRect(size: size))
+        }
     }
 
     public func createScaled(_ size: CGSize) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, 0)
-        draw(in: CGRect(size: size))
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return scaledImage!
+        UIGraphicsImageRenderer(size: size).image { (ctx) in
+            draw(in: CGRect(size: size))
+        }
     }
 
     public static func templateImageNamed(_ name: String) -> UIImage? {
