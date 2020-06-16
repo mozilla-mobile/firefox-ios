@@ -82,7 +82,7 @@ class IntroScreenWelcomeViewV2: UIView, CardTheme {
         return button
     }()
     // Welcome card items share same type of label hence combining them into a
-    // struct so we can reuse it    
+    // struct so we can reuse it
     private struct WelcomeUICardItem {
         var title: String
         var description: String
