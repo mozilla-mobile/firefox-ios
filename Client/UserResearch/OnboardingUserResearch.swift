@@ -7,17 +7,27 @@ import Leanplum
 import Shared
 
 struct LPVariables {
-    static var showOnboardingScreen = LPVar.define("showOnboardingScreen", with: true)
+    // Variable Used for AA test
+    static var showOnboardingScreenAA = LPVar.define("showOnboardingScreen", with: true)
+    // Variable Used for AB test
+    static var showOnboardingScreenAB = LPVar.define("showOnboardingScreen_2", with: true)
 }
 
+// For LP variable below is the convention we follow
+// True = Current Onboarding Screen
+// False = New Onboarding Screen
 enum OnboardingScreenType: String {
-    case versionV1 // Default
-    case versionV2 // New version 2
+    case versionV1
+    case versionV2 
+    
+    static func from(boolValue: Bool) -> OnboardingScreenType {
+        return boolValue ? .versionV1 : .versionV2
+    }
 }
 
 class OnboardingUserResearch {
     // Closure delegate
-    var updatedLPVariables: ((LPVar?) -> Void)?
+    var updatedLPVariable: (() -> Void)?
     // variable
     var lpVariable: LPVar?
     // Constants
@@ -25,7 +35,7 @@ class OnboardingUserResearch {
     // Saving user defaults
     private let defaults = UserDefaults.standard
     // Publicly accessible onboarding screen type
-    var onboardingScreenType:OnboardingScreenType? {
+    var onboardingScreenType: OnboardingScreenType? {
         set(value) {
             if value == nil {
                 defaults.removeObject(forKey: onboardingScreenTypeKey)
@@ -42,23 +52,43 @@ class OnboardingUserResearch {
     }
     
     // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.showOnboardingScreen) {
+    init(lpVariable: LPVar? = LPVariables.showOnboardingScreenAB) {
         self.lpVariable = lpVariable
     }
     
     // MARK: public
     func lpVariableObserver() {
-        Leanplum.onVariablesChanged {
-            self.updatedLPVariables?(self.lpVariable)
+        // Condition: Leanplum is disabled; use default intro view
+        guard LeanPlumClient.shared.getSettings() != nil else {
+            self.onboardingScreenType = .versionV1
+            self.updatedLPVariable?()
+            return
         }
-    }
-    
-    func updateValue(value: Bool) {
-        // For LP variable below is the convention
-        // we are going to follow
-        // True = Current Onboarding Screen
-        // False = New Onboarding Screen
-        onboardingScreenType = value ? .versionV1 : .versionV2
+        // Condition: A/B test variables from leanplum server
+        LeanPlumClient.shared.finishedStartingLeanplum = {
+            let showScreenA = LPVariables.showOnboardingScreenAB?.boolValue()
+            LeanPlumClient.shared.finishedStartingLeanplum = nil
+            self.updateTelemetry()
+            let screenType = OnboardingScreenType.from(boolValue: (showScreenA ?? true))
+            self.onboardingScreenType = screenType
+            self.updatedLPVariable?()
+        }
+        // Condition: Leanplum server too slow; Show default onboarding.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            guard LeanPlumClient.shared.finishedStartingLeanplum != nil else {
+                return
+            }
+            let lpStartStatus = LeanPlumClient.shared.lpState
+            var lpVariableValue: OnboardingScreenType = .versionV1
+            // Condition: LP has already started but we missed onStartLPVariable callback
+            if case .started(startedState: _) = lpStartStatus , let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
+                lpVariableValue = boolValue ? .versionV1 : .versionV2
+                self.updateTelemetry()
+            }
+            self.updatedLPVariable = nil
+            self.onboardingScreenType = lpVariableValue
+            self.updatedLPVariable?()
+        }
     }
     
     func updateTelemetry() {

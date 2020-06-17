@@ -6,13 +6,15 @@ labels: ''
 assignees: ''
 
 ---
-- [ ] Ensure L10N box has been run (if needed) to do string export
-- [ ] Check for [security advisories](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist/#security-advisories) 
-- [ ] Update Version Number in code (Eng task)
+Branch setup, steps typically done when creating new version branch
+- [ ] Update Version Number in code (Eng task, use `update_version.sh`)
 - [ ] Update `Client/Info.plist` MozWhatsNewTopic (Eng task)
-- [ ] Tag release in GitHub (Eng task)
 - [ ] Create version specific Sentry project
 - [ ] Setup Sentry keys in BuddyBuild (per release)
+---
+- [ ] Ensure L10N box has been run (if needed) to do string export
+- [ ] Check for [security advisories](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist/#security-advisories) 
+- [ ] Tag release in GitHub (Eng task)
 - [ ] File P.I. request
 - [ ] Release Notes updated
 - [ ] Submit build to Apple (Select YES to IDFA, 'Attribute this app installation to a previously served advertisement')

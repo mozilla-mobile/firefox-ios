@@ -489,8 +489,8 @@ open class BrowserProfile: Profile {
                 return
             }
             devices.forEach {
-                if let id = $0.id, let title = item.title {
-                    constellation.sendEventToDevice(targetDeviceId: id, e: .sendTab(title: title, url: item.url))
+                if let id = $0.id {
+                    constellation.sendEventToDevice(targetDeviceId: id, e: .sendTab(title: item.title ?? "", url: item.url))
                 }
             }
             deferred.fill(Maybe(success: ()))

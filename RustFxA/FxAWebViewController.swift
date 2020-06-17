@@ -45,6 +45,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     fileprivate let profile: Profile
     /// Used to show a second WKWebView to browse help links.
     fileprivate var helpBrowser: WKWebView?
+    fileprivate var deepLinkParams: FxALaunchParams?
 
     /**
      init() FxAWebView.
@@ -52,11 +53,13 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
      - parameter pageType: Specify login flow or settings page if already logged in.
      - parameter profile: a Profile.
      - parameter dismissalStyle: depending on how this was presented, it uses modal dismissal, or if part of a UINavigationController stack it will pop to the root.
+     - parameter: deepLinkParams: URL args passed in from deep link that propagate to FxA web view
      */
-    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType) {
+    init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, deepLinkParams: FxALaunchParams?) {
         self.pageType = pageType
         self.profile = profile
         self.dismissType = dismissalStyle
+        self.deepLinkParams = deepLinkParams
 
         let contentController = WKUserContentController()
         if let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) {
@@ -89,6 +92,22 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
         view = webView
 
+        func makeRequest(_ url: URL) -> URLRequest {
+            if let query = deepLinkParams?.query {
+                let args = query.filter { $0.key.starts(with: "utm_") }.map {
+                    return URLQueryItem(name: $0.key, value: $0.value)
+                }
+
+                var comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
+                comp?.queryItems?.append(contentsOf: args)
+                if let url = comp?.url {
+                    return URLRequest(url: url)
+                }
+            }
+
+            return URLRequest(url: url)
+        }
+
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
             accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
                 guard let self = self else { return }
@@ -100,7 +119,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
                         if case .success(let url) = result {
                             self?.baseURL = url
                             UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .emailLogin, object: .accountConnected)
-                            self?.webView.load(URLRequest(url: url))
+                            self?.webView.load(makeRequest(url))
                         }
                     }
                 case let .qrCode(url):
@@ -108,13 +127,13 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
                         if case .success(let url) = result {
                             self?.baseURL = url
                             UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: .accountConnected)
-                            self?.webView.load(URLRequest(url: url))
+                            self?.webView.load(makeRequest(url))
                         }
                     }
                 case .settingsPage:
                     if case .success(let url) = result {
                         self.baseURL = url
-                        self.webView.load(URLRequest(url: url))
+                        self.webView.load(makeRequest(url))
                     }
                 }
             }

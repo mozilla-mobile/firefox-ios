@@ -9,10 +9,10 @@ import SwiftKeychainWrapper
 let PendingAccountDisconnectedKey = "PendingAccountDisconnect"
 
 // Used to ignore unknown classes when de-archiving
-final class Unknown: NSObject, NSCoding  {
+final class Unknown: NSObject, NSCoding {
     func encode(with coder: NSCoder) {}
     init(coder aDecoder: NSCoder) {
-        super.init();
+        super.init()
     }
 }
 
@@ -23,11 +23,11 @@ final class Unknown: NSObject, NSCoding  {
 // TODO: renamed FirefoxAccounts.swift once the old code is removed fully.
 open class RustFirefoxAccounts {
     public static let prefKeyLastDeviceName = "prefKeyLastDeviceName"
-
     private static let clientID = "1b1a3e44c54fbb58"
     public static let redirectURL = "urn:ietf:wg:oauth:2.0:oob:oauth-redirect-webchannel"
     public static var shared = RustFirefoxAccounts()
     public var accountManager = Deferred<FxAccountManager>()
+    private static var isInitializingAccountManager = false
     public var avatar: Avatar?
     public let syncAuthState: SyncAuthState
     fileprivate static var prefs: Prefs?
@@ -50,15 +50,21 @@ open class RustFirefoxAccounts {
      hook into notifications like `.accountProfileUpdate` to refresh once initialize() is complete.
      Or they can wait on the accountManager deferred to fill.
      */
-    public static func startup(prefs _prefs: Prefs) -> Deferred<FxAccountManager> {
-        prefs = _prefs
-        if let manager = RustFirefoxAccounts.shared.accountManager.peek() {
-            return Deferred(value: manager)
+    public static func startup(prefs: Prefs) -> Deferred<FxAccountManager> {
+        assert(Thread.isMainThread)
+        RustFirefoxAccounts.prefs = prefs
+        if RustFirefoxAccounts.shared.accountManager.isFilled || isInitializingAccountManager {
+            return RustFirefoxAccounts.shared.accountManager
         }
 
-        let deferred = Deferred<FxAccountManager>()
+        // Setup the re-entrancy guard so consecutive calls to startup() won't do manager.initialize(). This flag is cleared when initialize is complete, or by calling reconfig().
+        isInitializingAccountManager = true
+
         let manager = RustFirefoxAccounts.shared.createAccountManager()
         manager.initialize { result in
+            assert(Thread.isMainThread)
+            isInitializingAccountManager = false
+
             let hasAttemptedMigration = UserDefaults.standard.bool(forKey: "hasAttemptedMigration")
 
             // Note this checks if startup() is called in an app extensions, and if so, do not try account migration
@@ -72,14 +78,13 @@ open class RustFirefoxAccounts {
             }
 
             RustFirefoxAccounts.shared.accountManager.fill(manager)
-            deferred.fill(manager)
 
             // After everthing is setup, register for push notifications
             if manager.hasAccount() {
                 NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
             }
         }
-        return deferred
+        return RustFirefoxAccounts.shared.accountManager
     }
 
     private static let prefKeySyncAuthStateUniqueID = "PrefKeySyncAuthStateUniqueID"
@@ -95,20 +100,26 @@ open class RustFirefoxAccounts {
         return id
     }
 
-    public static func reconfig(_ completion: ((FxAccountManager) -> Void)? = nil) {
+    @discardableResult
+    public static func reconfig(prefs: Prefs) -> Deferred<FxAccountManager> {
+        isInitializingAccountManager = false
         shared.accountManager = Deferred<FxAccountManager>()
-        let manager = shared.createAccountManager()
-        manager.initialize() { _ in
-            shared.accountManager.fill(manager)
-            completion?(manager)
-        }
+        return startup(prefs: prefs)
+    }
+
+    public var isChinaSyncServiceEnabled: Bool {
+        return RustFirefoxAccounts.prefs?.boolForKey(PrefsKeys.KeyEnableChinaSyncService) ?? AppInfo.isChinaEdition
     }
 
     private func createAccountManager() -> FxAccountManager {
         let prefs = RustFirefoxAccounts.prefs
         assert(prefs != nil)
-        let server = prefs?.intForKey(PrefsKeys.UseStageServer) == 1 ? FxAConfig.Server.stage :
-           (prefs?.boolForKey("useChinaSyncService") ?? AppInfo.isChinaEdition ? FxAConfig.Server.china : FxAConfig.Server.release)
+        let server: FxAConfig.Server
+        if prefs?.intForKey(PrefsKeys.UseStageServer) == 1 {
+            server = FxAConfig.Server.stage
+        } else {
+            server = isChinaSyncServiceEnabled ? FxAConfig.Server.china : FxAConfig.Server.release
+        }
 
         let config: FxAConfig
         let useCustom = prefs?.boolForKey(PrefsKeys.KeyUseCustomFxAContentServer) ?? false || prefs?.boolForKey(PrefsKeys.KeyUseCustomSyncTokenServerOverride) ?? false

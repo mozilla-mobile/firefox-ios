@@ -5,6 +5,7 @@
 import Foundation
 import SnapKit
 import Shared
+import Account
 
 /// Reflects parent page that launched FirefoxAccountSignInViewController
 enum FxASignInParentType {
@@ -40,7 +41,18 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.textAlignment = .center
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
-        label.attributedText = Strings.FxASignin_QRInstructions.attributedText(boldString: "firefox.com/pair", font: DynamicFontHelper().MediumSizeRegularWeightAS)
+
+        let placeholder = "firefox.com/pair"
+
+        RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { manager in
+            manager.getPairingAuthorityURL { result in
+                guard let url = try? result.get(), let host = url.host else { return }
+                let shortUrl = host + url.path // "firefox.com" + "/pair"
+                let msg = Strings.FxASignin_QRInstructions.replaceFirstOccurrence(of: placeholder, with: shortUrl)
+                label.attributedText = msg.attributedText(boldString: shortUrl, font: DynamicFontHelper().MediumSizeRegularWeightAS)
+            }
+        }
+
         return label
     }()
     
@@ -82,13 +94,17 @@ class FirefoxAccountSignInViewController: UIViewController {
     /// Dismissal style for FxAWebViewController
     /// Changes based on whether or not this VC is launched from the app menu or settings
     private let fxaDismissStyle: DismissType
-    
+
+    private var deepLinkParams: FxALaunchParams?
+
     // MARK: Init() and viewDidLoad()
     
     /// - Parameters:
     ///   - profile: User Profile info
     ///   - parentType: FxASignInParentType is an enum parent page that presented this VC. Parameter used in telemetry button events.
-    init(profile: Profile, parentType: FxASignInParentType) {
+    ///   - parameter: deepLinkParams: URL args passed in from deep link that propagate to FxA web view
+    init(profile: Profile, parentType: FxASignInParentType, deepLinkParams: FxALaunchParams?) {
+        self.deepLinkParams = deepLinkParams
         self.profile = profile
         switch parentType {
         case .appMenu:
@@ -112,6 +128,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         title = Strings.FxASignin_Title
+        accessibilityLabel = "FxASingin.navBar"
         addSubviews()
         addViewConstraints()
         handleDarkMode()
@@ -177,7 +194,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
-        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle)
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
         UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
@@ -186,7 +203,7 @@ class FirefoxAccountSignInViewController: UIViewController {
 // MARK: QRCodeViewControllerDelegate Functions
 extension FirefoxAccountSignInViewController: QRCodeViewControllerDelegate {
     func didScanQRCodeWithURL(_ url: URL) {
-        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: fxaDismissStyle)
+        let vc = FxAWebViewController(pageType: .qrCode(url: url.absoluteString), profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
         navigationController?.pushViewController(vc, animated: true)
     }
 

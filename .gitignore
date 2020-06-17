@@ -65,6 +65,9 @@ python-env/
 .idea
 
 Carthage/
+# Required for Glean
+/Client/Generated
+.venv/
 
 ThirdParty/google-breakpad
 

@@ -613,8 +613,8 @@ extension Strings {
     public static let TPListTitle_Cryptominer = NSLocalizedString("Menu.TrackingProtectionListTitle.Cryptominers", value: "Blocked Cryptominers", comment: "Title for list of domains blocked by category type. eg.  Blocked `CryptoMiners`")
     /// <--
 
-    public static let TPWhiteListOn = NSLocalizedString("Menu.TrackingProtectionOption.WhiteListOnDescription", value: "The site includes elements that may track your browsing. You have disabled protection.", comment: "label for the menu item to show when the website is whitelisted from blocking trackers.")
-    public static let TPWhiteListRemove = NSLocalizedString("Menu.TrackingProtectionWhitelistRemove.Title", value: "Enable for this site", comment: "label for the menu item that lets you remove a website from the tracking protection whitelist")
+    public static let TPSafeListOn = NSLocalizedString("Menu.TrackingProtectionOption.WhiteListOnDescription", value: "The site includes elements that may track your browsing. You have disabled protection.", comment: "label for the menu item to show when the website is whitelisted from blocking trackers.")
+    public static let TPSafeListRemove = NSLocalizedString("Menu.TrackingProtectionWhitelistRemove.Title", value: "Enable for this site", comment: "label for the menu item that lets you remove a website from the tracking protection whitelist")
 
     // Settings info
     public static let TPAccessoryInfoTitleStrict = NSLocalizedString("Settings.TrackingProtection.Info.StrictTitle", value: "Offers stronger protection, but may cause some sites to break.", comment: "Explanation of strict mode.")

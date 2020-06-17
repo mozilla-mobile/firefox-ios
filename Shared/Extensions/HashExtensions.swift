@@ -57,18 +57,3 @@ extension Data {
     }
 }
 
-extension Data {
-    public func xoredWith(_ other: Data) -> Data? {
-        if self.count != other.count {
-            return nil
-        }
-        var xoredBytes = [UInt8](repeating: 0, count: self.count)
-        let selfBytes = (self as NSData).bytes.bindMemory(to: UInt8.self, capacity: self.count)
-        let otherBytes = (other as NSData).bytes.bindMemory(to: UInt8.self, capacity: other.count)
-        for i in 0..<self.count {
-            xoredBytes[i] = selfBytes[i] ^ otherBytes[i]
-        }
-        return Data(bytes: UnsafePointer<UInt8>(xoredBytes), count: self.count)
-    }
-
-}

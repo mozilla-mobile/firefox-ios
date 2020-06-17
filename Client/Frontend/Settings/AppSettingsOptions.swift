@@ -7,6 +7,7 @@ import Shared
 import Account
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -46,7 +47,9 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
+        let viewController = AppInfo.isChinaEdition ?
+            FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC, deepLinkParams: nil) :
+            FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
         UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -337,7 +340,9 @@ class AccountStatusSetting: WithAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
-            let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings)
+            let vc = AppInfo.isChinaEdition ?
+                FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .popToRootVC, deepLinkParams: nil) :
+                FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
             UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(vc, animated: true)
             return
@@ -521,6 +526,27 @@ class SentryIDSetting: HiddenSetting {
     }
 }
 
+class ShowEtpCoverSheet: HiddenSetting {
+    let profile: Profile
+    
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: ETP Cover Sheet On", comment: "Debug option to show ETP Cover Sheet"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+    
+    override init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(settings: settings)
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        BrowserViewController.foregroundBVC().hasTriedToPresentETPAlready = false
+        // ETP is shown when user opens app for 3rd time on clean install.
+        // Hence setting session to 2 (0,1,2) for 3rd install as it starts from 0 being 1st session
+        self.profile.prefs.setInt(2, forKey: PrefsKeys.KeyInstallSession)
+        self.profile.prefs.setString(ETPCoverSheetShowType.CleanInstall.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+    }
+}
+
 class ToggleOnboarding: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: NSLocalizedString("Debug: Toggle onboarding type", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -541,19 +567,35 @@ class ToggleOnboarding: HiddenSetting {
 
 class LeanplumStatus: HiddenSetting {
     let lplumSetupType = LeanPlumClient.shared.lpSetupType()
-
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Leamplum Status: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning())", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "LP Setup: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning()) | Device ID: \(LeanPlumClient.shared.leanplumDeviceId ?? "")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        copyLeanplumDeviceIDAndPresentAlert(by: navigationController)
+    }
+    
+    func copyLeanplumDeviceIDAndPresentAlert(by navigationController: UINavigationController?) {
+        let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
+        let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+        UIPasteboard.general.string = "\(LeanPlumClient.shared.leanplumDeviceId ?? "")"
+        navigationController?.topViewController?.present(alert, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                alert.dismiss(animated: true)
+            }
+        }
     }
 }
 
-class SetOnboardingV2: HiddenSetting {
+class ClearOnboardingABVariables: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: Set onboarding type to v2", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        // If we are running an A/B test this will also fetch the A/B test variables from leanplum. Re-open app to see the effect.
+        return NSAttributedString(string: NSLocalizedString("Debug: Clear onboarding AB variables", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        OnboardingUserResearch().onboardingScreenType = .versionV2
+        settings.profile.prefs.removeObjectForKey(PrefsKeys.IntroSeen)
+        OnboardingUserResearch().onboardingScreenType = nil
     }
 }
 
@@ -696,6 +738,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
                 AdjustIntegration.setEnabled($0)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.telemetryOptIn: $0])
                 LeanPlumClient.shared.set(enabled: $0)
+                Glean.shared.setUploadEnabled($0)
             }
         )
     }
@@ -883,7 +926,7 @@ class PrivacyPolicySetting: Setting {
 class ChinaSyncServiceSetting: Setting {
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
     var prefs: Prefs { return profile.prefs }
-    let prefKey = "useChinaSyncService"
+    let prefKey = PrefsKeys.KeyEnableChinaSyncService
     let profile: Profile
     let settings: UIViewController
 
@@ -916,7 +959,7 @@ class ChinaSyncServiceSetting: Setting {
         UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)
-            RustFirefoxAccounts.reconfig()
+            RustFirefoxAccounts.reconfig(prefs: profile.prefs)
             return
         }
 
@@ -927,7 +970,7 @@ class ChinaSyncServiceSetting: Setting {
         let ok = UIAlertAction(title: Strings.OKString, style: .default) { _ in
             self.prefs.setObject(toggle.isOn, forKey: self.prefKey)
             self.profile.removeAccount()
-            RustFirefoxAccounts.reconfig()
+            RustFirefoxAccounts.reconfig(prefs: self.profile.prefs)
         }
         let cancel = UIAlertAction(title: Strings.CancelString, style: .default) { _ in
             toggle.setOn(!toggle.isOn, animated: true)

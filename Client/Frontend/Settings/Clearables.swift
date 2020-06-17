@@ -162,7 +162,7 @@ class TrackingProtectionClearable: Clearable {
 
     func clear() -> Success {
         let result = Success()
-        ContentBlocker.shared.clearWhitelist() {
+        ContentBlocker.shared.clearSafelist() {
             result.fill(Maybe(success: ()))
         }
         return result
