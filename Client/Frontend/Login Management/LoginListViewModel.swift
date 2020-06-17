@@ -26,7 +26,7 @@ final class LoginListViewModel {
         activeLoginQuery = queryLogins(query ?? "")
         activeLoginQuery! >>== dataSource.setLogins
     }
-
+    
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
     func queryLogins(_ query: String) -> Deferred<Maybe<[LoginRecord]>> {
