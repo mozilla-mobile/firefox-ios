@@ -48,27 +48,27 @@ class BreachAlertsTests: XCTestCase {
     }
     /// Test for testing compareBreaches
     func testCompareBreaches() {
-        let unloadedBreachesOpt = self.breachAlertsManager?.compareToBreaches(breachedLogin)
+        let unloadedBreachesOpt = self.breachAlertsManager?.findUserBreaches(breachedLogin)
         XCTAssertNotNil(unloadedBreachesOpt)
         if let unloadedBreaches = unloadedBreachesOpt {
             XCTAssertTrue(unloadedBreaches.isFailure)
         }
 
         breachAlertsManager?.loadBreaches { maybeBreachList  in
-            let emptyLoginsOpt = self.breachAlertsManager?.compareToBreaches([])
+            let emptyLoginsOpt = self.breachAlertsManager?.findUserBreaches([])
             XCTAssertNotNil(emptyLoginsOpt)
             if let emptyLogins = emptyLoginsOpt {
                 XCTAssertTrue(emptyLogins.isFailure)
             }
 
-            let noBreachesOpt = self.breachAlertsManager?.compareToBreaches(self.unbreachedLogin)
+            let noBreachesOpt = self.breachAlertsManager?.findUserBreaches(self.unbreachedLogin)
             XCTAssertNotNil(noBreachesOpt)
             if let noBreaches = noBreachesOpt {
                 XCTAssertTrue(noBreaches.isSuccess)
                 XCTAssertEqual(noBreaches.successValue?.count, 0)
             }
 
-            let breachedOpt = self.breachAlertsManager?.compareToBreaches(self.breachedLogin)
+            let breachedOpt = self.breachAlertsManager?.findUserBreaches(self.breachedLogin)
             XCTAssertNotNil(breachedOpt)
             if let breached = breachedOpt {
                 XCTAssertTrue(breached.isSuccess)

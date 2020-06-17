@@ -7,17 +7,17 @@ import Storage
 import Shared
 
 // MARK: - Main View Model
-/// View Model to handle logic for LoginListViewController.
+// Login List View Model
 final class LoginListViewModel {
 
     let profile: Profile
     fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>? = nil
-    var dataSource: LoginListDataSourceViewModel
+    var dataSource: ModelTypeLoginDataSource
     var isDuringSearchControllerDismiss = false
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
-        self.dataSource = LoginListDataSourceViewModel(searchController)
+        self.dataSource = ModelTypeLoginDataSource(searchController)
     }
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
@@ -47,8 +47,7 @@ final class LoginListViewModel {
         static let NoResultsTextColor = UIColor.Photon.Grey40
     }
 
-    // MARK: - Sub View Models
-    final class LoginListDataSourceViewModel {
+    class ModelTypeLoginDataSource {
         var count = 0
         weak var searchController: UISearchController?
         var titles = [Character]()
@@ -58,8 +57,8 @@ final class LoginListViewModel {
                 delegate?.loginSectionsDidUpdate() // based on Kayla's sample project
             }
         }
-        fileprivate let helper = LoginListDataSourceViewModelHelper()
-        weak var delegate: LoginDataSourceViewModelDelegate?
+        fileprivate let helper = LoginListDataSourceHelper()
+        weak var delegate: LoginDataSourceDelegate?
 
         init(_ searchController: UISearchController) {
             self.searchController = searchController
@@ -115,12 +114,12 @@ final class LoginListViewModel {
     }
 }
 // MARK: - LoginDataSourceViewModelDelegate
-protocol LoginDataSourceViewModelDelegate: AnyObject {
+protocol LoginDataSourceDelegate: AnyObject {
     func loginSectionsDidUpdate()
 }
 
-// MARK: - Helpers
-private class LoginListDataSourceViewModelHelper {
+// MARK: - Data Source
+private class LoginListDataSourceHelper {
     var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
 
     // Small helper method for using the precomputed base domain to determine the title/section of the
