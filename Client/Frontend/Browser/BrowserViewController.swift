@@ -2078,9 +2078,7 @@ extension BrowserViewController {
                 object = .settings
             }
 
-            let signInVC = AppInfo.isChinaEdition ?
-                FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: .dismiss, deepLinkParams: deepLinkParams) :
-                FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
+            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
             UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC
         }
