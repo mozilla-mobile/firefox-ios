@@ -47,11 +47,12 @@ class FxAWebViewModel {
     
     fileprivate let pageType: FxAPageType
     fileprivate let profile: Profile
+    fileprivate var deepLinkParams: FxALaunchParams?
     fileprivate let firefoxAccounts: RustFirefoxAccounts
     fileprivate let leanPlumClient: LeanPlumClient
     
     // This is not shown full-screen, use mobile UA
-    static let MobileUserAgent = UserAgent.mobileUserAgent()
+    static let mobileUserAgent = UserAgent.mobileUserAgent()
     
     static let FxSignInFilePath = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
     
@@ -70,6 +71,7 @@ class FxAWebViewModel {
 
     - parameter pageType: Specify login flow or settings page if already logged in.
     - parameter profile: a Profile.
+    - parameter deepLinkParams: URL args passed in from deep link that propagate to FxA web view
     - parameter firefoxAccounts: RustFirefoxAccounts singleton instance
     - parameter leanPlumClient: LeanPlumClient singleton instance
 
@@ -77,11 +79,13 @@ class FxAWebViewModel {
     required init(
         pageType: FxAPageType,
         profile: Profile,
+        deepLinkParams: FxALaunchParams?,
         firefoxAccounts: RustFirefoxAccounts,
         leanPlumClient: LeanPlumClient
     ) {
         self.pageType = pageType
         self.profile = profile
+        self.deepLinkParams = deepLinkParams
         self.firefoxAccounts = firefoxAccounts
         self.leanPlumClient = leanPlumClient
         
@@ -135,6 +139,22 @@ extension FxAWebViewModel {
                 }
             }
         }
+    }
+    
+    private func makeRequest(_ url: URL) -> URLRequest {
+        if let query = deepLinkParams?.query {
+            let args = query.filter { $0.key.starts(with: "utm_") }.map {
+                return URLQueryItem(name: $0.key, value: $0.value)
+            }
+
+            var comp = URLComponents(url: url, resolvingAgainstBaseURL: false)
+            comp?.queryItems?.append(contentsOf: args)
+            if let url = comp?.url {
+                return URLRequest(url: url)
+            }
+        }
+
+        return URLRequest(url: url)
     }
 }
 
