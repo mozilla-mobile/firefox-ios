@@ -41,12 +41,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.label.text = TodayStrings.NewTabButtonLabel
 
         let button = imageButton.button
-        button.frame = CGRect(width: 40.0, height: 40.0)
-        button.backgroundColor = UIColor.white
-        button.layer.cornerRadius = button.frame.size.width/2
-        button.clipsToBounds = true
-        button.setImage(UIImage(named: "search"), for: .normal)
-        button.imageEdgeInsets =  UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
+        button.setImage(UIImage(named: "search-button"), for: .normal)
+//        button.frame = CGRect(width: 100.0, height: 60.0)
+//        button.backgroundColor = UIColor.white
+//        button.layer.cornerRadius = button.frame.size.width/2
+//        button.clipsToBounds = true
+//        button.setImage(UIImage(named: "search"), for: .normal)
+//        button.imageEdgeInsets =  UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
+        
         let label = imageButton.label
         label.tintColor = UIColor(named: "widgetLabelColors")
         label.textColor = UIColor(named: "widgetLabelColors")
@@ -60,12 +62,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
         let button = imageButton.button
-        button.frame = CGRect(width: 40.0, height: 40.0)
-        button.performGradient(colorOne: TodayUX.privateSearchButtonColorFaintDarkPurple, colorTwo: TodayUX.privateSearchButtonColorDarkPurple, colorThree: TodayUX.privateSearchButtonColorBrightPurple)
-        button.layer.cornerRadius = button.frame.size.width/2
-        button.clipsToBounds = true
-        button.setImage(UIImage(named: "quick_action_new_private_tab")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = UIColor.white
+        button.setImage(UIImage(named: "private-search"), for: .normal)
+
+//        button.frame = CGRect(width: 60.0, height: 60.0)
+//        button.performGradient(colorOne: TodayUX.privateSearchButtonColorFaintDarkPurple, colorTwo: TodayUX.privateSearchButtonColorDarkPurple, colorThree: TodayUX.privateSearchButtonColorBrightPurple)
+//        button.layer.cornerRadius = button.frame.size.width/2
+//        button.clipsToBounds = true
+//        button.setImage(UIImage(named: "quick_action_new_private_tab")?.withRenderingMode(.alwaysTemplate), for: .normal)
+//        button.tintColor = UIColor.white
 
         let label = imageButton.label
         label.tintColor = UIColor(named: "widgetLabelColors")
@@ -98,8 +102,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.alignment = .fill
         stackView.spacing = TodayUX.margin / 2
         stackView.distribution = UIStackView.Distribution.fill
-        stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
-        stackView.isLayoutMarginsRelativeArrangement = true
         return stackView
     }()
 
@@ -124,7 +126,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         super.viewDidLoad()
 
         let widgetView: UIView!
-        self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
+        self.extensionContext?.widgetLargestAvailableDisplayMode = .expanded
         let effectView: UIVisualEffectView
         if #available(iOS 13, *) {
             effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
@@ -251,21 +253,22 @@ class ImageButtonWithLabel: UIView {
 
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(self)
-            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(30)
-            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(30)
-            make.width.height.equalTo(40)
+            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
+            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
+            make.width.height.greaterThanOrEqualTo(70)
         }
 
         label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(5)
+            make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
-            make.height.equalTo(15)
+            make.height.equalTo(10)
         }
 
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
+
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
@@ -292,7 +295,6 @@ class ButtonWithSublabel: UIButton {
 
     fileprivate func performLayout() {
         let titleLabel = self.label
-
         self.titleLabel?.removeFromSuperview()
         addSubview(titleLabel)
 
@@ -302,23 +304,23 @@ class ButtonWithSublabel: UIButton {
         self.addSubview(subtitleLabel)
 
         imageView.snp.makeConstraints { make in
-            make.centerY.left.equalTo(self)
+            make.centerY.left.equalTo(10)
             make.width.equalTo(TodayUX.copyLinkImageWidth)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(imageView.snp.right).offset(TodayUX.margin)
-            make.trailing.equalTo(self)
-            make.top.equalTo(self).offset(3)
-            make.height.equalTo(13)
+            make.left.equalTo(imageView.snp.right).offset(10)
+            make.trailing.top.equalTo(self)
+            make.height.equalTo(12)
+
         }
 
         subtitleLabel.lineBreakMode = .byTruncatingTail
         subtitleLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(self)
+            make.bottom.equalTo(self).inset(10)
             make.top.equalTo(titleLabel.snp.bottom)
             make.leading.trailing.equalTo(titleLabel)
-            make.height.equalTo(13)
+            make.height.greaterThanOrEqualTo(10)
         }
     }
 
