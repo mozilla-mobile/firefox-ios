@@ -9,7 +9,7 @@
 // required for user scripts injected into all frames.
 window.__firefox__.includeOnce("ContextMenu", function() {
   var usePointerEvent = "PointerEvent" in window;
-    var eventName = usePointerEvent ? "pointerdown" : "touchstart";
+  var eventName = usePointerEvent ? "pointerdown" : "touchstart";
   window.addEventListener(eventName, function(evt) {
     var target = evt.target;
 
@@ -23,7 +23,6 @@ window.__firefox__.includeOnce("ContextMenu", function() {
     var data = {};
 
     if (usePointerEvent){
-
       data.touchX = evt.pageX;
       data.touchY = evt.pageY;
     } else {
