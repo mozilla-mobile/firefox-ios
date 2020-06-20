@@ -32,19 +32,19 @@ class TabContentBlocker {
 
     var status: BlockerStatus {
         guard isEnabled else {
-            return .Disabled
+            return .disabled
         }
         guard let url = tab?.currentURL() else {
-            return .NoBlockedURLs
+            return .noBlockedURLs
         }
 
-        if ContentBlocker.shared.isWhitelisted(url: url) {
-            return .Whitelisted
+        if ContentBlocker.shared.isSafelisted(url: url) {
+            return .safelisted
         }
         if stats.total == 0 {
-            return .NoBlockedURLs
+            return .noBlockedURLs
         } else {
-            return .Blocking
+            return .blocking
         }
     }
 

@@ -11,6 +11,16 @@ struct ViewControllerConsts {
     }
 }
 
+protocol CardTheme {
+    var theme: BuiltinThemeName { get }
+}
+
+extension CardTheme {
+    var theme: BuiltinThemeName {
+        return BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    }
+}
+
 // MARK: Requires Work (Currently part of A/B test)
 // Intro View Model V2 - This is suppose to be the main view model for the
 // IntroView V2 however since we are running an onboarding A/B test
@@ -27,6 +37,10 @@ class IntroViewModelV2 {
     // Initializer
     init() {
         onboardingResearch = OnboardingUserResearch()
-        screenType = onboardingResearch?.onboardingScreenType
+        // Case: Older user who has updated to a newer version and is not a first time user
+        // When user updates from a version of app which didn't have the
+        // user research onboarding screen type and is trying to Always Show the screen
+        // from Show Tour, we default to our .version1 of the screen
+        screenType = onboardingResearch?.onboardingScreenType ?? .versionV1
     }
 }

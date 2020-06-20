@@ -76,6 +76,7 @@ class NavigationTest: BaseTestCase {
     func testTapSignInShowsFxAFromTour() {
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
         navigator.goto(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
         checkFirefoxSyncScreenShown()
 
         // Disabled due to issue 5937, not possible to tap on Close button
@@ -92,14 +93,19 @@ class NavigationTest: BaseTestCase {
         checkFirefoxSyncScreenShownViaSettings()
 
         // After that it is possible to go back to Settings
-        let settingsButton = app.navigationBars["Client.FxAWebView"].buttons["Settings"]
-        settingsButton.tap()
+        let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
+        closeButton.tap()
+        
+        let closeButtonFxView = app.navigationBars["Turn on Sync"].buttons["Settings"]
+        closeButtonFxView.tap()
     }
     
     // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        waitForExistence(app.navigationBars["Client.FxAWebView"], timeout: 20)
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+        app.buttons["EmailSignIn.button"].tap()
         waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout:20)
+
         let email = app.webViews.textFields.element(boundBy: 0)
         // Verify the placeholdervalues here for the textFields
         let mailPlaceholder = "Email"
@@ -112,10 +118,9 @@ class NavigationTest: BaseTestCase {
         navigator.goto(LibraryPanel_SyncedTabs)
 
         app.tables.buttons["Sign in to Sync"].tap()
+        waitForExistence(app.buttons["EmailSignIn.button"], timeout: 10)
+        app.buttons["EmailSignIn.button"].tap()
         checkFirefoxSyncScreenShown()
-        
-        app.navigationBars["Client.FxAWebView"].buttons["Close"].tap()
-        navigator.nowAt(LibraryPanel_SyncedTabs)
     }
 
     private func checkFirefoxSyncScreenShown() {
@@ -216,50 +221,18 @@ class NavigationTest: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
-    /* Disabled due to issue 5581
     func testLongPressOnAddressBar() {
         //This test is for populated clipboard only so we need to make sure there's something in Pasteboard
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("www.google.com\n")
-        waitUntilPageLoad()
-        app.textFields["url"].press(forDuration:3)
-        app.tables.cells["menu-Copy-Link"].tap()
-        app.textFields["url"].tap()
-        // Since the textField value appears all selected first time is clicked
-        // this workaround is necessary
+        app.textFields["address"].typeText("www.google.com")
+        // Tapping two times when the text is not selected will reveal the menu
         app.textFields["address"].tap()
+        waitForExistence(app.textFields["address"])
         app.textFields["address"].tap()
-        app.textFields["address"].press(forDuration: 2)
-
-        //Ensure that long press on address bar brings up a menu with Select All, Select, Paste, and Paste & Go
-        waitForExistence(app.menuItems["Select All"], timeout: 3)
+        waitForExistence(app.menuItems["Select All"])
         XCTAssertTrue(app.menuItems["Select All"].exists)
         XCTAssertTrue(app.menuItems["Select"].exists)
-        XCTAssertTrue(app.menuItems["Paste"].exists)
-        XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-
-        //Tap on Select option and make sure Copy, Cut, Paste, and Look Up are shown
-        app.menuItems["Select"].tap()
-        waitForExistence(app.menuItems["Copy"])
-        if iPad() {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
-        } else {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
-            XCTAssertTrue(app.menus.children(matching: .menuItem).element(boundBy: 4).exists)
-        }
-
-        //Go back from Select and redo the tap
-        app.textFields["address"].tap()
-        app.textFields["address"].press(forDuration: 2)
-
+        
         //Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
         app.menuItems["Select All"].tap()
         waitForExistence(app.menuItems["Copy"])
@@ -275,9 +248,32 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
             XCTAssertTrue(app.menuItems["Paste"].exists)
-            XCTAssertTrue(app.menus.children(matching: .menuItem).element(boundBy: 4).exists)
         }
-    }*/
+        
+        app.textFields["address"].typeText("\n")
+        waitUntilPageLoad()
+        app.textFields["url"].press(forDuration:3)
+        app.tables.cells["menu-Copy-Link"].tap()
+        app.textFields["url"].tap()
+        // Since the textField value appears all selected first time is clicked
+        // this workaround is necessary
+        app.textFields["address"].tap()
+        waitForExistence(app.menuItems["Copy"])
+        if iPad() {
+            XCTAssertTrue(app.menuItems["Copy"].exists)
+            XCTAssertTrue(app.menuItems["Cut"].exists)
+            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Share…"].exists)
+            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+            XCTAssertTrue(app.menuItems["Paste"].exists)
+        } else {
+            XCTAssertTrue(app.menuItems["Copy"].exists)
+            XCTAssertTrue(app.menuItems["Cut"].exists)
+            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+            XCTAssertTrue(app.menuItems["Share…"].exists)
+        }
+    }
 
     private func longPressLinkOptions(optionSelected: String) {
         navigator.openURL(path(forTestPage: "test-example.html"))

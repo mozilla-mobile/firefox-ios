@@ -93,7 +93,7 @@ class BrowserViewController: UIViewController {
     var scrollController = TabScrollingController()
 
     fileprivate var keyboardState: KeyboardState?
-    fileprivate var hasTriedToPresentETPAlready = false
+    var hasTriedToPresentETPAlready = false
     var pendingToast: Toast? // A toast that might be waiting for BVC to appear before displaying
     var downloadToast: DownloadToast? // A toast that is showing the combined download progress
 
@@ -467,7 +467,6 @@ class BrowserViewController: UIViewController {
         
         // Setup onboarding user research for A/B testing
         onboardingUserResearch = OnboardingUserResearch()
-        onboardingUserResearch?.lpVariableObserver()
     }
 
     fileprivate func setupConstraints() {
@@ -2007,57 +2006,19 @@ extension BrowserViewController {
     }
     
     private func onboardingUserResearchHelper(_ alwaysShow: Bool = false) {
-        // Condition: Want to see our 1st time launched onboarding again
-        // Our boolean variable shouldShow is used to present the onboarding
-        // that was presented to the user during first launch
         if alwaysShow {
             showProperIntroVC()
             return
         }
-        // Condition: Leanplum is disabled
-        // If leanplum is not enabled then we set the value of onboarding research to true
-        // True = .variant 1 which is our default Intro View
-        // False = .variant 2 which is our new Intro View that we are A/B testing against
-        // and get that from the server
-        guard LeanPlumClient.shared.getSettings() != nil else {
-            self.onboardingUserResearch?.updateValue(value: true)
-            showProperIntroVC()
-            return
-        }
-        // Condition: Update from leanplum server
-        // Get the A/B test variant from leanplum server
-        // and update onboarding user reasearch
-        onboardingUserResearch?.updatedLPVariables = {(lpVariable) -> () in
-            self.onboardingUserResearch?.updatedLPVariables = nil
-            print("lp Variable from server \(String(describing: lpVariable?.boolValue()))")
-            self.onboardingUserResearch?.updateTelemetry()
-            self.onboardingUserResearch?.updateValue(value: lpVariable?.boolValue() ?? true)
+        // Setup user research closure and observer to fetch the updated LP Variables
+        onboardingUserResearch?.updatedLPVariable =  {
             self.showProperIntroVC()
         }
-        // Conditon: Leanplum server too slow
-        // We don't want our users to be stuck on Onboarding
-        // Wait 2 second and update the onboarding research variable
-        // with true (True = .variant 1)
-        // Ex. Internet connection is unstable due to which
-        // leanplum isn't loading or taking too much time
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            guard self.onboardingUserResearch?.updatedLPVariables != nil else {
-                return
-            }
-            Sentry.shared.send(message: "Failed to fetch A/B test variables from LP")
-            self.onboardingUserResearch?.updatedLPVariables = nil
-            self.onboardingUserResearch?.updateValue(value: true)
-            self.showProperIntroVC()
-        }
+        onboardingUserResearch?.lpVariableObserver()
     }
     
     private func showProperIntroVC() {
-        // The onboarding screen type should always exist after
-        // the screen is presented for the 1st time
-        guard let onboardingScreenType = self.onboardingUserResearch?.onboardingScreenType else {
-            return
-        }
-        let introViewController = IntroViewControllerV2(onboardingType: onboardingScreenType)
+        let introViewController = IntroViewControllerV2()
         introViewController.didFinishClosure = { controller, fxaLoginFlow in
             self.profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
             controller.dismiss(animated: true) {
@@ -2100,10 +2061,10 @@ extension BrowserViewController {
 
     /// This function is called to determine if FxA sign in flow or settings page should be shown
     /// - Parameters:
-    ///     - fxaOptions: FxALaunchParams from deeplink query
+    ///     - deepLinkParams: FxALaunchParams from deeplink query
     ///     - flowType: FxAPageType is used to determine if email login, qr code login, or user settings page should be presented
     ///     - referringPage: ReferringPage enum is used to handle telemetry events correctly for the view event and the FxA sign in tap events, need to know which route we took to get to them
-    func getSignInOrFxASettingsVC(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage) -> UIViewController {
+    func getSignInOrFxASettingsVC(_ deepLinkParams: FxALaunchParams? = nil, flowType: FxAPageType, referringPage: ReferringPage) -> UIViewController {
         // Show the settings page if we have already signed in. If we haven't then show the signin page
         let parentType: FxASignInParentType
         let object: UnifiedTelemetry.EventObject
@@ -2119,7 +2080,8 @@ extension BrowserViewController {
                 parentType = .settings
                 object = .settings
             }
-            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType)
+
+            let signInVC = FirefoxAccountSignInViewController(profile: profile, parentType: parentType, deepLinkParams: deepLinkParams)
             UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: object)
             return signInVC
         }
@@ -2131,7 +2093,7 @@ extension BrowserViewController {
 
     func presentSignInViewController(_ fxaOptions: FxALaunchParams? = nil, flowType: FxAPageType = .emailLoginFlow, referringPage: ReferringPage = .none) {
         let vcToPresent = getSignInOrFxASettingsVC(fxaOptions, flowType: flowType, referringPage: referringPage)
-        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: true)
+        presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: vcToPresent, topTabsVisible: UIDevice.current.userInterfaceIdiom == .pad)
     }
 
     @objc func dismissSignInViewController() {

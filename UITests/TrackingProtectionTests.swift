@@ -44,7 +44,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     override func setUp() {
         super.setUp()
 
-        // IP addresses can't be used for whitelisted domains
+        // IP addresses can't be used for allowlisted domains
         SimplePageServer.useLocalhostInsteadOfIP = true
         webRoot = SimplePageServer.start()
         BrowserUtils.configEarlGrey()
@@ -65,7 +65,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         wait(for: [setup], timeout: 5)
 
         let clear = self.expectation(description: "clearing")
-        ContentBlocker.shared.clearWhitelist() { clear.fulfill() }
+        ContentBlocker.shared.clearSafelist() { clear.fulfill() }
         waitForExpectations(timeout: 2, handler: nil)
 
         register(self, forTabEvents: .didChangeContentBlocking)
@@ -178,36 +178,36 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         EarlGrey.selectElement(with: grey_accessibilityID("Settings.TrackingProtectionOption.BlockListBasic")).perform(grey_tap())
     }
 
-    func testWhitelist() {
+    func testSafelist() {
         // Enable strict mode
         enableStrictMode()
 
         let url = URL(string: "http://localhost")!
 
         let clear = self.expectation(description: "clearing")
-        ContentBlocker.shared.clearWhitelist() { clear.fulfill() }
+        ContentBlocker.shared.clearSafelist() { clear.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkStrictTrackingProtection(isBlocking: true)
 
-        let expWhitelist = self.expectation(description: "whitelisted")
-        ContentBlocker.shared.whitelist(enable: true, url: url) { expWhitelist.fulfill() }
+        let expSafelist = self.expectation(description: "safelisted")
+        ContentBlocker.shared.safelist(enable: true, url: url) { expSafelist.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
-        // The image from ymail.com would normally be blocked, but in this case it is whitelisted
+        // The image from ymail.com would normally be blocked, but in this case it is safelisted
         checkStrictTrackingProtection(isBlocking: false)
 
-        let expRemove = self.expectation(description: "whitelist removed")
-        ContentBlocker.shared.whitelist(enable: false,  url: url) { expRemove.fulfill() }
+        let expRemove = self.expectation(description: "safelist removed")
+        ContentBlocker.shared.safelist(enable: false,  url: url) { expRemove.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkStrictTrackingProtection(isBlocking: true)
 
-        let expWhitelistAgain = self.expectation(description: "whitelisted")
-        ContentBlocker.shared.whitelist(enable: true, url: url) { expWhitelistAgain.fulfill() }
+        let expSafelistAgain = self.expectation(description: "safelisted")
+        ContentBlocker.shared.safelist(enable: true, url: url) { expSafelistAgain.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
-        // The image from ymail.com would normally be blocked, but in this case it is whitelisted
+        // The image from ymail.com would normally be blocked, but in this case it is safelisted
         checkStrictTrackingProtection(isBlocking: false)
 
         let clear1 = self.expectation(description: "clearing")
-        ContentBlocker.shared.clearWhitelist() { clear1.fulfill() }
+        ContentBlocker.shared.clearSafelist() { clear1.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkStrictTrackingProtection(isBlocking: true)
     }

@@ -147,7 +147,7 @@ open class SyncStateMachine {
         RustFirefoxAccounts.shared.accountManager.uponQueue(.main) { accountManager in
             authState.token(Date.now(), canBeExpired: false).uponQueue(.main) { success in
                 guard let (token, kSync) = success.successValue else {
-                    assert(false)
+                    readyDeferred.fill(Maybe(failure: success.failureValue ?? FxAClientError.local(NSError())))
                     return
                 }
                 log.debug("Got token from auth state.")

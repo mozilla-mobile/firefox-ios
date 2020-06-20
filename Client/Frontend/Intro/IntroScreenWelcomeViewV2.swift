@@ -40,14 +40,14 @@ in the middle of the screen.
 
 */
 
-class IntroScreenWelcomeViewV2: UIView {
+class IntroScreenWelcomeViewV2: UIView, CardTheme {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
-        return UpdateViewController.theme == .dark ? .white : .black
+        return theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return UpdateViewController.theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
+        return theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
     }
     private lazy var titleImageView: UIImageView = {
         let imgView = UIImageView(image: #imageLiteral(resourceName: "splash"))
@@ -82,7 +82,7 @@ class IntroScreenWelcomeViewV2: UIView {
         return button
     }()
     // Welcome card items share same type of label hence combining them into a
-    // struct so we can reuse it    
+    // struct so we can reuse it
     private struct WelcomeUICardItem {
         var title: String
         var description: String

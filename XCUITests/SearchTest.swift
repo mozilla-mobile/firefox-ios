@@ -116,7 +116,7 @@ class SearchTests: BaseTestCase {
             }
         }
     }
-    /* Disabled due to issue 5581
+    
     func testCopyPasteComplete() {
         // Copy, Paste and Go to url
         navigator.goto(URLBarOpen)
@@ -129,6 +129,7 @@ class SearchTests: BaseTestCase {
 
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(URLBarOpen)
+        waitForExistence(app.textFields["address"])
         app.textFields["address"].tap()
         waitForExistence(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
@@ -152,7 +153,7 @@ class SearchTests: BaseTestCase {
         waitForValueContains(app.textFields["address"], value: "mozilla.org")
         let value = app.textFields["address"].value
         XCTAssertEqual(value as? String, "mozilla.org")
-    }*/
+    }
 
     private func changeSearchEngine(searchEngine: String) {
         navigator.goto(SearchSettings)

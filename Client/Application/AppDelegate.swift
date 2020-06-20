@@ -110,10 +110,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let profile = getProfile(application)
 
+        unifiedTelemetry = UnifiedTelemetry(profile: profile)
+        
+        // Get legacy telemetry ID
+        if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
+            GleanMetrics.LegacyIds.clientId.set(uuid)
+        }
+        
         // Initialize Glean telemetry
         glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue))
-
-        unifiedTelemetry = UnifiedTelemetry(profile: profile)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)

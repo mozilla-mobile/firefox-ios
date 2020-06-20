@@ -38,14 +38,14 @@ to make it center in the top container view.
 
 */
 
-class IntroScreenSyncViewV2: UIView {
+class IntroScreenSyncViewV2: UIView, CardTheme {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
-        return UpdateViewController.theme == .dark ? .white : .black
+        return theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return UpdateViewController.theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
+        return theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
     }
     private lazy var titleImageView: UIImageView = {
         let imgView = UIImageView(image: #imageLiteral(resourceName: "tour-sync-v2"))
