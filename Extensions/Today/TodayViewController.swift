@@ -42,13 +42,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
         let button = imageButton.button
         button.setImage(UIImage(named: "search-button"), for: .normal)
-//        button.frame = CGRect(width: 100.0, height: 60.0)
-//        button.backgroundColor = UIColor.white
-//        button.layer.cornerRadius = button.frame.size.width/2
-//        button.clipsToBounds = true
-//        button.setImage(UIImage(named: "search"), for: .normal)
-//        button.imageEdgeInsets =  UIEdgeInsets(top: 30, left: 30, bottom: 30, right: 30)
-        
         let label = imageButton.label
         label.tintColor = UIColor(named: "widgetLabelColors")
         label.textColor = UIColor(named: "widgetLabelColors")
@@ -63,14 +56,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
         let button = imageButton.button
         button.setImage(UIImage(named: "private-search"), for: .normal)
-
-//        button.frame = CGRect(width: 60.0, height: 60.0)
-//        button.performGradient(colorOne: TodayUX.privateSearchButtonColorFaintDarkPurple, colorTwo: TodayUX.privateSearchButtonColorDarkPurple, colorThree: TodayUX.privateSearchButtonColorBrightPurple)
-//        button.layer.cornerRadius = button.frame.size.width/2
-//        button.clipsToBounds = true
-//        button.setImage(UIImage(named: "quick_action_new_private_tab")?.withRenderingMode(.alwaysTemplate), for: .normal)
-//        button.tintColor = UIColor.white
-
         let label = imageButton.label
         label.tintColor = UIColor(named: "widgetLabelColors")
         label.textColor = UIColor(named: "widgetLabelColors")
@@ -101,7 +86,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = TodayUX.margin / 2
-        stackView.distribution = UIStackView.Distribution.fill
+        stackView.distribution = UIStackView.Distribution.fillProportionally
         return stackView
     }()
 
@@ -256,7 +241,7 @@ class ImageButtonWithLabel: UIView {
             make.top.equalTo(self.safeAreaLayoutGuide)
             make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
             make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
-            make.width.height.greaterThanOrEqualTo(70)
+            make.width.height.greaterThanOrEqualTo(60)
         }
 
         label.snp.makeConstraints { make in
