@@ -1,0 +1,37 @@
+<head>
+</head>
+
+<body>
+  <div id='pagediv' >REPLACE_ME_PAGE</div>
+  <div id='workerdiv' >REPLACE_ME_WORKER</div>
+</body>
+
+<script>
+  var request = window.indexedDB.open("MyTestDatabase", 1);
+  request.onupgradeneeded = function(event) {
+    var db = event.target.result;
+    var objectStore = db.createObjectStore("sample", { keyPath: "foo" });
+    document.getElementById('pagediv').innerHTML = 'DB_CREATED_PAGE'
+  }
+
+///////////////////////
+//////////////////////
+
+var worker_fn = function(e) {
+  var request = indexedDB.open("workerdb", 1);
+   request.onupgradeneeded = function(event) {
+    var db = event.target.result;
+    var objectStore = db.createObjectStore("sample", { keyPath: "foo" });
+    self.postMessage('msg from worker');            
+  }
+};
+
+var blob = new Blob(["onmessage ="+worker_fn.toString()], { type: "text/javascript" });
+var worker = new Worker(window.URL.createObjectURL(blob));
+worker.onmessage = function(e) {
+  document.getElementById('workerdiv').innerHTML = 'DB_CREATED_WORKER'
+};
+worker.postMessage("start"); 
+</script>
+
+
