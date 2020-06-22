@@ -4589,7 +4589,6 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Leanplum.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/ObjcExceptionBridging.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Glean.framework",
 			);
 			name = "Copy Carthage Dependencies";
