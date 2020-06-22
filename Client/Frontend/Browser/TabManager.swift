@@ -66,7 +66,7 @@ class TabManager: NSObject {
     public static func makeWebViewConfig(isPrivate: Bool, prefs: Prefs?) -> WKWebViewConfiguration {
         let configuration = WKWebViewConfiguration()
         configuration.processPool = WKProcessPool()
-        let blockPopups = prefs?.boolForKey("blockPopups") ?? true
+        let blockPopups = prefs?.boolForKey(PrefsKeys.KeyBlockPopups) ?? true
         configuration.preferences.javaScriptCanOpenWindowsAutomatically = !blockPopups
         // We do this to go against the configuration of the <meta name="viewport">
         // tag to behave the same way as Safari :-(
@@ -85,7 +85,6 @@ class TabManager: NSObject {
 
     // A WKWebViewConfiguration used for private mode tabs
     lazy fileprivate var privateConfiguration: WKWebViewConfiguration = {
-        let blockPopups = profile.prefs.boolForKey("blockPopups") ?? true
         return TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }()
 
@@ -556,7 +555,7 @@ class TabManager: NSObject {
 
     @objc func prefsDidChange() {
         DispatchQueue.main.async {
-            let allowPopups = !(self.profile.prefs.boolForKey("blockPopups") ?? true)
+            let allowPopups = !(self.profile.prefs.boolForKey(PrefsKeys.KeyBlockPopups) ?? true)
             // Each tab may have its own configuration, so we should tell each of them in turn.
             for tab in self.tabs {
                 tab.webView?.configuration.preferences.javaScriptCanOpenWindowsAutomatically = allowPopups
