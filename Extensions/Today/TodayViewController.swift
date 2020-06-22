@@ -32,14 +32,12 @@ private struct TodayUX {
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding {
-
     var copiedURL: URL?
 
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewTabButtonLabel
-
         let button = imageButton.button
         button.setImage(UIImage(named: "search-button"), for: .normal)
         let label = imageButton.label
@@ -66,16 +64,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     fileprivate lazy var openCopiedLinkButton: ButtonWithSublabel = {
         let button = ButtonWithSublabel()
-
         button.setTitle(TodayStrings.GoToCopiedLinkLabel, for: .normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
-
         // We need to set the background image/color for .Normal, so the whole button is tappable.
         button.setBackgroundColor(UIColor.clear, forState: .normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
-
         button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysTemplate), for: .normal)
-
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
         return button
@@ -109,9 +103,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let widgetView: UIView!
-        self.extensionContext?.widgetLargestAvailableDisplayMode = .expanded
+        self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
         let effectView: UIVisualEffectView
         if #available(iOS 13, *) {
             effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
