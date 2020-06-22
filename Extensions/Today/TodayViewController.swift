@@ -234,7 +234,7 @@ class ImageButtonWithLabel: UIView {
             make.top.equalTo(self.safeAreaLayoutGuide)
             make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
             make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
-            make.width.height.greaterThanOrEqualTo(60)
+            make.height.greaterThanOrEqualTo(60)
         }
 
         label.snp.makeConstraints { make in
