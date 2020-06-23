@@ -139,4 +139,8 @@ class TranslationSettingsController: ThemedTableViewController {
     override func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return indexPath.section != Section.translationOnOff.rawValue
     }
+
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.section == 0 ? 70.0 : UITableView.automaticDimension
+    }
 }
