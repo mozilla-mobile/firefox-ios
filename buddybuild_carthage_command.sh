@@ -8,4 +8,9 @@ brew install https://github.com/Homebrew/homebrew-core/raw/09ceff6c1de7ebbfedb42
 
 carthage version
 
-carthage bootstrap $CARTHAGE_VERBOSE --platform ios
+brew tap tmspzz/tap https://github.com/tmspzz/homebrew-tap.git
+brew install tmspzz/homebrew-tap/rome
+rome download --platform iOS | grep -v 'specified key' | grep -v 'in local cache' 
+rome list --missing --platform iOS | awk '{print $1}' | xargs -I {} carthage bootstrap "{}" $CARTHAGE_VERBOSE --platform iOS
+carthage checkout shavar-prod-lists
+

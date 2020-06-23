@@ -25,7 +25,16 @@ if [ ! -z "$XCS_BOT_ID"  ]; then
   CARTHAGE_VERBOSE="--verbose"
 fi
 
-carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
+# if rome is installed and is pointed at the bucket with glean in it
+if [ -x "$(command -v rome)" ] && rome list | grep -q glean; then
+  rome download --platform iOS | grep -v 'specified key' | grep -v 'in local cache' 
+  rome list --missing --platform iOS | awk '{print $1}' | xargs -I {} carthage bootstrap "{}" $CARTHAGE_VERBOSE --platform iOS --cache-builds
+  # upload in background
+  rome list --missing --platform ios | awk '{print $1}' | xargs rome upload --platform ios &
+  carthage checkout shavar-prod-lists
+else
+  carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
+fi
 
 # Install Node.js dependencies and build user scripts
 

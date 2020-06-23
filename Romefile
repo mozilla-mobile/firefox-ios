@@ -1,0 +1,30 @@
+repositoryMap:
+- swift-protobuf:
+  - name: SwiftProtobuf
+- A-Star:
+  - name: AStar
+- sentry-cocoa:
+  - name: Sentry
+- onepassword-app-extension:
+  - name: OnePasswordExtension
+- application-services:
+  - name: MozillaAppServices
+- telemetry-ios:
+  - name: Telemetry
+- GCDWebServer:
+  - name: GCDWebServers
+- readability:
+  - name: Readability
+- Leanplum-iOS-SDK:
+  - name: Leanplum
+- ios_sdk:
+  - name: AdjustSDK
+- XCGLogger:
+  - name: XCGLogger
+  - name: ObjcExceptionBridging
+ignoreMap:
+- shavar-prod-lists:
+  - name: shavar-prod-lists
+cache:
+  local: ~/Library/Caches/Rome
+  s3Bucket: gk-buddybuild-rome
