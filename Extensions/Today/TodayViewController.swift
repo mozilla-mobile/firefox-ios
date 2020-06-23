@@ -169,7 +169,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
         return .zero
     }
-    
+
     func updateCopiedLink() {
         UIPasteboard.general.asyncURL().uponQueue(.main) { res in
             if let copiedURL: URL? = res.successValue,
