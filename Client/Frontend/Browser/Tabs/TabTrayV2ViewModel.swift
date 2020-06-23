@@ -169,7 +169,7 @@ class TabTrayV2ViewModel: NSObject {
     }
     func closeTabsForCurrentTray() {
         viewController.hideDisplayedTabs() {
-            self.tabManager.removeTabsWithUndoToast(self.dataStore.compactMap{ $0.1 }.flatMap{ $0 })
+            self.tabManager.removeTabsWithUndoToast(self.dataStore.compactMap { $0.1 }.flatMap { $0 })
                 if self.getTabs().count == 1, let tab = self.getTabs().first {
                 self.tabManager.selectTab(tab)
                     self.viewController.dismissTabTray()
