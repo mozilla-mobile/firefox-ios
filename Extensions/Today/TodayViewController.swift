@@ -132,7 +132,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         super.viewWillAppear(animated)
         updateCopiedLink()
     }
-    
+
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         let edge = size.width * TodayUX.buttonsHorizontalMarginPercentage
         buttonStackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
@@ -228,7 +228,8 @@ class ImageButtonWithLabel: UIView {
     func performLayout() {
         addSubview(button)
         addSubview(label)
-
+        
+        button.contentMode = .scaleAspectFill
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self.safeAreaLayoutGuide)
@@ -289,7 +290,7 @@ class ButtonWithSublabel: UIButton {
         titleLabel.snp.makeConstraints { make in
             make.left.equalTo(imageView.snp.right).offset(10)
             make.trailing.top.equalTo(self)
-            make.height.equalTo(12)
+            make.height.greaterThanOrEqualTo(12)
 
         }
 
