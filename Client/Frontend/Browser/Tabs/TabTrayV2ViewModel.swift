@@ -154,8 +154,13 @@ class TabTrayV2ViewModel: NSObject {
         guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
             return
         }
-        
+
+        let tabCount = self.getTabs().count
         tabManager.removeTabAndUpdateSelectedIndex(tab)
+        if tabCount == 1 && self.getTabs().count == 1 {
+            // The last tab was removed. Dismiss the tab tray
+            self.viewController.dismissTabTray()
+        }
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
