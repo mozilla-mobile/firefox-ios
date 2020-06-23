@@ -22,7 +22,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         imageButton.label.text = TodayStrings.NewTabButtonLabel
 
         let button = imageButton.button
-        button.frame = CGRect(width: 60.0, height: 60.0)
+        button.frame = CGRect(width:60.0, height:60.0)
         button.backgroundColor = UIColor.white
         button.layer.cornerRadius = button.frame.size.width/2
         button.clipsToBounds = true
@@ -41,11 +41,10 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
         let button = imageButton.button
-        button.frame = CGRect(width: 60.0, height: 60.0)
-        button.performGradient(colorOne: TodayUX.privateSearchButtonColorFaintDarkPurple, colorTwo: TodayUX.privateSearchButtonColorDarkPurple, colorThree: TodayUX.privateSearchButtonColorBrightPurple)
+        button.frame = CGRect(width:60.0, height:60.0)
         button.layer.cornerRadius = button.frame.size.width/2
         button.clipsToBounds = true
-        button.setImage(UIImage(named: "quick_action_new_private_tab")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(named:"quick_action_new_private_tab")?.withRenderingMode(.alwaysTemplate), for: .normal)
         button.tintColor = UIColor.white
 
         let label = imageButton.label
@@ -65,8 +64,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         // We need to set the background image/color for .Normal, so the whole button is tappable.
         button.setBackgroundColor(UIColor.clear, forState: .normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
-
-        button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        button.setImage(UIImage(named:"copy_link_icon")?.withRenderingMode(.alwaysTemplate), for: .normal)
 
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
