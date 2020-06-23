@@ -22,7 +22,7 @@ private struct TodayUX {
     static let linkTextSize: CGFloat = 9.0
     static let labelTextSize: CGFloat = 12.0
     static let labelColor  = UIColor(rgb: 0x242327)
-    static let subtitleLabelColor = UIColor(rgb:0x38383C)
+    static let subtitleLabelColor = UIColor(rgb: 0x38383C)
     static let imageButtonTextSize: CGFloat = 13.0
     static let copyLinkImageWidth: CGFloat = 20
     static let margin: CGFloat = 8
@@ -44,7 +44,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         let label = imageButton.label
-        if #available(iOS 13,*) {
+        if #available(iOS 13, *) {
             label.textColor = UIColor(named: "widgetLabelColors")
             label.tintColor = UIColor(named: "widgetLabelColors")
         } else {
@@ -64,7 +64,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         let label = imageButton.label
-        if #available(iOS 13,*) {
+        if #available(iOS 13, *) {
             label.textColor = UIColor(named: "widgetLabelColors")
             label.tintColor = UIColor(named: "widgetLabelColors")
         } else {
@@ -86,7 +86,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
-        if #available(iOS 13,*) {
+        if #available(iOS 13, *) {
             button.label.textColor = UIColor(named: "widgetLabelColors")
             button.label.tintColor = UIColor(named: "widgetLabelColors")
             button.subtitleLabel.textColor = UIColor(named: "subtitleLableColor")
