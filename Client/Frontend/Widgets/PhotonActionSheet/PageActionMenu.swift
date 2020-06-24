@@ -11,6 +11,8 @@ enum ButtonToastAction {
     case bookmarkPage
     case removeBookmark
     case copyUrl
+    case pinPage
+    case removePinPage
 }
 
 extension PhotonActionSheetProtocol {
@@ -97,9 +99,12 @@ extension PhotonActionSheetProtocol {
                 guard let site = val.successValue?.asArray().first?.flatMap({ $0 }) else {
                     return succeed()
                 }
-
                 return self.profile.history.addPinnedTopSite(site)
-            }.uponQueue(.main) { _ in }
+            }.uponQueue(.main) { result in
+                if result.isSuccess {
+                    success(Strings.AppMenuAddPinToTopSitesConfirmMessage, .pinPage)
+                }
+            }
         }
 
         let removeTopSitesPin = PhotonActionSheetItem(title: Strings.RemovePinTopsiteActionTitle, iconString: "action_unpin") { _, _ in
@@ -111,7 +116,11 @@ extension PhotonActionSheetProtocol {
                 }
 
                 return self.profile.history.removeFromPinnedTopSites(site)
-            }.uponQueue(.main) { _ in }
+            }.uponQueue(.main) { result in
+                if result.isSuccess {
+                    success(Strings.AppMenuRemovePinFromTopSitesConfirmMessage, .removePinPage)
+                }
+            }
         }
 
         let sendToDevice = PhotonActionSheetItem(title: Strings.SendToDeviceTitle, iconString: "menu-Send-to-Device") { _, _ in
