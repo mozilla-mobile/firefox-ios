@@ -5,6 +5,7 @@
 import UIKit
 
 struct TodayUX {
+
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
     static let linkTextSize: CGFloat = 9.0
     static let labelTextSize: CGFloat = 12.0

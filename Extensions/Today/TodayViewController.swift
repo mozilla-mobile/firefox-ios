@@ -16,7 +16,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
 
-
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)

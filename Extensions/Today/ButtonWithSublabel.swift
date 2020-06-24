@@ -6,6 +6,7 @@ import UIKit
 
 class ButtonWithSublabel: UIButton {
     lazy var subtitleLabel = UILabel()
+
      lazy var label = UILabel()
 
      required init?(coder aDecoder: NSCoder) {
