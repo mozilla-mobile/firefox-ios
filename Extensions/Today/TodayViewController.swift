@@ -44,7 +44,7 @@ private struct TodayUX {
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding {
     var copiedURL: URL?
-    
+
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
