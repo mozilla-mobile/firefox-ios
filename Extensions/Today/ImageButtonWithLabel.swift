@@ -28,6 +28,7 @@ class ImageButtonWithLabel: UIView {
         button.imageView?.contentMode = .scaleAspectFit
 
         button.snp.makeConstraints { make in
+            make.centerX.equalTo(self)
             make.top.equalTo(self.safeAreaLayoutGuide).offset(5)
             make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
             make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
