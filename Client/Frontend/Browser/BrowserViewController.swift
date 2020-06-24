@@ -2007,9 +2007,11 @@ extension BrowserViewController {
             showProperIntroVC()
             return
         }
+        Sentry.shared.send(message: "LP: research | State: \(onboardingUserResearch?.state)", tag: .leanplum, severity: .debug, extra: nil, description: nil, completion: nil)
         // Setup user research closure and observer to fetch the updated LP Variables
         onboardingUserResearch?.updatedLPVariable =  {
             self.showProperIntroVC()
+            Sentry.shared.send(message: "LP: updated variable | State: \(self.onboardingUserResearch?.state)", tag: .leanplum, severity: .debug, extra: nil, description: nil, completion: nil)
         }
         onboardingUserResearch?.lpVariableObserver()
     }

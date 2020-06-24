@@ -25,7 +25,15 @@ enum OnboardingScreenType: String {
     }
 }
 
+enum UserResearchState: String {
+    case starting
+    case settingsUnavailable
+    case finishedStartingLp
+    case lpUnavailableDelay
+}
+
 class OnboardingUserResearch {
+    var state: UserResearchState = .starting
     // Closure delegate
     var updatedLPVariable: (() -> Void)?
     // variable
@@ -60,12 +68,16 @@ class OnboardingUserResearch {
     func lpVariableObserver() {
         // Condition: Leanplum is disabled; use default intro view
         guard LeanPlumClient.shared.getSettings() != nil else {
+            state = .settingsUnavailable
+            Sentry.shared.send(message: "LP: observer | State: \(state)", tag: .leanplum, severity: .debug, extra: nil, description: nil, completion: nil)
             self.onboardingScreenType = .versionV1
             self.updatedLPVariable?()
             return
         }
         // Condition: A/B test variables from leanplum server
         LeanPlumClient.shared.finishedStartingLeanplum = {
+            self.state = .finishedStartingLp
+            Sentry.shared.send(message: "LP: observer | State: \(self.state)", tag: .leanplum, severity: .debug, extra: nil, description: nil, completion: nil)
             let showScreenA = LPVariables.showOnboardingScreenAB?.boolValue()
             LeanPlumClient.shared.finishedStartingLeanplum = nil
             self.updateTelemetry()
@@ -75,9 +87,12 @@ class OnboardingUserResearch {
         }
         // Condition: Leanplum server too slow; Show default onboarding.
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.state = .lpUnavailableDelay
             guard LeanPlumClient.shared.finishedStartingLeanplum != nil else {
                 return
             }
+            LeanPlumClient.shared.finishedStartingLeanplum = nil
+            Sentry.shared.send(message: "LP: observer | State: \(self.state)", tag: .leanplum, severity: .debug, extra: nil, description: nil, completion: nil)
             let lpStartStatus = LeanPlumClient.shared.lpState
             var lpVariableValue: OnboardingScreenType = .versionV1
             // Condition: LP has already started but we missed onStartLPVariable callback
