@@ -85,7 +85,6 @@ class OnboardingUserResearch {
                 lpVariableValue = boolValue ? .versionV1 : .versionV2
                 self.updateTelemetry()
             }
-            self.updatedLPVariable = nil
             self.onboardingScreenType = lpVariableValue
             self.updatedLPVariable?()
         }
