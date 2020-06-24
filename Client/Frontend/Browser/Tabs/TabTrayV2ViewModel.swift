@@ -32,9 +32,10 @@ class TabTrayV2ViewModel: NSObject {
         return isPrivate && getTabs().isEmpty
     }
 
-    init(viewController: TabTrayV2ViewController) {
+    init(viewController: TabTrayV2ViewController,
+         tabManager: TabManager = BrowserViewController.foregroundBVC().tabManager) {
         self.viewController = viewController
-        self.tabManager = BrowserViewController.foregroundBVC().tabManager
+        self.tabManager = tabManager
         self.isPrivate = tabManager.selectedTab?.isPrivate ?? false
         super.init()
         tabManager.addDelegate(self)
