@@ -125,11 +125,11 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }
 
     func updateCopiedLinkInView(clipboardURL: URL?) {
-        if let url = clipboardURL{
+        if let url = clipboardURL {
             self.openCopiedLinkButton.isHidden = false
             self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
             self.openCopiedLinkButton.subtitleLabel.text = url.absoluteDisplayString
-        } else{
+        } else {
             self.openCopiedLinkButton.isHidden = true
             self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
         }
