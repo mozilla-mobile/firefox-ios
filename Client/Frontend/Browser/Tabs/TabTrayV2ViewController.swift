@@ -98,6 +98,16 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     func applyTheme() {
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
     }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if #available(iOS 13.0, *) {
+            if ThemeManager.instance.systemThemeIsOn {
+                tableView.reloadData()
+            }
+        }
+    }
 }
 
 // MARK: Datastore
