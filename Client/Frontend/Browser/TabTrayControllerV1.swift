@@ -45,6 +45,8 @@ class TabTrayControllerV1: UIViewController {
     var tabDisplayManager: TabDisplayManager!
     var tabCellIdentifer: TabDisplayer.TabCellIdentifer = TabCell.Identifier
     var otherBrowsingModeOffset = CGPoint.zero
+    // Backdrop used for displaying greyed background for private tabs
+    var webViewContainerBackdrop: UIView!
     var collectionView: UICollectionView!
 
     let statusBarBG = UIView()
@@ -161,6 +163,10 @@ class TabTrayControllerV1: UIViewController {
         super.viewDidLoad()
         tabManager.addDelegate(self)
         view.accessibilityLabel = NSLocalizedString("Tabs Tray", comment: "Accessibility label for the Tabs Tray view.")
+        
+        webViewContainerBackdrop = UIView()
+        webViewContainerBackdrop.backgroundColor = UIColor.Photon.Ink90
+        webViewContainerBackdrop.alpha = 0
 
         collectionView.alwaysBounceVertical = true
         collectionView.backgroundColor = UIColor.theme.tabTray.background
@@ -173,7 +179,7 @@ class TabTrayControllerV1: UIViewController {
         searchBarHolder.addSubview(roundedSearchBarHolder)
         searchBarHolder.addSubview(searchBar)
         searchBarHolder.backgroundColor = UIColor.theme.tabTray.toolbar
-        [collectionView, toolbar, searchBarHolder, cancelButton].forEach { view.addSubview($0) }
+        [webViewContainerBackdrop, collectionView, toolbar, searchBarHolder, cancelButton].forEach { view.addSubview($0) }
         makeConstraints()
 
         // The statusBar needs a background color
@@ -222,6 +228,11 @@ class TabTrayControllerV1: UIViewController {
     }
 
     fileprivate func makeConstraints() {
+        
+        webViewContainerBackdrop.snp.makeConstraints { make in
+            make.edges.equalTo(self.view)
+        }
+        
         collectionView.snp.makeConstraints { make in
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
@@ -518,20 +529,26 @@ extension TabTrayControllerV1 {
 extension TabTrayControllerV1 {
     @objc func appWillResignActiveNotification() {
         if tabDisplayManager.isPrivate {
+            webViewContainerBackdrop.alpha = 1
+            view.bringSubviewToFront(webViewContainerBackdrop)
             collectionView.alpha = 0
             searchBarHolder.alpha = 0
+            emptyPrivateTabsView.alpha = 0
         }
     }
 
     @objc func appDidBecomeActiveNotification() {
         // Re-show any components that might have been hidden because they were being displayed
         // as part of a private mode tab
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.2, animations: {
             self.collectionView.alpha = 1
-
+            self.emptyPrivateTabsView.alpha = 1
             if self.tabDisplayManager.isPrivate, !self.privateTabsAreEmpty() {
                 self.searchBarHolder.alpha = 1
             }
+        }) { _ in
+            self.webViewContainerBackdrop.alpha = 0
+            self.view.sendSubviewToBack(self.webViewContainerBackdrop)
         }
     }
 }
