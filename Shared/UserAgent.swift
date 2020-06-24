@@ -19,7 +19,13 @@ open class UserAgent {
     private static var defaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
     private static func clientUserAgent(prefix: String) -> String {
-        return "\(prefix)/\(AppInfo.appVersion)b\(AppInfo.buildNumber) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName))"
+        let versionStr: String
+        if AppInfo.appVersion != "0.0.1" {
+            versionStr = "\(AppInfo.appVersion)b\(AppInfo.buildNumber)"
+        } else {
+            versionStr = "dev"
+        }
+        return "\(prefix)/\(versionStr) (\(DeviceInfo.deviceModel()); iPhone OS \(UIDevice.current.systemVersion)) (\(AppInfo.displayName))"
     }
 
     public static var syncUserAgent: String {
