@@ -14,7 +14,7 @@ open class PushNotificationSetup {
         // If we've already registered this push subscription, we don't need to do it again.
         let apnsToken = deviceToken.hexEncodedString
         let keychain = KeychainWrapper.sharedAppContainerKeychain
-        guard keychain.string(forKey: KeychainKey.apnsToken) != apnsToken else {
+        guard keychain.string(forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock) != apnsToken else {
             return
         }
 
