@@ -25,18 +25,19 @@ class ImageButtonWithLabel: UIView {
     func performLayout() {
         addSubview(button)
         addSubview(label)
+        button.imageView?.contentMode = .scaleAspectFit
 
         button.snp.makeConstraints { make in
-            make.centerX.equalTo(self)
-            make.top.equalTo(self.safeAreaLayoutGuide)
-            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(30)
-            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(30)
-            make.height.width.equalTo(60)
+            make.top.equalTo(self.safeAreaLayoutGuide).offset(5)
+            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
+            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
+            make.height.greaterThanOrEqualTo(60)
         }
 
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
+            make.height.equalTo(10)
         }
 
         label.numberOfLines = 1
