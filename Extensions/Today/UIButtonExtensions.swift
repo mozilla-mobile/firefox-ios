@@ -20,7 +20,6 @@ func performGradient(colorOne: UIColor, colorTwo: UIColor, colorThree: UIColor) 
     layer.masksToBounds = true
     layer.insertSublayer(gradientLayer, below: self.imageView?.layer)
     }
-    
 }
 
 extension UIButton {
