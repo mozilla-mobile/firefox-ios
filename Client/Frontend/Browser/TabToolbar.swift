@@ -38,6 +38,14 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidLongPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+}
+
+enum MiddleButtonState {
+    case reload
+    case stop
+    case search
 }
 
 @objcMembers
@@ -46,15 +54,36 @@ open class TabToolbarHelper: NSObject {
 
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
     let ImageStop = UIImage.templateImageNamed("nav-stop")
+    let ImageSearch = UIImage.templateImageNamed("search")
+
+    func setMiddleButtonState(_ state: MiddleButtonState) {
+        switch state {
+            case .reload:
+                toolbar.stopReloadButton.setImage(ImageReload, for: .normal)
+                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+            case .stop:
+                toolbar.stopReloadButton.setImage(ImageStop, for: .normal)
+                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
+            case .search:
+                toolbar.stopReloadButton.setImage(ImageSearch, for: .normal)
+                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Search", comment: "Accessibility Label for the tab toolbar Search button")
+        }
+    }
 
     var loading: Bool = false {
         didSet {
             if loading {
-                toolbar.stopReloadButton.setImage(ImageStop, for: .normal)
-                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
-            } else {
-                toolbar.stopReloadButton.setImage(ImageReload, for: .normal)
-                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+                setMiddleButtonState(.stop)
+            } else if isWebPage {
+                setMiddleButtonState(.reload)
+            }
+        }
+    }
+
+    var isWebPage: Bool = false {
+        didSet {
+            if !isWebPage {
+                setMiddleButtonState(.search)
             }
         }
     }
@@ -142,8 +171,10 @@ open class TabToolbarHelper: NSObject {
     func didClickStopReload() {
         if loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.stopReloadButton)
-        } else {
+        } else if isWebPage {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.stopReloadButton)
+        } else {
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.stopReloadButton)
         }
     }
 
@@ -326,7 +357,7 @@ extension TabToolbar: TabToolbarProtocol {
     }
 
     func updatePageStatus(_ isWebPage: Bool) {
-        stopReloadButton.isEnabled = isWebPage
+        helper?.isWebPage = isWebPage
     }
 
     func updateTabCount(_ count: Int, animated: Bool) {
