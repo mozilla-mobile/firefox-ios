@@ -26,7 +26,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
-        label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
+        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -41,7 +41,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
-        label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
+        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -54,13 +54,14 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         button.setBackgroundColor(UIColor.clear, forState: .normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
         button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
+        button.label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.labelTextSize))
         button.accessibilityLabel = TodayStrings.GoToCopiedLinkLabel
-        button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
         button.label.textColor = TodayUX.labelColor
         button.label.tintColor = TodayUX.labelColor
+        button.label.sizeToFit()
         button.subtitleLabel.textColor = TodayUX.subtitleLabelColor
         button.subtitleLabel.tintColor = TodayUX.subtitleLabelColor
+        button.subtitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.linkTextSize))
         return button
     }()
 
