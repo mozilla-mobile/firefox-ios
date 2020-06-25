@@ -22,6 +22,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         imageButton.label.text = TodayStrings.NewTabButtonLabel
         let button = imageButton.button
         button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = TodayStrings.NewTabButtonLabel
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
@@ -36,6 +37,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
         let button = imageButton.button
         button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = TodayStrings.NewPrivateTabButtonLabel
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
@@ -53,6 +55,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
         button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
+        button.accessibilityLabel = TodayStrings.GoToCopiedLinkLabel
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
         button.label.textColor = TodayUX.labelColor
         button.label.tintColor = TodayUX.labelColor
