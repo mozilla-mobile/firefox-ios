@@ -21,10 +21,12 @@ class TodayWidgetViewModel {
             UIPasteboard.general.asyncURL().uponQueue(.main) { res in
                 if let URL: URL? = res.successValue,
                     let url = URL {
+
                     TodayModel.copiedURL = url
                     self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: url)
                 } else {
                     TodayModel.copiedURL = nil
+                    TodayModel.copiedURL = url
                     self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: nil)
                 }
             }
