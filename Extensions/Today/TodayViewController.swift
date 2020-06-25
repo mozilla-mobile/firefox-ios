@@ -156,7 +156,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }
 
     @objc func onPressOpenClibpoard(_ view: UIView) {
-        if let url = model.copiedURL,
+        if let url = TodayModel.copiedURL,
             let encodedString = url.absoluteString.escape() {
             openContainingApp("?url=\(encodedString)")
         }

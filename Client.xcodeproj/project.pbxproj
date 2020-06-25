@@ -13,29 +13,14 @@
 		04B917D624914E5C00FED84D /* TodayModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917D424914E5C00FED84D /* TodayModel.swift */; };
 		04B917D924914E6B00FED84D /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917D824914E6B00FED84D /* TodayViewModel.swift */; };
 		04B917DA24914E6B00FED84D /* TodayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917D824914E6B00FED84D /* TodayViewModel.swift */; };
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 8a515b7b7... added UIButton extensions in a separate file + created classe for special UI elements
 		04B917DC249157C300FED84D /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */; };
 		04B917DD249157C300FED84D /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */; };
 		04B917DF2491587700FED84D /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917DE2491587700FED84D /* UIButtonExtensions.swift */; };
 		04B917E02491587700FED84D /* UIButtonExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917DE2491587700FED84D /* UIButtonExtensions.swift */; };
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f1aefe82a... separated ux related structs
 		04B917E32492939700FED84D /* ButtonWithSublabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917E22492939700FED84D /* ButtonWithSublabel.swift */; };
 		04B917E42492939700FED84D /* ButtonWithSublabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917E22492939700FED84D /* ButtonWithSublabel.swift */; };
 		04B917E72492940100FED84D /* TodayUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917E62492940100FED84D /* TodayUX.swift */; };
 		04B917E82492940100FED84D /* TodayUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B917E62492940100FED84D /* TodayUX.swift */; };
-<<<<<<< HEAD
-=======
->>>>>>> 3c460f1a9... added ViewModel and Model files to widget extension and re-architect the widget
-=======
->>>>>>> 8a515b7b7... added UIButton extensions in a separate file + created classe for special UI elements
-=======
->>>>>>> f1aefe82a... separated ux related structs
 		0B21E8061E26CCB7000C8779 /* EarlGrey.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0B21E8051E26CCB7000C8779 /* EarlGrey.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		0B305E1B1E3A98A900BE0767 /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305E1A1E3A98A900BE0767 /* BookmarkingTests.swift */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
@@ -1192,21 +1177,13 @@
 		0430A544203B372D00FDF76D /* IntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntegrationTests.swift; sourceTree = "<group>"; };
 		04B917D424914E5C00FED84D /* TodayModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayModel.swift; sourceTree = "<group>"; };
 		04B917D824914E6B00FED84D /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayViewModel.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 		04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonWithLabel.swift; sourceTree = "<group>"; };
 		04B917DE2491587700FED84D /* UIButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
 		04B917E22492939700FED84D /* ButtonWithSublabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonWithSublabel.swift; sourceTree = "<group>"; };
 		04B917E62492940100FED84D /* TodayUX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayUX.swift; sourceTree = "<group>"; };
-<<<<<<< HEAD
-=======
->>>>>>> 3c460f1a9... added ViewModel and Model files to widget extension and re-architect the widget
-=======
 		04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonWithLabel.swift; sourceTree = "<group>"; };
 		04B917DE2491587700FED84D /* UIButtonExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
->>>>>>> 8a515b7b7... added UIButton extensions in a separate file + created classe for special UI elements
-=======
->>>>>>> f1aefe82a... separated ux related structs
 		0B21E8051E26CCB7000C8779 /* EarlGrey.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EarlGrey.framework; path = Carthage/Build/iOS/EarlGrey.framework; sourceTree = "<group>"; };
 		0B305E1A1E3A98A900BE0767 /* BookmarkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkingTests.swift; sourceTree = "<group>"; };
 		0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationTest.swift; sourceTree = "<group>"; };
@@ -2500,23 +2477,14 @@
 				3905274E1C874D35007E0BB7 /* TodayViewController.swift */,
 				04B917D424914E5C00FED84D /* TodayModel.swift */,
 				04B917D824914E6B00FED84D /* TodayViewModel.swift */,
-<<<<<<< HEAD
-<<<<<<< HEAD
 				04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */,
 				04B917DE2491587700FED84D /* UIButtonExtensions.swift */,
 				04B917E22492939700FED84D /* ButtonWithSublabel.swift */,
 				04B917E62492940100FED84D /* TodayUX.swift */,
-=======
->>>>>>> 3c460f1a9... added ViewModel and Model files to widget extension and re-architect the widget
-=======
 				04B917DB249157C300FED84D /* ImageButtonWithLabel.swift */,
 				04B917DE2491587700FED84D /* UIButtonExtensions.swift */,
-<<<<<<< HEAD
->>>>>>> 8a515b7b7... added UIButton extensions in a separate file + created classe for special UI elements
-=======
 				04B917E22492939700FED84D /* ButtonWithSublabel.swift */,
 				04B917E62492940100FED84D /* TodayUX.swift */,
->>>>>>> f1aefe82a... separated ux related structs
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -4954,32 +4922,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-<<<<<<< HEAD
-<<<<<<< HEAD
 				04B917E42492939700FED84D /* ButtonWithSublabel.swift in Sources */,
 				04B917DA24914E6B00FED84D /* TodayViewModel.swift in Sources */,
 				04B917DD249157C300FED84D /* ImageButtonWithLabel.swift in Sources */,
-=======
-=======
 				04B917E42492939700FED84D /* ButtonWithSublabel.swift in Sources */,
->>>>>>> f1aefe82a... separated ux related structs
-				04B917DA24914E6B00FED84D /* TodayViewModel.swift in Sources */,
-<<<<<<< HEAD
->>>>>>> 3c460f1a9... added ViewModel and Model files to widget extension and re-architect the widget
-=======
 				04B917DD249157C300FED84D /* ImageButtonWithLabel.swift in Sources */,
->>>>>>> 8a515b7b7... added UIButton extensions in a separate file + created classe for special UI elements
 				315D05561E58DD60001F349B /* UIPasteboardExtensions.swift in Sources */,
 				04B917E02491587700FED84D /* UIButtonExtensions.swift in Sources */,
 				3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */,
-<<<<<<< HEAD
-<<<<<<< HEAD
 				04B917E82492940100FED84D /* TodayUX.swift in Sources */,
-=======
->>>>>>> 3c460f1a9... added ViewModel and Model files to widget extension and re-architect the widget
-=======
 				04B917E82492940100FED84D /* TodayUX.swift in Sources */,
->>>>>>> f1aefe82a... separated ux related structs
+				04B917E42492939700FED84D /* ButtonWithSublabel.swift in Sources */,
+				04B917DA24914E6B00FED84D /* TodayViewModel.swift in Sources */,
+				04B917DD249157C300FED84D /* ImageButtonWithLabel.swift in Sources */,
+				315D05561E58DD60001F349B /* UIPasteboardExtensions.swift in Sources */,
+				04B917E02491587700FED84D /* UIButtonExtensions.swift in Sources */,
+				3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */,
+				04B917E82492940100FED84D /* TodayUX.swift in Sources */,
 				04B917D624914E5C00FED84D /* TodayModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
