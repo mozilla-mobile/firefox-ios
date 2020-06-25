@@ -150,7 +150,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
             log.info("Extension opened containing app: \(success)")
         }
     }
-
+    //TODO: Move it to model
     @objc func onPressOpenClibpoard(_ view: UIView) {
         if let url = TodayModel.copiedURL,
             let encodedString = url.absoluteString.escape() {
