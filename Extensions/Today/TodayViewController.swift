@@ -143,14 +143,14 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     @objc func onPressNewPrivateTab(_ view: UIView) {
         openContainingApp("?private=true")
     }
-
+    //TODO: Move it to model??
     fileprivate func openContainingApp(_ urlSuffix: String = "") {
         let urlString = "\(model.scheme)://open-url\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
     }
-    //TODO: Move it to model
+
     @objc func onPressOpenClibpoard(_ view: UIView) {
         if let url = model.copiedURL,
             let encodedString = url.absoluteString.escape() {
