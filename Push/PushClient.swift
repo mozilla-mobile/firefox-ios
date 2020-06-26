@@ -128,7 +128,7 @@ public extension PushClient {
         mutableURLRequest.httpBody = JSON(parameters).stringify()?.utf8EncodedData
 
         return send(request: mutableURLRequest) >>== { json in
-            KeychainStore.shared.setString(apnsToken, forKey: KeychainKey.apnsToken)
+            KeychainStore.shared.setString(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
             return deferMaybe(creds)
         }
     }

@@ -232,7 +232,11 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     }
 
     func pinToTopSites(_ site: Site) {
-        _ = profile.history.addPinnedTopSite(site).value
+        _ = profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
+            if result.isSuccess {
+                SimpleToast().showAlertWithText(Strings.AppMenuAddPinToTopSitesConfirmMessage, bottomContainer: self.view)
+            }
+        }
     }
 
     func navigateToRecentlyClosed() {
