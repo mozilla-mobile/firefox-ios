@@ -740,6 +740,7 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
+        navigationToolbar.updateIsSearchStatus(true)
     }
 
     fileprivate func hideFirefoxHome() {
@@ -748,6 +749,7 @@ class BrowserViewController: UIViewController {
         }
 
         self.firefoxHomeViewController = nil
+        navigationToolbar.updateIsSearchStatus(false)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
@@ -761,8 +763,7 @@ class BrowserViewController: UIViewController {
             if let readerMode = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) as? ReaderMode, readerMode.state == .active {
                 self.showReaderModeBar(animated: false)
             }
-        })
-    }
+        })    }
 
     fileprivate func updateInContentHomePanel(_ url: URL?) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false

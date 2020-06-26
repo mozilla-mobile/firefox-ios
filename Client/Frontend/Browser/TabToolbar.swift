@@ -20,6 +20,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updateForwardStatus(_ canGoForward: Bool)
     func updateReloadStatus(_ isLoading: Bool)
     func updatePageStatus(_ isWebPage: Bool)
+    func updateIsSearchStatus(_ isHomePage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
     func appMenuBadge(setVisible: Bool)
@@ -72,18 +73,22 @@ open class TabToolbarHelper: NSObject {
 
     var loading: Bool = false {
         didSet {
-            if loading {
-                setMiddleButtonState(.stop)
-            } else if isWebPage {
-                setMiddleButtonState(.reload)
+            if !isSearch {
+                if loading {
+                    setMiddleButtonState(.stop)
+                } else {
+                    setMiddleButtonState(.reload)
+                }
             }
         }
     }
 
-    var isWebPage: Bool = false {
+    var isSearch: Bool = false {
         didSet {
-            if !isWebPage {
+            if isSearch {
                 setMiddleButtonState(.search)
+            } else {
+                setMiddleButtonState(.stop)
             }
         }
     }
@@ -171,10 +176,10 @@ open class TabToolbarHelper: NSObject {
     func didClickStopReload() {
         if loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.stopReloadButton)
-        } else if isWebPage {
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.stopReloadButton)
-        } else {
+        } else if isSearch {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.stopReloadButton)
+        } else {
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.stopReloadButton)
         }
     }
 
@@ -357,11 +362,15 @@ extension TabToolbar: TabToolbarProtocol {
     }
 
     func updatePageStatus(_ isWebPage: Bool) {
-        helper?.isWebPage = isWebPage
+
     }
 
     func updateTabCount(_ count: Int, animated: Bool) {
         tabsButton.updateTabCount(count, animated: animated)
+    }
+
+    func updateIsSearchStatus(_ isSearch: Bool) {
+        helper?.isSearch = isSearch
     }
 }
 
