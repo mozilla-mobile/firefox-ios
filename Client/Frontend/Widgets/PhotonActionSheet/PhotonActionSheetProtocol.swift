@@ -97,7 +97,7 @@ extension PhotonActionSheetProtocol {
 
             let title = !isSafelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
             let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
-            let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { _, _ in
+            let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName, adjustsFontSizeToFitWidth: true) { _, _ in
                 ContentBlocker.shared.safelist(enable: !isSafelisted, url: url) {
                     tab.reload()
                 }
