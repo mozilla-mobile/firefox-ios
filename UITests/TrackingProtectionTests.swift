@@ -209,5 +209,8 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         ContentBlocker.shared.clearSafelist() { clear1.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkStrictTrackingProtection(isBlocking: true)
+        openTPSetting()
+        disableStrictTP()
+        closeTPSetting()
     }
 }
