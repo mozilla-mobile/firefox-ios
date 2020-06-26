@@ -22,28 +22,28 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func numberOfSections(in tableView: UITableView) -> Int {
-        if viewModel.dataSource.loginRecordSections.isEmpty {
+        if viewModel.loginRecordSections.isEmpty {
             tableView.backgroundView = emptyStateView
             return 1
         }
 
         tableView.backgroundView = nil
         // Add one section for the settings section.
-        return viewModel.dataSource.loginRecordSections.count + 1
+        return viewModel.loginRecordSections.count + 1
     }
 
     @objc func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == LoginsSettingsSection {
             return 2
         }
-        return viewModel.dataSource.loginsForSection(section)?.count ?? 0
+        return viewModel.loginsForSection(section)?.count ?? 0
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
 
         if indexPath.section == LoginsSettingsSection {
-            let hideSettings = viewModel.dataSource.searchController?.isActive ?? false || tableView.isEditing
+            let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
             setting.onConfigureCell(cell)
             if hideSettings {
@@ -61,7 +61,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
                 }
             }
         } else {
-            guard let login = viewModel.dataSource.loginAtIndexPath(indexPath) else { return cell }
+            guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
             cell.textLabel?.text = login.hostname
             cell.detailTextColor = UIColor.theme.tableView.rowDetailText
             cell.detailTextLabel?.text = login.username

@@ -370,6 +370,7 @@
 		CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */; };
 		CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */; };
 		CA7BD568248189E800A0A61B /* BreachAlertsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */; };
+		CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */; };
 		CA90753824929B22005B794D /* NoLoginsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA90753724929B22005B794D /* NoLoginsView.swift */; };
 		CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */; };
 		CAC458F1249429C20042561A /* ListSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* ListSelectionHelper.swift */; };
@@ -1514,6 +1515,7 @@
 		CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
 		CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsManager.swift; sourceTree = "<group>"; };
 		CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsTests.swift; sourceTree = "<group>"; };
+		CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListDataSourceHelper.swift; sourceTree = "<group>"; };
 		CA90753724929B22005B794D /* NoLoginsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoLoginsView.swift; sourceTree = "<group>"; };
 		CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataSource.swift; sourceTree = "<group>"; };
 		CAC458F0249429C20042561A /* ListSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListSelectionHelper.swift; sourceTree = "<group>"; };
@@ -3148,13 +3150,14 @@
 			children = (
 				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
-				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
-				CAC458F0249429C20042561A /* ListSelectionHelper.swift */,
 				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
-				CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */,
-				CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */,
+				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
 				CA90753724929B22005B794D /* NoLoginsView.swift */,
 				CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */,
+				CAC458F0249429C20042561A /* ListSelectionHelper.swift */,
+				CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */,
+				CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */,
+				CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */,
 			);
 			path = "Login Management";
 			sourceTree = "<group>";
@@ -5204,6 +5207,7 @@
 				D88FDAAF1F4E2BA000FD9709 /* PhotonActionSheetAnimator.swift in Sources */,
 				E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */,
 				D34510881ACF415700EC27F0 /* SearchLoader.swift in Sources */,
+				CA7FC7D324A6A9B70012F347 /* LoginListDataSourceHelper.swift in Sources */,
 				CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */,
 				39CE74FB21A8513B007AE4F2 /* TranslationService.swift in Sources */,
 				E65075521E37F6D1006961AC /* UIViewExtensions.swift in Sources */,
