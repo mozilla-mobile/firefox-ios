@@ -198,7 +198,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-        registerDefaultsFromSettingsBundle()
+        #if WEBXR
+            registerWebXRDefaultsFromSettingsBundle()
+        #endif
         
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
@@ -283,39 +285,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         return shouldPerformAdditionalDelegateHandling
     }
     
-    func registerDefaultsFromSettingsBundle() {
-        guard let settingsBundle = Bundle.main.url(forResource: "Settings", withExtension: "bundle") else {
-            print("Could not find Settings.bundle")
-            return
-        }
-
-        guard let settings = NSDictionary(contentsOf: settingsBundle.appendingPathComponent("Root.plist")) else {
-            print("Could not find settings dictionary")
-            return
-        }
-        let preferences = settings["PreferenceSpecifiers"] as? [[AnyHashable : Any]]
-
-        var defaultsToRegister = [AnyHashable : Any]()
-        for prefSpecification: [AnyHashable : Any] in preferences ?? [] {
-            let key = prefSpecification["Key"] as? String
-            if key != nil {
-                defaultsToRegister[key] = prefSpecification["DefaultValue"]
-            }
-        }
-
-        if let aRegister = defaultsToRegister as? [String : Any] {
-            UserDefaults.standard.register(defaults: aRegister)
-        }
-
-        if UserDefaults.standard.integer(forKey: Constant.secondsInBackgroundKey()) == 0 {
-            UserDefaults.standard.set(Constant.sessionInBackgroundDefaultTimeInSeconds(), forKey: Constant.secondsInBackgroundKey())
-        }
-
-        if UserDefaults.standard.float(forKey: Constant.distantAnchorsDistanceKey()) == 0.0 {
-            UserDefaults.standard.set(Constant.distantAnchorsDefaultDistanceInMeters(), forKey: Constant.distantAnchorsDistanceKey())
-        }
-    }
-
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         guard let routerpath = NavigationPath(url: url) else {
             return false
