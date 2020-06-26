@@ -140,10 +140,12 @@ class BrowserViewController: UIViewController {
 
         dismissVisibleMenus()
 
+        #if WEBXR
         if let tab = tabManager.selectedTab,
             let arkController = tab.arkController {
             arkController.viewWillTransition(to: size)
         }
+        #endif
         
         coordinator.animate(alongsideTransition: { context in
             self.scrollController.updateMinimumZoom()

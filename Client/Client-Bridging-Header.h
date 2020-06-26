@@ -12,6 +12,8 @@
 #import "Shared-Bridging-Header.h"
 #import "Storage-Bridging-Header.h"
 
+#if WEBXR
 #import "XRShaderTypes.h"
+#endif
 
 #endif
