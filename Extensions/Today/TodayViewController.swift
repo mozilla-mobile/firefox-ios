@@ -17,40 +17,44 @@ struct TodayStrings {
 }
 
 private struct TodayUX {
-    static let privateBrowsingColor = UIColor(rgb: 0xcf68ff)
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
-    static let linkTextSize: CGFloat = 10.0
-    static let labelTextSize: CGFloat = 14.0
-    static let imageButtonTextSize: CGFloat = 14.0
-    static let copyLinkImageWidth: CGFloat = 23
+    static let linkTextSize: CGFloat = 9.0
+    static let labelTextSize: CGFloat = 12.0
+    static let imageButtonTextSize: CGFloat = 13.0
+    static let copyLinkImageWidth: CGFloat = 20
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
-    static let privateSearchButtonColorBrightPurple = UIColor(red: 117.0/255.0, green: 41.0/255.0, blue: 167.0/255.0, alpha: 1.0)
-    static let privateSearchButtonColorDarkPurple = UIColor(red: 73.0/255.0, green: 46.0/255.0, blue: 133.0/255.0, alpha: 1.0)
-    static let privateSearchButtonColorFaintDarkPurple = UIColor(red: 56.0/255.0, green: 51.0/255.0, blue: 114.0/255.0, alpha: 1.0)
+    static let buttonStackViewSpacing: CGFloat = 30.0
+    static var labelColor: UIColor {
+        if #available(iOS 13, *) {
+            return UIColor(named: "widgetLabelColors") ?? UIColor(rgb: 0x242327)
+        } else {
+            return UIColor(rgb: 0x242327)
+        }
+    }
+    static var subtitleLabelColor: UIColor {
+        if #available(iOS 13, *) {
+            return UIColor(named: "subtitleLableColor") ?? UIColor(rgb: 0x38383C)
+        } else {
+            return UIColor(rgb: 0x38383C)
+        }
+    }
 }
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding {
-
     var copiedURL: URL?
 
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewTabButtonLabel
-
         let button = imageButton.button
-        button.frame = CGRect(width: 60.0, height: 60.0)
-        button.backgroundColor = UIColor.white
-        button.layer.cornerRadius = button.frame.size.width/2
-        button.clipsToBounds = true
-        button.setImage(UIImage(named: "search"), for: .normal)
+        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
         let label = imageButton.label
-        label.tintColor = UIColor(named: "widgetLabelColors")
-        label.textColor = UIColor(named: "widgetLabelColors")
+        label.textColor = TodayUX.labelColor
+        label.tintColor = TodayUX.labelColor
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
-
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -60,16 +64,10 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
         let button = imageButton.button
-        button.frame = CGRect(width: 60.0, height: 60.0)
-        button.performGradient(colorOne: TodayUX.privateSearchButtonColorFaintDarkPurple, colorTwo: TodayUX.privateSearchButtonColorDarkPurple, colorThree: TodayUX.privateSearchButtonColorBrightPurple)
-        button.layer.cornerRadius = button.frame.size.width/2
-        button.clipsToBounds = true
-        button.setImage(UIImage(named: "quick_action_new_private_tab")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.tintColor = UIColor.white
-
+        button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
         let label = imageButton.label
-        label.tintColor = UIColor(named: "widgetLabelColors")
-        label.textColor = UIColor(named: "widgetLabelColors")
+        label.textColor = TodayUX.labelColor
+        label.tintColor = TodayUX.labelColor
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
         imageButton.sizeToFit()
         return imageButton
@@ -77,18 +75,18 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     fileprivate lazy var openCopiedLinkButton: ButtonWithSublabel = {
         let button = ButtonWithSublabel()
-
         button.setTitle(TodayStrings.GoToCopiedLinkLabel, for: .normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
-
         // We need to set the background image/color for .Normal, so the whole button is tappable.
         button.setBackgroundColor(UIColor.clear, forState: .normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
-
-        button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysTemplate), for: .normal)
-
+        button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
+        button.label.textColor = TodayUX.labelColor
+        button.label.tintColor = TodayUX.labelColor
+        button.subtitleLabel.textColor = TodayUX.subtitleLabelColor
+        button.subtitleLabel.tintColor = TodayUX.subtitleLabelColor
         return button
     }()
 
@@ -97,9 +95,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = TodayUX.margin / 2
-        stackView.distribution = UIStackView.Distribution.fill
-        stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
-        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.distribution = UIStackView.Distribution.fillProportionally
         return stackView
     }()
 
@@ -107,7 +103,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .center
-        stackView.spacing = 30
+        stackView.spacing = TodayUX.buttonStackViewSpacing
         stackView.distribution = UIStackView.Distribution.fillEqually
         return stackView
     }()
@@ -122,15 +118,17 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let widgetView: UIView!
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
+
         let effectView: UIVisualEffectView
+
         if #available(iOS 13, *) {
             effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
         } else {
-            effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+            effectView = UIVisualEffectView(effect: .none)
         }
+
         self.view.addSubview(effectView)
         effectView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
@@ -217,20 +215,6 @@ extension UIButton {
     }
 }
 
-extension UIButton {
-    func performGradient(colorOne: UIColor, colorTwo: UIColor, colorThree: UIColor) {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.frame
-        gradientLayer.colors = [colorOne.cgColor, colorTwo.cgColor, colorThree.cgColor]
-        gradientLayer.startPoint = CGPoint(x: 1.0, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.0, y: 1.0)
-        gradientLayer.locations = [0.0, 0.5, 1.0]
-        gradientLayer.cornerRadius = self.frame.size.width/2
-        layer.masksToBounds = true
-        layer.insertSublayer(gradientLayer, below: self.imageView?.layer)
-    }
-}
-
 class ImageButtonWithLabel: UIView {
 
     lazy var button = UIButton()
@@ -248,18 +232,20 @@ class ImageButtonWithLabel: UIView {
     func performLayout() {
         addSubview(button)
         addSubview(label)
+        button.imageView?.contentMode = .scaleAspectFit
 
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(self.safeAreaLayoutGuide)
-            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(30)
-            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(30)
-            make.height.width.equalTo(60)
+            make.top.equalTo(self.safeAreaLayoutGuide).offset(5)
+            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
+            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
+            make.height.greaterThanOrEqualTo(60)
         }
 
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
+            make.height.equalTo(10)
         }
 
         label.numberOfLines = 1
@@ -291,30 +277,30 @@ class ButtonWithSublabel: UIButton {
 
     fileprivate func performLayout() {
         let titleLabel = self.label
-
         self.titleLabel?.removeFromSuperview()
         addSubview(titleLabel)
 
         let imageView = self.imageView!
         let subtitleLabel = self.subtitleLabel
-        subtitleLabel.textColor = UIColor.lightGray
         self.addSubview(subtitleLabel)
 
         imageView.snp.makeConstraints { make in
-            make.centerY.left.equalTo(self)
+            make.centerY.left.equalTo(10)
             make.width.equalTo(TodayUX.copyLinkImageWidth)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(imageView.snp.right).offset(TodayUX.margin)
+            make.left.equalTo(imageView.snp.right).offset(10)
             make.trailing.top.equalTo(self)
+            make.height.greaterThanOrEqualTo(12)
         }
 
         subtitleLabel.lineBreakMode = .byTruncatingTail
         subtitleLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(self)
+            make.bottom.equalTo(self).inset(10)
             make.top.equalTo(titleLabel.snp.bottom)
             make.leading.trailing.equalTo(titleLabel)
+            make.height.greaterThanOrEqualTo(10)
         }
     }
 
