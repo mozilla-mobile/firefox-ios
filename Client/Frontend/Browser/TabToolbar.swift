@@ -40,10 +40,9 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-    func tabToolbarDidLongPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
-enum MiddleButtonState {
+fileprivate enum MiddleButtonState {
     case reload
     case stop
     case search
@@ -57,7 +56,7 @@ open class TabToolbarHelper: NSObject {
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
 
-    func setMiddleButtonState(_ state: MiddleButtonState) {
+    fileprivate func setMiddleButtonState(_ state: MiddleButtonState) {
         switch state {
             case .reload:
                 toolbar.stopReloadButton.setImage(ImageReload, for: .normal)
@@ -71,7 +70,7 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
-    var loading: Bool = false {
+    fileprivate var loading: Bool = false {
         didSet {
             if !isSearch {
                 if loading {
@@ -83,7 +82,7 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
-    var isSearch: Bool = false {
+    fileprivate var isSearch: Bool = false {
         didSet {
             if isSearch {
                 setMiddleButtonState(.search)
