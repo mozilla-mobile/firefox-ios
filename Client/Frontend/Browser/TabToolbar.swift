@@ -70,7 +70,7 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
-    fileprivate var loading: Bool = false {
+    var loading: Bool = false {
         didSet {
             if !isSearch {
                 if loading {
@@ -82,7 +82,7 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
-    fileprivate var isSearch: Bool = false {
+    var isSearch: Bool = false {
         didSet {
             if isSearch {
                 setMiddleButtonState(.search)
