@@ -143,7 +143,7 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: RemoteClientIdentifier) as! TwoLineHeaderFooterView
         view.frame = CGRect(width: tableView.frame.width, height: RemoteTabsPanelUX.HeaderHeight)
         view.textLabel?.text = client.name
-        view.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        view.backgroundView?.backgroundColor = UIColor.theme.tableView.headerBackground
 
         view.showBorder(for: .top, section != 0)
 

@@ -141,7 +141,7 @@ class TwoLineHeaderFooterView: UITableViewHeaderFooterView, Themeable {
         twoLineHelper.setUpViews(self, textLabel: _textLabel, detailTextLabel: _detailTextLabel, imageView: imageView)
         bordersHelper.initBorders(view: self)
         setDefaultBordersValues()
-
+        backgroundView = UIView()
         contentView.addSubview(_textLabel)
         contentView.addSubview(_detailTextLabel)
         contentView.addSubview(imageView)

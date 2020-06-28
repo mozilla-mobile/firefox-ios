@@ -25,7 +25,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
         titleLabel.font = DynamicFontHelper.defaultHelper.DeviceFontMediumBold
 
         contentView.addSubview(titleLabel)
-
+        backgroundView = UIView()
         bordersHelper.initBorders(view: self)
         setDefaultBordersValues()
 
@@ -54,7 +54,7 @@ class SiteTableViewHeader: UITableViewHeaderFooterView, Themeable {
 
     func applyTheme() {
         titleLabel.textColor = UIColor.theme.tableView.headerTextDark
-        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        backgroundView?.backgroundColor = UIColor.theme.tableView.headerBackground
         bordersHelper.applyTheme()
     }
 
@@ -174,7 +174,7 @@ class SiteTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            header.backgroundView?.backgroundColor = UIColor.theme.tableView.headerBackground
         }
     }
 

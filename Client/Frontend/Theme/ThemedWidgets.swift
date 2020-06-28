@@ -81,6 +81,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         contentView.addSubview(titleLabel)
+        backgroundView = UIView()
         bordersHelper.initBorders(view: self)
         setDefaultBordersValues()
         setupInitialConstraints()
@@ -93,7 +94,7 @@ class ThemedTableSectionHeaderFooterView: UITableViewHeaderFooterView, Themeable
 
     func applyTheme() {
         bordersHelper.applyTheme()
-        contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+        backgroundView?.backgroundColor = UIColor.theme.tableView.headerBackground
         titleLabel.textColor = UIColor.theme.tableView.headerTextLight
     }
 

@@ -474,7 +474,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = UIColor.theme.tableView.headerTextDark
-            header.contentView.backgroundColor = UIColor.theme.tableView.headerBackground
+            header.backgroundView?.backgroundColor = UIColor.theme.tableView.headerBackground
         }
     }
 
