@@ -38,7 +38,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
             firefoxAccounts: RustFirefoxAccounts.shared,
             leanPlumClient: LeanPlumClient.shared
         )
-
+        
         self.dismissType = dismissalStyle
 
         let contentController = WKUserContentController()
@@ -66,14 +66,18 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    
+    private func setup() {
         webView.navigationDelegate = self
         view = webView
-
+        
         viewModel.authenticate()
         
         viewModel.onEmittingNewState = { [weak self] output in
             let (request, method) = output
-                if let method = method {
+            if let method = method {
                 UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
             }
             self?.webView.load(request)
@@ -83,10 +87,9 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
             self?.dismiss(animated: true)
         }
         
-        viewModel.onWantingToExecuteJSScriptString = { [weak self] msg in
+        viewModel.onWantingToExecuteJSScript = { [weak self] msg in
             self?.webView.evaluateJavaScript(msg)
         }
-        
     }
 
     /**
@@ -102,8 +105,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
     }
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        let shouldAllow = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
-        let decision: WKNavigationActionPolicy = shouldAllow ? .allow : .cancel
+        let decision = viewModel.shouldAllowRedirectAfterLogIn(basedOn: navigationAction.request.url)
         decisionHandler(decision)
     }
 }

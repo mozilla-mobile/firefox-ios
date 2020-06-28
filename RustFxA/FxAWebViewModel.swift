@@ -16,9 +16,7 @@ extension URL {
     }
     /// Figuring out if two urls are the same based on scheme, host and path.
     func isEquivilent(to url: URL) -> Bool {
-        return self.scheme == url.scheme &&
-        self.host == url.host &&
-        self.path == url.path
+        return self.scheme == url.scheme && self.host == url.host && self.path == url.path
     }
 }
 
@@ -41,13 +39,15 @@ fileprivate enum RemoteCommand: String {
     case profileChanged = "profile:change"
 }
 
-typealias STATE = (URLRequest, UnifiedTelemetry.EventMethod?)
+/// Represent the state of FxAWebViewModel
+typealias FxASTATE = (URLRequest, UnifiedTelemetry.EventMethod?)
 
 class FxAWebViewModel {
     
     fileprivate let pageType: FxAPageType
     fileprivate let profile: Profile
     fileprivate var deepLinkParams: FxALaunchParams?
+
     fileprivate let firefoxAccounts: RustFirefoxAccounts
     fileprivate let leanPlumClient: LeanPlumClient
     
@@ -71,7 +71,6 @@ class FxAWebViewModel {
 
     - parameter pageType: Specify login flow or settings page if already logged in.
     - parameter profile: a Profile.
-    - parameter deepLinkParams: URL args passed in from deep link that propagate to FxA web view
     - parameter firefoxAccounts: RustFirefoxAccounts singleton instance
     - parameter leanPlumClient: LeanPlumClient singleton instance
 
@@ -88,6 +87,7 @@ class FxAWebViewModel {
         self.deepLinkParams = deepLinkParams
         self.firefoxAccounts = firefoxAccounts
         self.leanPlumClient = leanPlumClient
+
         
         // If accountMigrationFailed then the app menu has a caution icon,
         // and at this point the user has taken sufficient action to clear the caution.
@@ -97,10 +97,9 @@ class FxAWebViewModel {
     fileprivate(set) var baseURL: URL?
     
     /// This closure will carry out the new success state created by invoking `authenticate` method within this viewModel.
-    var onEmittingNewState: ((STATE) -> Void)?
-    
+    var onEmittingNewState: ((FxASTATE) -> Void)?
     var onDismissController: (() -> Void)?
-    var onWantingToExecuteJSScriptString: ((String) -> Void)?
+    var onWantingToExecuteJSScript: ((String) -> Void)?
     
     func composeTitle(basedOn url: URL?, hasOnlySecureContent: Bool) -> String {
         return (hasOnlySecureContent ? "🔒 " : "") + (url?.host ?? "")
@@ -119,22 +118,26 @@ extension FxAWebViewModel {
                 switch self.pageType {
                 case .emailLoginFlow:
                     accountManager.beginAuthentication { [weak self] result in
+                        guard let self = self else { return }
+                        
                         if case .success(let url) = result {
-                            self?.baseURL = url
-                            self?.onEmittingNewState?((url.toRequest, .emailLogin))
+                            self.baseURL = url
+                            self.onEmittingNewState?((self.makeRequest(url), .emailLogin))
                         }
                     }
                 case let .qrCode(url):
                     accountManager.beginPairingAuthentication(pairingUrl: url) { [weak self] result in
+                        guard let self = self else { return }
+
                         if case .success(let url) = result {
-                            self?.baseURL = url
-                            self?.onEmittingNewState?((url.toRequest, .qrPairing))
+                            self.baseURL = url
+                            self.onEmittingNewState?((self.makeRequest(url), .qrPairing))
                         }
                     }
                 case .settingsPage:
                     if case .success(let url) = result {
                         self.baseURL = url
-                        self.onEmittingNewState?((url.toRequest, nil))
+                        self.onEmittingNewState?((self.makeRequest(url), nil))
                     }
                 }
             }
@@ -159,12 +162,11 @@ extension FxAWebViewModel {
 }
 
 // MARK: - Commands
-
 extension FxAWebViewModel {
     
     func dispatchLongPressCommand() {
         let hideLongpress = "document.body.style.webkitTouchCallout='none';"
-        onWantingToExecuteJSScriptString?(hideLongpress)
+        onWantingToExecuteJSScript?(hideLongpress)
     }
     
     func parseAndExecuteSuitableRemoteCommand(basedOn message: WKScriptMessage) {
@@ -227,7 +229,7 @@ extension FxAWebViewModel {
             window.dispatchEvent(new CustomEvent('WebChannelMessageToContent', { detail: JSON.stringify(msg) }));
         """
 
-        onWantingToExecuteJSScriptString?(msg)
+        onWantingToExecuteJSScript?(msg)
     }
 
     /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
@@ -312,17 +314,17 @@ extension FxAWebViewModel {
         }
     }
     
-    func shouldAllowRedirectAfterLogIn(basedOn navigationURL: URL?) -> Bool {
+    func shouldAllowRedirectAfterLogIn(basedOn navigationURL: URL?) -> WKNavigationActionPolicy {
         // Cancel navigation that happens after login to an account, which is when a redirect to `redirectURL` happens.
         // The app handles this event fully in native UI.
         let redirectUrl = RustFirefoxAccounts.redirectURL
         if let navigationURL = navigationURL {
             let expectedRedirectURL = URL(string: redirectUrl)!
             if navigationURL.isEquivilent(to: expectedRedirectURL) {
-                return false
+                return .cancel
             }
         }
-        return true
+        return .allow
     }
     
 }
