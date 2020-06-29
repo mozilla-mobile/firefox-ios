@@ -27,7 +27,7 @@ class LoginListViewController: SensitiveViewController {
     private let viewModel: LoginListViewModel
 
     fileprivate lazy var loginSelectionController: LoginListSelectionHelper = {
-        return ListSelectionHelper(tableView: self.tableView)
+        return LoginListSelectionHelper(tableView: self.tableView)
     }()
 
     fileprivate var loginDataSource: LoginDataSource
@@ -244,11 +244,11 @@ extension LoginListViewController: UISearchResultsUpdating {
 
 extension LoginListViewController: UISearchControllerDelegate {
     func willDismissSearchController(_ searchController: UISearchController) {
-        viewModel.isDuringSearchControllerDismiss = true
+        viewModel.setIsDuringSearchControllerDismiss(to: true)
     }
 
     func didDismissSearchController(_ searchController: UISearchController) {
-        viewModel.isDuringSearchControllerDismiss = false
+        viewModel.setIsDuringSearchControllerDismiss(to: false)
     }
 }
 

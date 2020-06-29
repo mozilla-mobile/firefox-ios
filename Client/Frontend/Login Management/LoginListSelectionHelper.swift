@@ -15,7 +15,6 @@ public class LoginListSelectionHelper {
 
     init(tableView: UITableView) {
         self.tableView = tableView
-        super.init()
     }
 
     func selectIndexPath(_ indexPath: IndexPath) {

@@ -11,13 +11,13 @@ import Shared
 final class LoginListViewModel {
 
     let profile: Profile
-    var isDuringSearchControllerDismiss = false
-    var count = 0
+    private(set) var isDuringSearchControllerDismiss = false
+    private(set) var count = 0
     weak var searchController: UISearchController?
     weak var delegate: LoginViewModelDelegate?
     fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
-    fileprivate var titles = [Character]()
-    fileprivate var loginRecordSections = [Character: [LoginRecord]]() {
+    private(set) var titles = [Character]()
+    private(set) var loginRecordSections = [Character: [LoginRecord]]() {
         didSet {
             assert(Thread.isMainThread)
             delegate?.loginSectionsDidUpdate()
@@ -46,6 +46,10 @@ final class LoginListViewModel {
             succeed()
         }
         return deferred
+    }
+
+    func setIsDuringSearchControllerDismiss(to: Bool) {
+        self.isDuringSearchControllerDismiss = to
     }
 
     // MARK: - Data Source Methods
