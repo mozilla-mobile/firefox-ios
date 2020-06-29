@@ -143,7 +143,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         EarlGrey.selectElement(with: grey_accessibilityID("Settings.TrackingProtectionOption.BlockListStrict")).perform(grey_tap())
 
         // Accept the warning alert when Strict mode is enabled
-        tester().waitForAnimationsToFinish()
+        tester().waitForAnimationsToFinish(withTimeout: 3)
         tester().tapView(withAccessibilityLabel: "OK, Got It")
         closeTPSetting()
     }
@@ -164,7 +164,6 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
             .perform(grey_tap())
 
         checkStrictTrackingProtection(isBlocking: false, isTPDisabled: true)
-
         enableStrictMode()
 
         // Now with the TP enabled, the image should be blocked
@@ -210,5 +209,8 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         ContentBlocker.shared.clearSafelist() { clear1.fulfill() }
         waitForExpectations(timeout: 10, handler: nil)
         checkStrictTrackingProtection(isBlocking: true)
+        openTPSetting()
+        disableStrictTP()
+        closeTPSetting()
     }
 }
