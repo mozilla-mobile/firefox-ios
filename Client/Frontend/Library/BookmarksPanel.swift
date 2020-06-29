@@ -308,8 +308,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
     @objc fileprivate func notificationReceived(_ notification: Notification) {
         switch notification.name {
-        case .FirefoxAccountChanged, .DynamicFontChanged:
+        case .FirefoxAccountChanged:
             reloadData()
+        case .DynamicFontChanged:
+            tableView.reloadData()
         default:
             log.warning("Received unexpected notification \(notification.name)")
             break
