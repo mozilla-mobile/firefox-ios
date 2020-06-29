@@ -11,19 +11,19 @@ import Shared
 final class LoginListViewModel {
 
     let profile: Profile
-    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>? 
     var isDuringSearchControllerDismiss = false
     var count = 0
     weak var searchController: UISearchController?
-    var titles = [Character]()
-    var loginRecordSections = [Character: [LoginRecord]]() {
+    weak var delegate: LoginViewModelDelegate?
+    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
+    fileprivate var titles = [Character]()
+    fileprivate var loginRecordSections = [Character: [LoginRecord]]() {
         didSet {
             assert(Thread.isMainThread)
             delegate?.loginSectionsDidUpdate()
         }
     }
     fileprivate let helper = LoginListDataSourceHelper()
-    weak var delegate: LoginViewModelDelegate?
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile

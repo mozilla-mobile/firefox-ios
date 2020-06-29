@@ -5,7 +5,7 @@
 import Foundation
 
 /// Helper that keeps track of selected indexes for LoginListViewController
-public class ListSelectionHelper: NSObject {
+public class LoginListSelectionHelper {
     private unowned let tableView: UITableView
     private(set) var selectedIndexPaths = [IndexPath]()
 

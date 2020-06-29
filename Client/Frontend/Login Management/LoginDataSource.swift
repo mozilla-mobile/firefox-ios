@@ -6,7 +6,7 @@ import Foundation
 import Shared
 
 /// Data source for handling LoginData objects from a Cursor
-class LoginDataSource: NSObject, UITableViewDataSource {
+class LoginDataSource: UITableViewDataSource {
     // in case there are no items to run cellForRowAt on, use an empty state view
     fileprivate let emptyStateView = NoLoginsView()
     fileprivate var viewModel: LoginListViewModel

@@ -26,7 +26,7 @@ class LoginListViewController: SensitiveViewController {
 
     private let viewModel: LoginListViewModel
 
-    fileprivate lazy var loginSelectionController: ListSelectionHelper = {
+    fileprivate lazy var loginSelectionController: LoginListSelectionHelper = {
         return ListSelectionHelper(tableView: self.tableView)
     }()
 
