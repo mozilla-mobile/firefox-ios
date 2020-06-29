@@ -2387,7 +2387,10 @@ extension BrowserViewController: Themeable {
         webViews.forEach({ $0.applyTheme() })
 
         let tabs = tabManager.tabs
-        tabs.forEach { $0.applyTheme() }
+        tabs.forEach {
+            $0.applyTheme()
+            urlBar.locationView.tabDidChangeContentBlocking($0)
+        }
         
         guard let contentScript = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         appyThemeForPreferences(profile.prefs, contentScript: contentScript)
