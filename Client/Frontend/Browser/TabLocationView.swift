@@ -394,7 +394,8 @@ extension TabLocationView: TabEventHandler {
         trackingProtectionButton.alpha = 1.0
         switch blocker.status {
         case .blocking:
-            trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: "tracking-protection-active-block"), for: .normal)
+            let blockImageName = ThemeManager.instance.currentName == .dark ? "tracking-protection-active-block-dark" : "tracking-protection-active-block"
+            trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: blockImageName), for: .normal)
         case .noBlockedURLs:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
             trackingProtectionButton.alpha = 0.5
