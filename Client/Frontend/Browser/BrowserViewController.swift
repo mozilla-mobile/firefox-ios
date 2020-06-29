@@ -1157,9 +1157,11 @@ class BrowserViewController: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if #available(iOS 13.0, *) {
-            if ThemeManager.instance.systemThemeIsOn {
-                let userInterfaceStyle = traitCollection.userInterfaceStyle
-                ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+            if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                if ThemeManager.instance.systemThemeIsOn {
+                    let userInterfaceStyle = traitCollection.userInterfaceStyle
+                    ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
+                }
             }
         }
     }
