@@ -171,6 +171,8 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     override func reloadData() {
+        // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
+        if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.RootGUID, recursive: true).uponQueue(.main) { result in
             guard let rootFolder = result.successValue as? BookmarkFolder else {
                 // TODO: Handle error case?
