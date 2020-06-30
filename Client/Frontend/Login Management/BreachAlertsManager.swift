@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Storage // or whichever module has the LoginsRecord class
@@ -56,7 +56,7 @@ final public class BreachAlertsManager {
     /// Compares a list of logins to a list of breaches and returns breached logins.
     ///    - Parameters:
     ///         - logins: a list of logins to compare breaches to
-    func compareToBreaches(_ logins: [LoginRecord]) -> Maybe<[LoginRecord]> {
+    func findUserBreaches(_ logins: [LoginRecord]) -> Maybe<[LoginRecord]> {
         var result: [LoginRecord] = []
 
         if self.breaches.count <= 0 {
