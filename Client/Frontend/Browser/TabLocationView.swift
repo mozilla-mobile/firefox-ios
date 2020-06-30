@@ -46,13 +46,12 @@ class TabLocationView: UIView {
         didSet { updateTextWithURL() }
     }
 
+    func showLockIcon(forSecureContent isSecure: Bool) {
+        lockImageView.isHidden = !isSecure
+    }
+
     var url: URL? {
         didSet {
-            let wasHidden = lockImageView.isHidden
-            lockImageView.isHidden = url?.scheme != "https"
-            if wasHidden != lockImageView.isHidden {
-                UIAccessibility.post(notification: UIAccessibility.Notification.layoutChanged, argument: nil)
-            }
             updateTextWithURL()
             pageOptionsButton.isHidden = (url == nil)
 
@@ -394,14 +393,15 @@ extension TabLocationView: TabEventHandler {
         guard let blocker = tab.contentBlocker else { return }
         trackingProtectionButton.alpha = 1.0
         switch blocker.status {
-        case .Blocking:
-            trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: "tracking-protection-active-block"), for: .normal)
-        case .NoBlockedURLs:
+        case .blocking:
+            let blockImageName = ThemeManager.instance.currentName == .dark ? "tracking-protection-active-block-dark" : "tracking-protection-active-block"
+            trackingProtectionButton.setImage(UIImage(imageLiteralResourceName: blockImageName), for: .normal)
+        case .noBlockedURLs:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection"), for: .normal)
             trackingProtectionButton.alpha = 0.5
-        case .Whitelisted:
+        case .safelisted:
             trackingProtectionButton.setImage(UIImage.templateImageNamed("tracking-protection-off"), for: .normal)
-        case .Disabled:
+        case .disabled:
             trackingProtectionButton.isHidden = true
         }
     }

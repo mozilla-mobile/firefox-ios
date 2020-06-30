@@ -6,11 +6,12 @@ import Foundation
 import AdSupport
 import Shared
 import Leanplum
+import Account
 
 private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
-private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
+//private let AppRequestedUserNotificationsPrefKey = "applicationDidRequestUserNotificationPermissionPrefKey"
 private let FxaDevicesCountPrefKey = "FxaDevicesCount"
 
 // FxA Custom Leanplum message template for A/B testing push notifications.
@@ -39,6 +40,11 @@ enum LPEvent: String {
     case firstRun = "E_First_Run"
     case secondRun = "E_Second_Run"
     case openedApp = "E_Opened_App"
+    case dismissUpdateCoverSheetAndStartBrowsing = "E_Dismissed_Update_Cover_Sheet_And_Start_Browsing"
+    case dismissETPCoverSheetAndGoToSettings = "E_Dismissed_Update_Cover_Sheet_And_Go_To_Settings"
+    case dismissedUpdateCoverSheet = "E_Dismissed_Update_Cover_Sheet"
+    case dismissedETPCoverSheet = "E_Dismissed_ETP_Sheet"
+    case dismissETPCoverSheetAndStartBrowsing = "E_Dismissed_ETP_Cover_Sheet_And_Start_Browsing"
     case dismissedOnboarding = "E_Dismissed_Onboarding"
     case dismissedOnboardingShowLogin = "E_Dismissed_Onboarding_Showed_Login"
     case dismissedOnboardingShowSignUp = "E_Dismissed_Onboarding_Showed_SignUpFlow"
@@ -60,6 +66,8 @@ enum LPEvent: String {
     case signsUpFxa = "E_User_Signed_Up_For_FxA"
     case useReaderView = "E_User_Used_Reader_View"
     case trackingProtectionSettings = "E_Tracking_Protection_Settings_Changed"
+    case trackingProtectionMenu = "E_Opened_Tracking_Protection_Menu"
+    case trackingProtectionSafeList = "E_Added_Site_To_Tracking_Protection_Safelist"
     case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
     case onboardingTestLoadedTooSlow = "E_Onboarding_Was_Swiped_Before_AB_Test_Could_Start"
 }
@@ -73,6 +81,9 @@ struct LPAttributeKey {
     static let telemetryOptIn = "Telemetry Opt In"
     static let fxaAccountVerified = "FxA account is verified"
     static let fxaDeviceCount = "Number of devices in FxA account"
+    static let experimentName = "Experiment name"
+    static let experimentId = "Experiment id"
+    static let experimentVariant = "Experiment variant"
 }
 
 struct MozillaAppSchemes {
@@ -87,10 +98,28 @@ private func isLocaleSupported() -> Bool {
     return supportedLocalePrefixes.contains(code)
 }
 
-private struct LPSettings {
+struct LPSettings {
     var appId: String
     var developmentKey: String
     var productionKey: String
+}
+
+enum LPSetupType: String {
+    case debug
+    case production
+    case none
+}
+
+enum LPState {
+    case disabled
+    case willStart
+    case started(startedState: LPStartedState)
+}
+
+enum LPStartedState {
+    case firstRun
+    case secondRun
+    case normalRun
 }
 
 class LeanPlumClient {
@@ -100,15 +129,20 @@ class LeanPlumClient {
     private weak var profile: Profile?
     private var prefs: Prefs? { return profile?.prefs }
     private var enabled: Bool = true
-
+    private var setupType: LPSetupType = .none
+    // Closure delegate for when leanplum has finished starting-up
+    var finishedStartingLeanplum: (() -> Void)?
+    // Comes from LeanPlum, used to show device ID in debug menu and finding user in LP dashboard"
+    var leanplumDeviceId: String? {
+        return Leanplum.deviceId()
+    }
+    // Used for sentry logging to know about the current state of leanplum execution
+    var lpState: LPState = .disabled
     // This defines an external Leanplum varible to enable/disable FxA prepush dialogs.
     // The primary result is having a feature flag controlled by Leanplum, and falling back
     // to prompting with native push permissions.
     private var useFxAPrePush = LPVar.define("useFxAPrePush", with: false)
     var enablePocketVideo = LPVar.define("pocketVideo", with: false)
-
-   // var introScreenVars = LPVar.define("IntroScreen", with: IntroCard.defaultCards().compactMap({ $0.asDictonary() }))
-
     private func isPrivateMode() -> Bool {
         // Need to be run on main thread since isInPrivateMode requires to be on the main thread.
         assert(Thread.isMainThread)
@@ -119,12 +153,20 @@ class LeanPlumClient {
         return enabled && Leanplum.hasStarted()
     }
 
+    func lpSetupType() -> LPSetupType {
+        return setupType
+    }
+
     static func shouldEnable(profile: Profile) -> Bool {
         return AppConstants.MOZ_ENABLE_LEANPLUM && (profile.prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true)
     }
 
     func setup(profile: Profile) {
         self.profile = profile
+    }
+
+    func forceVariableUpdate() {
+        Leanplum.forceContentUpdate()
     }
 
     func recordSyncedClients(with profile: Profile?) {
@@ -144,6 +186,7 @@ class LeanPlumClient {
     fileprivate func start() {
         guard let settings = getSettings(), isLocaleSupported(), !Leanplum.hasStarted() else {
             enabled = false
+            Sentry.shared.send(message: "LeanplumIntegration - Could not be started | isLocaleSupported: \(isLocaleSupported()) | Leanplum has not started: \(!Leanplum.hasStarted())")
             log.error("LeanplumIntegration - Could not be started")
             return
         }
@@ -152,9 +195,11 @@ class LeanPlumClient {
             log.info("LeanplumIntegration - Setting up for Development")
             Leanplum.setDeviceId(UIDevice.current.identifierForVendor?.uuidString)
             Leanplum.setAppId(settings.appId, withDevelopmentKey: settings.developmentKey)
+            setupType = .debug
         } else {
             log.info("LeanplumIntegration - Setting up for Production")
             Leanplum.setAppId(settings.appId, withProductionKey: settings.productionKey)
+            setupType = .production
         }
 
         Leanplum.syncResourcesAsync(true)
@@ -170,23 +215,38 @@ class LeanPlumClient {
 
         self.setupCustomTemplates()
 
+        lpState = .willStart
         Leanplum.start(withUserId: nil, userAttributes: attributes, responseHandler: { _ in
             self.track(event: .openedApp)
 
+            assert(Thread.isMainThread)
+            self.lpState = .started(startedState: .normalRun)
+            // https://docs.leanplum.com/reference#callbacks
+            // According to the doc all variables should be synced when lp start finishes
+            // Relying on this fact and sending the updated AB test variable
+            self.finishedStartingLeanplum?()
             // We need to check if the app is a clean install to use for
             // preventing the What's New URL from appearing.
             if self.prefs?.intForKey(PrefsKeys.IntroSeen) == nil {
                 self.prefs?.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
                 self.track(event: .firstRun)
+                self.lpState = .started(startedState: .firstRun)
             } else if self.prefs?.boolForKey("SecondRun") == nil {
                 self.prefs?.setBool(true, forKey: "SecondRun")
                 self.track(event: .secondRun)
+                self.lpState = .started(startedState: .secondRun)
             }
 
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
             self.recordSyncedClients(with: self.profile)
         })
+
+        NotificationCenter.default.addObserver(forName: .FirefoxAccountChanged, object: nil, queue: .main) { _ in
+            if !RustFirefoxAccounts.shared.hasAccount() {
+                LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
+            }
+        }
     }
 
     // Events
@@ -227,7 +287,11 @@ class LeanPlumClient {
     func isFxAPrePushEnabled() -> Bool {
         return AppConstants.MOZ_FXA_LEANPLUM_AB_PUSH_TEST && (useFxAPrePush?.boolValue() ?? false)
     }
-
+    
+    func isRunning() -> Bool {
+        return Leanplum.hasStarted()
+    }
+    
     /*
      This is used to determine if an app was installed after firefox was installed
      */
@@ -264,11 +328,11 @@ class LeanPlumClient {
         return (prefs?.stringForKey(PrefsKeys.KeyMailToOption) ?? "mailto:") == "mailto:"
     }
 
-    private func getSettings() -> LPSettings? {
+    func getSettings() -> LPSettings? {
         let bundle = Bundle.main
-        guard let appId = bundle.object(forInfoDictionaryKey: LPAppIdKey) as? String,
-              let productionKey = bundle.object(forInfoDictionaryKey: LPProductionKeyKey) as? String,
-              let developmentKey = bundle.object(forInfoDictionaryKey: LPDevelopmentKeyKey) as? String else {
+        guard let appId = bundle.object(forInfoDictionaryKey: LPAppIdKey) as? String, !appId.isEmpty,
+            let productionKey = bundle.object(forInfoDictionaryKey: LPProductionKeyKey) as? String, !productionKey.isEmpty,
+            let developmentKey = bundle.object(forInfoDictionaryKey: LPDevelopmentKeyKey) as? String, !developmentKey.isEmpty else {
             return nil
         }
         return LPSettings(appId: appId, developmentKey: developmentKey, productionKey: productionKey)
@@ -296,34 +360,29 @@ class LeanPlumClient {
                 return false
             }
 
-            guard let context = context else {
-                return false
-            }
-
             // Don't display permission screen if they have already allowed/disabled push permissions
-            if self.prefs?.boolForKey(AppRequestedUserNotificationsPrefKey) ?? false {
-                FxALoginHelper.sharedInstance.readyForSyncing()
-                return false
-            }
+//            if self.prefs?.boolForKey(applicationDidRequestUserNotificationPermissionPrefKey) ?? false {
+//                return false
+//            }
 
             // Present Alert View onto the current top view controller
-            let rootViewController = UIApplication.topViewController()
-            let alert = UIAlertController(title: context.stringNamed(LPMessage.ArgTitleText), message: context.stringNamed(LPMessage.ArgMessageText), preferredStyle: .alert)
-
-            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgCancelButtonText), style: .cancel, handler: { (action) -> Void in
-                // Log cancel event and call ready for syncing
-                context.runTrackedActionNamed(LPMessage.ArgCancelAction)
-                FxALoginHelper.sharedInstance.readyForSyncing()
-            }))
-
-            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgAcceptButtonText), style: .default, handler: { (action) -> Void in
-                // Log accept event and present push permission modal
-                context.runTrackedActionNamed(LPMessage.ArgAcceptAction)
-                FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
-                self.prefs?.setBool(true, forKey: AppRequestedUserNotificationsPrefKey)
-            }))
-
-            rootViewController?.present(alert, animated: true, completion: nil)
+//            let rootViewController = UIApplication.topViewController()
+//            let alert = UIAlertController(title: context.stringNamed(LPMessage.ArgTitleText), message: context.stringNamed(LPMessage.ArgMessageText), preferredStyle: .alert)
+//
+//            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgCancelButtonText), style: .cancel, handler: { (action) -> Void in
+//                // Log cancel event and call ready for syncing
+//                context.runTrackedActionNamed(LPMessage.ArgCancelAction)
+//                FxALoginHelper.sharedInstance.readyForSyncing()
+//            }))
+//
+//            alert.addAction(UIAlertAction(title: context.stringNamed(LPMessage.ArgAcceptButtonText), style: .default, handler: { (action) -> Void in
+//                // Log accept event and present push permission modal
+//                context.runTrackedActionNamed(LPMessage.ArgAcceptAction)
+//                FxALoginHelper.sharedInstance.requestUserNotifications(UIApplication.shared)
+//                self.prefs?.setBool(true, forKey: applicationDidRequestUserNotificationPermissionPrefKey)
+//            }))
+//
+//            rootViewController?.present(alert, animated: true, completion: nil)
             return true
         }
 

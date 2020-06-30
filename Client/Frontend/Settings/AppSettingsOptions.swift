@@ -7,6 +7,7 @@ import Shared
 import Account
 import SwiftKeychainWrapper
 import LocalAuthentication
+import Glean
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -46,9 +47,8 @@ class ConnectSetting: WithoutAccountSetting {
     override var accessibilityIdentifier: String? { return "SignInToSync" }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
-        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
-        viewController.delegate = self
+        let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -307,69 +307,25 @@ class AccountStatusSetting: WithAccountSetting {
         }
     }
 
-    override var image: UIImage? {
-        if let image = profile.getAccount()?.fxaProfile?.avatar.image {
-            return image.createScaled(CGSize(width: 30, height: 30))
-        }
-
-        let image = UIImage(named: "placeholder-avatar")
-        return image?.createScaled(CGSize(width: 30, height: 30))
-    }
-
     override var accessoryView: UIImageView? {
-        if let account = profile.getAccount() {
-            switch account.actionNeeded {
-            case .needsVerification:
-                // We link to the resend verification email page.
-                return disclosureIndicator
-            case .needsPassword:
-                 // We link to the re-enter password page.
-                return disclosureIndicator
-            case .none:
-                // We link to FxA web /settings.
-                return disclosureIndicator
-            case .needsUpgrade:
-                // In future, we'll want to link to an upgrade page.
-                return nil
-            }
-        }
         return disclosureIndicator
     }
 
     override var title: NSAttributedString? {
-        if let account = profile.getAccount() {
-
-            if let displayName = account.fxaProfile?.displayName {
-                return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
-            }
-
-            if let email = account.fxaProfile?.email {
-                return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
-            }
-
-            return NSAttributedString(string: account.email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
+        if let displayName = RustFirefoxAccounts.shared.userProfile?.displayName {
+            return NSAttributedString(string: displayName, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
         }
+
+        if let email = RustFirefoxAccounts.shared.userProfile?.email {
+            return NSAttributedString(string: email, attributes: [NSAttributedString.Key.font: DynamicFontHelper.defaultHelper.DefaultStandardFontBold, NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.syncText])
+        }
+
         return nil
     }
 
     override var status: NSAttributedString? {
-        if let account = profile.getAccount() {
-            var string: String
-
-            switch account.actionNeeded {
-            case .none:
-                return nil
-            case .needsVerification:
-                string = Strings.FxAAccountVerifyEmail
-                break
-            case .needsPassword:
-                string = Strings.FxAAccountVerifyPassword
-                break
-            case .needsUpgrade:
-                string = Strings.FxAAccountUpgradeFirefox
-                break
-            }
-
+        if RustFirefoxAccounts.shared.isActionNeeded {
+            let string = Strings.FxAAccountVerifyPassword
             let orange = UIColor.theme.tableView.warningText
             let range = NSRange(location: 0, length: string.count)
             let attrs = [NSAttributedString.Key.foregroundColor: orange]
@@ -381,34 +337,15 @@ class AccountStatusSetting: WithAccountSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        let fxaParams = FxALaunchParams(query: ["entrypoint": "preferences"])
-        let viewController = FxAContentViewController(profile: profile, fxaOptions: fxaParams)
-        viewController.delegate = self
-
-        if let account = profile.getAccount() {
-            switch account.actionNeeded {
-            case .none:
-                let viewController = SyncContentSettingsViewController()
-                viewController.profile = profile
-                navigationController?.pushViewController(viewController, animated: true)
-                return
-            case .needsVerification:
-                var cs = URLComponents(url: account.configuration.settingsURL, resolvingAgainstBaseURL: false)
-                cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                if let url = cs?.url {
-                    viewController.url = url
-                }
-            case .needsPassword:
-                var cs = URLComponents(url: account.configuration.forceAuthURL, resolvingAgainstBaseURL: false)
-                cs?.queryItems?.append(URLQueryItem(name: "email", value: account.email))
-                if let url = cs?.url {
-                    viewController.url = url
-                }
-            case .needsUpgrade:
-                // In future, we'll want to link to an upgrade page.
-                return
-            }
+        guard !profile.rustFxA.accountNeedsReauth() else {
+            let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
+            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+            navigationController?.pushViewController(vc, animated: true)
+            return
         }
+
+        let viewController = SyncContentSettingsViewController()
+        viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -419,74 +356,13 @@ class AccountStatusSetting: WithAccountSetting {
             imageView.frame = CGRect(width: 30, height: 30)
             imageView.layer.cornerRadius = (imageView.frame.height) / 2
             imageView.layer.masksToBounds = true
-            imageView.image = image
+
+            imageView.image = UIImage(named: "placeholder-avatar")!.createScaled(CGSize(width: 30, height: 30))
+
+            RustFirefoxAccounts.shared.avatar?.image.uponQueue(.main) { image in
+                imageView.image = image.createScaled(CGSize(width: 30, height: 30))
+            }
         }
-    }
-}
-
-// For great debugging!
-class RequirePasswordDebugSetting: WithAccountSetting {
-    override var hidden: Bool {
-        if !ShowDebugSettings {
-            return true
-        }
-        if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.needsPassword {
-            return false
-        }
-        return true
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: require password", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        profile.getAccount()?.makeSeparated()
-        settings.tableView.reloadData()
-    }
-}
-
-// For great debugging!
-class RequireUpgradeDebugSetting: WithAccountSetting {
-    override var hidden: Bool {
-        if !ShowDebugSettings {
-            return true
-        }
-        if let account = profile.getAccount(), account.actionNeeded != FxAActionNeeded.needsUpgrade {
-            return false
-        }
-        return true
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: require upgrade", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        profile.getAccount()?.makeDoghouse()
-        settings.tableView.reloadData()
-    }
-}
-
-// For great debugging!
-class ForgetSyncAuthStateDebugSetting: WithAccountSetting {
-    override var hidden: Bool {
-        if !ShowDebugSettings {
-            return true
-        }
-        if let _ = profile.getAccount() {
-            return false
-        }
-        return true
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        profile.getAccount()?.syncAuthState.invalidate()
-        settings.tableView.reloadData()
     }
 }
 
@@ -581,6 +457,20 @@ class ForceCrashSetting: HiddenSetting {
     }
 }
 
+class ChangeToChinaSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: toggle China version (needs restart)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        if UserDefaults.standard.bool(forKey: debugPrefIsChinaEdition) {
+            UserDefaults.standard.removeObject(forKey: debugPrefIsChinaEdition)
+        } else {
+            UserDefaults.standard.set(true, forKey: debugPrefIsChinaEdition)
+        }
+    }
+}
+
 class SlowTheDatabase: HiddenSetting {
     override var title: NSAttributedString? {
         return NSAttributedString(string: "Debug: simulate slow database operations", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -591,10 +481,21 @@ class SlowTheDatabase: HiddenSetting {
     }
 }
 
+class ForgetSyncAuthStateDebugSetting: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        settings.profile.rustFxA.syncAuthState.invalidate()
+        settings.tableView.reloadData()
+    }
+}
+
 class SentryIDSetting: HiddenSetting {
     let deviceAppHash = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)?.string(forKey: "SentryDeviceAppHash") ?? "0000000000000000000000000000000000000000"
     override var title: NSAttributedString? {
-        return NSAttributedString(string: "Debug: \(deviceAppHash)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
+        return NSAttributedString(string: "Sentry ID: \(deviceAppHash)", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 10)])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -621,11 +522,84 @@ class SentryIDSetting: HiddenSetting {
     }
 }
 
+class ShowEtpCoverSheet: HiddenSetting {
+    let profile: Profile
+    
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: ETP Cover Sheet On", comment: "Debug option to show ETP Cover Sheet"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+    
+    override init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        super.init(settings: settings)
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        BrowserViewController.foregroundBVC().hasTriedToPresentETPAlready = false
+        // ETP is shown when user opens app for 3rd time on clean install.
+        // Hence setting session to 2 (0,1,2) for 3rd install as it starts from 0 being 1st session
+        self.profile.prefs.setInt(2, forKey: PrefsKeys.KeyInstallSession)
+        self.profile.prefs.setString(ETPCoverSheetShowType.CleanInstall.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+    }
+}
+
+class ToggleOnboarding: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: NSLocalizedString("Debug: Toggle onboarding type", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let onboardingResearch = OnboardingUserResearch()
+        let type = onboardingResearch.onboardingScreenType
+        var newOnboardingType: OnboardingScreenType = .versionV2
+        if type == nil {
+            newOnboardingType = .versionV1
+        } else if type == .versionV2 {
+            newOnboardingType = .versionV1
+        }
+        OnboardingUserResearch().onboardingScreenType = newOnboardingType
+    }
+}
+
+class LeanplumStatus: HiddenSetting {
+    let lplumSetupType = LeanPlumClient.shared.lpSetupType()
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "LP Setup: \(lplumSetupType) | Started: \(LeanPlumClient.shared.isRunning()) | Device ID: \(LeanPlumClient.shared.leanplumDeviceId ?? "")", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+    
+    override func onClick(_ navigationController: UINavigationController?) {
+        copyLeanplumDeviceIDAndPresentAlert(by: navigationController)
+    }
+    
+    func copyLeanplumDeviceIDAndPresentAlert(by navigationController: UINavigationController?) {
+        let alertTitle = Strings.SettingsCopyAppVersionAlertTitle
+        let alert = AlertController(title: alertTitle, message: nil, preferredStyle: .alert)
+        UIPasteboard.general.string = "\(LeanPlumClient.shared.leanplumDeviceId ?? "")"
+        navigationController?.topViewController?.present(alert, animated: true) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                alert.dismiss(animated: true)
+            }
+        }
+    }
+}
+
+class ClearOnboardingABVariables: HiddenSetting {
+    override var title: NSAttributedString? {
+        // If we are running an A/B test this will also fetch the A/B test variables from leanplum. Re-open app to see the effect.
+        return NSAttributedString(string: NSLocalizedString("Debug: Clear onboarding AB variables", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        settings.profile.prefs.removeObjectForKey(PrefsKeys.IntroSeen)
+        OnboardingUserResearch().onboardingScreenType = nil
+    }
+}
+
 // Show the current version of Firefox
 class VersionSetting: Setting {
     unowned let settings: SettingsTableViewController
 
-     override var accessibilityIdentifier: String? { return "FxVersion" }
+    override var accessibilityIdentifier: String? { return "FxVersion" }
 
     init(settings: SettingsTableViewController) {
         self.settings = settings
@@ -633,9 +607,15 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        let appVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
-        let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of XRViewer shown in settings"), appVersion, buildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of XRViewer shown in settings"),  VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+    
+    public static var appVersion: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+    }
+    
+    public static var appBuildNumber: String {
+        return Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -754,6 +734,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
                 AdjustIntegration.setEnabled($0)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.telemetryOptIn: $0])
                 LeanPlumClient.shared.set(enabled: $0)
+                Glean.shared.setUploadEnabled($0)
             }
         )
     }
@@ -938,10 +919,14 @@ class PrivacyPolicySetting: Setting {
     }
 }
 
-class ChinaSyncServiceSetting: WithoutAccountSetting {
+class ChinaSyncServiceSetting: Setting {
     override var accessoryType: UITableViewCell.AccessoryType { return .none }
-    var prefs: Prefs { return settings.profile.prefs }
-    let prefKey = "useChinaSyncService"
+    var prefs: Prefs { return profile.prefs }
+    let prefKey = PrefsKeys.KeyEnableChinaSyncService
+    let profile: Profile
+    let settings: UIViewController
+
+    override var hidden: Bool { return !AppInfo.isChinaEdition }
 
     override var title: NSAttributedString? {
         return NSAttributedString(string: "本地同步服务", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
@@ -951,46 +936,9 @@ class ChinaSyncServiceSetting: WithoutAccountSetting {
         return NSAttributedString(string: "禁用后使用全球服务同步数据", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
     }
 
-    override func onConfigureCell(_ cell: UITableViewCell) {
-        super.onConfigureCell(cell)
-        let control = UISwitchThemed()
-        control.onTintColor = UIColor.theme.tableView.controlTint
-        control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? BrowserProfile.isChinaEdition
-        cell.accessoryView = control
-        cell.selectionStyle = .none
-    }
-
-    @objc func switchValueChanged(_ toggle: UISwitch) {
-        prefs.setObject(toggle.isOn, forKey: prefKey)
-    }
-}
-
-class StageSyncServiceDebugSetting: WithoutAccountSetting {
-    override var accessoryType: UITableViewCell.AccessoryType { return .none }
-    var prefs: Prefs { return settings.profile.prefs }
-
-    var prefKey: String = "useStageSyncService"
-
-    override var accessibilityIdentifier: String? { return "DebugStageSync" }
-
-    override var hidden: Bool {
-        if !ShowDebugSettings {
-            return true
-        }
-        if let _ = profile.getAccount() {
-            return true
-        }
-        return false
-    }
-
-    override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: use stage servers", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
-    }
-
-    override var status: NSAttributedString? {
-        let configurationURL = profile.accountConfiguration.authEndpointURL
-        return NSAttributedString(string: configurationURL.absoluteString, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.headerTextLight])
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+        self.settings = settings
     }
 
     override func onConfigureCell(_ cell: UITableViewCell) {
@@ -998,14 +946,34 @@ class StageSyncServiceDebugSetting: WithoutAccountSetting {
         let control = UISwitchThemed()
         control.onTintColor = UIColor.theme.tableView.controlTint
         control.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-        control.isOn = prefs.boolForKey(prefKey) ?? false
+        control.isOn = prefs.boolForKey(prefKey) ?? AppInfo.isChinaEdition
         cell.accessoryView = control
         cell.selectionStyle = .none
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
-        prefs.setObject(toggle.isOn, forKey: prefKey)
-        settings.tableView.reloadData()
+        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
+        guard profile.rustFxA.hasAccount() else {
+            prefs.setObject(toggle.isOn, forKey: prefKey)
+            RustFirefoxAccounts.reconfig(prefs: profile.prefs)
+            return
+        }
+
+        // Show confirmation dialog for the user to sign out of FxA
+
+        let msg = "更改此设置后，再次登录您的帐户" // "Sign-in again to your account after changing this setting"
+        let alert = UIAlertController(title: "", message: msg, preferredStyle: .alert)
+        let ok = UIAlertAction(title: Strings.OKString, style: .default) { _ in
+            self.prefs.setObject(toggle.isOn, forKey: self.prefKey)
+            self.profile.removeAccount()
+            RustFirefoxAccounts.reconfig(prefs: self.profile.prefs)
+        }
+        let cancel = UIAlertAction(title: Strings.CancelString, style: .default) { _ in
+            toggle.setOn(!toggle.isOn, animated: true)
+        }
+        alert.addAction(ok)
+        alert.addAction(cancel)
+        settings.present(alert, animated: true)
     }
 }
 

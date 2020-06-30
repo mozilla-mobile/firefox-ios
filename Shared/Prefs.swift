@@ -5,6 +5,9 @@
 import Foundation
 
 public struct PrefsKeys {
+    // When this pref is set (by the user) it overrides default behaviour which is just based on app locale.
+    public static let KeyEnableChinaSyncService = "useChinaSyncService"
+
     public static let KeyLastRemoteTabSyncTime = "lastRemoteTabSyncTime"
     public static let KeyLastSyncFinishTime = "lastSyncFinishTime"
     public static let KeyDefaultHomePageURL = "KeyDefaultHomePageURL"
@@ -13,6 +16,7 @@ public struct PrefsKeys {
     public static let KeyNightModeStatus = "NightModeStatus"
     public static let KeyNightModeEnabledDarkTheme = "NightModeEnabledDarkTheme"
     public static let KeyMailToOption = "MailToOption"
+    public static let KeyLastVersionNumber = "KeyLastVersionNumber"
     public static let HasFocusInstalled = "HasFocusInstalled"
     public static let HasPocketInstalled = "HasPocketInstalled"
     public static let IntroSeen = "IntroViewControllerSeen"
@@ -21,6 +25,10 @@ public struct PrefsKeys {
     public static let NumberOfTopSiteRows = "NumberOfTopSiteRows"
     public static let LoginsSaveEnabled = "saveLogins"
     public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
+    public static let KeyInstallSession = "installSessionNumber"
+    public static let KeyETPCoverSheetShowType = "etpCoverSheetShowType"
+
+    public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
 
     public static let NewTabCustomUrlPrefKey = "HomePageURLPref"
     //Activity Stream
@@ -34,19 +42,16 @@ public struct PrefsKeys {
 
     public static let KeyUseCustomSyncTokenServerOverride = "useCustomSyncTokenServerOverride"
     public static let KeyCustomSyncTokenServerOverride = "customSyncTokenServerOverride"
-
-    public static let KeyUseCustomAccountAutoconfig = "useCustomSyncService"
-    public static let KeyCustomSyncToken = "customSyncTokenServer"
-    public static let KeyCustomSyncProfile = "customSyncProfileServer"
-    public static let KeyCustomSyncOauth = "customSyncOauthServer"
-    public static let KeyCustomSyncAuth = "customSyncAuthServer"
-    public static let KeyCustomSyncWeb = "customSyncWebServer"
+    public static let KeyUseCustomFxAContentServer = "useCustomFxAContentServer"
+    public static let KeyCustomFxAContentServer = "customFxAContentServer"
     public static let UseStageServer = "useStageSyncService"
     public static let KeyFxALastCommandIndex = "FxALastCommandIndex"
     public static let KeyFxAHandledCommands = "FxAHandledCommands"
 
     public static let AppExtensionTelemetryOpenUrl = "AppExtensionTelemetryOpenUrl"
     public static let AppExtensionTelemetryEventArray = "AppExtensionTelemetryEvents"
+
+    public static let KeyBlockPopups = "blockPopups"
 }
 
 public struct PrefsDefaults {

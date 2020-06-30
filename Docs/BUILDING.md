@@ -1,10 +1,10 @@
 Building Firefox for iOS
 ========================
 
-Prerequisites, as of *February 14, 2017*:
+Prerequisites, as of *February 20, 2020*:
 
-* Mac OS X 10.11.5
-* Xcode 8.2.1 with the iOS 10 SDK (Betas not supported)
+* Mac OS X 10.15
+* Xcode 11.3, Swift 5.1.3, and the iOS 11 SDK (Betas not supported)
 * Carthage 0.15 or newer
 
 When running on a device:
@@ -45,13 +45,31 @@ At this point you have checked out the source code for both the Firefox for iOS 
 
 Everything after this point is done from within Xcode.
 
+Pointing to Local Rust Components (Application Services)
+--------------------
+
+Firefox for iOS depends internally on some of the [shared Rust components](https://github.com/mozilla/application-services). Sometimes, you may want to also point to your local Rust components when building locally. You can do so by:
+
+1. First ensure you can [build application-services](https://github.com/mozilla/application-services/blob/main/docs/building.md) locally.
+2. Next, `carthage build --no-skip-current --platform iOS --verbose --configuration Debug --cache-builds`.
+3. Now back in firefox-ios, after `carthage bootstrap`, replace the application-services library with a symlink:
+
+  ```
+  rm -rf Carthage/Build/iOS/MozillaAppServices.framework
+  ln -s ~/REPLACE_WITH_PATH_TO_YOUR_LOCAL_CHECKOUT/application-services/Carthage/Build/iOS/Static/MozillaAppServices.framework Carthage/Build/iOS
+  ```
+
+4. Build firefox-ios.
+
+Every time you make a change to application-services, re-run the carthage build command shown in step #2.
+
 Run on the Simulator
 -----------------
 
 * Open `Client.xcodeproj` and make sure you have the *Fennec* scheme and a simulated device selected. The app should run on any simulator. We just have not tested very well on the *Resizable iPad* and *Resizable iPhone* simulators.
 * Select *Product -> Run* and the application should build and run on the selected simulator.
 
-Run on a Device with Xcode 8 and a Free Developer Account
+Run on a Device with Xcode 11.3 and a Free Developer Account
 ---------------
 
 > Only follow these instructions if you are using the free personal developer accounts. Simply add your Apple ID as an account in Xcode.

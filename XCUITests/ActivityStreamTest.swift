@@ -24,9 +24,9 @@ class ActivityStreamTest: BaseTestCase {
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
             if iPad() {
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + pagesVisitediPad]
+                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPad]
             } else {
-                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone]
+                launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + pagesVisitediPhone]
             }
         }
         super.setUp()
@@ -172,8 +172,8 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(TopSiteCellgroup.cells["apple"])
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
         app.tables["Context Menu"].cells["Open in New Tab"].tap()
+        // The new tab is open but curren screen is still Homescreen
         XCTAssert(TopSiteCellgroup.exists)
-        XCTAssertFalse(app.staticTexts["apple"].exists)
 
         navigator.goto(TabTray)
         app.collectionViews.cells["Home"].tap()
@@ -191,6 +191,10 @@ class ActivityStreamTest: BaseTestCase {
         app.cells["TopSitesCell"].cells.element(boundBy: 3).press(forDuration:1)
         selectOptionFromContextMenu(option: "Open in New Tab")
         // Check that two tabs are open and one of them is the default top site one
+        // Needed for BB to work after iOS 13.3 update
+        sleep(1)
+        waitForNoExistence(app.tables["Context Menu"], timeoutValue: 15)
+        navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
         let numTabsOpen = app.collectionViews.cells.count
@@ -236,7 +240,10 @@ class ActivityStreamTest: BaseTestCase {
 
         // Check that two tabs are open and one of them is the default top site one
         // Workaroud needed after xcode 11.3 update Issue 5937
-        sleep(1)
+        sleep(3)
+        navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
+
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
         waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])

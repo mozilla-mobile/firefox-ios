@@ -23,7 +23,7 @@ class HistoryTests: BaseTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + historyDB]
+            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB]
         }
         super.setUp()
     }
@@ -236,9 +236,9 @@ class HistoryTests: BaseTestCase {
     }
     
     private func navigateToGoogle(){
-        navigator.openURL("google.com")
+        navigator.openURL("example.com")
         navigator.goto(LibraryPanel_History)
-        XCTAssertTrue(app.tables.cells.staticTexts["Google"].exists)
+        XCTAssertTrue(app.tables.cells.staticTexts["Example Domain"].exists)
     }
     
     func testClearRecentHistory() {
@@ -278,7 +278,9 @@ class HistoryTests: BaseTestCase {
         // Tapping everything removes both current data and older data.
         tapOnClearRecentHistoryOption(optionSelected: "Everything")
         for entry in oldHistoryEntries {
-            XCTAssertFalse(app.tables.cells.staticTexts[entry].exists)
+            waitForNoExistence(app.tables.cells.staticTexts[entry], timeoutValue: 10)
+
+        XCTAssertFalse(app.tables.cells.staticTexts[entry].exists, "History not removed")
         }
         XCTAssertFalse(app.tables.cells.staticTexts["Google"].exists)
         
@@ -291,5 +293,17 @@ class HistoryTests: BaseTestCase {
         for option in clearRecentHistoryOptions {
             XCTAssertTrue(app.sheets.buttons[option].exists)
         }
+    }
+
+    // Smoketest
+    func testDeleteHistoryEntryBySwiping() {
+        navigateToGoogle()
+        navigator.goto(LibraryPanel_History)
+        print(app.debugDescription)
+        waitForExistence(app.cells.staticTexts["http://example.com/"], timeout: 10)
+        app.cells.staticTexts["http://example.com/"].firstMatch.swipeLeft()
+        waitForExistence(app.buttons["Delete"], timeout: 10)
+        app.buttons["Delete"].tap()
+        waitForNoExistence(app.staticTexts["http://example.com"])
     }
 }

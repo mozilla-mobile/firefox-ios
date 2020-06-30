@@ -49,7 +49,7 @@ open class MockSyncManager: SyncManager {
     open func onAddedAccount() -> Success {
         return succeed()
     }
-    open func onRemovedAccount(_ account: Account.FirefoxAccount?) -> Success {
+    open func onRemovedAccount() -> Success {
         return succeed()
     }
 
@@ -99,6 +99,10 @@ class MockFiles: FileAccessor {
 }
 
 open class MockProfile: Client.Profile {
+    public var rustFxA: RustFirefoxAccounts {
+        return RustFirefoxAccounts.shared
+    }
+
     // Read/Writeable properties for mocking
     public var recommendations: HistoryRecommendations
     public var places: RustPlaces
@@ -122,7 +126,9 @@ open class MockProfile: Client.Profile {
         files = MockFiles()
         syncManager = MockSyncManager()
         let loginsDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_logins.db").path
-        logins = RustLogins(databasePath: loginsDatabasePath, encryptionKey: "AAAAAAAA")
+        let encryptionKey = "AAAAAAAA"
+        let salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: loginsDatabasePath, encryptionKey: encryptionKey)
+        logins = RustLogins(databasePath: loginsDatabasePath, encryptionKey: encryptionKey, salt: salt)
         db = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
         readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
         let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path
@@ -198,34 +204,18 @@ open class MockProfile: Client.Profile {
         return SQLiteRemoteClientsAndTabs(db: self.db)
     }()
 
-    public lazy var accountConfiguration: FirefoxAccountConfiguration = {
-        return ProductionFirefoxAccountConfiguration(prefs: self.prefs)
-    }()
-    var account: Account.FirefoxAccount?
-
     public func hasAccount() -> Bool {
-        return account != nil
+        return true
     }
 
     public func hasSyncableAccount() -> Bool {
-        return account?.actionNeeded == FxAActionNeeded.none
-    }
-
-    public func getAccount() -> Account.FirefoxAccount? {
-        return account
-    }
-
-    public func setAccount(_ account: Account.FirefoxAccount) {
-        self.account = account
-        self.syncManager.onAddedAccount()
+        return true
     }
 
     public func flushAccount() {}
 
     public func removeAccount() {
-        let old = self.account
-        self.account = nil
-        self.syncManager.onRemovedAccount(old)
+        self.syncManager.onRemovedAccount()
     }
 
     public func getClients() -> Deferred<Maybe<[RemoteClient]>> {

@@ -100,7 +100,7 @@ extension BrowserViewController: WKUIDelegate {
     @available(iOS 13.0, *)
     func webView(_ webView: WKWebView, contextMenuConfigurationForElement elementInfo: WKContextMenuElementInfo, completionHandler: @escaping (UIContextMenuConfiguration?) -> Void) {
         completionHandler(UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            guard let url = elementInfo.linkURL else { return nil }
+            guard let url = elementInfo.linkURL, self.profile.prefs.boolForKey(PrefsKeys.ContextMenuShowLinkPreviews) ?? true else { return nil }
             let previewViewController = UIViewController()
             previewViewController.view.isUserInteractionEnabled = false
             let clonedWebView = WKWebView(frame: webView.frame, configuration: webView.configuration)
@@ -168,8 +168,7 @@ extension BrowserViewController: WKUIDelegate {
 
             actions.append(UIAction(title: Strings.ContextMenuDownloadLink, image: UIImage.templateImageNamed("menu-panel-Downloads"), identifier: UIAction.Identifier("linkContextMenu.download")) {_ in
                 self.pendingDownloadWebView = currentTab.webView
-                currentTab.webView?.evaluateJavaScript("window.__firefox__.download('\(url.absoluteString)', '\(UserScriptManager.securityToken)')")
-                UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
+                DownloadContentScript.requestDownload(url: url, tab: currentTab)
             })
 
             actions.append(UIAction(title: Strings.ContextMenuCopyLink, image: UIImage.templateImageNamed("menu-Copy-Link"), identifier: UIAction.Identifier("linkContextMenu.copyLink")) { _ in
@@ -187,22 +186,26 @@ extension BrowserViewController: WKUIDelegate {
                 let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
                 actions.append(UIAction(title: Strings.ContextMenuSaveImage, identifier: UIAction.Identifier("linkContextMenu.saveImage")) { _ in
                     let handlePhotoLibraryAuthorized = {
-                        getImageData(url) { data in
-                            PHPhotoLibrary.shared().performChanges({
-                                PHAssetCreationRequest.forAsset().addResource(with: .photo, data: data, options: nil)
-                            })
+                        DispatchQueue.main.async {
+                            getImageData(url) { data in
+                                PHPhotoLibrary.shared().performChanges({
+                                    PHAssetCreationRequest.forAsset().addResource(with: .photo, data: data, options: nil)
+                                })
+                            }
                         }
                     }
 
                     let handlePhotoLibraryDenied = {
-                        let accessDenied = UIAlertController(title: Strings.PhotoLibraryFirefoxWouldLikeAccessTitle, message: Strings.PhotoLibraryFirefoxWouldLikeAccessMessage, preferredStyle: .alert)
-                        let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
-                        accessDenied.addAction(dismissAction)
-                        let settingsAction = UIAlertAction(title: Strings.OpenSettingsString, style: .default ) { _ in
-                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+                        DispatchQueue.main.async {
+                            let accessDenied = UIAlertController(title: Strings.PhotoLibraryFirefoxWouldLikeAccessTitle, message: Strings.PhotoLibraryFirefoxWouldLikeAccessMessage, preferredStyle: .alert)
+                            let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
+                            accessDenied.addAction(dismissAction)
+                            let settingsAction = UIAlertAction(title: Strings.OpenSettingsString, style: .default ) { _ in
+                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+                            }
+                            accessDenied.addAction(settingsAction)
+                            self.present(accessDenied, animated: true, completion: nil)
                         }
-                        accessDenied.addAction(settingsAction)
-                        self.present(accessDenied, animated: true, completion: nil)
                     }
 
                     if photoAuthorizeStatus == .notDetermined {
@@ -394,7 +397,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Second special case are a set of URLs that look like regular http links, but should be handed over to iOS
         // instead of being loaded in the webview. Note that there is no point in calling canOpenURL() here, because
-        // iOS will always say yes. TODO Is this the same as isWhitelisted?
+        // iOS will always say yes.
 
         if isAppleMapsURL(url) {
             UIApplication.shared.open(url, options: [:])
@@ -438,29 +441,67 @@ extension BrowserViewController: WKNavigationDelegate {
             return
         }
 
+        // https://blog.mozilla.org/security/2017/11/27/blocking-top-level-navigations-data-urls-firefox-59/
+        if url.scheme == "data" {
+            let url = url.absoluteString
+            // Allow certain image types
+            if url.hasPrefix("data:image/") && !url.hasPrefix("data:image/svg+xml") {
+                decisionHandler(.allow)
+                return
+            }
+
+            // Allow video, and certain application types
+            if url.hasPrefix("data:video/") || url.hasPrefix("data:application/pdf") || url.hasPrefix("data:application/json") {
+                decisionHandler(.allow)
+                return
+            }
+
+            // Allow plain text types.
+            // Note the format of data URLs is `data:[<media type>][;base64],<data>` with empty <media type> indicating plain text.
+            if url.hasPrefix("data:;base64,") || url.hasPrefix("data:,") || url.hasPrefix("data:text/plain,") || url.hasPrefix("data:text/plain;") {
+                decisionHandler(.allow)
+                return
+            }
+
+            decisionHandler(.cancel)
+            return
+        }
+
         // This is the normal case, opening a http or https url, which we handle by loading them in this WKWebView. We
         // always allow this. Additionally, data URIs are also handled just like normal web pages.
 
-        if ["http", "https", "data", "blob", "file"].contains(url.scheme) {
+        if ["http", "https", "blob", "file"].contains(url.scheme) {
             if navigationAction.targetFrame?.isMainFrame ?? false {
                 tab.changedUserAgent = Tab.ChangeUserAgent.contains(url: url)
             }
 
             pendingRequests[url.absoluteString] = navigationAction.request
+
+            if tab.changedUserAgent {
+                let platformSpecificUserAgent = UserAgent.oppositeUserAgent(domain: url.baseDomain ?? "")
+                webView.customUserAgent = platformSpecificUserAgent
+            } else {
+                webView.customUserAgent = UserAgent.getUserAgent(domain: url.baseDomain ?? "")
+            }
+            
             decisionHandler(.allow)
             return
         }
 
         if !(url.scheme?.contains("firefox") ?? true) {
-            UIApplication.shared.open(url, options: [:]) { openedURL in
-                // Do not show error message for JS navigated links or redirect as it's not the result of a user action.
-                if !openedURL, navigationAction.navigationType == .linkActivated {
-                    let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: Strings.OKString, style: .default, handler: nil))
-                    self.present(alert, animated: true, completion: nil)
+            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
+                guard isOk else { return }
+                UIApplication.shared.open(url, options: [:]) { openedURL in
+                    // Do not show error message for JS navigated links or redirect as it's not the result of a user action.
+                    if !openedURL, navigationAction.navigationType == .linkActivated {
+                        let alert = UIAlertController(title: Strings.UnableToOpenURLErrorTitle, message: Strings.UnableToOpenURLError, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: Strings.OKString, style: .default, handler: nil))
+                        self.present(alert, animated: true, completion: nil)
+                    }
                 }
             }
         }
+
         decisionHandler(.cancel)
     }
 
@@ -627,6 +668,9 @@ extension BrowserViewController: WKNavigationDelegate {
         guard let tab = tabManager[webView] else { return }
 
         tab.url = webView.url
+        // When tab url changes after web content starts loading on the page
+        // We notify the contect blocker change so that content blocker status can be correctly shown on beside the URL bar
+        tab.contentBlocker?.notifyContentBlockingChanged()
         self.scrollController.resetZoomState()
 
         if tabManager.selectedTab === tab {

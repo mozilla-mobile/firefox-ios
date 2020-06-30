@@ -25,7 +25,7 @@ class HomePageSettingsUITests: BaseTestCase {
         let key = String(parts[1])
         if testWithDB.contains(key) {
             // for the current test name, add the db fixture used
-            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + prefilledTopSites]
+            launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + prefilledTopSites]
         }
         super.setUp()
     }
@@ -196,7 +196,6 @@ class HomePageSettingsUITests: BaseTestCase {
         enterWebPageAsHomepage(text: websiteUrl1)
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
         navigator.goto(SettingsScreen)
-        //Assert that the label showing up in Settings is equal to the URL entere (NOT CURRENTLY WORKING, SHOWING HOMEPAGE INSTEAD OF URL)
         XCTAssertEqual(app.tables.cells["Home"].label, "Home, Homepage")
         //Switch to FXHome and check label
         navigator.performAction(Action.SelectHomeAsFirefoxHomePage)

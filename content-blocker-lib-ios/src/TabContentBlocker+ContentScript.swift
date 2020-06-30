@@ -11,14 +11,15 @@ extension TabContentBlocker {
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
         guard isEnabled,
-            let body = message.body as? [String: [String]],
-            let urls = body["urls"],
-            let mainDocumentUrl = tab?.currentURL() else {
+            let body = message.body as? [String: Any],
+            let urls = body["urls"] as? [String],
+            let mainDocumentUrl = tab?.currentURL()
+        else {
             return
         }
 
-        // Reset the pageStats to make sure the trackingprotection shield icon knows that a page was whitelisted
-        guard !ContentBlocker.shared.isWhitelisted(url: mainDocumentUrl) else {
+        // Reset the pageStats to make sure the trackingprotection shield icon knows that a page was safelisted
+        guard !ContentBlocker.shared.isSafelisted(url: mainDocumentUrl) else {
             clearPageStats()
             return
         }

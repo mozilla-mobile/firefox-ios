@@ -60,9 +60,14 @@ class TestAppDelegate: AppDelegate {
             profile = BrowserProfile(localName: "testProfile", syncDelegate: application.syncDelegate)
         }
 
+        // Don't show the ETP Coversheet New page.
+        if launchArguments.contains(LaunchArguments.SkipETPCoverSheet) {
+            profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+        }
+        
         // Don't show the What's New page.
         if launchArguments.contains(LaunchArguments.SkipWhatsNew) {
-            profile.prefs.setString(AppInfo.appVersion, forKey: LatestAppVersionProfileKey)
+            profile.prefs.setInt(1, forKey: PrefsKeys.KeyLastVersionNumber)
         }
 
         // Skip the intro when requested by for example tests or automation

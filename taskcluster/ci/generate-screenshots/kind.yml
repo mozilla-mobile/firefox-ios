@@ -1,0 +1,29 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+---
+loader: ffios_taskgraph.loader.screenshots_locales:loader
+
+transforms:
+    - ffios_taskgraph.transforms.bitrise:transforms
+    - ffios_taskgraph.transforms.secrets:transforms
+    - taskgraph.transforms.job:transforms
+    - taskgraph.transforms.task:transforms
+
+kind-dependencies:
+    - build
+
+not-for-locales:
+    - en-US   # Already built as part of the build task
+
+locales-per-chunk: 6
+
+job-defaults:
+    bitrise-workflow: L10nScreenshotsTests
+    build-derived-data-path: {artifact-reference: '<build/public/build/target.zip>'}
+    description: Generate localized screenshots by delegating the work to bitrise.io
+    dependencies:
+        build: build-screenshots
+    index:
+        type: l10n-screenshots
+    run-on-tasks-for: []

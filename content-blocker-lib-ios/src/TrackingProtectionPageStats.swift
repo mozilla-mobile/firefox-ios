@@ -50,11 +50,11 @@ class TPStatsBlocklistChecker {
         }
 
         // Make a copy on the main thread
-        let whitelistRegex = ContentBlocker.shared.whitelistedDomains.domainRegex
+        let safelistRegex = ContentBlocker.shared.safelistedDomains.domainRegex
 
         DispatchQueue.global().async {
             // Return true in the Deferred if the domain could potentially be blocked
-            deferred.fill(blockLists.urlIsInList(url, mainDocumentURL: mainDocumentURL, whitelistedDomains: whitelistRegex))
+            deferred.fill(blockLists.urlIsInList(url, mainDocumentURL: mainDocumentURL, safelistedDomains: safelistRegex))
         }
         return deferred
     }
@@ -189,7 +189,7 @@ class TPStatsBlocklists {
         }
     }
 
-    func urlIsInList(_ url: URL, mainDocumentURL: URL, whitelistedDomains: [String]) -> BlocklistCategory? {
+    func urlIsInList(_ url: URL, mainDocumentURL: URL, safelistedDomains: [String]) -> BlocklistCategory? {
         let resourceString = url.absoluteString
 
         guard let firstPartyDomain = mainDocumentURL.baseDomain, let baseDomain = url.baseDomain, let rules = blockRules[baseDomain] else {
@@ -206,9 +206,9 @@ class TPStatsBlocklists {
                     }
                 }
 
-                // Check the whitelist.
-                if let baseDomain = url.baseDomain, !whitelistedDomains.isEmpty {
-                    for ignoreDomain in whitelistedDomains {
+                // Check the safelist.
+                if let baseDomain = url.baseDomain, !safelistedDomains.isEmpty {
+                    for ignoreDomain in safelistedDomains {
                         if baseDomain.range(of: ignoreDomain, options: .regularExpression) != nil {
                             return nil
                         }

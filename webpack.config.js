@@ -1,7 +1,7 @@
 const glob = require("glob");
 const path = require("path");
 
-const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const UglifyJsPlugin = require("terser-webpack-plugin");
 
 const AllFramesAtDocumentStart = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/*.js");
 const AllFramesAtDocumentEnd = glob.sync("./Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentEnd/*.js");
@@ -47,7 +47,7 @@ module.exports = {
           loader: "babel-loader",
           options: {
             presets: [
-              ["env", {
+              ["@babel/preset-env", {
                 targets: {
                   iOS: "10.3"
                 }

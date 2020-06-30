@@ -1,8 +1,20 @@
 #!/bin/bash
 
+set -ex
+
+
+function get_abs_path {
+    local file_path="$1"
+    echo "$( cd "$(dirname "$file_path")" >/dev/null 2>&1 ; pwd -P )"
+}
+
+CURRENT_DIR="$(get_abs_path $0)"
+PROJECT_DIR="$(get_abs_path $CURRENT_DIR/../../../..)"
+
+
 if [ -d l10n-screenshots ]; then
-  echo "The l10n-screenshots directory already exists. You decide."
-  exit 1
+    echo "The l10n-screenshots directory already exists. You decide."
+    exit 1
 fi
 
 if [ ! -d firefoxios-l10n ]; then
@@ -10,11 +22,17 @@ if [ ! -d firefoxios-l10n ]; then
     exit 1
 fi
 
-mkdir l10n-screenshots
+mkdir -p l10n-screenshots
+
+if [ "$1" = '--test-without-building' ]; then
+    EXTRA_FAST_LANE_ARGS='--test_without_building'
+    shift
+fi
 
 LOCALES=$*
 if [ $# -eq 0 ]; then
-  LOCALES="af ar ast az bg bn br bs ca cs cy da de dsb el en-GB en-US eo es es-CL es-MX eu fa fr ga-IE gd gl he hi-IN hsb hu hy-AM id is it ja kab kk km kn ko lo lt lv ml ms my nb-NO ne-NP nl nn-NO or pa-IN pl pt-BR pt-PT rm ro ru ses si sk sl sq sv-SE te th tl tn tr uk ur uz zh-CN zh-TW"
+    echo "Please provide locales to test. Available locales live in 'l10n-screenshots-config.yml'. E.g.: $0 af an anp ar"
+    exit 1
 fi
 
 for lang in $LOCALES; do
@@ -24,6 +42,8 @@ for lang in $LOCALES; do
         --skip_open_summary \
         --derived_data_path l10n-screenshots-dd \
         --erase_simulator --localize_simulator \
-        --devices "iPhone SE" --languages "$lang" \
-        --output_directory "l10n-screenshots/$lang" > "l10n-screenshots/$lang/snapshot.log" 2>&1
+        --devices "iPhone 8" --languages "$lang" \
+        --output_directory "l10n-screenshots/$lang" \
+        $EXTRA_FAST_LANE_ARGS
+    echo "Fastlane exited with code: $?"
 done

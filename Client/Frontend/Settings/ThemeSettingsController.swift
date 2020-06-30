@@ -174,6 +174,8 @@ class ThemeSettingsController: ThemedTableViewController {
         switch section {
         case .systemTheme:
             cell.textLabel?.text = Strings.SystemThemeSectionSwitchTitle
+            cell.textLabel?.numberOfLines = 0
+            cell.textLabel?.lineBreakMode = .byWordWrapping
 
             let control = UISwitchThemed()
 

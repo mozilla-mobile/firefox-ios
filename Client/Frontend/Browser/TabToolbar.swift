@@ -9,7 +9,7 @@ import Shared
 protocol TabToolbarProtocol: AnyObject {
     var tabToolbarDelegate: TabToolbarDelegate? { get set }
     var tabsButton: TabsButton { get }
-    var menuButton: ToolbarButton { get }
+    var appMenuButton: ToolbarButton { get }
     var libraryButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
@@ -20,6 +20,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updateForwardStatus(_ canGoForward: Bool)
     func updateReloadStatus(_ isLoading: Bool)
     func updatePageStatus(_ isWebPage: Bool)
+    func updateIsSearchStatus(_ isHomePage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
     func appMenuBadge(setVisible: Bool)
@@ -38,6 +39,13 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressLibrary(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+}
+
+fileprivate enum MiddleButtonState {
+    case reload
+    case stop
+    case search
 }
 
 @objcMembers
@@ -46,15 +54,40 @@ open class TabToolbarHelper: NSObject {
 
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
     let ImageStop = UIImage.templateImageNamed("nav-stop")
+    let ImageSearch = UIImage.templateImageNamed("search")
+
+    fileprivate func setMiddleButtonState(_ state: MiddleButtonState) {
+        switch state {
+            case .reload:
+                toolbar.stopReloadButton.setImage(ImageReload, for: .normal)
+                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+            case .stop:
+                toolbar.stopReloadButton.setImage(ImageStop, for: .normal)
+                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
+            case .search:
+                toolbar.stopReloadButton.setImage(ImageSearch, for: .normal)
+                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Search", comment: "Accessibility Label for the tab toolbar Search button")
+        }
+    }
 
     var loading: Bool = false {
         didSet {
-            if loading {
-                toolbar.stopReloadButton.setImage(ImageStop, for: .normal)
-                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
+            if !isSearch {
+                if loading {
+                    setMiddleButtonState(.stop)
+                } else {
+                    setMiddleButtonState(.reload)
+                }
+            }
+        }
+    }
+
+    var isSearch: Bool = false {
+        didSet {
+            if isSearch {
+                setMiddleButtonState(.search)
             } else {
-                toolbar.stopReloadButton.setImage(ImageReload, for: .normal)
-                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+                setMiddleButtonState(.stop)
             }
         }
     }
@@ -89,11 +122,11 @@ open class TabToolbarHelper: NSObject {
         let longPressGestureTabsButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTabs))
         toolbar.tabsButton.addGestureRecognizer(longPressGestureTabsButton)
 
-        toolbar.menuButton.contentMode = .center
-        toolbar.menuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
-        toolbar.menuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
-        toolbar.menuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
-        toolbar.menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        toolbar.appMenuButton.contentMode = .center
+        toolbar.appMenuButton.setImage(UIImage.templateImageNamed("nav-menu"), for: .normal)
+        toolbar.appMenuButton.accessibilityLabel = Strings.AppMenuButtonAccessibilityLabel
+        toolbar.appMenuButton.addTarget(self, action: #selector(didClickMenu), for: .touchUpInside)
+        toolbar.appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
 
         toolbar.libraryButton.contentMode = .center
         toolbar.libraryButton.setImage(UIImage.templateImageNamed("menu-library"), for: .normal)
@@ -132,16 +165,18 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didClickMenu() {
-        toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.menuButton)
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressMenu(toolbar, button: toolbar.appMenuButton)
     }
 
     func didClickLibrary() {
-        toolbar.tabToolbarDelegate?.tabToolbarDidPressLibrary(toolbar, button: toolbar.menuButton)
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressLibrary(toolbar, button: toolbar.appMenuButton)
     }
 
     func didClickStopReload() {
         if loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.stopReloadButton)
+        } else if isSearch {
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.stopReloadButton)
         } else {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.stopReloadButton)
         }
@@ -217,7 +252,7 @@ class TabToolbar: UIView {
     weak var tabToolbarDelegate: TabToolbarDelegate?
 
     let tabsButton = TabsButton()
-    let menuButton = ToolbarButton()
+    let appMenuButton = ToolbarButton()
     let libraryButton = ToolbarButton()
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
@@ -232,7 +267,7 @@ class TabToolbar: UIView {
     private let contentView = UIStackView()
 
     fileprivate override init(frame: CGRect) {
-        actionButtons = [backButton, forwardButton, stopReloadButton, tabsButton, menuButton]
+        actionButtons = [backButton, forwardButton, stopReloadButton, tabsButton, appMenuButton]
         super.init(frame: frame)
         setupAccessibility()
 
@@ -250,8 +285,8 @@ class TabToolbar: UIView {
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
-        appMenuBadge.layout(onButton: menuButton)
-        warningMenuBadge.layout(onButton: menuButton)
+        appMenuBadge.layout(onButton: appMenuButton)
+        warningMenuBadge.layout(onButton: appMenuButton)
 
         contentView.snp.makeConstraints { make in
             make.leading.trailing.top.equalTo(self)
@@ -265,7 +300,7 @@ class TabToolbar: UIView {
         forwardButton.accessibilityIdentifier = "TabToolbar.forwardButton"
         stopReloadButton.accessibilityIdentifier = "TabToolbar.stopReloadButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
-        menuButton.accessibilityIdentifier = "TabToolbar.menuButton"
+        appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
         accessibilityNavigationStyle = .combined
         accessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
     }
@@ -326,11 +361,15 @@ extension TabToolbar: TabToolbarProtocol {
     }
 
     func updatePageStatus(_ isWebPage: Bool) {
-        stopReloadButton.isEnabled = isWebPage
+
     }
 
     func updateTabCount(_ count: Int, animated: Bool) {
         tabsButton.updateTabCount(count, animated: animated)
+    }
+
+    func updateIsSearchStatus(_ isSearch: Bool) {
+        helper?.isSearch = isSearch
     }
 }
 

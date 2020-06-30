@@ -155,6 +155,8 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     // MARK: - Loading data
 
     override func reloadData() {
+        // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
+        if profile.isShutdown { return }
         guard !isFetchInProgress else { return }
         groupedSites = DateGroupedTableData<Site>()
 
@@ -232,7 +234,11 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     }
 
     func pinToTopSites(_ site: Site) {
-        _ = profile.history.addPinnedTopSite(site).value
+        _ = profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
+            if result.isSuccess {
+                SimpleToast().showAlertWithText(Strings.AppMenuAddPinToTopSitesConfirmMessage, bottomContainer: self.view)
+            }
+        }
     }
 
     func navigateToRecentlyClosed() {
@@ -283,6 +289,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
             self.profile.history.clearHistory().uponQueue(.main) { _ in
                 self.reloadData()
             }
+            self.profile.recentlyClosedTabs.clearTabs()
         }))
         let cancelAction = UIAlertAction(title: Strings.CancelString, style: .cancel)
         alert.addAction(cancelAction)
@@ -339,13 +346,10 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
 
             cell.imageView?.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
             cell.imageView?.layer.borderWidth = HistoryPanelUX.IconBorderWidth
-            cell.imageView?.setIcon(site.icon, forURL: site.tileURL, completed: { (color, url) in
-                if site.tileURL == url {
-                    cell.imageView?.image = cell.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
-                    cell.imageView?.backgroundColor = color
-                    cell.imageView?.contentMode = .center
-                }
-            })
+            cell.imageView?.contentMode = .center
+            cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
+                cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+            }
         }
         return cell
     }

@@ -91,7 +91,7 @@ class CustomSearchViewController: SettingsTableViewController {
         }
 
         FaviconFetcher.fetchFavImageForURL(forURL: url, profile: profile).uponQueue(.main) { result in
-            let image = result.successValue ?? FaviconFetcher.getDefaultFavicon(url)
+            let image = result.successValue ?? FaviconFetcher.letter(forUrl: url)
             let engine = OpenSearchEngine(engineID: nil, shortName: name, image: image, searchTemplate: template, suggestTemplate: nil, isCustomEngine: true)
 
             //Make sure a valid scheme is used
@@ -135,9 +135,11 @@ class CustomSearchViewController: SettingsTableViewController {
             }
             self.engineTitle = title
         })
+        titleField.textField.text = engineTitle
         titleField.textField.accessibilityIdentifier = "customEngineTitle"
 
-        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 133, settingIsValid: { text in
+        let urlField = CustomSearchEngineTextView(placeholder: Strings.SettingsAddCustomEngineURLPlaceholder, height: 133,
+            keyboardType: .URL, settingIsValid: { text in
             //Can check url text text validity here.
             return true
         }, settingDidChange: {fieldText in
@@ -145,6 +147,7 @@ class CustomSearchViewController: SettingsTableViewController {
         })
 
         urlField.textField.autocapitalizationType = .none
+        urlField.textField.text = urlString
         urlField.textField.accessibilityIdentifier = "customEngineUrl"
 
         let settings: [SettingSection] = [
@@ -171,6 +174,10 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
     fileprivate let Padding: CGFloat = 8
     fileprivate let TextLabelHeight: CGFloat = 44
+    fileprivate var TextLabelWidth: CGFloat {
+        let width = textField.frame.width == 0 ? 360 : textField.frame.width
+        return width
+    }
     fileprivate var TextFieldHeight: CGFloat = 44
 
     fileprivate let defaultValue: String?
@@ -180,13 +187,15 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
 
     let textField = UITextView()
     let placeholderLabel = UILabel()
+    var keyboardType: UIKeyboardType = .default
 
-    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
+    init(defaultValue: String? = nil, placeholder: String, height: CGFloat = 44, keyboardType: UIKeyboardType = .default, settingIsValid isValueValid: ((String?) -> Bool)? = nil, settingDidChange: ((String?) -> Void)? = nil) {
         self.defaultValue = defaultValue
         self.TextFieldHeight = height
         self.settingDidChange = settingDidChange
         self.settingIsValid = isValueValid
         self.placeholder = placeholder
+        self.keyboardType = keyboardType
         textField.addSubview(placeholderLabel)
         super.init(cellHeight: TextFieldHeight)
     }
@@ -198,13 +207,17 @@ class CustomSearchEngineTextView: Setting, UITextViewDelegate {
         }
 
         placeholderLabel.adjustsFontSizeToFitWidth = true
-        placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder ?? UIColor(red: 0.0, green: 0.0, blue: 0.0980392, alpha: 0.22)
+        placeholderLabel.textColor = UIColor.theme.general.settingsTextPlaceholder
         placeholderLabel.text = placeholder
-        placeholderLabel.frame = CGRect(width: textField.frame.width, height: TextLabelHeight)
+        placeholderLabel.isHidden = !textField.text.isEmpty
+        placeholderLabel.frame = CGRect(width: TextLabelWidth, height: TextLabelHeight)
         textField.font = placeholderLabel.font
 
         textField.textContainer.lineFragmentPadding = 0
-        textField.keyboardType = .URL
+        textField.keyboardType = keyboardType
+        if (keyboardType == .default) {
+            textField.autocapitalizationType = .words
+        }
         textField.autocorrectionType = .no
         textField.delegate = self
         textField.backgroundColor = UIColor.theme.tableView.rowBackground

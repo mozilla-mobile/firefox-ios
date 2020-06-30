@@ -211,4 +211,13 @@ class ReaderViewTest: BaseTestCase {
         waitForNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
         XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
     }
+
+    // Smoketest
+    func testAddToReaderListOptions() {
+        addContentToReaderView()
+        // Check that Settings layouts options are shown
+        waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)
+        app.buttons["ReaderModeBarView.settingsButton"].tap()
+        XCTAssertTrue(app.buttons["Light"].exists)
+    }
 }

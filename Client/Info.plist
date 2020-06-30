@@ -74,6 +74,7 @@
 		<string>itms-books</string>
 		<string>org-appextension-feature-password-management</string>
 		<string>googlegmail</string>
+		<string>fastmail</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -143,7 +144,6 @@
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>audio</string>
 		<string>processing</string>
 		<string>remote-notification</string>
 	</array>

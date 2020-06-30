@@ -198,8 +198,9 @@ class GeneralColor {
     var highlightBlue: UIColor { return UIColor.Photon.Blue40 }
     var destructiveRed: UIColor { return UIColor.Photon.Red50 }
     var separator: UIColor { return defaultSeparator }
-    var settingsTextPlaceholder: UIColor? { return nil }
+    var settingsTextPlaceholder: UIColor { return UIColor.Photon.Grey40 }
     var controlTint: UIColor { return UIColor.Photon.Blue40 }
+    var switchToggle: UIColor { return UIColor.Photon.Grey90A40 }
 }
 
 protocol Theme {
@@ -216,6 +217,7 @@ protocol Theme {
     var snackbar: SnackBarColor { get }
     var general: GeneralColor { get }
     var actionMenu: ActionMenuColor { get }
+    var switchToggleTheme: GeneralColor { get }
 }
 
 class NormalTheme: Theme {
@@ -232,4 +234,5 @@ class NormalTheme: Theme {
     var snackbar: SnackBarColor { return SnackBarColor() }
     var general: GeneralColor { return GeneralColor() }
     var actionMenu: ActionMenuColor { return ActionMenuColor() }
+    var switchToggleTheme: GeneralColor { return GeneralColor() }
 }

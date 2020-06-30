@@ -243,6 +243,7 @@ public class RustPlaces {
         }
     }
 
+    @discardableResult
     public func createBookmark(parentGUID: GUID, url: String, title: String?, position: UInt32? = nil) -> Deferred<Maybe<GUID>> {
         return withWriter { connection in
             return try connection.createBookmark(parentGUID: parentGUID, url: url, title: title, position: position)
@@ -324,7 +325,7 @@ public class RustPlaces {
             }
 
             do {
-                try self.api?.resetBookmarksMetadata()
+                try self.api?.resetBookmarkSyncMetadata()
                 deferred.fill(Maybe(success: ()))
             } catch let error {
                 deferred.fill(Maybe(failure: error as MaybeErrorType))

@@ -617,11 +617,11 @@
 			};
 			buildConfigurationList = 28F951F519D0F9FA00DCE892 /* Build configuration list for PBXProject "FxA" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
+				Base,
 			);
 			mainGroup = 28F951F119D0F9FA00DCE892;
 			productRefGroup = 28F951FC19D0F9FA00DCE892 /* Products */;

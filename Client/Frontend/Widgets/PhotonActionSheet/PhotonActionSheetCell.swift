@@ -22,7 +22,7 @@ private struct PhotonActionSheetCellUX {
 
 class PhotonActionSheetCell: UITableViewCell {
     static let Padding: CGFloat = 16
-    static let HorizontalPadding: CGFloat = 10
+    static let HorizontalPadding: CGFloat = 1
     static let VerticalPadding: CGFloat = 2
     static let IconSize = 16
 
@@ -91,8 +91,7 @@ class PhotonActionSheetCell: UITableViewCell {
         func setOn(_ on: Bool) {
             foreground.image = on ? UIImage(named: "menu-customswitch-on") : UIImage(named: "menu-customswitch-off")
             mainView.accessibilityIdentifier = on ? "enabled" : "disabled"
-            mainView.tintColor = on ? UIColor.theme.general.controlTint : UIColor.Photon.Grey90A40
-        }
+            mainView.tintColor = on ? UIColor.theme.general.controlTint : UIColor.theme.general.switchToggle }
     }
 
     let toggleSwitch = ToggleSwitch()
@@ -177,8 +176,9 @@ class PhotonActionSheetCell: UITableViewCell {
         titleLabel.text = action.title
         titleLabel.textColor = UIColor.theme.tableView.rowText
         titleLabel.textColor = action.accessory == .Text ? titleLabel.textColor.withAlphaComponent(0.6) : titleLabel.textColor
+        titleLabel.adjustsFontSizeToFitWidth = false
         titleLabel.numberOfLines = 1
-        titleLabel.adjustsFontSizeToFitWidth = true
+        titleLabel.lineBreakMode = .byTruncatingTail
         titleLabel.minimumScaleFactor = 0.5
 
         subtitleLabel.text = action.text

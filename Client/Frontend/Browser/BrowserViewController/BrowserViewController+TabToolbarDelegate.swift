@@ -110,6 +110,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
+        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {
@@ -182,6 +183,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
             self.present(backForwardViewController, animated: true, completion: nil)
         }
+    }
+
+    func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        focusLocationTextField(forTab: tabManager.selectedTab)
     }
 }
 

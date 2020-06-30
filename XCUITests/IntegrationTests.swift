@@ -24,7 +24,7 @@ class IntegrationTests: BaseTestCase {
      let key = String(parts[1])
      if testWithDB.contains(key) {
      // for the current test name, add the db fixture used
-     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.LoadDatabasePrefix + historyDB]
+     launchArguments = [LaunchArguments.SkipIntro, LaunchArguments.StageServer, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet, LaunchArguments.LoadDatabasePrefix + historyDB]
      }
      super.setUp()
      }
@@ -38,9 +38,10 @@ class IntegrationTests: BaseTestCase {
     }
 
     private func signInFxAccounts() {
-        navigator.goto(FxASigninScreen)
+        navigator.goto(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
         sleep(5)
-        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 20)
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
         userState.fxaUsername = ProcessInfo.processInfo.environment["FXA_EMAIL"]!
         userState.fxaPassword = ProcessInfo.processInfo.environment["FXA_PASSWORD"]!
         navigator.performAction(Action.FxATypeEmail)
@@ -165,9 +166,8 @@ class IntegrationTests: BaseTestCase {
         waitForInitialSyncComplete()
 
         // Check synced Tabs
-        navigator.goto(LibraryPanel_History)
-        waitForExistence(app.cells["HistoryPanel.syncedDevicesCell"], timeout: 5)
-        app.cells["HistoryPanel.syncedDevicesCell"].tap()
+        navigator.goto(LibraryPanel_SyncedTabs)
+
         // Need to swipe to get the data on the screen on focus
         app.swipeDown()
         waitForExistence(app.tables.otherElements["profile1"], timeout: 10)

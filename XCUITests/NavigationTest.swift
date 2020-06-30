@@ -76,6 +76,7 @@ class NavigationTest: BaseTestCase {
     func testTapSignInShowsFxAFromTour() {
         // Open FxAccount from tour option in settings menu and go throughout all the screens there
         navigator.goto(Intro_FxASignin)
+        navigator.performAction(Action.OpenEmailToSignIn)
         checkFirefoxSyncScreenShown()
 
         // Disabled due to issue 5937, not possible to tap on Close button
@@ -93,21 +94,24 @@ class NavigationTest: BaseTestCase {
 
         // Disable check, page load issues on iOS13.3 sims, issue #5937
         // After that it is possible to go back to Settings
-        // let settingsButton = app.navigationBars["Client.FxAContentView"].buttons["Settings"]
-        // settingsButton.tap()
+        let closeButton = app.navigationBars["Client.FxAWebView"].buttons.element(boundBy: 0)
+        closeButton.tap()
+        
+        let closeButtonFxView = app.navigationBars["Turn on Sync"].buttons["Settings"]
+        closeButtonFxView.tap()
     }
     
     // Beacuse the Settings menu does not stretch tot the top we need a different function to check if the Firefox Sync screen is shown
     private func checkFirefoxSyncScreenShownViaSettings() {
-        // Disable check, page load issues on iOS13.3 sims, issue #5937
-        waitForExistence(app.webViews.firstMatch, timeout: 20)
-//        waitForExistence(app.navigationBars["Client.FxAContentView"], timeout: 50)
-//        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout:50)
-//        let email = app.webViews.textFields.element(boundBy: 0)
-//        // Verify the placeholdervalues here for the textFields
-//        let mailPlaceholder = "Email"
-//        let defaultMailPlaceholder = email.placeholderValue!
-//        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+        app.buttons["EmailSignIn.button"].tap()
+        waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout:20)
+
+        let email = app.webViews.textFields.element(boundBy: 0)
+        // Verify the placeholdervalues here for the textFields
+        let mailPlaceholder = "Email"
+        let defaultMailPlaceholder = email.placeholderValue!
+        XCTAssertEqual(mailPlaceholder, defaultMailPlaceholder, "The mail placeholder does not show the correct value")
     }
 
     func testTapSignInShowsFxAFromRemoteTabPanel() {
@@ -115,10 +119,9 @@ class NavigationTest: BaseTestCase {
         navigator.goto(LibraryPanel_SyncedTabs)
 
         app.tables.buttons["Sign in to Sync"].tap()
+        waitForExistence(app.buttons["EmailSignIn.button"], timeout: 10)
+        app.buttons["EmailSignIn.button"].tap()
         checkFirefoxSyncScreenShown()
-        
-        // Disable check, page load issues on iOS13.3 sims, issue #5937 app.navigationBars["Client.FxAContentView"].buttons["Close"].tap()
-        // navigator.nowAt(LibraryPanel_SyncedTabs)
     }
 
     private func checkFirefoxSyncScreenShown() {
@@ -172,12 +175,16 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testLongPressLinkOptions() {
         navigator.openURL(path(forTestPage: "test-example.html"))
+        waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
         waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
+
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Download Link"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Share Link"].exists, "The option is not shown")
+        XCTAssertTrue(app.buttons["Bookmark Link"].exists, "The option is not shown")
     }
 
     func testLongPressLinkOptionsPrivateMode() {
@@ -215,50 +222,18 @@ class NavigationTest: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: website_2["moreLinkLongPressInfo"]!)
     }
 
-    /* Disabled due to issue 5581
     func testLongPressOnAddressBar() {
         //This test is for populated clipboard only so we need to make sure there's something in Pasteboard
         navigator.goto(URLBarOpen)
-        app.textFields["address"].typeText("www.google.com\n")
-        waitUntilPageLoad()
-        app.textFields["url"].press(forDuration:3)
-        app.tables.cells["menu-Copy-Link"].tap()
-        app.textFields["url"].tap()
-        // Since the textField value appears all selected first time is clicked
-        // this workaround is necessary
+        app.textFields["address"].typeText("www.google.com")
+        // Tapping two times when the text is not selected will reveal the menu
         app.textFields["address"].tap()
+        waitForExistence(app.textFields["address"])
         app.textFields["address"].tap()
-        app.textFields["address"].press(forDuration: 2)
-
-        //Ensure that long press on address bar brings up a menu with Select All, Select, Paste, and Paste & Go
-        waitForExistence(app.menuItems["Select All"], timeout: 3)
+        waitForExistence(app.menuItems["Select All"])
         XCTAssertTrue(app.menuItems["Select All"].exists)
         XCTAssertTrue(app.menuItems["Select"].exists)
-        XCTAssertTrue(app.menuItems["Paste"].exists)
-        XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-
-        //Tap on Select option and make sure Copy, Cut, Paste, and Look Up are shown
-        app.menuItems["Select"].tap()
-        waitForExistence(app.menuItems["Copy"])
-        if iPad() {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
-        } else {
-            XCTAssertTrue(app.menuItems["Copy"].exists)
-            XCTAssertTrue(app.menuItems["Cut"].exists)
-            XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Paste"].exists)
-            XCTAssertTrue(app.menus.children(matching: .menuItem).element(boundBy: 4).exists)
-        }
-
-        //Go back from Select and redo the tap
-        app.textFields["address"].tap()
-        app.textFields["address"].press(forDuration: 2)
-
+        
         //Tap on Select All option and make sure Copy, Cut, Paste, and Look Up are shown
         app.menuItems["Select All"].tap()
         waitForExistence(app.menuItems["Copy"])
@@ -274,9 +249,32 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
             XCTAssertTrue(app.menuItems["Paste"].exists)
-            XCTAssertTrue(app.menus.children(matching: .menuItem).element(boundBy: 4).exists)
         }
-    }*/
+        
+        app.textFields["address"].typeText("\n")
+        waitUntilPageLoad()
+        app.textFields["url"].press(forDuration:3)
+        app.tables.cells["menu-Copy-Link"].tap()
+        app.textFields["url"].tap()
+        // Since the textField value appears all selected first time is clicked
+        // this workaround is necessary
+        app.textFields["address"].tap()
+        waitForExistence(app.menuItems["Copy"])
+        if iPad() {
+            XCTAssertTrue(app.menuItems["Copy"].exists)
+            XCTAssertTrue(app.menuItems["Cut"].exists)
+            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Share…"].exists)
+            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+            XCTAssertTrue(app.menuItems["Paste"].exists)
+        } else {
+            XCTAssertTrue(app.menuItems["Copy"].exists)
+            XCTAssertTrue(app.menuItems["Cut"].exists)
+            XCTAssertTrue(app.menuItems["Look Up"].exists)
+            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
+            XCTAssertTrue(app.menuItems["Share…"].exists)
+        }
+    }
 
     private func longPressLinkOptions(optionSelected: String) {
         navigator.openURL(path(forTestPage: "test-example.html"))
@@ -303,21 +301,23 @@ class NavigationTest: BaseTestCase {
         waitUntilPageLoad()
         waitForValueContains(app.textFields["url"], value: "reserved.html")
     }
-    // Disable issue 5554
-    /*
+
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.buttons["Copy"])
-        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.collectionViews.cells["Copy"])
+        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
     }
 
     func testShareLinkPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.buttons["Copy"])
-        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.collectionViews.cells["Copy"])
+        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
     }
 
+    // Disable, no Cancel button now and no option to
+    // tap on PopoverDismissRegion
+    /*
     func testCancelLongPressLinkMenu() {
         navigator.openURL(website_2["url"]!)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
@@ -328,7 +328,6 @@ class NavigationTest: BaseTestCase {
         } else {
             app.buttons["Cancel"].tap()
         }
-
         waitForNoExistence(app.sheets[website_2["moreLinkLongPressInfo"]!])
         XCTAssertEqual(app.textFields["url"].value! as? String, "www.example.com/", "After canceling the menu user is in a different website")
     }*/

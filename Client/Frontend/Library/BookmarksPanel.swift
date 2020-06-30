@@ -84,16 +84,11 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         tableView.allowsSelectionDuringEditing = true
 
         self.editBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit) { _ in
-            self.tableView.setEditing(true, animated: true)
-            self.navigationItem.leftBarButtonItem = self.newBarButtonItem
-            self.navigationItem.rightBarButtonItem = self.doneBarButtonItem
+            self.enableEditMode()
         }
 
         self.doneBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done) { _ in
-            self.tableView.setEditing(false, animated: true)
-            self.navigationItem.leftBarButtonItem = nil
-            self.navigationItem.rightBarButtonItem = self.editBarButtonItem
-            self.setupBackButtonGestureRecognizer()
+            self.disableEditMode()
         }
 
         self.newBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add) { _ in
@@ -151,6 +146,13 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
 
         setupBackButtonGestureRecognizer()
     }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if tableView.isEditing {
+            disableEditMode()
+        }
+        super.viewWillTransition(to: size, with: coordinator)
+    }
 
     override func applyTheme() {
         super.applyTheme()
@@ -161,6 +163,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
     }
 
     override func reloadData() {
+        // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
+        if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: bookmarkFolderGUID, recursive: false).uponQueue(.main) { result in
 
             guard let folder = result.successValue as? BookmarkFolder else {
@@ -193,6 +197,19 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
                 }
             }
         }
+    }
+    
+    fileprivate func enableEditMode() {
+        self.tableView.setEditing(true, animated: true)
+        self.navigationItem.leftBarButtonItem = self.newBarButtonItem
+        self.navigationItem.rightBarButtonItem = self.doneBarButtonItem
+    }
+    
+    fileprivate func disableEditMode() {
+        self.tableView.setEditing(false, animated: true)
+        self.navigationItem.leftBarButtonItem = nil
+        self.navigationItem.rightBarButtonItem = self.editBarButtonItem
+        self.setupBackButtonGestureRecognizer()
     }
 
     fileprivate func setupBackButtonGestureRecognizer() {
@@ -356,6 +373,10 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
         return 1
     }
 
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let bookmarkNode = indexPath.section == BookmarksSection.recent.rawValue ? recentBookmarks[safe: indexPath.row] : bookmarkNodes[safe: indexPath.row] else {
             return super.tableView(tableView, cellForRowAt: indexPath)
@@ -382,6 +403,8 @@ class BookmarksPanel: SiteTableViewController, LibraryPanel {
             } else {
                 cell.textLabel?.text = bookmarkItem.title
             }
+
+            cell.imageView?.image = nil
 
             let site = Site(url: bookmarkItem.url, title: bookmarkItem.title, bookmarked: true, guid: bookmarkItem.guid)
             profile.favicons.getFaviconImage(forSite: site).uponQueue(.main) { result in
@@ -506,7 +529,11 @@ extension BookmarksPanel: LibraryPanelContextMenu {
         }
 
         let pinTopSite = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin", handler: { _, _ in
-            _ = self.profile.history.addPinnedTopSite(site)
+            _ = self.profile.history.addPinnedTopSite(site).uponQueue(.main) { result in
+                if result.isSuccess {
+                    SimpleToast().showAlertWithText(Strings.AppMenuAddPinToTopSitesConfirmMessage, bottomContainer: self.view)
+                }
+            }
         })
         actions.append(pinTopSite)
 

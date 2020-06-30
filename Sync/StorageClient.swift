@@ -637,7 +637,7 @@ open class Sync15StorageClient {
 private let DefaultInfoConfiguration = InfoConfiguration(maxRequestBytes: 1_048_576,
                                                          maxPostRecords: 100,
                                                          maxPostBytes: 1_048_576,
-                                                         maxTotalRecords: 10_000,
+                                                         maxTotalRecords: 1666,
                                                          maxTotalBytes: 104_857_600)
 
 /**

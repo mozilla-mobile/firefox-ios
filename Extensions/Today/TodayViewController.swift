@@ -11,40 +11,50 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 struct TodayStrings {
-    static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "New Private Tab", comment: "New Private Tab button label")
-    static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Tab", comment: "New Tab button label")
+    static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "Private Search", comment: "New Private Tab button label")
+    static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Search", comment: "New Tab button label")
     static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
 }
 
 private struct TodayUX {
-    static let privateBrowsingColor = UIColor(rgb: 0xcf68ff)
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
-    static let linkTextSize: CGFloat = 10.0
-    static let labelTextSize: CGFloat = 14.0
-    static let imageButtonTextSize: CGFloat = 14.0
-    static let copyLinkImageWidth: CGFloat = 23
+    static let linkTextSize: CGFloat = 9.0
+    static let labelTextSize: CGFloat = 12.0
+    static let imageButtonTextSize: CGFloat = 13.0
+    static let copyLinkImageWidth: CGFloat = 20
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
+    static let buttonStackViewSpacing: CGFloat = 30.0
+    static var labelColor: UIColor {
+        if #available(iOS 13, *) {
+            return UIColor(named: "widgetLabelColors") ?? UIColor(rgb: 0x242327)
+        } else {
+            return UIColor(rgb: 0x242327)
+        }
+    }
+    static var subtitleLabelColor: UIColor {
+        if #available(iOS 13, *) {
+            return UIColor(named: "subtitleLableColor") ?? UIColor(rgb: 0x38383C)
+        } else {
+            return UIColor(rgb: 0x38383C)
+        }
+    }
 }
 
 @objc (TodayViewController)
 class TodayViewController: UIViewController, NCWidgetProviding {
-
     var copiedURL: URL?
 
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewTabButtonLabel
-
         let button = imageButton.button
-
-        button.setImage(UIImage(named: "new_tab_button_normal")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        button.setImage(UIImage(named: "new_tab_button_highlight")?.withRenderingMode(.alwaysTemplate), for: .highlighted)
-
+        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
         let label = imageButton.label
+        label.textColor = TodayUX.labelColor
+        label.tintColor = TodayUX.labelColor
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
-
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -53,14 +63,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
-
         let button = imageButton.button
-        button.setImage(UIImage(named: "new_private_tab_button_normal"), for: .normal)
-        button.setImage(UIImage(named: "new_private_tab_button_highlight"), for: .highlighted)
-
+        button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
         let label = imageButton.label
-        label.tintColor = TodayUX.privateBrowsingColor
-        label.textColor = TodayUX.privateBrowsingColor
+        label.textColor = TodayUX.labelColor
+        label.tintColor = TodayUX.labelColor
         label.font = UIFont.systemFont(ofSize: TodayUX.imageButtonTextSize)
         imageButton.sizeToFit()
         return imageButton
@@ -68,18 +75,18 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     fileprivate lazy var openCopiedLinkButton: ButtonWithSublabel = {
         let button = ButtonWithSublabel()
-
         button.setTitle(TodayStrings.GoToCopiedLinkLabel, for: .normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
-
         // We need to set the background image/color for .Normal, so the whole button is tappable.
         button.setBackgroundColor(UIColor.clear, forState: .normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
-
-        button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysTemplate), for: .normal)
-
+        button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.label.font = UIFont.systemFont(ofSize: TodayUX.labelTextSize)
         button.subtitleLabel.font = UIFont.systemFont(ofSize: TodayUX.linkTextSize)
+        button.label.textColor = TodayUX.labelColor
+        button.label.tintColor = TodayUX.labelColor
+        button.subtitleLabel.textColor = TodayUX.subtitleLabelColor
+        button.subtitleLabel.tintColor = TodayUX.subtitleLabelColor
         return button
     }()
 
@@ -88,17 +95,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = TodayUX.margin / 2
-        stackView.distribution = UIStackView.Distribution.fill
-        stackView.layoutMargins = UIEdgeInsets(top: TodayUX.margin, left: TodayUX.margin, bottom: TodayUX.margin, right: TodayUX.margin)
-        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.distribution = UIStackView.Distribution.fillProportionally
         return stackView
     }()
 
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.spacing = 0
+        stackView.alignment = .center
+        stackView.spacing = TodayUX.buttonStackViewSpacing
         stackView.distribution = UIStackView.Distribution.fillEqually
         return stackView
     }()
@@ -113,15 +118,17 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let widgetView: UIView!
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
+
         let effectView: UIVisualEffectView
+
         if #available(iOS 13, *) {
             effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetEffect(forVibrancyStyle: .label))
         } else {
-            effectView = UIVisualEffectView(effect: UIVibrancyEffect.widgetPrimary())
+            effectView = UIVisualEffectView(effect: .none)
         }
+
         self.view.addSubview(effectView)
         effectView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
@@ -225,20 +232,25 @@ class ImageButtonWithLabel: UIView {
     func performLayout() {
         addSubview(button)
         addSubview(label)
+        button.imageView?.contentMode = .scaleAspectFit
 
         button.snp.makeConstraints { make in
-            make.top.left.centerX.equalTo(self)
+            make.centerX.equalTo(self)
+            make.top.equalTo(self.safeAreaLayoutGuide).offset(5)
+            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
+            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
+            make.height.greaterThanOrEqualTo(60)
         }
 
         label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom)
+            make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
+            make.height.equalTo(10)
         }
 
         label.numberOfLines = 1
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
-        label.textColor = UIColor.white
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
@@ -265,30 +277,30 @@ class ButtonWithSublabel: UIButton {
 
     fileprivate func performLayout() {
         let titleLabel = self.label
-
         self.titleLabel?.removeFromSuperview()
         addSubview(titleLabel)
 
         let imageView = self.imageView!
         let subtitleLabel = self.subtitleLabel
-        subtitleLabel.textColor = UIColor.lightGray
         self.addSubview(subtitleLabel)
 
         imageView.snp.makeConstraints { make in
-            make.centerY.left.equalTo(self)
+            make.centerY.left.equalTo(10)
             make.width.equalTo(TodayUX.copyLinkImageWidth)
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.left.equalTo(imageView.snp.right).offset(TodayUX.margin)
+            make.left.equalTo(imageView.snp.right).offset(10)
             make.trailing.top.equalTo(self)
+            make.height.greaterThanOrEqualTo(12)
         }
 
         subtitleLabel.lineBreakMode = .byTruncatingTail
         subtitleLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(self)
+            make.bottom.equalTo(self).inset(10)
             make.top.equalTo(titleLabel.snp.bottom)
             make.leading.trailing.equalTo(titleLabel)
+            make.height.greaterThanOrEqualTo(10)
         }
     }
 

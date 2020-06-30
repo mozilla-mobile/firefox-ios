@@ -45,11 +45,11 @@ def tps_addon(pytestconfig, tmpdir_factory):
     path = pytestconfig.getoption('tps')
     if path is not None:
         return path
-    task_url = 'https://index.taskcluster.net/v1/task/' \
+    task_url = 'https://firefox-ci-tc.services.mozilla.com/api/index/v1/task/' \
                'gecko.v2.mozilla-central.latest.firefox.addons.tps'
     task_id = requests.get(task_url).json().get('taskId')
     cache_dir = str(pytestconfig.cache.makedir('tps-{}'.format(task_id)))
-    addon_url = 'https://queue.taskcluster.net/v1/task/' \
+    addon_url = 'https://firefox-ci-tc.services.mozilla.com/api/queue/v1/task/' \
                 '{}/artifacts/public/tps.xpi'.format(task_id)
     scraper = DirectScraper(addon_url, destination=cache_dir)
     return scraper.download()
@@ -86,7 +86,7 @@ def tps_profile(pytestconfig, tps_addon, tps_config, tps_log, fxa_urls):
         # 'devtools.debugger.remote-enabled': True,
         'engine.bookmarks.repair.enabled': False,
         'extensions.autoDisableScopes': 10,
-        'extensions.legacy.enabled': True,
+        'extensions.experiments.enabled': True,
         'extensions.update.enabled': False,
         'extensions.update.notifyUser': False,
         'identity.fxaccounts.autoconfig.uri': fxa_urls['content'],

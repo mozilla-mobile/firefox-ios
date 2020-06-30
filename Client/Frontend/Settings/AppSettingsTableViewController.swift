@@ -24,7 +24,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
 
         // Refresh the user's FxA profile upon viewing settings. This will update their avatar,
         // display name, etc.
-        profile.getAccount()?.updateProfile()
+        ////profile.rustAccount.refreshProfile()
 
         if showContentBlockerSetting {
             let viewController = ContentBlockerSettingViewController(prefs: profile.prefs)
@@ -40,13 +40,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
         var settings = [SettingSection]()
 
         let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
-        let accountDebugSettings = [
-            // Debug settings:
-            RequirePasswordDebugSetting(settings: self),
-            RequireUpgradeDebugSetting(settings: self),
-            ForgetSyncAuthStateDebugSetting(settings: self),
-            StageSyncServiceDebugSetting(settings: self),
-        ]
 
         let prefs = profile.prefs
         var generalSettings: [Setting] = [
@@ -55,7 +48,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             HomeSetting(settings: self),
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
-            BoolSetting(prefs: prefs, prefKey: "blockPopups", defaultValue: true,
+            BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
            ]
 
@@ -68,7 +61,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
         }
 
         let accountChinaSyncSetting: [Setting]
-        if !BrowserProfile.isChinaEdition {
+        if !AppInfo.isChinaEdition {
             accountChinaSyncSetting = []
         } else {
             accountChinaSyncSetting = [
@@ -83,7 +76,10 @@ class AppSettingsTableViewController: SettingsTableViewController {
         generalSettings += [
             BoolSetting(prefs: prefs, prefKey: "showClipboardBar", defaultValue: false,
                         titleText: Strings.SettingsOfferClipboardBarTitle,
-                        statusText: Strings.SettingsOfferClipboardBarStatus)
+                        statusText: Strings.SettingsOfferClipboardBarStatus),
+            BoolSetting(prefs: prefs, prefKey: PrefsKeys.ContextMenuShowLinkPreviews, defaultValue: true,
+                        titleText: Strings.SettingsShowLinkPreviewsTitle,
+                        statusText: Strings.SettingsShowLinkPreviewsStatus)
         ]
 
         let accountSectionTitle = NSAttributedString(string: Strings.FxAFirefoxAccount)
@@ -97,7 +93,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 // With a Firefox Account:
                 AccountStatusSetting(settings: self),
                 SyncNowSetting(settings: self)
-            ] + accountChinaSyncSetting + accountDebugSettings)]
+            ] + accountChinaSyncSetting )]
 
         settings += [ SettingSection(title: NSAttributedString(string: Strings.SettingsGeneralSectionTitle), children: generalSettings)]
 
@@ -138,7 +134,15 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 DeleteExportedDataSetting(settings: self),
                 ForceCrashSetting(settings: self),
                 SlowTheDatabase(settings: self),
+                ForgetSyncAuthStateDebugSetting(settings: self),
                 SentryIDSetting(settings: self),
+                ChangeToChinaSetting(settings: self),
+                ToggleOnboarding(settings: self),
+                LeanplumStatus(settings: self),
+                ShowEtpCoverSheet(settings: self),
+                ToggleOnboarding(settings: self),
+                LeanplumStatus(settings: self),
+                ClearOnboardingABVariables(settings: self)
             ])]
 
         return settings

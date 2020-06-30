@@ -37,10 +37,12 @@ struct ReaderModeHandlers {
                         // We have this page in our cache, so we can display it. Just grab the correct style from the
                         // profile and then generate HTML from the Readability results.
                         var readerModeStyle = DefaultReaderModeStyle
-                        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle) {
-                            if let style = ReaderModeStyle(dict: dict) {
+                        if let dict = profile.prefs.dictionaryForKey(ReaderModeProfileKeyStyle),
+                           var style = ReaderModeStyle(dict: dict) {
+                                style.ensurePreferredColorThemeIfNeeded()
                                 readerModeStyle = style
-                            }
+                        } else {
+                            readerModeStyle.theme = ReaderModeTheme.preferredTheme()
                         }
                         if let html = ReaderModeUtils.generateReaderContent(readabilityResult, initialStyle: readerModeStyle),
                             let response = GCDWebServerDataResponse(html: html) {

@@ -115,7 +115,7 @@ class BookmarkingTests: BaseTestCase {
         
         // Check if it shows in recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.otherElements["RECENT BOOKMARKS"])
+        waitForExistence(app.otherElements["Recent Bookmarks"])
         waitForExistence(app.staticTexts[urlLabelExample_3])
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 5)
         
@@ -126,7 +126,7 @@ class BookmarkingTests: BaseTestCase {
         
         // Check if it shows in recent bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
-        waitForExistence(app.otherElements["RECENT BOOKMARKS"])
+        waitForExistence(app.otherElements["Recent Bookmarks"])
         waitForExistence(app.staticTexts[urlLabelExample_4])
         XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 6)
         
@@ -260,5 +260,28 @@ class BookmarkingTests: BaseTestCase {
         sleep(1)
         app.textFields["address"].tap()
         app.textFields["address"].typeText(text)
+    }
+
+    // Smoketest
+    func testBookmarkLibraryAddDeleteBookmark() {
+        // Verify that there are only 4 cells without recent bookmarks
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForNoExistence(app.otherElements["Recent Bookmarks"])
+        // There are 4 rows for the default folders
+        XCTAssertEqual(app.tables["Bookmarks List"].cells.count, 4)
+
+        //Add a bookmark
+        navigator.openURL(url_3)
+        waitForTabsButton()
+        bookmark()
+
+        // Check that it appers in Bookmarks panel
+        navigator.goto(LibraryPanel_Bookmarks)
+        //waitForExistence(app.staticTexts["Example Domain"], timeout: 10)
+        app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].swipeLeft()
+        // Delete the Bookmark added, check it is removed
+        app.buttons["Delete"].tap()
+        waitForNoExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeoutValue: 10)
+        XCTAssertFalse(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"].exists, "Bookmark not removed successfully")
     }
 }

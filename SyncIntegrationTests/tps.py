@@ -18,7 +18,8 @@ class TPS(object):
         self.profile = profile
 
     def _log(self, line):
-        self.firefox_log.write(line + '\n')
+        # This receives bytes from process output, not a string.
+        self.firefox_log.write(line.decode() + '\n')
 
     def run(self, test, phase='phase1', ignore_unused_engines=True):
         self.profile.set_preferences({
