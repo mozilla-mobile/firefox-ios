@@ -740,6 +740,7 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
+        navigationToolbar.updateIsSearchStatus(true)
     }
 
     fileprivate func hideFirefoxHome() {
@@ -748,6 +749,7 @@ class BrowserViewController: UIViewController {
         }
 
         self.firefoxHomeViewController = nil
+        navigationToolbar.updateIsSearchStatus(false)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
