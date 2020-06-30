@@ -102,6 +102,10 @@ open class RustFirefoxAccounts {
 
     @discardableResult
     public static func reconfig(prefs: Prefs) -> Deferred<FxAccountManager> {
+        if isInitializingAccountManager {
+            // This func is for reconfiguring a completed FxA init, if FxA init is in-progress, let it complete the init as-is
+            return shared.accountManager
+        }
         isInitializingAccountManager = false
         shared.accountManager = Deferred<FxAccountManager>()
         return startup(prefs: prefs)

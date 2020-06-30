@@ -616,6 +616,10 @@ extension URLBarView: TabToolbarProtocol {
         stopReloadButton.isEnabled = isWebPage
     }
 
+    func updateIsSearchStatus(_ isHomePag: Bool) {
+
+    }
+
     var access: [Any]? {
         get {
             if inOverlayMode {

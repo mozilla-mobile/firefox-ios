@@ -740,6 +740,7 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
+        navigationToolbar.updateIsSearchStatus(true)
     }
 
     fileprivate func hideFirefoxHome() {
@@ -748,6 +749,7 @@ class BrowserViewController: UIViewController {
         }
 
         self.firefoxHomeViewController = nil
+        navigationToolbar.updateIsSearchStatus(false)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
@@ -1157,7 +1159,7 @@ class BrowserViewController: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
 
         if #available(iOS 13.0, *) {
-            if ThemeManager.instance.systemThemeIsOn {
+            if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection), ThemeManager.instance.systemThemeIsOn {
                 let userInterfaceStyle = traitCollection.userInterfaceStyle
                 ThemeManager.instance.current = userInterfaceStyle == .dark ? DarkTheme() : NormalTheme()
             }
@@ -2387,7 +2389,10 @@ extension BrowserViewController: Themeable {
         webViews.forEach({ $0.applyTheme() })
 
         let tabs = tabManager.tabs
-        tabs.forEach { $0.applyTheme() }
+        tabs.forEach {
+            $0.applyTheme()
+            urlBar.locationView.tabDidChangeContentBlocking($0)
+        }
         
         guard let contentScript = self.tabManager.selectedTab?.getContentScript(name: ReaderMode.name()) else { return }
         appyThemeForPreferences(profile.prefs, contentScript: contentScript)

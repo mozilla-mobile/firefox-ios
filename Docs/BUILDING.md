@@ -50,7 +50,7 @@ Pointing to Local Rust Components (Application Services)
 
 Firefox for iOS depends internally on some of the [shared Rust components](https://github.com/mozilla/application-services). Sometimes, you may want to also point to your local Rust components when building locally. You can do so by:
 
-1. First ensure you can [build application-services](https://github.com/mozilla/application-services/blob/master/docs/building.md) locally.
+1. First ensure you can [build application-services](https://github.com/mozilla/application-services/blob/main/docs/building.md) locally.
 2. Next, `carthage build --no-skip-current --platform iOS --verbose --configuration Debug --cache-builds`.
 3. Now back in firefox-ios, after `carthage bootstrap`, replace the application-services library with a symlink:
 
