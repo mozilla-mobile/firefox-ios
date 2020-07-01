@@ -83,7 +83,9 @@ class QRCodeViewController: UIViewController {
             self.navigationItem.rightBarButtonItem?.isEnabled = false
 
             let alert = UIAlertController(title: "", message: Strings.ScanQRCodePermissionErrorMessage, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: Strings.ScanQRCodeErrorOKButton, style: .default, handler: { (action) -> Void in
+                self.dismiss(animated: true)
+            }))
             self.present(alert, animated: true, completion: nil)
         }
 

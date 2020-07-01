@@ -3,8 +3,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import WebKit
-import UIKit
 import Account
+import Shared
 
 enum DismissType {
     case dismiss
@@ -31,21 +31,13 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
      - parameter deepLinkParams: URL args passed in from deep link that propagate to FxA web view
      */
     init(pageType: FxAPageType, profile: Profile, dismissalStyle: DismissType, deepLinkParams: FxALaunchParams?) {
-        self.viewModel = FxAWebViewModel(
-            pageType: pageType,
-            profile: profile,
-            deepLinkParams: deepLinkParams,
-            firefoxAccounts: RustFirefoxAccounts.shared,
-            leanPlumClient: LeanPlumClient.shared
-        )
+        self.viewModel = FxAWebViewModel(pageType: pageType, profile: profile, deepLinkParams: deepLinkParams)
         
         self.dismissType = dismissalStyle
 
         let contentController = WKUserContentController()
-        
-        if let userScript = FxAWebViewModel.makeSignInUserScript() {
-            contentController.addUserScript(userScript)
-        }
+        viewModel.setupUserScript(for: contentController)
+ 
         let config = WKWebViewConfiguration()
         config.userContentController = contentController
         webView = WKWebView(frame: .zero, configuration: config)
@@ -73,11 +65,8 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         webView.navigationDelegate = self
         view = webView
         
-        viewModel.authenticate()
-        
-        viewModel.onEmittingNewState = { [weak self] output in
-            let (request, method) = output
-            if let method = method {
+        viewModel.setupFirstPage { [weak self] (request, telemetryEventMethod) in
+            if let method = telemetryEventMethod {
                 UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
             }
             self?.webView.load(request)
@@ -85,10 +74,6 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         
         viewModel.onDismissController = { [weak self] in
             self?.dismiss(animated: true)
-        }
-        
-        viewModel.onWantingToExecuteJSScript = { [weak self] msg in
-            self?.webView.evaluateJavaScript(msg)
         }
     }
 
@@ -111,15 +96,16 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
 }
 
 extension FxAWebViewController: WKScriptMessageHandler {
-   
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        viewModel.parseAndExecuteSuitableRemoteCommand(basedOn: message)
+        viewModel.handle(scriptMessage: message)
     }
 }
 
 extension FxAWebViewController {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        viewModel.dispatchLongPressCommand()
+        let hideLongpress = "document.body.style.webkitTouchCallout='none';"
+        webView.evaluateJavaScript(hideLongpress)
+
         //The helpBrowser shows the current URL in the navbar, the main fxa webview does not.
         guard webView !== helpBrowser else {
             navigationItem.title = viewModel.composeTitle(basedOn: webView.url, hasOnlySecureContent: webView.hasOnlySecureContent)
@@ -144,7 +130,7 @@ extension FxAWebViewController: WKUIDelegate {
         helpBrowser = wv
         helpBrowser?.navigationDelegate = self
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: FxAWebViewModel.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.BackTitle, style: .plain, target: self, action: #selector(closeHelpBrowser))
 
         return helpBrowser
     }

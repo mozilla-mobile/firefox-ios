@@ -9,17 +9,6 @@ import MozillaAppServices
 import Shared
 import SwiftKeychainWrapper
 
-
-extension URL {
-    var toRequest: URLRequest {
-        return URLRequest(url: self)
-    }
-    /// Figuring out if two urls are the same based on scheme, host and path.
-    func isEquivilent(to url: URL) -> Bool {
-        return self.scheme == url.scheme && self.host == url.host && self.path == url.path
-    }
-}
-
 enum FxAPageType {
     case emailLoginFlow
     case qrCode(url: String)
@@ -39,90 +28,60 @@ fileprivate enum RemoteCommand: String {
     case profileChanged = "profile:change"
 }
 
-/// Represent the state of FxAWebViewModel
-typealias FxASTATE = (URLRequest, UnifiedTelemetry.EventMethod?)
-
 class FxAWebViewModel {
-    
     fileprivate let pageType: FxAPageType
     fileprivate let profile: Profile
     fileprivate var deepLinkParams: FxALaunchParams?
+    fileprivate(set) var baseURL: URL?
 
-    fileprivate let firefoxAccounts: RustFirefoxAccounts
-    fileprivate let leanPlumClient: LeanPlumClient
-    
     // This is not shown full-screen, use mobile UA
     static let mobileUserAgent = UserAgent.mobileUserAgent()
-    
-    static let FxSignInFilePath = Bundle.main.path(forResource: "FxASignIn", ofType: "js")
-    
-    static let BackTitle = Strings.BackTitle
-    
-    static func makeSignInUserScript() -> WKUserScript? {
-        guard let path = FxAWebViewModel.FxSignInFilePath,
-              let source = try? String(contentsOfFile: path, encoding: .utf8)
-        else { return nil }
+
+    func setupUserScript(for controller: WKUserContentController) {
+        guard let path = Bundle.main.path(forResource: "FxASignIn", ofType: "js"), let source = try? String(contentsOfFile: path, encoding: .utf8) else {
+            assert(false)
+            return
+        }
         let userScript = WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-        return userScript
+        controller.addUserScript(userScript)
     }
-    
+
     /**
     init() FxAWebViewModel.
-
     - parameter pageType: Specify login flow or settings page if already logged in.
     - parameter profile: a Profile.
-    - parameter firefoxAccounts: RustFirefoxAccounts singleton instance
-    - parameter leanPlumClient: LeanPlumClient singleton instance
-
+    - parameter deepLinkParams: url parameters that originate from a deep link
     */
-    required init(
-        pageType: FxAPageType,
-        profile: Profile,
-        deepLinkParams: FxALaunchParams?,
-        firefoxAccounts: RustFirefoxAccounts,
-        leanPlumClient: LeanPlumClient
-    ) {
+    required init(pageType: FxAPageType, profile: Profile, deepLinkParams: FxALaunchParams?) {
         self.pageType = pageType
         self.profile = profile
         self.deepLinkParams = deepLinkParams
-        self.firefoxAccounts = firefoxAccounts
-        self.leanPlumClient = leanPlumClient
 
-        
         // If accountMigrationFailed then the app menu has a caution icon,
         // and at this point the user has taken sufficient action to clear the caution.
-        firefoxAccounts.accountMigrationFailed = false
+        profile.rustFxA.accountMigrationFailed = false
     }
-    
-    fileprivate(set) var baseURL: URL?
-    
-    /// This closure will carry out the new success state created by invoking `authenticate` method within this viewModel.
-    var onEmittingNewState: ((FxASTATE) -> Void)?
+
     var onDismissController: (() -> Void)?
-    var onWantingToExecuteJSScript: ((String) -> Void)?
     
     func composeTitle(basedOn url: URL?, hasOnlySecureContent: Bool) -> String {
         return (hasOnlySecureContent ? "🔒 " : "") + (url?.host ?? "")
     }
-}
 
-// MARK: - Authentication
-extension FxAWebViewModel {
-    
-    func authenticate() {
-        firefoxAccounts.accountManager.uponQueue(.main) { accountManager in
+    func setupFirstPage(completion: @escaping ((URLRequest, UnifiedTelemetry.EventMethod?) -> Void)) {
+        profile.rustFxA.accountManager.uponQueue(.main) { accountManager in
             accountManager.getManageAccountURL(entrypoint: "ios_settings_manage") { [weak self] result in
                 guard let self = self else { return }
-                
+
                 // Handle authentication with either the QR code login flow, email login flow, or settings page flow
                 switch self.pageType {
                 case .emailLoginFlow:
                     accountManager.beginAuthentication { [weak self] result in
                         guard let self = self else { return }
-                        
+
                         if case .success(let url) = result {
                             self.baseURL = url
-                            self.onEmittingNewState?((self.makeRequest(url), .emailLogin))
+                            completion(self.makeRequest(url), .emailLogin)
                         }
                     }
                 case let .qrCode(url):
@@ -131,13 +90,13 @@ extension FxAWebViewModel {
 
                         if case .success(let url) = result {
                             self.baseURL = url
-                            self.onEmittingNewState?((self.makeRequest(url), .qrPairing))
+                            completion(self.makeRequest(url), .qrPairing)
                         }
                     }
                 case .settingsPage:
                     if case .success(let url) = result {
                         self.baseURL = url
-                        self.onEmittingNewState?((self.makeRequest(url), nil))
+                        completion(self.makeRequest(url), nil)
                     }
                 }
             }
@@ -163,14 +122,8 @@ extension FxAWebViewModel {
 
 // MARK: - Commands
 extension FxAWebViewModel {
-    
-    func dispatchLongPressCommand() {
-        let hideLongpress = "document.body.style.webkitTouchCallout='none';"
-        onWantingToExecuteJSScript?(hideLongpress)
-    }
-    
-    func parseAndExecuteSuitableRemoteCommand(basedOn message: WKScriptMessage) {
-        guard let url = baseURL else { return }
+    func handle(scriptMessage message: WKScriptMessage) {
+        guard let url = baseURL, let webView = message.webView else { return }
         
         let origin = message.frameInfo.securityOrigin
         guard origin.`protocol` == url.scheme && origin.host == url.host && origin.port == (url.port ?? 0) else {
@@ -183,32 +136,32 @@ extension FxAWebViewModel {
             let msg = detail["message"] as? [String: Any], let cmd = msg["command"] as? String else {
                 return
         }
-        
+
         let id = Int(msg["messageId"] as? String ?? "")
-        handleRemote(command: cmd, id: id, data: msg["data"])
+        handleRemote(command: cmd, id: id, data: msg["data"], webView: webView)
     }
     
     // Handle a message coming from the content server.
-    private func handleRemote(command rawValue: String, id: Int?, data: Any?) {
+    private func handleRemote(command rawValue: String, id: Int?, data: Any?, webView: WKWebView) {
         if let command = RemoteCommand(rawValue: rawValue) {
             switch command {
             case .login:
                 if let data = data {
-                    onLogin(data: data)
+                    onLogin(data: data, webView: webView)
                 }
             case .changePassword:
                 if let data = data {
-                    onPasswordChange(data: data)
+                    onPasswordChange(data: data, webView: webView)
                 }
             case .status:
                 if let id = id {
-                    onSessionStatus(id: id)
+                    onSessionStatus(id: id, webView: webView)
                 }
             case .deleteAccount, .signOut:
                 profile.removeAccount()
                 onDismissController?()
             case .profileChanged:
-                firefoxAccounts.accountManager.peek()?.refreshProfile(ignoreCache: true)
+                profile.rustFxA.accountManager.peek()?.refreshProfile(ignoreCache: true)
                 // dismiss keyboard after changing profile in order to see notification view
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
@@ -216,7 +169,7 @@ extension FxAWebViewModel {
     }
 
     /// Send a message to web content using the required message structure.
-    private func runJS(typeId: String, messageId: Int, command: String, data: String = "{}") {
+    private func runJS(webView: WKWebView, typeId: String, messageId: Int, command: String, data: String = "{}") {
         let msg = """
             var msg = {
                 id: "\(typeId)",
@@ -229,12 +182,12 @@ extension FxAWebViewModel {
             window.dispatchEvent(new CustomEvent('WebChannelMessageToContent', { detail: JSON.stringify(msg) }));
         """
 
-        onWantingToExecuteJSScript?(msg)
+        webView.evaluateJavaScript(msg)
     }
 
     /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
-    private func onSessionStatus(id: Int) {
-        guard let fxa = firefoxAccounts.accountManager.peek() else { return }
+    private func onSessionStatus(id: Int, webView: WKWebView) {
+        guard let fxa = profile.rustFxA.accountManager.peek() else { return }
         let cmd = "fxaccounts:fxa_status"
         let typeId = "account_updates"
         let data: String
@@ -254,7 +207,7 @@ extension FxAWebViewModel {
                         verified: true,
                     }
                 }
-            """
+                """
             case .emailLoginFlow, .qrCode:
                 data = """
                     { capabilities:
@@ -263,10 +216,10 @@ extension FxAWebViewModel {
                 """
         }
 
-        runJS(typeId: typeId, messageId: id, command: cmd, data: data)
+        runJS(webView: webView, typeId: typeId, messageId: id, command: cmd, data: data)
     }
 
-    private func onLogin(data: Any) {
+    private func onLogin(data: Any, webView: WKWebView) {
         guard let data = data as? [String: Any], let code = data["code"] as? String, let state = data["state"] as? String else {
             return
         }
@@ -278,14 +231,14 @@ extension FxAWebViewModel {
         
         // Use presence of key `offeredSyncEngines` to determine if this was a new sign-up.
         if let engines = data["offeredSyncEngines"] as? [String], engines.count > 0 {
-            leanPlumClient.track(event: .signsUpFxa)
+            LeanPlumClient.shared.track(event: .signsUpFxa)
         } else {
-            leanPlumClient.track(event: .signsInFxa)
+            LeanPlumClient.shared.track(event: .signsInFxa)
         }
-        leanPlumClient.set(attributes: [LPAttributeKey.signedInSync: true])
+        LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: true])
         
         let auth = FxaAuthData(code: code, state: state, actionQueryParam: "signin")
-        firefoxAccounts.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
+        profile.rustFxA.accountManager.peek()?.finishAuthentication(authData: auth) { _ in
             self.profile.syncManager.onAddedAccount()
             
             // ask for push notification
@@ -304,12 +257,12 @@ extension FxAWebViewModel {
         onDismissController?()
     }
     
-    private func onPasswordChange(data: Any) {
+    private func onPasswordChange(data: Any, webView: WKWebView) {
         guard let data = data as? [String: Any], let sessionToken = data["sessionToken"] as? String else {
             return
         }
         
-        firefoxAccounts.accountManager.peek()?.handlePasswordChanged(newSessionToken: sessionToken) {
+        profile.rustFxA.accountManager.peek()?.handlePasswordChanged(newSessionToken: sessionToken) {
             NotificationCenter.default.post(name: .RegisterForPushNotifications, object: nil)
         }
     }
@@ -320,11 +273,10 @@ extension FxAWebViewModel {
         let redirectUrl = RustFirefoxAccounts.redirectURL
         if let navigationURL = navigationURL {
             let expectedRedirectURL = URL(string: redirectUrl)!
-            if navigationURL.isEquivilent(to: expectedRedirectURL) {
+            if navigationURL.scheme == expectedRedirectURL.scheme && navigationURL.host == expectedRedirectURL.host && navigationURL.path == expectedRedirectURL.path {
                 return .cancel
             }
         }
         return .allow
     }
-    
 }
