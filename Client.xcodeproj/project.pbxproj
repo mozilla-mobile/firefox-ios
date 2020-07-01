@@ -355,10 +355,8 @@
 		B6E2E9C12370E67A00D1EB36 /* XRShaderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9952370E67900D1EB36 /* XRShaderManager.swift */; };
 		B6E2E9C22370E67A00D1EB36 /* XRRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9962370E67900D1EB36 /* XRRenderer.swift */; };
 		B6E2E9C32370E67A00D1EB36 /* XRPlane.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9972370E67900D1EB36 /* XRPlane.swift */; };
-		B6E2E9C42370E67A00D1EB36 /* XRTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9982370E67900D1EB36 /* XRTransform.swift */; };
 		B6E2E9C52370E67A00D1EB36 /* XRLight.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E99A2370E67900D1EB36 /* XRLight.swift */; };
 		B6E2E9C62370E67A00D1EB36 /* XRMaterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E99B2370E67900D1EB36 /* XRMaterial.swift */; };
-		B6E2E9C72370E67A00D1EB36 /* XRConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E99C2370E67900D1EB36 /* XRConstants.swift */; };
 		B6E2E9C82370E67A00D1EB36 /* XRARKController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E99D2370E67900D1EB36 /* XRARKController.swift */; };
 		B6E2E9C92370E67A00D1EB36 /* webxrPolyfill.js in Resources */ = {isa = PBXBuildFile; fileRef = B6E2E99E2370E67900D1EB36 /* webxrPolyfill.js */; };
 		B6E2E9CA2370E67A00D1EB36 /* XRRequestXRPermissionsViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6E2E99F2370E67900D1EB36 /* XRRequestXRPermissionsViewController.storyboard */; };
@@ -369,7 +367,6 @@
 		B6E2E9D02370E67A00D1EB36 /* XRSegmentedControlTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9A52370E67900D1EB36 /* XRSegmentedControlTableViewCell.swift */; };
 		B6E2E9D22370E67A00D1EB36 /* XRARKControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9A72370E67900D1EB36 /* XRARKControllerProtocol.swift */; };
 		B6E2E9D32370E67A00D1EB36 /* XRActivityIndicatorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9A82370E67900D1EB36 /* XRActivityIndicatorButton.swift */; };
-		B6E2E9D42370E67A00D1EB36 /* XRARKController+Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9A92370E67900D1EB36 /* XRARKController+Frame.swift */; };
 		B6E2E9D52370E67A00D1EB36 /* webxrShim.js in Resources */ = {isa = PBXBuildFile; fileRef = B6E2E9AA2370E67900D1EB36 /* webxrShim.js */; };
 		B6E2E9D62370E67A00D1EB36 /* XRRequestXRPermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9AB2370E67900D1EB36 /* XRRequestXRPermissionsViewController.swift */; };
 		B6E2E9D72370E67A00D1EB36 /* XRSwitchInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6E2E9AC2370E67900D1EB36 /* XRSwitchInputTableViewCell.xib */; };
@@ -377,7 +374,6 @@
 		B6E2E9D92370E67A00D1EB36 /* XRARKController+Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9AE2370E67900D1EB36 /* XRARKController+Images.swift */; };
 		B6E2E9DA2370E67A00D1EB36 /* XRARKController+AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9AF2370E67900D1EB36 /* XRARKController+AppState.swift */; };
 		B6E2E9DC2370E67A00D1EB36 /* XRSwitchInputTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9B12370E67900D1EB36 /* XRSwitchInputTableViewCell.swift */; };
-		B6E2E9DD2370E67A00D1EB36 /* XRARKController+Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6E2E9B22370E67900D1EB36 /* XRARKController+Camera.swift */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
 		C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45F44681D087DB600CB7EF0 /* TopTabsViewController.swift */; };
@@ -1544,11 +1540,8 @@
 		B6E2E9952370E67900D1EB36 /* XRShaderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRShaderManager.swift; sourceTree = "<group>"; };
 		B6E2E9962370E67900D1EB36 /* XRRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRRenderer.swift; sourceTree = "<group>"; };
 		B6E2E9972370E67900D1EB36 /* XRPlane.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRPlane.swift; sourceTree = "<group>"; };
-		B6E2E9982370E67900D1EB36 /* XRTransform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRTransform.swift; sourceTree = "<group>"; };
-		B6E2E9992370E67900D1EB36 /* XRShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XRShaderTypes.h; sourceTree = "<group>"; };
 		B6E2E99A2370E67900D1EB36 /* XRLight.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRLight.swift; sourceTree = "<group>"; };
 		B6E2E99B2370E67900D1EB36 /* XRMaterial.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRMaterial.swift; sourceTree = "<group>"; };
-		B6E2E99C2370E67900D1EB36 /* XRConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRConstants.swift; sourceTree = "<group>"; };
 		B6E2E99D2370E67900D1EB36 /* XRARKController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRARKController.swift; sourceTree = "<group>"; };
 		B6E2E99E2370E67900D1EB36 /* webxrPolyfill.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = webxrPolyfill.js; sourceTree = "<group>"; };
 		B6E2E99F2370E67900D1EB36 /* XRRequestXRPermissionsViewController.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = XRRequestXRPermissionsViewController.storyboard; sourceTree = "<group>"; };
@@ -1559,7 +1552,6 @@
 		B6E2E9A52370E67900D1EB36 /* XRSegmentedControlTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRSegmentedControlTableViewCell.swift; sourceTree = "<group>"; };
 		B6E2E9A72370E67900D1EB36 /* XRARKControllerProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRARKControllerProtocol.swift; sourceTree = "<group>"; };
 		B6E2E9A82370E67900D1EB36 /* XRActivityIndicatorButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRActivityIndicatorButton.swift; sourceTree = "<group>"; };
-		B6E2E9A92370E67900D1EB36 /* XRARKController+Frame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XRARKController+Frame.swift"; sourceTree = "<group>"; };
 		B6E2E9AA2370E67900D1EB36 /* webxrShim.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = webxrShim.js; sourceTree = "<group>"; };
 		B6E2E9AB2370E67900D1EB36 /* XRRequestXRPermissionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRRequestXRPermissionsViewController.swift; sourceTree = "<group>"; };
 		B6E2E9AC2370E67900D1EB36 /* XRSwitchInputTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = XRSwitchInputTableViewCell.xib; sourceTree = "<group>"; };
@@ -1567,7 +1559,6 @@
 		B6E2E9AE2370E67900D1EB36 /* XRARKController+Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XRARKController+Images.swift"; sourceTree = "<group>"; };
 		B6E2E9AF2370E67900D1EB36 /* XRARKController+AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XRARKController+AppState.swift"; sourceTree = "<group>"; };
 		B6E2E9B12370E67900D1EB36 /* XRSwitchInputTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XRSwitchInputTableViewCell.swift; sourceTree = "<group>"; };
-		B6E2E9B22370E67900D1EB36 /* XRARKController+Camera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XRARKController+Camera.swift"; sourceTree = "<group>"; };
 		B6E4680E239EB969007468EC /* XRViewer.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = XRViewer.xcconfig; path = Configuration/XRViewer.xcconfig; sourceTree = "<group>"; };
 		B6E46811239EB99B007468EC /* XRViewerDev.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = XRViewerDev.xcconfig; path = Configuration/XRViewerDev.xcconfig; sourceTree = "<group>"; };
 		C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
@@ -2812,6 +2803,50 @@
 			path = Menu;
 			sourceTree = "<group>";
 		};
+		8E03BD4724ACAEB80096A4FA /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				B6E2E9922370E67900D1EB36 /* XRBufferAllocator.swift */,
+				B6E2E9872370E67900D1EB36 /* XRWebController.swift */,
+				B6E2E9862370E67900D1EB36 /* XRARKController+Anchors.swift */,
+				B6E2E9892370E67900D1EB36 /* XRARKController+WorldMap.swift */,
+				B6E2E9AD2370E67900D1EB36 /* XRAppStateController.swift */,
+				8EE5003B24A54FCA00248844 /* Tab+WebXR.swift */,
+				B6E2E9A82370E67900D1EB36 /* XRActivityIndicatorButton.swift */,
+				B6E2E9B12370E67900D1EB36 /* XRSwitchInputTableViewCell.swift */,
+				B6E2E99D2370E67900D1EB36 /* XRARKController.swift */,
+				B6E2E98C2370E67900D1EB36 /* XRHitTestResult.swift */,
+				B6E2E98E2370E67900D1EB36 /* XRShaders.metal */,
+				B6E2E9942370E67900D1EB36 /* XRCamera.swift */,
+				B6E2E98F2370E67900D1EB36 /* XRBlinnPhong.metal */,
+				B6E2E9952370E67900D1EB36 /* XRShaderManager.swift */,
+				B6E2E9AF2370E67900D1EB36 /* XRARKController+AppState.swift */,
+				B6E2E9A42370E67900D1EB36 /* XRMessageController.swift */,
+				B6E2E9A52370E67900D1EB36 /* XRSegmentedControlTableViewCell.swift */,
+				B6E2E9912370E67900D1EB36 /* XRGeometry.swift */,
+				B6E2E9A22370E67900D1EB36 /* XRARKMetalController.swift */,
+				B6E2E99B2370E67900D1EB36 /* XRMaterial.swift */,
+				B6E2E9A72370E67900D1EB36 /* XRARKControllerProtocol.swift */,
+				B6E2E99A2370E67900D1EB36 /* XRLight.swift */,
+				B6E2E9902370E67900D1EB36 /* XRNode.swift */,
+				B6E2E9A02370E67900D1EB36 /* XRAppState.swift */,
+				B6E2E9AE2370E67900D1EB36 /* XRARKController+Images.swift */,
+				B6E2E9972370E67900D1EB36 /* XRPlane.swift */,
+				B6E2E9962370E67900D1EB36 /* XRRenderer.swift */,
+				B6E2E9932370E67900D1EB36 /* XRScene.swift */,
+				B6E2E9AB2370E67900D1EB36 /* XRRequestXRPermissionsViewController.swift */,
+				B6E2E9A12370E67900D1EB36 /* XRARKController+ARSessionObserver.swift */,
+				B6E2E98B2370E67900D1EB36 /* XRUtilities.swift */,
+				B6E2E9882370E67900D1EB36 /* XRARKController+ARSessionDelegate.swift */,
+				B6E2E99E2370E67900D1EB36 /* webxrPolyfill.js */,
+				B6E2E9AC2370E67900D1EB36 /* XRSwitchInputTableViewCell.xib */,
+				B6E2E98A2370E67900D1EB36 /* XRSegmentedControlTableViewCell.xib */,
+				B6E2E9AA2370E67900D1EB36 /* webxrShim.js */,
+				B6E2E99F2370E67900D1EB36 /* XRRequestXRPermissionsViewController.storyboard */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
 		C86E4F6F2493BA8E0087BFD9 /* Generated */ = {
 			isa = PBXGroup;
 			children = (
@@ -3109,7 +3144,6 @@
 				3BF56D261CDBBE1F00AC4D75 /* SimpleToast.swift */,
 				E68AEDAF1B18F81A00133D99 /* SwipeAnimator.swift */,
 				D3A994961A3686BD008AD1AC /* Tab.swift */,
-				8EE5003A24A54FB300248844 /* Tab */,
 				E4CD9F2C1A6DC91200318571 /* TabLocationView.swift */,
 				D3968F241A38FE8500CEFD3B /* TabManager.swift */,
 				7BA0601A1C0F4DE200DFADB6 /* TabPeekViewController.swift */,
@@ -3133,7 +3167,6 @@
 				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
 				39CE74F321A72309007AE4F2 /* TranslationToastHandler.swift */,
 				39CE74FA21A8513B007AE4F2 /* TranslationService.swift */,
-				B6E2E9852370E67900D1EB36 /* XR */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -3528,6 +3561,7 @@
 				28CE83EF1A1D246900576538 /* Third-Party Source */,
 				D39FA1601A83E0EC00EE869C /* UITests */,
 				3BFE4B081D342FB900DDF53F /* XCUITests */,
+				8E03BD4724ACAEB80096A4FA /* Recovered References */,
 			);
 			sourceTree = "<group>";
 		};
@@ -3590,7 +3624,6 @@
 				3B39EDB91E16E18900EF029F /* CustomSearchEnginesTest.swift */,
 				D3D488581ABB54CD00A93597 /* FileAccessorTests.swift */,
 				3943A81C1E9807C700D4F6DC /* FxAPushMessageTest.swift */,
-				43B137ED23A173D900CB7FA0 /* MockAccount.swift */,
 				281B2BE91ADF4D90002917DC /* MockProfile.swift */,
 				E683F0A51E92E0820035D990 /* MockableHistory.swift */,
 				3B61CD581F2A750800D38DE1 /* PocketFeedTests.swift */,
@@ -5466,7 +5499,6 @@
 				43446CF32412F9FF00F5C643 /* ETPCoverSheetTests.swift in Sources */,
 				D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */,
 				D3BA41681BD82F2200DA5457 /* XCTestCaseExtensions.swift in Sources */,
-				43B137EE23A173D900CB7FA0 /* MockAccount.swift in Sources */,
 				554867231DC3935A00183DAA /* HomePageTests.swift in Sources */,
 				DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */,
 				3BFCBF201E04B1C50070C042 /* UIImageViewExtensionsTests.swift in Sources */,
