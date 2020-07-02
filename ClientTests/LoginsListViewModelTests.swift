@@ -54,14 +54,25 @@ class LoginsListViewModelTests: XCTest {
     }
     
     func testQueryLogins() {
-        var query = ""
-
-        self.viewModel.queryLogins(query).upon { (emptyQueryResult) in
+        self.viewModel.queryLogins("").upon { (emptyQueryResult) in
             XCTAssertTrue(emptyQueryResult.isSuccess)
             XCTAssertEqual(emptyQueryResult.successValue?.count, 0)
         }
 
-        query = "examp"
+        self.viewModel.queryLogins("example").upon { (exampleQueryResult) in
+            XCTAssertTrue(exampleQueryResult.isSuccess)
+            XCTAssertEqual(exampleQueryResult.successValue?.count, 10)
+        }
+
+        self.viewModel.queryLogins("3").upon { (threeQueryResult) in
+            XCTAssertTrue(threeQueryResult.isSuccess)
+            XCTAssertEqual(threeQueryResult.successValue?.count, 1)
+        }
+
+        self.viewModel.queryLogins("username").upon { (usernameQueryResult) in
+            XCTAssertTrue(usernameQueryResult.isSuccess)
+            XCTAssertEqual(usernameQueryResult.successValue?.count, 10)
+        }
     }
 
     func testIsDuringSearchControllerDismiss() {
