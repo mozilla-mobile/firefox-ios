@@ -14,7 +14,7 @@ struct TabTrayV2ControllerUX {
     static let textMarginTopBottom = CGFloat(18.0)
 }
 
-class TabTrayV2ViewController: UIViewController {
+class TabTrayV2ViewController: UIViewController, Themeable {
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
     // Views
@@ -49,6 +49,7 @@ class TabTrayV2ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewSetup()
+        applyTheme()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -94,6 +95,20 @@ class TabTrayV2ViewController: UIViewController {
         emptyPrivateTabsView.isHidden = !viewModel.shouldShowPrivateView
     }
 
+    func applyTheme() {
+        toolbar.applyTheme()
+        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+    }
+
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+
+        if #available(iOS 13.0, *) {
+            if ThemeManager.instance.systemThemeIsOn {
+                tableView.reloadData()
+            }
+        }
+    }
 }
 
 // MARK: Datastore
