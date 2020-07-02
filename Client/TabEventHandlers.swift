@@ -12,6 +12,7 @@ class TabEventHandlers {
             UserActivityHandler(),
             MetadataParserHelper(),
             MediaImageLoader(prefs),
+            RelayParserHelper(prefs: prefs)
         ]
 
         if AppConstants.MOZ_DOCUMENT_SERVICES {

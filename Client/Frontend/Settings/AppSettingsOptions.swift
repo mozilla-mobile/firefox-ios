@@ -1059,6 +1059,22 @@ class SiriPageSetting: Setting {
     }
 }
 
+class RelaySetting: Setting {
+    let profile: Profile
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: "Relay", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let viewController = RelayConnectViewController(prefs: profile.prefs)
+//        viewController.profile = profile
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
 class OpenWithSetting: Setting {
     let profile: Profile
 

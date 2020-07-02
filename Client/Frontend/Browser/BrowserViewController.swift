@@ -1570,6 +1570,9 @@ extension BrowserViewController: TabDelegate {
         tab.addContentScript(blocker, name: FirefoxTabContentBlocker.name())
 
         tab.addContentScript(FocusHelper(tab: tab), name: FocusHelper.name())
+
+        let relayHelper = RelayContentScript(tab: tab, prefs: profile.prefs)
+        tab.addContentScript(relayHelper, name: RelayContentScript.name())
     }
 
     func tab(_ tab: Tab, willDeleteWebView webView: WKWebView) {

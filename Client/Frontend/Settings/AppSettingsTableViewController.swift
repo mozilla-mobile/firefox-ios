@@ -60,6 +60,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
             generalSettings.insert(TranslationSetting(settings: self), at: 6)
         }
 
+        generalSettings.insert(RelaySetting(settings: self), at: 7)
+
+
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
             accountChinaSyncSetting = []
