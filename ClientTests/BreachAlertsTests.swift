@@ -33,10 +33,11 @@ class BreachAlertsTests: XCTestCase {
     let breachedLogin = [
         LoginRecord(fromJSONDict: ["hostname" : "http://breached.com", "timePasswordChanged": 1])
    ]
+    
     override func setUp() {
         self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient())
     }
-    /// Test for testing loadBreaches
+
     func testDataRequest() {
         breachAlertsManager?.loadBreaches { maybeBreaches in
             XCTAssertTrue(maybeBreaches.isSuccess)
@@ -46,7 +47,7 @@ class BreachAlertsTests: XCTestCase {
             }
         }
     }
-    /// Test for testing compareBreaches
+
     func testCompareBreaches() {
         let unloadedBreachesOpt = self.breachAlertsManager?.findUserBreaches(breachedLogin)
         XCTAssertNotNil(unloadedBreachesOpt)

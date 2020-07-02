@@ -7,15 +7,31 @@ import Storage
 import Shared
 
 // MARK: - Main View Model
-// Login List View Model
-final class LoginListViewModel {
+protocol LoginListViewModelProtocol {
 
-    let profile: Profile
+    var profile: Profile { get }
+    var isDuringSearchControllerDismiss: Bool { get }
+    var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>? { get }
+    var count: Int { get }
+    var titles: [Character] { get }
+    var loginRecordSections: [Character: [LoginRecord]] { get }
+
+    func loadLogins(_ query: String?, loginDataSource: LoginDataSource)
+    func setIsDuringSearchControllerDismiss(to: Bool)
+    func loginAtIndexPath(_ indexPath: IndexPath) -> LoginRecord?
+    func loginsForSection(_ section: Int) -> [LoginRecord]?
+
+}
+
+// Login List View Model
+final class LoginListViewModel: LoginListViewModelProtocol {
+
+    private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0
     weak var searchController: UISearchController?
     weak var delegate: LoginViewModelDelegate?
-    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
+    private(set) var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
     private(set) var titles = [Character]()
     private(set) var loginRecordSections = [Character: [LoginRecord]]() {
         didSet {
@@ -78,7 +94,7 @@ final class LoginListViewModel {
         return loginRecordSections[titleForSectionIndex]
     }
 
-    func setLogins(_ logins: [LoginRecord]) {
+    private func setLogins(_ logins: [LoginRecord]) {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.
         return self.helper.computeSectionsFromLogins(logins).uponQueue(.main) { result in
