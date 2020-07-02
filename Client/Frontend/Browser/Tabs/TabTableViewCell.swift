@@ -5,7 +5,7 @@
 import Foundation
 import UIKit
 
-class TabTableViewCell: UITableViewCell {
+class TabTableViewCell: UITableViewCell, Themeable {
     static let identifier = "tabCell"
     
     lazy var closeButton: UIButton = {
@@ -51,9 +51,22 @@ class TabTableViewCell: UITableViewCell {
             make.top.equalTo(websiteTitle.snp.bottom).offset(3)
             make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.textMarginTopBottom)
         }
+
+        applyTheme()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.applyTheme()
+    }
+
+    func applyTheme() {
+        backgroundColor = UIColor.theme.tableView.rowBackground
+        textLabel?.textColor = UIColor.theme.tableView.rowText
     }
 }
