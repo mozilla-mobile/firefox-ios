@@ -13,7 +13,6 @@ github "mozilla-mobile/onepassword-app-extension" "68a9d932a6373ca045984fbf4fb9a
 github "mozilla-mobile/telemetry-ios" "v1.1.3"
 github "mozilla-services/shavar-prod-lists" "460e2f7754438a4fed6d2df0867471857032ded6"
 github "mozilla/glean" "v31.1.0"
-github "nbhasin2/KIF" "584e8a0a3b46600af1989b8b28d627096852adf5"
 github "nbhasin2/SwiftyJSON" "36a9d1d95396706b06d67cc0c47b267795248f4a"
 github "nbhasin2/application-services" "9ba8ece94d3975f3761a5b1a3e278c5c24e66764"
 github "swisspol/GCDWebServer" "3.5.4"
