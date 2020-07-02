@@ -96,6 +96,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
+        toolbar.applyTheme()
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
     }
 
