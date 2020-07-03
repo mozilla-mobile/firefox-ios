@@ -33,4 +33,5 @@ struct TodayStrings {
     static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "Private Search", comment: "New Private Tab button label")
     static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Search", comment: "New Tab button label")
     static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
+    static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoard", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
 }

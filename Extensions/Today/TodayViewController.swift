@@ -23,6 +23,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let button = imageButton.button
         button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.accessibilityLabel = TodayStrings.NewTabButtonLabel
+        button.accessibilityTraits = .button
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
@@ -38,6 +39,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let button = imageButton.button
         button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.accessibilityLabel = TodayStrings.NewPrivateTabButtonLabel
+        button.accessibilityTraits = .button
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
@@ -56,12 +58,15 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.labelTextSize))
         button.accessibilityLabel = TodayStrings.GoToCopiedLinkLabel
+        button.accessibilityTraits = .button
         button.label.textColor = TodayUX.labelColor
         button.label.tintColor = TodayUX.labelColor
         button.label.sizeToFit()
         button.subtitleLabel.textColor = TodayUX.subtitleLabelColor
         button.subtitleLabel.tintColor = TodayUX.subtitleLabelColor
         button.subtitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.linkTextSize))
+        button.label.accessibilityLabel = TodayStrings.CopiedLinkLabelFromPasteBoard
+        button.accessibilityTraits = .none
         return button
     }()
 
