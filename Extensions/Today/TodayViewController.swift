@@ -129,14 +129,14 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }
 
     func updateCopiedLinkInView(clipboardURL: URL?) {
-        if let url = clipboardURL {
-            self.openCopiedLinkButton.isHidden = false
-            self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
-            self.openCopiedLinkButton.subtitleLabel.text = url.absoluteDisplayString
-        } else {
+        guard let url = clipboardURL else {
             self.openCopiedLinkButton.isHidden = true
             self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
+            return
         }
+        self.openCopiedLinkButton.isHidden = false
+        self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
+        self.openCopiedLinkButton.subtitleLabel.text = url.absoluteDisplayString
     }
 
     // MARK: Button behaviour
@@ -147,7 +147,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     @objc func onPressNewPrivateTab(_ view: UIView) {
         openContainingApp("?private=true")
     }
-    //TODO: Move it to model??
+    //TODO: Move it to Viewmodel
     fileprivate func openContainingApp(_ urlSuffix: String = "") {
         let urlString = "\(model.scheme)://open-url\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
