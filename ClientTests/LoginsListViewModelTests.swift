@@ -8,7 +8,7 @@ import Shared
 import XCTest
 
 
-class LoginsListViewModelTests: XCTest {
+class LoginsListViewModelTests: XCTestCase {
     var viewModel: LoginListViewModel!
     var dataSource: LoginDataSource!
 
@@ -24,15 +24,13 @@ class LoginsListViewModelTests: XCTest {
         XCTAssertNil(self.viewModel.activeLoginQuery)
         self.viewModel.loadLogins(loginDataSource: self.dataSource)
         XCTAssertNotNil(self.viewModel.activeLoginQuery)
-        if let activeLoginQuery = self.viewModel.activeLoginQuery {
-            XCTAssertTrue(activeLoginQuery.isFilled)
-            XCTAssertTrue(activeLoginQuery.value.isSuccess)
-            XCTAssertEqual(activeLoginQuery.value.successValue?.count, 0)
+        if let value = self.viewModel.activeLoginQuery?.value {
+            XCTAssertTrue(value.isSuccess)
+            XCTAssertEqual(value.successValue?.count, 0)
         }
 
-        // add logins to DB
-        var deferred: Deferred<Maybe<String>>
-        for i in (0...10) {
+        // add logins to DB - tested in RustLoginsTests
+        for i in (0..<10) {
             let login = LoginRecord(fromJSONDict: [
                 "hostname": "https://example.com/\(i)",
                 "formSubmitURL": "https://example.com",
@@ -40,17 +38,22 @@ class LoginsListViewModelTests: XCTest {
                 "password": "password\(i)"
             ])
             login.httpRealm = nil
-            deferred = self.viewModel.profile.logins.add(login: login)
-            XCTAssertEqual(true, deferred.value.isSuccess, "Login added: \(login)")
+            _ = self.viewModel.profile.logins.add(login: login)
         }
 
         self.viewModel.loadLogins(loginDataSource: self.dataSource)
         XCTAssertNotNil(self.viewModel.activeLoginQuery)
-        if let activeLoginQuery = self.viewModel.activeLoginQuery {
-            XCTAssertTrue(activeLoginQuery.isFilled)
-            XCTAssertTrue(activeLoginQuery.value.isSuccess)
-            XCTAssertEqual(activeLoginQuery.value.successValue?.count, 10)
+        guard let value = self.viewModel.activeLoginQuery?.value else {
+            return
         }
+        XCTAssertTrue(value.isSuccess)
+        XCTAssertNotNil(value.successValue)
+        guard let records = value.successValue else {
+            return
+        }
+        XCTAssertEqual(records.count, 10)
+        XCTAssertEqual(records[0].hostname, "https://example.com/22")
+
     }
     
     func testQueryLogins() {
@@ -76,11 +79,21 @@ class LoginsListViewModelTests: XCTest {
     }
 
     func testIsDuringSearchControllerDismiss() {
-        
+        XCTAssertFalse(self.viewModel.isDuringSearchControllerDismiss)
+
+        self.viewModel.setIsDuringSearchControllerDismiss(to: true)
+        XCTAssertTrue(self.viewModel.isDuringSearchControllerDismiss)
+
+        self.viewModel.setIsDuringSearchControllerDismiss(to: false)
+        XCTAssertFalse(self.viewModel.isDuringSearchControllerDismiss)
     }
 
     func testLoginAtIndexPath() {
-        
+        XCTAssertThrowsError(self.viewModel.loginAtIndexPath(IndexPath(row: 0, section: 0)))
+
+        let firstItem = self.viewModel.loginAtIndexPath(IndexPath(row: 1, section: 1))
+        XCTAssertNotNil(firstItem)
+        XCTAssertEqual(firstItem?.hostname, "https://example.com/2")
     }
 
     func testLoginsForSection() {
