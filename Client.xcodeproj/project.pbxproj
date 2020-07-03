@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		03CCC9181AF05E7300DBF30D /* RelativeDatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03CCC9171AF05E7300DBF30D /* RelativeDatesTests.swift */; };
 		0430A545203B372D00FDF76D /* IntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0430A544203B372D00FDF76D /* IntegrationTests.swift */; };
-		048B6E4F24AEC7D70087EA70 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35210E01CB2F16600FC5DCB /* Strings.swift */; };
 		0B21E8061E26CCB7000C8779 /* EarlGrey.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0B21E8051E26CCB7000C8779 /* EarlGrey.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		0B305E1B1E3A98A900BE0767 /* BookmarkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B305E1A1E3A98A900BE0767 /* BookmarkingTests.swift */; };
 		0B3D670E1E09B90B00C1EFC7 /* AuthenticationTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */; };
@@ -4899,7 +4898,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				315D05561E58DD60001F349B /* UIPasteboardExtensions.swift in Sources */,
-				048B6E4F24AEC7D70087EA70 /* Strings.swift in Sources */,
 				3905274F1C874D35007E0BB7 /* TodayViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
