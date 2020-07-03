@@ -9,13 +9,6 @@ import SnapKit
 import XCGLogger
 
 private let log = Logger.browserLogger
-
-struct TodayStrings {
-    static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "Private Search", comment: "New Private Tab button label")
-    static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Search", comment: "New Tab button label")
-    static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
-}
-
 private struct TodayUX {
     static let backgroundHightlightColor = UIColor(white: 216.0/255.0, alpha: 44.0/255.0)
     static let linkTextSize: CGFloat = 9.0
@@ -48,7 +41,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
-        imageButton.label.text = TodayStrings.NewTabButtonLabel
+        imageButton.label.text = Strings.NewTabButtonLabel
         let button = imageButton.button
         button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
         let label = imageButton.label
@@ -62,7 +55,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
-        imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
+        imageButton.label.text = Strings.NewPrivateTabButtonLabel
         let button = imageButton.button
         button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
         let label = imageButton.label
@@ -75,7 +68,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     fileprivate lazy var openCopiedLinkButton: ButtonWithSublabel = {
         let button = ButtonWithSublabel()
-        button.setTitle(TodayStrings.GoToCopiedLinkLabel, for: .normal)
+        button.setTitle(Strings.GoToCopiedLinkLabel, for: .normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
         // We need to set the background image/color for .Normal, so the whole button is tappable.
         button.setBackgroundColor(UIColor.clear, forState: .normal)
