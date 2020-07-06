@@ -772,6 +772,10 @@ extension Strings {
     public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayTheme.OptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
 }
 
+extension Strings {
+    public static let AddTabAccessibilityLabel = NSLocalizedString("TabTray.AddTab.Button", value: "Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+}
+
 // Cover Sheet
 extension Strings {
     // Dark Mode Cover Sheet
