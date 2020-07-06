@@ -8,7 +8,7 @@ import UIKit
 open class UserAgent {
     public static let uaBitSafari = "Safari/605.1.15"
     public static let uaBitMobile = "Mobile/15E148"
-    public static let uaBitFx = "XRViewer/\(AppInfo.appVersion)"
+    public static let uaBitFx = "WebXRViewer/\(AppInfo.appVersion)"
     public static let product = "Mozilla/5.0"
     public static let platform = "AppleWebKit/605.1.15"
     public static let platformDetails = "(KHTML, like Gecko)"
@@ -49,7 +49,7 @@ open class UserAgent {
     }
     
     public static func desktopUserAgent() -> String {
-        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15"
+        return "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) \(uaBitGoogleIpad) \(uaBitFx) \(uaBitSafari)"
     }
 
     public static func mobileUserAgent() -> String {
@@ -135,10 +135,10 @@ public struct UserAgentBuilder {
     }
     
     public static func defaultMobileUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "FxiOS/\(AppInfo.appVersion)  \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
+        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "\(UserAgent.uaBitFx) \(UserAgent.uaBitMobile) \(UserAgent.uaBitSafari)")
     }
     
     public static func defaultDesktopUserAgent() -> UserAgentBuilder {
-        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "FxiOS/\(AppInfo.appVersion) \(UserAgent.uaBitSafari)")
+        return UserAgentBuilder(product: UserAgent.product, systemInfo: "(Macintosh; Intel Mac OS X 10.15)", platform: UserAgent.platform, platformDetails: UserAgent.platformDetails, extensions: "\(UserAgent.uaBitFx) \(UserAgent.uaBitSafari)")
     }
 }
