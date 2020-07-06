@@ -34,6 +34,5 @@ Phase("phase1", [
   [Sync],
   [Passwords.add, password_list],
   [Bookmarks.add, bookmarksCreated],
-  [History.add, historyCreated],
   [Sync]
 ]);
