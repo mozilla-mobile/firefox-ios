@@ -111,15 +111,6 @@ class QRCodeViewController: UIViewController {
         self.captureSession.stopRunning()
         stopScanLineAnimation()
     }
-    
-    private func applyShapeLayer() {
-        view.layoutIfNeeded()
-        shapeLayer.removeFromSuperlayer()
-        let rectPath = UIBezierPath(rect: view.bounds)
-        rectPath.append(UIBezierPath(rect: scanBorder.frame).reversing())
-        shapeLayer.path = rectPath.cgPath
-        maskView.layer.mask = shapeLayer
-    }
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -134,7 +125,7 @@ class QRCodeViewController: UIViewController {
         shapeLayer.path = rectPath.cgPath
         maskView.layer.mask = shapeLayer
     }
-
+    
     private func setupConstraints() {
         maskView.snp.remakeConstraints { (make) in
             make.edges.equalTo(view)
