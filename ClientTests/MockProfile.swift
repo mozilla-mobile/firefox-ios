@@ -130,6 +130,7 @@ open class MockProfile: Client.Profile {
         let encryptionKey = "AAAAAAAA"
         let salt = RustLogins.setupPlaintextHeaderAndGetSalt(databasePath: loginsDatabasePath, encryptionKey: encryptionKey)
         logins = RustLogins(databasePath: loginsDatabasePath, encryptionKey: encryptionKey, salt: salt)
+        _ = logins.reopenIfClosed()
         db = BrowserDB(filename: "\(databasePrefix).db", schema: BrowserSchema(), files: files)
         readingListDB = BrowserDB(filename: "\(databasePrefix)_ReadingList.db", schema: ReadingListSchema(), files: files)
         let placesDatabasePath = URL(fileURLWithPath: (try! files.getAndEnsureDirectory()), isDirectory: true).appendingPathComponent("\(databasePrefix)_places.db").path

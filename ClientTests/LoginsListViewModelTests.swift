@@ -29,7 +29,7 @@ class LoginsListViewModelTests: XCTestCase {
         // add logins to DB - tested in RustLoginsTests
         for i in (0..<10) {
             let login = LoginRecord(fromJSONDict: [
-                "hostname": "https://example.com/\(i)",
+                "hostname": "https://example\(i).com/",
                 "formSubmitURL": "https://example.com",
                 "username": "username\(i)",
                 "password": "password\(i)"
@@ -46,6 +46,7 @@ class LoginsListViewModelTests: XCTestCase {
         XCTAssertNotNil(logins.successValue)
 
         // load from populated db
+        let expectation = XCTestExpectation(description: "logins loaded")
         self.viewModel.loadLogins(loginDataSource: self.dataSource)
         XCTAssertEqual(self.viewModel.count, 10)
 //        XCTAssertEqual(self.viewModel.titles[0], "https://example.com/22")
