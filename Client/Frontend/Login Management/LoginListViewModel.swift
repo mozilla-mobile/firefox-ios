@@ -77,7 +77,6 @@ final class LoginListViewModel {
         let titleForSectionIndex = titles[section - 1]
         return loginRecordSections[titleForSectionIndex]
     }
-
     func setLogins(_ logins: [LoginRecord]) {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.

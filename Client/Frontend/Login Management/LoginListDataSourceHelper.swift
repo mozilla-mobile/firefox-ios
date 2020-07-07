@@ -19,7 +19,6 @@ class LoginListViewModelHelper {
             )
         }
     }
-
     // Small helper method for using the precomputed base domain to determine the title/section of the
     // given login.
     func titleForLogin(_ login: LoginRecord) -> Character {

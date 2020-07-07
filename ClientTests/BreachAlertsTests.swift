@@ -33,7 +33,7 @@ class BreachAlertsTests: XCTestCase {
     let breachedLogin = [
         LoginRecord(fromJSONDict: ["hostname" : "http://breached.com", "timePasswordChanged": 1])
    ]
-    
+
     override func setUp() {
         self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient())
     }
