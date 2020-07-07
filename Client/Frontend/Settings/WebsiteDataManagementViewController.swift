@@ -261,7 +261,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
 }
 
 extension WebsiteDataManagementViewController: WebsiteDataSearchResultsViewControllerDelegate {
-    func websiteDataSearchResultsViewController(_ viewController: WebsiteDataSearchResultsViewController, didDeletedRecord record: WKWebsiteDataRecord) {
+    func websiteDataSearchResultsViewController(_ viewController: WebsiteDataSearchResultsViewController, didDeleteRecord record: WKWebsiteDataRecord) {
         siteRecords?.removeAll(where: { $0 == record })
         tableView.reloadData()
     }
