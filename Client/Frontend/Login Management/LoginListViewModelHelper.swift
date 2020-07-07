@@ -6,7 +6,7 @@ import Storage
 import Shared
 
 class LoginListViewModelHelper {
-    var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
+    private(set) var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
 
     // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
     // baseDomain() is a costly call because of the ETLD lookup tables.

@@ -23,7 +23,7 @@ final class LoginListViewModel {
             delegate?.loginSectionsDidUpdate()
         }
     }
-    fileprivate let helper = LoginListDataSourceHelper()
+    fileprivate let helper = LoginListViewModelHelper()
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile

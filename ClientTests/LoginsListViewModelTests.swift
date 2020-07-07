@@ -40,6 +40,9 @@ class LoginsListViewModelTests: XCTestCase {
         let logins = self.viewModel.profile.logins.list().value
         XCTAssertTrue(logins.isSuccess)
         XCTAssertNotNil(logins.successValue)
+
+        // TODO
+//        test loadLogins
     }
 
     func testLoadLogins() { // TODO
