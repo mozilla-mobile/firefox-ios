@@ -36,11 +36,11 @@ struct TodayStrings {
     static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoard", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
 }
 
-
+//
 class DynamicLabelResize {
     static func height(text: String?, style : UIFont.TextStyle ) -> CGFloat {
         var currentHeight : CGFloat!
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude,height: CGFloat.greatestFiniteMagnitude))
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
         label.text = text
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping

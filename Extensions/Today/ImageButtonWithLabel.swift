@@ -33,10 +33,9 @@ class ImageButtonWithLabel: UIView {
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
-            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: TodayStrings.NewTabButtonLabel, style: .body))
+            make.height.equalTo(DynamicLabelResize.height(text: TodayStrings.NewTabButtonLabel, style: .body))
         }
-        label.contentCompressionResistancePriority(for: .vertical)
-
+        
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center

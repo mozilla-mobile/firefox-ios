@@ -32,15 +32,15 @@ class ButtonWithSublabel: UIButton {
         
         buttonImage.snp.makeConstraints { make in
             make.left.equalTo(10)
-            make.centerY.equalToSuperview()
-            make.top.equalTo(self.label.snp.top)
+//            make.top.equalTo(self.label.snp.top)
+            make.centerY.equalTo(self.label.snp.firstBaseline)
             make.width.equalTo(self.label.snp.height)
         }
 
         self.label.snp.makeConstraints { make in
             make.left.equalTo(buttonImage.snp.right).offset(10)
             make.trailing.top.equalTo(self)
-            make.height.equalTo(DynamicLabelResize.height(text: TodayStrings.GoToCopiedLinkLabel, style : UIFont.TextStyle.caption1))
+            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: TodayStrings.GoToCopiedLinkLabel, style : UIFont.TextStyle.caption1))
         }
         self.label.numberOfLines = 1
         self.label.lineBreakMode = .byWordWrapping
@@ -50,7 +50,7 @@ class ButtonWithSublabel: UIButton {
             make.bottom.equalTo(self).inset(10)
             make.top.equalTo(self.label.snp.bottom)
             make.leading.trailing.equalTo(self.label)
-            make.height.equalTo(DynamicLabelResize.height(text: TodayStrings.GoToCopiedLinkLabel, style : UIFont.TextStyle.footnote))
+            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: TodayStrings.GoToCopiedLinkLabel, style : UIFont.TextStyle.footnote))
         }
     }
 
