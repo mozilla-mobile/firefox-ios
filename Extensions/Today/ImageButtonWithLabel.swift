@@ -27,16 +27,17 @@ class ImageButtonWithLabel: UIView {
             make.top.equalTo(self.safeAreaLayoutGuide).offset(5)
             make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
             make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
-            make.height.greaterThanOrEqualTo(60)
+            make.height.greaterThanOrEqualTo(70)
         }
 
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
-            make.height.greaterThanOrEqualTo(10)
+            make.height.equalTo(DynamicLabelResize.height(text: TodayStrings.NewTabButtonLabel, style: .body))
         }
+        label.contentCompressionResistancePriority(for: .vertical)
 
-        label.numberOfLines = 1
+        label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
     }

@@ -9,7 +9,7 @@ struct TodayUX {
     static let linkTextSize: CGFloat = 9.0
     static let labelTextSize: CGFloat = 12.0
     static let imageButtonTextSize: CGFloat = 13.0
-    static let copyLinkImageWidth: CGFloat = 20
+    static let copyLinkImageWidth: CGFloat = 20.0
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
     static let buttonStackViewSpacing: CGFloat = 20.0
@@ -34,4 +34,22 @@ struct TodayStrings {
     static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Search", comment: "New Tab button label")
     static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
     static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoard", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
+}
+
+
+class DynamicLabelResize {
+    static func height(text: String?, style : UIFont.TextStyle ) -> CGFloat {
+        var currentHeight : CGFloat!
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude,height: CGFloat.greatestFiniteMagnitude))
+        label.text = text
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = UIFont.preferredFont(forTextStyle: style)
+        label.adjustsFontForContentSizeCategory = true
+        label.sizeToFit()
+        currentHeight = label.frame.height
+        label.removeFromSuperview()
+        return currentHeight
+    }
+
 }
