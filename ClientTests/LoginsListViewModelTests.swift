@@ -54,7 +54,9 @@ class LoginsListViewModelTests: XCTestCase {
         self.addLogins()
 
         // load from populated db
-        self.viewModel.loadLogins(loginDataSource: self.dataSource)
+        let queue = DispatchQueue(label: "LoginViewModelTests")
+        let loaded = expectation(description: "loaded login")
+        self.viewModel.loadLogins(loginDataSource: self.dataSource, onQueue: queue)
         XCTAssertEqual(self.viewModel.count, 10)
 //        XCTAssertEqual(self.viewModel.titles[0], "https://example.com/22")
 

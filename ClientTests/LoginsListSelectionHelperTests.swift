@@ -28,7 +28,7 @@ class LoginsListSelectionHelperTests: XCTestCase {
         XCTAssertTrue(self.selectionHelper.indexPathIsSelected(selection))
     }
 
-    func testDeselectIndexPathh() {
+    func testDeselectIndexPath() {
         let selection = IndexPath(row: 1, section: 1)
         XCTAssertEqual(selectionHelper.selectedCount, 0)
         XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))

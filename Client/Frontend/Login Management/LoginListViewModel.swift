@@ -30,7 +30,7 @@ final class LoginListViewModel {
         self.searchController = searchController
     }
 
-    func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
+    func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource, onQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) {
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
@@ -77,6 +77,7 @@ final class LoginListViewModel {
         let titleForSectionIndex = titles[section - 1]
         return loginRecordSections[titleForSectionIndex]
     }
+
     func setLogins(_ logins: [LoginRecord]) {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.

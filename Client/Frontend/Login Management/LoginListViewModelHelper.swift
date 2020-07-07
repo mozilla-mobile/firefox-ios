@@ -52,7 +52,7 @@ class LoginListViewModelHelper {
         }
     }
 
-    func computeSectionsFromLogins(_ logins: [LoginRecord]) -> Deferred<Maybe<([Character], [Character: [LoginRecord]])>> {
+    func computeSectionsFromLogins(_ logins: [LoginRecord], onQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) -> Deferred<Maybe<([Character], [Character: [LoginRecord]])>> {
         guard logins.count > 0 else {
             return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
         }
@@ -60,7 +60,7 @@ class LoginListViewModelHelper {
         var sections = [Character: [LoginRecord]]()
         var titleSet = Set<Character>()
 
-        return deferDispatchAsync(DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) {
+        return deferDispatchAsync(onQueue) {
             self.setDomainLookup(logins)
 
             // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
