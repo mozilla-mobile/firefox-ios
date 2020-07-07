@@ -7,24 +7,8 @@ import Storage
 import Shared
 
 // MARK: - Main View Model
-protocol LoginListViewModelProtocol {
-
-    var profile: Profile { get }
-    var isDuringSearchControllerDismiss: Bool { get }
-    var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>? { get }
-    var count: Int { get }
-    var titles: [Character] { get }
-    var loginRecordSections: [Character: [LoginRecord]] { get }
-
-    func loadLogins(_ query: String?, loginDataSource: LoginDataSource)
-    func setIsDuringSearchControllerDismiss(to: Bool)
-    func loginAtIndexPath(_ indexPath: IndexPath) -> LoginRecord?
-    func loginsForSection(_ section: Int) -> [LoginRecord]?
-
-}
-
 // Login List View Model
-final class LoginListViewModel: LoginListViewModelProtocol {
+final class LoginListViewModel {
 
     private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false

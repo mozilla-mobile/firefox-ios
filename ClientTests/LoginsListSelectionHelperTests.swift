@@ -17,6 +17,7 @@ class LoginsListSelectionHelperTests: XCTestCase {
 
     func testSelectIndexPath() {
         XCTAssertEqual(selectionHelper.selectedCount, 0)
+        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
         let selection = IndexPath(row: 1, section: 1)
         self.selectionHelper.selectIndexPath(selection)
         XCTAssertEqual(selectionHelper.selectedCount, 1)
@@ -24,19 +25,51 @@ class LoginsListSelectionHelperTests: XCTestCase {
     }
 
     func testIndexPathIsSelected() {
-
+        let selection = IndexPath(row: 1, section: 1)
+        XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))
+        self.selectionHelper.selectIndexPath(selection)
+        XCTAssertTrue(self.selectionHelper.indexPathIsSelected(selection))
     }
 
     func testDeselectIndexPathh() {
-
+        let selection = IndexPath(row: 1, section: 1)
+        XCTAssertEqual(selectionHelper.selectedCount, 0)
+        XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))
+        self.selectionHelper.deselectIndexPath(selection)
+        XCTAssertEqual(selectionHelper.selectedCount, 0)
+        XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))
+        self.selectionHelper.selectIndexPath(selection)
+        XCTAssertEqual(selectionHelper.selectedCount, 1)
+        XCTAssertTrue(self.selectionHelper.indexPathIsSelected(selection))
+        self.selectionHelper.deselectIndexPath(selection)
+        XCTAssertEqual(selectionHelper.selectedCount, 0)
+        XCTAssertFalse(self.selectionHelper.indexPathIsSelected(selection))
     }
 
     func testDeselectAll() {
+        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
+        self.selectionHelper.deselectAll()
+        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
+        let selection1 = IndexPath(row: 1, section: 1)
+        let selection2 = IndexPath(row: 2, section: 2)
+        self.selectionHelper.selectIndexPath(selection1)
+        XCTAssertEqual(selectionHelper.selectedCount, 1)
+        self.selectionHelper.deselectAll()
+        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
+        self.selectionHelper.selectIndexPath(selection1)
+        self.selectionHelper.selectIndexPath(selection2)
+        XCTAssertEqual(selectionHelper.selectedCount, 2)
+        self.selectionHelper.deselectAll()
+        XCTAssertEqual(selectionHelper.selectedCount, 0)
+        XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
 
     }
 
     func testSelectIndexPaths() {
-
+        XCTAssertEqual(self.selectionHelper.selectedIndexPaths, [])
+        let selection = [IndexPath(row: 1, section: 1), IndexPath(row: 2, section: 2)]
+        self.selectionHelper.selectIndexPaths(selection)
+        XCTAssertEqual(self.selectionHelper.selectedIndexPaths, selection)
     }
     
 }
