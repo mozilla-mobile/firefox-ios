@@ -19,10 +19,10 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
-        imageButton.label.text = TodayStrings.NewTabButtonLabel
+        imageButton.label.text = String.NewTabButtonLabel
         let button = imageButton.button
         button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = TodayStrings.NewTabButtonLabel
+        button.accessibilityLabel = String.NewTabButtonLabel
         button.accessibilityTraits = .button
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
@@ -37,10 +37,10 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
-        imageButton.label.text = TodayStrings.NewPrivateTabButtonLabel
+        imageButton.label.text = String.NewPrivateTabButtonLabel
         let button = imageButton.button
         button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = TodayStrings.NewPrivateTabButtonLabel
+        button.accessibilityLabel = String.NewPrivateTabButtonLabel
         button.accessibilityTraits = .button
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
@@ -54,25 +54,27 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     fileprivate lazy var openCopiedLinkButton: ButtonWithSublabel = {
         let button = ButtonWithSublabel()
-        button.setTitle(TodayStrings.GoToCopiedLinkLabel, for: .normal)
+        button.setTitle(String.GoToCopiedLinkLabel, for: .normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
         button.setBackgroundColor(UIColor.clear, forState: .normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
         button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.labelTextSize))
-        button.accessibilityLabel = TodayStrings.GoToCopiedLinkLabel
+        button.accessibilityLabel = String.GoToCopiedLinkLabel
         button.accessibilityTraits = .button
         button.label.textColor = TodayUX.labelColor
         button.label.tintColor = TodayUX.labelColor
         button.label.sizeToFit()
         button.subtitleLabel.textColor = TodayUX.subtitleLabelColor
         button.subtitleLabel.tintColor = TodayUX.subtitleLabelColor
+
         button.label.font = UIFont.preferredFont(forTextStyle: .caption1)
         button.label.adjustsFontForContentSizeCategory = true
         button.subtitleLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         button.subtitleLabel.adjustsFontForContentSizeCategory = true
 //        button.subtitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.linkTextSize))
-        button.label.accessibilityLabel = TodayStrings.CopiedLinkLabelFromPasteBoard
+        button.subtitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.linkTextSize))
+        button.label.accessibilityLabel = String.CopiedLinkLabelFromPasteBoard
         button.accessibilityTraits = .none
         return button
     }()

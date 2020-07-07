@@ -1,10 +1,10 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-class ImageButtonWithLabel: UIView {
 
+class ImageButtonWithLabel: UIView {
     lazy var button = UIButton()
     lazy var label = UILabel()
 
@@ -33,9 +33,8 @@ class ImageButtonWithLabel: UIView {
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
-            make.height.equalTo(DynamicLabelResize.height(text: TodayStrings.NewTabButtonLabel, style: .body))
+            make.height.equalTo(DynamicLabelResize.height(text: String.NewTabButtonLabel, style: .body))
         }
-        
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center

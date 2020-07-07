@@ -180,7 +180,7 @@ extension SyncEngineStatsSession: DictionaryRepresentable {
         }
 
         if uploadStats.hasData() {
-            dict["outgoing"] = uploadStats.asDictionary()
+            dict["outgoing"] = [uploadStats.asDictionary()]
         }
 
         if let validation = self.validationStats, validation.hasData() {

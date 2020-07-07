@@ -23,7 +23,7 @@ Data collection
 Who will have Leanplum enabled?
 ======================================================
 
-Users who have a device locale listed in the following code snippet will have Leanplum enabled: https://github.com/mozilla-mobile/firefox-ios/blob/master/Client/Application/LeanplumIntegration.swift
+Users who have a device locale listed in the following code snippet will have Leanplum enabled: https://github.com/mozilla-mobile/firefox-ios/blob/main/Client/Application/LeanplumIntegration.swift
 
 
 Where does data sent to the Leanplum backend go?
@@ -109,7 +109,7 @@ Some events are not collected in Mozilla Telemetry. This will be addressed separ
 There are three elements that are used for each event. They are: event name, value(default: 0.0), and info(default: "").
 Default value for event value is 0.0. Default value for event info is empty string.
 
-Here is the list of current Events sent, which can be found here in the code base: https://github.com/mozilla-mobile/firefox-ios/blob/master/Client/Application/LeanplumIntegration.swift#L21
+Here is the list of current Events sent, which can be found here in the code base: https://github.com/mozilla-mobile/firefox-ios/blob/main/Client/Application/LeanplumIntegration.swift#L21
 
 The first launch after install
 ~~~~
