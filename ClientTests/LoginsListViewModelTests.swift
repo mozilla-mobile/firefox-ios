@@ -1,6 +1,6 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
-* License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 @testable import Client
 import Storage
@@ -18,6 +18,7 @@ class LoginsListViewModelTests: XCTestCase {
         self.viewModel = LoginListViewModel(profile: mockProfile, searchController: searchController)
         self.dataSource = LoginDataSource(viewModel: self.viewModel)
     }
+
     private func addLogins() {
         // make sure local db is empty
         _ = self.viewModel.profile.logins.wipeLocal()
@@ -40,9 +41,6 @@ class LoginsListViewModelTests: XCTestCase {
         let logins = self.viewModel.profile.logins.list().value
         XCTAssertTrue(logins.isSuccess)
         XCTAssertNotNil(logins.successValue)
-
-        // TODO
-//        test loadLogins
     }
 
     func testLoadLogins() { // TODO
@@ -56,13 +54,12 @@ class LoginsListViewModelTests: XCTestCase {
         self.addLogins()
 
         // load from populated db
-        let expectation = XCTestExpectation(description: "logins loaded")
         self.viewModel.loadLogins(loginDataSource: self.dataSource)
-//        XCTAssertEqual(self.viewModel.count, 10)
+        XCTAssertEqual(self.viewModel.count, 10)
 //        XCTAssertEqual(self.viewModel.titles[0], "https://example.com/22")
 
     }
-    
+
     func testQueryLogins() {
         // populate db
         self.addLogins()
