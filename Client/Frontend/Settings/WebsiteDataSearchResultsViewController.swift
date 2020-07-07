@@ -8,7 +8,7 @@ import Shared
 import WebKit
 
 protocol WebsiteDataSearchResultsViewControllerDelegate: class {
-    func websiteDataSearchResultsViewController(_ viewController: WebsiteDataSearchResultsViewController, didDeletedRecord record: WKWebsiteDataRecord)
+    func websiteDataSearchResultsViewController(_ viewController: WebsiteDataSearchResultsViewController, didDeleteRecord record: WKWebsiteDataRecord)
 }
 
 private let SectionHeaderFooterIdentifier = "SectionHeaderFooterIdentifier"
@@ -63,7 +63,7 @@ class WebsiteDataSearchResultsViewController: UIViewController, UITableViewDataS
 
         let types = WKWebsiteDataStore.allWebsiteDataTypes()
         WKWebsiteDataStore.default().removeData(ofTypes: types, for: [record]) {
-            self.delegate?.websiteDataSearchResultsViewController(self, didDeletedRecord: record)
+            self.delegate?.websiteDataSearchResultsViewController(self, didDeleteRecord: record)
             self.filteredSiteRecords.remove(at: indexPath.row)
             self.tableView.reloadData()
         }
