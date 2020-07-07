@@ -35,7 +35,7 @@ class ButtonWithSublabel: UIButton {
         self.label.snp.makeConstraints { make in
             make.left.equalTo(buttonImage.snp.right).offset(10)
             make.trailing.top.equalTo(self)
-            make.height.equalTo(15)
+            make.height.greaterThanOrEqualTo(15)
         }
         self.label.numberOfLines = 1
         self.label.lineBreakMode = .byWordWrapping
@@ -45,7 +45,7 @@ class ButtonWithSublabel: UIButton {
             make.bottom.equalTo(self).inset(10)
             make.top.equalTo(self.label.snp.bottom).offset(3)
             make.leading.trailing.equalTo(self.label)
-            make.height.equalTo(10)
+            make.height.greaterThanOrEqualTo(10)
         }
     }
 

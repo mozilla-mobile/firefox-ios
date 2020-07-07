@@ -3,8 +3,8 @@
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
-class ImageButtonWithLabel: UIView {
 
+class ImageButtonWithLabel: UIView {
     lazy var button = UIButton()
     lazy var label = UILabel()
 
