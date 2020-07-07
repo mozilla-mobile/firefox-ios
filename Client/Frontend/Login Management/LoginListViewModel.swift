@@ -31,10 +31,12 @@ final class LoginListViewModel {
     }
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource, onQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) {
-        // Fill in an in-flight query and re-query
-        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
-        activeLoginQuery = queryLogins(query ?? "")
-        activeLoginQuery! >>== self.setLogins
+        onQueue.async {
+            // Fill in an in-flight query and re-query
+            self.activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+            self.activeLoginQuery = self.queryLogins(query ?? "")
+            self.activeLoginQuery! >>== self.setLogins
+        }
     }
     
     /// Searches SQLite database for logins that match query.
