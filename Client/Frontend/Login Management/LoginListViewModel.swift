@@ -24,6 +24,8 @@ final class LoginListViewModel {
         }
     }
     fileprivate let helper = LoginListDataSourceHelper()
+    private(set) var breachAlertsManager = BreachAlertsManager()
+    private(set) var userBreaches: Maybe<[LoginRecord]>?
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
@@ -34,6 +36,12 @@ final class LoginListViewModel {
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
+        breachAlertsManager.loadBreaches { (maybeBreaches) in
+            guard let logins = self.activeLoginQuery?.value.successValue else {
+                return
+            }
+            self.userBreaches = self.breachAlertsManager.findUserBreaches(logins)
+        }
         activeLoginQuery! >>== self.setLogins
     }
     
