@@ -25,7 +25,7 @@ final class LoginListViewModel {
     }
     fileprivate let helper = LoginListDataSourceHelper()
     private(set) var breachAlertsManager = BreachAlertsManager()
-    private(set) var userBreaches: Maybe<[LoginRecord]>?
+    private(set) var userBreaches: [LoginRecord]?
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
@@ -40,7 +40,7 @@ final class LoginListViewModel {
             guard let logins = self.activeLoginQuery?.value.successValue else {
                 return
             }
-            self.userBreaches = self.breachAlertsManager.findUserBreaches(logins)
+            self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
         }
         activeLoginQuery! >>== self.setLogins
     }
@@ -122,4 +122,10 @@ final class LoginListViewModel {
 // MARK: - LoginDataSourceViewModelDelegate
 protocol LoginViewModelDelegate: AnyObject {
     func loginSectionsDidUpdate()
+}
+
+extension LoginRecord: Equatable {
+    public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
+        return lhs.id == rhs.id && lhs.hostname == rhs.hostname && lhs.credentials == rhs.credentials
+    }
 }

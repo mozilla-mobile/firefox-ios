@@ -66,6 +66,11 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.detailTextColor = UIColor.theme.tableView.rowDetailText
             cell.detailTextLabel?.text = login.username
             cell.accessoryType = .disclosureIndicator
+            if let breaches = viewModel.userBreaches {
+                if breaches.contains(login) {
+                    cell.textLabel?.textColor = UIColor.systemRed
+                }
+            }
         }
         // Need to override the default background multi-select color to support theming
         cell.multipleSelectionBackgroundView = UIView()
