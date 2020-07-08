@@ -8,9 +8,7 @@
 // Ensure this module only gets included once. This is
 // required for user scripts injected into all frames.
 window.__firefox__.includeOnce("ContextMenu", function() {
-  var usePointerEvent = "PointerEvent" in window;
-  var eventName = usePointerEvent ? "pointerdown" : "touchstart";
-  window.addEventListener(eventName, function(evt) {
+  window.addEventListener("touchstart", function(evt) {
     var target = evt.target;
 
     var targetLink = target.closest("a");
@@ -22,13 +20,8 @@ window.__firefox__.includeOnce("ContextMenu", function() {
 
     var data = {};
 
-    if (usePointerEvent){
-      data.touchX = evt.pageX;
-      data.touchY = evt.pageY;
-    } else {
-      data.touchX = evt.changedTouches[0].pageX;
-      data.touchY = evt.changedTouches[0].pageY;
-    }
+    data.touchX = evt.changedTouches[0].pageX - window.scrollX;
+    data.touchY = evt.changedTouches[0].pageY - window.scrollY;
 
     if (targetLink) {
       data.link = targetLink.href;
