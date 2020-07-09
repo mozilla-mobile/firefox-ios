@@ -56,7 +56,9 @@ final public class BreachAlertsManager {
     /// Compares a list of logins to a list of breaches and returns breached logins.
     ///    - Parameters:
     ///         - logins: a list of logins to compare breaches to
-    func findUserBreaches(_ logins: [LoginRecord]) -> Maybe<[LoginRecord]> {
+    ///    - Returns:
+    ///         - an array of IndexPaths of breaches in the original list.
+    func findUserBreaches(_ logins: [LoginRecord]) -> Maybe<[IndexPath]> {
         var result: [LoginRecord] = []
 
         if self.breaches.count <= 0 {
@@ -80,6 +82,7 @@ final public class BreachAlertsManager {
                     dateFormatter.dateFormat = "yyyy-MM-dd"
                     if let breachDate = dateFormatter.date(from: breach.breachDate), pwLastChanged < breachDate {
                         print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
+                        let index = logins.firstIndex(of: login)
                         result.append(login)
                     }
                 }

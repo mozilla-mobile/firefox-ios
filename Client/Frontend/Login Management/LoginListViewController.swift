@@ -166,6 +166,7 @@ class LoginListViewController: SensitiveViewController {
         super.viewWillAppear(animated)
 
         loadLogins()
+        self.tableView.cellForRow(at: <#T##IndexPath#>)
     }
 
     func applyTheme() {

@@ -26,6 +26,7 @@ final class LoginListViewModel {
     fileprivate let helper = LoginListDataSourceHelper()
     private(set) var breachAlertsManager = BreachAlertsManager()
     private(set) var userBreaches: [LoginRecord]?
+    private(set) var breachIndexPath = [IndexPath]()
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
@@ -58,6 +59,25 @@ final class LoginListViewModel {
 
     func setIsDuringSearchControllerDismiss(to: Bool) {
         self.isDuringSearchControllerDismiss = to
+    }
+
+    private func setBreaches() {
+        self.breachIndexPath = []
+        guard let breaches = self.userBreaches else {
+            return
+        }
+        for breach in breaches {
+            let title = self.helper.titleForLogin(breach)
+            guard let breachSection = loginRecordSections[title] else {
+                return
+            }
+            if breachSection.contains(breach) {
+                guard let breachRow = breachSection.firstIndex(of: breach) else { return }
+                let breachSectionIndex = loginRecordSections.index(forKey: title).
+                let indexPath = IndexPath(row: breachRow, section: breachSectionIndex)
+                self.breachIndexPath.append(indexPath)
+            }
+        }
     }
 
     // MARK: - Data Source Methods
