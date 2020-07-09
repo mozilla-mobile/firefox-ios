@@ -51,6 +51,32 @@ class LoginsListViewModelHelperTests: XCTestCase {
     }
 
     func testComputeSectionsFromLogins() { // TODO
+        let apple = LoginRecord(fromJSONDict: [
+            "hostname": "https://apple.com/",
+            "id": "apple"
+        ])
+        let appleMusic = LoginRecord(fromJSONDict: [
+            "hostname": "https://apple.com/music",
+            "id": "appleMusic"
+        ])
+        let zebra = LoginRecord(fromJSONDict: [
+            "hostname": "https://zebra.com/",
+            "id": "zebra"
+        ])
 
+        let sortedTitles = [Character("A"), Character("Z")]
+        var expected = [Character: [LoginRecord]]()
+        expected[Character("A")] = [apple, appleMusic]
+        expected[Character("Z")] = [zebra]
+
+        let logins = [apple, appleMusic, zebra]
+        self.helper.setDomainLookup(logins)
+        self.helper.computeSectionsFromLogins(logins).upon { (formattedLoginsMaybe) in
+            XCTAssertTrue(formattedLoginsMaybe.isSuccess)
+            XCTAssertNotNil(formattedLoginsMaybe.successValue)
+            let formattedLogins = formattedLoginsMaybe.successValue
+            XCTAssertEqual(formattedLogins?.0, sortedTitles)
+            XCTAssertEqual(formattedLogins?.1, expected)
+        }
     }
 }

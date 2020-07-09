@@ -11,6 +11,7 @@ class LoginListViewModelHelper {
     // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
     // baseDomain() is a costly call because of the ETLD lookup tables.
     func setDomainLookup(_ logins: [LoginRecord]) {
+        self.domainLookup = [:]
         logins.forEach { login in
             self.domainLookup[login.id] = (
                 login.hostname.asURL?.baseDomain,
@@ -52,7 +53,7 @@ class LoginListViewModelHelper {
         }
     }
 
-    func computeSectionsFromLogins(_ logins: [LoginRecord], onQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) -> Deferred<Maybe<([Character], [Character: [LoginRecord]])>> {
+    func computeSectionsFromLogins(_ logins: [LoginRecord]) -> Deferred<Maybe<([Character], [Character: [LoginRecord]])>> {
         guard logins.count > 0 else {
             return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
         }
@@ -60,7 +61,7 @@ class LoginListViewModelHelper {
         var sections = [Character: [LoginRecord]]()
         var titleSet = Set<Character>()
 
-        return deferDispatchAsync(onQueue) {
+        return deferDispatchAsync(DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) {
             self.setDomainLookup(logins)
 
             // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.

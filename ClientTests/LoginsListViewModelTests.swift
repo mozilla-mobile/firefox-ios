@@ -43,29 +43,6 @@ class LoginsListViewModelTests: XCTestCase {
         XCTAssertNotNil(logins.successValue)
     }
 
-    func testLoadLogins() { // TODO
-        // start with loading empty DB
-        XCTAssertNil(self.viewModel.activeLoginQuery)
-        self.viewModel.loadLogins(loginDataSource: self.dataSource)
-        XCTAssertEqual(self.viewModel.count, 0)
-        XCTAssertEqual(self.viewModel.titles, [])
-
-        // populate db
-        self.addLogins()
-
-        // load from populated db
-        let queue = DispatchQueue(label: "LoginViewModelTests")
-        let loaded = expectation(description: "loaded login")
-        self.viewModel.loadLogins("", loginDataSource: self.dataSource, onQueue: queue)
-        queue.sync {
-            loaded.fulfill()
-        }
-        waitForExpectations(timeout: 5, handler: nil)
-        XCTAssertEqual(self.viewModel.count, 10)
-//        XCTAssertEqual(self.viewModel.titles[0], "https://example.com/22")
-
-    }
-
     func testQueryLogins() {
         // populate db
         self.addLogins()
@@ -82,9 +59,9 @@ class LoginsListViewModelTests: XCTestCase {
         XCTAssertTrue(threeQueryResult.value.isSuccess)
         XCTAssertEqual(threeQueryResult.value.successValue?.count, 1)
 
-        let usernameQueryResult = self.viewModel.queryLogins("username")
-        XCTAssertTrue(usernameQueryResult.value.isSuccess)
-        XCTAssertEqual(usernameQueryResult.value.successValue?.count, 10)
+        let zQueryResult = self.viewModel.queryLogins("yxz")
+        XCTAssertTrue(zQueryResult.value.isSuccess)
+        XCTAssertEqual(zQueryResult.value.successValue?.count, 0)
     }
 
     func testIsDuringSearchControllerDismiss() {

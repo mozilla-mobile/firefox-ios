@@ -30,13 +30,11 @@ final class LoginListViewModel {
         self.searchController = searchController
     }
 
-    func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource, onQueue: DispatchQueue = DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) {
-        onQueue.async {
-            // Fill in an in-flight query and re-query
-            self.activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
-            self.activeLoginQuery = self.queryLogins(query ?? "")
-            self.activeLoginQuery! >>== self.setLogins
-        }
+    func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
+        // Fill in an in-flight query and re-query
+        self.activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+        self.activeLoginQuery = self.queryLogins(query ?? "")
+        self.activeLoginQuery! >>== self.setLogins
     }
     
     /// Searches SQLite database for logins that match query.
@@ -116,4 +114,10 @@ final class LoginListViewModel {
 // MARK: - LoginDataSourceViewModelDelegate
 protocol LoginViewModelDelegate: AnyObject {
     func loginSectionsDidUpdate()
+}
+
+extension LoginRecord: Equatable {
+    public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
