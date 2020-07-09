@@ -20,10 +20,8 @@ class LoginsListViewModelTests: XCTestCase {
     }
 
     private func addLogins() {
-        // make sure local db is empty
         _ = self.viewModel.profile.logins.wipeLocal()
 
-        // add logins to DB - tested in RustLoginsTests
         for i in (0..<10) {
             let login = LoginRecord(fromJSONDict: [
                 "hostname": "https://example\(i).com/",
@@ -37,14 +35,12 @@ class LoginsListViewModelTests: XCTestCase {
             XCTAssertNotNil(addResult.value.successValue)
         }
 
-        // make sure db is populated
         let logins = self.viewModel.profile.logins.list().value
         XCTAssertTrue(logins.isSuccess)
         XCTAssertNotNil(logins.successValue)
     }
 
     func testQueryLogins() {
-        // populate db
         self.addLogins()
 
         let emptyQueryResult = self.viewModel.queryLogins("")
@@ -72,19 +68,5 @@ class LoginsListViewModelTests: XCTestCase {
 
         self.viewModel.setIsDuringSearchControllerDismiss(to: false)
         XCTAssertFalse(self.viewModel.isDuringSearchControllerDismiss)
-    }
-
-    func testLoginAtIndexPath() { // TODO
-//        let firstItem = self.viewModel.loginAtIndexPath(IndexPath(row: 1, section: 1))
-//        XCTAssertNotNil(firstItem)
-//        XCTAssertEqual(firstItem?.hostname, "https://example1.com/")
-    }
-
-    func testLoginsForSection() { // TODO
-
-    }
-
-    func testSetLogins() { // TODO
-        
     }
 }

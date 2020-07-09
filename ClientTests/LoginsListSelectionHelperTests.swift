@@ -7,6 +7,7 @@ import XCTest
 
 class LoginsListSelectionHelperTests: XCTestCase {
     var selectionHelper: LoginListSelectionHelper!
+
     override func setUp() {
         let tableView = UITableView()
         self.selectionHelper = LoginListSelectionHelper(tableView: tableView)
@@ -59,7 +60,6 @@ class LoginsListSelectionHelperTests: XCTestCase {
         self.selectionHelper.deselectAll()
         XCTAssertEqual(selectionHelper.selectedCount, 0)
         XCTAssertEqual(selectionHelper.selectedIndexPaths, [])
-
     }
 
     func testSelectIndexPaths() {
@@ -68,5 +68,4 @@ class LoginsListSelectionHelperTests: XCTestCase {
         self.selectionHelper.selectIndexPaths(selection)
         XCTAssertEqual(self.selectionHelper.selectedIndexPaths, selection)
     }
-    
 }

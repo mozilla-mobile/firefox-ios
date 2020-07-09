@@ -3159,14 +3159,14 @@
 		E63ED8DF1BFD254E0097D08E /* Login Management */ = {
 			isa = PBXGroup;
 			children = (
-				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
+				E63ED7D71BFCD9990097D08E /* LoginTableViewCell.swift */,
 				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
-				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
-				CA90753724929B22005B794D /* NoLoginsView.swift */,
 				CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */,
-				CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */,
+				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
 				CA7FC7D224A6A9B70012F347 /* LoginListViewModelHelper.swift */,
+				CA90753724929B22005B794D /* NoLoginsView.swift */,
+				CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */,
 				CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */,
 				CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */,
 			);
