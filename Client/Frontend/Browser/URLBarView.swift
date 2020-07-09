@@ -152,6 +152,7 @@ class URLBarView: UIView {
 
     var appMenuButton = ToolbarButton()
     var libraryButton = ToolbarButton()
+    var addNewTabButton = ToolbarButton()
 
     var bookmarkButton = ToolbarButton()
     var forwardButton = ToolbarButton()
@@ -163,7 +164,7 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton, self.forwardButton, self.backButton, self.stopReloadButton]
+    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.stopReloadButton]
 
     var currentURL: URL? {
         get {
@@ -198,7 +199,7 @@ class URLBarView: UIView {
         locationContainer.addSubview(locationView)
 
         [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-         libraryButton, appMenuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
+         libraryButton, appMenuButton, addNewTabButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
             addSubview($0)
         }
 
@@ -270,6 +271,12 @@ class URLBarView: UIView {
             make.centerY.equalTo(self)
             make.size.equalTo(URLBarViewUX.ButtonHeight)
         }
+        
+        addNewTabButton.snp.makeConstraints { make in
+            make.trailing.equalTo(self.tabsButton.snp.leading)
+            make.centerY.equalTo(self)
+            make.size.equalTo(URLBarViewUX.ButtonHeight)
+        }
 
         tabsButton.snp.makeConstraints { make in
             make.trailing.equalTo(self.appMenuButton.snp.leading)
@@ -314,9 +321,8 @@ class URLBarView: UIView {
                     if self.topTabsIsShowing {
                         make.trailing.equalTo(self.libraryButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
-                        make.trailing.equalTo(self.tabsButton.snp.leading).offset(-URLBarViewUX.Padding)
+                        make.trailing.equalTo(self.addNewTabButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
-
                 } else {
                     // Otherwise, left align the location view
                     make.leading.trailing.equalTo(self).inset(UIEdgeInsets(top: 0, left: URLBarViewUX.LocationLeftPadding-1, bottom: 0, right: URLBarViewUX.LocationLeftPadding-1))
@@ -478,6 +484,7 @@ class URLBarView: UIView {
         cancelButton.isHidden = false
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false
+        addNewTabButton.isHidden = !toolbarIsShowing
         appMenuButton.isHidden = !toolbarIsShowing
         libraryButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
@@ -494,6 +501,7 @@ class URLBarView: UIView {
         tabsButton.alpha = inOverlayMode ? 0 : 1
         appMenuButton.alpha = inOverlayMode ? 0 : 1
         libraryButton.alpha = inOverlayMode ? 0 : 1
+        addNewTabButton.alpha = inOverlayMode ? 0 : 1
         forwardButton.alpha = inOverlayMode ? 0 : 1
         backButton.alpha = inOverlayMode ? 0 : 1
         stopReloadButton.alpha = inOverlayMode ? 0 : 1
@@ -522,6 +530,7 @@ class URLBarView: UIView {
         cancelButton.isHidden = !inOverlayMode
         showQRScannerButton.isHidden = !inOverlayMode
         progressBar.isHidden = inOverlayMode
+        addNewTabButton.isHidden = !toolbarIsShowing || inOverlayMode
         appMenuButton.isHidden = !toolbarIsShowing || inOverlayMode
         libraryButton.isHidden = !toolbarIsShowing || inOverlayMode || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing || inOverlayMode
@@ -627,7 +636,7 @@ extension URLBarView: TabToolbarProtocol {
                 return [locationTextField, cancelButton]
             } else {
                 if toolbarIsShowing {
-                    return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, appMenuButton, progressBar]
+                    return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, appMenuButton, addNewTabButton, progressBar]
                 } else {
                     return [locationView, progressBar]
                 }
@@ -745,6 +754,7 @@ extension URLBarView: Themeable {
 
         actionButtons.forEach { $0.applyTheme() }
         tabsButton.applyTheme()
+        addNewTabButton.applyTheme()
 
         cancelTintColor = UIColor.theme.browser.tint
         showQRButtonTintColor = UIColor.theme.browser.tint
