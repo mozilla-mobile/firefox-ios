@@ -164,7 +164,8 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.stopReloadButton]
+    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton,  self.forwardButton, self.backButton, self.stopReloadButton]
+//    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.stopReloadButton]
 
     var currentURL: URL? {
         get {
@@ -202,6 +203,11 @@ class URLBarView: UIView {
          libraryButton, appMenuButton, addNewTabButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
             addSubview($0)
         }
+        
+//        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
+//         libraryButton, appMenuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
+//            addSubview($0)
+//        }
 
         privateModeBadge.add(toParent: self)
         appMenuBadge.add(toParent: self)
@@ -322,6 +328,7 @@ class URLBarView: UIView {
                         make.trailing.equalTo(self.libraryButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
                         make.trailing.equalTo(self.addNewTabButton.snp.leading).offset(-URLBarViewUX.Padding)
+//                        make.trailing.equalTo(self.tabsButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
                 } else {
                     // Otherwise, left align the location view
@@ -394,6 +401,12 @@ class URLBarView: UIView {
         // when we transition from portrait to landscape, calling this here causes
         // the constraints to be calculated too early and there are constraint errors
         if !toolbarIsShowing {
+            addNewTabButton.isHidden = !toolbarIsShowing
+//            if !toolbarIsShowing {
+//                
+//            }else {
+//                addSubview(addNewTabButton)
+//            }
             updateConstraintsIfNeeded()
         }
         updateViewsForOverlayModeAndToolbarChanges()
@@ -484,7 +497,7 @@ class URLBarView: UIView {
         cancelButton.isHidden = false
         showQRScannerButton.isHidden = false
         progressBar.isHidden = false
-        addNewTabButton.isHidden = !toolbarIsShowing
+        addNewTabButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         appMenuButton.isHidden = !toolbarIsShowing
         libraryButton.isHidden = !toolbarIsShowing || !topTabsIsShowing
         forwardButton.isHidden = !toolbarIsShowing
@@ -637,6 +650,7 @@ extension URLBarView: TabToolbarProtocol {
             } else {
                 if toolbarIsShowing {
                     return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, appMenuButton, addNewTabButton, progressBar]
+//                    return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, appMenuButton, progressBar]
                 } else {
                     return [locationView, progressBar]
                 }

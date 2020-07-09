@@ -41,6 +41,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPresssAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
 fileprivate enum MiddleButtonState {
@@ -180,7 +181,7 @@ open class TabToolbarHelper: NSObject {
     }
     
     func didClickAddNewTab() {
-        print("Add new tab clicked")
+        toolbar.tabToolbarDelegate?.tabToolbarDidPresssAddNewTab(toolbar, button: toolbar.addNewTabButton)
     }
 
     func didClickStopReload() {
@@ -297,7 +298,7 @@ class TabToolbar: UIView {
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
-        privateModeBadge.layout(onButton: addNewTabButton)
+//        privateModeBadge.layout(onButton: addNewTabButton)
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
 
