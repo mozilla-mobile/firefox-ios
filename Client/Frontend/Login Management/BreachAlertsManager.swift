@@ -69,19 +69,17 @@ final public class BreachAlertsManager {
 
         let loginsDictionary = loginsByHostname(logins)
         for breach in self.breaches {
-            guard let potentialBreaches = loginsDictionary[breach.domain] else {
-                return Maybe(failure: BreachAlertsError(description: "failed to unwrap logins"))
-            }
+            if let potentialBreaches = loginsDictionary[breach.domain] {
+                for item in potentialBreaches {
+                    // date check
+                    let pwLastChanged = TimeInterval(item.timePasswordChanged*1000)
 
-            for item in potentialBreaches {
-                // date check
-                let pwLastChanged = Date(timeIntervalSince1970: TimeInterval(item.timePasswordChanged))
-
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                if let breachDate = dateFormatter.date(from: breach.breachDate), pwLastChanged < breachDate {
-                    print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
-                    result.append(item)
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "yyyy-MM-dd"
+                    if let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate {
+                        print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
+                        result.append(item)
+                    }
                 }
             }
         }
@@ -89,15 +87,24 @@ final public class BreachAlertsManager {
         return Maybe(success: result)
     }
 
-    private func loginsByHostname(_ logins: [LoginRecord]) -> [String: [LoginRecord]] {
+    func loginsByHostname(_ logins: [LoginRecord]) -> [String: [LoginRecord]] {
         var result = [String: [LoginRecord]]()
+        var baseDomains = Set<String>()
         for login in logins {
-            guard let baseDomain = login.hostname.asURL?.baseDomain else {
-                return ["Error":[]]
-            }
-            if !result.keys.contains(baseDomain) { result = [:] }
-            result[baseDomain]?.append(login)
+            baseDomains.insert(baseDomainForLogin(login))
         }
+        for base in baseDomains {
+            result[base] = [LoginRecord]()
+        }
+
+        for login in logins {
+            result[self.baseDomainForLogin(login)]?.append(login)
+        }
+        return result
+    }
+
+    private func baseDomainForLogin(_ login: LoginRecord) -> String {
+        guard let result = login.hostname.asURL?.baseDomain else { return login.hostname }
         return result
     }
 }
