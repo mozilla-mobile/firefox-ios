@@ -1,19 +1,16 @@
-//
-//  LoginsListDataSourceHelperTests.swift
-//  ClientTests
-//
-//  Created by Vanna Phong on 6/30/20.
-//  Copyright © 2020 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 @testable import Client
 import Storage
 import Shared
 import XCTest
 
-class LoginsListDataSourceHelperTests: XCTestCase {
-    var helper: LoginListViewModelHelper!
+class LoginListDataSourceHelperTests: XCTestCase {
+    var helper: LoginListDataSourceHelper!
     override func setUp() {
-        helper = LoginListViewModelHelper()
+        helper = LoginListDataSourceHelper()
     }
 
     func testSetDomainLookup() {
@@ -53,7 +50,33 @@ class LoginsListDataSourceHelperTests: XCTestCase {
         XCTAssertFalse(self.helper.sortByDomain(zebra, loginB: apple))
     }
 
-    func testComputeSectionsFromLogins() { // TODO
+    func testComputeSectionsFromLogins() {
+        let apple = LoginRecord(fromJSONDict: [
+            "hostname": "https://apple.com/",
+            "id": "apple"
+        ])
+        let appleMusic = LoginRecord(fromJSONDict: [
+            "hostname": "https://apple.com/music",
+            "id": "appleMusic"
+        ])
+        let zebra = LoginRecord(fromJSONDict: [
+            "hostname": "https://zebra.com/",
+            "id": "zebra"
+        ])
 
+        let sortedTitles = [Character("A"), Character("Z")]
+        var expected = [Character: [LoginRecord]]()
+        expected[Character("A")] = [apple, appleMusic]
+        expected[Character("Z")] = [zebra]
+
+        let logins = [apple, appleMusic, zebra]
+        self.helper.setDomainLookup(logins)
+        self.helper.computeSectionsFromLogins(logins).upon { (formattedLoginsMaybe) in
+            XCTAssertTrue(formattedLoginsMaybe.isSuccess)
+            XCTAssertNotNil(formattedLoginsMaybe.successValue)
+            let formattedLogins = formattedLoginsMaybe.successValue
+            XCTAssertEqual(formattedLogins?.0, sortedTitles)
+            XCTAssertEqual(formattedLogins?.1, expected)
+        }
     }
 }
