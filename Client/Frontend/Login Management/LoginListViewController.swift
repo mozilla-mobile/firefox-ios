@@ -266,7 +266,11 @@ private extension LoginListViewController {
 
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
-        viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
+        viewModel.loadLogins(query, loginDataSource: self.loginDataSource)?.upon { _ in
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 
     @objc func beginEditing() {

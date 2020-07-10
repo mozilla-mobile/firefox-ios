@@ -33,7 +33,7 @@ final class LoginListViewModel {
         self.searchController = searchController
     }
 
-    func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
+    func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) -> Deferred<Maybe<[LoginRecord]>>? {
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
@@ -44,6 +44,7 @@ final class LoginListViewModel {
             self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
         }
         activeLoginQuery! >>== self.setLogins
+        return activeLoginQuery
     }
     
     /// Searches SQLite database for logins that match query.

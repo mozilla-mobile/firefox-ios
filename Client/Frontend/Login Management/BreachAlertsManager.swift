@@ -57,7 +57,7 @@ final public class BreachAlertsManager {
     ///    - Parameters:
     ///         - logins: a list of logins to compare breaches to
     ///    - Returns:
-    ///         - an array of IndexPaths of breaches in the original list.
+    ///         - an array of LoginRecords of breaches in the original list.
     func findUserBreaches(_ logins: [LoginRecord]) -> Maybe<[LoginRecord]> {
         var result: [LoginRecord] = []
 
@@ -71,9 +71,7 @@ final public class BreachAlertsManager {
         for breach in self.breaches {
             if let potentialBreaches = loginsDictionary[breach.domain] {
                 for item in potentialBreaches {
-                    // date check
-                    let pwLastChanged = TimeInterval(item.timePasswordChanged*1000)
-
+                    let pwLastChanged = TimeInterval(item.timePasswordChanged/1000)
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "yyyy-MM-dd"
                     if let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate {

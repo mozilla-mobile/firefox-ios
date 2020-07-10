@@ -28,10 +28,10 @@ class MockBreachAlertsClient: BreachAlertsClientProtocol {
 class BreachAlertsTests: XCTestCase {
     var breachAlertsManager: BreachAlertsManager!
     let unbreachedLogin = [
-        LoginRecord(fromJSONDict: ["hostname" : "http://unbreached.com", "timePasswordChanged": 1590784648189])
+        LoginRecord(fromJSONDict: ["hostname" : "http://unbreached.com", "timePasswordChanged": 1594411049000])
     ]
     let breachedLogin = [
-        LoginRecord(fromJSONDict: ["hostname" : "http://breached.com", "timePasswordChanged": 1])
+        LoginRecord(fromJSONDict: ["hostname" : "http://breached.com", "timePasswordChanged": 46800000])
    ]
     override func setUp() {
         self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient())
