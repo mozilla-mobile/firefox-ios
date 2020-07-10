@@ -221,6 +221,13 @@ The event ping contains a list of events ([see event format on readthedocs.io](h
 | Tab view button is pressed | action | press | tab-toolbar | tab-view | -n/a- |
                
 
+### Tab Tray
+
+| Event                                                               | category | method    | object  | value            | extras                                            |
+|---------------------------------------------------------------------|----------|-----------|---------|------------------|---------------------------------------------------|
+| Allow user to search or add url from tab tray search button  | action   | tap | start-search-button | -n/a-          | -n/a-                     |
+
+
 ## Limits
 
 * An event ping will not be sent until at least 3 events are recorded
