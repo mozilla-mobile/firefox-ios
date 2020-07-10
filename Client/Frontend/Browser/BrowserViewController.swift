@@ -236,7 +236,7 @@ class BrowserViewController: UIViewController {
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
-        navigationToolbar.addNewTabButton.isHidden = true
+        toolbar?.addNewTabButton.isHidden = showToolbar
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
         toolbar = nil

@@ -201,11 +201,6 @@ class URLBarView: UIView {
          libraryButton, appMenuButton, addNewTabButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
             addSubview($0)
         }
-        
-//        [scrollToTopButton, line, tabsButton, progressBar, cancelButton, showQRScannerButton,
-//         libraryButton, appMenuButton, forwardButton, backButton, stopReloadButton, locationContainer].forEach {
-//            addSubview($0)
-//        }
 
         privateModeBadge.add(toParent: self)
         appMenuBadge.add(toParent: self)
