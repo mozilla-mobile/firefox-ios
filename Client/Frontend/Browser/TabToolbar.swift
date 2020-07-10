@@ -26,7 +26,6 @@ protocol TabToolbarProtocol: AnyObject {
     func privateModeBadge(visible: Bool)
     func appMenuBadge(setVisible: Bool)
     func warningMenuBadge(setVisible: Bool)
-//    func hideAddNewTabButton(setVisible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -54,7 +53,6 @@ fileprivate enum MiddleButtonState {
 @objcMembers
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
-    
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
@@ -244,10 +242,8 @@ class ToolbarButton: UIButton {
     }
 
     override var isHidden: Bool {
-            didSet {
-                superview?.layoutIfNeeded()
-                print("isHidden\(isHidden)")
-                separatorLine?.isHidden = isHidden
+        didSet {
+            separatorLine?.isHidden = isHidden
         }
     }
 }
@@ -279,7 +275,7 @@ class TabToolbar: UIView {
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
     var helper: TabToolbarHelper?
-    let contentView = UIStackView()
+    private let contentView = UIStackView()
 
     fileprivate override init(frame: CGRect) {
         actionButtons = [backButton, forwardButton, stopReloadButton, addNewTabButton, tabsButton, appMenuButton]
@@ -342,10 +338,6 @@ class TabToolbar: UIView {
         context.addLine(to: CGPoint(x: end.x, y: end.y))
         context.strokePath()
     }
-    
-    func hideAddNewTabButton() {
-        addNewTabButton.isHidden = true
-    }
 }
 
 extension TabToolbar: TabToolbarProtocol {
@@ -390,10 +382,6 @@ extension TabToolbar: TabToolbarProtocol {
 
     func updateIsSearchStatus(_ isSearch: Bool) {
         helper?.isSearch = isSearch
-    }
-    
-    func hideAddNewTabButton(setVisible: Bool) {
-        addNewTabButton.isHidden = setVisible
     }
 }
 

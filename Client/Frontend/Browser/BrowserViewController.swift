@@ -236,7 +236,6 @@ class BrowserViewController: UIViewController {
 
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
-//        navigationToolbar.hideAddNewTabButton(setVisible: true)
         navigationToolbar.addNewTabButton.isHidden = true
         toolbar?.removeFromSuperview()
         toolbar?.tabToolbarDelegate = nil
@@ -248,7 +247,6 @@ class BrowserViewController: UIViewController {
             toolbar?.tabToolbarDelegate = self
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
-//            toolbar?.hideAddNewTabButton(setVisible: true)
             toolbar?.addNewTabButton.isHidden = true
             updateTabCountUsingTabManager(self.tabManager)
         }
@@ -470,8 +468,6 @@ class BrowserViewController: UIViewController {
         
         // Setup onboarding user research for A/B testing
         onboardingUserResearch = OnboardingUserResearch()
-        
-//        navigationToolbar.hideAddNewTabButton(setVisible: true)
     }
 
     fileprivate func setupConstraints() {

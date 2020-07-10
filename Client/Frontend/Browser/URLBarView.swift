@@ -163,7 +163,6 @@ class URLBarView: UIView {
         return backButton
     }()
 
-//    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton,  self.forwardButton, self.backButton, self.stopReloadButton]
     lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.stopReloadButton]
 
     var currentURL: URL? {
@@ -298,8 +297,6 @@ class URLBarView: UIView {
         privateModeBadge.layout(onButton: tabsButton)
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
-        
-//        addNewTabButton.isHidden = true
     }
 
     override func updateConstraints() {
@@ -400,12 +397,7 @@ class URLBarView: UIView {
         setNeedsUpdateConstraints()
         // when we transition from portrait to landscape, calling this here causes
         // the constraints to be calculated too early and there are constraint errors
-//        if toolbarIsShowing {
-//            addNewTabButton.isHidden = true
-//        }
         if !toolbarIsShowing {
-//            addNewTabButton.isHidden = !toolbarIsShowing
-//            addNewTabButton.alpha = !toolbarIsShowing ? 0 : 1
             updateConstraintsIfNeeded()
         }
         updateViewsForOverlayModeAndToolbarChanges()
@@ -618,7 +610,6 @@ extension URLBarView: TabToolbarProtocol {
 
     func updateForwardStatus(_ canGoForward: Bool) {
         forwardButton.isEnabled = canGoForward
-        forwardButton.isHidden = true
     }
 
     func updateTabCount(_ count: Int, animated: Bool = true) {
@@ -650,7 +641,6 @@ extension URLBarView: TabToolbarProtocol {
             } else {
                 if toolbarIsShowing {
                     return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, appMenuButton, addNewTabButton, progressBar]
-//                    return [backButton, forwardButton, stopReloadButton, locationView, tabsButton, libraryButton, appMenuButton, progressBar]
                 } else {
                     return [locationView, progressBar]
                 }
