@@ -61,25 +61,6 @@ final class LoginListViewModel {
         self.isDuringSearchControllerDismiss = to
     }
 
-    private func setBreaches() {
-        self.breachIndexPath = []
-        guard let breaches = self.userBreaches else {
-            return
-        }
-        for breach in breaches {
-            let title = self.helper.titleForLogin(breach)
-            guard let breachSection = loginRecordSections[title] else {
-                return
-            }
-            if breachSection.contains(breach) {
-                guard let breachRow = breachSection.firstIndex(of: breach) else { return }
-                let breachSectionIndex = loginRecordSections.index(forKey: title).
-                let indexPath = IndexPath(row: breachRow, section: breachSectionIndex)
-                self.breachIndexPath.append(indexPath)
-            }
-        }
-    }
-
     // MARK: - Data Source Methods
     func loginAtIndexPath(_ indexPath: IndexPath) -> LoginRecord? {
         guard indexPath.section > 0 else {
