@@ -26,7 +26,6 @@ final class LoginListViewModel {
     fileprivate let helper = LoginListDataSourceHelper()
     private(set) var breachAlertsManager = BreachAlertsManager()
     private(set) var userBreaches: [LoginRecord]?
-    private(set) var breachIndexPath = [IndexPath]()
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
