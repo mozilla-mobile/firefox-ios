@@ -8,9 +8,9 @@ import Shared
 import XCTest
 
 class LoginsListViewModelHelperTests: XCTestCase {
-    var helper: LoginListViewModelHelper!
+    var helper: LoginListDataSourceHelper!
     override func setUp() {
-        helper = LoginListViewModelHelper()
+        helper = LoginListDataSourceHelper()
     }
 
     func testSetDomainLookup() {
@@ -50,7 +50,7 @@ class LoginsListViewModelHelperTests: XCTestCase {
         XCTAssertFalse(self.helper.sortByDomain(zebra, loginB: apple))
     }
 
-    func testComputeSectionsFromLogins() { // TODO
+    func testComputeSectionsFromLogins() {
         let apple = LoginRecord(fromJSONDict: [
             "hostname": "https://apple.com/",
             "id": "apple"
