@@ -154,7 +154,6 @@ class URLBarView: UIView {
     var libraryButton = ToolbarButton()
     var addNewTabButton = ToolbarButton()
 
-    var bookmarkButton = ToolbarButton()
     var forwardButton = ToolbarButton()
     var stopReloadButton = ToolbarButton()
 
@@ -164,8 +163,8 @@ class URLBarView: UIView {
         return backButton
     }()
 
-    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton,  self.forwardButton, self.backButton, self.stopReloadButton]
-//    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.stopReloadButton]
+//    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton,  self.forwardButton, self.backButton, self.stopReloadButton]
+    lazy var actionButtons: [Themeable & UIButton] = [self.tabsButton, self.libraryButton, self.appMenuButton, self.addNewTabButton,  self.forwardButton, self.backButton, self.stopReloadButton]
 
     var currentURL: URL? {
         get {
@@ -299,6 +298,8 @@ class URLBarView: UIView {
         privateModeBadge.layout(onButton: tabsButton)
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
+        
+//        addNewTabButton.isHidden = true
     }
 
     override func updateConstraints() {
@@ -328,7 +329,6 @@ class URLBarView: UIView {
                         make.trailing.equalTo(self.libraryButton.snp.leading).offset(-URLBarViewUX.Padding)
                     } else {
                         make.trailing.equalTo(self.addNewTabButton.snp.leading).offset(-URLBarViewUX.Padding)
-//                        make.trailing.equalTo(self.tabsButton.snp.leading).offset(-URLBarViewUX.Padding)
                     }
                 } else {
                     // Otherwise, left align the location view
@@ -400,13 +400,12 @@ class URLBarView: UIView {
         setNeedsUpdateConstraints()
         // when we transition from portrait to landscape, calling this here causes
         // the constraints to be calculated too early and there are constraint errors
+//        if toolbarIsShowing {
+//            addNewTabButton.isHidden = true
+//        }
         if !toolbarIsShowing {
-            addNewTabButton.isHidden = !toolbarIsShowing
-//            if !toolbarIsShowing {
-//                
-//            }else {
-//                addSubview(addNewTabButton)
-//            }
+//            addNewTabButton.isHidden = !toolbarIsShowing
+//            addNewTabButton.alpha = !toolbarIsShowing ? 0 : 1
             updateConstraintsIfNeeded()
         }
         updateViewsForOverlayModeAndToolbarChanges()
@@ -619,6 +618,7 @@ extension URLBarView: TabToolbarProtocol {
 
     func updateForwardStatus(_ canGoForward: Bool) {
         forwardButton.isEnabled = canGoForward
+        forwardButton.isHidden = true
     }
 
     func updateTabCount(_ count: Int, animated: Bool = true) {

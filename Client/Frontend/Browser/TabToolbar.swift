@@ -26,6 +26,7 @@ protocol TabToolbarProtocol: AnyObject {
     func privateModeBadge(visible: Bool)
     func appMenuBadge(setVisible: Bool)
     func warningMenuBadge(setVisible: Bool)
+//    func hideAddNewTabButton(setVisible: Bool)
 }
 
 protocol TabToolbarDelegate: AnyObject {
@@ -53,7 +54,7 @@ fileprivate enum MiddleButtonState {
 @objcMembers
 open class TabToolbarHelper: NSObject {
     let toolbar: TabToolbarProtocol
-
+    
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
@@ -141,7 +142,6 @@ open class TabToolbarHelper: NSObject {
         toolbar.libraryButton.addTarget(self, action: #selector(didClickLibrary), for: .touchUpInside)
         toolbar.libraryButton.accessibilityIdentifier = "TabToolbar.libraryButton"
         setTheme(forButtons: toolbar.actionButtons)
-    
     }
 
     func didClickBack() {
@@ -244,8 +244,10 @@ class ToolbarButton: UIButton {
     }
 
     override var isHidden: Bool {
-        didSet {
-            separatorLine?.isHidden = isHidden
+            didSet {
+                superview?.layoutIfNeeded()
+                print("isHidden\(isHidden)")
+                separatorLine?.isHidden = isHidden
         }
     }
 }
@@ -277,7 +279,7 @@ class TabToolbar: UIView {
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
     var helper: TabToolbarHelper?
-    private let contentView = UIStackView()
+    let contentView = UIStackView()
 
     fileprivate override init(frame: CGRect) {
         actionButtons = [backButton, forwardButton, stopReloadButton, addNewTabButton, tabsButton, appMenuButton]
@@ -298,7 +300,6 @@ class TabToolbar: UIView {
 
     override func updateConstraints() {
         privateModeBadge.layout(onButton: tabsButton)
-//        privateModeBadge.layout(onButton: addNewTabButton)
         appMenuBadge.layout(onButton: appMenuButton)
         warningMenuBadge.layout(onButton: appMenuButton)
 
@@ -340,6 +341,10 @@ class TabToolbar: UIView {
         context.move(to: CGPoint(x: start.x, y: start.y))
         context.addLine(to: CGPoint(x: end.x, y: end.y))
         context.strokePath()
+    }
+    
+    func hideAddNewTabButton() {
+        addNewTabButton.isHidden = true
     }
 }
 
@@ -385,6 +390,10 @@ extension TabToolbar: TabToolbarProtocol {
 
     func updateIsSearchStatus(_ isSearch: Bool) {
         helper?.isSearch = isSearch
+    }
+    
+    func hideAddNewTabButton(setVisible: Bool) {
+        addNewTabButton.isHidden = setVisible
     }
 }
 
