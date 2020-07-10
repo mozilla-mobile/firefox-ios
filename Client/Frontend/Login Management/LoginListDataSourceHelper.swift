@@ -67,7 +67,6 @@ class LoginListDataSourceHelper {
             }
 
             self.setDomainLookup(logins)
-
             // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
             logins.forEach { titleSet.insert(self.titleForLogin($0)) }
 
