@@ -82,7 +82,7 @@ class MockTabToolbar: TabToolbarProtocol {
         get { return nil }
         set { }
     }
- 
+
     var _tabsButton = MockTabsButton()
     var tabsButton: TabsButton {
         get { _tabsButton }
