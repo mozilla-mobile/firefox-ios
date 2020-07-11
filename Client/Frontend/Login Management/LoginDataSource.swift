@@ -73,6 +73,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             if let breaches = viewModel.userBreaches {
                 if breaches.contains(login) {
                     cell.textLabel?.textColor = UIColor.systemRed
+                    viewModel.setBreachIndexPath(indexPath: indexPath)
                 }
             }
         }

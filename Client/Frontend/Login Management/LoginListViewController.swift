@@ -266,11 +266,7 @@ private extension LoginListViewController {
 
     func loadLogins(_ query: String? = nil) {
         loadingView.isHidden = false
-        viewModel.loadLogins(query, loginDataSource: self.loginDataSource)?.upon { _ in
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
+        viewModel.loadLogins(query, loginDataSource: self.loginDataSource)
     }
 
     @objc func beginEditing() {
@@ -436,6 +432,10 @@ extension LoginListViewController: SearchInputViewDelegate {
 
 // MARK: - LoginViewModelDelegate
 extension LoginListViewController: LoginViewModelDelegate {
+
+    func breachPathDidUpdate() {
+        tableView.reloadRows(at: self.viewModel.breachIndexPath, with: .right)
+    }
 
     func loginSectionsDidUpdate() {
         loadingView.isHidden = true
