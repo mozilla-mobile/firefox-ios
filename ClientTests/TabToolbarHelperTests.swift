@@ -83,16 +83,14 @@ class MockTabToolbar: TabToolbarProtocol {
         set { }
     }
     
-    var _addNewTabButton = MockTabsButton()
-    var addNewTabButton: TabsButton {
-        get { _addNewTabButton }
-    }
-    
     var _tabsButton = MockTabsButton()
     var tabsButton: TabsButton {
         get { _tabsButton }
     }
 
+    var _addNewTabButton = MockToolbarButton()
+    var addNewTabButton: ToolbarButton { get { _addNewTabButton } }
+    
     var _appMenuButton = MockToolbarButton()
     var appMenuButton: ToolbarButton { get { _appMenuButton } }
 
