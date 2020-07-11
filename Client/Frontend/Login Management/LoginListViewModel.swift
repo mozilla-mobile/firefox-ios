@@ -10,12 +10,12 @@ import Shared
 // Login List View Model
 final class LoginListViewModel {
 
-    let profile: Profile
+    private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0
     weak var searchController: UISearchController?
     weak var delegate: LoginViewModelDelegate?
-    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
+    private(set) var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
     private(set) var titles = [Character]()
     private(set) var loginRecordSections = [Character: [LoginRecord]]() {
         didSet {
@@ -32,9 +32,9 @@ final class LoginListViewModel {
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
         // Fill in an in-flight query and re-query
-        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
-        activeLoginQuery = queryLogins(query ?? "")
-        activeLoginQuery! >>== self.setLogins
+        self.activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+        self.activeLoginQuery = self.queryLogins(query ?? "")
+        self.activeLoginQuery! >>== self.setLogins
     }
     
     /// Searches SQLite database for logins that match query.
@@ -114,4 +114,10 @@ final class LoginListViewModel {
 // MARK: - LoginDataSourceViewModelDelegate
 protocol LoginViewModelDelegate: AnyObject {
     func loginSectionsDidUpdate()
+}
+
+extension LoginRecord: Equatable {
+    public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
+        return lhs.id == rhs.id
+    }
 }
