@@ -505,6 +505,7 @@
 		D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA0B1FF5B1FA001D3A09 /* NavigationRouter.swift */; };
 		D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */; };
 		D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */; };
+		DAACB04624B031F500B1033B /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
 		DABDA4AE20DA0FDB00FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
 		DABDA4AF20DA0FE400FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
@@ -1023,6 +1024,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
+		};
+		DAACB04824B031F500B1033B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
 		};
 		DAD46F3D24A1606E001B3967 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2085,6 +2093,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAD46F3624A1606C001B3967 /* SwiftUI.framework in Frameworks */,
+				DAACB04624B031F500B1033B /* Shared.framework in Frameworks */,
 				DAD46F3424A1606C001B3967 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4044,6 +4053,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				DAACB04924B031F500B1033B /* PBXTargetDependency */,
 			);
 			name = NewToday;
 			productName = NewSearchExtension;
@@ -5635,6 +5645,11 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = D40B30A821F718CC003C02A7 /* PBXContainerItemProxy */;
+		};
+		DAACB04924B031F500B1033B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = DAACB04824B031F500B1033B /* PBXContainerItemProxy */;
 		};
 		DAD46F3E24A1606E001B3967 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

@@ -4,12 +4,7 @@
 
 import WidgetKit
 import SwiftUI
-
-struct TodayStrings {
-    static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "Private Search", comment: "New Private Tab button label")
-    static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Search", comment: "New Tab button label")
-    static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
-}
+import Shared
 
 private struct TodayUX {
     static let linkTextSize: CGFloat = 9.0
@@ -51,23 +46,30 @@ struct ImageButtonWithLabel: View {
     var imageName: String
     var url: URL
     var label: String? = ""
+    var isPrivate: Bool = false
 
     var body: some View {
-        VStack {
-            Link(destination: url) {
-                Image(imageName)
-                    .padding(.top, 5.0)
-                    .padding(.horizontal, 40)
-                    .frame(minWidth: 60.0, minHeight: 60.0)
-
-                if let label = label {
-                    Text(label)
-                        .foregroundColor(Color("widgetLabelColors"))
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 10.0)
-                        .frame(minHeight: 12)
-                        .font(.body)
+        Link(destination: url) {
+            ZStack(alignment: .leading) {
+                if isPrivate {
+                    ContainerRelativeShape()
+                        .fill(LinearGradient(gradient: Gradient(colors: [Color("privateGradientOne"), Color("privateGradientTwo")]), startPoint: /*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/, endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/))
+                } else {
+                    ContainerRelativeShape()
+                        .fill(Color("normalBackgroundColor"))
                 }
+
+                VStack(alignment: .leading) {
+                    Image(imageName)
+                        .scaledToFit()
+                        .frame(height: 24.0)
+
+                    if let label = label {
+                        Text(label)
+                            .foregroundColor(Color("widgetLabelColors"))
+                    }
+                }
+                .padding(.leading, 10.0)
             }
         }
     }
@@ -78,32 +80,18 @@ struct NewTodayEntryView : View {
 
     @ViewBuilder
     var body: some View {
-        switch family {
-        case .systemSmall:
-            ZStack {
-                Color("WidgetBackground")
-                VStack {
-                    HStack(alignment: .center, spacing: 15.0) {
-                        ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false"))
-                        ImageButtonWithLabel(imageName: "private-search", url: linkToContainingApp("?private=true"))
-                    }
-                    HStack(alignment: .center, spacing: 15.0) {
-                        ImageButtonWithLabel(imageName: "close-private-tabs", url: linkToContainingApp("?private=true"))
-                    }
-                }
-                .padding()
+        VStack {
+            HStack(alignment: .top, spacing: 10.0) {
+                ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false"), label: String.NewTabButtonLabel)
+                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true"), label: String.NewPrivateTabButtonLabel, isPrivate: true)
             }
-        default:
-            ZStack {
-                Color("WidgetBackground")
-                HStack(alignment: .top, spacing: 20.0) {
-                    ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false"), label: TodayStrings.NewTabButtonLabel)
-                    ImageButtonWithLabel(imageName: "private-search", url: linkToContainingApp("?private=true"), label: TodayStrings.NewPrivateTabButtonLabel)
-                    ImageButtonWithLabel(imageName: "close-private-tabs", url: linkToContainingApp("?private=true"), label: "Close Private Tabs")
-                }
-                .padding()
+            HStack(alignment: .top, spacing: 10.0) {
+                ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp("?clipboard"), label: String.GoToCopiedLinkLabel)
+                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp("?private=true"), label: "Close Private Tabs", isPrivate: true)
             }
         }
+        .padding(10.0)
+        .background(Color("WidgetBackground"))
     }
 
     fileprivate func linkToContainingApp(_ urlSuffix: String = "") -> URL {
@@ -120,7 +108,7 @@ struct NewToday: Widget {
         StaticConfiguration(kind: kind, provider: Provider(), placeholder: NewTodayEntryView()) { entry in
             NewTodayEntryView()
         }
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemMedium])
         .configurationDisplayName("Search")
         .description("This is an example widget.")
     }

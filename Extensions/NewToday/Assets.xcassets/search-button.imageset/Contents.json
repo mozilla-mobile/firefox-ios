@@ -3,24 +3,6 @@
     {
       "filename" : "search.pdf",
       "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "light"
-        }
-      ],
-      "idiom" : "universal"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "idiom" : "universal"
     }
   ],
   "info" : {
@@ -28,6 +10,7 @@
     "version" : 1
   },
   "properties" : {
-    "template-rendering-intent" : "original"
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
   }
 }
