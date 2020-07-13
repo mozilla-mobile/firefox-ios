@@ -11,7 +11,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 @objc (TodayViewController)
-class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
+class TodayViewController: UIViewController, NCWidgetProviding {
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
@@ -52,7 +52,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     //MARK: Feature for V29
     // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
-        let button = setupButtons(buttonLabel: String.closePrivateTabsButtonLabel, buttonImageName: "close-private-tabs")
+        let button = setupButtons(buttonLabel: String.ClosePrivateTab, buttonImageName: "close-private-tabs")
         button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
         return button
         }()
