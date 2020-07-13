@@ -22,6 +22,7 @@ class ImageButtonWithLabel: UIView {
         addSubview(label)
         button.imageView?.contentMode = .scaleAspectFit
 
+        button.backgroundColor = .orange
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self.safeAreaLayoutGuide).offset(5)
@@ -30,15 +31,19 @@ class ImageButtonWithLabel: UIView {
             make.height.greaterThanOrEqualTo(60)
         }
 
+        label.backgroundColor = .green
+        
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
             //check TodayUX file for definition of DynamicLabelResize
-            make.height.equalTo(DynamicLabelResize.height(text: String.NewTabButtonLabel, style: .body))
+//            make.height.equalTo(200)
+//            make.height.equalTo(DynamicLabelResize.height(text: String.NewTabButtonLabel, style: .body))
         }
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 2
+//        label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
+        label.sizeToFit()
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {

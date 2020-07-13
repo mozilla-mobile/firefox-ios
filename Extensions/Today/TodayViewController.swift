@@ -117,9 +117,11 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
 
+        buttonStackView.backgroundColor = .brown
         widgetStackView.addArrangedSubview(buttonStackView)
         widgetStackView.addArrangedSubview(openCopiedLinkButton)
 
+        widgetStackView.backgroundColor = .cyan
         widgetView.addSubview(widgetStackView)
         widgetStackView.snp.makeConstraints { make in
             make.edges.equalTo(widgetView)
