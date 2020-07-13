@@ -36,7 +36,6 @@ class ImageButtonWithLabel: UIView {
             //check TodayUX file for definition of DynamicLabelResize
             make.height.equalTo(DynamicLabelResize.height(text: String.NewTabButtonLabel, style: .body))
         }
-        
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center

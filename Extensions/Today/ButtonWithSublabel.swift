@@ -26,7 +26,6 @@ class ButtonWithSublabel: UIButton {
         self.titleLabel?.removeFromSuperview()
         addSubview(self.label)
         addSubview(self.subtitleLabel)
-        
         buttonImage.adjustsImageSizeForAccessibilityContentSizeCategory = true
         buttonImage.contentMode = .scaleAspectFit
         

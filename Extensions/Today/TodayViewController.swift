@@ -67,7 +67,11 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         button.label.sizeToFit()
         button.subtitleLabel.textColor = TodayUX.subtitleLabelColor
         button.subtitleLabel.tintColor = TodayUX.subtitleLabelColor
-        button.subtitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.linkTextSize))
+        button.label.font = UIFont.preferredFont(forTextStyle: .caption1)
+        button.label.adjustsFontForContentSizeCategory = true
+        button.subtitleLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
+        button.subtitleLabel.adjustsFontForContentSizeCategory = true
+//        button.subtitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.linkTextSize))
         button.label.accessibilityLabel = String.CopiedLinkLabelFromPasteBoard
         button.accessibilityTraits = .none
         return button
