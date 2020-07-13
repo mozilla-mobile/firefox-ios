@@ -11,7 +11,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 @objc (TodayViewController)
-class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
+class TodayViewController: UIViewController, NCWidgetProviding {
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
@@ -48,8 +48,24 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         return button
-    }()
+        }()
 
+    fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
+        let imageButton = ImageButtonWithLabel()
+        imageButton.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
+        imageButton.label.text = String.GoToCopiedLinkLabel
+        let button = imageButton.button
+        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = String.GoToCopiedLinkLabel
+        button.accessibilityTraits = .button
+        let label = imageButton.label
+        label.textColor = TodayUX.labelColor
+        label.tintColor = TodayUX.labelColor
+        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
+        imageButton.sizeToFit()
+        return imageButton
+    }()
+    
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
