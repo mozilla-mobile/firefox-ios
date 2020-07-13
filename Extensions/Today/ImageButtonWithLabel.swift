@@ -5,6 +5,7 @@
 import UIKit
 
 class ImageButtonWithLabel: UIView {
+    
     lazy var button = UIButton()
     lazy var label = UILabel()
 

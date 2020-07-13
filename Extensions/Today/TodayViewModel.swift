@@ -4,6 +4,7 @@
 
 import Foundation
 import NotificationCenter
+
 protocol TodayWidgetAppearanceDelegate {
     func updateCopiedLinkInView(clipboardURL: URL?)
 }
