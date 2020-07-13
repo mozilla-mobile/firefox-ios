@@ -10,12 +10,12 @@ import Shared
 // Login List View Model
 final class LoginListViewModel {
 
-    let profile: Profile
+    private(set) var profile: Profile
     private(set) var isDuringSearchControllerDismiss = false
     private(set) var count = 0
     weak var searchController: UISearchController?
     weak var delegate: LoginViewModelDelegate?
-    fileprivate var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
+    private(set) var activeLoginQuery: Deferred<Maybe<[LoginRecord]>>?
     private(set) var titles = [Character]()
     private(set) var loginRecordSections = [Character: [LoginRecord]]() {
         didSet {
@@ -140,5 +140,11 @@ protocol LoginViewModelDelegate: AnyObject {
 extension LoginRecord: Equatable {
     public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
         return lhs.id == rhs.id && lhs.hostname == rhs.hostname && lhs.credentials == rhs.credentials
+    }
+}
+
+extension LoginRecord: Equatable {
+    public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
+        return lhs.id == rhs.id
     }
 }
