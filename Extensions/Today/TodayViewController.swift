@@ -155,7 +155,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     @objc func onPressNewPrivateTab(_ view: UIView) {
         openContainingApp("?private=true")
     }
-    
+
     //TODO: Move it to Viewmodel
     fileprivate func openContainingApp(_ urlSuffix: String = "") {
         let urlString = "\(model.scheme)://open-url\(urlSuffix)"

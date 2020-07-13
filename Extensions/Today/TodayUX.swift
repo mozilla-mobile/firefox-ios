@@ -43,5 +43,4 @@ class DynamicLabelResize {
         label.removeFromSuperview()
         return currentHeight
     }
-
 }
