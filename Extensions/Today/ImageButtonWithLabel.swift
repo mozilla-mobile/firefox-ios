@@ -33,7 +33,8 @@ class ImageButtonWithLabel: UIView {
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
-            make.height.equalTo(DynamicLabelResize.height(text: TodayStrings.NewTabButtonLabel, style: .body))
+            //check TodayUX file for definition of DynamicLabelResize
+            make.height.equalTo(DynamicLabelResize.height(text: String.NewTabButtonLabel, style: .body))
         }
         
         label.numberOfLines = 0

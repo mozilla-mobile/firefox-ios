@@ -40,7 +40,8 @@ class ButtonWithSublabel: UIButton {
         self.label.snp.makeConstraints { make in
             make.left.equalTo(buttonImage.snp.right).offset(10)
             make.trailing.top.equalTo(self)
-            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: TodayStrings.GoToCopiedLinkLabel, style : UIFont.TextStyle.caption1))
+            //check TodayUX file for definition of DynamicLabelResize
+            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: String.GoToCopiedLinkLabel, style : UIFont.TextStyle.caption1))
         }
         self.label.numberOfLines = 1
         self.label.lineBreakMode = .byWordWrapping
@@ -50,7 +51,8 @@ class ButtonWithSublabel: UIButton {
             make.bottom.equalTo(self).inset(10)
             make.top.equalTo(self.label.snp.bottom)
             make.leading.trailing.equalTo(self.label)
-            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: TodayStrings.GoToCopiedLinkLabel, style : UIFont.TextStyle.footnote))
+            //check TodayUX file for definition of DynamicLabelResize
+            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: String.GoToCopiedLinkLabel, style : UIFont.TextStyle.footnote))
         }
     }
 
