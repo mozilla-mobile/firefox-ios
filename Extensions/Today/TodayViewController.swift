@@ -27,7 +27,9 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
-        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
+//        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -43,7 +45,9 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
-        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
+//        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -52,7 +56,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         let button = ButtonWithSublabel()
         button.setTitle(String.GoToCopiedLinkLabel, for: .normal)
         button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
-        // We need to set the background image/color for .Normal, so the whole button is tappable.
         button.setBackgroundColor(UIColor.clear, forState: .normal)
         button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
         button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)

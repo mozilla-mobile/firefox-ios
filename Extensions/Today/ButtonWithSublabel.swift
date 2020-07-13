@@ -27,15 +27,20 @@ class ButtonWithSublabel: UIButton {
         addSubview(self.label)
         addSubview(self.subtitleLabel)
 
+        buttonImage.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        buttonImage.contentMode = .scaleAspectFit
+        
         buttonImage.snp.makeConstraints { make in
-            make.centerY.left.equalTo(10)
-            make.width.equalTo(TodayUX.copyLinkImageWidth)
+            make.left.equalTo(10)
+            make.centerY.equalToSuperview()
+            make.top.equalTo(self.label.snp.top)
+            make.width.equalTo(self.label.snp.height)
         }
 
         self.label.snp.makeConstraints { make in
             make.left.equalTo(buttonImage.snp.right).offset(10)
             make.trailing.top.equalTo(self)
-            make.height.greaterThanOrEqualTo(15)
+            make.height.equalTo(DynamicLabelResize.height(text: TodayStrings.GoToCopiedLinkLabel, style : UIFont.TextStyle.caption1))
         }
         self.label.numberOfLines = 1
         self.label.lineBreakMode = .byWordWrapping
@@ -43,9 +48,9 @@ class ButtonWithSublabel: UIButton {
         self.subtitleLabel.lineBreakMode = .byTruncatingTail
         self.subtitleLabel.snp.makeConstraints { make in
             make.bottom.equalTo(self).inset(10)
-            make.top.equalTo(self.label.snp.bottom).offset(3)
+            make.top.equalTo(self.label.snp.bottom)
             make.leading.trailing.equalTo(self.label)
-            make.height.greaterThanOrEqualTo(10)
+            make.height.equalTo(DynamicLabelResize.height(text: TodayStrings.GoToCopiedLinkLabel, style : UIFont.TextStyle.footnote))
         }
     }
 
