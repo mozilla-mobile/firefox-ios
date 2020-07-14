@@ -808,6 +808,6 @@ extension String {
     public static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.PrivateTabButtonLabelV1", tableName: "Today", value: "Private Search", comment: "Open New Private Tab button label")
     public static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabelV1", tableName: "Today", value: "New Search", comment: "Open New Tab button label")
     public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV1", tableName: "Today", value: "Go to copied link", comment: "Go to link pasted on the clipboard")
-    public static let closePrivateTabsButtonLabel = NSLocalizedString("TodayWidget.ClosePrivateTabButtonLabel", tableName: "Today", value: "Close\nprivate tabs", comment: "Close Private Tabs button label")
+    public static let closePrivateTabsButtonLabel = NSLocalizedString("TodayWidget.ClosePrivateTabButtonLabelV1", tableName: "Today", value: "Close\nprivate tabs", comment: "Close Private Tabs button label")
     public static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoardV1", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
 }
