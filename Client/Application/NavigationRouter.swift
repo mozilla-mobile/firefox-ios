@@ -99,8 +99,6 @@ enum NavigationPath {
             self = .text(text ?? "")
         } else if urlString.starts(with: "\(scheme)://glean") {
             self = .glean(url: url)
-        } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
-            let url = components.valueForQuery("url")?.asURL
         }
         else {
             return nil
