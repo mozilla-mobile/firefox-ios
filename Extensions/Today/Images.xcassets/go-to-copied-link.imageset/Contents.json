@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+<<<<<<< HEAD
       "filename" : "go-to-copied-link-1.pdf",
       "idiom" : "universal",
       "scale" : "1x"
@@ -12,11 +13,14 @@
           "value" : "light"
         }
       ],
+=======
+>>>>>>> added go to copied link icon
       "filename" : "go-to-copied-link.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+<<<<<<< HEAD
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -38,10 +42,13 @@
           "value" : "light"
         }
       ],
+=======
+>>>>>>> added go to copied link icon
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+<<<<<<< HEAD
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -72,6 +79,8 @@
           "value" : "dark"
         }
       ],
+=======
+>>>>>>> added go to copied link icon
       "idiom" : "universal",
       "scale" : "3x"
     }
