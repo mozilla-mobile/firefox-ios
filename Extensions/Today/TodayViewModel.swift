@@ -10,20 +10,27 @@ protocol TodayWidgetAppearanceDelegate {
 
 class TodayWidgetViewModel {
     var AppearanceDelegate: TodayWidgetAppearanceDelegate?
-
+    
     func setViewDelegate(todayViewDelegate: TodayWidgetAppearanceDelegate?) {
         self.AppearanceDelegate = todayViewDelegate
     }
-
+    
     func updateCopiedLink() {
-        UIPasteboard.general.asyncURL().uponQueue(.main) { res in
-            guard let url: URL? = res.successValue else {
-                TodayModel.copiedURL = nil
-//                self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: nil)
+        if !UIPasteboard.general.hasURLs {
+            guard let searchText = UIPasteboard.general.string else {
+                TodayModel.searchedText = nil
                 return
             }
-            TodayModel.copiedURL = url
-//            self.AppearanceDelegate?.updateCopiedLinkInView(clipboardURL: url)
+            TodayModel.searchedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        }
+        else {
+            UIPasteboard.general.asyncURL().uponQueue(.main) { res in
+                guard let url: URL? = res.successValue else {
+                    TodayModel.copiedURL = nil
+                    return
+                }
+                TodayModel.copiedURL = url
+            }
         }
     }
 }

@@ -805,7 +805,8 @@ extension String {
 //Today Widget Strings - [New Search - Private Search]
 extension String {
     public static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "Private Search", comment: "New Private Tab button label")
-    public static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New Search", comment: "New Tab button label")
-    public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to copied link", comment: "Go to link on clipboard")
+    public static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New\nSearch", comment: "New Tab button label")
+    public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to \ncopied link", comment: "Go to link on clipboard")
+    public static let closePrivateTabsButtonLabel = NSLocalizedString("TodayWidget.ClosePrivateTabButtonLabel", tableName: "Today", value: "Close\nprivate tabs", comment: "Close Private Tabs button label")
     public static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoard", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
 }

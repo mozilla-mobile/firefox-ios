@@ -67,10 +67,10 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
-        imageButton.label.text = String.GoToCopiedLinkLabel
+        imageButton.label.text = String.closePrivateTabsButtonLabel
         let button = imageButton.button
-        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = String.GoToCopiedLinkLabel
+        button.setImage(UIImage(named: "close-private-tabs")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = String.closePrivateTabsButtonLabel
         button.accessibilityTraits = .button
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
@@ -110,6 +110,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
         buttonStackView.addArrangedSubview(openCopiedLinkButton)
+        buttonStackView.addArrangedSubview(closePrivateTabsButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
             make.edges.equalTo(widgetView)
@@ -131,30 +132,35 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     // MARK: Button behaviour
     @objc func onPressNewTab(_ view: UIView) {
-        openContainingApp("?private=false")
+        openContainingApp("?private=false",query: "url")
     }
 
     @objc func onPressNewPrivateTab(_ view: UIView) {
-        openContainingApp("?private=true")
+        openContainingApp("?private=true",query: "url")
     }
     
     @objc func onPressClosePrivateTabs() {
-        
     }
     
     //TODO: Move it to Viewmodel
-    fileprivate func openContainingApp(_ urlSuffix: String = "") {
-        let urlString = "\(model.scheme)://open-url\(urlSuffix)"
+    fileprivate func openContainingApp(_ urlSuffix: String = "", query : String) {
+        let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
     }
-
+    
     @objc func onPressOpenClibpoard(_ view: UIView) {
         viewModel.updateCopiedLink()
         if let url = TodayModel.copiedURL,
             let encodedString = url.absoluteString.escape() {
-            openContainingApp("?url=\(encodedString)")
+            openContainingApp("?url=\(encodedString)",query: "url")
+        } else {
+            guard let copiedText = TodayModel.searchedText else {
+                return
+            }
+            openContainingApp("?text=\(copiedText)",query: "text")
+
         }
     }
 }

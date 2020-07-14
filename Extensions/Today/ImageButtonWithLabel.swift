@@ -36,7 +36,7 @@ class ImageButtonWithLabel: UIView {
             make.height.greaterThanOrEqualTo(10)
         }
 
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
     }
