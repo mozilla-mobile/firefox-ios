@@ -74,6 +74,8 @@ class LoginDataSource: NSObject, UITableViewDataSource {
                 if breaches.contains(login) {
                     cell.textLabel?.textColor = UIColor.systemRed
                     viewModel.setBreachIndexPath(indexPath: indexPath)
+                    let breachImage = UIImage(named: "Breached Website")
+                    cell.addSubview(UIImageView(image: breachImage))
                 }
             }
         }
