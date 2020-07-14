@@ -63,7 +63,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.sizeToFit()
         return imageButton
     }()
-    
+
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
@@ -79,7 +79,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.sizeToFit()
         return imageButton
     }()
-    
+
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -138,10 +138,10 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     @objc func onPressNewPrivateTab(_ view: UIView) {
         openContainingApp("?private=true",query: "url")
     }
-    
+
     @objc func onPressClosePrivateTabs() {
     }
-    
+
     //TODO: Move it to Viewmodel
     fileprivate func openContainingApp(_ urlSuffix: String = "", query : String) {
         let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
@@ -149,7 +149,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             log.info("Extension opened containing app: \(success)")
         }
     }
-    
+
     @objc func onPressOpenClibpoard(_ view: UIView) {
         viewModel.updateCopiedLink()
         if let url = TodayModel.copiedURL,
