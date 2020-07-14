@@ -179,19 +179,19 @@ class ETPCoverSheetViewController: UIViewController {
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         LeanPlumClient.shared.track(event: .dismissedETPCoverSheet)
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissedETPCoverSheet)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissedETPCoverSheet)
     }
     
     @objc private func goToSettings() {
         viewModel.goToSettings?()
         LeanPlumClient.shared.track(event: .dismissETPCoverSheetAndGoToSettings)
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissETPCoverSheetAndGoToSettings)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissETPCoverSheetAndGoToSettings)
     }
     
     @objc private func startBrowsing() {
         viewModel.startBrowsing?()
         LeanPlumClient.shared.track(event: .dismissETPCoverSheetAndStartBrowsing)
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .dismissUpdateCoverSheetAndStartBrowsing)
     }
 }
 

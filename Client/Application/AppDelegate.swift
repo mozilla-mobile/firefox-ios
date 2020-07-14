@@ -15,7 +15,6 @@ import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
-import Glean
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
@@ -46,9 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var launchOptions: [AnyHashable: Any]?
 
     var receivedURLs = [URL]()
-    var unifiedTelemetry: UnifiedTelemetry?
-
-    var glean = Glean.shared
+    var telemetry: TelemetryWrapper?
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         //
@@ -110,15 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         let profile = getProfile(application)
 
-        unifiedTelemetry = UnifiedTelemetry(profile: profile)
-        
-        // Get legacy telemetry ID
-        if let uuidString = UserDefaults.standard.string(forKey: "telemetry-key-prefix-clientId"), let uuid = UUID(uuidString: uuidString) {
-            GleanMetrics.LegacyIds.clientId.set(uuid)
-        }
-        
-        // Initialize Glean telemetry
-        glean.initialize(uploadEnabled: sendUsageData, configuration: Configuration(channel: AppConstants.BuildChannel.rawValue))
+        telemetry = TelemetryWrapper(profile: profile)
 
         // Set up a web server that serves us static content. Do this early so that it is ready when the UI is presented.
         setUpWebServer(profile)
@@ -287,11 +276,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         if let profile = profile, let _ = profile.prefs.boolForKey(PrefsKeys.AppExtensionTelemetryOpenUrl) {
             profile.prefs.removeObjectForKey(PrefsKeys.AppExtensionTelemetryOpenUrl)
-            var object = UnifiedTelemetry.EventObject.url
+            var object = TelemetryWrapper.EventObject.url
             if case .text(_) = routerpath {
                 object = .searchText
             }
-            UnifiedTelemetry.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
+            TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
         }
 
         DispatchQueue.main.async {
@@ -341,7 +330,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             quickActions.launchedShortcutItem = nil
         }
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .foreground, object: .app)
+        TelemetryWrapper.recordEvent(category: .action, method: .foreground, object: .app)
 
         // Delay these operations until after UIKit/UIApp init is complete
         // - loadQueuedTabs accesses the DB and shows up as a hot path in profiling
@@ -373,7 +362,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // TODO: iOS 13 needs to iterate all the BVCs.
         BrowserViewController.foregroundBVC().downloadQueue.pauseAll()
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .background, object: .app)
+        TelemetryWrapper.recordEvent(category: .action, method: .background, object: .app)
 
         let singleShotTimer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
         // 2 seconds is ample for a localhost request to be completed by GCDWebServer. <500ms is expected on newer devices.

@@ -53,7 +53,7 @@ extension BrowserViewController: DownloadQueueDelegate {
                     guard buttonPressed else { return }
 
                     self.showLibrary(panel: .downloads)
-                    UnifiedTelemetry.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .downloadCompleteToast)
+                    TelemetryWrapper.recordEvent(category: .action, method: .view, object: .downloadsPanel, value: .downloadCompleteToast)
                 })
 
                 self.show(toast: downloadCompleteToast, duration: DispatchTimeInterval.seconds(8))

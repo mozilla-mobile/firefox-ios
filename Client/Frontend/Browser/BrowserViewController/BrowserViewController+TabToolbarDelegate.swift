@@ -66,7 +66,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew, badgeIconNamed: "menuBadge") { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
-                UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .whatsNew)
+                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.openURLInNewTab(whatsNewURL)
             }
         }
@@ -110,7 +110,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {
