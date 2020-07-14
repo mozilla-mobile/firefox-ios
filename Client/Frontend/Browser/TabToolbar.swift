@@ -41,7 +41,7 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidLongPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton)
     func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton)
-    func tabToolbarDidPresssAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton)
+    func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
 fileprivate enum MiddleButtonState {
@@ -124,7 +124,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabsButton.addGestureRecognizer(longPressGestureTabsButton)
 
         toolbar.addNewTabButton.setImage(UIImage.templateImageNamed("menu-NewTab"), for: .normal)
-        toolbar.addNewTabButton.accessibilityLabel = "Some Label"
+        toolbar.addNewTabButton.accessibilityLabel = Strings.AddTabAccessibilityLabel
         toolbar.addNewTabButton.addTarget(self, action: #selector(didClickAddNewTab), for: .touchUpInside)
         toolbar.addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
         
@@ -179,7 +179,7 @@ open class TabToolbarHelper: NSObject {
     }
     
     func didClickAddNewTab() {
-        toolbar.tabToolbarDelegate?.tabToolbarDidPresssAddNewTab(toolbar, button: toolbar.addNewTabButton)
+        toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
     }
 
     func didClickStopReload() {
