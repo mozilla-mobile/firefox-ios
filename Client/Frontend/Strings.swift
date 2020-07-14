@@ -815,7 +815,6 @@ extension String {
 
 //Today Widget Strings - [New Search - Private Search]
 extension String {
-<<<<<<< HEAD
     public static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabelV1", tableName: "Today", value: "New Search", comment: "Open New Tab button label")
     public static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoardV1", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
     public static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.PrivateTabButtonLabelV1", tableName: "Today", value: "Private Search", comment: "Open New Private Tab button label")
@@ -889,11 +888,4 @@ extension String {
     public static let DefaultBrowserCardTitle = NSLocalizedString("TodayWidget.DefaultBrowserCardTitle", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.")
     public static let DefaultBrowserCardDescription = NSLocalizedString("TodayWidget.DefaultBrowserCardDescription", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
     public static let DefaultBrowserCardButton = NSLocalizedString("TodayWidget.DefaultBrowserCardButton", tableName: "Default Browser", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
-=======
-    public static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabel", tableName: "Today", value: "Private Search", comment: "New Private Tab button label")
-    public static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabel", tableName: "Today", value: "New\nSearch", comment: "New Tab button label")
-    public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabel", tableName: "Today", value: "Go to \ncopied link", comment: "Go to link on clipboard")
-    public static let closePrivateTabsButtonLabel = NSLocalizedString("TodayWidget.ClosePrivateTabButtonLabel", tableName: "Today", value: "Close\nprivate tabs", comment: "Close Private Tabs button label")
-    public static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoard", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
->>>>>>> copied link button can search copied text as well as navigate to copied URLs
 }
