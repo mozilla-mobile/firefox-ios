@@ -44,6 +44,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }()
 
     fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
+<<<<<<< HEAD
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         return button
@@ -56,6 +57,38 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
         return button
         }()
+=======
+        let imageButton = ImageButtonWithLabel()
+        imageButton.addTarget(self, action: #selector(onPressOpenClibpoard), forControlEvents: .touchUpInside)
+        imageButton.label.text = String.GoToCopiedLinkLabel
+        let button = imageButton.button
+        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = String.GoToCopiedLinkLabel
+        button.accessibilityTraits = .button
+        let label = imageButton.label
+        label.textColor = TodayUX.labelColor
+        label.tintColor = TodayUX.labelColor
+        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
+        imageButton.sizeToFit()
+        return imageButton
+    }()
+
+    fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
+        let imageButton = ImageButtonWithLabel()
+        imageButton.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
+        imageButton.label.text = String.closePrivateTabsButtonLabel
+        let button = imageButton.button
+        button.setImage(UIImage(named: "close-private-tabs")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = String.closePrivateTabsButtonLabel
+        button.accessibilityTraits = .button
+        let label = imageButton.label
+        label.textColor = TodayUX.labelColor
+        label.tintColor = TodayUX.labelColor
+        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
+        imageButton.sizeToFit()
+        return imageButton
+    }()
+>>>>>>> code styling
 
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -140,6 +173,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         openContainingApp("?private=true", query: "url")
     }
 
+
     @objc func onPressOpenCopiedLink(_ view: UIView) {
         viewModel.updateCopiedLink()
     }
@@ -149,6 +183,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             log.info("Extension opened containing app: \(success)")
         })
     }
+
 
     func openContainingApp(_ urlSuffix: String = "", query: String) {
         let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
