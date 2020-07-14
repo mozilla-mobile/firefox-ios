@@ -53,10 +53,10 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
-        imageButton.label.text = String.GoToCopiedLinkLabel
+        imageButton.label.text = String.closePrivateTabsButtonLabel
         let button = imageButton.button
-        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = String.GoToCopiedLinkLabel
+        button.setImage(UIImage(named: "close-private-tabs")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = String.closePrivateTabsButtonLabel
         button.accessibilityTraits = .button
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
@@ -95,6 +95,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         widgetView = effectView.contentView
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
+        buttonStackView.addArrangedSubview(openCopiedLinkButton)
+        buttonStackView.addArrangedSubview(closePrivateTabsButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
             make.top.right.left.equalTo(widgetView)

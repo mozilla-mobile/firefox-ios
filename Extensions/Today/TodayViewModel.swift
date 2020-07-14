@@ -10,11 +10,11 @@ protocol TodayWidgetAppearanceDelegate {
 
 class TodayWidgetViewModel {
     var AppearanceDelegate: TodayWidgetAppearanceDelegate?
-
+    
     func setViewDelegate(todayViewDelegate: TodayWidgetAppearanceDelegate?) {
         self.AppearanceDelegate = todayViewDelegate
     }
-
+    
     func updateCopiedLink() {
         if !UIPasteboard.general.hasURLs {
             guard let searchText = UIPasteboard.general.string else {
