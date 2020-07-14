@@ -65,7 +65,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.sizeToFit()
         return imageButton
     }()
-    
+
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -148,14 +148,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         openContainingApp("?private=true", query: "url")
     }
 
-     func openContainingApp(_ urlSuffix: String = "", query: String) {
+    @objc func onPressOpenCopiedLink(_ view: UIView) {
+        viewModel.updateCopiedLink()
+    }
+
+    func openContainingApp(_ urlSuffix: String = "", query: String) {
         let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
-    }
-
-    @objc func onPressOpenCopiedLink(_ view: UIView) {
-        viewModel.updateCopiedLink()
     }
 }
