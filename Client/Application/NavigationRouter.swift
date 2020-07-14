@@ -67,6 +67,7 @@ enum NavigationPath {
     case deepLink(DeepLink)
     case text(String)
     case glean(url: URL)
+    case closePrivateTabs
 
     init?(url: URL) {
         let urlString = url.absoluteString
@@ -100,7 +101,7 @@ enum NavigationPath {
         } else if urlString.starts(with: "\(scheme)://glean") {
             self = .glean(url: url)
         } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
-            let url = components.valueForQuery("url")?.asURL
+            self = .closePrivateTabs
         }
         else {
             return nil
@@ -114,6 +115,7 @@ enum NavigationPath {
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
+        case .closePrivateTabs : NavigationPath.handleClosePrivateTabs(bvc: bvc)
         }
     }
 
@@ -135,6 +137,11 @@ enum NavigationPath {
 
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
         bvc.presentSignInViewController(params)
+    }
+    
+    private static func handleClosePrivateTabs(bvc: BrowserViewController) {
+        let delegate = UIApplication.shared.delegate as! AppDelegate
+        delegate.tabManager.removeTabs(delegate.tabManager.privateTabs)
     }
     
     private static func handleGlean(url: URL) {

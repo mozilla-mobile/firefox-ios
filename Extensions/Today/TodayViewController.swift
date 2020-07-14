@@ -50,6 +50,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         return button
         }()
 
+    // Close Private tab button in today widget, delayed untill next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let imageButton = ImageButtonWithLabel()
         imageButton.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
@@ -150,6 +151,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     @objc func onPressOpenCopiedLink(_ view: UIView) {
         viewModel.updateCopiedLink()
+    }
+
+    @objc func onPressClosePrivateTabs() {
+        self.extensionContext?.open(URL(string:"\(model.scheme)://close-private-tabs")!, completionHandler: { (success) in
+            log.info("Extension opened containing app: \(success)")
+        })
     }
 
     func openContainingApp(_ urlSuffix: String = "", query: String) {
