@@ -115,7 +115,7 @@ enum NavigationPath {
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
-        case .closePrivateTabs : NavigationPath.handleClosePrivateTabs(bvc: bvc)
+        case .closePrivateTabs : NavigationPath.handleClosePrivateTabs()
         }
     }
 
@@ -139,7 +139,7 @@ enum NavigationPath {
         bvc.presentSignInViewController(params)
     }
     
-    private static func handleClosePrivateTabs(bvc: BrowserViewController) {
+    private static func handleClosePrivateTabs() {
         let delegate = UIApplication.shared.delegate as! AppDelegate
         delegate.tabManager.removeTabs(delegate.tabManager.privateTabs)
     }
