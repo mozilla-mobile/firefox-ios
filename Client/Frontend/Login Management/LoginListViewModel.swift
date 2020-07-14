@@ -42,7 +42,8 @@ final class LoginListViewModel {
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
-        breachAlertsManager.loadBreaches { (maybeBreaches) in
+        breachAlertsManager.loadBreaches { [weak self] _ in
+            guard let self = self else { return }
             guard let logins = self.activeLoginQuery?.value.successValue else {
                 return
             }
@@ -140,11 +141,5 @@ protocol LoginViewModelDelegate: AnyObject {
 extension LoginRecord: Equatable {
     public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
         return lhs.id == rhs.id && lhs.hostname == rhs.hostname && lhs.credentials == rhs.credentials
-    }
-}
-
-extension LoginRecord: Equatable {
-    public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
-        return lhs.id == rhs.id
     }
 }

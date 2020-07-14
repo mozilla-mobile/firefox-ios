@@ -76,16 +76,18 @@ final public class BreachAlertsManager {
 
         let loginsDictionary = loginsByHostname(logins)
         for breach in self.breaches {
-            if let potentialBreaches = loginsDictionary[breach.domain] {
-                for item in potentialBreaches {
-                    let pwLastChanged = TimeInterval(item.timePasswordChanged/1000)
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
-                    if let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate {
-                        print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
-                        result.append(item)
-                    }
+            guard let potentialBreaches = loginsDictionary[breach.domain] else {
+                continue
+            }
+            for item in potentialBreaches {
+                let pwLastChanged = TimeInterval(item.timePasswordChanged/1000)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
+                    continue
                 }
+                print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
+                result.append(item)
             }
         }
         print("compareToBreaches(): fin")
@@ -94,16 +96,13 @@ final public class BreachAlertsManager {
 
     func loginsByHostname(_ logins: [LoginRecord]) -> [String: [LoginRecord]] {
         var result = [String: [LoginRecord]]()
-        var baseDomains = Set<String>()
         for login in logins {
-            baseDomains.insert(baseDomainForLogin(login))
-        }
-        for base in baseDomains {
-            result[base] = [LoginRecord]()
-        }
-
-        for login in logins {
-            result[self.baseDomainForLogin(login)]?.append(login)
+            let base = baseDomainForLogin(login)
+            if !result.keys.contains(base) {
+                result[base] = [login]
+            } else {
+                result[base]?.append(login)
+            }
         }
         return result
     }

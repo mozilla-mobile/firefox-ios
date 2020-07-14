@@ -67,7 +67,6 @@ class BreachAlertsTests: XCTestCase {
             if let noBreaches = noBreachesOpt {
                 XCTAssertTrue(noBreaches.isSuccess)
                 XCTAssertEqual(noBreaches.successValue, Optional([]))
-
             }
 
             let breachedOpt = self.breachAlertsManager?.findUserBreaches(self.breachedLogin)
