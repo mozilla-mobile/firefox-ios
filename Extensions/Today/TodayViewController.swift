@@ -53,7 +53,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         imageButton.label.text = String.GoToCopiedLinkLabel
         let button = imageButton.button
-        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.setImage(UIImage(named: "go-to-copied-link")?.withRenderingMode(.alwaysOriginal), for: .normal)
         button.accessibilityLabel = String.GoToCopiedLinkLabel
         button.accessibilityTraits = .button
         let label = imageButton.label

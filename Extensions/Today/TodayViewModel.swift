@@ -10,7 +10,7 @@ protocol TodayWidgetAppearanceDelegate {
 
 class TodayWidgetViewModel {
     var AppearanceDelegate: TodayWidgetAppearanceDelegate?
-    
+
     func setViewDelegate(todayViewDelegate: TodayWidgetAppearanceDelegate?) {
         self.AppearanceDelegate = todayViewDelegate
     }
