@@ -45,6 +45,10 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     // Constants
     fileprivate let sectionHeaderIdentifier = "SectionHeader"
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     // Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +63,10 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     
     private func viewSetup() {
         // MARK: TODO - Theme setup setup
-        // --- --- --- --- --- --- --- ---
+        if let window = (UIApplication.shared.delegate?.window)! as UIWindow? {
+            window.backgroundColor = UIColor.Photon.Grey90A90
+        }
+        
         // Navigation bar
         navigationItem.title = Strings.TabTrayV2Title
         if #available(iOS 13.0, *) { } else {
@@ -98,6 +105,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     func applyTheme() {
         toolbar.applyTheme()
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        setNeedsStatusBarAppearanceUpdate()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
