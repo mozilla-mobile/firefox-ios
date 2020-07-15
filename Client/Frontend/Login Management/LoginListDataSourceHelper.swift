@@ -5,9 +5,21 @@
 import Storage
 import Shared
 
-// MARK: - Data Source
 class LoginListDataSourceHelper {
-    var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
+    private(set) var domainLookup = [GUID: (baseDomain: String?, host: String?, hostname: String)]()
+
+    // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
+    // baseDomain() is a costly call because of the ETLD lookup tables.
+    func setDomainLookup(_ logins: [LoginRecord]) {
+        self.domainLookup = [:]
+        logins.forEach { login in
+            self.domainLookup[login.id] = (
+                login.hostname.asURL?.baseDomain,
+                login.hostname.asURL?.host,
+                login.hostname
+            )
+        }
+    }
 
     // Small helper method for using the precomputed base domain to determine the title/section of the
     // given login.
@@ -49,17 +61,12 @@ class LoginListDataSourceHelper {
         var sections = [Character: [LoginRecord]]()
         var titleSet = Set<Character>()
 
-        return deferDispatchAsync(DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) {
-            // Precompute the baseDomain, host, and hostname values for sorting later on. At the moment
-            // baseDomain() is a costly call because of the ETLD lookup tables.
-            logins.forEach { login in
-                self.domainLookup[login.id] = (
-                    login.hostname.asURL?.baseDomain,
-                    login.hostname.asURL?.host,
-                    login.hostname
-                )
+        return deferDispatchAsync(DispatchQueue.global(qos: DispatchQoS.userInteractive.qosClass)) { [weak self] in
+            guard let self = self else {
+                return deferMaybe( ([Character](), [Character: [LoginRecord]]()) )
             }
 
+            self.setDomainLookup(logins)
             // 1. Temporarily insert titles into a Set to get duplicate removal for 'free'.
             logins.forEach { titleSet.insert(self.titleForLogin($0)) }
 
