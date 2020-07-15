@@ -455,7 +455,7 @@ extension TabTrayControllerV1: UITextFieldDelegate {
 
         tabDisplayManager.searchTabsAnimated()
         
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tabSearch)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabSearch)
     }
 
     func clearSearch() {
@@ -1176,12 +1176,11 @@ class TabCell: UICollectionViewCell {
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
             favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
         } else {
-            let defaultFavicon = UIImage(named: "defaultFavicon")
-            if tab.isPrivate {
-                favicon.image = defaultFavicon
+            if ThemeManager.instance.currentName == .dark {
+                favicon.image = UIImage(named: "defaultFavicon")?.withRenderingMode(.alwaysTemplate)
                 favicon.tintColor = UIColor.theme.tabTray.faviconTint
             } else {
-                favicon.image = defaultFavicon
+                favicon.image = UIImage(named: "defaultFavicon")
             }
         }
         if selected {

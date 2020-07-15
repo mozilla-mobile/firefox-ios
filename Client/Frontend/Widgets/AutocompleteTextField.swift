@@ -93,7 +93,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
         }
         switch input {
         case UIKeyCommand.inputLeftArrow:
-            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-left-arrow"])
             if isSelectionActive {
                 applyCompletion()
 
@@ -111,7 +111,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
         case UIKeyCommand.inputRightArrow:
-            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-right-arrow"])
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-right-arrow"])
             if isSelectionActive {
                 applyCompletion()
 
@@ -129,7 +129,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
                 selectedTextRange = textRange(from: cursorPosition, to: cursorPosition)
             }
         case UIKeyCommand.inputEscape:
-            UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-cancel"])
+            TelemetryWrapper.recordEvent(category: .action, method: .press, object: .keyCommand, extras: ["action": "autocomplete-cancel"])
             autocompleteDelegate?.autocompleteTextFieldDidCancel(self)
         case copyShortcutKey:
             if isSelectionActive {

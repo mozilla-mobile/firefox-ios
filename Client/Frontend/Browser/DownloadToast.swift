@@ -172,7 +172,7 @@ class DownloadToast: Toast {
         alert.addAction(UIAlertAction(title: Strings.CancelDownloadDialogCancel, style: .default, handler: { action in
             self.completionHandler?(true)
             self.dismiss(true)
-            UnifiedTelemetry.recordEvent(category: .action, method: .cancel, object: .download)
+            TelemetryWrapper.recordEvent(category: .action, method: .cancel, object: .download)
         }), accessibilityIdentifier: "cancelDownloadAlert.cancel")
 
         viewController?.present(alert, animated: true, completion: nil)
