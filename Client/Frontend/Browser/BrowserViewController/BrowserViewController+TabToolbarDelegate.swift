@@ -54,6 +54,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             showLibrary()
         }
     }
+    
+    func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))
+        focusLocationTextField(forTab: tabManager.selectedTab)
+    }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         var whatsNewAction: PhotonActionSheetItem? = nil
