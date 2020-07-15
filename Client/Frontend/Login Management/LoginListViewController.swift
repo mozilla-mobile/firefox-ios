@@ -434,7 +434,9 @@ extension LoginListViewController: SearchInputViewDelegate {
 extension LoginListViewController: LoginViewModelDelegate {
 
     func breachPathDidUpdate() {
-        tableView.reloadRows(at: self.viewModel.breachIndexPath, with: .right)
+        DispatchQueue.main.async {
+            self.tableView.reloadRows(at: self.viewModel.breachIndexPath, with: .right)
+        }
     }
 
     func loginSectionsDidUpdate() {
