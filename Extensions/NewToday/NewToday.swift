@@ -53,7 +53,7 @@ struct ImageButtonWithLabel: View {
             ZStack(alignment: .leading) {
                 if isPrivate {
                     ContainerRelativeShape()
-                        .fill(LinearGradient(gradient: Gradient(colors: [Color("privateGradientOne"), Color("privateGradientTwo")]), startPoint: /*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/, endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/))
+                        .fill(LinearGradient(gradient: Gradient(colors: [Color("privateGradientOne"), Color("privateGradientTwo")]), startPoint: .leading, endPoint: .trailing))
                 } else {
                     ContainerRelativeShape()
                         .fill(Color("normalBackgroundColor"))
@@ -66,10 +66,11 @@ struct ImageButtonWithLabel: View {
 
                     if let label = label {
                         Text(label)
+                            .font(.headline)
                             .foregroundColor(Color("widgetLabelColors"))
                     }
                 }
-                .padding(.leading, 10.0)
+                .padding(.leading, 8.0)
             }
         }
     }
@@ -81,11 +82,11 @@ struct NewTodayEntryView : View {
     @ViewBuilder
     var body: some View {
         VStack {
-            HStack(alignment: .top, spacing: 10.0) {
+            HStack(alignment: .top, spacing: 8.0) {
                 ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false"), label: String.NewTabButtonLabel)
                 ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true"), label: String.NewPrivateTabButtonLabel, isPrivate: true)
             }
-            HStack(alignment: .top, spacing: 10.0) {
+            HStack(alignment: .top, spacing: 8.0) {
                 ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp("?clipboard"), label: String.GoToCopiedLinkLabel)
                 ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp("?private=true"), label: "Close Private Tabs", isPrivate: true)
             }
@@ -111,9 +112,5 @@ struct NewToday: Widget {
         .supportedFamilies([.systemMedium])
         .configurationDisplayName("Search")
         .description("This is an example widget.")
-    }
-
-    private func clipboardChanged() {
-        WidgetCenter.shared.reloadAllTimelines()
     }
 }

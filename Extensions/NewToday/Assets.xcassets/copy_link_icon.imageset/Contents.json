@@ -1,23 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "todayCopiedLink.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "todayCopiedLink@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "todayCopiedLink@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "Copied Link.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
   }
 }
