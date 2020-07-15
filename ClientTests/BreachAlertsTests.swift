@@ -14,6 +14,14 @@ let mockRecord = BreachRecord(
  breachDate: "1970-01-02",
  description: "A mock BreachRecord for testing purposes."
 )
+// remove for official release
+let amockRecord = BreachRecord(
+ name: "MockBreach",
+ title: "A Mock BreachRecord",
+ domain: "abreached.com",
+ breachDate: "1970-01-02",
+ description: "A mock BreachRecord for testing purposes."
+)
 
 class MockBreachAlertsClient: BreachAlertsClientProtocol {
     func fetchData(endpoint: BreachAlertsClient.Endpoint, completion: @escaping (Maybe<Data>) -> Void) {
@@ -43,7 +51,7 @@ class BreachAlertsTests: XCTestCase {
             XCTAssertTrue(maybeBreaches.isSuccess)
             XCTAssertNotNil(maybeBreaches.successValue)
             if let breaches = maybeBreaches.successValue {
-                XCTAssertEqual([mockRecord], breaches)
+                XCTAssertEqual([mockRecord, amockRecord], breaches)
             }
         }
     }
