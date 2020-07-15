@@ -455,7 +455,7 @@ extension TabTrayControllerV1: UITextFieldDelegate {
 
         tabDisplayManager.searchTabsAnimated()
         
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tabSearch)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabSearch)
     }
 
     func clearSearch() {

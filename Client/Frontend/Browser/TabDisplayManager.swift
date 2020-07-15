@@ -123,7 +123,7 @@ class TabDisplayManager: NSObject {
         isPrivate = isOn
         UserDefaults.standard.set(isPrivate, forKey: "wasLastSessionPrivate")
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .privateBrowsingButton, extras: ["is-private": isOn.description] )
 
         searchedTabs = nil
         refreshStore()
@@ -207,10 +207,10 @@ class TabDisplayManager: NSObject {
         tabManager.removeTabAndUpdateSelectedIndex(tab)
     }
 
-    private func recordEventAndBreadcrumb(object: UnifiedTelemetry.EventObject, method: UnifiedTelemetry.EventMethod) {
+    private func recordEventAndBreadcrumb(object: TelemetryWrapper.EventObject, method: TelemetryWrapper.EventMethod) {
         let isTabTray = tabDisplayer as? TabTrayControllerV1 != nil
-        let eventValue = isTabTray ? UnifiedTelemetry.EventValue.tabTray : UnifiedTelemetry.EventValue.topTabs
-        UnifiedTelemetry.recordEvent(category: .action, method: method, object: object, value: eventValue)
+        let eventValue = isTabTray ? TelemetryWrapper.EventValue.tabTray : TelemetryWrapper.EventValue.topTabs
+        TelemetryWrapper.recordEvent(category: .action, method: method, object: object, value: eventValue)
     }
 
     // When using 'Close All', hide all the tabs so they don't animate their deletion individually
@@ -261,7 +261,7 @@ extension TabDisplayManager: TabSelectionDelegate {
         if tabsToDisplay.firstIndex(of: tab) != nil {
             tabManager.selectTab(tab)
         }
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tab)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tab)
     }
 }
 

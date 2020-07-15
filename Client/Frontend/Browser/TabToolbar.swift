@@ -176,7 +176,7 @@ open class TabToolbarHelper: NSObject {
         if loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.stopReloadButton)
         } else if isSearch {
-            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .startSearchButton)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.stopReloadButton)
         } else {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.stopReloadButton)
