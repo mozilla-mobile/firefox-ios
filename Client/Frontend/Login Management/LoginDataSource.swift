@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import SnapKit
 
 /// Data source for handling LoginData objects from a Cursor
 class LoginDataSource: NSObject, UITableViewDataSource {
@@ -40,11 +41,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
-
-        // Need to override the default background multi-select color to support theming
-        cell.multipleSelectionBackgroundView = UIView()
-        cell.applyTheme()
+        let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
 
         if indexPath.section == LoginsSettingsSection {
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
@@ -80,5 +77,33 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             }
         }
         return cell
+    }
+}
+
+class LoginListTableViewCell: ThemedTableViewCell {
+    lazy var breachAlertImageView: UIImageView = {
+        let image = UIImage(named: "Breached Website")
+        let imageView = UIImageView(image: image)
+
+        return imageView
+    }()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        contentView.addSubview(breachAlertImageView)
+        breachAlertImageView.snp.remakeConstraints { make in
+            make.centerY.equalTo(contentView)
+            make.trailing.equalTo(contentView.snp.trailing).offset(-14)
+        }
+
+        // Need to override the default background multi-select color to support theming
+        self.multipleSelectionBackgroundView = UIView()
+        self.applyTheme()
+
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

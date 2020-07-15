@@ -41,7 +41,7 @@ class LoginDetailViewController: SensitiveViewController {
     fileprivate weak var usernameField: UITextField?
     fileprivate weak var passwordField: UITextField?
     // Used to temporarily store a reference to the cell the user is showing the menu controller for
-    fileprivate var menuControllerCell: LoginTableViewCell?
+    fileprivate var menuControllerCell: LoginDetailTableViewCell?
     fileprivate var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
 
@@ -188,8 +188,8 @@ extension LoginDetailViewController: UITableViewDataSource {
         }
     }
 
-    fileprivate func cell(forIndexPath indexPath: IndexPath) -> LoginTableViewCell {
-        let loginCell = LoginTableViewCell()
+    fileprivate func cell(forIndexPath indexPath: IndexPath) -> LoginDetailTableViewCell {
+        let loginCell = LoginDetailTableViewCell()
         loginCell.selectionStyle = .none
         loginCell.delegate = self
         return loginCell
@@ -218,7 +218,7 @@ extension LoginDetailViewController: UITableViewDelegate {
             return
         }
 
-        guard let cell = tableView.cellForRow(at: indexPath) as? LoginTableViewCell else { return }
+        guard let cell = tableView.cellForRow(at: indexPath) as? LoginDetailTableViewCell else { return }
 
         cell.becomeFirstResponder()
 
@@ -294,7 +294,7 @@ extension LoginDetailViewController {
 
     @objc func edit() {
         isEditingFieldData = true
-        guard let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as? LoginTableViewCell else { return }
+        guard let cell = tableView.cellForRow(at: InfoItem.usernameItem.indexPath) as? LoginDetailTableViewCell else { return }
         cell.descriptionLabel.becomeFirstResponder()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneEditing))
     }
@@ -329,11 +329,11 @@ extension LoginDetailViewController {
 // MARK: - Cell Delegate
 extension LoginDetailViewController: LoginTableViewCellDelegate {
 
-    fileprivate func cellForItem(_ item: InfoItem) -> LoginTableViewCell? {
-        return tableView.cellForRow(at: item.indexPath) as? LoginTableViewCell
+    fileprivate func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
+        return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell
     }
 
-    func didSelectOpenAndFillForCell(_ cell: LoginTableViewCell) {
+    func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell) {
         guard let url = (self.login.formSubmitURL?.asURL ?? self.login.hostname.asURL) else {
             return
         }
@@ -343,7 +343,7 @@ extension LoginDetailViewController: LoginTableViewCellDelegate {
         })
     }
 
-    func shouldReturnAfterEditingDescription(_ cell: LoginTableViewCell) -> Bool {
+    func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool {
         let usernameCell = cellForItem(.usernameItem)
         let passwordCell = cellForItem(.passwordItem)
 
@@ -354,7 +354,7 @@ extension LoginDetailViewController: LoginTableViewCellDelegate {
         return false
     }
 
-    func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem? {
+    func infoItemForCell(_ cell: LoginDetailTableViewCell) -> InfoItem? {
         if let index = tableView.indexPath(for: cell),
             let item = InfoItem(rawValue: index.row) {
             return item

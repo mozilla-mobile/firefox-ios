@@ -12,7 +12,7 @@ protocol LoginTableViewCellDelegate: AnyObject {
     func infoItemForCell(_ cell: LoginDetailTableViewCell) -> InfoItem?
 }
 
-private struct LoginTableViewCellUX {
+public struct LoginTableViewCellUX {
     static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
     static let highlightedLabelTextColor = UIConstants.SystemBlueColor
     static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
@@ -84,7 +84,6 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
         return label
     }()
 
-
     /// Override the default accessibility label since it won't include the description by default
     /// since it's a UITextField acting as a label.
     override var accessibilityLabel: String? {
@@ -141,7 +140,6 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
         labelContainer.addSubview(highlightedLabel)
         labelContainer.addSubview(descriptionLabel)
-        labelContainer.addSubview(breachAlertImageView)
         contentView.addSubview(labelContainer)
 
         configureLayout()
@@ -177,10 +175,6 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
             make.leading.bottom.equalTo(labelContainer)
             make.top.equalTo(highlightedLabel.snp.bottom)
             make.width.equalTo(labelContainer)
-        }
-
-        breachAlertImageView.snp.remakeConstraints { make in
-            make.trailing.equalTo(self)
         }
 
         setNeedsUpdateConstraints()
