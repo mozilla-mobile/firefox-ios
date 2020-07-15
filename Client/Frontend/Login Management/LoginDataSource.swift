@@ -66,13 +66,10 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.textLabel?.text = login.hostname
             cell.detailTextColor = UIColor.theme.tableView.rowDetailText
             cell.detailTextLabel?.text = login.username
-            cell.accessoryType = .disclosureIndicator
             if let breaches = viewModel.userBreaches {
                 if breaches.contains(login) {
-                    cell.textLabel?.textColor = UIColor.systemRed
+                    cell.breachAlertImageView.isHidden = false
                     viewModel.setBreachIndexPath(indexPath: indexPath)
-                    let breachImage = UIImage(named: "Breached Website")
-                    cell.addSubview(UIImageView(image: breachImage))
                 }
             }
         }
@@ -84,23 +81,25 @@ class LoginListTableViewCell: ThemedTableViewCell {
     lazy var breachAlertImageView: UIImageView = {
         let image = UIImage(named: "Breached Website")
         let imageView = UIImageView(image: image)
-
+        imageView.isHidden = true
         return imageView
     }()
+    let breachAlertSize: CGFloat = 16
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
+        accessoryType = .disclosureIndicator
         contentView.addSubview(breachAlertImageView)
         breachAlertImageView.snp.remakeConstraints { make in
             make.centerY.equalTo(contentView)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-14)
+            make.trailing.equalTo(contentView.snp.trailing).offset(-16)
+            make.width.equalTo(breachAlertSize)
+            make.height.equalTo(breachAlertSize)
         }
 
         // Need to override the default background multi-select color to support theming
         self.multipleSelectionBackgroundView = UIView()
         self.applyTheme()
-
     }
 
     required init?(coder aDecoder: NSCoder) {
