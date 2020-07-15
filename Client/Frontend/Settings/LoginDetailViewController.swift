@@ -327,7 +327,7 @@ extension LoginDetailViewController {
 }
 
 // MARK: - Cell Delegate
-extension LoginDetailViewController: LoginTableViewCellDelegate {
+extension LoginDetailViewController: LoginDetailTableViewCellDelegate {
 
     fileprivate func cellForItem(_ item: InfoItem) -> LoginDetailTableViewCell? {
         return tableView.cellForRow(at: item.indexPath) as? LoginDetailTableViewCell

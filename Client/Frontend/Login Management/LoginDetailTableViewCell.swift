@@ -6,7 +6,7 @@ import UIKit
 import SnapKit
 import Storage
 
-protocol LoginTableViewCellDelegate: AnyObject {
+protocol LoginDetailTableViewCellDelegate: AnyObject {
     func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)
     func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool
     func infoItemForCell(_ cell: LoginDetailTableViewCell) -> InfoItem?
@@ -29,7 +29,7 @@ class LoginDetailTableViewCell: ThemedTableViewCell {
 
     fileprivate let labelContainer = UIView()
 
-    weak var delegate: LoginTableViewCellDelegate?
+    weak var delegate: LoginDetailTableViewCellDelegate?
 
     // In order for context menu handling, this is required
     override var canBecomeFirstResponder: Bool {

@@ -92,7 +92,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
         contentView.addSubview(breachAlertImageView)
         breachAlertImageView.snp.remakeConstraints { make in
             make.centerY.equalTo(contentView)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-16)
+            make.trailing.equalTo(contentView.snp.trailing).offset(LoginTableViewCellUX.HorizontalMargin)
             make.width.equalTo(breachAlertSize)
             make.height.equalTo(breachAlertSize)
         }
