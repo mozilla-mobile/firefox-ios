@@ -93,7 +93,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         widgetView = effectView.contentView
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
-        buttonStackView.addArrangedSubview(openCopiedLinkButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
             make.edges.equalTo(widgetView)
@@ -102,6 +101,11 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if UIPasteboard.general.hasURLs || UIPasteboard.general.hasStrings {
+            buttonStackView.addArrangedSubview(openCopiedLinkButton)
+        } else {
+            buttonStackView.removeArrangedSubview(openCopiedLinkButton)
+        }
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
