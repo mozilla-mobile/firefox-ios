@@ -371,13 +371,13 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             // Reading list items are closest in concept to bookmarks.
             let visitType = VisitType.bookmark
             libraryPanelDelegate?.libraryPanel(didSelectURL: encodedURL, visitType: visitType)
-            UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .readingListItem)
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .readingListItem)
         }
     }
 
     fileprivate func deleteItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
-            UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
+            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .readingListItem, value: .readingListPanel)
             if profile.readingList.deleteRecord(record).value.isSuccess {
                 records?.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
@@ -391,7 +391,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
     fileprivate func toggleItem(atIndex indexPath: IndexPath) {
         if let record = records?[indexPath.row] {
-            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .readingListItem, value: !record.unread ? .markAsUnread : .markAsRead, extras: [ "from": "reading-list-panel" ])
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .readingListItem, value: !record.unread ? .markAsUnread : .markAsRead, extras: [ "from": "reading-list-panel" ])
             if let updatedRecord = profile.readingList.updateRecord(record, unread: !record.unread).value.successValue {
                 records?[indexPath.row] = updatedRecord
                 tableView.reloadRows(at: [indexPath], with: .automatic)
@@ -430,7 +430,7 @@ extension ReadingListPanel: UITableViewDragDelegate {
             return []
         }
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .drag, object: .url, value: .readingListPanel)
+        TelemetryWrapper.recordEvent(category: .action, method: .drag, object: .url, value: .readingListPanel)
 
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = site

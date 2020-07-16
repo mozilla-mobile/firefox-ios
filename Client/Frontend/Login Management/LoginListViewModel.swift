@@ -28,7 +28,6 @@ final class LoginListViewModel {
     private(set) var userBreaches: [LoginRecord]?
     private(set) var breachIndexPath = [IndexPath]() {
         didSet {
-            assert(Thread.isMainThread)
             delegate?.breachPathDidUpdate()
         }
     }
@@ -43,10 +42,7 @@ final class LoginListViewModel {
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
         breachAlertsManager.loadBreaches { [weak self] _ in
-            guard let self = self else { return }
-            guard let logins = self.activeLoginQuery?.value.successValue else {
-                return
-            }
+            guard let self = self, let logins = self.activeLoginQuery?.value.successValue else { return }
             self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
         }
         activeLoginQuery! >>== self.setLogins

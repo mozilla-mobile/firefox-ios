@@ -67,7 +67,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         
         viewModel.setupFirstPage { [weak self] (request, telemetryEventMethod) in
             if let method = telemetryEventMethod {
-                UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
+                TelemetryWrapper.recordEvent(category: .firefoxAccount, method: method, object: .accountConnected)
             }
             self?.webView.load(request)
         }

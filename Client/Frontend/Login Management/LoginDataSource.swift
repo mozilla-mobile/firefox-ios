@@ -43,6 +43,10 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
 
+        // Need to override the default background multi-select color to support theming
+        cell.multipleSelectionBackgroundView = UIView()
+        cell.applyTheme()
+
         if indexPath.section == LoginsSettingsSection {
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1

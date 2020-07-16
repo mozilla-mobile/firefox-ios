@@ -106,6 +106,6 @@ class OnboardingUserResearch {
         // Leanplum telemetry
         LeanPlumClient.shared.set(attributes: attributesExtras)
         // Legacy telemetry
-        UnifiedTelemetry.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
+        TelemetryWrapper.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
     }
 }

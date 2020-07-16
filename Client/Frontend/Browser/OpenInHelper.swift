@@ -60,7 +60,7 @@ class DownloadHelper: NSObject, OpenInHelper {
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
         tab.webView?.evaluateJavaScript("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.securityToken)')")
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
     
     required init?(request: URLRequest?, response: URLResponse, canShowInWebView: Bool, forceDownload: Bool, browserViewController: BrowserViewController) {
@@ -113,7 +113,7 @@ class DownloadHelper: NSObject, OpenInHelper {
 
         let downloadFileItem = PhotonActionSheetItem(title: Strings.OpenInDownloadHelperAlertDownloadNow, iconString: "download") { _, _ in
             self.browserViewController.downloadQueue.enqueue(download)
-            UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
+            TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadNowButton)
         }
 
         let actions = [[filenameItem], [downloadFileItem]]

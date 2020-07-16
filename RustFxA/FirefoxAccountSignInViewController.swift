@@ -89,7 +89,7 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     /// This variable is used to track parent page that launched this sign in VC.
     /// telemetryObject deduced from parentType initializer is sent with telemetry events on button click
-    private let telemetryObject: UnifiedTelemetry.EventObject
+    private let telemetryObject: TelemetryWrapper.EventObject
     
     /// Dismissal style for FxAWebViewController
     /// Changes based on whether or not this VC is launched from the app menu or settings
@@ -188,14 +188,14 @@ class FirefoxAccountSignInViewController: UIViewController {
     @objc func scanbuttonTapped(_ sender: UIButton) {
         let qrCodeVC = QRCodeViewController()
         qrCodeVC.qrCodeDelegate = self
-        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .tap, object: telemetryObject, extras: ["flow_type": "pairing"])
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .tap, object: telemetryObject, extras: ["flow_type": "pairing"])
         presentThemedViewController(navItemLocation: .Left, navItemText: .Close, vcBeingPresented: qrCodeVC, topTabsVisible: true)
     }
     
     /// Use email login button tapped
     @objc func emailLoginTapped(_ sender: UIButton) {
         let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
-        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
 }

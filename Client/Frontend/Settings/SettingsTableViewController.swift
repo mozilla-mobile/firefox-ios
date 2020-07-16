@@ -229,7 +229,7 @@ class BoolSetting: Setting {
     @objc func switchValueChanged(_ control: UISwitch) {
         writeBool(control)
         settingDidChange?(control.isOn)
-        UnifiedTelemetry.recordEvent(category: .action, method: .change, object: .setting, value: self.prefKey, extras: ["to": control.isOn])
+        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, value: self.prefKey, extras: ["to": control.isOn])
     }
 
     // These methods allow a subclass to control how the pref is saved
