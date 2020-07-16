@@ -11,7 +11,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 @objc (TodayViewController)
-class TodayViewController: UIViewController, NCWidgetProviding {
+class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
