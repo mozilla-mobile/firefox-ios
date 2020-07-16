@@ -24,6 +24,13 @@ final class LoginListViewModel {
         }
     }
     fileprivate let helper = LoginListDataSourceHelper()
+    private(set) var breachAlertsManager = BreachAlertsManager()
+    private(set) var userBreaches: [LoginRecord]?
+    private(set) var breachIndexPath = [IndexPath]() {
+        didSet {
+            delegate?.breachPathDidUpdate()
+        }
+    }
 
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
@@ -32,9 +39,13 @@ final class LoginListViewModel {
 
     func loadLogins(_ query: String? = nil, loginDataSource: LoginDataSource) {
         // Fill in an in-flight query and re-query
-        self.activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
-        self.activeLoginQuery = self.queryLogins(query ?? "")
-        self.activeLoginQuery! >>== self.setLogins
+        activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
+        activeLoginQuery = queryLogins(query ?? "")
+        breachAlertsManager.loadBreaches { [weak self] _ in
+            guard let self = self, let logins = self.activeLoginQuery?.value.successValue else { return }
+            self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
+        }
+        activeLoginQuery! >>== self.setLogins
     }
     
     /// Searches SQLite database for logins that match query.
@@ -42,7 +53,9 @@ final class LoginListViewModel {
     func queryLogins(_ query: String) -> Deferred<Maybe<[LoginRecord]>> {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
         profile.logins.searchLoginsWithQuery(query) >>== { logins in
-            deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
+            var log = logins.asArray()
+            log.append(LoginRecord(fromJSONDict: ["hostname" : "http://abreached.com", "timePasswordChanged": 46800000]))
+            deferred.fillIfUnfilled(Maybe(success: log))
             succeed()
         }
         return deferred
@@ -101,6 +114,10 @@ final class LoginListViewModel {
         }
     }
 
+    func setBreachIndexPath(indexPath: IndexPath) {
+        self.breachIndexPath = [indexPath]
+    }
+
     // MARK: - UX Constants
     struct LoginListUX {
         static let RowHeight: CGFloat = 58
@@ -114,10 +131,11 @@ final class LoginListViewModel {
 // MARK: - LoginDataSourceViewModelDelegate
 protocol LoginViewModelDelegate: AnyObject {
     func loginSectionsDidUpdate()
+    func breachPathDidUpdate()
 }
 
 extension LoginRecord: Equatable {
     public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.hostname == rhs.hostname && lhs.credentials == rhs.credentials
     }
 }

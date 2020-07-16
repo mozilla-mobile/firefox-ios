@@ -7,7 +7,7 @@ import Storage // or whichever module has the LoginsRecord class
 import Shared // or whichever module has the Maybe class
 
 /// Breach structure decoded from JSON
-struct BreachRecord: Codable, Equatable {
+struct BreachRecord: Codable, Equatable, Hashable {
     var name: String
     var title: String
     var domain: String
@@ -49,6 +49,13 @@ final public class BreachAlertsManager {
             }
 
             self.breaches = decoded
+            self.breaches.append(BreachRecord(
+             name: "MockBreach",
+             title: "A Mock BreachRecord",
+             domain: "abreached.com",
+             breachDate: "1970-01-02",
+             description: "A mock BreachRecord for testing purposes."
+            ))
             completion(Maybe(success: self.breaches))
         }
     }
@@ -56,6 +63,8 @@ final public class BreachAlertsManager {
     /// Compares a list of logins to a list of breaches and returns breached logins.
     ///    - Parameters:
     ///         - logins: a list of logins to compare breaches to
+    ///    - Returns:
+    ///         - an array of LoginRecords of breaches in the original list.
     func findUserBreaches(_ logins: [LoginRecord]) -> Maybe<[LoginRecord]> {
         var result: [LoginRecord] = []
 
@@ -65,27 +74,41 @@ final public class BreachAlertsManager {
             return Maybe(failure: BreachAlertsError(description: "cannot compare to an empty list of logins"))
         }
 
-        // TODO: optimize this loop
-        for login in logins {
-            for breach in self.breaches {
-                // host check
-                let loginHostURL = URL(string: login.hostname)
-                if loginHostURL?.baseDomain == breach.domain {
-                    print("compareToBreaches(): breach: \(breach.domain)")
-
-                    // date check
-                    let pwLastChanged = Date(timeIntervalSince1970: TimeInterval(login.timePasswordChanged))
-
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "yyyy-MM-dd"
-                    if let breachDate = dateFormatter.date(from: breach.breachDate), pwLastChanged < breachDate {
-                        print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
-                        result.append(login)
-                    }
+        let loginsDictionary = loginsByHostname(logins)
+        for breach in self.breaches {
+            guard let potentialBreaches = loginsDictionary[breach.domain] else {
+                continue
+            }
+            for item in potentialBreaches {
+                let pwLastChanged = TimeInterval(item.timePasswordChanged/1000)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
+                    continue
                 }
+                print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
+                result.append(item)
             }
         }
         print("compareToBreaches(): fin")
         return Maybe(success: result)
+    }
+
+    func loginsByHostname(_ logins: [LoginRecord]) -> [String: [LoginRecord]] {
+        var result = [String: [LoginRecord]]()
+        for login in logins {
+            let base = baseDomainForLogin(login)
+            if !result.keys.contains(base) {
+                result[base] = [login]
+            } else {
+                result[base]?.append(login)
+            }
+        }
+        return result
+    }
+
+    private func baseDomainForLogin(_ login: LoginRecord) -> String {
+        guard let result = login.hostname.asURL?.baseDomain else { return login.hostname }
+        return result
     }
 }

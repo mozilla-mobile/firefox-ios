@@ -42,6 +42,10 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = ThemedTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
 
+        // Need to override the default background multi-select color to support theming
+        cell.multipleSelectionBackgroundView = UIView()
+        cell.applyTheme()
+
         if indexPath.section == LoginsSettingsSection {
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
@@ -66,10 +70,13 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.detailTextColor = UIColor.theme.tableView.rowDetailText
             cell.detailTextLabel?.text = login.username
             cell.accessoryType = .disclosureIndicator
+            if let breaches = viewModel.userBreaches {
+                if breaches.contains(login) {
+                    cell.textLabel?.textColor = UIColor.systemRed
+                    viewModel.setBreachIndexPath(indexPath: indexPath)
+                }
+            }
         }
-        // Need to override the default background multi-select color to support theming
-        cell.multipleSelectionBackgroundView = UIView()
-        cell.applyTheme()
         return cell
     }
 }
