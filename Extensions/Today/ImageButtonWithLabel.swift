@@ -21,8 +21,6 @@ class ImageButtonWithLabel: UIView {
         addSubview(button)
         addSubview(label)
         button.imageView?.contentMode = .scaleAspectFit
-
-        button.backgroundColor = .orange
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalTo(self.safeAreaLayoutGuide).offset(5)
