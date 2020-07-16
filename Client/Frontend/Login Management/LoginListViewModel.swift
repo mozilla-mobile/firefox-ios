@@ -47,7 +47,6 @@ final class LoginListViewModel {
         }
         activeLoginQuery! >>== self.setLogins
     }
-    
 
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
