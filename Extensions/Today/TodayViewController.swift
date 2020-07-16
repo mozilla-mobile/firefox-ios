@@ -29,7 +29,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         label.tintColor = TodayUX.labelColor
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
-//        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -47,7 +46,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         label.tintColor = TodayUX.labelColor
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
-//        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -71,7 +69,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         button.label.adjustsFontForContentSizeCategory = true
         button.subtitleLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
         button.subtitleLabel.adjustsFontForContentSizeCategory = true
-//        button.subtitleLabel.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.linkTextSize))
         button.label.accessibilityLabel = String.CopiedLinkLabelFromPasteBoard
         button.accessibilityTraits = .none
         return button
@@ -117,11 +114,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
 
-        buttonStackView.backgroundColor = .brown
         widgetStackView.addArrangedSubview(buttonStackView)
-        widgetStackView.addArrangedSubview(openCopiedLinkButton)
-
-        widgetStackView.backgroundColor = .cyan
         widgetView.addSubview(widgetStackView)
         widgetStackView.snp.makeConstraints { make in
             make.edges.equalTo(widgetView)
@@ -161,7 +154,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     @objc func onPressNewPrivateTab(_ view: UIView) {
         openContainingApp("?private=true")
     }
-    
+
     //TODO: Move it to Viewmodel
     fileprivate func openContainingApp(_ urlSuffix: String = "") {
         let urlString = "\(model.scheme)://open-url\(urlSuffix)"

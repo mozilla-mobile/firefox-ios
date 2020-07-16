@@ -30,33 +30,21 @@ class ButtonWithSublabel: UIButton {
         buttonImage.contentMode = .scaleAspectFit
         
         buttonImage.snp.makeConstraints { make in
-            make.left.equalTo(10)
-//            make.top.equalTo(self.label.snp.top)
-            make.centerY.equalTo(self.label.snp.firstBaseline)
+            make.left.centerY.equalTo(10)
             make.width.equalTo(self.label.snp.height)
         }
-
-        label.backgroundColor = .blue
-        
         self.label.snp.makeConstraints { make in
             make.left.equalTo(buttonImage.snp.right).offset(10)
             make.trailing.top.equalTo(self)
-            //check TodayUX file for definition of DynamicLabelResize
-            
-            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: String.GoToCopiedLinkLabel, style : UIFont.TextStyle.caption1))
         }
         self.label.numberOfLines = 2
-//        self.label.lineBreakMode = .byWordWrapping
+        self.label.lineBreakMode = .byWordWrapping
         label.sizeToFit()
-        
-        self.subtitleLabel.backgroundColor = .yellow
         self.subtitleLabel.lineBreakMode = .byTruncatingTail
         self.subtitleLabel.snp.makeConstraints { make in
             make.bottom.equalTo(self).inset(10)
             make.top.equalTo(self.label.snp.bottom)
             make.leading.trailing.equalTo(self.label)
-            //check TodayUX file for definition of DynamicLabelResize
-//            make.height.greaterThanOrEqualTo(DynamicLabelResize.height(text: String.GoToCopiedLinkLabel, style : UIFont.TextStyle.footnote))
         }
     }
 

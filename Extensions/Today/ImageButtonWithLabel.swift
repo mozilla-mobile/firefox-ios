@@ -31,14 +31,9 @@ class ImageButtonWithLabel: UIView {
             make.height.greaterThanOrEqualTo(60)
         }
 
-        label.backgroundColor = .green
-        
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalTo(self)
-            //check TodayUX file for definition of DynamicLabelResize
-//            make.height.equalTo(200)
-//            make.height.equalTo(DynamicLabelResize.height(text: String.NewTabButtonLabel, style: .body))
         }
         label.numberOfLines = 2
 //        label.lineBreakMode = .byWordWrapping
