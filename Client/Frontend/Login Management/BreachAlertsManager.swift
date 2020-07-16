@@ -52,7 +52,14 @@ final public class BreachAlertsManager {
             self.breaches.append(BreachRecord(
              name: "MockBreach",
              title: "A Mock BreachRecord",
-             domain: "abreached.com",
+             domain: "abreachedwithalongstringname.com",
+             breachDate: "1970-01-02",
+             description: "A mock BreachRecord for testing purposes."
+            ))
+            self.breaches.append(BreachRecord(
+             name: "MockBreach",
+             title: "A Mock BreachRecord",
+             domain: "abreach.com",
              breachDate: "1970-01-02",
              description: "A mock BreachRecord for testing purposes."
             ))

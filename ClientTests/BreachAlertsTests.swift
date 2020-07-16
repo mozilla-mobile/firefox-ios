@@ -18,7 +18,14 @@ let mockRecord = BreachRecord(
 let amockRecord = BreachRecord(
  name: "MockBreach",
  title: "A Mock BreachRecord",
- domain: "abreached.com",
+ domain: "abreach.com",
+ breachDate: "1970-01-02",
+ description: "A mock BreachRecord for testing purposes."
+)
+let longMock = BreachRecord(
+ name: "MockBreach",
+ title: "A Mock BreachRecord",
+ domain: "abreachedwithalongstringname.com",
  breachDate: "1970-01-02",
  description: "A mock BreachRecord for testing purposes."
 )
@@ -51,7 +58,7 @@ class BreachAlertsTests: XCTestCase {
             XCTAssertTrue(maybeBreaches.isSuccess)
             XCTAssertNotNil(maybeBreaches.successValue)
             if let breaches = maybeBreaches.successValue {
-                XCTAssertEqual([mockRecord, amockRecord], breaches)
+                XCTAssertEqual([mockRecord, longMock, amockRecord], breaches)
             }
         }
     }
