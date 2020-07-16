@@ -5,8 +5,6 @@
 import WidgetKit
 import SwiftUI
 import Shared
-import NotificationCenter
-
 
 private struct TodayUX {
     static let linkTextSize: CGFloat = 9.0
@@ -81,62 +79,25 @@ struct ImageButtonWithLabel: View {
 struct NewTodayEntryView : View {
     @Environment(\.widgetFamily) var family
 
-
-    static var copiedURL: URL?
-    static var searchedText : String?
-    
     @ViewBuilder
     var body: some View {
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false", query: "url"), label: "New Search")
-                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true", query: "url"), label: "Private Search", isPrivate: true)
+                ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false"), label: String.NewTabButtonLabel)
+                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true"), label: String.NewPrivateTabButtonLabel, isPrivate: true)
             }
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "copy_link_icon", url: onPressOpenClibpoard(), label: "Go To Copied Link")
-                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp("?private=true", query: "close-private-tabs"), label: "Close Private Tabs", isPrivate: true)
+                ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp("?clipboard"), label: String.GoToCopiedLinkLabel)
+                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp("?private=true"), label: "Close Private Tabs", isPrivate: true)
             }
         }
         .padding(10.0)
         .background(Color("WidgetBackground"))
     }
 
-    fileprivate func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
-        let urlString = "\(scheme)://open-\(query)\(urlSuffix)"
+    fileprivate func linkToContainingApp(_ urlSuffix: String = "") -> URL {
+        let urlString = "\(scheme)://open-url\(urlSuffix)"
         return URL(string: urlString)!
-    }
-    
-    func updateCopiedLink() {
-        if !UIPasteboard.general.hasURLs {
-            guard let searchText = UIPasteboard.general.string else {
-                NewTodayEntryView.searchedText = nil
-                return
-            }
-            NewTodayEntryView.searchedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        }
-        else {
-            UIPasteboard.general.asyncURL().uponQueue(.main) { res in
-                guard let url: URL? = res.successValue else {
-                    NewTodayEntryView.copiedURL = nil
-                    return
-                }
-                NewTodayEntryView.copiedURL = url
-            }
-            
-        }
-    }
-    
-    func onPressOpenClibpoard() -> URL {
-        updateCopiedLink()
-        if let url = NewTodayEntryView.copiedURL,
-            let encodedString = url.absoluteString.escape() {
-            return linkToContainingApp("?url=\(encodedString)",query: "url")
-        } else {
-            if let copiedText = NewTodayEntryView.searchedText {
-                return linkToContainingApp("?text=\(copiedText)",query: "text")
-            }
-        }
-        return linkToContainingApp("?private=false",query: "url")
     }
 }
 
