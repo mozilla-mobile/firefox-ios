@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import SnapKit
 
 /// Data source for handling LoginData objects from a Cursor
 class LoginDataSource: NSObject, UITableViewDataSource {
@@ -76,4 +75,3 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         return cell
     }
 }
-
