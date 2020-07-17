@@ -449,7 +449,7 @@ class TabManager: NSObject {
             privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
         }
 
-        tab.closeAndRemovePrivateBrowsingData()
+        tab.close()
 
         if notify {
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
@@ -480,7 +480,7 @@ class TabManager: NSObject {
         if selectedTab?.isPrivate ?? false {
             _selectedIndex = -1
         }
-        privateTabs.forEach { $0.closeAndRemovePrivateBrowsingData() }
+        privateTabs.forEach { $0.close() }
         tabs = normalTabs
 
         privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
