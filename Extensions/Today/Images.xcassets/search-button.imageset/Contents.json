@@ -1,7 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "search.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,6 +10,7 @@
           "value" : "light"
         }
       ],
+      "filename" : "search.pdf",
       "idiom" : "universal"
     },
     {
@@ -20,6 +20,7 @@
           "value" : "dark"
         }
       ],
+      "filename" : "search-dark.pdf",
       "idiom" : "universal"
     }
   ],

@@ -27,7 +27,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
-        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -43,7 +44,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
-        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         imageButton.sizeToFit()
         return imageButton
     }()
@@ -59,7 +61,8 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
         label.tintColor = TodayUX.labelColor
-        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
         imageButton.sizeToFit()
         return imageButton
     }()
