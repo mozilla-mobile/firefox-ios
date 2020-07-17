@@ -113,7 +113,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         widgetView = effectView.contentView
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
-
         widgetStackView.addArrangedSubview(buttonStackView)
         widgetView.addSubview(widgetStackView)
         widgetStackView.snp.makeConstraints { make in
