@@ -34,7 +34,6 @@ class ImageButtonWithLabel: UIView {
             make.leading.trailing.bottom.equalTo(self)
         }
         label.numberOfLines = 2
-//        label.lineBreakMode = .byWordWrapping
         label.textAlignment = .center
         label.sizeToFit()
     }
