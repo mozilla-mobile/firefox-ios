@@ -476,7 +476,7 @@ class TabManager: NSObject {
         return false
     }
 
-    private func removeAllPrivateTabs() {
+    public func removeAllPrivateTabs() {
         // reset the selectedTabIndex if we are on a private tab because we will be removing it.
         if selectedTab?.isPrivate ?? false {
             _selectedIndex = -1

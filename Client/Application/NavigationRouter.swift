@@ -108,14 +108,14 @@ enum NavigationPath {
         }
     }
 
-    static func handle(nav: NavigationPath, with bvc: BrowserViewController) {
+    static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray : TabTrayControllerV1) {
         switch nav {
         case .fxa(let params): NavigationPath.handleFxA(params: params, with: bvc)
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
-        case .closePrivateTabs : NavigationPath.handleClosePrivateTabs()
+        case .closePrivateTabs : NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
         }
     }
 
@@ -139,9 +139,9 @@ enum NavigationPath {
         bvc.presentSignInViewController(params)
     }
     
-    private static func handleClosePrivateTabs() {
-        let delegate = UIApplication.shared.delegate as! AppDelegate
-        delegate.tabManager.removeTabs(delegate.tabManager.privateTabs)
+    private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: TabTrayControllerV1) {
+        bvc.tabManager.removeTabs(bvc.tabManager.privateTabs)
+        tray.closeTabsForPrivateTray()
     }
     
     private static func handleGlean(url: URL) {

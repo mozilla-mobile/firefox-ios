@@ -510,6 +510,22 @@ extension TabTrayControllerV1 {
             }
         }
     }
+    
+    func closeTabsForPrivateTray() {
+        tabDisplayManager.hideDisplayedTabs() {
+            self.tabManager.removeAllPrivateTabs()
+            if self.tabDisplayManager.isPrivate {
+                self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
+                if !self.emptyPrivateTabsView.isHidden {
+                    // Fade in the empty private tabs message. This slow fade allows time for the closing tab animations to complete.
+                    self.emptyPrivateTabsView.alpha = 0
+                    UIView.animate(withDuration: 0.5, animations: {
+                        self.emptyPrivateTabsView.alpha = 1
+                    }, completion: nil)
+                }
+            }
+        }
+    }
 
     func changePrivacyMode(_ isPrivate: Bool) {
         if isPrivate != tabDisplayManager.isPrivate {
