@@ -141,7 +141,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         openContainingApp("?private=true", query: "url")
     }
 
-
     @objc func onPressOpenCopiedLink(_ view: UIView) {
         viewModel.updateCopiedLink()
     }
