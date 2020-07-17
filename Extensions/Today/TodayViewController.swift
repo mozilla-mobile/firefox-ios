@@ -122,15 +122,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     // MARK: Button behaviour
     @objc func onPressNewTab(_ view: UIView) {
-        openContainingApp("?private=false",query: "url")
+        openContainingApp("?private=false", query: "url")
     }
 
     @objc func onPressNewPrivateTab(_ view: UIView) {
-        openContainingApp("?private=true",query: "url")
+        openContainingApp("?private=true", query: "url")
     }
 
     //TODO: Move it to Viewmodel
-    fileprivate func openContainingApp(_ urlSuffix: String = "", query : String) {
+    fileprivate func openContainingApp(_ urlSuffix: String = "", query: String) {
         let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
@@ -141,12 +141,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         viewModel.updateCopiedLink()
         if let url = TodayModel.copiedURL,
             let encodedString = url.absoluteString.escape() {
-            openContainingApp("?url=\(encodedString)",query: "url")
+            openContainingApp("?url=\(encodedString)", query: "url")
         } else {
             guard let copiedText = TodayModel.searchedText else {
                 return
             }
-            openContainingApp("?text=\(copiedText)",query: "text")
+            openContainingApp("?text=\(copiedText)", query: "text")
         }
     }
 }

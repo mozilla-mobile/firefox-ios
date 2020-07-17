@@ -22,8 +22,7 @@ class TodayWidgetViewModel {
                 return
             }
             TodayModel.searchedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        }
-        else {
+        } else {
             UIPasteboard.general.asyncURL().uponQueue(.main) { res in
                 guard let url: URL? = res.successValue else {
                     TodayModel.copiedURL = nil
