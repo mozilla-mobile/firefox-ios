@@ -96,7 +96,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         widgetView = effectView.contentView
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
-        buttonStackView.addArrangedSubview(openCopiedLinkButton)
         buttonStackView.addArrangedSubview(closePrivateTabsButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
