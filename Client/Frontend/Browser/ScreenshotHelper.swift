@@ -18,13 +18,14 @@ class ScreenshotHelper {
         self.controller = controller
     }
     
+    /// Takes a screenshot of the WebView to be displayed on the tab view page
+    /**
+     If taking a screenshot of the home page, uses our custom screenshot `UIView` extension function
+     If taking a screenshot of a website, uses apple's `takeSnapshot` function
+     */
     func takeScreenshot(_ tab: Tab) {
-        guard let webView = tab.webView else {
-            //handle error here
-            return
-        }
-        guard let url = tab.url else {
-            //handle this error as well
+        guard let webView = tab.webView, let url = tab.url else {
+            print("Screenshot Error: We do not have the data we need to take a screenshot")
             return
         }
         //Handle home page snapshots, can not use Apple API snapshot function for this
