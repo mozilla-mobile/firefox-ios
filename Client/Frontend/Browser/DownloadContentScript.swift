@@ -29,7 +29,7 @@ class DownloadContentScript: TabContentScript {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
         blobUrlForDownload = url.scheme == "blob" ? URL(string: safeUrl) : nil
         tab.webView?.evaluateJavaScript("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.securityToken)')")
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
 
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {

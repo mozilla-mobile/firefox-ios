@@ -165,7 +165,7 @@ extension PhotonActionSheetProtocol {
 
         var addToSafelist = PhotonActionSheetItem(title: Strings.ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
             LeanPlumClient.shared.track(event: .trackingProtectionSafeList)
-            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
+            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
             ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
                 tab.reload()
                 // trigger a call to customRender
