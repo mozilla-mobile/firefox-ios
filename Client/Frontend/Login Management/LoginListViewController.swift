@@ -435,7 +435,7 @@ extension LoginListViewController: LoginViewModelDelegate {
 
     func breachPathDidUpdate() {
         DispatchQueue.main.async {
-            self.tableView.reloadRows(at: self.viewModel.breachIndexPath, with: .none)
+            self.tableView.reloadRows(at: Array(self.viewModel.breachIndexPath), with: .none)
         }
     }
 
