@@ -44,6 +44,14 @@ final class LoginListViewModel {
         breachAlertsManager.loadBreaches { [weak self] _ in
             guard let self = self, let logins = self.activeLoginQuery?.value.successValue else { return }
             self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
+            guard let breaches = self.userBreaches else { return }
+            var indexPaths = [IndexPath]()
+            for breach in breaches {
+                if logins.contains(breach), let indexPath = self.indexPathForLogin(breach) {
+                    indexPaths.append(indexPath)
+                }
+            }
+            self.breachIndexPath = indexPaths
         }
         activeLoginQuery! >>== self.setLogins
     }
@@ -81,6 +89,14 @@ final class LoginListViewModel {
         assert(indexPath.row <= section.count)
 
         return section[indexPath.row]
+    }
+
+    func indexPathForLogin(_ login: LoginRecord) -> IndexPath? {
+        let title = self.helper.titleForLogin(login)
+        guard let section = self.titles.firstIndex(of: title), let row = self.loginRecordSections[title]?.firstIndex(of: login) else {
+            return nil
+        }
+        return IndexPath(row: row, section: section+1)
     }
 
     func loginsForSection(_ section: Int) -> [LoginRecord]? {

@@ -67,9 +67,6 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             cell.detailTextLabel?.text = login.username
             if let breaches = viewModel.userBreaches, breaches.contains(login) {
                 cell.breachAlertImageView.isHidden = false
-                if !viewModel.breachIndexPath.contains(indexPath) {
-                    viewModel.setBreachIndexPath(indexPath: indexPath)
-                }
             }
         }
         return cell
