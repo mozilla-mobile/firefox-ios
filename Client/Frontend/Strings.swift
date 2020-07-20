@@ -232,6 +232,13 @@ extension Strings {
     // Detail view
     public static let LoginsDetailViewLoginTitle = NSLocalizedString("LoginsDetailView.LoginTitle", value: "Login", comment: "Title for the login detail view")
     public static let LoginsDetailViewLoginModified = NSLocalizedString("LoginsDetailView.LoginModified", value: "Modified", comment: "Login detail view field name for the last modified date")
+
+    // Breach Alerts
+    public static let BreachAlertsTitle = NSLocalizedString("BreachAlerts.Title", value: "Website Breach", comment: "Title for the Breached Login Detail View.")
+    public static let BreachAlertsLearnMore = NSLocalizedString("BreachAlerts.LearnMoreButton", value: "Learn more", comment: "Link to monitor.firefox.com to learn more about breached passwords")
+    public static let BreachAlertsBreachDate = NSLocalizedString("BreachAlerts.BreachDate", value: "This breach occurred on", comment: "Describes the date on which the breach occurred")
+    public static let BreachAlertsDescription = NSLocalizedString("BreachAlerts.Description", value: "Passwords were leaked or stolen since you last changed your password. To protect this account, log in to the site and change your password.", comment: "Description of what a breach is")
+    public static let BreachAlertsLink = NSLocalizedString("BreachAlerts.Link", value: "Go to", comment: "Leads to a link to the breached website")
 }
 
 // Firefox Account
