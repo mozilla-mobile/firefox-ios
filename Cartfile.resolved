@@ -14,5 +14,5 @@ github "mozilla-services/shavar-prod-lists" "c95899e51e4a75db90b701bfed8f6a06a71
 github "nbhasin2/Leanplum-iOS-SDK" "2.7.4"
 github "nbhasin2/SwiftyJSON" "36a9d1d95396706b06d67cc0c47b267795248f4a"
 github "nbhasin2/application-services" "62.0"
-github "nbhasin2/glean" "32.0"
+github "nbhasin2/glean" "31.4.1"
 github "swisspol/GCDWebServer" "3.5.4"

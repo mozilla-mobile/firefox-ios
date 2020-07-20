@@ -18,7 +18,7 @@ git "https://github.com/nbhasin2/SwiftyJSON.git" "nb/iOS14"
 # Using v60.0.0 with updated swift protobuf cartfile, original version v60.0.0
 git "https://github.com/nbhasin2/application-services.git" ~> 62.0
 git "https://github.com/nbhasin2/Leanplum-iOS-SDK.git" "2.7.4"
-git "https://github.com/nbhasin2/glean.git" "32.0"
+git "https://github.com/nbhasin2/glean.git" "31.4.1"
 
 # Broken #
 # These are the changes that happened with new iOS14 and are being worked upon by both teams
