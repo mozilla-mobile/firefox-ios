@@ -491,7 +491,7 @@ class URLBar: UIView {
 
     //Adds Menu Item
     func addCustomMenu() {
-        if UIPasteboard.general.string != nil && urlText.isFirstResponder {
+        if UIPasteboard.general.hasStrings && urlText.isFirstResponder {
             let lookupMenu = UIMenuItem(title: UIConstants.strings.urlPasteAndGo, action: #selector(pasteAndGoFromContextMenu))
             UIMenuController.shared.menuItems = [lookupMenu]
         }

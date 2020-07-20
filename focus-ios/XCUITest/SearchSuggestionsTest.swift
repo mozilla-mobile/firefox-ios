@@ -67,7 +67,10 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
         // Ensure prompt disappears
         waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
-
+        
+        // Adding a delay in case of slow network
+        sleep(4)
+        
         // Ensure search suggestions are shown
         checkSuggestions()
 
@@ -97,7 +100,7 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Ensure only one search cell is shown
         let suggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 0)
         waitforExistence(element: suggestion)
-        XCTAssertEqual("Search for g", suggestion.label)
+        XCTAssert("Search for g" == suggestion.label || "g" == suggestion.label)
 
         // Check tapping on suggestion leads to correct page
         suggestion.tap()
@@ -119,8 +122,12 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Prompt should not display
         app.buttons["SettingsViewController.doneButton"].tap()
         typeInURLBar(text: "g")
-        waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
 
+        // Adding a delay in case of slow network
+        sleep(4)
+
+        waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
+        
         // Ensure search suggestions are shown
         checkSuggestions()
     }
@@ -139,6 +146,9 @@ class SearchSuggestionsPromptTest: BaseTestCase {
         // Press enable
         app.buttons["SearchSuggestionsPromptView.enableButton"].tap()
 
+        // Adding a delay in case of slow network
+        sleep(4)
+        
         // Ensure prompt disappears
         waitforNoExistence(element: app.otherElements["SearchSuggestionsPromptView"])
 
@@ -153,9 +163,11 @@ class SearchSuggestionsPromptTest: BaseTestCase {
 
         // Ensure only one search cell is shown
         app.buttons["SettingsViewController.doneButton"].tap()
-        typeInURLBar(text: "g")
+        let urlBarTextField = app.textFields["URLBar.urlText"]
+        urlBarTextField.tap()
+        urlBarTextField.typeText("g")
         let suggestion = app.buttons.matching(identifier: "OverlayView.searchButton").element(boundBy: 0)
         waitforExistence(element: suggestion)
-        XCTAssertEqual("Search for g", suggestion.label)
+        XCTAssert("Search for g" == suggestion.label || "g" == suggestion.label)
     }
 }

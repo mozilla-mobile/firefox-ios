@@ -21,13 +21,12 @@ class CollapsedURLTest: BaseTestCase {
 
         // Go to mozilla.org
         loadWebPage("http://localhost:6573/licenses.html\n")
-        let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
 
         // Wait for the website to load
         waitforExistence(element: app.webViews.otherElements["Licenses"])
         let webView = app.webViews.children(matching: .other).element
-        webView.swipeUp()
-        webView.swipeUp()
+        app.swipeUp()
+        app.swipeUp()
         let collapsedTruncatedurltextTextView = app.textViews["Collapsed.truncatedUrlText"]
         waitforExistence(element: collapsedTruncatedurltextTextView)
 
@@ -35,8 +34,8 @@ class CollapsedURLTest: BaseTestCase {
         XCTAssertEqual(collapsedTruncatedurltextTextView.value as? String, "localhost")
 
         // After swiping down, the collapsed URL should not be displayed
-        webView.swipeDown()
-        webView.swipeDown()
+        app.swipeDown()
+        app.swipeDown()
         waitforNoExistence(element: collapsedTruncatedurltextTextView)
         XCTAssertFalse(collapsedTruncatedurltextTextView.exists)
     }

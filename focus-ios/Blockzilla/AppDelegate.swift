@@ -95,6 +95,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
 
         if AppInfo.isTesting() {
             let firstRunViewController = IntroViewController()
+            firstRunViewController.modalPresentationStyle = .fullScreen
             self.browserViewController.present(firstRunViewController, animated: false, completion: nil)
             return true
         }

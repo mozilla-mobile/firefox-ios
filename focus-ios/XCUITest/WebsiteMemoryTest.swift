@@ -38,8 +38,7 @@ class WebsiteMemoryTest: BaseTestCase {
         googleSearchField.press(forDuration: 1.5)
         waitforExistence(element: app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
-        app.buttons["Google Search"].tap()
-
+        app.keyboards.buttons["Search"].tap()
         // wait for mozilla link to appear
         waitforExistence(element: app.links["Mozilla"].staticTexts["Mozilla"])
 
