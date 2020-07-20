@@ -25,8 +25,8 @@ final class LoginListViewModel {
     }
     fileprivate let helper = LoginListDataSourceHelper()
     private(set) var breachAlertsManager = BreachAlertsManager()
-    private(set) var userBreaches: [LoginRecord]?
-    private(set) var breachIndexPath = [IndexPath]() {
+    private(set) var userBreaches: Set<LoginRecord>?
+    private(set) var breachIndexPath = Set<IndexPath>() {
         didSet {
             delegate?.breachPathDidUpdate()
         }
@@ -45,10 +45,10 @@ final class LoginListViewModel {
             guard let self = self, let logins = self.activeLoginQuery?.value.successValue else { return }
             self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
             guard let breaches = self.userBreaches else { return }
-            var indexPaths = [IndexPath]()
+            var indexPaths = Set<IndexPath>()
             for breach in breaches {
                 if logins.contains(breach), let indexPath = self.indexPathForLogin(breach) {
-                    indexPaths.append(indexPath)
+                    indexPaths.insert(indexPath)
                 }
             }
             self.breachIndexPath = indexPaths
@@ -151,8 +151,11 @@ protocol LoginViewModelDelegate: AnyObject {
     func breachPathDidUpdate()
 }
 
-extension LoginRecord: Equatable {
+extension LoginRecord: Equatable, Hashable {
     public static func == (lhs: LoginRecord, rhs: LoginRecord) -> Bool {
         return lhs.id == rhs.id && lhs.hostname == rhs.hostname && lhs.credentials == rhs.credentials
+    }
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id)
     }
 }
