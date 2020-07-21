@@ -14,7 +14,7 @@ class IntroScreenSyncViewV1: UIView, CardTheme {
         return theme == .dark ? .white : .black
     }
     private var fxBackgroundThemeColour: UIColor {
-        return theme == .dark ? .black : .white
+        return theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
     }
     // Screen constants
     private let screenHeight = UIScreen.main.bounds.size.height
