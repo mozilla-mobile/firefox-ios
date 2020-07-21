@@ -18,11 +18,19 @@ let mockRecord = BreachRecord(
 let amockRecord = BreachRecord(
  name: "MockBreach",
  title: "A Mock BreachRecord",
- domain: "abreached.com",
+ domain: "abreach.com",
  breachDate: "1970-01-02",
  description: "A mock BreachRecord for testing purposes."
 )
-
+let longMock = BreachRecord(
+ name: "MockBreach",
+ title: "A Mock BreachRecord",
+ domain: "abreachedwithalongstringname.com",
+ breachDate: "1970-01-02",
+ description: "A mock BreachRecord for testing purposes."
+)
+let unbreachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://unbreached.com", "timePasswordChanged": 1594411049000])
+let breachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://breached.com", "timePasswordChanged": 46800000])
 class MockBreachAlertsClient: BreachAlertsClientProtocol {
     func fetchData(endpoint: BreachAlertsClient.Endpoint, completion: @escaping (Maybe<Data>) -> Void) {
         guard let mockData = try? JSONEncoder().encode([mockRecord].self) else {
@@ -35,12 +43,8 @@ class MockBreachAlertsClient: BreachAlertsClientProtocol {
 
 class BreachAlertsTests: XCTestCase {
     var breachAlertsManager: BreachAlertsManager!
-    let unbreachedLogin = [
-        LoginRecord(fromJSONDict: ["hostname" : "http://unbreached.com", "timePasswordChanged": 1594411049000])
-    ]
-    let breachedLogin = [
-        LoginRecord(fromJSONDict: ["hostname" : "http://breached.com", "timePasswordChanged": 46800000])
-   ]
+    let unbreachedLoginSet = Set<LoginRecord>(arrayLiteral: unbreachedLogin)
+    let breachedLoginSet = Set<LoginRecord>(arrayLiteral: breachedLogin)
 
     override func setUp() {
         self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient())
@@ -51,13 +55,13 @@ class BreachAlertsTests: XCTestCase {
             XCTAssertTrue(maybeBreaches.isSuccess)
             XCTAssertNotNil(maybeBreaches.successValue)
             if let breaches = maybeBreaches.successValue {
-                XCTAssertEqual([mockRecord, amockRecord], breaches)
+                XCTAssertEqual([mockRecord, longMock, amockRecord], breaches)
             }
         }
     }
 
     func testCompareBreaches() {
-        let unloadedBreachesOpt = self.breachAlertsManager?.findUserBreaches(breachedLogin)
+        let unloadedBreachesOpt = self.breachAlertsManager?.findUserBreaches([breachedLogin])
         XCTAssertNotNil(unloadedBreachesOpt)
         if let unloadedBreaches = unloadedBreachesOpt {
             XCTAssertTrue(unloadedBreaches.isFailure)
@@ -70,28 +74,28 @@ class BreachAlertsTests: XCTestCase {
                 XCTAssertTrue(emptyLogins.isFailure)
             }
 
-            let noBreachesOpt = self.breachAlertsManager?.findUserBreaches(self.unbreachedLogin)
+            let noBreachesOpt = self.breachAlertsManager?.findUserBreaches([unbreachedLogin])
             XCTAssertNotNil(noBreachesOpt)
             if let noBreaches = noBreachesOpt {
                 XCTAssertTrue(noBreaches.isSuccess)
                 XCTAssertEqual(noBreaches.successValue, Optional([]))
             }
 
-            let breachedOpt = self.breachAlertsManager?.findUserBreaches(self.breachedLogin)
+            let breachedOpt = self.breachAlertsManager?.findUserBreaches([breachedLogin])
             XCTAssertNotNil(breachedOpt)
             if let breached = breachedOpt {
                 XCTAssertTrue(breached.isSuccess)
-                XCTAssertEqual(breached.successValue, self.breachedLogin)
+                XCTAssertEqual(breached.successValue, [breachedLogin])
             }
         }
     }
 
     func testLoginsByHostname() {
-        let unbreached = ["unbreached.com": self.unbreachedLogin]
-        var result = breachAlertsManager.loginsByHostname(self.unbreachedLogin)
+        let unbreached = ["unbreached.com": [unbreachedLogin]]
+        var result = breachAlertsManager.loginsByHostname([unbreachedLogin])
         XCTAssertEqual(result, unbreached)
-        let breached = ["breached.com": self.breachedLogin]
-        result = breachAlertsManager.loginsByHostname(self.breachedLogin)
+        let breached = ["breached.com": [breachedLogin]]
+        result = breachAlertsManager.loginsByHostname([breachedLogin])
         XCTAssertEqual(result, breached)
     }
 }
