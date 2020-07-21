@@ -34,11 +34,6 @@ class IntroViewControllerV2: UIViewController {
         syncCardView.clipsToBounds = true
         return syncCardView
     }()
-    private lazy var introWelcomeSyncV1Views: IntroWelcomeAndSyncViewV1 = {
-        let syncCardView = IntroWelcomeAndSyncViewV1()
-        syncCardView.clipsToBounds = true
-        return syncCardView
-    }()
     // Closure delegate
     var didFinishClosure: ((IntroViewControllerV2, FxAPageType?) -> Void)?
     
@@ -46,7 +41,6 @@ class IntroViewControllerV2: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
     }
-    
 
     convenience init(onboardingType: OnboardingScreenType?) {
         self.init()
@@ -136,9 +130,9 @@ class IntroViewControllerV2: UIViewController {
     private func setupIntroViewV2() {
         // Initialize
         view.addSubview(syncCardV2)
-        view.addSubview(welcomeCardV2)
+        view.addSubview(welcomeCardV1)
         // Constraints
-        setupWelcomeCardV2()
+        setupWelcomeCardV1()
         setupSyncCardV2()
     }
     
