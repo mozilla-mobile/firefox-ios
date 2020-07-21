@@ -601,7 +601,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     LoginManagerContent.onUsernameInput(event)
   }
 
-  var documentBody = document.body
   var observer = new MutationObserver(function(mutations) {
     for(var idx = 0; idx < mutations.length; ++idx){
       findForms(mutations[idx].addedNodes);
@@ -621,7 +620,6 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
     return false;
   }
 
-  observer.observe(documentBody, { attributes: false, childList: true, characterData: false, subtree: true });
 
   function findLogins(form) {
     try {
@@ -636,6 +634,7 @@ window.__firefox__.includeOnce("LoginsHelper", function() {
    }
 
   window.addEventListener("load", function(event) {
+    observer.observe(document.body, { attributes: false, childList: true, characterData: false, subtree: true });
     for (var i = 0; i < document.forms.length; i++) {
       findLogins(document.forms[i]);
     }
