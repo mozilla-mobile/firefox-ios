@@ -253,6 +253,8 @@
 		3D9CA9A81EF84D04002434DD /* NoImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CA9A71EF84D04002434DD /* NoImageTests.swift */; };
 		3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */; };
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
+		4334145424C63779001541F3 /* IntroScreenSyncViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */; };
+		4334145724C6378B001541F3 /* IntroScreenWelcomeViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
 		43446CEA2412066500F5C643 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CE92412066500F5C643 /* UIViewControllerExtension.swift */; };
 		43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */; };
@@ -1405,6 +1407,8 @@
 		3D9CA9A71EF84D04002434DD /* NoImageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageTests.swift; sourceTree = "<group>"; };
 		3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipBoardTests.swift; sourceTree = "<group>"; };
 		3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
+		4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenSyncViewV1.swift; sourceTree = "<group>"; };
+		4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenWelcomeViewV1.swift; sourceTree = "<group>"; };
 		43446CE5240D9F3000F5C643 /* ETP.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ETP.xcassets; sourceTree = "<group>"; };
 		43446CE92412066500F5C643 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIViewControllerExtension.swift; path = Extensions/UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCoverSheetViewModelTests.swift; sourceTree = "<group>"; };
@@ -3089,6 +3093,8 @@
 				435D7CBF2461EFCB0043ACB9 /* IntroScreenWelcomeViewV2.swift */,
 				435D7CC22461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift */,
 				4390F7F0246C76E700570811 /* IntroWelcomeAndSyncViewV1.swift */,
+				4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */,
+				4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */,
 			);
 			path = Intro;
 			sourceTree = "<group>";
@@ -5175,6 +5181,7 @@
 				FA9293D41D6580E100AC8D33 /* QRCodeViewController.swift in Sources */,
 				E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
+				4334145424C63779001541F3 /* IntroScreenSyncViewV1.swift in Sources */,
 				E4CD9F2D1A6DC91200318571 /* TabLocationView.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				EBC4869F2195F58300CDA48D /* SessionRestoreHandler.swift in Sources */,
@@ -5292,6 +5299,7 @@
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				28EADE5D1AFC3A78007FB2FB /* UIImageViewExtensions.swift in Sources */,
 				435D7CC32461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift in Sources */,
+				4334145724C6378B001541F3 /* IntroScreenWelcomeViewV1.swift in Sources */,
 				39CE74F021A6D2B8007AE4F2 /* DocumentServicesHelper.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
 				C4E398601D22C409004E89BA /* TopTabsLayout.swift in Sources */,
