@@ -1149,11 +1149,7 @@ class BrowserViewController: UIViewController {
         
         // Represents WebView observation or delegate update that called this function
         switch webViewStatus {
-        // If change in title or url occurred, do not need to take a new screenshot
-        case .title, .url:
-            return
-        // If navigation occurred, take new screenshot
-        case .finishedNavigation:
+        case .title, .url, .finishedNavigation:
             if tab !== tabManager.selectedTab, let webView = tab.webView {
                 // To Screenshot a tab that is hidden we must add the webView,
                 // then wait enough time for the webview to render.
@@ -1162,7 +1158,11 @@ class BrowserViewController: UIViewController {
                 // touch-screen keyboard from the background even though they shouldn't be able to.
                 webView.resignFirstResponder()
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+                // We need a better way of identifying when webviews are finished rendering
+                // There are cases in which the page will still show a loading animation or nothing when the screenshot is being taken,
+                // depending on internet connection
+                // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
                     self.screenshotHelper.takeScreenshot(tab)
                     if webView.superview == self.view {
                         webView.removeFromSuperview()
