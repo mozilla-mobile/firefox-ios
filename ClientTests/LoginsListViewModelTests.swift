@@ -24,7 +24,7 @@ class LoginsListViewModelTests: XCTestCase {
     private func addLogins() {
         _ = self.viewModel.profile.logins.wipeLocal()
 
-        for i in (0..<1000) {
+        for i in (0..<10) {
             let login = LoginRecord(fromJSONDict: [
                 "hostname": "https://example\(i).com/",
                 "formSubmitURL": "https://example.com",
