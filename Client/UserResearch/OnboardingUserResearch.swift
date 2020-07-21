@@ -11,7 +11,7 @@ struct LPVariables {
     static var showOnboardingScreenAA = LPVar.define("showOnboardingScreen", with: true)
     // Variable Used for AB test
     static var showOnboardingScreenAB = LPVar.define("showOnboardingScreen_2", with: true)
-    // Variable Used for 2nd Interation of Onboarding AB Test
+    // Variable Used for 2nd Iteration of Onboarding AB Test
     static var onboardingABTestV2 = LPVar.define("onboardingABTestV2", with: true)
 }
 

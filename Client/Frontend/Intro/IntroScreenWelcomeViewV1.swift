@@ -133,7 +133,7 @@ class IntroScreenWelcomeViewV1: UIView, CardTheme {
         titleImageViewPage1.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
+
         main2panel.addArrangedSubview(bottomHolder)
         [titleLabel, subTitleLabelPage1, signUpButton, signInButton, nextButton].forEach {
              bottomHolder.addSubview($0)
