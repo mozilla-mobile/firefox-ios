@@ -76,5 +76,4 @@ class ScreenshotHelper {
             takeDelayedScreenshot(tab)
         }
     }
-
 }
