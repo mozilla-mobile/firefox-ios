@@ -57,7 +57,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         return button
         }()
 
-
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal

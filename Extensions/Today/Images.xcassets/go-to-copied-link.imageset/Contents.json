@@ -1,11 +1,7 @@
 {
   "images" : [
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
       "filename" : "go-to-copied-link-1.pdf",
-=======
->>>>>>> added dark mode icons
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -16,20 +12,11 @@
           "value" : "light"
         }
       ],
-<<<<<<< HEAD
-=======
->>>>>>> added go to copied link icon
-=======
->>>>>>> added dark mode icons
       "filename" : "go-to-copied-link.pdf",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> added dark mode icons
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -51,19 +38,10 @@
           "value" : "light"
         }
       ],
-<<<<<<< HEAD
-=======
->>>>>>> added go to copied link icon
-=======
->>>>>>> added dark mode icons
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> added dark mode icons
       "appearances" : [
         {
           "appearance" : "luminosity",
@@ -94,11 +72,6 @@
           "value" : "dark"
         }
       ],
-<<<<<<< HEAD
-=======
->>>>>>> added go to copied link icon
-=======
->>>>>>> added dark mode icons
       "idiom" : "universal",
       "scale" : "3x"
     }
