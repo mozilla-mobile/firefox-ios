@@ -31,13 +31,13 @@ class ImageButtonWithLabel: UIView {
         }
 
         label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom)
+            make.top.equalTo(button.snp.bottom).offset(3)
             make.leading.trailing.bottom.equalTo(self)
-            make.height.greaterThanOrEqualTo(10)
         }
 
-        label.numberOfLines = 0
+        label.numberOfLines = 2
         label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
