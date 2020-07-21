@@ -935,7 +935,7 @@ class BrowserViewController: UIViewController {
                 }
                 // Catch history pushState navigation, but ONLY for same origin navigation,
                 // for reasons above about URL spoofing risk.
-                navigateInTab(tab: tab)
+                navigateInTab(tab: tab, webViewStatus: .url)
             }
         case .title:
             // Ensure that the tab title *actually* changed to prevent repeated calls
@@ -943,7 +943,7 @@ class BrowserViewController: UIViewController {
             guard let title = tab.title else { break }
             if !title.isEmpty && title != tab.lastTitle {
                 tab.lastTitle = title
-                navigateInTab(tab: tab)
+                navigateInTab(tab: tab, webViewStatus: .title)
             }
         case .canGoBack:
             guard tab === tabManager.selectedTab, let canGoBack = change?[.newKey] as? Bool else {
@@ -1114,7 +1114,14 @@ class BrowserViewController: UIViewController {
         notificationCenter.post(name: .OnLocationChange, object: self, userInfo: info)
     }
 
-    func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil) {
+    /// Enum to represent the WebView observation or delegate that triggered calling `navigateInTab`
+    enum WebViewUpdateStatus {
+        case title
+        case url
+        case finishedNavigation
+    }
+    
+    func navigateInTab(tab: Tab, to navigation: WKNavigation? = nil, webViewStatus: WebViewUpdateStatus) {
         tabManager.expireSnackbars()
 
         guard let webView = tab.webView else {
@@ -1139,19 +1146,27 @@ class BrowserViewController: UIViewController {
 
             TabEvent.post(.didChangeURL(url), for: tab)
         }
-
-        if tab !== tabManager.selectedTab, let webView = tab.webView {
-            // To Screenshot a tab that is hidden we must add the webView,
-            // then wait enough time for the webview to render.
-            view.insertSubview(webView, at: 0)
-            // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
-            // touch-screen keyboard from the background even though they shouldn't be able to.
-            webView.resignFirstResponder()
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-                self.screenshotHelper.takeScreenshot(tab)
-                if webView.superview == self.view {
-                    webView.removeFromSuperview()
+        
+        // Represents WebView observation or delegate update that called this function
+        switch webViewStatus {
+        case .title, .url, .finishedNavigation:
+            if tab !== tabManager.selectedTab, let webView = tab.webView {
+                // To Screenshot a tab that is hidden we must add the webView,
+                // then wait enough time for the webview to render.
+                view.insertSubview(webView, at: 0)
+                // This is kind of a hacky fix for Bug 1476637 to prevent webpages from focusing the
+                // touch-screen keyboard from the background even though they shouldn't be able to.
+                webView.resignFirstResponder()
+                
+                // We need a better way of identifying when webviews are finished rendering
+                // There are cases in which the page will still show a loading animation or nothing when the screenshot is being taken,
+                // depending on internet connection
+                // Issue created: https://github.com/mozilla-mobile/firefox-ios/issues/7003
+                DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1000)) {
+                    self.screenshotHelper.takeScreenshot(tab)
+                    if webView.superview == self.view {
+                        webView.removeFromSuperview()
+                    }
                 }
             }
         }
