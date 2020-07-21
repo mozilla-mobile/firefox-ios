@@ -289,6 +289,7 @@ class BrowserViewController: UIViewController {
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
             navigationToolbar.updateReloadStatus(tab.loading)
+            navigationToolbar.updateIsNewTabStatus(true)
         }
 
         libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
@@ -752,6 +753,7 @@ class BrowserViewController: UIViewController {
 
         self.firefoxHomeViewController = nil
         navigationToolbar.updateIsSearchStatus(false)
+        navigationToolbar.updateIsNewTabStatus(true)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in

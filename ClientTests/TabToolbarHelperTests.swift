@@ -127,6 +127,10 @@ class MockTabToolbar: TabToolbarProtocol {
     func updateIsSearchStatus(_ isHomePage: Bool) {
 
     }
+    
+    func updateIsNewTabStatus(_ isWebPage: Bool) {
+
+    }
 
     func updateTabCount(_ count: Int, animated: Bool) {
 

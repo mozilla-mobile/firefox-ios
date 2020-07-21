@@ -22,6 +22,7 @@ protocol TabToolbarProtocol: AnyObject {
     func updateReloadStatus(_ isLoading: Bool)
     func updatePageStatus(_ isWebPage: Bool)
     func updateIsSearchStatus(_ isHomePage: Bool)
+    func updateIsNewTabStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
     func appMenuBadge(setVisible: Bool)
@@ -48,6 +49,7 @@ fileprivate enum MiddleButtonState {
     case reload
     case stop
     case search
+    case newTab
 }
 
 @objcMembers
@@ -56,6 +58,7 @@ open class TabToolbarHelper: NSObject {
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
+    let ImageNewTab = UIImage.templateImageNamed("nav-add")
 
     fileprivate func setMiddleButtonState(_ state: MiddleButtonState) {
         switch state {
@@ -68,6 +71,9 @@ open class TabToolbarHelper: NSObject {
             case .search:
                 toolbar.stopReloadButton.setImage(ImageSearch, for: .normal)
                 toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Search", comment: "Accessibility Label for the tab toolbar Search button")
+            case .newTab:
+                toolbar.stopReloadButton.setImage(ImageNewTab, for: .normal)
+                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility Label for the tab toolbar New tab button")
         }
     }
 
@@ -75,9 +81,9 @@ open class TabToolbarHelper: NSObject {
         didSet {
             if !isSearch {
                 if loading {
-                    setMiddleButtonState(.stop)
+//                    setMiddleButtonState(.stop)
                 } else {
-                    setMiddleButtonState(.reload)
+//                    setMiddleButtonState(.reload)
                 }
             }
         }
@@ -87,6 +93,16 @@ open class TabToolbarHelper: NSObject {
         didSet {
             if isSearch {
                 setMiddleButtonState(.search)
+            } else {
+                setMiddleButtonState(.stop)
+            }
+        }
+    }
+    
+    var isNewTab: Bool = false {
+        didSet {
+            if isNewTab {
+                setMiddleButtonState(.newTab)
             } else {
                 setMiddleButtonState(.stop)
             }
@@ -189,6 +205,8 @@ open class TabToolbarHelper: NSObject {
         } else if isSearch {
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.stopReloadButton)
+        } else if isNewTab {
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
         } else {
             toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.stopReloadButton)
         }
@@ -385,6 +403,10 @@ extension TabToolbar: TabToolbarProtocol {
 
     func updateIsSearchStatus(_ isSearch: Bool) {
         helper?.isSearch = isSearch
+    }
+    
+    func updateIsNewTabStatus(_ isNewTab: Bool) {
+        helper?.isNewTab = isNewTab
     }
 }
 
