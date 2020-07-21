@@ -17,12 +17,14 @@ class LoginsListViewModelTests: XCTestCase {
         let searchController = UISearchController()
         self.viewModel = LoginListViewModel(profile: mockProfile, searchController: searchController)
         self.dataSource = LoginDataSource(viewModel: self.viewModel)
+        self.viewModel.setBreachAlertsManager(MockBreachAlertsClient())
+        self.addLogins()
     }
 
     private func addLogins() {
         _ = self.viewModel.profile.logins.wipeLocal()
 
-        for i in (0..<10) {
+        for i in (0..<1000) {
             let login = LoginRecord(fromJSONDict: [
                 "hostname": "https://example\(i).com/",
                 "formSubmitURL": "https://example.com",
@@ -41,8 +43,6 @@ class LoginsListViewModelTests: XCTestCase {
     }
 
     func testQueryLogins() {
-        self.addLogins()
-
         let emptyQueryResult = self.viewModel.queryLogins("")
         XCTAssertTrue(emptyQueryResult.value.isSuccess)
         XCTAssertEqual(emptyQueryResult.value.successValue?.count, 12)

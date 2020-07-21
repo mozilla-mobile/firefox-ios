@@ -436,7 +436,8 @@ extension LoginListViewController: LoginViewModelDelegate {
     func breachPathDidUpdate() {
         DispatchQueue.main.async {
             self.viewModel.breachIndexPath.forEach {
-                self.tableView.reloadRows(at: [$0], with: .none)
+                guard let cell = self.tableView.cellForRow(at: $0) as? LoginListTableViewCell else { return }
+                cell.breachAlertImageView.isHidden = false
             }
         }
     }

@@ -13,7 +13,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
     }()
     let breachAlertSize: CGFloat = 24
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, inset: UIEdgeInsets) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         accessoryType = .disclosureIndicator
         contentView.addSubview(breachAlertImageView)
@@ -25,9 +25,9 @@ class LoginListTableViewCell: ThemedTableViewCell {
         }
 
         textLabel?.snp.remakeConstraints({ make in
-            make.leading.equalTo(contentView).offset(LoginTableViewCellUX.HorizontalMargin)
+            make.leading.equalTo(contentView).offset(inset.left)
             make.trailing.equalTo(breachAlertImageView.snp.leading).offset(-LoginTableViewCellUX.HorizontalMargin/2)
-            make.top.bottom.equalTo(contentView)
+            make.top.equalTo(inset.top)
             make.centerY.equalTo(contentView)
             if let detailTextLabel = self.detailTextLabel {
                 make.bottom.equalTo(detailTextLabel.snp.top)

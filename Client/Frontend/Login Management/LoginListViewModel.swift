@@ -135,6 +135,10 @@ final class LoginListViewModel {
         self.breachIndexPath = [indexPath]
     }
 
+    func setBreachAlertsManager(_ client: BreachAlertsClientProtocol) {
+        self.breachAlertsManager = BreachAlertsManager(client)
+    }
+
     // MARK: - UX Constants
     struct LoginListUX {
         static let RowHeight: CGFloat = 58

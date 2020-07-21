@@ -40,7 +40,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier)
+        let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier, inset: tableView.separatorInset)
 
         if indexPath.section == LoginsSettingsSection {
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
