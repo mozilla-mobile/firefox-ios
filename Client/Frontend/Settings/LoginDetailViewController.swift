@@ -44,6 +44,8 @@ class LoginDetailViewController: SensitiveViewController {
     fileprivate var menuControllerCell: LoginDetailTableViewCell?
     fileprivate var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
+    fileprivate let breachDetailsView = BreachAlertsDetailView()
+    fileprivate var isBreached = false
 
     fileprivate var login: LoginRecord {
         didSet {
@@ -59,12 +61,19 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    init(profile: Profile, login: LoginRecord) {
+    init(profile: Profile, login: LoginRecord, isBreached: Bool) {
         self.login = login
         self.profile = profile
+        self.isBreached = isBreached
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
+
+//            self.breachDetailsView.snp.makeConstraints { make in
+//                make.top.leading.trailing.equalTo(self.view)
+//                make.bottom.equalTo(tableView)
+//            }
+
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,6 +86,10 @@ class LoginDetailViewController: SensitiveViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 
         view.addSubview(tableView)
+
+        if self.isBreached {
+            tableView.tableHeaderView = breachDetailsView
+        }
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
