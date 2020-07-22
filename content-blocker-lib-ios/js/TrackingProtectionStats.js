@@ -22,8 +22,8 @@ function install() {
     enumerable: false,
     configurable: false,
     writable: false,
-    value: function(enabled, securityToken) {
-      if (securityToken !== SECURITY_TOKEN || enabled === _enabled) {
+    value: function(enabled, appIdToken) {
+      if (appIdToken !== APP_ID_TOKEN || enabled === _enabled) {
         return;
       }
 
