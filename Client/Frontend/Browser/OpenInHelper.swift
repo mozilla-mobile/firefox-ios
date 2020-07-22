@@ -60,7 +60,7 @@ class DownloadHelper: NSObject, OpenInHelper {
 
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
-        tab.webView?.evaluateJavaScript("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.securityToken)')")
+        tab.webView?.evaluateJavaScript("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
     

@@ -9,8 +9,8 @@ Object.defineProperty(window.__firefox__, "download", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: function(url, securityToken) {
-    if (securityToken !== SECURITY_TOKEN) {
+  value: function(url, appIdToken) {
+    if (appIdToken !== APP_ID_TOKEN) {
       return;
     }
 
