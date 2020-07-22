@@ -16,13 +16,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
 
-    fileprivate lazy var newTabButton: ImageButtonWithLabel = {
+    fileprivate func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
         let imageButton = ImageButtonWithLabel()
-        imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
-        imageButton.label.text = String.NewTabButtonLabel + "\n"
+        imageButton.label.text = buttonLabel
         let button = imageButton.button
-        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = String.NewTabButtonLabel
+        button.setImage(UIImage(named: buttonImageName)?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = buttonLabel
         button.accessibilityTraits = .button
         let label = imageButton.label
         label.textColor = TodayUX.labelColor
@@ -31,40 +30,24 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         label.adjustsFontForContentSizeCategory = true
         imageButton.sizeToFit()
         return imageButton
+    }
+    
+    fileprivate lazy var newTabButton: ImageButtonWithLabel = {
+        let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
+        button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
+        return button
     }()
 
     fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
-        let imageButton = ImageButtonWithLabel()
-        imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
-        imageButton.label.text = String.NewPrivateTabButtonLabel + "\n"
-        let button = imageButton.button
-        button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = String.NewPrivateTabButtonLabel
-        button.accessibilityTraits = .button
-        let label = imageButton.label
-        label.textColor = TodayUX.labelColor
-        label.tintColor = TodayUX.labelColor
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        imageButton.sizeToFit()
-        return imageButton
+        let button = setupButtons(buttonLabel: String.NewPrivateTabButtonLabel, buttonImageName: "private-search")
+        button.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
+        return button
     }()
 
     fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
-        let imageButton = ImageButtonWithLabel()
-        imageButton.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
-        imageButton.label.text = String.GoToCopiedLinkLabel + "\n"
-        let button = imageButton.button
-        button.setImage(UIImage(named: "go-to-copied-link")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = String.GoToCopiedLinkLabel
-        button.accessibilityTraits = .button
-        let label = imageButton.label
-        label.textColor = TodayUX.labelColor
-        label.tintColor = TodayUX.labelColor
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        imageButton.sizeToFit()
-        return imageButton
+        let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
+        button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
+        return button
     }()
 
     fileprivate lazy var buttonStackView: UIStackView = {
@@ -115,18 +98,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         let edge = size.width * TodayUX.buttonsHorizontalMarginPercentage
         buttonStackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
     }
-
-    //    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-    //        super.traitCollectionDidChange(previousTraitCollection)
-    //
-    //        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-    //            if traitCollection.preferredContentSizeCategory >= .accessibilityLarge {
-    //                newTabButton.label.font = newTabButton.label.font.withSize(28)
-    //                newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(28)
-    //                openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(28)
-    //            }
-    //        }
-    //    }
 
     @objc func preferredContentSizeChanged(_ notification: Notification) {
         adjustFonts()
