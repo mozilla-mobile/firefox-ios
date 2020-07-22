@@ -14,18 +14,23 @@ class IntroViewControllerV2: UIViewController {
     // private var
     private var onboardingType: OnboardingScreenType?
     // Private views
-    private lazy var welcomeCard: IntroScreenWelcomeViewV2 = {
+    private lazy var welcomeCardV2: IntroScreenWelcomeViewV2 = {
         let welcomeCardView = IntroScreenWelcomeViewV2()
         welcomeCardView.clipsToBounds = true
         return welcomeCardView
     }()
-    private lazy var syncCard: IntroScreenSyncViewV2 = {
+    private lazy var welcomeCardV1: IntroScreenWelcomeViewV1 = {
+        let welcomeCardView = IntroScreenWelcomeViewV1()
+        welcomeCardView.clipsToBounds = true
+        return welcomeCardView
+    }()
+    private lazy var syncCardV2: IntroScreenSyncViewV2 = {
         let syncCardView = IntroScreenSyncViewV2()
         syncCardView.clipsToBounds = true
         return syncCardView
     }()
-    private lazy var introWelcomeSyncV1Views: IntroWelcomeAndSyncViewV1 = {
-        let syncCardView = IntroWelcomeAndSyncViewV1()
+    private lazy var syncCardV1: IntroScreenSyncViewV1 = {
+        let syncCardView = IntroScreenSyncViewV1()
         syncCardView.clipsToBounds = true
         return syncCardView
     }()
@@ -36,7 +41,6 @@ class IntroViewControllerV2: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
     }
-    
 
     convenience init(onboardingType: OnboardingScreenType?) {
         self.init()
@@ -67,21 +71,57 @@ class IntroViewControllerV2: UIViewController {
     
     // V1 of onboarding intro view
     func setupIntroViewV1() {
-        view.addSubview(introWelcomeSyncV1Views)
+        // Initialize
+        view.addSubview(syncCardV1)
+        view.addSubview(welcomeCardV1)
         // Constraints
-        introWelcomeSyncV1Views.snp.makeConstraints { make in
+        setupWelcomeCardV1()
+        setupSyncCardV1()
+    }
+    
+    private func setupWelcomeCardV1() {
+        // Constraints
+        welcomeCardV1.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        // Close button closure
-        introWelcomeSyncV1Views.closeClosure = {
+        // Buton action closures
+        // Next button action
+        welcomeCardV1.nextClosure = {
+            UIView.animate(withDuration: 0.3, animations: {
+                self.welcomeCardV1.alpha = 0
+            }) { _ in
+                self.welcomeCardV1.isHidden = true
+            }
+        }
+        // Close button action
+        welcomeCardV1.closeClosure = {
             self.didFinishClosure?(self, nil)
         }
         // Sign in button closure
-        introWelcomeSyncV1Views.signInClosure = {
+        welcomeCardV1.signInClosure = {
             self.didFinishClosure?(self, .emailLoginFlow)
         }
         // Sign up button closure
-        introWelcomeSyncV1Views.signUpClosure = {
+        welcomeCardV1.signUpClosure = {
+            self.didFinishClosure?(self, .emailLoginFlow)
+        }
+    }
+    
+    private func setupSyncCardV1() {
+        syncCardV1.snp.makeConstraints() { make in
+            make.edges.equalToSuperview()
+        }
+        
+        // Close button closure
+        syncCardV1.closeClosure = {
+            self.didFinishClosure?(self, nil)
+        }
+        // Sign in button closure
+        syncCardV1.signInClosure = {
+            self.didFinishClosure?(self, .emailLoginFlow)
+        }
+        // Sign up button closure
+        syncCardV1.signUpClosure = {
             self.didFinishClosure?(self, .emailLoginFlow)
         }
     }
@@ -89,43 +129,43 @@ class IntroViewControllerV2: UIViewController {
     // V2 of onboarding intro view
     private func setupIntroViewV2() {
         // Initialize
-        view.addSubview(syncCard)
-        view.addSubview(welcomeCard)
+        view.addSubview(syncCardV2)
+        view.addSubview(welcomeCardV1)
         // Constraints
-        setupWelcomeCard()
-        setupSyncCard()
+        setupWelcomeCardV1()
+        setupSyncCardV2()
     }
     
-    private func setupWelcomeCard() {
+    private func setupWelcomeCardV2() {
         // Constraints
-        welcomeCard.snp.makeConstraints { make in
+        welcomeCardV2.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         // Buton action closures
         // Next button action
-        welcomeCard.nextClosure = {
+        welcomeCardV2.nextClosure = {
             UIView.animate(withDuration: 0.3, animations: {
-                self.welcomeCard.alpha = 0
+                self.welcomeCardV2.alpha = 0
             }) { _ in
-                self.welcomeCard.isHidden = true
+                self.welcomeCardV2.isHidden = true
             }
         }
         // Close button action
-        welcomeCard.closeClosure = {
+        welcomeCardV2.closeClosure = {
             self.didFinishClosure?(self, nil)
         }
     }
     
-    private func setupSyncCard() {
-        syncCard.snp.makeConstraints() { make in
+    private func setupSyncCardV2() {
+        syncCardV2.snp.makeConstraints() { make in
             make.edges.equalToSuperview()
         }
         // Start browsing button action
-        syncCard.startBrowsing = {
+        syncCardV2.startBrowsing = {
             self.didFinishClosure?(self, nil)
         }
         // Sign-up browsing button action
-        syncCard.signUp = {
+        syncCardV2.signUp = {
             self.didFinishClosure?(self, .emailLoginFlow)
         }
     }
