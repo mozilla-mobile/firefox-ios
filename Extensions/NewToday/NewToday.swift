@@ -67,10 +67,10 @@ struct ImageButtonWithLabel: View {
                     if let label = label {
                         Text(label)
                             .font(.headline)
-                            .foregroundColor(Color("widgetLabelColors"))
                     }
                 }
-                .padding(.leading, 8.0)
+                .foregroundColor(isPrivate ? Color("privateLabelColor") : Color("widgetLabelColors"))
+                .padding(.leading, 10.0)
             }
         }
     }
@@ -102,7 +102,7 @@ struct NewTodayEntryView : View {
 }
 
 @main
-struct NewToday: Widget {
+struct NewTodayWidget: Widget {
     private let kind: String = "Search"
 
     public var body: some WidgetConfiguration {
@@ -112,5 +112,18 @@ struct NewToday: Widget {
         .supportedFamilies([.systemMedium])
         .configurationDisplayName("Search")
         .description("This is an example widget.")
+    }
+}
+
+struct NewTodayPreviews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            NewTodayEntryView()
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+
+            NewTodayEntryView()
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .environment(\.colorScheme, .dark)
+        }
     }
 }
