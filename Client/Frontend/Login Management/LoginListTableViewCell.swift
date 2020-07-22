@@ -30,7 +30,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
             make.top.equalTo(inset.top)
             make.centerY.equalTo(contentView)
             if let detailTextLabel = self.detailTextLabel {
-                make.bottom.equalTo(detailTextLabel.snp.top)
+                make.bottom.equalTo(detailTextLabel.snp.top).offset(inset.top)
                 make.top.equalTo(contentView.snp.top).offset(LoginTableViewCellUX.HorizontalMargin)
             }
         })

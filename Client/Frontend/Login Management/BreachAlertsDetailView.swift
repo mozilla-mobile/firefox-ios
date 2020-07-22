@@ -30,7 +30,9 @@ class BreachAlertsDetailView: UIView {
     }()
 
     lazy var titleContainer: UIStackView = {
-        return UIStackView(arrangedSubviews: [titleIcon, titleLabel, titleLearnMore])
+        let container = UIStackView(arrangedSubviews: [titleIcon, titleLabel, titleLearnMore])
+        container.axis = .horizontal
+        return container
     }()
 
     lazy var breachDateLabel: UILabel = {
@@ -54,21 +56,34 @@ class BreachAlertsDetailView: UIView {
         return button
     }()
 
+    lazy var contentStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [titleContainer, breachDateLabel, descriptionLabel, goToButton])
+        stack.axis = .vertical
+        return stack
+    }()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         self.backgroundColor = UIColor.red
         self.layer.cornerRadius = 5
         self.layer.masksToBounds = true
+        self.snp.makeConstraints { make in
+            make.height.greaterThanOrEqualTo(200)
+        }
 
-        self.addSubview(titleContainer)
-        self.addSubview(breachDateLabel)
-        self.addSubview(descriptionLabel)
-        self.addSubview(goToButton)
+        self.addSubview(contentStack)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    internal override func updateConstraints() {
+        super.updateConstraints()
+
+//        contentStack.snp.remakeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+    }
 }

@@ -68,12 +68,6 @@ class LoginDetailViewController: SensitiveViewController {
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
-
-//            self.breachDetailsView.snp.makeConstraints { make in
-//                make.top.leading.trailing.equalTo(self.view)
-//                make.bottom.equalTo(tableView)
-//            }
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -87,9 +81,6 @@ class LoginDetailViewController: SensitiveViewController {
 
         view.addSubview(tableView)
 
-        if self.isBreached {
-            tableView.tableHeaderView = breachDetailsView
-        }
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
@@ -133,6 +124,10 @@ class LoginDetailViewController: SensitiveViewController {
             cell?.separatorInset = .zero
             cell?.layoutMargins = .zero
             cell?.preservesSuperviewLayoutMargins = false
+        }
+
+        if self.isBreached {
+            tableView.tableHeaderView = breachDetailsView
         }
     }
 }
