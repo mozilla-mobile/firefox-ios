@@ -14,6 +14,19 @@ Object.defineProperty(window.__firefox__, "download", {
       return;
     }
 
+    function getLastPathComponent(url) {
+      return url.split("/").pop();
+    }
+
+    function blobToBase64String(blob, callback) {
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        callback(this.result.split(",")[1]);
+      };
+
+      reader.readAsDataURL(blob);
+    }
+
     if (url.startsWith("blob:")) {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", url, true);
@@ -45,16 +58,5 @@ Object.defineProperty(window.__firefox__, "download", {
   }
 });
 }
-function getLastPathComponent(url) {
-  return url.split("/").pop();
-}
 
-function blobToBase64String(blob, callback) {
-  var reader = new FileReader();
-  reader.onloadend = function() {
-    callback(this.result.split(",")[1]);
-  };
-
-  reader.readAsDataURL(blob);
-}
 
