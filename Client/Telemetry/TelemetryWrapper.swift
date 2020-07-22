@@ -439,7 +439,8 @@ extension TelemetryWrapper {
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
         default:
-            print("Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))")
+            let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+            Sentry.shared.send(message: msg, severity: .debug)
         }
     }
 }
