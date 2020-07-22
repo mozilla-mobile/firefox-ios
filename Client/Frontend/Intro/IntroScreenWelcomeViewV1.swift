@@ -16,9 +16,8 @@ class IntroScreenWelcomeViewV1: UIView, CardTheme {
     private var fxBackgroundThemeColour: UIColor {
         return theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
     }
-    // Screen constants
-    private let screenHeight = UIScreen.main.bounds.size.height
-    private let screenWidth = UIScreen.main.bounds.width
+    // Orientation independent screen size
+    private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
     // Views
     private lazy var titleImageViewPage1: UIImageView = {
         let imgView = UIImageView(image: UIImage(named: "tour-Welcome"))
@@ -36,7 +35,7 @@ class IntroScreenWelcomeViewV1: UIView, CardTheme {
         return label
     }()
     private lazy var subTitleLabelPage1: UILabel = {
-        let fontSize: CGFloat = screenWidth <= 320 ? 16 : 20
+        let fontSize: CGFloat = screenSize.width <= 320 ? 16 : 20
         let label = UILabel()
         label.text = Strings.CardTextWelcome
         label.textColor = fxTextThemeColour
@@ -133,7 +132,7 @@ class IntroScreenWelcomeViewV1: UIView, CardTheme {
         titleImageViewPage1.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-
+        
         main2panel.addArrangedSubview(bottomHolder)
         [titleLabel, subTitleLabelPage1, signUpButton, signInButton, nextButton].forEach {
              bottomHolder.addSubview($0)
@@ -169,7 +168,7 @@ class IntroScreenWelcomeViewV1: UIView, CardTheme {
         nextButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(buttonEdgeInset)
             // On large iPhone screens, bump this up from the bottom
-            let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (screenHeight > 800 ? 60 : 20)
+            let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (screenSize.height > 800 ? 60 : 20)
             make.bottom.equalToSuperview().inset(offset)
             make.height.equalTo(buttonHeight)
         }

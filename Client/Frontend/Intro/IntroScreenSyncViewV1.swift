@@ -16,9 +16,8 @@ class IntroScreenSyncViewV1: UIView, CardTheme {
     private var fxBackgroundThemeColour: UIColor {
         return theme == .dark ? UIColor.Firefox.DarkGrey10 : .white
     }
-    // Screen constants
-    private let screenHeight = UIScreen.main.bounds.size.height
-    private let screenWidth = UIScreen.main.bounds.width
+    // Orientation independent screen size
+    private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
     // Views
     private lazy var titleImageViewPage2: UIImageView = {
         let imgView = UIImageView(image: UIImage(named: "tour-Sync"))
@@ -27,7 +26,7 @@ class IntroScreenSyncViewV1: UIView, CardTheme {
         return imgView
     }()
     private lazy var subTitleLabelPage2: UILabel = {
-        let fontSize: CGFloat = screenWidth <= 320 ? 16 : 20
+        let fontSize: CGFloat = screenSize.width <= 320 ? 16 : 20
         let label = UILabel()
         label.text = Strings.CardTextSync
         label.textColor = fxTextThemeColour
@@ -155,7 +154,7 @@ class IntroScreenSyncViewV1: UIView, CardTheme {
         startBrowsingButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(buttonEdgeInset)
             // On large iPhone screens, bump this up from the bottom
-            let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (screenHeight > 800 ? 60 : 20)
+            let offset: CGFloat = UIDevice.current.userInterfaceIdiom == .pad ? 20 : (screenSize.height > 800 ? 60 : 20)
             make.bottom.equalToSuperview().inset(offset)
             make.height.equalTo(buttonHeight)
         }
