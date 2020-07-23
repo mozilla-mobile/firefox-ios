@@ -325,6 +325,18 @@ tabs:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
+  new_tab_pressed:
+    type: counter
+    description: |
+      Counts the number of times the add new tab button is
+      pressed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-21"
 
 # Bookmark metrics
 bookmarks:

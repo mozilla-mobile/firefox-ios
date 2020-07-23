@@ -179,6 +179,7 @@ open class TabToolbarHelper: NSObject {
     }
     
     func didClickAddNewTab() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .addNewTabButton)
         toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
     }
 
