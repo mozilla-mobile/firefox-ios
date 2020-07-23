@@ -40,9 +40,10 @@ class LoginDataSource: NSObject, UITableViewDataSource {
     }
 
     @objc func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier, inset: tableView.separatorInset)
 
         if indexPath.section == LoginsSettingsSection {
+            let cell = LoginListTableViewSettingsCell(style: .default, reuseIdentifier: CellReuseIdentifier)
+
             let hideSettings = viewModel.searchController?.isActive ?? false || tableView.isEditing
             let setting = indexPath.row == 0 ? boolSettings.0 : boolSettings.1
             setting.onConfigureCell(cell)
@@ -60,7 +61,9 @@ class LoginDataSource: NSObject, UITableViewDataSource {
                     cell.accessoryView?.alpha = 1
                 }
             }
+            return cell
         } else {
+            let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier, inset: tableView.separatorInset)
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
             cell.textLabel?.text = login.hostname
             cell.detailTextColor = UIColor.theme.tableView.rowDetailText
@@ -68,7 +71,7 @@ class LoginDataSource: NSObject, UITableViewDataSource {
             if let breaches = viewModel.userBreaches, breaches.contains(login) {
                 cell.breachAlertImageView.isHidden = false
             }
-        }
         return cell
+        }
     }
 }
