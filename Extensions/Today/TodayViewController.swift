@@ -15,7 +15,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
-
+    
     fileprivate func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
         let imageButton = ImageButtonWithLabel()
         imageButton.label.text = buttonLabel
@@ -30,22 +30,22 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         label.adjustsFontForContentSizeCategory = true
         return imageButton
     }
-    
+
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
-        button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressNewTab(_:)), forControlEvents: .touchUpInside)
         return button
     }()
 
     fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewPrivateTabButtonLabel, buttonImageName: "private-search")
-        button.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressNewPrivateTab(_:)), forControlEvents: .touchUpInside)
         return button
     }()
 
     fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
-        button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressOpenCopiedLink(_:)), forControlEvents: .touchUpInside)
         return button
         }()
 
