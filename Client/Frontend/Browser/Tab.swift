@@ -200,7 +200,7 @@ class Tab: NSObject {
 
         debugTabCount += 1
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
+        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -327,7 +327,7 @@ class Tab: NSObject {
         #endif
     }
 
-    func closeAndRemovePrivateBrowsingData() {
+    func close() {
         contentScriptManager.uninstall(tab: self)
 
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
@@ -336,21 +336,9 @@ class Tab: NSObject {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
 
-        if isPrivate {
-            removeAllBrowsingData()
-        }
-
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
         webView = nil
-    }
-
-    func removeAllBrowsingData(completionHandler: @escaping () -> Void = {}) {
-        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
-
-        webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
-                                                     modifiedSince: Date.distantPast,
-                                                 completionHandler: completionHandler)
     }
 
     var loading: Bool {

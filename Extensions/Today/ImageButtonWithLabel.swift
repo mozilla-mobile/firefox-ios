@@ -30,7 +30,6 @@ class ImageButtonWithLabel: UIView {
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(3)
             make.leading.trailing.bottom.equalTo(self)
-            
         }
 
         label.numberOfLines = 0

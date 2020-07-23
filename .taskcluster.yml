@@ -167,6 +167,7 @@ tasks:
                                           then:
                                               - index.mobile.v2.${project}.branch.${short_head_branch}.latest.taskgraph.decision
                                               - index.mobile.v2.${project}.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
+                                              - index.mobile.v2.${project}.revision.${head_sha}.taskgraph.decision
                                         - $if: 'tasks_for == "cron"'
                                           then:
                                               # cron context provides ${head_branch} as a short one

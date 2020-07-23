@@ -163,7 +163,7 @@ extension BrowserViewController: WKUIDelegate {
             actions.append(UIAction(title: Strings.ContextMenuBookmarkLink, image: UIImage.templateImageNamed("menu-Bookmark"), identifier: UIAction.Identifier("linkContextMenu.bookmarkLink")) { _ in
                 self.addBookmark(url: url.absoluteString, title: elements.title)
                 SimpleToast().showAlertWithText(Strings.AppMenuAddBookmarkConfirmMessage, bottomContainer: self.webViewContainer)
-                UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
+                TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .contextMenu)
             })
 
             actions.append(UIAction(title: Strings.ContextMenuDownloadLink, image: UIImage.templateImageNamed("menu-panel-Downloads"), identifier: UIAction.Identifier("linkContextMenu.download")) {_ in
@@ -673,7 +673,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if let tab = tabManager[webView] {
-            navigateInTab(tab: tab, to: navigation)
+            navigateInTab(tab: tab, to: navigation, webViewStatus: .finishedNavigation)
 
             // If this tab had previously crashed, wait 5 seconds before resetting
             // the consecutive crash counter. This allows a successful webpage load

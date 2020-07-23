@@ -11,6 +11,8 @@ struct LPVariables {
     static var showOnboardingScreenAA = LPVar.define("showOnboardingScreen", with: true)
     // Variable Used for AB test
     static var showOnboardingScreenAB = LPVar.define("showOnboardingScreen_2", with: true)
+    // Variable Used for 2nd Iteration of Onboarding AB Test
+    static var onboardingABTestV2 = LPVar.define("onboardingABTestV2", with: true)
 }
 
 // For LP variable below is the convention we follow
@@ -52,7 +54,7 @@ class OnboardingUserResearch {
     }
     
     // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.showOnboardingScreenAB) {
+    init(lpVariable: LPVar? = LPVariables.onboardingABTestV2) {
         self.lpVariable = lpVariable
     }
     
@@ -66,7 +68,7 @@ class OnboardingUserResearch {
         }
         // Condition: A/B test variables from leanplum server
         LeanPlumClient.shared.finishedStartingLeanplum = {
-            let showScreenA = LPVariables.showOnboardingScreenAB?.boolValue()
+            let showScreenA = LPVariables.onboardingABTestV2?.boolValue()
             LeanPlumClient.shared.finishedStartingLeanplum = nil
             self.updateTelemetry()
             let screenType = OnboardingScreenType.from(boolValue: (showScreenA ?? true))
@@ -81,7 +83,7 @@ class OnboardingUserResearch {
             let lpStartStatus = LeanPlumClient.shared.lpState
             var lpVariableValue: OnboardingScreenType = .versionV1
             // Condition: LP has already started but we missed onStartLPVariable callback
-            if case .started(startedState: _) = lpStartStatus , let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
+            if case .started(startedState: _) = lpStartStatus , let boolValue = LPVariables.onboardingABTestV2?.boolValue() {
                 lpVariableValue = boolValue ? .versionV1 : .versionV2
                 self.updateTelemetry()
             }
@@ -106,6 +108,6 @@ class OnboardingUserResearch {
         // Leanplum telemetry
         LeanPlumClient.shared.set(attributes: attributesExtras)
         // Legacy telemetry
-        UnifiedTelemetry.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
+        TelemetryWrapper.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
     }
 }

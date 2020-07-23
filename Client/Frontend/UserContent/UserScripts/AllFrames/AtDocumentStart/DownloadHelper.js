@@ -9,9 +9,22 @@ Object.defineProperty(window.__firefox__, "download", {
   enumerable: false,
   configurable: false,
   writable: false,
-  value: function(url, securityToken) {
-    if (securityToken !== SECURITY_TOKEN) {
+  value: function(url, appIdToken) {
+    if (appIdToken !== APP_ID_TOKEN) {
       return;
+    }
+
+    function getLastPathComponent(url) {
+      return url.split("/").pop();
+    }
+
+    function blobToBase64String(blob, callback) {
+      var reader = new FileReader();
+      reader.onloadend = function() {
+        callback(this.result.split(",")[1]);
+      };
+
+      reader.readAsDataURL(blob);
     }
 
     if (url.startsWith("blob:")) {
@@ -45,16 +58,5 @@ Object.defineProperty(window.__firefox__, "download", {
   }
 });
 }
-function getLastPathComponent(url) {
-  return url.split("/").pop();
-}
 
-function blobToBase64String(blob, callback) {
-  var reader = new FileReader();
-  reader.onloadend = function() {
-    callback(this.result.split(",")[1]);
-  };
-
-  reader.readAsDataURL(blob);
-}
 

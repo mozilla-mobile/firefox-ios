@@ -5,6 +5,7 @@
 import UIKit
 import Shared
 import Storage
+import Glean
 import Telemetry
 
 private enum SearchListSection: Int {
@@ -272,6 +273,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         }
 
         Telemetry.default.recordSearch(location: .quickSearch, searchEngine: engine.engineID ?? "other")
+        GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.quickSearch.rawValue)"].add()
 
         searchDelegate?.searchViewController(self, didSelectURL: url)
     }
@@ -358,7 +360,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             if let site = data[indexPath.row] {
                 if let url = URL(string: site.url) {
                     searchDelegate?.searchViewController(self, didSelectURL: url)
-                    UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
+                    TelemetryWrapper.recordEvent(category: .action, method: .open, object: .bookmark, value: .awesomebarResults)
                 }
             }
         }
@@ -509,6 +511,8 @@ extension SearchViewController: SuggestionCellDelegate {
 
         if let url = engine.searchURLForQuery(suggestion) {
             Telemetry.default.recordSearch(location: .suggestion, searchEngine: engine.engineID ?? "other")
+            GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.suggestion.rawValue)"].add()
+
             searchDelegate?.searchViewController(self, didSelectURL: url)
         }
     }
