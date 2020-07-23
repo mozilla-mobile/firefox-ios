@@ -28,19 +28,3 @@ struct TodayUX {
         }
     }
 }
-// This class with the function height is to dynamically calculate the height for a label and set the constraints accordingly, the height function takes some text and the text style size category and insert it into a label that dynamically resizes itself and get the frame of the resized label and consequently the right height to use.
-class DynamicLabelResize {
-    static func height(text: String?, style : UIFont.TextStyle ) -> CGFloat {
-        var currentHeight : CGFloat!
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude))
-        label.text = text
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
-        label.font = UIFont.preferredFont(forTextStyle: style)
-        label.adjustsFontForContentSizeCategory = true
-        label.sizeToFit()
-        currentHeight = label.frame.height
-        label.removeFromSuperview()
-        return currentHeight
-    }
-}
