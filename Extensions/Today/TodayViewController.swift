@@ -30,7 +30,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         label.adjustsFontForContentSizeCategory = true
         return imageButton
     }
-
+    
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
         button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
@@ -63,6 +63,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         stackView.alignment = .top
         stackView.spacing = TodayUX.buttonStackViewSpacing
         stackView.distribution = UIStackView.Distribution.fillEqually
+        stackView.backgroundColor = .gray
         return stackView
     }()
 
@@ -84,6 +85,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
             make.edges.equalTo(self.view)
         }
         widgetView = effectView.contentView
+        widgetView.backgroundColor = .yellow
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
         buttonStackView.addArrangedSubview(closePrivateTabsButton)
@@ -149,7 +151,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
             log.info("Extension opened containing app: \(success)")
         })
     }
-
 
     func openContainingApp(_ urlSuffix: String = "", query: String) {
         let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
