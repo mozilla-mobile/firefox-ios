@@ -15,7 +15,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
-    
+
     fileprivate func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
         let imageButton = ImageButtonWithLabel()
         imageButton.label.text = buttonLabel
