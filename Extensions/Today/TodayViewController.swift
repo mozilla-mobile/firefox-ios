@@ -15,7 +15,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
-
+    
     fileprivate func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
         let imageButton = ImageButtonWithLabel()
         imageButton.label.text = buttonLabel
@@ -31,22 +31,22 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.sizeToFit()
         return imageButton
     }
-    
+
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
-        button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressNewTab(_:)), forControlEvents: .touchUpInside)
         return button
     }()
 
     fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewPrivateTabButtonLabel, buttonImageName: "private-search")
-        button.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressNewPrivateTab(_:)), forControlEvents: .touchUpInside)
         return button
     }()
 
     fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
-        button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressOpenCopiedLink(_:)), forControlEvents: .touchUpInside)
         return button
     }()
 
@@ -80,7 +80,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         buttonStackView.addArrangedSubview(newPrivateTabButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
-            make.edges.equalTo(widgetView)
+           make.top.left.right.equalTo(widgetView)
         }
     }
 
@@ -104,14 +104,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func adjustFonts() {
-        if traitCollection.preferredContentSizeCategory >= .accessibilityLarge {
-            newTabButton.label.font = newTabButton.label.font.withSize(28)
-            newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(28)
-            openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(28)
-        } else if traitCollection.preferredContentSizeCategory == .extraLarge {
-            newTabButton.label.font = newTabButton.label.font.withSize(16)
-            newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(16)
-            openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(16)
+           if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
+               newTabButton.label.font = newTabButton.label.font.withSize(26)
+               newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(26)
+               openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(26)
+           }
+           else if traitCollection.preferredContentSizeCategory <= .large {
+               newTabButton.label.font = newTabButton.label.font.withSize(14)
+               newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(14)
+               openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(14)
         }
     }
 

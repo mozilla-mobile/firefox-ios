@@ -21,21 +21,23 @@ class ImageButtonWithLabel: UIView {
         addSubview(button)
         addSubview(label)
         button.imageView?.contentMode = .scaleAspectFill
-
+        button.backgroundColor = .orange
+        label.backgroundColor = .cyan
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalToSuperview()
-            make.right.greaterThanOrEqualToSuperview().offset(10)
-            make.left.greaterThanOrEqualToSuperview().inset(10)
+            make.right.equalToSuperview()
+            make.left.equalToSuperview()
             make.height.greaterThanOrEqualTo(70)
         }
 
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(3)
-            make.leading.trailing.bottom.equalTo(self)
+            make.leading.trailing.equalTo(self)
+            
         }
 
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         label.textAlignment = .center
         label.lineBreakMode = .byWordWrapping
     }
