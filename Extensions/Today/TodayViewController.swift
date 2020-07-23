@@ -56,7 +56,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         stackView.alignment = .top
         stackView.spacing = TodayUX.buttonStackViewSpacing
         stackView.distribution = UIStackView.Distribution.fillEqually
-        stackView.backgroundColor = .gray
         return stackView
     }()
 
