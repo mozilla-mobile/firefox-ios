@@ -26,26 +26,25 @@ class ButtonWithSublabel: UIButton {
         self.titleLabel?.removeFromSuperview()
         addSubview(self.label)
         addSubview(self.subtitleLabel)
-
+        buttonImage.adjustsImageSizeForAccessibilityContentSizeCategory = true
+        buttonImage.contentMode = .scaleAspectFit
+        
         buttonImage.snp.makeConstraints { make in
-            make.centerY.left.equalTo(10)
-            make.width.equalTo(TodayUX.copyLinkImageWidth)
+            make.left.centerY.equalTo(10)
+            make.width.equalTo(self.label.snp.height)
         }
-
         self.label.snp.makeConstraints { make in
             make.left.equalTo(buttonImage.snp.right).offset(10)
             make.trailing.top.equalTo(self)
-            make.height.greaterThanOrEqualTo(15)
         }
-        self.label.numberOfLines = 1
+        self.label.numberOfLines = 2
         self.label.lineBreakMode = .byWordWrapping
-
+        label.sizeToFit()
         self.subtitleLabel.lineBreakMode = .byTruncatingTail
         self.subtitleLabel.snp.makeConstraints { make in
             make.bottom.equalTo(self).inset(10)
-            make.top.equalTo(self.label.snp.bottom).offset(3)
+            make.top.equalTo(self.label.snp.bottom)
             make.leading.trailing.equalTo(self.label)
-            make.height.greaterThanOrEqualTo(10)
         }
     }
 
