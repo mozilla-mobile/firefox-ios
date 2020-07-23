@@ -505,6 +505,7 @@
 		D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA0B1FF5B1FA001D3A09 /* NavigationRouter.swift */; };
 		D8EFFA261FF702A8001D3A09 /* NavigationRouterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */; };
 		D8FDEB57220CFE970069A582 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */; };
+		DA0BCAD024C966A600D3FD85 /* ImageButtonWithLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0BCACF24C966A600D3FD85 /* ImageButtonWithLabel.swift */; };
 		DAACB04624B031F500B1033B /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
 		DABDA4AE20DA0FDB00FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
@@ -1662,6 +1663,7 @@
 		D8EFFA251FF702A8001D3A09 /* NavigationRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouterTests.swift; sourceTree = "<group>"; };
 		D8FDEB54220CFE970069A582 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIImage+ImageEffects.h"; path = "ThirdParty/Apple/UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		D8FDEB55220CFE970069A582 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIImage+ImageEffects.m"; path = "ThirdParty/Apple/UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		DA0BCACF24C966A600D3FD85 /* ImageButtonWithLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageButtonWithLabel.swift; sourceTree = "<group>"; };
 		DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjcExceptionBridging.framework; path = Carthage/Build/iOS/ObjcExceptionBridging.framework; sourceTree = "<group>"; };
 		DACDE995225E537900C8F37F /* VersionSettingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionSettingTests.swift; sourceTree = "<group>"; };
 		DAD46F3224A1606C001B3967 /* NewToday.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NewToday.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3081,6 +3083,7 @@
 			isa = PBXGroup;
 			children = (
 				DAD46F3824A1606C001B3967 /* NewToday.swift */,
+				DA0BCACF24C966A600D3FD85 /* ImageButtonWithLabel.swift */,
 				DAD46F3A24A1606E001B3967 /* Assets.xcassets */,
 				DAD46F3C24A1606E001B3967 /* Info.plist */,
 			);
@@ -5109,6 +5112,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA0BCAD024C966A600D3FD85 /* ImageButtonWithLabel.swift in Sources */,
 				DAD46F3924A1606C001B3967 /* NewToday.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

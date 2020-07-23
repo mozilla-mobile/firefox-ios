@@ -6,15 +6,6 @@ import WidgetKit
 import SwiftUI
 import Shared
 
-private struct TodayUX {
-    static let linkTextSize: CGFloat = 9.0
-    static let labelTextSize: CGFloat = 12.0
-    static let imageButtonTextSize: CGFloat = 13.0
-    static let copyLinkImageWidth: CGFloat = 20
-    static let margin: CGFloat = 8
-    static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
-}
-
 struct Provider: TimelineProvider {
     public typealias Entry = SimpleEntry
 
@@ -40,40 +31,6 @@ var scheme: String {
 
 struct SimpleEntry: TimelineEntry {
     public let date: Date
-}
-
-struct ImageButtonWithLabel: View {
-    var imageName: String
-    var url: URL
-    var label: String? = ""
-    var isPrivate: Bool = false
-
-    var body: some View {
-        Link(destination: url) {
-            ZStack(alignment: .leading) {
-                if isPrivate {
-                    ContainerRelativeShape()
-                        .fill(LinearGradient(gradient: Gradient(colors: [Color("privateGradientOne"), Color("privateGradientTwo")]), startPoint: .leading, endPoint: .trailing))
-                } else {
-                    ContainerRelativeShape()
-                        .fill(Color("normalBackgroundColor"))
-                }
-
-                VStack(alignment: .leading) {
-                    Image(imageName)
-                        .scaledToFit()
-                        .frame(height: 24.0)
-
-                    if let label = label {
-                        Text(label)
-                            .font(.headline)
-                    }
-                }
-                .foregroundColor(isPrivate ? Color("privateLabelColor") : Color("widgetLabelColors"))
-                .padding(.leading, 10.0)
-            }
-        }
-    }
 }
 
 struct NewTodayEntryView : View {
@@ -106,7 +63,7 @@ struct NewTodayWidget: Widget {
     private let kind: String = "Search"
 
     public var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider(), placeholder: NewTodayEntryView()) { entry in
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
             NewTodayEntryView()
         }
         .supportedFamilies([.systemMedium])
@@ -124,6 +81,14 @@ struct NewTodayPreviews: PreviewProvider {
             NewTodayEntryView()
                 .previewContext(WidgetPreviewContext(family: .systemMedium))
                 .environment(\.colorScheme, .dark)
+
+            NewTodayEntryView()
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .environment(\.sizeCategory, .small)
+
+            NewTodayEntryView()
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .environment(\.sizeCategory, .accessibilityLarge)
         }
     }
 }
