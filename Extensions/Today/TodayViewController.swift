@@ -11,7 +11,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 @objc (TodayViewController)
-class TodayViewController: UIViewController, NCWidgetProviding {
+class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
@@ -31,7 +31,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         imageButton.sizeToFit()
         return imageButton
     }
-
+    
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
         button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
@@ -53,9 +53,10 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.alignment = .center
+        stackView.alignment = .top
         stackView.spacing = TodayUX.buttonStackViewSpacing
         stackView.distribution = UIStackView.Distribution.fillEqually
+        stackView.backgroundColor = .gray
         return stackView
     }()
 
@@ -63,6 +64,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         super.viewDidLoad()
         let widgetView: UIView!
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
+        viewModel.setViewDelegate(todayViewDelegate: self)
         NotificationCenter.default.addObserver(self, selector: #selector(preferredContentSizeChanged(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
         let effectView: UIVisualEffectView
 
@@ -76,11 +78,12 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             make.edges.equalTo(self.view)
         }
         widgetView = effectView.contentView
+        widgetView.backgroundColor = .yellow
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
-            make.top.left.right.equalTo(widgetView)
+            make.top.right.left.equalTo(widgetView)
         }
     }
 
@@ -129,8 +132,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         openContainingApp("?private=true", query: "url")
     }
 
-    //TODO: Move it to Viewmodel
-    fileprivate func openContainingApp(_ urlSuffix: String = "", query: String) {
+     func openContainingApp(_ urlSuffix: String = "", query: String) {
         let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
@@ -139,14 +141,5 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     @objc func onPressOpenCopiedLink(_ view: UIView) {
         viewModel.updateCopiedLink()
-        if let url = TodayModel.copiedURL,
-            let encodedString = url.absoluteString.escape() {
-            openContainingApp("?url=\(encodedString)", query: "url")
-        } else {
-            guard let copiedText = TodayModel.searchedText else {
-                return
-            }
-            openContainingApp("?text=\(copiedText)", query: "text")
-        }
     }
 }

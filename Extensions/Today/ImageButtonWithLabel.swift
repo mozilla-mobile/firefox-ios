@@ -20,18 +20,21 @@ class ImageButtonWithLabel: UIView {
     fileprivate func performLayout() {
         addSubview(button)
         addSubview(label)
+        self.backgroundColor = .magenta
         button.imageView?.contentMode = .scaleAspectFill
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
             make.top.equalToSuperview()
             make.right.equalToSuperview()
             make.left.equalToSuperview()
-            make.height.greaterThanOrEqualTo(70)
+            make.height.equalTo(70)
         }
+        button.backgroundColor = .orange
+        label.backgroundColor = .cyan
 
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(3)
-            make.leading.trailing.equalTo(self)
+            make.leading.trailing.bottom.equalTo(self)
             
         }
 

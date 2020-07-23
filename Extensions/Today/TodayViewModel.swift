@@ -5,7 +5,7 @@
 import Foundation
 import NotificationCenter
 protocol TodayWidgetAppearanceDelegate {
-    func updateCopiedLinkInView(clipboardURL: URL?)
+    func openContainingApp(_ urlSuffix: String, query: String)
 }
 
 class TodayWidgetViewModel {
@@ -22,6 +22,7 @@ class TodayWidgetViewModel {
                 return
             }
             TodayModel.searchedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+            self.AppearanceDelegate?.openContainingApp("?text=\(TodayModel.searchedText ?? "")", query: "text")
         } else {
             UIPasteboard.general.asyncURL().uponQueue(.main) { res in
                 guard let url: URL? = res.successValue else {
@@ -29,7 +30,9 @@ class TodayWidgetViewModel {
                     return
                 }
                 TodayModel.copiedURL = url
+                self.AppearanceDelegate?.openContainingApp("?url=\(TodayModel.copiedURL?.absoluteString.escape() ?? "")", query: "url")
             }
         }
     }
 }
+
