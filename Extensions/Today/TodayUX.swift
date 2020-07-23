@@ -9,7 +9,7 @@ struct TodayUX {
     static let linkTextSize: CGFloat = 9.0
     static let labelTextSize: CGFloat = 12.0
     static let imageButtonTextSize: CGFloat = 13.0
-    static let copyLinkImageWidth: CGFloat = 20
+    static let copyLinkImageWidth: CGFloat = 20.0
     static let margin: CGFloat = 8
     static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
     static let buttonStackViewSpacing: CGFloat = 20.0
