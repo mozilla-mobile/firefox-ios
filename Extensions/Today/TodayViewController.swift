@@ -87,7 +87,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if UIPasteboard.general.hasURLs || UIPasteboard.general.hasStrings {
+        if UIPasteboard.general.hasStrings {
             buttonStackView.addArrangedSubview(openCopiedLinkButton)
         } else {
             buttonStackView.removeArrangedSubview(openCopiedLinkButton)
