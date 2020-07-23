@@ -23,9 +23,7 @@ class ImageButtonWithLabel: UIView {
         button.imageView?.contentMode = .scaleAspectFill
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalToSuperview()
-            make.right.equalToSuperview()
-            make.left.equalToSuperview()
+            make.top.right.left.equalToSuperview()
             make.height.equalTo(70)
         }
 
