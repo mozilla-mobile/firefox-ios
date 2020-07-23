@@ -85,7 +85,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
             make.edges.equalTo(self.view)
         }
         widgetView = effectView.contentView
-        widgetView.backgroundColor = .yellow
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
         buttonStackView.addArrangedSubview(closePrivateTabsButton)
