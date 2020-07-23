@@ -20,22 +20,21 @@ class ImageButtonWithLabel: UIView {
     fileprivate func performLayout() {
         addSubview(button)
         addSubview(label)
-        button.imageView?.contentMode = .scaleAspectFit
+        button.imageView?.contentMode = .scaleAspectFill
         button.snp.makeConstraints { make in
             make.centerX.equalTo(self)
-            make.top.equalTo(self.safeAreaLayoutGuide).offset(5)
-            make.right.greaterThanOrEqualTo(self.safeAreaLayoutGuide).offset(40)
-            make.left.greaterThanOrEqualTo(self.safeAreaLayoutGuide).inset(40)
-            make.height.greaterThanOrEqualTo(60)
+            make.top.right.left.equalToSuperview()
+            make.height.equalTo(70)
         }
 
         label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(10)
+            make.top.equalTo(button.snp.bottom).offset(3)
             make.leading.trailing.bottom.equalTo(self)
         }
-        label.numberOfLines = 2
+
+        label.numberOfLines = 0
         label.textAlignment = .center
-        label.sizeToFit()
+        label.lineBreakMode = .byWordWrapping
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
