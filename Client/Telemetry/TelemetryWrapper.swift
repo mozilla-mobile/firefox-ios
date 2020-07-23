@@ -437,7 +437,7 @@ extension TelemetryWrapper {
         case (.action, .close, .tab, let value, _):
             GleanMetrics.Tabs.close[value].add()
         case (.action, .tap, .addNewTabButton, _, _):
-            GleanMetrics.Tabs.addNewTabPressed.add()
+            GleanMetrics.Tabs.newTabPressed.add()
         // Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()

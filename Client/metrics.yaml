@@ -325,7 +325,7 @@ tabs:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
-  add-new-tab-button:
+  new_tab_pressed:
     type: counter
     description: |
       Counts the number of times the add new tab button is
