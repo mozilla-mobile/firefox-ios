@@ -29,8 +29,6 @@ class ImageButtonWithLabel: UIView {
             make.left.equalToSuperview()
             make.height.equalTo(70)
         }
-        button.backgroundColor = .orange
-        label.backgroundColor = .cyan
 
         label.snp.makeConstraints { make in
             make.top.equalTo(button.snp.bottom).offset(3)
