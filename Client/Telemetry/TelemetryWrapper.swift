@@ -334,6 +334,7 @@ extension TelemetryWrapper {
         case dismissedOnboardingSignUp = "dismissed-onboarding-sign-up"
         case privateBrowsingButton = "private-browsing-button"
         case startSearchButton = "start-search-button"
+        case addNewTabButton = "add-new-tab-button"
         case removeUnVerifiedAccountButton = "remove-unverified-account-button"
         case tabSearch = "tab-search"
         case tabToolbar = "tab-toolbar"
@@ -435,6 +436,8 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.open[value].add()
         case (.action, .close, .tab, let value, _):
             GleanMetrics.Tabs.close[value].add()
+        case (.action, .tap, .addNewTabButton, _, _):
+            GleanMetrics.Tabs.newTabPressed.add()
         // Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()
