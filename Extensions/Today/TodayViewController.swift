@@ -16,77 +16,44 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
 
+    fileprivate func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
+        let imageButton = ImageButtonWithLabel()
+        imageButton.label.text = buttonLabel
+        let button = imageButton.button
+        button.setImage(UIImage(named: buttonImageName)?.withRenderingMode(.alwaysOriginal), for: .normal)
+        button.accessibilityLabel = buttonLabel
+        button.accessibilityTraits = .button
+        let label = imageButton.label
+        label.textColor = TodayUX.labelColor
+        label.tintColor = TodayUX.labelColor
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.adjustsFontForContentSizeCategory = true
+        imageButton.sizeToFit()
+        return imageButton
+    }
+    
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
-        let imageButton = ImageButtonWithLabel()
-        imageButton.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
-        imageButton.label.text = String.NewTabButtonLabel
-        let button = imageButton.button
-        button.setImage(UIImage(named: "search-button")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = String.NewTabButtonLabel
-        button.accessibilityTraits = .button
-        let label = imageButton.label
-        label.textColor = TodayUX.labelColor
-        label.tintColor = TodayUX.labelColor
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        imageButton.sizeToFit()
-        return imageButton
-    }()
-
-    fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
-        let imageButton = ImageButtonWithLabel()
-        imageButton.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
-        imageButton.label.text = String.NewPrivateTabButtonLabel
-        let button = imageButton.button
-        button.setImage(UIImage(named: "private-search")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = String.NewPrivateTabButtonLabel
-        button.accessibilityTraits = .button
-        let label = imageButton.label
-        label.textColor = TodayUX.labelColor
-        label.tintColor = TodayUX.labelColor
-        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.adjustsFontForContentSizeCategory = true
-        imageButton.sizeToFit()
-        return imageButton
-    }()
-
-    fileprivate lazy var openCopiedLinkButton: ButtonWithSublabel = {
-        let button = ButtonWithSublabel()
-        button.setTitle(String.GoToCopiedLinkLabel, for: .normal)
-        button.addTarget(self, action: #selector(onPressOpenClibpoard), for: .touchUpInside)
-        button.setBackgroundColor(UIColor.clear, forState: .normal)
-        button.setBackgroundColor(TodayUX.backgroundHightlightColor, forState: .highlighted)
-        button.setImage(UIImage(named: "copy_link_icon")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.labelTextSize))
-        button.accessibilityLabel = String.GoToCopiedLinkLabel
-        button.accessibilityTraits = .button
-        button.label.textColor = TodayUX.labelColor
-        button.label.tintColor = TodayUX.labelColor
-        button.label.sizeToFit()
-        button.subtitleLabel.textColor = TodayUX.subtitleLabelColor
-        button.subtitleLabel.tintColor = TodayUX.subtitleLabelColor
-        button.label.font = UIFont.preferredFont(forTextStyle: .caption1)
-        button.label.adjustsFontForContentSizeCategory = true
-        button.subtitleLabel.font = UIFont.preferredFont(forTextStyle: .footnote)
-        button.subtitleLabel.adjustsFontForContentSizeCategory = true
-        button.label.accessibilityLabel = String.CopiedLinkLabelFromPasteBoard
-        button.accessibilityTraits = .none
+        let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
+        button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
         return button
     }()
 
-    fileprivate lazy var widgetStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = TodayUX.margin / 2
-        stackView.distribution = UIStackView.Distribution.fillProportionally
-        return stackView
+    fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
+        let button = setupButtons(buttonLabel: String.NewPrivateTabButtonLabel, buttonImageName: "private-search")
+        button.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
+        return button
+    }()
+
+    fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
+        let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
+        button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
+        return button
     }()
 
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .horizontal
-        stackView.alignment = .center
+        stackView.alignment = .top
         stackView.spacing = TodayUX.buttonStackViewSpacing
         stackView.distribution = UIStackView.Distribution.fillEqually
         return stackView
@@ -94,10 +61,10 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel.setViewDelegate(todayViewDelegate: self)
         let widgetView: UIView!
         self.extensionContext?.widgetLargestAvailableDisplayMode = .compact
-
+        viewModel.setViewDelegate(todayViewDelegate: self)
+        NotificationCenter.default.addObserver(self, selector: #selector(preferredContentSizeChanged(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
         let effectView: UIVisualEffectView
 
         if #available(iOS 13, *) {
@@ -105,7 +72,6 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         } else {
             effectView = UIVisualEffectView(effect: .none)
         }
-
         self.view.addSubview(effectView)
         effectView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
@@ -113,16 +79,20 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         widgetView = effectView.contentView
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
-        widgetStackView.addArrangedSubview(buttonStackView)
-        widgetView.addSubview(widgetStackView)
-        widgetStackView.snp.makeConstraints { make in
-            make.edges.equalTo(widgetView)
+        widgetView.addSubview(buttonStackView)
+        buttonStackView.snp.makeConstraints { make in
+            make.top.right.left.equalTo(widgetView)
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.updateCopiedLink()
+        if UIPasteboard.general.hasStrings {
+            buttonStackView.addArrangedSubview(openCopiedLinkButton)
+        } else {
+            buttonStackView.removeArrangedSubview(openCopiedLinkButton)
+        }
+        adjustFonts()
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -130,42 +100,44 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         buttonStackView.layoutMargins = UIEdgeInsets(top: 0, left: edge, bottom: 0, right: edge)
     }
 
+    @objc func preferredContentSizeChanged(_ notification: Notification) {
+        adjustFonts()
+    }
+
+    func adjustFonts() {
+        if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
+            newTabButton.label.font = newTabButton.label.font.withSize(26)
+            newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(26)
+            openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(26)
+        }
+        else if traitCollection.preferredContentSizeCategory <= .large {
+            newTabButton.label.font = newTabButton.label.font.withSize(14)
+            newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(14)
+            openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(14)
+        }
+    }
+
     func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
         return .zero
     }
 
-    func updateCopiedLinkInView(clipboardURL: URL?) {
-        guard let url = clipboardURL else {
-            self.openCopiedLinkButton.isHidden = true
-            self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
-            return
-        }
-        self.openCopiedLinkButton.isHidden = false
-        self.openCopiedLinkButton.subtitleLabel.isHidden = SystemUtils.isDeviceLocked()
-        self.openCopiedLinkButton.subtitleLabel.text = url.absoluteDisplayString
-    }
-
     // MARK: Button behaviour
     @objc func onPressNewTab(_ view: UIView) {
-        openContainingApp("?private=false")
+        openContainingApp("?private=false", query: "url")
     }
 
     @objc func onPressNewPrivateTab(_ view: UIView) {
-        openContainingApp("?private=true")
+        openContainingApp("?private=true", query: "url")
     }
 
-    //TODO: Move it to Viewmodel
-    fileprivate func openContainingApp(_ urlSuffix: String = "") {
-        let urlString = "\(model.scheme)://open-url\(urlSuffix)"
+     func openContainingApp(_ urlSuffix: String = "", query: String) {
+        let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }
     }
 
-    @objc func onPressOpenClibpoard(_ view: UIView) {
-        if let url = TodayModel.copiedURL,
-            let encodedString = url.absoluteString.escape() {
-            openContainingApp("?url=\(encodedString)")
-        }
+    @objc func onPressOpenCopiedLink(_ view: UIView) {
+        viewModel.updateCopiedLink()
     }
 }
