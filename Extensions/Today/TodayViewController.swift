@@ -15,7 +15,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
-    
+
     fileprivate func setupButtons(buttonLabel: String, buttonImageName: String) -> ImageButtonWithLabel {
         let imageButton = ImageButtonWithLabel()
         imageButton.label.text = buttonLabel
@@ -80,7 +80,7 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         buttonStackView.addArrangedSubview(newPrivateTabButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
-           make.top.left.right.equalTo(widgetView)
+            make.top.left.right.equalTo(widgetView)
         }
     }
 
@@ -104,15 +104,15 @@ class TodayViewController: UIViewController, NCWidgetProviding {
     }
 
     func adjustFonts() {
-           if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
-               newTabButton.label.font = newTabButton.label.font.withSize(26)
-               newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(26)
-               openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(26)
-           }
-           else if traitCollection.preferredContentSizeCategory <= .large {
-               newTabButton.label.font = newTabButton.label.font.withSize(14)
-               newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(14)
-               openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(14)
+        if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
+            newTabButton.label.font = newTabButton.label.font.withSize(26)
+            newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(26)
+            openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(26)
+        }
+        else if traitCollection.preferredContentSizeCategory <= .large {
+            newTabButton.label.font = newTabButton.label.font.withSize(14)
+            newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(14)
+            openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(14)
         }
     }
 
