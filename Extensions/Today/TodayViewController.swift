@@ -34,19 +34,19 @@ class TodayViewController: UIViewController, NCWidgetProviding {
 
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
-        button.addTarget(self, action: #selector(onPressNewTab(_:)), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
         return button
     }()
 
     fileprivate lazy var newPrivateTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewPrivateTabButtonLabel, buttonImageName: "private-search")
-        button.addTarget(self, action: #selector(onPressNewPrivateTab(_:)), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressNewPrivateTab), forControlEvents: .touchUpInside)
         return button
     }()
 
     fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
-        button.addTarget(self, action: #selector(onPressOpenCopiedLink(_:)), forControlEvents: .touchUpInside)
+        button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         return button
     }()
 
