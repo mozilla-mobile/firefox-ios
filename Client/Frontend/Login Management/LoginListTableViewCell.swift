@@ -22,6 +22,9 @@ class LoginListTableViewCell: ThemedTableViewCell {
         imageView.isHidden = true
         return imageView
     }()
+    lazy var breachMargin: CGFloat = {
+        return -LoginTableViewCellUX.HorizontalMargin*2
+    }()
     var inset: UIEdgeInsets!
 
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, inset: UIEdgeInsets) {
@@ -47,19 +50,21 @@ class LoginListTableViewCell: ThemedTableViewCell {
     private func setConstraints() {
         if (self.detailTextLabel?.text != "") {
             self.textLabel?.snp.remakeConstraints({ make in
-                make.leading.equalToSuperview().offset(inset.left)
-                make.trailing.equalTo(breachAlertImageView).offset(-LoginTableViewCellUX.HorizontalMargin*2)
-                make.bottom.equalTo(self.contentView.snp.centerY)
+                guard let textLabel = self.textLabel else { return }
+                make.leading.equalTo(self.snp.leading).offset(inset.left)
+                make.trailing.equalTo(breachAlertImageView).offset(breachMargin)
+                make.bottom.equalTo(self.snp.centerY)//.offset(-textLabel.frame.height/2)
             })
             self.detailTextLabel?.snp.remakeConstraints({ make in
-                make.top.equalTo(self.contentView.snp.centerY)
+                guard let detailTextLabel = self.detailTextLabel else { return }
                 make.leading.equalToSuperview().offset(inset.left)
-                make.trailing.equalTo(breachAlertImageView).offset(LoginTableViewCellUX.HorizontalMargin)
+                make.trailing.equalTo(breachAlertImageView).offset(breachMargin)
+                make.top.equalTo(self.snp.centerY)//.offset(detailTextLabel.frame.height/2)
             })
         } else {
             self.textLabel?.snp.remakeConstraints({ make in
                 make.top.equalToSuperview().offset(inset.top)
-                make.trailing.equalTo(breachAlertImageView).offset(-LoginTableViewCellUX.HorizontalMargin*2)
+                make.trailing.equalTo(breachAlertImageView).offset(breachMargin)
                 make.bottom.equalToSuperview().offset(inset.bottom)
                 make.leading.equalToSuperview().offset(inset.left)
             })
