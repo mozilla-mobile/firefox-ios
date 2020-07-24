@@ -377,7 +377,12 @@ extension LoginListViewController: UITableViewDelegate {
             toggleDeleteBarButton()
         } else if let login = viewModel.loginAtIndexPath(indexPath) {
             tableView.deselectRow(at: indexPath, animated: true)
-            let detailViewController = LoginDetailViewController(profile: viewModel.profile, login: login, isBreached: viewModel.breachIndexPath.contains(indexPath))
+            let detailViewController = LoginDetailViewController(profile: viewModel.profile, login: login)
+            if viewModel.breachIndexPath.contains(indexPath) {
+                guard let login = viewModel.loginAtIndexPath(indexPath) else { return }
+                let breach = viewModel.breachAlertsManager.breachRecordForLogin(login)
+                detailViewController.setBreachRecord(breach: breach)
+            }
             detailViewController.settingsDelegate = settingsDelegate
             navigationController?.pushViewController(detailViewController, animated: true)
         }

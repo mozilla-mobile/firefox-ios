@@ -8,7 +8,8 @@ import Shared
 import SwiftKeychainWrapper
 
 enum InfoItem: Int {
-    case websiteItem = 0
+    case breachItem = 0
+    case websiteItem
     case usernameItem
     case passwordItem
     case lastModifiedSeparator
@@ -44,9 +45,7 @@ class LoginDetailViewController: SensitiveViewController {
     fileprivate var menuControllerCell: LoginDetailTableViewCell?
     fileprivate var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
-    fileprivate let breachDetailsView = BreachAlertsDetailView()
-    fileprivate var isBreached = false
-
+    fileprivate var breach: BreachRecord?
     fileprivate var login: LoginRecord {
         didSet {
             tableView.reloadData()
@@ -61,13 +60,16 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    init(profile: Profile, login: LoginRecord, isBreached: Bool) {
+    init(profile: Profile, login: LoginRecord) {
         self.login = login
         self.profile = profile
-        self.isBreached = isBreached
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+
+    func setBreachRecord(breach: BreachRecord?) {
+        self.breach = breach
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -125,10 +127,6 @@ class LoginDetailViewController: SensitiveViewController {
             cell?.layoutMargins = .zero
             cell?.preservesSuperviewLayoutMargins = false
         }
-
-        if self.isBreached {
-            tableView.tableHeaderView = breachDetailsView
-        }
     }
 }
 
@@ -137,6 +135,18 @@ extension LoginDetailViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InfoItem(rawValue: indexPath.row)! {
+        case .breachItem:
+            let breachCell = cell(forIndexPath: indexPath)
+            let breachDetailView = BreachAlertsDetailView()
+            breachCell.contentView.addSubview(breachDetailView)
+
+            breachDetailView.breachDateLabel.text! += " \(String(describing: breach?.breachDate))."
+            breachDetailView.goToButton.titleLabel?.text! += " \(String(describing: breach?.domain))."
+
+            breachDetailView.snp.remakeConstraints({ make in
+                make.edges.equalTo(breachCell.contentView)
+            })
+            return breachCell
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = NSLocalizedString("Username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
@@ -214,7 +224,7 @@ extension LoginDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 6
     }
 }
 
@@ -246,6 +256,8 @@ extension LoginDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch InfoItem(rawValue: indexPath.row)! {
+        case .breachItem:
+            return self.breach != nil ? UITableView.automaticDimension : 0
         case .usernameItem, .passwordItem, .websiteItem:
             return LoginDetailUX.InfoRowHeight
         case .lastModifiedSeparator:

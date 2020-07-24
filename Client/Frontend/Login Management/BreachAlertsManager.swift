@@ -25,7 +25,7 @@ struct BreachRecord: Codable, Equatable, Hashable {
 
 /// A manager for the user's breached login information, if any.
 final public class BreachAlertsManager {
-    var breaches: [BreachRecord] = []
+    var breaches = Set<BreachRecord>()
     var breachAlertsClient: BreachAlertsClientProtocol
 
     init(_ client: BreachAlertsClientProtocol = BreachAlertsClient()) {
@@ -35,7 +35,7 @@ final public class BreachAlertsManager {
     /// Loads breaches from Monitor endpoint using BreachAlertsClient.
     ///    - Parameters:
     ///         - completion: a completion handler for the processed breaches
-    func loadBreaches(completion: @escaping (Maybe<[BreachRecord]>) -> Void) {
+    func loadBreaches(completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
         print("loadBreaches(): called")
 
         self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
@@ -43,20 +43,20 @@ final public class BreachAlertsManager {
                 completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches data")))
                 return
             }
-            guard let decoded = try? JSONDecoder().decode([BreachRecord].self, from: data) else {
+            guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
                 completion(Maybe(failure: BreachAlertsError(description: "JSON data decode failure")))
                 return
             }
 
             self.breaches = decoded
-            self.breaches.append(BreachRecord(
+            self.breaches.insert(BreachRecord(
              name: "MockBreach",
              title: "A Mock BreachRecord",
              domain: "abreachedwithalongstringname.com",
              breachDate: "1970-01-02",
              description: "A mock BreachRecord for testing purposes."
             ))
-            self.breaches.append(BreachRecord(
+            self.breaches.insert(BreachRecord(
              name: "MockBreach",
              title: "A Mock BreachRecord",
              domain: "abreach.com",
@@ -101,6 +101,11 @@ final public class BreachAlertsManager {
         return Maybe(success: result)
     }
 
+    /// Helper function to creat a dictionary of LoginRecords separated by hostname.
+    /// - Parameters:
+    ///     - logins: an array of LoginRecords to sort.
+    /// - Returns:
+    ///     - a dictionary of [String(<hostname>): [LoginRecord]].
     func loginsByHostname(_ logins: [LoginRecord]) -> [String: [LoginRecord]] {
         var result = [String: [LoginRecord]]()
         for login in logins {
@@ -117,5 +122,21 @@ final public class BreachAlertsManager {
     private func baseDomainForLogin(_ login: LoginRecord) -> String {
         guard let result = login.hostname.asURL?.baseDomain else { return login.hostname }
         return result
+    }
+
+    func breachRecordForLogin(_ login: LoginRecord) -> BreachRecord? {
+        let baseDomain = self.baseDomainForLogin(login)
+        for breach in self.breaches {
+            if breach.domain == baseDomain {
+                let pwLastChanged = TimeInterval(login.timePasswordChanged/1000)
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
+                    continue
+                }
+                return breach
+            }
+        }
+        return nil
     }
 }
