@@ -195,6 +195,7 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didLongPressStopReload(_ recognizer: UILongPressGestureRecognizer) {
+        guard !isSearch else { return }
         if recognizer.state == .began && !loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.stopReloadButton)
         }
