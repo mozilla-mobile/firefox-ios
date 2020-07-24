@@ -22,23 +22,49 @@ class LoginListTableViewCell: ThemedTableViewCell {
         imageView.isHidden = true
         return imageView
     }()
-    lazy var breachMargin: CGFloat = {
-        return -LoginTableViewCellUX.HorizontalMargin*2
+    lazy var breachAlertContainer: UIView = {
+        let view = UIView()
+        view.addSubview(breachAlertImageView)
+        view.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        return view
     }()
+    lazy var breachMargin: CGFloat = {
+        return breachAlertSize+LoginTableViewCellUX.HorizontalMargin*2
+    }()
+
+    let hostnameLabel = UILabel()
+    let usernameLabel = UILabel()
+    private lazy var hostnameContainer: UIView = {
+        let view = UIView()
+        view.addSubview(hostnameLabel)
+        return view
+    }()
+    private lazy var usernameContainer: UIView = {
+        let view = UIView()
+        view.addSubview(usernameLabel)
+        return view
+    }()
+    private lazy var textStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [hostnameContainer, usernameContainer])
+        stack.axis = .vertical
+        return stack
+    }()
+    private lazy var contentStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [textStack, breachAlertContainer])
+        stack.axis = .horizontal
+        return stack
+    }()
+
     var inset: UIEdgeInsets!
 
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, inset: UIEdgeInsets) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.inset = inset
         accessoryType = .disclosureIndicator
-        contentView.addSubview(breachAlertImageView)
-        breachAlertImageView.snp.remakeConstraints { make in
-            make.centerY.equalTo(contentView)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-LoginTableViewCellUX.HorizontalMargin)
-            make.width.height.equalTo(breachAlertSize)
-        }
+        contentView.addSubview(contentStack)
         // Need to override the default background multi-select color to support theming
         self.multipleSelectionBackgroundView = UIView()
+        self.usernameLabel.textColor = self.detailTextColor
         self.applyTheme()
         setConstraints()
     }
@@ -48,26 +74,24 @@ class LoginListTableViewCell: ThemedTableViewCell {
     }
 
     private func setConstraints() {
-        if (self.detailTextLabel?.text != "") {
-            self.textLabel?.snp.remakeConstraints({ make in
-                guard let textLabel = self.textLabel else { return }
-                make.leading.equalTo(self.snp.leading).offset(inset.left)
-                make.trailing.equalTo(breachAlertImageView).offset(breachMargin)
-                make.bottom.equalTo(self.snp.centerY)//.offset(-textLabel.frame.height/2)
-            })
-            self.detailTextLabel?.snp.remakeConstraints({ make in
-                guard let detailTextLabel = self.detailTextLabel else { return }
-                make.leading.equalToSuperview().offset(inset.left)
-                make.trailing.equalTo(breachAlertImageView).offset(breachMargin)
-                make.top.equalTo(self.snp.centerY)//.offset(detailTextLabel.frame.height/2)
-            })
-        } else {
-            self.textLabel?.snp.remakeConstraints({ make in
-                make.top.equalToSuperview().offset(inset.top)
-                make.trailing.equalTo(breachAlertImageView).offset(breachMargin)
-                make.bottom.equalToSuperview().offset(inset.bottom)
-                make.leading.equalToSuperview().offset(inset.left)
-            })
+        self.contentStack.snp.remakeConstraints { make in
+            make.top.bottom.trailing.equalTo(contentView)
+            make.left.equalTo(contentView).inset(self.inset.left)
+        }
+        self.hostnameLabel.snp.remakeConstraints { make in
+            make.bottom.equalTo(self.contentStack.snp.centerY)
+            make.leading.equalToSuperview()
+            make.trailing.lessThanOrEqualTo(self.textStack.snp.trailing)
+        }
+        self.usernameLabel.snp.remakeConstraints { make in
+            make.top.equalTo(self.contentStack.snp.centerY)
+        }
+        self.breachAlertImageView.snp.remakeConstraints { make in
+            make.width.height.equalTo(breachAlertSize)
+            make.center.equalTo(self.breachAlertContainer.snp.center)
+        }
+        self.breachAlertContainer.snp.remakeConstraints { make in
+            make.width.equalTo(breachMargin)
         }
     }
 

@@ -65,9 +65,9 @@ class LoginDataSource: NSObject, UITableViewDataSource {
         } else {
             let cell = LoginListTableViewCell(style: .subtitle, reuseIdentifier: CellReuseIdentifier, inset: tableView.separatorInset)
             guard let login = viewModel.loginAtIndexPath(indexPath) else { return cell }
-            cell.textLabel?.text = login.hostname
-            cell.detailTextColor = UIColor.theme.tableView.rowDetailText
-            cell.detailTextLabel?.text = login.username
+            cell.hostnameLabel.text = login.hostname
+            cell.usernameLabel.textColor = UIColor.theme.tableView.rowDetailText
+            cell.usernameLabel.text = login.username != "" ? login.username : "(no username)"
             if let breaches = viewModel.userBreaches, breaches.contains(login) {
                 cell.breachAlertImageView.isHidden = false
             }
