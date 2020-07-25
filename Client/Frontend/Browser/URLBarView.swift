@@ -74,6 +74,7 @@ class URLBarView: UIView {
                 // Cancel any pending/in-progress animations related to the progress bar
                 self.progressBar.setProgress(1, animated: false)
                 self.progressBar.alpha = 0.0
+                self.progressBar.isHidden = true
             }
         }
     }
@@ -413,6 +414,10 @@ class URLBarView: UIView {
         progressBar.isHidden = true
         progressBar.setProgress(0, animated: false)
     }
+    
+    func isProgressBarShowing() -> Bool {
+        return !progressBar.isHidden
+    }
 
     func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
@@ -497,6 +502,7 @@ class URLBarView: UIView {
         cancelButton.alpha = inOverlayMode ? 1 : 0
         showQRScannerButton.alpha = inOverlayMode ? 1 : 0
         progressBar.alpha = inOverlayMode || didCancel ? 0 : 1
+        progressBar.isHidden = inOverlayMode || didCancel ? true : false
         tabsButton.alpha = inOverlayMode ? 0 : 1
         appMenuButton.alpha = inOverlayMode ? 0 : 1
         libraryButton.alpha = inOverlayMode ? 0 : 1

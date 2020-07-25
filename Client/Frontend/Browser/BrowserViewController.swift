@@ -751,7 +751,6 @@ class BrowserViewController: UIViewController {
         }
 
         self.firefoxHomeViewController = nil
-        navigationToolbar.updateIsSearchStatus(false)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
@@ -768,16 +767,23 @@ class BrowserViewController: UIViewController {
         })
     }
 
-    fileprivate func updateInContentHomePanel(_ url: URL?) {
+    fileprivate func updateInContentHomePanel(_ url: URL?, didSelectTab: Bool) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
         if !urlBar.inOverlayMode {
             guard let url = url else {
+                navigationToolbar.updateIsSearchStatus(true)
                 hideFirefoxHome()
                 return
             }
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
+                // Fix: During transition from tabTray to tab view   the progress bar doesn't reflect correct state and hence we ignore changing any state of the middle search button 
+                if !didSelectTab {
+                    navigationToolbar.updateIsSearchStatus(false)
+                    // Reload status for middle tab button should reflect status of progressbar. It's meant to show "stop" when page is loading and "reload" when its done
+                    navigationToolbar.updateReloadStatus(urlBar.isProgressBarShowing())
+                }
                 hideFirefoxHome()
             }
         } else if isAboutHomeURL {
@@ -973,7 +979,7 @@ class BrowserViewController: UIViewController {
                 NotificationCenter.default.removeObserver(self, name: .DynamicFontChanged, object: nil)
             }
 
-            updateInContentHomePanel(url as URL)
+            updateInContentHomePanel(url as URL, didSelectTab: false)
         }
     }
 
@@ -1522,7 +1528,7 @@ extension BrowserViewController: URLBarDelegate {
 
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
         destroySearchController()
-        updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+        updateInContentHomePanel(tabManager.selectedTab?.url as URL?, didSelectTab: false)
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
@@ -1859,11 +1865,13 @@ extension BrowserViewController: TabManagerDelegate {
             topTabsDidChangeTab()
         }
 
-        updateInContentHomePanel(selected?.url as URL?)
+        updateInContentHomePanel(selected?.url as URL?, didSelectTab: true)
         if let tab = selected, NewTabAccessors.getNewTabPage(self.profile.prefs) == .blankPage {
             if tab.url == nil, !tab.restoring {
+                navigationToolbar.updateIsSearchStatus(true)
                 urlBar.tabLocationViewDidTapLocation(urlBar.locationView)
             } else {
+                navigationToolbar.updateIsSearchStatus(false)
                 urlBar.leaveOverlayMode()
             }
         }
