@@ -116,14 +116,13 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
             resize(size: 25)
         } else if traitCollection.preferredContentSizeCategory <= .extraExtraExtraLarge && traitCollection.preferredContentSizeCategory > .extraLarge {
-            resize(size: 16)
-            
+            resize(size: 15)
         } else if traitCollection.preferredContentSizeCategory >= .large && traitCollection.preferredContentSizeCategory <= .extraLarge {
             resize(size: 14)
         } else if traitCollection.preferredContentSizeCategory == .medium {
             resize(size: 12)
         } else if traitCollection.preferredContentSizeCategory >= .extraSmall && traitCollection.preferredContentSizeCategory <= .small {
-            resize(size: 11)
+            resize(size: 10)
         }
     }
 
