@@ -87,6 +87,7 @@ class LoginDetailViewController: SensitiveViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
+        tableView.estimatedRowHeight = 44.0
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -138,9 +139,13 @@ extension LoginDetailViewController: UITableViewDataSource {
         switch InfoItem(rawValue: indexPath.row)! {
         case .breachItem:
             let breachCell = cell(forIndexPath: indexPath)
+            guard let breach = self.breach else { return breachCell }
+            breachCell.isHidden = false
             let breachDetailView = BreachAlertsDetailView()
             breachCell.contentView.addSubview(breachDetailView)
-            guard let breach = self.breach else { return breachCell }
+            breachDetailView.snp.makeConstraints { make in
+                make.edges.equalTo(breachCell.contentView).inset(LoginTableViewCellUX.HorizontalMargin)
+            }
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             guard let date = dateFormatter.date(from: breach.breachDate) else { return breachCell }
@@ -153,14 +158,12 @@ extension LoginDetailViewController: UITableViewDataSource {
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
             let attributedText = NSMutableAttributedString(string: text, attributes: attributes)
-            breachDetailView.goToButton.setAttributedTitle(attributedText, for: .normal)
+            breachDetailView.goToButton.attributedText = attributedText
+            breachDetailView.goToButton.sizeToFit()
             breachDetailView.titleLearnMore.addTarget(self, action: #selector(didTapBreachLearnMore), for: .touchUpInside)
-            
-            breachDetailView.snp.makeConstraints { make in
-                make.leading.top.equalToSuperview().offset(LoginTableViewCellUX.HorizontalMargin)
-                make.trailing.bottom.equalToSuperview().inset(LoginTableViewCellUX.HorizontalMargin)
-            }
+            breachDetailView.layoutIfNeeded()
             return breachCell
+
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = NSLocalizedString("Username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
@@ -271,7 +274,8 @@ extension LoginDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch InfoItem(rawValue: indexPath.row)! {
         case .breachItem:
-            return self.breach != nil ? 240 : 0
+            guard let _ = self.breach else { return 0 }
+            return UITableView.automaticDimension
         case .usernameItem, .passwordItem, .websiteItem:
             return LoginDetailUX.InfoRowHeight
         case .lastModifiedSeparator:

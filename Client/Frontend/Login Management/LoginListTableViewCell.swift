@@ -64,6 +64,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
         contentView.addSubview(contentStack)
         // Need to override the default background multi-select color to support theming
         self.multipleSelectionBackgroundView = UIView()
+        self.hostnameLabel.textColor = UIColor.theme.tableView.rowText
         self.usernameLabel.textColor = self.detailTextColor
         self.applyTheme()
         setConstraints()

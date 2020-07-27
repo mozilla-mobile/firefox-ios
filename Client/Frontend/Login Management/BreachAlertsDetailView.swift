@@ -10,7 +10,7 @@ class BreachAlertsDetailView: UIView {
     private let textColor = UIColor.white
     private let titleIconSize: CGFloat = 24
     private lazy var titleIconContainerSize: CGFloat = {
-        return titleIconSize+LoginTableViewCellUX.HorizontalMargin
+        return titleIconSize+LoginTableViewCellUX.HorizontalMargin*2
     }()
 
     lazy var titleIcon: UIImageView = {
@@ -27,7 +27,7 @@ class BreachAlertsDetailView: UIView {
             make.center.equalToSuperview()
         }
         container.snp.makeConstraints { make in
-            make.width.equalTo(titleIconContainerSize)
+            make.width.height.equalTo(titleIconContainerSize)
         }
         return container
     }()
@@ -43,6 +43,7 @@ class BreachAlertsDetailView: UIView {
 
     lazy var titleLearnMore: UIButton = {
         let button = UIButton()
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         button.setTitle(Strings.BreachAlertsLearnMore, for: .normal)
         button.setTitleColor(textColor, for: .normal)
         button.tintColor = .white
@@ -73,16 +74,21 @@ class BreachAlertsDetailView: UIView {
         return label
     }()
 
-    lazy var goToButton: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(textColor, for: .normal)
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
-        button.contentHorizontalAlignment = .left
+    lazy var goToButton: UILabel = {
+        let button = UILabel()
+        button.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+        button.textColor = textColor
+        button.numberOfLines = 0
+        button.isUserInteractionEnabled = true
+        button.text = Strings.BreachAlertsLink
+        button.accessibilityLabel = Strings.BreachAlertsLink.description
+//        button.titleLabel?.te
         return button
     }()
 
     private lazy var infoStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [breachDateLabel, descriptionLabel, goToButton])
+        stack.distribution = .fillProportionally
         stack.axis = .vertical
         return stack
     }()
@@ -113,9 +119,11 @@ class BreachAlertsDetailView: UIView {
         }
         infoStack.snp.remakeConstraints { make in
             make.leading.equalToSuperview().inset(titleIconContainerSize)
+            make.trailing.equalToSuperview()
         }
         contentStack.snp.remakeConstraints { make in
-            make.edges.equalToSuperview().inset(LoginTableViewCellUX.HorizontalMargin)
+            make.bottom.trailing.equalToSuperview().inset(LoginTableViewCellUX.HorizontalMargin)
+            make.leading.top.equalToSuperview()
         }
         self.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     }
