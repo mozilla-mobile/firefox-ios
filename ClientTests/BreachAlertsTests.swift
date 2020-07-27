@@ -25,7 +25,7 @@ let amockRecord = BreachRecord(
 let longMock = BreachRecord(
  name: "MockBreach",
  title: "A Mock BreachRecord",
- domain: "abreachedwithalongstringname.com",
+ domain: "abreachedwithalongstringnameaslkdjflskjfas.com",
  breachDate: "1970-01-02",
  description: "A mock BreachRecord for testing purposes."
 )
