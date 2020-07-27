@@ -8,29 +8,48 @@ import Shared
 class BreachAlertsDetailView: UIView {
 
     private let textColor = UIColor.white
+    private let titleIconSize: CGFloat = 24
+    private lazy var titleIconContainerSize: CGFloat = {
+        return titleIconSize+LoginTableViewCellUX.HorizontalMargin
+    }()
 
     lazy var titleIcon: UIImageView = {
-        let image = UIImage(named: "Breached Website@3x")
-        return UIImageView(image: image)
+        let image = UIImage(named: "Breached Website")?.tinted(withColor: .white)
+        let imageView = UIImageView(image: image)
+        return imageView
+    }()
+
+    lazy var titleIconContainer: UIView = {
+        let container = UIView()
+        container.addSubview(titleIcon)
+        titleIcon.snp.makeConstraints { make in
+            make.width.height.equalTo(titleIconSize)
+            make.center.equalToSuperview()
+        }
+        container.snp.makeConstraints { make in
+            make.width.equalTo(titleIconContainerSize)
+        }
+        return container
     }()
 
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = DynamicFontHelper.defaultHelper.DeviceFontLarge
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontLargeBold
         label.textColor = textColor
         label.text = Strings.BreachAlertsTitle
+        label.sizeToFit()
         return label
     }()
 
     lazy var titleLearnMore: UIButton = {
-        let button = UIButton(type: .detailDisclosure)
-        button.titleLabel?.text = Strings.BreachAlertsLearnMore
-        button.titleLabel?.textColor = textColor
+        let button = UIButton() //? or detail disclosure?
+        button.setTitle(Strings.BreachAlertsLearnMore, for: .normal)
+        button.setTitleColor(textColor, for: .normal)
         return button
     }()
 
     lazy var titleStack: UIStackView = {
-        let container = UIStackView(arrangedSubviews: [titleIcon, titleLabel, titleLearnMore])
+        let container = UIStackView(arrangedSubviews: [titleIconContainer, titleLabel, titleLearnMore])
         container.axis = .horizontal
         return container
     }()
@@ -39,20 +58,25 @@ class BreachAlertsDetailView: UIView {
         let label = UILabel()
         label.text = Strings.BreachAlertsBreachDate
         label.textColor = textColor
+        label.numberOfLines = 0
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         return label
     }()
 
     lazy var descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = Strings.BreachAlertsDescription
+        label.numberOfLines = 0
         label.textColor = textColor
+        label.font = DynamicFontHelper.defaultHelper.DeviceFont
         return label
     }()
 
     lazy var goToButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.text = Strings.BreachAlertsLink
-        button.titleLabel?.textColor = textColor
+        button.setTitleColor(textColor, for: .normal)
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+        button.contentHorizontalAlignment = .left
         return button
     }()
 
@@ -81,7 +105,7 @@ class BreachAlertsDetailView: UIView {
             make.leading.trailing.equalToSuperview()
         }
         contentStack.snp.remakeConstraints { make in
-            make.top.bottom.equalToSuperview()
+            make.edges.equalToSuperview().inset(LoginTableViewCellUX.HorizontalMargin)
         }
     }
 }

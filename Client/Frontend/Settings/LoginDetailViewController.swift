@@ -139,13 +139,26 @@ extension LoginDetailViewController: UITableViewDataSource {
             let breachCell = cell(forIndexPath: indexPath)
             let breachDetailView = BreachAlertsDetailView()
             breachCell.contentView.addSubview(breachDetailView)
+            guard let breach = self.breach else { return breachCell }
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            guard let date = dateFormatter.date(from: breach.breachDate) else { return breachCell }
+            dateFormatter.dateStyle = .medium
+            breachDetailView.breachDateLabel.text! += " \(dateFormatter.string(from: date))."
 
-            breachDetailView.breachDateLabel.text! += " \(String(describing: breach?.breachDate))."
-            breachDetailView.goToButton.titleLabel?.text! += " \(String(describing: breach?.domain))."
-
-            breachDetailView.snp.remakeConstraints({ make in
-                make.edges.equalTo(breachCell.contentView)
-            })
+            let text = Strings.BreachAlertsLink + " \(breach.domain)"
+            let attributes: [NSAttributedString.Key: Any] = [
+                .foregroundColor: UIColor.white,
+                .underlineStyle: NSUnderlineStyle.single.rawValue
+            ]
+            let attributedText = NSMutableAttributedString(string: text, attributes: attributes)
+            breachDetailView.goToButton.setAttributedTitle(attributedText, for: .normal)
+            breachDetailView.titleLearnMore.addTarget(self, action: #selector(didTapBreachLearnMore), for: .touchUpInside)
+            
+            breachDetailView.snp.makeConstraints { make in
+                make.leading.top.equalToSuperview().offset(LoginTableViewCellUX.HorizontalMargin)
+                make.trailing.bottom.equalToSuperview().inset(LoginTableViewCellUX.HorizontalMargin)
+            }
             return breachCell
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
@@ -257,7 +270,7 @@ extension LoginDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch InfoItem(rawValue: indexPath.row)! {
         case .breachItem:
-            return self.breach != nil ? UITableView.automaticDimension : 0
+            return self.breach != nil ? 250 : 0
         case .usernameItem, .passwordItem, .websiteItem:
             return LoginDetailUX.InfoRowHeight
         case .lastModifiedSeparator:
@@ -289,6 +302,23 @@ extension LoginDetailViewController {
 
     @objc func dismissAlertController() {
         self.deleteAlert?.dismiss(animated: false, completion: nil)
+    }
+
+    @objc func didTapBreachLearnMore() {
+        //? https://monitor.firefox.com/about
+
+//        if let selectedTab = tabManager.selectedTab {
+//            screenshotHelper.takeScreenshot(selectedTab)
+//        }
+//        let request: URLRequest?
+//        if let url = url {
+//            request = URLRequest(url: url)
+//        } else {
+//            request = nil
+//        }
+//
+//        switchToPrivacyMode(isPrivate: isPrivate)
+//        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
 
     func deleteLogin() {
