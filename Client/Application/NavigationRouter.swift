@@ -102,8 +102,7 @@ enum NavigationPath {
             self = .glean(url: url)
         } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
             self = .closePrivateTabs
-        }
-        else {
+        } else {
             return nil
         }
     }
