@@ -13,6 +13,7 @@ protocol TabLocationViewDelegate {
     func tabLocationViewDidTapLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidLongPressLocation(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapReaderMode(_ tabLocationView: TabLocationView)
+    func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapShield(_ tabLocationView: TabLocationView)
     func tabLocationViewDidTapPageOptions(_ tabLocationView: TabLocationView, from button: UIButton)
     func tabLocationViewDidLongPressPageOptions(_ tabLocationVIew: TabLocationView)
@@ -158,6 +159,18 @@ class TabLocationView: UIView {
         return readerModeButton
     }()
 
+    fileprivate lazy var reloadButton: ToolbarButton = {
+       let refreshButton = ToolbarButton(frame: .zero)
+       refreshButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
+       refreshButton.isAccessibilityElement = true
+       refreshButton.isHidden = false
+       refreshButton.imageView?.contentMode = .scaleAspectFit
+       refreshButton.contentHorizontalAlignment = .left
+       refreshButton.accessibilityLabel = NSLocalizedString("Reload page", comment: "Accessibility label for the reload button")
+       refreshButton.accessibilityIdentifier = "TabLocationView.reloadButton"
+       return refreshButton
+   }()
+    
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
         pageOptionsButton.setImage(UIImage.templateImageNamed("menu-More-Options"), for: .normal)
@@ -206,8 +219,8 @@ class TabLocationView: UIView {
         trackingProtectionButton.separatorLine = separatorLineForTP
 
         pageOptionsButton.separatorLine = separatorLineForPageOptions
-
-        let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, separatorLineForPageOptions, pageOptionsButton]
+        let urlBarButton = readerModeState == ReaderModeState.available ? readerModeButton : reloadButton
+        let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, urlBarButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -237,7 +250,7 @@ class TabLocationView: UIView {
             make.width.equalTo(1)
             make.height.equalTo(26)
         }
-        readerModeButton.snp.makeConstraints { make in
+        urlBarButton.snp.makeConstraints { make in
             make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
             make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
@@ -276,6 +289,10 @@ class TabLocationView: UIView {
 
     @objc func tapReaderModeButton() {
         delegate?.tabLocationViewDidTapReaderMode(self)
+    }
+
+    @objc func tapReloadButton() {
+        delegate?.tabLocationViewDidTapReload(self)
     }
 
     @objc func longPressReaderModeButton(_ recognizer: UILongPressGestureRecognizer) {
