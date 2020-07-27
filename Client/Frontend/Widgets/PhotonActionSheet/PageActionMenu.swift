@@ -172,7 +172,7 @@ extension PhotonActionSheetProtocol {
             self.tabManager.selectedTab?.reload()
         }
         
-        let stopRefreshPage = PhotonActionSheetItem(title: Strings.CancelString, iconString: "nav-stop") { _, _ in
+        let stopRefreshPage = PhotonActionSheetItem(title: Strings.StopReloadPageTitle, iconString: "nav-stop") { _, _ in
             self.tabManager.selectedTab?.stop()
         }
         
