@@ -11,7 +11,7 @@ import XCGLogger
 private let log = Logger.browserLogger
 
 @objc (TodayViewController)
-class TodayViewController: UIViewController, NCWidgetProviding {
+class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppearanceDelegate {
 
     let viewModel = TodayWidgetViewModel()
     let model = TodayModel()
@@ -28,7 +28,6 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         label.tintColor = TodayUX.labelColor
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
-        imageButton.sizeToFit()
         return imageButton
     }
     
@@ -49,23 +48,14 @@ class TodayViewController: UIViewController, NCWidgetProviding {
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         return button
         }()
-
-    // Close Private tab button in today widget, delayed untill next release V29
+    
+    //MARK: Feature for V29
+    // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
-        let imageButton = ImageButtonWithLabel()
-        imageButton.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
-        imageButton.label.text = String.closePrivateTabsButtonLabel
-        let button = imageButton.button
-        button.setImage(UIImage(named: "close-private-tabs")?.withRenderingMode(.alwaysOriginal), for: .normal)
-        button.accessibilityLabel = String.closePrivateTabsButtonLabel
-        button.accessibilityTraits = .button
-        let label = imageButton.label
-        label.textColor = TodayUX.labelColor
-        label.tintColor = TodayUX.labelColor
-        label.font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(TodayUX.imageButtonTextSize))
-        imageButton.sizeToFit()
-        return imageButton
-    }()
+        let button = setupButtons(buttonLabel: String.closePrivateTabsButtonLabel, buttonImageName: "close-private-tabs")
+        button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
+        return button
+        }()
 
     fileprivate lazy var buttonStackView: UIStackView = {
         let stackView = UIStackView()
@@ -127,11 +117,13 @@ class TodayViewController: UIViewController, NCWidgetProviding {
             newTabButton.label.font = newTabButton.label.font.withSize(26)
             newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(26)
             openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(26)
+            closePrivateTabsButton.label.font = closePrivateTabsButton.label.font.withSize(26)
         }
         else if traitCollection.preferredContentSizeCategory <= .large {
             newTabButton.label.font = newTabButton.label.font.withSize(14)
             newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(14)
             openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(14)
+            closePrivateTabsButton.label.font = closePrivateTabsButton.label.font.withSize(14)
         }
     }
 
