@@ -298,9 +298,8 @@ class BrowserViewController: UIViewController {
         let shouldShow = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
         if (!shouldShow) {
             navigationToolbar.updateReloadStatus(loading)
-        } else {
-            navigationToolbar.updateIsNewTabStatus(true)
         }
+        navigationToolbar.updateIsNewTabStatus(shouldShow)
     }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
