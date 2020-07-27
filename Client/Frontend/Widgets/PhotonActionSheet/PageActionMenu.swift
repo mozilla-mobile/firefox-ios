@@ -216,7 +216,11 @@ extension PhotonActionSheetProtocol {
             commonActions.insert(findInPageAction, at: 0)
         }
 
-        return [refreshActions, mainActions, commonActions]
+        if (profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false) {
+            return [refreshActions, mainActions, commonActions]
+        } else {
+            return [mainActions, commonActions]
+        }
     }
 
 }

@@ -288,13 +288,21 @@ class BrowserViewController: UIViewController {
             updateURLBarDisplayURL(tab)
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
-            navigationToolbar.updateReloadStatus(tab.loading)
-            navigationToolbar.updateIsNewTabStatus(true)
+            shouldShowNewTabButton(tab.loading)
         }
 
         libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
     }
 
+    func shouldShowNewTabButton(_ loading: Bool) {
+        let shouldShow = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
+        if (!shouldShow) {
+            navigationToolbar.updateReloadStatus(loading)
+        } else {
+            navigationToolbar.updateIsNewTabStatus(true)
+        }
+    }
+    
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
 
@@ -753,7 +761,7 @@ class BrowserViewController: UIViewController {
 
         self.firefoxHomeViewController = nil
         navigationToolbar.updateIsSearchStatus(false)
-        navigationToolbar.updateIsNewTabStatus(true)
+        shouldShowNewTabButton(true)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
@@ -1839,7 +1847,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         updateFindInPageVisibility(visible: false, tab: previous)
 
-        navigationToolbar.updateReloadStatus(selected?.loading ?? false)
+        shouldShowNewTabButton(selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {

@@ -79,11 +79,11 @@ open class TabToolbarHelper: NSObject {
 
     var loading: Bool = false {
         didSet {
-            if !isSearch {
+            if !isSearch && !isNewTab {
                 if loading {
-//                    setMiddleButtonState(.stop)
+                    setMiddleButtonState(.stop)
                 } else {
-//                    setMiddleButtonState(.reload)
+                    setMiddleButtonState(.reload)
                 }
             }
         }
@@ -213,7 +213,7 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didLongPressStopReload(_ recognizer: UILongPressGestureRecognizer) {
-        guard !isSearch else { return }
+        guard !isSearch, !isNewTab else { return }
         if recognizer.state == .began && !loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.stopReloadButton)
         }

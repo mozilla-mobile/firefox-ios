@@ -627,7 +627,7 @@ extension URLBarView: TabToolbarProtocol {
     func updateIsSearchStatus(_ isHomePag: Bool) {
 
     }
-    
+
     func updateIsNewTabStatus(_ isWebPage: Bool) { }
 
     var access: [Any]? {
