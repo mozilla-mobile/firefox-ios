@@ -25,6 +25,9 @@ struct BreachRecord: Codable, Equatable, Hashable {
 
 /// A manager for the user's breached login information, if any.
 final public class BreachAlertsManager {
+    static let icon = UIImage(named: "Breached Website")?.withRenderingMode(.alwaysTemplate)
+    static let listColor = UIColor(red: 0.78, green: 0.16, blue: 0.18, alpha: 1.00)
+    static let detailColor = UIColor(red: 0.59, green: 0.11, blue: 0.11, alpha: 1.00)
     var breaches = Set<BreachRecord>()
     var breachAlertsClient: BreachAlertsClientProtocol
 

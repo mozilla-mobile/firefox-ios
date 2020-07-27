@@ -14,8 +14,8 @@ class BreachAlertsDetailView: UIView {
     }()
 
     lazy var titleIcon: UIImageView = {
-        let image = UIImage(named: "Breached Website")?.tinted(withColor: .white)
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: BreachAlertsManager.icon)
+        imageView.tintColor = textColor
         return imageView
     }()
 
@@ -42,9 +42,10 @@ class BreachAlertsDetailView: UIView {
     }()
 
     lazy var titleLearnMore: UIButton = {
-        let button = UIButton() //? or detail disclosure?
+        let button = UIButton()
         button.setTitle(Strings.BreachAlertsLearnMore, for: .normal)
         button.setTitleColor(textColor, for: .normal)
+        button.tintColor = .white
         return button
     }()
 
@@ -68,7 +69,7 @@ class BreachAlertsDetailView: UIView {
         label.text = Strings.BreachAlertsDescription
         label.numberOfLines = 0
         label.textColor = textColor
-        label.font = DynamicFontHelper.defaultHelper.DeviceFont
+        label.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
         return label
     }()
 
@@ -80,8 +81,14 @@ class BreachAlertsDetailView: UIView {
         return button
     }()
 
+    private lazy var infoStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [breachDateLabel, descriptionLabel, goToButton])
+        stack.axis = .vertical
+        return stack
+    }()
+
     private lazy var contentStack: UIStackView = {
-        let stack = UIStackView(arrangedSubviews: [titleStack, breachDateLabel, descriptionLabel, goToButton])
+        let stack = UIStackView(arrangedSubviews: [titleStack, infoStack])
         stack.axis = .vertical
         return stack
     }()
@@ -89,7 +96,7 @@ class BreachAlertsDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.backgroundColor = UIColor.red
+        self.backgroundColor = BreachAlertsManager.detailColor
         self.layer.cornerRadius = 5
         self.layer.masksToBounds = true
 
@@ -104,8 +111,12 @@ class BreachAlertsDetailView: UIView {
         titleStack.snp.remakeConstraints { make in
             make.leading.trailing.equalToSuperview()
         }
+        infoStack.snp.remakeConstraints { make in
+            make.leading.equalToSuperview().inset(titleIconContainerSize)
+        }
         contentStack.snp.remakeConstraints { make in
             make.edges.equalToSuperview().inset(LoginTableViewCellUX.HorizontalMargin)
         }
+        self.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     }
 }

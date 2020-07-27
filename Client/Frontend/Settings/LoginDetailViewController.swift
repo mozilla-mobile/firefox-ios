@@ -45,6 +45,7 @@ class LoginDetailViewController: SensitiveViewController {
     fileprivate var menuControllerCell: LoginDetailTableViewCell?
     fileprivate var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
+    let breachDetailView = BreachAlertsDetailView()
     fileprivate var breach: BreachRecord?
     fileprivate var login: LoginRecord {
         didSet {
@@ -270,7 +271,7 @@ extension LoginDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch InfoItem(rawValue: indexPath.row)! {
         case .breachItem:
-            return self.breach != nil ? 250 : 0
+            return self.breach != nil ? 240 : 0
         case .usernameItem, .passwordItem, .websiteItem:
             return LoginDetailUX.InfoRowHeight
         case .lastModifiedSeparator:

@@ -6,8 +6,8 @@ import UIKit
 
 class LoginListTableViewCell: ThemedTableViewCell {
     lazy var breachAlertImageView: UIImageView = {
-        let image = UIImage(named: "Breached Website")
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: BreachAlertsManager.icon)
+        imageView.tintColor = BreachAlertsManager.listColor
         imageView.isHidden = true
         return imageView
     }()
