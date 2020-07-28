@@ -3,6 +3,8 @@ import XCTest
 let testFileName = "Small.zip"
 let testFileSize = "178 bytes"
 let testURL = "http://demo.borland.com/testsite/download_testpage.php"
+let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-download-text-blob/"
+let testBLOBFileSize = "35 bytes"
 
 class DownloadFilesTests: BaseTestCase {
 
@@ -63,6 +65,19 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertTrue(app.tables.cells.staticTexts[testFileSize].exists)
     }
 
+    func testDownloadBLOBFile() {
+        downloadBLOBFile()
+        waitForExistence(app.buttons["Downloads"])
+        navigator.goto(BrowserTabMenu)
+        navigator.goto(LibraryPanel_Downloads)
+
+        waitForExistence(app.tables["DownloadsTable"])
+        // There should be one item downloaded. It's name and size should be shown
+        checkTheNumberOfDownloadedItems(items: 1)
+        // We can only check for the BLOB file size since the name is generated
+        XCTAssertTrue(app.tables.cells.staticTexts[testBLOBFileSize].exists)
+    }
+
     func testDeleteDownloadedFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
@@ -120,6 +135,14 @@ class DownloadFilesTests: BaseTestCase {
             waitForExistence(app.tables["Context Menu"])
             app.tables["Context Menu"].cells["download"].tap()
         }
+    }
+
+    private func downloadBLOBFile() {
+        navigator.openURL(testBLOBURL)
+        waitUntilPageLoad()
+        waitForExistence(app.webViews.links["Download Text"])
+        app.webViews.links["Download Text"].press(forDuration: 1)
+        app.buttons["Download Link"].tap()
     }
 
     func testDownloadMoreThanOneFile() {
