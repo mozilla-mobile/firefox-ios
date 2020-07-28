@@ -159,17 +159,19 @@ class TabLocationView: UIView {
         return readerModeButton
     }()
 
-    fileprivate lazy var reloadButton: ToolbarButton = {
-       let refreshButton = ToolbarButton(frame: .zero)
-       refreshButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
-       refreshButton.isAccessibilityElement = true
-       refreshButton.isHidden = false
-       refreshButton.imageView?.contentMode = .scaleAspectFit
-       refreshButton.contentHorizontalAlignment = .left
-       refreshButton.accessibilityLabel = NSLocalizedString("Reload page", comment: "Accessibility label for the reload button")
-       refreshButton.accessibilityIdentifier = "TabLocationView.reloadButton"
-       return refreshButton
-   }()
+    lazy var reloadButton: UIButton = {
+        let refreshButton = UIButton()
+        refreshButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+        refreshButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
+        refreshButton.tintColor = UIColor.Photon.Grey50
+        refreshButton.imageView?.contentMode = .scaleAspectFit
+        refreshButton.contentHorizontalAlignment = .left
+        refreshButton.accessibilityLabel = NSLocalizedString("Reload page", comment: "Accessibility label for the reload button")
+        refreshButton.accessibilityIdentifier = "TabLocationView.reloadButton"
+        refreshButton.isAccessibilityElement = true
+        refreshButton.isHidden = true
+        return refreshButton
+    }()
     
     lazy var pageOptionsButton: ToolbarButton = {
         let pageOptionsButton = ToolbarButton(frame: .zero)
@@ -219,8 +221,8 @@ class TabLocationView: UIView {
         trackingProtectionButton.separatorLine = separatorLineForTP
 
         pageOptionsButton.separatorLine = separatorLineForPageOptions
-        let urlBarButton = readerModeState == ReaderModeState.available ? readerModeButton : reloadButton
-        let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, urlBarButton, separatorLineForPageOptions, pageOptionsButton]
+
+        let subviews = [trackingProtectionButton, separatorLineForTP, space10px, lockImageView, urlTextField, readerModeButton, reloadButton, separatorLineForPageOptions, pageOptionsButton]
         contentView = UIStackView(arrangedSubviews: subviews)
         contentView.distribution = .fill
         contentView.alignment = .center
@@ -250,7 +252,11 @@ class TabLocationView: UIView {
             make.width.equalTo(1)
             make.height.equalTo(26)
         }
-        urlBarButton.snp.makeConstraints { make in
+        readerModeButton.snp.makeConstraints { make in
+            make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
+            make.height.equalTo(TabLocationViewUX.ButtonSize)
+        }
+        reloadButton.snp.makeConstraints { make in
             make.width.equalTo(TabLocationViewUX.ReaderModeButtonWidth)
             make.height.equalTo(TabLocationViewUX.ButtonSize)
         }
@@ -270,7 +276,7 @@ class TabLocationView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private lazy var _accessibilityElements = [urlTextField, readerModeButton, pageOptionsButton, trackingProtectionButton]
+    private lazy var _accessibilityElements = [urlTextField, readerModeButton, reloadButton, pageOptionsButton, trackingProtectionButton]
 
     override var accessibilityElements: [Any]? {
         get {

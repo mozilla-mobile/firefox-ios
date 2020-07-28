@@ -416,6 +416,14 @@ class URLBarView: UIView {
 
     func updateReaderModeState(_ state: ReaderModeState) {
         locationView.readerModeState = state
+        switch state {
+        case .active:
+            locationView.reloadButton.isHidden = true
+        case .available:
+            locationView.reloadButton.isHidden = true
+        case .unavailable:
+            locationView.reloadButton.isHidden = false
+        }
     }
 
     func setAutocompleteSuggestion(_ suggestion: String?) {
