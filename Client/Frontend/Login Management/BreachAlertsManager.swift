@@ -52,6 +52,7 @@ final public class BreachAlertsManager {
             }
 
             self.breaches = decoded
+            // remove for release
             self.breaches.insert(BreachRecord(
              name: "MockBreach",
              title: "A Mock BreachRecord",
@@ -86,25 +87,23 @@ final public class BreachAlertsManager {
 
         let loginsDictionary = loginsByHostname(logins)
         for breach in self.breaches {
-            guard let potentialBreaches = loginsDictionary[breach.domain] else {
+            guard let potentialUserBreaches = loginsDictionary[breach.domain] else {
                 continue
             }
-            for item in potentialBreaches {
+            for item in potentialUserBreaches {
                 let pwLastChanged = TimeInterval(item.timePasswordChanged/1000)
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd"
                 guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
                     continue
                 }
-                print("compareToBreaches(): ⚠️ password exposed ⚠️: \(breach.breachDate)")
                 result.insert(item)
             }
         }
-        print("compareToBreaches(): fin")
         return Maybe(success: result)
     }
 
-    /// Helper function to creat a dictionary of LoginRecords separated by hostname.
+    /// Helper function to create a dictionary of LoginRecords separated by hostname.
     /// - Parameters:
     ///     - logins: an array of LoginRecords to sort.
     /// - Returns:
@@ -122,24 +121,27 @@ final public class BreachAlertsManager {
         return result
     }
 
+    /// Helper function to find a breach associated with a LoginRecord.
+    /// - Parameters:
+    ///     - login: an array of LoginRecords to sort.
+    /// - Returns:
+    ///     - the first BreachRecord associated with login, if any.
+    func breachRecordForLogin(_ login: LoginRecord) -> BreachRecord? {
+        let baseDomain = self.baseDomainForLogin(login)
+        for breach in self.breaches where breach.domain == baseDomain {
+            let pwLastChanged = TimeInterval(login.timePasswordChanged/1000)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
+                continue
+            }
+            return breach
+        }
+        return nil
+    }
+
     private func baseDomainForLogin(_ login: LoginRecord) -> String {
         guard let result = login.hostname.asURL?.baseDomain else { return login.hostname }
         return result
-    }
-
-    func breachRecordForLogin(_ login: LoginRecord) -> BreachRecord? {
-        let baseDomain = self.baseDomainForLogin(login)
-        for breach in self.breaches {
-            if breach.domain == baseDomain {
-                let pwLastChanged = TimeInterval(login.timePasswordChanged/1000)
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
-                    continue
-                }
-                return breach
-            }
-        }
-        return nil
     }
 }

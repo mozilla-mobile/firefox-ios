@@ -82,7 +82,6 @@ class BreachAlertsDetailView: UIView {
         button.isUserInteractionEnabled = true
         button.text = Strings.BreachAlertsLink
         button.accessibilityLabel = Strings.BreachAlertsLink.description
-//        button.titleLabel?.te
         return button
     }()
 

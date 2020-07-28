@@ -23,7 +23,6 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
 
     /// Makes a network request to an endpoint and hands off the result to a completion handler.
     public func fetchData(endpoint: Endpoint, completion: @escaping (_ result: Maybe<Data>) -> Void) {
-        // endpoint.rawValue is the url
         guard let url = URL(string: endpoint.rawValue) else {
             completion(Maybe(failure: BreachAlertsError(description: "bad endpoint URL")))
             return

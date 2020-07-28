@@ -151,7 +151,6 @@ extension LoginDetailViewController: UITableViewDataSource {
             guard let date = dateFormatter.date(from: breach.breachDate) else { return breachCell }
             dateFormatter.dateStyle = .medium
             breachDetailView.breachDateLabel.text! += " \(dateFormatter.string(from: date))."
-
             let text = Strings.BreachAlertsLink + " \(breach.domain)"
             let attributes: [NSAttributedString.Key: Any] = [
                 .foregroundColor: UIColor.white,
