@@ -45,13 +45,13 @@ class LoginDetailViewController: SensitiveViewController {
     fileprivate var menuControllerCell: LoginDetailTableViewCell?
     fileprivate var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
-    let breachDetailView = BreachAlertsDetailView()
     fileprivate var breach: BreachRecord?
     fileprivate var login: LoginRecord {
         didSet {
             tableView.reloadData()
         }
     }
+    var webpageNavigationHandler: ((_ url: URL?) -> ())?
 
     fileprivate var isEditingFieldData: Bool = false {
         didSet {
@@ -61,9 +61,10 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    init(profile: Profile, login: LoginRecord) {
+    init(profile: Profile, login: LoginRecord, webpageNavigationHandler: ((_ url: URL?) -> ())?) {
         self.login = login
         self.profile = profile
+        self.webpageNavigationHandler = webpageNavigationHandler
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
@@ -160,6 +161,8 @@ extension LoginDetailViewController: UITableViewDataSource {
             breachDetailView.goToButton.attributedText = attributedText
             breachDetailView.goToButton.sizeToFit()
             breachDetailView.titleLearnMore.addTarget(self, action: #selector(didTapBreachLearnMore), for: .touchUpInside)
+            let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(didTapBreachLink(_:)))
+            breachDetailView.goToButton.addGestureRecognizer(breachLinkGesture)
             breachDetailView.layoutIfNeeded()
             return breachCell
 
@@ -309,20 +312,12 @@ extension LoginDetailViewController {
     }
 
     @objc func didTapBreachLearnMore() {
-        //? https://monitor.firefox.com/about
+        webpageNavigationHandler?(BreachAlertsManager.monitorAboutUrl)
+    }
 
-//        if let selectedTab = tabManager.selectedTab {
-//            screenshotHelper.takeScreenshot(selectedTab)
-//        }
-//        let request: URLRequest?
-//        if let url = url {
-//            request = URLRequest(url: url)
-//        } else {
-//            request = nil
-//        }
-//
-//        switchToPrivacyMode(isPrivate: isPrivate)
-//        tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
+    @objc func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
+        guard let domain = self.breach?.domain else { return }
+        webpageNavigationHandler?(URL(string: domain))
     }
 
     func deleteLogin() {
