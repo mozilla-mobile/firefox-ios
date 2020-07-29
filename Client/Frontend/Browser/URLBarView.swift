@@ -398,6 +398,7 @@ class URLBarView: UIView {
         if !toolbarIsShowing {
             updateConstraintsIfNeeded()
         }
+        locationView.reloadButton.isHidden = toolbarIsShowing
         updateViewsForOverlayModeAndToolbarChanges()
     }
 
@@ -431,7 +432,7 @@ class URLBarView: UIView {
         case .available:
             locationView.reloadButton.isHidden = true
         case .unavailable:
-            locationView.reloadButton.isHidden = false
+            if (!toolbarIsShowing) { locationView.reloadButton.isHidden = false }
         }
     }
 
@@ -632,9 +633,7 @@ extension URLBarView: TabToolbarProtocol {
         helper?.updateReloadStatus(isLoading)
         if isLoading {
             stopReloadButton.setImage(helper?.ImageStop, for: .normal)
-            locationView.reloadButton.reloadButtonState = .reload
         } else {
-            locationView.reloadButton.reloadButtonState = .stop
             stopReloadButton.setImage(helper?.ImageReload, for: .normal)
         }
     }
