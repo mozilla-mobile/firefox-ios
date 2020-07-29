@@ -180,12 +180,15 @@ class URLBarView: UIView {
         }
     }
 
+    var profile: Profile? = nil
+    
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
     fileprivate let appMenuBadge = BadgeWithBackdrop(imageName: "menuBadge")
     fileprivate let warningMenuBadge = BadgeWithBackdrop(imageName: "menuWarning", imageMask: "warning-mask")
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(profile: Profile) {
+        self.profile = profile
+        super.init(frame: CGRect())
         commonInit()
     }
 
@@ -404,6 +407,12 @@ class URLBarView: UIView {
     }
 
     func updateProgressBar(_ progress: Float) {
+        if (profile?.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false) {
+            locationView.reloadButton.reloadButtonState = progress != 1 ? .stop : .reload
+        } else {
+            locationView.reloadButton.reloadButtonState = .disabled
+        }
+        
         progressBar.alpha = 1
         progressBar.isHidden = false
         progressBar.setProgress(progress, animated: !isTransitioning)
@@ -623,7 +632,9 @@ extension URLBarView: TabToolbarProtocol {
         helper?.updateReloadStatus(isLoading)
         if isLoading {
             stopReloadButton.setImage(helper?.ImageStop, for: .normal)
+            locationView.reloadButton.reloadButtonState = .reload
         } else {
+            locationView.reloadButton.reloadButtonState = .stop
             stopReloadButton.setImage(helper?.ImageReload, for: .normal)
         }
     }
@@ -678,7 +689,16 @@ extension URLBarView: TabLocationViewDelegate {
     }
 
     func tabLocationViewDidTapReload(_ tabLocationView: TabLocationView) {
-        delegate?.urlBarDidPressReload(self)
+        let state = locationView.reloadButton.reloadButtonState
+        switch state {
+        case .reload:
+            delegate?.urlBarDidPressReload(self)
+        case .stop:
+            delegate?.urlBarDidPressStop(self)
+        case .disabled:
+            // do nothing
+            break
+        }
     }
 
     func tabLocationViewDidTapStop(_ tabLocationView: TabLocationView) {

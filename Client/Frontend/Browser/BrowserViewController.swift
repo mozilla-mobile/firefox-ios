@@ -407,7 +407,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(topTouchArea)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
-        urlBar = URLBarView()
+        urlBar = URLBarView(profile: profile)
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
@@ -751,6 +751,7 @@ class BrowserViewController: UIViewController {
         })
         view.setNeedsUpdateConstraints()
         navigationToolbar.updateIsSearchStatus(true)
+        urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
     fileprivate func hideFirefoxHome() {

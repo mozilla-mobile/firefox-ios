@@ -159,18 +159,16 @@ class TabLocationView: UIView {
         return readerModeButton
     }()
 
-    lazy var reloadButton: UIButton = {
-        let refreshButton = UIButton()
-        refreshButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
-        refreshButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
-        refreshButton.tintColor = UIColor.Photon.Grey50
-        refreshButton.imageView?.contentMode = .scaleAspectFit
-        refreshButton.contentHorizontalAlignment = .left
-        refreshButton.accessibilityLabel = NSLocalizedString("Reload page", comment: "Accessibility label for the reload button")
-        refreshButton.accessibilityIdentifier = "TabLocationView.reloadButton"
-        refreshButton.isAccessibilityElement = true
-        refreshButton.isHidden = true
-        return refreshButton
+    lazy var reloadButton: StatefulButton = {
+        let reloadButton = StatefulButton(frame: .zero, state: .disabled)
+        reloadButton.addTarget(self, action: #selector(tapReloadButton), for: .touchUpInside)
+        reloadButton.tintColor = UIColor.Photon.Grey50
+        reloadButton.imageView?.contentMode = .scaleAspectFit
+        reloadButton.contentHorizontalAlignment = .left
+        reloadButton.accessibilityLabel = NSLocalizedString("Reload page", comment: "Accessibility label for the reload button")
+        reloadButton.accessibilityIdentifier = "TabLocationView.reloadButton"
+        reloadButton.isAccessibilityElement = true
+        return reloadButton
     }()
     
     lazy var pageOptionsButton: ToolbarButton = {
@@ -436,6 +434,46 @@ extension TabLocationView: TabEventHandler {
 
     func tabDidToggleDesktopMode(_ tab: Tab) {
         menuBadge.show(tab.changedUserAgent)
+    }
+}
+
+enum ReloadButtonState: String {
+    case reload = "Reload"
+    case stop = "Stop"
+    case disabled = "Disabled"
+}
+
+class StatefulButton: UIButton {
+    convenience init(frame: CGRect, state: ReloadButtonState) {
+        self.init(frame: frame)
+        reloadButtonState = state
+    }
+
+    required override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    var _reloadButtonState = ReloadButtonState.disabled
+    
+    var reloadButtonState: ReloadButtonState {
+        get {
+            return _reloadButtonState
+        }
+        set (newReloadButtonState) {
+            _reloadButtonState = newReloadButtonState
+            switch _reloadButtonState {
+            case .reload:
+                setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+            case .stop:
+                setImage(UIImage.templateImageNamed("nav-stop"), for: .normal)
+            case .disabled:
+                self.isHidden = true
+            }
+        }
     }
 }
 
