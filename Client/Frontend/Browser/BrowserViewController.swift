@@ -783,12 +783,14 @@ class BrowserViewController: UIViewController {
         if !urlBar.inOverlayMode {
             guard let url = url else {
                 hideFirefoxHome()
+                urlBar.locationView.reloadButton.reloadButtonState = .disabled
                 return
             }
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
+                urlBar.locationView.reloadButton.reloadButtonState = .disabled
             }
         } else if isAboutHomeURL {
             showFirefoxHome(inline: false)
