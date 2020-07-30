@@ -310,8 +310,8 @@ class NavigationTest: BaseTestCase {
     func testShareLinkPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.cells["Copy"])
-        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.collectionViews.buttons["Copy"])
+        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
     }
 
     // Disable, no Cancel button now and no option to
