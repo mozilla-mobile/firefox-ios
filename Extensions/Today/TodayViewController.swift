@@ -49,8 +49,8 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         return button
         }()
 
-    //MARK: Feature for V29
-    // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
+//MARK: Feature for V29
+// Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.ClosePrivateTab, buttonImageName: "close-private-tabs")
         button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
@@ -139,11 +139,11 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     // MARK: Button behaviour
     @objc func onPressNewTab(_ view: UIView) {
-        openContainingApp("?private=false", query: "url")
+        openContainingApp("?private=false", query: "open-url")
     }
 
     @objc func onPressNewPrivateTab(_ view: UIView) {
-        openContainingApp("?private=true", query: "url")
+        openContainingApp("?private=true", query: "open-url")
     }
 
     @objc func onPressOpenCopiedLink(_ view: UIView) {
@@ -151,13 +151,11 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }
 
     @objc func onPressClosePrivateTabs() {
-        self.extensionContext?.open(URL(string:"\(model.scheme)://close-private-tabs")!, completionHandler: { (success) in
-            log.info("Extension opened containing app: \(success)")
-        })
+        openContainingApp(query: "close-private-tabs")
     }
 
     func openContainingApp(_ urlSuffix: String = "", query: String) {
-        let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
+        let urlString = "\(model.scheme)://\(query)\(urlSuffix)"
         self.extensionContext?.open(URL(string: urlString)!) { success in
             log.info("Extension opened containing app: \(success)")
         }

@@ -107,7 +107,7 @@ enum NavigationPath {
         }
     }
 
-    static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray : TabTrayControllerV1) {
+    static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray: TabTrayControllerV1) {
         switch nav {
         case .fxa(let params): NavigationPath.handleFxA(params: params, with: bvc)
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
