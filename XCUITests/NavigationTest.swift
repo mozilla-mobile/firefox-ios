@@ -304,8 +304,8 @@ class NavigationTest: BaseTestCase {
 
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.cells["Copy"])
-        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.collectionViews.buttons["Copy"])
+        XCTAssertTrue(app.collectionViews.buttons["Copy"].exists, "The share menu is not shown")
     }
 
     func testShareLinkPrivateMode() {
