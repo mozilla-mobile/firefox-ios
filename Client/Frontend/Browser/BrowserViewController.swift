@@ -1401,6 +1401,20 @@ extension BrowserViewController: URLBarDelegate {
         return true
     }
 
+    func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton) {
+        guard let tab = tabManager.selectedTab else {
+            return
+        }
+        let urlActions = self.getRefreshLongPressMenu(for: tab)
+        guard !urlActions.isEmpty else {
+            return
+        }
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
+    }
+
     func locationActionsForURLBar(_ urlBar: URLBarView) -> [AccessibleAction] {
         if UIPasteboard.general.string != nil {
             return [pasteGoAction, pasteAction, copyAddressAction]
