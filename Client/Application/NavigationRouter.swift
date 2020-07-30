@@ -73,17 +73,17 @@ enum NavigationPath {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
         }
-
+        
         guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
-            let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
+              let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
             // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
             return nil
         }
-
+        
         guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
             return nil
         }
-
+        
         if urlString.starts(with: "\(scheme)://deep-link"), let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
             self = .deepLink(link)
         } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
@@ -99,6 +99,20 @@ enum NavigationPath {
             self = .text(text ?? "")
         } else if urlString.starts(with: "\(scheme)://glean") {
             self = .glean(url: url)
+        } else if urlString.starts(with: "\(scheme)://open-copied") {
+            if !UIPasteboard.general.hasURLs {
+                guard let searchText = UIPasteboard.general.string else {
+                    return nil
+                }
+                self = .text(searchText)
+            }
+            else {
+                guard let url = UIPasteboard.general.url else {
+                    return nil
+                }
+                let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+                self = .url(webURL: url, isPrivate: isPrivate)
+            }
         }
         else {
             return nil

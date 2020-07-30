@@ -27,7 +27,7 @@ struct Provider: TimelineProvider {
 
     public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let entries = [SimpleEntry(date: Date())]
-        let timeline = Timeline(entries: entries, policy: .never)
+        let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }
 }
@@ -80,8 +80,6 @@ struct ImageButtonWithLabel: View {
 
 struct NewTodayEntryView : View {
     @Environment(\.widgetFamily) var family
-
-
     static var copiedURL: URL?
     static var searchedText : String?
     
@@ -93,7 +91,7 @@ struct NewTodayEntryView : View {
                 ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true", query: "url"), label: "Private Search", isPrivate: true)
             }
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "copy_link_icon", url: onPressOpenClibpoard(), label: "Go To Copied Link")
+                ImageButtonWithLabel(imageName: "copy_link_icon", url: navigateToCopiedItem(), label: "Go To Copied Link")
                 ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp("?private=true", query: "close-private-tabs"), label: "Close Private Tabs", isPrivate: true)
             }
         }
@@ -106,37 +104,9 @@ struct NewTodayEntryView : View {
         return URL(string: urlString)!
     }
     
-    func updateCopiedLink() {
-        if !UIPasteboard.general.hasURLs {
-            guard let searchText = UIPasteboard.general.string else {
-                NewTodayEntryView.searchedText = nil
-                return
-            }
-            NewTodayEntryView.searchedText = searchText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        }
-        else {
-            UIPasteboard.general.asyncURL().uponQueue(.main) { res in
-                guard let url: URL? = res.successValue else {
-                    NewTodayEntryView.copiedURL = nil
-                    return
-                }
-                NewTodayEntryView.copiedURL = url
-            }
-            
-        }
-    }
-    
-    func onPressOpenClibpoard() -> URL {
-        updateCopiedLink()
-        if let url = NewTodayEntryView.copiedURL,
-            let encodedString = url.absoluteString.escape() {
-            return linkToContainingApp("?url=\(encodedString)",query: "url")
-        } else {
-            if let copiedText = NewTodayEntryView.searchedText {
-                return linkToContainingApp("?text=\(copiedText)",query: "text")
-            }
-        }
-        return linkToContainingApp("?private=false",query: "url")
+    fileprivate func navigateToCopiedItem() -> URL {
+        let urlString = "\(scheme)://open-copied"
+        return URL(string: urlString)!
     }
 }
 
