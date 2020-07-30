@@ -216,7 +216,7 @@ extension PhotonActionSheetProtocol {
             commonActions.insert(findInPageAction, at: 0)
         }
 
-        if (profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false) {
+        if (profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false && tab.readerModeAvailableOrActive) {
             return [refreshActions, mainActions, commonActions]
         } else {
             return [mainActions, commonActions]
