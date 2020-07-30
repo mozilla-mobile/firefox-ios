@@ -73,14 +73,17 @@ enum NavigationPath {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
             return nil
         }
+
         guard let urlTypes = Bundle.main.object(forInfoDictionaryKey: "CFBundleURLTypes") as? [AnyObject],
             let urlSchemes = urlTypes.first?["CFBundleURLSchemes"] as? [String] else {
             // Something very strange has happened; org.mozilla.Client should be the zeroeth URL type.
             return nil
         }
+
         guard let scheme = components.scheme, urlSchemes.contains(scheme) else {
             return nil
         }
+
         if urlString.starts(with: "\(scheme)://deep-link"), let deepURL = components.valueForQuery("url"), let link = DeepLink(urlString: deepURL.lowercased()) {
             self = .deepLink(link)
         } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
