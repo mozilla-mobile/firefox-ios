@@ -5,17 +5,6 @@
 import WidgetKit
 import SwiftUI
 import Shared
-import NotificationCenter
-
-
-private struct TodayUX {
-    static let linkTextSize: CGFloat = 9.0
-    static let labelTextSize: CGFloat = 12.0
-    static let imageButtonTextSize: CGFloat = 13.0
-    static let copyLinkImageWidth: CGFloat = 20
-    static let margin: CGFloat = 8
-    static let buttonsHorizontalMarginPercentage: CGFloat = 0.1
-}
 
 struct Provider: TimelineProvider {
     public typealias Entry = SimpleEntry
@@ -44,66 +33,32 @@ struct SimpleEntry: TimelineEntry {
     public let date: Date
 }
 
-struct ImageButtonWithLabel: View {
-    var imageName: String
-    var url: URL
-    var label: String? = ""
-    var isPrivate: Bool = false
-
-    var body: some View {
-        Link(destination: url) {
-            ZStack(alignment: .leading) {
-                if isPrivate {
-                    ContainerRelativeShape()
-                        .fill(LinearGradient(gradient: Gradient(colors: [Color("privateGradientOne"), Color("privateGradientTwo")]), startPoint: .leading, endPoint: .trailing))
-                } else {
-                    ContainerRelativeShape()
-                        .fill(Color("normalBackgroundColor"))
-                }
-
-                VStack(alignment: .leading) {
-                    Image(imageName)
-                        .scaledToFit()
-                        .frame(height: 24.0)
-
-                    if let label = label {
-                        Text(label)
-                            .font(.headline)
-                            .foregroundColor(Color("widgetLabelColors"))
-                    }
-                }
-                .padding(.leading, 8.0)
-            }
-        }
-    }
-}
-
 struct NewTodayEntryView : View {
     @Environment(\.widgetFamily) var family
     static var copiedURL: URL?
     static var searchedText : String?
-    
+
     @ViewBuilder
     var body: some View {
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false", query: "url"), label: "New Search")
-                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true", query: "url"), label: "Private Search", isPrivate: true)
+                ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false"), label: String.NewTabButtonLabel)
+                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true"), label: String.NewPrivateTabButtonLabel, isPrivate: true)
             }
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "copy_link_icon", url: navigateToCopiedItem(), label: "Go To Copied Link")
-                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp("?private=true", query: "close-private-tabs"), label: "Close Private Tabs", isPrivate: true)
+                ImageButtonWithLabel(imageName: "copy_link_icon", url: navigateToCopiedItem(), label: String.GoToCopiedLinkLabelV2)
+                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp("?private=false"), label: String.closePrivateTabsButtonLabel, isPrivate: true)
             }
         }
         .padding(10.0)
         .background(Color("WidgetBackground"))
     }
 
-    fileprivate func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
-        let urlString = "\(scheme)://open-\(query)\(urlSuffix)"
+    fileprivate func linkToContainingApp(_ urlSuffix: String = "") -> URL {
+        let urlString = "\(scheme)://open-url\(urlSuffix)"
         return URL(string: urlString)!
     }
-    
+
     fileprivate func navigateToCopiedItem() -> URL {
         let urlString = "\(scheme)://open-copied"
         return URL(string: urlString)!
@@ -111,7 +66,7 @@ struct NewTodayEntryView : View {
 }
 
 @main
-struct NewToday: Widget {
+struct NewTodayWidget: Widget {
     private let kind: String = "Search"
 
     public var body: some WidgetConfiguration {
@@ -121,5 +76,26 @@ struct NewToday: Widget {
         .supportedFamilies([.systemMedium])
         .configurationDisplayName("Search")
         .description("This is an example widget.")
+    }
+}
+
+struct NewTodayPreviews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            NewTodayEntryView()
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+
+            NewTodayEntryView()
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .environment(\.colorScheme, .dark)
+
+            NewTodayEntryView()
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .environment(\.sizeCategory, .small)
+
+            NewTodayEntryView()
+                .previewContext(WidgetPreviewContext(family: .systemMedium))
+                .environment(\.sizeCategory, .accessibilityLarge)
+        }
     }
 }
