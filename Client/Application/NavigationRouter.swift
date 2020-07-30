@@ -139,7 +139,12 @@ enum NavigationPath {
     }
     
     private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: TabTrayControllerV1) {
-        bvc.tabManager.removeAllPrivateTabs()
+        bvc.tabManager.removeTabs(bvc.tabManager.privateTabs)
+        guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
+            bvc.tabManager.selectTab(bvc.tabManager.addTab())
+            return
+        }
+        bvc.tabManager.selectTab(tab)
     }
     
     private static func handleGlean(url: URL) {
