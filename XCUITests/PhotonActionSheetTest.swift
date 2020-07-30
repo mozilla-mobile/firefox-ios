@@ -36,7 +36,7 @@ class PhotonActionSheetTest: BaseTestCase {
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
-        waitForExistence(app.cells["Copy"], timeout: 10)
+        waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
     }
 
     // Smoketest
