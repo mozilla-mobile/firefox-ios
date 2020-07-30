@@ -42,25 +42,20 @@ struct NewTodayEntryView : View {
     var body: some View {
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false"), label: String.NewTabButtonLabel)
-                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true"), label: String.NewPrivateTabButtonLabel, isPrivate: true)
+                ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false", query: "open-url"), label: String.NewTabButtonLabel)
+                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true", query: "open-url"), label: String.NewPrivateTabButtonLabel, isPrivate: true)
             }
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "copy_link_icon", url: navigateToCopiedItem(), label: String.GoToCopiedLinkLabelV2)
-                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp("?private=false"), label: String.closePrivateTabsButtonLabel, isPrivate: true)
+                ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp(query: "open-copied"), label: String.GoToCopiedLinkLabelV2)
+                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp(query: "close-private-tabs"), label: String.closePrivateTabsButtonLabel, isPrivate: true)
             }
         }
         .padding(10.0)
         .background(Color("WidgetBackground"))
     }
 
-    fileprivate func linkToContainingApp(_ urlSuffix: String = "") -> URL {
-        let urlString = "\(scheme)://open-url\(urlSuffix)"
-        return URL(string: urlString)!
-    }
-
-    fileprivate func navigateToCopiedItem() -> URL {
-        let urlString = "\(scheme)://open-copied"
+    fileprivate func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
+        let urlString = "\(scheme)://\(query)\(urlSuffix)"
         return URL(string: urlString)!
     }
 }

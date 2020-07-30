@@ -67,6 +67,7 @@ enum NavigationPath {
     case deepLink(DeepLink)
     case text(String)
     case glean(url: URL)
+    case closePrivateTabs
 
     init?(url: URL) {
         let urlString = url.absoluteString
@@ -118,19 +119,21 @@ enum NavigationPath {
                 let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
                 self = .url(webURL: url, isPrivate: isPrivate)
             }
-        }
-        else {
+        } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
+            self = .closePrivateTabs
+        } else {
             return nil
         }
     }
 
-    static func handle(nav: NavigationPath, with bvc: BrowserViewController) {
+    static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray : TabTrayControllerV1) {
         switch nav {
         case .fxa(let params): NavigationPath.handleFxA(params: params, with: bvc)
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
+        case .closePrivateTabs : NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
         }
     }
 
@@ -153,7 +156,11 @@ enum NavigationPath {
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
         bvc.presentSignInViewController(params)
     }
-    
+
+    private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: TabTrayControllerV1) {
+            bvc.tabManager.removeAllPrivateTabs()
+        }
+
     private static func handleGlean(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
     }
