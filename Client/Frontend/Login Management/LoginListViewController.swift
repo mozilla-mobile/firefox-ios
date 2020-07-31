@@ -445,6 +445,7 @@ extension LoginListViewController: LoginViewModelDelegate {
             self.viewModel.breachIndexPath.forEach {
                 guard let cell = self.tableView.cellForRow(at: $0) as? LoginListTableViewCell else { return }
                 cell.breachAlertImageView.isHidden = false
+                cell.accessibilityValue = "Breached Login Alert"
             }
         }
     }

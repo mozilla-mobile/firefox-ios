@@ -16,6 +16,8 @@ class BreachAlertsDetailView: UIView {
     lazy var titleIcon: UIImageView = {
         let imageView = UIImageView(image: BreachAlertsManager.icon)
         imageView.tintColor = textColor
+        imageView.accessibilityTraits = .image
+        imageView.accessibilityLabel = "Breach Alert Icon"
         return imageView
     }()
 
@@ -38,20 +40,26 @@ class BreachAlertsDetailView: UIView {
         label.textColor = textColor
         label.text = Strings.BreachAlertsTitle
         label.sizeToFit()
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
+        label.accessibilityLabel = Strings.BreachAlertsTitle
         return label
     }()
 
-    lazy var titleLearnMore: UIButton = {
+    lazy var learnMoreButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
         button.setTitle(Strings.BreachAlertsLearnMore, for: .normal)
         button.setTitleColor(textColor, for: .normal)
         button.tintColor = .white
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = .button
+        button.accessibilityLabel = Strings.BreachAlertsLearnMore
         return button
     }()
 
     lazy var titleStack: UIStackView = {
-        let container = UIStackView(arrangedSubviews: [titleIconContainer, titleLabel, titleLearnMore])
+        let container = UIStackView(arrangedSubviews: [titleIconContainer, titleLabel, learnMoreButton])
         container.axis = .horizontal
         return container
     }()
@@ -62,6 +70,9 @@ class BreachAlertsDetailView: UIView {
         label.textColor = textColor
         label.numberOfLines = 0
         label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
+        label.accessibilityLabel = Strings.BreachAlertsBreachDate
         return label
     }()
 
@@ -71,6 +82,8 @@ class BreachAlertsDetailView: UIView {
         label.numberOfLines = 0
         label.textColor = textColor
         label.font = DynamicFontHelper.defaultHelper.DeviceFontSmall
+        label.isAccessibilityElement = true
+        label.accessibilityTraits = .staticText
         return label
     }()
 
@@ -81,7 +94,9 @@ class BreachAlertsDetailView: UIView {
         button.numberOfLines = 0
         button.isUserInteractionEnabled = true
         button.text = Strings.BreachAlertsLink
-        button.accessibilityLabel = Strings.BreachAlertsLink.description
+        button.isAccessibilityElement = true
+        button.accessibilityTraits = .button
+        button.accessibilityLabel = Strings.BreachAlertsLink
         return button
     }()
 
@@ -104,6 +119,9 @@ class BreachAlertsDetailView: UIView {
         self.backgroundColor = BreachAlertsManager.detailColor
         self.layer.cornerRadius = 5
         self.layer.masksToBounds = true
+
+        self.isAccessibilityElement = false
+        self.accessibilityElements = [titleLabel, learnMoreButton, breachDateLabel, descriptionLabel, goToButton]
 
         self.addSubview(contentStack)
     }

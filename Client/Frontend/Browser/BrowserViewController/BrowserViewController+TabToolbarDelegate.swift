@@ -87,11 +87,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
             PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
             guard let navController = self.navigationController else { return }
-                let navigationHandler: ((_ url: URL?) -> Void) = { url in
-                    UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
-                    self.openURLInNewTab(url)
-                }
-                LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
+            let navigationHandler: ((_ url: URL?) -> Void) = { url in
+                UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+                self.openURLInNewTab(url)
+            }
+            LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
                 guard let loginsVC = loginsVC else { return }
                 loginsVC.shownFromAppMenu = true
                 let navController = ThemedNavigationController(rootViewController: loginsVC)
