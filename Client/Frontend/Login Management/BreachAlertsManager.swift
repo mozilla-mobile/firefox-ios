@@ -57,7 +57,7 @@ final public class BreachAlertsManager {
             self.breaches.insert(BreachRecord(
              name: "MockBreach",
              title: "A Mock BreachRecord",
-             domain: "abreachedwithalongstringnameaslkdjflskjfas.com",
+             domain: "twitter.com",
              breachDate: "1970-01-02",
              description: "A mock BreachRecord for testing purposes."
             ))

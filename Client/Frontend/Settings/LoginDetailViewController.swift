@@ -316,7 +316,10 @@ extension LoginDetailViewController {
     }
 
     @objc func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
-        guard let domain = self.breach?.domain else { return }
+        guard var domain = self.breach?.domain else { return }
+        if !(domain.starts(with: "https://") || domain.starts(with: "http://") || domain.starts(with: "www.")) {
+            domain = "https://\(domain)"
+        }
         webpageNavigationHandler?(URL(string: domain))
     }
 
