@@ -607,7 +607,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"),  VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"),  VersionSetting.appVersion,  VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     public static var appVersion: String {
@@ -819,7 +819,7 @@ class LoginsSetting: Setting {
         deselectRow()
         
         guard let navController = navigationController else { return }
-        let navigationHandler: ((_ url: URL?) -> ()) = { url in
+        let navigationHandler: ((_ url: URL?) -> Void) = { url in
 //            self.openURLInNewTab(url)
         }
         LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in

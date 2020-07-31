@@ -40,7 +40,7 @@ class LoginListViewController: SensitiveViewController {
 
     weak var settingsDelegate: SettingsDelegate?
     var shownFromAppMenu: Bool = false
-    var webpageNavigationHandler: ((_ url: URL?) -> ())?
+    var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
     // Titles for selection/deselect/delete buttons
     fileprivate let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Label for the button used to deselect all logins.")
@@ -59,7 +59,7 @@ class LoginListViewController: SensitiveViewController {
         return prefs.boolForKey(PrefsKeys.LoginsShowShortcutMenuItem) ?? true
     }
 
-    static func create(authenticateInNavigationController navigationController: UINavigationController, profile: Profile, settingsDelegate: SettingsDelegate, webpageNavigationHandler: ((_ url: URL?) -> ())?) -> Deferred<LoginListViewController?> {
+    static func create(authenticateInNavigationController navigationController: UINavigationController, profile: Profile, settingsDelegate: SettingsDelegate, webpageNavigationHandler: ((_ url: URL?) -> Void)?) -> Deferred<LoginListViewController?> {
         let deferred = Deferred<LoginListViewController?>()
 
         func fillDeferred(ok: Bool) {
@@ -96,7 +96,7 @@ class LoginListViewController: SensitiveViewController {
         return deferred
     }
 
-    private init(profile: Profile, webpageNavigationHandler: ((_ url: URL?) -> ())?) {
+    private init(profile: Profile, webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
         self.viewModel = LoginListViewModel(profile: profile, searchController: searchController)
         self.loginDataSource = LoginDataSource(viewModel: self.viewModel)
         self.webpageNavigationHandler = webpageNavigationHandler

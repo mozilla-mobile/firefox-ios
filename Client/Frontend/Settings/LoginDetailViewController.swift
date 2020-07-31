@@ -51,7 +51,7 @@ class LoginDetailViewController: SensitiveViewController {
             tableView.reloadData()
         }
     }
-    var webpageNavigationHandler: ((_ url: URL?) -> ())?
+    var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
     fileprivate var isEditingFieldData: Bool = false {
         didSet {
@@ -61,7 +61,7 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    init(profile: Profile, login: LoginRecord, webpageNavigationHandler: ((_ url: URL?) -> ())?) {
+    init(profile: Profile, login: LoginRecord, webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
         self.login = login
         self.profile = profile
         self.webpageNavigationHandler = webpageNavigationHandler
