@@ -88,7 +88,6 @@ class DynamicFontHelper: NSObject {
      */
 
     var MediumSizeRegularWeightAS: UIFont {
-//        let size = min(deviceFontSize, 18)
         let size = max(deviceFontSize, 18)
         return UIFont.systemFont(ofSize: size)
     }
@@ -103,31 +102,26 @@ class DynamicFontHelper: NSObject {
         return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.heavy)
     }
     var SmallSizeMediumWeightAS: UIFont {
-//        let size = min(defaultSmallFontSize, 14)
         let size = max(defaultSmallFontSize, 14)
         return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.medium)
     }
 
     var MediumSizeBoldFontAS: UIFont {
-//        let size = min(deviceFontSize, 18)
         let size = max(deviceFontSize, 18)
         return UIFont.boldSystemFont(ofSize: size)
     }
     
     var LargeSizeHeavyFontAS: UIFont {
-//        let size = min(deviceFontSize + 2, 20)
         let size = max(deviceFontSize + 2, 20)
         return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.heavy)
     }
 
     var SmallSizeHeavyWeightAS: UIFont {
-//        let size = min(deviceFontSize, 16)
         let size = max(deviceFontSize, 16)
         return UIFont.systemFont(ofSize: size, weight: UIFont.Weight.heavy)
     }
 
     var SmallSizeRegularWeightAS: UIFont {
-//        let size = min(defaultSmallFontSize, 14)
         let size = max(defaultSmallFontSize, 14)
         return UIFont.systemFont(ofSize: size)
     }
