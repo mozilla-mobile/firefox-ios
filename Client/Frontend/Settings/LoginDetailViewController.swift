@@ -168,7 +168,7 @@ extension LoginDetailViewController: UITableViewDataSource {
             breachCell.isAccessibilityElement = false
             breachCell.contentView.accessibilityElementsHidden = true
             breachCell.accessibilityElements = [breachDetailView]
-            breachDetailView.goToButton.accessibilityLabel = goToText
+            breachDetailView.goToButton.accessibilityValue = breach.domain
             breachDetailView.breachDateLabel.accessibilityValue = "\(dateFormatter.string(from: date))."
 
             return breachCell
