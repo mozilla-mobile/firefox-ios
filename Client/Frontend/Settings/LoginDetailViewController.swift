@@ -147,29 +147,14 @@ extension LoginDetailViewController: UITableViewDataSource {
             breachDetailView.snp.makeConstraints { make in
                 make.edges.equalTo(breachCell.contentView).inset(LoginTableViewCellUX.HorizontalMargin)
             }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            guard let date = dateFormatter.date(from: breach.breachDate) else { return breachCell }
-            dateFormatter.dateStyle = .medium
-            breachDetailView.breachDateLabel.text! += " \(dateFormatter.string(from: date))."
-            let goToText = Strings.BreachAlertsLink + " \(breach.domain)"
-            let attributes: [NSAttributedString.Key: Any] = [
-                .foregroundColor: UIColor.white,
-                .underlineStyle: NSUnderlineStyle.single.rawValue
-            ]
-            let attributedText = NSMutableAttributedString(string: goToText, attributes: attributes)
-            breachDetailView.goToButton.attributedText = attributedText
-            breachDetailView.goToButton.sizeToFit()
+            breachDetailView.setup(breach)
+
             breachDetailView.learnMoreButton.addTarget(self, action: #selector(didTapBreachLearnMore), for: .touchUpInside)
             let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(didTapBreachLink(_:)))
             breachDetailView.goToButton.addGestureRecognizer(breachLinkGesture)
-            breachDetailView.layoutIfNeeded()
-
             breachCell.isAccessibilityElement = false
             breachCell.contentView.accessibilityElementsHidden = true
             breachCell.accessibilityElements = [breachDetailView]
-            breachDetailView.goToButton.accessibilityValue = breach.domain
-            breachDetailView.breachDateLabel.accessibilityValue = "\(dateFormatter.string(from: date))."
 
             return breachCell
 

@@ -144,4 +144,24 @@ class BreachAlertsDetailView: UIView {
         }
         self.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     }
+
+    public func setup(_ breach: BreachRecord) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let date = dateFormatter.date(from: breach.breachDate) else { return }
+        dateFormatter.dateStyle = .medium
+        self.breachDateLabel.text! += " \(dateFormatter.string(from: date))."
+        let goToText = Strings.BreachAlertsLink + " \(breach.domain)"
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.white,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        let attributedText = NSMutableAttributedString(string: goToText, attributes: attributes)
+        self.goToButton.attributedText = attributedText
+        self.goToButton.sizeToFit()
+        self.layoutIfNeeded()
+
+        self.goToButton.accessibilityValue = breach.domain
+        self.breachDateLabel.accessibilityValue = "\(dateFormatter.string(from: date))."
+    }
 }
