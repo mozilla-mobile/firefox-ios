@@ -327,12 +327,7 @@ extension LoginDetailViewController {
         var urlComponents = URLComponents()
         urlComponents.host = domain
         urlComponents.scheme = "https"
-        urlComponents.path = ""
-//        webpageNavigationHandler?(urlComponents.url)
-        guard let url = urlComponents.url else { return }
-        print(url)
-        print(url.absoluteString)
-        self.settingsDelegate?.settingsOpenURLInNewTab(url)
+        webpageNavigationHandler?(urlComponents.url)
     }
 
     func deleteLogin() {

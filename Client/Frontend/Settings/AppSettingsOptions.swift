@@ -821,6 +821,7 @@ class LoginsSetting: Setting {
         guard let navController = navigationController else { return }
         let navigationHandler: ((_ url: URL?) -> Void) = { url in
             guard let url = url else { return }
+            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
             self.delegate?.settingsOpenURLInNewTab(url)
         }
         LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
