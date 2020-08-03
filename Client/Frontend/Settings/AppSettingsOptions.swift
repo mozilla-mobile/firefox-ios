@@ -666,7 +666,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -682,7 +682,7 @@ class YourRightsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -715,7 +715,7 @@ class SendFeedbackSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -744,7 +744,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -820,7 +820,8 @@ class LoginsSetting: Setting {
         
         guard let navController = navigationController else { return }
         let navigationHandler: ((_ url: URL?) -> Void) = { url in
-//            self.openURLInNewTab(url)
+            guard let url = url else { return }
+            self.delegate?.settingsOpenURLInNewTab(url)
         }
         LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
             guard let loginsVC = loginsVC else { return }
@@ -918,7 +919,7 @@ class PrivacyPolicySetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 

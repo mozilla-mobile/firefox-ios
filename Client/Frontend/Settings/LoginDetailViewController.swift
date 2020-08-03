@@ -323,10 +323,16 @@ extension LoginDetailViewController {
     }
 
     @objc func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
-        guard var domain = self.breach?.domain else { return }
-        var urlComponents = URLComponents(string: domain)
-        urlComponents?.scheme = "https"
-        webpageNavigationHandler?(urlComponents?.url)
+        guard let domain = self.breach?.domain else { return }
+        var urlComponents = URLComponents()
+        urlComponents.host = domain
+        urlComponents.scheme = "https"
+        urlComponents.path = ""
+//        webpageNavigationHandler?(urlComponents.url)
+        guard let url = urlComponents.url else { return }
+        print(url)
+        print(url.absoluteString)
+        self.settingsDelegate?.settingsOpenURLInNewTab(url)
     }
 
     func deleteLogin() {
