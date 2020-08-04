@@ -62,6 +62,8 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
         super.init(nibName: nil, bundle: nil)
         self.title = title
         self.closeButton.setTitle(closeButtonTitle, for: .normal)
+
+        self.tableView.estimatedRowHeight = PhotonActionSheetUX.RowHeight
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -206,7 +208,7 @@ class PhotonActionSheet: UIViewController, UITableViewDelegate, UITableViewDataS
             }
         }
 
-        return PhotonActionSheetUX.RowHeight
+        return UITableView.automaticDimension
     }
 
     override func viewDidLayoutSubviews() {
