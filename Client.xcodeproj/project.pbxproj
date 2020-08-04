@@ -46,7 +46,6 @@
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
-		1FCF5C2524351CB4003AB95D /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCF5C2324351CB4003AB95D /* Glean.framework */; };
 		274A36C9239EB94000A21587 /* LibraryPanelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36C8239EB94000A21587 /* LibraryPanelButton.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
 		274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CD239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift */; };
@@ -348,6 +347,7 @@
 		A83E5B1E1C1DAAAA0026D912 /* UIPasteboardExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83E5AB61C1D993D0026D912 /* UIPasteboardExtensions.swift */; };
 		A9072B801D07B34100459960 /* NoImageModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */; };
 		A93067E81D0FE18E00C49C6E /* NightModeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */; };
+		AC2D5AC224D08B3A00B47948 /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC548C4924D079E00039DB29 /* Glean.framework */; };
 		ACD605D324B35EEE00EE4454 /* metrics.yaml in Resources */ = {isa = PBXBuildFile; fileRef = ACD605D124B35EEE00EE4454 /* metrics.yaml */; };
 		C400467C1CF4E43E00B08303 /* BackForwardListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */; };
 		C40046FA1CF8E0B200B08303 /* BackForwardListAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */; };
@@ -1498,6 +1498,7 @@
 		A83E5B1C1C1DA8D80026D912 /* UIPasteboardExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIPasteboardExtensionsTests.swift; sourceTree = "<group>"; };
 		A9072B7F1D07B34100459960 /* NoImageModeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeHelper.swift; sourceTree = "<group>"; };
 		A93067E71D0FE18E00C49C6E /* NightModeHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NightModeHelper.swift; sourceTree = "<group>"; };
+		AC548C4924D079E00039DB29 /* Glean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Glean.framework; path = Carthage/Build/iOS/Static/Glean.framework; sourceTree = "<group>"; };
 		ACD605D124B35EEE00EE4454 /* metrics.yaml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = metrics.yaml; sourceTree = "<group>"; };
 		C400467B1CF4E43E00B08303 /* BackForwardListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListViewController.swift; sourceTree = "<group>"; };
 		C40046F91CF8E0B200B08303 /* BackForwardListAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackForwardListAnimator.swift; sourceTree = "<group>"; };
@@ -1978,7 +1979,7 @@
 				3B4988CE1E42B01800A12FDA /* SwiftyJSON.framework in Frameworks */,
 				EBA31D861F799BE20055463D /* Telemetry.framework in Frameworks */,
 				7B604FBB1C495D8A006EEEC3 /* XCGLogger.framework in Frameworks */,
-				1FCF5C2524351CB4003AB95D /* Glean.framework in Frameworks */,
+				AC2D5AC224D08B3A00B47948 /* Glean.framework in Frameworks */,
 				D05434C02257DE9A00FDE4EF /* Leanplum.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2697,6 +2698,7 @@
 			isa = PBXGroup;
 			children = (
 				1FCF5C2324351CB4003AB95D /* Glean.framework */,
+				AC548C4924D079E00039DB29 /* Glean.framework */,
 				D05434BF2257DE9900FDE4EF /* Leanplum.framework */,
 				C8E18F1F222EDED000E30E52 /* SafariServices.framework */,
 				C8E18F1D222EDE4400E30E52 /* Accelerate.framework */,
@@ -4626,7 +4628,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftProtobuf.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Leanplum.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Glean.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Static/Glean.framework",
 			);
 			name = "Copy Carthage Dependencies";
 			outputPaths = (
@@ -6520,6 +6522,7 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/Static",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7406,6 +7409,7 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/Static",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -7976,6 +7980,7 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/Static",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -8349,6 +8354,7 @@
 					"$(inherited)",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/iOS/Static",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",

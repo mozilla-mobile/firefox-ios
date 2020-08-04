@@ -16,7 +16,10 @@ github "Leanplum/Leanplum-iOS-SDK"          ~> 2.7.2
 github "mozilla-services/shavar-prod-lists" "72.0"
 # Use release version of application-services
 github "mozilla/application-services"      "v61.0.7"
-github "mozilla/glean"                     "v31.3.0"
+# github "travis79/glean"                     "Bug1637539"
 
 # Use interim binary version of application-services
 # binary "https://circleci.com/api/v1.1/project/github/mozilla/application-services/2862/artifacts/0/dist/mozilla.app-services.json" ~> 0.0.1-snapshot # mozilla/application-services@fb5c540e99133980911216055425688f22a27be2
+
+# Use test binary version of Glean built as a Mach-O static lib
+binary "https://circleci.com/api/v1.1/project/github/mozilla/glean/86839/artifacts/0/dist/mozilla.glean.json" ~> 0.0.1-snapshot # mozilla/glean@019e100fc46e956aad530a842d833b30f9bd687c
