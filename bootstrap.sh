@@ -34,6 +34,12 @@ export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
 carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
 
+if [[ -f Carthage/Build/iOS/Static/MozillaAppServices.framework ]]; then
+  echo Move local build of AppServices from Static
+  rm -rf Carthage/Build/iOS/MozillaAppServices.framework
+  cp -r Carthage/Build/iOS/Static/MozillaAppServices.framework Carthage/Build/iOS/MozillaAppServices.framework
+fi
+
 # Install Node.js dependencies and build user scripts
 
 npm install
