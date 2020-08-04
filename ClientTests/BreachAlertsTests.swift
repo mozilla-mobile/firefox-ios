@@ -7,33 +7,33 @@ import Storage
 import Shared
 import XCTest
 
-let mockRecord = BreachRecord(
+let blockbusterBreach = BreachRecord(
  name: "MockBreach",
- title: "A Mock BreachRecord",
- domain: "breached.com",
+ title: "A Mock Blockbuster Record",
+ domain: "blockbuster.com",
  breachDate: "1970-01-02",
  description: "A mock BreachRecord for testing purposes."
 )
 // remove for official release
-let amockRecord = BreachRecord(
+let lipsumBreach = BreachRecord(
  name: "MockBreach",
- title: "A Mock BreachRecord",
+ title: "A Mock Lorem Ipsum Record",
+ domain: "lipsum.com",
+ breachDate: "1970-01-02",
+ description: "A mock BreachRecord for testing purposes."
+)
+let longBreach = BreachRecord(
+ name: "MockBreach",
+ title: "A Long Mock Breach Record",
  domain: "duisatconsecteturloremdonecmassasapienfaucibusetmolestieacfeugiatsedlectusvestibulummattisullamcorpervelitsedullamcorp.com",
  breachDate: "1970-01-02",
  description: "A mock BreachRecord for testing purposes."
 )
-let longMock = BreachRecord(
- name: "MockBreach",
- title: "A Mock BreachRecord",
- domain: "twitter.com",
- breachDate: "1970-01-02",
- description: "A mock BreachRecord for testing purposes."
-)
 let unbreachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://unbreached.com", "timePasswordChanged": 1594411049000])
-let breachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://breached.com", "timePasswordChanged": 46800000])
+let breachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://blockbuster.com", "timePasswordChanged": 46800000])
 class MockBreachAlertsClient: BreachAlertsClientProtocol {
     func fetchData(endpoint: BreachAlertsClient.Endpoint, completion: @escaping (Maybe<Data>) -> Void) {
-        guard let mockData = try? JSONEncoder().encode([mockRecord].self) else {
+        guard let mockData = try? JSONEncoder().encode([blockbusterBreach].self) else {
             completion(Maybe(failure: BreachAlertsError(description: "failed to encode mockRecord")))
             return
         }
@@ -55,7 +55,7 @@ class BreachAlertsTests: XCTestCase {
             XCTAssertTrue(maybeBreaches.isSuccess)
             XCTAssertNotNil(maybeBreaches.successValue)
             if let breaches = maybeBreaches.successValue {
-                XCTAssertEqual([mockRecord, longMock, amockRecord], breaches)
+                XCTAssertEqual([blockbusterBreach, longBreach, lipsumBreach], breaches)
             }
         }
     }
@@ -94,8 +94,13 @@ class BreachAlertsTests: XCTestCase {
         let unbreached = ["unbreached.com": [unbreachedLogin]]
         var result = breachAlertsManager.loginsByHostname([unbreachedLogin])
         XCTAssertEqual(result, unbreached)
-        let breached = ["breached.com": [breachedLogin]]
+        let blockbuster = ["blockbuster.com": [breachedLogin]]
         result = breachAlertsManager.loginsByHostname([breachedLogin])
-        XCTAssertEqual(result, breached)
+        XCTAssertEqual(result, blockbuster)
+    }
+
+    func testBreachRecordForLogin() {
+        breachAlertsManager.loadBreaches { _ in }
+        XCTAssertEqual(blockbusterBreach, breachAlertsManager.breachRecordForLogin(breachedLogin))
     }
 }

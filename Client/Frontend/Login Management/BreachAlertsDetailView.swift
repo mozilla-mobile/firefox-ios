@@ -124,6 +124,7 @@ class BreachAlertsDetailView: UIView {
         self.accessibilityElements = [titleLabel, learnMoreButton, breachDateLabel, descriptionLabel, goToButton]
 
         self.addSubview(contentStack)
+        self.configureView(for: self.traitCollection)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -145,6 +146,7 @@ class BreachAlertsDetailView: UIView {
         self.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
     }
 
+    // Populate the view with information from a BreachRecord.
     public func setup(_ breach: BreachRecord) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -163,5 +165,38 @@ class BreachAlertsDetailView: UIView {
 
         self.goToButton.accessibilityValue = breach.domain
         self.breachDateLabel.accessibilityValue = "\(dateFormatter.string(from: date))."
+    }
+
+    // MARK: - Dynamic Type Support
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if previousTraitCollection?.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory {
+            configureView(for: self.traitCollection)
+        }
+    }
+
+    // If large fonts are enabled, set the title stack vertically.
+    // Else, set the title stack horizontally.
+    private func configureView(for traitCollection: UITraitCollection) {
+        let contentSize = traitCollection.preferredContentSizeCategory
+        if contentSize.isAccessibilityCategory {
+            self.titleStack.axis = .vertical
+            self.titleStack.alignment = .leading
+            self.titleLabel.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(self.titleIconSize)
+            }
+            self.learnMoreButton.snp.makeConstraints { make in
+                make.leading.equalToSuperview().offset(self.titleIconSize)
+            }
+        } else {
+            self.titleStack.axis = .horizontal
+            self.titleStack.alignment = .leading
+            self.titleLabel.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+            }
+            self.learnMoreButton.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+            }
+        }
     }
 }

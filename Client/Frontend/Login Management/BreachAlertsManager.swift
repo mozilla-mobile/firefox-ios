@@ -40,8 +40,6 @@ final public class BreachAlertsManager {
     ///    - Parameters:
     ///         - completion: a completion handler for the processed breaches
     func loadBreaches(completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
-        print("loadBreaches(): called")
-
         self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
             guard let data = maybeData.successValue else {
                 completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches data")))
@@ -56,14 +54,21 @@ final public class BreachAlertsManager {
             // remove for release
             self.breaches.insert(BreachRecord(
              name: "MockBreach",
-             title: "A Mock BreachRecord",
-             domain: "twitter.com",
+             title: "A Mock Blockbuster Record",
+             domain: "blockbuster.com",
              breachDate: "1970-01-02",
              description: "A mock BreachRecord for testing purposes."
             ))
             self.breaches.insert(BreachRecord(
              name: "MockBreach",
-             title: "A Mock BreachRecord",
+             title: "A Mock Lorem Ipsum Record",
+             domain: "lipsum.com",
+             breachDate: "1970-01-02",
+             description: "A mock BreachRecord for testing purposes."
+            ))
+            self.breaches.insert(BreachRecord(
+             name: "MockBreach",
+             title: "A Long Mock Breach Record",
              domain: "duisatconsecteturloremdonecmassasapienfaucibusetmolestieacfeugiatsedlectusvestibulummattisullamcorpervelitsedullamcorp.com",
              breachDate: "1970-01-02",
              description: "A mock BreachRecord for testing purposes."

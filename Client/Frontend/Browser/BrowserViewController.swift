@@ -1014,7 +1014,6 @@ class BrowserViewController: UIViewController {
             request = nil
         }
 
-        print(request)
         switchToPrivacyMode(isPrivate: isPrivate)
         tabManager.selectTab(tabManager.addTab(request, isPrivate: isPrivate))
     }
@@ -1216,7 +1215,6 @@ extension BrowserViewController: QRCodeViewControllerDelegate {
 
 extension BrowserViewController: SettingsDelegate {
     func settingsOpenURLInNewTab(_ url: URL) {
-        print(url)
         let isPrivate = tabManager.selectedTab?.isPrivate ?? false
         self.openURLInNewTab(url, isPrivate: isPrivate)
     }
