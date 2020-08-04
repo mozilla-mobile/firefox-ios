@@ -71,6 +71,18 @@ class Tab: NSObject {
     var pageMetadata: PageMetadata?
 
     var consecutiveCrashes: UInt = 0
+    
+    var startingPageType: NewTabPage = .topSites // Default as topsites
+    
+    var isStartingPage: Bool {
+        guard url != nil else {
+            return true
+        }
+        if url!.absoluteString.hasPrefix("internal://") {
+            return true
+        }
+        return false
+    }
 
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,

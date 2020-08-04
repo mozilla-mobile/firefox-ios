@@ -288,19 +288,28 @@ class BrowserViewController: UIViewController {
             updateURLBarDisplayURL(tab)
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
-            shouldShowNewTabButton(tab.loading)
+//            shouldShowNewTabButton(tab.loading)
+            setupMiddleButtonStatus(state: .transition)
         }
 
         libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
     }
 
-    func shouldShowNewTabButton(_ loading: Bool) {
-        let shouldShow = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
-        if (!shouldShow) {
-            navigationToolbar.updateReloadStatus(loading)
-        }
-        navigationToolbar.updateIsNewTabStatus(shouldShow)
-    }
+//    func shouldShowNewTabButton(_ loading: Bool) {
+//        let shouldShow = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
+//        if shouldShow {
+//            navigationToolbar.updateMiddleButtonState(.newTab)
+//            return
+//        }
+//        navigationToolbar.updateMiddleButtonState(loading ? .stop : .reload)
+//    }
+    
+//    var cameFromTabTray = false
+//    func middleButtonHelper() {
+//        if cameFromTabTray {
+//            return
+//        }
+//    }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
@@ -750,7 +759,8 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
-        navigationToolbar.updateIsSearchStatus(true)
+//        navigationToolbar.updateMiddleButtonState(.search)
+        setupMiddleButtonStatus(state: .firefoxHome(isHidden: false))
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
@@ -760,8 +770,9 @@ class BrowserViewController: UIViewController {
         }
 
         self.firefoxHomeViewController = nil
-        navigationToolbar.updateIsSearchStatus(false)
-        shouldShowNewTabButton(true)
+//        navigationToolbar.updateMiddleButtonState(.stop)
+        setupMiddleButtonStatus(state: .firefoxHome(isHidden: true))
+//        shouldShowNewTabButton(true)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
@@ -905,6 +916,88 @@ class BrowserViewController: UIViewController {
         }
         return false
     }
+    
+    enum LocalState {
+        case loading(status: Bool)
+        case tabSelected
+        case urlBar(selected: Bool)
+        case transition
+        case firefoxHome(isHidden: Bool)
+        case estimatedProgressbar(inProgress: Bool)
+    }
+    
+    func setupMiddleButtonStatus(state: LocalState) {
+        
+        let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
+        let defaultTab: MiddleButtonState = shouldShowNewTabButton ? .newTab : .search
+        
+        // No tab
+        guard let tab = tabManager.selectedTab else {
+            print("notab setupmiddlebutton --")
+            navigationToolbar.updateMiddleButtonState(defaultTab)
+            return
+        }
+        
+        // Tab with starting page
+        if tab.isStartingPage {
+            print("tab isStaringPage ---")
+            navigationToolbar.updateMiddleButtonState(defaultTab)
+            return
+        }
+        
+        // Tab with other states
+        switch state {
+        case .loading(let status):
+            print("loading --- \(status)")
+            let mState: MiddleButtonState = status ? .stop : .reload
+            navigationToolbar.updateMiddleButtonState(mState)
+        case .tabSelected:
+            print("tab selected ---")
+        case .urlBar(let selected):
+            print("urlbar --- \(selected)")
+        case .transition:
+            print("transition ---")
+        case .firefoxHome(let hidden):
+            print("firefoxhome --- \(hidden)")
+        case .estimatedProgressbar(let inProgress):
+            print("estimatedProgressbar --- \(inProgress)")
+            let mState: MiddleButtonState = inProgress ? .stop : .reload
+            navigationToolbar.updateMiddleButtonState(mState)
+        }
+
+        // Case: Starting page
+        // Tab is at its starting page so we only show start page middle button options
+        
+        // Case: Non-starting page
+        //      Sub: Loading
+        //      Sub: Finished loading
+        
+        
+//        switch state.0 {
+//        case .estimatedProgress:
+//        case .loading:
+//        case .normal:
+//        default:
+//            print("Normal --- State")
+//        }
+        
+//        var mState: MiddleButtonState = state.1 ? .stop : .reload
+//        let temp = NewTabAccessors.getNewTabPage(profile.prefs)
+//        switch temp {
+//        case .blankPage:
+//            navigationToolbar.updateMiddleButtonState(.search)
+//            print("NewTabAccessors --- blankpage") // Nothing at all, it doesn't even come here
+//        case .homePage:
+//            navigationToolbar.updateMiddleButtonState(mState)
+//            print("NewTabAccessors --- homePage") // Anypage or custom page
+//        case .topSites:
+//            navigationToolbar.updateMiddleButtonState(.search)
+//            print("NewTabAccessors --- top sites") // Firefox Home
+//        default:
+//            navigationToolbar.updateMiddleButtonState(mState)
+//            print("NewTabAccessors --- nothing")
+//        }
+    }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let webView = object as? WKWebView, let tab = tabManager[webView] else {
@@ -926,14 +1019,42 @@ class BrowserViewController: UIViewController {
             guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
+                setupMiddleButtonStatus(state: .estimatedProgressbar(inProgress: true))
+                print("estimatedProgress --- show progressbar")
             } else {
                 urlBar.hideProgressBar()
+                setupMiddleButtonStatus(state: .estimatedProgressbar(inProgress: false))
+                print("estimatedProgress --- hide progressbar")
             }
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
-
+            setupMiddleButtonStatus(state: .loading(status: loading))
+            return
+            print("currentPage --- \(tab.sessionData?.currentPage)")
+            print("url --- \(tab.isStartingPage)")
+            var state: MiddleButtonState = loading ? .stop : .reload
             if tab === tabManager.selectedTab {
-                navigationToolbar.updateReloadStatus(loading)
+                let temp = NewTabAccessors.getNewTabPage(profile.prefs)
+                switch temp {
+                case .blankPage:
+                    navigationToolbar.updateMiddleButtonState(.search)
+                    print("NewTabAccessors --- blankpage") // Nothing at all, it doesn't even come here
+                case .homePage:
+                    navigationToolbar.updateMiddleButtonState(state)
+                    print("NewTabAccessors --- homePage") // Anypage or custom page
+                case .topSites:
+                    navigationToolbar.updateMiddleButtonState(.search)
+                    print("NewTabAccessors --- top sites") // Firefox Home
+                default:
+                    navigationToolbar.updateMiddleButtonState(state)
+                    print("NewTabAccessors --- nothing")
+                }
+                print(NewTabAccessors.getNewTabPage(profile.prefs))
+                print("LOADDDDD --- \(loading)")
+                
+//                var state: MiddleButtonState = loading ? .stop : .reload
+//                print(state)
+//                navigationToolbar.updateMiddleButtonState(state)
             }
         case .URL:
             // To prevent spoofing, only change the URL immediately if the new URL is on
@@ -1549,6 +1670,7 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
+        setupMiddleButtonStatus(state: .urlBar(selected: false))
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
@@ -1863,7 +1985,8 @@ extension BrowserViewController: TabManagerDelegate {
 
         updateFindInPageVisibility(visible: false, tab: previous)
 
-        shouldShowNewTabButton(selected?.loading ?? false)
+//        shouldShowNewTabButton(selected?.loading ?? false)
+        setupMiddleButtonStatus(state: .tabSelected)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
