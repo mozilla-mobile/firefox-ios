@@ -639,15 +639,6 @@ extension URLBarView: TabToolbarProtocol {
             multiStateButton.setImage(helper?.ImageReload, for: .normal)
         }
     }
-    
-//    func updateMiddleButtonState(_ isLoading: Bool) {
-//        helper?.updateReloadStatus(isLoading)
-//        if isLoading {
-//            multiStateButton.setImage(helper?.ImageStop, for: .normal)
-//        } else {
-//            multiStateButton.setImage(helper?.ImageReload, for: .normal)
-//        }
-//    }
 
     func updatePageStatus(_ isWebPage: Bool) {
         multiStateButton.isEnabled = isWebPage

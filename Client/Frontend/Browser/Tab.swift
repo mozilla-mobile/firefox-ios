@@ -72,8 +72,9 @@ class Tab: NSObject {
 
     var consecutiveCrashes: UInt = 0
     
-    var startingPageType: NewTabPage = .topSites // Default as topsites
-    
+    // Setting defualt page as topsites
+    var newTabPageType: NewTabPage = .topSites
+
     var isStartingPage: Bool {
         guard url != nil else {
             return true

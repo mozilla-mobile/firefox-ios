@@ -288,28 +288,11 @@ class BrowserViewController: UIViewController {
             updateURLBarDisplayURL(tab)
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
-//            shouldShowNewTabButton(tab.loading)
             setupMiddleButtonStatus(state: .transition)
         }
 
         libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
     }
-
-//    func shouldShowNewTabButton(_ loading: Bool) {
-//        let shouldShow = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
-//        if shouldShow {
-//            navigationToolbar.updateMiddleButtonState(.newTab)
-//            return
-//        }
-//        navigationToolbar.updateMiddleButtonState(loading ? .stop : .reload)
-//    }
-    
-//    var cameFromTabTray = false
-//    func middleButtonHelper() {
-//        if cameFromTabTray {
-//            return
-//        }
-//    }
     
     override func willTransition(to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
@@ -759,8 +742,6 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
-//        navigationToolbar.updateMiddleButtonState(.search)
-        setupMiddleButtonStatus(state: .firefoxHome(isHidden: false))
         urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
@@ -770,9 +751,6 @@ class BrowserViewController: UIViewController {
         }
 
         self.firefoxHomeViewController = nil
-//        navigationToolbar.updateMiddleButtonState(.stop)
-        setupMiddleButtonStatus(state: .firefoxHome(isHidden: true))
-//        shouldShowNewTabButton(true)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
@@ -919,7 +897,7 @@ class BrowserViewController: UIViewController {
     
     enum LocalState {
         case loading(status: Bool)
-        case tabSelected
+        case tabSelected(isLoading: Bool)
         case urlBar(selected: Bool)
         case transition
         case firefoxHome(isHidden: Bool)
@@ -951,8 +929,10 @@ class BrowserViewController: UIViewController {
             print("loading --- \(status)")
             let mState: MiddleButtonState = status ? .stop : .reload
             navigationToolbar.updateMiddleButtonState(mState)
-        case .tabSelected:
-            print("tab selected ---")
+        case .tabSelected(let isLoading):
+            print("tab selected --- \(isLoading)")
+            let mState: MiddleButtonState = isLoading ? .stop : .reload
+            navigationToolbar.updateMiddleButtonState(mState)
         case .urlBar(let selected):
             print("urlbar --- \(selected)")
         case .transition:
@@ -964,39 +944,6 @@ class BrowserViewController: UIViewController {
             let mState: MiddleButtonState = inProgress ? .stop : .reload
             navigationToolbar.updateMiddleButtonState(mState)
         }
-
-        // Case: Starting page
-        // Tab is at its starting page so we only show start page middle button options
-        
-        // Case: Non-starting page
-        //      Sub: Loading
-        //      Sub: Finished loading
-        
-        
-//        switch state.0 {
-//        case .estimatedProgress:
-//        case .loading:
-//        case .normal:
-//        default:
-//            print("Normal --- State")
-//        }
-        
-//        var mState: MiddleButtonState = state.1 ? .stop : .reload
-//        let temp = NewTabAccessors.getNewTabPage(profile.prefs)
-//        switch temp {
-//        case .blankPage:
-//            navigationToolbar.updateMiddleButtonState(.search)
-//            print("NewTabAccessors --- blankpage") // Nothing at all, it doesn't even come here
-//        case .homePage:
-//            navigationToolbar.updateMiddleButtonState(mState)
-//            print("NewTabAccessors --- homePage") // Anypage or custom page
-//        case .topSites:
-//            navigationToolbar.updateMiddleButtonState(.search)
-//            print("NewTabAccessors --- top sites") // Firefox Home
-//        default:
-//            navigationToolbar.updateMiddleButtonState(mState)
-//            print("NewTabAccessors --- nothing")
-//        }
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -1029,33 +976,6 @@ class BrowserViewController: UIViewController {
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
             setupMiddleButtonStatus(state: .loading(status: loading))
-            return
-            print("currentPage --- \(tab.sessionData?.currentPage)")
-            print("url --- \(tab.isStartingPage)")
-            var state: MiddleButtonState = loading ? .stop : .reload
-            if tab === tabManager.selectedTab {
-                let temp = NewTabAccessors.getNewTabPage(profile.prefs)
-                switch temp {
-                case .blankPage:
-                    navigationToolbar.updateMiddleButtonState(.search)
-                    print("NewTabAccessors --- blankpage") // Nothing at all, it doesn't even come here
-                case .homePage:
-                    navigationToolbar.updateMiddleButtonState(state)
-                    print("NewTabAccessors --- homePage") // Anypage or custom page
-                case .topSites:
-                    navigationToolbar.updateMiddleButtonState(.search)
-                    print("NewTabAccessors --- top sites") // Firefox Home
-                default:
-                    navigationToolbar.updateMiddleButtonState(state)
-                    print("NewTabAccessors --- nothing")
-                }
-                print(NewTabAccessors.getNewTabPage(profile.prefs))
-                print("LOADDDDD --- \(loading)")
-                
-//                var state: MiddleButtonState = loading ? .stop : .reload
-//                print(state)
-//                navigationToolbar.updateMiddleButtonState(state)
-            }
         case .URL:
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
@@ -1985,8 +1905,7 @@ extension BrowserViewController: TabManagerDelegate {
 
         updateFindInPageVisibility(visible: false, tab: previous)
 
-//        shouldShowNewTabButton(selected?.loading ?? false)
-        setupMiddleButtonStatus(state: .tabSelected)
+        setupMiddleButtonStatus(state: .tabSelected(isLoading: selected?.loading ?? false))
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {

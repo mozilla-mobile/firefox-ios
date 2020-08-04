@@ -21,8 +21,6 @@ protocol TabToolbarProtocol: AnyObject {
     func updateForwardStatus(_ canGoForward: Bool)
     func updateMiddleButtonState(_ state: MiddleButtonState)
     func updatePageStatus(_ isWebPage: Bool)
-//    func updateIsSearchStatus(_ isHomePage: Bool)
-//    func updateIsNewTabStatus(_ isWebPage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
     func appMenuBadge(setVisible: Bool)
@@ -175,17 +173,13 @@ open class TabToolbarHelper: NSObject {
         switch middleButtonState {
         case .reload:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
-            break
         case .search:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
             toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
-            break
         case .newTab:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
-            break
         case .stop:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
-            break
         }
     }
 
