@@ -103,19 +103,6 @@ public struct AppConstants {
             return false
         #endif
     }()
-
-    ///  Toggle use of Document Services — initially language detection.
-    public static let MOZ_DOCUMENT_SERVICES: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-        return false
-        #elseif MOZ_CHANNEL_BETA
-        return true
-        #elseif MOZ_CHANNEL_FENNEC
-        return true
-        #else
-        return true
-        #endif
-    }()
     
     /// Put it behind a feature flag as the strings didn't land in time
     public static let MOZ_SHAKE_TO_RESTORE: Bool = {
