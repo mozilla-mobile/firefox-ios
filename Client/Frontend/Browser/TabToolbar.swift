@@ -101,9 +101,9 @@ open class TabToolbarHelper: NSObject {
 
         toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
         toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
-        let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateReloadButton))
-        toolbar.multiStateButton.addGestureRecognizer(longPressGestureStopReloadButton)
-        toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateReloadButton), for: .touchUpInside)
+        let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
+        toolbar.multiStateButton.addGestureRecognizer(longPressMultiStateButton)
+        toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateButton), for: .touchUpInside)
 
         toolbar.tabsButton.addTarget(self, action: #selector(didClickTabs), for: .touchUpInside)
         let longPressGestureTabsButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTabs))
@@ -169,7 +169,7 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
     }
 
-    func didPressMultiStateReloadButton() {
+    func didPressMultiStateButton() {
         switch middleButtonState {
         case .reload:
             toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
@@ -183,7 +183,7 @@ open class TabToolbarHelper: NSObject {
         }
     }
 
-    func didLongPressMultiStateReloadButton(_ recognizer: UILongPressGestureRecognizer) {
+    func didLongPressMultiStateButton(_ recognizer: UILongPressGestureRecognizer) {
         switch middleButtonState {
         case .search, .reload:
             return
@@ -301,7 +301,7 @@ class TabToolbar: UIView {
     private func setupAccessibility() {
         backButton.accessibilityIdentifier = "TabToolbar.backButton"
         forwardButton.accessibilityIdentifier = "TabToolbar.forwardButton"
-        multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateReloadButton"
+        multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
         addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
         appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
