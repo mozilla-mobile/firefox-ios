@@ -288,7 +288,6 @@ class BrowserViewController: UIViewController {
             updateURLBarDisplayURL(tab)
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
-            setupMiddleButtonStatus(state: .transition)
         }
 
         libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
@@ -895,55 +894,23 @@ class BrowserViewController: UIViewController {
         return false
     }
     
-    enum LocalState {
-        case loading(status: Bool)
-        case tabSelected(isLoading: Bool)
-        case urlBar(selected: Bool)
-        case transition
-        case firefoxHome(isHidden: Bool)
-        case estimatedProgressbar(inProgress: Bool)
-    }
-    
-    func setupMiddleButtonStatus(state: LocalState) {
-        
+    func setupMiddleButtonStatus(isLoading: Bool) {
         let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
-        let defaultTab: MiddleButtonState = shouldShowNewTabButton ? .newTab : .search
         
         // No tab
         guard let tab = tabManager.selectedTab else {
-            print("notab setupmiddlebutton --")
-            navigationToolbar.updateMiddleButtonState(defaultTab)
+            navigationToolbar.updateMiddleButtonState(.search)
             return
         }
         
         // Tab with starting page
         if tab.isStartingPage {
-            print("tab isStaringPage ---")
-            navigationToolbar.updateMiddleButtonState(defaultTab)
+            navigationToolbar.updateMiddleButtonState(.search)
             return
         }
         
-        // Tab with other states
-        switch state {
-        case .loading(let status):
-            print("loading --- \(status)")
-            let mState: MiddleButtonState = status ? .stop : .reload
-            navigationToolbar.updateMiddleButtonState(mState)
-        case .tabSelected(let isLoading):
-            print("tab selected --- \(isLoading)")
-            let mState: MiddleButtonState = isLoading ? .stop : .reload
-            navigationToolbar.updateMiddleButtonState(mState)
-        case .urlBar(let selected):
-            print("urlbar --- \(selected)")
-        case .transition:
-            print("transition ---")
-        case .firefoxHome(let hidden):
-            print("firefoxhome --- \(hidden)")
-        case .estimatedProgressbar(let inProgress):
-            print("estimatedProgressbar --- \(inProgress)")
-            let mState: MiddleButtonState = inProgress ? .stop : .reload
-            navigationToolbar.updateMiddleButtonState(mState)
-        }
+        let state: MiddleButtonState = shouldShowNewTabButton ? .newTab : (isLoading ? .stop : .reload)
+        navigationToolbar.updateMiddleButtonState(state)
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -966,16 +933,14 @@ class BrowserViewController: UIViewController {
             guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
-                setupMiddleButtonStatus(state: .estimatedProgressbar(inProgress: true))
-                print("estimatedProgress --- show progressbar")
+                setupMiddleButtonStatus(isLoading: true)
             } else {
                 urlBar.hideProgressBar()
-                setupMiddleButtonStatus(state: .estimatedProgressbar(inProgress: false))
-                print("estimatedProgress --- hide progressbar")
+                setupMiddleButtonStatus(isLoading: false)
             }
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
-            setupMiddleButtonStatus(state: .loading(status: loading))
+            setupMiddleButtonStatus(isLoading: loading)
         case .URL:
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
@@ -1590,7 +1555,6 @@ extension BrowserViewController: URLBarDelegate {
     func urlBarDidLeaveOverlayMode(_ urlBar: URLBarView) {
         destroySearchController()
         updateInContentHomePanel(tabManager.selectedTab?.url as URL?)
-        setupMiddleButtonStatus(state: .urlBar(selected: false))
     }
 
     func urlBarDidBeginDragInteraction(_ urlBar: URLBarView) {
@@ -1904,8 +1868,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateFindInPageVisibility(visible: false, tab: previous)
-
-        setupMiddleButtonStatus(state: .tabSelected(isLoading: selected?.loading ?? false))
+        setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
