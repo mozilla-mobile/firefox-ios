@@ -63,7 +63,7 @@ extension PhotonActionSheetProtocol {
 
     @available(iOS 11.0, *)
     private func menuActionsForTrackingProtectionDisabled(for tab: Tab) -> [[PhotonActionSheetItem]] {
-        let enableTP = PhotonActionSheetItem(title: Strings.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
+        let enableTP = PhotonActionSheetItem(title: Strings.TrackingProtectionEnableTitle, text: Strings.EnableTPBlockingGlobally, iconString: "menu-TrackingProtection") { _, _ in
             FirefoxTabContentBlocker.toggleTrackingProtectionEnabled(prefs: self.profile.prefs)
             tab.reload()
         }
@@ -92,7 +92,7 @@ extension PhotonActionSheetProtocol {
         nestedTableViewDomainList = NestedTableViewDelegate(dataSource: NestedTableDataSource(data: data))
 
         var list = PhotonActionSheetItem(title: "")
-        list.customRender = { _, contentView in
+        list.customRender = { _, _, contentView in
             if nestedTableView != nil {
                 nestedTableView?.removeFromSuperview()
             }
@@ -120,7 +120,7 @@ extension PhotonActionSheetProtocol {
         }
 
         var info = PhotonActionSheetItem(title: description, accessory: .None)
-        info.customRender = { (label, contentView) in
+        info.customRender = { (label, _, contentView) in
             label.numberOfLines = 0
         }
         info.customHeight = { _ in
@@ -139,11 +139,11 @@ extension PhotonActionSheetProtocol {
         }
 
         var blockedtitle = PhotonActionSheetItem(title: Strings.TPPageMenuBlockedTitle, accessory: .Text, bold: true)
-        blockedtitle.customRender = { label, _ in
+        blockedtitle.customRender = { label, _, _ in
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         }
         blockedtitle.customHeight = { _ in
-            return PhotonActionSheetUX.RowHeight - 10
+            return UITableView.automaticDimension
         }
 
         let xsitecookies = PhotonActionSheetItem(title: Strings.TPCrossSiteCookiesBlocked, iconString: "tp-cookie", accessory: .Disclosure) { action, _ in
@@ -163,7 +163,7 @@ extension PhotonActionSheetProtocol {
             self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.cryptomining])
         }
 
-        var addToSafelist = PhotonActionSheetItem(title: Strings.ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
+        var addToSafelist = PhotonActionSheetItem(title: Strings.TrackingProtectionEnableTitle, text: Strings.ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
             LeanPlumClient.shared.track(event: .trackingProtectionSafeList)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
             ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
@@ -172,11 +172,11 @@ extension PhotonActionSheetProtocol {
                 cell.backgroundView?.setNeedsDisplay()
             }
         }
-        addToSafelist.customRender = { title, _ in
+        addToSafelist.customRender = { title, subtitle, _ in
             if tab.contentBlocker?.status == .safelisted {
-                title.text = Strings.ETPOff
+                subtitle.text = Strings.ETPOff
             } else {
-                title.text = Strings.ETPOn
+                subtitle.text = Strings.ETPOn
             }
         }
         addToSafelist.accessibilityId = "tp.add-to-safelist"
@@ -227,7 +227,7 @@ extension PhotonActionSheetProtocol {
         if items[0].count == 1 {
             // no items were blocked
             var noblockeditems = PhotonActionSheetItem(title: "", accessory: .Text)
-            noblockeditems.customRender = { title, contentView in
+            noblockeditems.customRender = { title, subtitle, contentView in
                 let l = UILabel()
                 l.numberOfLines = 0
                 l.textAlignment = .center

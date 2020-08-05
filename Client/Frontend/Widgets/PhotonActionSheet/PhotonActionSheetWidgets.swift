@@ -73,7 +73,7 @@ public struct PhotonActionSheetItem {
     public fileprivate(set) var badgeIconName: String?
 
     // Enable title customization beyond what the interface provides,
-    public var customRender: ((_ title: UILabel, _ contentView: UIView) -> Void)?
+    public var customRender: ((_ title: UILabel, _ subtitle: UILabel, _ contentView: UIView) -> Void)?
 
     // Enable height customization
     public var customHeight: ((PhotonActionSheetItem) -> CGFloat)?

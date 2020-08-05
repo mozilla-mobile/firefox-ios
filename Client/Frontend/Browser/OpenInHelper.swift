@@ -106,7 +106,7 @@ class DownloadHelper: NSObject, OpenInHelper {
         filenameItem.customHeight = { _ in
             return 80
         }
-        filenameItem.customRender = { label, contentView in
+        filenameItem.customRender = { label, _, contentView in
             label.numberOfLines = 2
             label.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
             label.lineBreakMode = .byCharWrapping

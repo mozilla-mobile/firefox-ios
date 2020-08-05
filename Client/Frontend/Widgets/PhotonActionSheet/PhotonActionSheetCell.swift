@@ -281,6 +281,6 @@ class PhotonActionSheetCell: UITableViewCell {
             break // Do nothing. The rest are not supported yet.
         }
 
-        action.customRender?(titleLabel, contentView)
+        action.customRender?(titleLabel, subtitleLabel, contentView)
     }
 }
