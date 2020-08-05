@@ -38,8 +38,10 @@ class PocketTest: BaseTestCase {
     func testTapOnMore() {
         // Tap on More should show Pocket website
         navigator.goto(NewTabScreen)
+        print(app.debugDescription)
         waitForExistence(app.buttons["More"], timeout: 5)
-        app.buttons["More"].tap()
+        // Workaround to app.buttons["More"].tap() for BB flaky failures tapping on See All button
+        app.buttons.element(boundBy: 3).tap()
         waitUntilPageLoad()
         navigator.nowAt(BrowserTab)
         waitForExistence(app.textFields["url"], timeout: 15)

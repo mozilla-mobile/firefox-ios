@@ -33,6 +33,8 @@ class PhotonActionSheetTest: BaseTestCase {
 
     func testShareOptionIsShown() {
         navigator.goto(BrowserTab)
+        navigator.goto(PageOptionsMenu)
+        waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 3)
         navigator.browserPerformAction(.shareOption)
 
         // Wait to see the Share options sheet
@@ -84,7 +86,9 @@ class PhotonActionSheetTest: BaseTestCase {
 
     private func openNewShareSheet() {
         navigator.openURL("example.com")
+        waitUntilPageLoad()
         navigator.goto(PageOptionsMenu)
+        waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 5)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
         waitForExistence(app.cells["Copy"], timeout: 5)
         // This is not ideal but only way to get the element on iPhone 8
