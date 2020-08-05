@@ -904,7 +904,7 @@ class BrowserViewController: UIViewController {
         }
         
         // Tab with starting page
-        if tab.isStartingPage {
+        if tab.isURLStartingPage {
             navigationToolbar.updateMiddleButtonState(.search)
             return
         }
