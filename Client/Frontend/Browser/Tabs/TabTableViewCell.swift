@@ -32,11 +32,13 @@ class TabTableViewCell: UITableViewCell, Themeable {
         urlLabel.textColor = UIColor.Photon.Grey40
         
         screenshotView.snp.makeConstraints { make in
-            make.height.width.equalTo(68)
+            make.height.width.equalTo(100)
             make.leading.equalToSuperview().offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
             make.top.equalToSuperview().offset(TabTrayV2ControllerUX.screenshotMarginTopBottom)
             make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.screenshotMarginTopBottom)
         }
+        
+        websiteTitle.numberOfLines = 2
         
         websiteTitle.snp.makeConstraints { make in
             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
@@ -49,7 +51,7 @@ class TabTableViewCell: UITableViewCell, Themeable {
             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
             make.trailing.equalToSuperview()
             make.top.equalTo(websiteTitle.snp.bottom).offset(3)
-            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.textMarginTopBottom)
+            make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.textMarginTopBottom * CGFloat(websiteTitle.numberOfLines))
         }
 
         applyTheme()
