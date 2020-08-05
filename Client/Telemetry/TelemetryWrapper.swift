@@ -377,39 +377,34 @@ extension TelemetryWrapper {
         case tabView = "tab-view"
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue, extras: [String: Any]? = nil) {
-        Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value.rawValue, extras: extras)
+    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
+        Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value?.rawValue ?? "", extras: extras)
 
-        gleanRecordEvent(category: category, method: method, object: object, value: value.rawValue, extras: extras);
+        gleanRecordEvent(category: category, method: method, object: object, value: value, extras: extras);
     }
 
-    public static func recordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String? = nil, extras: [String: Any]? = nil) {
-        Telemetry.default.recordEvent(category: category.rawValue, method: method.rawValue, object: object.rawValue, value: value, extras: extras)
-
-        gleanRecordEvent(category: category, method: method, object: object, value: value ?? "", extras: extras);
-    }
-
-    static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: String, extras: [String: Any]? = nil) {
+    static func gleanRecordEvent(category: EventCategory, method: EventMethod, object: EventObject, value: EventValue? = nil, extras: [String: Any]? = nil) {
+        let value = value?.rawValue ?? ""
         switch (category, method, object, value, extras) {
         // Bookmarks
-        case (.action, .view, .bookmarksPanel, let value, _):
-            GleanMetrics.Bookmarks.viewList[value].add()
-        case (.action, .add, .bookmark, let value, _):
-            GleanMetrics.Bookmarks.add[value].add()
-        case (.action, .delete, .bookmark, let value, _):
-            GleanMetrics.Bookmarks.delete[value].add()
-        case (.action, .open, .bookmark, let value, _):
-            GleanMetrics.Bookmarks.open[value].add()
+        case (.action, .view, .bookmarksPanel, let from, _):
+            GleanMetrics.Bookmarks.viewList[from].add()
+        case (.action, .add, .bookmark, let from, _):
+            GleanMetrics.Bookmarks.add[from].add()
+        case (.action, .delete, .bookmark, let from, _):
+            GleanMetrics.Bookmarks.delete[from].add()
+        case (.action, .open, .bookmark, let from, _):
+            GleanMetrics.Bookmarks.open[from].add()
         // Reader Mode
         case (.action, .tap, .readerModeOpenButton, _, _):
             GleanMetrics.ReaderMode.open.add()
         case (.action, .tap, .readerModeCloseButton, _, _):
             GleanMetrics.ReaderMode.close.add()
         // Reading List
-        case (.action, .add, .readingListItem, let value, _):
-            GleanMetrics.ReadingList.add[value].add()
-        case (.action, .delete, .readingListItem, let value, _):
-            GleanMetrics.ReadingList.delete[value].add()
+        case (.action, .add, .readingListItem, let from, _):
+            GleanMetrics.ReadingList.add[from].add()
+        case (.action, .delete, .readingListItem, let from, _):
+            GleanMetrics.ReadingList.delete[from].add()
         case (.action, .open, .readingListItem, _, _):
             GleanMetrics.ReadingList.open.add()
         case (.action, .tap, .readingListItem, EventValue.markAsRead.rawValue, _):
@@ -417,25 +412,24 @@ extension TelemetryWrapper {
         case (.action, .tap, .readingListItem, EventValue.markAsUnread.rawValue, _):
             GleanMetrics.ReadingList.markUnread.add()
         // Preferences
-        case (.action, .change, .setting, let preference, let extras):
-            if let to = extras?["go"] as? String {
+        case (.action, .change, .setting, _, let extras):
+            if let preference = extras?["pref"] as? String, let to = (extras?["go"] ?? "undefined") as? String {
                 GleanMetrics.Preferences.changed.record(
                 extra: [GleanMetrics.Preferences.ChangedKeys.preference: preference,
                         GleanMetrics.Preferences.ChangedKeys.changedTo: to])
             } else {
-                GleanMetrics.Preferences.changed.record(
-                    extra: [GleanMetrics.Preferences.ChangedKeys.preference: preference,
-                            GleanMetrics.Preferences.ChangedKeys.changedTo: "undefined"])
+                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
             }
         // QR Codes
         case (.action, .scan, .qrCodeText, _, _),
              (.action, .scan, .qrCodeURL, _, _):
             GleanMetrics.QrCode.scanned.add()
         // Tabs
-        case (.action, .add, .tab, let value, _):
-            GleanMetrics.Tabs.open[value].add()
-        case (.action, .close, .tab, let value, _):
-            GleanMetrics.Tabs.close[value].add()
+        case (.action, .add, .tab, let privateOrNormal, _):
+            GleanMetrics.Tabs.open[privateOrNormal].add()
+        case (.action, .close, .tab, let privateOrNormal, _):
+            GleanMetrics.Tabs.close[privateOrNormal].add()
         case (.action, .tap, .addNewTabButton, _, _):
             GleanMetrics.Tabs.newTabPressed.add()
         // Start Search Button
