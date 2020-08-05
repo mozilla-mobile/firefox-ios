@@ -68,8 +68,8 @@ final public class BreachAlertsManager {
             ))
             self.breaches.insert(BreachRecord(
              name: "MockBreach",
-             title: "A Long Mock Breach Record",
-             domain: "duisatconsecteturloremdonecmassasapienfaucibusetmolestieacfeugiatsedlectusvestibulummattisullamcorpervelitsedullamcorp.com",
+             title: "A Mock Swift Breach Record",
+             domain: "swift.org",
              breachDate: "1970-01-02",
              description: "A mock BreachRecord for testing purposes."
             ))
