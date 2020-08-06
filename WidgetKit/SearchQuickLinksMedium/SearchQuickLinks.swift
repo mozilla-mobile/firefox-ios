@@ -4,7 +4,6 @@
 
 import WidgetKit
 import SwiftUI
-import Shared
 
 struct Provider: TimelineProvider {
     public typealias Entry = SimpleEntry
@@ -21,50 +20,25 @@ struct Provider: TimelineProvider {
     }
 }
 
-var scheme: String {
-    guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
-        return "firefox"
-    }
-    return string
-}
-
 struct SimpleEntry: TimelineEntry {
     public let date: Date
 }
 
-struct SearchActionsUX {
-    static let searchButtonColors = [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]
-    static let privateTabsColors = [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
-    static let goToCopiedLinkColors = [Color("goToCopiedLinkColorTwo"), Color("goToCopiedLinkColorOne")]
-}
-
 struct SearchQuickLinksEntryView : View {
-    @Environment(\.widgetFamily) var family
-    static var copiedURL: URL?
-    static var searchedText : String?
-
     @ViewBuilder
     var body: some View {
-        
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "faviconFox", url: linkToContainingApp("?private=false", query: "open-url"), label: "Search in Firefox", ButtonGradient: Gradient(colors: SearchActionsUX.searchButtonColors))
-                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true", query: "open-url"), label: String.NewPrivateTabButtonLabel,ButtonGradient: Gradient(colors: SearchActionsUX.privateTabsColors))
+                ImageButtonWithLabel(action: .search)
+                ImageButtonWithLabel(action: .privateSearch)
             }
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp(query: "open-copied"), label: String.GoToCopiedLinkLabelV2, ButtonGradient: Gradient(colors: SearchActionsUX.goToCopiedLinkColors))
-                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp(query: "close-private-tabs"), label: String.closePrivateTabsButtonLabel, ButtonGradient: Gradient(colors: SearchActionsUX.privateTabsColors))
+                ImageButtonWithLabel(action: .copiedLink)
+                ImageButtonWithLabel(action: .closePrivateTabs)
             }
         }
-
         .padding(10.0)
         .background(Color("backgroundColor"))
-    }
-   
-
-    fileprivate func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
-        let urlString = "\(scheme)://\(query)\(urlSuffix)"
-        return URL(string: urlString)!
     }
 }
 
@@ -77,7 +51,7 @@ struct SearchQuickLinksWigdet: Widget {
         }
         .supportedFamilies([.systemMedium])
         .configurationDisplayName("Firefox - Quick Actions")
-        .description("This is an example widget.")
+        .description("Access to frequent actions directly on your home screen.")
     }
 }
 

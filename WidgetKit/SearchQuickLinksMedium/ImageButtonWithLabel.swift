@@ -5,27 +5,23 @@
 import SwiftUI
 
 struct ImageButtonWithLabel: View {
-    var imageName: String
-    var url: URL
-    var label: String? = ""
-    var ButtonGradient: Gradient
+    var link: QuickLink
 
     var body: some View {
-        Link(destination: url) {
+        Link(destination: link.url) {
             ZStack(alignment: .leading) {
                 ContainerRelativeShape()
-                    .fill(LinearGradient(gradient: ButtonGradient , startPoint: .init(x: 1.0, y: 0.0), endPoint: .init(x: 0.0, y: 1.0)))
+                    .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
 
-                HStack(alignment: .top ,content: {
-                    if let label = label {
-                        Text(label)
-                            .font(.headline)
-                    }
+                HStack(alignment: .top) {
+                    Text(link.label)
+                        .font(.headline)
+
                     Spacer()
-                    Image(imageName)
+                    Image(link.imageName)
                         .scaledToFit()
                         .frame(height: 24.0)
-                })
+                }
                 .foregroundColor(Color("widgetLabelColors"))
                 .padding(.horizontal, 10.0)
             }
