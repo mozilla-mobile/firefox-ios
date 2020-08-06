@@ -30,51 +30,75 @@ final public class BreachAlertsManager {
     static let detailColor = UIColor(red: 0.59, green: 0.11, blue: 0.11, alpha: 1.00)
     static let monitorAboutUrl = URL(string: "https://monitor.firefox.com/about")
     var breaches = Set<BreachRecord>()
-    var breachAlertsClient: BreachAlertsClientProtocol
+    var client: BreachAlertsClientProtocol
+    var files: FileAccessor!
 
-    init(_ client: BreachAlertsClientProtocol = BreachAlertsClient()) {
-        self.breachAlertsClient = client
+    init(_ client: BreachAlertsClientProtocol = BreachAlertsClient(), files: FileAccessor) {
+        self.client = client
+        self.files = files
     }
 
     /// Loads breaches from Monitor endpoint using BreachAlertsClient.
     ///    - Parameters:
     ///         - completion: a completion handler for the processed breaches
     func loadBreaches(completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
-        self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
-            guard let data = maybeData.successValue else {
-                completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches data")))
-                return
-            }
-            guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
-                completion(Maybe(failure: BreachAlertsError(description: "JSON data decode failure")))
-                return
-            }
+        let cacheURL = URL(fileURLWithPath: try! self.files.getAndEnsureDirectory(), isDirectory: true).appendingPathComponent("breaches.json")
 
-            self.breaches = decoded
-            // remove for release
-            self.breaches.insert(BreachRecord(
-             name: "MockBreach",
-             title: "A Mock Blockbuster Record",
-             domain: "blockbuster.com",
-             breachDate: "1970-01-02",
-             description: "A mock BreachRecord for testing purposes."
-            ))
-            self.breaches.insert(BreachRecord(
-             name: "MockBreach",
-             title: "A Mock Lorem Ipsum Record",
-             domain: "lipsum.com",
-             breachDate: "1970-01-02",
-             description: "A mock BreachRecord for testing purposes."
-            ))
-            self.breaches.insert(BreachRecord(
-             name: "MockBreach",
-             title: "A Mock Swift Breach Record",
-             domain: "swift.org",
-             breachDate: "1970-01-02",
-             description: "A mock BreachRecord for testing purposes."
-            ))
-            completion(Maybe(success: self.breaches))
+        var fileData: Data?
+        if FileManager.default.fileExists(atPath: cacheURL.path) {
+            fileData = FileManager.default.contents(atPath: cacheURL.path)
+        } else {
+            self.client.fetchData(endpoint: .breachedAccounts, "HEAD", cachePath: cacheURL.path) { maybeData in
+                guard let fetchedHeader = maybeData.successValue else {
+                    completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches header")))
+                    return
+                }
+
+                if fetchedHeader.isEmpty {
+                    self.client.fetchData(endpoint: .breachedAccounts, "GET", cachePath: cacheURL.path) { maybeData in
+                        guard let fetchedData = maybeData.successValue else {
+                            completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches data")))
+                            return
+                        }
+                        try? FileManager.default.removeItem(atPath: cacheURL.path)
+                        FileManager.default.createFile(atPath: cacheURL.path, contents: fetchedData, attributes: nil)
+                        fileData = FileManager.default.contents(atPath: cacheURL.path)
+                    }
+                }
+            }
         }
+
+        guard let data = fileData else { return }
+
+        guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
+            completion(Maybe(failure: BreachAlertsError(description: "JSON data decode failure")))
+            return
+        }
+
+        self.breaches = decoded
+        // remove for release
+        self.breaches.insert(BreachRecord(
+         name: "MockBreach",
+         title: "A Mock Blockbuster Record",
+         domain: "blockbuster.com",
+         breachDate: "1970-01-02",
+         description: "A mock BreachRecord for testing purposes."
+        ))
+        self.breaches.insert(BreachRecord(
+         name: "MockBreach",
+         title: "A Mock Lorem Ipsum Record",
+         domain: "lipsum.com",
+         breachDate: "1970-01-02",
+         description: "A mock BreachRecord for testing purposes."
+        ))
+        self.breaches.insert(BreachRecord(
+         name: "MockBreach",
+         title: "A Mock Swift Breach Record",
+         domain: "swift.org",
+         breachDate: "1970-01-02",
+         description: "A mock BreachRecord for testing purposes."
+        ))
+        completion(Maybe(success: self.breaches))
     }
 
     /// Compares a list of logins to a list of breaches and returns breached logins.
