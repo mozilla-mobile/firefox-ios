@@ -57,7 +57,6 @@ protocol TabEventHandler: AnyObject {
     func tabDidGainFocus(_ tab: Tab)
     func tabDidLoseFocus(_ tab: Tab)
     func tabDidClose(_ tab: Tab)
-    func tab(_ tab: Tab, didDeriveMetadata metadata: DerivedMetadata)
     func tabDidToggleDesktopMode(_ tab: Tab)
     func tabDidChangeContentBlocking(_ tab: Tab)
 }
@@ -72,7 +71,6 @@ extension TabEventHandler {
     func tabDidGainFocus(_ tab: Tab) {}
     func tabDidLoseFocus(_ tab: Tab) {}
     func tabDidClose(_ tab: Tab) {}
-    func tab(_ tab: Tab, didDeriveMetadata metadata: DerivedMetadata) {}
     func tabDidToggleDesktopMode(_ tab: Tab) {}
     func tabDidChangeContentBlocking(_ tab: Tab) {}
 }
@@ -85,7 +83,6 @@ enum TabEventLabel: String {
     case didGainFocus
     case didLoseFocus
     case didClose
-    case didDeriveMetadata
     case didToggleDesktopMode
     case didChangeContentBlocking
 }
@@ -99,7 +96,6 @@ enum TabEvent {
     case didGainFocus
     case didLoseFocus
     case didClose
-    case didDeriveMetadata(DerivedMetadata)
     case didToggleDesktopMode
     case didChangeContentBlocking
 
@@ -127,8 +123,6 @@ enum TabEvent {
             handler.tabDidLoseFocus(tab)
         case .didClose:
             handler.tabDidClose(tab)
-        case .didDeriveMetadata(let metadata):
-            handler.tab(tab, didDeriveMetadata: metadata)
         case .didToggleDesktopMode:
             handler.tabDidToggleDesktopMode(tab)
         case .didChangeContentBlocking:

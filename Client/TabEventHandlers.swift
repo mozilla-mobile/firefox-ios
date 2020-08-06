@@ -7,19 +7,12 @@ import Shared
 
 class TabEventHandlers {
     static func create(with prefs: Prefs) -> [TabEventHandler] {
-        var handlers: [TabEventHandler] = [
+        let handlers: [TabEventHandler] = [
             FaviconHandler(),
             UserActivityHandler(),
             MetadataParserHelper(),
             MediaImageLoader(prefs),
         ]
-
-        if AppConstants.MOZ_DOCUMENT_SERVICES {
-            handlers = handlers + [
-                DocumentServicesHelper(),
-                TranslationToastHandler(prefs),
-            ]
-        }
 
         return handlers
     }

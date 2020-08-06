@@ -1147,18 +1147,3 @@ class ThemeSetting: Setting {
     }
 }
 
-class TranslationSetting: Setting {
-    let profile: Profile
-    override var accessoryView: UIImageView? { return disclosureIndicator }
-    override var style: UITableViewCell.CellStyle { return .value1 }
-    override var accessibilityIdentifier: String? { return "TranslationOption" }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: Strings.SettingTranslateSnackBarTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(TranslationSettingsController(profile), animated: true)
-    }
-}

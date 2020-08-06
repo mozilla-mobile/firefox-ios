@@ -51,10 +51,7 @@ let TabTrayLongPressMenu = "TabTrayLongPressMenu"
 let HistoryRecentlyClosed = "HistoryRecentlyClosed"
 let TrackingProtectionContextMenuDetails = "TrackingProtectionContextMenuDetails"
 let DisplaySettings = "DisplaySettings"
-let TranslationSettings = "TranslationSettings"
 let HomePanel_Library = "HomePanel_Library"
-let TranslatePageMenu = "TranslatePageMenu"
-let DontTranslatePageMenu = "DontTranslatePageMenu"
 let MobileBookmarks = "MobileBookmarks"
 let MobileBookmarksEdit = "MobileBookmarksEdit"
 let MobileBookmarksAdd = "MobileBookmarksAdd"
@@ -72,7 +69,6 @@ let allSettingsScreens = [
     NewTabSettings,
     OpenWithSettings,
     DisplaySettings,
-    TranslationSettings,
 
     LoginsSettings,
     PasscodeSettings,
@@ -200,11 +196,6 @@ class Action {
     static let SelectManually = "SelectManually"
     static let SystemThemeSwitch = "SystemThemeSwitch"
 
-    static let SelectTranslateThisPage = "SelectTranslateThisPage"
-    static let SelectDontTranslateThisPage = "SelectDontTranslateThisPage"
-    
-    static let EnableTranslation = "EnableTranlation"
-    static let DisableTranslation = "DisableTranlation"
     static let SelectGoogle = "SelectGoogle"
     static let SelectBing = "SelectBing"
     
@@ -627,7 +618,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(table.cells["Home"], to: HomeSettings)
         screenState.tap(table.cells["OpenWith.Setting"], to: OpenWithSettings)
         screenState.tap(table.cells["DisplayThemeOption"], to: DisplaySettings)
-        screenState.tap(table.cells["TranslationOption"], to: TranslationSettings)
         screenState.tap(table.cells["SiriSettings"], to: SiriSettings)
         screenState.tap(table.cells["TouchIDPasscode"], to: PasscodeSettings)
         screenState.tap(table.cells["Logins"], to: LoginsSettings, if: "passcode == nil")
@@ -648,22 +638,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         }
         screenState.gesture(forAction: Action.SystemThemeSwitch) { userState in
             app.switches["SystemThemeSwitchValue"].tap()
-        }
-        screenState.backAction = navigationControllerBackAction
-    }
-
-    map.addScreenState(TranslationSettings) { screenState in
-        screenState.gesture(forAction: Action.DisableTranslation) { userState in
-                app.switches["TranslateSwitchValue"].tap()
-        }
-        screenState.gesture(forAction: Action.EnableTranslation) { userState in
-            app.switches["TranslateSwitchValue"].tap()
-        }
-        screenState.gesture(forAction: Action.SelectGoogle) { userstate in
-            app.tables.cells.element(boundBy:1).tap()
-        }
-        screenState.gesture(forAction: Action.SelectBing) { userstate in
-                app.tables.cells.element(boundBy:2).tap()
         }
         screenState.backAction = navigationControllerBackAction
     }
@@ -1021,17 +995,6 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
         screenState.tap(app.buttons["Private Mode"], forAction: Action.TogglePrivateModeFromTabBarBrowserTab) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-
-        screenState.noop(to: TranslatePageMenu, if: "localeIsExpectedDifferent == true")
-    }
-
-    map.addScreenState(TranslatePageMenu) { screenState in
-        screenState.onEnterWaitFor(element: app.buttons["TranslationPrompt.doTranslate"])
-
-        screenState.tap(app.buttons["TranslationPrompt.dontTranslate"], forAction: Action.SelectDontTranslateThisPage)
-
-        screenState.tap(app.buttons["TranslationPrompt.doTranslate"], forAction: Action.SelectTranslateThisPage, transitionTo: WebPageLoading)
-        screenState.dismissOnUse = true
     }
 
     map.addScreenState(ReloadLongPressMenu) { screenState in
