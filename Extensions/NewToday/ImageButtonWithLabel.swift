@@ -8,31 +8,26 @@ struct ImageButtonWithLabel: View {
     var imageName: String
     var url: URL
     var label: String? = ""
-    var isPrivate: Bool = false
+    var ButtonGradient: Gradient
 
     var body: some View {
         Link(destination: url) {
             ZStack(alignment: .leading) {
-                if isPrivate {
-                    ContainerRelativeShape()
-                        .fill(LinearGradient(gradient: Gradient(colors: [Color("privateGradientOne"), Color("privateGradientTwo")]), startPoint: .leading, endPoint: .trailing))
-                } else {
-                    ContainerRelativeShape()
-                        .fill(Color("normalBackgroundColor"))
-                }
+                ContainerRelativeShape()
+                    .fill(LinearGradient(gradient: ButtonGradient , startPoint: .init(x: 1.0, y: 0.0), endPoint: .init(x: 0.0, y: 1.0)))
 
-                VStack(alignment: .leading) {
-                    Image(imageName)
-                        .scaledToFit()
-                        .frame(height: 24.0)
-
+                HStack(alignment: .top ,content: {
                     if let label = label {
                         Text(label)
                             .font(.headline)
                     }
-                }
-                .foregroundColor(isPrivate ? Color("privateLabelColor") : Color("widgetLabelColors"))
-                .padding(.leading, 10.0)
+                    Spacer()
+                    Image(imageName)
+                        .scaledToFit()
+                        .frame(height: 24.0)
+                })
+                .foregroundColor(Color("widgetLabelColors"))
+                .padding(.horizontal, 10.0)
             }
         }
     }

@@ -23,7 +23,6 @@ struct Provider: TimelineProvider {
 
 var scheme: String {
     guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
-        // Something went wrong/weird, but we should fallback to the public one.
         return "firefox"
     }
     return string
@@ -33,6 +32,18 @@ struct SimpleEntry: TimelineEntry {
     public let date: Date
 }
 
+struct SearchActionsUX {
+    static let searchButtonColors = [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]
+    static let privateTabsColors = [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
+    static let goToCopiedLinkColors = [Color("goToCopiedLinkColorTwo"), Color("goToCopiedLinkColorOne")]
+}
+
+struct VisualEffectView: UIViewRepresentable {
+    var effect: UIVisualEffect?
+    func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView { UIVisualEffectView() }
+    func updateUIView(_ uiView: UIVisualEffectView, context: UIViewRepresentableContext<Self>) { uiView.effect = effect }
+}
+
 struct NewTodayEntryView : View {
     @Environment(\.widgetFamily) var family
     static var copiedURL: URL?
@@ -40,19 +51,22 @@ struct NewTodayEntryView : View {
 
     @ViewBuilder
     var body: some View {
+        
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "search-button", url: linkToContainingApp("?private=false", query: "open-url"), label: String.NewTabButtonLabel)
-                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true", query: "open-url"), label: String.NewPrivateTabButtonLabel, isPrivate: true)
+                ImageButtonWithLabel(imageName: "faviconFox", url: linkToContainingApp("?private=false", query: "open-url"), label: String.newSearchButtonLabel, ButtonGradient: Gradient(colors: SearchActionsUX.searchButtonColors))
+                ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true", query: "open-url"), label: String.NewPrivateTabButtonLabel,ButtonGradient: Gradient(colors: SearchActionsUX.privateTabsColors))
             }
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp(query: "open-copied"), label: String.GoToCopiedLinkLabelV2)
-                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp(query: "close-private-tabs"), label: String.closePrivateTabsButtonLabel, isPrivate: true)
+                ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp(query: "open-copied"), label: String.GoToCopiedLinkLabelV2, ButtonGradient: Gradient(colors: SearchActionsUX.goToCopiedLinkColors))
+                ImageButtonWithLabel(imageName: "delete", url: linkToContainingApp(query: "close-private-tabs"), label: String.closePrivateTabsButtonLabel, ButtonGradient: Gradient(colors: SearchActionsUX.privateTabsColors))
             }
         }
+
         .padding(10.0)
-        .background(Color("WidgetBackground"))
+        .background(Color("backgroundColor"))
     }
+   
 
     fileprivate func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
         let urlString = "\(scheme)://\(query)\(urlSuffix)"
@@ -62,14 +76,14 @@ struct NewTodayEntryView : View {
 
 @main
 struct NewTodayWidget: Widget {
-    private let kind: String = "Search"
+    private let kind: String = "Quick Actions - Medium"
 
     public var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider(), placeholder: NewTodayEntryView()) { entry in
             NewTodayEntryView()
         }
         .supportedFamilies([.systemMedium])
-        .configurationDisplayName("Search")
+        .configurationDisplayName("Firefox - Quick Actions")
         .description("This is an example widget.")
     }
 }
