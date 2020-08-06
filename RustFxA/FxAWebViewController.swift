@@ -47,7 +47,8 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         webView.customUserAgent = FxAWebViewModel.mobileUserAgent
 
         super.init(nibName: nil, bundle: nil)
-        contentController.add(self, name: "accountsCommandHandler")
+        let scriptMessageHandler = WKScriptMessageHandleDelegate(self)
+        contentController.add(scriptMessageHandler, name: "accountsCommandHandler")
         webView.navigationDelegate = self
         webView.uiDelegate = self
     }
@@ -146,5 +147,24 @@ extension FxAWebViewController: WKUIDelegate {
         navigationItem.title = nil
         self.navigationItem.leftBarButtonItem = nil
         self.navigationItem.hidesBackButton = false
+    }
+}
+
+// WKScriptMessageHandleDelegate uses for holding weak `self` to prevent retain cycle.
+// self - webview - configuration
+//   \                    /
+//   userContentController
+private class WKScriptMessageHandleDelegate: NSObject, WKScriptMessageHandler {
+    weak var delegate: WKScriptMessageHandler?
+
+    init(_ delegate: WKScriptMessageHandler) {
+        self.delegate = delegate
+    }
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard let delegate = delegate else {
+            return
+        }
+        delegate.userContentController(userContentController, didReceive: message)
     }
 }
