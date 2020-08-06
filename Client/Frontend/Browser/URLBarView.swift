@@ -644,12 +644,6 @@ extension URLBarView: TabToolbarProtocol {
         multiStateButton.isEnabled = isWebPage
     }
 
-    func updateIsSearchStatus(_ isHomePag: Bool) {
-
-    }
-
-    func updateIsNewTabStatus(_ isWebPage: Bool) { }
-
     var access: [Any]? {
         get {
             if inOverlayMode {
