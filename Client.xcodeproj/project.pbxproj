@@ -384,6 +384,7 @@
 		CA24B52224ABD7D40093848C /* LoginsListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B52024ABD7D40093848C /* LoginsListViewModelTests.swift */; };
 		CA24B53924ABFE250093848C /* LoginsListSelectionHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */; };
 		CA24B53B24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA24B53A24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift */; };
+		CA4ACE4924C8C91600F55894 /* BreachAlertsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4ACE4824C8C91500F55894 /* BreachAlertsDetailView.swift */; };
 		CA520E7A24913C1B00CCAB48 /* LoginListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */; };
 		CA77ABFD24773C92005079F9 /* BreachAlertsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */; };
 		CA7BD568248189E800A0A61B /* BreachAlertsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */; };
@@ -1542,6 +1543,7 @@
 		CA24B52024ABD7D40093848C /* LoginsListViewModelTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginsListViewModelTests.swift; sourceTree = "<group>"; };
 		CA24B53824ABFE250093848C /* LoginsListSelectionHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsListSelectionHelperTests.swift; sourceTree = "<group>"; };
 		CA24B53A24ABFE5D0093848C /* LoginsListDataSourceHelperTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginsListDataSourceHelperTests.swift; sourceTree = "<group>"; };
+		CA4ACE4824C8C91500F55894 /* BreachAlertsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsDetailView.swift; sourceTree = "<group>"; };
 		CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListViewModel.swift; sourceTree = "<group>"; };
 		CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsManager.swift; sourceTree = "<group>"; };
 		CA7BD564248185B500A0A61B /* BreachAlertsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreachAlertsTests.swift; sourceTree = "<group>"; };
@@ -3189,8 +3191,8 @@
 			children = (
 				E63ED8E01BFD25580097D08E /* LoginListViewController.swift */,
 				CA8226F224C11DB7008A6F38 /* LoginListTableViewCell.swift */,
-				E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */,
 				E633E2D91C21EAF8001FFF6C /* LoginDetailViewController.swift */,
+				E63ED7D71BFCD9990097D08E /* LoginDetailTableViewCell.swift */,
 				CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */,
 				CA520E7924913C1B00CCAB48 /* LoginListViewModel.swift */,
 				CA7FC7D224A6A9B70012F347 /* LoginListDataSourceHelper.swift */,
@@ -3198,6 +3200,7 @@
 				CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */,
 				CA77ABF424772D98005079F9 /* BreachAlertsManager.swift */,
 				CA03B269247F1D9E00382B62 /* BreachAlertsClient.swift */,
+				CA4ACE4824C8C91500F55894 /* BreachAlertsDetailView.swift */,
 			);
 			path = "Login Management";
 			sourceTree = "<group>";
@@ -5282,6 +5285,7 @@
 				EBA3B2D02268F40C00728BDB /* SyncMenuButton.swift in Sources */,
 				D31A0FC71A65D6D000DC8C7E /* SearchSuggestClient.swift in Sources */,
 				435D7CC5246209AA0043ACB9 /* IntroViewControllerV2.swift in Sources */,
+				CA4ACE4924C8C91600F55894 /* BreachAlertsDetailView.swift in Sources */,
 				A83E5AB71C1D993D0026D912 /* UIPasteboardExtensions.swift in Sources */,
 				D8EFFA0C1FF5B1FA001D3A09 /* NavigationRouter.swift in Sources */,
 				D0E55C4F1FB4FD23006DC274 /* FormPostHelper.swift in Sources */,

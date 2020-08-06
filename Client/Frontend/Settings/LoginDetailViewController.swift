@@ -8,7 +8,8 @@ import Shared
 import SwiftKeychainWrapper
 
 enum InfoItem: Int {
-    case websiteItem = 0
+    case breachItem = 0
+    case websiteItem
     case usernameItem
     case passwordItem
     case lastModifiedSeparator
@@ -44,12 +45,13 @@ class LoginDetailViewController: SensitiveViewController {
     fileprivate var menuControllerCell: LoginDetailTableViewCell?
     fileprivate var deleteAlert: UIAlertController?
     weak var settingsDelegate: SettingsDelegate?
-
+    fileprivate var breach: BreachRecord?
     fileprivate var login: LoginRecord {
         didSet {
             tableView.reloadData()
         }
     }
+    var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
     fileprivate var isEditingFieldData: Bool = false {
         didSet {
@@ -59,12 +61,17 @@ class LoginDetailViewController: SensitiveViewController {
         }
     }
 
-    init(profile: Profile, login: LoginRecord) {
+    init(profile: Profile, login: LoginRecord, webpageNavigationHandler: ((_ url: URL?) -> Void)?) {
         self.login = login
         self.profile = profile
+        self.webpageNavigationHandler = webpageNavigationHandler
         super.init(nibName: nil, bundle: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(dismissAlertController), name: UIApplication.didEnterBackgroundNotification, object: nil)
+    }
+
+    func setBreachRecord(breach: BreachRecord?) {
+        self.breach = breach
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,9 +84,11 @@ class LoginDetailViewController: SensitiveViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(edit))
 
         view.addSubview(tableView)
+
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
+        tableView.estimatedRowHeight = 44.0
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -129,6 +138,26 @@ extension LoginDetailViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch InfoItem(rawValue: indexPath.row)! {
+        case .breachItem:
+            let breachCell = cell(forIndexPath: indexPath)
+            guard let breach = self.breach else { return breachCell }
+            breachCell.isHidden = false
+            let breachDetailView = BreachAlertsDetailView()
+            breachCell.contentView.addSubview(breachDetailView)
+            breachDetailView.snp.makeConstraints { make in
+                make.edges.equalTo(breachCell.contentView).inset(LoginTableViewCellUX.HorizontalMargin)
+            }
+            breachDetailView.setup(breach)
+
+            breachDetailView.learnMoreButton.addTarget(self, action: #selector(didTapBreachLearnMore), for: .touchUpInside)
+            let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(didTapBreachLink(_:)))
+            breachDetailView.goToButton.addGestureRecognizer(breachLinkGesture)
+            breachCell.isAccessibilityElement = false
+            breachCell.contentView.accessibilityElementsHidden = true
+            breachCell.accessibilityElements = [breachDetailView]
+
+            return breachCell
+
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
             loginCell.highlightedLabelTitle = NSLocalizedString("Username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
@@ -206,7 +235,7 @@ extension LoginDetailViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return 6
     }
 }
 
@@ -238,6 +267,9 @@ extension LoginDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch InfoItem(rawValue: indexPath.row)! {
+        case .breachItem:
+            guard let _ = self.breach else { return 0 }
+            return UITableView.automaticDimension
         case .usernameItem, .passwordItem, .websiteItem:
             return LoginDetailUX.InfoRowHeight
         case .lastModifiedSeparator:
@@ -269,6 +301,18 @@ extension LoginDetailViewController {
 
     @objc func dismissAlertController() {
         self.deleteAlert?.dismiss(animated: false, completion: nil)
+    }
+
+    @objc func didTapBreachLearnMore() {
+        webpageNavigationHandler?(BreachAlertsManager.monitorAboutUrl)
+    }
+
+    @objc func didTapBreachLink(_ sender: UITapGestureRecognizer? = nil) {
+        guard let domain = self.breach?.domain else { return }
+        var urlComponents = URLComponents()
+        urlComponents.host = domain
+        urlComponents.scheme = "https"
+        webpageNavigationHandler?(urlComponents.url)
     }
 
     func deleteLogin() {

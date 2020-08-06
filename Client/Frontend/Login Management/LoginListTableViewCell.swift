@@ -17,8 +17,8 @@ class LoginListTableViewSettingsCell: ThemedTableViewCell {
 class LoginListTableViewCell: ThemedTableViewCell {
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = {
-        let image = UIImage(named: "Breached Website")
-        let imageView = UIImageView(image: image)
+        let imageView = UIImageView(image: BreachAlertsManager.icon)
+        imageView.tintColor = BreachAlertsManager.listColor
         imageView.isHidden = true
         return imageView
     }()
@@ -64,6 +64,7 @@ class LoginListTableViewCell: ThemedTableViewCell {
         contentView.addSubview(contentStack)
         // Need to override the default background multi-select color to support theming
         self.multipleSelectionBackgroundView = UIView()
+        self.hostnameLabel.textColor = UIColor.theme.tableView.rowText
         self.usernameLabel.textColor = self.detailTextColor
         self.applyTheme()
         setConstraints()
