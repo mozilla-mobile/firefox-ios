@@ -25,7 +25,7 @@ final class LoginListViewModel {
     }
     fileprivate let helper = LoginListDataSourceHelper()
     private(set) lazy var breachAlertsManager: BreachAlertsManager = {
-        return BreachAlertsManager(files: self.profile.files)
+        return BreachAlertsManager(profile: self.profile)
     }()
     private(set) var userBreaches: Set<LoginRecord>?
     private(set) var breachIndexPath = Set<IndexPath>() {
@@ -139,7 +139,7 @@ final class LoginListViewModel {
     }
 
     func setBreachAlertsManager(_ client: BreachAlertsClientProtocol) {
-        self.breachAlertsManager = BreachAlertsManager(client, files: profile.files)
+        self.breachAlertsManager = BreachAlertsManager(client, profile: profile)
     }
 
     // MARK: - UX Constants
