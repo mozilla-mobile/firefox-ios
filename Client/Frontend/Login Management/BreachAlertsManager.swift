@@ -63,21 +63,25 @@ final public class BreachAlertsManager {
 
         // 2. check the last time breach endpoint was accessed
         guard let dateLastAccessed = profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) else {
+            profile.prefs.removeObjectForKey(BreachAlertsClient.etagDateKey) // bad key, so delete it
             return
         }
         let timeUntilNextUpdate = UInt64(60 * 60 * 24 * 3) // 3 days in seconds
         let shouldUpdateDate = dateLastAccessed + timeUntilNextUpdate
 
         // 3. if 3 days have not passed since last update...
-        guard Date.now() >= shouldUpdateDate else {
+        guard Date.now() < shouldUpdateDate else {
             // 3a. no need to refetch. decode local data and hand off
             decodeData(data: fileData, completion)
             return
         }
 
         // 3b. should update - check if the etag is different
-        self.client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
-            guard let etag =  etag else { return }
+        client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
+            guard let etag =  etag else {
+                self.profile.prefs.removeObjectForKey(BreachAlertsClient.etagKey) // bad key, so delete it
+                return
+            }
             let savedEtag = self.profile.prefs.stringForKey(BreachAlertsClient.etagKey)
 
             // 4. if it is, refetch the data and hand entire Set of BreachRecords off
@@ -162,9 +166,7 @@ final public class BreachAlertsManager {
 
     private func fetchAndSaveBreaches(_ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
         self.client.fetchData(endpoint: .breachedAccounts, profile: self.profile) { maybeData in
-            guard let fetchedData = maybeData.successValue else {
-                return
-            }
+            guard let fetchedData = maybeData.successValue else { return }
             try? FileManager.default.removeItem(atPath: self.cacheURL.path)
             FileManager.default.createFile(atPath: self.cacheURL.path, contents: fetchedData, attributes: nil)
 
@@ -176,6 +178,7 @@ final public class BreachAlertsManager {
     private func decodeData(data: Data, _ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
         guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
             print(BreachAlertsError(description: "JSON data decode failure"))
+            assert(false)
             return
         }
 

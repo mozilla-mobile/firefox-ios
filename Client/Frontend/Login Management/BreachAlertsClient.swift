@@ -34,7 +34,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
         dataTask = URLSession.shared.dataTask(with: request) { _, response, _ in
             guard let response = response as? HTTPURLResponse else { return }
             guard response.statusCode < 400 else {
-                Sentry.shared.send(message: "BreachAlerts: fetchData HTTP status code: \(response.statusCode)")
+                Sentry.shared.send(message: "BreachAlerts: fetchData: HTTP status code: \(response.statusCode)")
                 completion(nil)
                 return
             }
@@ -52,16 +52,13 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
 
     /// Makes a network request to an endpoint and hands off the result to a completion handler.
     func fetchData(endpoint: Endpoint, profile: Profile, completion: @escaping (_ result: Maybe<Data>) -> Void) {
-        guard let url = URL(string: endpoint.rawValue) else {
-            completion(Maybe(failure: BreachAlertsError(description: "bad endpoint URL")))
-            return
-        }
+        guard let url = URL(string: endpoint.rawValue) else { return }
 
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let response = response as? HTTPURLResponse else { return }
             guard response.statusCode < 400 else {
-                Sentry.shared.send(message: "BreachAlerts: fetchData HTTP status code: \(response.statusCode)")
+                Sentry.shared.send(message: "BreachAlerts: fetchData: HTTP status code: \(response.statusCode)")
                 return
             }
             if let error = error {
@@ -71,7 +68,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
             }
             guard let data = data else {
                 completion(Maybe(failure: BreachAlertsError(description: "invalid data")))
-                Sentry.shared.send(message: "BreachAlerts: fetchData invalid data")
+                Sentry.shared.send(message: "BreachAlerts: fetchData: invalid data")
                 assert(false)
                 return
             }
