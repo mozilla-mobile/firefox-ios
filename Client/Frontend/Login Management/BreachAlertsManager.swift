@@ -45,41 +45,44 @@ final public class BreachAlertsManager {
     ///    - Parameters:
     ///         - completion: a completion handler for the processed breaches
     func loadBreaches(completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
-        if FileManager.default.fileExists(atPath: self.cacheURL.path) {
-            guard let fileData = FileManager.default.contents(atPath: self.cacheURL.path) else {
-                completion(Maybe(failure: BreachAlertsError(description: "failed to get data from breach.json")))
-                Sentry.shared.send(message: "BreachAlerts: failed to get data from breach.json")
-                return
-            }
 
-            // 1. check the last time breach endpoint was accessed
-            guard let dateLastAccessed = profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) else {
-                return
-            }
-
-            let timeUntilNextUpdate = UInt64(60 * 60 * 24 * 3) // 3 days in seconds
-            let shouldUpdateDate = dateLastAccessed + timeUntilNextUpdate
-
-            // 2a. if 3 days have passed since last update...
-            if Date.now() >= shouldUpdateDate {
-
-                // 3. check if the etag is different
-                self.client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
-                    guard let etag =  etag else { return }
-                    let savedEtag = self.profile.prefs.stringForKey(BreachAlertsClient.etagKey)
-
-                    // 4. if it is, refetch the data and hand entire Set of BreachRecords off
-                    if etag != savedEtag {
-                        self.fetchAndSaveBreaches(completion)
-                    }
-                }
-            } else {
-                // 2b. else, no need to refetch. decode local data and hand off
-                decodeData(data: fileData, completion)
-            }
-        } else {
-            // first time loading breaches, so fetch as normal and hand off
+        // 1. check for local breaches file
+        guard !FileManager.default.fileExists(atPath: self.cacheURL.path) else {
+            // 1a. no local file,  so fetch and save as normal and hand off
             self.fetchAndSaveBreaches(completion)
+            return
+        }
+
+        // 1b. local file exists, so load from that
+        guard let fileData = FileManager.default.contents(atPath: self.cacheURL.path) else {
+            completion(Maybe(failure: BreachAlertsError(description: "failed to get data from breach.json")))
+            Sentry.shared.send(message: "BreachAlerts: failed to get data from breach.json")
+            return
+        }
+
+        // 2. check the last time breach endpoint was accessed
+        guard let dateLastAccessed = profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) else {
+            return
+        }
+        let timeUntilNextUpdate = UInt64(60 * 60 * 24 * 3) // 3 days in seconds
+        let shouldUpdateDate = dateLastAccessed + timeUntilNextUpdate
+
+        // 3. if 3 days have not passed since last update...
+        guard Date.now() >= shouldUpdateDate else {
+            // 3a. no need to refetch. decode local data and hand off
+            decodeData(data: fileData, completion)
+            return
+        }
+
+        // 3b. should update - check if the etag is different
+        self.client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
+            guard let etag =  etag else { return }
+            let savedEtag = self.profile.prefs.stringForKey(BreachAlertsClient.etagKey)
+
+            // 4. if it is, refetch the data and hand entire Set of BreachRecords off
+            if etag != savedEtag {
+                self.fetchAndSaveBreaches(completion)
+            }
         }
     }
 

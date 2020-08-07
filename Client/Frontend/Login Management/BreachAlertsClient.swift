@@ -32,14 +32,15 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
 
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: request) { _, response, _ in
-            guard let response = validatedHTTPResponse(response) else {
+            guard let response = response as? HTTPURLResponse else { return }
+            guard response.statusCode < 400 else {
+                Sentry.shared.send(message: "BreachAlerts: fetchData HTTP status code: \(response.statusCode)")
                 completion(nil)
-                Sentry.shared.send(message: "BreachAlerts: fetchEtag HTTP response invalid")
-                assert(false)
                 return
             }
             guard let etag = response.allHeaderFields["Etag"] as Any as? String else {
                 completion(nil)
+                assert(false)
                 return
             }
             DispatchQueue.main.async {
@@ -58,21 +59,20 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
 
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard let response = validatedHTTPResponse(response) else {
-                completion(Maybe(failure: BreachAlertsError(description: "invalid HTTP response")))
-                Sentry.shared.send(message: "BreachAlerts: fetchData HTTP response invalid")
-                assert(false)
+            guard let response = response as? HTTPURLResponse else { return }
+            guard response.statusCode < 400 else {
+                Sentry.shared.send(message: "BreachAlerts: fetchData HTTP status code: \(response.statusCode)")
                 return
             }
             if let error = error {
                 completion(Maybe(failure: BreachAlertsError(description: error.localizedDescription)))
-                Sentry.shared.send(message: "BreachAlerts: fetchData HTTP error")
-                assert(false)
+                Sentry.shared.send(message: "BreachAlerts: fetchData: \(error)")
                 return
             }
             guard let data = data else {
                 completion(Maybe(failure: BreachAlertsError(description: "invalid data")))
                 Sentry.shared.send(message: "BreachAlerts: fetchData invalid data")
+                assert(false)
                 return
             }
 
@@ -85,7 +85,9 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
             if profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) != date {
                 profile.prefs.setTimestamp(date, forKey: BreachAlertsClient.etagDateKey)
             }
-            completion(Maybe(success: data))
+            DispatchQueue.main.async {
+                completion(Maybe(success: data))
+            }
         }
         dataTask?.resume()
     }
