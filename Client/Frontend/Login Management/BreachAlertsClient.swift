@@ -17,7 +17,7 @@ protocol BreachAlertsClientProtocol {
 
 /// Handles all network requests for BreachAlertsManager.
 public class BreachAlertsClient: BreachAlertsClientProtocol {
-    public var dataTask: URLSessionDataTask?
+    private var dataTask: URLSessionDataTask?
     public enum Endpoint: String {
         case breachedAccounts = "https://monitor.firefox.com/hibp/breaches"
     }

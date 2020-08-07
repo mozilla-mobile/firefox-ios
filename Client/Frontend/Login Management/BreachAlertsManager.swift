@@ -35,6 +35,7 @@ final public class BreachAlertsManager {
     private lazy var cacheURL: URL = {
         return URL(fileURLWithPath: (try? self.profile.files.getAndEnsureDirectory())!, isDirectory: true).appendingPathComponent("breaches.json")
     }()
+    private let dateFormatter = DateFormatter()
     init(_ client: BreachAlertsClientProtocol = BreachAlertsClient(), profile: Profile) {
         self.client = client
         self.profile = profile
@@ -54,9 +55,8 @@ final public class BreachAlertsManager {
             guard let dateLastAccessedString = profile.prefs.stringForKey(BreachAlertsClient.dateKey) else {
                 return
             }
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
-            guard let dateLastAccessed = dateFormatter.date(from: dateLastAccessedString) else { return }
+            self.dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
+            guard let dateLastAccessed = self.dateFormatter.date(from: dateLastAccessedString) else { return }
 
             let timeUntilNextUpdate = 60.0 * 60.0 * 24.0 * 3.0 // 3 days in seconds
             let shouldUpdateDate = Date(timeInterval: timeUntilNextUpdate, since: dateLastAccessed)
@@ -105,9 +105,8 @@ final public class BreachAlertsManager {
             }
             for item in potentialUserBreaches {
                 let pwLastChanged = TimeInterval(item.timePasswordChanged/1000)
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
+                self.dateFormatter.dateFormat = "yyyy-MM-dd"
+                guard let breachDate = self.dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
                     continue
                 }
                 result.insert(item)
@@ -143,9 +142,8 @@ final public class BreachAlertsManager {
         let baseDomain = self.baseDomainForLogin(login)
         for breach in self.breaches where breach.domain == baseDomain {
             let pwLastChanged = TimeInterval(login.timePasswordChanged/1000)
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
+            self.dateFormatter.dateFormat = "yyyy-MM-dd"
+            guard let breachDate = self.dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
                 continue
             }
             return breach
