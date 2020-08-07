@@ -69,23 +69,18 @@ final public class BreachAlertsManager {
                     guard let etag = maybeEtag.successValue else { return }
                     let savedEtag = self.profile.prefs.stringForKey(BreachAlertsClient.etagKey)
 
-                    // 4. if it is, refetch the data
+                    // 4. if it is, refetch the data and hand entire Set of BreachRecords off
                     if etag != savedEtag {
-                        self.fetchAndSaveBreaches {
-                            completion(Maybe(success: self.breaches))
-                        }
+                        self.fetchAndSaveBreaches(completion)
                     }
                 }
             } else {
-                // 2b. else, no need to refetch. decode local data
-                decodeData(data: fileData)
-                completion(Maybe(success: self.breaches))
+                // 2b. else, no need to refetch. decode local data and hand off
+                decodeData(data: fileData, completion)
             }
         } else {
-            // first time loading breaches, so fetch as normal
-            self.fetchAndSaveBreaches {
-                completion(Maybe(success: self.breaches))
-            }
+            // first time loading breaches, so fetch as normal and hand off
+            self.fetchAndSaveBreaches(completion)
         }
     }
 
@@ -164,7 +159,7 @@ final public class BreachAlertsManager {
         return result
     }
 
-    private func fetchAndSaveBreaches(completion: @escaping () -> Void) {
+    private func fetchAndSaveBreaches(_ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
         self.client.fetchData(endpoint: .breachedAccounts, profile: self.profile) { maybeData in
             guard let fetchedData = maybeData.successValue else {
                 return
@@ -173,12 +168,11 @@ final public class BreachAlertsManager {
             FileManager.default.createFile(atPath: self.cacheURL.path, contents: fetchedData, attributes: nil)
 
             guard let data = FileManager.default.contents(atPath: self.cacheURL.path) else { return }
-            self.decodeData(data: data)
-            completion()
+            self.decodeData(data: data, completion)
         }
     }
 
-    private func decodeData(data: Data) {
+    private func decodeData(data: Data, _ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
         guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
             print(BreachAlertsError(description: "JSON data decode failure"))
             return
@@ -207,5 +201,7 @@ final public class BreachAlertsManager {
          breachDate: "1970-01-02",
          description: "A mock BreachRecord for testing purposes."
         ))
+
+        completion(Maybe(success: self.breaches))
     }
 }
