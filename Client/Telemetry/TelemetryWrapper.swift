@@ -412,7 +412,7 @@ extension TelemetryWrapper {
             GleanMetrics.ReadingList.markUnread.add()
         // Preferences
         case (.action, .change, .setting, _, let extras):
-            if let preference = extras?["pref"] as? String, let to = (extras?["go"] ?? "undefined") as? String {
+            if let preference = extras?["pref"] as? String, let to = (extras?["to"] ?? "undefined") as? String {
                 GleanMetrics.Preferences.changed.record(
                 extra: [GleanMetrics.Preferences.ChangedKeys.preference: preference,
                         GleanMetrics.Preferences.ChangedKeys.changedTo: to])
