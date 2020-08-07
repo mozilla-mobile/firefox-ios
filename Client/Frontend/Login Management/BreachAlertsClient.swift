@@ -11,7 +11,7 @@ struct BreachAlertsError: MaybeErrorType {
 }
 /// For mocking and testing BreachAlertsClient.
 protocol BreachAlertsClientProtocol {
-    func fetchEtag(endpoint: BreachAlertsClient.Endpoint, profile: Profile, completion: @escaping (_ etag: Maybe<String>) -> Void)
+    func fetchEtag(endpoint: BreachAlertsClient.Endpoint, profile: Profile, completion: @escaping (_ etag: String?) -> Void)
     func fetchData(endpoint: BreachAlertsClient.Endpoint, profile: Profile, completion: @escaping (_ result: Maybe<Data>) -> Void)
 }
 
@@ -22,23 +22,29 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
         case breachedAccounts = "https://monitor.firefox.com/hibp/breaches"
     }
     static let etagKey = "BreachAlertsDataEtag"
-    static let dateKey = "BreachAlertsDataDate"
+    static let etagDateKey = "BreachAlertsDataDate"
 
     /// Makes a header-only request to an endpoint and hands off the endpoint's etag to a completion handler.
-    func fetchEtag(endpoint: Endpoint, profile: Profile, completion: @escaping (_ etag: Maybe<String>) -> Void) {
+    func fetchEtag(endpoint: Endpoint, profile: Profile, completion: @escaping (_ etag: String?) -> Void) {
         guard let url = URL(string: endpoint.rawValue) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "HEAD"
 
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: request) { _, response, _ in
-            guard validatedHTTPResponse(response) != nil else {
-            completion(Maybe(failure: BreachAlertsError(description: "invalid HTTP response")))
-            return
-        }
-            let httpResponse = response as? HTTPURLResponse
-            guard let etag = httpResponse?.allHeaderFields["Etag"] as Any as? String else { return }
-            completion(Maybe(success: etag))
+            guard let response = validatedHTTPResponse(response) else {
+                completion(nil)
+                Sentry.shared.send(message: "BreachAlerts: fetchEtag HTTP response invalid")
+                assert(false)
+                return
+            }
+            guard let etag = response.allHeaderFields["Etag"] as Any as? String else {
+                completion(nil)
+                return
+            }
+            DispatchQueue.main.async {
+                completion(etag)
+            }
         }
         dataTask?.resume()
     }
@@ -52,28 +58,32 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
 
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: url) { data, response, error in
-            guard validatedHTTPResponse(response) != nil else {
+            guard let response = validatedHTTPResponse(response) else {
                 completion(Maybe(failure: BreachAlertsError(description: "invalid HTTP response")))
+                Sentry.shared.send(message: "BreachAlerts: fetchData HTTP response invalid")
+                assert(false)
                 return
             }
             if let error = error {
                 completion(Maybe(failure: BreachAlertsError(description: error.localizedDescription)))
+                Sentry.shared.send(message: "BreachAlerts: fetchData HTTP error")
+                assert(false)
                 return
             }
             guard let data = data else {
                 completion(Maybe(failure: BreachAlertsError(description: "invalid data")))
+                Sentry.shared.send(message: "BreachAlerts: fetchData invalid data")
                 return
             }
 
-            let httpResponse = response as? HTTPURLResponse
-            guard let etag = httpResponse?.allHeaderFields["Etag"] as Any as? String else { return }
-            guard let date = httpResponse?.allHeaderFields["Date"] as Any as? String else { return }
+            guard let etag = response.allHeaderFields["Etag"] as Any as? String else { return }
+            let date = Date.now()
 
             if profile.prefs.stringForKey(BreachAlertsClient.etagKey) != etag {
                 profile.prefs.setString(etag, forKey: BreachAlertsClient.etagKey)
             }
-            if profile.prefs.stringForKey(BreachAlertsClient.dateKey) != date {
-                profile.prefs.setString(date, forKey: BreachAlertsClient.dateKey)
+            if profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) != date {
+                profile.prefs.setTimestamp(date, forKey: BreachAlertsClient.etagDateKey)
             }
             completion(Maybe(success: data))
         }

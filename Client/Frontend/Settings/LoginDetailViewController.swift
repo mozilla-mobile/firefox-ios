@@ -149,8 +149,9 @@ extension LoginDetailViewController: UITableViewDataSource {
             }
             breachDetailView.setup(breach)
 
-            breachDetailView.learnMoreButton.addTarget(self, action: #selector(didTapBreachLearnMore), for: .touchUpInside)
-            let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(didTapBreachLink(_:)))
+            breachDetailView.learnMoreButton.addTarget(self, action: #selector(LoginDetailViewController.didTapBreachLearnMore), for: .touchUpInside)
+            let breachLinkGesture = UITapGestureRecognizer(target: self, action: #selector(LoginDetailViewController
+                .didTapBreachLink(_:)))
             breachDetailView.goToButton.addGestureRecognizer(breachLinkGesture)
             breachCell.isAccessibilityElement = false
             breachCell.contentView.accessibilityElementsHidden = true

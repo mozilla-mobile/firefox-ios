@@ -48,25 +48,24 @@ final public class BreachAlertsManager {
         if FileManager.default.fileExists(atPath: self.cacheURL.path) {
             guard let fileData = FileManager.default.contents(atPath: self.cacheURL.path) else {
                 completion(Maybe(failure: BreachAlertsError(description: "failed to get data from breach.json")))
+                Sentry.shared.send(message: "BreachAlerts: failed to get data from breach.json")
                 return
             }
 
             // 1. check the last time breach endpoint was accessed
-            guard let dateLastAccessedString = profile.prefs.stringForKey(BreachAlertsClient.dateKey) else {
+            guard let dateLastAccessed = profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) else {
                 return
             }
-            self.dateFormatter.dateFormat = "E, d MMM yyyy HH:mm:ss zzz"
-            guard let dateLastAccessed = self.dateFormatter.date(from: dateLastAccessedString) else { return }
 
-            let timeUntilNextUpdate = 60.0 * 60.0 * 24.0 * 3.0 // 3 days in seconds
-            let shouldUpdateDate = Date(timeInterval: timeUntilNextUpdate, since: dateLastAccessed)
+            let timeUntilNextUpdate = UInt64(60 * 60 * 24 * 3) // 3 days in seconds
+            let shouldUpdateDate = dateLastAccessed + timeUntilNextUpdate
 
             // 2a. if 3 days have passed since last update...
-            if shouldUpdateDate.timeIntervalSinceNow >= timeUntilNextUpdate {
+            if Date.now() >= shouldUpdateDate {
 
                 // 3. check if the etag is different
-                self.client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { maybeEtag in
-                    guard let etag = maybeEtag.successValue else { return }
+                self.client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
+                    guard let etag =  etag else { return }
                     let savedEtag = self.profile.prefs.stringForKey(BreachAlertsClient.etagKey)
 
                     // 4. if it is, refetch the data and hand entire Set of BreachRecords off
