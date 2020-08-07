@@ -32,16 +32,15 @@ let longBreach = BreachRecord(
 let unbreachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://unbreached.com", "timePasswordChanged": 1594411049000])
 let breachedLogin = LoginRecord(fromJSONDict: ["hostname" : "http://blockbuster.com", "timePasswordChanged": 46800000])
 class MockBreachAlertsClient: BreachAlertsClientProtocol {
-    func fetchData(endpoint: BreachAlertsClient.Endpoint, _ httpMethod: String?, cachePath: String, completion: @escaping (Maybe<Data>) -> Void) {
-        if httpMethod == "HEAD" {
-            completion(Maybe(success: Data()))
-        } else {
-            guard let mockData = try? JSONEncoder().encode([blockbusterBreach].self) else {
-                completion(Maybe(failure: BreachAlertsError(description: "failed to encode mockRecord")))
-                return
-            }
-            completion(Maybe(success: mockData))
+    func fetchEtag(endpoint: BreachAlertsClient.Endpoint, profile: Client.Profile, completion: @escaping (_ etag: Maybe<String>) -> Void) {
+        completion(Maybe(success: "33a64df551425fcc55e4d42a148795d9f25f89d4"))
+    }
+    func fetchData(endpoint: BreachAlertsClient.Endpoint, profile: Client.Profile, completion: @escaping (Maybe<Data>) -> Void) {
+        guard let mockData = try? JSONEncoder().encode([blockbusterBreach].self) else {
+            completion(Maybe(failure: BreachAlertsError(description: "failed to encode mockRecord")))
+            return
         }
+        completion(Maybe(success: mockData))
     }
     var etag: String? = nil
 }
@@ -52,7 +51,7 @@ class BreachAlertsTests: XCTestCase {
     let breachedLoginSet = Set<LoginRecord>(arrayLiteral: breachedLogin)
 
     override func setUp() {
-        self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient(), files: MockFiles())
+        self.breachAlertsManager = BreachAlertsManager(MockBreachAlertsClient(), profile: MockProfile())
     }
 
     func testDataRequest() {
