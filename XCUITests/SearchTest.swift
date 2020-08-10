@@ -211,6 +211,7 @@ class SearchTests: BaseTestCase {
     }
     // Bug https://bugzilla.mozilla.org/show_bug.cgi?id=1541832 scenario 4
     func testSearchStartAfterTypingTwoWords() {
+        waitForExistence(app.textFields["url"], timeout: 10)
         navigator.goto(URLBarOpen)
         waitForExistence(app.textFields["url"], timeout: 10)
         app.typeText("foo bar")

@@ -9,6 +9,7 @@ class ReaderViewTest: BaseTestCase {
     func testLoadReaderContent() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
+        waitForExistence(app.buttons["Reader View"], timeout: 10)
         app.buttons["Reader View"].tap()
         app.buttons["Reload"].tap()
         // The settings of reader view are shown as well as the content of the web site
