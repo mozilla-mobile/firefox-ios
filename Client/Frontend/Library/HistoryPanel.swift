@@ -155,6 +155,8 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
     // MARK: - Loading data
 
     override func reloadData() {
+        // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
+        if profile.isShutdown { return }
         guard !isFetchInProgress else { return }
         groupedSites = DateGroupedTableData<Site>()
 

@@ -9,6 +9,523 @@
 ---
 $schema: moz://mozilla.org/schemas/glean/metrics/1-0-0
 
+# Search and search releated metrics
+search:
+  counts:
+    type: labeled_counter
+    description: |
+      The labels for this counter are `{search-engine-name}.{source}`
+
+      If the search engine is bundled with Firefox-iOS, then
+      `search-engine-name` will be the name of the search engine. If
+      it is a custom search engine, the value will be `custom`.
+
+      The value of `source` will reflect the source from which the
+      search started.  One of:
+      * quicksearch
+      * suggestion
+      * actionbar
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  default_engine:
+    type: string
+    lifetime: application
+    description: |
+      The default search engine identifier if the search engine is
+      pre-loaded with Firefox-iOS.  If it's a custom search engine,
+      then the value will be 'custom'.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  start_search_pressed:
+    type: counter
+    description: |
+      Counts the number of times the start search button is
+      pressed
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Preference metrics
+preferences:
+  changed:
+    type: event
+    description: |
+      Recorded when a preference is changed and includes the
+      preference that changed as well as the value changed to
+      recorded in the extra keys.
+    extra_keys:
+      preference:
+        description: |
+          The preference that was changed.
+      changed_to:
+        description: |
+          The value the preference was changed to.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  new_tab_experience:
+    type: string
+    description: |
+      The name of the view that the user wants to see on new tabs.
+      For example History, Homepage or Blank. It is used to measure
+      usage of this feature, to see how effective feature promotion
+      campaigns are and to establish a baseline number for when we
+      introduce the new Activity Stream features.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  mail_client:
+    type: string
+    description: |
+      The URL scheme of the mail client that the user wants to use
+      for `mailto:` links. It is used to measure usage of this
+      feature, to see how effective feature promotion campaigns are
+      and to report back to third-party mail clients what percentage
+      of users is using their client.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  block_popups:
+    type: boolean
+    description: |
+      Measures the state of the "Block Popups" preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  save_logins:
+    type: boolean
+    description: |
+      Measures the state of the "Save Logins" preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  show_clipboard_bar:
+    type: boolean
+    description: |
+      Measures the state of the "Show Clipboard Bar" preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  close_private_tabs:
+    type: boolean
+    description: |
+      Measures the state of the "Close Private Tabs" preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Application Services metrics
+application_services:
+  pocket_stories_visible:
+    type: boolean
+    description: |
+      Measures the state of the show Pocket stories preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  bookmark_highlights_visible:
+    type: boolean
+    description: |
+      Measures the state of the show bookmark highlights
+      preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  recent_highlights_visible:
+    type: boolean
+    description: |
+      Measures the state of the show recent highlights
+      preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Enhanced Tracking Protection metrics
+tracking_protection:
+  enabled:
+    type: boolean
+    description: |
+      Measures the state of the tracking-protection enabled
+      preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  strength:
+    type: string
+    description: |
+      A string representing the selected strength of the
+      tracking-protection that is enabled. One of:
+      * basic
+      * strict
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Theme metrics
+theme:
+  use_system_theme:
+    type: boolean
+    description: |
+      Measures the state of the "Use System Light/Dark Mode"
+      theme preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  automatic_mode:
+    type: boolean
+    description: |
+      Measures the state of the "Manual/Automatic" theme
+      preference.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  automatic_slider_value:
+    type: string
+    description: |
+      Measures the string representation of the current slider
+      value of the automatic theme switching slider.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  name:
+    type: string
+    description: |
+      Measures the name of the current theme.  One of:
+      * normal
+      * dark
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Tab metrics
+tabs:
+  cumulative_count:
+    type: counter
+    description: |
+      Measures the current open tab count as the application
+      goes to background. Each background event adds to this
+      metric, making it the cumulative sum of all open tabs
+      when the app goes to background. This can be divided by
+      the number of baseline pings to determine the average
+      open tab count.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  open:
+    type: labeled_counter
+    description: |
+      The count of tabs opened by the user. Increments the
+      appropriate label when either a normal or private tab
+      is opened.
+    labels:
+      - normal-tab
+      - private-tab
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  close:
+    type: labeled_counter
+    description: |
+      The count of tabs closed by the user. Increments the
+      appropriate label when either a normal or private tab
+      is closed.
+    labels:
+      - normal-tab
+      - private-tab
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  new_tab_pressed:
+    type: counter
+    description: |
+      Counts the number of times the add new tab button is
+      pressed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-21"
+
+# Bookmark metrics
+bookmarks:
+  view_list:
+    type: labeled_counter
+    description: |
+      Counts the number of times the bookmarks list is opened
+      from either the Home Panel tab button or the App Menu.
+    labels:
+      - home-panel
+      - app-menu
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  add:
+    type: labeled_counter
+    description: |
+      Counts the number of times a bookmark is added from the
+      following:
+      * Page Action Menu
+      * Share Menu
+      * Activity Stream context menu
+    labels:
+      - page-action-menu
+      - share-menu
+      - activity-stream
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  delete:
+    type: labeled_counter
+    description: |
+      Counts the number of times a bookmark is deleted from
+      the following:
+      * Page Action Menu
+      * Activity Stream
+      * Bookmarks Panel
+    labels:
+      - page-action-menu
+      - activity-stream
+      - bookmarks-panel
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  open:
+    type: labeled_counter
+    description: |
+      Counts the number of times a bookmark is opened from
+      the following:
+      * Awesomebar results
+      * Bookmarks Panel
+    labels:
+      - awesomebar-results
+      - bookmarks-panel
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Reader Mode metrics
+reader_mode:
+  open:
+    type: counter
+    description: |
+      Counts how many times the reader mode is opened.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  close:
+    type: counter
+    description: |
+      Counts how many times the reader mode is closed.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Reading List metrics
+reading_list:
+  add:
+    type: labeled_counter
+    description: |
+      Counts the number of times an item is added to the reading
+      list from the following:
+      * Reader Mode Toolbar
+      * Share Extension
+      * Page Action Menu
+    labels:
+      - reader-mode-toolbar
+      - share-extension
+      - page-action-menu
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  open:
+    type: counter
+    description: |
+      Counts the number of times an item is opened from the
+      Reading List
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  delete:
+    type: labeled_counter
+    description: |
+      Counts the number of times an item is added to the
+      reading list from the following:
+      * Reader Mode Toolbar
+      * Reading List Panel
+    labels:
+      - reader-mode-toolbar
+      - reading-list-panel
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  mark_read:
+    type: counter
+    description: |
+      Counts the number of times a reading list item is
+      marked as read.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  mark_unread:
+    type: counter
+    description: |
+      Counts the number of times a reading list item is
+      marked as unread.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# QR Code metrics
+qr_code:
+  scanned:
+    type: counter
+    description: |
+      Counts the number of times a QR code is scanned.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
+# Legacy IDs for deletion-request purposes
 legacy.ids:
   client_id:
     type: uuid

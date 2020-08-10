@@ -232,6 +232,13 @@ extension Strings {
     // Detail view
     public static let LoginsDetailViewLoginTitle = NSLocalizedString("LoginsDetailView.LoginTitle", value: "Login", comment: "Title for the login detail view")
     public static let LoginsDetailViewLoginModified = NSLocalizedString("LoginsDetailView.LoginModified", value: "Modified", comment: "Login detail view field name for the last modified date")
+
+    // Breach Alerts
+    public static let BreachAlertsTitle = NSLocalizedString("BreachAlerts.Title", value: "Website Breach", comment: "Title for the Breached Login Detail View.")
+    public static let BreachAlertsLearnMore = NSLocalizedString("BreachAlerts.LearnMoreButton", value: "Learn more", comment: "Link to monitor.firefox.com to learn more about breached passwords")
+    public static let BreachAlertsBreachDate = NSLocalizedString("BreachAlerts.BreachDate", value: "This breach occurred on", comment: "Describes the date on which the breach occurred")
+    public static let BreachAlertsDescription = NSLocalizedString("BreachAlerts.Description", value: "Passwords were leaked or stolen since you last changed your password. To protect this account, log in to the site and change your password.", comment: "Description of what a breach is")
+    public static let BreachAlertsLink = NSLocalizedString("BreachAlerts.Link", value: "Go to", comment: "Leads to a link to the breached website")
 }
 
 // Firefox Account
@@ -504,6 +511,7 @@ extension Strings {
 
 // App menu.
 extension Strings {
+    public static let AppMenuLibraryReloadString = NSLocalizedString("Menu.Library.Reload", tableName: "Menu", value: "Reload", comment: "Label for the button, displayed in the menu, used to Reload the webpage")
     public static let AppMenuLibraryTitleString = NSLocalizedString("Menu.Library.Title", tableName: "Menu", value: "Your Library", comment: "Label for the button, displayed in the menu, used to open the Library")
     public static let AppMenuAddToReadingListTitleString = NSLocalizedString("Menu.AddToReadingList.Title", tableName: "Menu", value: "Add to Reading List", comment: "Label for the button, displayed in the menu, used to add a page to the reading list.")
     public static let AppMenuShowTabsTitleString = NSLocalizedString("Menu.ShowTabs.Title", tableName: "Menu", value: "Show Tabs", comment: "Label for the button, displayed in the menu, used to open the tabs tray")
@@ -770,6 +778,10 @@ extension Strings {
     public static let DisplayThemeManualStatusLabel = NSLocalizedString("Settings.DisplayTheme.Manual.StatusLabel", value: "Manual", comment: "Display (theme) settings label to show if manually switch theme is enabled.")
     public static let DisplayThemeOptionLight = NSLocalizedString("Settings.DisplayTheme.OptionLight", value: "Light", comment: "Option choice in display theme settings for light theme")
     public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayTheme.OptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
+}
+
+extension Strings {
+    public static let AddTabAccessibilityLabel = NSLocalizedString("TabTray.AddTab.Button", value: "Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
 }
 
 // Cover Sheet

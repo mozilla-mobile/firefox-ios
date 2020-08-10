@@ -54,6 +54,12 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             showLibrary()
         }
     }
+    
+    func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))
+        focusLocationTextField(forTab: tabManager.selectedTab)
+    }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         var whatsNewAction: PhotonActionSheetItem? = nil
@@ -66,7 +72,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew, badgeIconNamed: "menuBadge") { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
-                UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .whatsNew)
+                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.openURLInNewTab(whatsNewURL)
             }
         }
@@ -110,7 +116,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {
@@ -183,6 +189,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
             self.present(backForwardViewController, animated: true, completion: nil)
         }
+    }
+
+    func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        focusLocationTextField(forTab: tabManager.selectedTab)
     }
 }
 

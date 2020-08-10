@@ -26,7 +26,16 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     var showMoreButtonEnabled = true
     let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
 
-    private var siteRecords: [WKWebsiteDataRecord]?
+    private let searchResultsViewController = WebsiteDataSearchResultsViewController()
+
+    private var siteRecords: [WKWebsiteDataRecord]? {
+        didSet {
+            if let siteRecords = siteRecords {
+                // Keep Search Results View Controller Data Synchronized
+                searchResultsViewController.siteRecords = siteRecords
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +69,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
         getAllWebsiteData()
 
         // Search Controller setup
-        let searchResultsViewController = WebsiteDataSearchResultsViewController()
+        searchResultsViewController.delegate = self
 
         let searchController = UISearchController(searchResultsController: searchResultsViewController)
 
@@ -248,5 +257,12 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
     private func unfoldSearchbar() {
         guard let searchBarHeight = navigationItem.searchController?.searchBar.intrinsicContentSize.height else { return }
         tableView.setContentOffset(CGPoint(x: 0, y: -searchBarHeight + tableView.contentOffset.y), animated: true)
+    }
+}
+
+extension WebsiteDataManagementViewController: WebsiteDataSearchResultsViewControllerDelegate {
+    func websiteDataSearchResultsViewController(_ viewController: WebsiteDataSearchResultsViewController, didDeleteRecord record: WKWebsiteDataRecord) {
+        siteRecords?.removeAll(where: { $0 == record })
+        tableView.reloadData()
     }
 }

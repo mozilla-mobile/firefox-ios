@@ -167,6 +167,7 @@ tasks:
                                           then:
                                               - index.mobile.v2.${project}.branch.${short_head_branch}.latest.taskgraph.decision
                                               - index.mobile.v2.${project}.branch.${short_head_branch}.revision.${head_sha}.taskgraph.decision
+                                              - index.mobile.v2.${project}.revision.${head_sha}.taskgraph.decision
                                         - $if: 'tasks_for == "cron"'
                                           then:
                                               # cron context provides ${head_branch} as a short one
@@ -234,7 +235,7 @@ tasks:
                               # Note: This task is built server side without the context or tooling that
                               # exist in tree so we must hard code the hash
                               image:
-                                  mozillareleases/taskgraph:decision-mobile-6020473b1a928d8df50e234a7ca2e81ade2220a4fb5fbe16b02477dd64a49728@sha256:98d226736b7d03907114bf37938002b90e8a37cbe3a297690e349f1ddddb1d7c
+                                  mozillareleases/taskgraph:decision-mobile-6607973bc60e32323a541861cc5856cd6a0f51ea9fd664ef7d43bca8df53db47@sha256:8c471aacc469ea8e7bb4846c16efe086f7350a5cc1df570cc6c86b22895a2456
 
                               maxRunTime: 1800
 

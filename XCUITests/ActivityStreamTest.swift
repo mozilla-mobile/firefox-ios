@@ -130,6 +130,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         navigator.goto(BrowserTab)
+        waitForNoExistence(app.progressIndicators.element(boundBy: 0))
         navigator.performAction(Action.PinToTopSitesPAM)
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)

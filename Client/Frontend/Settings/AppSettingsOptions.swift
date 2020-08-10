@@ -48,7 +48,7 @@ class ConnectSetting: WithoutAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
-        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -339,7 +339,7 @@ class AccountStatusSetting: WithAccountSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
             let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
-            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(vc, animated: true)
             return
         }
@@ -483,7 +483,7 @@ class SlowTheDatabase: HiddenSetting {
 
 class ForgetSyncAuthStateDebugSetting: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Debug: forget Sync auth state", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -526,7 +526,7 @@ class ShowEtpCoverSheet: HiddenSetting {
     let profile: Profile
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: ETP Cover Sheet On", comment: "Debug option to show ETP Cover Sheet"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Debug: ETP Cover Sheet On", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     override init(settings: SettingsTableViewController) {
@@ -545,7 +545,7 @@ class ShowEtpCoverSheet: HiddenSetting {
 
 class ToggleOnboarding: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: Toggle onboarding type", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Debug: Toggle onboarding type", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -586,7 +586,7 @@ class LeanplumStatus: HiddenSetting {
 class ClearOnboardingABVariables: HiddenSetting {
     override var title: NSAttributedString? {
         // If we are running an A/B test this will also fetch the A/B test variables from leanplum. Re-open app to see the effect.
-        return NSAttributedString(string: NSLocalizedString("Debug: Clear onboarding AB variables", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Debug: Clear onboarding AB variables", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -952,7 +952,7 @@ class ChinaSyncServiceSetting: Setting {
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)
             RustFirefoxAccounts.reconfig(prefs: profile.prefs)
