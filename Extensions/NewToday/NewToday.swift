@@ -54,7 +54,7 @@ struct NewTodayEntryView : View {
         
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabel(imageName: "faviconFox", url: linkToContainingApp("?private=false", query: "open-url"), label: String.newSearchButtonLabel, ButtonGradient: Gradient(colors: SearchActionsUX.searchButtonColors))
+                ImageButtonWithLabel(imageName: "faviconFox", url: linkToContainingApp("?private=false", query: "open-url"), label: String.NewTabButtonLabel, ButtonGradient: Gradient(colors: SearchActionsUX.searchButtonColors))
                 ImageButtonWithLabel(imageName: "smallPrivateMask", url: linkToContainingApp("?private=true", query: "open-url"), label: String.NewPrivateTabButtonLabel,ButtonGradient: Gradient(colors: SearchActionsUX.privateTabsColors))
             }
             HStack(alignment: .top, spacing: 8.0) {
