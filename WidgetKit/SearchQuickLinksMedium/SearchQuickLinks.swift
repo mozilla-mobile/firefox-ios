@@ -68,7 +68,7 @@ struct SearchQuickLinksEntryView : View {
     }
 }
 
-struct SearchQuickLinksWidget: Widget {
+struct SearchQuickLinksWigdet: Widget {
     private let kind: String = "Quick Actions - Medium"
 
     public var body: some WidgetConfiguration {
