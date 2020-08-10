@@ -48,7 +48,7 @@ final public class BreachAlertsManager {
 
         // 1. check for local breaches file
         guard FileManager.default.fileExists(atPath: self.cacheURL.path) else {
-            // 1a. no local file,  so fetch and save as normal and hand off
+            // 1a. no local file, so fetch and save as normal and hand off
             self.fetchAndSaveBreaches(completion)
             return
         }
@@ -58,19 +58,21 @@ final public class BreachAlertsManager {
             completion(Maybe(failure: BreachAlertsError(description: "failed to get data from breach.json")))
             Sentry.shared.send(message: "BreachAlerts: failed to get data from breach.json")
             try? FileManager.default.removeItem(at: self.cacheURL) // bad file, so delete it
+            self.fetchAndSaveBreaches(completion)
             return
         }
 
         // 2. check the last time breach endpoint was accessed
         guard let dateLastAccessed = profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) else {
             profile.prefs.removeObjectForKey(BreachAlertsClient.etagDateKey) // bad key, so delete it
+            self.fetchAndSaveBreaches(completion)
             return
         }
-        let timeUntilNextUpdate = UInt64(60 * 60 * 24 * 3) // 3 days in seconds
+        let timeUntilNextUpdate = UInt64(60 * 60 * 24 * 3 * 1000) // 3 days in milliseconds
         let shouldUpdateDate = dateLastAccessed + timeUntilNextUpdate
 
         // 3. if 3 days have not passed since last update...
-        guard Date.now() < shouldUpdateDate else {
+        guard Date.now() >= shouldUpdateDate else {
             // 3a. no need to refetch. decode local data and hand off
             decodeData(data: fileData, completion)
             return
