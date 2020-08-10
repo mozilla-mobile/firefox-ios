@@ -126,6 +126,7 @@ enum NavigationPath {
         }
     }
 
+    // TODO: Deep link to a specific tab.
     static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray : TabTrayControllerV1) {
         switch nav {
         case .fxa(let params): NavigationPath.handleFxA(params: params, with: bvc)

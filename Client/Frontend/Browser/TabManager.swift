@@ -197,7 +197,18 @@ class TabManager: NSObject {
 //        assert(_selectedIndex > -1, "Tab expected to be in `tabs`")
 
         store.preserveTabs(tabs, selectedTab: selectedTab)
-
+        
+        // TODO: Check if `faviconDidLoad` gets called on slow network
+        
+        // TODO: We could also just have a `timeout`
+        
+        // TODO: Make sure screenshot is NOT captured twice if we DO decide to
+        // write twice.
+        
+        // Schedule another save for a few seconds from now to try to capture the favicon.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.store.preserveTabs(self.tabs, selectedTab: self.selectedTab)
+        }
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
         selectedTab?.lastExecutedTime = Date.now()

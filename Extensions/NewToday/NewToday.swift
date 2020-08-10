@@ -17,6 +17,9 @@ struct Provider: TimelineProvider {
     public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let entries = [SimpleEntry(date: Date())]
         let timeline = Timeline(entries: entries, policy: .atEnd)
+        
+        // Supposedly this can do network calls
+        // TODO: Pre-cache the images here? Or pre-cache them in onPause of the app!
         completion(timeline)
     }
 }
@@ -75,10 +78,19 @@ struct NewTodayEntryView : View {
 }
 
 @main
+struct FirefoxWidgets: WidgetBundle {
+    
+    @WidgetBundleBuilder
+    var body: some Widget {
+        NewTodayWidget()
+        OpenTabsWidget()
+    }
+}
+
 struct NewTodayWidget: Widget {
     private let kind: String = "Quick Actions - Medium"
 
-    public var body: some WidgetConfiguration {
+     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider(), placeholder: NewTodayEntryView()) { entry in
             NewTodayEntryView()
         }

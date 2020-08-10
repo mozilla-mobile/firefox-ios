@@ -7,44 +7,44 @@ import WebKit
 import Storage
 import Shared
 
-class SavedTab: NSObject, NSCoding {
-    var isSelected: Bool = false
-    var title: String? = nil
-    var url: URL? = nil
-    var isPrivate: Bool = false
-    var sessionData: SessionData? = nil
-    var screenshotUUID: UUID? = nil
-    var faviconURL: String? = nil
+// A simpler version of SavedTab, meant for use in extensions.
+// Intentionally does not rely on other classes like Tab
+class BasicSavedTab: NSObject, NSCoding {
+    let title: String?
+    let isPrivate: Bool
+    let url: URL?
+    var screenshotUUID: UUID?
+    var faviconURL: String?
     
     var jsonDictionary: [String: AnyObject] {
         let title: String = self.title ?? "null"
         let faviconURL: String = self.faviconURL ?? "null"
         let uuid: String = self.screenshotUUID?.uuidString ?? "null"
         
-        var json: [String: AnyObject] = [
+        let json: [String: AnyObject] = [
             "title": title as AnyObject,
             "isPrivate": String(self.isPrivate) as AnyObject,
-            "isSelected": String(self.isSelected) as AnyObject,
             "faviconURL": faviconURL as AnyObject,
             "screenshotUUID": uuid as AnyObject,
             "url": url as AnyObject
         ]
-        
-        if let sessionDataInfo = self.sessionData?.jsonDictionary {
-            json["sessionData"] = sessionDataInfo as AnyObject?
-        }
-        
+
         return json
     }
     
-    override init() {
+    init?(tab: SimpleTab, isSelected: Bool) {
+        assert(Thread.isMainThread)
+        
+        self.screenshotUUID = tab.screenshotUUID as UUID?
+        self.title = tab.title
+        self.isPrivate = tab.isPrivate
+        self.faviconURL = tab.faviconURL
+        self.url = tab.url
         super.init()
     }
     
     required init?(coder: NSCoder) {
-        self.sessionData = coder.decodeObject(forKey: "sessionData") as? SessionData
         self.screenshotUUID = coder.decodeObject(forKey: "screenshotUUID") as? UUID
-        self.isSelected = coder.decodeBool(forKey: "isSelected")
         self.title = coder.decodeObject(forKey: "title") as? String
         self.isPrivate = coder.decodeBool(forKey: "isPrivate")
         self.faviconURL = coder.decodeObject(forKey: "faviconURL") as? String
@@ -52,9 +52,7 @@ class SavedTab: NSObject, NSCoding {
     }
     
     func encode(with coder: NSCoder) {
-        coder.encode(sessionData, forKey: "sessionData")
         coder.encode(screenshotUUID, forKey: "screenshotUUID")
-        coder.encode(isSelected, forKey: "isSelected")
         coder.encode(title, forKey: "title")
         coder.encode(isPrivate, forKey: "isPrivate")
         coder.encode(faviconURL, forKey: "faviconURL")
@@ -62,8 +60,10 @@ class SavedTab: NSObject, NSCoding {
     }
 }
 
-extension SavedTab {
-    func toSimpleTab() -> SimpleTab {
-        return SimpleTab(title: title, url: url, isPrivate: isPrivate, screenshotUUID: screenshotUUID, faviconURL: faviconURL)
-    }
+struct SimpleTab {
+    let title: String?
+    let url: URL?
+    let isPrivate: Bool
+    var screenshotUUID: UUID?
+    var faviconURL: String?
 }

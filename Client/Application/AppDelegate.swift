@@ -15,6 +15,7 @@ import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
+import WidgetKit
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
@@ -167,7 +168,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     func applicationWillTerminate(_ application: UIApplication) {
         // We have only five seconds here, so let's hope this doesn't take too long.
         profile?._shutdown()
-
+        
         // Allow deinitializers to close our database connections.
         profile = nil
         tabManager = nil
@@ -375,6 +376,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
         singleShotTimer.resume()
         shutdownWebServer = singleShotTimer
+        
+        print("sawyer refreshing widgets!")
+        WidgetCenter.shared.reloadAllTimelines()
 
         if #available(iOS 13.0, *) {
             scheduleBGSync(application: application)

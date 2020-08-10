@@ -46,6 +46,17 @@
 		0BF42D4F1A7CD09600889E28 /* TestFavicons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */; };
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
+		1DAFC46424ED972000D5B3EF /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
+		1DAFC46624ED974400D5B3EF /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
+		1DAFC46B24EDB41900D5B3EF /* TabArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAFC46A24EDB41900D5B3EF /* TabArchiver.swift */; };
+		1DAFC46C24EDB4D300D5B3EF /* TabArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAFC46A24EDB41900D5B3EF /* TabArchiver.swift */; };
+		1DAFC46E24EDB59700D5B3EF /* SavedTab+ConfigureExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DAFC46D24EDB59700D5B3EF /* SavedTab+ConfigureExtension.swift */; };
+		1DEF5EE924E200E7004D1C2D /* OpenTabsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D23626024E1F25D001892C5 /* OpenTabsWidget.swift */; };
+		1DEF5EF824E48EE0004D1C2D /* AppInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E65075641E37F7AB006961AC /* AppInfo.swift */; };
+		1DEF5EFC24E48FB5004D1C2D /* BasicSavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEF5EFB24E48FB5004D1C2D /* BasicSavedTab.swift */; };
+		1DEF5EFD24E48FD9004D1C2D /* BasicSavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DEF5EFB24E48FB5004D1C2D /* BasicSavedTab.swift */; };
+		1DEF5EFE24E4B04E004D1C2D /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* SDWebImage.framework */; };
+		1DEF5EFF24E4B04E004D1C2D /* SDWebImage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7B604F9A1C4950F2006EEEC3 /* SDWebImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1FCF5C2524351CB4003AB95D /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FCF5C2324351CB4003AB95D /* Glean.framework */; };
 		274A36C9239EB94000A21587 /* LibraryPanelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36C8239EB94000A21587 /* LibraryPanelButton.swift */; };
 		274A36CC239EB99400A21587 /* LibraryPanelContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */; };
@@ -1146,6 +1157,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1DEF5F0024E4B04E004D1C2D /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1DEF5EFF24E4B04E004D1C2D /* SDWebImage.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2F3444EC1AB2378200FD9731 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1231,6 +1253,10 @@
 		0BF42D4E1A7CD09600889E28 /* TestFavicons.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestFavicons.swift; sourceTree = "<group>"; };
 		0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = noTitle.html; sourceTree = "<group>"; };
 		19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LeanplumIntegration.swift; sourceTree = "<group>"; };
+		1D23626024E1F25D001892C5 /* OpenTabsWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenTabsWidget.swift; sourceTree = "<group>"; };
+		1DAFC46A24EDB41900D5B3EF /* TabArchiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabArchiver.swift; sourceTree = "<group>"; };
+		1DAFC46D24EDB59700D5B3EF /* SavedTab+ConfigureExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SavedTab+ConfigureExtension.swift"; sourceTree = "<group>"; };
+		1DEF5EFB24E48FB5004D1C2D /* BasicSavedTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicSavedTab.swift; sourceTree = "<group>"; };
 		1FCF5C2324351CB4003AB95D /* Glean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Glean.framework; path = Carthage/Build/iOS/Glean.framework; sourceTree = "<group>"; };
 		274A36C8239EB94000A21587 /* LibraryPanelButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelButton.swift; sourceTree = "<group>"; };
 		274A36CB239EB99400A21587 /* LibraryPanelContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryPanelContextMenu.swift; sourceTree = "<group>"; };
@@ -2120,6 +2146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1DEF5EFE24E4B04E004D1C2D /* SDWebImage.framework in Frameworks */,
 				DAD46F3624A1606C001B3967 /* SwiftUI.framework in Frameworks */,
 				DAACB04624B031F500B1033B /* Shared.framework in Frameworks */,
 				DAD46F3424A1606C001B3967 /* WidgetKit.framework in Frameworks */,
@@ -3105,9 +3132,12 @@
 				0BF0DB931A8545800039F300 /* URLBarView.swift */,
 				D0FCF7F41FE45842004A7995 /* UserScriptManager.swift */,
 				63306D3821103EAE00F25400 /* SavedTab.swift */,
+				1DAFC46D24EDB59700D5B3EF /* SavedTab+ConfigureExtension.swift */,
+				1DEF5EFB24E48FB5004D1C2D /* BasicSavedTab.swift */,
 				63306D422110B3CD00F25400 /* TabManagerStore.swift */,
 				39CE74F321A72309007AE4F2 /* TranslationToastHandler.swift */,
 				39CE74FA21A8513B007AE4F2 /* TranslationService.swift */,
+				1DAFC46A24EDB41900D5B3EF /* TabArchiver.swift */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -3119,6 +3149,7 @@
 				DA0BCACF24C966A600D3FD85 /* ImageButtonWithLabel.swift */,
 				DAD46F3A24A1606E001B3967 /* Assets.xcassets */,
 				DAD46F3C24A1606E001B3967 /* Info.plist */,
+				1D23626024E1F25D001892C5 /* OpenTabsWidget.swift */,
 			);
 			path = NewToday;
 			sourceTree = "<group>";
@@ -4088,6 +4119,7 @@
 				DAD46F2E24A1606C001B3967 /* Sources */,
 				DAD46F2F24A1606C001B3967 /* Frameworks */,
 				DAD46F3024A1606C001B3967 /* Resources */,
+				1DEF5F0024E4B04E004D1C2D /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -4325,8 +4357,8 @@
 					};
 					DAD46F3124A1606C001B3967 = {
 						CreatedOnToolsVersion = 12.0;
-						DevelopmentTeam = 6YL5Z34V65;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = 43AQ936H96;
+						ProvisioningStyle = Manual;
 					};
 					E69DB0741E97DEA9008A67E6 = {
 						CreatedOnToolsVersion = 8.3;
@@ -5156,7 +5188,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA0BCAD024C966A600D3FD85 /* ImageButtonWithLabel.swift in Sources */,
+				1DEF5EFD24E48FD9004D1C2D /* BasicSavedTab.swift in Sources */,
+				1DAFC46624ED974400D5B3EF /* SessionData.swift in Sources */,
+				1DEF5EF824E48EE0004D1C2D /* AppInfo.swift in Sources */,
+				1DAFC46424ED972000D5B3EF /* SavedTab.swift in Sources */,
+				1DAFC46C24EDB4D300D5B3EF /* TabArchiver.swift in Sources */,
 				DAD46F3924A1606C001B3967 /* NewToday.swift in Sources */,
+				1DEF5EE924E200E7004D1C2D /* OpenTabsWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5239,6 +5277,7 @@
 				C45F44691D087DB600CB7EF0 /* TopTabsViewController.swift in Sources */,
 				0BF0DB941A8545800039F300 /* URLBarView.swift in Sources */,
 				C8FB0C782321523D00031088 /* PageActionMenu.swift in Sources */,
+				1DAFC46E24EDB59700D5B3EF /* SavedTab+ConfigureExtension.swift in Sources */,
 				D01017F5219CB6BD009CBB5A /* DownloadContentScript.swift in Sources */,
 				C892DA0D22D39A980080F1F7 /* TrackingProtectionMenu.swift in Sources */,
 				C817B34D1FC609500086018E /* UIScrollViewSwizzled.swift in Sources */,
@@ -5297,6 +5336,7 @@
 				C86E4F712493BA8E0087BFD9 /* Metrics.swift in Sources */,
 				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
+				1DEF5EFC24E48FB5004D1C2D /* BasicSavedTab.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				E4B423BE1AB9FE6A007E66C8 /* ReaderModeCache.swift in Sources */,
 				396CDB55203C5B870034A3A3 /* TabTrayController+KeyCommands.swift in Sources */,
@@ -5414,6 +5454,7 @@
 				D3A9949C1A3686BD008AD1AC /* BrowserViewController.swift in Sources */,
 				59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */,
 				E6CF28E71CB43B7900151AB3 /* SensitiveViewController.swift in Sources */,
+				1DAFC46B24EDB41900D5B3EF /* TabArchiver.swift in Sources */,
 				E68E7ADA1CAC207400FDCA76 /* ChangePasscodeViewController.swift in Sources */,
 				E640E85E1C73A45A00C5F072 /* PasscodeEntryViewController.swift in Sources */,
 				D0625C98208E87F10081F3B2 /* DownloadQueue.swift in Sources */,
@@ -6785,7 +6826,6 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -6801,7 +6841,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = "firefox-internal";
@@ -7575,7 +7614,6 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -7595,7 +7633,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = fennec;
@@ -8066,7 +8103,6 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -8082,7 +8118,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = "firefox-beta";
@@ -8370,7 +8405,6 @@
 				DEVELOPMENT_TEAM = 43AQ936H96;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -8390,7 +8424,6 @@
 					"$(SDKROOT)/usr/include/libxml2",
 					"$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)/include/**",
 				);
-				
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(BUILD_DIR)/Release$(EFFECTIVE_PLATFORM_NAME)";
 				MOZ_INTERNAL_URL_SCHEME = fennec;
