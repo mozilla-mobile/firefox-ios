@@ -41,18 +41,14 @@ struct SearchActionsUX {
     static let goToCopiedLinkColors = [Color("goToCopiedLinkColorTwo"), Color("goToCopiedLinkColorOne")]
 }
 
-struct PlaceholderView : View {
-    var body: some View {
-        ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp(query: "open-copied"), label: String.GoToCopiedLinkLabelV2, ButtonGradient: Gradient(colors: SearchActionsUX.goToCopiedLinkColors))
-    }
-}
-
 struct QuickActionsSmallEntryView : View {
-    var entry: Provider.Entry
-
     var body: some View {
-        Text(entry.date, style: .time)
+        ImageButtonWithLabel(imageName: "copy_link_icon", url: linkToContainingApp(query: "open-copied"), label: "Go To Copied Link", ButtonGradient: Gradient(colors: SearchActionsUX.goToCopiedLinkColors))
     }
+    fileprivate func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
+         let urlString = "\(scheme)://\(query)\(urlSuffix)"
+         return URL(string: urlString)!
+     }
 }
 
 @main
@@ -60,17 +56,18 @@ struct QuickActionsSmall: Widget {
     private let kind: String = "QuickActionsSmall"
 
     public var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider(), placeholder: PlaceholderView()) { entry in
-            QuickActionsSmallEntryView(entry: entry)
+        StaticConfiguration(kind: kind, provider: Provider(), placeholder: QuickActionsSmallEntryView()) { entry in
+            QuickActionsSmallEntryView()
         }
         .configurationDisplayName("My Widget")
         .description("This is an example widget.")
+        .supportedFamilies([.systemSmall])
     }
 }
 
 struct QuickActionsSmall_Previews: PreviewProvider {
     static var previews: some View {
-        QuickActionsSmallEntryView(entry: SimpleEntry(date: Date()))
+        QuickActionsSmallEntryView()
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
