@@ -35,7 +35,7 @@ struct SimpleEntry: TimelineEntry {
 struct SearchActionsUX {
     static let searchButtonColors = [Color("searchButtonColorTwo"), Color("searchButtonColorOne")]
     static let privateTabsColors = [Color("privateGradientThree"), Color("privateGradientTwo"),Color("privateGradientOne")]
-    static let goToCopiedLinkColors = [Color("goToCopiedLinkColorTwo"), Color("goToCopiedLinkColorOne")]
+    static let goToCopiedLinkColors = [Color("goToCopiedLinkSolid")]
 }
 
 struct SearchQuickLinksEntryView : View {
