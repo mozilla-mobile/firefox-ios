@@ -38,13 +38,7 @@ struct SearchActionsUX {
     static let goToCopiedLinkColors = [Color("goToCopiedLinkColorTwo"), Color("goToCopiedLinkColorOne")]
 }
 
-struct VisualEffectView: UIViewRepresentable {
-    var effect: UIVisualEffect?
-    func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView { UIVisualEffectView() }
-    func updateUIView(_ uiView: UIVisualEffectView, context: UIViewRepresentableContext<Self>) { uiView.effect = effect }
-}
-
-struct NewTodayEntryView : View {
+struct SearchQuickLinksEntryView : View {
     @Environment(\.widgetFamily) var family
     static var copiedURL: URL?
     static var searchedText : String?
@@ -74,13 +68,12 @@ struct NewTodayEntryView : View {
     }
 }
 
-@main
-struct NewTodayWidget: Widget {
+struct SearchQuickLinksWidget: Widget {
     private let kind: String = "Quick Actions - Medium"
 
     public var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider(), placeholder: NewTodayEntryView()) { entry in
-            NewTodayEntryView()
+        StaticConfiguration(kind: kind, provider: Provider(), placeholder: SearchQuickLinksEntryView()) { entry in
+            SearchQuickLinksEntryView()
         }
         .supportedFamilies([.systemMedium])
         .configurationDisplayName("Firefox - Quick Actions")
@@ -88,21 +81,21 @@ struct NewTodayWidget: Widget {
     }
 }
 
-struct NewTodayPreviews: PreviewProvider {
+struct SearchQuickLinksPreviews: PreviewProvider {
     static var previews: some View {
         Group {
-            NewTodayEntryView()
+            SearchQuickLinksEntryView()
                 .previewContext(WidgetPreviewContext(family: .systemMedium))
 
-            NewTodayEntryView()
+            SearchQuickLinksEntryView()
                 .previewContext(WidgetPreviewContext(family: .systemMedium))
                 .environment(\.colorScheme, .dark)
 
-            NewTodayEntryView()
+            SearchQuickLinksEntryView()
                 .previewContext(WidgetPreviewContext(family: .systemMedium))
                 .environment(\.sizeCategory, .small)
 
-            NewTodayEntryView()
+            SearchQuickLinksEntryView()
                 .previewContext(WidgetPreviewContext(family: .systemMedium))
                 .environment(\.sizeCategory, .accessibilityLarge)
         }
