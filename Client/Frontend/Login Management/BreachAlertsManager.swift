@@ -32,8 +32,11 @@ final public class BreachAlertsManager {
     var breaches = Set<BreachRecord>()
     var client: BreachAlertsClientProtocol
     var profile: Profile!
-    private lazy var cacheURL: URL = {
-        return URL(fileURLWithPath: (try? self.profile.files.getAndEnsureDirectory())!, isDirectory: true).appendingPathComponent("breaches.json")
+    private lazy var cacheURL: URL? = {
+        guard let path = try? self.profile.files.getAndEnsureDirectory() else {
+            return nil
+        }
+        return URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent("breaches.json")
     }()
     private let dateFormatter = DateFormatter()
     init(_ client: BreachAlertsClientProtocol = BreachAlertsClient(), profile: Profile) {
@@ -45,19 +48,23 @@ final public class BreachAlertsManager {
     ///    - Parameters:
     ///         - completion: a completion handler for the processed breaches
     func loadBreaches(completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
+        guard let cacheURL = self.cacheURL else {
+            self.fetchAndSaveBreaches(completion)
+            return
+        }
 
         // 1. check for local breaches file
-        guard FileManager.default.fileExists(atPath: self.cacheURL.path) else {
+        guard FileManager.default.fileExists(atPath: cacheURL.path) else {
             // 1a. no local file, so fetch and save as normal and hand off
             self.fetchAndSaveBreaches(completion)
             return
         }
 
         // 1b. local file exists, so load from that
-        guard let fileData = FileManager.default.contents(atPath: self.cacheURL.path) else {
+        guard let fileData = FileManager.default.contents(atPath: cacheURL.path) else {
             completion(Maybe(failure: BreachAlertsError(description: "failed to get data from breach.json")))
             Sentry.shared.send(message: "BreachAlerts: failed to get data from breach.json")
-            try? FileManager.default.removeItem(at: self.cacheURL) // bad file, so delete it
+            try? FileManager.default.removeItem(at: cacheURL) // bad file, so delete it
             self.fetchAndSaveBreaches(completion)
             return
         }
@@ -167,12 +174,15 @@ final public class BreachAlertsManager {
     }
 
     private func fetchAndSaveBreaches(_ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
+        guard let cacheURL = self.cacheURL else {
+            return
+        }
         self.client.fetchData(endpoint: .breachedAccounts, profile: self.profile) { maybeData in
             guard let fetchedData = maybeData.successValue else { return }
-            try? FileManager.default.removeItem(atPath: self.cacheURL.path)
-            FileManager.default.createFile(atPath: self.cacheURL.path, contents: fetchedData, attributes: nil)
+            try? FileManager.default.removeItem(atPath: cacheURL.path)
+            FileManager.default.createFile(atPath: cacheURL.path, contents: fetchedData, attributes: nil)
 
-            guard let data = FileManager.default.contents(atPath: self.cacheURL.path) else { return }
+            guard let data = FileManager.default.contents(atPath: cacheURL.path) else { return }
             self.decodeData(data: data, completion)
         }
     }
