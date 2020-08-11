@@ -2164,6 +2164,7 @@
 		047F9B2A24E1FE1C00CD7DF7 /* WidgetKit */ = {
 			isa = PBXGroup;
 			children = (
+				DA9FD88724E213DC00168D1E /* QuickLink.swift */,
 				DA9FD88024E213B400168D1E /* SearchQuickLinksSmall */,
 				047F9B3924E1FED200CD7DF7 /* SearchQuickLinksMedium */,
 				DA9FD88524E213CC00168D1E /* Helpers.swift */,
@@ -2178,7 +2179,6 @@
 		047F9B3924E1FED200CD7DF7 /* SearchQuickLinksMedium */ = {
 			isa = PBXGroup;
 			children = (
-				DA9FD88724E213DC00168D1E /* QuickLink.swift */,
 				047F9B3A24E1FF4000CD7DF7 /* SearchQuickLinks.swift */,
 			);
 			path = SearchQuickLinksMedium;

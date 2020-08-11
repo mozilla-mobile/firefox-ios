@@ -25,16 +25,7 @@ enum QuickLink: Int {
     }
 
     public var headlineTxt: String {
-        switch self {
-        case .search:
-            return "Firefox"
-        case .privateSearch:
-            return "Firefox"
-        case .copiedLink:
-            return ""
-        case .closePrivateTabs:
-            return ""
-        }
+        return "Firefox"
     }
 
     public var captionTxt: String {
