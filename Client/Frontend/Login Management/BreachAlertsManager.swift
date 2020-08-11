@@ -89,6 +89,7 @@ final public class BreachAlertsManager {
         client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
             guard let etag =  etag else {
                 self.profile.prefs.removeObjectForKey(BreachAlertsClient.etagKey) // bad key, so delete it
+                self.fetchAndSaveBreaches(completion)
                 return
             }
             let savedEtag = self.profile.prefs.stringForKey(BreachAlertsClient.etagKey)
@@ -96,6 +97,9 @@ final public class BreachAlertsManager {
             // 4. if it is, refetch the data and hand entire Set of BreachRecords off
             if etag != savedEtag {
                 self.fetchAndSaveBreaches(completion)
+            } else {
+                self.profile.prefs.setTimestamp(Date.now(), forKey: BreachAlertsClient.etagDateKey)
+                self.decodeData(data: fileData, completion)
             }
         }
     }
