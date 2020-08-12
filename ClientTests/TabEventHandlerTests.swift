@@ -5,8 +5,9 @@
 import Foundation
 @testable import Client
 import WebKit
-
+import GCDWebServers
 import XCTest
+import Shared
 
 class TabEventHandlerTests: XCTestCase {
 
@@ -21,6 +22,36 @@ class TabEventHandlerTests: XCTestCase {
 
         TabEvent.post(.didLoseFocus, for: tab)
         XCTAssertFalse(handler.isFocused!)
+    }
+
+
+    func testBlankPopupURL() {
+        let webServer = GCDWebServer()
+        webServer.addHandler(forMethod: "GET", path: "/blankpopup", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
+            let page = """
+                <html>
+                <body onload="window.open('')">open about:blank popup</body>
+                </html>
+            """
+            return GCDWebServerDataResponse(html: page)!
+        }
+
+        if webServer.start(withPort: 0, bonjourName: nil) == false {
+            XCTFail("Can't start the GCDWebServer")
+        }
+        let webServerBase = "http://localhost:\(webServer.port)"
+
+        BrowserViewController.foregroundBVC().profile.prefs.setBool(false, forKey: PrefsKeys.KeyBlockPopups)
+        BrowserViewController.foregroundBVC().tabManager.addTab(URLRequest(url: URL(string: "\(webServerBase)/blankpopup")!))
+        let expectation = self.expectation(description: "Waiting on about:blank window")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            BrowserViewController.foregroundBVC().tabManager.tabs.forEach { tab in
+                if tab.url?.absoluteString == "about:blank" {
+                    expectation.fulfill()
+                }
+            }
+        }
+        waitForExpectations(timeout: 20, handler: nil)
     }
 }
 
