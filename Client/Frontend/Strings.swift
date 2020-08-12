@@ -817,4 +817,5 @@ extension String {
     public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV1", tableName: "Today", value: "Go to copied link", comment: "Go to link pasted on the clipboard")
     public static let GoToCopiedLinkLabelV2 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV2", tableName: "Today", value: "Go To\nCopied Link", comment: "Go to link pasted on the clipboard")
     public static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoardV1", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
+    public static let newSearchButtonLabel = NSLocalizedString("TodayWidget.NewSearchButtonLabelV1", tableName: "Today", value: "Search in Firefox", comment: "Open New Tab button label")
 }
