@@ -806,5 +806,6 @@ extension String {
     // Close Private tab button in today widget, delayed untill next release V29
     public static let closePrivateTabsButtonLabel = NSLocalizedString("TodayWidget.ClosePrivateTabButtonLabelV2", tableName: "Today", value: "Close Private Tabs", comment: "Close Private Tabs button label")
     public static let GoToCopiedLinkLabelV2 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV2", tableName: "Today", value: "Go To Copied Link", comment: "Go to link pasted on the clipboard")
+    public static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoardV1", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
     public static let newSearchButtonLabel = NSLocalizedString("TodayWidget.NewSearchButtonLabelV1", tableName: "Today", value: "Search in Firefox", comment: "Open New Tab button label")
 }
