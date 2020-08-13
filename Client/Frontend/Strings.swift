@@ -599,8 +599,8 @@ extension Strings {
     public static let TPBlockingSiteDisabled = NSLocalizedString("Menu.TrackingProtectionDisable1.Title", value: "Disabled for this site", comment: "The button that disabled TP for a site.")
     public static let ETPOn = NSLocalizedString("Menu.EnhancedTrackingProtectionOn.Title", value: "Enhanced Tracking Protection is ON for this site.", comment: "A switch to enable enhanced tracking protection inside the menu.")
     public static let ETPOff = NSLocalizedString("Menu.EnhancedTrackingProtectionOff.Title", value: "Enhanced Tracking Protection is OFF for this site.", comment: "A switch to disable enhanced tracking protection inside the menu.")
-    public static let StrictETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, cryptominers, fingerprinters and tracking content.", comment: "Description for having strict ETP protection with ITP offered in iOS14+")
-    public static let StandardETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStandardWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers and fingerprinters.", comment: "Description for having standard ETP protection with ITP offered in iOS14+")
+    public static let StrictETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, cryptominers, fingerprinters, and tracking content.", comment: "Description for having strict ETP protection with ITP offered in iOS14+")
+    public static let StandardETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStandardWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters.", comment: "Description for having standard ETP protection with ITP offered in iOS14+")
 
     // TP Page menu title
     public static let TPPageMenuTitle = NSLocalizedString("Menu.TrackingProtection.TitlePrefix", value: "Protections for %@", comment: "Title on tracking protection menu showing the domain. eg. Protections for mozilla.org")
@@ -884,6 +884,6 @@ extension String {
 //Default Browser
 extension String {
     public static let DefaultBrowserCardTitle = NSLocalizedString("TodayWidget.DefaultBrowserCardTitle", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.")
-    public static let DefaultBrowserCardDescription = NSLocalizedString("TodayWidget.DefaultBrowserCardDescription", tableName: "Default Browser", value: "Set links from websites, emails and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
+    public static let DefaultBrowserCardDescription = NSLocalizedString("TodayWidget.DefaultBrowserCardDescription", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
     public static let DefaultBrowserCardButton = NSLocalizedString("TodayWidget.DefaultBrowserCardButton", tableName: "Default Browser", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
 }
