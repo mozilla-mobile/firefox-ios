@@ -30,12 +30,12 @@ struct SearchQuickLinksEntryView : View {
     var body: some View {
         VStack {
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabelMedium(link: .search)
-                ImageButtonWithLabelMedium(link: .privateSearch)
+                ImageButtonWithLabel(isSmall: false, link: .search)
+                ImageButtonWithLabel(isSmall: false, link: .privateSearch)
             }
             HStack(alignment: .top, spacing: 8.0) {
-                ImageButtonWithLabelMedium(link: .copiedLink)
-                ImageButtonWithLabelMedium(link: .closePrivateTabs)
+                ImageButtonWithLabel(isSmall: false, link: .copiedLink)
+                ImageButtonWithLabel(isSmall: false, link: .closePrivateTabs)
             }
         }
         .padding(10.0)

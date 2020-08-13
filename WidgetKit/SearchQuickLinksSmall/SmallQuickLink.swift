@@ -32,7 +32,7 @@ struct SmallQuickLinkView : View {
 
     @ViewBuilder
     var body: some View {
-        ImageButtonWithLabelSmall(link: entry.link)
+        ImageButtonWithLabel(isSmall: true, link: entry.link)
     }
 }
 

@@ -34,9 +34,7 @@ enum QuickLink: Int {
             return String(String.newSearchButtonLabel.split(separator: " ")[0]) + " " + String(String.newSearchButtonLabel.split(separator: " ")[1])
         case .privateSearch:
             return String.NewPrivateTabButtonLabel
-        case .copiedLink:
-            return ""
-        case .closePrivateTabs:
+        default:
             return ""
         }
     }
