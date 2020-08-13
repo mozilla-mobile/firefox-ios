@@ -17,7 +17,7 @@ struct IntentProvider: IntentTimelineProvider {
     public func timeline(for configuration: Intent, with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let link = QuickLink.from(configuration)
         let entries = [QuickLinkEntry(date: Date(), link: link)]
-        let timeline = Timeline(entries: entries, policy: .atEnd)
+        let timeline = Timeline(entries: entries, policy: .after(Date()))
         completion(timeline)
     }
 }

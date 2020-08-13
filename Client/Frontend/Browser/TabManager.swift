@@ -470,18 +470,14 @@ class TabManager: NSObject {
         return false
     }
 
-    public func removeAllPrivateTabs() {
+    private func removeAllPrivateTabs() {
         // reset the selectedTabIndex if we are on a private tab because we will be removing it.
         if selectedTab?.isPrivate ?? false {
             _selectedIndex = -1
         }
         privateTabs.forEach { $0.closeAndRemovePrivateBrowsingData() }
         tabs = normalTabs
-        guard let tab = mostRecentTab(inTabs: tabs) else {
-                selectTab(addTab())
-                return
-            }
-        selectTab(tab)
+
         privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }
 
