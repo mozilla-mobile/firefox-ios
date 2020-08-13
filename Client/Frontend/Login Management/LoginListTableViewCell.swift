@@ -18,7 +18,6 @@ class LoginListTableViewCell: ThemedTableViewCell {
     private let breachAlertSize: CGFloat = 24
     lazy var breachAlertImageView: UIImageView = {
         let imageView = UIImageView(image: BreachAlertsManager.icon)
-        imageView.tintColor = BreachAlertsManager.listColor
         imageView.isHidden = true
         return imageView
     }()
