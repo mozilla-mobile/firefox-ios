@@ -884,6 +884,6 @@ extension String {
 //Default Browser
 extension String {
     public static let DefaultBrowserCardTitle = NSLocalizedString("TodayWidget.DefaultBrowserCardTitle", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.")
-    public static let DefaultBrowserCardDescription = NSLocalizedString("TodayWidget.DefaultBrowserCardDescription", tableName: "Default Browser", value: "Set links from websites, emails and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
+    public static let DefaultBrowserCardDescription = NSLocalizedString("TodayWidget.DefaultBrowserCardDescription", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
     public static let DefaultBrowserCardButton = NSLocalizedString("TodayWidget.DefaultBrowserCardButton", tableName: "Default Browser", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
 }
