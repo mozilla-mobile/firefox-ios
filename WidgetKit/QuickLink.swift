@@ -25,13 +25,13 @@ enum QuickLink: Int {
     }
 
     public var headlineTxt: String {
-        return "Firefox"
+        return String(String.newSearchButtonLabel.split(separator: " ")[2])
     }
 
     public var captionTxt: String {
         switch self {
         case .search:
-            return "Search in"
+            return String(String.newSearchButtonLabel.split(separator: " ")[0]) + " " + String(String.newSearchButtonLabel.split(separator: " ")[1])
         case .privateSearch:
             return String.NewPrivateTabButtonLabel
         case .copiedLink:
@@ -44,7 +44,7 @@ enum QuickLink: Int {
     public var label: String {
         switch self {
         case .search:
-            return "Search in Firefox"
+            return String.newSearchButtonLabel
         case .privateSearch:
             return String.NewPrivateTabButtonLabel
         case .copiedLink:
