@@ -875,6 +875,7 @@ extension String {
     // Pocket - Large - Medium Size Widget
     public static let PocketWidgetSubLabel = NSLocalizedString("TodayWidget.PocketWidgetSubLabel", tableName: "Today", value: "Firefox - Recommended by Pocket", comment: "Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app.")
     public static let ViewMoreDots = NSLocalizedString("TodayWidget.ViewMoreDots", tableName: "Today", value: "View More...", comment: "View More... for Firefox Pocket stories widget where we don't know how many articles are available.")
+
     // Pocket - Large - Medium Size - Gallery View
     public static let PocketWidgetGalleryTitle = NSLocalizedString("TodayWidget.PocketWidgetTitle", tableName: "Today", value: "Recommended by Pocket", comment: "Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
     public static let PocketWidgetGalleryDescription = NSLocalizedString("TodayWidget.PocketWidgetGalleryDescription", tableName: "Today", value: "Discover fascinating and thought-provoking stories from across the web, curated by Pocket.", comment: "Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
