@@ -47,7 +47,7 @@ class TabLocationView: UIView {
     }
 
     func showLockIcon(forSecureContent isSecure: Bool) {
-        if (url?.absoluteString == "about:blank") {
+        if url?.absoluteString == "about:blank" {
             // Matching the desktop behaviour, we don't mark these pages as secure.
             lockImageView.isHidden = true
             return
