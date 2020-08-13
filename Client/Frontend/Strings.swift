@@ -860,7 +860,7 @@ extension String {
 
     // Quick View Open Tabs - Medium Size Widget
     public static let QuickViewOpenTabsSubLabel = NSLocalizedString("TodayWidget.QuickViewOpenTabsSubLabel", tableName: "Today", value: "Firefox - Open Tabs", comment: "Sub label for Top Sites widget")
-    public static let MoreTabsLabel = NSLocalizedString("TodayWidget.MoreTabsLabel", tableName: "Today", value: "+%d More...", comment: "%d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget")
+    public static let MoreTabsLabel = NSLocalizedString("TodayWidget.MoreTabsLabel", tableName: "Today", value: "+%d More…", comment: "%d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget")
     public static let OpenFirefoxLabel = NSLocalizedString("TodayWidget.OpenFirefoxLabel", tableName: "Today", value: "Open Firefox", comment: "Open Firefox when there are no tabs opened in tab tray i.e. Empty State")
     public static let NoOpenTabsLabel = NSLocalizedString("TodayWidget.NoOpenTabsLabel", tableName: "Today", value: "No open tabs.", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
     
@@ -874,7 +874,7 @@ extension String {
 
     // Pocket - Large - Medium Size Widget
     public static let PocketWidgetSubLabel = NSLocalizedString("TodayWidget.PocketWidgetSubLabel", tableName: "Today", value: "Firefox - Recommended by Pocket", comment: "Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app.")
-    public static let ViewMoreDots = NSLocalizedString("TodayWidget.ViewMoreDots", tableName: "Today", value: "View More...", comment: "View More... for Firefox Pocket stories widget where we don't know how many articles are available.")
+    public static let ViewMoreDots = NSLocalizedString("TodayWidget.ViewMoreDots", tableName: "Today", value: "View More…", comment: "View More… for Firefox Pocket stories widget where we don't know how many articles are available.")
 
     // Pocket - Large - Medium Size - Gallery View
     public static let PocketWidgetGalleryTitle = NSLocalizedString("TodayWidget.PocketWidgetTitle", tableName: "Today", value: "Recommended by Pocket", comment: "Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
