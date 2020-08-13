@@ -599,9 +599,8 @@ extension Strings {
     public static let TPBlockingSiteDisabled = NSLocalizedString("Menu.TrackingProtectionDisable1.Title", value: "Disabled for this site", comment: "The button that disabled TP for a site.")
     public static let ETPOn = NSLocalizedString("Menu.EnhancedTrackingProtectionOn.Title", value: "Enhanced Tracking Protection is ON for this site.", comment: "A switch to enable enhanced tracking protection inside the menu.")
     public static let ETPOff = NSLocalizedString("Menu.EnhancedTrackingProtectionOff.Title", value: "Enhanced Tracking Protection is OFF for this site.", comment: "A switch to disable enhanced tracking protection inside the menu.")
-    public static let StrictETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, cryptominers, fingerprinters and tracking content.", comment: "Description for having standard ETP protection with ith ITP offered in iOS14+")
-    public static let StandardETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStandardWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers and fingerprinters.", comment: "Description for having standard ETP protection with ith ITP offered in iOS14+")
-    
+    public static let StrictETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, cryptominers, fingerprinters and tracking content.", comment: "Description for having strict ETP protection with ITP offered in iOS14+")
+    public static let StandardETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStandardWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers and fingerprinters.", comment: "Description for having standard ETP protection with ITP offered in iOS14+")
 
     // TP Page menu title
     public static let TPPageMenuTitle = NSLocalizedString("Menu.TrackingProtection.TitlePrefix", value: "Protections for %@", comment: "Title on tracking protection menu showing the domain. eg. Protections for mozilla.org")
@@ -872,7 +871,6 @@ extension String {
     
     // Quick View Open Tabs - Large Size - Gallery View
     public static let QuickViewLargeGalleryDescription = NSLocalizedString("TodayWidget.QuickViewLargeGalleryDescription", tableName: "Today", value: "Add shortcuts to your open tabs.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
-    
 
     // Pocket - Large - Medium Size Widget
     public static let PocketWidgetSubLabel = NSLocalizedString("TodayWidget.PocketWidgetSubLabel", tableName: "Today", value: "Firefox - Recommended by Pocket", comment: "Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app.")
