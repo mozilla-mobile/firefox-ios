@@ -30,50 +30,77 @@ final public class BreachAlertsManager {
     static let darkMode = UIColor(red: 1.00, green: 0.02, blue: 0.35, alpha: 1.00)
     static let monitorAboutUrl = URL(string: "https://monitor.firefox.com/about")
     var breaches = Set<BreachRecord>()
-    var breachAlertsClient: BreachAlertsClientProtocol
-
-    init(_ client: BreachAlertsClientProtocol = BreachAlertsClient()) {
-        self.breachAlertsClient = client
+    var client: BreachAlertsClientProtocol
+    var profile: Profile!
+    private lazy var cacheURL: URL? = {
+        guard let path = try? self.profile.files.getAndEnsureDirectory() else {
+            return nil
+        }
+        return URL(fileURLWithPath: path, isDirectory: true).appendingPathComponent("breaches.json")
+    }()
+    private let dateFormatter = DateFormatter()
+    init(_ client: BreachAlertsClientProtocol = BreachAlertsClient(), profile: Profile) {
+        self.client = client
+        self.profile = profile
     }
 
     /// Loads breaches from Monitor endpoint using BreachAlertsClient.
     ///    - Parameters:
     ///         - completion: a completion handler for the processed breaches
     func loadBreaches(completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
-        self.breachAlertsClient.fetchData(endpoint: .breachedAccounts) { maybeData in
-            guard let data = maybeData.successValue else {
-                completion(Maybe(failure: BreachAlertsError(description: "failed to load breaches data")))
-                return
-            }
-            guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
-                completion(Maybe(failure: BreachAlertsError(description: "JSON data decode failure")))
-                return
-            }
+        guard let cacheURL = self.cacheURL else {
+            self.fetchAndSaveBreaches(completion)
+            return
+        }
 
-            self.breaches = decoded
-            // remove for release
-            self.breaches.insert(BreachRecord(
-             name: "MockBreach",
-             title: "A Mock Blockbuster Record",
-             domain: "blockbuster.com",
-             breachDate: "1970-01-02",
-             description: "A mock BreachRecord for testing purposes."
-            ))
-            self.breaches.insert(BreachRecord(
-             name: "MockBreach",
-             title: "A Mock Lorem Ipsum Record",
-             domain: "lipsum.com",
-             breachDate: "1970-01-02",
-             description: "A mock BreachRecord for testing purposes."
-            ))
-            self.breaches.insert(BreachRecord(
-             name: "MockBreach",
-             title: "A Mock Swift Breach Record",
-             domain: "swift.org",
-             breachDate: "1970-01-02",
-             description: "A mock BreachRecord for testing purposes."
-            ))
-            completion(Maybe(success: self.breaches))
+        // 1. check for local breaches file
+        guard FileManager.default.fileExists(atPath: cacheURL.path) else {
+            // 1a. no local file, so fetch and save as normal and hand off
+            self.fetchAndSaveBreaches(completion)
+            return
+        }
+
+        // 1b. local file exists, so load from that
+        guard let fileData = FileManager.default.contents(atPath: cacheURL.path) else {
+            completion(Maybe(failure: BreachAlertsError(description: "failed to get data from breach.json")))
+            Sentry.shared.send(message: "BreachAlerts: failed to get data from breach.json")
+            try? FileManager.default.removeItem(at: cacheURL) // bad file, so delete it
+            self.fetchAndSaveBreaches(completion)
+            return
+        }
+
+        // 2. check the last time breach endpoint was accessed
+        guard let dateLastAccessed = profile.prefs.timestampForKey(BreachAlertsClient.etagDateKey) else {
+            profile.prefs.removeObjectForKey(BreachAlertsClient.etagDateKey) // bad key, so delete it
+            self.fetchAndSaveBreaches(completion)
+            return
+        }
+        let timeUntilNextUpdate = UInt64(60 * 60 * 24 * 3 * 1000) // 3 days in milliseconds
+        let shouldUpdateDate = dateLastAccessed + timeUntilNextUpdate
+
+        // 3. if 3 days have not passed since last update...
+        guard Date.now() >= shouldUpdateDate else {
+            // 3a. no need to refetch. decode local data and hand off
+            decodeData(data: fileData, completion)
+            return
+        }
+
+        // 3b. should update - check if the etag is different
+        client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
+            guard let etag =  etag else {
+                self.profile.prefs.removeObjectForKey(BreachAlertsClient.etagKey) // bad key, so delete it
+                self.fetchAndSaveBreaches(completion)
+                return
+            }
+            let savedEtag = self.profile.prefs.stringForKey(BreachAlertsClient.etagKey)
+
+            // 4. if it is, refetch the data and hand entire Set of BreachRecords off
+            if etag != savedEtag {
+                self.fetchAndSaveBreaches(completion)
+            } else {
+                self.profile.prefs.setTimestamp(Date.now(), forKey: BreachAlertsClient.etagDateKey)
+                self.decodeData(data: fileData, completion)
+            }
         }
     }
 
@@ -98,9 +125,8 @@ final public class BreachAlertsManager {
             }
             for item in potentialUserBreaches {
                 let pwLastChanged = TimeInterval(item.timePasswordChanged/1000)
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd"
-                guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
+                self.dateFormatter.dateFormat = "yyyy-MM-dd"
+                guard let breachDate = self.dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
                     continue
                 }
                 result.insert(item)
@@ -136,9 +162,8 @@ final public class BreachAlertsManager {
         let baseDomain = self.baseDomainForLogin(login)
         for breach in self.breaches where breach.domain == baseDomain {
             let pwLastChanged = TimeInterval(login.timePasswordChanged/1000)
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            guard let breachDate = dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
+            self.dateFormatter.dateFormat = "yyyy-MM-dd"
+            guard let breachDate = self.dateFormatter.date(from: breach.breachDate)?.timeIntervalSince1970, pwLastChanged < breachDate else {
                 continue
             }
             return breach
@@ -146,8 +171,35 @@ final public class BreachAlertsManager {
         return nil
     }
 
+    // MARK: - Helper Functions
     private func baseDomainForLogin(_ login: LoginRecord) -> String {
         guard let result = login.hostname.asURL?.baseDomain else { return login.hostname }
         return result
+    }
+
+    private func fetchAndSaveBreaches(_ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
+        guard let cacheURL = self.cacheURL else {
+            return
+        }
+        self.client.fetchData(endpoint: .breachedAccounts, profile: self.profile) { maybeData in
+            guard let fetchedData = maybeData.successValue else { return }
+            try? FileManager.default.removeItem(atPath: cacheURL.path)
+            FileManager.default.createFile(atPath: cacheURL.path, contents: fetchedData, attributes: nil)
+
+            guard let data = FileManager.default.contents(atPath: cacheURL.path) else { return }
+            self.decodeData(data: data, completion)
+        }
+    }
+
+    private func decodeData(data: Data, _ completion: @escaping (Maybe<Set<BreachRecord>>) -> Void) {
+        guard let decoded = try? JSONDecoder().decode(Set<BreachRecord>.self, from: data) else {
+            print(BreachAlertsError(description: "JSON data decode failure"))
+            assert(false)
+            return
+        }
+
+        self.breaches = decoded
+
+        completion(Maybe(success: self.breaches))
     }
 }

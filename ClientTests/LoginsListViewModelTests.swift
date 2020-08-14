@@ -45,19 +45,19 @@ class LoginsListViewModelTests: XCTestCase {
     func testQueryLogins() {
         let emptyQueryResult = self.viewModel.queryLogins("")
         XCTAssertTrue(emptyQueryResult.value.isSuccess)
-        XCTAssertEqual(emptyQueryResult.value.successValue?.count, 13)
+        XCTAssertEqual(emptyQueryResult.value.successValue?.count, 10)
 
         let exampleQueryResult = self.viewModel.queryLogins("example")
         XCTAssertTrue(exampleQueryResult.value.isSuccess)
-        XCTAssertEqual(exampleQueryResult.value.successValue?.count, 13)
+        XCTAssertEqual(exampleQueryResult.value.successValue?.count, 10)
 
         let threeQueryResult = self.viewModel.queryLogins("3")
         XCTAssertTrue(threeQueryResult.value.isSuccess)
-        XCTAssertEqual(threeQueryResult.value.successValue?.count, 4)
+        XCTAssertEqual(threeQueryResult.value.successValue?.count, 1)
 
         let zQueryResult = self.viewModel.queryLogins("yxz")
         XCTAssertTrue(zQueryResult.value.isSuccess)
-        XCTAssertEqual(zQueryResult.value.successValue?.count, 3)
+        XCTAssertEqual(zQueryResult.value.successValue?.count, 0)
     }
 
     func testIsDuringSearchControllerDismiss() {
