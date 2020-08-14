@@ -10,12 +10,9 @@ MOZ_TODAY_WIDGET_SEARCH_DISPLAY_NAME = Firefox - Search
 // Bundle Identifier
 MOZ_BUNDLE_ID = org.mozilla.ios.FirefoxBeta
 
-// Flag to indicate if we want to include the debug settings bundle or not
-INCLUDE_SETTINGS_BUNDLE = NO
+CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/FirefoxBeta.entitlements";
+DEVELOPMENT_TEAM = "";
 
-// Leanplum SDK Variables
-LEANPLUM_ENVIRONMENT =
-LEANPLUM_APP_ID =
-LEANPLUM_KEY =
+OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_BETA
 
-
+MOZ_INTERNAL_URL_SCHEME = firefox-beta
