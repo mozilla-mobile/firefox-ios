@@ -48,8 +48,13 @@ class BreachAlertsDetailView: UIView {
 
     lazy var learnMoreButton: UIButton = {
         let button = UIButton()
-        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontLight
-        button.setTitle(Strings.BreachAlertsLearnMore, for: .normal)
+        let attributes: [NSAttributedString.Key: Any] = [
+            .foregroundColor: UIColor.white,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ]
+        let attributedText = NSMutableAttributedString(string: Strings.BreachAlertsLearnMore, attributes: attributes)
+        button.titleLabel?.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
+        button.setAttributedTitle(attributedText, for: .normal)
         button.setTitleColor(textColor, for: .normal)
         button.tintColor = .white
         button.isAccessibilityElement = true
@@ -102,8 +107,9 @@ class BreachAlertsDetailView: UIView {
 
     private lazy var infoStack: UIStackView = {
         let stack = UIStackView(arrangedSubviews: [breachDateLabel, descriptionLabel, goToButton])
-        stack.distribution = .fillProportionally
+        stack.distribution = .fill
         stack.axis = .vertical
+        stack.setCustomSpacing(8.0, after: descriptionLabel)
         return stack
     }()
 
@@ -116,7 +122,7 @@ class BreachAlertsDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.backgroundColor = BreachAlertsManager.detailColor
+        self.backgroundColor = BreachAlertsManager.lightMode
         self.layer.cornerRadius = 5
         self.layer.masksToBounds = true
 
