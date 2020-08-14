@@ -84,7 +84,7 @@ enum QuickLink: Int {
             return .search
         case .privateSearch:
             return .privateSearch
-        case .clearPrivateTabs:
+        case .closePrivateTabs:
             return .closePrivateTabs
         case .copiedLink:
             return .copiedLink

@@ -63,7 +63,7 @@
 					<key>INEnumValueIndex</key>
 					<integer>4</integer>
 					<key>INEnumValueName</key>
-					<string>clearPrivateTabs</string>
+					<string>closePrivateTabs</string>
 				</dict>
 			</array>
 		</dict>
