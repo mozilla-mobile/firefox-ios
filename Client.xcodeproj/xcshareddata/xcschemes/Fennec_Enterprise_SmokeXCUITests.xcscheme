@@ -564,6 +564,9 @@
                   Identifier = "NoImageTests">
                </Test>
                <Test
+                  Identifier = "Performance">
+               </Test>
+               <Test
                   Identifier = "PhotonActionSheetTest/testSendToDeviceFromPageOptionsMenu()">
                </Test>
                <Test

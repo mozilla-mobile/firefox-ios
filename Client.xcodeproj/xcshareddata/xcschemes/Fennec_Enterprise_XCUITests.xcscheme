@@ -318,6 +318,18 @@
                   Identifier = "NoImageTests">
                </Test>
                <Test
+                  Identifier = "Performance/testPerfOpenTabsTrayWithCumulativeTabIncrease()">
+               </Test>
+               <Test
+                  Identifier = "Performance/testPerfOpenTabsTrayWithoutTabs()">
+               </Test>
+               <Test
+                  Identifier = "Performance/testPerfOpenTabsTrayWithoutTabsThenOneTab()">
+               </Test>
+               <Test
+                  Identifier = "Performance/testPerformanceTabTray()">
+               </Test>
+               <Test
                   Identifier = "PhotonActionSheetTest/testPinToTop()">
                </Test>
                <Test
