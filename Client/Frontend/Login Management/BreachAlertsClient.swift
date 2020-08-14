@@ -34,7 +34,7 @@ public class BreachAlertsClient: BreachAlertsClientProtocol {
         dataTask = URLSession.shared.dataTask(with: request) { _, response, _ in
             guard let response = response as? HTTPURLResponse else { return }
             guard response.statusCode < 400 else {
-                Sentry.shared.send(message: "BreachAlerts: fetchData: HTTP status code: \(response.statusCode)")
+                Sentry.shared.send(message: "BreachAlerts: fetchEtag: HTTP status code: \(response.statusCode)")
                 completion(nil)
                 return
             }

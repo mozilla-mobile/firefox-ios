@@ -63,11 +63,7 @@ final class LoginListViewModel {
     func queryLogins(_ query: String) -> Deferred<Maybe<[LoginRecord]>> {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
         profile.logins.searchLoginsWithQuery(query) >>== { logins in
-            var log = logins.asArray()
-            log.append(LoginRecord(fromJSONDict: ["hostname" : "https://blockbuster.com", "timePasswordChanged": 46800000, "password": "ipsum"]))
-            log.append(LoginRecord(fromJSONDict: ["hostname" : "https://lipsum.com", "timePasswordChanged": 46800000, "username": "lorem", "password": "ipsum"]))
-            log.append(LoginRecord(fromJSONDict: ["hostname" : "https://swift.org", "timePasswordChanged": 46800000, "username": "username", "password": "ipsum"]))
-            deferred.fillIfUnfilled(Maybe(success: log))
+            deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
             succeed()
         }
         return deferred
