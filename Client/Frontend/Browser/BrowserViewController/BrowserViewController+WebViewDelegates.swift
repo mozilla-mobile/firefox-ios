@@ -32,6 +32,10 @@ extension BrowserViewController: WKUIDelegate {
         // the request here manually leads to incorrect results!!
         let newTab = tabManager.addPopupForParentTab(bvc: bvc, parentTab: parentTab, configuration: configuration)
 
+        if navigationAction.request.url == nil {
+            newTab.url = URL(string: "about:blank")
+        }
+
         return newTab.webView
     }
 
