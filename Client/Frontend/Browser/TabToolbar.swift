@@ -179,6 +179,7 @@ open class TabToolbarHelper: NSObject {
     }
     
     func didClickAddNewTab() {
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .addNewTabButton)
         toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
     }
 
@@ -194,6 +195,7 @@ open class TabToolbarHelper: NSObject {
     }
 
     func didLongPressStopReload(_ recognizer: UILongPressGestureRecognizer) {
+        guard !isSearch else { return }
         if recognizer.state == .began && !loading {
             toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.stopReloadButton)
         }
