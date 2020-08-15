@@ -39,14 +39,14 @@ struct ImageButtonWithLabel: View {
                             } else {
                                 switch link {
                                 case .search:
-                                    Text(link.captionTxt)
+                                    Text(link.captionText)
                                         .font(.caption).bold()
-                                    Text(link.headlineTxt)
+                                    Text(link.headlineText)
                                         .font(.title).bold()
                                 case .privateSearch:
-                                    Text(link.headlineTxt)
+                                    Text(link.headlineText)
                                         .font(.title).bold()
-                                    Text(link.captionTxt)
+                                    Text(link.captionText)
                                         .font(.caption).bold()
                                 default:
                                     Text(link.label)

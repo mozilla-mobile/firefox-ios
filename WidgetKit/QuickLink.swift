@@ -4,6 +4,7 @@
 
 import SwiftUI
 import Shared
+// Enum file that holds the different cases for the Quick Actions small widget with their configurations (string, backgrounds, images) as selected by the user in edit mode. It maps the values of IntentQuickLink enum in the QuickLinkSelectionIntent to the designated values of each case.
 
 enum QuickLink: Int {
     case search = 1
@@ -24,11 +25,11 @@ enum QuickLink: Int {
         }
     }
 
-    public var headlineTxt: String {
+    public var headlineText: String {
         return String(String.newSearchButtonLabel.split(separator: " ")[2])
     }
 
-    public var captionTxt: String {
+    public var captionText: String {
         switch self {
         case .search:
             return String(String.newSearchButtonLabel.split(separator: " ")[0]) + " " + String(String.newSearchButtonLabel.split(separator: " ")[1])
