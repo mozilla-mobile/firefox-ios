@@ -167,7 +167,7 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
+    </array>
     <key>SentryDSN</key>
     <string>$(SENTRY_DSN)</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
@@ -186,7 +186,7 @@
 			<key>UTTypeSize64IconFile</key>
 			<string></string>
 		</dict>
-	</array>
+    </array>
     <key>UIFileSharingEnabled</key>
     <true/>
     <key>LSSupportsOpeningDocumentsInPlace</key>
