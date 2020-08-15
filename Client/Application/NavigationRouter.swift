@@ -106,8 +106,7 @@ enum NavigationPath {
                     return nil
                 }
                 self = .text(searchText)
-            }
-            else {
+            } else {
                 guard let url = UIPasteboard.general.url else {
                     return nil
                 }
@@ -128,7 +127,7 @@ enum NavigationPath {
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
-        case .closePrivateTabs : NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
+        case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
         }
     }
 

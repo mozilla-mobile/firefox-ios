@@ -21,7 +21,6 @@ import Glean
  import BackgroundTasks
 #endif
 
-
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"

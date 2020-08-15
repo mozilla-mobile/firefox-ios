@@ -116,7 +116,6 @@ struct ImageButtonWithLabel: View {
                         }
                     }
                 }
-
                 .foregroundColor(Color("widgetLabelColors"))
                 .padding(.horizontal, 10.0)
             }
