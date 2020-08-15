@@ -3,16 +3,10 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 #include "Common.xcconfig"
+#include "Release.xcconfig"
 
 MOZ_BUNDLE_DISPLAY_NAME = Firefox Beta
-MOZ_TODAY_WIDGET_SEARCH_DISPLAY_NAME = Firefox - Search
-
-// Bundle Identifier
 MOZ_BUNDLE_ID = org.mozilla.ios.FirefoxBeta
-
-CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/FirefoxBeta.entitlements";
-DEVELOPMENT_TEAM = "";
-
+CODE_SIGN_ENTITLEMENTS = Client/Entitlements/FirefoxBetaApplication.entitlements
 OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_BETA
-
 MOZ_INTERNAL_URL_SCHEME = firefox-beta
