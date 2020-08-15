@@ -97,7 +97,6 @@
 	<string>Firefox requires Face ID to access your saved logins.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
-        <string>QuickLinkSelectionIntent</string>
 		<string>org.mozilla.ios.firefox.browsing</string>
 	</array>
 	<key>UIAppFonts</key>
