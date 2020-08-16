@@ -86,7 +86,7 @@
 			<key>INIntentConfigurable</key>
 			<true/>
 			<key>INIntentDescription</key>
-			<string>Select Link</string>
+			<string>String.QuickActionDescription</string>
 			<key>INIntentDescriptionID</key>
 			<string>9NY97H</string>
 			<key>INIntentEligibleForWidgets</key>
