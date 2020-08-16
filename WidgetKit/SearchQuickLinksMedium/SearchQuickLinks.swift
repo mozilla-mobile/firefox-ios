@@ -51,8 +51,8 @@ struct SearchQuickLinksWigdet: Widget {
             SearchQuickLinksEntryView()
         }
         .supportedFamilies([.systemMedium])
-        .configurationDisplayName("Firefox - Quick Actions")
-        .description("Access to frequent actions directly on your home screen.")
+        .configurationDisplayName(String.QuickActionsGalleryTitle)
+        .description(String.FirefoxShortcutGalleryDescription)
     }
 }
 

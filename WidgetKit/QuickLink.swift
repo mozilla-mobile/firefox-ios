@@ -26,13 +26,13 @@ enum QuickLink: Int {
     }
 
     public var headlineText: String {
-        return String(String.newSearchButtonLabel.split(separator: " ")[2])
+        return String(String.NewSearchButtonLabel.split(separator: " ")[2])
     }
 
     public var captionText: String {
         switch self {
         case .search:
-            return String(String.newSearchButtonLabel.split(separator: " ")[0]) + " " + String(String.newSearchButtonLabel.split(separator: " ")[1])
+            return String(String.NewSearchButtonLabel.split(separator: " ")[0]) + " " + String(String.NewSearchButtonLabel.split(separator: " ")[1])
         case .privateSearch:
             return String.NewPrivateTabButtonLabel
         default:
@@ -43,13 +43,13 @@ enum QuickLink: Int {
     public var label: String {
         switch self {
         case .search:
-            return String.newSearchButtonLabel
+            return String.NewSearchButtonLabel
         case .privateSearch:
             return String.NewPrivateTabButtonLabel
         case .copiedLink:
             return String.GoToCopiedLinkLabelV2
         case .closePrivateTabs:
-            return String.closePrivateTabsButtonLabel
+            return String.ClosePrivateTab
         }
     }
 

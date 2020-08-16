@@ -9,7 +9,7 @@ import SwiftUI
 struct FirefoxWidgets: WidgetBundle {
     @WidgetBundleBuilder
     var body: some Widget {
-        SearchQuickLinksWigdet()
         SmallQuickLinkWidget()
+        SearchQuickLinksWigdet()
     }
 }

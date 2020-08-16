@@ -44,8 +44,8 @@ struct SmallQuickLinkWidget: Widget {
             SmallQuickLinkView(entry: entry)
         }
         .supportedFamilies([.systemSmall])
-        .configurationDisplayName("Firefox - Quick Actions")
-        .description("Access to frequent actions directly on your home screen.")
+        .configurationDisplayName(String.QuickActionsGalleryTitle)
+        .description(String.QuickActionGalleryDescription)
     }
 }
 
