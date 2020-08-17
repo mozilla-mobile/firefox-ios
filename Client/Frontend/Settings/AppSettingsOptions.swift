@@ -607,7 +607,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"),  VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     public static var appVersion: String {
@@ -666,7 +666,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -682,7 +682,7 @@ class YourRightsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -715,7 +715,7 @@ class SendFeedbackSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -744,7 +744,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -819,7 +819,12 @@ class LoginsSetting: Setting {
         deselectRow()
         
         guard let navController = navigationController else { return }
-        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC()).uponQueue(.main) { loginsVC in
+        let navigationHandler: ((_ url: URL?) -> Void) = { url in
+            guard let url = url else { return }
+            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+            self.delegate?.settingsOpenURLInNewTab(url)
+        }
+        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
             guard let loginsVC = loginsVC else { return }
             LeanPlumClient.shared.track(event: .openedLogins)
             navController.pushViewController(loginsVC, animated: true)
@@ -915,7 +920,7 @@ class PrivacyPolicySetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 

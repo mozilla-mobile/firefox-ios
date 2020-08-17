@@ -6,13 +6,13 @@ import UIKit
 import SnapKit
 import Storage
 
-protocol LoginTableViewCellDelegate: AnyObject {
-    func didSelectOpenAndFillForCell(_ cell: LoginTableViewCell)
-    func shouldReturnAfterEditingDescription(_ cell: LoginTableViewCell) -> Bool
-    func infoItemForCell(_ cell: LoginTableViewCell) -> InfoItem?
+protocol LoginDetailTableViewCellDelegate: AnyObject {
+    func didSelectOpenAndFillForCell(_ cell: LoginDetailTableViewCell)
+    func shouldReturnAfterEditingDescription(_ cell: LoginDetailTableViewCell) -> Bool
+    func infoItemForCell(_ cell: LoginDetailTableViewCell) -> InfoItem?
 }
 
-private struct LoginTableViewCellUX {
+public struct LoginTableViewCellUX {
     static let highlightedLabelFont = UIFont.systemFont(ofSize: 12)
     static let highlightedLabelTextColor = UIConstants.SystemBlueColor
     static let descriptionLabelFont = UIFont.systemFont(ofSize: 16)
@@ -25,11 +25,11 @@ enum LoginTableViewCellStyle {
     case iconAndDescriptionLabel
 }
 
-class LoginTableViewCell: ThemedTableViewCell {
+class LoginDetailTableViewCell: ThemedTableViewCell {
 
     fileprivate let labelContainer = UIView()
 
-    weak var delegate: LoginTableViewCellDelegate?
+    weak var delegate: LoginDetailTableViewCellDelegate?
 
     // In order for context menu handling, this is required
     override var canBecomeFirstResponder: Bool {
@@ -187,7 +187,7 @@ class LoginTableViewCell: ThemedTableViewCell {
 }
 
 // MARK: - Menu Selectors
-extension LoginTableViewCell: MenuHelperInterface {
+extension LoginDetailTableViewCell: MenuHelperInterface {
 
     func menuHelperReveal() {
         displayDescriptionAsPassword = false
@@ -208,14 +208,14 @@ extension LoginTableViewCell: MenuHelperInterface {
 }
 
 // MARK: - Cell Decorators
-extension LoginTableViewCell {
+extension LoginDetailTableViewCell {
     func updateCellWithLogin(_ login: LoginRecord) {
         descriptionLabel.text = login.hostname
         highlightedLabel.text = login.username
     }
 }
 
-extension LoginTableViewCell: UITextFieldDelegate {
+extension LoginDetailTableViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return self.delegate?.shouldReturnAfterEditingDescription(self) ?? true
     }

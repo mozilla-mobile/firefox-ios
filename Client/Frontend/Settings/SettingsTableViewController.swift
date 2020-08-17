@@ -110,7 +110,7 @@ class Setting: NSObject {
     func onLongPress(_ navigationController: UINavigationController?) { return }
 
     // Helper method to set up and push a SettingsContentViewController
-    func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?) {
+    func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?, _ url: URL? = nil) {
         if let url = self.url {
             let viewController = SettingsContentViewController()
             viewController.settingsTitle = self.title
