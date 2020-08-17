@@ -67,6 +67,14 @@ struct ImageButtonWithLabel: View {
         }
     }
 
+    var paddingValue: CGFloat {
+        if isSmall {
+            return 10.0
+        } else {
+            return 8.0
+        }
+    }
+
     var body: some View {
         Link(destination: link.url) {
             ZStack(alignment: .leading) {
@@ -78,6 +86,7 @@ struct ImageButtonWithLabel: View {
                             if !isSmall {
                                 Text(link.label)
                                     .font(.headline)
+                                    .layoutPriority(1000)
                             } else {
                                 switch link {
                                 case .search:
@@ -117,7 +126,7 @@ struct ImageButtonWithLabel: View {
                     }
                 }
                 .foregroundColor(Color("widgetLabelColors"))
-                .padding(.horizontal, 10.0)
+                .padding([.horizontal,.vertical], paddingValue)
             }
         }
     }
