@@ -599,7 +599,7 @@ extension Strings {
     public static let TPBlockingSiteDisabled = NSLocalizedString("Menu.TrackingProtectionDisable1.Title", value: "Disabled for this site", comment: "The button that disabled TP for a site.")
     public static let ETPOn = NSLocalizedString("Menu.EnhancedTrackingProtectionOn.Title", value: "Enhanced Tracking Protection is ON for this site.", comment: "A switch to enable enhanced tracking protection inside the menu.")
     public static let ETPOff = NSLocalizedString("Menu.EnhancedTrackingProtectionOff.Title", value: "Enhanced Tracking Protection is OFF for this site.", comment: "A switch to disable enhanced tracking protection inside the menu.")
-    public static let StrictETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, cryptominers, fingerprinters, and tracking content.", comment: "Description for having strict ETP protection with ITP offered in iOS14+")
+    public static let StrictETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content.", comment: "Description for having strict ETP protection with ITP offered in iOS14+")
     public static let StandardETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStandardWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters.", comment: "Description for having standard ETP protection with ITP offered in iOS14+")
 
     // TP Page menu title
@@ -820,7 +820,6 @@ extension String {
     
     // Widget - Shared
     public static let QuickActionsGalleryTitle = NSLocalizedString("TodayWidget.QuickActionsGalleryTitle", tableName: "Today", value: "Quick Actions", comment: "Quick Actions title when widget enters edit mode")
-    public static let SearchLabel = NSLocalizedString("TodayWidget.SearchLabel", tableName: "Today", value: "Search", comment: "This is a common word used in Search in Private Tab and Search in Firefox")
     
     // Quick Action - Medium Size Quick Action
     public static let QuickActionsSubLabel = NSLocalizedString("TodayWidget.QuickActionsSubLabel", tableName: "Today", value: "Firefox - Quick Actions", comment: "Sub label for medium size quick action widget")
@@ -835,9 +834,9 @@ extension String {
     public static let FirefoxShortcutGalleryDescription = NSLocalizedString("TodayWidget.FirefoxShortcutGalleryDescription", tableName: "Today", value: "Add Firefox shortcuts to your Home screen.", comment: "Description for medium size widget to add Firefox Shortcut to home screen")
     
     // Quick Action - Small Size Widget
-    public static let InPrivateTabLabel = NSLocalizedString("TodayWidget.InPrivateTabLabel", tableName: "Today", value: "in Private Tab", comment: "Search in Private is full text but this label is only for in Private Tab. Search text is in Search Label")
-    public static let InFirefox = NSLocalizedString("TodayWidget.InFirefox", tableName: "Today", value: "in Firefox", comment: "Search in Firefox is full text but this label is only for in Firefox. Search text is in Search Label")
-    public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", tableName: "Today", value: "Close\nPrivate\nTabs", comment: "Close Private Tabs with new line on each word to fix any wrapping issues")
+    public static let SearchInPrivateTabLabelV2 = NSLocalizedString("TodayWidget.SearchInPrivateTabLabelV2", tableName: "Today", value: "Search in\nPrivate Tab", comment: "\n means new line and thus means Search in goes in 1st line and Private Tab in 2nd line")
+    public static let SearchInFirefoxV2 = NSLocalizedString("TodayWidget.SearchInFirefoxV2", tableName: "Today", value: "Search in\nFirefox", comment: "\n means new line and thus means Search in goes in 1st line and Firefox in 2nd line")
+    public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", tableName: "Today", value: "Close\nPrivate Tabs", comment: "Close Private Tabs with new line. Close in 1st line and Private Tabs in 2nd line.")
     public static let GoToCopiedLinkLabelV4 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV4", tableName: "Today", value: "Go to\nCopied\nLink", comment: "Go to Copied Link with new line on each word to fix any wrapping issues")
     
     // Quick Action - Small Size Widget - Edit Mode
