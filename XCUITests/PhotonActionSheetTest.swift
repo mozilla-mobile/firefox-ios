@@ -29,7 +29,6 @@ class PhotonActionSheetTest: BaseTestCase {
         cell.press(forDuration: 2)
         waitForExistence(app.cells["action_pin"])
     }
-    // Disable issue #5554
 
     func testShareOptionIsShown() {
         navigator.goto(BrowserTab)
@@ -60,29 +59,6 @@ class PhotonActionSheetTest: BaseTestCase {
         waitForExistence(app.navigationBars["Client.InstructionsView"])
         XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
     }
-    // Disable issue #5554, More button is not accessible
-    /*
-    // Test disabled due to new implementation Bug 1449708 - new share sheet
-    func testSendToDeviceFromShareOption() {
-        // Open and Wait to see the Share options sheet
-        navigator.browserPerformAction(.shareOption)
-        waitForExistence(app.buttons["More"])
-        waitForNoExistence(app.buttons["Send Tab"])
-        app.collectionViews.cells/*@START_MENU_TOKEN@*/.collectionViews.containing(.button, identifier:"Copy")/*[[".collectionViews.containing(.button, identifier:\"Create PDF\")",".collectionViews.containing(.button, identifier:\"Print\")",".collectionViews.containing(.button, identifier:\"Copy\")"],[[[-1,2],[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.buttons["More"].tap()
-
-        // Enable Send Tab
-        let sendTabButton = app.tables.cells.switches["Send Tab"]
-        sendTabButton.tap()
-        app.navigationBars["Activities"].buttons["Done"].tap()
-
-        // Send Tab option appears on the Share options sheet
-        waitForExistence(app.buttons["Send Tab"])
-        app.buttons["Send Tab"].tap()
-
-        // User not logged in
-        waitForExistence(app.images["emptySync"])
-        XCTAssertTrue(app.staticTexts["You are not signed in to your Firefox Account."].exists)
-    }*/
 
     private func openNewShareSheet() {
         navigator.openURL("example.com")
