@@ -356,6 +356,7 @@
 		C8611C8E1F71904C00C3DE7D /* DiskImageStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3BF8CBC1B7472FA0007AFE6 /* DiskImageStoreTests.swift */; };
 		C8611CB01F71AEBA00C3DE7D /* NoImageModeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */; };
 		C86E4F712493BA8E0087BFD9 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C86E4F702493BA8E0087BFD9 /* Metrics.swift */; };
+		C88CB3BF24E772B80014D823 /* FxA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28CE83D01A1D1D5100576538 /* FxA.framework */; platformFilter = ios; };
 		C892DA0D22D39A980080F1F7 /* TrackingProtectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */; };
 		C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */; };
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
@@ -510,6 +511,7 @@
 		DABDA4AD20DA0FB900FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
 		DABDA4AE20DA0FDB00FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
 		DABDA4AF20DA0FE400FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; };
+		DABDA4B020DA0FF200FBB0BD /* ObjcExceptionBridging.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DABDA4AC20DA0FB800FBB0BD /* ObjcExceptionBridging.framework */; platformFilter = ios; };
 		DACDE996225E537900C8F37F /* VersionSettingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACDE995225E537900C8F37F /* VersionSettingTests.swift */; };
 		DADC62DA226E3297003AFF8B /* ReopenLastTabTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADC62D9226E3297003AFF8B /* ReopenLastTabTests.swift */; };
 		DD31E0FB1B382B520077078A /* TabPrintPageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD31E0FA1B382B520077078A /* TabPrintPageRenderer.swift */; };
@@ -1118,7 +1120,7 @@
 				E60138681C89EB8800DF9756 /* libSync.a in Copy Frameworks */,
 				E60138671C89EB8300DF9756 /* libAccount.a in Copy Frameworks */,
 				E60138661C89EB7D00DF9756 /* libStorage.a in Copy Frameworks */,
-				E60138651C89EB7600DF9756 /* libShared.a in Copy Frameworks */,
+				E60138651C89EB7600DF9756 /* libShared.a in Copy Frameworks */
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
