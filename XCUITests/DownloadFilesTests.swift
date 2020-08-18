@@ -1,8 +1,8 @@
 import XCTest
 
-let testFileName = "Small.zip"
-let testFileSize = "178 bytes"
-let testURL = "http://demo.borland.com/testsite/download_testpage.php"
+let testFileName = "1Mio.dat"
+let testFileSize = "1 MB"
+let testURL = "http://www.ovh.net/files/"
 let testBLOBURL = "http://bennadel.github.io/JavaScript-Demos/demos/href-download-text-blob/"
 let testBLOBFileSize = "35 bytes"
 
@@ -129,9 +129,7 @@ class DownloadFilesTests: BaseTestCase {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         for _ in 0..<numberOfDownlowds {
-            app.webViews.staticTexts[fileName].tap()
-            waitForExistence(app.webViews.buttons["Download"])
-            app.webViews.buttons["Download"].tap()
+            app.webViews.links["1 Mio file"].firstMatch.tap()
             waitForExistence(app.tables["Context Menu"])
             app.tables["Context Menu"].cells["download"].tap()
         }
