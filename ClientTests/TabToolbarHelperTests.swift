@@ -46,7 +46,7 @@ class TabToolbarHelperTests: XCTestCase {
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), searchButtonImage)
     }
 
-    func testSetNewTabStateImages() {
+    func testNewTabStateImages() {
         subject.setMiddleButtonState(.newTab)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), ImageNewTab)
     }
