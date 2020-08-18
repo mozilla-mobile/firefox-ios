@@ -41,9 +41,8 @@ class DownloadFilesTests: BaseTestCase {
         navigator.openURL(testURL)
         waitUntilPageLoad()
         // Verify that the context menu prior to download a file is correct
-        app.webViews.staticTexts[testFileName].tap()
-        waitForExistence(app.webViews.buttons["Download"])
-        app.webViews.buttons["Download"].tap()
+        app.webViews.links["1 Mio file"].firstMatch.tap()
+
         waitForExistence(app.tables["Context Menu"])
         XCTAssertTrue(app.tables["Context Menu"].staticTexts[testFileName].exists)
         XCTAssertTrue(app.tables["Context Menu"].cells["download"].exists)
