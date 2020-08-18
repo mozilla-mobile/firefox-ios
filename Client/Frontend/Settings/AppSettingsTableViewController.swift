@@ -56,10 +56,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
             generalSettings.insert(SiriPageSetting(settings: self), at: 5)
         }
 
-        if AppConstants.MOZ_DOCUMENT_SERVICES {
-            generalSettings.insert(TranslationSetting(settings: self), at: 6)
-        }
-
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
             accountChinaSyncSetting = []
