@@ -137,7 +137,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ShowEtpCoverSheet(settings: self),
                 ToggleOnboarding(settings: self),
                 LeanplumStatus(settings: self),
-                ClearOnboardingABVariables(settings: self)
+                ClearOnboardingABVariables(settings: self),
+                ToggleNewTabToolbarButton(settings: self)
             ])]
 
         return settings
