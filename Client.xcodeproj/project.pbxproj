@@ -5755,7 +5755,7 @@
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Firefox NotificationService";
+				PROVISIONING_PROFILE_SPECIFIER = "Fennec NotificationService Development";
 			};
 			name = Fennec;
 		};
