@@ -12,19 +12,14 @@ struct TabTrayV2ControllerUX {
     static let screenshotMarginLeftRight = CGFloat(20.0)
     static let screenshotMarginTopBottom = CGFloat(6.0)
     static let textMarginTopBottom = CGFloat(18.0)
+    static let navigationMenuHeight = CGFloat(32.0)
+    static let backgroundColor = UIColor.Photon.Grey10
 }
 
 class TabTrayV2ViewController: UIViewController, Themeable {
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
     // Views
-    lazy var toolbar: TrayToolbar = {
-        let toolbar = TrayToolbar()
-        toolbar.addTabButton.addTarget(self, action: #selector(didTapToolbarAddTab), for: .touchUpInside)
-        toolbar.deleteButton.addTarget(self, action: #selector(didTapToolbarDelete), for: .touchUpInside)
-        toolbar.maskButton.addTarget(self, action: #selector(didTogglePrivateMode), for: .touchUpInside)
-        return toolbar
-    }()
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.tableFooterView = UIView()
@@ -40,6 +35,12 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         emptyView.descriptionLabel.textColor = .black
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
         return emptyView
+    }()
+    lazy var navigationMenu: UISegmentedControl = {
+        let navigationMenu = UISegmentedControl(items: ["tabs", "private", "synced"])
+        navigationMenu.backgroundColor = UIColor.Photon.Grey10
+        navigationMenu.selectedSegmentIndex = 0
+        return navigationMenu
     }()
     
     // Constants
@@ -68,12 +69,17 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         }
         
         // Navigation bar
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.backgroundColor = TabTrayV2ControllerUX.backgroundColor
         navigationItem.title = Strings.TabTrayV2Title
         if #available(iOS 13.0, *) { } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .done, target: self, action: #selector(dismissTabTray))
         }
         // Add Subviews
-        view.addSubview(toolbar)
+        let navMenuContainer = UIView()
+        navMenuContainer.backgroundColor = TabTrayV2ControllerUX.backgroundColor
+        view.addSubview(navMenuContainer)
+        navMenuContainer.addSubview(navigationMenu)
         view.addSubview(tableView)
         view.addSubview(emptyPrivateTabsView)
         viewModel.updateTabs()
@@ -81,18 +87,21 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         tableView.snp.makeConstraints { make in
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
-            make.bottom.equalTo(toolbar.snp.top)
-            make.top.equalTo(self.view.safeArea.top)
+            make.bottom.equalTo(view)
+            make.top.equalTo(navMenuContainer.snp.bottom)
         }
-
-        toolbar.snp.makeConstraints { make in
-            make.left.right.bottom.equalTo(view)
-            make.height.equalTo(UIConstants.BottomToolbarHeight)
+        navMenuContainer.snp.makeConstraints { make in
+            make.left.right.equalTo(view)
+            make.top.equalTo(view.safeArea.top)
+            make.height.equalTo(TabTrayV2ControllerUX.navigationMenuHeight)
         }
-        
+        navigationMenu.snp.makeConstraints { make in
+            make.left.equalToSuperview().offset(20)
+            make.right.equalToSuperview().offset(-20)
+        }
         emptyPrivateTabsView.snp.makeConstraints { make in
             make.top.left.right.equalTo(view)
-            make.bottom.equalTo(self.toolbar.snp.top)
+            make.bottom.equalTo(view)
         }
         
         emptyPrivateTabsView.isHidden = true
@@ -103,7 +112,6 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        toolbar.applyTheme()
         tableView.backgroundColor = UIColor.theme.tableView.headerBackground
         setNeedsStatusBarAppearanceUpdate()
     }

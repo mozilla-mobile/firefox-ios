@@ -48,8 +48,7 @@ class TabTrayV2ViewModel: NSObject {
     }
     
     func setupPrivateModeBadge() {
-        viewController.toolbar.maskButton.setSelected(isPrivate, animated: true)
-        viewController.toolbar.applyUIMode(isPrivate: isPrivate)
+        
     }
 
     func togglePrivateMode () {
