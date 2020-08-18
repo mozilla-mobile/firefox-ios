@@ -341,6 +341,7 @@ class TabManager: NSObject {
             tab.loadRequest(request)
         } else if !isPopup {
             let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
+            tab.newTabPageType = newTabChoice
             switch newTabChoice {
             case .homePage:
                 // We definitely have a homepage if we've got here

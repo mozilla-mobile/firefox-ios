@@ -288,7 +288,6 @@ class BrowserViewController: UIViewController {
             updateURLBarDisplayURL(tab)
             navigationToolbar.updateBackStatus(webView.canGoBack)
             navigationToolbar.updateForwardStatus(webView.canGoForward)
-            navigationToolbar.updateReloadStatus(tab.loading)
         }
 
         libraryDrawerViewController?.view.snp.remakeConstraints(constraintsForLibraryDrawerView)
@@ -399,7 +398,7 @@ class BrowserViewController: UIViewController {
         view.addSubview(topTouchArea)
 
         // Setup the URL bar, wrapped in a view to get transparency effect
-        urlBar = URLBarView()
+        urlBar = URLBarView(profile: profile)
         urlBar.translatesAutoresizingMaskIntoConstraints = false
         urlBar.delegate = self
         urlBar.tabToolbarDelegate = self
@@ -742,7 +741,7 @@ class BrowserViewController: UIViewController {
             }
         })
         view.setNeedsUpdateConstraints()
-        navigationToolbar.updateIsSearchStatus(true)
+        urlBar.locationView.reloadButton.reloadButtonState = .disabled
     }
 
     fileprivate func hideFirefoxHome() {
@@ -751,7 +750,6 @@ class BrowserViewController: UIViewController {
         }
 
         self.firefoxHomeViewController = nil
-        navigationToolbar.updateIsSearchStatus(false)
         UIView.animate(withDuration: 0.2, delay: 0, options: .beginFromCurrentState, animations: { () -> Void in
             firefoxHomeViewController.view.alpha = 0
         }, completion: { _ in
@@ -773,12 +771,14 @@ class BrowserViewController: UIViewController {
         if !urlBar.inOverlayMode {
             guard let url = url else {
                 hideFirefoxHome()
+                urlBar.locationView.reloadButton.reloadButtonState = .disabled
                 return
             }
             if isAboutHomeURL {
                 showFirefoxHome(inline: true)
             } else if !url.absoluteString.hasPrefix("\(InternalURL.baseUrl)/\(SessionRestoreHandler.path)") {
                 hideFirefoxHome()
+                urlBar.locationView.reloadButton.reloadButtonState = .disabled
             }
         } else if isAboutHomeURL {
             showFirefoxHome(inline: false)
@@ -893,6 +893,25 @@ class BrowserViewController: UIViewController {
         }
         return false
     }
+    
+    func setupMiddleButtonStatus(isLoading: Bool) {
+        let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
+        
+        // No tab
+        guard let tab = tabManager.selectedTab else {
+            navigationToolbar.updateMiddleButtonState(.search)
+            return
+        }
+        
+        // Tab with starting page
+        if tab.isURLStartingPage {
+            navigationToolbar.updateMiddleButtonState(.search)
+            return
+        }
+        
+        let state: MiddleButtonState = shouldShowNewTabButton ? .newTab : (isLoading ? .stop : .reload)
+        navigationToolbar.updateMiddleButtonState(state)
+    }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         guard let webView = object as? WKWebView, let tab = tabManager[webView] else {
@@ -914,15 +933,14 @@ class BrowserViewController: UIViewController {
             guard tab === tabManager.selectedTab else { break }
             if let url = webView.url, !InternalURL.isValid(url: url) {
                 urlBar.updateProgressBar(Float(webView.estimatedProgress))
+                setupMiddleButtonStatus(isLoading: true)
             } else {
                 urlBar.hideProgressBar()
+                setupMiddleButtonStatus(isLoading: false)
             }
         case .loading:
             guard let loading = change?[.newKey] as? Bool else { break }
-
-            if tab === tabManager.selectedTab {
-                navigationToolbar.updateReloadStatus(loading)
-            }
+            setupMiddleButtonStatus(isLoading: loading)
         case .URL:
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
@@ -1389,6 +1407,20 @@ extension BrowserViewController: URLBarDelegate {
         return true
     }
 
+    func urlBarDidLongPressReload(_ urlBar: URLBarView, from button: UIButton) {
+        guard let tab = tabManager.selectedTab else {
+            return
+        }
+        let urlActions = self.getRefreshLongPressMenu(for: tab)
+        guard !urlActions.isEmpty else {
+            return
+        }
+        let generator = UIImpactFeedbackGenerator(style: .heavy)
+        generator.impactOccurred()
+        let shouldSuppress = !topTabsVisible && UIDevice.current.userInterfaceIdiom == .pad
+        presentSheetWith(actions: [urlActions], on: self, from: button, suppressPopover: shouldSuppress)
+    }
+
     func locationActionsForURLBar(_ urlBar: URLBarView) -> [AccessibleAction] {
         if UIPasteboard.general.string != nil {
             return [pasteGoAction, pasteAction, copyAddressAction]
@@ -1836,8 +1868,7 @@ extension BrowserViewController: TabManagerDelegate {
         }
 
         updateFindInPageVisibility(visible: false, tab: previous)
-
-        navigationToolbar.updateReloadStatus(selected?.loading ?? false)
+        setupMiddleButtonStatus(isLoading: selected?.loading ?? false)
         navigationToolbar.updateBackStatus(selected?.canGoBack ?? false)
         navigationToolbar.updateForwardStatus(selected?.canGoForward ?? false)
         if let url = selected?.webView?.url, !InternalURL.isValid(url: url) {
