@@ -4,7 +4,6 @@
 
 import Foundation
 import Shared
-import FxA
 import SwiftyJSON
 
 public let KeyLength = 32
