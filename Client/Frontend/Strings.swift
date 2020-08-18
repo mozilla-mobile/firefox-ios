@@ -835,9 +835,11 @@ extension String {
     public static let FirefoxShortcutGalleryDescription = NSLocalizedString("TodayWidget.FirefoxShortcutGalleryDescription", tableName: "Today", value: "Add Firefox shortcuts to your Home screen.", comment: "Description for medium size widget to add Firefox Shortcut to home screen")
     
     // Quick Action - Small Size Widget
+    public static let SearchInTitle = NSLocalizedString("TodayWidget.SearchInTitle", tableName: "Today", value: "Search in", comment: "Quick Actions title to search with Firefox")
     public static let SearchInPrivateTabLabelV2 = NSLocalizedString("TodayWidget.SearchInPrivateTabLabelV2", tableName: "Today", value: "Search in\nPrivate Tab", comment: "\n means new line and thus means Search in goes in 1st line and Private Tab in 2nd line")
     public static let SearchInFirefoxV2 = NSLocalizedString("TodayWidget.SearchInFirefoxV2", tableName: "Today", value: "Search in\nFirefox", comment: "\n means new line and thus means Search in goes in 1st line and Firefox in 2nd line")
     public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", tableName: "Today", value: "Close\nPrivate Tabs", comment: "Close Private Tabs with new line. Close in 1st line and Private Tabs in 2nd line.")
+    public static let ClosePrivateTabsLabelV3 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV3", tableName: "Today", value: "Close\nPrivate\nTabs", comment: "Close Private Tabs with new line. Close 1st line and Private in 2nd line and Tabs in 3rd line.")
     public static let GoToCopiedLinkLabelV4 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV4", tableName: "Today", value: "Go to\nCopied\nLink", comment: "Go to Copied Link with new line on each word to fix any wrapping issues")
     
     // Quick Action - Small Size Widget - Edit Mode
