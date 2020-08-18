@@ -17,7 +17,8 @@ class TabToolbarHelperTests: XCTestCase {
     let libraryButtonImage = UIImage.templateImageNamed("menu-library")
     let stopButtonImage = UIImage.templateImageNamed("nav-stop")
     let searchButtonImage = UIImage.templateImageNamed("search")
-
+    let ImageNewTab = UIImage.templateImageNamed("nav-add")
+    
     override func setUp() {
         super.setUp()
         mockToolbar = MockTabToolbar()
@@ -30,24 +31,24 @@ class TabToolbarHelperTests: XCTestCase {
         XCTAssertEqual(mockToolbar.forwardButton.image(for: .normal), forwardButtonImage)
     }
 
-    func testSetLoadingStateImages() {
+    func testStopStateImages() {
+        subject.setMiddleButtonState(.stop)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), stopButtonImage)
     }
 
-    func testSetLoadedStateImages() {
+    func testReloadStateImages() {
+        subject.setMiddleButtonState(.reload)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), refreshButtonImage)
     }
 
     func testSearchStateImages() {
+        subject.setMiddleButtonState(.search)
         XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), searchButtonImage)
     }
 
-    func testSearchStoppedStateImages() {
-        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), stopButtonImage)
-    }
-
-    func testLoadingDoesNotOverwriteSearchState() {
-        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), searchButtonImage)
+    func testSetNewTabStateImages() {
+        subject.setMiddleButtonState(.newTab)
+        XCTAssertEqual(mockToolbar.multiStateButton.image(for: .normal), ImageNewTab)
     }
 }
 
