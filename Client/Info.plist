@@ -52,6 +52,8 @@
 			<array>
 				<string>firefox</string>
 				<string>$(MOZ_INTERNAL_URL_SCHEME)</string>
+				<string>http:</string>
+				<string>https:</string>
 			</array>
 		</dict>
 	</array>
