@@ -89,7 +89,9 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         buttonStackView.addArrangedSubview(closePrivateTabsButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
-            make.top.right.left.equalTo(widgetView)
+            make.top.equalTo(widgetView)
+            make.left.equalTo(widgetView).offset(5)
+            make.right.equalTo(widgetView).offset(-5)
         }
     }
 
@@ -113,16 +115,20 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }
 
     func adjustFonts() {
-        if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
+        let size = traitCollection.preferredContentSizeCategory
+        switch size {
+        case let size where size >= .accessibilityMedium:
             resize(size: 25)
-        } else if traitCollection.preferredContentSizeCategory <= .extraExtraExtraLarge && traitCollection.preferredContentSizeCategory > .extraLarge {
+        case let size where size <= .extraExtraExtraLarge && size > .extraLarge:
             resize(size: 15)
-        } else if traitCollection.preferredContentSizeCategory >= .large && traitCollection.preferredContentSizeCategory <= .extraLarge {
+        case let size where size >= .large && size <= .extraLarge:
             resize(size: 14)
-        } else if traitCollection.preferredContentSizeCategory == .medium {
+        case let size where size == .medium:
             resize(size: 12)
-        } else if traitCollection.preferredContentSizeCategory >= .extraSmall && traitCollection.preferredContentSizeCategory <= .small {
+        case let size where size >= .extraSmall && size <= .small:
             resize(size: 10)
+        default:
+            resize(size: UIFont.systemFontSize)
         }
     }
 

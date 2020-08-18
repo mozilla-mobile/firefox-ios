@@ -483,7 +483,7 @@ class TabManager: NSObject {
         }
         privateTabs.forEach { $0.close() }
         tabs = normalTabs
-        
+
         privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
     }
 
