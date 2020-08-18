@@ -827,7 +827,7 @@ extension String {
     public static let NewSearchButtonLabel = NSLocalizedString("TodayWidget.NewSearchButtonLabelV1", tableName: "Today", value: "Search in Firefox", comment: "Open New Tab button label")
     public static let NewPrivateTabButtonLabelV2 = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabelV2", tableName: "Today", value: "Search in Private Tab", comment: "Open New Private Tab button label for medium size action")
     public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV1", tableName: "Today", value: "Go to copied link", comment: "Go to link pasted on the clipboard")
-    public static let GoToCopiedLinkLabelV2 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV2", tableName: "Today", value: "Go to\nCopied Link", comment: "Go to link pasted on the clipboard but this string has newline character")
+    public static let GoToCopiedLinkLabelV2 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV2", tableName: "Today", value: "Go to\nCopied Link", comment: "Go to link pasted on the clipboard but this string has newline character. It would be nice to have it in two lines max but if it goes more than two lines thats fine too.")
     public static let GoToCopiedLinkLabelV3 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV3", tableName: "Today", value: "Go to Copied Link", comment: "Go To Copied Link text pasted on the clipboard but this string doesn't have new line character")
     public static let ClosePrivateTab = NSLocalizedString("TodayWidget.ClosePrivateTabsButton", tableName: "Today", value: "Close Private Tabs", comment: "Close Private Tabs button label")
     
@@ -836,11 +836,11 @@ extension String {
     
     // Quick Action - Small Size Widget
     public static let SearchInTitle = NSLocalizedString("TodayWidget.SearchInTitle", tableName: "Today", value: "Search in", comment: "Quick Actions title to search with Firefox")
-    public static let SearchInPrivateTabLabelV2 = NSLocalizedString("TodayWidget.SearchInPrivateTabLabelV2", tableName: "Today", value: "Search in\nPrivate Tab", comment: "\n means new line and thus means Search in goes in 1st line and Private Tab in 2nd line")
-    public static let SearchInFirefoxV2 = NSLocalizedString("TodayWidget.SearchInFirefoxV2", tableName: "Today", value: "Search in\nFirefox", comment: "\n means new line and thus means Search in goes in 1st line and Firefox in 2nd line")
-    public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", tableName: "Today", value: "Close\nPrivate Tabs", comment: "Close Private Tabs with new line. Close in 1st line and Private Tabs in 2nd line.")
-    public static let ClosePrivateTabsLabelV3 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV3", tableName: "Today", value: "Close\nPrivate\nTabs", comment: "Close Private Tabs with new line. Close 1st line and Private in 2nd line and Tabs in 3rd line.")
-    public static let GoToCopiedLinkLabelV4 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV4", tableName: "Today", value: "Go to\nCopied\nLink", comment: "Go to Copied Link with new line on each word to fix any wrapping issues")
+    public static let SearchInPrivateTabLabelV2 = NSLocalizedString("TodayWidget.SearchInPrivateTabLabelV2", tableName: "Today", value: "Search in\nPrivate Tab", comment: "\n means new line and thus means hence it would be nice if Search in goes in 1st line and Private Tab in 2nd line but all in single line is also okay.")
+    public static let SearchInFirefoxV2 = NSLocalizedString("TodayWidget.SearchInFirefoxV2", tableName: "Today", value: "Search in\nFirefox", comment: "\n means new line and thus it would be nice if Search in goes in 1st line and Firefox in 2nd line but all in single line is also okay. Also please do not translate Firefox as thats brand name.")
+    public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", tableName: "Today", value: "Close\nPrivate Tabs", comment: "Close Private Tabs with new line. It would be nice if Close in 1st line and Private Tabs in 2nd line but all in single line is also okay.")
+    public static let ClosePrivateTabsLabelV3 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV3", tableName: "Today", value: "Close\nPrivate\nTabs", comment: "Close Private Tabs with new line. It would be nice if Close 1st line and Private in 2nd line and Tabs in 3rd line but all in single line is also okay.")
+    public static let GoToCopiedLinkLabelV4 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV4", tableName: "Today", value: "Go to\nCopied\nLink", comment: "Go to Copied Link with new line on each word to fix any wrapping issues. Would be nice if it goes in max 3 lines with max 2 words in single line but all in single line is also okay.")
     
     // Quick Action - Small Size Widget - Edit Mode
     public static let QuickActionDescription = NSLocalizedString("TodayWidget.QuickActionDescription", tableName: "Today", value: "Select a Firefox shortcut to add to your Home screen.", comment: "Quick action description when widget enters edit mode")
