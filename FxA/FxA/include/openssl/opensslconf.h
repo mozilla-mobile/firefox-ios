@@ -10,8 +10,6 @@
 
 #if TARGET_OS_IOS && TARGET_OS_SIMULATOR
 # include <openssl/opensslconf_ios_x86_64.h>
-#elif
-# include <openssl/opensslconf_tvos_arm64.h>
 #else
-# error Unable to determine target or target not included in OpenSSL build
+# include <openssl/opensslconf_ios_arm64.h>
 #endif

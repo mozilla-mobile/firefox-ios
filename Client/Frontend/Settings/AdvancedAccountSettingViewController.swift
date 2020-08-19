@@ -5,7 +5,6 @@
 import UIKit
 import Shared
 import SnapKit
-import FxA
 import Account
 
 fileprivate class CustomFxAContentServerEnableSetting: BoolSetting {
