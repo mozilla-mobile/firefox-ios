@@ -6178,6 +6178,7 @@
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
+				PRODUCT_NAME = NotificationService2;
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox NotificationService";
 			};
 			name = FirefoxBeta;
