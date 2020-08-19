@@ -50,23 +50,6 @@ struct ImageButtonWithLabel: View {
     var isSmall : Bool
     var link: QuickLink
 
-    var VAlignment: VerticalAlignment {
-        if isSmall {
-            switch link {
-            case .search:
-                return .top
-            case .privateSearch:
-                return .firstTextBaseline
-            case .copiedLink:
-                return .top
-            case .closePrivateTabs:
-                return .top
-            }
-        } else {
-            return .top
-        }
-    }
-
     var paddingValue: CGFloat {
         if isSmall {
             return 10.0
@@ -81,29 +64,11 @@ struct ImageButtonWithLabel: View {
                 ContainerRelativeShape()
                     .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
                 VStack (alignment: .center, spacing: 50.0){
-                    HStack(alignment: VAlignment) {
+                    HStack(alignment: .top) {
                         VStack(alignment: .leading){
-                            if !isSmall {
                                 Text(link.label)
                                     .font(.headline)
                                     .layoutPriority(1000)
-                            } else {
-                                switch link {
-                                case .search:
-                                    Text(link.captionText)
-                                        .font(.caption).bold()
-                                    Text(link.headlineText)
-                                        .font(.title).bold()
-                                case .privateSearch:
-                                    Text(link.headlineText)
-                                        .font(.title).bold()
-                                    Text(link.captionText)
-                                        .font(.caption).bold()
-                                default:
-                                    Text(link.label)
-                                        .font(.headline)
-                                }
-                            }
                         }
                         Spacer()
                         if link == .search && isSmall {

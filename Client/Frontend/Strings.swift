@@ -823,10 +823,12 @@ extension String {
     public static let FirefoxShortcutGalleryDescription = NSLocalizedString("TodayWidget.FirefoxShortcutGalleryDescription", tableName: "Today", value: "Add Firefox shortcuts to your Home screen.", comment: "Description for medium size widget to add Firefox Shortcut to home screen")
     
     // Quick Action - Small Size Widget
-    public static let InPrivateTabLabel = NSLocalizedString("TodayWidget.InPrivateTabLabel", tableName: "Today", value: "in Private Tab", comment: "Search in Private is full text but this label is only for in Private Tab. Search text is in Search Label")
-    public static let InFirefox = NSLocalizedString("TodayWidget.InFirefox", tableName: "Today", value: "in Firefox", comment: "Search in Firefox is full text but this label is only for in Firefox. Search text is in Search Label")
-    public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", tableName: "Today", value: "Close\nPrivate\nTabs", comment: "Close Private Tabs with new line on each word to fix any wrapping issues")
-    public static let GoToCopiedLinkLabelV4 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV4", tableName: "Today", value: "Go to\nCopied\nLink", comment: "Go to Copied Link with new line on each word to fix any wrapping issues")
+    public static let SearchInFirefoxTitle = NSLocalizedString("TodayWidget.SearchInFirefoxTitle", tableName: "Today", value: "Search in Firefox", comment: "Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox.")
+    public static let SearchInPrivateTabLabelV2 = NSLocalizedString("TodayWidget.SearchInPrivateTabLabelV2", tableName: "Today", value: "Search in\nPrivate Tab", comment: "Search in private tab")
+    public static let SearchInFirefoxV2 = NSLocalizedString("TodayWidget.SearchInFirefoxV2", tableName: "Today", value: "Search in\nFirefox", comment: "Search in Firefox. Do not translate the word Firefox")
+    public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", tableName: "Today", value: "Close\nPrivate Tabs", comment: "Close Private Tabs")
+    public static let ClosePrivateTabsLabelV3 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV3", tableName: "Today", value: "Close\nPrivate\nTabs", comment: "Close Private Tabs")
+    public static let GoToCopiedLinkLabelV4 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV4", tableName: "Today", value: "Go to\nCopied\nLink", comment: "Go to copied link")
     
     // Quick Action - Small Size Widget - Edit Mode
     public static let QuickActionDescription = NSLocalizedString("TodayWidget.QuickActionDescription", tableName: "Today", value: "Select a Firefox shortcut to add to your Home screen.", comment: "Quick action description when widget enters edit mode")
