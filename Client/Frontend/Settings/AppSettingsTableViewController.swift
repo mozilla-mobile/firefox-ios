@@ -56,10 +56,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
             generalSettings.insert(SiriPageSetting(settings: self), at: 5)
         }
 
-        if AppConstants.MOZ_DOCUMENT_SERVICES {
-            generalSettings.insert(TranslationSetting(settings: self), at: 6)
-        }
-
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
             accountChinaSyncSetting = []
@@ -141,7 +137,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ShowEtpCoverSheet(settings: self),
                 ToggleOnboarding(settings: self),
                 LeanplumStatus(settings: self),
-                ClearOnboardingABVariables(settings: self)
+                ClearOnboardingABVariables(settings: self),
+                ToggleNewTabToolbarButton(settings: self)
             ])]
 
         return settings

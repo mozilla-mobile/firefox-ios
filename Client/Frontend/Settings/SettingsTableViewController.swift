@@ -110,7 +110,7 @@ class Setting: NSObject {
     func onLongPress(_ navigationController: UINavigationController?) { return }
 
     // Helper method to set up and push a SettingsContentViewController
-    func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?) {
+    func setUpAndPushSettingsContentViewController(_ navigationController: UINavigationController?, _ url: URL? = nil) {
         if let url = self.url {
             let viewController = SettingsContentViewController()
             viewController.settingsTitle = self.title
@@ -229,7 +229,7 @@ class BoolSetting: Setting {
     @objc func switchValueChanged(_ control: UISwitch) {
         writeBool(control)
         settingDidChange?(control.isOn)
-        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, value: self.prefKey, extras: ["to": control.isOn])
+        TelemetryWrapper.recordEvent(category: .action, method: .change, object: .setting, extras: ["pref": prefKey as Any, "to": control.isOn])
     }
 
     // These methods allow a subclass to control how the pref is saved
