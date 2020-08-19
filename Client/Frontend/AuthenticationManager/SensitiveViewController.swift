@@ -22,6 +22,7 @@ class SensitiveViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: UIApplication.willEnterForegroundNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: UIApplication.didBecomeActiveNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(blurContents), name: UIApplication.willResignActiveNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(blurContents), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -59,6 +60,7 @@ class SensitiveViewController: UIViewController {
                 AppAuthenticator.presentPasscodeAuthentication(self.navigationController).uponQueue(.main) { isOk in
                     if isOk {
                         self.removeBackgroundedBlur()
+                        self.navigationController?.dismiss(animated: true, completion: nil)
                         self.authState = .notAuthenticating
                     } else {
                         // On cancel, the login list can appear for a split-second, set the view to transparent to avoid this.
