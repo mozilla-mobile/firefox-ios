@@ -4,8 +4,6 @@
 <dict>
 	<key>aps-environment</key>
 	<string>production</string>
-	<key>com.apple.developer.associated-domains</key>
-	<array/>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.org.mozilla.ios.FirefoxBeta</string>
