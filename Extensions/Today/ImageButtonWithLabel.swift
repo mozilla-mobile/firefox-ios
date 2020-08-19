@@ -28,7 +28,7 @@ class ImageButtonWithLabel: UIView {
         }
 
         label.snp.makeConstraints { make in
-            make.top.equalTo(button.snp.bottom).offset(3)g
+            make.top.equalTo(button.snp.bottom).offset(3)
             make.leading.equalTo(button.snp.leading)
             make.trailing.equalTo(button.snp.trailing)
             make.bottom.equalTo(self)

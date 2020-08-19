@@ -44,7 +44,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }()
 
     fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
-        let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
+        let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabelV2, buttonImageName: "go-to-copied-link")
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
         return button
         }()
@@ -52,7 +52,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 //MARK: Feature for V29
 // Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
     fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
-        let button = setupButtons(buttonLabel: String.ClosePrivateTab, buttonImageName: "close-private-tabs")
+        let button = setupButtons(buttonLabel: String.ClosePrivateTabsLabelV2, buttonImageName: "close-private-tabs")
         button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
         return button
     }()
@@ -126,7 +126,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         case let size where size == .medium:
             resize(size: 12)
         case let size where size >= .extraSmall && size <= .small:
-            resize(size: 10)
+            resize(size: 8)
         default:
             resize(size: UIFont.systemFontSize)
         }
