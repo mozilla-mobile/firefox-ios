@@ -87,8 +87,6 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Websites you visit may request your location.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This lets you save and upload photos.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This lets you take and upload photos.</string>
 	<key>NSMicrophoneUsageDescription</key>
