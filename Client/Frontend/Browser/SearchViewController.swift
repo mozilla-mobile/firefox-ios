@@ -95,19 +95,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
 
         layoutTable()
         layoutSearchEngineScrollView()
-
-        searchEngineScrollViewContent.snp.makeConstraints { make in
-            make.center.equalTo(self.searchEngineScrollView).priority(10)
-            //left-align the engines on iphones, center on ipad
-            if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
-                make.left.equalTo(self.searchEngineScrollView).priority(1000)
-            } else {
-                make.left.greaterThanOrEqualTo(self.searchEngineScrollView).priority(1000)
-            }
-            make.right.lessThanOrEqualTo(self.searchEngineScrollView).priority(1000)
-            make.top.equalTo(self.searchEngineScrollView)
-            make.bottom.equalTo(self.searchEngineScrollView)
-        }
+        layoutSearchEngineScrollViewContent()
 
         blur.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
@@ -141,6 +129,21 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             } else {
                 make.bottom.equalTo(view).offset(-keyboardHeight)
             }
+        }
+    }
+
+    fileprivate func layoutSearchEngineScrollViewContent() {
+        searchEngineScrollViewContent.snp.remakeConstraints { make in
+            make.center.equalTo(self.searchEngineScrollView).priority(10)
+            //left-align the engines on iphones, center on ipad
+            if UIScreen.main.traitCollection.horizontalSizeClass == .compact {
+                make.left.equalTo(self.searchEngineScrollView).priority(1000)
+            } else {
+                make.left.greaterThanOrEqualTo(self.searchEngineScrollView).priority(1000)
+            }
+            make.right.lessThanOrEqualTo(self.searchEngineScrollView).priority(1000)
+            make.top.equalTo(self.searchEngineScrollView)
+            make.bottom.equalTo(self.searchEngineScrollView)
         }
     }
 
@@ -286,6 +289,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         // The height of the suggestions row may change, so call reloadData() to recalculate cell heights.
         coordinator.animate(alongsideTransition: { _ in
             self.tableView.reloadData()
+            self.layoutSearchEngineScrollViewContent()
         }, completion: nil)
     }
 
