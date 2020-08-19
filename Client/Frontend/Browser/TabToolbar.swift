@@ -14,14 +14,13 @@ protocol TabToolbarProtocol: AnyObject {
     var libraryButton: ToolbarButton { get }
     var forwardButton: ToolbarButton { get }
     var backButton: ToolbarButton { get }
-    var stopReloadButton: ToolbarButton { get }
+    var multiStateButton: ToolbarButton { get }
     var actionButtons: [Themeable & UIButton] { get }
 
     func updateBackStatus(_ canGoBack: Bool)
     func updateForwardStatus(_ canGoForward: Bool)
-    func updateReloadStatus(_ isLoading: Bool)
+    func updateMiddleButtonState(_ state: MiddleButtonState)
     func updatePageStatus(_ isWebPage: Bool)
-    func updateIsSearchStatus(_ isHomePage: Bool)
     func updateTabCount(_ count: Int, animated: Bool)
     func privateModeBadge(visible: Bool)
     func appMenuBadge(setVisible: Bool)
@@ -44,10 +43,11 @@ protocol TabToolbarDelegate: AnyObject {
     func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton)
 }
 
-fileprivate enum MiddleButtonState {
+enum MiddleButtonState {
     case reload
     case stop
     case search
+    case newTab
 }
 
 @objcMembers
@@ -56,42 +56,28 @@ open class TabToolbarHelper: NSObject {
     let ImageReload = UIImage.templateImageNamed("nav-refresh")
     let ImageStop = UIImage.templateImageNamed("nav-stop")
     let ImageSearch = UIImage.templateImageNamed("search")
-
-    fileprivate func setMiddleButtonState(_ state: MiddleButtonState) {
+    let ImageNewTab = UIImage.templateImageNamed("nav-add")
+    
+    func setMiddleButtonState(_ state: MiddleButtonState) {
+        middleButtonState = state
         switch state {
             case .reload:
-                toolbar.stopReloadButton.setImage(ImageReload, for: .normal)
-                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+                toolbar.multiStateButton.setImage(ImageReload, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
             case .stop:
-                toolbar.stopReloadButton.setImage(ImageStop, for: .normal)
-                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
+                toolbar.multiStateButton.setImage(ImageStop, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
             case .search:
-                toolbar.stopReloadButton.setImage(ImageSearch, for: .normal)
-                toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Search", comment: "Accessibility Label for the tab toolbar Search button")
+                toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Search", comment: "Accessibility Label for the tab toolbar Search button")
+            case .newTab:
+                toolbar.multiStateButton.setImage(ImageNewTab, for: .normal)
+                toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility Label for the tab toolbar New tab button")
         }
     }
-
-    var loading: Bool = false {
-        didSet {
-            if !isSearch {
-                if loading {
-                    setMiddleButtonState(.stop)
-                } else {
-                    setMiddleButtonState(.reload)
-                }
-            }
-        }
-    }
-
-    var isSearch: Bool = false {
-        didSet {
-            if isSearch {
-                setMiddleButtonState(.search)
-            } else {
-                setMiddleButtonState(.stop)
-            }
-        }
-    }
+    
+    // Default state as reload
+    var middleButtonState: MiddleButtonState = .reload
 
     fileprivate func setTheme(forButtons buttons: [Themeable]) {
         buttons.forEach { $0.applyTheme() }
@@ -113,11 +99,11 @@ open class TabToolbarHelper: NSObject {
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         toolbar.forwardButton.addTarget(self, action: #selector(didClickForward), for: .touchUpInside)
 
-        toolbar.stopReloadButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
-        toolbar.stopReloadButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
-        let longPressGestureStopReloadButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressStopReload))
-        toolbar.stopReloadButton.addGestureRecognizer(longPressGestureStopReloadButton)
-        toolbar.stopReloadButton.addTarget(self, action: #selector(didClickStopReload), for: .touchUpInside)
+        toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
+        toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+        let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
+        toolbar.multiStateButton.addGestureRecognizer(longPressMultiStateButton)
+        toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateButton), for: .touchUpInside)
 
         toolbar.tabsButton.addTarget(self, action: #selector(didClickTabs), for: .touchUpInside)
         let longPressGestureTabsButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressTabs))
@@ -183,26 +169,29 @@ open class TabToolbarHelper: NSObject {
         toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
     }
 
-    func didClickStopReload() {
-        if loading {
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.stopReloadButton)
-        } else if isSearch {
+    func didPressMultiStateButton() {
+        switch middleButtonState {
+        case .reload:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.multiStateButton)
+        case .search:
             TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .startSearchButton)
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.stopReloadButton)
-        } else {
-            toolbar.tabToolbarDelegate?.tabToolbarDidPressReload(toolbar, button: toolbar.stopReloadButton)
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressSearch(toolbar, button: toolbar.multiStateButton)
+        case .newTab:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressAddNewTab(toolbar, button: toolbar.addNewTabButton)
+        case .stop:
+            toolbar.tabToolbarDelegate?.tabToolbarDidPressStop(toolbar, button: toolbar.multiStateButton)
         }
     }
 
-    func didLongPressStopReload(_ recognizer: UILongPressGestureRecognizer) {
-        guard !isSearch else { return }
-        if recognizer.state == .began && !loading {
-            toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.stopReloadButton)
+    func didLongPressMultiStateButton(_ recognizer: UILongPressGestureRecognizer) {
+        switch middleButtonState {
+        case .search, .reload:
+            return
+        default:
+            if recognizer.state == .began {
+                toolbar.tabToolbarDelegate?.tabToolbarDidLongPressReload(toolbar, button: toolbar.multiStateButton)
+            }
         }
-    }
-
-    func updateReloadStatus(_ isLoading: Bool) {
-        loading = isLoading
     }
 }
 
@@ -270,7 +259,7 @@ class TabToolbar: UIView {
     let libraryButton = ToolbarButton()
     let forwardButton = ToolbarButton()
     let backButton = ToolbarButton()
-    let stopReloadButton = ToolbarButton()
+    let multiStateButton = ToolbarButton()
     let actionButtons: [Themeable & UIButton]
 
     fileprivate let privateModeBadge = BadgeWithBackdrop(imageName: "privateModeBadge", backdropCircleColor: UIColor.Defaults.MobilePrivatePurple)
@@ -281,7 +270,7 @@ class TabToolbar: UIView {
     private let contentView = UIStackView()
 
     fileprivate override init(frame: CGRect) {
-        actionButtons = [backButton, forwardButton, stopReloadButton, addNewTabButton, tabsButton, appMenuButton]
+        actionButtons = [backButton, forwardButton, multiStateButton, addNewTabButton, tabsButton, appMenuButton]
         super.init(frame: frame)
         setupAccessibility()
 
@@ -312,7 +301,7 @@ class TabToolbar: UIView {
     private func setupAccessibility() {
         backButton.accessibilityIdentifier = "TabToolbar.backButton"
         forwardButton.accessibilityIdentifier = "TabToolbar.forwardButton"
-        stopReloadButton.accessibilityIdentifier = "TabToolbar.stopReloadButton"
+        multiStateButton.accessibilityIdentifier = "TabToolbar.multiStateButton"
         tabsButton.accessibilityIdentifier = "TabToolbar.tabsButton"
         addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
         appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
@@ -371,8 +360,8 @@ extension TabToolbar: TabToolbarProtocol {
         forwardButton.isEnabled = canGoForward
     }
 
-    func updateReloadStatus(_ isLoading: Bool) {
-        helper?.updateReloadStatus(isLoading)
+    func updateMiddleButtonState(_ state: MiddleButtonState) {
+        helper?.setMiddleButtonState(state)
     }
 
     func updatePageStatus(_ isWebPage: Bool) {
@@ -381,10 +370,6 @@ extension TabToolbar: TabToolbarProtocol {
 
     func updateTabCount(_ count: Int, animated: Bool) {
         tabsButton.updateTabCount(count, animated: animated)
-    }
-
-    func updateIsSearchStatus(_ isSearch: Bool) {
-        helper?.isSearch = isSearch
     }
 }
 
