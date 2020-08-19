@@ -30,6 +30,10 @@ class PrivateBrowsingTest: BaseTestCase {
         // Go to Private browsing to open a website and check if it appears on History
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
+        measure(metrics: [XCTClockMetric(), // to measure time
+                          XCTCPUMetric(), // to measure CPU cycles
+        XCTStorageMetric(), // to measure storage consuming
+        XCTMemoryMetric()])
         navigator.openURL(url2)
         waitForValueContains(app.textFields["url"], value: "mozilla")
         navigator.goto(LibraryPanel_History)
