@@ -6413,7 +6413,7 @@
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
-				PRODUCT_NAME = WidgetKitExtension;
+				INFOPLIST_FILE = WidgetKit/Info.plist;
 			};
 			name = Fennec;
 		};
@@ -6422,7 +6422,7 @@
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
-				PRODUCT_NAME = WidgetKitExtension;
+				PINFOPLIST_FILE = WidgetKit/Info.plist;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -6431,7 +6431,7 @@
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
-				PRODUCT_NAME = WidgetKitExtension;
+				INFOPLIST_FILE = WidgetKit/Info.plist;
 			};
 			name = Firefox;
 		};
@@ -6440,7 +6440,7 @@
 			buildSettings = {
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
-				PRODUCT_NAME = WidgetKitExtension;
+				INFOPLIST_FILE = WidgetKit/Info.plist;
 			};
 			name = FirefoxBeta;
 		};
