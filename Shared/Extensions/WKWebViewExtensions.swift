@@ -7,6 +7,11 @@ import WebKit
 
 extension WKWebView {
     
+    /// This calls different WebKit evaluateJavaScript functions depending on iOS version
+    ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
+    ///  - If below iOS14, evaluates Javascript without sandboxed environment
+    /// - Parameters:
+    ///     - javascript: String representing javascript to be evaluated
     public func evaluateJavascriptInDefaultContentWorld(_ javascript: String) {
         if #available(iOS 14.0, *) {
             self.evaluateJavaScript(javascript, in: nil, in: .defaultClient, completionHandler: { _ in })
@@ -15,7 +20,13 @@ extension WKWebView {
         }
     }
     
-    public func evaluateJavascriptInDefaultContentWorld(_ javascript: String, completion: @escaping ((Any?, Error?) -> Void)) {
+    /// This calls different WebKit evaluateJavaScript functions depending on iOS version with a completion that passes a tuple with optional data or an optional error
+    ///  - If iOS14 or higher, evaluates Javascript in a .defaultClient sandboxed content world
+    ///  - If below iOS14, evaluates Javascript without sandboxed environment
+    /// - Parameters:
+    ///     - javascript: String representing javascript to be evaluated
+    ///     - completion: Tuple containing optional data and an optional error
+    public func evaluateJavascriptInDefaultContentWorld(_ javascript: String,_ completion: @escaping ((Any?, Error?) -> Void)) {
         if #available(iOS 14.0, *) {
             self.evaluateJavaScript(javascript, in: nil, in: .defaultClient) { result in
                 switch result {
