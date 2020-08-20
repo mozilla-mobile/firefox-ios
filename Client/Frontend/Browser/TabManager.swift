@@ -33,6 +33,12 @@ class WeakTabManagerDelegate {
     }
 }
 
+extension TabManager: TabEventHandler {
+    func tab(_ tab: Tab, didLoadFavicon favicon: Favicon?, with: Data?) {
+        store.preserveTabs(tabs, selectedTab: selectedTab)
+    }
+}
+
 // TabManager must extend NSObjectProtocol in order to implement WKNavigationDelegate
 class TabManager: NSObject {
     fileprivate var delegates = [WeakTabManagerDelegate]()
@@ -112,6 +118,8 @@ class TabManager: NSObject {
 
         self.store = TabManagerStore(imageStore: imageStore)
         super.init()
+
+        register(self, forTabEvents: .didLoadFavicon)
 
         addNavigationDelegate(self)
 
@@ -196,7 +204,7 @@ class TabManager: NSObject {
         }
 
         store.preserveTabs(tabs, selectedTab: selectedTab)
-
+        
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
         selectedTab?.lastExecutedTime = Date.now()
