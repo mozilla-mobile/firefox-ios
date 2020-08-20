@@ -143,7 +143,7 @@ class Tab: NSObject {
                 return
             }
 
-            webView?.evaluateJavaScript("window.__firefox__.NightMode.setEnabled(\(nightMode))")
+            webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NightMode.setEnabled(\(nightMode))")
             // For WKWebView background color to take effect, isOpaque must be false,
             // which is counter-intuitive. Default is true. The color is previously
             // set to black in the WKWebView init.
@@ -666,7 +666,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
     func applyTheme() {
         if url == nil {
             let backgroundColor = ThemeManager.instance.current.browser.background.hexString
-            evaluateJavaScript("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
+            evaluateJavascriptInDefaultContentWorld("document.documentElement.style.backgroundColor = '\(backgroundColor)';")
         }
         window?.backgroundColor = UIColor.theme.browser.background
     }
@@ -676,14 +676,14 @@ class TabWebView: WKWebView, MenuHelperInterface {
     }
 
     @objc func menuHelperFindInPage() {
-        evaluateJavaScript("getSelection().toString()") { result, _ in
+        evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebView(self, didSelectFindInPageForSelection: selection)
         }
     }
 
     @objc func menuHelperSearchWithFirefox() {
-        evaluateJavaScript("getSelection().toString()") { result, _ in
+        evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
             let selection = result as? String ?? ""
             self.delegate?.tabWebViewSearchWithFirefox(self, didSelectSearchWithFirefoxForSelection: selection)
         }
@@ -709,7 +709,7 @@ class TabWebView: WKWebView, MenuHelperInterface {
 class TabWebViewMenuHelper: UIView {
     @objc func swizzledMenuHelperFindInPage() {
         if let tabWebView = superview?.superview as? TabWebView {
-            tabWebView.evaluateJavaScript("getSelection().toString()") { result, _ in
+            tabWebView.evaluateJavascriptInDefaultContentWorld("getSelection().toString()") { result, _ in
                 let selection = result as? String ?? ""
                 tabWebView.delegate?.tabWebView(tabWebView, didSelectFindInPageForSelection: selection)
             }
