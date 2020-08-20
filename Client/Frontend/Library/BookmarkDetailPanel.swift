@@ -171,6 +171,8 @@ class BookmarkDetailPanel: SiteTableViewController {
     }
 
     override func reloadData() {
+        // Can be called while app backgrounded and the db closed, don't try to reload the data source in this case
+        if profile.isShutdown { return }
         profile.places.getBookmarksTree(rootGUID: BookmarkRoots.RootGUID, recursive: true).uponQueue(.main) { result in
             guard let rootFolder = result.successValue as? BookmarkFolder else {
                 // TODO: Handle error case?
@@ -182,13 +184,19 @@ class BookmarkDetailPanel: SiteTableViewController {
             var bookmarkFolders: [(folder: BookmarkFolder, indent: Int)] = []
 
             func addFolder(_ folder: BookmarkFolder, indent: Int = 0) {
-                // Do not append the top "root" folder to this list as
+                // Do not append itself and the top "root" folder to this list as
                 // bookmarks cannot be stored directly within it.
-                if folder.guid != BookmarkRoots.RootGUID {
+                if folder.guid != BookmarkRoots.RootGUID && folder.guid != self.bookmarkNodeGUID {
                     bookmarkFolders.append((folder, indent))
                 }
 
-                for case let childFolder as BookmarkFolder in folder.children ?? [] {
+                var folderChildren: [BookmarkNode]? = nil
+                // Suitable to be appended
+                if folder.guid != self.bookmarkNodeGUID {
+                    folderChildren = folder.children
+                }
+
+                for case let childFolder as BookmarkFolder in folderChildren ?? [] {
                     // Any "root" folders (i.e. "Mobile Bookmarks") should
                     // have an indentation of 0.
                     if childFolder.isRoot {

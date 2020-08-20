@@ -56,7 +56,7 @@ class DisconnectSetting: Setting {
         alertController.addAction(
             UIAlertAction(title: Strings.SettingsDisconnectDestructiveAction, style: .destructive) { (action) in
                 self.profile.removeAccount()
-                UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .settings, object: .accountDisconnected)
+                TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .settings, object: .accountDisconnected)
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: self.profile.hasAccount()])
 
                 // If there is more than one view controller in the navigation controller, we can pop.

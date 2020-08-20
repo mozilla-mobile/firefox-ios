@@ -54,9 +54,15 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             showLibrary()
         }
     }
+    
+    func tabToolbarDidPressAddNewTab(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        let isPrivate = tabManager.selectedTab?.isPrivate ?? false
+        tabManager.selectTab(tabManager.addTab(nil, isPrivate: isPrivate))
+        focusLocationTextField(forTab: tabManager.selectedTab)
+    }
 
     func tabToolbarDidPressMenu(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
-        var whatsNewAction: PhotonActionSheetItem? = nil
+        var whatsNewAction: PhotonActionSheetItem?
         let showBadgeForWhatsNew = shouldShowWhatsNew()
         if showBadgeForWhatsNew {
             // Set the version number of the app, so the What's new will stop showing
@@ -66,7 +72,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         }
         whatsNewAction = PhotonActionSheetItem(title: Strings.WhatsNewString, iconString: "whatsnew", isEnabled: showBadgeForWhatsNew, badgeIconNamed: "menuBadge") { _, _ in
             if let whatsNewTopic = AppInfo.whatsNewTopic, let whatsNewURL = SupportUtils.URLForTopic(whatsNewTopic) {
-                UnifiedTelemetry.recordEvent(category: .action, method: .open, object: .whatsNew)
+                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .whatsNew)
                 self.openURLInNewTab(whatsNewURL)
             }
         }
@@ -81,7 +87,11 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
         let viewLogins: PhotonActionSheetItem? = !isLoginsButtonShowing ? nil :
             PhotonActionSheetItem(title: Strings.LoginsAndPasswordsTitle, iconString: "key", iconType: .Image, iconAlignment: .left, isEnabled: true) { _, _ in
             guard let navController = self.navigationController else { return }
-            LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self).uponQueue(.main) { loginsVC in
+            let navigationHandler: ((_ url: URL?) -> Void) = { url in
+                UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+                self.openURLInNewTab(url)
+            }
+            LoginListViewController.create(authenticateInNavigationController: navController, profile: self.profile, settingsDelegate: self, webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
                 guard let loginsVC = loginsVC else { return }
                 loginsVC.shownFromAppMenu = true
                 let navController = ThemedNavigationController(rootViewController: loginsVC)
@@ -110,7 +120,7 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
 
     func tabToolbarDidPressTabs(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
         showTabTray()
-        UnifiedTelemetry.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
+        TelemetryWrapper.recordEvent(category: .action, method: .press, object: .tabToolbar, value: .tabView)
     }
 
     func getTabToolbarLongPressActionsForModeSwitching() -> [PhotonActionSheetItem] {
@@ -183,6 +193,10 @@ extension BrowserViewController: TabToolbarDelegate, PhotonActionSheetProtocol {
             backForwardViewController.backForwardTransitionDelegate = BackForwardListAnimator()
             self.present(backForwardViewController, animated: true, completion: nil)
         }
+    }
+
+    func tabToolbarDidPressSearch(_ tabToolbar: TabToolbarProtocol, button: UIButton) {
+        focusLocationTextField(forTab: tabManager.selectedTab)
     }
 }
 

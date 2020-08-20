@@ -173,4 +173,58 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.tables.otherElements["profile1"], timeout: 10)
         XCTAssertTrue(app.tables.staticTexts[tabOpenInDesktop].exists, "The tab is not synced")
     }
+
+    func testFxADisconnectConnect() {
+        // Sign into Firefox Accounts
+        signInFxAccounts()
+        sleep(3)
+
+        // Wait for initial sync to complete
+        waitForInitialSyncComplete()
+        navigator.nowAt(SettingsScreen)
+        // Check Bookmarks
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.tables["Bookmarks List"], timeout: 3)
+        waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 5)
+
+        // Check Login
+        navigator.goto(SettingsScreen)
+        navigator.goto(LoginsSettings)
+        waitForExistence(app.tables["Login List"], timeout: 3)
+        // Verify the login
+        waitForExistence(app.staticTexts["https://accounts.google.com"])
+
+        // Disconnect account
+        navigator.goto(SettingsScreen)
+        app.tables.cells.element(boundBy: 0).tap()
+        waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
+
+        app.cells["SignOut"].tap()
+        
+        waitForExistence(app.buttons["Disconnect"], timeout: 5)
+        app.buttons["Disconnect"].tap()
+        sleep(3)
+
+        // Connect same account again
+        navigator.performAction(Action.OpenEmailToSignIn)
+        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+
+        app.secureTextFields.element(boundBy: 0).tap()
+        app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
+        waitForExistence(app.webViews.buttons.element(boundBy: 0), timeout: 5)
+        app.webViews.buttons.element(boundBy: 0).tap()
+
+        waitForInitialSyncComplete()
+        navigator.nowAt(SettingsScreen)
+        
+        // Check Bookmarks
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 5)
+
+        // Check Logins
+        navigator.goto(SettingsScreen)
+        navigator.goto(LoginsSettings)
+        waitForExistence(app.tables["Login List"], timeout: 5)
+        waitForExistence(app.staticTexts["https://accounts.google.com"])
+    }
 }

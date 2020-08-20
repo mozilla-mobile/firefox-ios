@@ -66,7 +66,7 @@ extension PhotonActionSheetProtocol {
             guard let url = tab.url?.displayURL else { return }
 
             self.profile.readingList.createRecordWithURL(url.absoluteString, title: tab.title ?? "", addedBy: UIDevice.current.name)
-            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
+            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .readingListItem, value: .pageActionMenu)
             success(Strings.AppMenuAddToReadingListConfirmMessage, .addToReadingList)
         }
 
@@ -76,7 +76,7 @@ extension PhotonActionSheetProtocol {
                     return
             }
             bvc.addBookmark(url: url.absoluteString, title: tab.title, favicon: tab.displayFavicon)
-            UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
+            TelemetryWrapper.recordEvent(category: .action, method: .add, object: .bookmark, value: .pageActionMenu)
             success(Strings.AppMenuAddBookmarkConfirmMessage, .bookmarkPage)
         }
 
@@ -89,7 +89,7 @@ extension PhotonActionSheetProtocol {
                 }
             }
 
-            UnifiedTelemetry.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
+            TelemetryWrapper.recordEvent(category: .action, method: .delete, object: .bookmark, value: .pageActionMenu)
         }
 
         let pinToTopSites = PhotonActionSheetItem(title: Strings.PinTopsiteActionTitle, iconString: "action_pin") { _, _ in
@@ -167,7 +167,31 @@ extension PhotonActionSheetProtocol {
                 success(Strings.AppMenuCopyURLConfirmMessage, .copyUrl)
             }
         }
-
+        
+        let refreshPage = PhotonActionSheetItem(title: Strings.ReloadPageTitle, iconString: "nav-refresh") { _, _ in
+            self.tabManager.selectedTab?.reload()
+        }
+        
+        let stopRefreshPage = PhotonActionSheetItem(title: Strings.StopReloadPageTitle, iconString: "nav-stop") { _, _ in
+            self.tabManager.selectedTab?.stop()
+        }
+        
+        let refreshAction = tab.loading ? stopRefreshPage : refreshPage
+        var refreshActions = [refreshAction]
+        
+        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled {
+            let isSafelisted = helper.status == .safelisted
+            
+            let title = !isSafelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
+            let imageName = helper.isEnabled ? "menu-TrackingProtection-Off" : "menu-TrackingProtection"
+            let toggleTP = PhotonActionSheetItem(title: title, iconString: imageName) { _, _ in
+                ContentBlocker.shared.safelist(enable: !isSafelisted, url: url) {
+                    tab.reload()
+                }
+            }
+            refreshActions.append(toggleTP)
+        }
+        
         var mainActions = [sharePage]
 
         // Disable bookmarking and reading list if the URL is too long.
@@ -192,7 +216,11 @@ extension PhotonActionSheetProtocol {
             commonActions.insert(findInPageAction, at: 0)
         }
 
-        return [mainActions, commonActions]
+        if (profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false && tab.readerModeAvailableOrActive) {
+            return [refreshActions, mainActions, commonActions]
+        } else {
+            return [mainActions, commonActions]
+        }
     }
 
 }

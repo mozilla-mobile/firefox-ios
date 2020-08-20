@@ -5,8 +5,9 @@
 import Foundation
 @testable import Client
 import WebKit
-
+import GCDWebServers
 import XCTest
+import Shared
 
 class TabEventHandlerTests: XCTestCase {
 
@@ -21,6 +22,44 @@ class TabEventHandlerTests: XCTestCase {
 
         TabEvent.post(.didLoseFocus, for: tab)
         XCTAssertFalse(handler.isFocused!)
+    }
+
+
+    func testBlankPopupURL() {
+        // Hide intro so it is easier to see the test running and debug it
+        BrowserViewController.foregroundBVC().profile.prefs.setInt(1, forKey: PrefsKeys.IntroSeen)
+        BrowserViewController.foregroundBVC().profile.prefs.setString(ETPCoverSheetShowType.DoNotShow.rawValue, forKey: PrefsKeys.KeyETPCoverSheetShowType)
+
+        let webServer = GCDWebServer()
+        webServer.addHandler(forMethod: "GET", path: "/blankpopup", request: GCDWebServerRequest.self) { (request) -> GCDWebServerResponse in
+            let page = """
+                <html>
+                <body onload="window.open('')">open about:blank popup</body>
+                </html>
+            """
+            return GCDWebServerDataResponse(html: page)!
+        }
+
+        if !webServer.start(withPort: 0, bonjourName: nil) {
+            XCTFail("Can't start the GCDWebServer")
+        }
+        let webServerBase = "http://localhost:\(webServer.port)"
+
+        BrowserViewController.foregroundBVC().profile.prefs.setBool(false, forKey: PrefsKeys.KeyBlockPopups)
+        BrowserViewController.foregroundBVC().tabManager.addTab(URLRequest(url: URL(string: "\(webServerBase)/blankpopup")!))
+
+        let exists = NSPredicate() { obj,_ in
+            let tabManager = obj as! TabManager
+            return tabManager.tabs.count > 2
+        }
+
+        expectation(for: exists, evaluatedWith: BrowserViewController.foregroundBVC().tabManager) {
+            let url = BrowserViewController.foregroundBVC().tabManager.tabs[2].url
+            XCTAssertTrue(url?.absoluteString == "about:blank")
+            return true
+        }
+
+        waitForExpectations(timeout: 20, handler: nil)
     }
 }
 

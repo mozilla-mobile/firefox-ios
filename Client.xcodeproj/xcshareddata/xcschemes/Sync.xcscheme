@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2827315D1ABC9BE600AA1954"
-               BuildableName = "Sync.framework"
+               BuildableName = "libSync.a"
                BlueprintName = "Sync"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -61,17 +61,6 @@
             </SkippedTests>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2827315D1ABC9BE600AA1954"
-            BuildableName = "Sync.framework"
-            BlueprintName = "Sync"
-            ReferencedContainer = "container:Client.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Fennec"
@@ -87,13 +76,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2827315D1ABC9BE600AA1954"
-            BuildableName = "Sync.framework"
+            BuildableName = "libSync.a"
             BlueprintName = "Sync"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Fennec"
@@ -105,7 +92,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2827315D1ABC9BE600AA1954"
-            BuildableName = "Sync.framework"
+            BuildableName = "libSync.a"
             BlueprintName = "Sync"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>

@@ -48,7 +48,7 @@ class ConnectSetting: WithoutAccountSetting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         let viewController = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
-        UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
@@ -339,7 +339,7 @@ class AccountStatusSetting: WithAccountSetting {
     override func onClick(_ navigationController: UINavigationController?) {
         guard !profile.rustFxA.accountNeedsReauth() else {
             let vc = FirefoxAccountSignInViewController(profile: profile, parentType: .settings, deepLinkParams: nil)
-            UnifiedTelemetry.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
+            TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .view, object: .settings)
             navigationController?.pushViewController(vc, animated: true)
             return
         }
@@ -483,7 +483,7 @@ class SlowTheDatabase: HiddenSetting {
 
 class ForgetSyncAuthStateDebugSetting: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: forget Sync auth state", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Debug: forget Sync auth state", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -526,7 +526,7 @@ class ShowEtpCoverSheet: HiddenSetting {
     let profile: Profile
     
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: ETP Cover Sheet On", comment: "Debug option to show ETP Cover Sheet"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Debug: ETP Cover Sheet On", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     override init(settings: SettingsTableViewController) {
@@ -545,7 +545,7 @@ class ShowEtpCoverSheet: HiddenSetting {
 
 class ToggleOnboarding: HiddenSetting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Debug: Toggle onboarding type", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Debug: Toggle onboarding type", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -586,12 +586,23 @@ class LeanplumStatus: HiddenSetting {
 class ClearOnboardingABVariables: HiddenSetting {
     override var title: NSAttributedString? {
         // If we are running an A/B test this will also fetch the A/B test variables from leanplum. Re-open app to see the effect.
-        return NSAttributedString(string: NSLocalizedString("Debug: Clear onboarding AB variables", comment: "Debug option"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "Debug: Clear onboarding AB variables", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
         settings.profile.prefs.removeObjectForKey(PrefsKeys.IntroSeen)
         OnboardingUserResearch().onboardingScreenType = nil
+    }
+}
+
+class ToggleNewTabToolbarButton: HiddenSetting {
+    override var title: NSAttributedString? {
+        return NSAttributedString(string: "Debug: Toggle new tab toolbar button", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        let currentValue = settings.profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
+        settings.profile.prefs.setBool(!currentValue, forKey: PrefsKeys.ShowNewTabToolbarButton)
     }
 }
 
@@ -607,7 +618,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"),  VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     public static var appVersion: String {
@@ -666,7 +677,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -682,7 +693,7 @@ class YourRightsSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -715,7 +726,7 @@ class SendFeedbackSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -744,7 +755,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -819,7 +830,12 @@ class LoginsSetting: Setting {
         deselectRow()
         
         guard let navController = navigationController else { return }
-        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC()).uponQueue(.main) { loginsVC in
+        let navigationHandler: ((_ url: URL?) -> Void) = { url in
+            guard let url = url else { return }
+            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+            self.delegate?.settingsOpenURLInNewTab(url)
+        }
+        LoginListViewController.create(authenticateInNavigationController: navController, profile: profile, settingsDelegate: BrowserViewController.foregroundBVC(), webpageNavigationHandler: navigationHandler).uponQueue(.main) { loginsVC in
             guard let loginsVC = loginsVC else { return }
             LeanPlumClient.shared.track(event: .openedLogins)
             navController.pushViewController(loginsVC, animated: true)
@@ -915,7 +931,7 @@ class PrivacyPolicySetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
-        setUpAndPushSettingsContentViewController(navigationController)
+        setUpAndPushSettingsContentViewController(navigationController, self.url)
     }
 }
 
@@ -952,7 +968,7 @@ class ChinaSyncServiceSetting: Setting {
     }
 
     @objc func switchValueChanged(_ toggle: UISwitch) {
-        UnifiedTelemetry.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .chinaServerSwitch)
         guard profile.rustFxA.hasAccount() else {
             prefs.setObject(toggle.isOn, forKey: prefKey)
             RustFirefoxAccounts.reconfig(prefs: profile.prefs)
@@ -1147,18 +1163,3 @@ class ThemeSetting: Setting {
     }
 }
 
-class TranslationSetting: Setting {
-    let profile: Profile
-    override var accessoryView: UIImageView? { return disclosureIndicator }
-    override var style: UITableViewCell.CellStyle { return .value1 }
-    override var accessibilityIdentifier: String? { return "TranslationOption" }
-
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-        super.init(title: NSAttributedString(string: Strings.SettingTranslateSnackBarTitle, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
-    }
-
-    override func onClick(_ navigationController: UINavigationController?) {
-        navigationController?.pushViewController(TranslationSettingsController(profile), animated: true)
-    }
-}

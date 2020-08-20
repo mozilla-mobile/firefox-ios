@@ -232,6 +232,13 @@ extension Strings {
     // Detail view
     public static let LoginsDetailViewLoginTitle = NSLocalizedString("LoginsDetailView.LoginTitle", value: "Login", comment: "Title for the login detail view")
     public static let LoginsDetailViewLoginModified = NSLocalizedString("LoginsDetailView.LoginModified", value: "Modified", comment: "Login detail view field name for the last modified date")
+
+    // Breach Alerts
+    public static let BreachAlertsTitle = NSLocalizedString("BreachAlerts.Title", value: "Website Breach", comment: "Title for the Breached Login Detail View.")
+    public static let BreachAlertsLearnMore = NSLocalizedString("BreachAlerts.LearnMoreButton", value: "Learn more", comment: "Link to monitor.firefox.com to learn more about breached passwords")
+    public static let BreachAlertsBreachDate = NSLocalizedString("BreachAlerts.BreachDate", value: "This breach occurred on", comment: "Describes the date on which the breach occurred")
+    public static let BreachAlertsDescription = NSLocalizedString("BreachAlerts.Description", value: "Passwords were leaked or stolen since you last changed your password. To protect this account, log in to the site and change your password.", comment: "Description of what a breach is")
+    public static let BreachAlertsLink = NSLocalizedString("BreachAlerts.Link", value: "Go to", comment: "Leads to a link to the breached website")
 }
 
 // Firefox Account
@@ -504,6 +511,8 @@ extension Strings {
 
 // App menu.
 extension Strings {
+    public static let AppMenuLibraryReloadString = NSLocalizedString("Menu.Library.Reload", tableName: "Menu", value: "Reload", comment: "Label for the button, displayed in the menu, used to Reload the webpage")
+    public static let StopReloadPageTitle = NSLocalizedString("Menu.Library.StopReload", value: "Stop", comment: "Label for the button displayed in the menu used to stop the reload of the webpage")
     public static let AppMenuLibraryTitleString = NSLocalizedString("Menu.Library.Title", tableName: "Menu", value: "Your Library", comment: "Label for the button, displayed in the menu, used to open the Library")
     public static let AppMenuAddToReadingListTitleString = NSLocalizedString("Menu.AddToReadingList.Title", tableName: "Menu", value: "Add to Reading List", comment: "Label for the button, displayed in the menu, used to add a page to the reading list.")
     public static let AppMenuShowTabsTitleString = NSLocalizedString("Menu.ShowTabs.Title", tableName: "Menu", value: "Show Tabs", comment: "Label for the button, displayed in the menu, used to open the tabs tray")
@@ -591,7 +600,7 @@ extension Strings {
     public static let TPBlockingSiteDisabled = NSLocalizedString("Menu.TrackingProtectionDisable1.Title", value: "Disabled for this site", comment: "The button that disabled TP for a site.")
     public static let ETPOn = NSLocalizedString("Menu.EnhancedTrackingProtectionOn.Title", value: "Enhanced Tracking Protection is ON for this site.", comment: "A switch to enable enhanced tracking protection inside the menu.")
     public static let ETPOff = NSLocalizedString("Menu.EnhancedTrackingProtectionOff.Title", value: "Enhanced Tracking Protection is OFF for this site.", comment: "A switch to disable enhanced tracking protection inside the menu.")
-    public static let StrictETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, cryptominers, fingerprinters, and tracking content.", comment: "Description for having strict ETP protection with ITP offered in iOS14+")
+    public static let StrictETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStrictWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers, fingerprinters, and tracking content.", comment: "Description for having strict ETP protection with ITP offered in iOS14+")
     public static let StandardETPWithITP = NSLocalizedString("Menu.EnhancedTrackingProtectionStandardWithITP.Title", value: "Firefox blocks cross-site trackers, social trackers, cryptominers, and fingerprinters.", comment: "Description for having standard ETP protection with ITP offered in iOS14+")
 
     // TP Page menu title
@@ -774,6 +783,10 @@ extension Strings {
     public static let DisplayThemeOptionDark = NSLocalizedString("Settings.DisplayTheme.OptionDark", value: "Dark", comment: "Option choice in display theme settings for dark theme")
 }
 
+extension Strings {
+    public static let AddTabAccessibilityLabel = NSLocalizedString("TabTray.AddTab.Button", value: "Add Tab", comment: "Accessibility label for the Add Tab button in the Tab Tray.")
+}
+
 // Cover Sheet
 extension Strings {
     // Dark Mode Cover Sheet
@@ -808,14 +821,13 @@ extension String {
     
     // Widget - Shared
     public static let QuickActionsGalleryTitle = NSLocalizedString("TodayWidget.QuickActionsGalleryTitle", tableName: "Today", value: "Quick Actions", comment: "Quick Actions title when widget enters edit mode")
-    public static let SearchLabel = NSLocalizedString("TodayWidget.SearchLabel", tableName: "Today", value: "Search", comment: "This is a common word used in Search in Private Tab and Search in Firefox")
     
     // Quick Action - Medium Size Quick Action
     public static let QuickActionsSubLabel = NSLocalizedString("TodayWidget.QuickActionsSubLabel", tableName: "Today", value: "Firefox - Quick Actions", comment: "Sub label for medium size quick action widget")
     public static let NewSearchButtonLabel = NSLocalizedString("TodayWidget.NewSearchButtonLabelV1", tableName: "Today", value: "Search in Firefox", comment: "Open New Tab button label")
     public static let NewPrivateTabButtonLabelV2 = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabelV2", tableName: "Today", value: "Search in Private Tab", comment: "Open New Private Tab button label for medium size action")
     public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV1", tableName: "Today", value: "Go to copied link", comment: "Go to link pasted on the clipboard")
-    public static let GoToCopiedLinkLabelV2 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV2", tableName: "Today", value: "Go to\nCopied Link", comment: "Go to link pasted on the clipboard but this string has newline character")
+    public static let GoToCopiedLinkLabelV2 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV2", tableName: "Today", value: "Go to\nCopied Link", comment: "Go to copied link")
     public static let GoToCopiedLinkLabelV3 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV3", tableName: "Today", value: "Go to Copied Link", comment: "Go To Copied Link text pasted on the clipboard but this string doesn't have new line character")
     public static let ClosePrivateTab = NSLocalizedString("TodayWidget.ClosePrivateTabsButton", tableName: "Today", value: "Close Private Tabs", comment: "Close Private Tabs button label")
     

@@ -89,7 +89,7 @@ enum NavigationPath {
             self = .deepLink(link)
         } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
             self = .fxa(params: FxALaunchParams(query: url.getQuery()))
-        } else if urlString.starts(with: "\(scheme)://open-url") {
+        } else if urlString.starts(with: "\(scheme)://open-url") || urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
             let url = components.valueForQuery("url")?.asURL
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.

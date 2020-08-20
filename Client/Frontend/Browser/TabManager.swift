@@ -341,6 +341,7 @@ class TabManager: NSObject {
             tab.loadRequest(request)
         } else if !isPopup {
             let newTabChoice = NewTabAccessors.getNewTabPage(profile.prefs)
+            tab.newTabPageType = newTabChoice
             switch newTabChoice {
             case .homePage:
                 // We definitely have a homepage if we've got here
@@ -398,8 +399,13 @@ class TabManager: NSObject {
         removeTab(tab, flushToDisk: true, notify: true)
         updateIndexAfterRemovalOf(tab, deletedIndex: index)
         hideNetworkActivitySpinner()
-        
-        UnifiedTelemetry.recordEvent(category: .action, method: .close, object: .tab)
+
+        TelemetryWrapper.recordEvent(
+            category: .action,
+            method: .close,
+            object: .tab,
+            value: tab.isPrivate ? .privateTab : .normalTab
+        )
     }
 
     private func updateIndexAfterRemovalOf(_ tab: Tab, deletedIndex: Int) {
@@ -444,7 +450,7 @@ class TabManager: NSObject {
             privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
         }
 
-        tab.closeAndRemovePrivateBrowsingData()
+        tab.close()
 
         if notify {
             delegates.forEach { $0.get()?.tabManager(self, didRemoveTab: tab, isRestoring: store.isRestoringTabs) }
@@ -475,7 +481,7 @@ class TabManager: NSObject {
         if selectedTab?.isPrivate ?? false {
             _selectedIndex = -1
         }
-        privateTabs.forEach { $0.closeAndRemovePrivateBrowsingData() }
+        privateTabs.forEach { $0.close() }
         tabs = normalTabs
 
         privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
@@ -638,7 +644,7 @@ extension TabManager: WKNavigationDelegate {
         guard let tab = self[webView] else { return }
 
         if let tpHelper = tab.contentBlocker, !tpHelper.isEnabled {
-            webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.securityToken))")
+            webView.evaluateJavaScript("window.__firefox__.TrackingProtectionStats.setEnabled(false, \(UserScriptManager.appIdToken))")
         }
     }
 

@@ -5,7 +5,6 @@
 import Foundation
 import Account
 import Shared
-import FxA
 import SwiftyJSON
 
 /**

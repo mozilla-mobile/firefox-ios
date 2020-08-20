@@ -71,6 +71,20 @@ class Tab: NSObject {
     var pageMetadata: PageMetadata?
 
     var consecutiveCrashes: UInt = 0
+    
+    // Setting defualt page as topsites
+    var newTabPageType: NewTabPage = .topSites
+
+    // To check if current URL is the starting page i.e. either blank page or internal page like topsites
+    var isURLStartingPage: Bool {
+        guard url != nil else {
+            return true
+        }
+        if url!.absoluteString.hasPrefix("internal://") {
+            return true
+        }
+        return false
+    }
 
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,
@@ -200,7 +214,7 @@ class Tab: NSObject {
 
         debugTabCount += 1
 
-        UnifiedTelemetry.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
+        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: isPrivate ? .privateTab : .normalTab)
     }
 
     class func toRemoteTab(_ tab: Tab) -> RemoteTab? {
@@ -327,7 +341,7 @@ class Tab: NSObject {
         #endif
     }
 
-    func closeAndRemovePrivateBrowsingData() {
+    func close() {
         contentScriptManager.uninstall(tab: self)
 
         webView?.removeObserver(self, forKeyPath: KVOConstants.URL.rawValue)
@@ -336,21 +350,9 @@ class Tab: NSObject {
             tabDelegate?.tab?(self, willDeleteWebView: webView)
         }
 
-        if isPrivate {
-            removeAllBrowsingData()
-        }
-
         webView?.navigationDelegate = nil
         webView?.removeFromSuperview()
         webView = nil
-    }
-
-    func removeAllBrowsingData(completionHandler: @escaping () -> Void = {}) {
-        let dataTypes = WKWebsiteDataStore.allWebsiteDataTypes()
-
-        webView?.configuration.websiteDataStore.removeData(ofTypes: dataTypes,
-                                                     modifiedSince: Date.distantPast,
-                                                 completionHandler: completionHandler)
     }
 
     var loading: Bool {

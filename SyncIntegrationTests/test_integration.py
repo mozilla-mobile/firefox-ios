@@ -30,4 +30,8 @@ def test_sync_logins_from_desktop(tps, xcodebuild):
 def test_sync_tabs_from_desktop(tps, xcodebuild):
     tps.run('test_tabs_desktop.js')
     xcodebuild.test('XCUITests/IntegrationTests/testFxASyncTabsDesktop')
+
+def test_sync_disconnect_connect_fxa(tps, xcodebuild):
+    tps.run('test_bookmark_login.js')
+    xcodebuild.test('XCUITests/IntegrationTests/testFxADisconnectConnect')
  

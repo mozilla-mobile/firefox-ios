@@ -35,6 +35,14 @@ open class BasePayloadJSON {
  *  Encrypted DataObject adds fields like id and deleted."
  */
 open class CleartextPayloadJSON: BasePayloadJSON {
+    required public init(_ jsonString: String) {
+        super.init(jsonString)
+    }
+
+    public override init(_ json: JSON) {
+        super.init(json)
+    }
+
     // Override me.
     override open func isValid() -> Bool {
         return super.isValid() && self["id"].isString()

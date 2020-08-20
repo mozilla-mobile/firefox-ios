@@ -8,6 +8,8 @@ This means you might have to go searching through the dependency tree to get a f
 # Pings
 
  - [deletion_request](#deletion_request)
+ - [events](#events)
+ - [metrics](#metrics)
 
 
 ## deletion_request
@@ -21,6 +23,63 @@ The following metrics are added to the ping:
 | Name | Type | Description | Data reviews | Extras | Expiration |
 | --- | --- | --- | --- | --- | --- |
 | legacy.ids.client_id |[uuid](https://mozilla.github.io/glean/book/user/metrics/uuid.html) |The client id from legacy telemetry.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1635427)||never |
+
+## events
+
+This is a built-in ping that is assembled out of the box by the Glean SDK.
+
+See the Glean SDK documentation for the [`events` ping](https://mozilla.github.io/glean/book/user/pings/events.html).
+
+The following metrics are added to the ping:
+
+| Name | Type | Description | Data reviews | Extras | Expiration |
+| --- | --- | --- | --- | --- | --- |
+| preferences.changed |[event](https://mozilla.github.io/glean/book/user/metrics/event.html) |Recorded when a preference is changed and includes the preference that changed as well as the value changed to recorded in the extra keys.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>changed_to: The value the preference was changed to. </li><li>preference: The preference that was changed. </li></ul>|2021-07-01 |
+
+## metrics
+
+This is a built-in ping that is assembled out of the box by the Glean SDK.
+
+See the Glean SDK documentation for the [`metrics` ping](https://mozilla.github.io/glean/book/user/pings/metrics.html).
+
+The following metrics are added to the ping:
+
+| Name | Type | Description | Data reviews | Extras | Expiration |
+| --- | --- | --- | --- | --- | --- |
+| application_services.bookmark_highlights_visible |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the show bookmark highlights preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| application_services.pocket_stories_visible |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the show Pocket stories preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| application_services.recent_highlights_visible |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the show recent highlights preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| bookmarks.add |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |Counts the number of times a bookmark is added from the following: * Page Action Menu * Share Menu * Activity Stream context menu  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>page-action-menu</li><li>share-menu</li><li>activity-stream</li></ul>|2021-07-01 |
+| bookmarks.delete |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |Counts the number of times a bookmark is deleted from the following: * Page Action Menu * Activity Stream * Bookmarks Panel  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>page-action-menu</li><li>activity-stream</li><li>bookmarks-panel</li></ul>|2021-07-01 |
+| bookmarks.open |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |Counts the number of times a bookmark is opened from the following: * Awesomebar results * Bookmarks Panel  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>awesomebar-results</li><li>bookmarks-panel</li></ul>|2021-07-01 |
+| bookmarks.view_list |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |Counts the number of times the bookmarks list is opened from either the Home Panel tab button or the App Menu.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>home-panel</li><li>app-menu</li></ul>|2021-07-01 |
+| preferences.block_popups |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the "Block Popups" preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| preferences.close_private_tabs |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the "Close Private Tabs" preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| preferences.mail_client |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |The URL scheme of the mail client that the user wants to use for `mailto:` links. It is used to measure usage of this feature, to see how effective feature promotion campaigns are and to report back to third-party mail clients what percentage of users is using their client.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| preferences.new_tab_experience |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |The name of the view that the user wants to see on new tabs. For example History, Homepage or Blank. It is used to measure usage of this feature, to see how effective feature promotion campaigns are and to establish a baseline number for when we introduce the new Activity Stream features.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| preferences.save_logins |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the "Save Logins" preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| preferences.show_clipboard_bar |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the "Show Clipboard Bar" preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| qr_code.scanned |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts the number of times a QR code is scanned.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| reader_mode.close |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times the reader mode is closed.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| reader_mode.open |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times the reader mode is opened.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| reading_list.add |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |Counts the number of times an item is added to the reading list from the following: * Reader Mode Toolbar * Share Extension * Page Action Menu  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>reader-mode-toolbar</li><li>share-extension</li><li>page-action-menu</li></ul>|2021-07-01 |
+| reading_list.delete |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |Counts the number of times an item is added to the reading list from the following: * Reader Mode Toolbar * Reading List Panel  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>reader-mode-toolbar</li><li>reading-list-panel</li></ul>|2021-07-01 |
+| reading_list.mark_read |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts the number of times a reading list item is marked as read.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| reading_list.mark_unread |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts the number of times a reading list item is marked as unread.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| reading_list.open |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts the number of times an item is opened from the Reading List  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| search.counts |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |The labels for this counter are `{search-engine-name}.{source}`  If the search engine is bundled with Firefox-iOS, then `search-engine-name` will be the name of the search engine. If it is a custom search engine, the value will be `custom`.  The value of `source` will reflect the source from which the search started.  One of: * quicksearch * suggestion * actionbar  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| search.default_engine |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |The default search engine identifier if the search engine is pre-loaded with Firefox-iOS.  If it's a custom search engine, then the value will be 'custom'.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| search.start_search_pressed |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts the number of times the start search button is pressed  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| tabs.close |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |The count of tabs closed by the user. Increments the appropriate label when either a normal or private tab is closed.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>normal-tab</li><li>private-tab</li></ul>|2021-07-01 |
+| tabs.cumulative_count |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Measures the current open tab count as the application goes to background. Each background event adds to this metric, making it the cumulative sum of all open tabs when the app goes to background. This can be divided by the number of baseline pings to determine the average open tab count.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| tabs.new_tab_pressed |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts the number of times the add new tab button is pressed  |[1](https://github.com/mozilla-mobile/firefox-ios/issues/6886)||2021-07-21 |
+| tabs.open |[labeled_counter](https://mozilla.github.io/glean/book/user/metrics/labeled_counters.html) |The count of tabs opened by the user. Increments the appropriate label when either a normal or private tab is opened.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>normal-tab</li><li>private-tab</li></ul>|2021-07-01 |
+| theme.automatic_mode |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the "Manual/Automatic" theme preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| theme.automatic_slider_value |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |Measures the string representation of the current slider value of the automatic theme switching slider.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| theme.name |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |Measures the name of the current theme.  One of: * normal * dark  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| theme.use_system_theme |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the "Use System Light/Dark Mode" theme preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| tracking_protection.enabled |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the tracking-protection enabled preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
+| tracking_protection.strength |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |A string representing the selected strength of the tracking-protection that is enabled. One of: * basic * strict  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
 
 
 <!-- AUTOGENERATED BY glean_parser.  DO NOT EDIT. -->
