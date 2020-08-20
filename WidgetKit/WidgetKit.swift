@@ -10,6 +10,7 @@ struct FirefoxWidgets: WidgetBundle {
     @WidgetBundleBuilder
     var body: some Widget {
         SmallQuickLinkWidget()
-        SearchQuickLinksWigdet()
+        SearchQuickLinksWidget()
+        OpenTabsWidget()
     }
 }
