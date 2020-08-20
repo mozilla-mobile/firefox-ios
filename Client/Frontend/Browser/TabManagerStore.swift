@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import WebKit
 import Storage
 import Shared
 import XCGLogger
@@ -17,7 +16,9 @@ class TabManagerStore {
     fileprivate var writeOperation = DispatchWorkItem {}
 
     // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
-    fileprivate lazy var archivedStartupTabs = { return tabsToRestore() }()
+    fileprivate lazy var archivedStartupTabs = {
+        return TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
+    }()
 
     init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default) {
         self.fileManager = fileManager
@@ -31,7 +32,7 @@ class TabManagerStore {
     var hasTabsToRestoreAtStartup: Bool {
         return archivedStartupTabs.count > 0
     }
-
+    
     fileprivate func tabsStateArchivePath() -> String? {
         let profilePath: String?
         if  AppConstants.IsRunningTest {
@@ -43,36 +44,16 @@ class TabManagerStore {
         return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
     }
 
-    fileprivate func tabsToRestore() -> [SavedTab] {
-        guard let tabStateArchivePath = tabsStateArchivePath(),
-            fileManager.fileExists(atPath: tabStateArchivePath),
-            let tabData = try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath)) else {
-                return [SavedTab]()
-        }
-
-        let unarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
-        unarchiver.decodingFailurePolicy = .setErrorAndReturn
-        guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
-            Sentry.shared.send(
-                message: "Failed to restore tabs",
-                tag: SentryTag.tabManager,
-                severity: .error,
-                description: "\(unarchiver.error ??? "nil")")
-            return [SavedTab]()
-        }
-        return tabs
-    }
-
     fileprivate func prepareSavedTabs(fromTabs tabs: [Tab], selectedTab: Tab?) -> [SavedTab]? {
         var savedTabs = [SavedTab]()
         var savedUUIDs = Set<String>()
         for tab in tabs {
-            if let savedTab = SavedTab(tab: tab, isSelected: tab === selectedTab) {
+            if let savedTab = SavedTab(tab: tab, isSelected: tab == selectedTab) {
                 savedTabs.append(savedTab)
-
                 if let screenshot = tab.screenshot,
-                    let screenshotUUID = tab.screenshotUUID {
+                   let screenshotUUID = tab.screenshotUUID {
                     savedUUIDs.insert(screenshotUUID.uuidString)
+                    
                     imageStore?.put(screenshotUUID.uuidString, image: screenshot)
                 }
             }
@@ -87,6 +68,7 @@ class TabManagerStore {
     // Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
     @discardableResult func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) -> Success {
         assert(Thread.isMainThread)
+        print("preserve tabs!")
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
             let path = tabsStateArchivePath() else {
                 clearArchive()
@@ -95,15 +77,32 @@ class TabManagerStore {
 
         writeOperation.cancel()
 
+        // TODO: Look into this more
         let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
+//        let simpleTabs = savedTabs.map { BasicSavedTab(tab: $0.toSimpleTab(), isSelected: false) }
+        
+        
+        // didLoadPageMetadata
+        
+        for tab in savedTabs {
+            print("tabs url and favicon", tab.title, tab.faviconURL)
+        }
+        
+//        for tab in simpleTabs {
+//            print("saving tab url and favicon", tab?.title, tab?.faviconURL)
+//        }
+       
+//        archiver.encode(simpleTabs, forKey: "simpleTabs")
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
 
         let result = Success()
         writeOperation = DispatchWorkItem {
             let written = tabStateData.write(toFile: path, atomically: true)
-            log.debug("PreserveTabs write ok: \(written)") // Ignore write failure (could be restoring).
+            
+            // TODO: Check how many bytes we're writing.
+            log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)") // Ignore write failure (could be restoring).
             result.fill(Maybe(success: ()))
         }
 
@@ -162,6 +161,6 @@ class TabManagerStore {
 extension TabManagerStore {
     func testTabCountOnDisk() -> Int {
         assert(AppConstants.IsRunningTest)
-        return tabsToRestore().count
+        return TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).count
     }
 }
