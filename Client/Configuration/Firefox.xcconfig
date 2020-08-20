@@ -2,21 +2,11 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+#include "Common.xcconfig"
+#include "Release.xcconfig"
+
 MOZ_BUNDLE_DISPLAY_NAME = Firefox
-
-// Bundle Identifier
 MOZ_BUNDLE_ID = org.mozilla.ios.Firefox
-
-// Flag to indicate if we want to include the debug settings bundle or not
-INCLUDE_SETTINGS_BUNDLE = NO
-
-// Leanplum SDK Variables
-LEANPLUM_ENVIRONMENT =
-LEANPLUM_APP_ID =
-LEANPLUM_KEY =
-
-ENABLE_BITCODE = NO
-CLANG_MODULES_AUTOLINK = NO
-
-// Today Widget - Search
-MOZ_TODAY_WIDGET_SEARCH_DISPLAY_NAME = Firefox - Search
+CODE_SIGN_ENTITLEMENTS = Client/Entitlements/FirefoxApplication.entitlements
+OTHER_SWIFT_FLAGS = $(OTHER_SWIFT_FLAGS_common) -DMOZ_CHANNEL_RELEASE
+MOZ_INTERNAL_URL_SCHEME = firefox-internal
