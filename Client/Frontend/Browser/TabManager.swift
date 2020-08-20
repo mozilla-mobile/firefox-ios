@@ -446,7 +446,7 @@ class TabManager: NSObject {
         tabs.remove(at: removalIndex)
         assert(count == prevCount - 1, "Make sure the tab count was actually removed")
 
-        if (tab.isPrivate && privateTabs.count < 1) {
+        if tab.isPrivate && privateTabs.count < 1 {
             privateConfiguration = TabManager.makeWebViewConfig(isPrivate: true, prefs: profile.prefs)
         }
 
