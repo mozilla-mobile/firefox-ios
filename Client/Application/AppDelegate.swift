@@ -20,7 +20,6 @@ import Account
  import BackgroundTasks
 #endif
 
-
 private let log = Logger.browserLogger
 
 let LatestAppVersionProfileKey = "latestAppVersion"
@@ -34,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
     var window: UIWindow?
     var browserViewController: BrowserViewController!
+    var tabTrayController: TabTrayControllerV1!
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
@@ -120,6 +120,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         self.tabManager = TabManager(profile: profile, imageStore: imageStore)
+        self.tabTrayController = TabTrayControllerV1(tabManager: self.tabManager, profile: profile)
 
         // Add restoration class, the factory that will return the ViewController we
         // will restore with.
@@ -284,7 +285,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
 
         DispatchQueue.main.async {
-            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC())
+            NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC(), tray: self.tabTrayController)
         }
         return true
     }
@@ -390,8 +391,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Create an expiring background task. This allows plenty of time for db locks to be released
         // async. Otherwise we are getting crashes due to db locks not released yet.
-        var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
-        taskId = application.beginBackgroundTask (expirationHandler: {
+        var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+        taskId = application.beginBackgroundTask(expirationHandler: {
             print("Running out of background time, but we have a profile shutdown pending.")
             self.shutdownProfileWhenNotActive(application)
             application.endBackgroundTask(taskId)
