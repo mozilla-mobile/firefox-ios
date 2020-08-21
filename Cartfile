@@ -15,10 +15,6 @@ github "mozilla-mobile/MappaMundi"          "master"
 github "Leanplum/Leanplum-iOS-SDK"          ~> 2.7.2
 github "mozilla-services/shavar-prod-lists" "72.0"
 
-# iOS14 Enabled Custom Libs
-git "https://github.com/nbhasin2/glean.git" "33.0"
-git "https://github.com/nbhasin2/application-services.git" "63.0"
-
 # iOS14 Disabled
 # github "mozilla/glean"                     "v31.3.0"
 # github "mozilla/application-services"      "v61.0.7"
