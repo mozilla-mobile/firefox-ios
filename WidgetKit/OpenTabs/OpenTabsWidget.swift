@@ -1,14 +1,9 @@
-//
-//  TopSitesWidget.swift
-//  Client
-//
-//  Created by Sawyer Blatz on 8/10/20.
-//  Copyright © 2020 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import SwiftUI
 import WidgetKit
-import SDWebImage
 import UIKit
 import Combine
 
@@ -17,7 +12,8 @@ struct TabProvider: TimelineProvider {
 
     public func snapshot(with context: Context, completion: @escaping (OpenTabsEntry) -> ()) {
         let allOpenTabs = TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
-        let openTabs = allOpenTabs.filter { $0.url != nil && !$0.isPrivate }
+        let openTabs = allOpenTabs.filter { $0.url != nil && !$0.isPrivate && $0.url?.absoluteString.starts(with: "internal://") == false }
+        
         let faviconFetchGroup = DispatchGroup()
         var tabFaviconDictionary = [URL : Image]()
         
@@ -108,11 +104,8 @@ struct OpenTabsWidget: Widget {
 }
 
 struct OpenTabsView: View {
-   
     let entry: OpenTabsEntry
-    
-    @State var tabImage: Image?
-    
+        
     @Environment(\.widgetFamily) var widgetFamily
     
     @ViewBuilder
@@ -157,7 +150,7 @@ struct OpenTabsView: View {
         if widgetFamily == .systemMedium {
             return 3
         } else {
-            return 6
+            return 8
         }
     }
     
