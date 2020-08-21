@@ -41,7 +41,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         label.font = TabsButtonUX.TitleFont
         label.layer.cornerRadius = TabsButtonUX.CornerRadius
         label.textAlignment = .center
-        label.text = String(viewModel.getTabs().count)
+        label.text = String(viewModel.countOfNormalTabs())
         return label
     }()
     lazy var navigationMenu: UISegmentedControl = {

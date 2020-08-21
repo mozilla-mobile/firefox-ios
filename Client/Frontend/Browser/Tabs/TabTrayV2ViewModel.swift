@@ -46,6 +46,10 @@ class TabTrayV2ViewModel: NSObject {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
     
+    func countOfNormalTabs() -> Int {
+        return tabManager.normalTabs.count
+    }
+    
     func togglePrivateMode (_ toggleToOn: Bool) {
         tabManager.willSwitchTabMode(leavingPBM: self.isPrivate)
         self.isPrivate = toggleToOn ? true : false
