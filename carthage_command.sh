@@ -13,6 +13,7 @@ carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
 #  cp -r Carthage/Build/iOS/Static/MozillaAppServices.framework Carthage/Build/iOS/MozillaAppServices.framework
 # fi
 
+SOURCE_ROOT=`pwd` PROJECT=Client ./sdk_generator.sh -m docs Client/metrics.yaml
 
 files=(MozillaAppServices Glean)
 for i in "${files[@]}"
