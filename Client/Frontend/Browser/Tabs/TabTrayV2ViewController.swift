@@ -47,7 +47,8 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     lazy var navigationMenu: UISegmentedControl = {
         let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named:"panelIconSyncedTabs")!])
         navigationMenu.backgroundColor = UIColor.Photon.Grey10
-        navigationMenu.selectedSegmentIndex = 0
+        navigationMenu.selectedSegmentIndex = viewModel.isInPrivateMode ? 1 : 0
+        navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         return navigationMenu
     }()
     
@@ -179,9 +180,9 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         present(controller, animated: true, completion: nil)
     }
     
-    @objc func didTogglePrivateMode(_ sender: UIButton) {
+    func didTogglePrivateMode(_ toggleToOn: Bool) {
         // Toggle private mode
-        viewModel.togglePrivateMode()
+        viewModel.togglePrivateMode(toggleToOn)
         
         // Reload data
         viewModel.updateTabs()
@@ -216,6 +217,19 @@ extension TabTrayV2ViewController: UITableViewDataSource {
             viewModel.addTab(learnMoreRequest)
         }
         self.dismissTabTray()
+    }
+    
+    @objc func panelChanged() {
+        switch navigationMenu.selectedSegmentIndex {
+        case 0:
+            didTogglePrivateMode(false)
+        case 1:
+            didTogglePrivateMode(true)
+        case 2:
+            return
+        default:
+            return
+        }
     }
 }
 
