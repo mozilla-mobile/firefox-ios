@@ -36,8 +36,16 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
         return emptyView
     }()
+    lazy var countLabel: UILabel = {
+        let label = UILabel(frame: CGRect(width: 23, height: 23))
+        label.font = TabsButtonUX.TitleFont
+        label.layer.cornerRadius = TabsButtonUX.CornerRadius
+        label.textAlignment = .center
+        label.text = String(viewModel.getTabs().count)
+        return label
+    }()
     lazy var navigationMenu: UISegmentedControl = {
-        let navigationMenu = UISegmentedControl(items: ["tabs", "private", "synced"])
+        let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named:"panelIconSyncedTabs")!])
         navigationMenu.backgroundColor = UIColor.Photon.Grey10
         navigationMenu.selectedSegmentIndex = 0
         return navigationMenu
@@ -100,8 +108,8 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             make.right.equalToSuperview().offset(-20)
         }
         emptyPrivateTabsView.snp.makeConstraints { make in
-            make.top.left.right.equalTo(view)
-            make.bottom.equalTo(view)
+            make.bottom.left.right.equalTo(view)
+            make.top.equalTo(navMenuContainer.snp.bottom)
         }
         
         emptyPrivateTabsView.isHidden = true
