@@ -60,7 +60,7 @@
 		2816F0001B33E05400522243 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
 		281B029A1C037C1F005202C3 /* TestBrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B02991C037C1F005202C3 /* TestBrowserDB.swift */; };
 		281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B2BE91ADF4D90002917DC /* MockProfile.swift */; };
-		282731631ABC9BE600AA1954 /* Sync-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 282731621ABC9BE600AA1954 /* Sync-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		282731631ABC9BE600AA1954 /* Sync-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 282731621ABC9BE600AA1954 /* Sync-Bridging-Header.h */; };
 		282731691ABC9BE700AA1954 /* libSync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* libSync.a */; };
 		282731751ABC9BE700AA1954 /* libSync.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* libSync.a */; };
 		282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BB1A1D1D3200576538 /* ClientPayload.swift */; };
@@ -169,7 +169,7 @@
 		2FCAE2781ABB531100877008 /* Visit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE25C1ABB531100877008 /* Visit.swift */; };
 		2FCAE2841ABB533A00877008 /* MockFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE2791ABB533A00877008 /* MockFiles.swift */; };
 		2FCAE2851ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FCAE27A1ABB533A00877008 /* TestSQLiteRemoteClientsAndTabs.swift */; };
-		2FCAE33E1ABB5F1800877008 /* Storage-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FCAE33D1ABB5F1800877008 /* Storage-Bridging-Header.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2FCAE33E1ABB5F1800877008 /* Storage-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FCAE33D1ABB5F1800877008 /* Storage-Bridging-Header.h */; };
 		2FDB10931A9FBEC5006CF312 /* PrefsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDB10921A9FBEC5006CF312 /* PrefsTests.swift */; };
 		2FDBCF611ABFC9DE00AFF7F0 /* SyncAuthState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDBCF601ABFC9DE00AFF7F0 /* SyncAuthState.swift */; };
 		2FDE87FE1ABB3817005317B1 /* RemoteTabsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDE87FD1ABB3817005317B1 /* RemoteTabsPanel.swift */; };
@@ -458,7 +458,6 @@
 		C8340C5224EC69EE00FE91A6 /* JSONWebTokenUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BE124EC69EE00FE91A6 /* JSONWebTokenUtils.m */; };
 		C8340C5324EC69EE00FE91A6 /* KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = C8340BE224EC69EE00FE91A6 /* KeyPair.m */; };
 		C8340C5424EC69EE00FE91A6 /* NSData+Base32.h in Headers */ = {isa = PBXBuildFile; fileRef = C8340BE324EC69EE00FE91A6 /* NSData+Base32.h */; };
-		C8340C5524EC69EE00FE91A6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C8340BE424EC69EE00FE91A6 /* Info.plist */; };
 		C8340C5624EC69EE00FE91A6 /* PrivateKey.h in Headers */ = {isa = PBXBuildFile; fileRef = C8340BE524EC69EE00FE91A6 /* PrivateKey.h */; };
 		C8340C5E24EC6A3500FE91A6 /* trailer.c in Sources */ = {isa = PBXBuildFile; fileRef = C8340C5824EC6A3500FE91A6 /* trailer.c */; };
 		C8340C5F24EC6A3500FE91A6 /* base64url.c in Sources */ = {isa = PBXBuildFile; fileRef = C8340C5924EC6A3500FE91A6 /* base64url.c */; };
@@ -788,7 +787,7 @@
 		E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* TabScrollController.swift */; };
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
 		E69DB07E1E97DEAA008A67E6 /* libSyncTelemetry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* libSyncTelemetry.a */; };
-		E69DB0871E97DEAA008A67E6 /* SyncTelemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = E69DB0771E97DEA9008A67E6 /* SyncTelemetry.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E69DB0871E97DEAA008A67E6 /* SyncTelemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = E69DB0771E97DEA9008A67E6 /* SyncTelemetry.h */; };
 		E69DB0A81E97DF22008A67E6 /* libSyncTelemetry.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* libSyncTelemetry.a */; };
 		E69DB0B71E97E2AC008A67E6 /* SyncTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0B51E97E2AC008A67E6 /* SyncTelemetry.swift */; };
 		E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */; };
@@ -4892,7 +4891,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C8340C5524EC69EE00FE91A6 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6267,6 +6265,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec Today Development";
+				SKIP_INSTALL = NO;
 			};
 			name = Fennec;
 		};
@@ -6280,6 +6279,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = "BR Firefox Today App Store";
+				SKIP_INSTALL = NO;
 			};
 			name = Firefox;
 		};
@@ -6292,6 +6292,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Today Development";
+				SKIP_INSTALL = NO;
 			};
 			name = FirefoxBeta;
 		};
@@ -6303,6 +6304,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox NotificationService";
+				SKIP_INSTALL = NO;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -6314,6 +6316,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec NotificationService Development";
+				SKIP_INSTALL = NO;
 			};
 			name = Fennec;
 		};
@@ -6326,6 +6329,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "BR Firefox NotificationService App Store";
+				SKIP_INSTALL = NO;
 			};
 			name = Firefox;
 		};
@@ -6338,6 +6342,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PRODUCT_NAME = NotificationService2;
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox NotificationService";
+				SKIP_INSTALL = NO;
 			};
 			name = FirefoxBeta;
 		};
@@ -6401,6 +6406,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec WidgetKit Development";
+				SKIP_INSTALL = NO;
 			};
 			name = Fennec;
 		};
@@ -6410,6 +6416,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PINFOPLIST_FILE = WidgetKit/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
+				SKIP_INSTALL = NO;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -6420,6 +6427,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
 				PROVISIONING_PROFILE_SPECIFIER = "BR Firefox WidgetKit App Store";
+				SKIP_INSTALL = NO;
 			};
 			name = Firefox;
 		};
@@ -6429,6 +6437,7 @@
 				INFOPLIST_FILE = WidgetKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
+				SKIP_INSTALL = NO;
 			};
 			name = FirefoxBeta;
 		};
@@ -6466,6 +6475,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "BR Firefox App Store";
+				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
 			};
 			name = Firefox;
@@ -6488,6 +6498,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "BR Firefox ShareTo App Store";
+				SKIP_INSTALL = NO;
 			};
 			name = Firefox;
 		};
@@ -6703,6 +6714,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise Development";
+				SKIP_INSTALL = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
 			};
@@ -6716,6 +6728,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise Share To Development";
+				SKIP_INSTALL = NO;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -6728,6 +6741,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PRODUCT_NAME = Today;
 				PROVISIONING_PROFILE_SPECIFIER = "FennecEnterprise Today Development";
+				SKIP_INSTALL = NO;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -6903,6 +6917,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Development";
+				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
 			};
 			name = FirefoxBeta;
@@ -6924,6 +6939,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta ShareTo Development";
+				SKIP_INSTALL = NO;
 			};
 			name = FirefoxBeta;
 		};
@@ -7038,6 +7054,7 @@
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec Development";
+				SKIP_INSTALL = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = BUDDYBUILD;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
 			};
@@ -7060,6 +7077,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_FENNEC -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Fennec ShareTo Development";
+				SKIP_INSTALL = NO;
 			};
 			name = Fennec;
 		};
