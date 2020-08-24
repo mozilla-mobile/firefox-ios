@@ -714,7 +714,11 @@ class TabWebView: WKWebView, MenuHelperInterface {
     // We should only be calling evaluateJavascriptInDefaultContentWorld in the future
     @available(*, unavailable, message:"Do not call evaluateJavaScript directly on TabWebViews, should only be called on super class")
     override func evaluateJavaScript(_ javaScriptString: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
-        super.evaluateJavaScript(javaScriptString, completionHandler: completionHandler)
+        if let completion = completionHandler {
+            evaluateJavascriptInDefaultContentWorld(javaScriptString, completion)
+        } else {
+            evaluateJavascriptInDefaultContentWorld(javaScriptString)
+        }
     }
     
 }
