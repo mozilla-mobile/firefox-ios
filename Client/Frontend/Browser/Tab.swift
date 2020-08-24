@@ -71,6 +71,20 @@ class Tab: NSObject {
     var pageMetadata: PageMetadata?
 
     var consecutiveCrashes: UInt = 0
+    
+    // Setting defualt page as topsites
+    var newTabPageType: NewTabPage = .topSites
+
+    // To check if current URL is the starting page i.e. either blank page or internal page like topsites
+    var isURLStartingPage: Bool {
+        guard url != nil else {
+            return true
+        }
+        if url!.absoluteString.hasPrefix("internal://") {
+            return true
+        }
+        return false
+    }
 
     var canonicalURL: URL? {
         if let string = pageMetadata?.siteURL,

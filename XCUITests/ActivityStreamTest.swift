@@ -98,6 +98,7 @@ class ActivityStreamTest: BaseTestCase {
         // Open a new page and wait for the completion
         navigator.nowAt(HomePanelsScreen)
         navigator.openURL(newTopSite["url"]!)
+        waitUntilPageLoad()
         navigator.nowAt(NewTabScreen)
         navigator.goto(TabTray)
         // Workaround to have visited website in top sites
@@ -130,7 +131,7 @@ class ActivityStreamTest: BaseTestCase {
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         navigator.goto(BrowserTab)
-        waitForNoExistence(app.progressIndicators.element(boundBy: 0))
+        waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
         // Workaround to have visited website in top sites
         navigator.performAction(Action.AcceptRemovingAllTabs)

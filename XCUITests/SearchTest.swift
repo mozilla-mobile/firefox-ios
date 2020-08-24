@@ -128,18 +128,23 @@ class SearchTests: BaseTestCase {
         app.buttons["urlBar-cancel"].tap()
 
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        waitForExistence(app.textFields["address"])
+        waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 10)
+        waitForExistence(app.textFields["url"], timeout: 3)
+        app.textFields["url"].tap()
+        waitForExistence(app.textFields["address"], timeout: 3)
         app.textFields["address"].tap()
+
         waitForExistence(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
 
         // Verify that the Paste shows the search controller with prompt
         waitForNoExistence(app.staticTexts[LabelPrompt])
         app.typeText("\r")
+        waitUntilPageLoad()
 
         // Check that the website is loaded
         waitForValueContains(app.textFields["url"], value: "www.mozilla.org")
+        waitUntilPageLoad()
 
         // Go back, write part of moz, check the autocompletion
         if iPad() {
@@ -164,8 +169,8 @@ class SearchTests: BaseTestCase {
 
         navigator.openURL("foo")
         // Workaroud needed after xcode 11.3 update Issue 5937
-        waitForExistence(app.webViews.firstMatch, timeout: 3)
-        // waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
+        // waitForExistence(app.webViews.firstMatch, timeout: 3)
+        waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
         }
 
     // Smoketest

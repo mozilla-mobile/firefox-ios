@@ -7,9 +7,21 @@ export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
 carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
 
-if [[ -d Carthage/Build/iOS/Static/MozillaAppServices.framework ]]; then
-  echo Move local build of AppServices from Static
-  rm -rf Carthage/Build/iOS/MozillaAppServices.framework
-  cp -r Carthage/Build/iOS/Static/MozillaAppServices.framework Carthage/Build/iOS/MozillaAppServices.framework
-fi
+# if [[ -d Carthage/Build/iOS/Static/MozillaAppServices.framework ]]; then
+#  echo Move local build of AppServices from Static
+#  rm -rf Carthage/Build/iOS/MozillaAppServices.framework
+#  cp -r Carthage/Build/iOS/Static/MozillaAppServices.framework Carthage/Build/iOS/MozillaAppServices.framework
+# fi
+
+SOURCE_ROOT=`pwd` PROJECT=Client ./sdk_generator.sh -m docs Client/metrics.yaml
+
+files=(MozillaAppServices Glean)
+for i in "${files[@]}"
+do
+  [ -d $i.framework ] && rm -rf $i.framework
+  unzip $i-*.framework.zip 
+  [ -d Carthage/Build/iOS/$i.framework ] && rm -rf Carthage/Build/iOS/$i.framework
+  mv -f $i.framework Carthage/Build/iOS/
+done
+
 
