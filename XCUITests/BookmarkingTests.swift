@@ -136,9 +136,6 @@ class BookmarkingTests: BaseTestCase {
         waitForValueContains(app.textFields["url"], value: url_3)
     }
 
-    // Smoketest
-    // Disabling and modifying this check xcode 11.3 update Issue 5937
-    /*
     func testBookmarksAwesomeBar() {
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
@@ -175,7 +172,7 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.tables["SiteTable"])
         waitForExistence(app.buttons["olx.ro"])
         XCTAssertNotEqual(app.tables["SiteTable"].cells.count, 0)
-    }*/
+    }
 
     func testAddBookmark() {
         addNewBookmark()
