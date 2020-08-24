@@ -574,6 +574,7 @@ extension FirefoxHomeViewController: DataObserverDelegate {
         showSiteWithURLHandler(Pocket.MoreStoriesURL)
     }
 
+    // TODO: Look at this getTopSites function
     func getTopSites() -> Success {
         let numRows = max(self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows, 1)
         let maxItems = UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
