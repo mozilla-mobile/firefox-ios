@@ -579,6 +579,13 @@ extension BrowserViewController: WKNavigationDelegate {
 
             tab.mimeType = response.mimeType
         }
+        
+        if shouldOpenInNewTab {
+            guard let url = webView.url, let isPrivate = self.tabManager.selectedTab?.isPrivate else { return }
+            homePanelDidRequestToOpenInNewTab(url, isPrivate: isPrivate)
+            self.shouldOpenInNewTab = false // the new tab will ask for the policy, if shouldOpenInNewTab = true, it will try to open itself in a new tab, so for now, we can make it false
+            decisionHandler(.cancel)
+        }
 
         // If none of our helpers are responsible for handling this response,
         // just let the webview handle it as normal.
