@@ -29,8 +29,6 @@ search:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -45,8 +43,6 @@ search:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -59,8 +55,6 @@ search:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -84,8 +78,6 @@ preferences:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -101,8 +93,6 @@ preferences:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -118,8 +108,6 @@ preferences:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -131,8 +119,6 @@ preferences:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -144,8 +130,6 @@ preferences:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -157,8 +141,6 @@ preferences:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -170,8 +152,6 @@ preferences:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -186,8 +166,6 @@ application_services:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -200,8 +178,6 @@ application_services:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -214,8 +190,6 @@ application_services:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -231,8 +205,6 @@ tracking_protection:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -247,8 +219,6 @@ tracking_protection:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -264,8 +234,6 @@ theme:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -278,8 +246,6 @@ theme:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -292,8 +258,6 @@ theme:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -307,8 +271,6 @@ theme:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -328,8 +290,6 @@ tabs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -346,8 +306,6 @@ tabs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -364,8 +322,6 @@ tabs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -378,8 +334,6 @@ tabs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/6886
     data_reviews:
       - https://github.com/mozilla-mobile/firefox-ios/issues/6886
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-21"
@@ -398,8 +352,6 @@ bookmarks:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -419,8 +371,6 @@ bookmarks:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -440,8 +390,6 @@ bookmarks:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -459,8 +407,6 @@ bookmarks:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -475,8 +421,6 @@ reader_mode:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -488,8 +432,6 @@ reader_mode:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -512,8 +454,6 @@ reading_list:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -526,8 +466,6 @@ reading_list:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -545,8 +483,6 @@ reading_list:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -559,8 +495,6 @@ reading_list:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -573,8 +507,6 @@ reading_list:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -589,8 +521,6 @@ qr_code:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
-    data_sensitivity:
-      - interaction
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
@@ -608,8 +538,6 @@ legacy.ids:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
     data_reviews:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
-    data_sensitivity:
-      - technical
     notification_emails:
       - firefox-ios@mozilla.com
     expires: never
