@@ -10,10 +10,6 @@ MOZ_BUNDLE_ID = org.mozilla.ios.Fennec
 // Flag to indicate if we want to include the debug settings bundle or not
 INCLUDE_SETTINGS_BUNDLE = YES
 
-// Adjust SDK Variables
-ADJUST_ENVIRONMENT =
-ADJUST_APP_TOKEN =
-
 // Leanplum SDK Variables
 LEANPLUM_ENVIRONMENT = development
 LEANPLUM_APP_ID = 
