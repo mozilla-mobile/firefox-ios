@@ -12,16 +12,20 @@ import UIKit
 import Storage
 import SyncTelemetry
 
-struct TopSitesManager {
-    // TODO: Look at this getTopSites function
-    static func getTopSites(profile: Profile) -> Success {
-        let numRows = max(profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows, 1)
+struct TopSitesHandler {
+    static func getTopSites(profile: Profile) -> Deferred<[Site]> {
+        // TODO: We should not just base this on the `userInterfaceIdiom`
+        // File a github ticket for that!
+      
         let maxItems = UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
         return profile.history.getTopSitesWithLimit(maxItems).both(profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
+            
+            let deferred = Deferred<[Site]>()
+                        
             guard let mySites = topsites.successValue?.asArray(), let pinned = pinnedSites.successValue?.asArray() else {
-                return succeed()
+                return deferred
             }
-
+            
             // How sites are merged together. We compare against the url's base domain. example m.youtube.com is compared against `youtube.com`
             let unionOnURL = { (site: Site) -> String in
                 return URL(string: site.url)?.normalizedHost ?? ""
@@ -45,25 +49,10 @@ struct TopSitesManager {
                 let domain = URL(string: site.url)?.shortDisplayString
                 return defaultSites.find { $0.title.lowercased() == domain } ?? site
             }
-
-            self.topSitesManager.currentTraits = self.view.traitCollection
-            let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
-            if newSites.count > Int(ActivityStreamTopSiteCacheSize) {
-                self.topSitesManager.content = Array(newSites[0..<Int(ActivityStreamTopSiteCacheSize)])
-            } else {
-                self.topSitesManager.content = newSites
-            }
-
-            if newSites.count > maxItems {
-                self.topSitesManager.content =  Array(newSites[0..<maxItems])
-            }
-
-            self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
-                self.longPressRecognizer.isEnabled = false
-                self.showSiteWithURLHandler(url as URL)
-            }
-
-            return succeed()
+            
+            deferred.fill(newSites)
+            
+            return deferred
         }
     }
     
@@ -71,5 +60,17 @@ struct TopSitesManager {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
+    }
+    
+    static let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"
+}
+
+open class PinnedSite: Site {
+    let isPinnedSite = true
+
+    init(site: Site) {
+        super.init(url: site.url, title: site.title, bookmarked: site.bookmarked)
+        self.icon = site.icon
+        self.metadata = site.metadata
     }
 }

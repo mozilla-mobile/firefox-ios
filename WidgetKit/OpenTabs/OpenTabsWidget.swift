@@ -14,6 +14,8 @@ struct TabProvider: TimelineProvider {
     public func snapshot(with context: Context, completion: @escaping (OpenTabsEntry) -> ()) {
         let allOpenTabs = TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
         let openTabs = allOpenTabs.filter { $0.url != nil && !$0.isPrivate }
+        
+        // TODO: Handle About:home!
         let faviconFetchGroup = DispatchGroup()
         var tabFaviconDictionary = [URL : Image]()
         

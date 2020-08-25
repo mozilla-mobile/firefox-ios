@@ -54,6 +54,13 @@
 		0BF8F8DA1AEFF1C900E90BC2 /* noTitle.html in Resources */ = {isa = PBXBuildFile; fileRef = 0BF8F8D91AEFF1C900E90BC2 /* noTitle.html */; };
 		19DE1F671EC13B6400428B8C /* LeanplumIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DE1F661EC13B6400428B8C /* LeanplumIntegration.swift */; };
 		1D0BA05C24F46A0400D731B5 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */; };
+		1D0BA05E24F48B1800D731B5 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = D34DC84D1A16C40C00D49B7B /* Profile.swift */; };
+		1D0BA05F24F48B2E00D731B5 /* SearchEngines.swift in Sources */ = {isa = PBXBuildFile; fileRef = D308E4E31A5306F500842685 /* SearchEngines.swift */; };
+		1D0BA06024F48B3A00D731B5 /* PanelDataObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E68F36971EA694000048CF44 /* PanelDataObservers.swift */; };
+		1D0BA06124F48B4100D731B5 /* SyncStatusResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */; };
+		1D0BA06224F48B9800D731B5 /* OpenSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA77831A43B2CE0010CD32 /* OpenSearch.swift */; };
+		1D0BA06324F48BA200D731B5 /* DefaultSearchPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA24A341FD84D620098F159 /* DefaultSearchPrefs.swift */; };
+		1D49F7EC24F6DF190075C4D3 /* TopSitesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0BA05B24F46A0400D731B5 /* TopSitesManager.swift */; };
 		1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */; };
 		1DA3CE5F24EEE7C600422BB2 /* TabArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* TabArchiver.swift */; };
 		1DA3CE6024EEE7C600422BB2 /* TabArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* TabArchiver.swift */; };
@@ -5247,16 +5254,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				047F9B3E24E1FF4000CD7DF7 /* SearchQuickLinks.swift in Sources */,
+				1D0BA05E24F48B1800D731B5 /* Profile.swift in Sources */,
+				1D0BA06124F48B4100D731B5 /* SyncStatusResolver.swift in Sources */,
 				DA9FD88624E213CD00168D1E /* Helpers.swift in Sources */,
 				DA9FD88424E213B500168D1E /* SmallQuickLink.swift in Sources */,
+				1D0BA06024F48B3A00D731B5 /* PanelDataObservers.swift in Sources */,
+				1D49F7EC24F6DF190075C4D3 /* TopSitesManager.swift in Sources */,
 				1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */,
 				047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */,
 				047F9B2C24E1FE1C00CD7DF7 /* WidgetKit.swift in Sources */,
 				1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */,
+				1D0BA06324F48BA200D731B5 /* DefaultSearchPrefs.swift in Sources */,
 				1DA3CE6024EEE7C600422BB2 /* TabArchiver.swift in Sources */,
 				1DA3CE6124EEE7F000422BB2 /* SessionData.swift in Sources */,
 				DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */,
+				1D0BA06224F48B9800D731B5 /* OpenSearch.swift in Sources */,
 				1DA3CE6524EEE84800422BB2 /* SavedTab.swift in Sources */,
+				1D0BA05F24F48B2E00D731B5 /* SearchEngines.swift in Sources */,
 				DA9FD88324E213B500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */,
 			);
