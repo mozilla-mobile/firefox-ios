@@ -22,8 +22,7 @@ class SensitiveViewController: UIViewController {
         notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: UIApplication.willEnterForegroundNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(checkIfUserRequiresValidation), name: UIApplication.didBecomeActiveNotification, object: nil)
         notificationCenter.addObserver(self, selector: #selector(blurContents), name: UIApplication.willResignActiveNotification, object: nil)
-        notificationCenter.addObserver(self, selector: #selector(hideLogins), name: UIApplication.didEnterBackgroundNotification, object: nil)
-
+        notificationCenter.addObserver(self, selector: #selector(blurContents), name: UIApplication.didEnterBackgroundNotification, object: nil)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -51,11 +50,10 @@ class SensitiveViewController: UIViewController {
                 self.removeBackgroundedBlur()
             },
             cancel: {
-                self.view.alpha = 0
                 self.promptingForTouchID = false
                 self.authState = .notAuthenticating
-                _ = self.navigationController?.popToRootViewController(animated: false)
-                self.dismiss(animated: false)
+                self.navigationController?.dismiss(animated: true, completion: nil)
+                self.dismiss(animated: true)
             },
             fallback: {
                 self.promptingForTouchID = false
@@ -65,20 +63,14 @@ class SensitiveViewController: UIViewController {
                         self.navigationController?.dismiss(animated: true, completion: nil)
                         self.authState = .notAuthenticating
                     } else {
-                        // On cancel, the login list can appear for a split-second, set the view to transparent to avoid this.
-                        self.view.alpha = 0
-                        _ = self.navigationController?.popToRootViewController(animated: false)
-                        self.dismiss(animated: false)
+                        self.navigationController?.dismiss(animated: true, completion: nil)
+                        self.dismiss(animated: true)
                         self.authState = .notAuthenticating
                     }
                 }
             }
         )
         authState = .presenting
-    }
-
-    @objc func hideLogins() {
-        _ = self.navigationController?.popToRootViewController(animated: true)
     }
 
     @objc func blurContents() {
