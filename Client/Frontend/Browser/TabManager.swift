@@ -194,6 +194,7 @@ class TabManager: NSObject {
         } else {
             _selectedIndex = -1
         }
+        assert(_selectedIndex > -1, "Tab expected to be in `tabs`")
 
         store.preserveTabs(tabs, selectedTab: selectedTab)
 
