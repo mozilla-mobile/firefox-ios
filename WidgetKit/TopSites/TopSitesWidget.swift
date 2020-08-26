@@ -25,7 +25,6 @@ struct TopSitesProvider: TimelineProvider {
                 faviconFetchGroup.enter()
 
                 if let faviconURL = site.icon?.url {
-                    print("trying to fetch faviconUrl: \(faviconURL)")
                     getImageForUrl(URL(string: faviconURL)!, completion: { image in
                         if image != nil {
                             tabFaviconDictionary[site.url] = image
@@ -34,7 +33,6 @@ struct TopSitesProvider: TimelineProvider {
                         faviconFetchGroup.leave()
                     })
                 } else {
-                    print("no favicon to fetch for: \(site)")
                     faviconFetchGroup.leave()
                 }
             }
@@ -52,37 +50,6 @@ struct TopSitesProvider: TimelineProvider {
             let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
             completion(timeline)
         })
-    }
-
-    // TODO: De-dup this to a widget util.
-    func getImageForUrl(_ url: URL, completion: @escaping (Image?) -> Void) {
-        let queue = DispatchQueue.global()
-
-        var fetchImageWork: DispatchWorkItem?
-
-        fetchImageWork = DispatchWorkItem {
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        if fetchImageWork?.isCancelled == true { return }
-
-                        completion(Image(uiImage: image))
-                        fetchImageWork = nil
-                    }
-                }
-            }
-        }
-
-        queue.async(execute: fetchImageWork!)
-
-        // Timeout the favicon fetch request if it's taking too long
-        queue.asyncAfter(deadline: .now() + 2) {
-            // If we've already successfully called the completion block, early return
-            if fetchImageWork == nil { return }
-
-            fetchImageWork?.cancel()
-            completion(nil)
-        }
     }
 
     fileprivate func tabsStateArchivePath() -> String? {

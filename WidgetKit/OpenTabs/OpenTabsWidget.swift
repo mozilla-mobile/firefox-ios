@@ -9,13 +9,21 @@ import Combine
 
 struct TabProvider: TimelineProvider {
     public typealias Entry = OpenTabsEntry
-
+    
     public func snapshot(with context: Context, completion: @escaping (OpenTabsEntry) -> ()) {
         let allOpenTabs = TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
-        let openTabs = allOpenTabs.filter { $0.url != nil && !$0.isPrivate && $0.url?.absoluteString.starts(with: "internal://") == false }
+        let openTabs = allOpenTabs.filter {
+            !$0.isPrivate &&
+            $0.sessionData != nil &&
+            $0.url?.absoluteString.starts(with: "internal://") == false &&
+            $0.title != nil
+        }
         
         let faviconFetchGroup = DispatchGroup()
-        var tabFaviconDictionary = [URL : Image]()
+        
+        var tabFaviconDictionary = [String : Image]()
+        
+        
         
         for tab in openTabs {
             faviconFetchGroup.enter()
@@ -23,7 +31,8 @@ struct TabProvider: TimelineProvider {
             if let faviconURL = tab.faviconURL {
                 getImageForUrl(URL(string: faviconURL)!, completion: { image in
                     if image != nil {
-                        tabFaviconDictionary[tab.url!] = image
+                        // TODO: I know this is not unique, but what else can I use?
+                        tabFaviconDictionary[tab.title!] = image
                     }
                     
                     faviconFetchGroup.leave()
@@ -46,36 +55,6 @@ struct TabProvider: TimelineProvider {
         })
     }
     
-    func getImageForUrl(_ url: URL, completion: @escaping (Image?) -> Void) {
-        let queue = DispatchQueue.global()
-        
-        var fetchImageWork: DispatchWorkItem?
-        
-        fetchImageWork = DispatchWorkItem {
-            if let data = try? Data(contentsOf: url) {
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        if fetchImageWork?.isCancelled == true { return }
-                        
-                        completion(Image(uiImage: image))
-                        fetchImageWork = nil
-                    }
-                }
-            }
-        }
-        
-        queue.async(execute: fetchImageWork!)
-        
-        // Timeout the favicon fetch request if it's taking too long
-        queue.asyncAfter(deadline: .now() + 2) {
-            // If we've already successfully called the completion block, early return
-            if fetchImageWork == nil { return }
-            
-            fetchImageWork?.cancel()
-            completion(nil)
-        }
-    }
-    
     fileprivate func tabsStateArchivePath() -> String? {
         let profilePath: String?
         profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
@@ -86,7 +65,7 @@ struct TabProvider: TimelineProvider {
 
 struct OpenTabsEntry: TimelineEntry {
     let date: Date
-    let favicons: [URL : Image]
+    let favicons: [String : Image]
     let tabs: [SavedTab]
 }
 
@@ -110,20 +89,20 @@ struct OpenTabsView: View {
     
     @ViewBuilder
     func lineItemForTab(_ tab: SavedTab) -> some View {
-        let url = tab.url!
+        let url = tab.sessionData!.urls.last!
 
         VStack(alignment: .leading) {
             Link(destination: linkToContainingApp("?url=\(url)", query: "open-url")) {
                 HStack(alignment: .center, spacing: 15) {
-                    if (entry.favicons[url] != nil) {
-                        (entry.favicons[url])!.resizable().frame(width: 16, height: 16)
+                    if (entry.favicons[tab.title!] != nil) {
+                        (entry.favicons[tab.title!])!.resizable().frame(width: 16, height: 16)
                     } else {
                         Image("placeholderFavicon")
                             .foregroundColor(Color.white)
                             .frame(width: 16, height: 16)
                     }
                     
-                    Text(tab.title!)
+                    Text(tab.title ?? ":(")
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)

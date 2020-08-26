@@ -68,7 +68,7 @@ class TabManagerStore {
     // Write failures (i.e. due to read locks) are considered inconsequential, as preserveTabs will be called frequently.
     @discardableResult func preserveTabs(_ tabs: [Tab], selectedTab: Tab?) -> Success {
         assert(Thread.isMainThread)
-        print("preserve tabs!")
+        print("preserve tabs!, existing tabs: \(tabs.count)")
         guard let savedTabs = prepareSavedTabs(fromTabs: tabs, selectedTab: selectedTab),
             let path = tabsStateArchivePath() else {
                 clearArchive()
@@ -115,7 +115,9 @@ class TabManagerStore {
 
     func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
         let selectedTab = restoreTabs(savedTabs: archivedStartupTabs, clearPrivateTabs: clearPrivateTabs, tabManager: tabManager)
-        archivedStartupTabs.removeAll()
+        
+        print("restoreStartupTabs: \(archivedStartupTabs.count)")
+//        archivedStartupTabs.removeAll()
         return selectedTab
     }
 
