@@ -382,6 +382,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             syncOnDidEnterBackground(application: application)
         }
         
+        tabManager.preserveTabs()
+        
         WidgetCenter.shared.reloadAllTimelines()
     }
 
