@@ -151,6 +151,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         }
 
         let query = getQuery(url: url)
+        let isHttpScheme = scheme == "http" || scheme == "https"
 
         if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
@@ -163,7 +164,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
             } else {
                 queuedUrl = url
             }
-        } else if host == "open-text" {
+        } else if host == "open-text" || isHttpScheme {
             let text = unescape(string: query["text"]) ?? ""
 
             if application.applicationState == .active {

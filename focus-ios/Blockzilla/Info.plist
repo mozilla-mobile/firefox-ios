@@ -26,6 +26,8 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>$(BLOCKZILLA_URL_SCHEME)</string>
+				<string>http</string>
+				<string>https</string>
 			</array>
 		</dict>
 	</array>
