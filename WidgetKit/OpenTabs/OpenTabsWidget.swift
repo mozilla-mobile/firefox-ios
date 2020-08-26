@@ -4,7 +4,6 @@
 
 import SwiftUI
 import WidgetKit
-import SDWebImage
 import UIKit
 import Combine
 
@@ -13,9 +12,8 @@ struct TabProvider: TimelineProvider {
 
     public func snapshot(with context: Context, completion: @escaping (OpenTabsEntry) -> ()) {
         let allOpenTabs = TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
-        let openTabs = allOpenTabs.filter { $0.url != nil && !$0.isPrivate }
+        let openTabs = allOpenTabs.filter { $0.url != nil && !$0.isPrivate && $0.url?.absoluteString.starts(with: "internal://") == false }
         
-        // TODO: Handle About:home!
         let faviconFetchGroup = DispatchGroup()
         var tabFaviconDictionary = [URL : Image]()
         
