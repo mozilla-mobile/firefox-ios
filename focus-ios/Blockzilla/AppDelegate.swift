@@ -386,16 +386,6 @@ extension AppDelegate {
 
         // Start the telemetry session and record an event indicating that we have entered the
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
-
-        // Only include Adjust SDK in Focus and NOT in Klar builds.
-        #if FOCUS
-            // Always initialize Adjust, otherwise the SDK is in a bad state. We disable it
-            // immediately so that no data is collected or sent.
-            AdjustIntegration.applicationDidFinishLaunching()
-            if !Settings.getToggle(.sendAnonymousUsageData) {
-                AdjustIntegration.enabled = false
-            }
-        #endif
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {

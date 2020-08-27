@@ -1,6 +1,5 @@
 github "AgileBits/onepassword-extension" "a614e290396346e3cb69e4951656eb8033390f8c"
 github "SnapKit/SnapKit" "4.0.0"
-github "adjust/ios_sdk" "v4.14.2"
 github "cezheng/Fuzi" "8bb9034e336a2d863f279411469f538f548f5874"
 github "getsentry/sentry-cocoa" "3.12.4"
 github "mozilla-mobile/AutocompleteTextField" "f5614c04a1fc3f2fa29fbb2e149e0083070fcf1b"
