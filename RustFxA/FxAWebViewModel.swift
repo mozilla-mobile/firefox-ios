@@ -160,6 +160,11 @@ extension FxAWebViewModel {
             case .deleteAccount, .signOut:
                 profile.removeAccount()
                 onDismissController?()
+                //if the profile was removed correctly, we need to pop one more view controller
+                //fix for FXIOS-816: https://github.com/mozilla-mobile/firefox-ios/issues/7227#issue-687200349
+                if !profile.hasAccount() {
+                    onDismissController?()
+                }
             case .profileChanged:
                 profile.rustFxA.accountManager.peek()?.refreshProfile(ignoreCache: true)
                 // dismiss keyboard after changing profile in order to see notification view
