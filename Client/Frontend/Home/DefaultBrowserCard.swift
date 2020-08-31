@@ -99,7 +99,7 @@ class DefaultBrowserCard: UIView {
         labelView.snp.makeConstraints { make in
             make.right.equalToSuperview()
             make.left.equalTo(image.snp.right)
-            make.width.equalTo(223)
+            make.width.lessThanOrEqualTo(223)
             make.bottom.equalTo(settingsButton.snp.top).offset(-16)
             make.top.equalToSuperview().offset(20)
         }

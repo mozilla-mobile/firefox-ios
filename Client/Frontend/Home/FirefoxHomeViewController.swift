@@ -178,6 +178,8 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
             defaultBrowserCard.snp.makeConstraints { make in
                 make.top.equalToSuperview()
                 make.bottom.equalTo(collectionView.snp.top)
+                make.width.lessThanOrEqualTo(508)
+                make.centerX.equalTo(self.view)
             }
             collectionView.snp.makeConstraints { make in
                 make.top.equalTo(defaultBrowserCard.snp.bottom)
