@@ -124,6 +124,7 @@ class DefaultBrowserCard: UIView {
     
     @objc private func dismissCard() {
         self.dismissClosure?()
+        UserDefaults.standard.set(true, forKey: "DidDismissDefaultBrowserCard")
     }
     
     @objc private func showSettings() {
