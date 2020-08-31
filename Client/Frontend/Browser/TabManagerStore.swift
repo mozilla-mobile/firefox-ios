@@ -32,7 +32,7 @@ class TabManagerStore {
     var hasTabsToRestoreAtStartup: Bool {
         return archivedStartupTabs.count > 0
     }
-    
+
     fileprivate func tabsStateArchivePath() -> String? {
         let profilePath: String?
         if  AppConstants.IsRunningTest {
@@ -77,23 +77,9 @@ class TabManagerStore {
 
         writeOperation.cancel()
 
-        // TODO: Look into this more
         let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
-//        let simpleTabs = savedTabs.map { BasicSavedTab(tab: $0.toSimpleTab(), isSelected: false) }
-        
-        
-        // didLoadPageMetadata
-        
-        for tab in savedTabs {
-            print("tabs url and favicon", tab.title, tab.faviconURL)
-        }
-        
-//        for tab in simpleTabs {
-//            print("saving tab url and favicon", tab?.title, tab?.faviconURL)
-//        }
-       
-//        archiver.encode(simpleTabs, forKey: "simpleTabs")
+
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
 
@@ -101,8 +87,8 @@ class TabManagerStore {
         writeOperation = DispatchWorkItem {
             let written = tabStateData.write(toFile: path, atomically: true)
             
-            // TODO: Check how many bytes we're writing.
-            log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)") // Ignore write failure (could be restoring).
+            // Ignore write failure (could be restoring).
+            log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
             result.fill(Maybe(success: ()))
         }
 
@@ -115,9 +101,6 @@ class TabManagerStore {
 
     func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
         let selectedTab = restoreTabs(savedTabs: archivedStartupTabs, clearPrivateTabs: clearPrivateTabs, tabManager: tabManager)
-        
-        print("restoreStartupTabs: \(archivedStartupTabs.count)")
-//        archivedStartupTabs.removeAll()
         return selectedTab
     }
 

@@ -9,63 +9,6 @@ import Shared
 import Storage
 import SyncTelemetry
 
-struct TopSitesProvider: TimelineProvider {
-    public typealias Entry = TopSitesEntry
-
-    public func snapshot(with context: Context, completion: @escaping (TopSitesEntry) -> ()) {
-        TopSitesHandler.getTopSites(profile: BrowserProfile(localName: "profile")).uponQueue(.main) { topSites in
-            
-            // TODO: It seems like some sites (Twitter, YouTube) do not have favicons... where should I fetch them? I think they're "built in"
-            
-            // TODO: Add a timeout
-            let faviconFetchGroup = DispatchGroup()
-            var tabFaviconDictionary = [String : Image]()
-            
-            for site in topSites {
-                faviconFetchGroup.enter()
-
-                if let faviconURL = site.icon?.url {
-                    getImageForUrl(URL(string: faviconURL)!, completion: { image in
-                        if image != nil {
-                            tabFaviconDictionary[site.url] = image
-                        }
-
-                        faviconFetchGroup.leave()
-                    })
-                } else {
-                    faviconFetchGroup.leave()
-                }
-            }
-            
-            faviconFetchGroup.notify(queue: .main) {
-                let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites)
-                
-                completion(topSitesEntry)
-            }
-        }
-    }
-
-    public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        snapshot(with: context, completion: { topSitesEntry in
-            let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
-            completion(timeline)
-        })
-    }
-
-    fileprivate func tabsStateArchivePath() -> String? {
-        let profilePath: String?
-        profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
-    }
-}
-
-struct TopSitesEntry: TimelineEntry {
-    let date: Date
-    let favicons: [String : Image]
-    let sites: [Site]
-}
-
 struct TopSitesWidget: Widget {
     private let kind: String = "Top Sites"
 
@@ -102,7 +45,6 @@ struct TopSitesView: View {
     }
     
     var emptySquare: some View {
-        // Using ContainerRelativeShape leads to varied sizes :(
         maskShape
             .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
             .frame(width: 60, height: 60)
@@ -113,15 +55,38 @@ struct TopSitesView: View {
         VStack {
             // TODO: Always fill with 16 squares, no matter what!
             HStack {
-                ForEach(entry.sites.prefix(4), id: \.url) { tab in
-                    topSitesItem(tab)
-                        .background(Color.clear).frame(maxWidth: .infinity)
+                if entry.sites.count > 3 {
+                    ForEach(entry.sites.prefix(4), id: \.url) { tab in
+                        topSitesItem(tab)
+                            .background(Color.clear).frame(maxWidth: .infinity)
+                    }
+                } else {
+                    ForEach(entry.sites[0...entry.sites.count - 1], id: \.url) { tab in
+                        topSitesItem(tab).frame(maxWidth: .infinity)
+                    }
+                    
+                    ForEach(0..<(4 - entry.sites.count), id: \.self) { _ in
+                        emptySquare
+                    }
                 }
             }.padding(.top)
             Spacer()
             HStack {
-                ForEach(entry.sites.suffix(4), id: \.url) { tab in
-                    topSitesItem(tab).frame(maxWidth: .infinity)
+                if entry.sites.count > 7 {
+                    ForEach(entry.sites[4...7], id: \.url) { tab in
+                        topSitesItem(tab).frame(maxWidth: .infinity)
+                    }
+                } else {
+                    // Ensure there is at least a single site in the second row
+                    if entry.sites.count > 4 {
+                        ForEach(entry.sites[4...entry.sites.count - 1], id: \.url) { tab in
+                            topSitesItem(tab).frame(maxWidth: .infinity)
+                        }
+                    }
+                    
+                    ForEach(0..<(min(4, 8 - entry.sites.count)), id: \.self) { _ in
+                        emptySquare
+                    }
                 }
             }.padding(.bottom)
         }

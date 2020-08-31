@@ -7,68 +7,6 @@ import WidgetKit
 import UIKit
 import Combine
 
-struct TabProvider: TimelineProvider {
-    public typealias Entry = OpenTabsEntry
-    
-    public func snapshot(with context: Context, completion: @escaping (OpenTabsEntry) -> ()) {
-        let allOpenTabs = TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
-        let openTabs = allOpenTabs.filter {
-            !$0.isPrivate &&
-            $0.sessionData != nil &&
-            $0.url?.absoluteString.starts(with: "internal://") == false &&
-            $0.title != nil
-        }
-        
-        let faviconFetchGroup = DispatchGroup()
-        
-        var tabFaviconDictionary = [String : Image]()
-        
-        
-        
-        for tab in openTabs {
-            faviconFetchGroup.enter()
-            
-            if let faviconURL = tab.faviconURL {
-                getImageForUrl(URL(string: faviconURL)!, completion: { image in
-                    if image != nil {
-                        // TODO: I know this is not unique, but what else can I use?
-                        tabFaviconDictionary[tab.title!] = image
-                    }
-                    
-                    faviconFetchGroup.leave()
-                })
-            } else {
-                faviconFetchGroup.leave()
-            }
-        }
-        
-        faviconFetchGroup.notify(queue: .main) {
-            let openTabsEntry = OpenTabsEntry(date: Date(), favicons: tabFaviconDictionary, tabs: openTabs)
-            completion(openTabsEntry)
-        }
-    }
-
-    public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        snapshot(with: context, completion: { openTabsEntry in
-            let timeline = Timeline(entries: [openTabsEntry], policy: .atEnd)
-            completion(timeline)
-        })
-    }
-    
-    fileprivate func tabsStateArchivePath() -> String? {
-        let profilePath: String?
-        profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
-    }
-}
-
-struct OpenTabsEntry: TimelineEntry {
-    let date: Date
-    let favicons: [String : Image]
-    let tabs: [SavedTab]
-}
-
 struct OpenTabsWidget: Widget {
     private let kind: String = "Quick View"
 
@@ -102,7 +40,7 @@ struct OpenTabsView: View {
                             .frame(width: 16, height: 16)
                     }
                     
-                    Text(tab.title ?? ":(")
+                    Text(tab.title!)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)

@@ -551,18 +551,9 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             let numRows = max(self.profile.prefs.intForKey(PrefsKeys.NumberOfTopSiteRows) ?? TopSitesRowCountSettingsController.defaultNumberOfRows, 1)
             
             let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
-//            if newSites.count > Int(ActivityStreamTopSiteCacheSize) {
-//                self.topSitesManager.content = Array(newSites[0..<Int(ActivityStreamTopSiteCacheSize)])
-//            } else {
-//                self.topSitesManager.content = newSites
-//            }
-//
+            
             self.topSitesManager.content = Array(result.prefix(maxItems))
-
-//            if newSites.count > maxItems {
-//                self.topSitesManager.content =  Array(newSites[0..<maxItems])
-//            }
-
+            
             self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
                 self.longPressRecognizer.isEnabled = false
                 self.showSiteWithURLHandler(url as URL)
