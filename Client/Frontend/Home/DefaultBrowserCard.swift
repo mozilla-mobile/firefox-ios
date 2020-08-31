@@ -7,6 +7,7 @@ import Storage
 import Shared
 
 class DefaultBrowserCard: UIView {
+    public var dismissClosure: (() -> Void)?
     lazy var title: UILabel = {
         let title = UILabel()
         title.text = "Switch your default browser"
@@ -122,7 +123,7 @@ class DefaultBrowserCard: UIView {
     }
     
     @objc private func dismissCard() {
-        self.isHidden = true
+        self.dismissClosure?()
     }
     
     @objc private func showSettings() {
