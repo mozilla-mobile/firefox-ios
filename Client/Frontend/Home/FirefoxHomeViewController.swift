@@ -143,6 +143,14 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         return customCell
     }()
 
+    lazy var defaultBrowserCard: UIView = {
+        if #available(iOS 14.0, *) {
+            return DefaultBrowserCard()
+        } else {
+            return UIView()
+        }
+    }()
+
     var pocketStories: [PocketStory] = []
 
     init(profile: Profile) {
@@ -169,6 +177,15 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
         self.collectionView?.register(ASFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "Footer")
         collectionView?.keyboardDismissMode = .onDrag
 
+        self.view.addSubview(defaultBrowserCard)
+        defaultBrowserCard.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.equalTo(collectionView.snp.top)
+        }
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(defaultBrowserCard.snp.bottom)
+            make.bottom.left.right.equalToSuperview()
+        }
         self.profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
