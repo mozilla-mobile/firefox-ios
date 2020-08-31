@@ -14,6 +14,7 @@ class DefaultBrowserCard: UIView {
         title.numberOfLines = 0
         title.lineBreakMode = .byWordWrapping
         title.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        title.textColor = UIColor.theme.defaultBrowserCard.textColor
         return title
     }()
     lazy var descriptionText: UILabel = {
@@ -22,6 +23,7 @@ class DefaultBrowserCard: UIView {
         descriptionText.numberOfLines = 0
         descriptionText.lineBreakMode = .byWordWrapping
         descriptionText.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        descriptionText.textColor = UIColor.theme.defaultBrowserCard.textColor
         return descriptionText
     }()
     lazy var settingsButton: UIButton = {
@@ -41,12 +43,13 @@ class DefaultBrowserCard: UIView {
     }()
     lazy var closeButton: UIButton = {
         let closeButton = UIButton()
-        closeButton.setImage(UIImage(named: "nav-stop"), for: .normal)
+        closeButton.setImage(UIImage(named: "nav-stop")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        closeButton.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
         return closeButton
     }()
     lazy var background: UIView = {
         let background = UIView()
-        background.backgroundColor = UIColor.Photon.Grey30
+        background.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
         background.layer.cornerRadius = 12
         background.layer.masksToBounds = true
         return background
@@ -129,5 +132,13 @@ class DefaultBrowserCard: UIView {
     
     @objc private func showSettings() {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+    }
+    
+    func applyTheme() {
+        background.backgroundColor = UIColor.theme.defaultBrowserCard.backgroundColor
+        title.textColor = UIColor.theme.defaultBrowserCard.textColor
+        descriptionText.textColor = UIColor.theme.defaultBrowserCard.textColor
+        closeButton.imageView?.tintColor = UIColor.theme.defaultBrowserCard.textColor
+        backgroundColor = UIColor.theme.homePanel.topSitesBackground
     }
 }

@@ -144,7 +144,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }()
 
     lazy var defaultBrowserCard: DefaultBrowserCard = {
-        return DefaultBrowserCard()
+        let card = DefaultBrowserCard()
+        card.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        return card
     }()
 
     var pocketStories: [PocketStory] = []
@@ -193,7 +195,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                 }
             }
         }
-
+        self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         self.profile.panelDataObservers.activityStream.delegate = self
 
         applyTheme()
@@ -233,7 +235,9 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
     }
 
     func applyTheme() {
+        defaultBrowserCard.applyTheme()
         collectionView?.backgroundColor = UIColor.theme.homePanel.topSitesBackground
+        self.view.backgroundColor = UIColor.theme.homePanel.topSitesBackground
         topSiteCell.collectionView.reloadData()
         if let collectionView = self.collectionView, collectionView.numberOfSections > 0, collectionView.numberOfItems(inSection: 0) > 0 {
             collectionView.reloadData()
