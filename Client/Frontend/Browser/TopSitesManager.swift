@@ -1,10 +1,6 @@
-//
-//  TopSitesHandler.swift
-//  Client
-//
-//  Created by Sawyer Blatz on 8/24/20.
-//  Copyright © 2020 Mozilla. All rights reserved.
-//
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
 import Shared
@@ -13,10 +9,7 @@ import Storage
 import SyncTelemetry
 
 struct TopSitesHandler {
-    static func getTopSites(profile: Profile) -> Deferred<[Site]> {
-        // TODO: We should not just base this on the `userInterfaceIdiom`
-        // File a github ticket for that!
-      
+    static func getTopSites(profile: Profile) -> Deferred<[Site]> {      
         let maxItems = UIDevice.current.userInterfaceIdiom == .pad ? 32 : 16
         return profile.history.getTopSitesWithLimit(maxItems).both(profile.history.getPinnedTopSites()).bindQueue(.main) { (topsites, pinnedSites) in
             

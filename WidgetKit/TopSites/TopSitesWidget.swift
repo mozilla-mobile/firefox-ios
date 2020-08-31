@@ -15,9 +15,6 @@ struct TopSitesProvider: TimelineProvider {
     public func snapshot(with context: Context, completion: @escaping (TopSitesEntry) -> ()) {
         TopSitesHandler.getTopSites(profile: BrowserProfile(localName: "profile")).uponQueue(.main) { topSites in
             
-            // TODO: It seems like some sites (Twitter, YouTube) do not have favicons... where should I fetch them? I think they're "built in"
-            
-            // TODO: Add a timeout
             let faviconFetchGroup = DispatchGroup()
             var tabFaviconDictionary = [String : Image]()
             
@@ -102,7 +99,6 @@ struct TopSitesView: View {
     }
     
     var emptySquare: some View {
-        // Using ContainerRelativeShape leads to varied sizes :(
         maskShape
             .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
             .frame(width: 60, height: 60)

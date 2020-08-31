@@ -22,16 +22,11 @@ struct TabProvider: TimelineProvider {
         let faviconFetchGroup = DispatchGroup()
         
         var tabFaviconDictionary = [String : Image]()
-        
-        
-        
         for tab in openTabs {
             faviconFetchGroup.enter()
-            
             if let faviconURL = tab.faviconURL {
                 getImageForUrl(URL(string: faviconURL)!, completion: { image in
                     if image != nil {
-                        // TODO: I know this is not unique, but what else can I use?
                         tabFaviconDictionary[tab.title!] = image
                     }
                     
@@ -102,7 +97,7 @@ struct OpenTabsView: View {
                             .frame(width: 16, height: 16)
                     }
                     
-                    Text(tab.title ?? ":(")
+                    Text(tab.title!)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.leading)
                         .lineLimit(1)

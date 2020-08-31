@@ -220,8 +220,6 @@ class TabManager: NSObject {
     }
     
     func preserveTabs() {
-        print("backgrounding and preserving")
-        
         store.preserveTabs(tabs, selectedTab: selectedTab)
     }
 
@@ -623,7 +621,6 @@ extension TabManager {
             }
         }
         
-        print("restoring tabs on startup: \(count)")
         guard count == 0, !AppConstants.IsRunningTest, !DebugSettingsBundleOptions.skipSessionRestore, store.hasTabsToRestoreAtStartup else {
             return
         }
