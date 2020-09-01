@@ -10,7 +10,7 @@ class DefaultBrowserCard: UIView {
     public var dismissClosure: (() -> Void)?
     lazy var title: UILabel = {
         let title = UILabel()
-        title.text = "Switch your default browser"
+        title.text = String.DefaultBrowserCardTitle
         title.numberOfLines = 0
         title.lineBreakMode = .byWordWrapping
         title.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -19,7 +19,7 @@ class DefaultBrowserCard: UIView {
     }()
     lazy var descriptionText: UILabel = {
         let descriptionText = UILabel()
-        descriptionText.text = "Set links from websites, emails, and Messages to open automatically in Firefox."
+        descriptionText.text = String.DefaultBrowserCardDescription
         descriptionText.numberOfLines = 0
         descriptionText.lineBreakMode = .byWordWrapping
         descriptionText.font = UIFont.systemFont(ofSize: 15, weight: .regular)
@@ -28,7 +28,7 @@ class DefaultBrowserCard: UIView {
     }()
     lazy var settingsButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Go To Settings", for: .normal)
+        button.setTitle(String.DefaultBrowserCardButton, for: .normal)
         button.backgroundColor = UIColor.Photon.Blue50
         button.titleLabel?.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         button.titleLabel?.textAlignment = .center
