@@ -116,17 +116,4 @@ public struct AppConstants {
         return true
         #endif
     }()
-    
-    /// Put it behind a feature flag as we don't know fully how iOS14 allows setting default browser
-    public static let MOZ_DEFAULT_BROWSER_SETUP: Bool = {
-        #if MOZ_CHANNEL_RELEASE
-        return false
-        #elseif MOZ_CHANNEL_BETA
-        return true
-        #elseif MOZ_CHANNEL_FENNEC
-        return true
-        #else
-        return true
-        #endif
-    }()
 }

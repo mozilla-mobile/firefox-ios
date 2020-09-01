@@ -1087,6 +1087,7 @@ class DefaultBrowserSetting: Setting {
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
+        TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .settingsMenuSetAsDefaultBrowser)
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
     }
 }
