@@ -346,6 +346,7 @@ extension TelemetryWrapper {
         case onboarding = "onboarding"
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
+        case asDefaultBrowser = "as-default-browser"
     }
 
     public enum EventValue: String {
@@ -440,6 +441,8 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserCard.dismissPressed.add()
         case (.action, .tap, .goToSettingsDefaultBrowserCard, _, _):
             GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
+        case (.action, .open, .asDefaultBrowser, _, _):
+            GleanMetrics.App.openedAsDefaultBrowser.add()
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)

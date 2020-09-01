@@ -46,6 +46,7 @@ The following metrics are added to the ping:
 
 | Name | Type | Description | Data reviews | Extras | Expiration |
 | --- | --- | --- | --- | --- | --- |
+| app.opened_as_default_browser |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Recorded when a preference is changed and includes the preference that changed as well as the value changed to recorded in the extra keys.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
 | application_services.bookmark_highlights_visible |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the show bookmark highlights preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
 | application_services.pocket_stories_visible |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the show Pocket stories preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |
 | application_services.recent_highlights_visible |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the show recent highlights preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 |

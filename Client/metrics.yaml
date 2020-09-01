@@ -551,6 +551,21 @@ default_browser_card:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
 
+app:
+  opened_as_default_browser:
+    type: counter
+    description: |
+      Recorded when a preference is changed and includes the
+      preference that changed as well as the value changed to
+      recorded in the extra keys.
+    bugs:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    data_reviews:
+      - https://bugzilla.mozilla.org/show_bug.cgi?id=1644846
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+
 # Legacy IDs for deletion-request purposes
 legacy.ids:
   client_id:
