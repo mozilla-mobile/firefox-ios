@@ -32,7 +32,7 @@ class TabManagerStore {
     var hasTabsToRestoreAtStartup: Bool {
         return archivedStartupTabs.count > 0
     }
-    
+
     fileprivate func tabsStateArchivePath() -> String? {
         let profilePath: String?
         if  AppConstants.IsRunningTest {

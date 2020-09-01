@@ -9,8 +9,12 @@ import Combine
 
 struct TabProvider: TimelineProvider {
     public typealias Entry = OpenTabsEntry
+
+    func placeholder(in context: Context) -> OpenTabsEntry {
+        OpenTabsEntry(date: Date(), favicons: [String: Image](), tabs: [])
+    }
     
-    public func snapshot(with context: Context, completion: @escaping (OpenTabsEntry) -> ()) {
+    func getSnapshot(in context: Context, completion: @escaping (OpenTabsEntry) -> Void) {
         let allOpenTabs = TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
         let openTabs = allOpenTabs.filter {
             !$0.isPrivate &&
@@ -42,9 +46,9 @@ struct TabProvider: TimelineProvider {
             completion(openTabsEntry)
         }
     }
-
-    public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        snapshot(with: context, completion: { openTabsEntry in
+    
+    func getTimeline(in context: Context, completion: @escaping (Timeline<OpenTabsEntry>) -> Void) {
+        getSnapshot(in: context, completion: { openTabsEntry in
             let timeline = Timeline(entries: [openTabsEntry], policy: .atEnd)
             completion(timeline)
         })

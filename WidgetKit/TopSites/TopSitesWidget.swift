@@ -12,7 +12,11 @@ import SyncTelemetry
 struct TopSitesProvider: TimelineProvider {
     public typealias Entry = TopSitesEntry
 
-    public func snapshot(with context: Context, completion: @escaping (TopSitesEntry) -> ()) {
+    func placeholder(in context: Context) -> TopSitesEntry {
+        return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
+    }
+    
+    func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
         TopSitesHandler.getTopSites(profile: BrowserProfile(localName: "profile")).uponQueue(.main) { topSites in
             
             let faviconFetchGroup = DispatchGroup()
@@ -41,14 +45,14 @@ struct TopSitesProvider: TimelineProvider {
             }
         }
     }
-
-    public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        snapshot(with: context, completion: { topSitesEntry in
+    
+    func getTimeline(in context: Context, completion: @escaping (Timeline<TopSitesEntry>) -> Void) {
+        getSnapshot(in: context, completion: { topSitesEntry in
             let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
             completion(timeline)
         })
     }
-
+    
     fileprivate func tabsStateArchivePath() -> String? {
         let profilePath: String?
         profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
@@ -109,15 +113,38 @@ struct TopSitesView: View {
         VStack {
             // TODO: Always fill with 16 squares, no matter what!
             HStack {
-                ForEach(entry.sites.prefix(4), id: \.url) { tab in
-                    topSitesItem(tab)
-                        .background(Color.clear).frame(maxWidth: .infinity)
+                if entry.sites.count > 3 {
+                    ForEach(entry.sites.prefix(4), id: \.url) { tab in
+                        topSitesItem(tab)
+                            .background(Color.clear).frame(maxWidth: .infinity)
+                    }
+                } else {
+                    ForEach(entry.sites[0...entry.sites.count - 1], id: \.url) { tab in
+                        topSitesItem(tab).frame(maxWidth: .infinity)
+                    }
+                    
+                    ForEach(0..<(4 - entry.sites.count), id: \.self) { _ in
+                        emptySquare
+                    }
                 }
             }.padding(.top)
             Spacer()
             HStack {
-                ForEach(entry.sites.suffix(4), id: \.url) { tab in
-                    topSitesItem(tab).frame(maxWidth: .infinity)
+                if entry.sites.count > 7 {
+                    ForEach(entry.sites[4...7], id: \.url) { tab in
+                        topSitesItem(tab).frame(maxWidth: .infinity)
+                    }
+                } else {
+                    // Ensure there is at least a single site in the second row
+                    if entry.sites.count > 4 {
+                        ForEach(entry.sites[4...entry.sites.count - 1], id: \.url) { tab in
+                            topSitesItem(tab).frame(maxWidth: .infinity)
+                        }
+                    }
+                    
+                    ForEach(0..<(min(4, 8 - entry.sites.count)), id: \.self) { _ in
+                        emptySquare
+                    }
                 }
             }.padding(.bottom)
         }
