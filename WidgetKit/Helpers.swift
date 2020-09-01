@@ -36,7 +36,9 @@ func getImageForUrl(_ url: URL, completion: @escaping (Image?) -> Void) {
         }
     }
 
-    queue.async(execute: fetchImageWork!)
+    if let imageWork = fetchImageWork {
+        queue.async(execute: imageWork)
+    }
 
     // Timeout the favicon fetch request if it's taking too long
     queue.asyncAfter(deadline: .now() + 2) {

@@ -9,64 +9,6 @@ import Shared
 import Storage
 import SyncTelemetry
 
-struct TopSitesProvider: TimelineProvider {
-    public typealias Entry = TopSitesEntry
-
-    func placeholder(in context: Context) -> TopSitesEntry {
-        return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
-    }
-    
-    func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
-        TopSitesHandler.getTopSites(profile: BrowserProfile(localName: "profile")).uponQueue(.main) { topSites in
-            
-            let faviconFetchGroup = DispatchGroup()
-            var tabFaviconDictionary = [String : Image]()
-            
-            for site in topSites {
-                faviconFetchGroup.enter()
-
-                if let faviconURL = site.icon?.url {
-                    getImageForUrl(URL(string: faviconURL)!, completion: { image in
-                        if image != nil {
-                            tabFaviconDictionary[site.url] = image
-                        }
-
-                        faviconFetchGroup.leave()
-                    })
-                } else {
-                    faviconFetchGroup.leave()
-                }
-            }
-            
-            faviconFetchGroup.notify(queue: .main) {
-                let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites)
-                
-                completion(topSitesEntry)
-            }
-        }
-    }
-    
-    func getTimeline(in context: Context, completion: @escaping (Timeline<TopSitesEntry>) -> Void) {
-        getSnapshot(in: context, completion: { topSitesEntry in
-            let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
-            completion(timeline)
-        })
-    }
-    
-    fileprivate func tabsStateArchivePath() -> String? {
-        let profilePath: String?
-        profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
-    }
-}
-
-struct TopSitesEntry: TimelineEntry {
-    let date: Date
-    let favicons: [String : Image]
-    let sites: [Site]
-}
-
 struct TopSitesWidget: Widget {
     private let kind: String = "Top Sites"
 
