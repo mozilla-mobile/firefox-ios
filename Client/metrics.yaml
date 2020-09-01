@@ -524,7 +524,7 @@ settings_menu:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7090
     notification_emails:
       - firefox-ios@mozilla.com
-    expires: "2021-07-01"
+    expires: "2021-03-01"
 
 # QR Code metrics
 qr_code:
