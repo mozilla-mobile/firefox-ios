@@ -204,7 +204,7 @@ class TabManager: NSObject {
         }
 
         store.preserveTabs(tabs, selectedTab: selectedTab)
-        
+
         assert(tab === selectedTab, "Expected tab is selected")
         selectedTab?.createWebview()
         selectedTab?.lastExecutedTime = Date.now()
