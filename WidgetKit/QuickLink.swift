@@ -4,10 +4,32 @@
 
 import SwiftUI
 import Shared
+import WidgetKit
+
 // Enum file that holds the different cases for the Quick Actions small widget with their configurations (string, backgrounds, images) as selected by the user in edit mode. It maps the values of IntentQuickLink enum in the QuickLinkSelectionIntent to the designated values of each case.
 
+enum WidgetSize: String {
+    case small = "small"
+    case medium = "medium"
+    case large = "large"
+    case unknown = "unknown"
+}
+
+extension WidgetFamily {
+    func toWidgetSize() -> WidgetSize {
+        switch(self) {
+        case .systemSmall: return .small
+        case .systemMedium: return .medium
+        case .systemLarge: return .large
+            
+        @unknown default:
+            return .unknown
+        }
+    }
+}
+
 enum QuickLink: Int {
-    case search = 1
+    case search
     case copiedLink
     case privateSearch
     case closePrivateTabs
@@ -37,17 +59,35 @@ enum QuickLink: Int {
             return String.ClosePrivateTabsLabelV2
         }
     }
-
-    public var url: URL {
+    
+    public func url(size: WidgetSize) -> URL {
         switch self {
         case .search:
-            return linkToContainingApp("?private=false", query: "open-url")
+            return linkToContainingApp(
+                "?private=false",
+                query: "open-url",
+                widgetObjectIdentifier: "quick-link-search-widget",
+                widgetSize: size
+            )
         case .privateSearch:
-            return linkToContainingApp("?private=true", query: "open-url")
+            return linkToContainingApp(
+                "?private=true",
+                query: "open-url",
+                widgetObjectIdentifier: "quick-link-private-search-widget",
+                widgetSize: size
+            )
         case .copiedLink:
-            return linkToContainingApp(query: "open-copied")
+            return linkToContainingApp(
+                query: "open-copied",
+                widgetObjectIdentifier: "quick-link-copied-link-widget",
+                widgetSize: size
+            )
         case .closePrivateTabs:
-            return linkToContainingApp(query: "close-private-tabs")
+            return linkToContainingApp(
+                query: "close-private-tabs",
+                widgetObjectIdentifier: "quick-link-close-private-tabs-widget",
+                widgetSize: size
+            )
         }
     }
 

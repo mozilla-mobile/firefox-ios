@@ -284,6 +284,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
             TelemetryWrapper.recordEvent(category: .appExtensionAction, method: .applicationOpenUrl, object: object)
         }
+        
+        // TODO: Not sure where this constant for array key should live?
+        if let profile = profile, let pickledEvents = profile.prefs.arrayForKey("widgetkit.telemetry.event") as? [Data] {
+            
+            // Unpickle the events and discard invalid ones
+            let events = pickledEvents.compactMap(Event.unpickle).filter { $0.validate() }
+            
+            for event in events {
+                if let category = TelemetryWrapper.EventCategory(rawValue: event.category),
+                   let method = TelemetryWrapper.EventMethod(rawValue: event.method),
+                   let object = TelemetryWrapper.EventObject(rawValue: event.object),
+                   let extras = event.extra
+                {
+                    TelemetryWrapper.recordEvent(category: category, method: method, object: object, extras: extras)
+                }
+            }
+        }
 
         DispatchQueue.main.async {
             NavigationPath.handle(nav: routerpath, with: BrowserViewController.foregroundBVC(), tray: self.tabTrayController)

@@ -57,9 +57,11 @@ struct ImageButtonWithLabel: View {
             return 8.0
         }
     }
+    
+    @Environment(\.widgetFamily) var widgetFamily
 
     var body: some View {
-        Link(destination: link.url) {
+        Link(destination: link.url(size: widgetFamily.toWidgetSize())) {
             ZStack(alignment: .leading) {
                 if !isSmall {
                     ContainerRelativeShape()

@@ -25,11 +25,19 @@ struct TopSitesWidget: Widget {
 struct TopSitesView: View {
     let entry: TopSitesEntry
     
+    @Environment(\.widgetFamily) var widgetFamily
+
     @ViewBuilder
     func topSitesItem(_ site: Site) -> some View {
         let url = site.url
         
-        Link(destination: linkToContainingApp("?url=\(url)", query: "open-url")) {
+        Link(destination:
+                linkToContainingApp(
+                    "?url=\(url)",
+                    query: "open-url",
+                    widgetObjectIdentifier: "top-sites-widget",
+                    widgetSize: widgetFamily.toWidgetSize()
+                )) {
             if (entry.favicons[url] != nil) {
                 (entry.favicons[url])!.resizable().frame(width: 60, height: 60).mask(maskShape)
             } else {
@@ -92,10 +100,5 @@ struct TopSitesView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background((Color(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00))))
-    }
-    
-    private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
-        let urlString = "\(scheme)://\(query)\(urlSuffix)"
-        return URL(string: urlString)!
     }
 }

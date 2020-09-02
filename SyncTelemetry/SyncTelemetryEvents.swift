@@ -18,12 +18,12 @@ public extension IdentifierString {
 // Telemetry Events
 // Documentation: http://gecko.readthedocs.io/en/latest/toolkit/components/telemetry/telemetry/collection/events.html#events
 public struct Event {
-    let timestamp: Timestamp
-    let category: IdentifierString
-    let method: IdentifierString
-    let object: IdentifierString
-    let value: String?
-    let extra: [String: String]?
+    public let timestamp: Timestamp
+    public let category: IdentifierString
+    public let method: IdentifierString
+    public let object: IdentifierString
+    public let value: String?
+    public let extra: [String: String]?
 
     public init(category: IdentifierString,
                 method: IdentifierString,

@@ -28,9 +28,14 @@ struct OpenTabsView: View {
     @ViewBuilder
     func lineItemForTab(_ tab: SavedTab) -> some View {
         let url = tab.sessionData!.urls.last!
-
+        
         VStack(alignment: .leading) {
-            Link(destination: linkToContainingApp("?url=\(url)", query: "open-url")) {
+            Link(destination: linkToContainingApp(
+                    "?url=\(url)",
+                    query: "open-url",
+                    widgetObjectIdentifier: "open-tabs-widget",
+                    widgetSize: widgetFamily.toWidgetSize())
+            ) {
                 HStack(alignment: .center, spacing: 15) {
                     if (entry.favicons[tab.title!] != nil) {
                         (entry.favicons[tab.title!])!.resizable().frame(width: 16, height: 16)
@@ -106,10 +111,5 @@ struct OpenTabsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background((Color(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00))))
-    }
-    
-    private func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
-        let urlString = "\(scheme)://\(query)\(urlSuffix)"
-        return URL(string: urlString)!
     }
 }

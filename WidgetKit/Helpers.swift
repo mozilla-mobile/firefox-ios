@@ -5,6 +5,7 @@
 import Foundation
 import SwiftUI
 import UIKit
+import SyncTelemetry
 
 var scheme: String {
     guard let string = Bundle.main.object(forInfoDictionaryKey: "MozInternalURLScheme") as? String else {
@@ -13,8 +14,30 @@ var scheme: String {
     return string
 }
 
-func linkToContainingApp(_ urlSuffix: String = "", query: String) -> URL {
+func linkToContainingApp(
+    _ urlSuffix: String = "",
+    query: String,
+    widgetObjectIdentifier: String,
+    widgetSize: WidgetSize
+) -> URL {
     let urlString = "\(scheme)://\(query)\(urlSuffix)"
+    
+    let prefs = BrowserProfile(localName: "profile").prefs
+    let prefKeySyncEvents = "widgetkit.telemetry.event"
+    var events = prefs.arrayForKey(prefKeySyncEvents) as? [Data] ?? []
+    let newEvent = Event(
+        category: "action",
+        method: "open",
+        object: widgetObjectIdentifier,
+        value: nil,
+        extra: ["size": widgetSize.rawValue]
+    ).pickle()
+    
+    if let openEvent = newEvent {
+        events.append(openEvent)
+        prefs.setObject(events, forKey: prefKeySyncEvents)
+    }
+    
     return URL(string: urlString)!
 }
 
