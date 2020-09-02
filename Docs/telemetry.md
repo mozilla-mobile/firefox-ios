@@ -1,3 +1,5 @@
+**NOTE:** We have switched to using Glean to record telemetry and new documentation is in [`docs/metrics.md`](https://github.com/mozilla-mobile/firefox-ios/blob/main/Docs/metrics.md)
+
 # Mozilla's Telemetry Service Pings
 
 > **NOTE:** If there is anything in this document that is not clear, is incorrect, or that requires more detail, please file a request through [Bugzilla](https://bugzilla.mozilla.org/enter_bug.cgi?product=Firefox%20for%20iOS&component=Telemetry). Also feel free to submit corrections or additional information.
