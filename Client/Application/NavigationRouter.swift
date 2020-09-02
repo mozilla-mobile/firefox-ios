@@ -100,6 +100,19 @@ enum NavigationPath {
             self = .text(text ?? "")
         } else if urlString.starts(with: "\(scheme)://glean") {
             self = .glean(url: url)
+        } else if urlString.starts(with: "\(scheme)://open-copied") {
+            if !UIPasteboard.general.hasURLs {
+                guard let searchText = UIPasteboard.general.string else {
+                    return nil
+                }
+                self = .text(searchText)
+            } else {
+                guard let url = UIPasteboard.general.url else {
+                    return nil
+                }
+                let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+                self = .url(webURL: url, isPrivate: isPrivate)
+            }
         } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
             self = .closePrivateTabs
         } else {
@@ -114,7 +127,7 @@ enum NavigationPath {
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
-        case .closePrivateTabs : NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
+        case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
         }
     }
 
@@ -137,16 +150,16 @@ enum NavigationPath {
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
         bvc.presentSignInViewController(params)
     }
-    
+
     private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: TabTrayControllerV1) {
         bvc.tabManager.removeTabs(bvc.tabManager.privateTabs)
-        guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
-            bvc.tabManager.selectTab(bvc.tabManager.addTab())
-            return
-        }
-        bvc.tabManager.selectTab(tab)
+         guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
+             bvc.tabManager.selectTab(bvc.tabManager.addTab())
+             return
+         }
+         bvc.tabManager.selectTab(tab)
     }
-    
+
     private static func handleGlean(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
     }

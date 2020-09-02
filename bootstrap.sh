@@ -17,15 +17,7 @@ if [ "$1" == "--force" ]; then
     rm -rf ~/Library/Caches/org.carthage.CarthageKit
 fi
 
-# Only enable this on the Xcode Server because it times out if it does not
-# get any output for some time while building the dependencies.
-
-CARTHAGE_VERBOSE=""
-if [ ! -z "$XCS_BOT_ID"  ]; then
-  CARTHAGE_VERBOSE="--verbose"
-fi
-
-carthage bootstrap $CARTHAGE_VERBOSE --platform ios --color auto --cache-builds
+./carthage_command.sh
 
 # Install Node.js dependencies and build user scripts
 

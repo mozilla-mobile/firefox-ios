@@ -5,7 +5,7 @@
 @testable import Account
 @testable import Client
 import Foundation
-import FxA
+
 import SwiftyJSON
 import XCTest
 

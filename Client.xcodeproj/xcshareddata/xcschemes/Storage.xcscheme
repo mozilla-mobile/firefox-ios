@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FCAE2191ABB51F800877008"
-               BuildableName = "Storage.framework"
+               BuildableName = "libStorage.a"
                BlueprintName = "Storage"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -49,17 +49,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2FCAE2191ABB51F800877008"
-            BuildableName = "Storage.framework"
-            BlueprintName = "Storage"
-            ReferencedContainer = "container:Client.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Fennec"
@@ -75,13 +64,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FCAE2191ABB51F800877008"
-            BuildableName = "Storage.framework"
+            BuildableName = "libStorage.a"
             BlueprintName = "Storage"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Fennec"
@@ -93,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FCAE2191ABB51F800877008"
-            BuildableName = "Storage.framework"
+            BuildableName = "libStorage.a"
             BlueprintName = "Storage"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>

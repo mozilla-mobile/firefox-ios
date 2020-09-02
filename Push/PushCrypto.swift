@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import FxA
+
 
 /// Class to wrap ecec which does the encryption, decryption and key generation with OpenSSL.
 /// This supports aesgcm and the newer aes128gcm.

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FA435FA1ABB83B4008031D1"
-               BuildableName = "Account.framework"
+               BuildableName = "libAccount.a"
                BlueprintName = "Account"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -44,17 +44,6 @@
             </SkippedTests>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "2FA435FA1ABB83B4008031D1"
-            BuildableName = "Account.framework"
-            BlueprintName = "Account"
-            ReferencedContainer = "container:Client.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Fennec"
@@ -70,13 +59,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FA435FA1ABB83B4008031D1"
-            BuildableName = "Account.framework"
+            BuildableName = "libAccount.a"
             BlueprintName = "Account"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Fennec"
@@ -88,7 +75,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FA435FA1ABB83B4008031D1"
-            BuildableName = "Account.framework"
+            BuildableName = "libAccount.a"
             BlueprintName = "Account"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>

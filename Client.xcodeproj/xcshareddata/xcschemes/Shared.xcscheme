@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "288A2D851AB8B3260023ABC3"
-               BuildableName = "Shared.framework"
+               BuildableName = "libShared.a"
                BlueprintName = "Shared"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -39,17 +39,6 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "288A2D851AB8B3260023ABC3"
-            BuildableName = "Shared.framework"
-            BlueprintName = "Shared"
-            ReferencedContainer = "container:Client.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Fennec"
@@ -65,13 +54,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "288A2D851AB8B3260023ABC3"
-            BuildableName = "Shared.framework"
+            BuildableName = "libShared.a"
             BlueprintName = "Shared"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <AdditionalOptions>
-      </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Fennec"
@@ -83,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "288A2D851AB8B3260023ABC3"
-            BuildableName = "Shared.framework"
+            BuildableName = "libShared.a"
             BlueprintName = "Shared"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>

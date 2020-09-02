@@ -50,8 +50,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
         navigator.back()
     }
-    
-    func test3ReloadButtonContextMenu() {
+    // Disabled due to real bug:  https://github.com/mozilla-mobile/firefox-ios/issues/7248
+    /*func test3ReloadButtonContextMenu() {
         navigator.toggleOn(userState.trackingProtectionSettingOnNormalMode == true, withAction: Action.SwitchETP)
         navigator.goto(BrowserTab)
 
@@ -68,7 +68,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // Snapshot of 'Reload *with* tracking protection' label, because trackingProtectionPerTabEnabled is false.
         snapshot("ContextMenuReloadButton-03", waitForLoadingIndicator: false)
-    }
+    }*/
 
     private func typePasscode(n: Int, keyNumber: Int) {
         for _ in 1...n {

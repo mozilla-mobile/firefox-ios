@@ -8,4 +8,4 @@ brew install https://github.com/Homebrew/homebrew-core/raw/09ceff6c1de7ebbfedb42
 
 carthage version
 
-carthage bootstrap $CARTHAGE_VERBOSE --platform ios
+./carthage_command.sh

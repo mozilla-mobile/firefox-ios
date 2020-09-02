@@ -4,7 +4,7 @@
 
 @testable import Account
 import Foundation
-import FxA
+
 import Shared
 import XCTest
 
