@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import EarlGrey
 @testable import Client
 
 class LoginManagerTests: KIFTestCase {
@@ -16,62 +15,36 @@ class LoginManagerTests: KIFTestCase {
         PasscodeUtils.resetPasscode()
         webRoot = SimplePageServer.start()
         generateLogins()
-        BrowserUtils.dismissFirstRunUI()
-        BrowserUtils.configEarlGrey()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
         super.tearDown()
         clearLogins()
         PasscodeUtils.resetPasscode()
-        BrowserUtils.resetToAboutHome()
+        BrowserUtils.resetToAboutHomeKIF(tester())
     }
 
     fileprivate func openLoginManager() {
-        // Wait until the dialog shows up
-        let menuAppeared = GREYCondition(name: "Wait the Settings dialog to appear", block: { () -> Bool in
-            var errorOrNil: NSError?
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Search")).assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil == nil
-            return success
-        })
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().tapView(withAccessibilityLabel: "Menu")
 
-        let menu_button = grey_allOf([grey_accessibilityLabel("Menu"),
-                                          grey_accessibilityID("TabToolbar.menuButton")])
-        EarlGrey.selectElement(with: menu_button).perform(grey_tap())
-        EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
+        tester().tapView(withAccessibilityLabel: "Settings")
 
-        let success = menuAppeared.wait(withTimeout: 20)
-        GREYAssertTrue(success, reason: "Failed to display settings dialog")
-        if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityID("Logins"))
-                .using(searchAction: grey_scrollInDirection(.down, 200),
-                       onElementWithMatcher: grey_accessibilityID("AppSettingsTableViewController.tableView"))
-                .assert(grey_notNil())
-        }
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        let list = tester().waitForView(withAccessibilityIdentifier: "AppSettingsTableViewController.tableView") as? UITableView
+               
+        let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "AppSettingsTableViewController.tableView")
+        tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.down)
 
-        EarlGrey.selectElement(with:grey_accessibilityLabel("Tracking Protection"))
-            .using(searchAction: grey_scrollInDirection(GREYDirection.down, 400),
-                   onElementWithMatcher: grey_kindOfClass(UITableView.self))
-            .assert(grey_notNil())
-
-        EarlGrey.selectElement(with: grey_accessibilityID("Logins")).perform(grey_tap())
+        tester().tapView(withAccessibilityIdentifier: "Logins")
     }
 
     fileprivate func closeLoginManager() {
         tester().waitForAnimationsToFinish(withTimeout: 5)
         tester().tapView(withAccessibilityLabel: "Settings")
-        
-        let DoneAppeared = GREYCondition(name: "Wait for the Done button", block: { () -> Bool in
-            var errorOrNil: NSError?
-            EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem"))
-                .assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil == nil
-            return success
-        })
-        let success = DoneAppeared.wait(withTimeout: 15)
-        GREYAssertTrue(success, reason: "Failed to see Done button")
-        EarlGrey.selectElement(with: grey_accessibilityID("AppSettingsTableViewController.navigationItem.leftBarButtonItem")).perform(grey_tap())
+
+        tester().tapView(withAccessibilityIdentifier: "AppSettingsTableViewController.navigationItem.leftBarButtonItem")
    }
 
     fileprivate func generateLogins() {
@@ -97,20 +70,9 @@ class LoginManagerTests: KIFTestCase {
     }
 
     func waitForMatcher(name: String) {
-        let matcher = grey_allOf([grey_accessibilityLabel(name),
-                                  grey_kindOfClass(NSClassFromString("UICalloutBarButton")!),
-                                  grey_sufficientlyVisible()])
-
-        let menuShown = GREYCondition(name: "Wait for " + name) {
-            var errorOrNil: NSError?
-
-            EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil == nil
-            return success
-        }
-        let success = menuShown.wait(withTimeout: 10)
-        GREYAssertTrue(success, reason: name + " Menu not shown")
-        EarlGrey.selectElement(with: matcher).perform(grey_tap())
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().waitForView(withAccessibilityLabel: name)
+        tester().tapView(withAccessibilityLabel: name)
     }
 
     fileprivate func generateStringListWithFormat(_ format: String, numRange: CountableRange<Int>, prefixes: String) -> [String] {
@@ -195,7 +157,7 @@ class LoginManagerTests: KIFTestCase {
         tester().wait(forTimeInterval: 1)
         tester().waitForView(withAccessibilityLabel: "a0@email.com")
         for _ in 1...6 {
-            EarlGrey.selectElement(with: grey_accessibilityID("Login List")).perform(grey_swipeFastInDirection(.up))
+            tester().swipeView(withAccessibilityIdentifier: "SAVED LOGINS", in: KIFSwipeDirection.up)
         }
         tester().waitForAnimationsToFinish()
         tester().waitForView(withAccessibilityLabel: "k9@email.com")
@@ -206,26 +168,31 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
+
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+
         tester().waitForView(withAccessibilityLabel: "Password")
 
         var passwordField = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
         XCTAssertTrue(passwordField.isSecureTextEntry)
 
         // Tap the ‘Reveal’ menu option
-        EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
+        let list2 = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        tester().tapRow(at: IndexPath(row: 3, section: 0), in: list2)
+
         waitForMatcher(name: "Reveal")
         passwordField = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
         XCTAssertFalse(passwordField.isSecureTextEntry)
 
         // Tap the ‘Hide’ menu option
-        EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
+        tester().tapRow(at: IndexPath(row: 3, section: 0), in: list2)
         waitForMatcher(name: "Hide")
         passwordField = tester().waitForView(withAccessibilityIdentifier: "passwordField") as! UITextField
         XCTAssertTrue(passwordField.isSecureTextEntry)
 
         // Tap the ‘Copy’ menu option
-        EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
+        tester().tapRow(at: IndexPath(row: 3, section: 0), in: list2)
         waitForMatcher(name: "Copy")
 
         tester().tapView(withAccessibilityLabel: "Logins & Passwords")
@@ -237,14 +204,17 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
         tester().waitForView(withAccessibilityLabel: "Password")
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Website")).perform(grey_tap())
+        let list2 = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        tester().tapRow(at: IndexPath(row: 1, section: 0), in: list2)
+        
         waitForMatcher(name: "Copy")
 
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Website")).perform(grey_tap())
+        tester().tapRow(at: IndexPath(row: 1, section: 0), in: list2)
         waitForMatcher(name: "Open & Fill")
 
         tester().wait(forTimeInterval: 2)
@@ -256,11 +226,14 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
+
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
         tester().waitForView(withAccessibilityLabel: "Password")
 
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Website")).perform(grey_tap())
+        let list2 = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        tester().tapRow(at: IndexPath(row: 1, section: 0), in: list2)
         waitForMatcher(name: "Open & Fill")
 
         tester().wait(forTimeInterval: 10)
@@ -310,11 +283,15 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
+
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
         tester().waitForView(withAccessibilityLabel: "Password")
 
         // Tap the 'Open & Fill' menu option  just checks to make sure we navigate to the web page
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Username")).perform(grey_tap())
+        let list2 = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        tester().tapRow(at: IndexPath(row: 2, section: 0), in: list2)
+
         waitForMatcher(name: "Copy")
 
         tester().tapView(withAccessibilityLabel: "Logins & Passwords")
@@ -594,7 +571,9 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
 
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
+
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
         tester().waitForView(withAccessibilityLabel: "Password")
 
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
@@ -621,7 +600,8 @@ class LoginManagerTests: KIFTestCase {
         tester().tapView(withAccessibilityLabel: "Done")
 
         // Tap the 'Reveal' menu option
-        EarlGrey.selectElement(with: grey_accessibilityID("passwordField")).perform(grey_tap())
+        let list2 = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        tester().tapRow(at: IndexPath(row: 3, section: 0), in: list2)
         waitForMatcher(name: "Reveal")
 
         passwordCell = list.cellForRow(at: IndexPath(row: 3, section: 0)) as! LoginDetailTableViewCell
@@ -647,10 +627,15 @@ class LoginManagerTests: KIFTestCase {
         // let firstCellBeforeRemoving = list.cellForRow(at: firstIndexPathBeforeRemoving)!
         // let firstCellLabelBeforeRemoving  = firstCellBeforeRemoving.textLabel?.text!
         // XCTAssertEqual(firstCellLabelBeforeRemoving, "http://a0.com")
+        
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
         tester().waitForAnimationsToFinish()
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Delete")).perform(grey_tap())
+        
+        let list2 = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView
+        tester().tapRow(at: IndexPath(row: 5, section: 0), in: list2)
+        
         tester().waitForAnimationsToFinish()
         // Verify that we are looking at the nonsynced alert dialog
         tester().waitForView(withAccessibilityLabel: "Are you sure?")
@@ -660,7 +645,7 @@ class LoginManagerTests: KIFTestCase {
         tester().waitForAnimationsToFinish()
 
         // Check to verify that the element removed is not there
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).assert(grey_notVisible())
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "http://a0.com")
         tester().waitForView(withAccessibilityLabel: "http://a1.com")
 
         // Both the count and the first element is checked before removing
@@ -679,7 +664,10 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
         tester().wait(forTimeInterval: 1)
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
+
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
+
         tester().waitForView(withAccessibilityLabel: "Password")
 
         XCTAssertTrue(tester().viewExistsWithLabelPrefixedBy("Created just now"))
@@ -692,7 +680,9 @@ class LoginManagerTests: KIFTestCase {
         openLoginManager()
         tester().waitForAnimationsToFinish(withTimeout: 5)
         tester().waitForView(withAccessibilityLabel: "http://a0.com")
-        EarlGrey.selectElement(with: grey_accessibilityLabel("http://a0.com")).perform(grey_tap())
+
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        tester().tapRow(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "Login List")
         tester().waitForView(withAccessibilityLabel: "Password")
 
         let list = tester().waitForView(withAccessibilityIdentifier: "Login Detail List") as! UITableView

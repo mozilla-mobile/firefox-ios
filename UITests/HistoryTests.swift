@@ -4,7 +4,6 @@
 
 import Foundation
 import WebKit
-import EarlGrey
 
 class HistoryTests: KIFTestCase {
     fileprivate var webRoot: String!
@@ -12,15 +11,14 @@ class HistoryTests: KIFTestCase {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-        BrowserUtils.configEarlGrey()
-        BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     func addHistoryItemPage(_ pageNo: Int) -> String {
         // Load a page
         let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
 
-        BrowserUtils.enterUrlAddressBar(typeUrl: url)
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
         return url
     }
@@ -44,34 +42,21 @@ class HistoryTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
 
         // Wait until the dialog shows up
-        let listAppeared = GREYCondition(name: "Wait the history list to appear", block: {
-            var errorOrNil: NSError?
-            let matcher = grey_allOf([grey_accessibilityLabel("Page 2"),
-                                      grey_sufficientlyVisible()])
-            EarlGrey.selectElement(with: matcher)
-                .inRoot(grey_accessibilityID("History List"))
-                .assert(grey_notNil(), error: &errorOrNil)
-            return errorOrNil == nil
-        }).wait(withTimeout: 20)
-        GREYAssertTrue(listAppeared, reason: "Failed to display history")
+        tester().waitForAnimationsToFinish()
+        tester().waitForView(withAccessibilityLabel: "Page 2")
+        
+        tester().waitForView(withAccessibilityLabel: "Page 1")
+        tester().waitForView(withAccessibilityLabel: "\(webRoot!)/numberedPage.html?page=2")
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Page 2"))
-            .inRoot(grey_accessibilityID("History List"))
-            .assert(grey_sufficientlyVisible())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Page 1"))
-            .inRoot(grey_accessibilityID("History List"))
-            .assert(grey_sufficientlyVisible())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("\(webRoot!)/numberedPage.html?page=2"))
-            .inRoot(grey_accessibilityID("History List"))
-            .assert(grey_sufficientlyVisible())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("\(webRoot!)/numberedPage.html?page=1"))
-            .inRoot(grey_accessibilityID("History List"))
-            .assert(grey_sufficientlyVisible())
+        tester().waitForView(withAccessibilityLabel: "\(webRoot!)/numberedPage.html?page=1")
+
 
         // Close History (and so Library) panel
         BrowserUtils.closeLibraryMenu(tester())
     }
 
+    // Could be removed since tested on XCUITets -> AP VERIFY OR ADD
+    /*
     func testDeleteHistoryItemFromListWith2Items() {
         // add 2 history items
         let urls = addHistoryItems(2)
@@ -82,9 +67,8 @@ class HistoryTests: KIFTestCase {
 
         EarlGrey.selectElement(with: grey_accessibilityLabel(urls[0]))
             .perform(grey_longPress())
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Delete from History"))
-            .inRoot(grey_kindOfClass(NSClassFromString("UITableViewCellContentView")!))
-            .perform(grey_tap())
+        
+        tester().tapView(withAccessibilityLabel: "Delete from History")
 
         // The second history entry still exists
         EarlGrey.selectElement(with: grey_accessibilityLabel(urls[1]))
@@ -104,7 +88,7 @@ class HistoryTests: KIFTestCase {
 
         // Close History (and so Library) panel
         BrowserUtils.closeLibraryMenu(tester())
-    }
+    }*/
 
     func testDeleteHistoryItemFromListWithMoreThan100Items() {
 
@@ -116,39 +100,35 @@ class HistoryTests: KIFTestCase {
         let oldestUrl = "\(webRoot!)/numberedPage.html?page=\(101)"
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
-        tester().waitForAnimationsToFinish()
+        tester().waitForAnimationsToFinish(withTimeout: 10)
         tester().waitForView(withAccessibilityIdentifier: "LibraryPanels.History")
+        tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         tester().waitForView(withAccessibilityLabel: "Page 102")
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Page 102")).inRoot(grey_kindOfClass(NSClassFromString("UITableView")!)).perform(grey_swipeSlowInDirectionWithStartPoint(.left, 0.6, 0.6))
+        let firstIndexPath = IndexPath(row: 0, section: 1)
+        let list = tester().waitForView(withAccessibilityIdentifier: "LibraryPanels.History") as? UITableView
+        
+        let row = tester().waitForCell(at: firstIndexPath, inTableViewWithAccessibilityIdentifier: "History List")
+        tester().swipeView(withAccessibilityLabel: row?.accessibilityLabel, value: row?.accessibilityValue, in: KIFSwipeDirection.left)
+     
         if !BrowserUtils.iPad() {
-            EarlGrey.selectElement(with:grey_accessibilityLabel("Delete"))
-                .perform(grey_tap())
+            tester().tapView(withAccessibilityLabel: "Delete")
         }
 
         // The history list still exists
-        EarlGrey.selectElement(with: grey_accessibilityID("History List"))
-            .assert(grey_notNil())
-        EarlGrey.selectElement(with: grey_accessibilityLabel(oldestUrl))
-            .assert(grey_notNil())
+       
+        tester().waitForView(withAccessibilityIdentifier: "History List")
+        tester().waitForView(withAccessibilityLabel: oldestUrl)
 
         // check page 1 does not exist
-        let historyRemoved = GREYCondition(name: "Check entry is removed", block: {
-            var errorOrNil: NSError?
-            let matcher = grey_allOf([grey_accessibilityLabel(urlToDelete),
-                                              grey_sufficientlyVisible()])
-            EarlGrey.selectElement(with:matcher).assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil != nil
-            return success
-        }).wait(withTimeout: 5)
-        GREYAssertTrue(historyRemoved, reason: "Failed to remove history")
+        tester().waitForAbsenceOfView(withAccessibilityLabel: "Page 97")
 
         // Close History (and so Library) panel
         BrowserUtils.closeLibraryMenu(tester())
     }
 
     override func tearDown() {
-        BrowserUtils.clearPrivateData()
+        BrowserUtils.clearPrivateDataKIF(tester())
         super.tearDown()
     }
 }

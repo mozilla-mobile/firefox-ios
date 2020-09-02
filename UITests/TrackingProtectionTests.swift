@@ -4,36 +4,9 @@
 
 import Foundation
 import Storage
-import EarlGrey
 @testable import Client
+import KIF
 
-func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
-    BrowserUtils.enterUrlAddressBar(typeUrl: url)
-
-    let dialogAppeared = GREYCondition(name: "Wait for JS dialog") {
-        var errorOrNil: NSError?
-        EarlGrey.selectElement(with: grey_accessibilityLabel("OK"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
-            .assert(grey_notNil(), error: &errorOrNil)
-        let success = errorOrNil == nil
-        return success
-    }
-    let success = dialogAppeared.wait(withTimeout: 10)
-    GREYAssertTrue(success, reason: "Failed to display JS dialog")
-
-    if shouldBlockImage {
-        EarlGrey.selectElement(with: grey_accessibilityLabel("image not loaded."))
-            .assert(grey_notNil())
-    } else {
-        EarlGrey.selectElement(with: grey_accessibilityLabel("image loaded."))
-            .assert(grey_notNil())
-    }
-
-    EarlGrey.selectElement(with: grey_accessibilityLabel("OK"))
-        .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
-        .assert(grey_enabled())
-        .perform((grey_tap()))
-}
 
 class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     private var webRoot: String!
@@ -47,8 +20,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
         // IP addresses can't be used for allowlisted domains
         SimplePageServer.useLocalhostInsteadOfIP = true
         webRoot = SimplePageServer.start()
-        BrowserUtils.configEarlGrey()
-        BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI(tester())
 
         // Check TP is ready manually as NSPredicate-based expectation on a primitive type doesn't work.
         let setup = self.expectation(description: "setup")
@@ -70,7 +42,23 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
         register(self, forTabEvents: .didChangeContentBlocking)
     }
+    
+    func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
 
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+
+            if shouldBlockImage {
+                tester().waitForView(withAccessibilityLabel: "image not loaded.")
+            } else {
+                tester().waitForView(withAccessibilityLabel: "image loaded.")
+
+            }
+        tester().tapView(withAccessibilityLabel: "OK")
+        }
+
+    
     func tabDidChangeContentBlocking(_ tab: Tab) {
         stats = tab.contentBlocker!.stats
 
@@ -104,29 +92,18 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     }
 
     func openTPSetting() {
+        tester().waitForAnimationsToFinish()
         // Check tracking protection is enabled on private tabs only in Settings
-        let menuAppeared = GREYCondition(name: "Wait for the Settings dialog to appear") {
-            var errorOrNil: NSError?
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Search")).assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil == nil
-            return success
-        }
+
         if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+            tester().tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         } else {
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+            tester().tapView(withAccessibilityLabel: "Menu")
         }
-        EarlGrey.selectElement(with: grey_text("Settings")).perform(grey_tap())
+        tester().tapView(withAccessibilityLabel: "Settings")
 
-        let success = menuAppeared.wait(withTimeout: 20)
-        GREYAssertTrue(success, reason: "Failed to display settings dialog")
-
-        // Scroll to Tracking Protection Menu
-        EarlGrey.selectElement(with:grey_accessibilityLabel("Tracking Protection"))
-            .using(searchAction: grey_scrollInDirection(GREYDirection.down, 400),
-                   onElementWithMatcher: grey_kindOfClass(UITableView.self))
-            .assert(grey_notNil())
-            .perform(grey_tap())
+        tester().accessibilityScroll(.down)
+        tester().tapView(withAccessibilityLabel: "Tracking Protection")
     }
 
     func closeTPSetting() {
@@ -137,10 +114,11 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
     func enableStrictMode() {
         openTPSetting()
-        EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(true))
+        tester().tapView(withAccessibilityIdentifier: "prefkey.trackingprotection.normalbrowsing")
         // Lets enable Strict mode to block the image this is fixed:
         // https://github.com/mozilla-mobile/firefox-ios/pull/5274#issuecomment-516111508
-        EarlGrey.selectElement(with: grey_accessibilityID("Settings.TrackingProtectionOption.BlockListStrict")).perform(grey_tap())
+
+        tester().tapView(withAccessibilityIdentifier: "Settings.TrackingProtectionOption.BlockListStrict")
 
         // Accept the warning alert when Strict mode is enabled
         tester().waitForAnimationsToFinish(withTimeout: 3)
@@ -150,18 +128,16 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
 
     func testStrictTrackingProtection() {
         openTPSetting()
-        EarlGrey.selectElement(with: grey_accessibilityID("prefkey.trackingprotection.normalbrowsing")).perform(grey_turnSwitchOn(false))
+        tester().tapView(withAccessibilityIdentifier: "prefkey.trackingprotection.normalbrowsing")
         closeTPSetting()
 
         if BrowserUtils.iPad() {
-        EarlGrey.selectElement(with:grey_accessibilityID("TopTabsViewController.tabsButton"))
-                .perform(grey_tap())
+            tester().tapView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")
         } else {
-            EarlGrey.selectElement(with:grey_accessibilityID("TabToolbar.tabsButton"))
-                .perform(grey_tap())
+            tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         }
-        EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.addTabButton"))
-            .perform(grey_tap())
+
+        tester().tapView(withAccessibilityIdentifier: "TabTrayController.addTabButton")
 
         checkStrictTrackingProtection(isBlocking: false, isTPDisabled: true)
         enableStrictMode()
@@ -174,7 +150,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     }
 
     func disableStrictTP() {
-        EarlGrey.selectElement(with: grey_accessibilityID("Settings.TrackingProtectionOption.BlockListBasic")).perform(grey_tap())
+        tester().tapView(withAccessibilityIdentifier: "Settings.TrackingProtectionOption.BlockListBasic")
     }
 
     func testSafelist() {
