@@ -7,9 +7,6 @@ import Leanplum
 import Shared
 
 class NewTabUserResearch {
-    // Closure delegate
-    var updatedLPVariable: (() -> Void)?
-    // variable
     // Variable
     var lpVariable: LPVar?
     // Constants
@@ -48,7 +45,6 @@ class NewTabUserResearch {
         guard LeanPlumClient.shared.getSettings() != nil else {
             // default state is false
             self.newTabState = false
-            self.updatedLPVariable?()
             return
         }
         // Condition: A/B test variables from leanplum server
@@ -60,7 +56,6 @@ class NewTabUserResearch {
             self.fetchedExperimentVariables = true
             self.updateTelemetry()
             self.newTabState = LPVariables.newTabButtonABTest?.boolValue() ?? false
-            self.updatedLPVariable?()
         }
         // Condition: Leanplum server too slow; Set default New tab state
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -72,10 +67,8 @@ class NewTabUserResearch {
             // Condition: LP has already started but we missed onStartLPVariable callback
             if case .started(startedState: _) = LeanPlumClient.shared.lpState , let boolValue = LPVariables.newTabButtonABTest?.boolValue() {
                 self.newTabState = boolValue
-                self.updateTelemetry()
             }
             self.fetchedExperimentVariables = true
-            self.updatedLPVariable?()
         }
     }
     
