@@ -10,6 +10,7 @@ class NewTabUserResearch {
     // Closure delegate
     var updatedLPVariable: (() -> Void)?
     // variable
+    // Variable
     var lpVariable: LPVar?
     // Constants
     private let newTabUserResearchKey = "newTabUserResearchKey"
@@ -43,7 +44,6 @@ class NewTabUserResearch {
     
     // MARK: public
     func lpVariableObserver() {
-        print("NewTabUserResearch: lpVariableObserver")
         // Condition: Leanplum is disabled; Set default New tab state
         guard LeanPlumClient.shared.getSettings() != nil else {
             // default state is false
