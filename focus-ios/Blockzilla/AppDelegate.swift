@@ -153,7 +153,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, ModalDelegate, AppSplashC
         let query = getQuery(url: url)
         let isHttpScheme = scheme == "http" || scheme == "https"
 
-        if host == "open-url" {
+        if isHttpScheme {
+            if application.applicationState == .active {
+                // If we are active then we can ask the BVC to open the new tab right away.
+                // Otherwise, we remember the URL and we open it in applicationDidBecomeActive.
+                browserViewController.submit(url: url)
+            } else {
+                queuedUrl = url
+            }
+        } else if host == "open-url" {
             let urlString = unescape(string: query["url"]) ?? ""
             guard let url = URL(string: urlString) else { return false }
 
