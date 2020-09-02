@@ -525,6 +525,47 @@ qr_code:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
 
+# Default browser card metrics
+default_browser_card:
+  dismiss_pressed:
+    type: counter
+    description: |
+      Counts the number of times default browser card is dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  go_to_settings_pressed:
+    type: counter
+    description: |
+      Counts the number of times the Go To Settings button on
+      default browser card is clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-03-01"
+
+app:
+  opened_as_default_browser:
+    type: counter
+    description: |
+      Recorded when a preference is changed and includes the
+      preference that changed as well as the value changed to
+      recorded in the extra keys.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-03-01"
+
 # Legacy IDs for deletion-request purposes
 legacy.ids:
   client_id:
