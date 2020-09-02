@@ -7,7 +7,6 @@
 import Shared
 import Foundation
 import WebKit
-import EarlGrey
 /*
 class BookmarksPanelTests: KIFTestCase {
 
