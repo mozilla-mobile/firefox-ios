@@ -221,6 +221,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Leanplum usersearch variable setup for onboarding research
         _ = OnboardingUserResearch()
+        // Leanplum usersearch variable setup for New Tab user research
+        _ = NewTabUserResearch()
         // Leanplum setup
 
         if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
