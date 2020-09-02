@@ -89,7 +89,7 @@ enum NavigationPath {
             self = .deepLink(link)
         } else if urlString.starts(with: "\(scheme)://fxa-signin"), components.valueForQuery("signin") != nil {
             self = .fxa(params: FxALaunchParams(query: url.getQuery()))
-        } else if urlString.starts(with: "\(scheme)://open-url") || urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
+        } else if urlString.starts(with: "\(scheme)://open-url") {
             let url = components.valueForQuery("url")?.asURL
             // Unless the `open-url` URL specifies a `private` parameter,
             // use the last browsing mode the user was in.
@@ -121,6 +121,10 @@ enum NavigationPath {
             }
         } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
             self = .closePrivateTabs
+        } else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
+            // Use the last browsing mode the user was in
+            let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+            self = .url(webURL: url, isPrivate: isPrivate)
         } else {
             return nil
         }
