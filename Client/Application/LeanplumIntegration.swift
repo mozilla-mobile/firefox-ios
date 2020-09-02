@@ -70,6 +70,8 @@ enum LPEvent: String {
     case trackingProtectionSafeList = "E_Added_Site_To_Tracking_Protection_Safelist"
     case fxaSyncedNewDevice = "E_FXA_Synced_New_Device"
     case onboardingTestLoadedTooSlow = "E_Onboarding_Was_Swiped_Before_AB_Test_Could_Start"
+    case dismissDefaultBrowserCard = "E_Dismissed_Default_Browser_Card"
+    case goToSettingsDefaultBrowserCard = "E_Default_Browser_Card_Clicked_Go_To_Settings"
 }
 
 struct LPAttributeKey {
