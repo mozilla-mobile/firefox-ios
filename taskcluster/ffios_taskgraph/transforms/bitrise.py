@@ -101,22 +101,22 @@ def add_bitrise_command(config, tasks):
 
         yield task
 
+# Commented functuion due to issue #7248 causing less screenshots taken
+# @transforms.add
+# def add_screenshot_checks_command(config, tasks):
+#    for task in tasks:
+#        commands = task["run"]["commands"]
 
-@transforms.add
-def add_screenshot_checks_command(config, tasks):
-    for task in tasks:
-        commands = task["run"]["commands"]
+#        command = [
+#            "python3",
+#            "taskcluster/scripts/check-screenshots.py",
+#            "--artifacts-directory", _ARTIFACTS_DIRECTORY,
+#            "--screenshots-configuration", "l10n-screenshots-config.yml",
+#        ]
 
-        command = [
-            "python3",
-            "taskcluster/scripts/check-screenshots.py",
-            "--artifacts-directory", _ARTIFACTS_DIRECTORY,
-            "--screenshots-configuration", "l10n-screenshots-config.yml",
-        ]
+#        for locale in task["attributes"]["chunk_locales"]:
+#            command.extend(["--locale", locale])
 
-        for locale in task["attributes"]["chunk_locales"]:
-            command.extend(["--locale", locale])
+#        commands.append(command)
 
-        commands.append(command)
-
-        yield task
+#        yield task
