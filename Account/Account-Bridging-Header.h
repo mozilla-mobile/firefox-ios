@@ -1,7 +1,6 @@
 #ifndef Client_Account_Bridging_Header_h
 #define Client_Account_Bridging_Header_h
 
-
 #include "RSAKeyPair.h"
 #include "JSONWebTokenUtils.h"
 #include "NSData+Base16.h"

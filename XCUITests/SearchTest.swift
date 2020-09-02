@@ -177,13 +177,11 @@ class SearchTests: BaseTestCase {
     func testSearchEngine() {
         // Change to the each search engine and verify the search uses it
         changeSearchEngine(searchEngine: "Bing")
-        // Lets keep only one search engine test, xcode 11.3 update Issue 5937
-        // changeSearchEngine(searchEngine: "DuckDuckGo")
-        // Temporary disabled due to intermittent issue on BB
-        // changeSearchEngine(searchEngine: "Google")
-        // changeSearchEngine(searchEngine: "Twitter")
-        // changeSearchEngine(searchEngine: "Wikipedia")
-        // changeSearchEngine(searchEngine: "Amazon.com")
+        changeSearchEngine(searchEngine: "DuckDuckGo")
+        changeSearchEngine(searchEngine: "Google")
+        changeSearchEngine(searchEngine: "Twitter")
+        changeSearchEngine(searchEngine: "Wikipedia")
+        changeSearchEngine(searchEngine: "Amazon.com")
     }
 
     func testDefaultSearchEngine() {

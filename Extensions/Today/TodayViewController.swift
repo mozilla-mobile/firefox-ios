@@ -28,10 +28,9 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         label.tintColor = TodayUX.labelColor
         label.font = UIFont.preferredFont(forTextStyle: .body)
         label.adjustsFontForContentSizeCategory = true
-        imageButton.sizeToFit()
         return imageButton
     }
-    
+
     fileprivate lazy var newTabButton: ImageButtonWithLabel = {
         let button = setupButtons(buttonLabel: String.NewTabButtonLabel, buttonImageName: "search-button")
         button.addTarget(self, action: #selector(onPressNewTab), forControlEvents: .touchUpInside)
@@ -45,8 +44,16 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }()
 
     fileprivate lazy var openCopiedLinkButton: ImageButtonWithLabel = {
-        let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabel, buttonImageName: "go-to-copied-link")
+        let button = setupButtons(buttonLabel: String.GoToCopiedLinkLabelV2, buttonImageName: "go-to-copied-link")
         button.addTarget(self, action: #selector(onPressOpenCopiedLink), forControlEvents: .touchUpInside)
+        return button
+        }()
+
+//MARK: Feature for V29
+// Close Private tab button in today widget, when clicked, it clears all private browsing tabs from the widget. delayed untill next release V29
+    fileprivate lazy var closePrivateTabsButton: ImageButtonWithLabel = {
+        let button = setupButtons(buttonLabel: String.ClosePrivateTabsLabelV2, buttonImageName: "close-private-tabs")
+        button.addTarget(self, action: #selector(onPressClosePrivateTabs), forControlEvents: .touchUpInside)
         return button
     }()
 
@@ -79,9 +86,12 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
         widgetView = effectView.contentView
         buttonStackView.addArrangedSubview(newTabButton)
         buttonStackView.addArrangedSubview(newPrivateTabButton)
+        buttonStackView.addArrangedSubview(closePrivateTabsButton)
         widgetView.addSubview(buttonStackView)
         buttonStackView.snp.makeConstraints { make in
-            make.top.right.left.equalTo(widgetView)
+            make.top.equalTo(widgetView)
+            make.left.equalTo(widgetView).offset(5)
+            make.right.equalTo(widgetView).offset(-5)
         }
     }
 
@@ -105,16 +115,28 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
     }
 
     func adjustFonts() {
-        if traitCollection.preferredContentSizeCategory >= .accessibilityMedium {
-            newTabButton.label.font = newTabButton.label.font.withSize(26)
-            newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(26)
-            openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(26)
+        let size = traitCollection.preferredContentSizeCategory
+        switch size {
+        case let size where size >= .accessibilityMedium:
+            resize(size: 25)
+        case let size where size <= .extraExtraExtraLarge && size > .extraLarge:
+            resize(size: 15)
+        case let size where size >= .large && size <= .extraLarge:
+            resize(size: 14)
+        case let size where size == .medium:
+            resize(size: 12)
+        case let size where size >= .extraSmall && size <= .small:
+            resize(size: 8)
+        default:
+            resize(size: UIFont.systemFontSize)
         }
-        else if traitCollection.preferredContentSizeCategory <= .large {
-            newTabButton.label.font = newTabButton.label.font.withSize(14)
-            newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(14)
-            openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(14)
-        }
+    }
+
+    func resize(size: CGFloat) {
+        newTabButton.label.font = newTabButton.label.font.withSize(size)
+        newPrivateTabButton.label.font = newPrivateTabButton.label.font.withSize(size)
+        openCopiedLinkButton.label.font = openCopiedLinkButton.label.font.withSize(size)
+        closePrivateTabsButton.label.font = closePrivateTabsButton.label.font.withSize(size)
     }
 
     func widgetMarginInsets(forProposedMarginInsets defaultMarginInsets: UIEdgeInsets) -> UIEdgeInsets {
@@ -123,21 +145,25 @@ class TodayViewController: UIViewController, NCWidgetProviding, TodayWidgetAppea
 
     // MARK: Button behaviour
     @objc func onPressNewTab(_ view: UIView) {
-        openContainingApp("?private=false", query: "url")
+        openContainingApp("?private=false", query: "open-url")
     }
 
     @objc func onPressNewPrivateTab(_ view: UIView) {
-        openContainingApp("?private=true", query: "url")
-    }
-
-     func openContainingApp(_ urlSuffix: String = "", query: String) {
-        let urlString = "\(model.scheme)://open-\(query)\(urlSuffix)"
-        self.extensionContext?.open(URL(string: urlString)!) { success in
-            log.info("Extension opened containing app: \(success)")
-        }
+        openContainingApp("?private=true", query: "open-url")
     }
 
     @objc func onPressOpenCopiedLink(_ view: UIView) {
         viewModel.updateCopiedLink()
+    }
+
+    @objc func onPressClosePrivateTabs() {
+        openContainingApp(query: "close-private-tabs")
+    }
+
+    func openContainingApp(_ urlSuffix: String = "", query: String) {
+        let urlString = "\(model.scheme)://\(query)\(urlSuffix)"
+        self.extensionContext?.open(URL(string: urlString)!) { success in
+            log.info("Extension opened containing app: \(success)")
+        }
     }
 }

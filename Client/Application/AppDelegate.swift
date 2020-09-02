@@ -37,7 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     var rootViewController: UIViewController!
     weak var profile: Profile?
     var tabManager: TabManager!
-    var adjustIntegration: AdjustIntegration?
     var applicationCleanlyBackgrounded = true
     var shutdownWebServer: DispatchSourceTimer?
 
@@ -134,8 +133,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             }
         }
 
-        adjustIntegration = AdjustIntegration(profile: profile)
-
         self.updateAuthenticationInfo()
         SystemUtils.onFirstRun()
 
@@ -196,8 +193,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         var shouldPerformAdditionalDelegateHandling = true
-
-        adjustIntegration?.triggerApplicationDidFinishLaunchingWithOptions(launchOptions)
 
         UIScrollView.doBadSwizzleStuff()
 
@@ -391,8 +386,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Create an expiring background task. This allows plenty of time for db locks to be released
         // async. Otherwise we are getting crashes due to db locks not released yet.
-        var taskId: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier(rawValue: 0)
-        taskId = application.beginBackgroundTask (expirationHandler: {
+        var taskId = UIBackgroundTaskIdentifier(rawValue: 0)
+        taskId = application.beginBackgroundTask(expirationHandler: {
             print("Running out of background time, but we have a profile shutdown pending.")
             self.shutdownProfileWhenNotActive(application)
             application.endBackgroundTask(taskId)
@@ -499,7 +494,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
             // Check for fxa sign-in code and launch the login screen directly
             if query["signin"] != nil {
-                bvc.launchFxAFromDeeplinkURL(url)
+                // bvc.launchFxAFromDeeplinkURL(url) // Was using Adjust. Consider hooking up again when replacement system in-place.
                 return true
             }
 

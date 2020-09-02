@@ -35,12 +35,13 @@ open class BasePayloadJSON {
  *  Encrypted DataObject adds fields like id and deleted."
  */
 open class CleartextPayloadJSON: BasePayloadJSON {
-    required public init(_ jsonString: String) {
-        super.init(jsonString)
+  
+    required public override init(_ json: JSON) {
+        super.init(json)
     }
 
-    public override init(_ json: JSON) {
-        super.init(json)
+    required public init(_ jsonString: String) {
+        super.init(jsonString)
     }
 
     // Override me.
