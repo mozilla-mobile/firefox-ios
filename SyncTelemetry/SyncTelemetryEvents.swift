@@ -6,6 +6,8 @@ import Shared
 
 private let log = Logger.browserLogger
 
+public let PrefKeySyncEvents = "sync.telemetry.events"
+
 public typealias IdentifierString = String
 public extension IdentifierString {
     func validate() -> Bool {
@@ -53,6 +55,18 @@ public struct Event {
         self.extra = extra
     }
 
+    public static func hasQueuedEvents(inPrefs prefs: Prefs) -> Bool {
+        let pickledEvents = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
+        return !pickledEvents.isEmpty
+    }
+
+    public static func takeAll(fromPrefs prefs: Prefs) -> [Event] {
+        let pickledEvents = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
+        let events = pickledEvents.compactMap(Event.unpickle)
+        prefs.setObject(nil, forKey: PrefKeySyncEvents)
+        return events
+    }
+
     public func validate() -> Bool {
         let results = [category, method, object].map { $0.validate() }
         // Fold down the results into false if any of the results is false.
@@ -87,6 +101,17 @@ public struct Event {
 
     public func toArray() -> [Any] {
         return [timestamp, category, method, object, value ?? NSNull(), extra ?? NSNull()]
+    }
+
+    public func record(intoPrefs prefs: Prefs) {
+        var events = prefs.arrayForKey(PrefKeySyncEvents) as? [Data] ?? []
+
+        if let data = self.pickle(), self.validate() {
+            events.append(data)
+            prefs.setObject(events, forKey: PrefKeySyncEvents)
+        } else {
+            log.info("Event not recorded due to validation failure or pickling error!")
+        }
     }
 }
 

@@ -13,11 +13,11 @@ import Storage
 import Sync
 import XCGLogger
 import SwiftKeychainWrapper
+import SyncTelemetry
 
 // Import these dependencies ONLY for the main `Client` application target.
 #if MOZ_TARGET_CLIENT
     import SwiftyJSON
-    import SyncTelemetry
 #endif
 
 private let log = Logger.syncLogger
@@ -140,6 +140,8 @@ protocol Profile: AnyObject {
     func getCachedClientsAndTabs() -> Deferred<Maybe<[ClientAndTabs]>>
 
     func cleanupHistoryIfNeeded()
+
+    func sendQueuedSyncEvents()
 
     @discardableResult func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>>
 
@@ -477,6 +479,24 @@ open class BrowserProfile: Profile {
         recommendations.cleanupHistoryIfNeeded()
     }
 
+    public func sendQueuedSyncEvents() {
+        if !hasAccount() {
+            // We shouldn't be called at all if the user isn't signed in.
+            return
+        }
+        if syncManager.isSyncing {
+            // If Sync is already running, `BrowserSyncManager#endSyncing` will
+            // send a ping with the queued events when it's done, so don't send
+            // an events-only ping now.
+            return
+        }
+        let sendUsageData = prefs.boolForKey(AppConstants.PrefSendUsageData) ?? true
+        if sendUsageData {
+            SyncPing.fromQueuedEvents(prefs: self.prefs,
+                                      why: .schedule) >>== { SyncTelemetry.send(ping: $0, docType: .sync) }
+        }
+    }
+
     func storeTabs(_ tabs: [RemoteTab]) -> Deferred<Maybe<Int>> {
         return self.remoteClientsAndTabs.insertOrUpdateTabs(tabs)
     }
@@ -493,6 +513,11 @@ open class BrowserProfile: Profile {
                     constellation.sendEventToDevice(targetDeviceId: id, e: .sendTab(title: item.title ?? "", url: item.url))
                 }
             }
+            if let json = try? accountManager.gatherTelemetry() {
+                let events = FxATelemetry.parseTelemetry(fromJSONString: json)
+                events.forEach { $0.record(intoPrefs: self.prefs) }
+            }
+            self.sendQueuedSyncEvents()
             deferred.fill(Maybe(success: ()))
         }
         return deferred
