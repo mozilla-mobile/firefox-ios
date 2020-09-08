@@ -865,10 +865,13 @@ extension String {
     public static let MoreTabsLabel = NSLocalizedString("TodayWidget.MoreTabsLabel", tableName: "Today", value: "+%d More…", comment: "%d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget")
     public static let OpenFirefoxLabel = NSLocalizedString("TodayWidget.OpenFirefoxLabel", tableName: "Today", value: "Open Firefox", comment: "Open Firefox when there are no tabs opened in tab tray i.e. Empty State")
     public static let NoOpenTabsLabel = NSLocalizedString("TodayWidget.NoOpenTabsLabel", tableName: "Today", value: "No open tabs.", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
+    public static let NoOpenTabsLabelV2 = NSLocalizedString("TodayWidget.NoOpenTabsLabelV2", tableName: "Today", value: "No Open Tabs", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
+    
     
     // Quick View Open Tabs - Medium Size - Gallery View
     public static let QuickViewGalleryTitle = NSLocalizedString("TodayWidget.QuickViewGalleryTitle", tableName: "Today", value: "Quick View", comment: "Title for Quick View widget in Gallery View where user can add it to home screen")
     public static let QuickViewGalleryDescription = NSLocalizedString("TodayWidget.QuickViewGalleryDescription", tableName: "Today", value: "Access your open tabs directly on your homescreen.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
+    public static let QuickViewGalleryDescriptionV2 = NSLocalizedString("TodayWidget.QuickViewGalleryDescriptionV2", tableName: "Today", value: "Add shortcuts to your open tabs.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
     public static let ViewMore = NSLocalizedString("TodayWidget.ViewMore", tableName: "Today", value: "View More", comment: "View More for Quick View widget in Gallery View where we don't know how many tabs might be opened")
     
     // Quick View Open Tabs - Large Size - Gallery View

@@ -1976,10 +1976,6 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 
 extension BrowserViewController {
     func presentIntroViewController(_ alwaysShow: Bool = false) {
-        if let deeplink = self.profile.prefs.stringForKey("AdjustDeeplinkKey"), let url = URL(string: deeplink) {
-            self.launchFxAFromDeeplinkURL(url)
-            return
-        }
         if alwaysShow || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
             onboardingUserResearchHelper(alwaysShow)
         }
@@ -2099,15 +2095,6 @@ extension BrowserViewController {
                 tab.loadRequest(URLRequest(url: homePageURL))
             }
         }
-    }
-
-    func launchFxAFromDeeplinkURL(_ url: URL) {
-        self.profile.prefs.removeObjectForKey("AdjustDeeplinkKey")
-        var query = url.getQuery()
-        query["entrypoint"] = "adjust_deepklink_ios"
-        let fxaParams: FxALaunchParams
-        fxaParams = FxALaunchParams(query: query)
-        self.presentSignInViewController(fxaParams)
     }
 
     /// This function is called to determine if FxA sign in flow or settings page should be shown
