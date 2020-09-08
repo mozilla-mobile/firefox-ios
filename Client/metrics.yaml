@@ -511,6 +511,21 @@ reading_list:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
 
+# Default Browser Settings Menu Option
+settings_menu:
+  set_as_default_browser_pressed:
+    type: counter
+    description: |
+      Counts the number of times setting as default
+      browser menu option is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7090
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7090
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-03-01"
+
 # QR Code metrics
 qr_code:
   scanned:
