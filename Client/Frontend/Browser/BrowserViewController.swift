@@ -61,6 +61,7 @@ class BrowserViewController: UIViewController {
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
     private var onboardingUserResearch: OnboardingUserResearch?
+    private var newTabUserResearch: NewTabUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
 
     fileprivate var customSearchBarButton: UIBarButtonItem?
@@ -468,6 +469,9 @@ class BrowserViewController: UIViewController {
         
         // Setup onboarding user research for A/B testing
         onboardingUserResearch = OnboardingUserResearch()
+        // Setup New Tab user research for A/B testing
+        newTabUserResearch = NewTabUserResearch()
+        newTabUserResearch?.lpVariableObserver()
     }
 
     fileprivate func setupConstraints() {
@@ -895,7 +899,7 @@ class BrowserViewController: UIViewController {
     }
     
     func setupMiddleButtonStatus(isLoading: Bool) {
-        let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
+        let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (newTabUserResearch?.newTabState ?? false)
         
         // No tab
         guard let tab = tabManager.selectedTab else {

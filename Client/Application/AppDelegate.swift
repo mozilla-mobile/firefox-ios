@@ -220,8 +220,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         pushNotificationSetup()
 
-        // Leanplum usersearch variable setup for onboarding research
+        // Leanplum user research variable setup for onboarding research
         _ = OnboardingUserResearch()
+        // Leanplum user research variable setup for New tab user research
+        _ = NewTabUserResearch()
         // Leanplum setup
 
         if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
