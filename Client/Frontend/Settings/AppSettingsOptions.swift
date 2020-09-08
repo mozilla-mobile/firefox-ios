@@ -1074,6 +1074,24 @@ class SiriPageSetting: Setting {
     }
 }
 
+@available(iOS 14.0, *)
+class DefaultBrowserSetting: Setting {
+    let profile: Profile
+
+    override var accessibilityIdentifier: String? { return "DefaultBrowserSettings" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: String.DefaultBrowserMenuItem, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .settingsMenuSetAsDefaultBrowser)
+        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+    }
+}
+
 class OpenWithSetting: Setting {
     let profile: Profile
 
