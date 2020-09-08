@@ -344,6 +344,7 @@ extension TelemetryWrapper {
         case accountDisconnected = "disconnected"
         case appMenu = "app_menu"
         case settings = "settings"
+        case settingsMenuSetAsDefaultBrowser = "set-as-default-browser-menu-go-to-settings"
         case onboarding = "onboarding"
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
@@ -441,6 +442,9 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.close[value].add()
         case (.action, .tap, .addNewTabButton, _, _):
             GleanMetrics.Tabs.newTabPressed.add()
+        // Settings Menu
+        case (.action, .tap, .settingsMenuSetAsDefaultBrowser, _, _):
+            GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
         // Start Search Button
         case (.action, .tap, .startSearchButton, _, _):
             GleanMetrics.Search.startSearchPressed.add()

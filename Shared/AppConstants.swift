@@ -129,5 +129,4 @@ public struct AppConstants {
         return true
         #endif
     }()
-
 }
