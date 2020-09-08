@@ -257,6 +257,8 @@
 		435D7CC02461EFCB0043ACB9 /* IntroScreenWelcomeViewV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CBF2461EFCB0043ACB9 /* IntroScreenWelcomeViewV2.swift */; };
 		435D7CC32461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC22461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift */; };
 		435D7CC5246209AA0043ACB9 /* IntroViewControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC4246209AA0043ACB9 /* IntroViewControllerV2.swift */; };
+		4368BC6824FF14650021931D /* NewTabUserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BC6724FF14650021931D /* NewTabUserResearch.swift */; };
+		4368BC6A24FF14800021931D /* SharedUserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BC6924FF14800021931D /* SharedUserResearch.swift */; };
 		4390F7F5246CE04300570811 /* IntroViewModelV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7F4246CE04300570811 /* IntroViewModelV2.swift */; };
 		4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7FE246DAFBE00570811 /* FirefoxColors.swift */; };
 		43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A5643523CD1E1B00B6857D /* UpdateViewController.swift */; };
@@ -1464,6 +1466,8 @@
 		435D7CC22461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenSyncViewV2.swift; sourceTree = "<group>"; };
 		435D7CC4246209AA0043ACB9 /* IntroViewControllerV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewControllerV2.swift; sourceTree = "<group>"; };
 		435FAB17242404B400AE9310 /* FullscreenHelper.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = FullscreenHelper.js; path = Client/Frontend/UserContent/UserScripts/AllFrames/AtDocumentStart/FullscreenHelper.js; sourceTree = SOURCE_ROOT; };
+		4368BC6724FF14650021931D /* NewTabUserResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewTabUserResearch.swift; sourceTree = "<group>"; };
+		4368BC6924FF14800021931D /* SharedUserResearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUserResearch.swift; sourceTree = "<group>"; };
 		4390F7F4246CE04300570811 /* IntroViewModelV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewModelV2.swift; sourceTree = "<group>"; };
 		4390F7FE246DAFBE00570811 /* FirefoxColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxColors.swift; sourceTree = "<group>"; };
 		43A5643523CD1E1B00B6857D /* UpdateViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateViewController.swift; sourceTree = "<group>"; };
@@ -2801,6 +2805,8 @@
 			isa = PBXGroup;
 			children = (
 				434F97F224196B4200812FDF /* OnboardingUserResearch.swift */,
+				4368BC6724FF14650021931D /* NewTabUserResearch.swift */,
+				4368BC6924FF14800021931D /* SharedUserResearch.swift */,
 			);
 			path = UserResearch;
 			sourceTree = "<group>";
@@ -5625,6 +5631,7 @@
 				EBF47E701F7979DF00899189 /* TelemetryWrapper.swift in Sources */,
 				E68F36981EA694000048CF44 /* PanelDataObservers.swift in Sources */,
 				31ADB5DA1E58CEC300E87909 /* ClipboardBarDisplayHandler.swift in Sources */,
+				4368BC6824FF14650021931D /* NewTabUserResearch.swift in Sources */,
 				745DAB3F1CDAB09E00D44181 /* HistoryBackButton.swift in Sources */,
 				EB9A179D20E69A7F00B12184 /* Theme.swift in Sources */,
 				CA03B26A247F1D9E00382B62 /* BreachAlertsClient.swift in Sources */,
@@ -5682,6 +5689,7 @@
 				E6108FF91C84E91C005D25E8 /* BasePasscodeViewController.swift in Sources */,
 				39F4C10A2045DB2E00746155 /* FocusHelper.swift in Sources */,
 				4334145424C63779001541F3 /* IntroScreenSyncViewV1.swift in Sources */,
+				4368BC6A24FF14800021931D /* SharedUserResearch.swift in Sources */,
 				E4CD9F2D1A6DC91200318571 /* TabLocationView.swift in Sources */,
 				0BB5B2881AC0A2B90052877D /* SnackBar.swift in Sources */,
 				EBC4869F2195F58300CDA48D /* SessionRestoreHandler.swift in Sources */,
