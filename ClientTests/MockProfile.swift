@@ -245,4 +245,6 @@ open class MockProfile: Client.Profile {
     public func sendItem(_ item: ShareItem, toDevices devices: [RemoteDevice]) -> Success {
         return succeed()
     }
+    
+    public func sendQueuedSyncEvents() {}
 }
