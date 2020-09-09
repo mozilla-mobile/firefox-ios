@@ -13,7 +13,7 @@ class DomainAutocompleteTests: KIFTestCase {
 
     func testAutocomplete() {
         BrowserUtils.addHistoryEntry("Foo bar baz", url: URL(string: "https://foo.bar.baz.org/dingbat")!)
-
+        tester().waitForAnimationsToFinish(withTimeout: 3)
         tester().tapView(withAccessibilityIdentifier: "url")
         let textField = tester().waitForView(withAccessibilityLabel: "Address and Search") as! UITextField
 
