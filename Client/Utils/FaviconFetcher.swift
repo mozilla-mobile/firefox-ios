@@ -24,6 +24,8 @@ class FaviconFetcherErrorType: MaybeErrorType {
  * If that fails, it will attempt to find a favicon.ico in the root host domain.
  */
 open class FaviconFetcher: NSObject, XMLParserDelegate {
+    static let MaximumFaviconSize = 1 * 1024 * 1024 // 1 MiB file size limit
+
     public static var userAgent: String = ""
     static let ExpirationTime = TimeInterval(60*60*24*7) // Only check for icons once a week
     fileprivate static var characterToFaviconCache = [String: UIImage]()
@@ -166,7 +168,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             fetch = manager.loadImage(with: url,
                 options: .lowPriority,
                 progress: { (receivedSize, expectedSize, _) in
-                    if receivedSize > FaviconHandler.MaximumFaviconSize || expectedSize > FaviconHandler.MaximumFaviconSize {
+                    if receivedSize > FaviconFetcher.MaximumFaviconSize || expectedSize > FaviconFetcher.MaximumFaviconSize {
                         fetch?.cancel()
                     }
                 },
@@ -195,12 +197,14 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         return deferred
     }
 
-    // Returns a single Favicon UIImage for a given URL
+    // Returns the largest Favicon UIImage for a given URL
     class func fetchFavImageForURL(forURL url: URL, profile: Profile) -> Deferred<Maybe<UIImage>> {
         let deferred = Deferred<Maybe<UIImage>>()
         FaviconFetcher.getForURL(url.domainURL, profile: profile).uponQueue(.main) { result in
             var iconURL: URL?
-            if let favicons = result.successValue, favicons.count > 0, let faviconImageURL = favicons.first?.url.asURL {
+            
+            if let favicons = result.successValue, favicons.count > 0, let faviconImageURL =
+                favicons.first?.url.asURL {
                 iconURL = faviconImageURL
             } else {
                 return deferred.fill(Maybe(failure: FaviconError()))
@@ -274,7 +278,19 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
 
     // Default favicons and background colors provided via mozilla/tippy-top-sites
     private class func getBundledIcons() -> [String: BundledIconType] {
-        let filePath = Bundle.main.path(forResource: "top_sites", ofType: "json")
+        
+        // Alows us to access bundle from extensions
+        // Also found in `SentryIntegration`. Taken from: https://stackoverflow.com/questions/26189060/get-the-main-app-bundle-from-within-extension
+        var bundle = Bundle.main
+        if bundle.bundleURL.pathExtension == "appex" {
+            // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
+            let url = bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent()
+            if let otherBundle = Bundle(url: url) {
+                bundle = otherBundle
+            }
+        }
+        
+        let filePath = bundle.path(forResource: "top_sites", ofType: "json")
         let file = try! Data(contentsOf: URL(fileURLWithPath: filePath!))
         let decoder = JSONDecoder()
         var icons = [String: BundledIconType]()
@@ -302,5 +318,11 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         }
 
         return icons
+    }
+}
+
+class FaviconError: MaybeErrorType {
+    internal var description: String {
+        return "No Image Loaded"
     }
 }

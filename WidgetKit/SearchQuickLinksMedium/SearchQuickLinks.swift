@@ -2,24 +2,27 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#if canImport(WidgetKit)
 import WidgetKit
 import SwiftUI
 import Shared
 
 struct Provider: TimelineProvider {
-    public typealias Entry = SimpleEntry
-
-    public func snapshot(with context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    func placeholder(in context: Context) -> SimpleEntry {
+        return SimpleEntry(date: Date())
+    }
+    
+    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
         let entry = SimpleEntry(date: Date())
         completion(entry)
     }
-
-    public func timeline(with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    
+    func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> Void) {
         let entries = [SimpleEntry(date: Date())]
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }
+    
+    public typealias Entry = SimpleEntry
 }
 
 struct SimpleEntry: TimelineEntry {
@@ -44,11 +47,11 @@ struct SearchQuickLinksEntryView : View {
     }
 }
 
-struct SearchQuickLinksWigdet: Widget {
+struct SearchQuickLinksWidget: Widget {
     private let kind: String = "Quick Actions - Medium"
 
     public var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider(), placeholder: SearchQuickLinksEntryView()) { entry in
+        StaticConfiguration(kind: kind, provider: Provider()) { entry in
             SearchQuickLinksEntryView()
         }
         .supportedFamilies([.systemMedium])
@@ -77,4 +80,3 @@ struct SearchQuickLinksPreviews: PreviewProvider {
         }
     }
 }
-#endif

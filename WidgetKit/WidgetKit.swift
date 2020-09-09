@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#if canImport(WidgetKit)
 import WidgetKit
 import SwiftUI
 
@@ -11,7 +10,8 @@ struct FirefoxWidgets: WidgetBundle {
     @WidgetBundleBuilder
     var body: some Widget {
         SmallQuickLinkWidget()
-        SearchQuickLinksWigdet()
+        SearchQuickLinksWidget()
+        OpenTabsWidget()
+        TopSitesWidget()
     }
 }
-#endif

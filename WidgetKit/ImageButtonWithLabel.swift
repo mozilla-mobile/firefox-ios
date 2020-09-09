@@ -2,7 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#if canImport(WidgetKit)
 import SwiftUI
 
 // View for Quick Action Widget Buttons (Small & Medium)
@@ -62,8 +61,11 @@ struct ImageButtonWithLabel: View {
     var body: some View {
         Link(destination: link.url) {
             ZStack(alignment: .leading) {
-                ContainerRelativeShape()
-                    .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
+                if !isSmall {
+                    ContainerRelativeShape()
+                        .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
+                }
+                
                 VStack (alignment: .center, spacing: 50.0){
                     HStack(alignment: .top) {
                         VStack(alignment: .leading){
@@ -97,4 +99,3 @@ struct ImageButtonWithLabel: View {
         }
     }
 }
-#endif
