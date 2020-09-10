@@ -118,8 +118,6 @@ enum NavigationPath {
                 let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
                 self = .url(webURL: url, isPrivate: isPrivate)
             }
-        } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
-            self = .closePrivateTabs
         } else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
