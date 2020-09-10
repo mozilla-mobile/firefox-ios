@@ -149,7 +149,7 @@ class ContentBlocker {
 
         // Async required here to ensure remove() call is processed.
         DispatchQueue.main.async() { [weak tab] in
-            tab?.currentWebView()?.evaluateJavaScript("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
+            tab?.currentWebView()?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.NoImageMode.setEnabled(\(enabled))")
         }
     }
 }

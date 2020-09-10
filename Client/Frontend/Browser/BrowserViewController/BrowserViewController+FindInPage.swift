@@ -33,7 +33,7 @@ extension BrowserViewController {
             findInPageBar.endEditing(true)
             let tab = tab ?? tabManager.selectedTab
             guard let webView = tab?.webView else { return }
-            webView.evaluateJavaScript("__firefox__.findDone()", completionHandler: nil)
+            webView.evaluateJavascriptInDefaultContentWorld("__firefox__.findDone()")
             findInPageBar.removeFromSuperview()
             self.findInPageBar = nil
             updateViewConstraints()
@@ -63,7 +63,7 @@ extension BrowserViewController: FindInPageBarDelegate, FindInPageHelperDelegate
     fileprivate func find(_ text: String, function: String) {
         guard let webView = tabManager.selectedTab?.webView else { return }
         let escaped = text.replacingOccurrences(of: "\\", with: "\\\\").replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavaScript("__firefox__.\(function)(\"\(escaped)\")", completionHandler: nil)
+        webView.evaluateJavascriptInDefaultContentWorld("__firefox__.\(function)(\"\(escaped)\")")
     }
 
     func findInPageHelper(_ findInPageHelper: FindInPageHelper, didUpdateCurrentResult currentResult: Int) {
