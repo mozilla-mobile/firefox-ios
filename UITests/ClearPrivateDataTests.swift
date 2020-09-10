@@ -193,7 +193,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     fileprivate func setCookies(_ webView: WKWebView, cookie: String) {
         let expectation = self.expectation(description: "Set cookie")
-        webView.evaluateJavaScript("document.cookie = \"\(cookie)\"; localStorage.cookie = \"\(cookie)\"; sessionStorage.cookie = \"\(cookie)\";") { result, _ in
+        webView.evaluateJavascriptInDefaultContentWorld("document.cookie = \"\(cookie)\"; localStorage.cookie = \"\(cookie)\"; sessionStorage.cookie = \"\(cookie)\";") { result, _ in
             expectation.fulfill()
         }
         waitForExpectations(timeout: 10, handler: nil)
@@ -204,7 +204,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         var value: String!
         let expectation = self.expectation(description: "Got cookie")
 
-        webView.evaluateJavaScript("JSON.stringify([document.cookie, localStorage.cookie, sessionStorage.cookie])") { result, _ in
+        webView.evaluateJavascriptInDefaultContentWorld("JSON.stringify([document.cookie, localStorage.cookie, sessionStorage.cookie])") { result, _ in
             value = result as! String
             expectation.fulfill()
         }

@@ -132,8 +132,8 @@ extension KIFUITestActor {
         var stepResult = KIFTestStepResult.wait
 
         let escaped = text.replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavaScript("KIFHelper.enterTextIntoInputWithName(\"\(escaped)\", \"\(inputName)\");") { success, _ in
-            stepResult = (success as! Bool) ? KIFTestStepResult.success : KIFTestStepResult.failure
+        webView.evaluateJavascriptInDefaultContentWorld("KIFHelper.enterTextIntoInputWithName(\"\(escaped)\", \"\(inputName)\");") { success, _ in
+            stepResult = (success as? Bool) ? KIFTestStepResult.success : KIFTestStepResult.failure
         }
 
         run { error in
@@ -152,8 +152,8 @@ extension KIFUITestActor {
         var stepResult = KIFTestStepResult.wait
 
         let escaped = text.replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavaScript("KIFHelper.tapElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
-            stepResult = (success as! Bool) ? KIFTestStepResult.success : KIFTestStepResult.failure
+        webView.evaluateJavascriptInDefaultContentWorld("KIFHelper.tapElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
+            stepResult = (success as? Bool) ? KIFTestStepResult.success : KIFTestStepResult.failure
         }
 
         run { error in
@@ -173,7 +173,7 @@ extension KIFUITestActor {
         var found = false
 
         let escaped = text.replacingOccurrences(of: "\"", with: "\\\"")
-        webView.evaluateJavaScript("KIFHelper.hasElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
+        webView.evaluateJavascriptInDefaultContentWorld("KIFHelper.hasElementWithAccessibilityLabel(\"\(escaped)\")") { success, _ in
             found = success as? Bool ?? false
             stepResult = KIFTestStepResult.success
         }
@@ -193,14 +193,19 @@ extension KIFUITestActor {
 
         var stepResult = KIFTestStepResult.wait
 
-        webView.evaluateJavaScript("typeof KIFHelper") { result, _ in
-            if result as! String == "undefined" {
+        webView.evaluateJavascriptInDefaultContentWorld("typeof KIFHelper") { result, _ in
+            if let result = result as? String, result == "undefined" {
                 let bundle = Bundle(for: BrowserTests.self)
                 let path = bundle.path(forResource: "KIFHelper", ofType: "js")!
-                let source = try! String(contentsOfFile: path, encoding: .utf8)
-                webView.evaluateJavaScript(source, completionHandler: nil)
+                if let source = try? String(contentsOfFile: path, encoding: .utf8) {
+                    webView.evaluateJavascriptInDefaultContentWorld(source)
+                    stepResult = KIFTestStepResult.success
+                } else {
+                    stepResult = KIFTestStepResult.failure
+                }
+            } else {
+                stepResult = KIFTestStepResult.failure
             }
-            stepResult = KIFTestStepResult.success
         }
 
         run { _ in return stepResult }

@@ -498,6 +498,7 @@
 		CA90753824929B22005B794D /* NoLoginsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA90753724929B22005B794D /* NoLoginsView.swift */; };
 		CAA3B7E62497DCB60094E3C1 /* LoginDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */; };
 		CAC458F1249429C20042561A /* LoginListSelectionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */; };
+		CD1CE85F24EDE66A00006DFB /* WKWebViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD1CE85E24EDE66A00006DFB /* WKWebViewExtensions.swift */; };
 		CDB3BE8724746787009320EE /* FirefoxAccountSignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */; };
 		CE7F11941F3CEEC800ABFC0B /* RemoteDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */; };
 		CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */; };
@@ -1706,6 +1707,7 @@
 		CA90753724929B22005B794D /* NoLoginsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoLoginsView.swift; sourceTree = "<group>"; };
 		CAA3B7E52497DCB60094E3C1 /* LoginDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginDataSource.swift; sourceTree = "<group>"; };
 		CAC458F0249429C20042561A /* LoginListSelectionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginListSelectionHelper.swift; sourceTree = "<group>"; };
+		CD1CE85E24EDE66A00006DFB /* WKWebViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WKWebViewExtensions.swift; sourceTree = "<group>"; };
 		CDB3BE8624746787009320EE /* FirefoxAccountSignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirefoxAccountSignInViewController.swift; sourceTree = "<group>"; };
 		CE7F115E1F3CCEF900ABFC0B /* RemoteDevices.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RemoteDevices.swift; sourceTree = "<group>"; };
 		CEFA977D1FAA6B490016F365 /* SyncContentSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncContentSettingsViewController.swift; sourceTree = "<group>"; };
@@ -3561,6 +3563,7 @@
 				7B3D9E641E4CBFDB007A50DA /* NSCoderExtensions.swift */,
 				E693F0D81E9D64BD0086DC17 /* OptionalExtensions.swift */,
 				D0543529226687A400FDE4EF /* UIBarButtonItemExtensions.swift */,
+				CD1CE85E24EDE66A00006DFB /* WKWebViewExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -5261,6 +5264,7 @@
 				E65075A01E37F7AB006961AC /* ArrayExtensions.swift in Sources */,
 				E65075A31E37F7AB006961AC /* KeychainWrapperExtensions.swift in Sources */,
 				E65075921E37F7AB006961AC /* Accessibility.swift in Sources */,
+				CD1CE85F24EDE66A00006DFB /* WKWebViewExtensions.swift in Sources */,
 				E65075B51E37F7AB006961AC /* LaunchArguments.swift in Sources */,
 				E65075BB1E37F7AB006961AC /* RollingFileLogger.swift in Sources */,
 				E650759D1E37F7AB006961AC /* DeviceInfo.swift in Sources */,

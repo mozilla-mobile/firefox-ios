@@ -28,7 +28,7 @@ class DownloadContentScript: TabContentScript {
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
         blobUrlForDownload = url.scheme == "blob" ? URL(string: safeUrl) : nil
-        tab.webView?.evaluateJavaScript("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
+        tab.webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
 

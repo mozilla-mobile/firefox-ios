@@ -182,7 +182,7 @@ extension FxAWebViewModel {
             window.dispatchEvent(new CustomEvent('WebChannelMessageToContent', { detail: JSON.stringify(msg) }));
         """
 
-        webView.evaluateJavaScript(msg)
+        webView.evaluateJavascriptInDefaultContentWorld(msg)
     }
 
     /// Respond to the webpage session status notification by either passing signed in user info (for settings), or by passing CWTS setup info (in case the user is signing up for an account). This latter case is also used for the sign-in state.
