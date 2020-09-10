@@ -13,11 +13,15 @@ extension WKWebView {
     /// - Parameters:
     ///     - javascript: String representing javascript to be evaluated
     public func evaluateJavascriptInDefaultContentWorld(_ javascript: String) {
-        if #available(iOS 14.0, *) {
-            self.evaluateJavaScript(javascript, in: nil, in: .defaultClient, completionHandler: { _ in })
-        } else {
+        #if compiler(>=5.3)
+            if #available(iOS 14.0, *) {
+                self.evaluateJavaScript(javascript, in: nil, in: .defaultClient, completionHandler: { _ in })
+            } else {
+                self.evaluateJavaScript(javascript)
+            }
+        #else
             self.evaluateJavaScript(javascript)
-        }
+        #endif
     }
     
     /// This calls different WebKit evaluateJavaScript functions depending on iOS version with a completion that passes a tuple with optional data or an optional error
@@ -27,19 +31,25 @@ extension WKWebView {
     ///     - javascript: String representing javascript to be evaluated
     ///     - completion: Tuple containing optional data and an optional error
     public func evaluateJavascriptInDefaultContentWorld(_ javascript: String,_ completion: @escaping ((Any?, Error?) -> Void)) {
-        if #available(iOS 14.0, *) {
-            self.evaluateJavaScript(javascript, in: nil, in: .defaultClient) { result in
-                switch result {
-                case .success(let value):
-                    completion(value, nil)
-                case .failure(let error):
-                    completion(nil, error)
+        #if compiler(>=5.3)
+            if #available(iOS 14.0, *) {
+                self.evaluateJavaScript(javascript, in: nil, in: .defaultClient) { result in
+                    switch result {
+                    case .success(let value):
+                        completion(value, nil)
+                    case .failure(let error):
+                        completion(nil, error)
+                    }
+                }
+            } else {
+                self.evaluateJavaScript(javascript) { data, error  in
+                    completion(data, error)
                 }
             }
-        } else {
+        #else
             self.evaluateJavaScript(javascript) { data, error  in
                 completion(data, error)
             }
-        }
+        #endif
     }
 }
