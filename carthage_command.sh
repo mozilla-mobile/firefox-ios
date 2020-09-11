@@ -1,4 +1,4 @@
-# use 0.34.0 because of cross-volume bug with 0.35.0
+# use 0.34.0 because of cross-volume bug with 0.35.0 on BuddyBuild
 brew uninstall carthage
 wget https://github.com/Carthage/Carthage/releases/download/0.34.0/Carthage.pkg
 installer -pkg Carthage.pkg -target CurrentUserHomeDirectory
