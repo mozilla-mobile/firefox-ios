@@ -23,7 +23,7 @@ class ViewMemoryLeakTests: KIFTestCase, UITextFieldDelegate {
             tester().tapView(withAccessibilityLabel: "home")
         } catch _ {
         }
-        BrowserUtils.resetToAboutHome()
+        BrowserUtils.resetToAboutHomeKIF(tester())
     }
     /*
     func testSearchViewControllerDisposed() {

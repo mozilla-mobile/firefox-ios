@@ -5,7 +5,6 @@
 import Shared
 import WebKit
 import UIKit
-import EarlGrey
 import GCDWebServers
 @testable import Client
 
@@ -16,19 +15,18 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-        BrowserUtils.configEarlGrey()
-        BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome()
+        BrowserUtils.resetToAboutHomeKIF(tester())
     }
 
     func visitSites(noOfSites: Int) -> [(title: String, domain: String, dispDomain: String, url: String)] {
         var urls: [(title: String, domain: String, dispDomain: String, url: String)] = []
         for pageNo in 1...noOfSites {
             let url = "\(webRoot!)/numberedPage.html?page=\(pageNo)"
-            BrowserUtils.enterUrlAddressBar(typeUrl: url)
+            BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
 
             tester().waitForAnimationsToFinish()
             tester().waitForWebViewElementWithAccessibilityLabel("Page \(pageNo)")
@@ -39,41 +37,17 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             = ("Page \(pageNo)", dom, dispDom, url)
             urls.append(tuple)
         }
-        BrowserUtils.resetToAboutHome()
+        BrowserUtils.resetToAboutHomeKIF(tester())
         return urls
     }
 
-    func anyDomainsExistOnTopSites(_ domains: Set<String>, fulldomains: Set<String>) {
-        if checkDomains(domains: domains) == true {
-            return
-        } else {
-            if checkDomains(domains: fulldomains) == true {
-                return
-            }
-        }
-       XCTFail("Couldn't find any domains in top sites.")
-    }
-
-    private func checkDomains(domains: Set<String>) -> Bool {
-        var errorOrNil: NSError?
-
-        for domain in domains {
-            let withoutDot = domain.replacingOccurrences(of: ".", with: " ")
-            let matcher = grey_allOf([grey_accessibilityLabel(withoutDot),
-                                              grey_kindOfClass(NSClassFromString("Client.TopSiteItemCell")!),
-                                              grey_sufficientlyVisible()])
-            EarlGrey.selectElement(with: matcher).assert(grey_notNil(), error: &errorOrNil)
-
-            if errorOrNil == nil {
-                return true
-            }
-        }
-        return false
-    }
-
     func testRemembersToggles() {
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe:false)
-        BrowserUtils.openClearPrivateDataDialog(false)
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], tester())
+        BrowserUtils.acceptClearPrivateData(tester())
+        BrowserUtils.closeClearPrivateDataDialog(tester())
+
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
 
         // Ensure the toggles match our settings.
         [
@@ -85,10 +59,11 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             XCTAssertNotNil(tester()
                 .waitForView(withAccessibilityLabel: clearable.rawValue, value: switchValue, traits: UIAccessibilityTraits.none))
         }
-        BrowserUtils.closeClearPrivateDataDialog()
+        BrowserUtils.closeClearPrivateDataDialog(tester())
     }
 
     func testClearsHistoryPanel() {
+        tester().waitForAnimationsToFinish(withTimeout: 3)
         let urls = visitSites(noOfSites: 2)
 
         let url1 = urls[0].url
@@ -100,8 +75,13 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().waitForView(withAccessibilityLabel: url2)
 
         BrowserUtils.closeLibraryMenu(tester())
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], swipe: false)
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.History], tester())
+        BrowserUtils.acceptClearPrivateData(tester())
+        BrowserUtils.closeClearPrivateDataDialog(tester())
+
         BrowserUtils.openLibraryMenu(tester())
+
         // Open History Panel
         tester().waitForAbsenceOfView(withAccessibilityLabel: url1)
         tester().waitForAbsenceOfView(withAccessibilityLabel: url2)
@@ -110,12 +90,16 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
     }
 
     func testDisabledHistoryDoesNotClearHistoryPanel() {
+        tester().waitForAnimationsToFinish(withTimeout: 3)
         let urls = visitSites(noOfSites: 2)
         var errorOrNil: NSError?
 
         let url1 = urls[0].url
         let url2 = urls[1].url
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), swipe: false)
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.History]), tester())
+        BrowserUtils.acceptClearPrivateData(tester())
+        BrowserUtils.closeClearPrivateDataDialog(tester())
         tester().waitForAnimationsToFinish()
         BrowserUtils.openLibraryMenu(tester())
         // Open History Panel
@@ -123,19 +107,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         tester().tapView(withAccessibilityIdentifier: "LibraryPanels.Bookmarks")
         tester().tapView(withAccessibilityIdentifier: "LibraryPanels.History")
         tester().waitForAnimationsToFinish()
-        let historyListShown = GREYCondition(name: "Wait for history to appear", block: {
-            var errorOrNil: NSError?
-            EarlGrey.selectElement(with: grey_accessibilityLabel(url1))
-                .assert(grey_notNil(), error: &errorOrNil)
-            let success = errorOrNil == nil
-            return success
-        }).wait(withTimeout: 20)
-        GREYAssertTrue(historyListShown, reason: "Failed to display history list")
 
-        EarlGrey.selectElement(with: grey_accessibilityLabel(url1))
-            .assert(grey_notNil(), error: &errorOrNil)
-        EarlGrey.selectElement(with: grey_accessibilityLabel(url2))
-            .assert(grey_notNil(), error: &errorOrNil)
+        tester().waitForView(withAccessibilityLabel: url1)
+        tester().waitForView(withAccessibilityLabel: url2)
 
         // Close History (and so Library) panel
         BrowserUtils.closeLibraryMenu(tester())
@@ -143,7 +117,9 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsCookies() {
         let url = "\(webRoot!)/numberedPage.html?page=1"
-        BrowserUtils.enterUrlAddressBar(typeUrl: url)
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
@@ -156,14 +132,23 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are not cleared when Cookies is deselected.
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cookies]), swipe: false)
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cookies]), tester())
+        BrowserUtils.acceptClearPrivateData(tester())
+        BrowserUtils.closeClearPrivateDataDialog(tester())
+
+        tester().waitForAnimationsToFinish(withTimeout: 3)
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "foo=bar")
         XCTAssertEqual(cookies.localStorage, "foo=bar")
         XCTAssertEqual(cookies.sessionStorage, "foo=bar")
 
         // Verify that cookies are cleared when Cookies is selected.
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], swipe: false)
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cookies], tester())
+        BrowserUtils.acceptClearPrivateData(tester())
+        BrowserUtils.closeClearPrivateDataDialog(tester())
+
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "")
         XCTAssertEqual(cookies.localStorage, "null")
@@ -174,19 +159,25 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         let cachedServer = CachedPageServer()
         let cacheRoot = cachedServer.start()
         let url = "\(cacheRoot)/cachedPage.html"
-        BrowserUtils.enterUrlAddressBar(typeUrl: url)
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().waitForWebViewElementWithAccessibilityLabel("Cache test")
 
         let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
         let requests = cachedServer.requests
 
         // Verify that clearing non-cache items will keep the page in the cache.
-        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cache]), swipe: false)
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
+        BrowserUtils.clearPrivateData(BrowserUtils.AllClearables.subtracting([BrowserUtils.Clearable.Cache]), tester())
+        BrowserUtils.acceptClearPrivateData(tester())
+        BrowserUtils.closeClearPrivateDataDialog(tester())
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests)
 
         // Verify that clearing the cache will fire a new request.
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], swipe: false)
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.Cache], tester())
+        BrowserUtils.acceptClearPrivateData(tester())
+        BrowserUtils.closeClearPrivateDataDialog(tester())
         webView.reload()
         XCTAssertEqual(cachedServer.requests, requests + 1)
     }
@@ -224,8 +215,10 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
             wait.fulfill()
         }
         waitForExpectations(timeout: 5)
-
-        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.TrackingProtection], swipe: false)
+        BrowserUtils.openClearPrivateDataDialogKIF(tester())
+        BrowserUtils.clearPrivateData([BrowserUtils.Clearable.TrackingProtection], tester())
+        BrowserUtils.acceptClearPrivateData(tester())
+        BrowserUtils.closeClearPrivateDataDialog(tester())
 
         let data = ContentBlocker.shared.readSafelistFile()
         XCTAssert(data == nil || data!.isEmpty)

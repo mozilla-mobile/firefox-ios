@@ -4,22 +4,21 @@
 
 import Foundation
 import Storage
-import EarlGrey
 @testable import Client
 
 class BrowserTests: KIFTestCase {
-
+/*
     private var webRoot: String!
 
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-        BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome()
-        BrowserUtils.clearPrivateData()
+        BrowserUtils.resetToAboutHomeKIF(tester())
+        BrowserUtils.clearPrivateDataKIF(tester())
         super.tearDown()
     }
 
@@ -52,5 +51,5 @@ class BrowserTests: KIFTestCase {
             .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
             .assert(grey_enabled())
             .perform((grey_tap()))
-    }
+    }*/
 }

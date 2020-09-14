@@ -3,59 +3,65 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import EarlGrey
 @testable import Client
 
 class NoImageModeTests: KIFTestCase {
-
+    
     private var webRoot: String!
 
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-        BrowserUtils.configEarlGrey()
-        BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
-        BrowserUtils.clearPrivateData()
+        BrowserUtils.clearPrivateDataKIF(tester())
         super.tearDown()
     }
 
     private func checkHiding(isOn: Bool) {
         let url = "\(webRoot!)/hide-images-test.html"
         checkIfImageLoaded(url: url, shouldBlockImage: isOn)
-        BrowserUtils.resetToAboutHome()
+        BrowserUtils.resetToAboutHomeKIF(tester())
+    }
+
+    func checkIfImageLoaded(url: String, shouldBlockImage: Bool) {
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
+
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+
+            if shouldBlockImage {
+                tester().waitForView(withAccessibilityLabel: "image not loaded.")
+            } else {
+                tester().waitForView(withAccessibilityLabel: "image loaded.")
+
+            }
+        tester().tapView(withAccessibilityLabel: "OK")
     }
 
     func testHideImage() {
         checkHiding(isOn: false)
         if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+            tester().tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         } else {
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+            tester().tapView(withAccessibilityLabel: "Menu")
         }
-        EarlGrey.selectElement(with: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
-                                                       grey_accessibilityLabel("Block Images")]))
-            .perform(grey_tap())
+
+        tester().tapView(withAccessibilityLabel: "Block Images")
         //Need to tap out of the browser tab menu to dismiss it (there is close button in iphone but not ipad)
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .inRoot(grey_kindOfClass(UITextField.self))
-            .perform(grey_tap())
+        tester().tapView(withAccessibilityLabel: "Close")
 
         checkHiding(isOn: true)
 
         if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with: grey_accessibilityID("TabToolbar.menuButton")).perform(grey_tap())
+            tester().tapView(withAccessibilityIdentifier: "TabToolbar.menuButton")
         } else {
-            EarlGrey.selectElement(with: grey_accessibilityLabel("Menu")).perform(grey_tap())
+             tester().tapView(withAccessibilityLabel: "Menu")
         }
-        EarlGrey.selectElement(with: grey_allOf([grey_accessibilityID("menu-NoImageMode"),
-                                                       grey_accessibilityLabel("Block Images")]))
-        .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .inRoot(grey_kindOfClass(UITextField.self))
-            .perform(grey_tap())
+        tester().tapView(withAccessibilityLabel: "Block Images")
+        tester().tapView(withAccessibilityLabel: "Close")
     }
 }
 
