@@ -342,6 +342,7 @@ private func createTransitionCellFromTab(_ tab: Tab?, withFrame frame: CGRect) -
             cell.favicon.tintColor = (tab?.isPrivate ?? false) ? UIColor.Photon.White100 : UIColor.Photon.Grey60
         } else {
             cell.favicon.image = defaultFavicon
+            cell.favicon.tintColor = UIColor.theme.tabTray.faviconTint
         }
     }
     return cell

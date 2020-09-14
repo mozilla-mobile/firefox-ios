@@ -117,7 +117,7 @@ class TabTrayColor {
     var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
     var cellCloseButton: UIColor { return UIColor.Photon.Grey50 }
     var cellTitleBackground: UIColor { return UIColor.clear }
-    var faviconTint: UIColor { return UIColor.Photon.White100 }
+    var faviconTint: UIColor { return UIColor.black }
     var searchBackground: UIColor { return UIColor.Photon.Grey30 }
 }
 
