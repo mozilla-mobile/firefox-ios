@@ -120,6 +120,8 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
+    var isCmdClickForNewTab = false
+
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -2343,6 +2345,17 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         displayedPopoverController?.dismiss(animated: true) {
             self.displayedPopoverController = nil
         }
+    }
+    
+    //Support for CMD+ Click on link to open in a new tab
+     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+         guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return } //GUI buttons = CMD buttons on ipad/mac
+         self.isCmdClickForNewTab = true
+    }
+    
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return }
+        self.isCmdClickForNewTab = false
     }
 }
 
