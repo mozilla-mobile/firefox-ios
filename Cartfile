@@ -8,7 +8,6 @@ github "jrendel/SwiftKeychainWrapper"       ~> 3.2.0
 github "DaveWoodCom/XCGLogger"              ~> 7.0
 github "cezheng/Fuzi"                       ~> 3.0
 github "SwiftyJSON/SwiftyJSON"              ~> 5.0
-github "google/EarlGrey"                    "master"
 github "mozilla-mobile/telemetry-ios"      ~> 1.1
 github "mozilla-mobile/MappaMundi"          "master"
 github "Leanplum/Leanplum-iOS-SDK"          ~> 2.7.2

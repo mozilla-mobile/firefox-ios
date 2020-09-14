@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import EarlGrey
 
 class AuthenticationTests: KIFTestCase {
     fileprivate var webRoot: String!
@@ -11,13 +10,12 @@ class AuthenticationTests: KIFTestCase {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-        BrowserUtils.configEarlGrey()
-		BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI(tester())
 	}
 
     override func tearDown() {
-		BrowserUtils.resetToAboutHome()
-		BrowserUtils.clearPrivateData()
+        BrowserUtils.resetToAboutHomeKIF(tester())
+        BrowserUtils.clearPrivateDataKIF(tester())
 		super.tearDown()
     }
 
@@ -36,8 +34,7 @@ class AuthenticationTests: KIFTestCase {
         tester().waitForWebViewElementWithAccessibilityLabel("auth fail")
 
         // Enter valid credentials and ensure the page loads.
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Reload"))
-            .perform(grey_tap())
+        tester().tapView(withAccessibilityLabel: "Reload")
 		enterCredentials(usernameValue: "Username", passwordValue: "Password", username: "user", password: "pass")
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
@@ -48,23 +45,17 @@ class AuthenticationTests: KIFTestCase {
         loadAuthPage()
 
         // Make sure the credentials were saved and auto-filled.
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Log in"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
-            .perform(grey_tap())
+        tester().tapView(withAccessibilityLabel: "Log in")
         tester().waitForWebViewElementWithAccessibilityLabel("logged in")
 
         // Add a private tab.
         if BrowserUtils.iPad() {
-            EarlGrey.selectElement(with:grey_accessibilityID("TopTabsViewController.tabsButton"))
-                .perform(grey_tap())
+            tester().tapView(withAccessibilityIdentifier: "TopTabsViewController.tabsButton")
         } else {
-            EarlGrey.selectElement(with:grey_accessibilityID("TabToolbar.tabsButton"))
-                .perform(grey_tap())
+            tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         }
-        EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.maskButton"))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with:grey_accessibilityID("TabTrayController.addTabButton"))
-            .perform(grey_tap())
+        tester().tapView(withAccessibilityIdentifier: "TabTrayController.maskButton")
+        tester().tapView(withAccessibilityIdentifier: "TabTrayController.addTabButton")
         tester().waitForAnimationsToFinish()
         loadAuthPage()
 
@@ -77,29 +68,14 @@ class AuthenticationTests: KIFTestCase {
 
     fileprivate func loadAuthPage() {
         tester().wait(forTimeInterval: 3)
-        BrowserUtils.enterUrlAddressBar(typeUrl: "\(webRoot!)/auth.html")
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: "\(webRoot!)/auth.html")
     }
 
     fileprivate func logOut() {
-        BrowserUtils.enterUrlAddressBar(typeUrl: "\(webRoot!)/auth.html?logout=1")
-
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: "\(webRoot!)/auth.html?logout=1")
         // Wait until the dialog shows up
-		let dialogAppeared = GREYCondition(name: "Wait the login dialog to appear", block: {
-			var errorOrNil: NSError?
-			let matcher = grey_allOf([grey_accessibilityLabel("Cancel"),
-			                                 grey_sufficientlyVisible()])
-            EarlGrey.selectElement(with: matcher)
-				.inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
-				.assert(grey_notNil(), error: &errorOrNil)
-			let success = errorOrNil == nil
-			return success
-		}).wait(withTimeout: 20)
-
-		GREYAssertTrue(dialogAppeared, reason: "Failed to display login dialog")
-
-        EarlGrey.selectElement(with: grey_accessibilityLabel("Cancel"))
-            .inRoot(grey_kindOfClass(NSClassFromString("_UIAlertControllerActionView")!))
-            .perform(grey_tap())
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().tapView(withAccessibilityLabel: "Cancel")
     }
 
     fileprivate func enterCredentials(usernameValue: String, passwordValue: String, username: String, password: String) {
