@@ -42,12 +42,9 @@ class AuthenticationTest: BaseTestCase {
         //send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         app.activate()
-        let contentView = app.navigationBars["Client.FxAContentView"]
-        if contentView.exists {
-            app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
-        }
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(LockedLoginsSettings)
+
+        // Need to be sure the app is ready
+        navigator.nowAt(LockedLoginsSettings)
         waitForExistence(app.navigationBars["Enter Passcode"])
     }
 
@@ -60,13 +57,10 @@ class AuthenticationTest: BaseTestCase {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         app.activate()
-        let contentView = app.navigationBars["Client.FxAContentView"]
-        if contentView.exists {
-            app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
-        }
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(LockedLoginsSettings)
-        waitForExistence(app.tables["Login List"])
+
+        // Login List is shown since the delay is set to 5min
+        navigator.nowAt(LockedLoginsSettings)
+        waitForExistence(app.tables["Login List"], timeout: 3)
     }
 
     func testChangePasscodeShowsErrorStates() {
@@ -157,6 +151,9 @@ class AuthenticationTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.tables["Login List"])
+
+        app.buttons["Settings"].tap()
+        navigator.nowAt(SettingsScreen)
 
         navigator.goto(PasscodeSettings)
         waitForExistence(app.staticTexts["After 5 minutes"])

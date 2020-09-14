@@ -123,6 +123,7 @@ class SearchTests: BaseTestCase {
         typeOnSearchBar(text: "www.mozilla.org")
         app.textFields["address"].press(forDuration: 5)
         app.menuItems["Select All"].tap()
+        waitForExistence(app.menuItems["Copy"], timeout: 3)
         app.menuItems["Copy"].tap()
         waitForExistence(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
