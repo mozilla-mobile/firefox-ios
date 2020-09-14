@@ -1176,12 +1176,8 @@ class TabCell: UICollectionViewCell {
         if let favIcon = tab.displayFavicon, let url = URL(string: favIcon.url) {
             favicon.sd_setImage(with: url, placeholderImage: UIImage(named: "defaultFavicon"), options: [], completed: nil)
         } else {
-            if ThemeManager.instance.currentName == .dark {
-                favicon.image = UIImage(named: "defaultFavicon")?.withRenderingMode(.alwaysTemplate)
-                favicon.tintColor = UIColor.theme.tabTray.faviconTint
-            } else {
-                favicon.image = UIImage(named: "defaultFavicon")
-            }
+            favicon.image = UIImage(named: "defaultFavicon")
+            favicon.tintColor = UIColor.theme.tabTray.faviconTint
         }
         if selected {
             setTabSelected(tab.isPrivate)
