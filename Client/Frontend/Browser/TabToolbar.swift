@@ -185,7 +185,7 @@ open class TabToolbarHelper: NSObject {
 
     func didLongPressMultiStateButton(_ recognizer: UILongPressGestureRecognizer) {
         switch middleButtonState {
-        case .search, .reload:
+        case .search, .newTab:
             return
         default:
             if recognizer.state == .began {
