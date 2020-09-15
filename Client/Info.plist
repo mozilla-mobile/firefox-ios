@@ -5,9 +5,9 @@
 	<key>MozDevelopmentTeam</key>
 	<string>$(DEVELOPMENT_TEAM)</string>
 	<key>LeanplumAppId</key>
-	<string></string>
+	<string>$(LEANPLUM_APP_ID)</string>
 	<key>LeanplumProductionKey</key>
-	<string></string>
+	<string>$(LEANPLUM_KEY_PRODUCTION)</string>
 	<key>LeanplumDevelopmentKey</key>
 	<string></string>
 	<key>AppIdentifierPrefix</key>
