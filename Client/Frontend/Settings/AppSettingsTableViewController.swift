@@ -56,7 +56,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
             generalSettings.insert(DefaultBrowserSetting(settings: self), at: 4)
         }
 
-        generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        if #available(iOS 12.0, *) {
+            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        }
 
         let accountChinaSyncSetting: [Setting]
         if !AppInfo.isChinaEdition {
