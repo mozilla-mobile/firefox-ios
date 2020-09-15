@@ -56,7 +56,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             generalSettings.insert(DefaultBrowserSetting(settings: self), at: 4)
         }
 
-        if #available(iOS 14.0, *) {
+        if #available(iOS 12.0, *) {
             generalSettings.insert(SiriPageSetting(settings: self), at: 5)
         }
 
