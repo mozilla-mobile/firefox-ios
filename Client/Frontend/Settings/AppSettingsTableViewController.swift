@@ -52,7 +52,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
            ]
 
-        if #available(iOS 14.0, *) {
+        if #available(iOS 14.0, *), let code = Locale.current.languageCode, code == "en" {
             generalSettings.insert(DefaultBrowserSetting(settings: self), at: 4)
         }
 
