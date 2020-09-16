@@ -45,8 +45,8 @@ struct SmallQuickLinkWidget: Widget {
             SmallQuickLinkView(entry: entry)
         }
         .supportedFamilies([.systemSmall])
-        .configurationDisplayName(String.QuickActionsGalleryTitle)
-        .description(String.QuickActionGalleryDescription)
+        .configurationDisplayName(Strings.QuickActionsGalleryTitle)
+        .description(Strings.QuickActionGalleryDescription)
     }
 }
 

@@ -809,88 +809,87 @@ extension Strings {
 }
 
 // FxA QR code scanning screen
-extension String {
+extension Strings {
     public static let FxAQRCode_Instructions = NSLocalizedString("fxa.qr-scanning-view.instructions", value: "Scan the QR code shown at firefox.com/pair", comment: "Instructions shown on qr code scanning view")
 }
 
 //Today Widget Strings - [New Search - Private Search]
-extension String {
-    public static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabelV1", tableName: "Today", value: "New Search", comment: "Open New Tab button label")
-    public static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoardV1", tableName: "Today", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
-    public static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.PrivateTabButtonLabelV1", tableName: "Today", value: "Private Search", comment: "Open New Private Tab button label")
+extension Strings {
+    public static let NewTabButtonLabel = NSLocalizedString("TodayWidget.NewTabButtonLabelV1", value: "New Search", comment: "Open New Tab button label")
+    public static let CopiedLinkLabelFromPasteBoard = NSLocalizedString("TodayWidget.CopiedLinkLabelFromPasteBoardV1", value: "Copied Link from clipboard", comment: "Copied Link from clipboard displayed")
+    public static let NewPrivateTabButtonLabel = NSLocalizedString("TodayWidget.PrivateTabButtonLabelV1", value: "Private Search", comment: "Open New Private Tab button label")
     
     // Widget - Shared
-    public static let QuickActionsGalleryTitle = NSLocalizedString("TodayWidget.QuickActionsGalleryTitle", tableName: "Today", value: "Quick Actions", comment: "Quick Actions title when widget enters edit mode")
+    public static let QuickActionsGalleryTitle = NSLocalizedString("TodayWidget.QuickActionsGalleryTitle", value: "Quick Actions", comment: "Quick Actions title when widget enters edit mode")
     
     // Quick Action - Medium Size Quick Action
-    public static let QuickActionsSubLabel = NSLocalizedString("TodayWidget.QuickActionsSubLabel", tableName: "Today", value: "Firefox - Quick Actions", comment: "Sub label for medium size quick action widget")
-    public static let NewSearchButtonLabel = NSLocalizedString("TodayWidget.NewSearchButtonLabelV1", tableName: "Today", value: "Search in Firefox", comment: "Open New Tab button label")
-    public static let NewPrivateTabButtonLabelV2 = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabelV2", tableName: "Today", value: "Search in Private Tab", comment: "Open New Private Tab button label for medium size action")
-    public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV1", tableName: "Today", value: "Go to copied link", comment: "Go to link pasted on the clipboard")
-    public static let GoToCopiedLinkLabelV2 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV2", tableName: "Today", value: "Go to\nCopied Link", comment: "Go to copied link")
-    public static let GoToCopiedLinkLabelV3 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV3", tableName: "Today", value: "Go to Copied Link", comment: "Go To Copied Link text pasted on the clipboard but this string doesn't have new line character")
-    public static let ClosePrivateTab = NSLocalizedString("TodayWidget.ClosePrivateTabsButton", tableName: "Today", value: "Close Private Tabs", comment: "Close Private Tabs button label")
+    public static let QuickActionsSubLabel = NSLocalizedString("TodayWidget.QuickActionsSubLabel", value: "Firefox - Quick Actions", comment: "Sub label for medium size quick action widget")
+    public static let NewSearchButtonLabel = NSLocalizedString("TodayWidget.NewSearchButtonLabelV1", value: "Search in Firefox", comment: "Open New Tab button label")
+    public static let NewPrivateTabButtonLabelV2 = NSLocalizedString("TodayWidget.NewPrivateTabButtonLabelV2", value: "Search in Private Tab", comment: "Open New Private Tab button label for medium size action")
+    public static let GoToCopiedLinkLabel = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV1", value: "Go to copied link", comment: "Go to link pasted on the clipboard")
+    public static let GoToCopiedLinkLabelV2 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV2", value: "Go to\nCopied Link", comment: "Go to copied link")
+    public static let GoToCopiedLinkLabelV3 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV3", value: "Go to Copied Link", comment: "Go To Copied Link text pasted on the clipboard but this string doesn't have new line character")
+    public static let ClosePrivateTab = NSLocalizedString("TodayWidget.ClosePrivateTabsButton", value: "Close Private Tabs", comment: "Close Private Tabs button label")
     
     // Quick Action - Medium Size - Gallery View
-    public static let FirefoxShortcutGalleryDescription = NSLocalizedString("TodayWidget.FirefoxShortcutGalleryDescription", tableName: "Today", value: "Add Firefox shortcuts to your Home screen.", comment: "Description for medium size widget to add Firefox Shortcut to home screen")
+    public static let FirefoxShortcutGalleryDescription = NSLocalizedString("TodayWidget.FirefoxShortcutGalleryDescription", value: "Add Firefox shortcuts to your Home screen.", comment: "Description for medium size widget to add Firefox Shortcut to home screen")
     
     // Quick Action - Small Size Widget
-    public static let SearchInFirefoxTitle = NSLocalizedString("TodayWidget.SearchInFirefoxTitle", tableName: "Today", value: "Search in Firefox", comment: "Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox.")
-    public static let SearchInPrivateTabLabelV2 = NSLocalizedString("TodayWidget.SearchInPrivateTabLabelV2", tableName: "Today", value: "Search in\nPrivate Tab", comment: "Search in private tab")
-    public static let SearchInFirefoxV2 = NSLocalizedString("TodayWidget.SearchInFirefoxV2", tableName: "Today", value: "Search in\nFirefox", comment: "Search in Firefox. Do not translate the word Firefox")
-    public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", tableName: "Today", value: "Close\nPrivate Tabs", comment: "Close Private Tabs")
-    public static let ClosePrivateTabsLabelV3 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV3", tableName: "Today", value: "Close\nPrivate\nTabs", comment: "Close Private Tabs")
-    public static let GoToCopiedLinkLabelV4 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV4", tableName: "Today", value: "Go to\nCopied\nLink", comment: "Go to copied link")
+    public static let SearchInFirefoxTitle = NSLocalizedString("TodayWidget.SearchInFirefoxTitle", value: "Search in Firefox", comment: "Title for small size widget which allows users to search in Firefox. Do not translate the word Firefox.")
+    public static let SearchInPrivateTabLabelV2 = NSLocalizedString("TodayWidget.SearchInPrivateTabLabelV2", value: "Search in\nPrivate Tab", comment: "Search in private tab")
+    public static let SearchInFirefoxV2 = NSLocalizedString("TodayWidget.SearchInFirefoxV2", value: "Search in\nFirefox", comment: "Search in Firefox. Do not translate the word Firefox")
+    public static let ClosePrivateTabsLabelV2 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV2", value: "Close\nPrivate Tabs", comment: "Close Private Tabs")
+    public static let ClosePrivateTabsLabelV3 = NSLocalizedString("TodayWidget.ClosePrivateTabsLabelV3", value: "Close\nPrivate\nTabs", comment: "Close Private Tabs")
+    public static let GoToCopiedLinkLabelV4 = NSLocalizedString("TodayWidget.GoToCopiedLinkLabelV4", value: "Go to\nCopied\nLink", comment: "Go to copied link")
     
     // Quick Action - Small Size Widget - Edit Mode
-    public static let QuickActionDescription = NSLocalizedString("TodayWidget.QuickActionDescription", tableName: "Today", value: "Select a Firefox shortcut to add to your Home screen.", comment: "Quick action description when widget enters edit mode")
-    public static let QuickActionDropDownMenu = NSLocalizedString("TodayWidget.QuickActionDropDownMenu", tableName: "Today", value: "Quick action", comment: "Quick Actions left label text for dropdown menu when widget enters edit mode")
-    public static let DropDownMenuItemNewSearch = NSLocalizedString("TodayWidget.DropDownMenuItemNewSearch", tableName: "Today", value: "New Search", comment: "Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands")
-    public static let DropDownMenuItemNewPrivateSearch = NSLocalizedString("TodayWidget.DropDownMenuItemNewPrivateSearch", tableName: "Today", value: "New Private Search", comment: "Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands")
-    public static let DropDownMenuItemGoToCopiedLink = NSLocalizedString("TodayWidget.DropDownMenuItemGoToCopiedLink", tableName: "Today", value: "Go to Copied Link", comment: "Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands")
-    public static let DropDownMenuItemClearPrivateTabs = NSLocalizedString("TodayWidget.DropDownMenuItemClearPrivateTabs", tableName: "Today", value: "Clear Private Tabs", comment: "Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands")
+    public static let QuickActionDescription = NSLocalizedString("TodayWidget.QuickActionDescription", value: "Select a Firefox shortcut to add to your Home screen.", comment: "Quick action description when widget enters edit mode")
+    public static let QuickActionDropDownMenu = NSLocalizedString("TodayWidget.QuickActionDropDownMenu", value: "Quick action", comment: "Quick Actions left label text for dropdown menu when widget enters edit mode")
+    public static let DropDownMenuItemNewSearch = NSLocalizedString("TodayWidget.DropDownMenuItemNewSearch", value: "New Search", comment: "Quick Actions drop down menu item for new search when widget enters edit mode and drop down menu expands")
+    public static let DropDownMenuItemNewPrivateSearch = NSLocalizedString("TodayWidget.DropDownMenuItemNewPrivateSearch", value: "New Private Search", comment: "Quick Actions drop down menu item for new private search when widget enters edit mode and drop down menu expands")
+    public static let DropDownMenuItemGoToCopiedLink = NSLocalizedString("TodayWidget.DropDownMenuItemGoToCopiedLink", value: "Go to Copied Link", comment: "Quick Actions drop down menu item for Go to Copied Link when widget enters edit mode and drop down menu expands")
+    public static let DropDownMenuItemClearPrivateTabs = NSLocalizedString("TodayWidget.DropDownMenuItemClearPrivateTabs", value: "Clear Private Tabs", comment: "Quick Actions drop down menu item for lear Private Tabs when widget enters edit mode and drop down menu expands")
     
     // Quick Action - Small Size - Gallery View
-    public static let QuickActionGalleryDescription = NSLocalizedString("TodayWidget.QuickActionGalleryDescription", tableName: "Today", value: "Add a Firefox shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.", comment: "Description for small size widget to add it to home screen")
+    public static let QuickActionGalleryDescription = NSLocalizedString("TodayWidget.QuickActionGalleryDescription", value: "Add a Firefox shortcut to your Home screen. After adding the widget, touch and hold to edit it and select a different shortcut.", comment: "Description for small size widget to add it to home screen")
     
     // Top Sites - Medium Size Widget
-    public static let TopSitesSubLabel = NSLocalizedString("TodayWidget.TopSitesSubLabel", tableName: "Today", value: "Firefox - Top Sites", comment: "Sub label for Top Sites widget")
+    public static let TopSitesSubLabel = NSLocalizedString("TodayWidget.TopSitesSubLabel", value: "Firefox - Top Sites", comment: "Sub label for Top Sites widget")
     
     // Top Sites - Medium Size - Gallery View
-    public static let TopSitesGalleryTitle = NSLocalizedString("TodayWidget.TopSitesGalleryTitle", tableName: "Today", value: "Top Sites", comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
-    public static let TopSitesGalleryDescription = NSLocalizedString("TodayWidget.TopSitesGalleryDescription", tableName: "Today", value: "Add shortcuts to frequently and recently visited sites.", comment: "Description for top sites widget to add Firefox top sites shotcuts to home screen")
+    public static let TopSitesGalleryTitle = NSLocalizedString("TodayWidget.TopSitesGalleryTitle", value: "Top Sites", comment: "Title for top sites widget to add Firefox top sites shotcuts to home screen")
+    public static let TopSitesGalleryDescription = NSLocalizedString("TodayWidget.TopSitesGalleryDescription", value: "Add shortcuts to frequently and recently visited sites.", comment: "Description for top sites widget to add Firefox top sites shotcuts to home screen")
 
     // Quick View Open Tabs - Medium Size Widget
-    public static let QuickViewOpenTabsSubLabel = NSLocalizedString("TodayWidget.QuickViewOpenTabsSubLabel", tableName: "Today", value: "Firefox - Open Tabs", comment: "Sub label for Top Sites widget")
-    public static let MoreTabsLabel = NSLocalizedString("TodayWidget.MoreTabsLabel", tableName: "Today", value: "+%d More…", comment: "%d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget")
-    public static let OpenFirefoxLabel = NSLocalizedString("TodayWidget.OpenFirefoxLabel", tableName: "Today", value: "Open Firefox", comment: "Open Firefox when there are no tabs opened in tab tray i.e. Empty State")
-    public static let NoOpenTabsLabel = NSLocalizedString("TodayWidget.NoOpenTabsLabel", tableName: "Today", value: "No open tabs.", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
-    public static let NoOpenTabsLabelV2 = NSLocalizedString("TodayWidget.NoOpenTabsLabelV2", tableName: "Today", value: "No Open Tabs", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
+    public static let QuickViewOpenTabsSubLabel = NSLocalizedString("TodayWidget.QuickViewOpenTabsSubLabel", value: "Firefox - Open Tabs", comment: "Sub label for Top Sites widget")
+    public static let MoreTabsLabel = NSLocalizedString("TodayWidget.MoreTabsLabel", value: "+%d More…", comment: "%d represents number and it becomes something like +5 more where 5 is the number of open tabs in tab tray beyond what is displayed in the widget")
+    public static let OpenFirefoxLabel = NSLocalizedString("TodayWidget.OpenFirefoxLabel", value: "Open Firefox", comment: "Open Firefox when there are no tabs opened in tab tray i.e. Empty State")
+    public static let NoOpenTabsLabel = NSLocalizedString("TodayWidget.NoOpenTabsLabel", value: "No open tabs.", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
+    public static let NoOpenTabsLabelV2 = NSLocalizedString("TodayWidget.NoOpenTabsLabelV2", value: "No Open Tabs", comment: "Label that is shown when there are no tabs opened in tab tray i.e. Empty State")
     
     
     // Quick View Open Tabs - Medium Size - Gallery View
-    public static let QuickViewGalleryTitle = NSLocalizedString("TodayWidget.QuickViewGalleryTitle", tableName: "Today", value: "Quick View", comment: "Title for Quick View widget in Gallery View where user can add it to home screen")
-    public static let QuickViewGalleryDescription = NSLocalizedString("TodayWidget.QuickViewGalleryDescription", tableName: "Today", value: "Access your open tabs directly on your homescreen.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
-    public static let QuickViewGalleryDescriptionV2 = NSLocalizedString("TodayWidget.QuickViewGalleryDescriptionV2", tableName: "Today", value: "Add shortcuts to your open tabs.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
-    public static let ViewMore = NSLocalizedString("TodayWidget.ViewMore", tableName: "Today", value: "View More", comment: "View More for Quick View widget in Gallery View where we don't know how many tabs might be opened")
+    public static let QuickViewGalleryTitle = NSLocalizedString("TodayWidget.QuickViewGalleryTitle", value: "Quick View", comment: "Title for Quick View widget in Gallery View where user can add it to home screen")
+    public static let QuickViewGalleryDescription = NSLocalizedString("TodayWidget.QuickViewGalleryDescription", value: "Access your open tabs directly on your homescreen.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
+    public static let QuickViewGalleryDescriptionV2 = NSLocalizedString("TodayWidget.QuickViewGalleryDescriptionV2", value: "Add shortcuts to your open tabs.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
+    public static let ViewMore = NSLocalizedString("TodayWidget.ViewMore", value: "View More", comment: "View More for Quick View widget in Gallery View where we don't know how many tabs might be opened")
     
     // Quick View Open Tabs - Large Size - Gallery View
-    public static let QuickViewLargeGalleryDescription = NSLocalizedString("TodayWidget.QuickViewLargeGalleryDescription", tableName: "Today", value: "Add shortcuts to your open tabs.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
+    public static let QuickViewLargeGalleryDescription = NSLocalizedString("TodayWidget.QuickViewLargeGalleryDescription", value: "Add shortcuts to your open tabs.", comment: "Description for Quick View widget in Gallery View where user can add it to home screen")
 
     // Pocket - Large - Medium Size Widget
-    public static let PocketWidgetSubLabel = NSLocalizedString("TodayWidget.PocketWidgetSubLabel", tableName: "Today", value: "Firefox - Recommended by Pocket", comment: "Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app.")
-    public static let ViewMoreDots = NSLocalizedString("TodayWidget.ViewMoreDots", tableName: "Today", value: "View More…", comment: "View More… for Firefox Pocket stories widget where we don't know how many articles are available.")
+    public static let PocketWidgetSubLabel = NSLocalizedString("TodayWidget.PocketWidgetSubLabel", value: "Firefox - Recommended by Pocket", comment: "Sub label for medium size Firefox Pocket stories widge widget. Pocket is the name of another app.")
+    public static let ViewMoreDots = NSLocalizedString("TodayWidget.ViewMoreDots", value: "View More…", comment: "View More… for Firefox Pocket stories widget where we don't know how many articles are available.")
 
     // Pocket - Large - Medium Size - Gallery View
-    public static let PocketWidgetGalleryTitle = NSLocalizedString("TodayWidget.PocketWidgetTitle", tableName: "Today", value: "Recommended by Pocket", comment: "Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
-    public static let PocketWidgetGalleryDescription = NSLocalizedString("TodayWidget.PocketWidgetGalleryDescription", tableName: "Today", value: "Discover fascinating and thought-provoking stories from across the web, curated by Pocket.", comment: "Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
+    public static let PocketWidgetGalleryTitle = NSLocalizedString("TodayWidget.PocketWidgetTitle", value: "Recommended by Pocket", comment: "Title for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
+    public static let PocketWidgetGalleryDescription = NSLocalizedString("TodayWidget.PocketWidgetGalleryDescription", value: "Discover fascinating and thought-provoking stories from across the web, curated by Pocket.", comment: "Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
 }
 
 //Default Browser
-extension String {
-    public static let DefaultBrowserCardTitle = NSLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.")
-    public static let DefaultBrowserCardDescription = NSLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
-    public static let DefaultBrowserCardButton = NSLocalizedString("DefaultBrowserCard.Button", tableName: "Default Browser", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
-    public static let DefaultBrowserMenuItem = NSLocalizedString("Settings.DefaultBrowserMenuItem", tableName: "Default Browser", value: "Set as Default Browser", comment: "Menu option for setting Firefox as default browser.")
-    
+extension Strings {
+    public static let DefaultBrowserCardTitle = NSLocalizedString("DefaultBrowserCard.Title", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.")
+    public static let DefaultBrowserCardDescription = NSLocalizedString("DefaultBrowserCard.Description", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
+    public static let DefaultBrowserCardButton = NSLocalizedString("DefaultBrowserCard.Button", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
+    public static let DefaultBrowserMenuItem = NSLocalizedString("Settings.DefaultBrowserMenuItem", value: "Set as Default Browser", comment: "Menu option for setting Firefox as default browser.")
 }

@@ -28,13 +28,13 @@ enum QuickLink: Int {
     public var label: String {
         switch self {
         case .search:
-            return String.SearchInFirefoxV2
+            return Strings.SearchInFirefoxV2
         case .privateSearch:
-            return String.SearchInPrivateTabLabelV2
+            return Strings.SearchInPrivateTabLabelV2
         case .copiedLink:
-            return String.GoToCopiedLinkLabelV2
+            return Strings.GoToCopiedLinkLabelV2
         case .closePrivateTabs:
-            return String.ClosePrivateTabsLabelV2
+            return Strings.ClosePrivateTabsLabelV2
         }
     }
 
