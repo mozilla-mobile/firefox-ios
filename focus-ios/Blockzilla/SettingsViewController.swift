@@ -584,6 +584,9 @@ class SettingsViewController: UIViewController, UITableViewDataSource, UITableVi
             if toggle.label == UIConstants.strings.labelSendAnonymousUsageData ||
                 toggle.label == UIConstants.strings.settingsSearchSuggestions {
                 height += 10
+                if toggle.label == UIConstants.strings.settingsSearchSuggestions && UIDevice.current.userInterfaceIdiom == .pad {
+                    height += 15
+                }
             }
         }
 
