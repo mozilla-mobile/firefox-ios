@@ -5,7 +5,6 @@
 #if canImport(WidgetKit)
 import WidgetKit
 import SwiftUI
-import Shared
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
