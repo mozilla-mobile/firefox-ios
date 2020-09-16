@@ -5,7 +5,6 @@
 #include "Common.xcconfig"
 #include "Debug.xcconfig"
 
-INFOPLIST_FILE = Client/Info.plist
 MOZ_BUNDLE_DISPLAY_NAME = Fennec ($(USER))
 MOZ_BUNDLE_ID = org.mozilla.ios.Fennec
 // Flag to indicate if we want to include the debug settings bundle or not
