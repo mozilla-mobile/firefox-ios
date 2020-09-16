@@ -6364,7 +6364,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = XCUITests/Info.plist;
-				PROVISIONING_PROFILE_SPECIFIER = FirefoxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = XCUITests;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
@@ -6374,7 +6375,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = XCUITests/Info.plist;
-				PROVISIONING_PROFILE_SPECIFIER = FirefoxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = XCUITests;
 				TEST_TARGET_NAME = Client;
 			};
 			name = Firefox;
@@ -6383,7 +6385,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = XCUITests/Info.plist;
-				PROVISIONING_PROFILE_SPECIFIER = FirefoxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = XCUITests;
 				TEST_TARGET_NAME = Client;
 			};
 			name = FirefoxBeta;
@@ -6859,7 +6862,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				INFOPLIST_FILE = XCUITests/Info.plist;
-				PROVISIONING_PROFILE_SPECIFIER = FirefoxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = XCUITests;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
