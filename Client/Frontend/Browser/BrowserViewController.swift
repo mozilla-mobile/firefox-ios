@@ -15,7 +15,7 @@ import MobileCoreServices
 import SDWebImage
 import SwiftyJSON
 import Telemetry
-import Glean
+import MozillaAppServices
 import Sentry
 
 private let KVOs: [KVOConstants] = [
