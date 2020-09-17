@@ -241,9 +241,9 @@
 		3D9CA9A81EF84D04002434DD /* NoImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CA9A71EF84D04002434DD /* NoImageTests.swift */; };
 		3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */; };
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
+		3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */; };
 		4334145424C63779001541F3 /* IntroScreenSyncViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */; };
 		4334145724C6378B001541F3 /* IntroScreenWelcomeViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */; };
-		3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
 		43446CEA2412066500F5C643 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CE92412066500F5C643 /* UIViewControllerExtension.swift */; };
 		43446CF02412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */; };
@@ -1448,9 +1448,9 @@
 		3D9CA9A71EF84D04002434DD /* NoImageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageTests.swift; sourceTree = "<group>"; };
 		3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipBoardTests.swift; sourceTree = "<group>"; };
 		3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtectionTests.swift; sourceTree = "<group>"; };
+		3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxATelemetryUtils.swift; path = Account/FxATelemetryUtils.swift; sourceTree = "<group>"; };
 		4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenSyncViewV1.swift; sourceTree = "<group>"; };
 		4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroScreenWelcomeViewV1.swift; sourceTree = "<group>"; };
-		3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FxATelemetryUtils.swift; path = Account/FxATelemetryUtils.swift; sourceTree = "<group>"; };
 		43446CE5240D9F3000F5C643 /* ETP.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ETP.xcassets; sourceTree = "<group>"; };
 		43446CE92412066500F5C643 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UIViewControllerExtension.swift; path = Extensions/UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		43446CEF2412DDBE00F5C643 /* UpdateCoverSheetViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCoverSheetViewModelTests.swift; sourceTree = "<group>"; };
@@ -6363,6 +6363,7 @@
 		3BFE4B0E1D342FB900DDF53F /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
@@ -6374,6 +6375,7 @@
 		3BFE4B0F1D342FB900DDF53F /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
@@ -6384,6 +6386,7 @@
 		3BFE4B101D342FB900DDF53F /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
@@ -6861,6 +6864,7 @@
 		E6DCC21A1DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
 				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
