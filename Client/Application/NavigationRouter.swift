@@ -33,11 +33,16 @@ enum SettingsPage: String {
     case theme = "theme"
 }
 
+enum DefaultBrowserPath: String {
+    case systemSettings = "system-settings"
+}
+
 // Used by the App to navigate to different views.
 // To open a URL use /open-url or to open a blank tab use /open-url with no params
 enum DeepLink {
     case settings(SettingsPage)
     case homePanel(HomePanelPath)
+    case defaultBrowser(DefaultBrowserPath)
     init?(urlString: String) {
         let paths = urlString.split(separator: "/")
         guard let component = paths[safe: 0], let componentPath = paths[safe: 1] else {
@@ -47,6 +52,8 @@ enum DeepLink {
             self = .settings(link)
         } else if component == "homepanel", let link = HomePanelPath(rawValue: String(componentPath)) {
             self = .homePanel(link)
+        } else if component == "default-browser", let link = DefaultBrowserPath(rawValue: String(componentPath)) {
+            self = .defaultBrowser(link)
         } else {
             return nil
         }
@@ -154,6 +161,8 @@ enum NavigationPath {
             settingsTableViewController.tabManager = bvc.tabManager
             settingsTableViewController.settingsDelegate = bvc
             NavigationPath.handleSettings(settings: settingsPath, with: rootVC, baseSettingsVC: settingsTableViewController, and: bvc)
+        case .defaultBrowser(let path):
+            NavigationPath.handleDefaultBrowser(path: path)
         }
     }
 
@@ -241,6 +250,13 @@ enum NavigationPath {
             controller.pushViewController(ThemeSettingsController(), animated: true)
         }
     }
+    
+    private static func handleDefaultBrowser(path: DefaultBrowserPath) {
+        switch path {
+        case .systemSettings:
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        }
+    }
 }
 
 extension NavigationPath: Equatable {}
@@ -265,6 +281,8 @@ func == (lhs: DeepLink, rhs: DeepLink) -> Bool {
     case let (.settings(lhs), .settings(rhs)):
         return lhs == rhs
     case let (.homePanel(lhs), .homePanel(rhs)):
+        return lhs == rhs
+    case let (.defaultBrowser(lhs), .defaultBrowser(rhs)):
         return lhs == rhs
     default:
         return false
