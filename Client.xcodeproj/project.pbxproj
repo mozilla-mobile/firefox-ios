@@ -6365,7 +6365,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PROVISIONING_PROFILE_SPECIFIER = Bitrise Firefox iOS Dev - XCUI Tests;
+				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Test";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
@@ -6376,7 +6376,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PROVISIONING_PROFILE_SPECIFIER = Bitrise Firefox iOS Dev - XCUI Tests;
+				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
 				TEST_TARGET_NAME = Client;
 			};
 			name = Firefox;
@@ -6386,7 +6386,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PROVISIONING_PROFILE_SPECIFIER = Bitrise Firefox iOS Dev - XCUI Tests;
+				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
 				TEST_TARGET_NAME = Client;
 			};
 			name = FirefoxBeta;
@@ -6863,7 +6863,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = XCUITests/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PROVISIONING_PROFILE_SPECIFIER = Bitrise Firefox iOS Dev - XCUI Tests;
+				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
