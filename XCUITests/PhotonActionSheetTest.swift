@@ -6,6 +6,7 @@ import XCTest
 
 class PhotonActionSheetTest: BaseTestCase {
     // Smoketest
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7346
     func testPinToTop() {
         navigator.openURL("http://example.com")
         waitUntilPageLoad()
@@ -28,7 +29,7 @@ class PhotonActionSheetTest: BaseTestCase {
         // Check that it has been unpinned
         cell.press(forDuration: 2)
         waitForExistence(app.cells["action_pin"])
-    }
+    }*/
     // Disable issue #5554
 
     func testShareOptionIsShown() {
@@ -51,7 +52,11 @@ class PhotonActionSheetTest: BaseTestCase {
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
         pageObjectButtonCenter.press(forDuration: 1)
 
-        waitForExistence(app.cells["Copy"], timeout: 10)
+        if #available(iOS 14.0, *) {
+            waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
+        } else {
+            waitForExistence(app.cells["Copy"], timeout: 10)
+        }
     }
 
     func testSendToDeviceFromPageOptionsMenu() {
@@ -87,10 +92,15 @@ class PhotonActionSheetTest: BaseTestCase {
     private func openNewShareSheet() {
         navigator.openURL("example.com")
         waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["Fennec pasted from CoreSimulatorBridge"])
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables["Context Menu"].cells["action_share"], timeout: 5)
         app.tables["Context Menu"].staticTexts["Share Page With…"].tap()
-        waitForExistence(app.cells["Copy"], timeout: 5)
+        if #available(iOS 14.0, *) {
+            waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
+        } else {
+            waitForExistence(app.cells["Copy"], timeout: 10)
+        }
         // This is not ideal but only way to get the element on iPhone 8
         // for iPhone 11, that would be boundBy: 2
         let fennecElement = app.collectionViews.scrollViews.cells.element(boundBy: 1)
