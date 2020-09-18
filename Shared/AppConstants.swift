@@ -4,6 +4,15 @@
 
 import UIKit
 
+public enum AppName: String, CustomStringConvertible {
+    case shortName = "Firefox"
+    case longName = "Firefox Daylight"
+
+    public var description: String {
+        return self.rawValue
+    }
+}
+
 public enum AppBuildChannel: String {
     case release = "release"
     case beta = "beta"
@@ -116,5 +125,4 @@ public struct AppConstants {
         return true
         #endif
     }()
-
 }

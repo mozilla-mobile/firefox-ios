@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import Foundation
-import EarlGrey
 @testable import Client
 
 // WKWebView's WKNavigationDelegate is used for custom URL handling
@@ -15,23 +14,23 @@ class NavigationDelegateTests: KIFTestCase {
     override func setUp() {
         super.setUp()
         webRoot = SimplePageServer.start()
-        BrowserUtils.configEarlGrey()
-        BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     override func tearDown() {
-        BrowserUtils.resetToAboutHome()
-        BrowserUtils.clearPrivateData()
+        BrowserUtils.resetToAboutHomeKIF(tester())
+        BrowserUtils.clearPrivateDataKIF(tester())
         super.tearDown()
     }
 
     func testAppStoreLinkShowsConfirmation() {
         let url = "\(webRoot!)/navigationDelegate.html"
-        BrowserUtils.enterUrlAddressBar(typeUrl: url)
+        tester().waitForAnimationsToFinish(withTimeout: 3)
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().waitForAnimationsToFinish()
         tester().waitForWebViewElementWithAccessibilityLabel("link")
         tester().tapWebViewElementWithAccessibilityLabel("link")
         tester().wait(forTimeInterval: 2)
-        EarlGrey.selectElement(with: grey_accessibilityID("CancelOpenInAppStore")).perform(grey_tap())
+        tester().tapView(withAccessibilityIdentifier: "CancelOpenInAppStore")
     }
 }

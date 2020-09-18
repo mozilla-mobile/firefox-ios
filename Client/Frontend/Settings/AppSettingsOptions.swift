@@ -7,7 +7,7 @@ import Shared
 import Account
 import SwiftKeychainWrapper
 import LocalAuthentication
-import Glean
+import MozillaAppServices
 
 // This file contains all of the settings available in the main settings screen of the app.
 
@@ -618,7 +618,7 @@ class VersionSetting: Setting {
     }
 
     override var title: NSAttributedString? {
-        return NSAttributedString(string: String(format: NSLocalizedString("Version %@ (%@)", comment: "Version number of Firefox shown in settings"), VersionSetting.appVersion, VersionSetting.appBuildNumber), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: "\(AppName.longName) \(VersionSetting.appVersion) (\(VersionSetting.appBuildNumber))", attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
     
     public static var appVersion: String {
@@ -1071,6 +1071,24 @@ class SiriPageSetting: Setting {
         let viewController = SiriSettingsViewController(prefs: profile.prefs)
         viewController.profile = profile
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+@available(iOS 14.0, *)
+class DefaultBrowserSetting: Setting {
+    let profile: Profile
+
+    override var accessibilityIdentifier: String? { return "DefaultBrowserSettings" }
+
+    init(settings: SettingsTableViewController) {
+        self.profile = settings.profile
+
+        super.init(title: NSAttributedString(string: String.DefaultBrowserMenuItem, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+    }
+
+    override func onClick(_ navigationController: UINavigationController?) {
+        TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .settingsMenuSetAsDefaultBrowser)
+        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
     }
 }
 

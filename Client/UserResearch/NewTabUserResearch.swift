@@ -6,80 +6,69 @@ import Foundation
 import Leanplum
 import Shared
 
-// For LP variable below is the convention we follow
-// True = Current Onboarding Screen
-// False = New Onboarding Screen
-enum OnboardingScreenType: String {
-    case versionV1
-    case versionV2 
-    
-    static func from(boolValue: Bool) -> OnboardingScreenType {
-        return boolValue ? .versionV1 : .versionV2
-    }
-}
-
-class OnboardingUserResearch {
-    // Closure delegate
-    var updatedLPVariable: (() -> Void)?
-    // variable
+class NewTabUserResearch {
+    // Variable
     var lpVariable: LPVar?
     // Constants
-    private let onboardingScreenTypeKey = "onboardingScreenTypeKey"
+    private let newTabUserResearchKey = "newTabUserResearchKey"
     // Saving user defaults
     private let defaults = UserDefaults.standard
-    // Publicly accessible onboarding screen type
-    var onboardingScreenType: OnboardingScreenType? {
+    // LP fetched status variable
+    private var fetchedExperimentVariables = false
+    // New tab button state
+    // True: Show new tab button
+    // False: Hide new tab button
+    var newTabState: Bool? {
         set(value) {
             if value == nil {
-                defaults.removeObject(forKey: onboardingScreenTypeKey)
+                defaults.removeObject(forKey: newTabUserResearchKey)
             } else {
-                defaults.set(value?.rawValue, forKey: onboardingScreenTypeKey)
+                defaults.set(value, forKey: newTabUserResearchKey)
             }
         }
         get {
-            guard let value = defaults.value(forKey: onboardingScreenTypeKey) as? String else {
+            guard let value = defaults.value(forKey: newTabUserResearchKey) as? Bool else {
                 return nil
             }
-            return OnboardingScreenType(rawValue: value)
+            return value
         }
     }
     
     // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.onboardingABTestV2) {
+    init(lpVariable: LPVar? = LPVariables.newTabButtonABTest) {
         self.lpVariable = lpVariable
     }
     
     // MARK: public
     func lpVariableObserver() {
-        // Condition: Leanplum is disabled; use default intro view
+        // Condition: Leanplum is disabled; Set default New tab state
         guard LeanPlumClient.shared.getSettings() != nil else {
-            self.onboardingScreenType = .versionV1
-            self.updatedLPVariable?()
+            // default state is false
+            self.newTabState = false
             return
         }
         // Condition: A/B test variables from leanplum server
         LeanPlumClient.shared.finishedStartingLeanplum = {
-            let showScreenA = LPVariables.onboardingABTestV2?.boolValue()
             LeanPlumClient.shared.finishedStartingLeanplum = nil
-            self.updateTelemetry()
-            let screenType = OnboardingScreenType.from(boolValue: (showScreenA ?? true))
-            self.onboardingScreenType = screenType
-            self.updatedLPVariable?()
-        }
-        // Condition: Leanplum server too slow; Show default onboarding.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            guard LeanPlumClient.shared.finishedStartingLeanplum != nil else {
+            guard self.fetchedExperimentVariables == false else {
                 return
             }
-            let lpStartStatus = LeanPlumClient.shared.lpState
-            var lpVariableValue: OnboardingScreenType = .versionV1
-            // Condition: LP has already started but we missed onStartLPVariable callback
-            if case .started(startedState: _) = lpStartStatus , let boolValue = LPVariables.onboardingABTestV2?.boolValue() {
-                lpVariableValue = boolValue ? .versionV1 : .versionV2
-                self.updateTelemetry()
+            self.fetchedExperimentVariables = true
+            self.updateTelemetry()
+            self.newTabState = LPVariables.newTabButtonABTest?.boolValue() ?? false
+        }
+        // Condition: Leanplum server too slow; Set default New tab state
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            guard self.fetchedExperimentVariables == false else {
+                return
             }
-            self.onboardingScreenType = lpVariableValue
-            self.updatedLPVariable?()
+            // Condition: Leanplum server too slow; Set default New tab state
+            self.newTabState = false
+            // Condition: LP has already started but we missed onStartLPVariable callback
+            if case .started(startedState: _) = LeanPlumClient.shared.lpState , let boolValue = LPVariables.newTabButtonABTest?.boolValue() {
+                self.newTabState = boolValue
+            }
+            self.fetchedExperimentVariables = true
         }
     }
     

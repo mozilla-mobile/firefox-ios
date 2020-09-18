@@ -60,7 +60,7 @@ class DownloadHelper: NSObject, OpenInHelper {
 
     static func requestDownload(url: URL, tab: Tab) {
         let safeUrl = url.absoluteString.replacingOccurrences(of: "'", with: "%27")
-        tab.webView?.evaluateJavaScript("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
+        tab.webView?.evaluateJavascriptInDefaultContentWorld("window.__firefox__.download('\(safeUrl)', '\(UserScriptManager.appIdToken)')")
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .downloadLinkButton)
     }
     
@@ -92,7 +92,9 @@ class DownloadHelper: NSObject, OpenInHelper {
             return
         }
 
-        let download = HTTPDownload(preflightResponse: preflightResponse, request: request)
+        guard let download = HTTPDownload(preflightResponse: preflightResponse, request: request) else {
+            return
+        }
 
         let expectedSize = download.totalBytesExpected != nil ? ByteCountFormatter.string(fromByteCount: download.totalBytesExpected!, countStyle: .file) : nil
 

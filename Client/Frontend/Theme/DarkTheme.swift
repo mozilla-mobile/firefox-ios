@@ -57,6 +57,7 @@ fileprivate class DarkTabTrayColor: TabTrayColor {
     override var toolbarButtonTint: UIColor { return defaultTextAndTint }
     override var cellCloseButton: UIColor { return defaultTextAndTint }
     override var cellTitleBackground: UIColor { return UIColor.Photon.Grey70 }
+    override var faviconTint: UIColor { return UIColor.Photon.White100 }
     override var searchBackground: UIColor { return UIColor.Photon.Grey60 }
 }
 

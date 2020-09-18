@@ -15,7 +15,7 @@ import MobileCoreServices
 import SDWebImage
 import SwiftyJSON
 import Telemetry
-import Glean
+import MozillaAppServices
 import Sentry
 
 private let KVOs: [KVOConstants] = [
@@ -61,6 +61,7 @@ class BrowserViewController: UIViewController {
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
     private var onboardingUserResearch: OnboardingUserResearch?
+    private var newTabUserResearch: NewTabUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
 
     fileprivate var customSearchBarButton: UIBarButtonItem?
@@ -119,6 +120,8 @@ class BrowserViewController: UIViewController {
     weak var pendingDownloadWebView: WKWebView?
 
     let downloadQueue = DownloadQueue()
+    var isCmdClickForNewTab = false
+
 
     init(profile: Profile, tabManager: TabManager) {
         self.profile = profile
@@ -468,6 +471,9 @@ class BrowserViewController: UIViewController {
         
         // Setup onboarding user research for A/B testing
         onboardingUserResearch = OnboardingUserResearch()
+        // Setup New Tab user research for A/B testing
+        newTabUserResearch = NewTabUserResearch()
+        newTabUserResearch?.lpVariableObserver()
     }
 
     fileprivate func setupConstraints() {
@@ -895,7 +901,7 @@ class BrowserViewController: UIViewController {
     }
     
     func setupMiddleButtonStatus(isLoading: Bool) {
-        let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false
+        let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (newTabUserResearch?.newTabState ?? false)
         
         // No tab
         guard let tab = tabManager.selectedTab else {
@@ -1155,7 +1161,7 @@ class BrowserViewController: UIViewController {
             if (!InternalURL.isValid(url: url) || url.isReaderModeURL), !url.isFileURL {
                 postLocationChangeNotificationForTab(tab, navigation: navigation)
 
-                webView.evaluateJavaScript("\(ReaderModeNamespace).checkReadability()", completionHandler: nil)
+                webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
 
             if urlBar.inOverlayMode, InternalURL.isValid(url: url), url.path.starts(with: "/\(AboutHomeHandler.path)") {
@@ -2193,8 +2199,13 @@ extension BrowserViewController: ContextMenuHelperDelegate {
             actionSheetController.addAction(bookmarkAction, accessibilityIdentifier: "linkContextMenu.bookmarkLink")
 
             let downloadAction = UIAlertAction(title: Strings.ContextMenuDownloadLink, style: .default) { _ in
-                self.pendingDownloadWebView = currentTab.webView
-                DownloadContentScript.requestDownload(url: url, tab: currentTab)
+                // This checks if download is a blob, if yes, begin blob download process
+                if !DownloadContentScript.requestBlobDownload(url: url, tab: currentTab) {
+                    //if not a blob, set pendingDownloadWebView and load the request in the webview, which will trigger the WKWebView navigationResponse delegate function and eventually downloadHelper.open()
+                    self.pendingDownloadWebView = currentTab.webView
+                    let request = URLRequest(url: url)
+                    currentTab.webView?.load(request)
+                }
             }
             actionSheetController.addAction(downloadAction, accessibilityIdentifier: "linkContextMenu.download")
 
@@ -2334,6 +2345,17 @@ extension BrowserViewController: ContextMenuHelperDelegate {
         displayedPopoverController?.dismiss(animated: true) {
             self.displayedPopoverController = nil
         }
+    }
+    
+    //Support for CMD+ Click on link to open in a new tab
+     override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+         guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return } //GUI buttons = CMD buttons on ipad/mac
+         self.isCmdClickForNewTab = true
+    }
+    
+    override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return }
+        self.isCmdClickForNewTab = false
     }
 }
 

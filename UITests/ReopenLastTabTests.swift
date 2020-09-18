@@ -4,7 +4,6 @@
 
 import Foundation
 import Storage
-import EarlGrey
 @testable import Client
 // Disabling due to failure in iOS 13/Xcode 11. Investigation requiered
 /*
