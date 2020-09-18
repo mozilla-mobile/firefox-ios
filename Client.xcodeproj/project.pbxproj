@@ -6408,8 +6408,10 @@
 		3BFE4B0E1D342FB900DDF53F /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = XCUITests/Info.plist;
-				PROVISIONING_PROFILE_SPECIFIER = FirefoxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
@@ -6418,8 +6420,10 @@
 		3BFE4B0F1D342FB900DDF53F /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = XCUITests/Info.plist;
-				PROVISIONING_PROFILE_SPECIFIER = FirefoxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
 				TEST_TARGET_NAME = Client;
 			};
 			name = Firefox;
@@ -6427,8 +6431,10 @@
 		3BFE4B101D342FB900DDF53F /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = XCUITests/Info.plist;
-				PROVISIONING_PROFILE_SPECIFIER = FirefoxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
 				TEST_TARGET_NAME = Client;
 			};
 			name = FirefoxBeta;
@@ -6903,8 +6909,10 @@
 		E6DCC21A1DCBB6F100CEC4B7 /* Fennec_Enterprise */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				INFOPLIST_FILE = XCUITests/Info.plist;
-				PROVISIONING_PROFILE_SPECIFIER = FirefoxXCUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
 				TEST_TARGET_NAME = Client;
 			};
