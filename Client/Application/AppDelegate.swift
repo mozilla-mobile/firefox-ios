@@ -16,6 +16,7 @@ import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
+import WidgetKit
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
@@ -378,6 +379,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         } else {
             syncOnDidEnterBackground(application: application)
         }
+        
+        tabManager.preserveTabs()
+        
+        WidgetCenter.shared.reloadAllTimelines()
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {

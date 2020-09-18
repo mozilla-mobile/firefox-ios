@@ -3,7 +3,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import SwiftUI
-import Shared
 // Enum file that holds the different cases for the Quick Actions small widget with their configurations (string, backgrounds, images) as selected by the user in edit mode. It maps the values of IntentQuickLink enum in the QuickLinkSelectionIntent to the designated values of each case.
 
 enum QuickLink: Int {
