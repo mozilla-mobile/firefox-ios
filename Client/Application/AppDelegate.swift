@@ -381,8 +381,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
         
         tabManager.preserveTabs()
-        
-        WidgetCenter.shared.reloadAllTimelines()
+        if #available(iOS 14.0, *) {
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
 
     fileprivate func syncOnDidEnterBackground(application: UIApplication) {
