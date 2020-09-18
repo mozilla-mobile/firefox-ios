@@ -6325,7 +6325,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PRODUCT_NAME = Today;
-				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Today Development";
+				PROVISIONING_PROFILE_SPECIFIER = "BR FirefoxBeta Today";
 				SKIP_INSTALL = NO;
 			};
 			name = FirefoxBeta;
@@ -6375,7 +6375,7 @@
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
 				PRODUCT_NAME = NotificationService2;
-				PROVISIONING_PROFILE_SPECIFIER = "Firefox NotificationService";
+				PROVISIONING_PROFILE_SPECIFIER = "BR FirefoxBeta NotificationService";
 				SKIP_INSTALL = NO;
 			};
 			name = FirefoxBeta;
@@ -6478,6 +6478,7 @@
 				INFOPLIST_FILE = WidgetKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
+				PROVISIONING_PROFILE_SPECIFIER = "BR FirefoxBeta WidgetKit";
 				SKIP_INSTALL = NO;
 			};
 			name = FirefoxBeta;
@@ -6959,7 +6960,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
 				PRODUCT_NAME = Client;
-				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta Development";
+				PROVISIONING_PROFILE_SPECIFIER = "BR FirefoxBeta";
 				SKIP_INSTALL = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/Client/Client-Bridging-Header.h";
 			};
@@ -6981,7 +6982,7 @@
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Firefox Beta ShareTo Development";
+				PROVISIONING_PROFILE_SPECIFIER = "BR FirefoxBeta ShareTo";
 				SKIP_INSTALL = NO;
 			};
 			name = FirefoxBeta;
