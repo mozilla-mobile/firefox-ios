@@ -39,7 +39,7 @@ class SessionData: NSObject, NSCoding {
 
     required init?(coder: NSCoder) {
         self.currentPage = coder.decodeAsInt(forKey: "currentPage")
-        self.urls = (coder.decodeObject(forKey: "urls") as? [URL])!
+        self.urls = (coder.decodeObject(forKey: "urls") as? [URL]) ?? [URL]()
         self.lastUsedTime = coder.decodeAsUInt64(forKey: "lastUsedTime")
     }
 
