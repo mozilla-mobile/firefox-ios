@@ -8,9 +8,10 @@ import Storage
 import Shared
 
 class SavedTab: NSObject, NSCoding {
-    let isSelected: Bool
-    let title: String?
-    let isPrivate: Bool
+    var isSelected: Bool
+    var title: String?
+    var url: URL?
+    var isPrivate: Bool
     var sessionData: SessionData?
     var screenshotUUID: UUID?
     var faviconURL: String?
@@ -25,7 +26,8 @@ class SavedTab: NSObject, NSCoding {
             "isPrivate": String(self.isPrivate) as AnyObject,
             "isSelected": String(self.isSelected) as AnyObject,
             "faviconURL": faviconURL as AnyObject,
-            "screenshotUUID": uuid as AnyObject
+            "screenshotUUID": uuid as AnyObject,
+            "url": url as AnyObject
         ]
         
         if let sessionDataInfo = self.sessionData?.jsonDictionary {
@@ -35,33 +37,17 @@ class SavedTab: NSObject, NSCoding {
         return json
     }
     
-    init?(tab: Tab, isSelected: Bool) {
-        assert(Thread.isMainThread)
-        
-        self.screenshotUUID = tab.screenshotUUID as UUID?
+    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?) {
+
+        self.screenshotUUID = screenshotUUID
         self.isSelected = isSelected
-        self.title = tab.displayTitle
-        self.isPrivate = tab.isPrivate
-        self.faviconURL = tab.displayFavicon?.url
-        super.init()
+        self.title = title
+        self.isPrivate = isPrivate
+        self.faviconURL = faviconURL
+        self.url = url
+        self.sessionData = sessionData
         
-        if tab.sessionData == nil {
-            let currentItem: WKBackForwardListItem! = tab.webView?.backForwardList.currentItem
-            
-            // Freshly created web views won't have any history entries at all.
-            // If we have no history, abort.
-            if currentItem == nil {
-                return nil
-            }
-            
-            let backList = tab.webView?.backForwardList.backList ?? []
-            let forwardList = tab.webView?.backForwardList.forwardList ?? []
-            let urls = (backList + [currentItem] + forwardList).map { $0.url }
-            let currentPage = -forwardList.count
-            self.sessionData = SessionData(currentPage: currentPage, urls: urls, lastUsedTime: tab.lastExecutedTime ?? Date.now())
-        } else {
-            self.sessionData = tab.sessionData
-        }
+        super.init()
     }
     
     required init?(coder: NSCoder) {
@@ -71,6 +57,7 @@ class SavedTab: NSObject, NSCoding {
         self.title = coder.decodeObject(forKey: "title") as? String
         self.isPrivate = coder.decodeBool(forKey: "isPrivate")
         self.faviconURL = coder.decodeObject(forKey: "faviconURL") as? String
+        self.url = coder.decodeObject(forKey: "url") as? URL
     }
     
     func encode(with coder: NSCoder) {
@@ -80,31 +67,6 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(title, forKey: "title")
         coder.encode(isPrivate, forKey: "isPrivate")
         coder.encode(faviconURL, forKey: "faviconURL")
-    }
-
-    func configureSavedTabUsing(_ tab: Tab, imageStore: DiskImageStore? = nil) -> Tab {
-        // Since this is a restored tab, reset the URL to be loaded as that will be handled by the SessionRestoreHandler
-        tab.url = nil
-
-        if let faviconURL = faviconURL {
-            let icon = Favicon(url: faviconURL, date: Date())
-            icon.width = 1
-            tab.favicons.append(icon)
-        }
-
-        if let screenshotUUID = screenshotUUID,
-            let imageStore = imageStore {
-            tab.screenshotUUID = screenshotUUID
-            imageStore.get(screenshotUUID.uuidString) >>== { screenshot in
-                if tab.screenshotUUID == screenshotUUID {
-                    tab.setScreenshot(screenshot, revUUID: false)
-                }
-            }
-        }
-
-        tab.sessionData = sessionData
-        tab.lastTitle = title
-
-        return tab
+        coder.encode(url, forKey: "url")
     }
 }

@@ -62,8 +62,11 @@ struct ImageButtonWithLabel: View {
     var body: some View {
         Link(destination: link.url) {
             ZStack(alignment: .leading) {
-                ContainerRelativeShape()
-                    .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
+                if !isSmall {
+                    ContainerRelativeShape()
+                        .fill(LinearGradient(gradient: Gradient(colors: link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing))
+                }
+                
                 VStack (alignment: .center, spacing: 50.0){
                     HStack(alignment: .top) {
                         VStack(alignment: .leading){

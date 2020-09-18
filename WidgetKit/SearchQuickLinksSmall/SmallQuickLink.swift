@@ -7,20 +7,24 @@ import SwiftUI
 import WidgetKit
 
 struct IntentProvider: IntentTimelineProvider {
-    typealias Intent = QuickLinkSelectionIntent
-    public typealias Entry = QuickLinkEntry
-
-    public func snapshot(for configuration: Intent, with context: Context, completion: @escaping (QuickLinkEntry) -> ()) {
+    func placeholder(in context: Context) -> QuickLinkEntry {
+        return QuickLinkEntry(date: Date(), link: .search)
+    }
+    
+    func getSnapshot(for configuration: QuickLinkSelectionIntent, in context: Context, completion: @escaping (QuickLinkEntry) -> Void) {
         let entry = QuickLinkEntry(date: Date(), link: QuickLink.from(configuration))
         completion(entry)
     }
-
-    public func timeline(for configuration: Intent, with context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    
+    func getTimeline(for configuration: QuickLinkSelectionIntent, in context: Context, completion: @escaping (Timeline<QuickLinkEntry>) -> Void) {
         let link = QuickLink.from(configuration)
         let entries = [QuickLinkEntry(date: Date(), link: link)]
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }
+    
+    typealias Intent = QuickLinkSelectionIntent
+    public typealias Entry = QuickLinkEntry
 }
 
 struct QuickLinkEntry: TimelineEntry {
@@ -34,6 +38,8 @@ struct SmallQuickLinkView : View {
     @ViewBuilder
     var body: some View {
         ImageButtonWithLabel(isSmall: true, link: entry.link)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(LinearGradient(gradient: Gradient(colors: entry.link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing)).widgetURL(entry.link.url)
     }
 }
 
@@ -41,7 +47,7 @@ struct SmallQuickLinkWidget: Widget {
     private let kind: String = "Quick Actions - Small"
 
     public var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: QuickLinkSelectionIntent.self, provider: IntentProvider(), placeholder: SmallQuickLinkView(entry: QuickLinkEntry(date: Date(), link: .search))) { entry in
+        IntentConfiguration(kind: kind, intent: QuickLinkSelectionIntent.self, provider: IntentProvider()) { entry in
             SmallQuickLinkView(entry: entry)
         }
         .supportedFamilies([.systemSmall])
