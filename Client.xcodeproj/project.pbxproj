@@ -5160,7 +5160,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -rf .venv; bash $PWD/Build/iOS/MozillaAppServices.framework/sdk_generator.sh -m $SRCROOT/docs -g MozillaAppServices\n";
+			shellScript = "rm -rf .venv; bash $PWD/Carthage/Build/iOS/MozillaAppServices.framework/sdk_generator.sh -m $SRCROOT/docs -g MozillaAppServices\n";
 		};
 		E4A69F612048AFEA00D9017B /* Copy Carthage Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
