@@ -1036,6 +1036,13 @@
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
 		};
+		C8963D59251913B400E6B214 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E69DB0741E97DEA9008A67E6;
+			remoteInfo = SyncTelemetry;
+		};
 		D01489FF220B9D44008A6EEF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
@@ -1142,13 +1149,6 @@
 			remoteInfo = Client;
 		};
 		E69DB0881E97DEAA008A67E6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = E69DB0741E97DEA9008A67E6;
-			remoteInfo = SyncTelemetry;
-		};
-		E69DB0A61E97DEF6008A67E6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
 			proxyType = 1;
@@ -4279,7 +4279,6 @@
 				2F77F6B91ABCAF0700484F3A /* PBXTargetDependency */,
 				2F11EE501ABCAE910083902D /* PBXTargetDependency */,
 				E4EE05B01BA3A0A10021B3A7 /* PBXTargetDependency */,
-				E69DB0A71E97DEF6008A67E6 /* PBXTargetDependency */,
 			);
 			name = Sync;
 			productName = Sync;
@@ -4375,6 +4374,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				C8963D5A251913B400E6B214 /* PBXTargetDependency */,
 				2FCAE23C1ABB520700877008 /* PBXTargetDependency */,
 			);
 			name = Storage;
@@ -6103,6 +6103,11 @@
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 7BEB645C1C7346100092C02E /* PBXContainerItemProxy */;
 		};
+		C8963D5A251913B400E6B214 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E69DB0741E97DEA9008A67E6 /* SyncTelemetry */;
+			targetProxy = C8963D59251913B400E6B214 /* PBXContainerItemProxy */;
+		};
 		D0148A00220B9D44008A6EEF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = ios;
@@ -6173,11 +6178,6 @@
 			isa = PBXTargetDependency;
 			target = E69DB0741E97DEA9008A67E6 /* SyncTelemetry */;
 			targetProxy = E69DB0881E97DEAA008A67E6 /* PBXContainerItemProxy */;
-		};
-		E69DB0A71E97DEF6008A67E6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = E69DB0741E97DEA9008A67E6 /* SyncTelemetry */;
-			targetProxy = E69DB0A61E97DEF6008A67E6 /* PBXContainerItemProxy */;
 		};
 		E6F965141B2F1CF20034B023 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -6307,7 +6307,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Firefox.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				INFOPLIST_FILE = Extensions/Today/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_TODAY";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
@@ -6358,7 +6357,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Firefox.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_NOTIFICATIONSERVICE";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
@@ -6373,8 +6371,8 @@
 				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/FirefoxBeta.entitlements";
 				INFOPLIST_FILE = Extensions/NotificationService/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_BETA -DMOZ_TARGET_NOTIFICATIONSERVICE";
-				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
-				PRODUCT_NAME = NotificationService2;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)2";
+				PRODUCT_NAME = NotificationService;
 				PROVISIONING_PROFILE_SPECIFIER = "BR FirefoxBeta NotificationService";
 				SKIP_INSTALL = NO;
 			};
@@ -6463,7 +6461,6 @@
 		4354D3E324EEEEC5001184F6 /* Firefox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				INFOPLIST_FILE = WidgetKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
@@ -6511,7 +6508,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				INFOPLIST_FILE = Client/Info.plist;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID)";
 				PRODUCT_MODULE_NAME = Client;
@@ -6535,7 +6531,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "$(inherit)Extensions/Entitlements/Firefox.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				INFOPLIST_FILE = Extensions/ShareTo/Info.plist;
 				OTHER_SWIFT_FLAGS = "-DMOZ_CHANNEL_RELEASE -DMOZ_TARGET_SHARETO";
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).$(PRODUCT_NAME)";
