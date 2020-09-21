@@ -98,6 +98,11 @@ class FirefoxAccountSignInViewController: UIViewController {
         text.append(createOne)
         text.append(space)
         text.append(rest)
+        
+        let font = DynamicFontHelper().DefaultSmallFontBold
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 4
+        text.addAttributes([.paragraphStyle: paragraphStyle], range: NSMakeRange(0, text.length))
 
         label.textColor = UIColor.Photon.Grey80
         label.attributedText = text
@@ -105,7 +110,6 @@ class FirefoxAccountSignInViewController: UIViewController {
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.font = DynamicFontHelper().DefaultSmallFontBold
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(createAccountTapped))
         label.addGestureRecognizer(tapGesture)
         label.isUserInteractionEnabled = true
