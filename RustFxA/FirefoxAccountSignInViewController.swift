@@ -109,6 +109,8 @@ class FirefoxAccountSignInViewController: UIViewController {
         
         return label
     }()
+    
+    lazy var scrollView = UIScrollView()
             
     private let profile: Profile
     
@@ -166,17 +168,23 @@ class FirefoxAccountSignInViewController: UIViewController {
     // MARK: Subview Layout Functions
     
     func addSubviews() {
-        view.addSubview(qrSignInLabel)
-        view.addSubview(pairImageView)
-        view.addSubview(instructionsLabel)
-        view.addSubview(scanButton)
-        view.addSubview(emailButton)
-        view.addSubview(createAccountButton)
+        scrollView.addSubview(qrSignInLabel)
+        scrollView.addSubview(pairImageView)
+        scrollView.addSubview(instructionsLabel)
+        scrollView.addSubview(scanButton)
+        scrollView.addSubview(emailButton)
+        scrollView.addSubview(createAccountButton)
+        
+        view.addSubview(scrollView)
     }
     
     func addViewConstraints() {
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
         qrSignInLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.snp_topMargin).offset(50)
+            make.top.equalTo(scrollView.snp_topMargin).offset(50)
             make.centerX.equalToSuperview()
             make.width.equalToSuperview()
         }
@@ -207,6 +215,7 @@ class FirefoxAccountSignInViewController: UIViewController {
             make.top.equalTo(emailButton.snp.bottomMargin).offset(40)
             make.centerX.equalToSuperview()
             make.width.equalTo(emailButton.snp.width).multipliedBy(0.8)
+            make.bottom.equalTo(scrollView.snp.bottom).offset(-20)
         }
     }
     
