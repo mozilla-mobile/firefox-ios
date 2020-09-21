@@ -90,10 +90,13 @@ class FirefoxAccountSignInViewController: UIViewController {
     
     lazy var createAccountButton: UILabel = {
        let label = UILabel()
-        let text = NSMutableAttributedString(string: "No Account? ")
-        let createOne = NSAttributedString(string: "Create one", attributes: [.foregroundColor: UIColor.Photon.Blue50])
-        let rest = NSAttributedString(string: " to sync Firefox between devices.")
+        let space = NSAttributedString(string: " ")
+        let text = NSMutableAttributedString(string: Strings.FxASignin_CreateAccountPt1)
+        let createOne = NSAttributedString(string: Strings.FxASignin_CreateAccountPt2, attributes: [.foregroundColor: UIColor.Photon.Blue50])
+        let rest = NSAttributedString(string: Strings.FxASignin_CreateAccountPt3)
+        text.append(space)
         text.append(createOne)
+        text.append(space)
         text.append(rest)
 
         label.textColor = UIColor.Photon.Grey80
