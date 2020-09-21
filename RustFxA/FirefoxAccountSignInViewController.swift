@@ -87,6 +87,28 @@ class FirefoxAccountSignInViewController: UIViewController {
         button.titleLabel?.font = DynamicFontHelper().MediumSizeBoldFontAS
         return button
     }()
+    
+    lazy var createAccountButton: UILabel = {
+       let label = UILabel()
+        let text = NSMutableAttributedString(string: "No Account? ")
+        let createOne = NSAttributedString(string: "Create one", attributes: [.foregroundColor: UIColor.Photon.Blue50])
+        let rest = NSAttributedString(string: " to sync Firefox between devices.")
+        text.append(createOne)
+        text.append(rest)
+
+        label.textColor = UIColor.Photon.Grey80
+        label.attributedText = text
+        label.textAlignment = .center
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.font = DynamicFontHelper().DefaultSmallFontBold
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(createAccountTapped))
+        label.addGestureRecognizer(tapGesture)
+        label.isUserInteractionEnabled = true
+        
+        return label
+    }()
             
     private let profile: Profile
     
@@ -149,6 +171,7 @@ class FirefoxAccountSignInViewController: UIViewController {
         view.addSubview(instructionsLabel)
         view.addSubview(scanButton)
         view.addSubview(emailButton)
+        view.addSubview(createAccountButton)
     }
     
     func addViewConstraints() {
@@ -180,6 +203,11 @@ class FirefoxAccountSignInViewController: UIViewController {
             make.width.equalTo(327)
             make.height.equalTo(44)
         }
+        createAccountButton.snp.makeConstraints { make in
+            make.top.equalTo(emailButton.snp.bottomMargin).offset(40)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(emailButton.snp.width).multipliedBy(0.8)
+        }
     }
     
     func handleDarkMode() {
@@ -207,6 +235,12 @@ class FirefoxAccountSignInViewController: UIViewController {
             self?.dismissVC()
         }
         TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "email"])
+        navigationController?.pushViewController(fxaWebVC, animated: true)
+    }
+    
+    @objc func createAccountTapped(_ sender: UITapGestureRecognizer) {
+        let fxaWebVC = FxAWebViewController(pageType: .emailLoginFlow, profile: profile, dismissalStyle: fxaDismissStyle, deepLinkParams: deepLinkParams)
+        TelemetryWrapper.recordEvent(category: .firefoxAccount, method: .qrPairing, object: telemetryObject, extras: ["flow_type": "create"])
         navigationController?.pushViewController(fxaWebVC, animated: true)
     }
 }
