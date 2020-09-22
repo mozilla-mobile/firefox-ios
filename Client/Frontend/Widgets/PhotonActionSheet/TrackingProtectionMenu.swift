@@ -172,13 +172,13 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight
         }
         addToSafelistNoSwitch.customRender = { label, _ in
-            label.textColor = UIColor.black
+            label.textColor = UIColor.theme.tableView.headerTextLight
         }
 
         let blockersDescriptionString: String = {
-            if (blocker.blockingStrengthPref == .strict) {
+            if blocker.blockingStrengthPref == .strict {
                 return Strings.StrictETPWithITP
-            } else if (blocker.blockingStrengthPref == .basic) {
+            } else if blocker.blockingStrengthPref == .basic {
                 return Strings.StandardETPWithITP
             } else {
                 return Strings.TPPageMenuNoTrackersBlocked
@@ -213,14 +213,14 @@ extension PhotonActionSheetProtocol {
         
         var noblockeditems = PhotonActionSheetItem(title: "", accessory: .Text)
         noblockeditems.customRender = { title, contentView in
-            let l = UILabel()
-            l.numberOfLines = 0
-            l.textAlignment = .center
-            l.textColor = UIColor.theme.tableView.headerTextLight
-            l.text = Strings.TPPageMenuNoTrackersBlocked
-            l.accessibilityIdentifier = "tp.no-trackers-blocked"
-            contentView.addSubview(l)
-            l.snp.makeConstraints { make in
+            let label = UILabel()
+            label.numberOfLines = 0
+            label.textAlignment = .center
+            label.textColor = UIColor.theme.tableView.headerTextLight
+            label.text = Strings.TPPageMenuNoTrackersBlocked
+            label.accessibilityIdentifier = "tp.no-trackers-blocked"
+            contentView.addSubview(label)
+            label.snp.makeConstraints { make in
                 make.center.equalToSuperview()
                 make.width.equalToSuperview().inset(40)
             }
@@ -232,13 +232,13 @@ extension PhotonActionSheetProtocol {
         var items: [[PhotonActionSheetItem]]
         
         // ETP is off: show no blocked items description
-        if (isSafelisted) {
+        if isSafelisted {
             items = [[addToSafelistSwitch]] + [[noblockeditems]]
         }
         // ETP is on
         else {
             // Standard mode: show no switch
-            if (blocker.blockingStrengthPref == .basic) {
+            if blocker.blockingStrengthPref == .basic {
                 items = [[addToSafelistNoSwitch]] + [[blockedtitle, blockersDescription]]
             }
             // Strict mode: show switch
