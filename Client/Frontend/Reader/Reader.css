@@ -34,24 +34,24 @@
 
 @font-face {
     font-family: serif;
-    src: url('/reader-mode/fonts/CharisSILR.ttf');
+    src: url('/reader-mode/fonts/NewYorkMedium-Regular.otf');
 }
 
 @font-face {
     font-family: serif;
-    src: url('/reader-mode/fonts/CharisSILB.ttf');
+    src: url('/reader-mode/fonts/NewYorkMedium-Bold.otf');
     font-weight: bold;
 }
 
 @font-face {
     font-family: serif;
-    src: url('/reader-mode/fonts/CharisSILI.ttf');
+    src: url('/reader-mode/fonts/NewYorkMedium-RegularItalic.otf');
     font-style: italic;
 }
 
 @font-face {
     font-family: serif;
-    src: url('/reader-mode/fonts/CharisSILBI.ttf');
+    src: url('/reader-mode/fonts/NewYorkMedium-BoldItalic.otf');
     font-weight: bold;
     font-style: italic;
 }
