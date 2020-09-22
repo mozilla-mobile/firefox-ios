@@ -42,12 +42,19 @@ class L10nBaseSnapshotTests: XCTestCase {
         app.activate()
     }
 
-    func waitForExistence(_ element: XCUIElement) {
-        let exists = NSPredicate(format: "exists == true")
-
-        expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 20, handler: nil)
+    func waitForExistence(_ element: XCUIElement, timeout: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+            waitFor(element, with: "exists == true", timeout: timeout, file: file, line: line)
     }
+
+    private func waitFor(_ element: XCUIElement, with predicateString: String, description: String? = nil, timeout: TimeInterval = 5.0, file: String, line: UInt) {
+            let predicate = NSPredicate(format: predicateString)
+            let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+            let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+            if result != .completed {
+                let message = description ?? "Expect predicate \(predicateString) for \(element.description)"
+                self.recordFailure(withDescription: message, inFile: file, atLine: Int(line), expected: false)
+            }
+        }
 
     func waitForNoExistence(_ element: XCUIElement) {
         let exists = NSPredicate(format: "exists != true")

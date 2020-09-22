@@ -106,9 +106,11 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func test10PageMenuOnWebPage() {
-           navigator.goto(PageOptionsMenu)
-           snapshot("MenuOnWebPage-03")
-           navigator.back()
+        navigator.goto(BrowserTab)
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        navigator.goto(PageOptionsMenu)
+        snapshot("MenuOnWebPage-03")
+        navigator.back()
        }
 
     func test11FxASignInPage() {

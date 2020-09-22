@@ -116,6 +116,9 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func test7BookmarksTableContextMenu() {
         navigator.openURL(loremIpsumURL2)
+        // There is no other way the test work with the new Copied.. snackbar ahow on iOS14
+        sleep(1)
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 5)
         navigator.performAction(Action.Bookmark)
         navigator.createNewTab()
         navigator.goto(BookmarksPanelContextMenu)
@@ -135,6 +138,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func test8ETPperSite() {
         // Website without blocked elements
         navigator.openURL(loremIpsumURL2)
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 5)
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
         navigator.goto(TrackingProtectionContextMenuDetails)
         snapshot("TrackingProtectionEnabledPerSite-01")
         navigator.performAction(Action.TrackingProtectionperSiteToggle)
