@@ -319,7 +319,7 @@ class FontTypeButton: UIButton {
         case .serif,
              .serifBold:
             setTitle(NSLocalizedString("Serif", comment: "Font type setting in the reading view settings"), for: [])
-            let f = UIFont(name: "Charis SIL", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+            let f = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             titleLabel?.font = f
         }
     }
@@ -383,7 +383,7 @@ class FontSizeLabel: UILabel {
                 font = UIFont(name: "FiraSans-Book", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
             case .serif,
                  .serifBold:
-                font = UIFont(name: "Charis SIL", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
+                font = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderBigFontSize)
             }
         }
     }
@@ -426,7 +426,7 @@ class ThemeButton: UIButton {
                 titleLabel?.font = UIFont(name: "FiraSans-Book", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             case .serif,
                  .serifBold:
-                titleLabel?.font = UIFont(name: "Charis SIL", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
+                titleLabel?.font = UIFont(name: "NewYorkMedium-Regular", size: DynamicFontHelper.defaultHelper.ReaderStandardFontSize)
             }
         }
     }
