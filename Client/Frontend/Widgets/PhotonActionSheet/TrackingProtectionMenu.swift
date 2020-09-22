@@ -146,24 +146,7 @@ extension PhotonActionSheetProtocol {
             return PhotonActionSheetUX.RowHeight - 10
         }
 
-        let xsitecookies = PhotonActionSheetItem(title: Strings.TPCrossSiteCookiesBlocked, iconString: "tp-cookie", accessory: .Disclosure) { action, _ in
-            let desc = Strings.TPCategoryDescriptionCrossSite
-            self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.advertising, BlocklistCategory.analytics])
-        }
-        let social = PhotonActionSheetItem(title: Strings.TPSocialBlocked, iconString: "tp-socialtracker", accessory: .Disclosure) { action,  _ in
-            let desc = Strings.TPCategoryDescriptionSocial
-            self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.social])
-        }
-        let fingerprinters = PhotonActionSheetItem(title: Strings.TPFingerprintersBlocked, iconString: "tp-fingerprinter", accessory: .Disclosure) { action, _ in
-            let desc = Strings.TPCategoryDescriptionFingerprinters
-            self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.fingerprinting])
-        }
-        let cryptomining = PhotonActionSheetItem(title: Strings.TPCryptominersBlocked, iconString: "tp-cryptominer", accessory: .Disclosure) { action, _ in
-            let desc = Strings.TPCategoryDescriptionCryptominers
-            self.showDomainTable(title: action.title, description: desc, blocker: blocker, categories: [BlocklistCategory.cryptomining])
-        }
-
-        var addToSafelist = PhotonActionSheetItem(title: Strings.ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
+        var addToSafelistSwitch = PhotonActionSheetItem(title: Strings.ETPOn, isEnabled: !isSafelisted, accessory: .Switch) { _, cell in
             LeanPlumClient.shared.track(event: .trackingProtectionSafeList)
             TelemetryWrapper.recordEvent(category: .action, method: .add, object: .trackingProtectionSafelist)
             ContentBlocker.shared.safelist(enable: tab.contentBlocker?.status != .safelisted, url: currentURL) {
@@ -172,16 +155,42 @@ extension PhotonActionSheetProtocol {
                 cell.backgroundView?.setNeedsDisplay()
             }
         }
-        addToSafelist.customRender = { title, _ in
+        addToSafelistSwitch.customRender = { title, _ in
             if tab.contentBlocker?.status == .safelisted {
                 title.text = Strings.ETPOff
             } else {
                 title.text = Strings.ETPOn
             }
         }
-        addToSafelist.accessibilityId = "tp.add-to-safelist"
-        addToSafelist.customHeight = { _ in
+        addToSafelistSwitch.accessibilityId = "tp.add-to-safelist"
+        addToSafelistSwitch.customHeight = { _ in
             return PhotonActionSheetUX.RowHeight
+        }
+        
+        var addToSafelistNoSwitch = PhotonActionSheetItem(title: Strings.ETPOn, accessory: .Text)
+        addToSafelistNoSwitch.customHeight = { _ in
+            return PhotonActionSheetUX.RowHeight
+        }
+        addToSafelistNoSwitch.customRender = { label, _ in
+            label.textColor = UIColor.theme.tableView.headerTextLight
+        }
+
+        let blockersDescriptionString: String = {
+            if blocker.blockingStrengthPref == .strict {
+                return Strings.StrictETPWithITP
+            } else if blocker.blockingStrengthPref == .basic {
+                return Strings.StandardETPWithITP
+            } else {
+                return Strings.TPPageMenuNoTrackersBlocked
+            }
+        }()
+        
+        var blockersDescription = PhotonActionSheetItem(title: blockersDescriptionString, accessory: .Text)
+        blockersDescription.customRender = { label, _ in
+            label.numberOfLines = 3
+        }
+        blockersDescription.customHeight = { _ in
+            return PhotonActionSheetUX.RowHeight + 70
         }
 
         let settings = PhotonActionSheetItem(title: Strings.TPProtectionSettings, iconString: "settings") { _, _ in
@@ -201,54 +210,43 @@ extension PhotonActionSheetProtocol {
                 bvc.present(controller, animated: true, completion: nil)
             }
         }
-
-        var items = [[blockedtitle]]
-
-        let count = [BlocklistCategory.analytics, BlocklistCategory.advertising].reduce(0) { result, item in
-            return result + (blocker.stats.domains[item]?.count ?? 0)
+        
+        var noblockeditems = PhotonActionSheetItem(title: "", accessory: .Text)
+        noblockeditems.customRender = { title, contentView in
+            let label = UILabel()
+            label.numberOfLines = 0
+            label.textAlignment = .center
+            label.textColor = UIColor.theme.tableView.headerTextLight
+            label.text = Strings.TPPageMenuNoTrackersBlocked
+            label.accessibilityIdentifier = "tp.no-trackers-blocked"
+            contentView.addSubview(label)
+            label.snp.makeConstraints { make in
+                make.center.equalToSuperview()
+                make.width.equalToSuperview().inset(40)
+            }
         }
-
-        if count > 0 {
-            items[0].append(xsitecookies)
+        noblockeditems.customHeight = { _ in
+            return 180
         }
         
-        if !(blocker.stats.domains[.social]?.isEmpty ?? true) {
-            items[0].append(social)
+        var items: [[PhotonActionSheetItem]]
+        
+        // ETP is off: show no blocked items description
+        if isSafelisted {
+            items = [[addToSafelistSwitch]] + [[noblockeditems]]
         }
-
-        if !(blocker.stats.domains[.fingerprinting]?.isEmpty ?? true) {
-            items[0].append(fingerprinters)
-        }
-
-        if !(blocker.stats.domains[.cryptomining]?.isEmpty ?? true) {
-            items[0].append(cryptomining)
-        }
-
-        if items[0].count == 1 {
-            // no items were blocked
-            var noblockeditems = PhotonActionSheetItem(title: "", accessory: .Text)
-            noblockeditems.customRender = { title, contentView in
-                let l = UILabel()
-                l.numberOfLines = 0
-                l.textAlignment = .center
-                l.textColor = UIColor.theme.tableView.headerTextLight
-                l.text = Strings.TPPageMenuNoTrackersBlocked
-                l.accessibilityIdentifier = "tp.no-trackers-blocked"
-                contentView.addSubview(l)
-                l.snp.makeConstraints { make in
-                    make.center.equalToSuperview()
-                    make.width.equalToSuperview().inset(40)
-                }
+        // ETP is on
+        else {
+            // Standard mode: show no switch
+            if blocker.blockingStrengthPref == .basic {
+                items = [[addToSafelistNoSwitch]] + [[blockedtitle, blockersDescription]]
             }
-            noblockeditems.customHeight = { _ in
-                return 180
+            // Strict mode: show switch
+            else {
+                items = [[addToSafelistSwitch]] + [[blockedtitle, blockersDescription]]
             }
-
-            items = [[noblockeditems]]
         }
-
-        items = [[addToSafelist]] + items + [[settings]]
-        return items
+        return items + [[settings]]
     }
 
     @available(iOS 11.0, *)
