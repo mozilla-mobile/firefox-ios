@@ -92,7 +92,7 @@ extension PhotonActionSheetProtocol {
             }
         }
 
-        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled {
+        if let url = tab.webView?.url, let helper = tab.contentBlocker, helper.isEnabled, helper.blockingStrengthPref == .strict {
             let isSafelisted = helper.status == .safelisted
 
             let title = !isSafelisted ? Strings.TrackingProtectionReloadWithout : Strings.TrackingProtectionReloadWith
