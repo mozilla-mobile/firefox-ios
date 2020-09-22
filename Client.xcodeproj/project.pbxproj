@@ -255,6 +255,10 @@
 		3D9CAA1C1EFCD655002434DD /* ClipBoardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D9CAA1B1EFCD655002434DD /* ClipBoardTests.swift */; };
 		3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEFED071F55EBE300F8620C /* TrackingProtectionTests.swift */; };
 		3E82980324BE4C31000A59FF /* FxATelemetryUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */; };
+		43118CDD251A9CA700F24376 /* libShared.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* libShared.a */; };
+		43118CF3251A9CCA00F24376 /* TabArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* TabArchiver.swift */; };
+		43118D07251A9CD100F24376 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
+		43118D1B251A9CE000F24376 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
 		4334145424C63779001541F3 /* IntroScreenSyncViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */; };
 		4334145724C6378B001541F3 /* IntroScreenWelcomeViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
@@ -1014,6 +1018,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = F84B21BD1A090F8100AAB793;
 			remoteInfo = Client;
+		};
+		43118CDE251A9CAD00F24376 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = F84B21B61A090F8100AAB793 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 288A2D851AB8B3260023ABC3;
+			remoteInfo = Shared;
 		};
 		7B9BF92E1E435DE400CB24F4 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2116,6 +2127,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				43118CDD251A9CA700F24376 /* libShared.a in Frameworks */,
 				047F9B2924E1FE1C00CD7DF7 /* SwiftUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4258,6 +4270,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				43118CDF251A9CAD00F24376 /* PBXTargetDependency */,
 			);
 			name = WidgetKitExtension;
 			productName = WidgetKitExtension;
@@ -5234,13 +5247,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				047F9B3E24E1FF4000CD7DF7 /* SearchQuickLinks.swift in Sources */,
+				43118CF3251A9CCA00F24376 /* TabArchiver.swift in Sources */,
 				DA9FD88624E213CD00168D1E /* Helpers.swift in Sources */,
 				1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */,
 				DA9FD88424E213B500168D1E /* SmallQuickLink.swift in Sources */,
 				1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */,
+				43118D07251A9CD100F24376 /* SavedTab.swift in Sources */,
 				1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */,
 				43BA967D2512D15900EB6134 /* Strings.swift in Sources */,
 				047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */,
+				43118D1B251A9CE000F24376 /* SessionData.swift in Sources */,
 				047F9B2C24E1FE1C00CD7DF7 /* WidgetKit.swift in Sources */,
 				1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */,
 				DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */,
@@ -6105,6 +6121,11 @@
 			isa = PBXTargetDependency;
 			target = F84B21BD1A090F8100AAB793 /* Client */;
 			targetProxy = 3BFE4B0C1D342FB900DDF53F /* PBXContainerItemProxy */;
+		};
+		43118CDF251A9CAD00F24376 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 288A2D851AB8B3260023ABC3 /* Shared */;
+			targetProxy = 43118CDE251A9CAD00F24376 /* PBXContainerItemProxy */;
 		};
 		7B9BF92F1E435DE400CB24F4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

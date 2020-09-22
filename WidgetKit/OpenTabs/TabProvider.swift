@@ -2,10 +2,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-// Commenting it out until it is refactored
-
-/*
- 
 import SwiftUI
 import WidgetKit
 import UIKit
@@ -71,5 +67,3 @@ struct OpenTabsEntry: TimelineEntry {
     let favicons: [String : Image]
     let tabs: [SavedTab]
 }
-
-*/
