@@ -97,10 +97,10 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
-		<string>CharisSILB.ttf</string>
-		<string>CharisSILBI.ttf</string>
-		<string>CharisSILI.ttf</string>
-		<string>CharisSILR.ttf</string>
+		<string>NewYorkMedium-Bold.otf</string>
+		<string>NewYorkMedium-BoldItalic.otf</string>
+		<string>NewYorkMedium-Regular.otf</string>
+		<string>NewYorkMedium-RegularItalic.otf</string>
 		<string>FiraSans-Bold.ttf</string>
 		<string>FiraSans-BoldItalic.ttf</string>
 		<string>FiraSans-Book.ttf</string>
