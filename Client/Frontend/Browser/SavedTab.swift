@@ -4,7 +4,6 @@
 
 import Foundation
 import WebKit
-import Storage
 import Shared
 
 class SavedTab: NSObject, NSCoding {
