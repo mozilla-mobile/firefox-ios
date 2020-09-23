@@ -6,6 +6,7 @@ import XCTest
 
 class ReaderViewTest: BaseTestCase {
     // Smoketest
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testLoadReaderContent() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
@@ -14,8 +15,9 @@ class ReaderViewTest: BaseTestCase {
         // The settings of reader view are shown as well as the content of the web site
         waitForExistence(app.buttons["Display Settings"])
         XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
-    }
+    }*/
 
+    
     private func addContentToReaderView() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
@@ -34,6 +36,7 @@ class ReaderViewTest: BaseTestCase {
     }
 
     // Smoketest
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testAddToReadingList() {
         // Navigate to reading list
         navigator.goto(BrowserTabMenu)
@@ -57,8 +60,9 @@ class ReaderViewTest: BaseTestCase {
         waitForExistence(savedToReadingList)
         XCTAssertTrue(savedToReadingList.exists)
         checkReadingListNumberOfItems(items: 1)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testAddToReadingListPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.performAction(Action.OpenNewTabFromTabTray)
@@ -88,8 +92,9 @@ class ReaderViewTest: BaseTestCase {
         navigator.toggleOff(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testMarkAsReadAndUreadFromReaderView() {
         addContentToReaderView()
 
@@ -100,8 +105,9 @@ class ReaderViewTest: BaseTestCase {
         // Mark the content as unread, so the mark as read button appear
         app.buttons["Mark as Unread"].tap()
         waitForExistence(app.buttons["Mark as Read"])
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testRemoveFromReadingView() {
         addContentToReaderView()
         // Once the content has been added, remove it
@@ -117,8 +123,9 @@ class ReaderViewTest: BaseTestCase {
         waitForExistence(app.buttons["LibraryPanels.ReadingList"])
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 0)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testMarkAsReadAndUnreadFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -136,8 +143,9 @@ class ReaderViewTest: BaseTestCase {
         app.tables.cells.buttons["trailing1"].tap()
         savedToReadingList.swipeLeft()
         waitForExistence(app.buttons["trailing1"].staticTexts["Mark as  Unread"])
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testRemoveFromReadingList() {
         addContentToReaderView()
         navigator.goto(BrowserTabMenu)
@@ -155,8 +163,9 @@ class ReaderViewTest: BaseTestCase {
 
         // Reader list view should be empty
         checkReadingListNumberOfItems(items: 0)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testAddToReadingListFromPageOptionsMenu() {
         // First time Reading list is empty
         navigator.goto(LibraryPanel_ReadingList)
@@ -172,8 +181,9 @@ class ReaderViewTest: BaseTestCase {
         navigator.nowAt(BrowserTab)
         navigator.goto(LibraryPanel_ReadingList)
         checkReadingListNumberOfItems(items: 1)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testOpenSavedForReadingLongPressInNewTab() {
         let numTab = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTab, "1")
@@ -194,8 +204,9 @@ class ReaderViewTest: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         let numTabAfter = app.buttons["Show Tabs"].value as? String
         XCTAssertEqual(numTabAfter, "2")
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testRemoveSavedForReadingLongPress() {
         // Add item to Reading List
         addContentToReaderView()
@@ -210,14 +221,15 @@ class ReaderViewTest: BaseTestCase {
         // Verify the item has been removed
         waitForNoExistence(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"])
         XCTAssertFalse(app.tables["ReadingTable"].cells.staticTexts["The Book of Mozilla"].exists)
-    }
+    }*/
 
     // Smoketest
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7345
     func testAddToReaderListOptions() {
         addContentToReaderView()
         // Check that Settings layouts options are shown
         waitForExistence(app.buttons["ReaderModeBarView.settingsButton"], timeout: 10)
         app.buttons["ReaderModeBarView.settingsButton"].tap()
         XCTAssertTrue(app.buttons["Light"].exists)
-    }
+    }*/
 }
