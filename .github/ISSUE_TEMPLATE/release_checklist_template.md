@@ -18,7 +18,7 @@ Branch setup, steps typically done when creating new version branch
     - [ ] Link to commit diff between versions
 - [ ] File P.I. request
 - [ ] Release Notes updated
-- [ ] Submit build to Apple (Select YES to IDFA, 'Attribute this app installation to a previously served advertisement')
+- [ ] Submit build to Apple (Select NO to IDFA)
 - [ ] Get App Store screenshots and all locales if necessary
 - [ ] Release with 7-day rollout 
 
