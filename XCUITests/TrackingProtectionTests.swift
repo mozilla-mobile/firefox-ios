@@ -105,6 +105,7 @@ class TrackingProtectionTests: BaseTestCase {
     }
 
     // Smoketest
+    /* Disable due to update ETP to ITP
     func testEnableDisableTPforSite() {
         disableTrackingProtectionForSite()
         waitUntilPageLoad()
@@ -123,7 +124,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(TrackingProtectionContextMenuDetails)
         navigator.performAction(Action.CloseTPContextMenu)
         navigator.nowAt(BrowserTab)
-    }
+    }*/
 
     func testDisableForSiteDoesNotDisableForOthersSameTab() {
         disableTrackingProtectionForSite()

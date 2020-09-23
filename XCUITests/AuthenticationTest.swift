@@ -41,11 +41,15 @@ class AuthenticationTest: BaseTestCase {
 
         //send app to background, and re-enter
         XCUIDevice.shared.press(.home)
+
+        // Let's be sure the app is backgrounded
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
 
         // Need to be sure the app is ready
         navigator.nowAt(LockedLoginsSettings)
-        waitForExistence(app.navigationBars["Enter Passcode"])
+        waitForExistence(app.navigationBars["Enter Passcode"], timeout: 10)
     }
 
     func testPromptPassCodeUponReentryWithDelay() {
