@@ -104,7 +104,7 @@ class DefaultBrowserCard: UIView {
             make.left.equalTo(image.snp.right)
             make.width.lessThanOrEqualTo(223)
             make.bottom.equalTo(settingsButton.snp.top).offset(-16)
-            make.top.equalToSuperview().offset(20)
+            make.top.equalToSuperview().offset(30)
         }
         settingsButton.snp.makeConstraints { make in
             make.top.equalTo(topView.snp.bottom).offset(16)
