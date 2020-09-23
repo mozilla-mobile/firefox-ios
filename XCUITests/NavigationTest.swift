@@ -176,7 +176,7 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
+        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
 
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
@@ -365,7 +365,8 @@ class NavigationTest: BaseTestCase {
     }
 
     // Smoketest
-    func testSSL() {
+    /*f Disabled due to bug https://github.com/mozilla-mobile/firefox-ios/issues/7356
+     func testSSL() {
         navigator.openURL("https://expired.badssl.com/")
         waitForExistence(app.buttons["Advanced"], timeout: 10)
         app.buttons["Advanced"].tap()
@@ -374,7 +375,7 @@ class NavigationTest: BaseTestCase {
         app.links["Visit site anyway"].tap()
         waitForExistence(app.webViews.otherElements["expired.badssl.com"], timeout: 10)
         XCTAssertTrue(app.webViews.otherElements["expired.badssl.com"].exists)
-    }
+    }*/
 
     // In this test, the parent window opens a child and in the child it creates a fake link 'link-created-by-parent'
     func testWriteToChildPopupTab() {
