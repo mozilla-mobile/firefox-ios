@@ -49,10 +49,32 @@ struct TopSitesHandler {
         }
     }
     
+    // TODO: Read before actually writing
+    static func writeTopSitesForWidget(topSites: [TopSite]) {
+        let tabStateData = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
+
+        DispatchQueue.main.async {
+            archiver.encode(topSites, forKey: "topSites")
+            archiver.finishEncoding()
+            
+            if let path = topSitesArchivePath() {
+                tabStateData.write(toFile: path, atomically: true)
+            }
+        }
+    }
+    
     static func defaultTopSites(_ profile: Profile) -> [Site] {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
+    }
+    
+    static func topSitesArchivePath() -> String? {
+        let profilePath: String?
+        profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
+        guard let path = profilePath else { return nil }
+        return URL(fileURLWithPath: path).appendingPathComponent("topSites.archive").path
     }
     
     static let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"

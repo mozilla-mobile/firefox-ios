@@ -341,6 +341,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             self.receivedURLs.removeAll()
             application.applicationIconBadgeNumber = 0
         }
+        
+        transformTopSitesAndAttemptWrite()
 
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
@@ -381,8 +383,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
         
         tabManager.preserveTabs()
+        
         if #available(iOS 14.0, *) {
+            // Since we only need the topSites data in the archiver, let's write it
+            // only if iOS 14 is available.
+            transformTopSitesAndAttemptWrite()
+            
             WidgetCenter.shared.reloadAllTimelines()
+        }
+    }
+    
+    private func transformTopSitesAndAttemptWrite() {
+        if let profile = profile {
+            TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { result in
+                let topSites = result.map { TopSite(url: $0.url, title: $0.title, faviconUrl: $0.icon?.url) }
+                
+                TopSitesHandler.writeTopSitesForWidget(topSites: topSites)
+            }
         }
     }
 
