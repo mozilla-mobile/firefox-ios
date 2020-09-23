@@ -578,17 +578,6 @@ class Tab: NSObject {
         return sequence(first: parent) { $0?.parent }.contains { $0 == ancestor }
     }
 
-    func injectUserScriptWith(fileName: String, type: String = "js", injectionTime: WKUserScriptInjectionTime = .atDocumentEnd, mainFrameOnly: Bool = true) {
-        guard let webView = self.webView else {
-            return
-        }
-        if let path = Bundle.main.path(forResource: fileName, ofType: type),
-            let source = try? String(contentsOfFile: path) {
-            let userScript = WKUserScript(source: source, injectionTime: injectionTime, forMainFrameOnly: mainFrameOnly)
-            webView.configuration.userContentController.addUserScript(userScript)
-        }
-    }
-
     func observeURLChanges(delegate: URLChangeDelegate) {
         self.urlDidChangeDelegate = delegate
     }
@@ -658,7 +647,7 @@ private class TabContentScriptManager: NSObject, WKScriptMessageHandler {
         // If this helper handles script messages, then get the handler name and register it. The Browser
         // receives all messages and then dispatches them to the right TabHelper.
         if let scriptMessageHandlerName = helper.scriptMessageHandlerName() {
-            tab.webView?.configuration.userContentController.add(self, name: scriptMessageHandlerName)
+            tab.webView?.configuration.userContentController.addInDefaultContentWorld(scriptMessageHandler: self, name: scriptMessageHandlerName)
         }
     }
 
