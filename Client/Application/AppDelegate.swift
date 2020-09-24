@@ -342,8 +342,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             application.applicationIconBadgeNumber = 0
         }
         
-        transformTopSitesAndAttemptWrite()
-
+        if #available(iOS 14.0, *) {
+            // TopSite is only available in iOS14 for WidgetKit hence we don't need to write for lower versions
+            transformTopSitesAndAttemptWrite()
+        }
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             self.profile?.cleanupHistoryIfNeeded()
