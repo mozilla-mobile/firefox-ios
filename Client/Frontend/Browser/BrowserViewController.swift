@@ -948,6 +948,12 @@ class BrowserViewController: UIViewController {
             guard let loading = change?[.newKey] as? Bool else { break }
             setupMiddleButtonStatus(isLoading: loading)
         case .URL:
+            // Special case for "about:blank" popups, if the webView.url is nil, keep the tab url as "about:blank"
+            if tab.url?.absoluteString == "about:blank" && webView.url == nil {
+                print(webView.url?.origin)
+                break
+            }
+
             // To prevent spoofing, only change the URL immediately if the new URL is on
             // the same origin as the current URL. Otherwise, do nothing and wait for
             // didCommitNavigation to confirm the page load.
