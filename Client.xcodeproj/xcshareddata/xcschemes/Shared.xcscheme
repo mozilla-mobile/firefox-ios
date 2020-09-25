@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "288A2D851AB8B3260023ABC3"
-               BuildableName = "libShared.a"
+               BuildableName = "Shared.framework"
                BlueprintName = "Shared"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -54,7 +54,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "288A2D851AB8B3260023ABC3"
-            BuildableName = "libShared.a"
+            BuildableName = "Shared.framework"
             BlueprintName = "Shared"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "288A2D851AB8B3260023ABC3"
-            BuildableName = "libShared.a"
+            BuildableName = "Shared.framework"
             BlueprintName = "Shared"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
