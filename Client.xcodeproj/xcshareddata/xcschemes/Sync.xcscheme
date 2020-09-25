@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2827315D1ABC9BE600AA1954"
-               BuildableName = "libSync.a"
+               BuildableName = "Sync.framework"
                BlueprintName = "Sync"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -76,7 +76,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2827315D1ABC9BE600AA1954"
-            BuildableName = "libSync.a"
+            BuildableName = "Sync.framework"
             BlueprintName = "Sync"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
@@ -92,7 +92,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2827315D1ABC9BE600AA1954"
-            BuildableName = "libSync.a"
+            BuildableName = "Sync.framework"
             BlueprintName = "Sync"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
