@@ -52,9 +52,7 @@ struct TopSitesHandler {
     // We compare WidgetKit top sites with client sites so as to avoid updating it if they are same
     static func compareAndUpdateWidgetKitTopSite(clientSites:[TopSite])  {
         let widgetSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesArchivePath())
-        guard clientSites != widgetSites  else {
-            return
-        }
+        guard clientSites != widgetSites else { return }
         TopSitesHandler.writeTopSitesForWidget(topSites: clientSites)
     }
     
@@ -66,7 +64,7 @@ struct TopSitesHandler {
             archiver.encode(topSites, forKey: "topSites")
             archiver.finishEncoding()
             
-            if let path = topSitesArchivePath() {
+            if let path = topSitesWidgetKitArchivePath() {
                 tabStateData.write(toFile: path, atomically: true)
             }
         }
@@ -78,7 +76,7 @@ struct TopSitesHandler {
         return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
     }
     
-    static func topSitesArchivePath() -> String? {
+    static func topSitesWidgetKitArchivePath() -> String? {
         let profilePath: String?
         profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
         guard let path = profilePath else { return nil }
