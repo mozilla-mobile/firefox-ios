@@ -8,7 +8,7 @@ import Shared
 
 // This extension is for WidgetKit to fetch top sites
 extension SiteArchiver {
-    static func fetchTopSites(topSiteArchivePath: String?) -> [TopSite] {
+    static func fetchTopSitesForWidget(topSiteArchivePath: String?) -> [TopSite] {
         guard let topSiteArchivePath = topSiteArchivePath,
               FileManager.default.fileExists(atPath: topSiteArchivePath),
               let tabData = try? Data(contentsOf: URL(fileURLWithPath: topSiteArchivePath)) else {
@@ -50,6 +50,11 @@ class TopSite: NSObject, NSCoding {
         self.url = url
         self.title = title
         self.faviconUrl = faviconUrl
+    }
+    
+    override func isEqual(_ object: Any?) -> Bool {
+        guard let site = object as? TopSite else { return false }
+        return self.url == site.url
     }
     
     let url: String

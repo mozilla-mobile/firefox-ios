@@ -49,7 +49,15 @@ struct TopSitesHandler {
         }
     }
     
-    // TODO: Read before actually writing
+    // We compare WidgetKit top sites with client sites so as to avoid updating it if they are same
+    static func compareAndUpdateWidgetKitTopSite(clientSites:[TopSite])  {
+        let widgetSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesArchivePath())
+        guard clientSites != widgetSites  else {
+            return
+        }
+        TopSitesHandler.writeTopSitesForWidget(topSites: clientSites)
+    }
+    
     static func writeTopSitesForWidget(topSites: [TopSite]) {
         let tabStateData = NSMutableData()
         let archiver = NSKeyedArchiver(forWritingWith: tabStateData)

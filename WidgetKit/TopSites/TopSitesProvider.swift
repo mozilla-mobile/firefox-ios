@@ -14,7 +14,7 @@ struct TopSitesProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
-        let topSites = SiteArchiver.fetchTopSites(topSiteArchivePath: topSitesArchivePath())
+        let topSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesArchivePath())
         
         let faviconFetchGroup = DispatchGroup()
         var tabFaviconDictionary = [String : Image]()
