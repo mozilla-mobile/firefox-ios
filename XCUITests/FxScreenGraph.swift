@@ -108,6 +108,8 @@ let allHomePanels = [
     LibraryPanel_SyncedTabs
 ]
 
+let iOS_Settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+
 class Action {
     static let LoadURL = "LoadURL"
     static let LoadURLByTyping = "LoadURLByTyping"
