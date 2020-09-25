@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E69DB0741E97DEA9008A67E6"
-               BuildableName = "libSyncTelemetry.a"
+               BuildableName = "SyncTelemetry.framework"
                BlueprintName = "SyncTelemetry"
                ReferencedContainer = "container:Client.xcodeproj">
             </BuildableReference>
@@ -54,7 +54,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E69DB0741E97DEA9008A67E6"
-            BuildableName = "libSyncTelemetry.a"
+            BuildableName = "SyncTelemetry.framework"
             BlueprintName = "SyncTelemetry"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E69DB0741E97DEA9008A67E6"
-            BuildableName = "libSyncTelemetry.a"
+            BuildableName = "SyncTelemetry.framework"
             BlueprintName = "SyncTelemetry"
             ReferencedContainer = "container:Client.xcodeproj">
          </BuildableReference>
