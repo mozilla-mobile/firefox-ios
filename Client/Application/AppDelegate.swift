@@ -341,10 +341,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             self.receivedURLs.removeAll()
             application.applicationIconBadgeNumber = 0
         }
-
+        
+        if #available(iOS 14.0, *) {
+            // TopSite is only available in iOS14 for WidgetKit hence we don't need to write for lower versions
+            transformTopSitesAndAttemptWrite()
+        }
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             self.profile?.cleanupHistoryIfNeeded()
+        }
+    }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        if #available(iOS 14.0, *) {
+            // Since we only need the topSites data in the archiver, let's write it
+            // only if iOS 14 is available.
+            transformTopSitesAndAttemptWrite()
+            
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 
@@ -381,8 +395,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
         
         tabManager.preserveTabs()
-        if #available(iOS 14.0, *) {
-            WidgetCenter.shared.reloadAllTimelines()
+    }
+    
+    private func transformTopSitesAndAttemptWrite() {
+        if let profile = profile {
+            TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { result in
+                let topSites = result.map { TopSite(url: $0.url, title: $0.title, faviconUrl: $0.icon?.url) }
+                
+                TopSitesHandler.compareAndUpdateWidgetKitTopSite(clientSites: topSites)
+            }
         }
     }
 
