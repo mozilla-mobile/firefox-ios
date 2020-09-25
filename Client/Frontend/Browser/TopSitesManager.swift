@@ -49,10 +49,38 @@ struct TopSitesHandler {
         }
     }
     
+    // We compare WidgetKit top sites with client sites so as to avoid updating it if they are same
+    static func compareAndUpdateWidgetKitTopSite(clientSites:[TopSite])  {
+        let widgetSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesArchivePath())
+        guard clientSites != widgetSites else { return }
+        TopSitesHandler.writeTopSitesForWidget(topSites: clientSites)
+    }
+    
+    static func writeTopSitesForWidget(topSites: [TopSite]) {
+        let tabStateData = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWith: tabStateData)
+
+        DispatchQueue.main.async {
+            archiver.encode(topSites, forKey: "topSites")
+            archiver.finishEncoding()
+            
+            if let path = topSitesWidgetKitArchivePath() {
+                tabStateData.write(toFile: path, atomically: true)
+            }
+        }
+    }
+    
     static func defaultTopSites(_ profile: Profile) -> [Site] {
         let suggested = SuggestedSites.asArray()
         let deleted = profile.prefs.arrayForKey(DefaultSuggestedSitesKey) as? [String] ?? []
         return suggested.filter({deleted.firstIndex(of: $0.url) == .none})
+    }
+    
+    static func topSitesWidgetKitArchivePath() -> String? {
+        let profilePath: String?
+        profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
+        guard let path = profilePath else { return nil }
+        return URL(fileURLWithPath: path).appendingPathComponent("topSites.archive").path
     }
     
     static let DefaultSuggestedSitesKey = "topSites.deletedSuggestedSites"

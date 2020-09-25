@@ -2,16 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-// Commenting it out until it is refactored
-
-/*
-
 import SwiftUI
 import WidgetKit
 import Combine
-import Shared
-import Storage
-import SyncTelemetry
 
 struct TopSitesWidget: Widget {
     private let kind: String = "Top Sites"
@@ -30,7 +23,7 @@ struct TopSitesView: View {
     let entry: TopSitesEntry
     
     @ViewBuilder
-    func topSitesItem(_ site: Site) -> some View {
+    func topSitesItem(_ site: TopSite) -> some View {
         let url = site.url
         
         Link(destination: linkToContainingApp("?url=\(url)", query: "open-url")) {
@@ -57,9 +50,12 @@ struct TopSitesView: View {
     
     var body: some View {
         VStack {
-            // TODO: Always fill with 16 squares, no matter what!
             HStack {
-                if entry.sites.count > 3 {
+                if entry.sites.count == 0 {
+                    ForEach(0..<4, id: \.self) { _ in
+                        emptySquare
+                    }
+                } else if entry.sites.count > 3 {
                     ForEach(entry.sites.prefix(4), id: \.url) { tab in
                         topSitesItem(tab)
                             .background(Color.clear).frame(maxWidth: .infinity)
@@ -73,7 +69,7 @@ struct TopSitesView: View {
                         emptySquare
                     }
                 }
-            }.padding(.top)
+            }.padding([.top, .horizontal])
             Spacer()
             HStack {
                 if entry.sites.count > 7 {
@@ -92,7 +88,7 @@ struct TopSitesView: View {
                         emptySquare
                     }
                 }
-            }.padding(.bottom)
+            }.padding([.bottom, .horizontal])
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background((Color(UIColor(red: 0.11, green: 0.11, blue: 0.13, alpha: 1.00))))
@@ -103,5 +99,3 @@ struct TopSitesView: View {
         return URL(string: urlString)!
     }
 }
-
-*/
