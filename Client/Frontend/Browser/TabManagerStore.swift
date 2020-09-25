@@ -17,7 +17,7 @@ class TabManagerStore {
 
     // Init this at startup with the tabs on disk, and then on each save, update the in-memory tab state.
     fileprivate lazy var archivedStartupTabs = {
-        return TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
+        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
     }()
 
     init(imageStore: DiskImageStore?, _ fileManager: FileManager = FileManager.default) {
@@ -146,6 +146,6 @@ class TabManagerStore {
 extension TabManagerStore {
     func testTabCountOnDisk() -> Int {
         assert(AppConstants.IsRunningTest)
-        return TabArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).count
+        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).count
     }
 }

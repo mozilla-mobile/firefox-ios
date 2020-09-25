@@ -6,7 +6,7 @@ import Foundation
 import Sentry
 import Shared
 
-struct TabArchiver {
+struct SiteArchiver {
     static func tabsToRestore(tabsStateArchivePath: String?) -> [SavedTab] {
         guard let tabStateArchivePath = tabsStateArchivePath,
               FileManager.default.fileExists(atPath: tabStateArchivePath),

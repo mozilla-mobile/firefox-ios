@@ -2,15 +2,9 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-// Commenting it out until it is refactored
-
-/*
-
 import SwiftUI
 import WidgetKit
 import Shared
-import Storage
-import SyncTelemetry
 
 struct TopSitesProvider: TimelineProvider {
     public typealias Entry = TopSitesEntry
@@ -20,48 +14,54 @@ struct TopSitesProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
-        let profile = BrowserProfile(localName: "profile")
-        TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { topSites in
+        let topSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesArchivePath())
+        
+        let faviconFetchGroup = DispatchGroup()
+        var tabFaviconDictionary = [String : Image]()
+        
+        // Concurrently fetch each of the top sites icons
+        for site in topSites {
+            faviconFetchGroup.enter()
 
-            let faviconFetchGroup = DispatchGroup()
-            var tabFaviconDictionary = [String : Image]()
-            
-            // Concurrently fetch each of the top sites icons
-            for site in topSites {
-                faviconFetchGroup.enter()
+            if let siteURL = URL(string: site.url) {
                 
                 // Get the bundled top site favicon, if available
-                if let siteURL = URL(string: site.url) {
-                    if let bundled = FaviconFetcher.getBundledIcon(forUrl: siteURL),
-                       let uiImage = UIImage(contentsOfFile: bundled.filePath) {
-                        let color = bundled.bgcolor.components.alpha < 0.01 ? UIColor.white : bundled.bgcolor
-                        
-                        tabFaviconDictionary[site.url] = Image(uiImage: uiImage.withBackgroundAndPadding(color: color))
-                        faviconFetchGroup.leave()
-                    } else {
-                        // Fetch the favicon from the faviconURL if available
-                        if let faviconPath = site.icon?.url, let faviconURL = URL(string: faviconPath) {
-                            getImageForUrl(faviconURL, completion: { image in
-                                if image != nil {
-                                    tabFaviconDictionary[site.url] = image
-                                }
-                                faviconFetchGroup.leave()
-                                
-                            })
-                        } else {
-                            faviconFetchGroup.leave()
-                        }
-                    }
-                } else {
+                if let bundled = FaviconFetcher.getBundledIcon(forUrl: siteURL),
+                   let uiImage = UIImage(contentsOfFile: bundled.filePath) {
+                    let color = bundled.bgcolor.components.alpha < 0.01 ? UIColor.white : bundled.bgcolor
+                    
+                    tabFaviconDictionary[site.url] = Image(uiImage: uiImage.withBackgroundAndPadding(color: color))
                     faviconFetchGroup.leave()
+                } else {
+                    // Fetch the favicon from the faviconURL if available
+                    if let faviconPath = site.faviconUrl, let faviconURL = URL(string: faviconPath) {
+                        getImageForUrl(faviconURL, completion: { image in
+                            if image != nil {
+                                // Use the image we got back
+                                tabFaviconDictionary[site.url] = image
+                            }
+                            
+                            faviconFetchGroup.leave()
+                            
+                        })
+                    } else {
+                        // If no favicon is available, fall back to the "letter" favicon
+                        tabFaviconDictionary[site.url] =
+                            Image(uiImage: FaviconFetcher.letter(forUrl: siteURL))
+                        
+                        faviconFetchGroup.leave()
+                    }
                 }
+            } else {
+                // We don't even have a real URL, not much we can do to get a favicon.
+                faviconFetchGroup.leave()
             }
-
-            faviconFetchGroup.notify(queue: .main) {
-                let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites)
-
-                completion(topSitesEntry)
-            }
+        }
+        
+        faviconFetchGroup.notify(queue: .main) {
+            let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites)
+            
+            completion(topSitesEntry)
         }
     }
 
@@ -72,18 +72,18 @@ struct TopSitesProvider: TimelineProvider {
         })
     }
 
-    fileprivate func tabsStateArchivePath() -> String? {
+    fileprivate func topSitesArchivePath() -> String? {
         let profilePath: String?
         profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
         guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
+        return URL(fileURLWithPath: path).appendingPathComponent("topSites.archive").path
     }
 }
 
 struct TopSitesEntry: TimelineEntry {
     let date: Date
     let favicons: [String : Image]
-    let sites: [Site]
+    let sites: [TopSite]
 }
 
 fileprivate extension UIImage {
@@ -116,5 +116,3 @@ fileprivate extension UIColor {
         return (r, g, b, a)
     }
 }
-
-*/

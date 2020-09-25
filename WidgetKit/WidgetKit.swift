@@ -13,6 +13,7 @@ struct FirefoxWidgets: WidgetBundle {
         SmallQuickLinkWidget()
         SearchQuickLinksWidget()
         OpenTabsWidget()
+        TopSitesWidget()
     }
 }
 #endif
