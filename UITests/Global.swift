@@ -258,11 +258,7 @@ class BrowserUtils {
     }
     
     class func enterUrlAddressBar(_ tester: KIFUITestActor, typeUrl: String) {
-        if #available(iOS 14.0, *) {
-            tester.tapView(withAccessibilityLabel: "Search or enter address")
-        } else  {
-            tester.tapView(withAccessibilityIdentifier: "url")
-        }
+        tester.tapView(withAccessibilityIdentifier: "url")
         tester.enterText(intoCurrentFirstResponder: typeUrl)
         tester.enterText(intoCurrentFirstResponder: "\n")
     }
