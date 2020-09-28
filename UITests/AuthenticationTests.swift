@@ -40,7 +40,7 @@ class AuthenticationTests: KIFTestCase {
 
         // Save the credentials.
         tester().tapView(withAccessibilityIdentifier: "SaveLoginPrompt.saveLoginButton")
-
+        tester().waitForAnimationsToFinish(withTimeout: 3)
         logOut()
         loadAuthPage()
 
