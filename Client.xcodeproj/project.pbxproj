@@ -502,6 +502,11 @@
 		C877039625222FDC006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C877039725222FE6006E38EB /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		C877039825222FEA006E38EB /* Storage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; };
+		C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		C87703D325223EAC006E38EB /* Storage.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2FCAE21A1ABB51F800877008 /* Storage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		C87703D425223EB1006E38EB /* Account.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2FA435FB1ABB83B4008031D1 /* Account.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		C87703D525223EB7006E38EB /* Sync.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 2827315E1ABC9BE600AA1954 /* Sync.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		C87703D625223EBE006E38EB /* SyncTelemetry.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = E69DB0751E97DEA9008A67E6 /* SyncTelemetry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		C892DA0D22D39A980080F1F7 /* TrackingProtectionMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C892DA0C22D39A980080F1F7 /* TrackingProtectionMenu.swift */; };
 		C8CFF4E422F9FDB6002CC6BD /* effective_tld_names.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */; };
 		C8DFFE492294AAB600296DB1 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */; };
@@ -1224,6 +1229,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				C87703D625223EBE006E38EB /* SyncTelemetry.framework in Copy Frameworks */,
+				C87703D525223EB7006E38EB /* Sync.framework in Copy Frameworks */,
+				C87703D425223EB1006E38EB /* Account.framework in Copy Frameworks */,
+				C87703D325223EAC006E38EB /* Storage.framework in Copy Frameworks */,
+				C87703D225223EA5006E38EB /* Shared.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
