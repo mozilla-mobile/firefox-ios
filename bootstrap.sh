@@ -17,6 +17,12 @@ if [ "$1" == "--force" ]; then
     rm -rf ~/Library/Caches/org.carthage.CarthageKit
 fi
 
+
+# Import locales
+git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git
+./ios-l10n-scripts/import-locales-firefox.sh
+
+# Run carthage
 ./carthage_command.sh
 
 # Install Node.js dependencies and build user scripts
