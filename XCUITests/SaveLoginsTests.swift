@@ -180,7 +180,6 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(app.tables["Login List"].cells.count, defaultNumRowsLoginsList + 1)
     }
 
-    /*// Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7342
     // Smoketest
     func testSavedLoginAutofilled() {
         navigator.openURL(urlLogin)
@@ -213,5 +212,5 @@ class SaveLoginTest: BaseTestCase {
         XCTAssertEqual(emailValue as! String, mailLogin)
         let passwordValue =  app.webViews.secureTextFields.element(boundBy: 0).value!
         XCTAssertEqual(passwordValue as! String, "••••••••")
-    }*/
+    }
 }

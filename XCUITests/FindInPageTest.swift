@@ -16,14 +16,14 @@ class FindInPageTests: BaseTestCase {
         XCTAssertTrue(app.textFields["FindInPage.searchField"].exists)
     }
 
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7341
     func testFindInLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         // Workaround until FxSGraph is fixed to allow the previos way with goto
         navigator.nowAt(BrowserTab)
 
-        waitForExistence(app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/, timeout: 15)
-        app/*@START_MENU_TOKEN@*/.buttons["TabLocationView.pageOptionsButton"]/*[[".buttons[\"Page Options Menu\"]",".buttons[\"TabLocationView.pageOptionsButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 15)
+        app.buttons["TabLocationView.pageOptionsButton"].tap()
         waitForExistence(app.tables["Context Menu"].cells["menu-FindInPage"], timeout: 10)
         app.tables["Context Menu"].cells["menu-FindInPage"].tap()
 
@@ -31,10 +31,9 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("Book")
         waitForExistence(app.textFields["Book"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
-    }*/
+    }
 
     // Smoketest
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7341
     func testFindFromMenu() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
@@ -68,9 +67,8 @@ class FindInPageTests: BaseTestCase {
         // Tapping on close dismisses the search bar
         navigator.goto(BrowserTab)
         waitForNoExistence(app.textFields["Book"])
-    }*/
+    }
 
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7341
     func testFindInPageTwoWordsSearch() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
@@ -80,9 +78,8 @@ class FindInPageTests: BaseTestCase {
         // Once there are matches, test previous/next buttons
         waitForExistence(app.staticTexts["1/6"])
         XCTAssertTrue(app.staticTexts["1/6"].exists)
-    }*/
+    }
 
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7341
     func testFindInPageTwoWordsSearchLargeDoc() {
         navigator.openURL("http://localhost:\(serverPort)/test-fixture/find-in-page-test.html")
         // Workaround until FxSGraph is fixed to allow the previos way with goto
@@ -95,9 +92,8 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("The Book of")
         waitForExistence(app.textFields["The Book of"], timeout: 15)
         XCTAssertEqual(app.staticTexts["FindInPage.matchCount"].label, "1/500+", "The book word count does match")
-    }*/
+    }
 
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7341
     func testFindInPageResultsPageShowHideContent() {
         userState.url = "lorem2.com"
         openFindInPageFromMenu()
@@ -107,9 +103,8 @@ class FindInPageTests: BaseTestCase {
         // There should be matches
         waitForExistence(app.staticTexts["1/5"])
         XCTAssertTrue(app.staticTexts["1/5"].exists)
-    }*/
+    }
 
-    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7341
     func testQueryWithNoMatches() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         openFindInPageFromMenu()
@@ -118,7 +113,7 @@ class FindInPageTests: BaseTestCase {
         app.textFields["FindInPage.searchField"].typeText("foo")
         waitForExistence(app.staticTexts["0/0"])
         XCTAssertTrue(app.staticTexts["0/0"].exists, "There should not be any matches")
-    }*/
+    }
 
     func testBarDissapearsWhenReloading() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
