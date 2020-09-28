@@ -76,6 +76,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitForExistence(app.cells.staticTexts["Enhanced Tracking Protection is ON for this site."])
     }
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7128
     func testMenuWhenThereAreBlockedElements() {
         // Open website which has trackers blocked
         navigator.openURL(websiteWithBlockedElements)
@@ -92,8 +93,9 @@ class TrackingProtectionTests: BaseTestCase {
         app.cells["tp-cookie"].tap()
         XCTAssertTrue(app.tables.cells.count > 0)
         app.cells["goBack"].tap()
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7128
     func testMenuWhenThereAreNotBlockedElements() {
         navigator.openURL(websiteWithoutBlockedElements)
         waitUntilPageLoad()
@@ -102,7 +104,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.goto(TrackingProtectionContextMenuDetails)
         waitForExistence(app.tables.cells.staticTexts[noTrackingElementsString])
         XCTAssertTrue(app.tables.cells.staticTexts[noTrackingElementsString].exists, "TP menu is wrong when there are not blocking elements")
-    }
+    }*/
 
     // Smoketest
     /* Disable due to update ETP to ITP
@@ -126,6 +128,7 @@ class TrackingProtectionTests: BaseTestCase {
         navigator.nowAt(BrowserTab)
     }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7128
     func testDisableForSiteDoesNotDisableForOthersSameTab() {
         disableTrackingProtectionForSite()
         navigator.goto(URLBarOpen)
@@ -136,8 +139,9 @@ class TrackingProtectionTests: BaseTestCase {
         checkTrackingProtectionEnabledForSite()
         navigator.performAction(Action.CloseTPContextMenu)
         navigator.nowAt(BrowserTab)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7128
     func testDisableForSiteDoesNotDisableForOthersDifferentTab() {
         disableTrackingProtectionForSite()
         navigator.openNewURL(urlString: differentWebsite)
@@ -146,8 +150,9 @@ class TrackingProtectionTests: BaseTestCase {
         checkTrackingProtectionEnabledForSite()
         navigator.performAction(Action.CloseTPContextMenu)
         navigator.nowAt(BrowserTab)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7128
     func testDisableforSiteIsKeptAfterBrowsing() {
         disableTrackingProtectionForSite()
 
@@ -161,15 +166,17 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
         checkTrackingProtectionDisabledForSite()
         navigator.goto(BrowserTab)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7128
     func testDisablingTPforOneSiteDoesNotChangeGeneralTPOption() {
         disableTrackingProtectionForSite()
 
         navigator.goto(TrackingProtectionSettings)
         XCTAssertTrue(app.switches["prefkey.trackingprotection.normalbrowsing"].isEnabled)
-    }
+    }*/
 
+    /* Disabled due to https://github.com/mozilla-mobile/firefox-ios/issues/7128
     func testOpenSettingsFromTPcontextMenu() {
         // Open website which has trackers blocked
         navigator.openURL(websiteWithBlockedElements)
@@ -196,7 +203,7 @@ class TrackingProtectionTests: BaseTestCase {
         waitUntilPageLoad()
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
         navigator.nowAt(BrowserTab)
-    }
+    }*/
 
     func testBasicMoreInfo() {
         navigator.goto(TrackingProtectionSettings)
