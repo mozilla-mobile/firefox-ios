@@ -10,17 +10,28 @@
 # CI services where the Carthage directory can be cached.
 #
 # Use the --force option to force a rebuild of the dependencies.
+# Use the --locale option to fetch and update locales only
 #
+
+getLocale()
+{
+  echo "Getting locale..."
+  git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git
+  ./ios-l10n-scripts/import-locales-firefox.sh
+}
+
+if [ "$1" == "--locale" ]; then
+  getLocale
+  exit 0
+fi
 
 if [ "$1" == "--force" ]; then
     rm -rf Carthage/*
     rm -rf ~/Library/Caches/org.carthage.CarthageKit
 fi
 
-
 # Import locales
-git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git
-./ios-l10n-scripts/import-locales-firefox.sh
+getLocale
 
 # Run carthage
 ./carthage_command.sh
