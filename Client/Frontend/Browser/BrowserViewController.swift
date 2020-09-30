@@ -1170,10 +1170,6 @@ class BrowserViewController: UIViewController {
                 webView.evaluateJavascriptInDefaultContentWorld("\(ReaderModeNamespace).checkReadability()")
             }
 
-            if urlBar.inOverlayMode, InternalURL.isValid(url: url), url.path.starts(with: "/\(AboutHomeHandler.path)") {
-                urlBar.leaveOverlayMode()
-            }
-
             TabEvent.post(.didChangeURL(url), for: tab)
         }
         
