@@ -1,11 +1,6 @@
 PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.$(CONFIGURATION)
 INFOPLIST_FILE = $(TARGET_NAME)/Info.plist
 
-MOZ_BUNDLE_DISPLAY_NAME = $(CONFIGURATION)
-MOZ_BUNDLE_DISPLAY_NAME[config=Fennec][sdk=*][arch=*] = $(CONFIGURATION) ($(USER))
-MOZ_BUNDLE_DISPLAY_NAME[config=FirefoxBeta][sdk=*][arch=*] = Firefox Beta
-MOZ_BUNDLE_ID = $(PRODUCT_BUNDLE_IDENTIFIER)
-
 CODE_SIGN_ENTITLEMENTS = Client/Entitlements/$(CONFIGURATION)Application.entitlements
 
 PRODUCT_MODULE_NAME = Client;
@@ -26,5 +21,5 @@ SWIFT_OBJC_BRIDGING_HEADER = $(PROJECT_DIR)/Client/Client-Bridging-Header.h
 
 PROVISIONING_PROFILE_SPECIFIER[config=Fennec][sdk=*][arch=*] = $(CONFIGURATION) Development
 PROVISIONING_PROFILE_SPECIFIER[config=FennecEnterprise][sdk=*][arch=*] = $(CONFIGURATION) Development
-PROVISIONING_PROFILE_SPECIFIERconfig=Firefox][sdk=*][arch=*] = BR $(CONFIGURATION) App Store
-PROVISIONING_PROFILE_SPECIFIERconfig=FirefoxBeta][sdk=*][arch=*] = BR $(CONFIGURATION) App Store
+PROVISIONING_PROFILE_SPECIFIER[config=Firefox][sdk=*][arch=*] = BR $(CONFIGURATION) App Store
+PROVISIONING_PROFILE_SPECIFIER[config=FirefoxBeta][sdk=*][arch=*] = BR $(CONFIGURATION) App Store

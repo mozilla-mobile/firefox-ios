@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import KIF
 
 /// This test should be disabled since getTopViewController() crashes with iOS 10
 /// ------------------------------------------------------------------------------

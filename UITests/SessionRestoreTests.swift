@@ -7,6 +7,7 @@ import WebKit
 import Shared
 import SwiftyJSON
 @testable import Client
+import KIF
 
 class SessionRestoreTests: KIFTestCase {
     fileprivate var webRoot: String!

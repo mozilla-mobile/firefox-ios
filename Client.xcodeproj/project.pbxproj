@@ -79,7 +79,6 @@
 		2816F0001B33E05400522243 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
 		281B029A1C037C1F005202C3 /* TestBrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B02991C037C1F005202C3 /* TestBrowserDB.swift */; };
 		281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B2BE91ADF4D90002917DC /* MockProfile.swift */; };
-		282731631ABC9BE600AA1954 /* Sync-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 282731621ABC9BE600AA1954 /* Sync-Bridging-Header.h */; };
 		282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BB1A1D1D3200576538 /* ClientPayload.swift */; };
 		2827319B1ABC9C2F00AA1954 /* KeysPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BD1A1D1D3200576538 /* KeysPayload.swift */; };
 		2827319C1ABC9C2F00AA1954 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BE1A1D1D3200576538 /* Record.swift */; };
@@ -725,7 +724,6 @@
 		E693F0D91E9D64BD0086DC17 /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693F0D81E9D64BD0086DC17 /* OptionalExtensions.swift */; };
 		E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* TabScrollController.swift */; };
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
-		E69DB0871E97DEAA008A67E6 /* SyncTelemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = E69DB0771E97DEA9008A67E6 /* SyncTelemetry.h */; };
 		E69DB0B71E97E2AC008A67E6 /* SyncTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0B51E97E2AC008A67E6 /* SyncTelemetry.swift */; };
 		E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */; };
 		E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */; };
@@ -3018,6 +3016,7 @@
 		C7C54345A164D550CF2BC575 /* kn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kn; path = kn.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C7D341F8BA6A9E44518C11C8 /* oc */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = oc; path = oc.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C7DB49358A6A84AA7391EEE6 /* ta */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ta; path = ta.lproj/Intro.strings; sourceTree = "<group>"; };
+		C803741A25268DC600C3F119 /* Library.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Library.xcconfig; path = Configuration/Library.xcconfig; sourceTree = "<group>"; };
 		C8154C5887169941126C530A /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C817B34C1FC609500086018E /* UIScrollViewSwizzled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScrollViewSwizzled.swift; sourceTree = "<group>"; };
 		C82CDD45233E8996002E2743 /* Tab+ChangeUserAgent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Tab+ChangeUserAgent.swift"; sourceTree = "<group>"; };
@@ -3144,6 +3143,7 @@
 		C8399D9422DE5E6200EFA5CA /* disconnect-block-social.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "disconnect-block-social.json"; sourceTree = "<group>"; };
 		C8464093BC0470D518B16C72 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C846D4CC2524EB3700E9D423 /* WidgetKitExtension.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = WidgetKitExtension.xcconfig; path = Configuration/WidgetKitExtension.xcconfig; sourceTree = "<group>"; };
+		C846D59E252509A100E9D423 /* UnitTest.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = UnitTest.xcconfig; path = Configuration/UnitTest.xcconfig; sourceTree = "<group>"; };
 		C8611CA11F71AEB900C3DE7D /* NoImageModeTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoImageModeTests.swift; sourceTree = "<group>"; };
 		C86758FD251E496300A3D599 /* Client.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Client.xcconfig; path = Configuration/Client.xcconfig; sourceTree = "<group>"; };
 		C8675911251E4A3300A3D599 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Configuration/Release.xcconfig; sourceTree = "<group>"; };
@@ -3158,6 +3158,7 @@
 		C8B34CBE911A7211E314D870 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/ClearHistoryConfirm.strings; sourceTree = "<group>"; };
 		C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = effective_tld_names.swift; sourceTree = "<group>"; };
 		C8D3475789EF0BC1B4457F1A /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
+		C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = UITest.xcconfig; path = Configuration/UITest.xcconfig; sourceTree = "<group>"; };
 		C8D9497CA0DF70586C706A76 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		C8DFFE482294AAB600296DB1 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		C8E18F1D222EDE4400E30E52 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
@@ -3574,7 +3575,7 @@
 		E4D34D9F8D6C64E9CE235E84 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = sv.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		E4D6BEB81A0930EC00F538BD /* LaunchScreen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LaunchScreen.xib; sourceTree = "<group>"; };
 		E4D749219953D78CDF92E3C0 /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-CN"; path = "zh-CN.lproj/ClearHistoryConfirm.strings"; sourceTree = "<group>"; };
-		E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Shared-Bridging-Header.h"; path = "../Shared-Bridging-Header.h"; sourceTree = "<group>"; };
+		E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Shared-Bridging-Header.h"; sourceTree = "<group>"; };
 		E4E0BB171AFBC9E4008D6260 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E4E25CCA1CA99E7400D0F088 /* HexExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexExtensionsTests.swift; sourceTree = "<group>"; };
 		E4E7EB6C1C4AED5E0094275D /* SupportUtilsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupportUtilsTests.swift; sourceTree = "<group>"; };
@@ -3586,8 +3587,6 @@
 		E59A418F9208400903902F07 /* ses */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ses; path = ses.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		E5C24864B9BA6790B352962E /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Search.strings; sourceTree = "<group>"; };
 		E5D343558F3C933F5CA7690C /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Storage.strings"; sourceTree = "<group>"; };
-		E60961861B62B8A700DD640F /* Fennec.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Fennec.xcconfig; path = Configuration/Fennec.xcconfig; sourceTree = "<group>"; };
-		E60961891B62B8C800DD640F /* Firefox.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Firefox.xcconfig; path = Configuration/Firefox.xcconfig; sourceTree = "<group>"; };
 		E60D03171D511398002FE3F6 /* SyncStatusResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncStatusResolver.swift; sourceTree = "<group>"; };
 		E60D03291D5118DB002FE3F6 /* SyncStatusResolverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncStatusResolverTests.swift; sourceTree = "<group>"; };
 		E6108FF81C84E91C005D25E8 /* BasePasscodeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePasscodeViewController.swift; sourceTree = "<group>"; };
@@ -3703,7 +3702,6 @@
 		E6CA4229B067C32CA10E19A9 /* ml */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ml; path = ml.lproj/Search.strings; sourceTree = "<group>"; };
 		E6CF28E61CB43B7900151AB3 /* SensitiveViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensitiveViewController.swift; sourceTree = "<group>"; };
 		E6D8D5E61B569D70009E5A58 /* BrowserTrayAnimators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrowserTrayAnimators.swift; sourceTree = "<group>"; };
-		E6DCC1ED1DCBB6AA00CEC4B7 /* Fennec.enterprise.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Fennec.enterprise.xcconfig; path = Configuration/Fennec.enterprise.xcconfig; sourceTree = "<group>"; };
 		E6DD408EAF352F4B541022BA /* or */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = or; path = or.lproj/HistoryPanel.strings; sourceTree = "<group>"; };
 		E6EAC5951B29CB3A00E1DE1E /* scrollablePage.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = scrollablePage.html; sourceTree = "<group>"; };
 		E6EC4E5DA51902A09A0F0957 /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = "hr.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -5339,11 +5337,12 @@
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				E4E0BB171AFBC9E4008D6260 /* Info.plist */,
+				E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */,
 				43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */,
 				C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */,
 				D35210E01CB2F16600FC5DCB /* Strings.swift */,
 				E650756F1E37F7AB006961AC /* Extensions */,
-				E4E0BB161AFBC9E4008D6260 /* Supporting Files */,
 				E65075621E37F7AB006961AC /* Accessibility.swift */,
 				EB7FFFBF20A9D38C003E1E34 /* AlertController.swift */,
 				E65075631E37F7AB006961AC /* AppConstants.swift */,
@@ -5383,18 +5382,12 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
-		E4E0BB161AFBC9E4008D6260 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				E4E0BB151AFBC9E4008D6260 /* Shared-Bridging-Header.h */,
-				E4E0BB171AFBC9E4008D6260 /* Info.plist */,
-			);
-			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		E60961841B62B7E100DD640F /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
+				C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */,
+				C846D59E252509A100E9D423 /* UnitTest.xcconfig */,
+				C803741A25268DC600C3F119 /* Library.xcconfig */,
 				C8675912251E4A3300A3D599 /* Common.xcconfig */,
 				C8675913251E4A3300A3D599 /* Debug.xcconfig */,
 				C8675911251E4A3300A3D599 /* Release.xcconfig */,
@@ -10159,55 +10152,50 @@
 /* Begin XCBuildConfiguration section */
 		282731771ABC9BE800AA1954 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Fennec;
 		};
 		2827317A1ABC9BE800AA1954 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
 		};
 		288A2DA01AB8B3260023ABC3 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Fennec;
 		};
 		2FA436151ABB83B4008031D1 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Fennec;
 		};
 		2FA436191ABB83B4008031D1 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = AccountTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
 		};
 		2FCAE2341ABB51F900877008 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Fennec;
 		};
 		2FCAE2381ABB51F900877008 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = StorageTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
 		};
@@ -10262,63 +10250,43 @@
 		};
 		3B43E3D71D95C48E00BBA9DB /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				ENABLE_TESTABILITY = YES;
-				INFOPLIST_FILE = StoragePerfTests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
 		};
 		3B43E3D81D95C48E00BBA9DB /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = StoragePerfTests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
 		};
 		3B43E3D91D95C48E00BBA9DB /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = StoragePerfTests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
 		};
 		3BFE4B0E1D342FB900DDF53F /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = XCUITests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
-				TEST_TARGET_NAME = Client;
 			};
 			name = Fennec;
 		};
 		3BFE4B0F1D342FB900DDF53F /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = XCUITests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
-				TEST_TARGET_NAME = Client;
 			};
 			name = Firefox;
 		};
 		3BFE4B101D342FB900DDF53F /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = XCUITests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
-				TEST_TARGET_NAME = Client;
 			};
 			name = FirefoxBeta;
 		};
@@ -10331,40 +10299,35 @@
 		};
 		4354D3E224EEEEC5001184F6 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8675AB6251E665200A3D599 /* Extension.xcconfig */;
+			baseConfigurationReference = C846D4CC2524EB3700E9D423 /* WidgetKitExtension.xcconfig */;
 			buildSettings = {
 			};
 			name = FennecEnterprise;
 		};
 		4354D3E324EEEEC5001184F6 /* Firefox */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8675AB6251E665200A3D599 /* Extension.xcconfig */;
+			baseConfigurationReference = C846D4CC2524EB3700E9D423 /* WidgetKitExtension.xcconfig */;
 			buildSettings = {
 			};
 			name = Firefox;
 		};
 		4354D3E424EEEEC5001184F6 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C8675AB6251E665200A3D599 /* Extension.xcconfig */;
+			baseConfigurationReference = C846D4CC2524EB3700E9D423 /* WidgetKitExtension.xcconfig */;
 			buildSettings = {
 			};
 			name = FirefoxBeta;
 		};
 		D39FA1681A83E0EC00EE869C /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = UITests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/UITests/UITests-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
 		};
 		D39FA1691A83E0EC00EE869C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				INFOPLIST_FILE = UITests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Release;
 		};
@@ -10384,11 +10347,8 @@
 		};
 		E448FC9F1AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = ClientTests/Info.plist;
-				PRODUCT_NAME = ClientTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
 		};
@@ -10401,178 +10361,155 @@
 		};
 		E448FCA21AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
 			};
 			name = Firefox;
 		};
 		E448FCA31AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Firefox;
 		};
 		E448FCA41AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Firefox;
 		};
 		E448FCA51AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = StorageTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
 		};
 		E448FCA61AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Firefox;
 		};
 		E448FCA71AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = AccountTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
 		};
 		E448FCA81AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Firefox;
 		};
 		E448FCA91AEE7A6000869B6C /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
 		};
 		E601384C1C89EAE600DF9756 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = L10nSnapshotTests;
-				TEST_TARGET_NAME = Client;
-				USES_XCTRUNNER = YES;
 			};
 			name = Fennec;
 		};
 		E601384D1C89EAE600DF9756 /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = L10nSnapshotTests;
-				TEST_TARGET_NAME = Client;
-				USES_XCTRUNNER = YES;
 			};
 			name = Firefox;
 		};
 		E601384E1C89EAE600DF9756 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = L10nSnapshotTests;
-				TEST_TARGET_NAME = Client;
-				USES_XCTRUNNER = YES;
 			};
 			name = FirefoxBeta;
 		};
 		E60138511C89EAE600DF9756 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = MarketingUITests;
 			};
 			name = Fennec;
 		};
 		E60138521C89EAE600DF9756 /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = MarketingUITests;
 			};
 			name = Firefox;
 		};
 		E60138531C89EAE600DF9756 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FirefoxBeta;
 		};
 		E69DB08D1E97DEAA008A67E6 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Fennec;
 		};
 		E69DB08E1E97DEAA008A67E6 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FennecEnterprise;
 		};
 		E69DB08F1E97DEAA008A67E6 /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = Firefox;
 		};
 		E69DB0901E97DEAA008A67E6 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FirefoxBeta;
 		};
 		E69DB0931E97DEAA008A67E6 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTelemetryTests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
 		};
 		E69DB0941E97DEAA008A67E6 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTelemetryTests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
 		};
 		E69DB0951E97DEAA008A67E6 /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTelemetryTests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
 		};
 		E69DB0961E97DEAA008A67E6 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTelemetryTests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
 		};
@@ -10606,144 +10543,113 @@
 		};
 		E6DCC20B1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC20C1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC20D1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC20E1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC2101DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = ClientTests/Info.plist;
-				PRODUCT_NAME = ClientTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC2111DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = UITests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/UITests/UITests-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC2131DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = StorageTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC2141DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = AccountTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC2151DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC2171DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SharedTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC2181DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = L10nSnapshotTests;
-				TEST_TARGET_NAME = Client;
-				USES_XCTRUNNER = YES;
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC2191DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				PRODUCT_NAME = MarketingUITests;
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC21A1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C8D7A72D2526B8D1001E5D7A /* UITest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = XCUITests/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = "";
-				PROVISIONING_PROFILE_SPECIFIER = "Bitrise Firefox iOS Dev - XCUI Tests";
-				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/XCUITests/XCUITests-Bridging-Header.h";
-				TEST_TARGET_NAME = Client;
 			};
 			name = FennecEnterprise;
 		};
 		E6DCC21B1DCBB6F100CEC4B7 /* FennecEnterprise */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = StoragePerfTests/Info.plist;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FennecEnterprise;
 		};
 		E6F965151B2F1CF20034B023 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SharedTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
 		};
 		E6F965171B2F1CF20034B023 /* Firefox */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SharedTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Firefox;
 		};
@@ -10763,11 +10669,8 @@
 		};
 		E6FCC42B1C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = ClientTests/Info.plist;
-				PRODUCT_NAME = ClientTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
 		};
@@ -10780,74 +10683,64 @@
 		};
 		E6FCC42F1C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
 			};
 			name = FirefoxBeta;
 		};
 		E6FCC4311C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FirefoxBeta;
 		};
 		E6FCC4321C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FirefoxBeta;
 		};
 		E6FCC4331C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = StorageTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Storage/Storage-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
 		};
 		E6FCC4341C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FirefoxBeta;
 		};
 		E6FCC4351C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				INFOPLIST_FILE = AccountTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Account/Account-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
 		};
 		E6FCC4361C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C803741A25268DC600C3F119 /* Library.xcconfig */;
 			buildSettings = {
 			};
 			name = FirefoxBeta;
 		};
 		E6FCC4371C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SyncTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/SyncTests/SyncTests-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
 		};
 		E6FCC43A1C40562400DF6113 /* FirefoxBeta */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = SharedTests/Info.plist;
-				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = FirefoxBeta;
 		};
@@ -10867,11 +10760,8 @@
 		};
 		F84B21E11A090F8100AAB793 /* Fennec */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C846D59E252509A100E9D423 /* UnitTest.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "";
-				INFOPLIST_FILE = ClientTests/Info.plist;
-				PRODUCT_NAME = ClientTests;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
 			};
 			name = Fennec;
 		};

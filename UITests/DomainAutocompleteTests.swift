@@ -4,6 +4,7 @@
 
 import Foundation
 import Shared
+import KIF
 
 class DomainAutocompleteTests: KIFTestCase {
     override func setUp() {

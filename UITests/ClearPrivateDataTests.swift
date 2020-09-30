@@ -7,6 +7,7 @@ import WebKit
 import UIKit
 import GCDWebServers
 @testable import Client
+import KIF
 
 class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 

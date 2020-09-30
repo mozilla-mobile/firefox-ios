@@ -1,3 +1,5 @@
+#include "Extension.xcconfig"
+
 PRODUCT_BUNDLE_IDENTIFIER=org.mozilla.ios.$(CONFIGURATION).WidgetKit
 
 CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/$(CONFIGURATION).entitlements
@@ -11,4 +13,3 @@ INFOPLIST_FILE = WidgetKit/Info.plist
 
 IPHONEOS_DEPLOYMENT_TARGET = 14.0
 
-SWIFT_OBJC_BRIDGING_HEADER =

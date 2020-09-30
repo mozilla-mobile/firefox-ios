@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import KIF
 
 class HistoryTests: KIFTestCase {
     fileprivate var webRoot: String!

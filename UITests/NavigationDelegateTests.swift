@@ -4,6 +4,7 @@
 
 import Foundation
 @testable import Client
+import KIF
 
 // WKWebView's WKNavigationDelegate is used for custom URL handling
 // such as telephone links, app store links, etc.

@@ -4,6 +4,7 @@
 
 import Foundation
 import WebKit
+import KIF
 
 class ReadingListTests: KIFTestCase, UITextFieldDelegate {
     fileprivate var webRoot: String!

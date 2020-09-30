@@ -4,6 +4,7 @@
 
 import Foundation
 @testable import Client
+import KIF
 
 class NoImageModeTests: KIFTestCase {
     
