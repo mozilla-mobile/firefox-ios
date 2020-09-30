@@ -5,6 +5,7 @@
 import XCTest
 import Storage
 
+@testable import Client
 class CertTests: XCTestCase {
     func testCertStore() {
         let certStore = CertStore()
