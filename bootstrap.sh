@@ -26,12 +26,19 @@ if [ "$1" == "--locale" ]; then
 fi
 
 if [ "$1" == "--force" ]; then
+    rm -rf firefoxios-l10n
+    rm -rf ios-l10n-scripts
     rm -rf Carthage/*
     rm -rf ~/Library/Caches/org.carthage.CarthageKit
 fi
 
 # Import locales
-getLocale
+if [ -d "/firefoxios-l10n" ] && [ -d "/ios-l10n-scripts" ]; then
+    echo "l10n directories found. Not downloading scripts."
+else
+    echo "l10n directory not found. Downloading repo and scripts."
+    getLocale
+fi
 
 # Run carthage
 ./carthage_command.sh
