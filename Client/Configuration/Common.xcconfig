@@ -23,8 +23,6 @@ LEANPLUM_ENVIRONMENT =
 LEANPLUM_KEY =
 MOZ_TODAY_WIDGET_SEARCH_DISPLAY_NAME = Firefox - Search
 OTHER_LDFLAGS = -ObjC -lxml2
-OTHER_LDFLAGS[sdk=iphoneos14.0] = -ObjC -lxml2 -weak_framework WidgetKit
-OTHER_LDFLAGS[sdk=iphonesimulator14.0] = -ObjC -lxml2  -weak_framework WidgetKit
 OTHER_SWIFT_FLAGS_common = -DMOZ_TARGET_CLIENT
 PRODUCT_NAME = $(TARGET_NAME)
 SDKROOT = iphoneos
