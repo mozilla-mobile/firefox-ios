@@ -6,6 +6,7 @@ import Foundation
 
 public struct LaunchArguments {
     public static let Test = "FIREFOX_TEST"
+    public static let PerformanceTest = "FIREFOX_PERFORMANCE_TEST"
     public static let SkipIntro = "FIREFOX_SKIP_INTRO"
     public static let SkipWhatsNew = "FIREFOX_SKIP_WHATS_NEW"
     public static let SkipETPCoverSheet = "FIREFOX_SKIP_ETP_COVER_SHEET"
@@ -16,4 +17,5 @@ public struct LaunchArguments {
 
     // After the colon, put the name of the file to load from test bundle
     public static let LoadDatabasePrefix = "FIREFOX_LOAD_DB_NAMED:"
+    public static let LoadTabsStateArchive = "LOAD_TABS_STATE_ARCHIVE_NAMED:" 
 }

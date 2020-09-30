@@ -37,6 +37,8 @@ public struct KeychainKey {
 public struct AppConstants {
     public static let IsRunningTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.Test)
 
+    public static let IsRunningPerfTest = NSClassFromString("XCTestCase") != nil || ProcessInfo.processInfo.arguments.contains(LaunchArguments.PerformanceTest)
+    
     public static let FxAiOSClientId = "1b1a3e44c54fbb58"
 
     /// Build Channel.
