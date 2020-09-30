@@ -218,4 +218,39 @@ class SearchTests: BaseTestCase {
         waitForExistence(app.textFields["url"], timeout: 20)
         waitForValueContains(app.textFields["url"], value: "google")
     }
+    
+    func testSearchIconOnAboutHome() {
+        waitForTabsButton()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        
+        // Search icon is displayed.
+        waitForExistence(app.buttons["TabToolbar.multiStateButton"])
+
+        XCTAssertEqual(app.buttons["TabToolbar.multiStateButton"].label, "Search")
+        XCTAssertTrue(app.buttons["TabToolbar.multiStateButton"].exists)
+        app.buttons["TabToolbar.multiStateButton"].tap()
+
+        let addressBar = app.textFields["address"]
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+    
+        app.textFields["address"].typeText("www.google.com\n")
+        waitUntilPageLoad()
+
+        // Reload icon is displayed.
+        waitForExistence(app.buttons["TabToolbar.multiStateButton"])
+        XCTAssertEqual(app.buttons["TabToolbar.multiStateButton"].label, "Reload")
+        app.buttons["TabToolbar.multiStateButton"].tap()
+
+        app.buttons["TabToolbar.backButton"].tap()
+
+        waitForExistence(app.buttons["TabToolbar.multiStateButton"])
+        XCTAssertTrue(app.buttons["TabToolbar.multiStateButton"].exists)
+        // Tap on the Search icon.
+        app.buttons["TabToolbar.multiStateButton"].tap()
+
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+    }
 }
