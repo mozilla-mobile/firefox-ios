@@ -2,7 +2,7 @@ import XCTest
 
 class CronTabsPerformanceTest: BaseTestCase {
 
-    let fixtures:[String:String] = ["testPerfTabs10": "tabsState10.archive","testPerfTabs20": "tabsState20.archive","testPerfTabs40": "tabsState40.archive","testPerfTabs80": "tabsState80.archive","testPerfTabs160": "tabsState160.archive","testPerfTabs320": "tabsState320.archive", "testPerfTabs640": "tabsState640.archive", "testPerfTabs1280": "tabsState1280.archive"]
+    let fixtures:[String:String] = ["testPerfTabs10": "tabsState10.archive","testPerfTabs20": "tabsState20.archive","testPerfTabs40": "tabsState40.archive","testPerfTabs80": "tabsState80.archive","testPerfTabs160": "tabsState160.archive","testPerfTabs320": "tabsState320.archive", "testPerfTabs640": "tabsState640.archive", "testPerfTabs1280": "tabsState1280.archive", "testPerfTabs20tabTray":"tabsState20.archive", "testPerfTabs1280tabTray":"tabsState1280.archive"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out function name
@@ -48,130 +48,147 @@ class CronTabsPerformanceTest: BaseTestCase {
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
                 app.launch()
+                // activity measurement here
             }
         }
     }
 
     func testPerfTabs20startup() {
         if #available(iOS 13.0, *) {
-            app.launch()
+        
             measure(metrics: [
                 XCTMemoryMetric(),
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
+                // activity measurement here
+                app.launch()
             }
         }
     }
 
     func testPerfTabs1280startup() {
         if #available(iOS 13.0, *) {
-            app.launch()
+
             measure(metrics: [
                 XCTMemoryMetric(),
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
+                // activity measurement here
+                app.launch()
             }
         }
     }
     func testPerfTabs40() {
+
         if #available(iOS 13.0, *) {
+            app.launch()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
-                app.launch()
+                // activity measurement here
             }
         }
     }
 
     func testPerfTabs80() {
         if #available(iOS 13.0, *) {
+            app.launch()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
-                app.launch()
+                // activity measurement here
             }
         }
     }
 
     func testPerfTabs160() {
         if #available(iOS 13.0, *) {
+            app.launch()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
-                app.launch()
+                // activity measurement here
             }
         }
     }
 
     func testPerfTabs320() {
         if #available(iOS 13.0, *) {
+            app.launch()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
-                app.launch()
+                // activity measurement here
             }
         }
     }
 
     func testPerfTabs640() {
         if #available(iOS 13.0, *) {
+            app.launch()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
-                app.launch()
+                // activity measurement here
             }
         }
     }
 
     func testPerfTabs1280() {
         if #available(iOS 13.0, *) {
+            app.launch()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
-                app.launch()
+                // activity measurement here
             }
         }
     }
 
+    func testPerfTabs20tabTray() {
+
+        if #available(iOS 13.0, *) {
+            app.launch()
+            measure(metrics: [
+                XCTClockMetric(), // to measure timeClock Mon
+                XCTCPUMetric(), // to measure cpu cycles
+                XCTStorageMetric(), // to measure storage consuming
+                XCTMemoryMetric()]) {
+                // go to tab tray
+                //navigator.performAction(Action.TogglePrivateMode)
+                navigator.goto(NewTabScreen)
+            }
+        }
+    }
+    
     func testPerfTabs1280tabTray() {
 
-        // launch app
-        // go to tab tray
         if #available(iOS 13.0, *) {
+            app.launch()
             measure(metrics: [
                 XCTClockMetric(), // to measure timeClock Mon
                 XCTCPUMetric(), // to measure cpu cycles
                 XCTStorageMetric(), // to measure storage consuming
                 XCTMemoryMetric()]) {
-                app.launch()
-            }
-        }
-    }
-
-    func testPerfOpenApp() {
-        if #available(iOS 13.0, *) {
-            measure(metrics: [
-                XCTClockMetric(), // to measure timeClock Mon
-                XCTCPUMetric(), // to measure cpu cycles
-                XCTStorageMetric(), // to measure storage consuming
-                XCTMemoryMetric()]) {
-                    app.launch()
+                // go to tab tray
+                //navigator.performAction(Action.TogglePrivateMode)
+                navigator.goto(NewTabScreen)
             }
         }
     }
