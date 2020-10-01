@@ -663,6 +663,9 @@
                   Identifier = "SearchTests/testPromptPresence()">
                </Test>
                <Test
+                  Identifier = "SearchTests/testSearchIconOnAboutHome()">
+               </Test>
+               <Test
                   Identifier = "SearchTests/testSearchWithFirefoxOption()">
                </Test>
                <Test
