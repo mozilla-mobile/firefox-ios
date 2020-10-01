@@ -5,7 +5,7 @@
 import Foundation
 import WebKit
 import Shared
-import Photos
+import UIKit
 
 private let log = Logger.browserLogger
 
@@ -190,44 +190,10 @@ extension BrowserViewController: WKUIDelegate {
             })
 
             if let url = elements.image {
-                let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
                 actions.append(UIAction(title: Strings.ContextMenuSaveImage, identifier: UIAction.Identifier("linkContextMenu.saveImage")) { _ in
-                    let handlePhotoLibraryAuthorized = {
-                        DispatchQueue.main.async {
-                            getImageData(url) { data in
-                                PHPhotoLibrary.shared().performChanges({
-                                    PHAssetCreationRequest.forAsset().addResource(with: .photo, data: data, options: nil)
-                                })
-                            }
-                        }
-                    }
-
-                    let handlePhotoLibraryDenied = {
-                        DispatchQueue.main.async {
-                            let accessDenied = UIAlertController(title: Strings.PhotoLibraryFirefoxWouldLikeAccessTitle, message: Strings.PhotoLibraryFirefoxWouldLikeAccessMessage, preferredStyle: .alert)
-                            let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
-                            accessDenied.addAction(dismissAction)
-                            let settingsAction = UIAlertAction(title: Strings.OpenSettingsString, style: .default ) { _ in
-                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
-                            }
-                            accessDenied.addAction(settingsAction)
-                            self.present(accessDenied, animated: true, completion: nil)
-                        }
-                    }
-
-                    if photoAuthorizeStatus == .notDetermined {
-                        PHPhotoLibrary.requestAuthorization({ status in
-                            guard status == .authorized else {
-                                handlePhotoLibraryDenied()
-                                return
-                            }
-
-                            handlePhotoLibraryAuthorized()
-                        })
-                    } else if photoAuthorizeStatus == .authorized {
-                        handlePhotoLibraryAuthorized()
-                    } else {
-                        handlePhotoLibraryDenied()
+                    getImageData(url) { data in
+                        guard let image = UIImage(data: data) else { return }
+                        self.writeToPhotoAlbum(image: image)
                     }
                 })
 
@@ -267,6 +233,24 @@ extension BrowserViewController: WKUIDelegate {
 
             return UIMenu(title: url.absoluteString, children: actions)
         }))
+    }
+    
+    func writeToPhotoAlbum(image: UIImage) {
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(saveError), nil)
+    }
+
+    @objc func saveError(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        guard error != nil else { return }
+        DispatchQueue.main.async {
+            let accessDenied = UIAlertController(title: Strings.PhotoLibraryFirefoxWouldLikeAccessTitle, message: Strings.PhotoLibraryFirefoxWouldLikeAccessMessage, preferredStyle: .alert)
+            let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
+            accessDenied.addAction(dismissAction)
+            let settingsAction = UIAlertAction(title: Strings.OpenSettingsString, style: .default ) { _ in
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+            }
+            accessDenied.addAction(settingsAction)
+            self.present(accessDenied, animated: true, completion: nil)
+        }
     }
 }
 
