@@ -275,8 +275,9 @@ class BrowserViewController: UIViewController {
 
     // These functions are used to handle displaying and hiding the keyboard after the splash view is animated
     public func activateUrlBarOnHomeView() {
+        // If the Settings view is not displayed AND
         // If the home view is not displayed, nor the overlayView hidden do not activate the text field:
-        guard homeView != nil || !overlayView.isHidden else { return }
+        guard !(self.presentedViewController?.children.first is SettingsViewController) && (homeView != nil || !overlayView.isHidden) else { return }
         urlBar.activateTextField()
     }
 
