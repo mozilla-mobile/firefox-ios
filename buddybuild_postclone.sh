@@ -9,6 +9,14 @@ function setup_virtualenv {
 }
 
 #
+# Cleanup: Firefox l10n repo directories if they exsist
+#
+
+echo "Cleanup: Firefox l10n directories"
+rm -rf firefoxios-l10n
+rm -rf ios-l10n-scripts
+
+#
 # Install Node.js dependencies and build user scripts
 #
 
