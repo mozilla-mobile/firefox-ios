@@ -8,6 +8,7 @@ import Storage
 import WebKit
 import SwiftKeychainWrapper
 import Shared
+import KIF
 @testable import Client
 
 let LabelAddressAndSearch = "Address and Search"

@@ -1,0 +1,15 @@
+#include "Extension.xcconfig"
+
+PRODUCT_BUNDLE_IDENTIFIER=org.mozilla.ios.$(CONFIGURATION).WidgetKit
+
+CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/$(CONFIGURATION).entitlements
+
+PROVISIONING_PROFILE_SPECIFIER[config=Firefox][sdk=*][arch=*] = BR $(CONFIGURATION) WidgetKit App Store
+PROVISIONING_PROFILE_SPECIFIER[config=FirefoxBeta][sdk=*][arch=*] = BR $(CONFIGURATION) WidgetKit
+PROVISIONING_PROFILE_SPECIFIER[config=Fennec][sdk=*][arch=*] = Fennec WidgetKit Development
+PROVISIONING_PROFILE_SPECIFIER[config=FennecEnterprise][sdk=*][arch=*] =
+
+INFOPLIST_FILE = WidgetKit/Info.plist
+
+IPHONEOS_DEPLOYMENT_TARGET = 14.0
+

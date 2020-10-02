@@ -1,0 +1,12 @@
+PRODUCT_BUNDLE_IDENTIFIER=org.mozilla.ios.$(CONFIGURATION).$(PRODUCT_NAME)
+CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/$(CONFIGURATION).entitlements
+INFOPLIST_FILE = Extensions/$(TARGET_NAME)/Info.plist
+SWIFT_OBJC_BRIDGING_HEADER =
+SKIP_INSTALL = NO
+
+PROVISIONING_PROFILE_SPECIFIER[config=Firefox][sdk=*][arch=*] = BR $(CONFIGURATION) $(PRODUCT_NAME) App Store
+PROVISIONING_PROFILE_SPECIFIER[config=FirefoxBeta][sdk=*][arch=*] = BR $(CONFIGURATION) $(PRODUCT_NAME)
+PROVISIONING_PROFILE_SPECIFIER[config=Fennec][sdk=*][arch=*] = Fennec $(PRODUCT_NAME) Development
+PROVISIONING_PROFILE_SPECIFIER[config=FennecEnterprise][sdk=*][arch=*] =
+
+

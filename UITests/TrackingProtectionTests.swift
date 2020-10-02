@@ -7,7 +7,6 @@ import Storage
 @testable import Client
 import KIF
 
-
 class TrackingProtectionTests: KIFTestCase, TabEventHandler {
     private var webRoot: String!
     var stats = TPPageStats()

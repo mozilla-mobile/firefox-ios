@@ -5,6 +5,7 @@
 import Foundation
 import Storage
 @testable import Client
+import KIF
 
 class BrowserTests: KIFTestCase {
 /*

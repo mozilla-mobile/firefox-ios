@@ -5,6 +5,7 @@
 import Foundation
 import WebKit
 @testable import Client
+import KIF
 
 class SecurityTests: KIFTestCase {
     fileprivate var webRoot: String!

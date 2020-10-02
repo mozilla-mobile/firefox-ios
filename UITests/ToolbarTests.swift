@@ -4,6 +4,7 @@
 
 import WebKit
 import UIKit
+import KIF
 
 class ToolbarTests: KIFTestCase, UITextFieldDelegate {
     fileprivate var webRoot: String!

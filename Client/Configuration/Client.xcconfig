@@ -1,0 +1,25 @@
+PRODUCT_BUNDLE_IDENTIFIER = org.mozilla.ios.$(CONFIGURATION)
+INFOPLIST_FILE = $(TARGET_NAME)/Info.plist
+
+CODE_SIGN_ENTITLEMENTS = Client/Entitlements/$(CONFIGURATION)Application.entitlements
+
+PRODUCT_MODULE_NAME = Client;
+PRODUCT_NAME = Client;
+SKIP_INSTALL = NO;
+
+MOZ_INTERNAL_URL_SCHEME[config=Fennec][sdk=*][arch=*] = fennec
+MOZ_INTERNAL_URL_SCHEME[config=Firefox][sdk=*][arch=*] = firefox
+MOZ_INTERNAL_URL_SCHEME[config=FirefoxBeta][sdk=*][arch=*] = firefox-beta
+MOZ_INTERNAL_URL_SCHEME[config=FennecEnterprise][sdk=*][arch=*] = firefox-internal
+
+ASSETCATALOG_COMPILER_APPICON_NAME[config=Fennec][sdk=*][arch=*] = AppIcon_Developer
+ASSETCATALOG_COMPILER_APPICON_NAME[config=Firefox][sdk=*][arch=*] = AppIcon
+ASSETCATALOG_COMPILER_APPICON_NAME[config=FirefoxBeta][sdk=*][arch=*] = AppIcon_Beta
+ASSETCATALOG_COMPILER_APPICON_NAME[config=FennecEnterprise][sdk=*][arch=*] = AppIcon_Developer
+
+SWIFT_OBJC_BRIDGING_HEADER = $(PROJECT_DIR)/Client/Client-Bridging-Header.h
+
+PROVISIONING_PROFILE_SPECIFIER[config=Fennec][sdk=*][arch=*] = Bitrise Firefox iOS Dev 
+PROVISIONING_PROFILE_SPECIFIER[config=FennecEnterprise][sdk=*][arch=*] = $(CONFIGURATION) Development
+PROVISIONING_PROFILE_SPECIFIER[config=Firefox][sdk=*][arch=*] = BR $(CONFIGURATION) App Store
+PROVISIONING_PROFILE_SPECIFIER[config=FirefoxBeta][sdk=*][arch=*] = BR $(CONFIGURATION) App Store
