@@ -362,7 +362,6 @@ class URLBarView: UIView {
         locationTextField.returnKeyType = .go
         locationTextField.clearButtonMode = .whileEditing
         locationTextField.textAlignment = .left
-        locationTextField.font = UIConstants.DefaultChromeFont
         locationTextField.accessibilityIdentifier = "address"
         locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
         locationTextField.attributedPlaceholder = self.locationView.placeholder
@@ -379,6 +378,10 @@ class URLBarView: UIView {
         locationTextField.backgroundColor = UIColor.theme.textField.backgroundInOverlay
     }
 
+    private func setupFonts() {
+        locationTextField?.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+    }
+    
     override func becomeFirstResponder() -> Bool {
         return self.locationTextField?.becomeFirstResponder() ?? false
     }
@@ -512,6 +515,8 @@ class URLBarView: UIView {
     }
 
     func transitionToOverlay(_ didCancel: Bool = false) {
+        setupFonts()
+        
         locationView.contentView.alpha = inOverlayMode ? 0 : 1
         cancelButton.alpha = inOverlayMode ? 1 : 0
         showQRScannerButton.alpha = inOverlayMode ? 1 : 0
@@ -593,6 +598,12 @@ class URLBarView: UIView {
 
     @objc func tappedScrollToTopArea() {
         delegate?.urlBarDidPressScrollToTop(self)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            setupFonts()
+        }
     }
 }
 

@@ -64,7 +64,6 @@ class TabTrayControllerV1: UIViewController {
         searchBar.leftView = UIImageView(image: UIImage(named: "quickSearch"))
         searchBar.leftViewMode = .unlessEditing
         searchBar.textColor = UIColor.theme.tabTray.tabTitleText
-        searchBar.attributedPlaceholder = NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7)])
         searchBar.clearButtonMode = .never
         searchBar.delegate = self
         searchBar.addTarget(self, action: #selector(textDidChange), for: .editingChanged)
@@ -104,6 +103,12 @@ class TabTrayControllerV1: UIViewController {
 
     var numberOfColumns: Int {
         return tabLayoutDelegate.numberOfColumns
+    }
+    
+    private var placeholder: NSAttributedString {
+        return NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes:
+                                    [NSAttributedString.Key.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7),
+             NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)])
     }
 
     init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil) {
@@ -202,6 +207,8 @@ class TabTrayControllerV1: UIViewController {
             searchBar.applyUIMode(isPrivate: true)
         }
 
+        setupFonts()
+        
         if traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: view)
         }
@@ -217,6 +224,7 @@ class TabTrayControllerV1: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
+        setupFonts()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -266,6 +274,11 @@ class TabTrayControllerV1: UIViewController {
         searchBar.snp.makeConstraints { make in
             make.edges.equalTo(roundedSearchBarHolder).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
+    }
+    
+    private func setupFonts() {
+        searchBar.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+        searchBar.attributedPlaceholder = self.placeholder
     }
 
     @objc func didTogglePrivateMode() {
