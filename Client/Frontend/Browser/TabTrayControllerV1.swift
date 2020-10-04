@@ -108,7 +108,7 @@ class TabTrayControllerV1: UIViewController {
     private var placeholder: NSAttributedString {
         return NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes:
                                     [NSAttributedString.Key.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7),
-             NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)])
+                                     NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)])
     }
 
     init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil) {
