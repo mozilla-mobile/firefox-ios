@@ -21,7 +21,9 @@ DerivedData
 
 /fastlane/scripts/upload.sh
 /fastlane/README.md
-/firefox-ios-l10n
+# l10n
+/firefoxios-l10n
+/ios-l10n-scripts
 # fastlane temporary profiling data
 /fastlane/report.xml
 # deliver temporary error output
