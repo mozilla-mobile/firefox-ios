@@ -94,3 +94,8 @@ Client/Assets/MainFrameAtDocumentStart.js
 Client/Assets/MainFrameAtDocumentEnd.js
 Client/Assets/*.js.LICENSE.txt
 *.strings
+
+
+# Checkouts
+firefoxios-l10n
+ios-l10n-scripts
