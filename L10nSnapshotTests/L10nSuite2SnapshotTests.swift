@@ -9,12 +9,12 @@ let loremIpsumURL = "\(testPageBase)"
 
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     func test1DefaultTopSites() {
-        navigator.toggleOff(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
+//        navigator.toggleOff(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
         navigator.goto(HomePanelsScreen)
         snapshot("DefaultTopSites-01")
-        navigator.toggleOn(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
-        navigator.goto(HomePanelsScreen)
-        snapshot("DefaultTopSites-with-pocket-02")
+//        navigator.toggleOn(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
+//        navigator.goto(HomePanelsScreen)
+//        snapshot("DefaultTopSites-with-pocket-02")
     }
 
     func test2MenuOnTopSites() {
@@ -25,17 +25,19 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func test3Settings() {
         let table = app.tables.element(boundBy: 0)
+        sleep(1)
         navigator.goto(SettingsScreen)
-        table.forEachScreen { i in
-            snapshot("Settings-main-\(i)")
-        }
-
-        allSettingsScreens.forEach { nodeName in
-            self.navigator.goto(nodeName)
-            table.forEachScreen { i in
-                snapshot("Settings-\(nodeName)-\(i)")
-            }
-        }
+//        table.forEachScreen { i in
+//            snapshot("Settings-main-\(i)")
+//        }
+//
+//        allSettingsScreens.forEach { nodeName in
+//            self.navigator.goto(nodeName)
+//            table.forEachScreen { i in
+//                snapshot("Settings-\(nodeName)-\(i)")
+//            }
+//        }
+        snapshot("Settings")
     }
 
     func test4PrivateBrowsingTabsEmptyState() {
@@ -128,7 +130,9 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         setupSnapshot(springboard)
         // Open the app and set it to background
         app.activate()
-        navigator.openURL("www.mozilla.org")
+//        navigator.openURL("www.mozilla.org")
+        sleep(1)
+        snapshot("DefaultBrowser-01")
         sleep(1)
         XCUIDevice.shared.press(.home)
 
@@ -151,7 +155,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
         
         // Select Fennec (username)
-        springboard.collectionViews.cells.element(boundBy: 5).children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
+        springboard.collectionViews.cells["Fennec (isabelrios)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
         // Tap on Add widget button
         springboard.buttons.staticTexts.firstMatch.tap()
 
@@ -166,7 +170,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         
         springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
 
-        springboard.collectionViews.cells.element(boundBy: 5).children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
+        springboard.collectionViews.cells["Fennec (isabelrios)"].children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
 
         // Scroll to she second screen to select the other widget
         print(springboard.debugDescription)

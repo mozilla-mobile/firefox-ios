@@ -30,8 +30,7 @@
       systemAttachmentLifetime = "keepAlways">
       <Testables>
          <TestableReference
-            skipped = "NO"
-            parallelizable = "YES">
+            skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "7BEB64401C7345600092C02E"
@@ -66,9 +65,6 @@
                </Test>
                <Test
                   Identifier = "L10nSuite2SnapshotTests/test2MenuOnTopSites()">
-               </Test>
-               <Test
-                  Identifier = "L10nSuite2SnapshotTests/test3Settings()">
                </Test>
                <Test
                   Identifier = "L10nSuite2SnapshotTests/test4PrivateBrowsingTabsEmptyState()">
