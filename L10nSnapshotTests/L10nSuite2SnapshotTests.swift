@@ -118,4 +118,65 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
         waitForExistence(app.navigationBars.staticTexts["FxASingin.navBar"])
         snapshot("FxASignInScreen-01")
     }
+    
+    func testSearchWidgets2() {
+        
+        // Set a url in the pasteboard
+        UIPasteboard.general.string = "www.example.com"
+
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        setupSnapshot(springboard)
+        // Open the app and set it to background
+        app.activate()
+        navigator.openURL("www.mozilla.org")
+        sleep(1)
+        XCUIDevice.shared.press(.home)
+
+        // Swipe Right to go to Widgets view
+        let window = springboard.children(matching: .window).element(boundBy: 0)
+        window.swipeRight()
+        window.swipeRight()
+
+        // Swipe Up to get to the Edit and Add Widget buttons
+        // This line is needed the first time widgets view is open
+        springboard.alerts.firstMatch.scrollViews.otherElements.buttons.element(boundBy: 0).tap()
+
+        let element = springboard/*@START_MENU_TOKEN@*/.scrollViews["left-of-home-scroll-view"]/*[[".otherElements[\"Home screen icons\"].scrollViews[\"left-of-home-scroll-view\"]",".scrollViews[\"left-of-home-scroll-view\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
+        element.swipeUp()
+        element.swipeUp()
+        element.swipeUp()
+        springboard.scrollViews["left-of-home-scroll-view"].otherElements.buttons.firstMatch.tap()
+        
+        sleep(1)
+        springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
+        
+        // Select Fennec (username)
+        springboard.collectionViews.cells.element(boundBy: 5).children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
+        // Tap on Add widget button
+        springboard.buttons.staticTexts.firstMatch.tap()
+
+        // Dismiss the edit mode
+        element.tap()
+
+        // Wait for the Search in Firefox widget and tap on it
+        sleep(1)
+        snapshot("Widget-01")
+        // Tap on Edit and then on Add to Widget
+        springboard.scrollViews["left-of-home-scroll-view"].otherElements.buttons.firstMatch.tap()
+        
+        springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
+
+        springboard.collectionViews.cells.element(boundBy: 5).children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.swipeLeft()
+
+        // Scroll to she second screen to select the other widget
+        print(springboard.debugDescription)
+        springboard.scrollViews.staticTexts.firstMatch.swipeLeft()
+        // Tap on Add widget button
+        springboard.buttons.staticTexts.firstMatch.tap()
+
+        // Dismiss the edit mode
+        element.tap()
+        sleep(1)
+        snapshot("Widget-02")
+    }
 }

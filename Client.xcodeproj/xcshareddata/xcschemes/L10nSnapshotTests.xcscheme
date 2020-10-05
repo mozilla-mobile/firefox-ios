@@ -50,6 +50,42 @@
                   Identifier = "L10nSnapshotTests/test14SetHompage()">
                </Test>
                <Test
+                  Identifier = "L10nSuite1SnapshotTests">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test10MenuOnWebPage()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test10PageMenuOnWebPage()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test11FxASignInPage()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test1DefaultTopSites()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test2MenuOnTopSites()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test3Settings()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test4PrivateBrowsingTabsEmptyState()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test5PanelsEmptyState()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test6LongPressOnTextOptions()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test7URLBar()">
+               </Test>
+               <Test
+                  Identifier = "L10nSuite2SnapshotTests/test8URLBarContextMenu()">
+               </Test>
+               <Test
                   Identifier = "ScreenGraphTest">
                </Test>
             </SkippedTests>

@@ -23,26 +23,39 @@ class WidgetTests: BaseTestCase {
 
         // Swipe Up to get to the Edit and Add Widget buttons
         // This line is needed the first time widgets view is open
-        //springboard.alerts["Refreshed Widgets"].scrollViews.otherElements.buttons["OK"].tap()
+        springboard.alerts.firstMatch.scrollViews.otherElements.buttons.element(boundBy: 0).tap()
 
         let element = springboard/*@START_MENU_TOKEN@*/.scrollViews["left-of-home-scroll-view"]/*[[".otherElements[\"Home screen icons\"].scrollViews[\"left-of-home-scroll-view\"]",".scrollViews[\"left-of-home-scroll-view\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0)
         element.swipeUp()
         element.swipeUp()
         element.swipeUp()
-        springboard/*@START_MENU_TOKEN@*/.scrollViews["left-of-home-scroll-view"].otherElements.buttons["Edit"]/*[[".otherElements[\"Home screen icons\"].scrollViews[\"left-of-home-scroll-view\"].otherElements",".otherElements[\"WGMajorListViewControllerView\"].buttons[\"Edit\"]",".buttons[\"Edit\"]",".scrollViews[\"left-of-home-scroll-view\"].otherElements"],[[[-1,3,1],[-1,0,1]],[[-1,2],[-1,1]]],[0,0]]@END_MENU_TOKEN@*/.tap()
-        springboard/*@START_MENU_TOKEN@*/.buttons["Add Widget"]/*[[".otherElements[\"Home screen icons\"].buttons[\"Add Widget\"]",".buttons[\"Add Widget\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-
+//        springboard/*@START_MENU_TOKEN@*/.scrollViews["left-of-home-scroll-view"].otherElements.buttons["Edit"]/*[[".otherElements[\"Home screen icons\"].scrollViews[\"left-of-home-scroll-view\"].otherElements",".otherElements[\"WGMajorListViewControllerView\"].buttons[\"Edit\"]",".buttons[\"Edit\"]",".scrollViews[\"left-of-home-scroll-view\"].otherElements"],[[[-1,3,1],[-1,0,1]],[[-1,2],[-1,1]]],[0,0]]@END_MENU_TOKEN@*/
+        springboard.scrollViews["left-of-home-scroll-view"].otherElements.buttons.firstMatch.tap()
+        
+        
+        sleep(3)
+    //7 app/*@START_MENU_TOKEN@*/.buttons["Añadir widget"]/*[[".otherElements[\"Home screen icons\"].buttons[\"Añadir widget\"]",".buttons[\"Añadir widget\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
+        
+//        springboard.otherElements["Home screen icons"].buttons.firstMatch.tap()
+        
         // Select Fennec (username)
-        springboard.collectionViews.cells.element(boundBy: 2).children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
-        springboard/*@START_MENU_TOKEN@*/.staticTexts[" Add Widget"]/*[[".buttons[\" Add Widget\"].staticTexts[\" Add Widget\"]",".staticTexts[\" Add Widget\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        springboard.collectionViews.cells.element(boundBy: 4).children(matching: .other).element.children(matching: .other).element(boundBy: 0).children(matching: .other).element.tap()
+//        springboard/*@START_MENU_TOKEN@*/.buttons[" Add Widget"].staticTexts[" Add Widget"]/*[[".buttons[\" Add Widget\"].staticTexts[\" Add Widget\"]",".staticTexts[\" Add Widget\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.tap()
+        
+        springboard.buttons.staticTexts.firstMatch.tap()
 
         // Dismiss the edit mode
         element.tap()
 
         // Wait for the Search in Firefox widget and tap on it
+        print(springboard.debugDescription)
         waitForExistence(springboard.scrollViews.buttons["Search in\nFirefox"], timeout: 3)
+        
+        
         springboard.scrollViews.buttons["Search in\nFirefox"].tap()
 
+        
         // Verify that the app is open in the corresponding view
         waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 5)
         // Verify that < and QR buttons are shown that indicates the url is focused
@@ -79,5 +92,20 @@ class WidgetTests: BaseTestCase {
 
         // Verify that the app is open in the corresponding view
         waitForExistence(app.links["More information..."])
+        
+        
+        
+        
+//        let app = XCUIApplication()
+//        let window = app.children(matching: .window).element(boundBy: 0)
+//        window.swipeRight()
+//        window.swipeRight()
+//        window.swipeRight()
+//        app.children(matching: .window).element(boundBy: 2).children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.swipeUp()
+//        app/*@START_MENU_TOKEN@*/.scrollViews["left-of-home-scroll-view"]/*[[".otherElements[\"Home screen icons\"].scrollViews[\"left-of-home-scroll-view\"]",".scrollViews[\"left-of-home-scroll-view\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.children(matching: .other).element.children(matching: .other).element(boundBy: 0).swipeUp()
+//        app/*@START_MENU_TOKEN@*/.scrollViews["left-of-home-scroll-view"].otherElements.buttons["Editar"]/*[[".otherElements[\"Home screen icons\"].scrollViews[\"left-of-home-scroll-view\"].otherElements",".otherElements[\"WGMajorListViewControllerView\"].buttons[\"Editar\"]",".buttons[\"Editar\"]",".scrollViews[\"left-of-home-scroll-view\"].otherElements"],[[[-1,3,1],[-1,0,1]],[[-1,2],[-1,1]]],[0,0]]@END_MENU_TOKEN@*/.tap()
+//        app/*@START_MENU_TOKEN@*/.buttons["Añadir widget"]/*[[".otherElements[\"Home screen icons\"].buttons[\"Añadir widget\"]",".buttons[\"Añadir widget\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+///
+        
     }
 }
