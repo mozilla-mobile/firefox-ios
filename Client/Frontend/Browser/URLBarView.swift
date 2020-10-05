@@ -633,7 +633,7 @@ extension URLBarView: TabToolbarProtocol {
     func updateMiddleButtonState(_ state: MiddleButtonState) {
         helper?.setMiddleButtonState(state)
         switch state {
-        case .reload:
+        case .stop:
             multiStateButton.setImage(helper?.ImageStop, for: .normal)
         default:
             multiStateButton.setImage(helper?.ImageReload, for: .normal)
