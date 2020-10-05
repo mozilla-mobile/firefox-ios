@@ -106,7 +106,7 @@ extension MockSyncableHistory: SyncableHistory {
         if let existingModified = self.places[place.guid]?.serverModified {
             if existingModified == modified {
                 log.debug("Already seen unchanged record \(place.guid).")
-                return deferMaybe(place.guid)
+                return Deferred(value: Maybe(success: place.guid))
             }
         }
 
@@ -124,7 +124,7 @@ extension MockSyncableHistory: SyncableHistory {
                             // Nothing to do: it's marked as changed.
                             log.debug("Discarding remote non-visit changes!")
                             self.places[place.guid]?.serverModified = modified
-                            return deferMaybe(place.guid)
+                            return Deferred(value: Maybe(success: place.guid))
                         } else {
                             log.debug("Discarding local non-visit changes!")
                             self.places[place.guid]?.shouldUpload = false
@@ -142,7 +142,7 @@ extension MockSyncableHistory: SyncableHistory {
                 p.serverModified = modified
                 p.isDeleted = false
                 self.places[place.guid] = p
-                return deferMaybe(place.guid)
+                return Deferred(value: Maybe(success: place.guid))
         }
     }
 
