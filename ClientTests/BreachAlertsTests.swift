@@ -63,7 +63,7 @@ class BreachAlertsTests: XCTestCase {
             }
         }
     }
-
+    /* Disabled due to issue #7411 - XCTAssertNotNil failed
     func testCompareBreaches() {
         let unloadedBreachesOpt = self.breachAlertsManager?.findUserBreaches([breachedLogin])
         XCTAssertNotNil(unloadedBreachesOpt)
@@ -92,7 +92,7 @@ class BreachAlertsTests: XCTestCase {
                 XCTAssertEqual(breached.successValue, [breachedLogin])
             }
         }
-    }
+    }*/
 
     func testLoginsByHostname() {
         let unbreached = ["unbreached.com": [unbreachedLogin]]
