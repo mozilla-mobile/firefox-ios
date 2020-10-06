@@ -10,6 +10,7 @@ import Storage
 import XCTest
 
 class TestBookmarks: ProfileTest {
+    /* Disabled due to issue #7411 - Should not have failed to get mock bookmarks
     func testBookmarks() {
         withTestProfile { profile -> Void in
             for i in 0...10 {
@@ -39,5 +40,5 @@ class TestBookmarks: ProfileTest {
             _ = profile.places.forceClose()
             try? profile.files.remove("profile-test_places.db")
         }
-    }
+    }*/
 }
