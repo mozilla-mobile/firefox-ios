@@ -99,7 +99,7 @@ public class RustLogins {
         self.encryptionKey = encryptionKey
         self.salt = salt
 
-        self.queue =  DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
+        self.queue = DispatchQueue(label: "RustLogins queue: \(databasePath)", attributes: [])
         self.storage = LoginsStorage(databasePath: databasePath)
     }
 

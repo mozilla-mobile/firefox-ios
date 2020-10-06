@@ -210,7 +210,7 @@ class SaveLoginTest: BaseTestCase {
         waitForExistence(app.webViews.textFields.element(boundBy: 0), timeout: 3)
         let emailValue = app.webViews.textFields.element(boundBy: 0).value!
         XCTAssertEqual(emailValue as! String, mailLogin)
-        let passwordValue =  app.webViews.secureTextFields.element(boundBy: 0).value!
+        let passwordValue = app.webViews.secureTextFields.element(boundBy: 0).value!
         XCTAssertEqual(passwordValue as! String, "••••••••")
     }
 }

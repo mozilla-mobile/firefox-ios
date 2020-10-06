@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 import Foundation
 
-protocol Themeable:  AnyObject {
+protocol Themeable: AnyObject {
     func applyTheme()
 }
 
@@ -166,8 +166,8 @@ class HomePanelColor {
     var siteTableHeaderBorder: UIColor { return UIColor.Photon.Grey30.withAlphaComponent(0.8) }
 
     var topSiteDomain: UIColor { return UIColor.black }
-    var topSitesGradientStart:  UIColor { return UIColor.white }
-    var topSitesGradientEnd:  UIColor { return UIColor(rgb: 0xf8f8f8) }
+    var topSitesGradientStart: UIColor { return UIColor.white }
+    var topSitesGradientEnd: UIColor { return UIColor(rgb: 0xf8f8f8) }
     var topSitesBackground: UIColor { return UIColor.white }
 
     var activityStreamHeaderText: UIColor { return UIColor.Photon.Grey50 }

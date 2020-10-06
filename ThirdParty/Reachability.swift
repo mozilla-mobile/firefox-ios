@@ -36,7 +36,7 @@ enum ReachabilityType: CustomStringConvertible {
     }
 }
 
-enum ReachabilityStatus: CustomStringConvertible  {
+enum ReachabilityStatus: CustomStringConvertible {
     case offline
     case online(ReachabilityType)
     case unknown
@@ -106,7 +106,7 @@ extension ReachabilityStatus {
                 self = .online(.wiFi)
             }
         } else {
-            self =  .offline
+            self = .offline
         }
     }
 }

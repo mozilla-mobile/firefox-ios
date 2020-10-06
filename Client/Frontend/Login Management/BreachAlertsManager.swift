@@ -87,7 +87,7 @@ final public class BreachAlertsManager {
 
         // 3b. should update - check if the etag is different
         client.fetchEtag(endpoint: .breachedAccounts, profile: self.profile) { etag in
-            guard let etag =  etag else {
+            guard let etag = etag else {
                 self.profile.prefs.removeObjectForKey(BreachAlertsClient.etagKey) // bad key, so delete it
                 self.fetchAndSaveBreaches(completion)
                 return

@@ -308,7 +308,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     }
 
     func maxHorizontalItemsCount(width: CGFloat) -> Int {
-        let horizontalItemsCount =  Int(floor(width / (ASHorizontalScrollCellUX.TopSiteItemSize.width + insets.left)))
+        let horizontalItemsCount = Int(floor(width / (ASHorizontalScrollCellUX.TopSiteItemSize.width + insets.left)))
         if let delegate = self.collectionView?.delegate as? ASHorizontalLayoutDelegate {
             return delegate.numberOfHorizontalItems()
         } else {
@@ -317,7 +317,7 @@ class HorizontalFlowLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        let decorationAttr =  UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
+        let decorationAttr = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
         let cellAttr = self.computeLayoutAttributesForCellAtIndexPath(indexPath)
         decorationAttr.frame = cellAttr.frame
 
