@@ -24,7 +24,7 @@ private class FetchInProgressError: MaybeErrorType {
 
 @objcMembers
 class HistoryPanel: SiteTableViewController, LibraryPanel {
-    enum Section: Int {
+    enum Section: Int, CaseIterable {
         // Showing showing recently closed, and clearing recent history are action rows of this type.
         case additionalHistoryActions
         case today
@@ -93,6 +93,16 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         return UILongPressGestureRecognizer(target: self, action: #selector(onLongPressGestureRecognized))
     }()
 
+    lazy var searchController: UISearchController = {
+        let resultsController = HistorySearchResultsController(profile: self.profile)
+        resultsController.presentingPanel = self
+        let searchController = UISearchController(searchResultsController: resultsController)
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.autocapitalizationType = .none
+        searchController.searchBar.delegate = self
+        return searchController
+    }()
+
     // MARK: - Lifecycle
     override init(profile: Profile) {
         super.init(profile: profile)
@@ -114,6 +124,8 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         tableView.addGestureRecognizer(longPressRecognizer)
         tableView.accessibilityIdentifier = "History List"
         tableView.prefetchDataSource = self
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -637,5 +649,91 @@ extension HistoryPanel: LibraryPanelContextMenu {
         actions.append(pinTopSite)
         actions.append(removeAction)
         return actions
+    }
+}
+
+extension HistoryPanel: UISearchBarDelegate, UISearchTextFieldDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+}
+
+extension HistoryPanel: UISearchResultsUpdating {
+    private func findMatches(searchString: String) -> NSCompoundPredicate {
+        let titleExpression = NSExpression(forKeyPath: Site.Keys.title.rawValue)
+        let searchStringExpression = NSExpression(forConstantValue: searchString)
+        let titleComparisonPredicate = NSComparisonPredicate(leftExpression: titleExpression, rightExpression: searchStringExpression,
+                                                             modifier: .direct, type: .contains, options: .caseInsensitive)
+        
+        let urlExpression = NSExpression(forKeyPath: Site.Keys.url.rawValue)
+        let urlComparisonPredicate = NSComparisonPredicate(leftExpression: urlExpression, rightExpression: searchStringExpression,
+                                                           modifier: .direct, type: .contains, options: .caseInsensitive)
+        
+        return NSCompoundPredicate(orPredicateWithSubpredicates: [titleComparisonPredicate, urlComparisonPredicate])
+    }
+
+    func updateSearchResults(for searchController: UISearchController) {
+        var results = [Site]()
+        let searchString = searchController.searchBar.text!.trimmingCharacters(in: .whitespaces)
+        let searchItems = searchString.components(separatedBy: " ") as [String]
+        
+        let andMatchPredicates: [NSPredicate] = searchItems.map { searchString in
+            findMatches(searchString: searchString)
+        }
+        let finalCompoundPredicate =
+            NSCompoundPredicate(andPredicateWithSubpredicates: andMatchPredicates)
+
+        Section.allCases.forEach {
+            if $0.rawValue > 3 { return }
+            results.append(contentsOf: groupedSites.itemsForSection($0.rawValue).filter {
+                finalCompoundPredicate.evaluate(with: $0)
+            })
+        }
+
+        (searchController.searchResultsController as? HistorySearchResultsController)?.searchResults = results
+    }
+}
+
+
+class HistorySearchResultsController: SiteTableViewController {
+    var searchResults = [Site]() {
+        didSet {
+            self.tableView.reloadData()
+        }
+    }
+    
+    var presentingPanel: LibraryPanel?
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchResults.count
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        cell.accessoryType = .none
+        return configureSite(cell, for: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let site = searchResults[safe: indexPath.row], let url = URL(string: site.url) {
+            if let libraryPanelDelegate = presentingPanel?.libraryPanelDelegate {
+                libraryPanelDelegate.libraryPanel(didSelectURL: url, visitType: VisitType.typed)
+            }
+            return
+        }
+    }
+
+    func configureSite(_ cell: UITableViewCell, for indexPath: IndexPath) -> UITableViewCell {
+        if let site = searchResults[safe: indexPath.row], let cell = cell as? TwoLineTableViewCell {
+            cell.setLines(site.title, detailText: site.url)
+
+            cell.imageView?.layer.borderColor = HistoryPanelUX.IconBorderColor.cgColor
+            cell.imageView?.layer.borderWidth = HistoryPanelUX.IconBorderWidth
+            cell.imageView?.contentMode = .center
+            cell.imageView?.setImageAndBackground(forIcon: site.icon, website: site.tileURL) { [weak cell] in
+                cell?.imageView?.image = cell?.imageView?.image?.createScaled(CGSize(width: HistoryPanelUX.IconSize, height: HistoryPanelUX.IconSize))
+            }
+        }
+        return cell
     }
 }

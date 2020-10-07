@@ -59,5 +59,21 @@ open class Site: Identifiable {
     open func setBookmarked(_ bookmarked: Bool) {
         self.bookmarked = bookmarked
     }
-
+    
+    public enum Keys: String {
+        case url
+        case title
+    }
+    
+    @objc(valueForKey:) public func value(forKey key: String) -> Any? {
+        let key = Keys(rawValue: key)
+        switch key {
+        case .url:
+            return self.url
+        case .title:
+            return self.title
+        default:
+            return nil
+        }
+    }
 }
