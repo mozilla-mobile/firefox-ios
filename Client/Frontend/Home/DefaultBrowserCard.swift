@@ -86,12 +86,12 @@ class DefaultBrowserCard: UIView {
         background.snp.makeConstraints { make in
             make.top.left.equalToSuperview().offset(20)
             make.right.bottom.equalToSuperview().offset(-20)
-            make.height.equalTo(210)
+            make.height.greaterThanOrEqualTo(210)
         }
         topView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.bottom.equalTo(settingsButton.snp.top)
-            make.height.equalTo(114)
+            make.height.greaterThanOrEqualTo(114)
         }
         image.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(18)
