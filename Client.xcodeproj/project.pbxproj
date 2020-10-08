@@ -79,7 +79,6 @@
 		2816F0001B33E05400522243 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2816EFFF1B33E05400522243 /* UIConstants.swift */; };
 		281B029A1C037C1F005202C3 /* TestBrowserDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B02991C037C1F005202C3 /* TestBrowserDB.swift */; };
 		281B2BEA1ADF4D90002917DC /* MockProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B2BE91ADF4D90002917DC /* MockProfile.swift */; };
-		282731631ABC9BE600AA1954 /* Sync-Bridging-Header.h in Headers */ = {isa = PBXBuildFile; fileRef = 282731621ABC9BE600AA1954 /* Sync-Bridging-Header.h */; };
 		282731991ABC9C2F00AA1954 /* ClientPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BB1A1D1D3200576538 /* ClientPayload.swift */; };
 		2827319B1ABC9C2F00AA1954 /* KeysPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BD1A1D1D3200576538 /* KeysPayload.swift */; };
 		2827319C1ABC9C2F00AA1954 /* Record.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CE83BE1A1D1D3200576538 /* Record.swift */; };
@@ -262,7 +261,6 @@
 		43118CDD251A9CA700F24376 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288A2D861AB8B3260023ABC3 /* Shared.framework */; };
 		43118CF3251A9CCA00F24376 /* SiteArchiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DA3CE5E24EEE7C600422BB2 /* SiteArchiver.swift */; };
 		43118D07251A9CD100F24376 /* SavedTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63306D3821103EAE00F25400 /* SavedTab.swift */; };
-		43118D1B251A9CE000F24376 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
 		4334145424C63779001541F3 /* IntroScreenSyncViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145324C63779001541F3 /* IntroScreenSyncViewV1.swift */; };
 		4334145724C6378B001541F3 /* IntroScreenWelcomeViewV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4334145624C6378B001541F3 /* IntroScreenWelcomeViewV1.swift */; };
 		43446CE7240D9F3000F5C643 /* ETP.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43446CE5240D9F3000F5C643 /* ETP.xcassets */; };
@@ -280,6 +278,10 @@
 		4368BC6A24FF14800021931D /* SharedUserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BC6924FF14800021931D /* SharedUserResearch.swift */; };
 		4390F7F5246CE04300570811 /* IntroViewModelV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7F4246CE04300570811 /* IntroViewModelV2.swift */; };
 		4390F7FF246DAFBE00570811 /* FirefoxColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7FE246DAFBE00570811 /* FirefoxColors.swift */; };
+		4392FB20252EC49D00AD3D23 /* SessionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C027441B2A348C001B1E88 /* SessionData.swift */; };
+		4392FB34252EC4CE00AD3D23 /* SessionRestoreHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC4869C2195F58300CDA48D /* SessionRestoreHandler.swift */; };
+		4392FB48252EC50400AD3D23 /* InternalSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBC486982195F46A00CDA48D /* InternalSchemeHandler.swift */; };
+		4392FB5C252EC51E00AD3D23 /* PrivilegedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31CF65B1CC1959A001D0BD0 /* PrivilegedRequest.swift */; };
 		43A5643823CD1E1C00B6857D /* UpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43A5643523CD1E1B00B6857D /* UpdateViewController.swift */; };
 		43A5643923CD1E1C00B6857D /* Update.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43A5643623CD1E1B00B6857D /* Update.xcassets */; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
@@ -725,7 +727,6 @@
 		E693F0D91E9D64BD0086DC17 /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E693F0D81E9D64BD0086DC17 /* OptionalExtensions.swift */; };
 		E698FFDA1B4AADF40001F623 /* TabScrollController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E698FFD91B4AADF40001F623 /* TabScrollController.swift */; };
 		E69922171B94E3EF007C480D /* Licenses.html in Resources */ = {isa = PBXBuildFile; fileRef = E69922121B94E3EF007C480D /* Licenses.html */; };
-		E69DB0871E97DEAA008A67E6 /* SyncTelemetry.h in Headers */ = {isa = PBXBuildFile; fileRef = E69DB0771E97DEA9008A67E6 /* SyncTelemetry.h */; };
 		E69DB0B71E97E2AC008A67E6 /* SyncTelemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69DB0B51E97E2AC008A67E6 /* SyncTelemetry.swift */; };
 		E69E06BA1C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06B91C76173D00D0F926 /* RequirePasscodeIntervalViewController.swift */; };
 		E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E69E06C81C76198000D0F926 /* AuthenticationManagerConstants.swift */; };
@@ -7077,18 +7078,21 @@
 				43118CF3251A9CCA00F24376 /* SiteArchiver.swift in Sources */,
 				DA9FD88624E213CD00168D1E /* Helpers.swift in Sources */,
 				1DF426CF251BDF6A0086386A /* photon-colors.swift in Sources */,
+				4392FB5C252EC51E00AD3D23 /* PrivilegedRequest.swift in Sources */,
 				1D06AE6A24FEE8D6000B092B /* TabProvider.swift in Sources */,
 				DA9FD88424E213B500168D1E /* SmallQuickLink.swift in Sources */,
 				1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */,
 				43118D07251A9CD100F24376 /* SavedTab.swift in Sources */,
+				4392FB48252EC50400AD3D23 /* InternalSchemeHandler.swift in Sources */,
 				1DF42682251BDB3A0086386A /* FaviconFetcher.swift in Sources */,
 				1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */,
 				43BA967D2512D15900EB6134 /* Strings.swift in Sources */,
+				4392FB20252EC49D00AD3D23 /* SessionData.swift in Sources */,
 				047F9B4224E1FF4000CD7DF7 /* ImageButtonWithLabel.swift in Sources */,
 				43EF756E251D3AD000575E10 /* TopSiteArchiverExtension.swift in Sources */,
-				43118D1B251A9CE000F24376 /* SessionData.swift in Sources */,
 				047F9B2C24E1FE1C00CD7DF7 /* WidgetKit.swift in Sources */,
 				1DA3CE6724EEE86C00422BB2 /* AppInfo.swift in Sources */,
+				4392FB34252EC4CE00AD3D23 /* SessionRestoreHandler.swift in Sources */,
 				DA9FD88824E213DD00168D1E /* QuickLink.swift in Sources */,
 				DA9FD88324E213B500168D1E /* QuickLinkSelection.intentdefinition in Sources */,
 				1DA3CE5D24EEE73100422BB2 /* OpenTabsWidget.swift in Sources */,
@@ -10385,7 +10389,7 @@
 		4354D3E124EEEEC5001184F6 /* Fennec */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "Extensions/Entitlements/Fennec.entitlements";
+				CODE_SIGN_ENTITLEMENTS = Extensions/Entitlements/Fennec.entitlements;
 				INFOPLIST_FILE = WidgetKit/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "$(MOZ_BUNDLE_ID).WidgetKit";
