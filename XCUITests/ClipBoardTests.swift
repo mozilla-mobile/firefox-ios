@@ -45,6 +45,7 @@ class ClipBoardTests: BaseTestCase {
         checkCopiedUrl()
 
         navigator.createNewTab()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(URLBarOpen)
         app.textFields["address"].press(forDuration: 3)
         app.menuItems["Paste"].tap()
