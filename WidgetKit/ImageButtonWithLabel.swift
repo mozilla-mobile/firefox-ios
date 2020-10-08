@@ -72,6 +72,7 @@ struct ImageButtonWithLabel: View {
                         VStack(alignment: .leading){
                                 Text(link.label)
                                     .font(.headline)
+                                    .minimumScaleFactor(0.75)
                                     .layoutPriority(1000)
                         }
                         Spacer()
