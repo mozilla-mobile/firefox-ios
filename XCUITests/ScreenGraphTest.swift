@@ -72,6 +72,7 @@ extension ScreenGraphTest {
         let navigator = self.navigator!
         measure {
             navigator.userState.url = defaultURL
+            wait(forElement: app.textFields.firstMatch, timeout: 3)
             navigator.performAction(TestActions.LoadURLByPasting)
             XCTAssertEqual(navigator.screenState, WebPageLoading)
         }
