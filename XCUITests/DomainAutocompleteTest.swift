@@ -87,6 +87,7 @@ class DomainAutocompleteTest: BaseTestCase {
     // Non-matches.
     func testNoMatches() {
         navigator.openURL("twitter.com/login")
+        waitUntilPageLoad()
         navigator.goto(URLBarOpen)
         app.textFields["address"].typeText("baz")
         let value = app.textFields["address"].value

@@ -22,6 +22,7 @@ class DataManagementTests: BaseTestCase {
         let websitesList = ["example.com", path(forTestPage: "test-mozilla-org.html"), path(forTestPage: "test-mozilla-book.html"), "youtube.com", "www.google.com", "bing.com"]
         for website in websitesList {
             navigator.openURL(website)
+            waitUntilPageLoad()
         }
         navigator.goto(WebsiteDataSettings)
         waitForExistence(app.tables.otherElements["Website Data"], timeout: 3)

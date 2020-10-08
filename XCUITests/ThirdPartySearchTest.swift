@@ -12,14 +12,12 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     func testCustomSearchEngines() {
-        navigator.performAction(Action.AddCustomSearchEngine)
-        waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
-        app.buttons["customEngineSaveButton"].tap()
+        addCustomSearchEngine()
 
         waitForExistence(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
         app.navigationBars["Search"].buttons["Settings"].tap()
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
-            
+
         // Perform a search using a custom search engine
         app.textFields["url"].tap()
         waitForExistence(app.buttons["urlBar-cancel"])
@@ -37,16 +35,14 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     func testCustomSearchEngineAsDefault() {
-        navigator.performAction(Action.AddCustomSearchEngine)
-        waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
-        app.buttons["customEngineSaveButton"].tap()
+        addCustomSearchEngine()
 
         // Go to settings and set MDN as the default
         waitForExistence(app.tables.staticTexts["Google"])
         app.tables.staticTexts["Google"].tap()
         waitForExistence(app.tables.staticTexts["Mozilla Engine"])
         app.tables.staticTexts["Mozilla Engine"].tap()
-        DismissSearchScreen()
+        dismissSearchScreen()
 
         // Perform a search to check
         app.textFields["url"].tap()
@@ -66,10 +62,7 @@ class ThirdPartySearchTest: BaseTestCase {
     }
 
     func testCustomSearchEngineDeletion() {
-        navigator.performAction(Action.AddCustomSearchEngine)
-        waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
-        app.buttons["customEngineSaveButton"].tap()
-
+        addCustomSearchEngine()
         waitForExistence(app.navigationBars["Search"].buttons["Settings"], timeout: 3)
 
         app.navigationBars["Search"].buttons["Settings"].tap()
@@ -83,12 +76,13 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssertTrue(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
                                 
         // Need to go step by step to Search Settings. The ScreenGraph will fail to go to the Search Settings Screen
+        waitForExistence(app.buttons["urlBar-cancel"], timeout: 3)
         app.buttons["urlBar-cancel"].tap()
         app.buttons["TabToolbar.menuButton"].tap()
         app.tables["Context Menu"].staticTexts["Settings"].tap()
         app.tables.staticTexts["Google"].tap()
         navigator.performAction(Action.RemoveCustomSearchEngine)
-        DismissSearchScreen()
+        dismissSearchScreen()
         
         // Perform a search to check
         waitForExistence(app.textFields["url"], timeout: 3)
@@ -102,7 +96,18 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssertFalse(app.scrollViews.otherElements.buttons["Mozilla Engine search"].exists)
     }
     
-    private func DismissSearchScreen() {
+    private func addCustomSearchEngine() {
+        navigator.performAction(Action.AddCustomSearchEngine)
+        waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
+        app.buttons["customEngineSaveButton"].tap()
+        // Workaround for iOS14 need to wait for those elements and tap again
+        if #available(iOS 14.0, *) {
+            waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
+            app.navigationBars["Add Search Engine"].buttons["Save"].tap()
+        }
+    }
+
+    private func dismissSearchScreen() {
         waitForExistence(app.navigationBars["Search"].buttons["Settings"])
         app.navigationBars["Search"].buttons["Settings"].tap()
         app.navigationBars["Settings"].buttons["AppSettingsTableViewController.navigationItem.leftBarButtonItem"].tap()
@@ -121,8 +126,11 @@ class ThirdPartySearchTest: BaseTestCase {
         XCTAssertTrue(tablesQuery.textViews["customEngineUrl"].staticTexts["URL (Replace Query with %s)"].exists)
         customengineurlTextView.press(forDuration: 2.0)
         app.staticTexts["Paste"].tap()
-        sleep(2)
-        app.navigationBars.buttons["customEngineSaveButton"].tap()
+
+        waitForExistence(app.buttons["customEngineSaveButton"], timeout: 3)
+        app.buttons["customEngineSaveButton"].tap()
+        waitForExistence(app.navigationBars["Add Search Engine"], timeout: 3)
+        app.navigationBars["Add Search Engine"].buttons["Save"].tap()
 
         waitForExistence(app.alerts.element(boundBy: 0))
         XCTAssert(app.alerts.element(boundBy: 0).label == "Failed")

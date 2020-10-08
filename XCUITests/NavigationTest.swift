@@ -6,7 +6,6 @@ import XCTest
 
 let website_1 = ["url": "www.mozilla.org", "label": "Internet for people, not profit — Mozilla", "value": "mozilla.org"]
 let website_2 = ["url": "www.example.com", "label": "Example", "value": "example", "link": "More information...", "moreLinkLongPressUrl": "http://www.iana.org/domains/example", "moreLinkLongPressInfo": "iana"]
-
 let urlAddons = "addons.mozilla.org"
 let urlGoogle = "www.google.com"
 let popUpTestUrl = path(forTestPage: "test-popup-blocker.html")
@@ -188,10 +187,11 @@ class NavigationTest: BaseTestCase {
 
     func testLongPressLinkOptionsPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 5)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.scrollViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
+        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!], timeout: 3)
         XCTAssertFalse(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Copy Link"].exists, "The option is not shown")
@@ -271,8 +271,6 @@ class NavigationTest: BaseTestCase {
             XCTAssertTrue(app.menuItems["Copy"].exists)
             XCTAssertTrue(app.menuItems["Cut"].exists)
             XCTAssertTrue(app.menuItems["Look Up"].exists)
-            XCTAssertTrue(app.menuItems["Paste & Go"].exists)
-            XCTAssertTrue(app.menuItems["Share…"].exists)
         }
     }
 
@@ -304,15 +302,15 @@ class NavigationTest: BaseTestCase {
 
     func testShareLink() {
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.cells["Copy"])
-        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.buttons["Copy"], timeout: 3)
+        XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
     }
 
     func testShareLinkPrivateMode() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         longPressLinkOptions(optionSelected: "Share Link")
-        waitForExistence(app.collectionViews.cells["Copy"])
-        XCTAssertTrue(app.collectionViews.cells["Copy"].exists, "The share menu is not shown")
+        waitForExistence(app.buttons["Copy"], timeout: 3)
+        XCTAssertTrue(app.buttons["Copy"].exists, "The share menu is not shown")
     }
 
     // Disable, no Cancel button now and no option to
@@ -385,6 +383,7 @@ class NavigationTest: BaseTestCase {
         let switchValueAfter = switchBlockPopUps.value!
         XCTAssertEqual(switchValueAfter as? String, "0")
         navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         waitForExistence(app.links["link-created-by-parent"], timeout: 10)
     }

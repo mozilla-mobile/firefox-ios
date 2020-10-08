@@ -136,10 +136,10 @@ class ReaderViewTest: BaseTestCase {
 
         // Mark it as read/unread
         savedToReadingList.swipeLeft()
-        waitForExistence(app.tables.cells.buttons["trailing1"].staticTexts["Mark as  Read"])
-        app.tables.cells.buttons["trailing1"].tap()
+        waitForExistence(app.tables.cells.buttons.staticTexts["Mark as  Read"], timeout: 3)
+        app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
         savedToReadingList.swipeLeft()
-        waitForExistence(app.buttons["trailing1"].staticTexts["Mark as  Unread"])
+        waitForExistence(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
     }
 
     func testRemoveFromReadingList() {
