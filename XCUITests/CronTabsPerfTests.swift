@@ -55,7 +55,7 @@ class CronTabsPerformanceTest: BaseTestCase {
 
     func testPerfTabs20startup() {
         if #available(iOS 13.0, *) {
-        
+
             measure(metrics: [
                 XCTMemoryMetric(),
                 XCTClockMetric(), // to measure timeClock Mon
@@ -160,6 +160,16 @@ class CronTabsPerformanceTest: BaseTestCase {
             }
         }
     }
+    
+    // Additional Scenarios
+    // 1. Start app
+    // 2. Open tabs Tray
+    // 3. Open 1 new tab
+    // 4. Close 1 tab
+    // 5. Cloase all tabs
+    // 6. Switch to private browsing
+    // 7. Switch back from private browsing
+    // 8. Create new tab in private browsing
 
     func testPerfTabs20tabTray() {
 
@@ -172,7 +182,8 @@ class CronTabsPerformanceTest: BaseTestCase {
                 XCTMemoryMetric()]) {
                 // go to tab tray
                 //navigator.performAction(Action.TogglePrivateMode)
-                navigator.goto(NewTabScreen)
+                navigator.goto(TabTray)
+
             }
         }
     }
@@ -188,7 +199,8 @@ class CronTabsPerformanceTest: BaseTestCase {
                 XCTMemoryMetric()]) {
                 // go to tab tray
                 //navigator.performAction(Action.TogglePrivateMode)
-                navigator.goto(NewTabScreen)
+                navigator.goto(TabTray)
+
             }
         }
     }
