@@ -28,7 +28,9 @@ class LibraryTestsIphone: IphoneOnlyTestCase {
     
     func testLibraryShortcutHomePage () {
         if skipPlatform {return}
-
+        if #available(iOS 14.0, *) {
+            app.buttons["libraryMoreButton"].swipeUp()
+        }
         waitForExistence(app.staticTexts["libraryTitle"], timeout: 3)
         waitForExistence(app.buttons["menu Bookmark"])
         waitForExistence(app.buttons["menu panel ReadingList"])
