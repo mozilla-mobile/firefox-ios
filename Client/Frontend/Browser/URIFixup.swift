@@ -48,7 +48,19 @@ class URIFixup {
     }
 
     static func punycodedURL(_ string: String) -> URL? {
-        var components = URLComponents(string: string)
+        
+        var string = string
+        if string.filter({ $0 == "#" }).count > 1 {
+            
+            replaceHashMarks(url: &string)
+        }
+
+        guard let url = URL(string: string) else {
+            
+            return nil
+        }
+
+        var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
         if AppConstants.MOZ_PUNYCODE {
             let host = components?.host?.utf8HostToAscii()
             components?.host = host
@@ -58,5 +70,24 @@ class URIFixup {
 
     static func replaceBrackets(url: String) -> String {
         return url.replacingOccurrences(of: "[", with: "%5B").replacingOccurrences(of: "]", with: "%5D")
+    }
+
+    static func replaceHashMarks(url: inout String) {
+        
+        let firstIndex = url.firstIndex(of: "#")!
+        var start = url.index(firstIndex, offsetBy: 1)
+
+        var ranges: [Range<String.Index>] = []
+        while start <= url.endIndex,
+            let range = url.range(of: "#", range: start..<url.endIndex) {
+                
+            ranges.append(range)
+            start = range.upperBound
+        }
+
+        for range in ranges {
+            
+            url.replaceSubrange(range, with:  "%23")
+        }
     }
 }
