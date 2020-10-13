@@ -37,6 +37,15 @@ class BookmarkingTests: BaseTestCase {
         }
     }
 
+    private func undoBookmarkRemoval() {
+        navigator.goto(PageOptionsMenu)
+        waitForExistence(app.tables.cells["Remove Bookmark"])
+        app.cells["Remove Bookmark"].tap()
+        navigator.nowAt(BrowserTab)
+        waitForExistence(app.buttons["Undo"], timeout: 3)
+        app.buttons["Undo"].tap()
+    }
+
     private func checkUnbookmarked() {
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables.cells["Bookmark This Page"])
@@ -230,6 +239,16 @@ class BookmarkingTests: BaseTestCase {
         waitForExistence(app.tables["Context Menu"])
         app.tables["Context Menu"].cells["action_bookmark_remove"].tap()
         checkItemsInBookmarksList(items: 0)
+    }
+
+    func testUndoDeleteBookmark() {
+        navigator.openURL(path(forTestPage: url_1))
+        navigator.nowAt(BrowserTab)
+        waitForTabsButton()
+        bookmark()
+        checkBookmarked()
+        undoBookmarkRemoval()
+        checkBookmarked()
     }
 
     private func addNewBookmark() {
