@@ -104,7 +104,6 @@ extension Strings {
     public static let SettingsDataManagementTitle = NSLocalizedString("Settings.DataManagement.Title", value: "Data Management", comment: "Title displayed in header of the setting panel.")
     public static let SettingsWebsiteDataTitle = NSLocalizedString("Settings.WebsiteData.Title", value: "Website Data", comment: "Title displayed in header of the Data Management panel.")
     public static let SettingsWebsiteDataShowMoreButton = NSLocalizedString("Settings.WebsiteData.ButtonShowMore", value: "Show More", comment: "Button shows all websites on website data tableview")
-    public static let SettingsClearWebsiteDataMessage = NSLocalizedString("Settings.WebsiteData.ConfirmPrompt", value: "This action will clear all of your website data. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
     public static let SettingsEditWebsiteSearchButton = NSLocalizedString("Settings.WebsiteData.ButtonEdit", value: "Edit", comment: "Button to edit website search results")
     public static let SettingsDeleteWebsiteSearchButton = NSLocalizedString("Settings.WebsiteData.ButtonDelete", value: "Delete", comment: "Button to delete website in search results")
     public static let SettingsDoneWebsiteSearchButton = NSLocalizedString("Settings.WebsiteData.ButtonDone", value: "Done", comment: "Button to exit edit website search results")
@@ -925,4 +924,53 @@ extension String {
 // QuickActions
 extension String {
     public static let QuickActionsLastBookmarkTitle = NSLocalizedString("Open Last Bookmark", tableName: "3DTouchActions", comment: "String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch")
+}
+
+// CrashOptInAlert
+extension String {
+    public static let CrashOptInAlertTitle = NSLocalizedString("Oops! Firefox crashed", comment: "Title for prompt displayed to user after the app crashes")
+    public static let CrashOptInAlertMessage = NSLocalizedString("Send a crash report so Mozilla can fix the problem?", comment: "Message displayed in the crash dialog above the buttons used to select when sending reports")
+    public static let CrashOptInAlertSend = NSLocalizedString("Send Report", comment: "Used as a button label for crash dialog prompt")
+    public static let CrashOptInAlertAlwaysSend = NSLocalizedString("Always Send", comment: "Used as a button label for crash dialog prompt")
+    public static let CrashOptInAlertDontSend = NSLocalizedString("Don’t Send", comment: "Used as a button label for crash dialog prompt")
+}
+
+// RestoreTabsAlert
+extension String {
+    public static let RestoreTabsAlertTitle = NSLocalizedString("Well, this is embarrassing.", comment: "Restore Tabs Prompt Title")
+    public static let RestoreTabsAlertMessage = NSLocalizedString("Looks like Firefox crashed previously. Would you like to restore your tabs?", comment: "Restore Tabs Prompt Description")
+    public static let RestoreTabsAlertNo = NSLocalizedString("No", comment: "Restore Tabs Negative Action")
+    public static let RestoreTabsAlertOkay = NSLocalizedString("Okay", comment: "Restore Tabs Affirmative Action")
+}
+
+// ClearPrivateDataAlert
+extension String {
+    public static let ClearPrivateDataAlertMessage = NSLocalizedString("This action will clear all of your private data. It cannot be undone.", tableName: "ClearPrivateDataConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
+    public static let ClearPrivateDataAlertCancel = NSLocalizedString("Cancel", tableName: "ClearPrivateDataConfirm", comment: "The cancel button when confirming clear private data.")
+    public static let ClearPrivateDataAlertOk = NSLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data.")
+}
+
+// ClearWebsiteDataAlert
+extension String {
+    public static let ClearWebsiteDataAlertMessage = NSLocalizedString("Settings.WebsiteData.ConfirmPrompt", value: "This action will clear all of your website data. It cannot be undone.", comment: "Description of the confirmation dialog shown when a user tries to clear their private data.")
+    // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
+    public static let ClearWebsiteDataAlertCancel = NSLocalizedString("Cancel", tableName: "ClearPrivateDataConfirm", comment: "The cancel button when confirming clear private data.")
+    public static let ClearWebsiteDataAlertOk = NSLocalizedString("OK", tableName: "ClearPrivateDataConfirm", comment: "The button that clears private data.")
+}
+
+// ClearSyncedHistoryAlert
+extension String {
+    public static let ClearSyncedHistoryAlertMessage = NSLocalizedString("This action will clear all of your private data, including history from your synced devices.", tableName: "ClearHistoryConfirm", comment: "Description of the confirmation dialog shown when a user tries to clear history that's synced to another device.")
+    // TODO: these look like the same as in ClearPrivateDataAlert, I think we can remove them
+    public static let ClearSyncedHistoryAlertCancel = NSLocalizedString("Cancel", tableName: "ClearHistoryConfirm", comment: "The cancel button when confirming clear history.")
+    public static let ClearSyncedHistoryAlertOk = NSLocalizedString("OK", tableName: "ClearHistoryConfirm", comment: "The confirmation button that clears history even when Sync is connected.")
+}
+
+// DeleteLoginAlert
+extension String {
+    public static let DeleteLoginAlertTitle = NSLocalizedString("Are you sure?", tableName: "LoginManager", comment: "Prompt title when deleting logins")
+    public static let DeleteLoginAlertSyncedMessage = NSLocalizedString("Logins will be removed from all connected devices.", tableName: "LoginManager", comment: "Prompt message warning the user that deleted logins will remove logins from all connected devices")
+    public static let DeleteLoginAlertLocalMessage = NSLocalizedString("Logins will be permanently removed.", tableName: "LoginManager", comment: "Prompt message warning the user that deleting non-synced logins will permanently remove them")
+    public static let DeleteLoginAlertCancel = NSLocalizedString("Cancel", tableName: "LoginManager", comment: "Prompt option for cancelling out of deletion")
+    public static let DeleteLoginAlertDelete = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
 }
