@@ -37,6 +37,7 @@ extension PhotonActionSheetProtocol {
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
                        isPinned: Bool,
+                       shouldShowNewTabButton: Bool,
                        success: @escaping (String, ButtonToastAction) -> Void) -> Array<[PhotonActionSheetItem]> {
         if tab.url?.isFileURL ?? false {
             let shareFile = PhotonActionSheetItem(title: Strings.AppMenuSharePageTitleString, iconString: "action_share") { _, _ in
@@ -216,7 +217,7 @@ extension PhotonActionSheetProtocol {
             commonActions.insert(findInPageAction, at: 0)
         }
 
-        if (profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false && tab.readerModeAvailableOrActive) {
+        if shouldShowNewTabButton && tab.readerModeAvailableOrActive {
             return [refreshActions, mainActions, commonActions]
         } else {
             return [mainActions, commonActions]

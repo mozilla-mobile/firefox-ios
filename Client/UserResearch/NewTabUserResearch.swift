@@ -10,6 +10,7 @@ class NewTabUserResearch {
     // Variable
     var lpVariable: LPVar?
     // Constants
+    private let enrollmentKey = "newTabUserResearchEnrollmentKey"
     private let newTabUserResearchKey = "newTabUserResearchKey"
     // Saving user defaults
     private let defaults = UserDefaults.standard
@@ -33,6 +34,14 @@ class NewTabUserResearch {
             return value
         }
     }
+    var hasEnrolled: Bool {
+        set(value) {
+            defaults.set(value, forKey: enrollmentKey)
+        }
+        get {
+            defaults.bool(forKey: enrollmentKey)
+        }
+    }
     
     // MARK: Initializer
     init(lpVariable: LPVar? = LPVariables.newTabButtonABTest) {
@@ -54,12 +63,16 @@ class NewTabUserResearch {
                 return
             }
             self.fetchedExperimentVariables = true
-            self.updateTelemetry()
-            self.newTabState = LPVariables.newTabButtonABTest?.boolValue() ?? false
+            //Only update add new tab (+ button) when it doesn't match leanplum value 
+            let lpValue = LPVariables.newTabButtonABTest?.boolValue() ?? false
+            if self.newTabState != lpValue {
+                self.newTabState = lpValue
+                self.updateTelemetry()
+            }
         }
         // Condition: Leanplum server too slow; Set default New tab state
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            guard self.fetchedExperimentVariables == false else {
+            guard self.fetchedExperimentVariables == false && self.newTabState == nil else {
                 return
             }
             // Condition: Leanplum server too slow; Set default New tab state
@@ -67,12 +80,14 @@ class NewTabUserResearch {
             // Condition: LP has already started but we missed onStartLPVariable callback
             if case .started(startedState: _) = LeanPlumClient.shared.lpState , let boolValue = LPVariables.newTabButtonABTest?.boolValue() {
                 self.newTabState = boolValue
+                self.updateTelemetry()
             }
             self.fetchedExperimentVariables = true
         }
     }
     
     func updateTelemetry() {
+        guard !hasEnrolled else { return }
         // Printing variant is good to know all details of A/B test fields
         print("lp variant \(String(describing: Leanplum.variants()))")
         guard let variants = Leanplum.variants(), let lpData = variants.first as? Dictionary<String, AnyObject> else {
@@ -89,5 +104,6 @@ class NewTabUserResearch {
         LeanPlumClient.shared.set(attributes: attributesExtras)
         // Legacy telemetry
         TelemetryWrapper.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
+        hasEnrolled = true
     }
 }
