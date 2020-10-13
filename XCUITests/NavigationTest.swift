@@ -175,7 +175,7 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-example.html"))
         waitForExistence(app.webViews.links[website_2["link"]!], timeout: 30)
         app.webViews.links[website_2["link"]!].press(forDuration: 2)
-        waitForExistence(app.collectionViews.staticTexts[website_2["moreLinkLongPressUrl"]!])
+        waitForExistence(app.otherElements.collectionViews.element(boundBy: 0), timeout: 5)
 
         XCTAssertTrue(app.buttons["Open in New Tab"].exists, "The option is not shown")
         XCTAssertTrue(app.buttons["Open in New Private Tab"].exists, "The option is not shown")
