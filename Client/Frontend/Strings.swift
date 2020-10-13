@@ -888,7 +888,7 @@ extension String {
     public static let PocketWidgetGalleryDescription = NSLocalizedString("TodayWidget.PocketWidgetGalleryDescription", tableName: "Today", value: "Discover fascinating and thought-provoking stories from across the web, curated by Pocket.", comment: "Description for Firefox Pocket stories widget in Gallery View where user can add it to home screen. Pocket is the name of another app.")
 }
 
-//Default Browser
+// Default Browser
 extension String {
     public static let DefaultBrowserCardTitle = NSLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.")
     public static let DefaultBrowserCardDescription = NSLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
@@ -900,4 +900,9 @@ extension String {
 // FxAWebViewController
 extension String {
     public static let FxAWebContentAccessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+}
+
+// QuickActions
+extension String {
+    public static let QuickActionsLastBookmarkTitle = NSLocalizedString("Open Last Bookmark", tableName: "3DTouchActions", comment: "String describing the action of opening the last added bookmark from the home screen Quick Actions via 3D Touch")
 }
