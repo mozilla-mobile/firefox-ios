@@ -134,6 +134,7 @@ class AuthenticationTest: BaseTestCase {
         navigator.performAction(Action.UnlockLoginsSettings)
         waitForExistence(app.tables["Login List"])
         navigator.goto(SettingsScreen)
+        navigator.goto(NewTabScreen)
         // Trying again should display passcode screen since we've set the interval to be immediately.
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.navigationBars["Enter Passcode"], timeout: 3)

@@ -42,8 +42,10 @@ class SearchTests: BaseTestCase {
 
         // Disable Search suggestion
         app.buttons["urlBar-cancel"].tap()
-        navigator.nowAt(HomePanelsScreen)
+
         waitForTabsButton()
+        app.buttons["TabToolbar.menuButton"].tap()
+        navigator.nowAt(BrowserTabMenu)
         suggestionsOnOff()
 
         // Suggestions should not be shown
@@ -64,7 +66,9 @@ class SearchTests: BaseTestCase {
         XCTAssertFalse(app.tables["SiteTable"].buttons.firstMatch.exists)
 
         app.buttons["urlBar-cancel"].tap()
-        navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
+        app.buttons["TabToolbar.menuButton"].tap()
+        navigator.nowAt(BrowserTabMenu)
 
         // Reset suggestion button, set it to on
         suggestionsOnOff()
