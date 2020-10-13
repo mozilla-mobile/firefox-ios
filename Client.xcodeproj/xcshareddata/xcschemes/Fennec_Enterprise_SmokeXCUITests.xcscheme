@@ -336,6 +336,9 @@
                   Identifier = "CopiedLinksTests">
                </Test>
                <Test
+                  Identifier = "CronTabsPerformanceTest">
+               </Test>
+               <Test
                   Identifier = "DataManagementTests/testWebSiteDataOptions()">
                </Test>
                <Test
