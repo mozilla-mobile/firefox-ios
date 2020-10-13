@@ -3,8 +3,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 @testable import Account
+@testable import Client
 import Foundation
-import FxA
+
 import Shared
 import XCTest
 

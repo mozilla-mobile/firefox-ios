@@ -52,12 +52,12 @@ class AppSettingsTableViewController: SettingsTableViewController {
                         titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
            ]
 
-        if #available(iOS 12.0, *) {
-            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
+        if #available(iOS 14.0, *) {
+            generalSettings.insert(DefaultBrowserSetting(settings: self), at: 4)
         }
 
-        if AppConstants.MOZ_DOCUMENT_SERVICES {
-            generalSettings.insert(TranslationSetting(settings: self), at: 6)
+        if #available(iOS 12.0, *) {
+            generalSettings.insert(SiriPageSetting(settings: self), at: 5)
         }
 
         let accountChinaSyncSetting: [Setting]
@@ -141,7 +141,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ShowEtpCoverSheet(settings: self),
                 ToggleOnboarding(settings: self),
                 LeanplumStatus(settings: self),
-                ClearOnboardingABVariables(settings: self)
+                ClearOnboardingABVariables(settings: self),
+                ToggleNewTabToolbarButton(settings: self)
             ])]
 
         return settings

@@ -4,25 +4,19 @@
 
 import WebKit
 import UIKit
-import EarlGrey
 
 class ToolbarTests: KIFTestCase, UITextFieldDelegate {
     fileprivate var webRoot: String!
 
     override func setUp() {
         webRoot = SimplePageServer.start()
-        BrowserUtils.configEarlGrey()
-        BrowserUtils.dismissFirstRunUI()
+        BrowserUtils.dismissFirstRunUI(tester())
     }
 
     func testURLEntry() {
         let textField = tester().waitForView(withAccessibilityIdentifier: "url") as! UITextField
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .inRoot(grey_kindOfClass(UITextField.self))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .inRoot(grey_kindOfClass(UITextField.self))
-            .perform(grey_replaceText("foobar"))
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().enterText(intoCurrentFirstResponder: "foobar")
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         XCTAssertNotEqual(textField.text, "foobar", "Verify that the URL bar text clears on about:home")
 
@@ -33,29 +27,21 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         // URL without "http://".
         let displayURL = "\(localhostURL)/numberedPage.html?page=1".substring(from: url.index(url.startIndex, offsetBy: "http://".count))
 
-        BrowserUtils.enterUrlAddressBar(typeUrl: url)
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
 
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "URL matches page URL")
 
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-            .inRoot(grey_kindOfClass(UITextField.self))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-            .inRoot(grey_kindOfClass(UITextField.self))
-            .perform(grey_replaceText("foobar"))
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().enterText(intoCurrentFirstResponder: "foobar")
         tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after entering text")
 
-        EarlGrey.selectElement(with: grey_accessibilityID("url"))
-             .inRoot(grey_kindOfClass(UITextField.self))
-            .perform(grey_tap())
-        EarlGrey.selectElement(with: grey_accessibilityID("address"))
-             .inRoot(grey_kindOfClass(UITextField.self))
-            .perform(grey_replaceText(" "))
+        tester().tapView(withAccessibilityIdentifier: "url")
+        tester().enterText(intoCurrentFirstResponder: " ")
 
-        EarlGrey.selectElement(with: grey_accessibilityID("urlBar-cancel")).perform(grey_tap())
+        tester().tapView(withAccessibilityIdentifier: "urlBar-cancel")
         tester().waitForAnimationsToFinish()
         XCTAssertEqual(textField.text, displayURL, "Verify that text reverts to page URL after clearing text")
     }
@@ -65,15 +51,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
         let urlWithUserInfo = "\(hostWithUsername)/numberedPage.html?page=1"
         let url = "\(webRoot!)/numberedPage.html?page=1"
 
-//        let urlFieldAppeared = GREYCondition(name: "Wait for URL field", block: {
-//            var errorOrNil: NSError?
-//            EarlGrey.selectElement(with: grey_accessibilityID("url"))
-//                .assert(grey_notNil(), error: &errorOrNil)
-//            return errorOrNil == nil
-//        }).wait(withTimeout: 10)
-//        GREYAssertTrue(urlFieldAppeared, reason: "Failed to display URL field")
-
-        BrowserUtils.enterUrlAddressBar(typeUrl: urlWithUserInfo)
+        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: urlWithUserInfo)
         tester().waitForAnimationsToFinish()
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
 
@@ -88,7 +66,7 @@ class ToolbarTests: KIFTestCase, UITextFieldDelegate {
             let value = UIInterfaceOrientation.portrait.rawValue
             UIDevice.current.setValue(value, forKey: "orientation")
         }
-        BrowserUtils.resetToAboutHome()
-        BrowserUtils.clearPrivateData()
+        BrowserUtils.resetToAboutHomeKIF(tester())
+        BrowserUtils.clearPrivateDataKIF(tester())
     }
 }

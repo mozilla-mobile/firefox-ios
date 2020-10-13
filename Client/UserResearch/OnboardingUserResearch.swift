@@ -6,13 +6,6 @@ import Foundation
 import Leanplum
 import Shared
 
-struct LPVariables {
-    // Variable Used for AA test
-    static var showOnboardingScreenAA = LPVar.define("showOnboardingScreen", with: true)
-    // Variable Used for AB test
-    static var showOnboardingScreenAB = LPVar.define("showOnboardingScreen_2", with: true)
-}
-
 // For LP variable below is the convention we follow
 // True = Current Onboarding Screen
 // False = New Onboarding Screen
@@ -52,7 +45,7 @@ class OnboardingUserResearch {
     }
     
     // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.showOnboardingScreenAB) {
+    init(lpVariable: LPVar? = LPVariables.onboardingABTestV2) {
         self.lpVariable = lpVariable
     }
     
@@ -66,7 +59,7 @@ class OnboardingUserResearch {
         }
         // Condition: A/B test variables from leanplum server
         LeanPlumClient.shared.finishedStartingLeanplum = {
-            let showScreenA = LPVariables.showOnboardingScreenAB?.boolValue()
+            let showScreenA = LPVariables.onboardingABTestV2?.boolValue()
             LeanPlumClient.shared.finishedStartingLeanplum = nil
             self.updateTelemetry()
             let screenType = OnboardingScreenType.from(boolValue: (showScreenA ?? true))
@@ -81,7 +74,7 @@ class OnboardingUserResearch {
             let lpStartStatus = LeanPlumClient.shared.lpState
             var lpVariableValue: OnboardingScreenType = .versionV1
             // Condition: LP has already started but we missed onStartLPVariable callback
-            if case .started(startedState: _) = lpStartStatus , let boolValue = LPVariables.showOnboardingScreenAB?.boolValue() {
+            if case .started(startedState: _) = lpStartStatus , let boolValue = LPVariables.onboardingABTestV2?.boolValue() {
                 lpVariableValue = boolValue ? .versionV1 : .versionV2
                 self.updateTelemetry()
             }

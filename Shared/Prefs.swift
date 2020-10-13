@@ -27,6 +27,7 @@ public struct PrefsKeys {
     public static let LoginsShowShortcutMenuItem = "showLoginsInAppMenu"
     public static let KeyInstallSession = "installSessionNumber"
     public static let KeyETPCoverSheetShowType = "etpCoverSheetShowType"
+    public static let ShowNewTabToolbarButton = "newTabToolbarButton"
 
     public static let ContextMenuShowLinkPreviews = "showLinkPreviews"
 

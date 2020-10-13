@@ -271,7 +271,7 @@ class LoginsHelper: TabContentScript {
 
             let json = JSON(dict)
             let injectJavaScript = "window.__firefox__.logins.inject(\(json.stringify()!))"
-            self.tab?.webView?.evaluateJavaScript(injectJavaScript)
+            self.tab?.webView?.evaluateJavascriptInDefaultContentWorld(injectJavaScript)
         }
     }
 }

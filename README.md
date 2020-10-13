@@ -15,7 +15,7 @@ For bug fixes and features for a specific release use the version branch.
 Getting involved
 ----------------
 
-Want to contribute but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/issues?q=is%3Aissue+is%3Aopen+label%3A%22Contributor+OK+%F0%9F%A4%9D%22)
+Want to contribute but don't know where to start? Here is a list of [issues that are contributor friendly](https://github.com/mozilla-mobile/firefox-ios/labels/Contributor%20OK)
 
 Building the code
 -----------------

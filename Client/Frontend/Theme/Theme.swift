@@ -117,7 +117,7 @@ class TabTrayColor {
     var privateModeButtonOnTint: UIColor { return UIColor.Photon.Grey10 }
     var cellCloseButton: UIColor { return UIColor.Photon.Grey50 }
     var cellTitleBackground: UIColor { return UIColor.clear }
-    var faviconTint: UIColor { return UIColor.Photon.White100 }
+    var faviconTint: UIColor { return UIColor.black }
     var searchBackground: UIColor { return UIColor.Photon.Grey30 }
 }
 
@@ -203,6 +203,11 @@ class GeneralColor {
     var switchToggle: UIColor { return UIColor.Photon.Grey90A40 }
 }
 
+class DefaultBrowserCardColor {
+    var backgroundColor: UIColor { return UIColor.Photon.Grey30 }
+    var textColor: UIColor { return UIColor.black }
+}
+
 protocol Theme {
     var name: String { get }
     var tableView: TableViewColor { get }
@@ -218,6 +223,7 @@ protocol Theme {
     var general: GeneralColor { get }
     var actionMenu: ActionMenuColor { get }
     var switchToggleTheme: GeneralColor { get }
+    var defaultBrowserCard: DefaultBrowserCardColor { get }
 }
 
 class NormalTheme: Theme {
@@ -235,4 +241,5 @@ class NormalTheme: Theme {
     var general: GeneralColor { return GeneralColor() }
     var actionMenu: ActionMenuColor { return ActionMenuColor() }
     var switchToggleTheme: GeneralColor { return GeneralColor() }
+    var defaultBrowserCard: DefaultBrowserCardColor { return DefaultBrowserCardColor() }
 }

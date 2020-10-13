@@ -4,7 +4,7 @@
 
 import Foundation
 import Shared
-import Glean
+import MozillaAppServices
 
 struct FxALaunchParams {
     var query: [String: String]
@@ -33,11 +33,16 @@ enum SettingsPage: String {
     case theme = "theme"
 }
 
+enum DefaultBrowserPath: String {
+    case systemSettings = "system-settings"
+}
+
 // Used by the App to navigate to different views.
 // To open a URL use /open-url or to open a blank tab use /open-url with no params
 enum DeepLink {
     case settings(SettingsPage)
     case homePanel(HomePanelPath)
+    case defaultBrowser(DefaultBrowserPath)
     init?(urlString: String) {
         let paths = urlString.split(separator: "/")
         guard let component = paths[safe: 0], let componentPath = paths[safe: 1] else {
@@ -47,6 +52,8 @@ enum DeepLink {
             self = .settings(link)
         } else if component == "homepanel", let link = HomePanelPath(rawValue: String(componentPath)) {
             self = .homePanel(link)
+        } else if component == "default-browser", let link = DefaultBrowserPath(rawValue: String(componentPath)) {
+            self = .defaultBrowser(link)
         } else {
             return nil
         }
@@ -67,6 +74,7 @@ enum NavigationPath {
     case deepLink(DeepLink)
     case text(String)
     case glean(url: URL)
+    case closePrivateTabs
 
     init?(url: URL) {
         let urlString = url.absoluteString
@@ -94,24 +102,49 @@ enum NavigationPath {
             // use the last browsing mode the user was in.
             let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
+            
+            // Tracking for default browser
+            if (urlString.starts(with: "http:") ||  urlString.starts(with: "https:") && UserDefaults.standard.bool(forKey: "OpenedAsDefaultBrowser")) {
+                TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
+                UserDefaults.standard.set(true, forKey: "OpenedAsDefaultBrowser")
+            }
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
             self = .text(text ?? "")
         } else if urlString.starts(with: "\(scheme)://glean") {
             self = .glean(url: url)
-        }
-        else {
+        } else if urlString.starts(with: "\(scheme)://open-copied") {
+            if !UIPasteboard.general.hasURLs {
+                guard let searchText = UIPasteboard.general.string else {
+                    return nil
+                }
+                self = .text(searchText)
+            } else {
+                guard let url = UIPasteboard.general.url else {
+                    return nil
+                }
+                let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+                self = .url(webURL: url, isPrivate: isPrivate)
+            }
+        } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
+            self = .closePrivateTabs
+        } else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
+            // Use the last browsing mode the user was in
+            let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+            self = .url(webURL: url, isPrivate: isPrivate)
+        } else {
             return nil
         }
     }
 
-    static func handle(nav: NavigationPath, with bvc: BrowserViewController) {
+    static func handle(nav: NavigationPath, with bvc: BrowserViewController, tray: TabTrayControllerV1) {
         switch nav {
         case .fxa(let params): NavigationPath.handleFxA(params: params, with: bvc)
         case .deepLink(let link): NavigationPath.handleDeepLink(link, with: bvc)
         case .url(let url, let isPrivate): NavigationPath.handleURL(url: url, isPrivate: isPrivate, with: bvc)
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
+        case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
         }
     }
 
@@ -128,13 +161,24 @@ enum NavigationPath {
             settingsTableViewController.tabManager = bvc.tabManager
             settingsTableViewController.settingsDelegate = bvc
             NavigationPath.handleSettings(settings: settingsPath, with: rootVC, baseSettingsVC: settingsTableViewController, and: bvc)
+        case .defaultBrowser(let path):
+            NavigationPath.handleDefaultBrowser(path: path)
         }
     }
 
     private static func handleFxA(params: FxALaunchParams, with bvc: BrowserViewController) {
         bvc.presentSignInViewController(params)
     }
-    
+
+    private static func handleClosePrivateTabs(with bvc: BrowserViewController, tray: TabTrayControllerV1) {
+        bvc.tabManager.removeTabs(bvc.tabManager.privateTabs)
+         guard let tab = mostRecentTab(inTabs: bvc.tabManager.normalTabs) else {
+             bvc.tabManager.selectTab(bvc.tabManager.addTab())
+             return
+         }
+         bvc.tabManager.selectTab(tab)
+    }
+
     private static func handleGlean(url: URL) {
         Glean.shared.handleCustomUrl(url: url)
     }
@@ -206,6 +250,13 @@ enum NavigationPath {
             controller.pushViewController(ThemeSettingsController(), animated: true)
         }
     }
+    
+    private static func handleDefaultBrowser(path: DefaultBrowserPath) {
+        switch path {
+        case .systemSettings:
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        }
+    }
 }
 
 extension NavigationPath: Equatable {}
@@ -230,6 +281,8 @@ func == (lhs: DeepLink, rhs: DeepLink) -> Bool {
     case let (.settings(lhs), .settings(rhs)):
         return lhs == rhs
     case let (.homePanel(lhs), .homePanel(rhs)):
+        return lhs == rhs
+    case let (.defaultBrowser(lhs), .defaultBrowser(rhs)):
         return lhs == rhs
     default:
         return false

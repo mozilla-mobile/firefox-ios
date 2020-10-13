@@ -325,6 +325,18 @@ tabs:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
+  new_tab_pressed:
+    type: counter
+    description: |
+      Counts the number of times the add new tab button is
+      pressed
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6886
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-21"
 
 # Bookmark metrics
 bookmarks:
@@ -499,6 +511,21 @@ reading_list:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
 
+# Default Browser Settings Menu Option
+settings_menu:
+  set_as_default_browser_pressed:
+    type: counter
+    description: |
+      Counts the number of times setting as default
+      browser menu option is tapped.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7090
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7090
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-03-01"
+
 # QR Code metrics
 qr_code:
   scanned:
@@ -513,6 +540,47 @@ qr_code:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
 
+# Default browser card metrics
+default_browser_card:
+  dismiss_pressed:
+    type: counter
+    description: |
+      Counts the number of times default browser card is dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-07-01"
+  go_to_settings_pressed:
+    type: counter
+    description: |
+      Counts the number of times the Go To Settings button on
+      default browser card is clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-03-01"
+
+app:
+  opened_as_default_browser:
+    type: counter
+    description: |
+      Recorded when a preference is changed and includes the
+      preference that changed as well as the value changed to
+      recorded in the extra keys.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7151
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-03-01"
+
 # Legacy IDs for deletion-request purposes
 legacy.ids:
   client_id:
@@ -521,7 +589,7 @@ legacy.ids:
     description: |
       The client id from legacy telemetry.
     send_in_pings:
-      - deletion_request
+      - deletion-request
     bugs:
       - https://bugzilla.mozilla.org/show_bug.cgi?id=1635427
     data_reviews:

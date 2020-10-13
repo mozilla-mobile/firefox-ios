@@ -37,37 +37,48 @@ class SearchTests: BaseTestCase {
         waitForNoExistence(app.staticTexts[LabelPrompt])
 
         // Suggestions should be shown
-        waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForExistence(app.tables["SiteTable"].buttons.firstMatch)
+        XCTAssertTrue(app.tables["SiteTable"].buttons.firstMatch.exists)
 
         // Disable Search suggestion
         app.buttons["urlBar-cancel"].tap()
-        navigator.nowAt(HomePanelsScreen)
+
+        waitForTabsButton()
+        app.buttons["TabToolbar.menuButton"].tap()
+        navigator.nowAt(BrowserTabMenu)
         suggestionsOnOff()
 
         // Suggestions should not be shown
-        waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForNoExistence(app.tables["SiteTable"].buttons.firstMatch)
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
-        waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForNoExistence(app.tables["SiteTable"].buttons.firstMatch)
+        XCTAssertFalse(app.tables["SiteTable"].buttons.firstMatch.exists)
 
         // Verify that previous choice is remembered
         app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        waitForTabsButton()
+
         typeOnSearchBar(text: "foobar")
         waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        XCTAssertFalse(app.tables["SiteTable"].buttons.firstMatch.exists)
+
         app.buttons["urlBar-cancel"].tap()
-        navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
+        app.buttons["TabToolbar.menuButton"].tap()
+        navigator.nowAt(BrowserTabMenu)
 
         // Reset suggestion button, set it to on
         suggestionsOnOff()
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        waitForTabsButton()
 
         // Suggestions prompt should appear
         typeOnSearchBar(text: "foobar")
-        waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForExistence(app.tables["SiteTable"].buttons.firstMatch)
+        XCTAssertTrue(app.tables["SiteTable"].buttons.firstMatch.exists)
     }
 
     // Promt does not appear once Search has been enabled by default, see bug: 1411184
@@ -123,23 +134,29 @@ class SearchTests: BaseTestCase {
         typeOnSearchBar(text: "www.mozilla.org")
         app.textFields["address"].press(forDuration: 5)
         app.menuItems["Select All"].tap()
+        waitForExistence(app.menuItems["Copy"], timeout: 3)
         app.menuItems["Copy"].tap()
         waitForExistence(app.buttons["urlBar-cancel"])
         app.buttons["urlBar-cancel"].tap()
 
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
-        waitForExistence(app.textFields["address"])
+        waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 10)
+        waitForExistence(app.textFields["url"], timeout: 3)
+        app.textFields["url"].tap()
+        waitForExistence(app.textFields["address"], timeout: 3)
         app.textFields["address"].tap()
+
         waitForExistence(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
 
         // Verify that the Paste shows the search controller with prompt
         waitForNoExistence(app.staticTexts[LabelPrompt])
         app.typeText("\r")
+        waitUntilPageLoad()
 
         // Check that the website is loaded
         waitForValueContains(app.textFields["url"], value: "www.mozilla.org")
+        waitUntilPageLoad()
 
         // Go back, write part of moz, check the autocompletion
         if iPad() {
@@ -148,7 +165,7 @@ class SearchTests: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        waitForTabsButton()
         typeOnSearchBar(text: "moz")
         waitForValueContains(app.textFields["address"], value: "mozilla.org")
         let value = app.textFields["address"].value
@@ -164,20 +181,19 @@ class SearchTests: BaseTestCase {
 
         navigator.openURL("foo")
         // Workaroud needed after xcode 11.3 update Issue 5937
-        waitForExistence(app.webViews.firstMatch, timeout: 3)
-        // waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
+        // waitForExistence(app.webViews.firstMatch, timeout: 3)
+        waitForValueContains(app.textFields["url"], value: searchEngine.lowercased())
         }
 
     // Smoketest
     func testSearchEngine() {
         // Change to the each search engine and verify the search uses it
         changeSearchEngine(searchEngine: "Bing")
-        // Lets keep only one search engine test, xcode 11.3 update Issue 5937
-        // changeSearchEngine(searchEngine: "DuckDuckGo")
-        // Temporary disabled due to intermittent issue on BB
-        // changeSearchEngine(searchEngine: "Google")
-        // changeSearchEngine(searchEngine: "Twitter")
-        // changeSearchEngine(searchEngine: "Wikipedia")
+        changeSearchEngine(searchEngine: "DuckDuckGo")
+        changeSearchEngine(searchEngine: "Google")
+        changeSearchEngine(searchEngine: "Twitter")
+        changeSearchEngine(searchEngine: "Wikipedia")
+        // Last check failing intermittently, temporary disabled
         // changeSearchEngine(searchEngine: "Amazon.com")
     }
 
@@ -212,5 +228,40 @@ class SearchTests: BaseTestCase {
         app.typeText(XCUIKeyboardKey.return.rawValue)
         waitForExistence(app.textFields["url"], timeout: 20)
         waitForValueContains(app.textFields["url"], value: "google")
+    }
+    
+    func testSearchIconOnAboutHome() {
+        waitForTabsButton()
+        navigator.performAction(Action.OpenNewTabFromTabTray)
+        waitForTabsButton()
+        
+        // Search icon is displayed.
+        waitForExistence(app.buttons["TabToolbar.multiStateButton"])
+
+        XCTAssertEqual(app.buttons["TabToolbar.multiStateButton"].label, "Search")
+        XCTAssertTrue(app.buttons["TabToolbar.multiStateButton"].exists)
+        app.buttons["TabToolbar.multiStateButton"].tap()
+
+        let addressBar = app.textFields["address"]
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+    
+        app.textFields["address"].typeText("www.google.com\n")
+        waitUntilPageLoad()
+
+        // Reload icon is displayed.
+        waitForExistence(app.buttons["TabToolbar.multiStateButton"])
+        XCTAssertEqual(app.buttons["TabToolbar.multiStateButton"].label, "Reload")
+        app.buttons["TabToolbar.multiStateButton"].tap()
+
+        app.buttons["TabToolbar.backButton"].tap()
+
+        waitForExistence(app.buttons["TabToolbar.multiStateButton"])
+        XCTAssertTrue(app.buttons["TabToolbar.multiStateButton"].exists)
+        // Tap on the Search icon.
+        app.buttons["TabToolbar.multiStateButton"].tap()
+
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
     }
 }

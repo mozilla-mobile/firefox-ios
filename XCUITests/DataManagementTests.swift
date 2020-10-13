@@ -22,9 +22,12 @@ class DataManagementTests: BaseTestCase {
         let websitesList = ["example.com", path(forTestPage: "test-mozilla-org.html"), path(forTestPage: "test-mozilla-book.html"), "youtube.com", "www.google.com", "bing.com"]
         for website in websitesList {
             navigator.openURL(website)
+            waitUntilPageLoad()
         }
         navigator.goto(WebsiteDataSettings)
-        waitForExistence(app.searchFields["Filter Sites"])
+        waitForExistence(app.tables.otherElements["Website Data"], timeout: 3)
+        app.tables.otherElements["Website Data"].swipeDown()
+        waitForExistence(app.searchFields["Filter Sites"], timeout: 3)
         navigator.performAction(Action.TapOnFilterWebsites)
         app.typeText("bing")
         waitForExistence(app.tables["Search results"])
@@ -35,6 +38,7 @@ class DataManagementTests: BaseTestCase {
         let expectedNoSearchResults = app.tables["Search results"].cells.count
         XCTAssertEqual(expectedNoSearchResults, 0)
         app.buttons["Cancel"].tap()
+        waitForExistence(app.tables.cells["ShowMoreWebsiteData"], timeout: 3)
         navigator.performAction(Action.ShowMoreWebsiteDataEntries)
         let expectedShowMoreWebsites = app.tables.cells.count
         XCTAssertNotEqual(expectedShowMoreWebsites, 9)

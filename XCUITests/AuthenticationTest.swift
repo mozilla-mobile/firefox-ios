@@ -4,6 +4,8 @@
 
 import XCTest
 
+let testBasicHTTPAuthURL = "https://jigsaw.w3.org/HTTP/Basic/"
+
 class AuthenticationTest: BaseTestCase {
 
     fileprivate func setInterval(_ interval: String = "Immediately") {
@@ -39,14 +41,15 @@ class AuthenticationTest: BaseTestCase {
 
         //send app to background, and re-enter
         XCUIDevice.shared.press(.home)
+
+        // Let's be sure the app is backgrounded
+        let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
+        waitForExistence(springboard.icons["XCUITests-Runner"], timeout: 10)
         app.activate()
-        let contentView = app.navigationBars["Client.FxAContentView"]
-        if contentView.exists {
-            app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
-        }
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(LockedLoginsSettings)
-        waitForExistence(app.navigationBars["Enter Passcode"])
+
+        // Need to be sure the app is ready
+        navigator.nowAt(LockedLoginsSettings)
+        waitForExistence(app.navigationBars["Enter Passcode"], timeout: 10)
     }
 
     func testPromptPassCodeUponReentryWithDelay() {
@@ -58,13 +61,10 @@ class AuthenticationTest: BaseTestCase {
         // Send app to background, and re-enter
         XCUIDevice.shared.press(.home)
         app.activate()
-        let contentView = app.navigationBars["Client.FxAContentView"]
-        if contentView.exists {
-            app.navigationBars["Client.FxAContentView"].buttons["Settings"].tap()
-        }
-        navigator.nowAt(SettingsScreen)
-        navigator.goto(LockedLoginsSettings)
-        waitForExistence(app.tables["Login List"])
+
+        // Login List is shown since the delay is set to 5min
+        navigator.nowAt(LockedLoginsSettings)
+        waitForExistence(app.tables["Login List"], timeout: 3)
     }
 
     func testChangePasscodeShowsErrorStates() {
@@ -134,6 +134,7 @@ class AuthenticationTest: BaseTestCase {
         navigator.performAction(Action.UnlockLoginsSettings)
         waitForExistence(app.tables["Login List"])
         navigator.goto(SettingsScreen)
+        navigator.goto(NewTabScreen)
         // Trying again should display passcode screen since we've set the interval to be immediately.
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.navigationBars["Enter Passcode"], timeout: 3)
@@ -155,6 +156,9 @@ class AuthenticationTest: BaseTestCase {
         navigator.goto(SettingsScreen)
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.tables["Login List"])
+
+        app.buttons["Settings"].tap()
+        navigator.nowAt(SettingsScreen)
 
         navigator.goto(PasscodeSettings)
         waitForExistence(app.staticTexts["After 5 minutes"])
@@ -262,5 +266,27 @@ class AuthenticationTest: BaseTestCase {
         navigator.goto(LockedLoginsSettings)
         waitForExistence(app.navigationBars["Enter Passcode"])
         navigator.performAction(Action.UnlockLoginsSettings)
+    }
+
+    func testBasicHTTPAuthenticationPromptVisible() {
+        navigator.openURL(testBasicHTTPAuthURL)
+
+        waitForExistence(app.staticTexts["Authentication required"], timeout: 5)
+        waitForExistence(app.staticTexts["A username and password are being requested by jigsaw.w3.org. The site says: test"])
+
+        let placeholderValueUsername = app.alerts.textFields.element(boundBy: 0).value as! String
+        let placeholderValuePassword = app.alerts.secureTextFields.element(boundBy: 0).value as! String
+
+        XCTAssertEqual(placeholderValueUsername, "Username")
+        XCTAssertEqual(placeholderValuePassword, "Password")
+
+        waitForExistence(app.alerts.buttons["Cancel"])
+        waitForExistence(app.alerts.buttons["Log in"])
+
+        // Skip login due to HTTP Basic Authentication crash in #5757
+
+        // Dismiss authentication prompt
+        app.alerts.buttons["Cancel"].tap()
+        waitForNoExistence(app.alerts.buttons["Cancel"], timeoutValue:5)
     }
 }

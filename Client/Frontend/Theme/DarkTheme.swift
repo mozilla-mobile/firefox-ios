@@ -57,6 +57,7 @@ fileprivate class DarkTabTrayColor: TabTrayColor {
     override var toolbarButtonTint: UIColor { return defaultTextAndTint }
     override var cellCloseButton: UIColor { return defaultTextAndTint }
     override var cellTitleBackground: UIColor { return UIColor.Photon.Grey70 }
+    override var faviconTint: UIColor { return UIColor.Photon.White100 }
     override var searchBackground: UIColor { return UIColor.Photon.Grey60 }
 }
 
@@ -126,6 +127,11 @@ fileprivate class DarkGeneralColor: GeneralColor {
     override var switchToggle: UIColor { return UIColor.Photon.Grey40 }
 }
 
+class DarkDefaultBrowserCardColor: DefaultBrowserCardColor {
+    override var backgroundColor: UIColor { return UIColor.Photon.Grey60 }
+    override var textColor: UIColor { return UIColor.white }
+}
+
 class DarkTheme: NormalTheme {
     override var name: String { return BuiltinThemeName.dark.rawValue }
     override var tableView: TableViewColor { return DarkTableViewColor() }
@@ -138,5 +144,6 @@ class DarkTheme: NormalTheme {
     override var homePanel: HomePanelColor { return DarkHomePanelColor() }
     override var snackbar: SnackBarColor { return DarkSnackBarColor() }
     override var general: GeneralColor { return DarkGeneralColor() }
-    override var actionMenu: ActionMenuColor { return DarkActionMenuColor() } 
+    override var actionMenu: ActionMenuColor { return DarkActionMenuColor() }
+    override var defaultBrowserCard: DefaultBrowserCardColor { return DarkDefaultBrowserCardColor() }
 }

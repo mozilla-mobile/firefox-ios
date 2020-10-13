@@ -9,17 +9,21 @@ class ReaderViewTest: BaseTestCase {
     func testLoadReaderContent() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
+        waitForNoExistence(app.staticTexts["Fennec pasted from XCUITests-Runner"])
+        waitForExistence(app.buttons["Reader View"], timeout: 5)
         app.buttons["Reader View"].tap()
         app.buttons["Reload"].tap()
         // The settings of reader view are shown as well as the content of the web site
-        waitForExistence(app.buttons["Display Settings"])
+        waitForExistence(app.buttons["Display Settings"], timeout: 5)
         XCTAssertTrue(app.webViews.staticTexts["The Book of Mozilla"].exists)
     }
 
+    
     private func addContentToReaderView() {
         userState.url = path(forTestPage: "test-mozilla-book.html")
         navigator.goto(BrowserTab)
         waitUntilPageLoad()
+        waitForExistence(app.buttons["Reader View"], timeout: 5)
         app.buttons["Reader View"].tap()
         app.buttons["Reload"].tap()
         waitUntilPageLoad()
@@ -132,10 +136,10 @@ class ReaderViewTest: BaseTestCase {
 
         // Mark it as read/unread
         savedToReadingList.swipeLeft()
-        waitForExistence(app.tables.cells.buttons["trailing1"].staticTexts["Mark as  Read"])
-        app.tables.cells.buttons["trailing1"].tap()
+        waitForExistence(app.tables.cells.buttons.staticTexts["Mark as  Read"], timeout: 3)
+        app.tables["ReadingTable"].cells.buttons.element(boundBy: 1).tap()
         savedToReadingList.swipeLeft()
-        waitForExistence(app.buttons["trailing1"].staticTexts["Mark as  Unread"])
+        waitForExistence(app.tables.cells.buttons.staticTexts["Mark as  Unread"])
     }
 
     func testRemoveFromReadingList() {
