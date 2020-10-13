@@ -570,9 +570,7 @@ extension Strings {
     public static let TrackingProtectionOptionProtectionLevelTitle = NSLocalizedString("Settings.TrackingProtection.ProtectionLevelTitle", value: "Protection Level", comment: "Title for tracking protection options section where level can be selected.")
     public static let TrackingProtectionOptionBlockListsHeader = NSLocalizedString("Settings.TrackingProtection.BlockListsHeader", value: "You can choose which list Firefox will use to block Web elements that may track your browsing activity.", comment: "Header description for tracking protection options section where Basic/Strict block list can be selected")
     public static let TrackingProtectionOptionBlockListLevelStandard = NSLocalizedString("Settings.TrackingProtectionOption.BasicBlockList", value: "Standard (default)", comment: "Tracking protection settings option for using the basic blocklist.")
-   // public static let TrackingProtectionOptionBlockListLevelStandardDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListBasicDescription", value: "Allows some trackers so websites function properly.", comment: "Tracking protection settings option description for using the basic blocklist.")
     public static let TrackingProtectionOptionBlockListLevelStrict = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrict", value: "Strict", comment: "Tracking protection settings option for using the strict blocklist.")
-   // public static let TrackingProtectionOptionBlockListLevelStrictDescription = NSLocalizedString("Settings.TrackingProtectionOption.BlockListStrictDescription", value: "Blocks known trackers. Some websites may not function properly.", comment: "Tracking protection settings option description for using the strict blocklist.")
     public static let TrackingProtectionReloadWithout = NSLocalizedString("Menu.ReloadWithoutTrackingProtection.Title", value: "Reload Without Tracking Protection", comment: "Label for the button, displayed in the menu, used to reload the current website without Tracking Protection")
     public static let TrackingProtectionReloadWith = NSLocalizedString("Menu.ReloadWithTrackingProtection.Title", value: "Reload With Tracking Protection", comment: "Label for the button, displayed in the menu, used to reload the current website with Tracking Protection enabled")
 
@@ -897,4 +895,9 @@ extension String {
     public static let DefaultBrowserCardButton = NSLocalizedString("DefaultBrowserCard.Button", tableName: "Default Browser", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
     public static let DefaultBrowserMenuItem = NSLocalizedString("Settings.DefaultBrowserMenuItem", tableName: "Default Browser", value: "Set as Default Browser", comment: "Menu option for setting Firefox as default browser.")
     
+}
+
+// FxAWebViewController
+extension String {
+    public static let FxAWebContentAccessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
 }
