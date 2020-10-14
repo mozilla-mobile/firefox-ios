@@ -841,12 +841,12 @@ class TouchIDPasscodeSetting: Setting {
         let title: String
         if localAuthContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: nil) {
             if localAuthContext.biometryType == .faceID {
-                title = AuthenticationStrings.faceIDPasscodeSetting
+                title = .AuthenticationFaceIDPasscodeSetting
             } else {
-                title = AuthenticationStrings.touchIDPasscodeSetting
+                title = .AuthenticationTouchIDPasscodeSetting
             }
         } else {
-            title = AuthenticationStrings.passcode
+            title = .AuthenticationPasscode
         }
         super.init(title: NSAttributedString(string: title, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
                    delegate: delegate)
