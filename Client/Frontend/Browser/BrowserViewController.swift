@@ -2351,20 +2351,18 @@ extension BrowserViewController: ContextMenuHelperDelegate {
     
     //Support for CMD+ Click on link to open in a new tab
      override func pressesBegan(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+         super.pressesBegan(presses, with: event)
          if #available(iOS 13.4, *) {
              guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return } //GUI buttons = CMD buttons on ipad/mac
              self.isCmdClickForNewTab = true
-         } else {
-             super.pressesBegan(presses, with: event)
          }
     }
     
     override func pressesEnded(_ presses: Set<UIPress>, with event: UIPressesEvent?) {
+        super.pressesEnded(presses, with: event)
         if #available(iOS 13.4, *) {
             guard let key = presses.first?.key, (key.keyCode == .keyboardLeftGUI || key.keyCode == .keyboardRightGUI) else { return }
             self.isCmdClickForNewTab = false
-        } else {
-            super.pressesEnded(presses, with: event)
         }
     }
 }

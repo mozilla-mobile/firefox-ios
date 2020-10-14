@@ -37,37 +37,48 @@ class SearchTests: BaseTestCase {
         waitForNoExistence(app.staticTexts[LabelPrompt])
 
         // Suggestions should be shown
-        waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForExistence(app.tables["SiteTable"].buttons.firstMatch)
+        XCTAssertTrue(app.tables["SiteTable"].buttons.firstMatch.exists)
 
         // Disable Search suggestion
         app.buttons["urlBar-cancel"].tap()
-        navigator.nowAt(HomePanelsScreen)
+
+        waitForTabsButton()
+        app.buttons["TabToolbar.menuButton"].tap()
+        navigator.nowAt(BrowserTabMenu)
         suggestionsOnOff()
 
         // Suggestions should not be shown
-        waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForNoExistence(app.tables["SiteTable"].buttons.firstMatch)
         navigator.nowAt(BrowserTab)
         navigator.goto(URLBarOpen)
         typeOnSearchBar(text: "foobar")
-        waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForNoExistence(app.tables["SiteTable"].buttons.firstMatch)
+        XCTAssertFalse(app.tables["SiteTable"].buttons.firstMatch.exists)
 
         // Verify that previous choice is remembered
         app.buttons["urlBar-cancel"].tap()
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        waitForTabsButton()
+
         typeOnSearchBar(text: "foobar")
         waitForNoExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        XCTAssertFalse(app.tables["SiteTable"].buttons.firstMatch.exists)
+
         app.buttons["urlBar-cancel"].tap()
-        navigator.nowAt(HomePanelsScreen)
+        waitForTabsButton()
+        app.buttons["TabToolbar.menuButton"].tap()
+        navigator.nowAt(BrowserTabMenu)
 
         // Reset suggestion button, set it to on
         suggestionsOnOff()
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        waitForTabsButton()
 
         // Suggestions prompt should appear
         typeOnSearchBar(text: "foobar")
-        waitForExistence(app.tables["SiteTable"].buttons[SuggestedSite])
+        waitForExistence(app.tables["SiteTable"].buttons.firstMatch)
+        XCTAssertTrue(app.tables["SiteTable"].buttons.firstMatch.exists)
     }
 
     // Promt does not appear once Search has been enabled by default, see bug: 1411184
@@ -154,7 +165,7 @@ class SearchTests: BaseTestCase {
             app.buttons["TabToolbar.backButton"].tap()
         }
         navigator.nowAt(HomePanelsScreen)
-        navigator.goto(URLBarOpen)
+        waitForTabsButton()
         typeOnSearchBar(text: "moz")
         waitForValueContains(app.textFields["address"], value: "mozilla.org")
         let value = app.textFields["address"].value
@@ -197,10 +208,6 @@ class SearchTests: BaseTestCase {
         waitForExistence(app.webViews.staticTexts["cloud"], timeout: 10)
         // Select some text and long press to find the option
         app.webViews.staticTexts["cloud"].press(forDuration: 1)
-        if !iPad() {
-            waitForExistence(app.menuItems["show.next.items.menu.button"], timeout: 5)
-            app.menuItems["show.next.items.menu.button"].tap()
-        }
         waitForExistence(app.menuItems["Search with Firefox"])
         app.menuItems["Search with Firefox"].tap()
         waitUntilPageLoad()
