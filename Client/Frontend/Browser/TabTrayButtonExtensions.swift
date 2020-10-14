@@ -10,8 +10,8 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-        accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
+        accessibilityLabel = .TabTrayToggleAccessibilityLabel
+        accessibilityHint = .TabTrayToggleAccessibilityHint
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
         setImage(maskImage, for: [])
     }
@@ -26,7 +26,7 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         tintColor = isPrivate ? onTint : offTint
         imageView?.tintColor = tintColor
 
-        accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+        accessibilityValue = isSelected ? .TabTrayToggleAccessibilityValueOn : .TabTrayToggleAccessibilityValueOff
     }
 }
 

@@ -17,7 +17,7 @@ public enum PasscodeInterval: Int {
     case fifteenMinutes = 900
     case oneHour        = 3600
     
-    var settingTitle: String {
+    public var settingTitle: String {
         switch self {
         case .immediately:      return .AuthenticationImmediately
         case .oneMinute:        return .AuthenticationOneMinute
