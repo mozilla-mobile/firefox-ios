@@ -1267,3 +1267,8 @@ extension String {
     public static let SearchInputClearAccessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager", comment: "Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode")
     public static let SearchInputEnterSearchMode = NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
 }
+
+// TabsButton
+extension String {
+    public static let TabsButtonShowTabsAccessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
+}
