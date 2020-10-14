@@ -1259,3 +1259,11 @@ extension String {
 extension String {
     public static let SettingsContentPageLoadError = NSLocalizedString("Could not load page.", comment: "Error message that is shown in settings when there was a problem loading")
 }
+
+// SearchInput
+extension String {
+    public static let SearchInputAccessibilityLabel = NSLocalizedString("Search Input Field", tableName: "LoginManager", comment: "Accessibility label for the search input field in the Logins list")
+    public static let SearchInputTitle = NSLocalizedString("Search", tableName: "LoginManager", comment: "Title for the search field at the top of the Logins list screen")
+    public static let SearchInputClearAccessibilityLabel = NSLocalizedString("Clear Search", tableName: "LoginManager", comment: "Accessibility message e.g. spoken by VoiceOver after the user taps the close button in the search field to clear the search and exit search mode")
+    public static let SearchInputEnterSearchMode = NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
+}
