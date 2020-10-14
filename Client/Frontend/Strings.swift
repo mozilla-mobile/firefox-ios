@@ -1152,3 +1152,9 @@ extension String {
     public static let LoginDetailModifiedAt = NSLocalizedString("Modified %@", tableName: "LoginManager", comment: "Label describing when the current login was last modified with the timestamp as the parameter.")
     public static let LoginDetailDelete = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
 }
+
+// No Logins View
+extension String {
+    public static let NoLoginsFound = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Label displayed when no logins are found after searching.")
+}
+
