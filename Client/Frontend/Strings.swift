@@ -1029,3 +1029,13 @@ extension String {
     public static let SearchSearchEngineSuggestionAccessibilityLabel = NSLocalizedString("Search suggestions from %@", tableName: "Search", comment: "Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google")
     public static let SearchSearchSuggestionTapAccessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
 }
+
+// Tab Location View
+extension String {
+    public static let TabLocationURLPlaceholder = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
+    public static let TabLocationLockIconAccessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
+    public static let TabLocationReaderModeAccessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
+    public static let TabLocationReaderModeAddToReadingListAccessibilityLabel = NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list.")
+    public static let TabLocationReloadAccessibilityLabel = NSLocalizedString("Reload page", comment: "Accessibility label for the reload button")
+    public static let TabLocationPageOptionsAccessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
+}
