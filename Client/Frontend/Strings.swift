@@ -1183,3 +1183,7 @@ extension String {
     public static let ReaderModeStyleSepiaLabel = NSLocalizedString("Sepia", comment: "Sepia theme setting in Reading View settings")
 }
 
+// Advanced Account Setting
+extension String {
+    public static let AdvancedAccountUseStageServer = NSLocalizedString("Use stage servers", comment: "Debug option")
+}
