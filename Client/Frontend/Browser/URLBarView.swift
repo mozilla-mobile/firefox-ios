@@ -365,7 +365,7 @@ class URLBarView: UIView {
         locationTextField.clearButtonMode = .whileEditing
         locationTextField.textAlignment = .left
         locationTextField.accessibilityIdentifier = "address"
-        locationTextField.accessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+        locationTextField.accessibilityLabel = .URLBarLocationAccessibilityLabel
         locationTextField.attributedPlaceholder = self.locationView.placeholder
         locationContainer.addSubview(locationTextField)
         locationTextField.snp.remakeConstraints { make in

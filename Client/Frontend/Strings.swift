@@ -1099,3 +1099,8 @@ extension String {
     public static let TabTrayCloseAccessibilityCustomAction = NSLocalizedString("Close", comment: "Accessibility label for action denoting closing a tab in tab list (tray)")
     public static let TabTraySwipeToCloseAccessibilityHint = NSLocalizedString("Swipe right or left with three fingers to close the tab.", comment: "Accessibility hint for tab tray's displayed tab.")
 }
+
+// URL Bar
+extension String {
+    public static let URLBarLocationAccessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
+}
