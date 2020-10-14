@@ -1294,3 +1294,13 @@ extension String {
 extension String {
     public static let DeviceInfoClientNameDescription = NSLocalizedString("%@ on %@", tableName: "Shared", comment: "A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.")
 }
+
+// TimeConstants
+extension String {
+    public static let TimeConstantMoreThanAMonth = NSLocalizedString("more than a month ago", comment: "Relative date for dates older than a month and less than two months.")
+    public static let TimeConstantMoreThanAWeek = NSLocalizedString("more than a week ago", comment: "Description for a date more than a week ago, but less than a month ago.")
+    public static let TimeConstantYesterday = NSLocalizedString("yesterday", comment: "Relative date for yesterday.")
+    public static let TimeConstantThisWeek = NSLocalizedString("this week", comment: "Relative date for date in past week.")
+    public static let TimeConstantRelativeToday = NSLocalizedString("today at %@", comment: "Relative date for date older than a minute.")
+    public static let TimeConstantJustNow = NSLocalizedString("just now", comment: "Relative time for a tab that was visited within the last few moments.")
+}
