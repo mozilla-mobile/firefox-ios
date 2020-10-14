@@ -1067,3 +1067,15 @@ extension String {
     public static let TabPeekCloseTab = NSLocalizedString("Close Tab", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
     public static let TabPeekPreviewAccessibilityLabel = NSLocalizedString("Preview of %@", tableName: "3DTouchActions", comment: "Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab.")
 }
+
+// Tab Toolbar
+
+extension String {
+    public static let TabToolbarReloadAccessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+    public static let TabToolbarStopAccessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
+    public static let TabToolbarSearchAccessibilityLabel = NSLocalizedString("Search", comment: "Accessibility Label for the tab toolbar Search button")
+    public static let TabToolbarNewTabAccessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility Label for the tab toolbar New tab button")
+    public static let TabToolbarBackAccessibilityLabel = NSLocalizedString("Back", comment: "Accessibility label for the Back button in the tab toolbar.")
+    public static let TabToolbarForwardAccessibilityLabel = NSLocalizedString("Forward", comment: "Accessibility Label for the tab toolbar Forward button")
+    public static let TabToolbarNavigationToolbarAccessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
+}
