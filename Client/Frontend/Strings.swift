@@ -1041,3 +1041,11 @@ extension String {
     public static let ReaderModeBarAddToReadingList = NSLocalizedString("Add to Reading List", comment: "Name for button adding current article to reading list in reader mode")
     public static let ReaderModeBarRemoveFromReadingList = NSLocalizedString("Remove from Reading List", comment: "Name for button removing current article from reading list in reader mode")
 }
+
+// SearchViewController
+extension String {
+    public static let SearchSettingsAccessibilityLabel = NSLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button.")
+    public static let SearchSearchEngineAccessibilityLabel = NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine.")
+    public static let SearchSearchEngineSuggestionAccessibilityLabel = NSLocalizedString("Search suggestions from %@", tableName: "Search", comment: "Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google")
+    public static let SearchSearchSuggestionTapAccessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
+}
