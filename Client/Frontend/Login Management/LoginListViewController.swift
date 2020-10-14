@@ -78,7 +78,7 @@ class LoginListViewController: SensitiveViewController {
             return deferred
         }
 
-        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: AuthenticationStrings.loginsTouchReason, success: {
+        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: .AuthenticationLoginsTouchReason, success: {
             fillDeferred(ok: true)
         }, cancel: {
             fillDeferred(ok: false)
