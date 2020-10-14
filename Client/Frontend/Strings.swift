@@ -1104,3 +1104,9 @@ extension String {
 extension String {
     public static let URLBarLocationAccessibilityLabel = NSLocalizedString("Address and Search", comment: "Accessibility label for address and search field, both words (Address, Search) are therefore nouns.")
 }
+
+// Error Pages
+extension String {
+    public static let ErrorPageTryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
+    public static let ErrorPageOpenInSafari = NSLocalizedString("Open in Safari", tableName: "ErrorPages", comment: "Shown in error pages for files that can't be shown and need to be downloaded.")
+}
