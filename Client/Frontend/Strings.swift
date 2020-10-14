@@ -997,3 +997,11 @@ extension String {
     public static let AuthenticatorUsernamePlaceholder = NSLocalizedString("Username", comment: "Username textbox in Authentication prompt")
     public static let AuthenticatorPasswordPlaceholder = NSLocalizedString("Password", comment: "Password textbox in Authentication prompt")
 }
+
+// BrowserViewController
+extension String {
+    public static let ReaderModeAddPageGeneralErrorAccessibilityLabel = NSLocalizedString("Could not add page to Reading list", comment: "Accessibility message e.g. spoken by VoiceOver after adding current webpage to the Reading List failed.")
+    public static let ReaderModeAddPageSuccessAcessibilityLabel = NSLocalizedString("Added page to Reading List", comment: "Accessibility message e.g. spoken by VoiceOver after the current page gets added to the Reading List using the Reader View button, e.g. by long-pressing it or by its accessibility custom action.")
+    public static let ReaderModeAddPageMaybeExistsErrorAccessibilityLabel = NSLocalizedString("Could not add page to Reading List. Maybe it’s already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures.")
+    public static let WebViewAccessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+}
