@@ -1219,3 +1219,9 @@ extension String {
     public static let ClearableCookies = NSLocalizedString("Cookies", tableName: "ClearPrivateData", comment: "Settings item for clearing cookies")
     public static let ClearableDownloads = NSLocalizedString("Downloaded Files", tableName: "ClearPrivateData", comment: "Settings item for deleting downloaded files")
 }
+
+// SearchEngine Picker
+extension String {
+    public static let SearchEnginePickerTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine picker.")
+    public static let SearchEnginePickerCancel = NSLocalizedString("Cancel", comment: "Label for Cancel button")
+}
