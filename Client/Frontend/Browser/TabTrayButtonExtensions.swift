@@ -34,7 +34,7 @@ extension UIButton {
     static func newTabButton() -> UIButton {
         let newTab = UIButton()
         newTab.setImage(UIImage.templateImageNamed("quick_action_new_tab"), for: .normal)
-        newTab.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
+        newTab.accessibilityLabel = .TabTrayButtonNewTabAccessibilityLabel
         return newTab
     }
 }
@@ -43,7 +43,7 @@ extension TabsButton {
     static func tabTrayButton() -> TabsButton {
         let tabsButton = TabsButton()
         tabsButton.countLabel.text = "0"
-        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
+        tabsButton.accessibilityLabel = .TabTrayButtonShowTabsAccessibilityLabel
         return tabsButton
     }
 }
