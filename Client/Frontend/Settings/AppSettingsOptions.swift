@@ -669,7 +669,7 @@ class VersionSetting: Setting {
 // Opens the license page in a new tab
 class LicenseAndAcknowledgementsSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .AppSettingsLicenses, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var url: URL? {
@@ -684,7 +684,7 @@ class LicenseAndAcknowledgementsSetting: Setting {
 // Opens about:rights page in the content view controller
 class YourRightsSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Your Rights", comment: "Your Rights settings section title"), attributes:
+        return NSAttributedString(string: .AppSettingsYourRights, attributes:
             [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
@@ -705,7 +705,7 @@ class ShowIntroductionSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .AppSettingsShowTour, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -717,7 +717,7 @@ class ShowIntroductionSetting: Setting {
 
 class SendFeedbackSetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Send Feedback", comment: "Menu item in settings used to open input.mozilla.org where people can submit feedback"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .AppSettingsSendFeedback, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var url: URL? {
@@ -761,7 +761,7 @@ class SendAnonymousUsageDataSetting: BoolSetting {
 // Opens the SUMO page in a new tab
 class OpenSupportPageSetting: Setting {
     init(delegate: SettingsDelegate?) {
-        super.init(title: NSAttributedString(string: NSLocalizedString("Help", comment: "Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
+        super.init(title: NSAttributedString(string: .AppSettingsHelp, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]),
             delegate: delegate)
     }
 
@@ -788,7 +788,7 @@ class SearchSetting: Setting {
 
     init(settings: SettingsTableViewController) {
         self.profile = settings.profile
-        super.init(title: NSAttributedString(string: NSLocalizedString("Search", comment: "Open search section of settings"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+        super.init(title: NSAttributedString(string: .AppSettingsSearch, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
@@ -922,7 +922,7 @@ class ClearPrivateDataSetting: Setting {
 
 class PrivacyPolicySetting: Setting {
     override var title: NSAttributedString? {
-        return NSAttributedString(string: NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/"), attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
+        return NSAttributedString(string: .AppSettingsPrivacyPolicy, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText])
     }
 
     override var url: URL? {
