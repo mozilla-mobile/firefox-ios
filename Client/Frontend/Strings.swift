@@ -1155,3 +1155,10 @@ extension String {
     public static let RemoteTabMobileAccessibilityLabel =  NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
     public static let RemoteTabCreateAccount = NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j")
 }
+
+// Login list
+extension String {
+    public static let LoginListDeselctAll = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Label for the button used to deselect all logins.")
+    public static let LoginListSelctAll = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Label for the button used to select all logins.")
+    public static let LoginListDelete = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
+}
