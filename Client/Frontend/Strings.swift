@@ -1269,3 +1269,8 @@ extension String {
     public static let MenuHelperFindInPage = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Text selection menu item")
     public static let MenuHelperSearchWithFirefox = NSLocalizedString("UIMenuItem.SearchWithFirefox", value: "Search with Firefox", comment: "Search in New Tab Text selection menu item")
 }
+
+// DeviceInfo
+extension String {
+    public static let DeviceInfoClientNameDescription = NSLocalizedString("%@ on %@", tableName: "Shared", comment: "A brief descriptive name for this app on this device, used for Send Tab and Synced Tabs. The first argument is the app name. The second argument is the device name.")
+}
