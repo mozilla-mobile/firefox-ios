@@ -1162,3 +1162,13 @@ extension String {
     public static let LoginListSelctAll = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Label for the button used to select all logins.")
     public static let LoginListDelete = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
 }
+
+// Login Detail
+extension String {
+    public static let LoginDetailUsername = NSLocalizedString("Username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
+    public static let LoginDetailPassword = NSLocalizedString("Password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
+    public static let LoginDetailWebsite = NSLocalizedString("Website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
+    public static let LoginDetailCreatedAt =  NSLocalizedString("Created %@", tableName: "LoginManager", comment: "Label describing when the current login was created with the timestamp as the parameter.")
+    public static let LoginDetailModifiedAt = NSLocalizedString("Modified %@", tableName: "LoginManager", comment: "Label describing when the current login was last modified with the timestamp as the parameter.")
+    public static let LoginDetailDelete = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
+}
