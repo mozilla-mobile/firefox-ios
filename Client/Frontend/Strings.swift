@@ -1252,3 +1252,9 @@ extension String {
 extension String {
     public static let TabsButtonShowTabsAccessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility label for the tabs button in the (top) tab toolbar")
 }
+
+// TabTrayButtons
+extension String {
+    public static let TabTrayButtonNewTabAccessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
+    public static let TabTrayButtonShowTabsAccessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
+}
