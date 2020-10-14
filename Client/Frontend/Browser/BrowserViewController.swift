@@ -474,6 +474,7 @@ class BrowserViewController: UIViewController {
         // Setup New Tab user research for A/B testing
         newTabUserResearch = NewTabUserResearch()
         newTabUserResearch?.lpVariableObserver()
+        urlBar.newTabUserResearch = newTabUserResearch
     }
 
     fileprivate func setupConstraints() {
@@ -1337,11 +1338,12 @@ extension BrowserViewController: URLBarDelegate {
 
         // Wait for both the bookmark status and the pinned status
         deferredBookmarkStatus.both(deferredPinnedTopSiteStatus).uponQueue(.main) {
+            let shouldShowNewTabButton = self.profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (self.newTabUserResearch?.newTabState ?? false)
             let isBookmarked = $0.successValue ?? false
             let isPinned = $1.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
                                                  findInPage: findInPageAction, presentableVC: self, isBookmarked: isBookmarked,
-                                                 isPinned: isPinned, success: successCallback)
+                                                 isPinned: isPinned, shouldShowNewTabButton: shouldShowNewTabButton, success: successCallback)
             self.presentSheetWith(title: Strings.PageActionMenuTitle, actions: pageActions, on: self, from: button)
         }
     }
