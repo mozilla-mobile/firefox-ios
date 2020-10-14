@@ -1128,3 +1128,15 @@ extension String {
 extension String {
     public static let LibraryPanelChooserAccessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
 }
+
+// ReaderPanel
+extension String {
+    public static let ReaderPanelRemove = NSLocalizedString("Remove", comment: "Title for the button that removes a reading list item")
+    public static let ReaderPanelMarkAsRead = NSLocalizedString("Mark as Read", comment: "Title for the button that marks a reading list item as read")
+    public static let ReaderPanelMarkAsUnread =  NSLocalizedString("Mark as Unread", comment: "Title for the button that marks a reading list item as unread")
+    public static let ReaderPanelUnreadAccessibilityLabel = NSLocalizedString("unread", comment: "Accessibility label for unread article in reading list. It's a past participle - functions as an adjective.")
+    public static let ReaderPanelReadAccessibilityLabel = NSLocalizedString("read", comment: "Accessibility label for read article in reading list. It's a past participle - functions as an adjective.")
+    public static let ReaderPanelWelcome = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
+    public static let ReaderPanelReadingModeDescription = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
+    public static let ReaderPanelReadingListDescription = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
+}
