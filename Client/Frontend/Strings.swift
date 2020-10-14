@@ -1234,3 +1234,8 @@ extension String {
     public static let SearchSettingsDefaultSearchEngineTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
     public static let SearchSettingsQuickSearchEnginesTitle = NSLocalizedString("Quick-Search Engines", comment: "Title for quick-search engines settings section.")
 }
+
+// SettingsContent
+extension String {
+    public static let SettingsContentPageLoadError = NSLocalizedString("Could not load page.", comment: "Error message that is shown in settings when there was a problem loading")
+}
