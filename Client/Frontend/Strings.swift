@@ -1258,3 +1258,14 @@ extension String {
     public static let TabTrayButtonNewTabAccessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
     public static let TabTrayButtonShowTabsAccessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
 }
+
+// MenuHelper
+extension String {
+    public static let MenuHelperPasteAndGo = NSLocalizedString("UIMenuItem.PasteGo", value: "Paste & Go", comment: "The menu item that pastes the current contents of the clipboard into the URL bar and navigates to the page")
+    public static let MenuHelperReveal = NSLocalizedString("Reveal", tableName: "LoginManager", comment: "Reveal password text selection menu item")
+    public static let MenuHelperHide =  NSLocalizedString("Hide", tableName: "LoginManager", comment: "Hide password text selection menu item")
+    public static let MenuHelperCopy = NSLocalizedString("Copy", tableName: "LoginManager", comment: "Copy password text selection menu item")
+    public static let MenuHelperOpenAndFill = NSLocalizedString("Open & Fill", tableName: "LoginManager", comment: "Open and Fill website text selection menu item")
+    public static let MenuHelperFindInPage = NSLocalizedString("Find in Page", tableName: "FindInPage", comment: "Text selection menu item")
+    public static let MenuHelperSearchWithFirefox = NSLocalizedString("UIMenuItem.SearchWithFirefox", value: "Search with Firefox", comment: "Search in New Tab Text selection menu item")
+}
