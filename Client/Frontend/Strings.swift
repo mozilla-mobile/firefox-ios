@@ -986,3 +986,14 @@ extension String {
     public static let AuthenticationMismatchPasscodeError = NSLocalizedString("Passcodes didn’t match. Try again.", tableName: "AuthenticationManager", comment: "Error message displayed to user when their confirming passcode doesn't match the first code.")
     public static let AuthenticationUseNewPasscodeError = NSLocalizedString("New passcode must be different than existing code.", tableName: "AuthenticationManager", comment: "Error message displayed when user tries to enter the same passcode as their existing code when changing it.")
 }
+
+// Authenticator strings
+extension String {
+    public static let AuthenticatorCancel = NSLocalizedString("Cancel", comment: "Label for Cancel button")
+    public static let AuthenticatorLogin = NSLocalizedString("Log in", comment: "Authentication prompt log in button")
+    public static let AuthenticatorPromptTitle = NSLocalizedString("Authentication required", comment: "Authentication prompt title")
+    public static let AuthenticatorPromptRealmMessage = NSLocalizedString("A username and password are being requested by %@. The site says: %@", comment: "Authentication prompt message with a realm. First parameter is the hostname. Second is the realm string")
+    public static let AuthenticatorPromptEmptyRealmMessage = NSLocalizedString("A username and password are being requested by %@.", comment: "Authentication prompt message with no realm. Parameter is the hostname of the site")
+    public static let AuthenticatorUsernamePlaceholder = NSLocalizedString("Username", comment: "Username textbox in Authentication prompt")
+    public static let AuthenticatorPasswordPlaceholder = NSLocalizedString("Password", comment: "Password textbox in Authentication prompt")
+}
