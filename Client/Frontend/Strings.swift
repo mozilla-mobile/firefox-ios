@@ -1094,3 +1094,12 @@ extension String {
     public static let ErrorPageTryAgain = NSLocalizedString("Try again", tableName: "ErrorPages", comment: "Shown in error pages on a button that will try to load the page again")
     public static let ErrorPageOpenInSafari = NSLocalizedString("Open in Safari", tableName: "ErrorPages", comment: "Shown in error pages for files that can't be shown and need to be downloaded.")
 }
+
+// LibraryPanel
+extension String {
+    public static let LibraryPanelBookmarksAccessibilityLabel = NSLocalizedString("Bookmarks", comment: "Panel accessibility label")
+    public static let LibraryPanelHistoryAccessibilityLabel = NSLocalizedString("History", comment: "Panel accessibility label")
+    public static let LibraryPanelReadingListAccessibilityLabel = NSLocalizedString("Reading list", comment: "Panel accessibility label")
+    public static let LibraryPanelDownloadsAccessibilityLabel = NSLocalizedString("Downloads", comment: "Panel accessibility label")
+    public static let LibraryPanelSyncedTabsAccessibilityLabel = NSLocalizedString("Synced Tabs", comment: "Panel accessibility label")
+}
