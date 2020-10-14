@@ -1025,3 +1025,10 @@ extension String {
     public static let ReaderModeAddPageMaybeExistsErrorAccessibilityLabel = NSLocalizedString("Could not add page to Reading List. Maybe it’s already there?", comment: "Accessibility message e.g. spoken by VoiceOver after the user wanted to add current page to the Reading List and this was not done, likely because it already was in the Reading List, but perhaps also because of real failures.")
     public static let WebViewAccessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
 }
+
+// Find in page
+extension String {
+    public static let FindInPagePreviousAccessibilityLabel = NSLocalizedString("Previous in-page result", tableName: "FindInPage", comment: "Accessibility label for previous result button in Find in Page Toolbar.")
+    public static let FindInPageNextAccessibilityLabel = NSLocalizedString("Next in-page result", tableName: "FindInPage", comment: "Accessibility label for next result button in Find in Page Toolbar.")
+    public static let FindInPageDoneAccessibilityLabel = NSLocalizedString("Done", tableName: "FindInPage", comment: "Done button in Find in Page Toolbar.")
+}
