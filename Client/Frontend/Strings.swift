@@ -1186,3 +1186,20 @@ extension String {
     public static let ReaderModeHandlerError = NSLocalizedString("There was an error converting the page", comment: "Error displayed when reader mode cannot be enabled")
 }
 
+// ReaderModeStyle
+extension String {
+    public static let ReaderModeStyleBrightnessAccessibilityLabel = NSLocalizedString("Brightness", comment: "Accessibility label for brightness adjustment slider in Reader Mode display settings")
+    public static let ReaderModeStyleFontTypeAccessibilityLabel = NSLocalizedString("Changes font type.", comment: "Accessibility hint for the font type buttons in reader mode display settings")
+    public static let ReaderModeStyleSansSerifFontType = NSLocalizedString("Sans-serif", comment: "Font type setting in the reading view settings")
+    public static let ReaderModeStyleSerifFontType = NSLocalizedString("Serif", comment: "Font type setting in the reading view settings")
+    public static let ReaderModeStyleSmallerLabel = NSLocalizedString("-", comment: "Button for smaller reader font size. Keep this extremely short! This is shown in the reader mode toolbar.")
+    public static let ReaderModeStyleSmallerAccessibilityLabel = NSLocalizedString("Decrease text size", comment: "Accessibility label for button decreasing font size in display settings of reader mode")
+    public static let ReaderModeStyleLargerLabel = NSLocalizedString("+", comment: "Button for larger reader font size. Keep this extremely short! This is shown in the reader mode toolbar.")
+    public static let ReaderModeStyleLargerAccessibilityLabel = NSLocalizedString("Increase text size", comment: "Accessibility label for button increasing font size in display settings of reader mode")
+    public static let ReaderModeStyleFontSize = NSLocalizedString("Aa", comment: "Button for reader mode font size. Keep this extremely short! This is shown in the reader mode toolbar.")
+    public static let ReaderModeStyleChangeColorSchemeAccessibilityHint = NSLocalizedString("Changes color theme.", comment: "Accessibility hint for the color theme setting buttons in reader mode display settings")
+    public static let ReaderModeStyleLightLabel = NSLocalizedString("Light", comment: "Light theme setting in Reading View settings")
+    public static let ReaderModeStyleDarkLabel = NSLocalizedString("Dark", comment: "Dark theme setting in Reading View settings")
+    public static let ReaderModeStyleSepiaLabel = NSLocalizedString("Sepia", comment: "Sepia theme setting in Reading View settings")
+}
+
