@@ -81,6 +81,7 @@ class URLBarView: UIView {
 
     var toolbarIsShowing = false
     var topTabsIsShowing = false
+    var newTabUserResearch: NewTabUserResearch?
 
     fileprivate var locationTextField: ToolbarTextField?
 
@@ -409,7 +410,8 @@ class URLBarView: UIView {
     }
 
     func updateProgressBar(_ progress: Float) {
-        if (profile?.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? false) {
+        let shouldShowNewTabButton = profile?.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (newTabUserResearch?.newTabState ?? false)
+        if shouldShowNewTabButton {
             locationView.reloadButton.reloadButtonState = progress != 1 ? .stop : .reload
         } else {
             locationView.reloadButton.reloadButtonState = .disabled
