@@ -1158,3 +1158,11 @@ extension String {
     public static let NoLoginsFound = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Label displayed when no logins are found after searching.")
 }
 
+// Reader Mode Handler
+extension String {
+    public static let ReaderModeHandlerLoadingContent = NSLocalizedString("Loading content…", comment: "Message displayed when the reader mode page is loading. This message will appear only when sharing to Firefox reader mode from another app.")
+    public static let ReaderModeHandlerPageCantDisplay = NSLocalizedString("The page could not be displayed in Reader View.", comment: "Message displayed when the reader mode page could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.")
+    public static let ReaderModeHandlerLoadOriginalPage = NSLocalizedString("Load original page", comment: "Link for going to the non-reader page when the reader view could not be loaded. This message will appear only when sharing to Firefox reader mode from another app.")
+    public static let ReaderModeHandlerError = NSLocalizedString("There was an error converting the page", comment: "Error displayed when reader mode cannot be enabled")
+}
+
