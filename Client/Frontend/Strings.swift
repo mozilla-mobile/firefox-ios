@@ -1284,3 +1284,12 @@ extension String {
     public static let TimeConstantRelativeToday = NSLocalizedString("today at %@", comment: "Relative date for date older than a minute.")
     public static let TimeConstantJustNow = NSLocalizedString("just now", comment: "Relative time for a tab that was visited within the last few moments.")
 }
+
+// Default Suggested Site
+extension String {
+    public static let DefaultSuggestedFacebook = NSLocalizedString("Facebook", comment: "Tile title for Facebook")
+    public static let DefaultSuggestedYouTube = NSLocalizedString("YouTube", comment: "Tile title for YouTube")
+    public static let DefaultSuggestedAmazon = NSLocalizedString("Amazon", comment: "Tile title for Amazon")
+    public static let DefaultSuggestedWikipedia = NSLocalizedString("Wikipedia", comment: "Tile title for Wikipedia")
+    public static let DefaultSuggestedTwitter = NSLocalizedString("Twitter", comment: "Tile title for Twitter")
+}
