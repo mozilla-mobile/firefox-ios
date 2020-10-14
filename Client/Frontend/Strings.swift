@@ -1225,3 +1225,12 @@ extension String {
     public static let SearchEnginePickerTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine picker.")
     public static let SearchEnginePickerCancel = NSLocalizedString("Cancel", comment: "Label for Cancel button")
 }
+
+// SearchSettings
+extension String {
+    public static let SearchSettingsTitle = NSLocalizedString("Search", comment: "Navigation title for search settings.")
+    public static let SearchSettingsDefaultSearchEngineAccessibilityLabel = NSLocalizedString("Default Search Engine", comment: "Accessibility label for default search engine setting.")
+    public static let SearchSettingsShowSearchSuggestions = NSLocalizedString("Show Search Suggestions", comment: "Label for show search suggestions setting.")
+    public static let SearchSettingsDefaultSearchEngineTitle = NSLocalizedString("Default Search Engine", comment: "Title for default search engine settings section.")
+    public static let SearchSettingsQuickSearchEnginesTitle = NSLocalizedString("Quick-Search Engines", comment: "Title for quick-search engines settings section.")
+}
