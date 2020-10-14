@@ -1207,3 +1207,23 @@ extension String {
 extension String {
     public static let AdvancedAccountUseStageServer = NSLocalizedString("Use stage servers", comment: "Debug option")
 }
+
+// App Settings
+extension String {
+    public static let AppSettingsLicenses = NSLocalizedString("Licenses", comment: "Settings item that opens a tab containing the licenses. See http://mzl.la/1NSAWCG")
+    public static let AppSettingsYourRights = NSLocalizedString("Your Rights", comment: "Your Rights settings section title")
+    public static let AppSettingsShowTour = NSLocalizedString("Show Tour", comment: "Show the on-boarding screen again from the settings")
+    public static let AppSettingsSendFeedback = NSLocalizedString("Send Feedback", comment: "Menu item in settings used to open input.mozilla.org where people can submit feedback")
+    public static let AppSettingsHelp = NSLocalizedString("Help", comment: "Show the SUMO support page from the Support section in the settings. see http://mzl.la/1dmM8tZ")
+    public static let AppSettingsSearch = NSLocalizedString("Search", comment: "Open search section of settings")
+    public static let AppSettingsPrivacyPolicy = NSLocalizedString("Privacy Policy", comment: "Show Firefox Browser Privacy Policy page from the Privacy section in the settings. See https://www.mozilla.org/privacy/firefox/")
+    
+    public static let AppSettingsTitle = NSLocalizedString("Settings", comment: "Title in the settings view controller title bar")
+    public static let AppSettingsDone = NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar")
+    public static let AppSettingsPrivacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
+    public static let AppSettingsBlockPopups = NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")
+    public static let AppSettingsClosePrivateTabsTitle = NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs")
+    public static let AppSettingsClosePrivateTabsDescription = NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'")
+    public static let AppSettingsSupport = NSLocalizedString("Support", comment: "Support section title")
+    public static let AppSettingsAbout = NSLocalizedString("About", comment: "About settings section title")
+}
