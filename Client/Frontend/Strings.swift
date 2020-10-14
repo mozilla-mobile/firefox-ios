@@ -1120,3 +1120,18 @@ extension String {
     public static let ReaderPanelReadingModeDescription = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
     public static let ReaderPanelReadingListDescription = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
 }
+
+// Remote Tabs Panel
+extension String {
+    // Backup and active strings added in Bug 1205294.
+    public static let RemoteTabEmptyStateInstructionsSyncTabsPasswordsBookmarksString = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in.")
+    public static let RemoteTabEmptyStateInstructionsSyncTabsPasswordsString = NSLocalizedString("Sync your tabs, passwords and more.", comment: "Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in.")
+    public static let RemoteTabEmptyStateInstructionsGetTabsBookmarksPasswordsString = NSLocalizedString("Get your open tabs, bookmarks, and passwords from your other devices.", comment: "A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing.")
+
+    public static let RemoteTabErrorNoTabs = NSLocalizedString("You don’t have any tabs open in Firefox on your other devices.", comment: "Error message in the remote tabs panel")
+    public static let RemoteTabErrorFailedToSync = NSLocalizedString("There was a problem accessing tabs from your other devices. Try again in a few moments.", comment: "Error message in the remote tabs panel")
+    public static let RemoteTabLastSync = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time. Argument is the relative date string.")
+    public static let RemoteTabComputerAccessibilityLabel = NSLocalizedString("computer", comment: "Accessibility label for Desktop Computer (PC) image in remote tabs list")
+    public static let RemoteTabMobileAccessibilityLabel =  NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
+    public static let RemoteTabCreateAccount = NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j")
+}
