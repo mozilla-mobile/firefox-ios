@@ -1123,3 +1123,8 @@ extension String {
     public static let LibraryPanelDownloadsAccessibilityLabel = NSLocalizedString("Downloads", comment: "Panel accessibility label")
     public static let LibraryPanelSyncedTabsAccessibilityLabel = NSLocalizedString("Synced Tabs", comment: "Panel accessibility label")
 }
+
+// LibraryViewController
+extension String {
+    public static let LibraryPanelChooserAccessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
+}
