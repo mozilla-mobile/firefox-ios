@@ -124,24 +124,6 @@ class SecurityTests: KIFTestCase {
         tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
         
       }
-    /* Disabled due to issue https://github.com/mozilla-mobile/firefox-ios/issues/7393
-    func testDataURL() {
-        // Check data urls that are valid
-        ["data-url-ok-1", "data-url-ok-2"].forEach { buttonName in
-            tester().tapWebViewElementWithAccessibilityLabel(buttonName)
-            tester().wait(forTimeInterval: 1)
-            let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
-            XCTAssert(webView.url!.absoluteString.hasPrefix("data:")) // indicates page loaded ok
-            BrowserUtils.resetToAboutHomeKIF(tester())
-            beforeEach()
-        }
-
-        // Check data url that is not allowed
-        tester().tapWebViewElementWithAccessibilityLabel("data-url-html-bad")
-        tester().wait(forTimeInterval: 1)
-        let webView = tester().waitForView(withAccessibilityLabel: "Web content") as! WKWebView
-        XCTAssert(webView.url == nil) // indicates page load was blocked
-    }*/
 
     override func tearDown() {
         BrowserUtils.resetToAboutHomeKIF(tester())
