@@ -1207,3 +1207,15 @@ extension String {
     public static let AppSettingsSupport = NSLocalizedString("Support", comment: "Support section title")
     public static let AppSettingsAbout = NSLocalizedString("About", comment: "About settings section title")
 }
+
+// Clearables
+extension String {
+    // Removed Clearables as part of Bug 1226654, but keeping the string around.
+    private static let removedSavedLoginsLabel = NSLocalizedString("Saved Logins", tableName: "ClearPrivateData", comment: "Settings item for clearing passwords and login data")
+    
+    public static let ClearableHistory = NSLocalizedString("Browsing History", tableName: "ClearPrivateData", comment: "Settings item for clearing browsing history")
+    public static let ClearableCache = NSLocalizedString("Cache", tableName: "ClearPrivateData", comment: "Settings item for clearing the cache")
+    public static let ClearableOfflineData = NSLocalizedString("Offline Website Data", tableName: "ClearPrivateData", comment: "Settings item for clearing website data")
+    public static let ClearableCookies = NSLocalizedString("Cookies", tableName: "ClearPrivateData", comment: "Settings item for clearing cookies")
+    public static let ClearableDownloads = NSLocalizedString("Downloaded Files", tableName: "ClearPrivateData", comment: "Settings item for deleting downloaded files")
+}
