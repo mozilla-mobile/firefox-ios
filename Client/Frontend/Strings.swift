@@ -1059,3 +1059,11 @@ extension String {
     public static let TabLocationReloadAccessibilityLabel = NSLocalizedString("Reload page", comment: "Accessibility label for the reload button")
     public static let TabLocationPageOptionsAccessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
 }
+
+// TabPeekViewController
+extension String {
+    public static let TabPeekAddToBookmarks = NSLocalizedString("Add to Bookmarks", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to add current tab to Bookmarks")
+    public static let TabPeekCopyUrl = NSLocalizedString("Copy URL", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to copy the URL of the current tab to clipboard")
+    public static let TabPeekCloseTab = NSLocalizedString("Close Tab", tableName: "3DTouchActions", comment: "Label for preview action on Tab Tray Tab to close the current tab")
+    public static let TabPeekPreviewAccessibilityLabel = NSLocalizedString("Preview of %@", tableName: "3DTouchActions", comment: "Accessibility label, associated to the 3D Touch action on the current tab in the tab tray, used to display a larger preview of the tab.")
+}
