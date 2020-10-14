@@ -12,8 +12,8 @@ class SearchEnginePicker: ThemedTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = NSLocalizedString("Default Search Engine", comment: "Title for default search engine picker.")
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("Cancel", comment: "Label for Cancel button"), style: .plain, target: self, action: #selector(cancel))
+        navigationItem.title = .SearchEnginePickerTitle
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: .SearchEnginePickerCancel, style: .plain, target: self, action: #selector(cancel))
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
