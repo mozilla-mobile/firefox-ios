@@ -2229,44 +2229,10 @@ extension BrowserViewController: ContextMenuHelperDelegate {
                 dialogTitle = elements.title ?? url.absoluteString
             }
 
-            let photoAuthorizeStatus = PHPhotoLibrary.authorizationStatus()
             let saveImageAction = UIAlertAction(title: Strings.ContextMenuSaveImage, style: .default) { _ in
-                let handlePhotoLibraryAuthorized = {
-                    DispatchQueue.main.async {
-                        self.getImageData(url) { data in
-                            PHPhotoLibrary.shared().performChanges({
-                                PHAssetCreationRequest.forAsset().addResource(with: .photo, data: data, options: nil)
-                            })
-                        }
-                    }
-                }
-
-                let handlePhotoLibraryDenied = {
-                    DispatchQueue.main.async {
-                        let accessDenied = UIAlertController(title: Strings.PhotoLibraryFirefoxWouldLikeAccessTitle, message: Strings.PhotoLibraryFirefoxWouldLikeAccessMessage, preferredStyle: .alert)
-                        let dismissAction = UIAlertAction(title: Strings.CancelString, style: .default, handler: nil)
-                        accessDenied.addAction(dismissAction)
-                        let settingsAction = UIAlertAction(title: Strings.OpenSettingsString, style: .default ) { _ in
-                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
-                        }
-                        accessDenied.addAction(settingsAction)
-                        self.present(accessDenied, animated: true, completion: nil)
-                    }
-                }
-
-                if photoAuthorizeStatus == .notDetermined {
-                    PHPhotoLibrary.requestAuthorization({ status in
-                        guard status == .authorized else {
-                            handlePhotoLibraryDenied()
-                            return
-                        }
-
-                        handlePhotoLibraryAuthorized()
-                    })
-                } else if photoAuthorizeStatus == .authorized {
-                    handlePhotoLibraryAuthorized()
-                } else {
-                    handlePhotoLibraryDenied()
+                self.getImageData(url) { data in
+                    guard let image = UIImage(data: data) else { return }
+                    self.writeToPhotoAlbum(image: image)
                 }
             }
             actionSheetController.addAction(saveImageAction, accessibilityIdentifier: "linkContextMenu.saveImage")
