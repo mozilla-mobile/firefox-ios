@@ -55,7 +55,7 @@ class IntegrationTests: BaseTestCase {
     private func waitForInitialSyncComplete() {
         navigator.nowAt(BrowserTab)
         navigator.goto(SettingsScreen)
-        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 15)
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 25)
     }
 
     func testFxASyncHistory () {
@@ -200,23 +200,25 @@ class IntegrationTests: BaseTestCase {
         waitForExistence(app.cells["DeviceNameSetting"].textFields["DeviceNameSettingTextField"], timeout: 10)
 
         app.cells["SignOut"].tap()
-        
+
         waitForExistence(app.buttons["Disconnect"], timeout: 5)
         app.buttons["Disconnect"].tap()
         sleep(3)
 
         // Connect same account again
-        navigator.performAction(Action.OpenEmailToSignIn)
-        waitForExistence(app.navigationBars["Turn on Sync"], timeout: 20)
+        navigator.nowAt(SettingsScreen)
+        app.tables.cells["SignInToSync"].tap()
+        app.buttons["EmailSignIn.button"].tap()
 
+        waitForExistence(app.secureTextFields.element(boundBy: 0), timeout: 10)
         app.secureTextFields.element(boundBy: 0).tap()
         app.secureTextFields.element(boundBy: 0).typeText(userState.fxaPassword!)
         waitForExistence(app.webViews.buttons.element(boundBy: 0), timeout: 5)
         app.webViews.buttons.element(boundBy: 0).tap()
 
-        waitForInitialSyncComplete()
         navigator.nowAt(SettingsScreen)
-        
+        waitForExistence(app.tables.staticTexts["Sync Now"], timeout: 35)
+
         // Check Bookmarks
         navigator.goto(LibraryPanel_Bookmarks)
         waitForExistence(app.tables["Bookmarks List"].cells.staticTexts["Example Domain"], timeout: 5)
@@ -224,7 +226,8 @@ class IntegrationTests: BaseTestCase {
         // Check Logins
         navigator.goto(SettingsScreen)
         navigator.goto(LoginsSettings)
-        waitForExistence(app.tables["Login List"], timeout: 5)
-        waitForExistence(app.staticTexts["https://accounts.google.com"])
+
+        waitForExistence(app.tables["Login List"], timeout: 10)
+        waitForExistence(app.staticTexts["https://accounts.google.com"], timeout: 10)
     }
 }
