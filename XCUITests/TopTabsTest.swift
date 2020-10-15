@@ -405,7 +405,7 @@ class TopTabsTestIpad: IpadOnlyTestCase {
         navigator.openURL(urlValueLong)
 
         // Create enough tabs that tabs bar needs to scroll
-        for _ in 0..<6 {
+                for _ in 0..<6 {
             navigator.createNewTab()
         }
 

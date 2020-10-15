@@ -474,7 +474,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             InternalSchemeHandler.responders[path] = responder
         }
 
-        if AppConstants.IsRunningTest {
+        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest {
             registerHandlersForTestMethods(server: server.server)
         }
 

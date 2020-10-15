@@ -181,7 +181,7 @@ extension URL {
     }
 
     public var displayURL: URL? {
-        if AppConstants.IsRunningTest, path.contains("test-fixture/") {
+        if AppConstants.IsRunningTest || AppConstants.IsRunningPerfTest, path.contains("test-fixture/") {
             return self
         }
 
