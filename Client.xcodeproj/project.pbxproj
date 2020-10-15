@@ -298,6 +298,7 @@
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		5002717C41BC7C50F67F1CAD /* StateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50027345B49B967409DDA348 /* StateTests.swift */; };
 		54744E00AB1EB95A92A1DC50 /* Today.strings in Resources */ = {isa = PBXBuildFile; fileRef = 21374EEAA2C69079F77A0AC3 /* Today.strings */; };
+		52262904252505630083DFD5 /* CronTabsPerfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52262903252505630083DFD5 /* CronTabsPerfTests.swift */; };
 		554867231DC3935A00183DAA /* HomePageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554867221DC3935A00183DAA /* HomePageTests.swift */; };
 		580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580B0C4121748CFE00448DF8 /* DataManagementTests.swift */; };
 		59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68CCB63E2A565CB03F832 /* SearchViewController.swift */; };
@@ -2063,6 +2064,7 @@
 		550B42139C1483832FF96816 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Today.strings; sourceTree = "<group>"; };
 		553E4B3E9B83BE964515B4EC /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Menu.strings; sourceTree = "<group>"; };
 		55454D35918F2D2C7284FF2F /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/ErrorPages.strings; sourceTree = "<group>"; };
+		52262903252505630083DFD5 /* CronTabsPerfTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CronTabsPerfTests.swift; sourceTree = "<group>"; };
 		554867221DC3935A00183DAA /* HomePageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomePageTests.swift; sourceTree = "<group>"; };
 		55534EEFAE797FC31FE9F217 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		557946069E409E7941D0079B /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -4624,6 +4626,7 @@
 		3BFE4B081D342FB900DDF53F /* XCUITests */ = {
 			isa = PBXGroup;
 			children = (
+				52262903252505630083DFD5 /* CronTabsPerfTests.swift */,
 				3B546EBF1D95ECAE00BDBE36 /* ActivityStreamTest.swift */,
 				0B3D670D1E09B90B00C1EFC7 /* AuthenticationTest.swift */,
 				0B305E1A1E3A98A900BE0767 /* BookmarkingTests.swift */,
@@ -7417,6 +7420,7 @@
 				39C261CC2018DE21009D97BD /* FxScreenGraphTests.swift in Sources */,
 				3DEFED081F55EBE300F8620C /* TrackingProtectionTests.swift in Sources */,
 				2CEDADA220207EC400223A89 /* SyncFAUITests.swift in Sources */,
+				52262904252505630083DFD5 /* CronTabsPerfTests.swift in Sources */,
 				3D9CA9A81EF84D04002434DD /* NoImageTests.swift in Sources */,
 				0430A545203B372D00FDF76D /* IntegrationTests.swift in Sources */,
 				2C31A8471E8D447F00DAC646 /* HomePageSettingsUITest.swift in Sources */,
