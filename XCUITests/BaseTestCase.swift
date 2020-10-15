@@ -29,7 +29,11 @@ class BaseTestCase: XCTestCase {
     }
 
     func setUpApp() {
-        app.launchArguments = [LaunchArguments.Test] + launchArguments
+        if !launchArguments.contains("FIREFOX_PERFORMANCE_TEST") {
+            app.launchArguments = [LaunchArguments.Test] + launchArguments
+        } else {
+            app.launchArguments = [LaunchArguments.PerformanceTest] + launchArguments
+        }
         app.launch()
     }
 

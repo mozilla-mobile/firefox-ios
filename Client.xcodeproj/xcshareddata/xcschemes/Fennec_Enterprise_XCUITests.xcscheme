@@ -237,6 +237,9 @@
                   Identifier = "ClipBoardTests/testClipboardPasteAndGo()">
                </Test>
                <Test
+                  Identifier = "CronTabsPerformanceTest">
+               </Test>
+               <Test
                   Identifier = "DataManagementTests/testWebSiteDataEnterFirstTime()">
                </Test>
                <Test

@@ -50,6 +50,27 @@ class TestAppDelegate: AppDelegate {
 
                 try! FileManager.default.copyItem(at: input, to: output)
             }
+            
+            if arg.starts(with: LaunchArguments.LoadTabsStateArchive) {
+                 if launchArguments.contains(LaunchArguments.ClearProfile) {
+                     fatalError("Clearing profile and loading a TabsState.Archive is not a supported combination.")
+                 }
+
+                 // Grab the name of file in the bundle's test-fixtures dir, and copy it to the runtime app dir.
+                 let filenameArchive = arg.replacingOccurrences(of: LaunchArguments.LoadTabsStateArchive, with: "")
+                 let input = URL(fileURLWithPath: Bundle(for: TestAppDelegate.self).path(forResource: filenameArchive, ofType: nil, inDirectory: "test-fixtures")!)
+                 try? FileManager.default.createDirectory(atPath: dirForTestProfile, withIntermediateDirectories: false, attributes: nil)
+                 let output = URL(fileURLWithPath: "\(dirForTestProfile)/tabsState.archive")
+
+                 let enumerator = FileManager.default.enumerator(atPath: dirForTestProfile)
+                 let filePaths = enumerator?.allObjects as! [String]
+                 filePaths.filter { $0.contains(".archive") }.forEach { item in
+                     try! FileManager.default.removeItem(at: URL(fileURLWithPath: "\(dirForTestProfile)/\(item)"))
+                 }
+
+                 try! FileManager.default.copyItem(at: input, to: output)
+             }
+            
         }
 
         if launchArguments.contains(LaunchArguments.ClearProfile) {
