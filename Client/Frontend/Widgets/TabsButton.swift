@@ -6,7 +6,7 @@ import Foundation
 import SnapKit
 import Shared
 
-private struct TabsButtonUX {
+struct TabsButtonUX {
     static let CornerRadius: CGFloat = 2
     static let TitleFont: UIFont = UIConstants.DefaultChromeSmallFontBold
     static let BorderStrokeWidth: CGFloat = 1.5
