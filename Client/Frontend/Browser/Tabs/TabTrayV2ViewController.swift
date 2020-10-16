@@ -180,9 +180,9 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         present(controller, animated: true, completion: nil)
     }
     
-    func didTogglePrivateMode(_ toggleToOn: Bool) {
+    func didTogglePrivateMode(_ togglePrivateModeOn: Bool) {
         // Toggle private mode
-        viewModel.togglePrivateMode(toggleToOn)
+        viewModel.togglePrivateMode(togglePrivateModeOn)
         
         // Reload data
         viewModel.updateTabs()
