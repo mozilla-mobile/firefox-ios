@@ -39,7 +39,6 @@ class TabTrayV2ViewModel: NSObject {
         super.init()
         tabManager.addDelegate(self)
         register(self, forTabEvents: .didLoadFavicon, .didChangeURL)
-        setupPrivateModeBadge()
     }
     
     // Returns tabs for the mode the current view model is in
@@ -47,14 +46,13 @@ class TabTrayV2ViewModel: NSObject {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
     
-    func setupPrivateModeBadge() {
-        viewController.toolbar.maskButton.setSelected(isPrivate, animated: true)
-        viewController.toolbar.applyUIMode(isPrivate: isPrivate)
+    func countOfNormalTabs() -> Int {
+        return tabManager.normalTabs.count
     }
 
-    func togglePrivateMode () {
+    func togglePrivateMode (_ toggleToOn: Bool) {
         tabManager.willSwitchTabMode(leavingPBM: self.isPrivate)
-        self.isPrivate = !self.isPrivate
+        self.isPrivate = toggleToOn ? true : false
         resetDataStoreTabs()
         let tabs = getTabs()
         let tab = mostRecentTab(inTabs: tabs) ?? tabs.last
@@ -63,7 +61,6 @@ class TabTrayV2ViewModel: NSObject {
         } else {
             self.addTab()
         }
-        setupPrivateModeBadge()
     }
     
     func addPrivateTab() {
