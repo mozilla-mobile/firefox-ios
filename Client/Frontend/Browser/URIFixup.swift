@@ -12,10 +12,9 @@ class URIFixup {
         }
 
         let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard var escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .URLAllowed) else {
+        guard let escaped = trimmed.addingPercentEncoding(withAllowedCharacters: .URLAllowed) else {
             return nil
         }
-        escaped = replaceBrackets(url: escaped)
 
         // Then check if the URL includes a scheme. This will handle
         // all valid requests starting with "http://", "about:", etc.
@@ -27,10 +26,10 @@ class URIFixup {
         }
 
         // If there's no scheme, we're going to prepend "http://". First,
-        // make sure there's at least one "." in the host. This means
+        // make sure there's at least one ".", or ":" for IPv6, in the host. This means
         // we'll allow single-word searches (e.g., "foo") at the expense
         // of breaking single-word hosts without a scheme (e.g., "localhost").
-        if trimmed.range(of: ".") == nil {
+        if trimmed.range(of: ".") == nil && trimmed.filter({ $0 == ":" }).count < 1 {
             return nil
         }
 
@@ -52,6 +51,10 @@ class URIFixup {
         if string.filter({ $0 == "#" }).count > 1 {
             string = replaceHashMarks(url: string)
         }
+        
+        if string.filter({ $0 == "[" || $0 == "]" }).count > 1 {
+            string = replaceBrackets(url: string)
+        }
 
         guard let url = URL(string: string) else { return nil }
 
@@ -64,7 +67,19 @@ class URIFixup {
     }
 
     static func replaceBrackets(url: String) -> String {
-        return url.replacingOccurrences(of: "[", with: "%5B").replacingOccurrences(of: "]", with: "%5D")
+        var url = url
+        let firstOpenIndex = url.firstIndex(of: "[")
+        let firstCloseIndex = url.firstIndex(of: "]")
+        if firstOpenIndex == nil && firstCloseIndex == nil { return url }
+        if let firstOpenIndex = firstOpenIndex {
+            let start = url.index(firstOpenIndex, offsetBy: 1)
+            url = url.replacingOccurrences(of: "[", with: "%5B", range: start..<url.endIndex)
+        }
+        if let firstCloseIndex = firstCloseIndex {
+            let start = url.index(firstCloseIndex, offsetBy: 1)
+            url = url.replacingOccurrences(of: "]", with: "%5D", range: start..<url.endIndex)
+        }
+        return url
     }
 
     static func replaceHashMarks(url: String) -> String {
