@@ -796,6 +796,7 @@
 		EF5742E3AE9ACDD5BBE7AF95 /* Intro.strings in Resources */ = {isa = PBXBuildFile; fileRef = 99C54F4F8354A39A0F06511F /* Intro.strings */; };
 		F35B8D2B1D6380EA008E3D61 /* SessionRestore.html in Resources */ = {isa = PBXBuildFile; fileRef = F35B8D2A1D6380EA008E3D61 /* SessionRestore.html */; };
 		F35B8D2D1D6383E9008E3D61 /* SessionRestoreHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F35B8D2C1D6383E9008E3D61 /* SessionRestoreHelper.swift */; };
+		F61D45742539016300F19A33 /* AdjustableFontSizeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A7936B252D2CD900349C0B /* AdjustableFontSizeProtocol.swift */; };
 		F6F942FEAEECEDA197C48DCE /* HistoryPanel.strings in Resources */ = {isa = PBXBuildFile; fileRef = 67AF4B8392ADBAA41F1B3AD0 /* HistoryPanel.strings */; };
 		F84B21DA1A090F8100AAB793 /* ClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21D91A090F8100AAB793 /* ClientTests.swift */; };
 		F84B22041A0910F600AAB793 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84B21E51A0910F600AAB793 /* AppDelegate.swift */; };
@@ -3870,6 +3871,7 @@
 		F5E84699B672AEC4CE4D5871 /* af */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = af; path = af.lproj/FindInPage.strings; sourceTree = "<group>"; };
 		F5F94E989BFE5C0AAD2FFCFD /* bo */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bo; path = bo.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		F63D438AB501007BE110524A /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/AuthenticationManager.strings; sourceTree = "<group>"; };
+		F6A7936B252D2CD900349C0B /* AdjustableFontSizeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdjustableFontSizeProtocol.swift; sourceTree = "<group>"; };
 		F6AA4920A08DE9E2F0BC44C2 /* br */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = br; path = br.lproj/ClearPrivateDataConfirm.strings; sourceTree = "<group>"; };
 		F6B547FFB6722A9411C5F91F /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		F6EA434FA5D8305063BC630B /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -5334,6 +5336,7 @@
 		E4E0BB141AFBC9E4008D6260 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				F6A7936B252D2CD900349C0B /* AdjustableFontSizeProtocol.swift */,
 				43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */,
 				C8CFF4E322F9FDB5002CC6BD /* effective_tld_names.swift */,
 				D35210E01CB2F16600FC5DCB /* Strings.swift */,
@@ -7154,6 +7157,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F61D45742539016300F19A33 /* AdjustableFontSizeProtocol.swift in Sources */,
 				E65075991E37F7AB006961AC /* Cancellable.swift in Sources */,
 				E65075BE1E37F7AB006961AC /* TimeConstants.swift in Sources */,
 				E65075B21E37F7AB006961AC /* Functions.swift in Sources */,

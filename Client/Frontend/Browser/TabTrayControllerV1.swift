@@ -104,12 +104,6 @@ class TabTrayControllerV1: UIViewController {
     var numberOfColumns: Int {
         return tabLayoutDelegate.numberOfColumns
     }
-    
-    private var placeholder: NSAttributedString {
-        return NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes:
-                                    [NSAttributedString.Key.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7),
-                                     NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)])
-    }
 
     init(tabManager: TabManager, profile: Profile, tabTrayDelegate: TabTrayDelegate? = nil) {
         self.tabManager = tabManager
@@ -128,6 +122,7 @@ class TabTrayControllerV1: UIViewController {
         // these will be animated during view show/hide transition
         statusBarBG.alpha = 0
         searchBarHolder.alpha = 0
+        searchBar.adjustFonts()
 
         tabDisplayManager.tabDisplayCompletionDelegate = self
     }
@@ -206,8 +201,6 @@ class TabTrayControllerV1: UIViewController {
             toolbar.applyUIMode(isPrivate: true)
             searchBar.applyUIMode(isPrivate: true)
         }
-
-        setupFonts()
         
         if traitCollection.forceTouchCapability == .available {
             registerForPreviewing(with: self, sourceView: view)
@@ -224,7 +217,6 @@ class TabTrayControllerV1: UIViewController {
         super.traitCollectionDidChange(previousTraitCollection)
         // Update the trait collection we reference in our layout delegate
         tabLayoutDelegate.traitCollection = traitCollection
-        setupFonts()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -274,11 +266,6 @@ class TabTrayControllerV1: UIViewController {
         searchBar.snp.makeConstraints { make in
             make.edges.equalTo(roundedSearchBarHolder).inset(UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10))
         }
-    }
-    
-    private func setupFonts() {
-        searchBar.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
-        searchBar.attributedPlaceholder = self.placeholder
     }
 
     @objc func didTogglePrivateMode() {
@@ -1235,6 +1222,20 @@ class TabCell: UICollectionViewCell {
 
 class SearchBarTextField: UITextField, PrivateModeUI {
     static let leftInset = CGFloat(18)
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            adjustFonts()
+        }
+    }
+    
+    private func placeholderString(_ size: CGFloat) -> NSAttributedString {
+        return NSAttributedString(string: Strings.TabSearchPlaceholderText, attributes:
+                                    [NSAttributedString.Key.foregroundColor: UIColor.theme.tabTray.tabTitleText.withAlphaComponent(0.7),
+                                     NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body).withSize(size)])
+    }
 
     func applyUIMode(isPrivate: Bool) {
         tintColor = UIColor.theme.urlbar.textSelectionHighlight(isPrivate).textFieldMode
@@ -1250,5 +1251,12 @@ class SearchBarTextField: UITextField, PrivateModeUI {
 
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.insetBy(dx: SearchBarTextField.leftInset, dy: 0)
+    }
+}
+
+extension SearchBarTextField: AdjustableFontSizeProtocol {
+    func resize(size: CGFloat) {
+        font = font?.withSize(size)
+        attributedPlaceholder = placeholderString(size)
     }
 }

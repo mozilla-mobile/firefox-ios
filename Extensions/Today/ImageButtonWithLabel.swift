@@ -3,6 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 import UIKit
+import Shared
 
 class ImageButtonWithLabel: UIView {
     lazy var button = UIButton()
@@ -37,9 +38,25 @@ class ImageButtonWithLabel: UIView {
         label.numberOfLines = 0
         label.textAlignment = .center
         label.lineBreakMode = .byWordWrapping
+        
+        adjustFonts()
     }
 
     func addTarget(_ target: AnyObject?, action: Selector, forControlEvents events: UIControl.Event) {
         button.addTarget(target, action: action, for: events)
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
+            adjustFonts()
+        }
+    }
+}
+
+extension ImageButtonWithLabel: AdjustableFontSizeProtocol {
+    func resize(size: CGFloat) {
+        label.font = label.font.withSize(size)
     }
 }

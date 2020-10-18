@@ -274,6 +274,8 @@ class TabLocationView: UIView {
         menuBadge.add(toParent: contentView)
         menuBadge.layout(onButton: pageOptionsButton)
         menuBadge.show(false)
+        
+        adjustFonts()
     }
 
     required init(coder: NSCoder) {
@@ -281,8 +283,10 @@ class TabLocationView: UIView {
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            urlTextField.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
+            adjustFonts()
         }
     }
 
@@ -452,6 +456,12 @@ extension TabLocationView: TabEventHandler {
 
     func tabDidToggleDesktopMode(_ tab: Tab) {
         menuBadge.show(tab.changedUserAgent)
+    }
+}
+
+extension TabLocationView: AdjustableFontSizeProtocol {
+    func resize(size: CGFloat) {
+        urlTextField.font = urlTextField.font?.withSize(size)
     }
 }
 

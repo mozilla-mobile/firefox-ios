@@ -377,10 +377,6 @@ class URLBarView: UIView {
         locationTextField.applyTheme()
         locationTextField.backgroundColor = UIColor.theme.textField.backgroundInOverlay
     }
-
-    private func setupFonts() {
-        locationTextField?.font = UIFont.preferredFont(forTextStyle: UIFont.TextStyle.body)
-    }
     
     override func becomeFirstResponder() -> Bool {
         return self.locationTextField?.becomeFirstResponder() ?? false
@@ -515,7 +511,7 @@ class URLBarView: UIView {
     }
 
     func transitionToOverlay(_ didCancel: Bool = false) {
-        setupFonts()
+        adjustFonts()
         
         locationView.contentView.alpha = inOverlayMode ? 0 : 1
         cancelButton.alpha = inOverlayMode ? 1 : 0
@@ -601,8 +597,10 @@ class URLBarView: UIView {
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
         if previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory {
-            setupFonts()
+            adjustFonts()
         }
     }
 }
@@ -821,6 +819,12 @@ extension URLBarView: PrivateModeUI {
         ToolbarTextField.applyUIMode(isPrivate: isPrivate)
 
         applyTheme()
+    }
+}
+
+extension URLBarView: AdjustableFontSizeProtocol {
+    func resize(size: CGFloat) {
+        locationTextField?.font = locationTextField?.font?.withSize(size)
     }
 }
 
