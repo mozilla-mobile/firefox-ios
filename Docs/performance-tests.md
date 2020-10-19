@@ -37,7 +37,7 @@ The tests are using a low size profile (with 20 tabs) and a heavy profile (with 
 * Launch app
 * Open Tabs Tray
 
-It was decided to use those edge profiles and maybe add more in the future depending on the data retrieved and how the app performs.
+It was decided to use those profiles and maybe add more in the future depending on the data retrieved and how the app performs.
 
 Those profiles are stored in the [test-fixtures](https://github.com/mozilla-mobile/firefox-ios/tree/main/test-fixtures)folder and in addition to those there are more availables (40, 60, 80 tabs in this folder in case they are needed in the future)
 
