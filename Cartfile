@@ -13,7 +13,7 @@ github "mozilla-mobile/MappaMundi"          "master"
 github "Leanplum/Leanplum-iOS-SDK"          ~> 2.7.2
 github "mozilla-services/shavar-prod-lists" "72.0"
 # Use release version of application-services
-github "mozilla/application-services"      "v63.0.0"
+github "mozilla/application-services"      "v65.0.0"
 
 # Use interim binary version of application-services
 # binary "https://circleci.com/api/v1.1/project/github/mozilla/application-services/2862/artifacts/0/dist/mozilla.app-services.json" ~> 0.0.1-snapshot # mozilla/application-services@fb5c540e99133980911216055425688f22a27be2
