@@ -156,6 +156,10 @@
 		D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */; };
 		D5ABA3DA1FCC846800D5C060 /* AutocompleteSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */; };
 		D5B10AAB1FD5EFA40044523A /* OnePasswordExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */; };
+		D5D067FB252F945D00C35227 /* metrics.yaml in Resources */ = {isa = PBXBuildFile; fileRef = D5D067FA252F945D00C35227 /* metrics.yaml */; };
+		D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D2F02A252FA6AE00761DC8 /* Metrics.swift */; };
+		D5D2F041252FA71B00761DC8 /* Glean.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5D067F0252F926E00C35227 /* Glean.framework */; };
+		D5D2F042252FA71B00761DC8 /* Glean.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D5D067F0252F926E00C35227 /* Glean.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D803D37420EF1A49001F2819 /* UserAgentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D803D37320EF1A49001F2819 /* UserAgentTests.swift */; };
 		D831FEE2205247A400EAE19A /* BrowserViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */; };
 		D8E0152C1FB4136E00CA3B9F /* AddSearchEngineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */; };
@@ -237,6 +241,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		D5D2F043252FA71B00761DC8 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D5D2F042252FA71B00761DC8 /* Glean.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E4BF2DF91BACE92400DA9D68 /* Embed App Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -646,6 +661,9 @@
 		D597608B1F9FEFB300A2D212 /* TrackingProtection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingProtection.swift; sourceTree = "<group>"; };
 		D5ABA3D71FCC846800D5C060 /* AddCustomDomainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCustomDomainViewController.swift; sourceTree = "<group>"; };
 		D5ABA3D81FCC846800D5C060 /* AutocompleteSettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutocompleteSettingViewController.swift; sourceTree = "<group>"; };
+		D5D067F0252F926E00C35227 /* Glean.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Glean.framework; path = Carthage/Build/iOS/Glean.framework; sourceTree = "<group>"; };
+		D5D067FA252F945D00C35227 /* metrics.yaml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = metrics.yaml; sourceTree = "<group>"; };
+		D5D2F02A252FA6AE00761DC8 /* Metrics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Metrics.swift; sourceTree = "<group>"; };
 		D803D37320EF1A49001F2819 /* UserAgentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentTests.swift; sourceTree = "<group>"; };
 		D831FEE1205247A400EAE19A /* BrowserViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserViewControllerTests.swift; sourceTree = "<group>"; };
 		D8E0152B1FB4136E00CA3B9F /* AddSearchEngineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSearchEngineViewController.swift; sourceTree = "<group>"; };
@@ -976,6 +994,7 @@
 				4285B8E0671F40DA543A2E58 /* AssetsLibrary.framework in Frameworks */,
 				A57245250F88CCA4993E55B2 /* CoreText.framework in Frameworks */,
 				2B36326E97D2E67E9C684B4B /* CoreTelephony.framework in Frameworks */,
+				D5D2F041252FA71B00761DC8 /* Glean.framework in Frameworks */,
 				D00A44111EB8F80A00DB0218 /* Telemetry.framework in Frameworks */,
 				2825C3665AB14081B262F767 /* SystemConfiguration.framework in Frameworks */,
 				34056D10515852F370C83A01 /* QuartzCore.framework in Frameworks */,
@@ -1165,9 +1184,18 @@
 			path = TrackingProtection;
 			sourceTree = "<group>";
 		};
+		D5D2F029252FA6AE00761DC8 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				D5D2F02A252FA6AE00761DC8 /* Metrics.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
 		D77FE464056F274978E025ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D5D067F0252F926E00C35227 /* Glean.framework */,
 				163BFFE32124F8E10007CEBC /* IntentsUI.framework */,
 				163BFFE12124EBAF0007CEBC /* Intents.framework */,
 				747ADA1D1FCE0B7B00970132 /* OnePasswordExtension.framework */,
@@ -1260,6 +1288,7 @@
 		E4BF2DD51BACE8CA00DA9D68 /* Blockzilla */ = {
 			isa = PBXGroup;
 			children = (
+				D5D2F029252FA6AE00761DC8 /* Generated */,
 				30DFF97F21810BF20055707C /* SearchSuggestClient.swift */,
 				EB84F9702093815500BA6739 /* effective_tld_names.dat */,
 				EB84F96C2093799800BA6739 /* TrackingProtectionPageStats.swift */,
@@ -1346,6 +1375,7 @@
 				2696EB03211F540600F0C73F /* SearchHistoryUtils.swift */,
 				F7FF8B5A2194084000CCA80F /* UIDeviceExtensions.swift */,
 				24433100219DA46F00778D02 /* Debouncer.swift */,
+				D5D067FA252F945D00C35227 /* metrics.yaml */,
 			);
 			path = Blockzilla;
 			sourceTree = "<group>";
@@ -1457,11 +1487,13 @@
 			buildConfigurationList = E4BF2DE51BACE8CA00DA9D68 /* Build configuration list for PBXNativeTarget "Blockzilla" */;
 			buildPhases = (
 				F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */,
+				D5D067F9252F939600C35227 /* Glean */,
 				E4BF2DCF1BACE8CA00DA9D68 /* Sources */,
 				E4BF2DD01BACE8CA00DA9D68 /* Frameworks */,
 				E4BF2DD11BACE8CA00DA9D68 /* Resources */,
 				E4BF2DF91BACE92400DA9D68 /* Embed App Extensions */,
 				D38D693F1C471AC7003EF211 /* Run Script (Carthage) */,
+				D5D2F043252FA71B00761DC8 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -1725,6 +1757,7 @@
 				D362D2AB1C4EAF940041980A /* rights-focus.html in Resources */,
 				D3E2C8FC1D9F17AC00DEBE3D /* disconnect-analytics.json in Resources */,
 				D3E2C8FD1D9F17AC00DEBE3D /* disconnect-content.json in Resources */,
+				D5D067FB252F945D00C35227 /* metrics.yaml in Resources */,
 				D3BFCB5B1BD15CD000AD22D1 /* rights-klar.html in Resources */,
 				D3426AEF1DB846BB0016DA5A /* topdomains.txt in Resources */,
 				B3D23BEF1FA3A9E500D9C50F /* postload.js in Resources */,
@@ -1765,6 +1798,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Telemetry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Sentry.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/OnePasswordExtension.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Glean.framework",
 			);
 			name = "Run Script (Carthage)";
 			outputPaths = (
@@ -1772,6 +1806,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+		D5D067F9252F939600C35227 /* Glean */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Blockzilla/metrics.yaml",
+			);
+			name = Glean;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/Blockzilla/Generated/Metrics.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "bash $PWD/bin/sdk_generator.sh -m $SRCROOT/Documentation\n";
 		};
 		F84AFE711DE77ACC005C4DD1 /* Run Script (Copy Wordmark) */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1885,6 +1939,7 @@
 				D5ABA3D91FCC846800D5C060 /* AddCustomDomainViewController.swift in Sources */,
 				D3426AEB1DB7F8AA0016DA5A /* OverlayView.swift in Sources */,
 				746BD9241F758FDA00BE8DB9 /* Bytes.swift in Sources */,
+				D5D2F02B252FA6AE00761DC8 /* Metrics.swift in Sources */,
 				16180DBB212F563800AFE3C2 /* Intents.intentdefinition in Sources */,
 				16D465B12127891000FEC226 /* SiriFavoriteViewController.swift in Sources */,
 				D3E54FCF1DEFAE80003E1AFF /* OpenSearchParser.swift in Sources */,

@@ -4,6 +4,7 @@
 
 import UIKit
 import Telemetry
+import Glean
 
 protocol AppSplashController {
     var splashView: UIView { get }
@@ -394,6 +395,14 @@ extension AppDelegate {
 
         // Start the telemetry session and record an event indicating that we have entered the
         Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.foreground, object: TelemetryEventObject.app)
+
+        if let clientId = UserDefaults
+            .standard.string(forKey: "telemetry-key-prefix-clientId")
+            .flatMap(UUID.init(uuidString:)) {
+            GleanMetrics.LegacyIds.clientId.set(clientId)
+        }
+
+        Glean.shared.initialize(uploadEnabled: Settings.getToggle(.sendAnonymousUsageData))
     }
 
     func presentModal(viewController: UIViewController, animated: Bool) {

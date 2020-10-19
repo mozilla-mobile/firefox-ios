@@ -3,5 +3,6 @@ github "SnapKit/SnapKit" ~> 5.0
 github "cezheng/Fuzi" "master"
 github "mozilla-mobile/AutocompleteTextField" "master"
 github "mozilla-mobile/telemetry-ios" ~> 1.1
-github "getsentry/sentry-cocoa"  ~> 4.2
+github "getsentry/sentry-cocoa" ~> 4.2
 github "AgileBits/onepassword-extension" "new/carthage+ios10"
+github "mozilla/glean" "v32.4.1"
