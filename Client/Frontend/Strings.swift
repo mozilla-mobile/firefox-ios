@@ -383,6 +383,17 @@ extension Strings {
     public static let TabSearchPlaceholderText = NSLocalizedString("Tabs.Search.PlaceholderText", value: "Search Tabs", comment: "The placeholder text for the tab search bar")
 }
 
+// Tab tray (chronological tabs)
+extension Strings {
+    public static let TabTrayV2Title = NSLocalizedString("TabTray.Title", value: "Open Tabs", comment: "The title for the tab tray")
+    public static let TabTrayV2TodayHeader = NSLocalizedString("TabTray.Today.Header", value: "Today", comment: "The section header for tabs opened today")
+    public static let TabTrayV2YesterdayHeader = NSLocalizedString("TabTray.Yesterday.Header", value: "Yesterday", comment: "The section header for tabs opened yesterday")
+    public static let TabTrayV2LastWeekHeader = NSLocalizedString("TabTray.LastWeek.Header", value: "Last Week", comment: "The section header for tabs opened last week")
+    public static let TabTrayV2OlderHeader = NSLocalizedString("TabTray.Older.Header", value: "Older", comment: "The section header for tabs opened before last week")
+    public static let TabTraySwipeMenuMore = NSLocalizedString("TabTray.SwipeMenu.More", value: "More", comment: "The button title to see more options to perform on the tab.")
+    public static let TabTrayMoreMenuCopy = NSLocalizedString("TabTray.MoreMenu.Copy", value: "Copy", comment: "The title on the button to copy the tab address.")
+}
+
 //Clipboard Toast
 extension Strings {
     public static let GoToCopiedLink = NSLocalizedString("ClipboardToast.GoToCopiedLink.Title", value: "Go to copied link?", comment: "Message displayed when the user has a copied link on the clipboard")
