@@ -35,6 +35,11 @@ private struct BrowserViewControllerUX {
     fileprivate static let BookmarkStarAnimationOffset: CGFloat = 80
 }
 
+struct UrlToOpenModel {
+    var url: URL?
+    var isPrivate: Bool
+}
+
 /// Enum used to track flow for telemetry events
 enum ReferringPage {
     case onboarding
@@ -63,7 +68,9 @@ class BrowserViewController: UIViewController {
     private var onboardingUserResearch: OnboardingUserResearch?
     private var newTabUserResearch: NewTabUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
-
+    var urlFromAnotherApp: UrlToOpenModel?
+    var isCrashAlertShowing: Bool = false
+    
     fileprivate var customSearchBarButton: UIBarButtonItem?
 
     // popover rotation handling
@@ -587,13 +594,17 @@ class BrowserViewController: UIViewController {
         }
         let alert = UIAlertController.restoreTabsAlert(
             okayCallback: { _ in
-                self.tabManager.restoreTabs()
+                self.isCrashAlertShowing = false
+                self.tabManager.restoreTabs(true)
             },
             noCallback: { _ in
+                self.isCrashAlertShowing = false
                 self.tabManager.selectTab(self.tabManager.addTab())
+                self.openUrlAfterRestore()
             }
         )
         self.present(alert, animated: true, completion: nil)
+        isCrashAlertShowing = true
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -1026,6 +1037,10 @@ class BrowserViewController: UIViewController {
     }
 
     func switchToTabForURLOrOpen(_ url: URL, isPrivate: Bool = false) {
+        guard !isCrashAlertShowing else {
+            urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
+            return
+        }
         popToBVC()
         if let tab = tabManager.getTabForURL(url) {
             tabManager.selectTab(tab)
@@ -1931,6 +1946,13 @@ extension BrowserViewController: TabManagerDelegate {
 
     func tabManagerDidRestoreTabs(_ tabManager: TabManager) {
         updateTabCountUsingTabManager(tabManager)
+        openUrlAfterRestore()
+    }
+    
+    func openUrlAfterRestore() {
+        guard let url = urlFromAnotherApp?.url else { return }
+        openURLInNewTab(url, isPrivate: urlFromAnotherApp?.isPrivate ?? false)
+        urlFromAnotherApp = nil
     }
 
     func show(toast: Toast, afterWaiting delay: DispatchTimeInterval = SimpleToastUX.ToastDelayBefore, duration: DispatchTimeInterval? = SimpleToastUX.ToastDismissAfter) {
