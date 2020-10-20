@@ -51,6 +51,18 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         return navigationMenu
     }()
+    lazy var bottomToolbar: UIToolbar = {
+        let bottomToolbar = UIToolbar()
+        let addTabButton = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
+        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let closeAllTabsButton = UIBarButtonItem(image: UIImage(named: "delete"), style: .plain , target: self, action: #selector(didTapToolbarDelete))
+        closeAllTabsButton.tintColor = UIColor.Photon.Grey90A80
+        bottomToolbar.barStyle = .default
+        bottomToolbar.backgroundColor = .white
+        bottomToolbar.setItems([closeAllTabsButton, space, addTabButton], animated: false)
+        bottomToolbar.sizeToFit()
+        return bottomToolbar
+    }()
     
     // Constants
     fileprivate let sectionHeaderIdentifier = "SectionHeader"
@@ -91,12 +103,13 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         navMenuContainer.addSubview(navigationMenu)
         view.addSubview(tableView)
         view.addSubview(emptyPrivateTabsView)
+        view.addSubview(bottomToolbar)
         viewModel.updateTabs()
         // Constraints
         tableView.snp.makeConstraints { make in
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
-            make.bottom.equalTo(view)
+            make.bottom.equalTo(bottomToolbar.snp.top)
             make.top.equalTo(navMenuContainer.snp.bottom)
         }
         navMenuContainer.snp.makeConstraints { make in
@@ -109,8 +122,14 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             make.right.equalToSuperview().offset(-20)
         }
         emptyPrivateTabsView.snp.makeConstraints { make in
-            make.bottom.left.right.equalTo(view)
+            make.left.right.equalTo(view)
+            make.bottom.equalTo(bottomToolbar.snp.top)
             make.top.equalTo(navMenuContainer.snp.bottom)
+        }
+        bottomToolbar.snp.makeConstraints { make in
+            make.top.equalTo(tableView.snp.bottom)
+            make.width.equalTo(view)
+            make.bottom.equalTo(view.safeArea.bottom)
         }
         
         emptyPrivateTabsView.isHidden = true
@@ -166,7 +185,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         }
     }
     
-    @objc func didTapToolbarAddTab(_ sender: UIButton) {
+    @objc func didTapToolbarAddTab(_ sender: UIBarButtonItem) {
         viewModel.addTab()
         dismissTabTray()
     }
