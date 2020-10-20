@@ -9671,6 +9671,11 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = Fennec;
@@ -10007,6 +10012,11 @@
 				DEFINES_MODULE = YES;
 				ENABLE_TESTABILITY = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = Firefox;
@@ -10263,6 +10273,11 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = Fennec_Enterprise;
@@ -10489,6 +10504,11 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				DEFINES_MODULE = YES;
 				INFOPLIST_FILE = "Shared/Supporting Files/Info.plist";
+				LOCALIZED_STRING_MACRO_NAMES = (
+					MZLocalizedString,
+					NSLocalizedString,
+					CFCopyLocalizedString,
+				);
 				SWIFT_OBJC_BRIDGING_HEADER = "$SRCROOT/Shared/Shared-Bridging-Header.h";
 			};
 			name = FirefoxBeta;
