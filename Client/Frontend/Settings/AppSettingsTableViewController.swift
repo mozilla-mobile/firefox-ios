@@ -106,7 +106,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 prefKey: "settings.closePrivateTabs",
                 defaultValue: false,
                 titleText: .AppSettingsClosePrivateTabsTitle,
-                statusText: .AppSettingsClosePrivateTabsDescriptiongi)
+                statusText: .AppSettingsClosePrivateTabsDescription)
         ]
 
         privacySettings.append(ContentBlockerSetting(settings: self))

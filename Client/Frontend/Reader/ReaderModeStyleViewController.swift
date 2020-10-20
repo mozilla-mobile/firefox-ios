@@ -395,7 +395,7 @@ class ThemeButton: UIButton {
 
         setTitle(theme.rawValue, for: [])
 
-        accessibilityHint =.ReaderModeStyleChangeColorSchemeAccessibilityHint
+        accessibilityHint = .ReaderModeStyleChangeColorSchemeAccessibilityHint
 
         switch theme {
         case .light:
