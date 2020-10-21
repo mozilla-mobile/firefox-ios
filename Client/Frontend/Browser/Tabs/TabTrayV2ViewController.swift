@@ -188,6 +188,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
     @objc func didTapToolbarAddTab(_ sender: UIBarButtonItem) {
         viewModel.addTab()
         dismissTabTray()
+        TelemetryWrapper.recordEvent(category: .action, method: .add, object: .tab, value: viewModel.isInPrivateMode ? .privateTab : .normalTab)
     }
     
     @objc func didTapToolbarDelete(_ sender: UIButton) {
@@ -197,6 +198,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         controller.popoverPresentationController?.sourceView = sender
         controller.popoverPresentationController?.sourceRect = sender.bounds
         present(controller, animated: true, completion: nil)
+        TelemetryWrapper.recordEvent(category: .action, method: .deleteAll, object: .tab, value: viewModel.isInPrivateMode ? .privateTab : .normalTab)
     }
     
     func didTogglePrivateMode(_ togglePrivateModeOn: Bool) {

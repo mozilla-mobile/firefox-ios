@@ -282,6 +282,7 @@ extension TelemetryWrapper {
         case cancel = "cancel"
         case change = "change"
         case close = "close"
+        case closeAll = "close-all"
         case delete = "delete"
         case deleteAll = "deleteAll"
         case drag = "drag"
@@ -433,6 +434,8 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.open[privateOrNormal].add()
         case (.action, .close, .tab, let privateOrNormal, _):
             GleanMetrics.Tabs.close[privateOrNormal].add()
+        case (.action, .closeAll, .tab, let privateOrNormal, _):
+            GleanMetrics.Tabs.closeAll[privateOrNormal].add()
         case (.action, .tap, .addNewTabButton, _, _):
             GleanMetrics.Tabs.newTabPressed.add()
         // Settings Menu
