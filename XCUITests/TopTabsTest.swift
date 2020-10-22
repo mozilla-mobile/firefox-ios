@@ -365,7 +365,6 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
         waitForExistence(app.textFields["url"], timeout: 5)
         waitForValueContains(app.textFields["url"], value: "iana")
-        XCTAssertTrue(app.links["RFC 2606"].exists)
         navigator.goto(TabTray)
         XCTAssertTrue(app.buttons["TabTrayController.maskButton"].isEnabled)
     }
