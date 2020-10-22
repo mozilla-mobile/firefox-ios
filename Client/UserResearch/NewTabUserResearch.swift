@@ -10,7 +10,7 @@ class NewTabUserResearch {
     // Variable
     var lpVariable: LPVar?
     // Constants
-    private let enrollmentKey = "newTabUserResearchEnrollmentKey"
+    private let enrollmentKey = "newTabUserResearchEnrollmentKey_v2"
     private let newTabUserResearchKey = "newTabUserResearchKey"
     // Saving user defaults
     private let defaults = UserDefaults.standard
