@@ -264,6 +264,7 @@ private extension LoginListViewController {
 
     @objc func dismissAlertController() {
         self.deleteAlert?.dismiss(animated: false, completion: nil)
+        navigationController?.view.endEditing(true)
     }
 
     func loadLogins(_ query: String? = nil) {
