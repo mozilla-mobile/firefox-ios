@@ -260,8 +260,8 @@ class BrowserViewController: UIViewController {
             toolbar?.applyUIMode(isPrivate: tabManager.selectedTab?.isPrivate ?? false)
             toolbar?.applyTheme()
             toolbar?.addNewTabButton.isHidden = true
-            // This is for showing (+) add tab on middle button with A/B test where we need to update both toolbar and url bar when (+) button is enabled.
-            // The urlbar already has the state we just need to refresh it so that if reader mode is available we don't accidently show reload or stop button in url bar
+            // This is for showing (+) add tab middle button with A/B test where we need to update both toolbar and url bar when (+) button is enabled.
+            // Urlbar already has reader mode state but we still need to refresh it so that if reader mode is available we don't accidently show reload or stop button in url bar
             if shouldShowNewTabButton {
                 toolbar?.updateMiddleButtonState(.newTab)
                 let state = urlBar.locationView.readerModeState
