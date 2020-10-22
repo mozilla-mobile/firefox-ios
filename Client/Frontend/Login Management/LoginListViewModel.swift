@@ -33,7 +33,7 @@ final class LoginListViewModel {
             delegate?.breachPathDidUpdate()
         }
     }
-
+    var hasLoadedBreaches: Bool = false
     init(profile: Profile, searchController: UISearchController) {
         self.profile = profile
         self.searchController = searchController
@@ -43,6 +43,9 @@ final class LoginListViewModel {
         // Fill in an in-flight query and re-query
         activeLoginQuery?.fillIfUnfilled(Maybe(success: []))
         activeLoginQuery = queryLogins(query ?? "")
+        activeLoginQuery! >>== self.setLogins
+        // Loading breaches is a heavy operation hence loading it once per opening logins screen
+        guard !hasLoadedBreaches else { return }
         breachAlertsManager.loadBreaches { [weak self] _ in
             guard let self = self, let logins = self.activeLoginQuery?.value.successValue else { return }
             self.userBreaches = self.breachAlertsManager.findUserBreaches(logins).successValue
@@ -54,15 +57,24 @@ final class LoginListViewModel {
                 }
             }
             self.breachIndexPath = indexPaths
+            self.hasLoadedBreaches = true
         }
-        activeLoginQuery! >>== self.setLogins
     }
 
     /// Searches SQLite database for logins that match query.
     /// Wraps the SQLiteLogins method to allow us to cancel it from our end.
     func queryLogins(_ query: String) -> Deferred<Maybe<[LoginRecord]>> {
         let deferred = Deferred<Maybe<[LoginRecord]>>()
-        profile.logins.searchLoginsWithQuery(query) >>== { logins in
+        profile.logins.searchLoginsWithQuery(query).upon { result in
+            // Check any failure, Ex. database is closed
+            guard result.failureValue == nil else {
+                DispatchQueue.main.async {
+                    self.delegate?.loginSectionsDidUpdate()
+                }
+                return
+            }
+            // Make sure logins exist
+            guard let logins = result.successValue else { return }
             deferred.fillIfUnfilled(Maybe(success: logins.asArray()))
             succeed()
         }
@@ -111,13 +123,12 @@ final class LoginListViewModel {
         // NB: Make sure we call the callback on the main thread so it can be synced up with a reloadData to
         //     prevent race conditions between data/UI indexing.
         return self.helper.computeSectionsFromLogins(logins).uponQueue(.main) { result in
-            guard let (titles, sections) = result.successValue else {
+            guard let (titles, sections) = result.successValue, logins.count > 0 else {
                 self.count = 0
                 self.titles = []
                 self.loginRecordSections = [:]
                 return
             }
-
             self.count = logins.count
             self.titles = titles
             self.loginRecordSections = sections
