@@ -151,7 +151,7 @@ class BaseTestCase: XCTestCase {
 
         UIPasteboard.general.string = url
         waitforHittable(element: searchOrEnterAddressTextField)
-
+        waitforExistence(element: searchOrEnterAddressTextField)
         // Must press this way in order to support iPhone 5s
         searchOrEnterAddressTextField.tap()
         searchOrEnterAddressTextField.coordinate(withNormalizedOffset: CGVector.zero).withOffset(CGVector(dx: 10, dy: 0)).press(forDuration: 1.5)
