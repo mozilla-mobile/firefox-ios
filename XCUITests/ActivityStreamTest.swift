@@ -252,7 +252,7 @@ class ActivityStreamTest: BaseTestCase {
         let numTabsOpen = userState.numTabs
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
-
+    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
     func testTopSitesBookmarkDefaultTopSite() {
         // Bookmark a default TopSite, Wikipedia, third top site
         waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 3), timeout: 3)
@@ -260,6 +260,8 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Bookmark")
 
         // Check that it appears under Bookmarks menu
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.cells.staticTexts["Mobile Bookmarks"], timeout: 5)
         navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"])
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
@@ -277,8 +279,9 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Remove Bookmark")
         navigator.goto(LibraryPanel_Bookmarks)
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[defaultTopSite["bookmarkLabel"]!].exists)
-    }
+    }*/
 
+    /* Disable due to https://github.com/mozilla-mobile/firefox-ios/issues/7521
     func testTopSitesBookmarkNewTopSite() {
         let topSiteCells = TopSiteCellgroup.cells
         waitForExistence(topSiteCells[newTopSite["topSiteLabel"]!])
@@ -287,6 +290,8 @@ class ActivityStreamTest: BaseTestCase {
 
         // Check that it appears under Bookmarks menu
         navigator.nowAt(HomePanelsScreen)
+        navigator.goto(LibraryPanel_Bookmarks)
+        waitForExistence(app.cells.staticTexts["Mobile Bookmarks"], timeout: 5)
         navigator.goto(MobileBookmarks)
         XCTAssertTrue(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
 
@@ -300,7 +305,7 @@ class ActivityStreamTest: BaseTestCase {
         selectOptionFromContextMenu(option: "Remove Bookmark")
         navigator.goto(LibraryPanel_Bookmarks)
         XCTAssertFalse(app.tables["Bookmarks List"].staticTexts[newTopSite["bookmarkLabel"]!].exists)
-    }
+    }*/
 
     func testTopSitesShareDefaultTopSite() {
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!]
