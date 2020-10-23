@@ -70,7 +70,7 @@ class BrowserViewController: UIViewController {
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing: Bool = false
-    
+    var currentMiddleButtonState: MiddleButtonState?
     fileprivate var customSearchBarButton: UIBarButtonItem?
 
     // popover rotation handling
@@ -266,6 +266,8 @@ class BrowserViewController: UIViewController {
                 toolbar?.updateMiddleButtonState(.newTab)
                 let state = urlBar.locationView.readerModeState
                 urlBar.updateReaderModeState(state)
+            } else {
+                toolbar?.updateMiddleButtonState(currentMiddleButtonState ?? .search)
             }
             updateTabCountUsingTabManager(self.tabManager)
         }
@@ -920,23 +922,26 @@ class BrowserViewController: UIViewController {
         return false
     }
     
-    func setupMiddleButtonStatus(isLoading: Bool) {
+    func setupMiddleButtonStatus(isLoading: Bool) {        
         let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (newTabUserResearch?.newTabState ?? false)
         
         // No tab
         guard let tab = tabManager.selectedTab else {
             navigationToolbar.updateMiddleButtonState(.search)
+            currentMiddleButtonState = .search
             return
         }
         
         // Tab with starting page
         if tab.isURLStartingPage {
             navigationToolbar.updateMiddleButtonState(.search)
+            currentMiddleButtonState = .search
             return
         }
         
         let state: MiddleButtonState = shouldShowNewTabButton ? .newTab : (isLoading ? .stop : .reload)
         navigationToolbar.updateMiddleButtonState(state)
+        currentMiddleButtonState = state
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
