@@ -9,7 +9,6 @@ import Shared
 class NewTabUserResearch {
     // Variable
     var lpVariable: LPVar?
-    var lpVariableV2: LPVar?
     // Constants
     private let enrollmentKey = "newTabUserResearchEnrollmentKey"
     private let newTabUserResearchKey = "newTabUserResearchKey"
@@ -45,7 +44,7 @@ class NewTabUserResearch {
     }
     
     // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.newTabButtonABTestV2) {
+    init(lpVariable: LPVar? = LPVariables.newTabButtonABTest) {
         self.lpVariable = lpVariable
     }
     
@@ -65,7 +64,7 @@ class NewTabUserResearch {
             }
             self.fetchedExperimentVariables = true
             //Only update add new tab (+ button) when it doesn't match leanplum value 
-            let lpValue = LPVariables.newTabButtonABTestV2?.boolValue() ?? false
+            let lpValue = LPVariables.newTabButtonABTest?.boolValue() ?? false
             if self.newTabState != lpValue {
                 self.newTabState = lpValue
                 self.updateTelemetry()
@@ -79,7 +78,7 @@ class NewTabUserResearch {
             // Condition: Leanplum server too slow; Set default New tab state
             self.newTabState = false
             // Condition: LP has already started but we missed onStartLPVariable callback
-            if case .started(startedState: _) = LeanPlumClient.shared.lpState , let boolValue = LPVariables.newTabButtonABTestV2?.boolValue() {
+            if case .started(startedState: _) = LeanPlumClient.shared.lpState , let boolValue = LPVariables.newTabButtonABTest?.boolValue() {
                 self.newTabState = boolValue
                 self.updateTelemetry()
             }
