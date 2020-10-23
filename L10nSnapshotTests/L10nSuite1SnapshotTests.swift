@@ -117,11 +117,13 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     func test7BookmarksTableContextMenu() {
         navigator.openURL(loremIpsumURL2)
         // There is no other way the test work with the new Copied.. snackbar ahow on iOS14
-        sleep(1)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 5)
         navigator.performAction(Action.Bookmark)
         navigator.createNewTab()
-        navigator.goto(BookmarksPanelContextMenu)
+        // Disable due to issue #7521
+        // navigator.goto(BookmarksPanelContextMenu)
+        navigator.goto(LibraryPanel_Bookmarks)
         snapshot("BookmarksTableContextMenu-01")
     }
 
@@ -136,33 +138,29 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
     }*/
 
     func test8ETPperSite() {
+        // Enable Strict ETP
+        navigator.goto(TrackingProtectionSettings)
+        // Check the warning alert
+         app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
+
+         snapshot("TrackingProtectionStrictWarning-01")
+         app.alerts.buttons.firstMatch.tap()
+
         // Website without blocked elements
         navigator.openURL(loremIpsumURL2)
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 5)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
         navigator.goto(TrackingProtectionContextMenuDetails)
         snapshot("TrackingProtectionEnabledPerSite-01")
-        navigator.performAction(Action.TrackingProtectionperSiteToggle)
-        snapshot("TrackingProtectionDisabledPerSite-02")
 
-        // Website with blocked elements
-        navigator.openNewURL(urlString: "twitter.com")
-        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"])
-        navigator.goto(TrackingProtectionContextMenuDetails)
-        snapshot("TrackingProtectionBlockedElements-01")
-        // Tap on the block element to get more details
-        app.cells.element(boundBy: 2).tap()
-        snapshot("TrackingProtectionBlockedElements-02")
+        // Disable the toggle so that TP is off
+        app.cells["tp.add-to-safelist"].tap()
+        snapshot("TrackingProtectionDisabledPerSite-02")
     }
 
     func test9SettingsETP() {
         navigator.goto(TrackingProtectionSettings)
-        
-       // Check the warning alert
-        app.cells["Settings.TrackingProtectionOption.BlockListStrict"].tap()
 
-        snapshot("TrackingProtectionStrictWarning-01")
-        app.alerts.buttons.firstMatch.tap()
         waitForExistence(app.cells["Settings.TrackingProtectionOption.BlockListBasic"])
         app.cells["Settings.TrackingProtectionOption.BlockListBasic"].buttons.firstMatch.tap()
         snapshot("TrackingProtectionBasicMoreInfo-01")
