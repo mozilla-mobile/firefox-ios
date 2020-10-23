@@ -325,6 +325,22 @@ tabs:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
+  close_all:
+    type: labeled_counter
+    description: |
+      The count of times the user closes all tabs. Increments the
+      appropriate label when either a normal or private tab
+      is closed.
+    labels:
+      - normal-tab
+      - private-tab
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7008
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-10-21"
   new_tab_pressed:
     type: counter
     description: |
