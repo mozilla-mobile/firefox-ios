@@ -15,4 +15,6 @@ struct LPVariables {
     static var onboardingABTestV2 = LPVar.define("onboardingABTestV2", with: true)
     // Variable Used for New Tab Button AB Test
     static var newTabButtonABTest = LPVar.define("newTabButtonABTestProd", with: false)
+    // Variable Used for New Tab Button AB Test V2
+    static var newTabButtonABTestV2 = LPVar.define("newTabButtonABTestProd_V2", with: false)
 }
