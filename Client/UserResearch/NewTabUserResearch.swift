@@ -11,8 +11,8 @@ class NewTabUserResearch {
     var lpVariable: LPVar?
     var lpVariableV2: LPVar?
     // Constants
-    private let enrollmentKey = "newTabUserResearchEnrollmentKey_v2"
-    private let newTabUserResearchKey = "newTabUserResearchKey_v2"
+    private let enrollmentKey = "newTabUserResearchEnrollmentKey"
+    private let newTabUserResearchKey = "newTabUserResearchKey"
     // Saving user defaults
     private let defaults = UserDefaults.standard
     // LP fetched status variable
