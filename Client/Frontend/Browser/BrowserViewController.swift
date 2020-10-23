@@ -922,7 +922,7 @@ class BrowserViewController: UIViewController {
         return false
     }
     
-    func setupMiddleButtonStatus(isLoading: Bool) {        
+    func setupMiddleButtonStatus(isLoading: Bool) {
         let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (newTabUserResearch?.newTabState ?? false)
         
         // No tab
