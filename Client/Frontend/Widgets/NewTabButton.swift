@@ -12,7 +12,7 @@ class NewTabButton: UIButton {
         plusImage.image = UIImage(named: "menu-NewTab")?.tinted(withColor: .systemBlue)
         return plusImage
     }()
-    lazy var newTabCopy: UILabel = {
+    lazy var newTabTitle: UILabel = {
         let newTabCopy = UILabel()
         newTabCopy.text = Strings.NewTabTitle
         newTabCopy.textColor = .systemBlue
@@ -37,14 +37,14 @@ class NewTabButton: UIButton {
 
     private func viewSetup() {
         addSubview(plusImage)
-        addSubview(newTabCopy)
+        addSubview(newTabTitle)
         
         plusImage.snp.makeConstraints { make in
-            make.left.equalTo(newTabCopy.snp.right)
+            make.left.equalTo(newTabTitle.snp.right)
             make.right.equalToSuperview()
             make.centerY.equalTo(self.snp.centerY)
         }
-        newTabCopy.snp.makeConstraints { make in
+        newTabTitle.snp.makeConstraints { make in
             make.right.equalTo(plusImage.snp.left).offset(-10)
             make.left.equalToSuperview()
             make.height.equalTo(24)
