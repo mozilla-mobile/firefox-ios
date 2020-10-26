@@ -56,11 +56,8 @@ class L10nBaseSnapshotTests: XCTestCase {
             }
         }
 
-    func waitForNoExistence(_ element: XCUIElement) {
-        let exists = NSPredicate(format: "exists != true")
-
-        expectation(for: exists, evaluatedWith: element, handler: nil)
-        waitForExpectations(timeout: 20, handler: nil)
+    func waitForNoExistence(_ element: XCUIElement, timeoutValue: TimeInterval = 5.0, file: String = #file, line: UInt = #line) {
+        waitFor(element, with: "exists != true", timeout: timeoutValue, file: file, line: line)
     }
 
     func loadWebPage(url: String, waitForOtherElementWithAriaLabel ariaLabel: String) {
@@ -71,5 +68,11 @@ class L10nBaseSnapshotTests: XCTestCase {
     func loadWebPage(url: String, waitForLoadToFinish: Bool = true) {
         userState.url = url
         navigator.performAction(Action.LoadURL)
+    }
+
+    func waitUntilPageLoad() {
+        let app = XCUIApplication()
+        let progressIndicator = app.progressIndicators.element(boundBy: 0)
+        waitForNoExistence(progressIndicator, timeoutValue: 20.0)
     }
 }

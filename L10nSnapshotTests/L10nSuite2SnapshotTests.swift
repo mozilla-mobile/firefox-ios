@@ -19,6 +19,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func test2MenuOnTopSites() {
         navigator.goto(NewTabScreen)
+        navigator.goto(BrowserTab)
+        waitUntilPageLoad()
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnTopSites-01")
     }
@@ -61,6 +63,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     // From here on it is fine to load pages
     func test6LongPressOnTextOptions() {
         navigator.openURL(loremIpsumURL)
+        waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
 
         // Select some text and long press to find the option
         app.webViews.element(boundBy: 0).staticTexts.element(boundBy: 0).press(forDuration: 1)
@@ -94,6 +98,7 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func test10MenuOnWebPage() {
         navigator.openURL(loremIpsumURL)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(BrowserTabMenu)
         snapshot("MenuOnWebPage-01")
         navigator.back()
@@ -107,7 +112,8 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func test10PageMenuOnWebPage() {
         navigator.goto(BrowserTab)
-        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"])
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        waitForExistence(app.buttons["TabLocationView.pageOptionsButton"], timeout: 15)
         navigator.goto(PageOptionsMenu)
         snapshot("MenuOnWebPage-03")
         navigator.back()

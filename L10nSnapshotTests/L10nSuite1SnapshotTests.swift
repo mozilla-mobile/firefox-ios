@@ -31,6 +31,8 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
         // Link
         navigator.openURL("http://wikipedia.org")
+        waitUntilPageLoad()
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(WebLinkContextMenu)
         drag()
         snapshot("WebViewContextMenu-01-link")
@@ -46,6 +48,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func test2WebViewAuthenticationDialog() {
         navigator.openURL("https://jigsaw.w3.org/HTTP/Basic/", waitForLoading: false)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(BasicAuthDialog)
         snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
         navigator.back()
@@ -110,6 +113,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func test6HistoryTableContextMenu() {
         navigator.openURL(loremIpsumURL2)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         navigator.goto(HistoryPanelContextMenu)
         snapshot("HistoryTableContextMenu-01")
     }
