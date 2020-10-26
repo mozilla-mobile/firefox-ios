@@ -13,6 +13,3 @@
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Esto te permite guardar y actualizar tus fotos.";
 
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "Esto te permite guardar y subir fotos.";
-

@@ -9,7 +9,3 @@
 
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "ສື່ງນີ້ຊ່ວຍໃຫ້ທ່ານບັນທືກ ແລະ ອັບໂຫລດຮູບພາບ";
-
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "ສິ່ງນີ້ຈະເຮັດໃຫ້ທ່ານສາມາດບັນທຶກ ແລະ ອັບໂຫລດຮູບພາບໄດ້.";
-

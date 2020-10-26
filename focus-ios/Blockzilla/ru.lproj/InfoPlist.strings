@@ -12,7 +12,3 @@
 
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Это позволит вам сохранять и загружать фотографии.";
-
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "Это позволит вам сохранять и загружать фотографии.";
-

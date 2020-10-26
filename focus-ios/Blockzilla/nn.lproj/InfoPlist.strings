@@ -12,7 +12,3 @@
 
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Lar deg lagra og lasta opp bilde.";
-
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "Dette gjer det mogleg å lagra og lasta opp bilde.";
-
