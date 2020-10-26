@@ -19,8 +19,9 @@ class FindInPageTest: BaseTestCase {
     func testFindInPageURLBarElement() {
         // Navigate to website
         loadWebPage("http://localhost:6573/licenses.html\n")
+        waitForWebPageLoad()
+        
         let searchOrEnterAddressTextField = app.textFields["Search or enter address"]
-
         // Activate the find in page bar
         app.textFields["Search or enter address"].tap()
         app.textFields["Search or enter address"].typeText("mozilla")
