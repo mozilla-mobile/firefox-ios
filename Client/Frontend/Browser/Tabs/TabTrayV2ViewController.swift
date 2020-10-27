@@ -24,9 +24,10 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         let tableView = UITableView()
         tableView.tableFooterView = UIView()
         tableView.register(TabTableViewCell.self, forCellReuseIdentifier: TabTableViewCell.identifier)
-        tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: sectionHeaderIdentifier)
+        tableView.register(TabTableViewHeader.self, forHeaderFooterViewReuseIdentifier: sectionHeaderIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.allowsMultipleSelectionDuringEditing = true
         return tableView
     }()
     lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
@@ -94,12 +95,11 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     private func viewSetup() {
         // MARK: TODO - Theme setup setup
         if let window = (UIApplication.shared.delegate?.window)! as UIWindow? {
-            window.backgroundColor = UIColor.Photon.Grey90A90
+            window.backgroundColor = .black
         }
         
         // Navigation bar
         navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.backgroundColor = TabTrayV2ControllerUX.backgroundColor
         navigationItem.title = Strings.TabTrayV2Title
         if #available(iOS 13.0, *) { } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .done, target: self, action: #selector(dismissTabTray))
@@ -110,10 +110,10 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         setToolbarItems(bottomToolbar, animated: false)
         
         // Add Subviews
-        let navMenuContainer = UIView()
-        navMenuContainer.backgroundColor = TabTrayV2ControllerUX.backgroundColor
+        let navMenuContainer = UIToolbar()
+        navMenuContainer.delegate = self
+        navMenuContainer.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
         view.addSubview(navMenuContainer)
-        navMenuContainer.addSubview(navigationMenu)
         view.addSubview(tableView)
         view.addSubview(emptyPrivateTabsView)
         viewModel.updateTabs()
@@ -127,11 +127,9 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         navMenuContainer.snp.makeConstraints { make in
             make.left.right.equalTo(view)
             make.top.equalTo(view.safeArea.top)
-            make.height.equalTo(TabTrayV2ControllerUX.navigationMenuHeight)
         }
         navigationMenu.snp.makeConstraints { make in
-            make.left.equalToSuperview().offset(20)
-            make.right.equalToSuperview().offset(-20)
+            make.height.equalTo(TabTrayV2ControllerUX.navigationMenuHeight)
         }
         emptyPrivateTabsView.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(view)
@@ -146,7 +144,22 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     }
 
     func applyTheme() {
-        tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+        if #available(iOS 13.0, *) {
+            tableView.backgroundColor = UIColor.systemGroupedBackground
+            navigationController?.navigationBar.tintColor = UIColor.label
+            navigationController?.toolbar.tintColor = UIColor.label
+            navigationItem.rightBarButtonItem?.tintColor = UIColor.label
+            emptyPrivateTabsView.titleLabel.textColor = UIColor.label
+            emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
+        } else {
+            tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+            navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
+            navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+            navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
+            navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+            navigationMenu.superview?.backgroundColor = UIColor.theme.tabTray.toolbar
+            navigationMenu.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+        }
         setNeedsStatusBarAppearanceUpdate()
     }
 
@@ -267,7 +280,7 @@ extension TabTrayV2ViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: sectionHeaderIdentifier) as? ThemedTableSectionHeaderFooterView, viewModel.numberOfRowsInSection(section: section) != 0 else {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: sectionHeaderIdentifier) as? TabTableViewHeader, viewModel.numberOfRowsInSection(section: section) != 0 else {
             return nil
         }
         headerView.titleLabel.text = viewModel.getSectionDateHeader(section)
@@ -277,5 +290,11 @@ extension TabTrayV2ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == TabSection(rawValue: section)?.rawValue && viewModel.numberOfRowsInSection(section: section) != 0 ? UITableView.automaticDimension : 0
+    }
+}
+
+extension TabTrayV2ViewController: UIToolbarDelegate {
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
     }
 }
