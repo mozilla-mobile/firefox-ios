@@ -16,24 +16,27 @@ class NewTabUserResearch {
     private let defaults = UserDefaults.standard
     // LP fetched status variable
     private var fetchedExperimentVariables = false
-    // New tab button state
-    // True: Show new tab button
-    // False: Hide new tab button
-    var newTabState: Bool? {
-        set(value) {
-            if value == nil {
-                defaults.removeObject(forKey: newTabUserResearchKey)
-            } else {
-                defaults.set(value, forKey: newTabUserResearchKey)
-            }
-        }
-        get {
-            guard let value = defaults.value(forKey: newTabUserResearchKey) as? Bool else {
-                return nil
-            }
-            return value
-        }
-    }
+    // Note: Until AB Test is finalized we are going to disable it and have new tab state as False
+    var newTabState = false
+//    // New tab button state
+//    // True: Show new tab button
+//    // False: Hide new tab button
+//    var newTabState: Bool? {
+//        set(value) {
+//            if value == nil {
+//                defaults.removeObject(forKey: newTabUserResearchKey)
+//            } else {
+//                defaults.set(value, forKey: newTabUserResearchKey)
+//            }
+//        }
+//        get {
+//            guard let value = defaults.value(forKey: newTabUserResearchKey) as? Bool else {
+//                return nil
+//            }
+//            return value
+//        }
+//    }
+    
     var hasEnrolled: Bool {
         set(value) {
             defaults.set(value, forKey: enrollmentKey)
@@ -50,6 +53,8 @@ class NewTabUserResearch {
     
     // MARK: public
     func lpVariableObserver() {
+        // Note: Until AB Test is finalized we are going to disable and not fetch any data from leanplum server
+        return
         // Condition: Leanplum is disabled; Set default New tab state
         guard LeanPlumClient.shared.getSettings() != nil else {
             // default state is false
