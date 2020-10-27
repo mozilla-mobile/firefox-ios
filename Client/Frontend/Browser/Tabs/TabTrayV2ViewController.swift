@@ -92,8 +92,10 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             window.backgroundColor = UIColor.Photon.Grey90A90
         }
         
+        let deleteAllItem = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete))
+        deleteAllItem.tintColor = UIColor.Photon.Grey90A80
         let normalToolbarItems: [UIBarButtonItem] = [
-            UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete)),
+            deleteAllItem,
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))]
         
