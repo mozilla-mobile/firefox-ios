@@ -88,7 +88,7 @@ class LoginManagerTests: KIFTestCase {
         let profile = (UIApplication.shared.delegate as! AppDelegate).profile!
         _ = profile.logins.wipeLocal().value
     }
-
+    /* Temporary disabled due to a crash on BR
     func testListFiltering() {
         openLoginManager()
 
@@ -149,7 +149,7 @@ class LoginManagerTests: KIFTestCase {
         XCTAssertEqual(loginCount, 2)
         tester().tapView(withAccessibilityLabel: "Cancel")
         closeLoginManager()
-    }
+    }*/
 
     func testListIndexView() {
         openLoginManager()
