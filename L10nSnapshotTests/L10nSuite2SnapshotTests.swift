@@ -4,9 +4,6 @@
 
 import XCTest
 
-//let testPageBase = "http://www.example.com"
-//let loremIpsumURL = "\(testPageBase)"
-
 class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
 
     func testPanelsEmptyState() {
@@ -23,56 +20,6 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
                 snapshot("PanelsEmptyState-\(panel)")
             }
     }
-
-//    func test1DefaultTopSites() {
-//        navigator.toggleOff(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
-//        navigator.goto(HomePanelsScreen)
-//        snapshot("DefaultTopSites-01")
-//        navigator.toggleOn(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
-//        navigator.goto(HomePanelsScreen)
-//        snapshot("DefaultTopSites-with-pocket-02")
-//    }
-//
-//    func test2MenuOnTopSites() {
-//        navigator.goto(NewTabScreen)
-//        navigator.goto(BrowserTabMenu)
-//        snapshot("MenuOnTopSites-01")
-//    }
-//
-//    func test3Settings() {
-//        let table = app.tables.element(boundBy: 0)
-//        navigator.goto(SettingsScreen)
-//        table.forEachScreen { i in
-//            snapshot("Settings-main-\(i)")
-//        }
-//
-//        allSettingsScreens.forEach { nodeName in
-//            self.navigator.goto(nodeName)
-//            table.forEachScreen { i in
-//                snapshot("Settings-\(nodeName)-\(i)")
-//            }
-//        }
-//    }
-//
-//    func test4PrivateBrowsingTabsEmptyState() {
-//        navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
-//        snapshot("PrivateBrowsingTabsEmptyState-01")
-//    }
-//
-//    func test5PanelsEmptyState() {
-//        let libraryPanels = [
-//            "LibraryPanels.History",
-//            "LibraryPanels.ReadingList",
-//            "LibraryPanels.Downloads",
-//            "LibraryPanels.SyncedTabs"
-//        ]
-//        navigator.goto(LibraryPanel_Bookmarks)
-//        snapshot("PanelsEmptyState-LibraryPanels.Bookmarks")
-//        libraryPanels.forEach { panel in
-//            app.buttons[panel].tap()
-//            snapshot("PanelsEmptyState-\(panel)")
-//        }
-//    }
 
     // From here on it is fine to load pages
     func testLongPressOnTextOptions() {

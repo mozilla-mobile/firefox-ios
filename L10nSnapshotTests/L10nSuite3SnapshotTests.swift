@@ -38,13 +38,8 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
     }
     
     func testDefaultTopSites() {
-//        navigator.toggleOff(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
         navigator.goto(HomePanelsScreen)
         snapshot("DefaultTopSites-01")
-//        Disable, pocket not shown in screenshots
-//        navigator.toggleOn(userState.pocketInNewTab, withAction: Action.TogglePocketInNewTab)
-//        navigator.goto(HomePanelsScreen)
-//        snapshot("DefaultTopSites-with-pocket-02")
     }
 
     func testMenuOnTopSites() {
