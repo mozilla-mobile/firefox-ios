@@ -13,7 +13,7 @@ let url_4 = "test-password-2.html"
 
 class BookmarkingTests: BaseTestCase {
     private func bookmark() {
-        waitForExistence(app.buttons["Reader View"], timeout: 5)
+        waitForExistence(app.buttons["TabLocationView.trackingProtectionButton"], timeout: 5)
         navigator.goto(PageOptionsMenu)
         waitForExistence(app.tables.cells["Bookmark This Page"], timeout: 15)
         app.tables.cells["Bookmark This Page"].tap()
