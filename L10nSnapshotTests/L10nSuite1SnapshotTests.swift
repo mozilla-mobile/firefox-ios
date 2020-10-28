@@ -53,25 +53,18 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
         snapshot("WebViewAuthenticationDialog-01", waitForLoadingIndicator: false)
         navigator.back()
     }
-//    // Disabled due to real bug:  https://github.com/mozilla-mobile/firefox-ios/issues/7248
-//    /*func test3ReloadButtonContextMenu() {
-//        navigator.toggleOn(userState.trackingProtectionSettingOnNormalMode == true, withAction: Action.SwitchETP)
-//        navigator.goto(BrowserTab)
-//
-//        navigator.openURL(loremIpsumURL2)
-//        navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
-//        navigator.goto(ReloadLongPressMenu)
-//        snapshot("ContextMenuReloadButton-01")
-//        navigator.toggleOn(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
-//        navigator.goto(ReloadLongPressMenu)
-//        snapshot("ContextMenuReloadButton-02", waitForLoadingIndicator: false)
-//
-//        navigator.toggleOff(userState.trackingProtectionPerTabEnabled, withAction: Action.ToggleTrackingProtectionPerTabEnabled)
-//        navigator.goto(ReloadLongPressMenu)
-//
-//        // Snapshot of 'Reload *with* tracking protection' label, because trackingProtectionPerTabEnabled is false.
-//        snapshot("ContextMenuReloadButton-03", waitForLoadingIndicator: false)
-//    }*/
+
+    func test3ReloadButtonContextMenu() {
+        navigator.openURL(loremIpsumURL)
+        waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
+        
+        navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
+        navigator.goto(ReloadLongPressMenu)
+        snapshot("ContextMenuReloadButton-01")
+        navigator.toggleOn(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
+        navigator.goto(ReloadLongPressMenu)
+        snapshot("ContextMenuReloadButton-02", waitForLoadingIndicator: false)
+    }
 
     func testTopSitesMenu() {
         navigator.goto(HomePanel_TopSites)
