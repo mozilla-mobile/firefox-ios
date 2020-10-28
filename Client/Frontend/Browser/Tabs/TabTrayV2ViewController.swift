@@ -293,6 +293,43 @@ extension TabTrayV2ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == TabSection(rawValue: section)?.rawValue && viewModel.numberOfRowsInSection(section: section) != 0 ? UITableView.automaticDimension : 0
     }
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let share = UIContextualAction(style: .normal, title: Strings.ShareContextMenuTitle, handler: { (action, view, completionHandler) in
+            guard let tab = self.viewModel.getTab(forIndex: indexPath), let url = tab.url else { return }
+            self.presentActivityViewController(url, tab: tab)
+        })
+        let more = UIContextualAction(style: .normal, title: Strings.PocketMoreStoriesText, handler: { (action, view, completionHandler) in
+            
+        })
+        let delete = UIContextualAction(style: .destructive, title: Strings.CloseButtonTitle, handler: { (action, view, completionHandler) in
+            self.viewModel.removeTab(forIndex: indexPath)
+        })
+        
+        share.backgroundColor = UIColor.systemOrange
+        share.image = UIImage.templateImageNamed("menu-Send")?.tinted(withColor: .white)
+        more.image = UIImage.templateImageNamed("menu-More-Options")?.tinted(withColor: .white)
+        delete.image = UIImage.templateImageNamed("menu-CloseTabs")?.tinted(withColor: .white)
+        
+        let configuration = UISwipeActionsConfiguration(actions: [delete, share, more])
+        return configuration
+    }
+}
+
+extension TabTrayV2ViewController: UIPopoverPresentationControllerDelegate {
+    func presentActivityViewController(_ url: URL, tab: Tab? = nil) {
+        let helper = ShareExtensionHelper(url: url, tab: tab)
+
+        let controller = helper.createActivityViewController({ _,_ in })
+
+        if let popoverPresentationController = controller.popoverPresentationController {
+            popoverPresentationController.sourceView = view
+            popoverPresentationController.sourceRect = view.bounds
+            popoverPresentationController.permittedArrowDirections = .up
+            popoverPresentationController.delegate = self
+        }
+
+        present(controller, animated: true, completion: nil)
+    }
 }
 
 extension TabTrayV2ViewController: UIToolbarDelegate {

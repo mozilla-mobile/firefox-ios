@@ -160,10 +160,6 @@ class TabTrayV2ViewModel: NSObject {
         }
     }
 
-    // When using 'Close All', hide all the tabs so they don't animate their deletion individually
-    func closeAllTabs( completion: @escaping () -> Void) {
-       
-    }
     func closeTabsForCurrentTray() {
         viewController.hideDisplayedTabs() {
             self.tabManager.removeTabsWithUndoToast(self.dataStore.compactMap { $0.1 }.flatMap { $0 })
@@ -192,6 +188,13 @@ class TabTrayV2ViewModel: NSObject {
     
     func numberOfSections() -> Int {
         return TabSection.allCases.count
+    }
+
+    func getTab(forIndex index: IndexPath) -> Tab? {
+        guard let section = TabSection(rawValue: index.section), let tab = dataStore[section]?[index.row] else {
+            return nil
+        }
+        return tab
     }
     
     func numberOfRowsInSection(section: Int) -> Int {
