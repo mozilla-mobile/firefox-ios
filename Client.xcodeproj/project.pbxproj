@@ -274,6 +274,7 @@
 		435D7CC02461EFCB0043ACB9 /* IntroScreenWelcomeViewV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CBF2461EFCB0043ACB9 /* IntroScreenWelcomeViewV2.swift */; };
 		435D7CC32461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC22461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift */; };
 		435D7CC5246209AA0043ACB9 /* IntroViewControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC4246209AA0043ACB9 /* IntroViewControllerV2.swift */; };
+		435E3391254780B700406D92 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
 		4368BC6824FF14650021931D /* NewTabUserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BC6724FF14650021931D /* NewTabUserResearch.swift */; };
 		4368BC6A24FF14800021931D /* SharedUserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BC6924FF14800021931D /* SharedUserResearch.swift */; };
 		4390F7F5246CE04300570811 /* IntroViewModelV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7F4246CE04300570811 /* IntroViewModelV2.swift */; };
@@ -6706,6 +6707,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				047F9B2E24E1FE1F00CD7DF7 /* Assets.xcassets in Resources */,
+				435E3391254780B700406D92 /* Images.xcassets in Resources */,
 				1D9E1FE524FEF56C006E561D /* TopSites in Resources */,
 				43EF781525228FA500575E10 /* Today.strings in Resources */,
 			);
