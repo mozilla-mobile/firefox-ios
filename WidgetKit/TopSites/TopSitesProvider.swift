@@ -39,6 +39,8 @@ struct TopSitesProvider: TimelineProvider {
                             if image != nil {
                                 // Use the image we got back
                                 tabFaviconDictionary[site.url] = image
+                            } else {
+                                tabFaviconDictionary[site.url] = Image(uiImage: FaviconFetcher.letter(forUrl: siteURL))
                             }
                             
                             faviconFetchGroup.leave()
