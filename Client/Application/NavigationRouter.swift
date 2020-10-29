@@ -70,6 +70,7 @@ extension URLComponents {
 // The root navigation for the Router. Look at the tests to see a complete URL
 enum NavigationPath {
     case url(webURL: URL?, isPrivate: Bool)
+    case widgetUrl(webURL: URL?, lastUsed: Timestamp?)
     case fxa(params: FxALaunchParams)
     case deepLink(DeepLink)
     case text(String)
@@ -108,6 +109,15 @@ enum NavigationPath {
                 TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
                 UserDefaults.standard.set(true, forKey: "OpenedAsDefaultBrowser")
             }
+        } else if urlString.starts(with: "\(scheme)://open-url-widget") {
+            
+            // TODO extract timestamp from open-url-widget param
+            var timestamp:Timestamp?
+            
+            // Widget
+            self = .widgetUrl(webURL: url, lastUsed: timestamp)
+    
+            
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
             self = .text(text ?? "")
