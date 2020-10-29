@@ -5,6 +5,9 @@
 import MappaMundi
 import XCTest
 
+let testPageBase = "http://www.example.com"
+let loremIpsumURL = "\(testPageBase)"
+
 class L10nBaseSnapshotTests: XCTestCase {
 
     var app: XCUIApplication!
