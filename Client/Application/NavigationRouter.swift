@@ -155,6 +155,8 @@ enum NavigationPath {
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
         case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
+        case .widgetUrl(webURL: let webURL, lastUsed: let lastUsed):
+            NavigationPath.handleURL(url: webURL, isPrivate: false, with: bvc)
         }
     }
 
@@ -209,6 +211,15 @@ enum NavigationPath {
             bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        }
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension"])
+    }
+    
+    private static func handleWidgetURL(url: URL?, lastUser:Timestamp?, with bvc: BrowserViewController) {
+        if let newURL = url {
+            bvc.switchToTabForWidgetURLOrOpen(newURL, isPrivate: false)
+        } else {
+            bvc.openBlankNewTab(focusLocationField: true, isPrivate: false)
         }
         LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension"])
     }
