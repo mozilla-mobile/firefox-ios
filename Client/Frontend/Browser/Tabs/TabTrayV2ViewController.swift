@@ -52,18 +52,17 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         return navigationMenu
     }()
-    lazy var bottomToolbar: UIToolbar = {
-        let bottomToolbar = UIToolbar()
-        let addTabButton = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
-        addTabButton.accessibilityIdentifier = "newTabButtonTabTray"
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let closeAllTabsButton = UIBarButtonItem(image: UIImage(named: "delete"), style: .plain , target: self, action: #selector(didTapToolbarDelete))
-        closeAllTabsButton.tintColor = UIColor.Photon.Grey90A80
-        closeAllTabsButton.accessibilityIdentifier = "closeAllTabsButtonTabTray"
-        bottomToolbar.barStyle = .default
-        bottomToolbar.backgroundColor = .white
-        bottomToolbar.setItems([closeAllTabsButton, space, addTabButton], animated: false)
-        bottomToolbar.sizeToFit()
+    lazy var deleteAllButton: UIBarButtonItem = {
+        let deleteAllButton = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete))
+        deleteAllButton.tintColor = UIColor.Photon.Grey90A80
+        return deleteAllButton
+    }()
+    lazy var bottomToolbar: [UIBarButtonItem] = {
+        let bottomToolbar = [
+            deleteAllButton,
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
+        ]
         return bottomToolbar
     }()
     
@@ -92,13 +91,6 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             window.backgroundColor = UIColor.Photon.Grey90A90
         }
         
-        let deleteAllItem = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete))
-        deleteAllItem.tintColor = UIColor.Photon.Grey90A80
-        let normalToolbarItems: [UIBarButtonItem] = [
-            deleteAllItem,
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))]
-        
         // Navigation bar
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.backgroundColor = TabTrayV2ControllerUX.backgroundColor
@@ -107,8 +99,9 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .done, target: self, action: #selector(dismissTabTray))
         }
         
+        // Bottom toolbar
         navigationController?.isToolbarHidden = false
-        setToolbarItems(normalToolbarItems, animated: false)
+        setToolbarItems(bottomToolbar, animated: false)
         
         // Add Subviews
         let navMenuContainer = UIView()
