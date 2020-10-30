@@ -11,6 +11,7 @@ class TabTableViewCell: UITableViewCell, Themeable {
     lazy var closeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage.templateImageNamed("tab_close"), for: [])
+        button.accessibilityIdentifier = "closeButtonForTabTabTray"
         button.tintColor = UIColor.theme.tabTray.cellCloseButton
         button.sizeToFit()
         return button

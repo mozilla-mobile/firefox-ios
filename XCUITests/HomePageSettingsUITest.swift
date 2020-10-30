@@ -88,7 +88,6 @@ class HomePageSettingsUITests: BaseTestCase {
         navigator.goto(HomeSettings)
         app.textFields["HomeAsCustomURLTextField"].tap()
         app.textFields["HomeAsCustomURLTextField"].press(forDuration: 3)
-        print(app.debugDescription)
         waitForExistence(app.menuItems["Paste"])
         app.menuItems["Paste"].tap()
         waitForValueContains(app.textFields["HomeAsCustomURLTextField"], value: "mozilla")
