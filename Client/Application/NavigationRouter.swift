@@ -116,7 +116,6 @@ enum NavigationPath {
             }
             let tab = tabs[uuid]
             self = .widgetUrl(webURL: tab?.url, uuid: uuid)
-            
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
             self = .text(text ?? "")

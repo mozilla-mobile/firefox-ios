@@ -14,23 +14,23 @@ struct SiteArchiver {
             return ([SavedTab](), [SimpleTab]())
         }
         
-        let unarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
-        unarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
-        unarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
-        
-        unarchiver.decodingFailurePolicy = .setErrorAndReturn
-        guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
-            Sentry.shared.send(
-                message: "Failed to restore tabs",
-                tag: SentryTag.tabManager,
-                severity: .error,
-                description: "\(unarchiver.error ??? "nil")")
-            SimpleTab.saveSimpleTab(tabs: nil)
-            return ([SavedTab](), [SimpleTab]())
+        do {
+            let unarchiver = try NSKeyedUnarchiver(forReadingFrom: tabData)
+            unarchiver.setClass(SavedTab.self, forClassName: "Client.SavedTab")
+            unarchiver.setClass(SessionData.self, forClassName: "Client.SessionData")
+            unarchiver.decodingFailurePolicy = .setErrorAndReturn
+            guard let tabs = unarchiver.decodeObject(forKey: "tabs") as? [SavedTab] else {
+                Sentry.shared.send( message: "Failed to restore tabs", tag: .tabManager, severity: .error, description: "\(unarchiver.error ??? "nil")")
+                SimpleTab.saveSimpleTab(tabs: nil)
+                return ([SavedTab](), [SimpleTab]())
+            }
+            let simpleTabs = SimpleTab.convertToSimpleTabs(tabs)
+            SimpleTab.saveSimpleTab(tabs: simpleTabs.1)
+            return (tabs, simpleTabs.0)
+        } catch {
+            Sentry.shared.send( message: "Failed to restore tabs", tag: .tabManager, severity: .error, description: "Unarchiver failure")
         }
-        
-        let simpleTabs = SimpleTab.convertToSimpleTabs(tabs)
-        SimpleTab.saveSimpleTab(tabs: simpleTabs.1)
-        return (tabs, simpleTabs.0)
+
+        return ([SavedTab](), [SimpleTab]())
     }
 }

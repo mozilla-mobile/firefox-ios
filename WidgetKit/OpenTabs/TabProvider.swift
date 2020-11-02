@@ -17,11 +17,11 @@ struct TabProvider: TimelineProvider {
     
     func getSnapshot(in context: Context, completion: @escaping (OpenTabsEntry) -> Void) {
         let allOpenTabs = SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).1
-        
+
         let openTabs = allOpenTabs.filter {
             !$0.isPrivate
         }
-        
+
         let faviconFetchGroup = DispatchGroup()
         
         var tabFaviconDictionary = [String : Image]()
@@ -32,7 +32,6 @@ struct TabProvider: TimelineProvider {
                     if image != nil {
                         tabFaviconDictionary[tab.title!] = image
                     }
-
                     faviconFetchGroup.leave()
                 })
             } else {
@@ -60,7 +59,6 @@ struct TabProvider: TimelineProvider {
         return URL(fileURLWithPath: path).appendingPathComponent("tabsState.archive").path
     }
 }
-
 
 struct OpenTabsEntry: TimelineEntry {
     let date: Date
