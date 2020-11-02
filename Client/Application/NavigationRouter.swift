@@ -110,7 +110,8 @@ enum NavigationPath {
                 UserDefaults.standard.set(true, forKey: "OpenedAsDefaultBrowser")
             }
         } else if urlString.starts(with: "\(scheme)://widget-open-url") {
-            guard let uuid = components.valueForQuery("uuid"), let tabs = SimpleTab.getSimpleTabDict() else {
+            let tabs = SimpleTab.getSimpleTabs()
+            guard let uuid = components.valueForQuery("uuid"), !tabs.isEmpty else {
                 self = .url(webURL: url, isPrivate: false)
                 return
             }

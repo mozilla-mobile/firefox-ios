@@ -82,11 +82,15 @@ class TabManagerStore {
 
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
+        
+        let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
+        
 
         let result = Success()
         writeOperation = DispatchWorkItem {
             let written = tabStateData.write(toFile: path, atomically: true)
             
+            SimpleTab.saveSimpleTab(tabs: simpleTabs)
             // Ignore write failure (could be restoring).
             log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
             result.fill(Maybe(success: ()))

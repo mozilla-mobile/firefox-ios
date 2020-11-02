@@ -18,7 +18,7 @@ struct TabProvider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (OpenTabsEntry) -> Void) {
         let allOpenTabs = SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).1
 
-        let openTabs = allOpenTabs.filter {
+        let openTabs = allOpenTabs.values.filter {
             !$0.isPrivate
         }
 

@@ -16,7 +16,7 @@ struct SimpleTab: Hashable, Codable {
 }
 
 extension SimpleTab {
-    static func getSimpleTabDict() -> [String: SimpleTab]? {
+    static func getSimpleTabs() -> [String: SimpleTab] {
         if let tbs = userDefaults.object(forKey: PrefsKeys.WidgetKitSimpleTabKey) as? Data {
             do {
                 let jsonDecoder = JSONDecoder()
@@ -27,7 +27,7 @@ extension SimpleTab {
                 print("Error occured")
             }
         }
-        return nil
+        return [String: SimpleTab]()
     }
     
     static func saveSimpleTab(tabs:[String: SimpleTab]?) {
@@ -41,12 +41,11 @@ extension SimpleTab {
         }
     }
     
-    static func convertToSimpleTabs(_ tabs: [SavedTab]) -> ([SimpleTab], [String: SimpleTab]) {
+    static func convertToSimpleTabs(_ tabs: [SavedTab]) -> [String: SimpleTab] {
         var simpleTabs: [String: SimpleTab] = [:]
         for tab in tabs {
             var url:URL?
             // Set URL
-            // Check if we have any url
             if tab.url != nil {
                 url = tab.url
             // Check if session data urls have something
@@ -54,25 +53,24 @@ extension SimpleTab {
                 url = tab.sessionData?.urls.last
             }
             
-            // Ignore internal about urls which corresponds to Home
+            // Ignore `internal about` urls which corresponds to Home
             if url != nil, url!.absoluteString.starts(with: "internal://local/about/") {
                 continue
             }
             
             // Set Title
             var title = tab.title ?? ""
-            // There is no title then use the base url
+            // There is no title then use the base url Ex https://www.mozilla.org/ will be short displayed as `mozilla`
             if title.isEmpty {
                 title = url?.shortDisplayString ?? ""
             }
-    
+            
+            // Key for simple tabs dictionary is tab UUID which is used to select proper tab when we send UUID to NavigationRouter class handle widget url
             let uuidVal = tab.UUID ?? ""
             let value = SimpleTab(title: title, url: url, lastUsedTime: tab.sessionData?.lastUsedTime ?? 0, faviconURL: tab.faviconURL, isPrivate: tab.isPrivate, uuid: uuidVal)
             simpleTabs[uuidVal] = value
         }
-
-        let arrayFromDic = Array(simpleTabs.values.map{ $0 })
-        return (arrayFromDic, simpleTabs)
+        return simpleTabs
     }
 }
 
