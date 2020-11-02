@@ -30,7 +30,7 @@ class TabManagerStore {
     }
 
     var hasTabsToRestoreAtStartup: Bool {
-        return archivedStartupTabs.count > 0
+        return archivedStartupTabs.0.count > 0
     }
 
     fileprivate func tabsStateArchivePath() -> String? {
@@ -99,7 +99,7 @@ class TabManagerStore {
     }
 
     func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
-        let selectedTab = restoreTabs(savedTabs: archivedStartupTabs, clearPrivateTabs: clearPrivateTabs, tabManager: tabManager)
+        let selectedTab = restoreTabs(savedTabs: archivedStartupTabs.0, clearPrivateTabs: clearPrivateTabs, tabManager: tabManager)
         return selectedTab
     }
 
@@ -145,6 +145,6 @@ class TabManagerStore {
 extension TabManagerStore {
     func testTabCountOnDisk() -> Int {
         assert(AppConstants.IsRunningTest)
-        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).count
+        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).0.count
     }
 }

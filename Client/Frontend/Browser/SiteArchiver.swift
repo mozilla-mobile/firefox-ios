@@ -7,11 +7,11 @@ import Sentry
 import Shared
 
 struct SiteArchiver {
-    static func tabsToRestore(tabsStateArchivePath: String?) -> [SavedTab] {
+    static func tabsToRestore(tabsStateArchivePath: String?) -> ([SavedTab], [SimpleTab]) {
         guard let tabStateArchivePath = tabsStateArchivePath,
               FileManager.default.fileExists(atPath: tabStateArchivePath),
               let tabData = try? Data(contentsOf: URL(fileURLWithPath: tabStateArchivePath)) else {
-            return [SavedTab]()
+            return ([SavedTab](), [SimpleTab]())
         }
         
         let unarchiver = NSKeyedUnarchiver(forReadingWith: tabData)
@@ -25,9 +25,12 @@ struct SiteArchiver {
                 tag: SentryTag.tabManager,
                 severity: .error,
                 description: "\(unarchiver.error ??? "nil")")
-            return [SavedTab]()
+            SimpleTab.saveSimpleTab(tabs: nil)
+            return ([SavedTab](), [SimpleTab]())
         }
         
-        return tabs
+        let simpleTabs = SimpleTab.convertedTabs(tabs)
+        SimpleTab.saveSimpleTab(tabs: simpleTabs.1)
+        return (tabs, simpleTabs.0)
     }
 }
