@@ -121,64 +121,12 @@ enum NavigationPath {
                 UserDefaults.standard.set(true, forKey: "OpenedAsDefaultBrowser")
             }
         } else if urlString.starts(with: "\(scheme)://widget-open-url") {
-            var urlWidget: URL? = nil
-            var timeStamp: Timestamp? = nil
-            
-            guard let stringValue1 = components.valueForQuery("uuid") else {
+            guard let lastTimeUsed = components.valueForQuery("lastUsedTime"), let tabs = SimpleTab.getSimpleTabDict() else {
                 self = .url(webURL: url, isPrivate: false)
                 return
             }
-
-            let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
-            let userDefaultsKey = "myTabKey1"
-            if let tbs = userDefaults.object(forKey: userDefaultsKey) as? Data {
-                do {
-                    // Decode data to object
-                    let jsonDecoder = JSONDecoder()
-                    let tabs = try jsonDecoder.decode([String: SimpleTab].self, from: tbs)
-                    tabs.forEach {
-                        print("key - \($0)\nValue - \($1)\n")
-                    }
-                    print("loaded tab\(tabs[stringValue1])")
-                    print("loaded tab url \(tabs[stringValue1]?.url)")
-                    print("loaded tab lastUsedTime \(tabs[stringValue1]?.lastUsedTime)")
-                    self = .widgetUrl(webURL: tabs[stringValue1]?.url, lastUsed: tabs[stringValue1]?.lastUsedTime)
-                    return
-                }
-                catch {
-                }
-            }
-            
-            self = .widgetUrl(webURL: url, lastUsed: timeStamp)
-            // OLD CODE
-            // last time used
-            
-            // TODO extract timestamp from open-url-widget param
-//            guard let stringValue = components.valueForQuery("lastUsedTime") else {
-//                self = .url(webURL: url, isPrivate: false)
-//                return
-//            }
-//
-//            let temp = stringValue.toUInt()
-//            let t2 = Int(stringValue)
-//            if let string = components.valueForQuery("lastUsedTime"), let myInt = Int(string) {
-//                 print("Int : \(myInt)")
-//            }
-//            guard let timestamp = UInt64(stringValue) else {
-//                /* string isn't an Int64, handle error here */
-//                self = .url(webURL: url, isPrivate: false)
-//                return
-//            }
-//
-////            let value:String = components.valueForQuery("lastUsedTime") ?? ""
-////            var timestamp:UInt64 = UInt64("") ?? <#default value#>
-////            if value != nil {
-////                timestamp = UInt64(value!)
-////            }
-//
-//            // Widget
-//            self = .widgetUrl(webURL: url, lastUsed: timestamp)
-//
+            let tab = tabs[lastTimeUsed]
+            self = .widgetUrl(webURL: tab?.url, lastUsed: tab?.lastUsedTime)
             
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")

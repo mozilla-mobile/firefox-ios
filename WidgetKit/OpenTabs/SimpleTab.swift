@@ -12,7 +12,6 @@ struct SimpleTab: Hashable, Codable {
     var url: URL?
     let lastUsedTime: Timestamp? // From Session Data
     var faviconURL: String?
-    var uuid: String = ""
     var isPrivate: Bool = false
 }
 
@@ -85,12 +84,10 @@ extension SimpleTab {
             if title.isEmpty {
                 title = url?.shortDisplayString ?? ""
             }
-            
-            // An id for simple tab
-            let tempud = String(tab.sessionData?.lastUsedTime ?? 0)
-            let uuid = UUID().uuidString
-            let value = SimpleTab(title: title, url: url, lastUsedTime: tab.sessionData?.lastUsedTime ?? 0, faviconURL: tab.faviconURL, uuid: tempud, isPrivate: tab.isPrivate)
-            simpleTabs[tempud] = value
+    
+            let lastUsedTime = String(tab.sessionData?.lastUsedTime ?? 0)
+            let value = SimpleTab(title: title, url: url, lastUsedTime: tab.sessionData?.lastUsedTime ?? 0, faviconURL: tab.faviconURL, isPrivate: tab.isPrivate)
+            simpleTabs[lastUsedTime] = value
         }
 
         let arrayFromDic = Array(simpleTabs.values.map{ $0 })
