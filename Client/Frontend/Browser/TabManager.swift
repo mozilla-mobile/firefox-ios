@@ -569,6 +569,22 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
         return tabs.filter({ $0.webView?.url == url }).first
     }
+    
+    func getTabForURL(_ url: URL, timestamp: Timestamp) -> Tab? {
+        assert(Thread.isMainThread)
+        let tabs1 = tabs.filter { tab -> Bool in
+            // check main url
+            tab.url == url && tab.lastExecutedTime == timestamp ||
+            tab.url == url && tab.sessionData?.lastUsedTime == timestamp ||
+            tab.sessionData?.urls.last == url && tab.lastExecutedTime == timestamp ||
+            tab.sessionData?.urls.last == url && tab.sessionData?.lastUsedTime == timestamp
+                
+//            tab.sessionData?.urls.last == url &&
+//            tab.sessionData?.lastUsedTime == timestamp
+        }
+        return tabs1.first
+//        return tabs.filter({ $0.webView?.url == url }).first
+    }
 
     @objc func prefsDidChange() {
         DispatchQueue.main.async {

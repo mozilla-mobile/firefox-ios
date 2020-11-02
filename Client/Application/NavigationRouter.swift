@@ -10,6 +10,17 @@ struct FxALaunchParams {
     var query: [String: String]
 }
 
+extension String {
+    func toUInt() -> UInt? {
+        let scanner = Scanner(string: self)
+        var u: UInt64 = 0
+        if scanner.scanUnsignedLongLong(&u)  && scanner.isAtEnd {
+            return UInt(u)
+        }
+        return nil
+    }
+}
+
 // An enum to route to HomePanels
 enum HomePanelPath: String {
     case bookmarks = "bookmarks"
@@ -109,14 +120,65 @@ enum NavigationPath {
                 TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
                 UserDefaults.standard.set(true, forKey: "OpenedAsDefaultBrowser")
             }
-        } else if urlString.starts(with: "\(scheme)://open-url-widget") {
+        } else if urlString.starts(with: "\(scheme)://widget-open-url") {
+            var urlWidget: URL? = nil
+            var timeStamp: Timestamp? = nil
+            
+            guard let stringValue1 = components.valueForQuery("uuid") else {
+                self = .url(webURL: url, isPrivate: false)
+                return
+            }
+
+            let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
+            let userDefaultsKey = "myTabKey1"
+            if let tbs = userDefaults.object(forKey: userDefaultsKey) as? Data {
+                do {
+                    // Decode data to object
+                    let jsonDecoder = JSONDecoder()
+                    let tabs = try jsonDecoder.decode([String: SimpleTab].self, from: tbs)
+                    tabs.forEach {
+                        print("key - \($0)\nValue - \($1)\n")
+                    }
+                    print("loaded tab\(tabs[stringValue1])")
+                    print("loaded tab url \(tabs[stringValue1]?.url)")
+                    print("loaded tab lastUsedTime \(tabs[stringValue1]?.lastUsedTime)")
+                    self = .widgetUrl(webURL: tabs[stringValue1]?.url, lastUsed: tabs[stringValue1]?.lastUsedTime)
+                    return
+                }
+                catch {
+                }
+            }
+            
+            self = .widgetUrl(webURL: url, lastUsed: timeStamp)
+            // OLD CODE
+            // last time used
             
             // TODO extract timestamp from open-url-widget param
-            var timestamp:Timestamp?
-            
-            // Widget
-            self = .widgetUrl(webURL: url, lastUsed: timestamp)
-    
+//            guard let stringValue = components.valueForQuery("lastUsedTime") else {
+//                self = .url(webURL: url, isPrivate: false)
+//                return
+//            }
+//
+//            let temp = stringValue.toUInt()
+//            let t2 = Int(stringValue)
+//            if let string = components.valueForQuery("lastUsedTime"), let myInt = Int(string) {
+//                 print("Int : \(myInt)")
+//            }
+//            guard let timestamp = UInt64(stringValue) else {
+//                /* string isn't an Int64, handle error here */
+//                self = .url(webURL: url, isPrivate: false)
+//                return
+//            }
+//
+////            let value:String = components.valueForQuery("lastUsedTime") ?? ""
+////            var timestamp:UInt64 = UInt64("") ?? <#default value#>
+////            if value != nil {
+////                timestamp = UInt64(value!)
+////            }
+//
+//            // Widget
+//            self = .widgetUrl(webURL: url, lastUsed: timestamp)
+//
             
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
@@ -156,7 +218,7 @@ enum NavigationPath {
         case .glean(let url): NavigationPath.handleGlean(url: url)
         case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
         case .widgetUrl(webURL: let webURL, lastUsed: let lastUsed):
-            NavigationPath.handleURL(url: webURL, isPrivate: false, with: bvc)
+            NavigationPath.handleWidgetURL(url: webURL, lastUsed: lastUsed, with: bvc)
         }
     }
 
@@ -215,9 +277,9 @@ enum NavigationPath {
         LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension"])
     }
     
-    private static func handleWidgetURL(url: URL?, lastUser:Timestamp?, with bvc: BrowserViewController) {
+    private static func handleWidgetURL(url: URL?, lastUsed:Timestamp?, with bvc: BrowserViewController) {
         if let newURL = url {
-            bvc.switchToTabForWidgetURLOrOpen(newURL, isPrivate: false)
+            bvc.switchToTabForWidgetURLOrOpen(newURL, lastUsed: lastUsed, isPrivate: false)
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: false)
         }

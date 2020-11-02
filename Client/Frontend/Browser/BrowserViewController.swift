@@ -1062,13 +1062,13 @@ class BrowserViewController: UIViewController {
         }
     }
     
-    func switchToTabForWidgetURLOrOpen(_ url: URL, isPrivate: Bool = false) {
+    func switchToTabForWidgetURLOrOpen(_ url: URL, lastUsed: Timestamp?, isPrivate: Bool = false) {
         guard !isCrashAlertShowing else {
             urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
             return
         }
         popToBVC()
-        if let tab = tabManager.getTabForURL(url) {
+        if let tab = tabManager.getTabForURL(url, timestamp: lastUsed ?? 0) {
             tabManager.selectTab(tab)
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)
