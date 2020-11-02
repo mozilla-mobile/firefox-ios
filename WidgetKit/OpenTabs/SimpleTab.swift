@@ -4,7 +4,6 @@
 
 import Shared
 
-let userDefaultsKey = "myTabKey1"
 let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
 
 struct SimpleTab: Hashable, Codable {
@@ -13,6 +12,7 @@ struct SimpleTab: Hashable, Codable {
     let lastUsedTime: Timestamp? // From Session Data
     var faviconURL: String?
     var isPrivate: Bool = false
+    var uuid: String = ""
 }
 
 extension SimpleTab {
@@ -32,7 +32,7 @@ extension SimpleTab {
     }
     
     static func getSimpleTabDict() -> [String: SimpleTab]? {
-        if let tbs = userDefaults.object(forKey: userDefaultsKey) as? Data {
+        if let tbs = userDefaults.object(forKey: PrefsKeys.WidgetKitSimpleTabKey) as? Data {
             do {
                 // Decode data to object
                 let jsonDecoder = JSONDecoder()
@@ -51,12 +51,12 @@ extension SimpleTab {
     
     static func saveSimpleTab(tabs:[String: SimpleTab]?) {
         guard let tabs = tabs, !tabs.isEmpty else {
-            userDefaults.removeObject(forKey: userDefaultsKey)
+            userDefaults.removeObject(forKey: PrefsKeys.WidgetKitSimpleTabKey)
             return
         }
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(tabs) {
-            userDefaults.set(encoded, forKey: userDefaultsKey)
+            userDefaults.set(encoded, forKey: PrefsKeys.WidgetKitSimpleTabKey)
         }
     }
     
@@ -85,9 +85,9 @@ extension SimpleTab {
                 title = url?.shortDisplayString ?? ""
             }
     
-            let lastUsedTime = String(tab.sessionData?.lastUsedTime ?? 0)
-            let value = SimpleTab(title: title, url: url, lastUsedTime: tab.sessionData?.lastUsedTime ?? 0, faviconURL: tab.faviconURL, isPrivate: tab.isPrivate)
-            simpleTabs[lastUsedTime] = value
+            let uuidVal = tab.UUID ?? ""
+            let value = SimpleTab(title: title, url: url, lastUsedTime: tab.sessionData?.lastUsedTime ?? 0, faviconURL: tab.faviconURL, isPrivate: tab.isPrivate, uuid: uuidVal)
+            simpleTabs[uuidVal] = value
         }
 
         let arrayFromDic = Array(simpleTabs.values.map{ $0 })

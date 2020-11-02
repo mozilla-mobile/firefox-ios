@@ -47,6 +47,7 @@ class TabManagerStore {
         var savedTabs = [SavedTab]()
         var savedUUIDs = Set<String>()
         for tab in tabs {
+            tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
             if let savedTab = SavedTab(tab: tab, isSelected: tab == selectedTab) {
                 savedTabs.append(savedTab)
                 if let screenshot = tab.screenshot,
@@ -121,7 +122,6 @@ class TabManagerStore {
             // Provide an empty request to prevent a new tab from loading the home screen
             var tab = tabManager.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
             tab = savedTab.configureSavedTabUsing(tab, imageStore: imageStore)
-
             if savedTab.isSelected {
                 tabToSelect = tab
             }

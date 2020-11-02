@@ -570,20 +570,12 @@ class TabManager: NSObject {
         return tabs.filter({ $0.webView?.url == url }).first
     }
     
-    func getTabForURL(_ url: URL, timestamp: Timestamp) -> Tab? {
+    func getTabForURL(_ url: URL, uuid: String) -> Tab? {
         assert(Thread.isMainThread)
-        let tabs1 = tabs.filter { tab -> Bool in
-            // check main url
-            tab.url == url && tab.lastExecutedTime == timestamp ||
-            tab.url == url && tab.sessionData?.lastUsedTime == timestamp ||
-            tab.sessionData?.urls.last == url && tab.lastExecutedTime == timestamp ||
-            tab.sessionData?.urls.last == url && tab.sessionData?.lastUsedTime == timestamp
-                
-//            tab.sessionData?.urls.last == url &&
-//            tab.sessionData?.lastUsedTime == timestamp
+        let filterdTabs = tabs.filter { tab -> Bool in
+            tab.tabUUID == uuid
         }
-        return tabs1.first
-//        return tabs.filter({ $0.webView?.url == url }).first
+        return filterdTabs.first
     }
 
     @objc func prefsDidChange() {
