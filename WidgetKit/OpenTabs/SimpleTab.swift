@@ -16,30 +16,11 @@ struct SimpleTab: Hashable, Codable {
 }
 
 extension SimpleTab {
-    static func compareTemp(dict: [String: SimpleTab]?, tab: SavedTab) -> Bool {
-        // case: nothing is saved
-        guard dict != nil else {
-            return false
-        }
-        
-        // case: dict is available lets check if it has a tab
-        for (_,v) in dict! {
-            if tab.sessionData?.lastUsedTime == v.lastUsedTime && tab.url == v.url {
-                return true
-            }
-        }
-        return false
-    }
-    
     static func getSimpleTabDict() -> [String: SimpleTab]? {
         if let tbs = userDefaults.object(forKey: PrefsKeys.WidgetKitSimpleTabKey) as? Data {
             do {
-                // Decode data to object
                 let jsonDecoder = JSONDecoder()
                 let tabs = try jsonDecoder.decode([String: SimpleTab].self, from: tbs)
-                tabs.forEach {
-                    print("key - \($0)\nValue - \($1)\n")
-                }
                 return tabs
             }
             catch {
@@ -60,7 +41,7 @@ extension SimpleTab {
         }
     }
     
-    static func convertedTabs(_ tabs: [SavedTab]) -> ([SimpleTab], [String: SimpleTab]) {
+    static func convertToSimpleTabs(_ tabs: [SavedTab]) -> ([SimpleTab], [String: SimpleTab]) {
         var simpleTabs: [String: SimpleTab] = [:]
         for tab in tabs {
             var url:URL?

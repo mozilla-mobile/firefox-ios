@@ -22,11 +22,6 @@ struct TabProvider: TimelineProvider {
             !$0.isPrivate
         }
         
-//        let convertedTabs = SimpleTab.convertedTabs(openTabs)
-//        let convertedTabsArray = convertedTabs.0
-//        let convertedTabsDict = convertedTabs.1
-//        SimpleTab.saveSimpleTab(tabs: convertedTabsDict)
-        
         let faviconFetchGroup = DispatchGroup()
         
         var tabFaviconDictionary = [String : Image]()

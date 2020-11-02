@@ -29,7 +29,7 @@ struct SiteArchiver {
             return ([SavedTab](), [SimpleTab]())
         }
         
-        let simpleTabs = SimpleTab.convertedTabs(tabs)
+        let simpleTabs = SimpleTab.convertToSimpleTabs(tabs)
         SimpleTab.saveSimpleTab(tabs: simpleTabs.1)
         return (tabs, simpleTabs.0)
     }
