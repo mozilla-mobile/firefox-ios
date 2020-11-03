@@ -76,7 +76,7 @@ class BookmarkingTests: BaseTestCase {
         // Go back, check it's still bookmarked, check it's on bookmarks home panel
         waitForTabsButton()
         navigator.goto(TabTray)
-        app.collectionViews.cells["Example Domain"].tap()
+        app.cells.staticTexts["Example Domain"].tap()
         navigator.nowAt(BrowserTab)
         waitForTabsButton()
         checkBookmarked()
@@ -276,7 +276,6 @@ class BookmarkingTests: BaseTestCase {
 
     private func typeOnSearchBar(text: String) {
         waitForExistence(app.textFields["url"], timeout: 5)
-        sleep(1)
         app.textFields["address"].tap()
         app.textFields["address"].typeText(text)
     }
