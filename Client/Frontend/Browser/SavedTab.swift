@@ -14,6 +14,7 @@ class SavedTab: NSObject, NSCoding {
     var sessionData: SessionData?
     var screenshotUUID: UUID?
     var faviconURL: String?
+    var UUID:String?
     
     var jsonDictionary: [String: AnyObject] {
         let title: String = self.title ?? "null"
@@ -26,7 +27,8 @@ class SavedTab: NSObject, NSCoding {
             "isSelected": String(self.isSelected) as AnyObject,
             "faviconURL": faviconURL as AnyObject,
             "screenshotUUID": uuid as AnyObject,
-            "url": url as AnyObject
+            "url": url as AnyObject,
+            "UUID": self.UUID as AnyObject
         ]
         
         if let sessionDataInfo = self.sessionData?.jsonDictionary {
@@ -36,7 +38,7 @@ class SavedTab: NSObject, NSCoding {
         return json
     }
     
-    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?) {
+    init?(screenshotUUID: UUID?, isSelected: Bool, title: String?, isPrivate: Bool, faviconURL: String?, url: URL?, sessionData: SessionData?, uuid: String) {
 
         self.screenshotUUID = screenshotUUID
         self.isSelected = isSelected
@@ -45,6 +47,7 @@ class SavedTab: NSObject, NSCoding {
         self.faviconURL = faviconURL
         self.url = url
         self.sessionData = sessionData
+        self.UUID = uuid
         
         super.init()
     }
@@ -57,6 +60,7 @@ class SavedTab: NSObject, NSCoding {
         self.isPrivate = coder.decodeBool(forKey: "isPrivate")
         self.faviconURL = coder.decodeObject(forKey: "faviconURL") as? String
         self.url = coder.decodeObject(forKey: "url") as? URL
+        self.UUID = coder.decodeObject(forKey: "UUID") as? String
     }
     
     func encode(with coder: NSCoder) {
@@ -67,5 +71,6 @@ class SavedTab: NSObject, NSCoding {
         coder.encode(isPrivate, forKey: "isPrivate")
         coder.encode(faviconURL, forKey: "faviconURL")
         coder.encode(url, forKey: "url")
+        coder.encode(UUID, forKey: "UUID")
     }
 }

@@ -569,6 +569,14 @@ class TabManager: NSObject {
         assert(Thread.isMainThread)
         return tabs.filter({ $0.webView?.url == url }).first
     }
+    
+    func getTabForUUID(uuid: String) -> Tab? {
+        assert(Thread.isMainThread)
+        let filterdTabs = tabs.filter { tab -> Bool in
+            tab.tabUUID == uuid
+        }
+        return filterdTabs.first
+    }
 
     @objc func prefsDidChange() {
         DispatchQueue.main.async {

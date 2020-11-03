@@ -74,6 +74,7 @@ class Tab: NSObject {
     
     // Setting defualt page as topsites
     var newTabPageType: NewTabPage = .topSites
+    var tabUUID: String = UUID().uuidString
 
     // To check if current URL is the starting page i.e. either blank page or internal page like topsites
     var isURLStartingPage: Bool {

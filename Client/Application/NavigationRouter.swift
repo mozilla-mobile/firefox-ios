@@ -70,6 +70,7 @@ extension URLComponents {
 // The root navigation for the Router. Look at the tests to see a complete URL
 enum NavigationPath {
     case url(webURL: URL?, isPrivate: Bool)
+    case widgetUrl(webURL: URL?, uuid: String)
     case fxa(params: FxALaunchParams)
     case deepLink(DeepLink)
     case text(String)
@@ -108,6 +109,14 @@ enum NavigationPath {
                 TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
                 UserDefaults.standard.set(true, forKey: "OpenedAsDefaultBrowser")
             }
+        } else if urlString.starts(with: "\(scheme)://widget-open-url") {
+            let tabs = SimpleTab.getSimpleTabs()
+            guard let uuid = components.valueForQuery("uuid"), !tabs.isEmpty else {
+                self = .url(webURL: nil, isPrivate: false)
+                return
+            }
+            let tab = tabs[uuid]
+            self = .widgetUrl(webURL: tab?.url, uuid: uuid)
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
             self = .text(text ?? "")
@@ -145,6 +154,8 @@ enum NavigationPath {
         case .text(let text): NavigationPath.handleText(text: text, with: bvc)
         case .glean(let url): NavigationPath.handleGlean(url: url)
         case .closePrivateTabs: NavigationPath.handleClosePrivateTabs(with: bvc, tray: tray)
+        case .widgetUrl(webURL: let webURL, uuid: let uuid):
+            NavigationPath.handleWidgetURL(url: webURL, uuid: uuid, with: bvc)
         }
     }
 
@@ -199,6 +210,15 @@ enum NavigationPath {
             bvc.switchToTabForURLOrOpen(newURL, isPrivate: isPrivate)
         } else {
             bvc.openBlankNewTab(focusLocationField: true, isPrivate: isPrivate)
+        }
+        LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension"])
+    }
+    
+    private static func handleWidgetURL(url: URL?, uuid: String, with bvc: BrowserViewController) {
+        if let newURL = url {
+            bvc.switchToTabForWidgetURLOrOpen(newURL, uuid: uuid, isPrivate: false)
+        } else {
+            bvc.openBlankNewTab(focusLocationField: true, isPrivate: false)
         }
         LeanPlumClient.shared.track(event: .openedNewTab, withParameters: ["Source": "External App or Extension"])
     }

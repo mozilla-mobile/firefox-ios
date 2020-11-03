@@ -26,11 +26,10 @@ struct OpenTabsView: View {
     @Environment(\.widgetFamily) var widgetFamily
     
     @ViewBuilder
-    func lineItemForTab(_ tab: SavedTab) -> some View {
-        let url = tab.sessionData!.urls.last!
+    func lineItemForTab(_ tab: SimpleTab) -> some View {
 
         VStack(alignment: .leading) {
-            Link(destination: linkToContainingApp("?url=\(url)", query: "open-url")) {
+            Link(destination: linkToContainingApp("?uuid=\(tab.uuid)", query: "widget-open-url")) {
                 HStack(alignment: .center, spacing: 15) {
                     if (entry.favicons[tab.title!] != nil) {
                         (entry.favicons[tab.title!])!.resizable().frame(width: 16, height: 16)

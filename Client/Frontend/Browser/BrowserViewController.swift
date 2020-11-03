@@ -1061,6 +1061,19 @@ class BrowserViewController: UIViewController {
             openURLInNewTab(url, isPrivate: isPrivate)
         }
     }
+    
+    func switchToTabForWidgetURLOrOpen(_ url: URL, uuid: String,  isPrivate: Bool = false) {
+        guard !isCrashAlertShowing else {
+            urlFromAnotherApp = UrlToOpenModel(url: url, isPrivate: isPrivate)
+            return
+        }
+        popToBVC()
+        if let tab = tabManager.getTabForUUID(uuid: uuid) {
+            tabManager.selectTab(tab)
+        } else {
+            openURLInNewTab(url, isPrivate: isPrivate)
+        }
+    }
 
     func openURLInNewTab(_ url: URL?, isPrivate: Bool = false) {
         if let selectedTab = tabManager.selectedTab {
