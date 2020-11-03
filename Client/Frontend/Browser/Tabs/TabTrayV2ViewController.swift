@@ -55,13 +55,19 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     lazy var deleteAllButton: UIBarButtonItem = {
         let deleteAllButton = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete))
         deleteAllButton.tintColor = UIColor.Photon.Grey90A80
+        deleteAllButton.accessibilityIdentifier = "closeAllTabsButtonTabTray"
         return deleteAllButton
+    }()
+    lazy var newTabButton: UIBarButtonItem = {
+        let newTabButton = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
+        newTabButton.accessibilityIdentifier = "newTabButtonTabTray"
+        return newTabButton
     }()
     lazy var bottomToolbar: [UIBarButtonItem] = {
         let bottomToolbar = [
             deleteAllButton,
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
+            newTabButton
         ]
         return bottomToolbar
     }()
