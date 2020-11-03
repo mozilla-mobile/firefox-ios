@@ -233,7 +233,7 @@ class BrowserUtils {
         // if in private mode, close all tabs
         tester.tapView(withAccessibilityLabel: "smallPrivateMask")
 
-        tester.tapView(withAccessibilityIdentifier: "closeAllTabsTabTray")
+        tester.tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
         tester.tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
 
         tester.wait(forTimeInterval: 3)
@@ -243,7 +243,7 @@ class BrowserUtils {
         } else {
             tester.tapView(withAccessibilityLabel: "smallPrivateMask")
         }
-        tester.tapView(withAccessibilityIdentifier: "closeAllTabsTabTray")
+        tester.tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
         tester.tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
     }
 

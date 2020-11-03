@@ -137,7 +137,7 @@ class TrackingProtectionTests: KIFTestCase, TabEventHandler {
             tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         }
 
-        tester().tapView(withAccessibilityIdentifier: "newTabTabTray")
+        tester().tapView(withAccessibilityIdentifier: "newTabButtonTabTray")
 
         checkStrictTrackingProtection(isBlocking: false, isTPDisabled: true)
         enableStrictMode()

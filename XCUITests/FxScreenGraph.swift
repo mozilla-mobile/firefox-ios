@@ -909,11 +909,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     }
 
     map.addScreenState(TabTray) { screenState in
-        screenState.tap(app.buttons["newTabTabTray"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
+        screenState.tap(app.buttons["newTabButtonTabTray"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
         screenState.tap(app.buttons["smallPrivateMask"], forAction: Action.TogglePrivateMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
-        screenState.tap(app.buttons["closeAllTabsTabTray"], to: CloseTabMenu)
+        screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
 
         screenState.onEnter { userState in
             userState.numTabs = Int(app.cells.count)
@@ -1117,7 +1117,7 @@ extension MMNavigator where T == FxUserState {
     func createNewTab() {
         let app = XCUIApplication()
         self.goto(TabTray)
-        app.buttons["newTabTabTray"].tap()
+        app.buttons["newTabButtonTabTray"].tap()
         self.nowAt(NewTabScreen)
     }
 
