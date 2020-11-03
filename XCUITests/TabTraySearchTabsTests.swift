@@ -5,7 +5,7 @@ let secondURL = "mozilla.org/en-US/book"
 let fullFirstURL = "https://www.mozilla.org/en-US/"
 
 class TabTraySearchTabsTests: BaseTestCase {
-
+/* Disble test suite since in theory it does not make sense with Chron tabs implementatio
     func testSearchTabs() {
         // Open two tabs and go to tab tray
         navigator.openURL(path(forTestPage: "test-mozilla-org.html"))
@@ -72,4 +72,5 @@ class TabTraySearchTabsTests: BaseTestCase {
         let searchValue = app.textFields["Search Tabs"].value
         XCTAssertEqual(searchValue as! String, "Search Tabs")
     }
-}
+     */
+ }

@@ -46,6 +46,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     }()
     lazy var navigationMenu: UISegmentedControl = {
         let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named:"panelIconSyncedTabs")!])
+        navigationMenu.accessibilityIdentifier = "navBarTabTray"
         navigationMenu.backgroundColor = UIColor.Photon.Grey10
         navigationMenu.selectedSegmentIndex = viewModel.isInPrivateMode ? 1 : 0
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
@@ -54,9 +55,11 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     lazy var bottomToolbar: UIToolbar = {
         let bottomToolbar = UIToolbar()
         let addTabButton = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
+        addTabButton.accessibilityIdentifier = "newTabButtonTabTray"
         let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         let closeAllTabsButton = UIBarButtonItem(image: UIImage(named: "delete"), style: .plain , target: self, action: #selector(didTapToolbarDelete))
         closeAllTabsButton.tintColor = UIColor.Photon.Grey90A80
+        closeAllTabsButton.accessibilityIdentifier = "closeAllTabsButtonTabTray"
         bottomToolbar.barStyle = .default
         bottomToolbar.backgroundColor = .white
         bottomToolbar.setItems([closeAllTabsButton, space, addTabButton], animated: false)
