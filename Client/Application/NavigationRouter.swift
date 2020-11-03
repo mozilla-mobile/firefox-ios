@@ -112,7 +112,7 @@ enum NavigationPath {
         } else if urlString.starts(with: "\(scheme)://widget-open-url") {
             let tabs = SimpleTab.getSimpleTabs()
             guard let uuid = components.valueForQuery("uuid"), !tabs.isEmpty else {
-                self = .url(webURL: url, isPrivate: false)
+                self = .url(webURL: nil, isPrivate: false)
                 return
             }
             let tab = tabs[uuid]

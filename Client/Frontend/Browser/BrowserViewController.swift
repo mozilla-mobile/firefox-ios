@@ -1068,7 +1068,7 @@ class BrowserViewController: UIViewController {
             return
         }
         popToBVC()
-        if let tab = tabManager.getTabForURL(url, uuid: uuid) {
+        if let tab = tabManager.getTabForUUID(uuid: uuid) {
             tabManager.selectTab(tab)
         } else {
             openURLInNewTab(url, isPrivate: isPrivate)

@@ -570,7 +570,7 @@ class TabManager: NSObject {
         return tabs.filter({ $0.webView?.url == url }).first
     }
     
-    func getTabForURL(_ url: URL, uuid: String) -> Tab? {
+    func getTabForUUID(uuid: String) -> Tab? {
         assert(Thread.isMainThread)
         let filterdTabs = tabs.filter { tab -> Bool in
             tab.tabUUID == uuid
