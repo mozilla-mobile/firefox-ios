@@ -74,6 +74,11 @@ class SecurityTests: KIFTestCase {
 
         // Also make sure the XSS alert doesn't appear.
         XCTAssertFalse(tester().viewExistsWithLabel("Local page loaded"))
+
+        // Workaround number of tabs not updated
+        tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
     }
 
     /// Tap the URL spoof button, which opens a new window to a host with an invalid port.
@@ -89,9 +94,10 @@ class SecurityTests: KIFTestCase {
         // Make sure the URL bar doesn't show the URL since it hasn't loaded.
         XCTAssertFalse(tester().viewExistsWithLabel("http://1.2.3.4:1234/"))
 
-        // Since the newly opened tab doesn't have a URL/title we can't find its accessibility
-        // element to close it in teardown. Workaround: load another page first.
-        BrowserUtils.enterUrlAddressBar(tester(), typeUrl: webRoot!)
+        // Workaround number of tabs not updated
+        tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
     }
 
     // For blob URLs, just show "blob:" to the user (see bug 1446227)

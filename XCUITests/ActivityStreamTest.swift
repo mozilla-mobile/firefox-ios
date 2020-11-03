@@ -66,6 +66,7 @@ class ActivityStreamTest: BaseTestCase {
         } else {
             app.buttons["TabToolbar.backButton"].tap()
         }
+        navigator.goto(TabTray)
         navigator.performAction(Action.OpenNewTabFromTabTray)
         // A new site has been added to the top sites
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
