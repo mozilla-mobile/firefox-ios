@@ -30,7 +30,7 @@ class TabManagerStore {
     }
 
     var hasTabsToRestoreAtStartup: Bool {
-        return archivedStartupTabs.count > 0
+        return archivedStartupTabs.0.count > 0
     }
 
     fileprivate func tabsStateArchivePath() -> String? {
@@ -47,6 +47,7 @@ class TabManagerStore {
         var savedTabs = [SavedTab]()
         var savedUUIDs = Set<String>()
         for tab in tabs {
+            tab.tabUUID = tab.tabUUID.isEmpty ? UUID().uuidString : tab.tabUUID
             if let savedTab = SavedTab(tab: tab, isSelected: tab == selectedTab) {
                 savedTabs.append(savedTab)
                 if let screenshot = tab.screenshot,
@@ -81,11 +82,15 @@ class TabManagerStore {
 
         archiver.encode(savedTabs, forKey: "tabs")
         archiver.finishEncoding()
+        
+        let simpleTabs = SimpleTab.convertToSimpleTabs(savedTabs)
+        
 
         let result = Success()
         writeOperation = DispatchWorkItem {
             let written = tabStateData.write(toFile: path, atomically: true)
             
+            SimpleTab.saveSimpleTab(tabs: simpleTabs)
             // Ignore write failure (could be restoring).
             log.debug("PreserveTabs write ok: \(written), bytes: \(tabStateData.length)")
             result.fill(Maybe(success: ()))
@@ -99,7 +104,7 @@ class TabManagerStore {
     }
 
     func restoreStartupTabs(clearPrivateTabs: Bool, tabManager: TabManager) -> Tab? {
-        let selectedTab = restoreTabs(savedTabs: archivedStartupTabs, clearPrivateTabs: clearPrivateTabs, tabManager: tabManager)
+        let selectedTab = restoreTabs(savedTabs: archivedStartupTabs.0, clearPrivateTabs: clearPrivateTabs, tabManager: tabManager)
         return selectedTab
     }
 
@@ -121,7 +126,6 @@ class TabManagerStore {
             // Provide an empty request to prevent a new tab from loading the home screen
             var tab = tabManager.addTab(flushToDisk: false, zombie: true, isPrivate: savedTab.isPrivate)
             tab = savedTab.configureSavedTabUsing(tab, imageStore: imageStore)
-
             if savedTab.isSelected {
                 tabToSelect = tab
             }
@@ -145,6 +149,6 @@ class TabManagerStore {
 extension TabManagerStore {
     func testTabCountOnDisk() -> Int {
         assert(AppConstants.IsRunningTest)
-        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).count
+        return SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).0.count
     }
 }

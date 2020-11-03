@@ -275,6 +275,7 @@
 		435D7CC32461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC22461EFDD0043ACB9 /* IntroScreenSyncViewV2.swift */; };
 		435D7CC5246209AA0043ACB9 /* IntroViewControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435D7CC4246209AA0043ACB9 /* IntroViewControllerV2.swift */; };
 		435E3391254780B700406D92 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F84B21EF1A0910F600AAB793 /* Images.xcassets */; };
+		435E34B3254A6A6000406D92 /* TimeConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E650758F1E37F7AB006961AC /* TimeConstants.swift */; };
 		4368BC6824FF14650021931D /* NewTabUserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BC6724FF14650021931D /* NewTabUserResearch.swift */; };
 		4368BC6A24FF14800021931D /* SharedUserResearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4368BC6924FF14800021931D /* SharedUserResearch.swift */; };
 		4390F7F5246CE04300570811 /* IntroViewModelV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4390F7F4246CE04300570811 /* IntroViewModelV2.swift */; };
@@ -290,6 +291,8 @@
 		43DDB96A240994370058A068 /* ETPCoverSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB969240994360058A068 /* ETPCoverSheetViewController.swift */; };
 		43DDB96C240995A70058A068 /* ETPModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB96B240995A70058A068 /* ETPModel.swift */; };
 		43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB97524099F200058A068 /* ETPViewModel.swift */; };
+		43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
+		43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43EF756E251D3AD000575E10 /* TopSiteArchiverExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EF756C251D3AD000575E10 /* TopSiteArchiverExtension.swift */; };
 		43EF75E5251D3C8300575E10 /* TopSiteArchiverExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EF756C251D3AD000575E10 /* TopSiteArchiverExtension.swift */; };
 		43EF780125228FA500575E10 /* Today.strings in Resources */ = {isa = PBXBuildFile; fileRef = 21374EEAA2C69079F77A0AC3 /* Today.strings */; };
@@ -1923,6 +1926,7 @@
 		43DDB96B240995A70058A068 /* ETPModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPModel.swift; sourceTree = "<group>"; };
 		43DDB97524099F200058A068 /* ETPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPViewModel.swift; sourceTree = "<group>"; };
 		43E448868CEE068E52298FEC /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
+		43E69EAF254D064E00B591C2 /* SimpleTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTab.swift; sourceTree = "<group>"; };
 		43EF756C251D3AD000575E10 /* TopSiteArchiverExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteArchiverExtension.swift; sourceTree = "<group>"; };
 		44374D28A38301B2A54F591A /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		443D48F68072CB9805794141 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = "th.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -4208,6 +4212,7 @@
 			children = (
 				1DA3CE5C24EEE73100422BB2 /* OpenTabsWidget.swift */,
 				1D06AE6924FEE8D6000B092B /* TabProvider.swift */,
+				43E69EAF254D064E00B591C2 /* SimpleTab.swift */,
 			);
 			path = OpenTabs;
 			sourceTree = "<group>";
@@ -7092,6 +7097,8 @@
 				1D06AE6624FEE4D5000B092B /* TopSitesProvider.swift in Sources */,
 				43118D07251A9CD100F24376 /* SavedTab.swift in Sources */,
 				4392FB48252EC50400AD3D23 /* InternalSchemeHandler.swift in Sources */,
+				435E34B3254A6A6000406D92 /* TimeConstants.swift in Sources */,
+				43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */,
 				1DF42682251BDB3A0086386A /* FaviconFetcher.swift in Sources */,
 				1DDAD13E24F0651C007623C8 /* TopSitesWidget.swift in Sources */,
 				43BA967D2512D15900EB6134 /* Strings.swift in Sources */,
@@ -7640,6 +7647,7 @@
 				396CDB55203C5B870034A3A3 /* TabTrayController+KeyCommands.swift in Sources */,
 				74E36D781B71323500D69DA1 /* SettingsContentViewController.swift in Sources */,
 				EBB8950C21939E4100EB91A0 /* FirefoxTabContentBlocker.swift in Sources */,
+				43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */,
 				742A56391D80B54A00BDB803 /* PhotonActionSheet.swift in Sources */,
 				C4EFEECF1CEBB6F2009762A4 /* BackForwardTableViewCell.swift in Sources */,
 				2C49854E206173C800893DAE /* photon-colors.swift in Sources */,

@@ -9,20 +9,19 @@ import Combine
 
 struct TabProvider: TimelineProvider {
     public typealias Entry = OpenTabsEntry
-
+    var tabsDict: [String: SimpleTab] = [:]
+    
     func placeholder(in context: Context) -> OpenTabsEntry {
         OpenTabsEntry(date: Date(), favicons: [String: Image](), tabs: [])
     }
     
     func getSnapshot(in context: Context, completion: @escaping (OpenTabsEntry) -> Void) {
-        let allOpenTabs = SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath())
-        let openTabs = allOpenTabs.filter {
-            !$0.isPrivate &&
-            $0.sessionData != nil &&
-            $0.url?.absoluteString.starts(with: "internal://") == false &&
-            $0.title != nil
+        let allOpenTabs = SiteArchiver.tabsToRestore(tabsStateArchivePath: tabsStateArchivePath()).1
+
+        let openTabs = allOpenTabs.values.filter {
+            !$0.isPrivate
         }
-        
+
         let faviconFetchGroup = DispatchGroup()
         
         var tabFaviconDictionary = [String : Image]()
@@ -33,7 +32,6 @@ struct TabProvider: TimelineProvider {
                     if image != nil {
                         tabFaviconDictionary[tab.title!] = image
                     }
-                    
                     faviconFetchGroup.leave()
                 })
             } else {
@@ -65,5 +63,5 @@ struct TabProvider: TimelineProvider {
 struct OpenTabsEntry: TimelineEntry {
     let date: Date
     let favicons: [String : Image]
-    let tabs: [SavedTab]
+    let tabs: [SimpleTab]
 }
