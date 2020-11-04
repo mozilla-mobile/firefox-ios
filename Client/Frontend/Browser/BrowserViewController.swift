@@ -244,7 +244,7 @@ class BrowserViewController: UIViewController {
     func updateToolbarStateForTraitCollection(_ newCollection: UITraitCollection, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator? = nil) {
         let showToolbar = shouldShowFooterForTraitCollection(newCollection)
         let showTopTabs = shouldShowTopTabsForTraitCollection(newCollection)
-        let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (newTabUserResearch?.newTabState ?? false)
+        let shouldShowNewTabButton = false
         
         urlBar.topTabsIsShowing = showTopTabs
         urlBar.setShowToolbar(!showToolbar)
@@ -923,7 +923,7 @@ class BrowserViewController: UIViewController {
     }
     
     func setupMiddleButtonStatus(isLoading: Bool) {
-        let shouldShowNewTabButton = profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (newTabUserResearch?.newTabState ?? false)
+        let shouldShowNewTabButton = false
         
         // No tab
         guard let tab = tabManager.selectedTab else {
@@ -1379,7 +1379,7 @@ extension BrowserViewController: URLBarDelegate {
 
         // Wait for both the bookmark status and the pinned status
         deferredBookmarkStatus.both(deferredPinnedTopSiteStatus).uponQueue(.main) {
-            let shouldShowNewTabButton = self.profile.prefs.boolForKey(PrefsKeys.ShowNewTabToolbarButton) ?? (self.newTabUserResearch?.newTabState ?? false)
+            let shouldShowNewTabButton = false
             let isBookmarked = $0.successValue ?? false
             let isPinned = $1.successValue ?? false
             let pageActions = self.getTabActions(tab: tab, buttonView: button, presentShareMenu: actionMenuPresenter,
