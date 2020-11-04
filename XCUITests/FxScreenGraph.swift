@@ -179,6 +179,8 @@ class Action {
     static let OpenSettingsFromTPMenu = "OpenSettingsFromTPMenu"
     static let SwitchETP = "SwitchETP"
     static let CloseTPContextMenu = "CloseTPContextMenu"
+    static let EnableStrictMode = "EnableStrictMode"
+    static let EnableStandardMode = "EnableStandardMode"
 
     static let CloseTab = "CloseTab"
     static let CloseTabFromTabTrayLongPressMenu = "CloseTabFromTabTrayLongPressMenu"
@@ -379,20 +381,11 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
             userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
 
-        screenState.gesture(forAction: Action.OpenSettingsFromTPMenu) { userState in
+        screenState.gesture(forAction: Action.OpenSettingsFromTPMenu, transitionTo: TrackingProtectionSettings) { userState in
             app.cells["settings"].tap()
         }
 
         screenState.gesture(forAction: Action.CloseTPContextMenu) { userState in
-            if isTablet {
-                // There is no Cancel option in iPad.
-                app.otherElements["PopoverDismissRegion"].tap()
-            } else {
-                app.buttons["PhotonMenu.close"].tap()
-            }
-        }
-
-        screenState.backAction = {
             if isTablet {
                 // There is no Cancel option in iPad.
                 app.otherElements["PopoverDismissRegion"].tap()
@@ -897,6 +890,10 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
 
         screenState.tap(app.switches["prefkey.trackingprotection.normalbrowsing"], forAction: Action.SwitchETP) { userState in
             userState.trackingProtectionSettingOnNormalMode = !userState.trackingProtectionSettingOnNormalMode
+        }
+
+        screenState.tap(app.cells["Settings.TrackingProtectionOption.BlockListStrict"], forAction: Action.EnableStrictMode) { userState in
+                userState.trackingProtectionPerTabEnabled = !userState.trackingProtectionPerTabEnabled
         }
     }
 
