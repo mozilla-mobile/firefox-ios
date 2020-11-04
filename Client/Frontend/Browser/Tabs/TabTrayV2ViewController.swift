@@ -7,6 +7,10 @@ import Shared
 import SnapKit
 import UIKit
 
+protocol TabTrayV2Delegate: AnyObject {
+    func closeTab(forIndex index: IndexPath)
+}
+
 struct TabTrayV2ControllerUX {
     static let cornerRadius = CGFloat(4.0)
     static let screenshotMarginLeftRight = CGFloat(20.0)
@@ -17,8 +21,10 @@ struct TabTrayV2ControllerUX {
 }
 
 class TabTrayV2ViewController: UIViewController, Themeable {
+    weak var delegate: TabTrayDelegate?
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
+    let profile: Profile
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -80,6 +86,16 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile) {
+        self.delegate = tabTrayDelegate
+        self.profile = profile
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // Lifecycle
@@ -299,7 +315,13 @@ extension TabTrayV2ViewController: UITableViewDelegate {
             self.presentActivityViewController(url, tab: tab)
         })
         let more = UIContextualAction(style: .normal, title: Strings.PocketMoreStoriesText, handler: { (action, view, completionHandler) in
-            
+            let moreViewController = TabMoreMenuViewController(tabTrayDelegate: self.delegate, tab: self.viewModel.getTab(forIndex: indexPath), index: indexPath, profile: self.profile)
+            moreViewController.tabTrayV2Delegate = self
+            let controller = ThemedNavigationController(rootViewController: moreViewController)
+            let customTransitioningDelegate = TransitioningDelegate()
+            controller.modalPresentationStyle = .custom
+            controller.transitioningDelegate = customTransitioningDelegate
+            self.present(controller, animated: true, completion: nil)
         })
         let delete = UIContextualAction(style: .destructive, title: Strings.CloseButtonTitle, handler: { (action, view, completionHandler) in
             self.viewModel.removeTab(forIndex: indexPath)
@@ -335,5 +357,11 @@ extension TabTrayV2ViewController: UIPopoverPresentationControllerDelegate {
 extension TabTrayV2ViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
+    }
+}
+
+extension TabTrayV2ViewController: TabTrayV2Delegate {
+    func closeTab(forIndex index: IndexPath) {
+        viewModel.removeTab(forIndex: index)
     }
 }
