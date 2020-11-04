@@ -51,16 +51,23 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         return navigationMenu
     }()
-    lazy var bottomToolbar: UIToolbar = {
-        let bottomToolbar = UIToolbar()
-        let addTabButton = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let closeAllTabsButton = UIBarButtonItem(image: UIImage(named: "delete"), style: .plain , target: self, action: #selector(didTapToolbarDelete))
-        closeAllTabsButton.tintColor = UIColor.Photon.Grey90A80
-        bottomToolbar.barStyle = .default
-        bottomToolbar.backgroundColor = .white
-        bottomToolbar.setItems([closeAllTabsButton, space, addTabButton], animated: false)
-        bottomToolbar.sizeToFit()
+    lazy var deleteAllButton: UIBarButtonItem = {
+        let deleteAllButton = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete))
+        deleteAllButton.tintColor = UIColor.Photon.Grey90A80
+        deleteAllButton.accessibilityIdentifier = "closeAllTabsButtonTabTray"
+        return deleteAllButton
+    }()
+    lazy var newTabButton: UIBarButtonItem = {
+        let newTabButton = UIBarButtonItem(customView: NewTabButton(target: self, selector: #selector(didTapToolbarAddTab)))
+        newTabButton.accessibilityIdentifier = "newTabButtonTabTray"
+        return newTabButton
+    }()
+    lazy var bottomToolbar: [UIBarButtonItem] = {
+        let bottomToolbar = [
+            deleteAllButton,
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            newTabButton
+        ]
         return bottomToolbar
     }()
     
@@ -96,6 +103,11 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         if #available(iOS 13.0, *) { } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .done, target: self, action: #selector(dismissTabTray))
         }
+        
+        // Bottom toolbar
+        navigationController?.isToolbarHidden = false
+        setToolbarItems(bottomToolbar, animated: false)
+        
         // Add Subviews
         let navMenuContainer = UIView()
         navMenuContainer.backgroundColor = TabTrayV2ControllerUX.backgroundColor
@@ -103,13 +115,12 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         navMenuContainer.addSubview(navigationMenu)
         view.addSubview(tableView)
         view.addSubview(emptyPrivateTabsView)
-        view.addSubview(bottomToolbar)
         viewModel.updateTabs()
         // Constraints
         tableView.snp.makeConstraints { make in
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
-            make.bottom.equalTo(bottomToolbar.snp.top)
+            make.bottom.equalTo(view)
             make.top.equalTo(navMenuContainer.snp.bottom)
         }
         navMenuContainer.snp.makeConstraints { make in
@@ -122,14 +133,8 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             make.right.equalToSuperview().offset(-20)
         }
         emptyPrivateTabsView.snp.makeConstraints { make in
-            make.left.right.equalTo(view)
-            make.bottom.equalTo(bottomToolbar.snp.top)
+            make.bottom.left.right.equalTo(view)
             make.top.equalTo(navMenuContainer.snp.bottom)
-        }
-        bottomToolbar.snp.makeConstraints { make in
-            make.top.equalTo(tableView.snp.bottom)
-            make.width.equalTo(view)
-            make.bottom.equalTo(view.safeArea.bottom)
         }
         
         emptyPrivateTabsView.isHidden = true
