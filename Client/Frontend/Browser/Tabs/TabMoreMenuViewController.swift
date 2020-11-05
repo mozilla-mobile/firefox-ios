@@ -53,7 +53,21 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         tabView.closeButton = UIButton()
         return tabView
     }()
+    
+    lazy var handleView: UIView = {
+        let handleView = UIView()
+        handleView.backgroundColor = .black
+        handleView.alpha = DrawerViewControllerUX.HandleAlpha
+        handleView.layer.cornerRadius = DrawerViewControllerUX.HandleHeight / 2
+        return handleView
+    }()
 
+    lazy var divider: UIView = {
+        let divider = UIView()
+        divider.backgroundColor = UIColor.Photon.Grey30
+        return divider
+    }()
+    
     func applyTheme() {
         if ThemeManager.instance.currentName == .normal {
             tabDetailView.backgroundColor = UIColor(rgb: 0xF2F2F7)
@@ -76,8 +90,10 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(handleView)
         view.addSubview(tableView)
         view.addSubview(tabDetailView)
+        view.addSubview(divider)
         view.layer.cornerRadius = 8
         navigationController?.navigationBar.isHidden = true
         
@@ -87,14 +103,26 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     }
     
     func setupConstraints() {
-        tabDetailView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
+        divider.snp.makeConstraints { make in
+            make.top.equalTo(tabDetailView.snp.bottom)
             make.bottom.equalTo(tableView.snp.top)
+            make.height.equalTo(2)
+            make.width.equalToSuperview()
+        }
+        tabDetailView.snp.makeConstraints { make in
+            make.top.equalTo(handleView.snp.bottom)
+            make.bottom.equalTo(divider.snp.top)
             make.left.right.equalToSuperview()
         }
         tableView.snp.makeConstraints { make in
             make.bottom.left.right.equalToSuperview()
-            make.top.equalTo(tabDetailView.snp.bottom)
+            make.top.equalTo(divider.snp.bottom)
+        }
+        handleView.snp.makeConstraints{ make in
+            make.width.equalTo(DrawerViewControllerUX.HandleWidth)
+            make.height.equalTo(DrawerViewControllerUX.HandleHeight)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset((DrawerViewControllerUX.HandleMargin - DrawerViewControllerUX.HandleHeight) / 2)
         }
     }
     
