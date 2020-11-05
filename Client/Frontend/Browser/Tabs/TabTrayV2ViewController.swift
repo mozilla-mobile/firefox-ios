@@ -32,8 +32,6 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     }()
     lazy var emptyPrivateTabsView: EmptyPrivateTabsView = {
         let emptyView = EmptyPrivateTabsView()
-        emptyView.titleLabel.textColor = .black
-        emptyView.descriptionLabel.textColor = .black
         emptyView.learnMoreButton.addTarget(self, action: #selector(didTapLearnMore), for: .touchUpInside)
         return emptyView
     }()
@@ -48,14 +46,18 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     lazy var navigationMenu: UISegmentedControl = {
         let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named:"panelIconSyncedTabs")!])
         navigationMenu.accessibilityIdentifier = "navBarTabTray"
-        navigationMenu.backgroundColor = UIColor.Photon.Grey10
         navigationMenu.selectedSegmentIndex = viewModel.isInPrivateMode ? 1 : 0
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         return navigationMenu
     }()
+    lazy var navigationToolbar: UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.delegate = self
+        toolbar.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
+        return toolbar
+    }()
     lazy var deleteAllButton: UIBarButtonItem = {
         let deleteAllButton = UIBarButtonItem(image: UIImage.templateImageNamed("action_delete"), style: .plain, target: self, action: #selector(didTapToolbarDelete))
-        deleteAllButton.tintColor = UIColor.Photon.Grey90A80
         deleteAllButton.accessibilityIdentifier = "closeAllTabsButtonTabTray"
         return deleteAllButton
     }()
@@ -110,10 +112,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         setToolbarItems(bottomToolbar, animated: false)
         
         // Add Subviews
-        let navMenuContainer = UIToolbar()
-        navMenuContainer.delegate = self
-        navMenuContainer.setItems([UIBarButtonItem(customView: navigationMenu)], animated: false)
-        view.addSubview(navMenuContainer)
+        view.addSubview(navigationToolbar)
         view.addSubview(tableView)
         view.addSubview(emptyPrivateTabsView)
         viewModel.updateTabs()
@@ -122,9 +121,9 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             make.left.equalTo(view.safeArea.left)
             make.right.equalTo(view.safeArea.right)
             make.bottom.equalTo(view)
-            make.top.equalTo(navMenuContainer.snp.bottom)
+            make.top.equalTo(navigationToolbar.snp.bottom)
         }
-        navMenuContainer.snp.makeConstraints { make in
+        navigationToolbar.snp.makeConstraints { make in
             make.left.right.equalTo(view)
             make.top.equalTo(view.safeArea.top)
         }
@@ -133,7 +132,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         }
         emptyPrivateTabsView.snp.makeConstraints { make in
             make.bottom.left.right.equalTo(view)
-            make.top.equalTo(navMenuContainer.snp.bottom)
+            make.top.equalTo(navigationToolbar.snp.bottom)
         }
         
         emptyPrivateTabsView.isHidden = true
@@ -153,12 +152,15 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
         } else {
             tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+            tableView.separatorColor = UIColor.theme.tableView.separator
             navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
             navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
             navigationController?.toolbar.barTintColor = UIColor.theme.tabTray.toolbar
             navigationController?.toolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
-            navigationMenu.superview?.backgroundColor = UIColor.theme.tabTray.toolbar
-            navigationMenu.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+            navigationToolbar.barTintColor = UIColor.theme.tabTray.toolbar
+            navigationToolbar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
+            emptyPrivateTabsView.titleLabel.textColor = UIColor.theme.tableView.rowText
+            emptyPrivateTabsView.descriptionLabel.textColor = UIColor.theme.tableView.rowDetailText
         }
         setNeedsStatusBarAppearanceUpdate()
     }
