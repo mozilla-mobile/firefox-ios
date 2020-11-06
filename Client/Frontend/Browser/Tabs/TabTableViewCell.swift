@@ -4,6 +4,7 @@
 
 import Foundation
 import UIKit
+import Shared
 
 class TabTableViewCell: UITableViewCell, Themeable {
     static let identifier = "tabCell"
@@ -28,8 +29,6 @@ class TabTableViewCell: UITableViewCell, Themeable {
         screenshotView.layer.cornerRadius = TabTrayV2ControllerUX.cornerRadius
         screenshotView.layer.borderWidth = 1
         screenshotView.layer.borderColor = UIColor.Photon.Grey30.cgColor
-
-        urlLabel.textColor = UIColor.Photon.Grey40
         
         screenshotView.snp.makeConstraints { make in
             make.height.width.equalTo(100)
@@ -68,7 +67,16 @@ class TabTableViewCell: UITableViewCell, Themeable {
     }
 
     func applyTheme() {
-        backgroundColor = UIColor.theme.tableView.rowBackground
-        textLabel?.textColor = UIColor.theme.tableView.rowText
+        if #available(iOS 13.0, *) {
+            backgroundColor = UIColor.secondarySystemGroupedBackground
+            textLabel?.textColor = UIColor.label
+            detailTextLabel?.textColor = UIColor.secondaryLabel
+            closeButton.tintColor = UIColor.secondaryLabel
+        } else {
+            backgroundColor = UIColor.theme.tableView.rowBackground
+            textLabel?.textColor = UIColor.theme.tableView.rowText
+            detailTextLabel?.textColor = UIColor.theme.tableView.rowDetailText
+            closeButton.tintColor = UIColor.theme.tabTray.cellCloseButton
+        }
     }
 }

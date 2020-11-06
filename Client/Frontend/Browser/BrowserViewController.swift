@@ -1330,8 +1330,18 @@ extension BrowserViewController: URLBarDelegate {
 
         if AppConstants.CHRONOLOGICAL_TABS {
             let tabTrayViewController = TabTrayV2ViewController()
-            let controller = ThemedNavigationController(rootViewController: tabTrayViewController)
-            controller.presentingModalViewControllerDelegate = self
+            let controller: UINavigationController
+            if #available(iOS 13.0, *) {
+                controller = UINavigationController(rootViewController: tabTrayViewController)
+                // If we're not using the system theme, override the view's style to match
+                if !ThemeManager.instance.systemThemeIsOn {
+                    controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
+                }
+            } else {
+                let themedController = ThemedNavigationController(rootViewController: tabTrayViewController)
+                themedController.presentingModalViewControllerDelegate = self
+                controller = themedController
+            }
             self.present(controller, animated: true, completion: nil)
             self.tabTrayControllerV2 = tabTrayViewController
         } else {

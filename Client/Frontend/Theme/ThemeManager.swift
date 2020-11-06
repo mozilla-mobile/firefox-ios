@@ -61,6 +61,16 @@ class ThemeManager {
         return currentName == .dark ? .lightContent : .default
     }
 
+    @available(iOS 13.0, *)
+    var userInterfaceStyle: UIUserInterfaceStyle {
+        switch currentName {
+        case .dark:
+            return .dark
+        default:
+            return .light
+        }
+    }
+
     func updateCurrentThemeBasedOnScreenBrightness() {
         let prefValue = UserDefaults.standard.float(forKey: ThemeManagerPrefs.automaticSliderValue.rawValue)
 
