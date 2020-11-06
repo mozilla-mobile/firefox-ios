@@ -436,7 +436,7 @@ extension TelemetryWrapper {
         case (.action, .tap, .addNewTabButton, _, _):
             GleanMetrics.Tabs.newTabPressed.add()
         // Settings Menu
-        case (.action, .tap, .settingsMenuSetAsDefaultBrowser, _, _):
+        case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
         // Start Search Button
         case (.action, .tap, .startSearchButton, _, _):

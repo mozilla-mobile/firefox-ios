@@ -103,12 +103,6 @@ enum NavigationPath {
             // use the last browsing mode the user was in.
             let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
-            
-            // Tracking for default browser
-            if (urlString.starts(with: "http:") ||  urlString.starts(with: "https:") && UserDefaults.standard.bool(forKey: "OpenedAsDefaultBrowser")) {
-                TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
-                UserDefaults.standard.set(true, forKey: "OpenedAsDefaultBrowser")
-            }
         } else if urlString.starts(with: "\(scheme)://widget-open-url") {
             let tabs = SimpleTab.getSimpleTabs()
             guard let uuid = components.valueForQuery("uuid"), !tabs.isEmpty else {
@@ -138,6 +132,7 @@ enum NavigationPath {
         } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
             self = .closePrivateTabs
         } else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
+            TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
