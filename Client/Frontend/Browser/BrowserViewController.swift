@@ -1332,7 +1332,7 @@ extension BrowserViewController: URLBarDelegate {
         updateFindInPageVisibility(visible: false)
 
         if AppConstants.CHRONOLOGICAL_TABS {
-            let tabTrayViewController = TabTrayV2ViewController()
+            let tabTrayViewController = TabTrayV2ViewController(tabTrayDelegate: self, profile: profile)
             let controller: UINavigationController
             if #available(iOS 13.0, *) {
                 controller = UINavigationController(rootViewController: tabTrayViewController)

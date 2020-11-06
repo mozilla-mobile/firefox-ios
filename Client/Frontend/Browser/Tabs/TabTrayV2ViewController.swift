@@ -50,9 +50,8 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         return label
     }()
     lazy var navigationMenu: UISegmentedControl = {
-        let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named:"panelIconSyncedTabs")!])
-        navigationMenu.accessibilityIdentifier = "navBarTabTray"
         let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!])
+        navigationMenu.accessibilityIdentifier = "navBarTabTray"
         navigationMenu.backgroundColor = UIColor.Photon.Grey10
         navigationMenu.selectedSegmentIndex = viewModel.isInPrivateMode ? 1 : 0
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
