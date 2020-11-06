@@ -18,7 +18,6 @@ protocol BottomSheetDelegate {
 
 class BottomSheetViewController: UIViewController {
     var delegate: BottomSheetDelegate?
-    var tabTrayV2Delegate: TabTrayV2Delegate?
     var bottomVal: ConstraintMakerEditable?
     let maxInset = 0
     lazy var maxY = view.frame.height - frameHeight
@@ -44,11 +43,6 @@ class BottomSheetViewController: UIViewController {
         return closeButton
     }()
     
-    init(frame: CGRect, tabTrayDelegate: TabTrayDelegate? = nil, tab: Tab? = nil, index: IndexPath, profile: Profile) {
-        panView = TabMoreMenuView(frame: frame, tabTrayDelegate: tabTrayDelegate, tab: tab, index: index, profile: profile)
-        super.init(nibName: nil, bundle: nil)
-    }
-    
     init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -65,7 +59,6 @@ class BottomSheetViewController: UIViewController {
     
     // MARK: View setup
     private func initialViewSetup() {
-        navigationController?.navigationBar.isHidden = true
         self.view.backgroundColor = .clear
         self.view.addSubview(overlay)
         overlay.snp.makeConstraints { make in

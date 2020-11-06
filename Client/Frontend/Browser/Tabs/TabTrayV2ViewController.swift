@@ -25,7 +25,6 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
     let profile: Profile
-    private var bottomSheetVC: BottomSheetViewController?
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -154,8 +153,6 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         }
         
         emptyPrivateTabsView.isHidden = true
-        
-        bottomSheetVC = BottomSheetViewController(frame: view.frame, tabTrayDelegate: delegate, tab: viewModel.getTab(forIndex: indexPath), index: indexPath, profile: profile)
     }
     
     func shouldShowPrivateTabsView() {
@@ -317,13 +314,13 @@ extension TabTrayV2ViewController: UITableViewDelegate {
             self.presentActivityViewController(url, tab: tab)
         })
         let more = UIContextualAction(style: .normal, title: Strings.PocketMoreStoriesText, handler: { (action, view, completionHandler) in
-//            let moreViewController = BottomSheetViewController(frame: self.view.frame, tabTrayDelegate: self.delegate, tab: self.viewModel.getTab(forIndex: indexPath), index: indexPath, profile: self.profile)
-//            moreViewController.tabTrayV2Delegate = self
-//            let controller = ThemedNavigationController(rootViewController: moreViewController)
-//            let customTransitioningDelegate = TransitioningDelegate()
-//            controller.modalPresentationStyle = .custom
-//            controller.transitioningDelegate = customTransitioningDelegate
-//            self.present(controller, animated: true, completion: nil)
+            let moreViewController = TabMoreMenuViewController(tabTrayDelegate: self.delegate, tab: self.viewModel.getTab(forIndex: indexPath), index: indexPath, profile: self.profile)
+            moreViewController.tabTrayV2Delegate = self
+            let controller = ThemedNavigationController(rootViewController: moreViewController)
+            let customTransitioningDelegate = TransitioningDelegate()
+            controller.modalPresentationStyle = .custom
+            controller.transitioningDelegate = customTransitioningDelegate
+            self.present(controller, animated: true, completion: nil)
         })
         let delete = UIContextualAction(style: .destructive, title: Strings.CloseButtonTitle, handler: { (action, view, completionHandler) in
             self.viewModel.removeTab(forIndex: indexPath)
