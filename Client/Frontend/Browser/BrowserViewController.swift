@@ -1361,6 +1361,7 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
         }
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {

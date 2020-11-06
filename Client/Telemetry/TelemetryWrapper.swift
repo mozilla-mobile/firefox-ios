@@ -335,6 +335,7 @@ extension TelemetryWrapper {
         case readingListItem = "reading-list-item"
         case setting = "setting"
         case tab = "tab"
+        case tabTray = "tab-tray"
         case trackingProtectionStatistics = "tracking-protection-statistics"
         case trackingProtectionSafelist = "tracking-protection-safelist"
         case trackingProtectionMenu = "tracking-protection-menu"
@@ -463,6 +464,12 @@ extension TelemetryWrapper {
             GleanMetrics.Tabs.closeAll[privateOrNormal].add()
         case (.action, .tap, .addNewTabButton, _, _):
             GleanMetrics.Tabs.newTabPressed.add()
+        case (.action, .tap, .tab, _, _):
+            GleanMetrics.Tabs.clickTab.record()
+        case (.action, .open, .tabTray, _, _):
+            GleanMetrics.Tabs.openTabTray.record()
+        case (.action, .close, .tabTray, _, _):
+            GleanMetrics.Tabs.closeTabTray.record()
         // Settings Menu
         case (.action, .open, .settingsMenuSetAsDefaultBrowser, _, _):
             GleanMetrics.SettingsMenu.setAsDefaultBrowserPressed.add()
