@@ -7,13 +7,14 @@ import Shared
 import SnapKit
 import UIKit
 
-class TabMoreMenuViewController: UIViewController, Themeable {
+class TabMoreMenuView: UIView, Themeable {
     weak var delegate: TabTrayDelegate?
     var tabTrayV2Delegate: TabTrayV2Delegate?
     weak var tab: Tab?
     lazy var viewModel = TabMoreMenuViewModel(viewController: self, profile: profile)
     let profile: Profile
     let tabIndex: IndexPath
+    let viewController = BottomSheetViewController()
 
     let titles: [Int: [String]] = [ 1: [Strings.ShareAddToReadingList,
                                         Strings.BookmarkContextMenuTitle,
@@ -76,30 +77,25 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         }
     }
     
-    init(tabTrayDelegate: TabTrayDelegate? = nil, tab: Tab? = nil, index: IndexPath, profile: Profile) {
+    init(frame: CGRect, tabTrayDelegate: TabTrayDelegate? = nil, tab: Tab? = nil, index: IndexPath, profile: Profile) {
         self.delegate = tabTrayDelegate
         self.tab = tab
         self.profile = profile
         self.tabIndex = index
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.addSubview(handleView)
-        view.addSubview(tableView)
-        view.addSubview(tabDetailView)
-        view.addSubview(divider)
-        view.layer.cornerRadius = 8
-        navigationController?.navigationBar.isHidden = true
+        super.init(frame: frame)
+        addSubview(handleView)
+        addSubview(tableView)
+        addSubview(tabDetailView)
+        addSubview(divider)
+        layer.cornerRadius = 8
         
         configure(view: tabDetailView, tab: tab)
         setupConstraints()
         applyTheme()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func setupConstraints() {
@@ -140,11 +136,11 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     }
     
     func dismissMenu() {
-        navigationController?.dismiss(animated: true, completion: nil)
+        viewController.dismiss(animated: true, completion: nil)
     }
 }
 
-extension TabMoreMenuViewController: UITableViewDataSource {
+extension TabMoreMenuView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -165,7 +161,7 @@ extension TabMoreMenuViewController: UITableViewDataSource {
     }
 }
 
-extension TabMoreMenuViewController: UITableViewDelegate {
+extension TabMoreMenuView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "moreMenuHeader") as? ThemedTableSectionHeaderFooterView else {
             return nil
@@ -190,7 +186,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
             switch indexPath.row {
             case 0:
                 UIPasteboard.general.url = url
-                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
+                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: self)
                 dismissMenu()
             case 1:
                 self.presentActivityViewController(url, tab: tab)
@@ -221,45 +217,45 @@ extension TabMoreMenuViewController: UITableViewDelegate {
     }
 }
 
-extension TabMoreMenuViewController: UIPopoverPresentationControllerDelegate {
+extension TabMoreMenuView: UIPopoverPresentationControllerDelegate {
     func presentActivityViewController(_ url: URL, tab: Tab? = nil) {
         let helper = ShareExtensionHelper(url: url, tab: tab)
 
         let controller = helper.createActivityViewController({ _,_ in })
 
         if let popoverPresentationController = controller.popoverPresentationController {
-            popoverPresentationController.sourceView = view
-            popoverPresentationController.sourceRect = view.bounds
+            popoverPresentationController.sourceView = self
+            popoverPresentationController.sourceRect = self.bounds
             popoverPresentationController.permittedArrowDirections = .up
             popoverPresentationController.delegate = self
         }
 
-        present(controller, animated: true, completion: nil)
+        viewController.present(controller, animated: true, completion: nil)
     }
 }
 
-class TransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return PresentationController(presentedViewController: presented, presenting: presenting)
-    }
-}
-
-class PresentationController: UIPresentationController {
-    override var frameOfPresentedViewInContainerView: CGRect {
-        let bounds = presentingViewController.view.bounds
-        return CGRect(x: 0, y: bounds.height/2 - 80, width: bounds.width, height: bounds.height/2 + 160)
-    }
-
-    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
-        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
-
-        presentedView?.autoresizingMask = [
-            .flexibleTopMargin,
-            .flexibleBottomMargin,
-            .flexibleLeftMargin,
-            .flexibleRightMargin
-        ]
-
-        presentedView?.translatesAutoresizingMaskIntoConstraints = true
-    }
-}
+//class TransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+//    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+//        return PresentationController(presentedViewController: presented, presenting: presenting)
+//    }
+//}
+//
+//class PresentationController: UIPresentationController {
+//    override var frameOfPresentedViewInContainerView: CGRect {
+//        let bounds = presentingViewController.view.bounds
+//        return CGRect(x: 0, y: bounds.height/2 - 80, width: bounds.width, height: bounds.height/2 + 160)
+//    }
+//
+//    override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+//        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
+//
+//        presentedView?.autoresizingMask = [
+//            .flexibleTopMargin,
+//            .flexibleBottomMargin,
+//            .flexibleLeftMargin,
+//            .flexibleRightMargin
+//        ]
+//
+//        presentedView?.translatesAutoresizingMaskIntoConstraints = true
+//    }
+//}

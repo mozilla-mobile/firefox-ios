@@ -10,10 +10,10 @@ class TabMoreMenuViewModel: NSObject {
     typealias PresentableVC = UIViewController & UIPopoverPresentationControllerDelegate
     
     fileprivate let tabManager: TabManager
-    fileprivate let viewController: TabMoreMenuViewController
+    fileprivate let viewController: TabMoreMenuView
     fileprivate let profile: Profile
     
-    init(viewController: TabMoreMenuViewController, profile: Profile) {
+    init(viewController: TabMoreMenuView, profile: Profile) {
         self.viewController = viewController
         self.tabManager = BrowserViewController.foregroundBVC().tabManager
         self.profile = profile
