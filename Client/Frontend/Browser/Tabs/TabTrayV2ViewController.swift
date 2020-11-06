@@ -25,6 +25,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
     let profile: Profile
+    private var bottomSheetVC: BottomSheetViewController?
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -153,7 +154,12 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         }
         
         emptyPrivateTabsView.isHidden = true
-    }
+        
+        bottomSheetVC = BottomSheetViewController()
+        bottomSheetVC?.delegate = self
+        self.addChild(bottomSheetVC!)
+        self.view.addSubview(bottomSheetVC!.view)
+}
     
     func shouldShowPrivateTabsView() {
         emptyPrivateTabsView.isHidden = !viewModel.shouldShowPrivateView
@@ -314,13 +320,22 @@ extension TabTrayV2ViewController: UITableViewDelegate {
             self.presentActivityViewController(url, tab: tab)
         })
         let more = UIContextualAction(style: .normal, title: Strings.PocketMoreStoriesText, handler: { (action, view, completionHandler) in
+            // Bottom toolbar
+            self.navigationController?.isToolbarHidden = true
+    //        setToolbarItems(bottomToolbar, animated: false)
+
             let moreViewController = TabMoreMenuViewController(tabTrayDelegate: self.delegate, tab: self.viewModel.getTab(forIndex: indexPath), index: indexPath, profile: self.profile)
             moreViewController.tabTrayV2Delegate = self
-            let controller = ThemedNavigationController(rootViewController: moreViewController)
-            let customTransitioningDelegate = TransitioningDelegate()
-            controller.modalPresentationStyle = .custom
-            controller.transitioningDelegate = customTransitioningDelegate
-            self.present(controller, animated: true, completion: nil)
+//            let controller = ThemedNavigationController(rootViewController: moreViewController)
+//            let customTransitioningDelegate = TransitioningDelegate()
+//            controller.modalPresentationStyle = .custom
+//            controller.transitioningDelegate = customTransitioningDelegate
+//
+//            self.present(controller, animated: true, completion: nil)
+            
+            self.bottomSheetVC?.panView.addSubview(moreViewController.view)
+            self.bottomSheetVC?.showView()
+
         })
         let delete = UIContextualAction(style: .destructive, title: Strings.CloseButtonTitle, handler: { (action, view, completionHandler) in
             self.viewModel.removeTab(forIndex: indexPath)
@@ -362,5 +377,13 @@ extension TabTrayV2ViewController: UIToolbarDelegate {
 extension TabTrayV2ViewController: TabTrayV2Delegate {
     func closeTab(forIndex index: IndexPath) {
         viewModel.removeTab(forIndex: index)
+    }
+}
+
+extension TabTrayV2ViewController: BottomSheetDelegate {
+    
+    func closeBottomSheet() {
+        // Show bottom toolbar when we hide bottom sheet
+        navigationController?.isToolbarHidden = false
     }
 }
