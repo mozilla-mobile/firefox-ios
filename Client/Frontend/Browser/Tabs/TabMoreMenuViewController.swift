@@ -10,6 +10,7 @@ import UIKit
 class TabMoreMenuViewController: UIViewController, Themeable {
     weak var delegate: TabTrayDelegate?
     var tabTrayV2Delegate: TabTrayV2Delegate?
+    var bottomSheetDelegate: BottomSheetDelegate?
     weak var tab: Tab?
     lazy var viewModel = TabMoreMenuViewModel(viewController: self, profile: profile)
     let profile: Profile
@@ -140,7 +141,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     }
     
     func dismissMenu() {
-        navigationController?.dismiss(animated: true, completion: nil)
+        bottomSheetDelegate?.closeBottomSheet()
     }
 }
 
@@ -195,6 +196,8 @@ extension TabMoreMenuViewController: UITableViewDelegate {
             case 1:
                 self.presentActivityViewController(url, tab: tab)
             case 2:
+                dismissMenu()
+                tabTrayV2Delegate?.closeTabTray()
                 viewModel.sendToDevice()
             default:
                 return

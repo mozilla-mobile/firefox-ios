@@ -34,7 +34,7 @@ class TabMoreMenuViewModel: NSObject {
     }
     
     func sendToDevice() {
-        guard let bvc = viewController as? PresentableVC & InstructionsViewControllerDelegate & DevicePickerViewControllerDelegate else { return }
+        let bvc = BrowserViewController.foregroundBVC()
         if !self.profile.hasAccount() {
             let instructionsViewController = InstructionsViewController()
             instructionsViewController.delegate = bvc

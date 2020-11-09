@@ -9,6 +9,7 @@ import UIKit
 
 protocol TabTrayV2Delegate: AnyObject {
     func closeTab(forIndex index: IndexPath)
+    func closeTabTray()
 }
 
 struct TabTrayV2ControllerUX {
@@ -322,15 +323,10 @@ extension TabTrayV2ViewController: UITableViewDelegate {
         let more = UIContextualAction(style: .normal, title: Strings.PocketMoreStoriesText, handler: { (action, view, completionHandler) in
             // Bottom toolbar
             self.navigationController?.isToolbarHidden = true
-    //        setToolbarItems(bottomToolbar, animated: false)
 
             let moreViewController = TabMoreMenuViewController(tabTrayDelegate: self.delegate, tab: self.viewModel.getTab(forIndex: indexPath), index: indexPath, profile: self.profile)
             moreViewController.tabTrayV2Delegate = self
-//            let controller = ThemedNavigationController(rootViewController: moreViewController)
-//            let customTransitioningDelegate = TransitioningDelegate()
-//            controller.modalPresentationStyle = .custom
-//            controller.transitioningDelegate = customTransitioningDelegate
-//            self.present(controller, animated: true, completion: nil)
+            moreViewController.bottomSheetDelegate = self
             self.bottomSheetVC?.containerViewController = moreViewController
             self.bottomSheetVC?.showView()
 
@@ -376,12 +372,18 @@ extension TabTrayV2ViewController: TabTrayV2Delegate {
     func closeTab(forIndex index: IndexPath) {
         viewModel.removeTab(forIndex: index)
     }
+    func closeTabTray() {
+        dismissTabTray()
+    }
 }
 
 extension TabTrayV2ViewController: BottomSheetDelegate {
-    
-    func closeBottomSheet() {
+    func showBottomToolbar() {
         // Show bottom toolbar when we hide bottom sheet
         navigationController?.isToolbarHidden = false
+    }
+    func closeBottomSheet() {
+        showBottomToolbar()
+        self.bottomSheetVC?.hideView(shouldAnimate: true)
     }
 }

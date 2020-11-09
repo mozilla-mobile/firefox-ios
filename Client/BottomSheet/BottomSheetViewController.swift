@@ -14,6 +14,7 @@ enum BottomSheetState {
 
 protocol BottomSheetDelegate {
     func closeBottomSheet()
+    func showBottomToolbar()
 }
 
 class BottomSheetViewController: UIViewController {
@@ -135,7 +136,7 @@ class BottomSheetViewController: UIViewController {
     }
     
     @objc func hideView(shouldAnimate: Bool) {
-        delegate?.closeBottomSheet()
+        delegate?.showBottomToolbar()
         let closure = {
             self.moveView(state: .none)
             self.isFullyHidden = true
