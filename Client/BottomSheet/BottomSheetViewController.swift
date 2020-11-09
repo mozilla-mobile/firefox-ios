@@ -17,33 +17,38 @@ protocol BottomSheetDelegate {
 }
 
 class BottomSheetViewController: UIViewController {
+    // Delegate
     var delegate: BottomSheetDelegate?
-    var bottomVal: ConstraintMakerEditable?
+    
+    // Bottom sheet location var
+    
+    // value ranges from 0~1
+    var heightSpecifier: CGFloat = 0.65
+    private lazy var maxY = view.frame.height - frameHeight
+    private lazy var minY = view.frame.height
+    private var endedYVal: CGFloat = 0
+    private var endedTranslationYVal: CGFloat = 0
+    private var isFullyHidden = false
+    private var frameHeight: CGFloat {
+        return view.frame.height * heightSpecifier
+    }
+    
+    // Container child view controller
     var containerViewController: UIViewController?
-    let maxInset = 0
-    lazy var maxY = view.frame.height - frameHeight
-    lazy var minY = view.frame.height
-    var endedYVal:CGFloat = 0
-    var endedTranslationYVal:CGFloat = 0
-    var overlay: UIView = {
+    
+    // Views
+    private var overlay: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.2)
         return view
     }()
-    var panView: UIView = {
+    private var panView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
         return view
     }()
-    var isFullyHidden = false
-    lazy var frameHeight = view.frame.height/2
-    private var closeButton: UIButton = {
-        let closeButton = UIButton()
-        closeButton.setTitle("Close", for: .normal)
-        closeButton.setTitleColor(.blue, for: .normal)
-        return closeButton
-    }()
     
+    // MARK: Initializers
     init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -69,36 +74,29 @@ class BottomSheetViewController: UIViewController {
         
         self.view.addSubview(panView)
         panView.snp.makeConstraints { make in
-            self.bottomVal = make.bottom.equalTo(self.view.safeArea.bottom)
+            make.bottom.equalTo(self.view.safeArea.bottom)
             make.centerX.equalToSuperview()
             make.left.right.equalToSuperview()
             make.height.equalTo(frameHeight)
-        }
-
-        self.panView.addSubview(closeButton)
-        closeButton.snp.makeConstraints { make in
-            make.top.equalTo(self.panView.snp.top)
-            make.left.right.equalTo(self.panView)
-            make.height.equalTo(40)
         }
         
         let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
         panView.addGestureRecognizer(gesture)
         panView.translatesAutoresizingMaskIntoConstraints = true
-
-        closeButton.addTarget(self, action: #selector(self.showView), for: .touchUpInside)
-        hideView(shouldAnimate: false)
         
         let overlayTapGesture = UITapGestureRecognizer(target: self, action:  #selector(self.hideViewWithAnimation))
         overlay.addGestureRecognizer(overlayTapGesture)
+        
+        hideView(shouldAnimate: false)
     }
     
-    func roundViews() {
+    private func roundViews() {
         panView.layer.cornerRadius = 10
         view.clipsToBounds = true
         panView.clipsToBounds = true
     }
 
+    // MARK: Bottomsheet swipe methods
     private func moveView(state: BottomSheetState) {
         let yPosition = state == .none ? minY : maxY
         panView.frame = CGRect(x: 0, y: yPosition, width: view.frame.width, height: frameHeight)
@@ -109,8 +107,6 @@ class BottomSheetViewController: UIViewController {
         let yVal:CGFloat = translation.y
         let startedYVal = endedTranslationYVal + maxY
         let newYVal = startedYVal + yVal
-        // Debug only
-        // print("minY(\(minY) || t.y(\(translation.y)) || maxY(\(maxY)) || endYVal(\(endedTranslationYVal)) || startVal(\(startedYVal)) || newVal(\(newYVal))")
         
         // Top
         guard newYVal >= maxY else {
@@ -121,7 +117,6 @@ class BottomSheetViewController: UIViewController {
         panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: frameHeight)
 
         if recognizer.state == .ended {
-            
             // past middle
             if newYVal > (maxY - 80)*2 {
                 endedTranslationYVal = 0
@@ -137,10 +132,6 @@ class BottomSheetViewController: UIViewController {
                 self.moveView(state: state)
             }, completion: nil)
         }
-    }
-    
-    @objc private func hideViewWithAnimation() {
-        hideView(shouldAnimate: true)
     }
     
     @objc func hideView(shouldAnimate: Bool) {
@@ -176,5 +167,9 @@ class BottomSheetViewController: UIViewController {
 
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
+    }
+    
+    @objc private func hideViewWithAnimation() {
+        hideView(shouldAnimate: true)
     }
 }
