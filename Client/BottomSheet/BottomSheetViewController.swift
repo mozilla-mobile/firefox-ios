@@ -5,6 +5,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import Shared
 
 enum BottomSheetState {
     case none
@@ -20,10 +21,17 @@ class BottomSheetViewController: UIViewController {
     // Delegate
     var delegate: BottomSheetDelegate?
     
+    // Orientation independent screen size
+    private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
+    
     // Bottom sheet location var
     
     // value ranges from 0~1
-    var heightSpecifier: CGFloat = 0.65
+    private var heightSpecifier: CGFloat {
+        let height = screenSize.height
+        let heightForTallScreen: CGFloat = height > 850 ? 0.65 : 0.72
+        return height > 668 ? heightForTallScreen : 0.84
+    }
     private lazy var maxY = view.frame.height - frameHeight
     private lazy var minY = view.frame.height
     private var endedYVal: CGFloat = 0
