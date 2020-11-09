@@ -12,7 +12,3 @@
 
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "写真を保存してアップロードできます。";
-
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "写真を保存してアップロードできます。";
-

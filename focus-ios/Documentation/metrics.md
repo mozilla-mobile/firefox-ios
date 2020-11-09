@@ -20,7 +20,7 @@ The following metrics are added to the ping:
 
 | Name | Type | Description | Data reviews | Extras | Expiration | [Data Sensitivity](https://wiki.mozilla.org/Firefox/Data_Collection) |
 | --- | --- | --- | --- | --- | --- | --- |
-| legacy.ids.client_id |[uuid](https://mozilla.github.io/glean/book/user/metrics/uuid.html) |The client id from legacy telemetry.  |[1](TBD)||never | |
+| legacy.ids.client_id |[uuid](https://mozilla.github.io/glean/book/user/metrics/uuid.html) |The client id from legacy telemetry.  |[1](https://github.com/mozilla-mobile/focus-ios/pull/1741#issuecomment-705853690)||never | |
 
 
 Data categories are [defined here](https://wiki.mozilla.org/Firefox/Data_Collection).

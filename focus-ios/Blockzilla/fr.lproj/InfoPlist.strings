@@ -12,7 +12,3 @@
 
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Ceci vous permet d’enregistrer des photos et de les envoyer.";
-
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "Ceci vous permet d’enregistrer des photos et de les envoyer.";
-

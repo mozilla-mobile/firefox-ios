@@ -12,7 +12,3 @@
 
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Toto umožňuje ukladať a nahrávať fotografie.";
-
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "Toto umožňuje ukladať a odosielať fotografie.";
-

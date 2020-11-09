@@ -12,7 +12,3 @@
 
 /* (No Comment) */
 "NSPhotoLibraryAddUsageDescription" = "Це дозволяє вам знімати й вивантажувати фото.";
-
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "Це дозволяє вам зберігати й вивантажувати фото.";
-

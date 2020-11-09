@@ -6,7 +6,3 @@
 
 /* (No Comment) */
 "NSMicrophoneUsageDescription" = "U videoga olish va internetga yuklash imkonini beradi.";
-
-/* (No Comment) */
-"NSPhotoLibraryUsageDescription" = "U rasmni saqlash va internetga yuklash imkonini beradi.";
-
