@@ -330,10 +330,8 @@ extension TabTrayV2ViewController: UITableViewDelegate {
 //            let customTransitioningDelegate = TransitioningDelegate()
 //            controller.modalPresentationStyle = .custom
 //            controller.transitioningDelegate = customTransitioningDelegate
-//
 //            self.present(controller, animated: true, completion: nil)
-            
-            self.bottomSheetVC?.panView.addSubview(moreViewController.view)
+            self.bottomSheetVC?.containerViewController = moreViewController
             self.bottomSheetVC?.showView()
 
         })

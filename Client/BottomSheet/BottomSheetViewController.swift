@@ -19,6 +19,7 @@ protocol BottomSheetDelegate {
 class BottomSheetViewController: UIViewController {
     var delegate: BottomSheetDelegate?
     var bottomVal: ConstraintMakerEditable?
+    var containerViewController: UIViewController?
     let maxInset = 0
     lazy var maxY = view.frame.height - frameHeight
     lazy var minY = view.frame.height
@@ -105,7 +106,6 @@ class BottomSheetViewController: UIViewController {
 
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: view)
-        let minY = view.frame.minY
         let yVal:CGFloat = translation.y
         let startedYVal = endedTranslationYVal + maxY
         let newYVal = startedYVal + yVal
@@ -163,6 +163,9 @@ class BottomSheetViewController: UIViewController {
     }
 
     @objc func showView() {
+        if let container = containerViewController {
+            panView.addSubview(container.view)
+        }
         UIView.animate(withDuration: 0.26, animations: {
             self.moveView(state: .full)
             self.isFullyHidden = false
