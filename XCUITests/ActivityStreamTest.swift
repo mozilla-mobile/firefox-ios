@@ -33,6 +33,7 @@ class ActivityStreamTest: BaseTestCase {
     }
 
     override func tearDown() {
+        XCUIDevice.shared.orientation = .portrait
         super.tearDown()
     }
 
@@ -350,6 +351,7 @@ class ActivityStreamTest: BaseTestCase {
     func testContextMenuInLandscape() {
         XCUIDevice.shared.orientation = .landscapeLeft
 
+        waitForExistence(TopSiteCellgroup.cells["apple"], timeout: 5)
         TopSiteCellgroup.cells["apple"].press(forDuration: 1)
 
         let contextMenuHeight = app.tables["Context Menu"].frame.size.height
