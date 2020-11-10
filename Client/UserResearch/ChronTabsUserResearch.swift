@@ -45,7 +45,7 @@ class ChronTabsUserResearch {
     }
     
     // MARK: Initializer
-    init(lpVariable: LPVar? = LPVariables.newTabButtonABTest) {
+    init(lpVariable: LPVar? = LPVariables.chronTabsABTest) {
         self.lpVariable = lpVariable
     }
     
@@ -65,7 +65,7 @@ class ChronTabsUserResearch {
             }
             self.fetchedExperimentVariables = true
             
-            let lpValue = LPVariables.newTabButtonABTest?.boolValue() ?? false
+            let lpValue = LPVariables.chronTabsABTest?.boolValue() ?? false
             if self.chronTabsState != lpValue {
                 self.chronTabsState = lpValue
                 self.updateTelemetry()
