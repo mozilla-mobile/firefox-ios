@@ -107,7 +107,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         divider.snp.makeConstraints { make in
             make.top.equalTo(tabDetailView.snp.bottom)
             make.bottom.equalTo(tableView.snp.top)
-            make.height.equalTo(2)
+            make.height.equalTo(1)
             make.width.equalToSuperview()
         }
         tabDetailView.snp.makeConstraints { make in
@@ -218,6 +218,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
             }
         case 2:
             tabTrayV2Delegate?.closeTab(forIndex: tabIndex)
+            dismissMenu()
         default:
             return
         }

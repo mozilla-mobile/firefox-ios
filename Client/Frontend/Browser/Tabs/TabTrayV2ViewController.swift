@@ -54,7 +54,6 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     lazy var navigationMenu: UISegmentedControl = {
         let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!])
         navigationMenu.accessibilityIdentifier = "navBarTabTray"
-        navigationMenu.backgroundColor = UIColor.Photon.Grey10
         navigationMenu.selectedSegmentIndex = viewModel.isInPrivateMode ? 1 : 0
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
         return navigationMenu
@@ -160,7 +159,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         bottomSheetVC?.delegate = self
         self.addChild(bottomSheetVC!)
         self.view.addSubview(bottomSheetVC!.view)
-}
+    }
     
     func shouldShowPrivateTabsView() {
         emptyPrivateTabsView.isHidden = !viewModel.shouldShowPrivateView
@@ -169,6 +168,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     func applyTheme() {
         if #available(iOS 13.0, *) {
             tableView.backgroundColor = UIColor.systemGroupedBackground
+            view.backgroundColor = UIColor.systemGroupedBackground
             navigationController?.navigationBar.tintColor = UIColor.label
             navigationController?.toolbar.tintColor = UIColor.label
             navigationItem.rightBarButtonItem?.tintColor = UIColor.label
@@ -176,6 +176,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
         } else {
             tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+            view.backgroundColor = UIColor.theme.tableView.headerBackground
             tableView.separatorColor = UIColor.theme.tableView.separator
             navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
             navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
@@ -187,6 +188,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             emptyPrivateTabsView.descriptionLabel.textColor = UIColor.theme.tableView.rowDetailText
         }
         setNeedsStatusBarAppearanceUpdate()
+        bottomSheetVC?.applyTheme()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

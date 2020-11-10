@@ -18,7 +18,7 @@ protocol BottomSheetDelegate {
     func showBottomToolbar()
 }
 
-class BottomSheetViewController: UIViewController {
+class BottomSheetViewController: UIViewController, Themeable {
     // Delegate
     var delegate: BottomSheetDelegate?
     
@@ -53,7 +53,6 @@ class BottomSheetViewController: UIViewController {
     }()
     private var panView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white
         return view
     }()
     
@@ -70,6 +69,7 @@ class BottomSheetViewController: UIViewController {
         super.viewDidLoad()
         roundViews()
         initialViewSetup()
+        applyTheme()
     }
     
     // MARK: View setup
@@ -180,5 +180,13 @@ class BottomSheetViewController: UIViewController {
     
     @objc private func hideViewWithAnimation() {
         hideView(shouldAnimate: true)
+    }
+    
+    func applyTheme() {
+        if ThemeManager.instance.currentName == .normal {
+            panView.backgroundColor = UIColor(rgb: 0xF2F2F7)
+        } else {
+            panView.backgroundColor = UIColor(rgb: 0x1C1C1E)
+        }
     }
 }
