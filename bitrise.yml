@@ -162,89 +162,6 @@ workflows:
       -Run tests on parallel (Flank and Firebase)
 
       With the necessary steps to generate the reports with the test results
-  PushInMasterSmokeTest:
-    steps:
-    - activate-ssh-key@4.0:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0: {}
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            set -x
-
-            npm install
-            npm run build
-    - certificate-and-profile-installer@1.10: {}
-    - script@1:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
-            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
-            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
-            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
-        title: 'Workaround carthage lipo bug #3019'
-    - carthage@3.2:
-        inputs:
-        - carthage_options: " --platform ios"
-    - script@1:
-        title: Remove carthage lipo workaround
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
-            --value ''"
-    - script@1:
-        inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\n#cd Client.xcodeproj\nsed -i '' 's/\"Fennec Development\"/\"Bitrise
-            Firefox iOS Dev\"/' project.pbxproj \nsed -i '' 's/Fennec Today Development/Bitrise
-            Firefox iOS Dev - Fennec Today/' project.pbxproj  \nsed -i '' 's/Fennec
-            ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
-            \nsed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj \nsed -i '' 's/\"XCUITests\"/\"Bitrise Firefox
-            iOS Dev - XCUI Tests\"/' project.pbxproj \nsed -i '' 's/Fennec NotificationService
-            Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj\nsed
-            -i '' 's/CODE_SIGN_IDENTITY = \"iPhone Developer\"/CODE_SIGN_IDENTITY
-            = \"iPhone Distribution\"/' project.pbxproj\n# sed -i '' 's/DEVELOPMENT_TEAM
-            = \"\"/DEVELOPMENT_TEAM = 43AQ936H96/' project.pbxproj\ncd -"
-        title: Set provisioning to Bitrise in xcodeproj
-    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
-        inputs:
-        - configuration: Release
-        - scheme: Fennec_Enterprise_SmokeXCUITests
-    - xcode-test@2.4:
-        inputs:
-        - output_tool: xcodebuild
-        - export_uitest_artifacts: 'true'
-        - scheme: Fennec_Enterprise_SmokeXCUITests
-        - simulator_device: iPhone 8
-    - deploy-to-bitrise-io@1.10: {}
-    - cache-push@2.2: {}
-    - slack@3.1:
-        inputs:
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-    description: This Workflow is to run tests (currently SmokeTest) when there is
-      a merge in master
   jlorenzo_L10nBuild:
     steps:
     - activate-ssh-key@4.0:
@@ -424,6 +341,44 @@ workflows:
             cd content-blocker-lib-ios/ContentBlockerGen && swift run
         title: Post clone step for TP updates
     - cache-pull@2.1: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+        title: Workaround carthage lipo
+    - carthage@3.2:
+        inputs:
+        - carthage_options: "--platform ios"
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: Remove carthage lip
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            # Import only the shipping locales (from shipping_locales.txt) on Release
+            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+            # requests.
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+            pip install --user virtualenv
+            cd /usr/local/bin
+            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            cd -
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
+        title: Pull in L10n
     - script@1.1:
         title: NPM install and build
         inputs:
@@ -436,32 +391,6 @@ workflows:
 
             npm install
             npm run build
-    - certificate-and-profile-installer@1.10: {}
-    - carthage@3.2:
-        inputs:
-        - carthage_options: "--platform ios"
-    - script@1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            pip3 install virtualenv
-            virtualenv .
-            source ./bin/activate
-
-            # write your script here
-            ls
-            cd /Users/vagrant/git/
-            ls
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git
-
-            # Import locales
-            ./ios-l10n-scripts/import-locales-firefox.sh
-        title: Import locales
     - script@1.1:
         inputs:
         - content: |-
@@ -490,7 +419,7 @@ workflows:
       a merge in master
     meta:
       bitrise.io:
-        stack: osx-xcode-11.5.x
+        stack: osx-xcode-12.0.x
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
@@ -501,24 +430,19 @@ workflows:
         inputs:
         - content: |-
             #!/usr/bin/env bash
-            # fail if any commands fails
             set -e
-            # debug log
             set -x
 
-            pip3 install virtualenv
-            virtualenv .
-            source ./bin/activate
-
-            # write your script here
-            ls
-            cd /Users/vagrant/git/
-            ls
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git
-
-            # Import locales
-            ./ios-l10n-scripts/import-locales-firefox.sh
-        title: Import locales
+            # Import only the shipping locales (from shipping_locales.txt) on Release
+            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+            # requests.
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+            pip install --user virtualenv
+            cd /usr/local/bin
+            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            cd -
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
+        title: Pull in L10n
     - script@1:
         inputs:
         - content: |-
@@ -558,71 +482,6 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: L10nSnapshotTest
-    description: This Workflow is to run tests (currently SmokeTest) when there is
-      a merge in master
-    meta:
-      bitrise.io:
-        stack: osx-xcode-11.5.x
-  PushInMasterSmoketestiPhoneAndiPad:
-    steps:
-    - activate-ssh-key@4.0:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0: {}
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
-    - cache-pull@2.1: {}
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            npm install
-            npm run build
-    - certificate-and-profile-installer@1.10: {}
-    - carthage@3.2:
-        inputs:
-        - carthage_options: ''
-    - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
-        inputs:
-        - configuration: Release
-        - scheme: Fennec_Enterprise_SmokeXCUITests
-    - xcode-test@2.4:
-        run_if: '{{enveq "BITRISE_SCHEME" "Fennec_Enterprise_SmokeXCUITests"}}'
-        inputs:
-        - output_tool: xcodebuild
-        - export_uitest_artifacts: 'true'
-        - simulator_device: iPhone 8
-        title: Xcode Test for iOS iPhone
-    - xcode-test@2:
-        inputs:
-        - simulator_device: iPad Air (3rd generation)
-        title: Xcode Test for iOS iPad
-    - deploy-to-bitrise-io@1.10: {}
-    - cache-push@2.2: {}
-    - slack@3.1:
-        inputs:
-        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-    envs:
-    - opts:
-        is_expand: false
-      BITRISE_SCHEME: Fennec_Enterprise_SmokeXCUITests
     description: This Workflow is to run tests (currently SmokeTest) when there is
       a merge in master
     meta:
@@ -737,18 +596,6 @@ workflows:
             cd content-blocker-lib-ios/ContentBlockerGen && swift run
         title: Post clone step for TP updates
     - cache-pull@2.1: {}
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            npm install
-            npm run build
     - certificate-and-profile-installer@1.10: {}
     - script@1:
         inputs:
@@ -770,22 +617,56 @@ workflows:
         title: Remove carthage lipo workaround
     - script@1:
         inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\ncd Client.xcodeproj\nsed -i '' 's/\"Fennec Development\"/\"Bitrise
-            Firefox iOS Dev\"/' project.pbxproj \nsed -i '' 's/Fennec Today Development/Bitrise
-            Firefox iOS Dev - Fennec Today/' project.pbxproj  \nsed -i '' 's/Fennec
-            ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
-            \nsed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj \nsed -i '' 's/\"XCUITests\"/\"Bitrise Firefox
-            iOS Dev - XCUI Tests\"/' project.pbxproj \nsed -i '' 's/Fennec NotificationService
-            Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj\nsed
-            -i '' 's/CODE_SIGN_IDENTITY = \"iPhone Developer\"/CODE_SIGN_IDENTITY
-            = \"iPhone Distribution\"/' project.pbxproj\n#sed -i '' 's/DEVELOPMENT_TEAM
-            = \"\"/DEVELOPMENT_TEAM = 43AQ936H96/' project.pbxproj\ncd -"
+        - content: |2-
+
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            # Import only the shipping locales (from shipping_locales.txt) on Release
+            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+            # requests.
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+            pip install --user virtualenv
+            cd /usr/local/bin
+            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            cd -
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
+        title: Pull in L10N
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\nset -e\nset -x\n\ncd Client.xcodeproj\nsed
+            -i '' 's/\"Fennec Development\"/\"Bitrise Firefox iOS Dev\"/' project.pbxproj
+            \nsed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev - Fennec
+            Today/' project.pbxproj  \nsed -i '' 's/Fennec ShareTo Development/Bitrise
+            Firefox iOS Dev - Share To/' project.pbxproj \nsed -i '' 's/Fennec WidgetKit
+            Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj \nsed
+            -i '' 's/\"XCUITests\"/\"Bitrise Firefox iOS Dev - XCUI Tests\"/' project.pbxproj
+            \nsed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
+            iOS Dev - Notification Service/' project.pbxproj\nsed -i '' 's/CODE_SIGN_IDENTITY
+            = \"iPhone Developer\"/CODE_SIGN_IDENTITY = \"iPhone Distribution\"/'
+            project.pbxproj\ncd -"
         title: Set provisioning to Bitrise in xcodeproj
+    - script@1.1:
+        title: NPM install and build
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            npm install
+            npm run build
     - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
         inputs:
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec
+    - xcode-test@2:
+        inputs:
+        - scheme: Fennec
+        - simulator_device: iPhone 8
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2: {}
     - slack@3.1:
@@ -825,7 +706,7 @@ workflows:
         title: remove carthage lipo workaround
     - script@1:
         inputs:
-        - content: |+
+        - content: |-
             #!/usr/bin/env bash
             set -e
             set -x
@@ -839,7 +720,6 @@ workflows:
             ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
             cd -
             ./ios-l10n-scripts/import-locales-firefox.sh --release
-
         title: Pull in L10N
     - script@1:
         inputs:
@@ -882,6 +762,22 @@ workflows:
     - set-xcode-build-number@1:
         inputs:
         - plist_path: WidgetKit/Info.plist
+    - script@1:
+        title: Leanplum Variable Setup
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
+            /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set LeanplumProductionKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
     - xcode-archive@2:
         inputs:
         - compile_bitcode: 'no'
@@ -927,7 +823,181 @@ workflows:
         is_expand: false
       BITRISE_SCHEME: Firefox
     description: ''
-  CommonJustBuild:
+  RunUITests:
+    steps:
+    - cache-pull@2.1: {}
+    - xcode-test@2:
+        inputs:
+        - scheme: Fennec_Enterprise_UITests
+        - simulator_device: iPhone 8
+    - deploy-to-bitrise-io@1.9: {}
+    - cache-push@2.2:
+        is_always_run: true
+    - slack@3.1:
+        inputs:
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+    description: This Workflow is to run tests UI TESTS
+  RunSmokeXCUITests:
+    steps:
+    - cache-pull@2.1:
+        is_always_run: true
+    - xcode-test@2:
+        inputs:
+        - scheme: Fennec_Enterprise_SmokeXCUITests
+        - simulator_device: iPhone 11
+        is_always_run: true
+    - deploy-to-bitrise-io@1.9: {}
+    - cache-push@2.2: {}
+    - slack@3.1:
+        inputs:
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+    description: This Workflow is to run tests UI TESTS
+    before_run: []
+  xcode12-release-and-beta-nocache:
+    steps:
+    - activate-ssh-key@4.0:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4.0: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+        title: Workaround carthage lipo bug
+    - carthage@3.2:
+        inputs:
+        - carthage_options: " --platform ios --cache-builds"
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            # Import only the shipping locales (from shipping_locales.txt) on Release
+            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+            # requests.
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+            pip install --user virtualenv
+            cd /usr/local/bin
+            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            cd -
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
+        title: Pull in L10N
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            npm install
+            npm run build
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
+            /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set LeanplumProductionKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
+        title: Leanplum Variable Setup
+    - xcode-archive@2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - configuration: "$BITRISE_SCHEME"
+    - deploy-to-bitrise-io@1: {}
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            # sleep 9999
+        is_always_run: true
+        title: debug-sleep
+    - slack@3.1:
+        inputs:
+        - webhook_url: "$WEBHOOK_SLACK_TOKEN"
+    - xcode-archive@2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - configuration: FirefoxBeta
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'FirefoxBeta: Deploy to iTunes Connect'
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: ''
+  RunAllXCUITests:
     steps:
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -946,18 +1016,7 @@ workflows:
 
             cd content-blocker-lib-ios/ContentBlockerGen && swift run
         title: Post clone step for TP updates
-    - cache-pull@2.1: {}
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            set -x
-
-            npm install
-            npm run build
+    - cache-pull@2: {}
     - certificate-and-profile-installer@1.10: {}
     - script@1:
         inputs:
@@ -981,48 +1040,210 @@ workflows:
             --value ''"
     - script@1:
         inputs:
-        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
-            log\nset -x\n\ncd Client.xcodeproj\nsed -i '' 's/\"Fennec Development\"/\"Bitrise
-            Firefox iOS Dev\"/' project.pbxproj \nsed -i '' 's/Fennec Today Development/Bitrise
-            Firefox iOS Dev - Fennec Today/' project.pbxproj  \nsed -i '' 's/Fennec
-            ShareTo Development/Bitrise Firefox iOS Dev - Share To/' project.pbxproj
-            \nsed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj \nsed -i '' 's/\"XCUITests\"/\"Bitrise Firefox
-            iOS Dev - XCUI Tests\"/' project.pbxproj \nsed -i '' 's/Fennec NotificationService
-            Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj\nsed
-            -i '' 's/CODE_SIGN_IDENTITY = \"iPhone Developer\"/CODE_SIGN_IDENTITY
-            = \"iPhone Distribution\"/' project.pbxproj\n# sed -i '' 's/DEVELOPMENT_TEAM
-            = \"\"/DEVELOPMENT_TEAM = 43AQ936H96/' project.pbxproj\ncd -"
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            # Import only the shipping locales (from shipping_locales.txt) on Release
+            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+            # requests.
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+            pip install --user virtualenv
+            cd /usr/local/bin
+            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            cd -
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
+        title: Pull in L10n
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\nset -e\nset -x\n\ncd Client.xcodeproj\nsed
+            -i '' 's/\"Fennec Development\"/\"Bitrise Firefox iOS Dev\"/' project.pbxproj
+            \nsed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev - Fennec
+            Today/' project.pbxproj  \nsed -i '' 's/Fennec ShareTo Development/Bitrise
+            Firefox iOS Dev - Share To/' project.pbxproj \nsed -i '' 's/Fennec WidgetKit
+            Development/Bitrise Firefox iOS Dev - WidgetKit/' project.pbxproj \nsed
+            -i '' 's/\"XCUITests\"/\"Bitrise Firefox iOS Dev - XCUI Tests\"/' project.pbxproj
+            \nsed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
+            iOS Dev - Notification Service/' project.pbxproj\nsed -i '' 's/CODE_SIGN_IDENTITY
+            = \"iPhone Developer\"/CODE_SIGN_IDENTITY = \"iPhone Distribution\"/'
+            project.pbxproj\ncd -"
         title: Set provisioning to Bitrise in xcodeproj
+    - script@1.1:
+        title: NPM install and build
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            set -x
+
+            npm install
+            npm run build
     - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
         inputs:
-        - configuration: Release
-        - scheme: Fennec_Enterprise_SmokeXCUITests
-    - deploy-to-bitrise-io@1.9: {}
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+        - scheme: Fennec_Enterprise_XCUITests
+    - xcode-test@2.4:
+        inputs:
+        - export_uitest_artifacts: 'true'
+        - scheme: Fennec_Enterprise_XCUITests
+        - simulator_os_version: '14.0'
+        - simulator_device: iPhone 11
+    - deploy-to-bitrise-io@1.10: {}
     - cache-push@2.2: {}
     - slack@3.1:
         inputs:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     description: This Workflow is to run tests (currently SmokeTest) when there is
       a merge in master
-    after_run:
-    - RunUITests
-  RunUITests:
+  TEMP:
     steps:
+    - activate-ssh-key@4.0:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4.0: {}
     - cache-pull@2.1: {}
-    - xcode-test@2:
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
         inputs:
-        - scheme: Fennec_Enterprise_UITests
-        - simulator_os_version: '13.5'
-        - simulator_device: iPhone 8
-    - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.2: {}
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\necho 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig\necho 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig\necho 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig\necho
+            'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig\necho 'GCC_TREAT_WARNINGS_AS_ERRORS=NO'
+            >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
+            add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
+        title: Workaround carthage lipo bug
+    - carthage@3.2:
+        inputs:
+        - carthage_options: " --platform ios --cache-builds"
+    - script@1:
+        inputs:
+        - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
+            log\nset -x\n\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
+            --value ''"
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            # Import only the shipping locales (from shipping_locales.txt) on Release
+            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+            # requests.
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+            pip install --user virtualenv
+            cd /usr/local/bin
+            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            cd -
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
+        title: Pull in L10N
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            cd Client.xcodeproj
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/' project.pbxproj
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: NPM, ContentBlockerGen
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            npm install
+            npm run build
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+    - cache-push@2: {}
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            # write your script here
+
+            echo "Setting Leanplum environment to PRODUCTION for $BUDDYBUILD_SCHEME"
+            /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set LeanplumProductionKey $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+            /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
+        title: Leanplum Variable Setup
+    - xcode-archive@2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - configuration: "$BITRISE_SCHEME"
+    - deploy-to-bitrise-io@1: {}
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+            # sleep 9999
+        is_always_run: true
+        title: debug-sleep
     - slack@3.1:
         inputs:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
-    description: This Workflow is to run tests (currently SmokeTest) when there is
-      a merge in master
-  TestBootstrapForce:
+    - xcode-archive@2:
+        inputs:
+        - compile_bitcode: 'no'
+        - upload_bitcode: 'no'
+        - team_id: 43AQ936H96
+        - export_method: app-store
+        - output_tool: xcodebuild
+        - scheme: FirefoxBeta
+        - configuration: FirefoxBeta
+        title: 'FirefoxBeta: Xcode Archive & Export for iOS'
+    - deploy-to-itunesconnect-application-loader@0:
+        inputs:
+        - app_password: "$APPLE_ACCOUNT_PW"
+        - itunescon_user: "$APPLE_ACCOUNT_ID"
+        title: 'FirefoxBeta: Deploy to iTunes Connect'
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: ''
+  CommonBuild-UItest-XCUISmoketest:
     steps:
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -1041,18 +1262,7 @@ workflows:
 
             cd content-blocker-lib-ios/ContentBlockerGen && swift run
         title: Post clone step for TP updates
-    - cache-pull@2: {}
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            set -x
-
-            npm install
-            npm run build
+    - cache-pull@2.1: {}
     - certificate-and-profile-installer@1.10: {}
     - script@1:
         inputs:
@@ -1065,28 +1275,31 @@ workflows:
             >> /tmp/tmp.xcconfig\nexport XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig\nenvman
             add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig "
         title: 'Workaround carthage lipo bug #3019'
-    - script@1:
+    - carthage@3.2:
         inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-            # First install virtualenv
-            pip3 install virtualenv
-            virtualenv .
-            source ./bin/activate
-
-            # Then run bootstrap
-            ./bootstrap.sh --force
-        title: Run bootstrap force
+        - carthage_options: " --platform ios"
     - script@1:
         title: Remove carthage lipo workaround
         inputs:
         - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
             log\nset -x\n\nrm /tmp/tmp.xcconfig \nenvman add --key XCODE_XCCONFIG_FILE
             --value ''"
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -e
+            set -x
+
+            # Import only the shipping locales (from shipping_locales.txt) on Release
+            # builds. Import all locales on Beta and Fennec_Enterprise, except for pull
+            # requests.
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git || exit 1
+            pip install --user virtualenv
+            cd /usr/local/bin
+            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            cd -
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
     - script@1:
         inputs:
         - content: "#!/usr/bin/env bash\n# fail if any commands fails\nset -e\n# debug
@@ -1099,20 +1312,35 @@ workflows:
             iOS Dev - XCUI Tests\"/' project.pbxproj \nsed -i '' 's/Fennec NotificationService
             Development/Bitrise Firefox iOS Dev - Notification Service/' project.pbxproj\nsed
             -i '' 's/CODE_SIGN_IDENTITY = \"iPhone Developer\"/CODE_SIGN_IDENTITY
-            = \"iPhone Distribution\"/' project.pbxproj\n#sed -i '' 's/DEVELOPMENT_TEAM
+            = \"iPhone Distribution\"/' project.pbxproj\n# sed -i '' 's/DEVELOPMENT_TEAM
             = \"\"/DEVELOPMENT_TEAM = 43AQ936H96/' project.pbxproj\ncd -"
         title: Set provisioning to Bitrise in xcodeproj
+    - script@1.1:
+        title: NPM install and build
+        inputs:
+        - content: |
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            set -x
+
+            npm install
+            npm run build
     - git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix:
         inputs:
         - configuration: Release
+        - xcodebuild_options: CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
         - scheme: Fennec_Enterprise_SmokeXCUITests
-    - deploy-to-bitrise-io@1.10: {}
+    - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2: {}
     - slack@3.1:
         inputs:
         - webhook_url: "$WEBHOOK_SLACK_TOKEN"
     description: This Workflow is to run tests (currently SmokeTest) when there is
       a merge in master
+    after_run:
+    - RunUITests
+    - RunSmokeXCUITests
 app:
   envs:
   - opts:
@@ -1125,11 +1353,17 @@ meta:
   bitrise.io:
     machine_type: performance
 trigger_map:
-- push_branch: v29.x
-  workflow: xcode12-release-and-beta
+- push_branch: v29.1
+  workflow: xcode12-release-and-beta-nocache
 - push_branch: v28.2
   workflow: ios13-xcode11.7-28.x-release
 - push_branch: main
-  workflow: TestBootstrapForce
+  workflow: RunUnitTests
+- push_branch: chronological-tabs
+  workflow: RunUnitTests
 - pull_request_target_branch: main
-  workflow: TestBootstrapForce
+  workflow: RunUnitTests
+- pull_request_source_branch: "*"
+  pull_request_target_branch: chronological-tabs
+  workflow: RunUnitTests
+
