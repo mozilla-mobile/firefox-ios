@@ -184,7 +184,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let tab = tab, let url = self.tab?.canonicalURL else { return }
+        guard let tab = tab, let url = self.tab?.sessionData?.urls.last ?? self.tab?.url else { return }
         
         switch indexPath.section {
         case 0:
