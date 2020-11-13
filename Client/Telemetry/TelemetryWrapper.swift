@@ -155,6 +155,13 @@ class TelemetryWrapper {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
+        // Get the FxA device id and record it in Glean for the deletion-request ping
+        profile.getCachedClients().upon { maybeClient in
+            guard
+                let deviceId = maybeClient.successValue?.first?.fxaDeviceId.flatMap(UUID.init(uuidString:)) else { return }
+            GleanMetrics.Deletion.fxaDeviceId.set(deviceId)
+        }
+
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
         NotificationCenter.default.addObserver(
