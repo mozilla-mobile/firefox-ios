@@ -10,7 +10,7 @@ Branch setup, steps typically done when creating new version branch
 - [ ] Update Version Number in code (Eng task, use `update_version.sh`)
 - [ ] Update `Client/Info.plist` MozWhatsNewTopic (Eng task)
 - [ ] Create version specific Sentry project
-- [ ] Setup Sentry keys in BuddyBuild (per release)
+- [ ] Update SENTRY_DSN secret in Bitrise (per release)
 ---
 - [ ] Ensure L10N box has been run (if needed) to do string export
 - [ ] Check for [security advisories](https://github.com/mozilla-mobile/firefox-ios/wiki/Release-Build-Checklist/#security-advisories) 
