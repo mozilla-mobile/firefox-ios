@@ -7,6 +7,11 @@ import Shared
 import SnapKit
 import UIKit
 
+protocol TabTrayV2Delegate: AnyObject {
+    func closeTab(forIndex index: IndexPath)
+    func closeTabTray()
+}
+
 struct TabTrayV2ControllerUX {
     static let cornerRadius = CGFloat(4.0)
     static let screenshotMarginLeftRight = CGFloat(20.0)
@@ -17,8 +22,11 @@ struct TabTrayV2ControllerUX {
 }
 
 class TabTrayV2ViewController: UIViewController, Themeable {
+    weak var delegate: TabTrayDelegate?
     // View Model
     lazy var viewModel = TabTrayV2ViewModel(viewController: self)
+    let profile: Profile
+    private var bottomSheetVC: BottomSheetViewController?
     // Views
     lazy var tableView: UITableView = {
         let tableView = UITableView()
@@ -44,7 +52,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         return label
     }()
     lazy var navigationMenu: UISegmentedControl = {
-        let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!, UIImage(named:"panelIconSyncedTabs")!])
+        let navigationMenu = UISegmentedControl(items: [UIImage(named: "nav-tabcounter")!.overlayWith(image: countLabel), UIImage(named: "smallPrivateMask")!])
         navigationMenu.accessibilityIdentifier = "navBarTabTray"
         navigationMenu.selectedSegmentIndex = viewModel.isInPrivateMode ? 1 : 0
         navigationMenu.addTarget(self, action: #selector(panelChanged), for: .valueChanged)
@@ -80,6 +88,16 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    init(tabTrayDelegate: TabTrayDelegate? = nil, profile: Profile) {
+        self.delegate = tabTrayDelegate
+        self.profile = profile
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     // Lifecycle
@@ -136,6 +154,11 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         }
         
         emptyPrivateTabsView.isHidden = true
+        
+        bottomSheetVC = BottomSheetViewController()
+        bottomSheetVC?.delegate = self
+        self.addChild(bottomSheetVC!)
+        self.view.addSubview(bottomSheetVC!.view)
     }
     
     func shouldShowPrivateTabsView() {
@@ -145,6 +168,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
     func applyTheme() {
         if #available(iOS 13.0, *) {
             tableView.backgroundColor = UIColor.systemGroupedBackground
+            view.backgroundColor = UIColor.systemGroupedBackground
             navigationController?.navigationBar.tintColor = UIColor.label
             navigationController?.toolbar.tintColor = UIColor.label
             navigationItem.rightBarButtonItem?.tintColor = UIColor.label
@@ -152,6 +176,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             emptyPrivateTabsView.descriptionLabel.textColor = UIColor.secondaryLabel
         } else {
             tableView.backgroundColor = UIColor.theme.tableView.headerBackground
+            view.backgroundColor = UIColor.theme.tableView.headerBackground
             tableView.separatorColor = UIColor.theme.tableView.separator
             navigationController?.navigationBar.barTintColor = UIColor.theme.tabTray.toolbar
             navigationController?.navigationBar.tintColor = UIColor.theme.tabTray.toolbarButtonTint
@@ -163,6 +188,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
             emptyPrivateTabsView.descriptionLabel.textColor = UIColor.theme.tableView.rowDetailText
         }
         setNeedsStatusBarAppearanceUpdate()
+        bottomSheetVC?.applyTheme()
     }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -267,8 +293,6 @@ extension TabTrayV2ViewController: UITableViewDataSource {
             didTogglePrivateMode(false)
         case 1:
             didTogglePrivateMode(true)
-        case 2:
-            return
         default:
             return
         }
@@ -293,10 +317,75 @@ extension TabTrayV2ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == TabSection(rawValue: section)?.rawValue && viewModel.numberOfRowsInSection(section: section) != 0 ? UITableView.automaticDimension : 0
     }
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let share = UIContextualAction(style: .normal, title: Strings.ShareContextMenuTitle, handler: { (action, view, completionHandler) in
+            guard let tab = self.viewModel.getTab(forIndex: indexPath), let url = tab.url else { return }
+            self.presentActivityViewController(url, tab: tab)
+        })
+        let more = UIContextualAction(style: .normal, title: Strings.PocketMoreStoriesText, handler: { (action, view, completionHandler) in
+            // Bottom toolbar
+            self.navigationController?.isToolbarHidden = true
+
+            let moreViewController = TabMoreMenuViewController(tabTrayDelegate: self.delegate, tab: self.viewModel.getTab(forIndex: indexPath), index: indexPath, profile: self.profile)
+            moreViewController.tabTrayV2Delegate = self
+            moreViewController.bottomSheetDelegate = self
+            self.bottomSheetVC?.containerViewController = moreViewController
+            self.bottomSheetVC?.showView()
+
+        })
+        let delete = UIContextualAction(style: .destructive, title: Strings.CloseButtonTitle, handler: { (action, view, completionHandler) in
+            self.viewModel.removeTab(forIndex: indexPath)
+        })
+        
+        share.backgroundColor = UIColor.systemOrange
+        share.image = UIImage.templateImageNamed("menu-Send")?.tinted(withColor: .white)
+        more.image = UIImage.templateImageNamed("menu-More-Options")?.tinted(withColor: .white)
+        delete.image = UIImage.templateImageNamed("menu-CloseTabs")?.tinted(withColor: .white)
+        
+        let configuration = UISwipeActionsConfiguration(actions: [delete, share, more])
+        return configuration
+    }
+}
+
+extension TabTrayV2ViewController: UIPopoverPresentationControllerDelegate {
+    func presentActivityViewController(_ url: URL, tab: Tab? = nil) {
+        let helper = ShareExtensionHelper(url: url, tab: tab)
+
+        let controller = helper.createActivityViewController({ _,_ in })
+
+        if let popoverPresentationController = controller.popoverPresentationController {
+            popoverPresentationController.sourceView = view
+            popoverPresentationController.sourceRect = view.bounds
+            popoverPresentationController.permittedArrowDirections = .up
+            popoverPresentationController.delegate = self
+        }
+
+        present(controller, animated: true, completion: nil)
+    }
 }
 
 extension TabTrayV2ViewController: UIToolbarDelegate {
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
+    }
+}
+
+extension TabTrayV2ViewController: TabTrayV2Delegate {
+    func closeTab(forIndex index: IndexPath) {
+        viewModel.removeTab(forIndex: index)
+    }
+    func closeTabTray() {
+        dismissTabTray()
+    }
+}
+
+extension TabTrayV2ViewController: BottomSheetDelegate {
+    func showBottomToolbar() {
+        // Show bottom toolbar when we hide bottom sheet
+        navigationController?.isToolbarHidden = false
+    }
+    func closeBottomSheet() {
+        showBottomToolbar()
+        self.bottomSheetVC?.hideView(shouldAnimate: true)
     }
 }
