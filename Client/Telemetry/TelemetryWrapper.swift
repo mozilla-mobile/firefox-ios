@@ -157,7 +157,8 @@ class TelemetryWrapper {
 
         // Get the FxA device id and record it in Glean for the deletion-request ping
         profile.getCachedClients().upon { maybeClient in
-            guard let deviceId = maybeClient.successValue?.first?.fxaDeviceId else { return }
+            guard
+                let deviceId = maybeClient.successValue?.first?.fxaDeviceId.flatMap(UUID.init(uuidString:)) else { return }
             GleanMetrics.Deletion.fxaDeviceId.set(deviceId)
         }
 
