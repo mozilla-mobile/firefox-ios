@@ -597,3 +597,19 @@ legacy.ids:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: never
+
+deletion:
+  fxa_device_id:
+    type: uuid
+    lifetime: user
+    description: |
+      The FxA device id.
+    send_in_pings:
+      - deletion-request
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/6933
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7629#issuecomment-723312428
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: never
