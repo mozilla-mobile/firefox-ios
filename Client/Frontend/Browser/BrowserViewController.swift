@@ -67,6 +67,7 @@ class BrowserViewController: UIViewController {
     var findInPageBar: FindInPageBar?
     private var onboardingUserResearch: OnboardingUserResearch?
     private var newTabUserResearch: NewTabUserResearch?
+    private var chronTabsUserResearch: ChronTabsUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
     var isCrashAlertShowing: Bool = false
@@ -493,6 +494,9 @@ class BrowserViewController: UIViewController {
         newTabUserResearch = NewTabUserResearch()
         newTabUserResearch?.lpVariableObserver()
         urlBar.newTabUserResearch = newTabUserResearch
+        // Setup chron tabs A/B test
+        chronTabsUserResearch = ChronTabsUserResearch()
+        chronTabsUserResearch?.lpVariableObserver()
     }
 
     fileprivate func setupConstraints() {
@@ -1330,8 +1334,9 @@ extension BrowserViewController: URLBarDelegate {
         Sentry.shared.clearBreadcrumbs()
 
         updateFindInPageVisibility(visible: false)
-
-        if AppConstants.CHRONOLOGICAL_TABS {
+        
+        let shouldShowChronTabs = profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey) ?? (chronTabsUserResearch?.chronTabsState ?? false)
+        if shouldShowChronTabs {
             let tabTrayViewController = TabTrayV2ViewController(tabTrayDelegate: self, profile: profile)
             let controller: UINavigationController
             if #available(iOS 13.0, *) {
