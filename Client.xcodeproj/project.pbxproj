@@ -301,6 +301,7 @@
 		43DDB97624099F200058A068 /* ETPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43DDB97524099F200058A068 /* ETPViewModel.swift */; };
 		43E69EC3254D081D00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
 		43E69ED7254D081F00B591C2 /* SimpleTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E69EAF254D064E00B591C2 /* SimpleTab.swift */; };
+		43E9BDFB255E0904005BCB91 /* TabMoreMenuHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E9BDFA255E0904005BCB91 /* TabMoreMenuHeader.swift */; };
 		43EF756E251D3AD000575E10 /* TopSiteArchiverExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EF756C251D3AD000575E10 /* TopSiteArchiverExtension.swift */; };
 		43EF75E5251D3C8300575E10 /* TopSiteArchiverExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43EF756C251D3AD000575E10 /* TopSiteArchiverExtension.swift */; };
 		43EF780125228FA500575E10 /* Today.strings in Resources */ = {isa = PBXBuildFile; fileRef = 21374EEAA2C69079F77A0AC3 /* Today.strings */; };
@@ -1944,6 +1945,7 @@
 		43DDB97524099F200058A068 /* ETPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETPViewModel.swift; sourceTree = "<group>"; };
 		43E448868CEE068E52298FEC /* es-CL */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-CL"; path = "es-CL.lproj/HistoryPanel.strings"; sourceTree = "<group>"; };
 		43E69EAF254D064E00B591C2 /* SimpleTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTab.swift; sourceTree = "<group>"; };
+		43E9BDFA255E0904005BCB91 /* TabMoreMenuHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabMoreMenuHeader.swift; sourceTree = "<group>"; };
 		43EF756C251D3AD000575E10 /* TopSiteArchiverExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSiteArchiverExtension.swift; sourceTree = "<group>"; };
 		44374D28A38301B2A54F591A /* fil */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fil; path = fil.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		443D48F68072CB9805794141 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = "th.lproj/Default Browser.strings"; sourceTree = "<group>"; };
@@ -4254,6 +4256,7 @@
 				436715882488216A006D1D4E /* TabTableViewCell.swift */,
 				43162A2E2492DB7800F91658 /* EmptyPrivateTabsView.swift */,
 				DA3A4FE8254A781A00C4A9C9 /* TabTableViewHeader.swift */,
+				43E9BDFA255E0904005BCB91 /* TabMoreMenuHeader.swift */,
 			);
 			path = Tabs;
 			sourceTree = "<group>";
@@ -7689,6 +7692,7 @@
 				C86E4F712493BA8E0087BFD9 /* Metrics.swift in Sources */,
 				E69E06C91C76198000D0F926 /* AuthenticationManagerConstants.swift in Sources */,
 				1DA3CE6324EEE83200422BB2 /* SavedTab+ConfigureExtension.swift in Sources */,
+				43E9BDFB255E0904005BCB91 /* TabMoreMenuHeader.swift in Sources */,
 				392ED7E61D0AEFEF009D9B62 /* HomePageAccessors.swift in Sources */,
 				7BA8D1C71BA037F500C8AE9E /* OpenInHelper.swift in Sources */,
 				CA90753824929B22005B794D /* NoLoginsView.swift in Sources */,

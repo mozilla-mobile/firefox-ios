@@ -27,10 +27,11 @@ class BottomSheetViewController: UIViewController, Themeable {
     
     // Bottom sheet location var
     
-    // value ranges from 0~1
+    // Shows how much bottom sheet should be visible
+    // 1 = full, 0.5 = half, 0 = hidden
     private var heightSpecifier: CGFloat {
         let height = screenSize.height
-        let heightForTallScreen: CGFloat = height > 850 ? 0.65 : 0.72
+        let heightForTallScreen: CGFloat = height > 850 ? 0.65 : 0.74
         return height > 668 ? heightForTallScreen : 0.84
     }
     private lazy var maxY = view.frame.height - frameHeight

@@ -49,10 +49,9 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         return tableView
     }()
     
-    lazy var tabDetailView: TabTableViewCell = {
-        let tabView = TabTableViewCell()
-        tabView.closeButton = UIButton()
-        return tabView
+    lazy var tabMoreMenuHeader: TabMoreMenuHeader = {
+        let header = TabMoreMenuHeader()
+        return header
     }()
     
     lazy var handleView: UIView = {
@@ -71,10 +70,15 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     
     func applyTheme() {
         if ThemeManager.instance.currentName == .normal {
-            tabDetailView.backgroundColor = UIColor(rgb: 0xF2F2F7)
+            tabMoreMenuHeader.backgroundColor = UIColor(rgb: 0xF2F2F7)
         } else {
-            tabDetailView.backgroundColor = UIColor(rgb: 0x1C1C1E)
+            tabMoreMenuHeader.backgroundColor = UIColor(rgb: 0x1C1C1E)
         }
+    }
+    
+    @objc func displayThemeChanged() {
+        applyTheme()
+        tableView.reloadData()
     }
     
     init(tabTrayDelegate: TabTrayDelegate? = nil, tab: Tab? = nil, index: IndexPath, profile: Profile) {
@@ -93,24 +97,25 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         super.viewDidLoad()
         view.addSubview(handleView)
         view.addSubview(tableView)
-        view.addSubview(tabDetailView)
+        view.addSubview(tabMoreMenuHeader)
         view.addSubview(divider)
         view.layer.cornerRadius = 8
         navigationController?.navigationBar.isHidden = true
         
-        configure(view: tabDetailView, tab: tab)
+        configure(headerView: tabMoreMenuHeader, tab: tab)
         setupConstraints()
         applyTheme()
+        NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged), name: .DisplayThemeChanged, object: nil)
     }
     
     func setupConstraints() {
         divider.snp.makeConstraints { make in
-            make.top.equalTo(tabDetailView.snp.bottom)
+            make.top.equalTo(tabMoreMenuHeader.snp.bottom)
             make.bottom.equalTo(tableView.snp.top)
             make.height.equalTo(1)
             make.width.equalToSuperview()
         }
-        tabDetailView.snp.makeConstraints { make in
+        tabMoreMenuHeader.snp.makeConstraints { make in
             make.top.equalTo(handleView.snp.bottom)
             make.bottom.equalTo(divider.snp.top)
             make.left.right.equalToSuperview()
@@ -127,21 +132,21 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         }
     }
     
-    func configure(view: UITableViewCell, tab: Tab? = nil) {
-        guard let tab = tab,
-            let textLabel = view.textLabel,
-            let detailTextLabel = view.detailTextLabel,
-            let imageView = view.imageView
-            else { return }
+    func configure(headerView: TabMoreMenuHeader, tab: Tab? = nil) {
+        guard  let tab = tab else { return }
         let baseDomain = tab.url?.baseDomain
-        detailTextLabel.text = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
-        textLabel.text = tab.displayTitle
-        imageView.image = tab.screenshot ?? UIImage()
-        view.backgroundColor = UIColor(rgb: 0xF2F2F7)
+        headerView.descriptionLabel.text = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
+        headerView.titleLabel.text = tab.displayTitle
+        headerView.imageView.image = tab.screenshot ?? UIImage()
+        headerView.backgroundColor = UIColor(rgb: 0xF2F2F7)
     }
     
     func dismissMenu() {
         bottomSheetDelegate?.closeBottomSheet()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
 }
 
@@ -157,7 +162,9 @@ extension TabMoreMenuViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "moreMenuCell", for: indexPath)
-        cell.backgroundColor = UIColor.theme.tableView.rowBackground
+        let lightColor = UIColor.theme.tableView.rowBackground
+        let darkColor = UIColor.Photon.Grey80
+        cell.backgroundColor = ThemeManager.instance.currentName == .normal ? lightColor : darkColor
         cell.textLabel?.text = titles[indexPath.section]?[indexPath.row]
         cell.accessoryView = imageViews[indexPath.section]?[indexPath.row]
         cell.accessoryView?.tintColor = UIColor.theme.textField.textAndTint
