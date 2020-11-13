@@ -9,4 +9,6 @@ import Shared
 struct LPVariables {
     // Variable Used for New Tab Button AB Test
     static var newTabButtonABTest = LPVar.define("newTabButtonABTestProd", with: false)
+    // Variable Used for Chron tabs AB Test
+    static var chronTabsABTest = LPVar.define("chronTabsABTestProd", with: false)
 }

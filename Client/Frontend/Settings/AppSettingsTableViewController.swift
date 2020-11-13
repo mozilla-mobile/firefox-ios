@@ -138,7 +138,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 SentryIDSetting(settings: self),
                 ChangeToChinaSetting(settings: self),
                 ShowEtpCoverSheet(settings: self),
-                LeanplumStatus(settings: self)
+                LeanplumStatus(settings: self),
+                ToggleChronTabs(settings: self)
             ])]
 
         return settings
