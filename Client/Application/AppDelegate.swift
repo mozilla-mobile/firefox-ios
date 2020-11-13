@@ -223,6 +223,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
 
         // Leanplum user research variable setup for New tab user research
         _ = NewTabUserResearch()
+        // Leanplum user research variable setup for Chron tabs user research
+        _ = ChronTabsUserResearch()
         // Leanplum setup
 
         if let profile = self.profile, LeanPlumClient.shouldEnable(profile: profile) {
