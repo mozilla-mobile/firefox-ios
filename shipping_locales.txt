@@ -70,7 +70,7 @@ pt-PT
 rm
 ro
 ru
-sat-Olck
+sat
 ses
 sk
 sl
