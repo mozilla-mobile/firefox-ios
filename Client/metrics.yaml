@@ -599,7 +599,7 @@ legacy.ids:
     expires: never
 
 deletion:
-  fxa_device_id:
+  sync_device_id:
     type: string
     lifetime: user
     description: |

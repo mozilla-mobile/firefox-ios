@@ -157,7 +157,7 @@ class TelemetryWrapper {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
-        sendFxADeletionPing()
+        setSyncDeviceId()
         
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
@@ -169,15 +169,16 @@ class TelemetryWrapper {
         )
     }
     
-    func sendFxADeletionPing() {
+    // Sets hashed fxa sync device id for glean deletion ping
+    func setSyncDeviceId() {
         guard let prefs = profile?.prefs else { return }
         // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for deletion-request ping
-        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: false) >>== { (token, kSync) in
+        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: true) >>== { (token, kSync) in
             let scratchpadPrefs = prefs.branch("sync.scratchpad")
             guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else { return }
 
             let deviceId = (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
-            GleanMetrics.Deletion.fxaDeviceId.set(deviceId)
+            GleanMetrics.Deletion.syncDeviceId.set(deviceId)
         }
     }
 
