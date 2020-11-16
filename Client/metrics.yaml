@@ -600,7 +600,7 @@ legacy.ids:
 
 deletion:
   fxa_device_id:
-    type: uuid
+    type: string
     lifetime: user
     description: |
       The FxA device id.
