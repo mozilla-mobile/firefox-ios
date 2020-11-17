@@ -5,6 +5,8 @@
 import MozillaAppServices
 import Shared
 import Telemetry
+import Account
+import Sync
 
 class TelemetryWrapper {
     let legacyTelemetry = Telemetry.default
@@ -155,13 +157,8 @@ class TelemetryWrapper {
         // Save the profile so we can record settings from it when the notification below fires.
         self.profile = profile
 
-        // Get the FxA device id and record it in Glean for the deletion-request ping
-        profile.getCachedClients().upon { maybeClient in
-            guard
-                let deviceId = maybeClient.successValue?.first?.fxaDeviceId.flatMap(UUID.init(uuidString:)) else { return }
-            GleanMetrics.Deletion.fxaDeviceId.set(deviceId)
-        }
-
+        setSyncDeviceId()
+        
         // Register an observer to record settings and other metrics that are more appropriate to
         // record on going to background rather than during initialization.
         NotificationCenter.default.addObserver(
@@ -170,6 +167,19 @@ class TelemetryWrapper {
             name: UIApplication.didEnterBackgroundNotification,
             object: nil
         )
+    }
+    
+    // Sets hashed fxa sync device id for glean deletion ping
+    func setSyncDeviceId() {
+        guard let prefs = profile?.prefs else { return }
+        // Grab our token so we can use the hashed_fxa_uid and clientGUID from our scratchpad for deletion-request ping
+        RustFirefoxAccounts.shared.syncAuthState.token(Date.now(), canBeExpired: true) >>== { (token, kSync) in
+            let scratchpadPrefs = prefs.branch("sync.scratchpad")
+            guard let scratchpad = Scratchpad.restoreFromPrefs(scratchpadPrefs, syncKeyBundle: KeyBundle.fromKSync(kSync)) else { return }
+
+            let deviceId = (scratchpad.clientGUID + token.hashedFxAUID).sha256.hexEncodedString
+            GleanMetrics.Deletion.syncDeviceId.set(deviceId)
+        }
     }
 
     // Function for recording metrics that are better recorded when going to background due

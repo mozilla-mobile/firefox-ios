@@ -22,7 +22,7 @@ The following metrics are added to the ping:
 
 | Name | Type | Description | Data reviews | Extras | Expiration | [Data Sensitivity](https://wiki.mozilla.org/Firefox/Data_Collection) |
 | --- | --- | --- | --- | --- | --- | --- |
-| deletion.fxa_device_id |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |The FxA device id.  |[1](TBD)||never | |
+| deletion.sync_device_id |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |The FxA device id.  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7629#issuecomment-723312428)||never | |
 | legacy.ids.client_id |[uuid](https://mozilla.github.io/glean/book/user/metrics/uuid.html) |The client id from legacy telemetry.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1635427)||never | |
 
 ## events

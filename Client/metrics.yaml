@@ -599,8 +599,8 @@ legacy.ids:
     expires: never
 
 deletion:
-  fxa_device_id:
-    type: uuid
+  sync_device_id:
+    type: string
     lifetime: user
     description: |
       The FxA device id.
