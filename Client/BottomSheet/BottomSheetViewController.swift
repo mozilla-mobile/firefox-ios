@@ -39,9 +39,20 @@ class BottomSheetViewController: UIViewController, Themeable {
     private var endedYVal: CGFloat = 0
     private var endedTranslationYVal: CGFloat = 0
     private var isFullyHidden = false
+    private var isFullyShown = false
     private var frameHeight: CGFloat {
         return view.frame.height * heightSpecifier
     }
+    private var navHeight: CGFloat {
+//        var height: CGFloat = 0
+//        if let h = navigationController?.navigationBar.frame.height {
+//            navheight = h
+//        }
+        return navigationController?.navigationBar.frame.height ?? 0
+    }
+    lazy var fullHeight: CGFloat = view.frame.height - navHeight
+    
+    
     
     // Container child view controller
     var containerViewController: UIViewController?
@@ -108,59 +119,139 @@ class BottomSheetViewController: UIViewController, Themeable {
 
     // MARK: Bottomsheet swipe methods
     private func moveView(state: BottomSheetState) {
-        let yPosition = state == .none ? minY : maxY
-        panView.frame = CGRect(x: 0, y: yPosition, width: view.frame.width, height: frameHeight)
+        switch state {
+        case .full:
+//            print("full>>>>>>>")
+            self.isFullyHidden = false
+            self.isFullyShown = true
+            panView.frame = CGRect(x: 0, y: navHeight, width: view.frame.width, height: fullHeight)
+        case .none:
+//            print("None>>>>>>>")
+            self.isFullyHidden = true
+            self.isFullyShown = false
+            panView.frame = CGRect(x: 0, y: minY, width: view.frame.width, height: fullHeight)
+        case .partial:
+//            print("PARTIAL>>>>>>>")
+            self.isFullyHidden = false
+            self.isFullyShown = false
+            panView.frame = CGRect(x: 0, y: maxY, width: view.frame.width, height: fullHeight)
+    
+        }
+//        let yPosition = state == .none ? minY : maxY
+//        panView.frame = CGRect(x: 0, y: yPosition, width: view.frame.width, height: frameHeight)
     }
 
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: view)
         let yVal:CGFloat = translation.y
         let startedYVal = endedTranslationYVal + maxY
-        let newYVal = startedYVal + yVal
-        
+//        let newYVal = startedYVal + yVal
+        let newYVal = isFullyShown ? navHeight + yVal : startedYVal + yVal
+        print("startedYVal \(startedYVal)| yVal \(yVal)| newYVal \(newYVal)| maxY \(maxY)| fullH \(fullHeight)")
         // Top
-        guard newYVal >= maxY else {
-            endedTranslationYVal = 0
-            return
-        }
+//        guard newYVal >= maxY else {
+//            endedTranslationYVal = 0
+//            return
+//        }
         
-        panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: frameHeight)
+        panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: fullHeight)
 
+        let upYShift: CGFloat = 30 // how much height do we want to let the bottom sheet rise before making it full screen
+        
         if recognizer.state == .ended {
             // past middle
             if newYVal > (maxY - 80)*2 {
                 endedTranslationYVal = 0
                 hideView(shouldAnimate: true)
                 return
+            } else if newYVal < (maxY - upYShift) {
+                endedTranslationYVal = 0
+                showFullView()
+                return
             }
             
-            endedYVal = maxY + yVal
-            endedTranslationYVal = 0
+//            else if newYVal < (maxY - 80)*2 {
+//                endedTranslationYVal = 0
+//                showFullView()
+//                return
+//            }
             
-            UIView.animate(withDuration: 0.1, delay: 0.0, options: [.allowUserInteraction], animations: {
-                let state: BottomSheetState = recognizer.velocity(in: self.view).y >= 0 ? .partial : .full
-                self.moveView(state: state)
+            
+            
+//            endedYVal = maxY + yVal
+//            endedTranslationYVal = 0
+            
+//            return
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: [.allowUserInteraction], animations: {
+//                let state: BottomSheetState = recognizer.velocity(in: self.view).y >= 0 ? .partial : .partial
+
+                // This means its going down
+                if newYVal > (self.maxY - upYShift) {
+                    // past middle
+                    if newYVal > (self.maxY - 80)*2 {
+                        self.moveView(state: .none)
+                    } else {
+                        self.endedTranslationYVal = 0
+                        self.moveView(state: .partial)
+                    }
+
+                   // going up
+                } else if newYVal < (self.maxY - upYShift) {
+                    self.moveView(state: .full)
+                }
+
+//                self.moveView(state: state)
             }, completion: nil)
         }
     }
     
     @objc func hideView(shouldAnimate: Bool) {
-        delegate?.showBottomToolbar()
-        let closure = {
+//        delegate?.showBottomToolbar()
+//        let closure = {
+//            self.moveView(state: .none)
+//            self.isFullyHidden = true
+//            self.isFullyShown = false
+//            self.view.isUserInteractionEnabled = true
+//            self.overlay.alpha = 0
+//            self.view.isHidden = true
+//        }
+        guard shouldAnimate else {
             self.moveView(state: .none)
             self.isFullyHidden = true
+            self.isFullyShown = false
             self.view.isUserInteractionEnabled = true
             self.overlay.alpha = 0
             self.view.isHidden = true
-        }
-        guard shouldAnimate else {
-            closure()
+            delegate?.showBottomToolbar()
+//            closure()
             return
         }
         self.view.isUserInteractionEnabled = false
-        UIView.animate(withDuration: 0.4, animations: {
-            closure()
-        })
+        UIView.animate(withDuration: 0.25) {
+            self.moveView(state: .none)
+            self.isFullyHidden = true
+            self.isFullyShown = false
+            self.view.isUserInteractionEnabled = true
+            self.overlay.alpha = 0
+            
+//            self.view.isHidden = true
+        } completion: { value in
+            if value {
+                self.view.isHidden = true
+                self.delegate?.showBottomToolbar()
+            }
+        }
+
+//        UIView.animate(withDuration: 1, animations: {
+////            closure()
+//            self.moveView(state: .none)
+//            self.isFullyHidden = true
+//            self.isFullyShown = false
+//            self.view.isUserInteractionEnabled = true
+//            self.overlay.alpha = 0
+//            self.view.isHidden = true
+//            self.delegate?.showBottomToolbar()
+//        })
     }
 
     @objc func showView() {
@@ -168,8 +259,22 @@ class BottomSheetViewController: UIViewController, Themeable {
             panView.addSubview(container.view)
         }
         UIView.animate(withDuration: 0.26, animations: {
+            self.moveView(state: .partial)
+            self.isFullyHidden = false
+            self.isFullyShown = false
+            self.overlay.alpha = 1
+            self.view.isHidden = false
+        })
+    }
+    
+    func showFullView() {
+        if let container = containerViewController {
+            panView.addSubview(container.view)
+        }
+        UIView.animate(withDuration: 0.26, animations: {
             self.moveView(state: .full)
             self.isFullyHidden = false
+            self.isFullyShown = true
             self.overlay.alpha = 1
             self.view.isHidden = false
         })
