@@ -368,9 +368,9 @@ open class Scratchpad {
 
     // What's our client name?
     let clientName: String
-    let clientGUID: String
     let fxaDeviceId: String
     let hashedUID: String?
+    public let clientGUID: String
 
     var hashedDeviceID: String? {
         guard let hashedUID = hashedUID else {
