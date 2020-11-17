@@ -185,6 +185,7 @@ extension Strings {
     public static let FirefoxSyncPartialTitle = NSLocalizedString("SyncState.Partial.Title", value: "Sync is experiencing issues syncing %@", comment: "Title for Sync status message when a component of Sync failed to complete, where %@ represents the name of the component, i.e. Sync is experiencing issues syncing Bookmarks")
     public static let FirefoxSyncFailedTitle = NSLocalizedString("SyncState.Failed.Title", value: "Syncing has failed", comment: "Title for Sync status message when synchronization failed to complete")
     public static let FirefoxSyncTroubleshootTitle = NSLocalizedString("Settings.TroubleShootSync.Title", value: "Troubleshoot", comment: "Title of link to help page to find out how to solve Sync issues")
+    public static let FirefoxSyncCreateAccount = NSLocalizedString("Sync.NoAccount.Description", value: "No account? Create one to sync Firefox between devices.", comment: "String displayed on Sign In to Sync page that allows the user to create a new account.")
 
     public static let FirefoxSyncBookmarksEngine = NSLocalizedString("Bookmarks", comment: "Toggle bookmarks syncing setting")
     public static let FirefoxSyncHistoryEngine = NSLocalizedString("History", comment: "Toggle history syncing setting")
@@ -361,6 +362,7 @@ extension Strings {
     public static let BookmarksNewFolder = NSLocalizedString("Bookmarks.NewFolder.Label", value: "New Folder", comment: "The button to create a new folder")
     public static let BookmarksNewSeparator = NSLocalizedString("Bookmarks.NewSeparator.Label", value: "New Separator", comment: "The button to create a new separator")
     public static let BookmarksEditBookmark = NSLocalizedString("Bookmarks.EditBookmark.Label", value: "Edit Bookmark", comment: "The button to edit a bookmark")
+    public static let BookmarksEdit = NSLocalizedString("Bookmarks.Edit.Button", value: "Edit", comment: "The button on the snackbar to edit a bookmark after adding it.")
     public static let BookmarksEditFolder = NSLocalizedString("Bookmarks.EditFolder.Label", value: "Edit Folder", comment: "The button to edit a folder")
     public static let BookmarksFolderName = NSLocalizedString("Bookmarks.FolderName.Label", value: "Folder Name", comment: "The label for the title of the new folder")
     public static let BookmarksFolderLocation = NSLocalizedString("Bookmarks.FolderLocation.Label", value: "Location", comment: "The label for the location of the new folder")
@@ -733,6 +735,7 @@ extension Strings {
     public static let SendToCloseButton = NSLocalizedString("SendTo.Cancel.Button", bundle: applicationBundle(), value: "Close", comment: "Close button in top navigation bar")
     public static let SendToNotSignedInText = NSLocalizedString("SendTo.NotSignedIn.Title", bundle: applicationBundle(), value: "You are not signed in to your Firefox Account.", comment: "See http://mzl.la/1ISlXnU")
     public static let SendToNotSignedInMessage = NSLocalizedString("SendTo.NotSignedIn.Message", bundle: applicationBundle(), value: "Please open Firefox, go to Settings and sign in to continue.", comment: "See http://mzl.la/1ISlXnU")
+    public static let SendToSignInButton = NSLocalizedString("SendTo.SignIn.Button", bundle: applicationBundle(), value: "Sign In to Firefox", comment: "The text for the button on the Send to Device page if you are not signed in to Firefox Accounts.")
     public static let SendToNoDevicesFound = NSLocalizedString("SendTo.NoDevicesFound.Message", bundle: applicationBundle(), value: "You don’t have any other devices connected to this Firefox Account available to sync.", comment: "Error message shown in the remote tabs panel")
     public static let SendToTitle = NSLocalizedString("SendTo.NavBar.Title", bundle: applicationBundle(), value: "Send Tab", comment: "Title of the dialog that allows you to send a tab to a different device")
     public static let SendToSendButtonTitle = NSLocalizedString("SendTo.SendAction.Text", bundle: applicationBundle(), value: "Send", comment: "Navigation bar button to Send the current page to a device")
@@ -817,6 +820,8 @@ extension Strings {
     public static let FxASignin_QRInstructions = NSLocalizedString("fxa.signin.qr-link-instruction", value: "On your computer open Firefox and go to firefox.com/pair", comment: "FxA sign in view qr code instructions")
     public static let FxASignin_QRScanSignin = NSLocalizedString("fxa.signin.ready-to-scan", value: "Ready to Scan", comment: "FxA sign in view qr code scan button")
     public static let FxASignin_EmailSignin = NSLocalizedString("fxa.signin.use-email-instead", value: "Use Email Instead", comment: "FxA sign in view email login button")
+    public static let FxASignin_CreateAccountPt1 = NSLocalizedString("fxa.signin.create-account-pt-1", value: "Sync Firefox between devices with an account.", comment: "FxA sign in create account label.")
+    public static let FxASignin_CreateAccountPt2 = NSLocalizedString("fxa.signin.create-account-pt-2", value: "Create Firefox account.", comment: "FxA sign in create account label. This will be linked to the site to create an account.")
 }
 
 // FxA QR code scanning screen
