@@ -820,6 +820,8 @@ extension Strings {
     public static let FxASignin_QRInstructions = NSLocalizedString("fxa.signin.qr-link-instruction", value: "On your computer open Firefox and go to firefox.com/pair", comment: "FxA sign in view qr code instructions")
     public static let FxASignin_QRScanSignin = NSLocalizedString("fxa.signin.ready-to-scan", value: "Ready to Scan", comment: "FxA sign in view qr code scan button")
     public static let FxASignin_EmailSignin = NSLocalizedString("fxa.signin.use-email-instead", value: "Use Email Instead", comment: "FxA sign in view email login button")
+    public static let FxASignin_CreateAccountPt1 = NSLocalizedString("fxa.signin.create-account-pt-1", value: "Sync Firefox between devices with an account.", comment: "FxA sign in create account label.")
+    public static let FxASignin_CreateAccountPt2 = NSLocalizedString("fxa.signin.create-account-pt-2", value: "Create Firefox account.", comment: "FxA sign in create account label. This will be linked to the site to create an account.")
 }
 
 // FxA QR code scanning screen
