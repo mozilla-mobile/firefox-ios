@@ -200,6 +200,9 @@
          <TestPlanReference
             reference = "container:XCUITests/PerformanceTestPlan.xctestplan">
          </TestPlanReference>
+         <TestPlanReference
+            reference = "container:XCUITests/SyncIntegrationTestPlan.xctestplan">
+         </TestPlanReference>
       </TestPlans>
       <Testables>
          <TestableReference
