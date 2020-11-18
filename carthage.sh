@@ -14,5 +14,5 @@ echo 'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_iphonesimulator__NATIVE_ARCH_64_
 echo 'EXCLUDED_ARCHS = $(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(PLATFORM_NAME)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT)__XCODE_$(XCODE_VERSION_MAJOR))' >> $xcconfig
 
 export XCODE_XCCONFIG_FILE="$xcconfig"
-carthage "$@" --verbose
+carthage "$@" --verbose --color auto --cache-builds --no-use-binaries
 
