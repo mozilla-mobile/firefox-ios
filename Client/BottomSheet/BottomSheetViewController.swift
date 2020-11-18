@@ -22,18 +22,12 @@ class BottomSheetViewController: UIViewController, Themeable {
     // Delegate
     var delegate: BottomSheetDelegate?
     
-    // Orientation independent screen size
-    private let screenSize = DeviceInfo.screenSizeOrientationIndependent()
-    var landscapeHeight: CGFloat?
     private var orientationBasedHeight: CGFloat {
         if UIApplication.shared.statusBarOrientation.isLandscape {
-            return screenSize.width //landscapeHeight ?? screenSize.width
+            return DeviceInfo.screenSizeOrientationIndependent().width
         }
-        return screenSize.height
+        return DeviceInfo.screenSizeOrientationIndependent().height
     }
-
-    // Bottom sheet location var
-    
     // Shows how much bottom sheet should be visible
     // 1 = full, 0.5 = half, 0 = hidden
     private var heightSpecifier: CGFloat {
@@ -47,8 +41,6 @@ class BottomSheetViewController: UIViewController, Themeable {
     private var minY: CGFloat {
         return orientationBasedHeight
     }
-//    private lazy var maxY = view.frame.height - frameHeight
-//    private lazy var minY = view.frame.height
     private var endedYVal: CGFloat = 0
     private var endedTranslationYVal: CGFloat = 0
     private var isFullyHidden = false
@@ -56,19 +48,13 @@ class BottomSheetViewController: UIViewController, Themeable {
     private var frameHeight: CGFloat {
         return orientationBasedHeight * heightSpecifier
     }
-//    private var frameHeight: CGFloat {
-//        return view.frame.height * heightSpecifier
-//    }
     private var navHeight: CGFloat {
         return navigationController?.navigationBar.frame.height ?? 0
     }
     private var fullHeight: CGFloat {
         return orientationBasedHeight - navHeight
     }
-//    lazy var fullHeight: CGFloat = view.frame.height - navHeight
-    
-    
-    
+
     // Container child view controller
     var containerViewController: UIViewController?
     
@@ -101,9 +87,6 @@ class BottomSheetViewController: UIViewController, Themeable {
     
     // MARK: View setup
     private func initialViewSetup() {
-        if UIApplication.shared.statusBarOrientation.isLandscape {
-            self.landscapeHeight = view.frame.height
-        }
         self.view.backgroundColor = .clear
         self.view.addSubview(overlay)
         overlay.snp.makeConstraints { make in
@@ -245,12 +228,6 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
     
     func showFullView() {
-//        if let container = containerViewController {
-//            panView.addSubview(container.view)
-//        }
-//        if let container = containerViewController {
-//            panView.addSubview(container.view)
-//        }
         UIView.animate(withDuration: 0.26, animations: {
             self.moveView(state: .full)
             self.isFullyHidden = false
@@ -284,7 +261,6 @@ class BottomSheetViewController: UIViewController, Themeable {
             case .portrait:
                 self.moveView(state: .partial)
             case .landscapeLeft, .landscapeRight:
-                self.landscapeHeight = size.height
                 self.moveView(state: .full)
             default:
                 print("orientation not supported")
