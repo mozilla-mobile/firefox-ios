@@ -157,7 +157,6 @@ class BottomSheetViewController: UIViewController, Themeable {
         
         panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: fullHeight)
 
-        let upYShift: CGFloat = 30 // how much height do we want to let the bottom sheet rise before making it full screen
         let downYShiftSpecifier: CGFloat = UIApplication.shared.statusBarOrientation.isLandscape ? 0.3 : 0.2
         if recognizer.state == .ended {
             // past middle
@@ -167,7 +166,7 @@ class BottomSheetViewController: UIViewController, Themeable {
                 endedTranslationYVal = 0
                 hideView(shouldAnimate: true)
                 return
-            } else if newYVal < (maxY - upYShift) {
+            } else if newYVal < maxY {
                 endedTranslationYVal = 0
                 showFullView()
                 return
@@ -176,7 +175,7 @@ class BottomSheetViewController: UIViewController, Themeable {
             UIView.animate(withDuration: 0.2, delay: 0.0, options: [.allowUserInteraction], animations: {
 
                 // This means its going down
-                if newYVal > (self.maxY - upYShift) {
+                if newYVal > self.maxY {
                     // past middle
 //                    if newYVal > (self.maxY - 80)*2 {
 //                    if newYVal > (self.frameHeight * 0.5) + (self.frameHeight * downYShiftSpecifier) {
@@ -188,7 +187,7 @@ class BottomSheetViewController: UIViewController, Themeable {
                     }
 
                    // going up
-                } else if newYVal < (self.maxY - upYShift) {
+                } else if newYVal < self.maxY {
                     self.moveView(state: .full)
                 }
             }, completion: nil)
