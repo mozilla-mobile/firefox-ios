@@ -6,7 +6,7 @@ import XCTest
 
 private let LabelPrompt: String = "Turn on search suggestions?"
 private let SuggestedSite: String = "foobar meaning"
-private let SuggestedSite2: String = "foobar2000"
+private let SuggestedSite2: String = "foobar google"
 private let SuggestedSite3: String = "foobar2000 mac"
 
 private let SuggestedSite4: String = "foo bar baz"
