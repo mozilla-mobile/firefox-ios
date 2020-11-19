@@ -110,16 +110,7 @@ class TabMoreMenuViewController: UIViewController, Themeable {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
         tableView.reloadData()
-//        if UIDevice.current.orientation.isLandscape {
-//            tableView.snp.remakeConstraints { make in
-//                make.left.right.equalToSuperview()
-//                make.centerX.equalToSuperview()
-//                make.bottom.equalTo(self.view.superview!.safeArea.bottom)
-//                make.top.equalTo(divider.snp.bottom)
-//            }
-//        }
         tableView.isScrollEnabled = UIDevice.current.orientation.isLandscape ? true : false
     }
     
@@ -137,15 +128,14 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         }
         divider.snp.makeConstraints { make in
             make.top.equalTo(tabMoreMenuHeader.snp.bottom)
-            make.bottom.equalTo(tableView.snp.top)
+            make.bottom.equalTo(tableView.snp.top).inset(-20)
             make.height.equalTo(1)
             make.width.equalToSuperview()
         }
         tableView.snp.makeConstraints { make in
-            make.bottom.left.right.equalToSuperview()
+            make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(self.view.safeArea.bottom).inset(45)
-            make.top.equalTo(divider.snp.bottom)
+            make.bottom.equalTo(self.view.safeArea.bottom).inset(40)
         }
     }
     
