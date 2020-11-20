@@ -1,9 +1,9 @@
 Performance tests
 ==================
 
-There are several scenarios in which having performance tests to meassure how the app performs is really important. The data bases for Bookmarks, History, Tabs could be very big and impact in the time it takes to launch the app or use it. 
+There are several scenarios in which having performance tests to measure how the app performs is really important. The data bases for Bookmarks, History, Tabs could be very big and impact in the time it takes to launch the app or use it. 
 
-Being able to pre-load existing data bases with heavy profiles has helped to implement these tests. It is possible to launch a test with a specific profile and meassure differnt data that could help to find issues for the app in that situation.
+Being able to pre-load existing data bases with heavy profiles has helped to implement these tests. It is possible to launch a test with a specific profile and measure different data that could help to find issues for the app in that situation.
 
 Currently in the repository there are performance tests for Tabs. In the future similar ones will be added for History and Bookmarks.
 
@@ -22,16 +22,16 @@ Performance data
 -----------
 The data gathered after running these tests is:
 * Duration (s)
-* CMT (s) : Clock Monotinic Time
+* CMT (s) : Clock Monotonic Time
 * CPU Cycles (kC)
 * CPU Time (s)
 * Mem Physical (kB)
 * Mem Physical Peak (kB)
 * CPU Instructions retired (kl)
-* Disk locigal writes (kB)
+* Disk logical writes (kB)
 
 
-As a first approach the data is being recorded in a [doc](https://docs.google.com/spreadsheets/d/1ERhNf1IY7Rqfzvcvb2PJldUiHWNArh81yEx6rJ-BA-U/edit?usp=sharing) after running the tests on pyhiscal device.
+As a first approach the data is being recorded in a [doc](https://docs.google.com/spreadsheets/d/1ERhNf1IY7Rqfzvcvb2PJldUiHWNArh81yEx6rJ-BA-U/edit?usp=sharing) after running the tests on physical device.
 
 The tests are using a low size profile (with 20 tabs) and a heavy profile (with 1280 tabs), there are two scenarios covered for each profile:
 * Launch app
