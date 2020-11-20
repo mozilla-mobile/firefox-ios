@@ -54,9 +54,6 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
     private var endedYVal: CGFloat = 0
     private var endedTranslationYVal: CGFloat = 0
-//    private var isFullyHidden = false
-//    private var isFullyShown = false
-    
     private var navHeight: CGFloat {
         return navigationController?.navigationBar.frame.height ?? 0
     }
@@ -130,21 +127,8 @@ class BottomSheetViewController: UIViewController, Themeable {
     // MARK: Bottomsheet swipe methods
     private func moveView(state: BottomSheetState) {
         self.currentState = state
-        switch state {
-        case .full:
-//            self.isFullyHidden = false
-//            self.isFullyShown = true
-            panView.frame = CGRect(x: 0, y: navHeight, width: view.frame.width, height: fullHeight)
-        case .none:
-//            self.isFullyHidden = true
-//            self.isFullyShown = false
-            panView.frame = CGRect(x: 0, y: minY, width: view.frame.width, height: fullHeight)
-        case .partial:
-//            self.isFullyHidden = false
-//            self.isFullyShown = false
-            panView.frame = CGRect(x: 0, y: maxY, width: view.frame.width, height: fullHeight)
-    
-        }
+        let yVal = state == .full ? navHeight : state == .partial ? maxY : minY
+        panView.frame = CGRect(x: 0, y: yVal, width: view.frame.width, height: fullHeight)
     }
 
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
@@ -196,8 +180,6 @@ class BottomSheetViewController: UIViewController, Themeable {
     @objc func hideView(shouldAnimate: Bool) {
         let closure = {
             self.moveView(state: .none)
-//            self.isFullyHidden = true
-//            self.isFullyShown = false
             self.view.isUserInteractionEnabled = true
         }
         guard shouldAnimate else {
@@ -226,8 +208,6 @@ class BottomSheetViewController: UIViewController, Themeable {
         }
         UIView.animate(withDuration: 0.26, animations: {
             self.moveView(state: .partial)
-//            self.isFullyHidden = false
-//            self.isFullyShown = false
             self.overlay.alpha = 1
             self.view.isHidden = false
         })
@@ -236,8 +216,6 @@ class BottomSheetViewController: UIViewController, Themeable {
     func showFullView() {
         UIView.animate(withDuration: 0.26, animations: {
             self.moveView(state: .full)
-//            self.isFullyHidden = false
-//            self.isFullyShown = true
             self.overlay.alpha = 1
             self.view.isHidden = false
         })
