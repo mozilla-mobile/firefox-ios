@@ -74,7 +74,7 @@ class SearchInputView: UIView, Themeable {
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tappedSearch)))
 
         view.isAccessibilityElement = true
-        view.accessibilityLabel =  NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
+        view.accessibilityLabel = NSLocalizedString("Enter Search Mode", tableName: "LoginManager", comment: "Accessibility label for entering search mode for logins")
         return view
     }()
 

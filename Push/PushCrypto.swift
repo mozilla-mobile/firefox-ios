@@ -264,7 +264,7 @@ extension PushCrypto {
         }
 
         guard let privKey = Data(bytes: rawRecvPrivKey, count: privateKeyLength).base64urlSafeEncodedString,
-            let pubKey =  Data(bytes: rawRecvPubKey, count: publicKeyLength).base64urlSafeEncodedString,
+            let pubKey = Data(bytes: rawRecvPubKey, count: publicKeyLength).base64urlSafeEncodedString,
             let authKey = Data(bytes: authSecret, count: authSecretLength).base64urlSafeEncodedString else {
                 throw PushCryptoError.base64EncodeError
         }

@@ -48,7 +48,7 @@ class TabPrintPageRenderer: UIPrintPageRenderer {
 
     override func drawHeaderForPage(at pageIndex: Int, in headerRect: CGRect) {
         let headerInsets = UIEdgeInsets(top: headerRect.minY, left: PrintedPageUX.PageInsets, bottom: paperRect.maxY - headerRect.maxY, right: PrintedPageUX.PageInsets)
-        let headerRect =  paperRect.inset(by: headerInsets)
+        let headerRect = paperRect.inset(by: headerInsets)
 
         // page title on left
         self.drawTextAtPoint(tab!.displayTitle, rect: headerRect, onLeft: true)

@@ -66,7 +66,7 @@ class EmbeddedNavController {
             let shrinkage = UX.navBarLandscapeShrinkage + (UX.numberOfActionRows + 1 /*one info row*/) * UX.perRowShrinkageForLandscape
             updatedHeight = isLandscapeSmallScreen(forTraitCollection) ? UX.topViewHeight - shrinkage : UX.topViewHeight
         } else {
-            updatedHeight = forTraitCollection.verticalSizeClass == .compact ? UX.topViewHeight - UX.navBarLandscapeShrinkage :  UX.topViewHeight
+            updatedHeight = forTraitCollection.verticalSizeClass == .compact ? UX.topViewHeight - UX.navBarLandscapeShrinkage : UX.topViewHeight
         }
         heightConstraint.update(offset: updatedHeight)
     }

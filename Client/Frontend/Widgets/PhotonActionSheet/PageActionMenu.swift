@@ -33,7 +33,7 @@ extension PhotonActionSheetProtocol {
 
     func getTabActions(tab: Tab, buttonView: UIView,
                        presentShareMenu: @escaping (URL, Tab, UIView, UIPopoverArrowDirection) -> Void,
-                       findInPage:  @escaping () -> Void,
+                       findInPage: @escaping () -> Void,
                        presentableVC: PresentableVC,
                        isBookmarked: Bool,
                        isPinned: Bool,

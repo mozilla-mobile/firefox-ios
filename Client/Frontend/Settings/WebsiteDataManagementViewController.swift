@@ -150,7 +150,7 @@ class WebsiteDataManagementViewController: UIViewController, UITableViewDataSour
             showMoreButtonEnabled = false
             tableView.reloadData()
         case .clearAllButton:
-            let alert =  UIAlertController.clearWebsiteDataAlert(okayCallback: clearWebsiteData)
+            let alert = UIAlertController.clearWebsiteDataAlert(okayCallback: clearWebsiteData)
             let generator = UIImpactFeedbackGenerator(style: .heavy)
             generator.impactOccurred()
             present(alert, animated: true, completion: nil)

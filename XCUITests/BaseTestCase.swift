@@ -13,7 +13,7 @@ func path(forTestPage page: String) -> String {
 
 class BaseTestCase: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
-    let app =  XCUIApplication()
+    let app = XCUIApplication()
     var userState: FxUserState!
 
     // leave empty for non-specific tests
