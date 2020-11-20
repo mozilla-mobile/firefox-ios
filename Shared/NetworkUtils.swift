@@ -18,7 +18,7 @@ public func makeURLSession(userAgent: String, configuration: URLSessionConfigura
 public func validatedHTTPResponse(_ response: URLResponse?, contentType: String? = nil, statusCode: Range<Int>?  = nil) -> HTTPURLResponse? {
     if let response = response as? HTTPURLResponse {
         if let range = statusCode {
-            return range.contains(response.statusCode) ? response :  nil
+            return range.contains(response.statusCode) ? response : nil
         }
         if let type = contentType {
             if let responseType = response.allHeaderFields["Content-Type"] as? String {

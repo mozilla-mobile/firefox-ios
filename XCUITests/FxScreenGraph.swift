@@ -1187,7 +1187,7 @@ extension XCUIElement {
                 let cell = cells.element(boundBy: Int(i))
                 // if the cell's bottom is beyond the table's bottom
                 // i.e. if the cell isn't completely visible.
-                if self.frame.maxY <= cell.frame.maxY  {
+                if self.frame.maxY <= cell.frame.maxY {
                     return i
                 }
             }

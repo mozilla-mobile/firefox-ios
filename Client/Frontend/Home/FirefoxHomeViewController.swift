@@ -186,7 +186,7 @@ class FirefoxHomeViewController: UICollectionViewController, HomePanel {
                 make.top.equalTo(defaultBrowserCard.snp.bottom)
                 make.bottom.left.right.equalToSuperview()
             }
-            defaultBrowserCard.dismissClosure =  {
+            defaultBrowserCard.dismissClosure = {
                 self.defaultBrowserCard.removeFromSuperview()
                 self.collectionView.snp.makeConstraints { make in
                     make.top.equalToSuperview()
@@ -974,7 +974,7 @@ class ASHeaderView: UICollectionReusableView {
         titleLabel.text = nil
         moreButton.removeTarget(nil, action: nil, for: .allEvents)
         iconView.isHidden = true
-        iconView.tintColor =  UIColor.theme.homePanel.activityStreamHeaderText
+        iconView.tintColor = UIColor.theme.homePanel.activityStreamHeaderText
         titleLabel.textColor = UIColor.theme.homePanel.activityStreamHeaderText
         moreButton.setTitleColor(UIConstants.SystemBlueColor, for: .normal)
     }

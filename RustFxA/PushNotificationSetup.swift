@@ -27,7 +27,7 @@ open class PushNotificationSetup {
                 keychain.set(apnsToken, forKey: KeychainKey.apnsToken, withAccessibility: .afterFirstUnlock)
 
                 let subscription = pushReg.defaultSubscription
-                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey:  subscription.p256dhPublicKey, authKey: subscription.authKey)
+                let devicePush = DevicePushSubscription(endpoint: subscription.endpoint.absoluteString, publicKey: subscription.p256dhPublicKey, authKey: subscription.authKey)
                 accountManager.deviceConstellation()?.setDevicePushSubscription(sub: devicePush)
                 keychain.set(pushReg as NSCoding, forKey: KeychainKey.fxaPushRegistration, withAccessibility: .afterFirstUnlock)
             }

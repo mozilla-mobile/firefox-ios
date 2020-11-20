@@ -13,7 +13,7 @@ private let log = Logger.browserLogger
 private struct ReadingListTableViewCellUX {
     static let RowHeight: CGFloat = 86
 
-    static let ReadIndicatorWidth: CGFloat =  12  // image width
+    static let ReadIndicatorWidth: CGFloat = 12  // image width
     static let ReadIndicatorHeight: CGFloat = 12 // image height
     static let ReadIndicatorLeftOffset: CGFloat = 18
     static let ReadAccessibilitySpeechPitch: Float = 0.7 // 1.0 default, 0.0 lowest, 2.0 highest

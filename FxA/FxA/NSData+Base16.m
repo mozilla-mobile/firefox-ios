@@ -67,7 +67,7 @@ static const char kBase16AlphabetLowerCase[] = "0123456789abcdef";
     const char *src = [self bytes];
     char *dst = encoded;
 
-    const char *alphabet =  (options & NSDataBase16EncodingOptionsLowerCase) ? kBase16AlphabetLowerCase : kBase16AlphabetUpperCase;
+    const char *alphabet = (options & NSDataBase16EncodingOptionsLowerCase) ? kBase16AlphabetLowerCase : kBase16AlphabetUpperCase;
 
     for (NSUInteger i = 0; i < [self length]; i++, src++) {
         *dst++ = alphabet[(*src >> 4) & 0b00001111];

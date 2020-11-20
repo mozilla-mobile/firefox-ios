@@ -50,7 +50,7 @@ struct TopSitesHandler {
     }
     
     // We compare WidgetKit top sites with client sites so as to avoid updating it if they are same
-    static func compareAndUpdateWidgetKitTopSite(clientSites:[TopSite])  {
+    static func compareAndUpdateWidgetKitTopSite(clientSites:[TopSite]) {
         let widgetSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesWidgetKitArchivePath())
         guard clientSites != widgetSites else { return }
         TopSitesHandler.writeTopSitesForWidget(topSites: clientSites)
