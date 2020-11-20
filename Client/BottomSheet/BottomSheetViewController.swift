@@ -26,14 +26,11 @@ class BottomSheetViewController: UIViewController, Themeable {
         return UIApplication.shared.statusBarOrientation.isLandscape
     }
     private var orientationBasedHeight: CGFloat {
-        if isLandscape {
-            return DeviceInfo.screenSizeOrientationIndependent().width
-        }
-        return DeviceInfo.screenSizeOrientationIndependent().height
+        return isLandscape ? DeviceInfo.screenSizeOrientationIndependent().width : DeviceInfo.screenSizeOrientationIndependent().height
     }
     // Shows how much bottom sheet should be visible
     // 1 = full, 0.5 = half, 0 = hidden
-    // and for landscape for go with 0.5 specifier just because how small its height is
+    // and for landscape we show 0.5 specifier just because of very small height 
     private var heightSpecifier: CGFloat {
         let height = orientationBasedHeight
         let heightForTallScreen: CGFloat = height > 850 ? 0.65 : 0.74
