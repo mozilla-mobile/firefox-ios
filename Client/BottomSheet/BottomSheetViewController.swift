@@ -21,20 +21,24 @@ protocol BottomSheetDelegate {
 class BottomSheetViewController: UIViewController, Themeable {
     // Delegate
     var delegate: BottomSheetDelegate?
-    
+    var currentState: BottomSheetState = .none
+    var isLandscape: Bool {
+        return UIApplication.shared.statusBarOrientation.isLandscape
+    }
     private var orientationBasedHeight: CGFloat {
-        if UIApplication.shared.statusBarOrientation.isLandscape {
+        if isLandscape {
             return DeviceInfo.screenSizeOrientationIndependent().width
         }
         return DeviceInfo.screenSizeOrientationIndependent().height
     }
     // Shows how much bottom sheet should be visible
     // 1 = full, 0.5 = half, 0 = hidden
+    // and for landscape for go with 0.5 specifier just because how small its height is
     private var heightSpecifier: CGFloat {
-        let height = orientationBasedHeight //screenSize.height
+        let height = orientationBasedHeight
         let heightForTallScreen: CGFloat = height > 850 ? 0.65 : 0.74
         var specifier = height > 668 ? heightForTallScreen : 0.84
-        if UIApplication.shared.statusBarOrientation.isLandscape {
+        if isLandscape {
             specifier = 0.5
         }
         return specifier
@@ -50,8 +54,8 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
     private var endedYVal: CGFloat = 0
     private var endedTranslationYVal: CGFloat = 0
-    private var isFullyHidden = false
-    private var isFullyShown = false
+//    private var isFullyHidden = false
+//    private var isFullyShown = false
     
     private var navHeight: CGFloat {
         return navigationController?.navigationBar.frame.height ?? 0
@@ -125,18 +129,19 @@ class BottomSheetViewController: UIViewController, Themeable {
 
     // MARK: Bottomsheet swipe methods
     private func moveView(state: BottomSheetState) {
+        self.currentState = state
         switch state {
         case .full:
-            self.isFullyHidden = false
-            self.isFullyShown = true
+//            self.isFullyHidden = false
+//            self.isFullyShown = true
             panView.frame = CGRect(x: 0, y: navHeight, width: view.frame.width, height: fullHeight)
         case .none:
-            self.isFullyHidden = true
-            self.isFullyShown = false
+//            self.isFullyHidden = true
+//            self.isFullyShown = false
             panView.frame = CGRect(x: 0, y: minY, width: view.frame.width, height: fullHeight)
         case .partial:
-            self.isFullyHidden = false
-            self.isFullyShown = false
+//            self.isFullyHidden = false
+//            self.isFullyShown = false
             panView.frame = CGRect(x: 0, y: maxY, width: view.frame.width, height: fullHeight)
     
         }
@@ -146,9 +151,10 @@ class BottomSheetViewController: UIViewController, Themeable {
         let translation = recognizer.translation(in: view)
         let yVal:CGFloat = translation.y
         let startedYVal = endedTranslationYVal + maxY
-        let newYVal = isFullyShown ? navHeight + yVal : startedYVal + yVal
+        let newYVal = currentState == .full ? navHeight + yVal : startedYVal + yVal
+        let downYShiftSpecifier: CGFloat = isLandscape ? 0.3 : 0.2
         print("startedYVal \(startedYVal)| yVal \(yVal)| newYVal \(newYVal)| maxY \(maxY)| fullH \(fullHeight)")
-        
+    
         // Top
         guard newYVal >= navHeight else {
             endedTranslationYVal = 0
@@ -156,12 +162,9 @@ class BottomSheetViewController: UIViewController, Themeable {
         }
         
         panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: fullHeight)
-
-        let downYShiftSpecifier: CGFloat = UIApplication.shared.statusBarOrientation.isLandscape ? 0.3 : 0.2
+        
         if recognizer.state == .ended {
             // past middle
-//            if newYVal > (maxY - 80)*2 {
-//            if newYVal > (frameHeight * 0.5) + (frameHeight * downYShiftSpecifier) {
             if newYVal > self.maxY + (self.partialHeight * downYShiftSpecifier) {
                 endedTranslationYVal = 0
                 hideView(shouldAnimate: true)
@@ -173,20 +176,16 @@ class BottomSheetViewController: UIViewController, Themeable {
             }
             
             UIView.animate(withDuration: 0.2, delay: 0.0, options: [.allowUserInteraction], animations: {
-
-                // This means its going down
+                // moving down
                 if newYVal > self.maxY {
                     // past middle
-//                    if newYVal > (self.maxY - 80)*2 {
-//                    if newYVal > (self.frameHeight * 0.5) + (self.frameHeight * downYShiftSpecifier) {
                     if newYVal > self.maxY + (self.partialHeight * downYShiftSpecifier) {
                         self.moveView(state: .none)
                     } else {
                         self.endedTranslationYVal = 0
                         self.moveView(state: .partial)
                     }
-
-                   // going up
+                   // moving up
                 } else if newYVal < self.maxY {
                     self.moveView(state: .full)
                 }
@@ -197,8 +196,8 @@ class BottomSheetViewController: UIViewController, Themeable {
     @objc func hideView(shouldAnimate: Bool) {
         let closure = {
             self.moveView(state: .none)
-            self.isFullyHidden = true
-            self.isFullyShown = false
+//            self.isFullyHidden = true
+//            self.isFullyShown = false
             self.view.isUserInteractionEnabled = true
         }
         guard shouldAnimate else {
@@ -206,7 +205,6 @@ class BottomSheetViewController: UIViewController, Themeable {
             self.overlay.alpha = 0
             self.view.isHidden = true
             delegate?.showBottomToolbar()
-            
             return
         }
         self.view.isUserInteractionEnabled = false
@@ -227,13 +225,9 @@ class BottomSheetViewController: UIViewController, Themeable {
             panView.addSubview(container.view)
         }
         UIView.animate(withDuration: 0.26, animations: {
-//            if UIApplication.shared.statusBarOrientation.isLandscape {
-//                self.moveView(state: .full)
-//            } else {
-                self.moveView(state: .partial)
-//            }
-            self.isFullyHidden = false
-            self.isFullyShown = false
+            self.moveView(state: .partial)
+//            self.isFullyHidden = false
+//            self.isFullyShown = false
             self.overlay.alpha = 1
             self.view.isHidden = false
         })
@@ -242,8 +236,8 @@ class BottomSheetViewController: UIViewController, Themeable {
     func showFullView() {
         UIView.animate(withDuration: 0.26, animations: {
             self.moveView(state: .full)
-            self.isFullyHidden = false
-            self.isFullyShown = true
+//            self.isFullyHidden = false
+//            self.isFullyShown = true
             self.overlay.alpha = 1
             self.view.isHidden = false
         })
