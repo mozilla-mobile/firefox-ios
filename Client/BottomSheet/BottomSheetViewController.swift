@@ -30,7 +30,7 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
     // Shows how much bottom sheet should be visible
     // 1 = full, 0.5 = half, 0 = hidden
-    // and for landscape we show 0.5 specifier just because of very small height 
+    // and for landscape we show 0.5 specifier just because of very small height
     private var heightSpecifier: CGFloat {
         let height = orientationBasedHeight
         let heightForTallScreen: CGFloat = height > 850 ? 0.65 : 0.74
@@ -134,8 +134,7 @@ class BottomSheetViewController: UIViewController, Themeable {
         let startedYVal = endedTranslationYVal + maxY
         let newYVal = currentState == .full ? navHeight + yVal : startedYVal + yVal
         let downYShiftSpecifier: CGFloat = isLandscape ? 0.3 : 0.2
-        print("startedYVal \(startedYVal)| yVal \(yVal)| newYVal \(newYVal)| maxY \(maxY)| fullH \(fullHeight)")
-    
+
         // Top
         guard newYVal >= navHeight else {
             endedTranslationYVal = 0
@@ -143,10 +142,10 @@ class BottomSheetViewController: UIViewController, Themeable {
         }
         
         panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: fullHeight)
-        
+
         if recognizer.state == .ended {
             // past middle
-            if newYVal > self.maxY + (self.partialHeight * downYShiftSpecifier) {
+            if newYVal > maxY + (partialHeight * downYShiftSpecifier) {
                 endedTranslationYVal = 0
                 hideView(shouldAnimate: true)
                 return

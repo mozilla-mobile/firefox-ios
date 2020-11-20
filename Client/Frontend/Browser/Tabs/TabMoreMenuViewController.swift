@@ -39,7 +39,6 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         } else {
             tableView = UITableView()
         }
-//        tableView.tableFooterView = UIView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "moreMenuCell")
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "moreMenuHeader")
         tableView.dataSource = self
