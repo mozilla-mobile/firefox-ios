@@ -21,14 +21,14 @@ protocol BottomSheetDelegate {
 class BottomSheetViewController: UIViewController, Themeable {
     // Delegate
     var delegate: BottomSheetDelegate?
-    var currentState: BottomSheetState = .none
-    var isLandscape: Bool {
+    private var currentState: BottomSheetState = .none
+    private var isLandscape: Bool {
         return UIApplication.shared.statusBarOrientation.isLandscape
     }
     private var orientationBasedHeight: CGFloat {
         return isLandscape ? DeviceInfo.screenSizeOrientationIndependent().width : DeviceInfo.screenSizeOrientationIndependent().height
     }
-    // Shows how much bottom sheet should be visible
+    // shows how much bottom sheet should be visible
     // 1 = full, 0.5 = half, 0 = hidden
     // and for landscape we show 0.5 specifier just because of very small height
     private var heightSpecifier: CGFloat {
@@ -39,6 +39,12 @@ class BottomSheetViewController: UIViewController, Themeable {
             specifier = 0.5
         }
         return specifier
+    }
+    private var navHeight: CGFloat {
+        return navigationController?.navigationBar.frame.height ?? 0
+    }
+    private var fullHeight: CGFloat {
+        return orientationBasedHeight - navHeight
     }
     private var partialHeight: CGFloat {
         return fullHeight * heightSpecifier
@@ -51,12 +57,6 @@ class BottomSheetViewController: UIViewController, Themeable {
     }
     private var endedYVal: CGFloat = 0
     private var endedTranslationYVal: CGFloat = 0
-    private var navHeight: CGFloat {
-        return navigationController?.navigationBar.frame.height ?? 0
-    }
-    private var fullHeight: CGFloat {
-        return orientationBasedHeight - navHeight
-    }
 
     // Container child view controller
     var containerViewController: UIViewController?
@@ -127,49 +127,37 @@ class BottomSheetViewController: UIViewController, Themeable {
         let yVal = state == .full ? navHeight : state == .partial ? maxY : minY
         panView.frame = CGRect(x: 0, y: yVal, width: view.frame.width, height: fullHeight)
     }
-
+    
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let translation = recognizer.translation(in: view)
-        let yVal:CGFloat = translation.y
+        let yVal: CGFloat = translation.y
         let startedYVal = endedTranslationYVal + maxY
         let newYVal = currentState == .full ? navHeight + yVal : startedYVal + yVal
         let downYShiftSpecifier: CGFloat = isLandscape ? 0.3 : 0.2
 
-        // Top
+        // top
         guard newYVal >= navHeight else {
             endedTranslationYVal = 0
             return
         }
         
+        // move the frame according to pan gesture
         panView.frame = CGRect(x: 0, y: newYVal, width: view.frame.width, height: fullHeight)
-
+        
         if recognizer.state == .ended {
-            // past middle
-            if newYVal > maxY + (partialHeight * downYShiftSpecifier) {
-                endedTranslationYVal = 0
-                hideView(shouldAnimate: true)
-                return
-            } else if newYVal < maxY {
-                endedTranslationYVal = 0
-                showFullView()
-                return
-            }
-            
-            UIView.animate(withDuration: 0.2, delay: 0.0, options: [.allowUserInteraction], animations: {
-                // moving down
-                if newYVal > self.maxY {
-                    // past middle
-                    if newYVal > self.maxY + (self.partialHeight * downYShiftSpecifier) {
-                        self.moveView(state: .none)
-                    } else {
-                        self.endedTranslationYVal = 0
-                        self.moveView(state: .partial)
-                    }
-                   // moving up
-                } else if newYVal < self.maxY {
-                    self.moveView(state: .full)
+            self.endedTranslationYVal = 0
+            // moving down
+            if newYVal > self.maxY {
+                // past middle
+                if newYVal > self.maxY + (self.partialHeight * downYShiftSpecifier) {
+                    hideView(shouldAnimate: true)
+                } else {
+                    self.moveView(state: .partial)
                 }
-            }, completion: nil)
+            // moving up
+            } else if newYVal < self.maxY {
+                self.showFullView(shouldAnimate: true)
+            }
         }
     }
     
@@ -209,11 +197,18 @@ class BottomSheetViewController: UIViewController, Themeable {
         })
     }
     
-    func showFullView() {
-        UIView.animate(withDuration: 0.26, animations: {
+    func showFullView(shouldAnimate: Bool) {
+        let closure = {
             self.moveView(state: .full)
             self.overlay.alpha = 1
             self.view.isHidden = false
+        }
+        guard shouldAnimate else {
+            closure()
+            return
+        }
+        UIView.animate(withDuration: 0.26, animations: {
+            closure()
         })
     }
 
