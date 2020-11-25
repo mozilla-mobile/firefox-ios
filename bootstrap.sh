@@ -41,10 +41,10 @@ else
 fi
 
 # Run carthage
-./carthage_command.sh
+#./carthage_command.sh
+./carthage.sh build --platform iOS --no-use-binaries --cache-builds --verbose
 
 # Install Node.js dependencies and build user scripts
-
 npm install
 npm run build
 
