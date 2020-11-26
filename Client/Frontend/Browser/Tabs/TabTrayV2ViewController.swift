@@ -190,6 +190,13 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         setNeedsStatusBarAppearanceUpdate()
         bottomSheetVC?.applyTheme()
     }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
+        tableView.reloadData()
+    }
 
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
