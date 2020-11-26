@@ -191,7 +191,7 @@ class BottomSheetViewController: UIViewController, Themeable {
             panView.addSubview(container.view)
         }
         UIView.animate(withDuration: 0.26, animations: {
-            self.moveView(state: .partial)
+            self.moveView(state: self.isLandscape ? .full : .partial)
             self.overlay.alpha = 1
             self.view.isHidden = false
         })
@@ -240,11 +240,10 @@ class BottomSheetViewController: UIViewController, Themeable {
             default:
                 print("orientation not supported")
             }
-
-            }, completion: { (UIViewControllerTransitionCoordinatorContext) -> Void in
-                self.view.setNeedsLayout()
-                self.view.layoutIfNeeded()
-                self.containerViewController?.view.setNeedsLayout()
+        }, completion: { (UIViewControllerTransitionCoordinatorContext) -> Void in
+            self.view.setNeedsLayout()
+            self.view.layoutIfNeeded()
+            self.containerViewController?.view.setNeedsLayout()
         })
     }
 }
