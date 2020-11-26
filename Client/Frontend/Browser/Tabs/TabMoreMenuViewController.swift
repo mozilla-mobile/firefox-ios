@@ -39,13 +39,12 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         } else {
             tableView = UITableView()
         }
-        tableView.tableFooterView = UIView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "moreMenuCell")
         tableView.register(ThemedTableSectionHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "moreMenuHeader")
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
-        tableView.isScrollEnabled = false
+        tableView.isScrollEnabled = UIDevice.current.orientation.isLandscape ? true : false
         return tableView
     }()
     
@@ -108,27 +107,34 @@ class TabMoreMenuViewController: UIViewController, Themeable {
         NotificationCenter.default.addObserver(self, selector: #selector(displayThemeChanged), name: .DisplayThemeChanged, object: nil)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.reloadData()
+        tableView.isScrollEnabled = UIDevice.current.orientation.isLandscape ? true : false
+    }
+    
     func setupConstraints() {
-        divider.snp.makeConstraints { make in
-            make.top.equalTo(tabMoreMenuHeader.snp.bottom)
-            make.bottom.equalTo(tableView.snp.top)
-            make.height.equalTo(1)
-            make.width.equalToSuperview()
+        handleView.snp.makeConstraints{ make in
+            make.width.equalTo(DrawerViewControllerUX.HandleWidth)
+            make.height.equalTo(DrawerViewControllerUX.HandleHeight)
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().offset((DrawerViewControllerUX.HandleMargin - DrawerViewControllerUX.HandleHeight) / 2)
         }
         tabMoreMenuHeader.snp.makeConstraints { make in
             make.top.equalTo(handleView.snp.bottom)
             make.bottom.equalTo(divider.snp.top)
             make.left.right.equalToSuperview()
         }
-        tableView.snp.makeConstraints { make in
-            make.bottom.left.right.equalToSuperview()
-            make.top.equalTo(divider.snp.bottom)
+        divider.snp.makeConstraints { make in
+            make.top.equalTo(tabMoreMenuHeader.snp.bottom)
+            make.bottom.equalTo(tableView.snp.top).inset(-20)
+            make.height.equalTo(1)
+            make.width.equalToSuperview()
         }
-        handleView.snp.makeConstraints{ make in
-            make.width.equalTo(DrawerViewControllerUX.HandleWidth)
-            make.height.equalTo(DrawerViewControllerUX.HandleHeight)
+        tableView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset((DrawerViewControllerUX.HandleMargin - DrawerViewControllerUX.HandleHeight) / 2)
+            make.bottom.equalTo(self.view.safeArea.bottom).inset(40)
         }
     }
     
@@ -201,6 +207,7 @@ extension TabMoreMenuViewController: UITableViewDelegate {
                 SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: self.view)
                 dismissMenu()
             case 1:
+                dismissMenu()
                 self.presentActivityViewController(url, tab: tab)
             case 2:
                 dismissMenu()
