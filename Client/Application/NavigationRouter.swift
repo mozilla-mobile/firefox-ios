@@ -99,39 +99,8 @@ enum NavigationPath {
             self = .fxa(params: FxALaunchParams(query: url.getQuery()))
         } else if urlString.starts(with: "\(scheme)://open-url") {
             self = .openUrlFromComponents(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-medium-topsites-open-url") {
-            // Widget Top sites - open url
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)
-            self = .openUrlFromComponents(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-small-quicklink-open-url") {
-            // Widget Quick links - small - open url private or regular
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
-            self = .openUrlFromComponents(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-open-url") {
-            // Widget Quick Actions - medium - open url private or regular
-            let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
-            if isPrivate {
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionPrivateSearch)
-            } else {
-                TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionSearch)
-            }
-            self = .openUrlFromComponents(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-open-copied") {
-            // Widget Quick links - medium - open copied url
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionCopiedLink)
-            self = .openCopiedUrl()
-        } else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-close-private-tabs") {
-            // Widget Quick links - medium - close private tabs
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
-            self = .closePrivateTabs
-        } else if urlString.starts(with: "\(scheme)://widget-tabs-medium-open-url") {
-            // Widget Tabs Quick View - medium
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTabsOpenUrl)
-            self = .openWidgetUrl(components: components)
-        } else if urlString.starts(with: "\(scheme)://widget-tabs-large-open-url") {
-            // Widget Tabs Quick View - large
-            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .largeTabsOpenUrl)
-            self = .openWidgetUrl(components: components)
+        } else if let widgetKitNavPath = NavigationPath.handleWidgetKitQuery(urlString: urlString, scheme: scheme, components: components) {
+            self = widgetKitNavPath
         } else if urlString.starts(with: "\(scheme)://open-text") {
             let text = components.valueForQuery("text")
             self = .text(text ?? "")
@@ -178,6 +147,40 @@ enum NavigationPath {
         }
     }
 
+    private static func handleWidgetKitQuery(urlString: String, scheme: String, components: URLComponents) -> NavigationPath? {
+        if urlString.starts(with: "\(scheme)://widget-medium-topsites-open-url") {
+            // Widget Top sites - open url
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTopSitesWidget)
+            return .openUrlFromComponents(components: components)
+        } else if urlString.starts(with: "\(scheme)://widget-small-quicklink-open-url") {
+            // Widget Quick links - small - open url private or regular
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
+            return .openUrlFromComponents(components: components)
+        } else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-open-url") {
+            // Widget Quick Actions - medium - open url private or regular
+            let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: isPrivate ? .mediumQuickActionPrivateSearch : .mediumQuickActionSearch)
+            return .openUrlFromComponents(components: components)
+        } else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-open-copied") {
+            // Widget Quick links - medium - open copied url
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionCopiedLink)
+            return .openCopiedUrl()
+        } else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-close-private-tabs") {
+            // Widget Quick links - medium - close private tabs
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumQuickActionClosePrivate)
+            return .closePrivateTabs
+        } else if urlString.starts(with: "\(scheme)://widget-tabs-medium-open-url") {
+            // Widget Tabs Quick View - medium
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .mediumTabsOpenUrl)
+            return .openWidgetUrl(components: components)
+        } else if urlString.starts(with: "\(scheme)://widget-tabs-large-open-url") {
+            // Widget Tabs Quick View - large
+            TelemetryWrapper.recordEvent(category: .action, method: .open, object: .largeTabsOpenUrl)
+            return .openWidgetUrl(components: components)
+        }
+        return nil
+    }
+    
     private static func openUrlFromComponents(components: URLComponents) -> NavigationPath {
         let url = components.valueForQuery("url")?.asURL
         // Unless the `open-url` URL specifies a `private` parameter,
