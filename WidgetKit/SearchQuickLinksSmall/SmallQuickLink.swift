@@ -36,7 +36,7 @@ struct SmallQuickLinkView : View {
     var body: some View {
         ImageButtonWithLabel(isSmall: true, link: entry.link)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(LinearGradient(gradient: Gradient(colors: entry.link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing)).widgetURL(entry.link.url)
+            .background(LinearGradient(gradient: Gradient(colors: entry.link.backgroundColors), startPoint: .bottomLeading, endPoint: .topTrailing)).widgetURL(entry.link.smallWidgetUrl)
     }
 }
 

@@ -36,17 +36,30 @@ enum QuickLink: Int {
             return String.ClosePrivateTabsLabelV2
         }
     }
-
-    public var url: URL {
+    
+    public var smallWidgetUrl: URL {
         switch self {
         case .search:
-            return linkToContainingApp("?private=false", query: "open-url")
+            return linkToContainingApp("?private=false", query: "widget-small-quicklink-open-url")
         case .privateSearch:
-            return linkToContainingApp("?private=true", query: "open-url")
+            return linkToContainingApp("?private=true", query: "widget-small-quicklink-open-url")
         case .copiedLink:
-            return linkToContainingApp(query: "open-copied")
+            return linkToContainingApp(query: "widget-small-quicklink-open-copied")
         case .closePrivateTabs:
-            return linkToContainingApp(query: "close-private-tabs")
+            return linkToContainingApp(query: "widget-small-quicklink-close-private-tabs")
+        }
+    }
+    
+    public var mediumWidgetUrl: URL {
+        switch self {
+        case .search:
+            return linkToContainingApp("?private=false", query: "widget-medium-quicklink-open-url")
+        case .privateSearch:
+            return linkToContainingApp("?private=true", query: "widget-medium-quicklink-open-url")
+        case .copiedLink:
+            return linkToContainingApp(query: "widget-medium-quicklink-open-copied")
+        case .closePrivateTabs:
+            return linkToContainingApp(query: "widget-medium-quicklink-close-private-tabs")
         }
     }
 
