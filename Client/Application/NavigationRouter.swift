@@ -107,15 +107,7 @@ enum NavigationPath {
             // Widget Quick links - small - open url private or regular
             TelemetryWrapper.recordEvent(category: .action, method: .open, object: .smallQuickActionSearch)
             self = .openUrlFromComponents(components: components)
-        }
-//        } else if urlString.starts(with: "\(scheme)://widget-small-quicklink-open-copied") {
-//            // Widget Quick links - small - open copied url
-//            self = .openCopiedUrl()
-//        } else if urlString.starts(with: "\(scheme)://widget-small-quicklink-close-private-tabs") {
-//            // Widget Quick links - small - close private tabs
-//            self = .closePrivateTabs
-//        }
-        else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-open-url") {
+        } else if urlString.starts(with: "\(scheme)://widget-medium-quicklink-open-url") {
             // Widget Quick Actions - medium - open url private or regular
             let isPrivate = Bool(components.valueForQuery("private") ?? "") ?? UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             if isPrivate {
@@ -145,13 +137,7 @@ enum NavigationPath {
             self = .text(text ?? "")
         } else if urlString.starts(with: "\(scheme)://glean") {
             self = .glean(url: url)
-        }
-//        } else if urlString.starts(with: "\(scheme)://open-copied") {
-//            self = .openCopiedUrl()
-//        } else if urlString.starts(with: "\(scheme)://close-private-tabs") {
-//            self = .closePrivateTabs
-//        }
-        else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
+        } else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
