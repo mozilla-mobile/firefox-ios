@@ -27,9 +27,9 @@ struct OpenTabsView: View {
     
     @ViewBuilder
     func lineItemForTab(_ tab: SimpleTab) -> some View {
-
+        let query = widgetFamily == .systemMedium ? "widget-tabs-medium-open-url" : "widget-tabs-large-open-url"
         VStack(alignment: .leading) {
-            Link(destination: linkToContainingApp("?uuid=\(tab.uuid)", query: "widget-open-url")) {
+            Link(destination: linkToContainingApp("?uuid=\(tab.uuid)", query: query)) {
                 HStack(alignment: .center, spacing: 15) {
                     if (entry.favicons[tab.title!] != nil) {
                         (entry.favicons[tab.title!])!.resizable().frame(width: 16, height: 16)

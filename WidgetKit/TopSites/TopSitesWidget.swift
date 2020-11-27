@@ -26,7 +26,7 @@ struct TopSitesView: View {
     func topSitesItem(_ site: TopSite) -> some View {
         let url = site.url
         
-        Link(destination: linkToContainingApp("?url=\(url)", query: "open-url")) {
+        Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
             if (entry.favicons[url] != nil) {
                 (entry.favicons[url])!.resizable().frame(width: 60, height: 60).mask(maskShape)
             } else {

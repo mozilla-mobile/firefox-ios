@@ -365,6 +365,14 @@ extension TelemetryWrapper {
         case dismissDefaultBrowserCard = "default-browser-card"
         case goToSettingsDefaultBrowserCard = "default-browser-card-go-to-settings"
         case asDefaultBrowser = "as-default-browser"
+        case mediumTabsOpenUrl = "medium-tabs-widget-url"
+        case largeTabsOpenUrl = "large-tabs-widget-url"
+        case smallQuickActionSearch = "small-quick-action-search"
+        case mediumQuickActionSearch = "medium-quick-action-search"
+        case mediumQuickActionPrivateSearch = "medium-quick-action-private-search"
+        case mediumQuickActionCopiedLink = "medium-quick-action-copied-link"
+        case mediumQuickActionClosePrivate = "medium-quick-action-close-private"
+        case mediumTopSitesWidget = "medium-top-sites-widget"
     }
 
     public enum EventValue: String {
@@ -464,6 +472,23 @@ extension TelemetryWrapper {
             GleanMetrics.DefaultBrowserCard.goToSettingsPressed.add()
         case (.action, .open, .asDefaultBrowser, _, _):
             GleanMetrics.App.openedAsDefaultBrowser.add()
+        // Widget
+        case (.action, .open, .mediumTabsOpenUrl, _, _):
+            GleanMetrics.Widget.mTabsOpenUrl.add()
+        case (.action, .open, .largeTabsOpenUrl, _, _):
+            GleanMetrics.Widget.lTabsOpenUrl.add()
+        case (.action, .open, .smallQuickActionSearch, _, _):
+            GleanMetrics.Widget.sQuickActionSearch.add()
+        case (.action, .open, .mediumQuickActionSearch, _, _):
+            GleanMetrics.Widget.mQuickActionSearch.add()
+        case (.action, .open, .mediumQuickActionPrivateSearch, _, _):
+            GleanMetrics.Widget.mQuickActionPrivateSearch.add()
+        case (.action, .open, .mediumQuickActionCopiedLink, _, _):
+            GleanMetrics.Widget.mQuickActionCopiedLink.add()
+        case (.action, .open, .mediumQuickActionClosePrivate, _, _):
+            GleanMetrics.Widget.mQuickActionClosePrivate.add()
+        case (.action, .open, .mediumTopSitesWidget, _, _):
+            GleanMetrics.Widget.mTopSitesWidget.add()
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)
