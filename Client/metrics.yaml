@@ -624,7 +624,7 @@ widget:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7097
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
@@ -635,7 +635,7 @@ widget:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7097
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
@@ -647,7 +647,7 @@ widget:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7097
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
@@ -659,7 +659,7 @@ widget:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7097
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
@@ -671,7 +671,7 @@ widget:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7097
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
@@ -683,7 +683,7 @@ widget:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7097
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
@@ -695,7 +695,7 @@ widget:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7097
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
@@ -706,7 +706,7 @@ widget:
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7097
     data_reviews:
-      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
