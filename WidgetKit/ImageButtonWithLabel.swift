@@ -60,7 +60,7 @@ struct ImageButtonWithLabel: View {
     }
 
     var body: some View {
-        Link(destination: link.url) {
+        Link(destination: isSmall ? link.smallWidgetUrl : link.mediumWidgetUrl) {
             ZStack(alignment: .leading) {
                 if !isSmall {
                     ContainerRelativeShape()

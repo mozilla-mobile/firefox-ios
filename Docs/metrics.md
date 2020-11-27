@@ -85,6 +85,14 @@ The following metrics are added to the ping:
 | theme.use_system_theme |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the "Use System Light/Dark Mode" theme preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 | |
 | tracking_protection.enabled |[boolean](https://mozilla.github.io/glean/book/user/metrics/boolean.html) |Measures the state of the tracking-protection enabled preference.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 | |
 | tracking_protection.strength |[string](https://mozilla.github.io/glean/book/user/metrics/string.html) |A string representing the selected strength of the tracking-protection that is enabled. One of: * basic * strict  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)||2021-07-01 | |
+| widget.l_tabs_open_url |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times the large tabs widget opens url  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7681)||2021-12-01 | |
+| widget.m_quick_action_close_private |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times medium quick action widget closes private tabs  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7681)||2021-12-01 | |
+| widget.m_quick_action_copied_link |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times medium quick action widget opens copied links  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7681)||2021-12-01 | |
+| widget.m_quick_action_private_search |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times medium quick action widget opens firefox for private search  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7681)||2021-12-01 | |
+| widget.m_quick_action_search |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times medium quick action widget opens firefox for regular search  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7681)||2021-12-01 | |
+| widget.m_tabs_open_url |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times the medium tabs widget opens url  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7681)||2021-12-01 | |
+| widget.m_top_sites_widget |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times user opens top site tabs  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7681)||2021-12-01 | |
+| widget.s_quick_action_search |[counter](https://mozilla.github.io/glean/book/user/metrics/counter.html) |Counts how many times small quick action widget opens firefox for regular search  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7681)||2021-12-01 | |
 
 
 Data categories are [defined here](https://wiki.mozilla.org/Firefox/Data_Collection).

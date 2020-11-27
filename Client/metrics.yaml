@@ -613,3 +613,100 @@ deletion:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: never
+
+# iOS 14 widget metrics
+# m: medium, s: small, l: large
+widget:
+  m_tabs_open_url:
+    type: counter
+    description: |
+      Counts how many times the medium tabs widget opens url
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
+  l_tabs_open_url:
+    type: counter
+    description: |
+      Counts how many times the large tabs widget opens url
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
+  s_quick_action_search:
+    type: counter
+    description: |
+      Counts how many times small quick action
+      widget opens firefox for regular search
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
+  m_quick_action_search:
+    type: counter
+    description: |
+      Counts how many times medium quick action
+      widget opens firefox for regular search
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
+  m_quick_action_private_search:
+    type: counter
+    description: |
+       Counts how many times medium quick action
+       widget opens firefox for private search
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
+  m_quick_action_copied_link:
+    type: counter
+    description: |
+      Counts how many times medium quick action
+      widget opens copied links
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
+  m_quick_action_close_private:
+    type: counter
+    description: |
+      Counts how many times medium quick action
+      widget closes private tabs
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
+  m_top_sites_widget:
+    type: counter
+    description: |
+      Counts how many times user opens top site tabs
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"
