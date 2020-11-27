@@ -14,9 +14,7 @@ class L10nBaseSnapshotTests: XCTestCase {
     var navigator: MMNavigator<FxUserState>!
     var userState: FxUserState!
 
-    var skipIntro: Bool {
-        return true
-    }
+    var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet,LaunchArguments.SkipIntro]
 
     override func setUp() {
         super.setUp()
@@ -24,17 +22,12 @@ class L10nBaseSnapshotTests: XCTestCase {
         app = XCUIApplication()
         setupSnapshot(app)
         app.terminate()
-        var args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
-        if skipIntro {
-            args.append(LaunchArguments.SkipIntro)
-        }
+
         springboardStart(app, args: args)
 
         let map = createScreenGraph(for: self, with: app)
         navigator = map.navigator()
         userState = navigator.userState
-
-        userState.showIntro = !skipIntro
 
         navigator.synchronizeWithUserState()
     }

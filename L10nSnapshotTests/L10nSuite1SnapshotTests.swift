@@ -5,12 +5,23 @@
 import XCTest
 
 class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
-    override var skipIntro: Bool {
-        return false
+
+    var noSkipIntroTest = ["testIntro"]
+
+    override func setUp() {
+        // Test name looks like: "[Class testFunc]", parse out the function name
+        let parts = name.replacingOccurrences(of: "]", with: "").split(separator: " ")
+                let key = String(parts[1])
+        if noSkipIntroTest.contains(key) {
+            args = [LaunchArguments.ClearProfile, LaunchArguments.SkipWhatsNew, LaunchArguments.SkipETPCoverSheet]
+        }
+        super.setUp()
     }
 
     func testIntro() {
         var num = 1
+        waitForExistence(app.buttons["nextOnboardingButton"])
+        navigator.nowAt(Intro_Welcome)
         allIntroPages.forEach { screenName in
             navigator.goto(screenName)
             snapshot("Intro-\(num)-\(screenName)")
@@ -56,6 +67,7 @@ class L10nSuite1SnapshotTests: L10nBaseSnapshotTests {
 
     func test3ReloadButtonContextMenu() {
         navigator.openURL(loremIpsumURL)
+        waitUntilPageLoad()
         waitForNoExistence(app.staticTexts["XCUITests-Runner pasted from Fennec"])
         
         navigator.toggleOff(userState.requestDesktopSite, withAction: Action.ToggleRequestDesktopSite)
