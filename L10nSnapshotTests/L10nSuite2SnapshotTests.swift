@@ -82,8 +82,10 @@ class L10nSuite2SnapshotTests: L10nBaseSnapshotTests {
     }
 
     func testFxASignInPage() {
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables.cells["menu-sync"], timeout: 5)
         navigator.goto(Intro_FxASignin)
-        waitForExistence(app.navigationBars.staticTexts["FxASingin.navBar"])
+        waitForExistence(app.navigationBars.staticTexts["FxASingin.navBar"], timeout: 10)
         snapshot("FxASignInScreen-01")
     }
 }
