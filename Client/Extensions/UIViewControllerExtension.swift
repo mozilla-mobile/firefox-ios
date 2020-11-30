@@ -23,6 +23,13 @@ enum NavigationItemText {
     }
 }
 
+struct ViewControllerConsts {
+    struct PreferredSize {
+        static let IntroViewController = CGSize(width: 375, height: 667)
+        static let UpdateViewController = CGSize(width: 375, height: 667)
+    }
+}
+
 extension UIViewController {
     /// This presents a View Controller with a bar button item that can be used to dismiss the VC
     /// - Parameters:

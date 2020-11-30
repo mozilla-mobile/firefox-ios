@@ -92,3 +92,13 @@ extension UIView {
         return nil
     }
 }
+
+protocol CardTheme {
+    var theme: BuiltinThemeName { get }
+}
+
+extension CardTheme {
+    var theme: BuiltinThemeName {
+        return BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
+    }
+}
