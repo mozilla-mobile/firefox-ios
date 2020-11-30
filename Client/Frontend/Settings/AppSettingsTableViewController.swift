@@ -137,11 +137,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
                 ForgetSyncAuthStateDebugSetting(settings: self),
                 SentryIDSetting(settings: self),
                 ChangeToChinaSetting(settings: self),
-                ToggleOnboarding(settings: self),
                 ShowEtpCoverSheet(settings: self),
-                ToggleOnboarding(settings: self),
-                LeanplumStatus(settings: self),
-                ClearOnboardingABVariables(settings: self)
+                LeanplumStatus(settings: self)
             ])]
 
         return settings
