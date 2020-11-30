@@ -65,7 +65,6 @@ class BrowserViewController: UIViewController {
     fileprivate var searchLoader: SearchLoader?
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
-    private var onboardingUserResearch: OnboardingUserResearch?
     private var newTabUserResearch: NewTabUserResearch?
     lazy var mailtoLinkHandler = MailtoLinkHandler()
     var urlFromAnotherApp: UrlToOpenModel?
@@ -486,8 +485,6 @@ class BrowserViewController: UIViewController {
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.appMenuBadgeUpdate), name: .FirefoxAccountStateChange, object: nil)
         
-        // Setup onboarding user research for A/B testing
-        onboardingUserResearch = OnboardingUserResearch()
         // Setup New Tab user research for A/B testing
         newTabUserResearch = NewTabUserResearch()
         newTabUserResearch?.lpVariableObserver()
@@ -2035,7 +2032,7 @@ extension BrowserViewController: UIAdaptivePresentationControllerDelegate {
 extension BrowserViewController {
     func presentIntroViewController(_ alwaysShow: Bool = false) {
         if alwaysShow || profile.prefs.intForKey(PrefsKeys.IntroSeen) == nil {
-            onboardingUserResearchHelper(alwaysShow)
+            showProperIntroVC()
         }
     }
     
@@ -2108,18 +2105,6 @@ extension BrowserViewController {
         }
         
         return false
-    }
-    
-    private func onboardingUserResearchHelper(_ alwaysShow: Bool = false) {
-        if alwaysShow {
-            showProperIntroVC()
-            return
-        }
-        // Setup user research closure and observer to fetch the updated LP Variables
-        onboardingUserResearch?.updatedLPVariable = {
-            self.showProperIntroVC()
-        }
-        onboardingUserResearch?.lpVariableObserver()
     }
     
     private func showProperIntroVC() {
