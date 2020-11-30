@@ -123,6 +123,7 @@ class TabTrayV2ViewController: UIViewController, Themeable {
         navigationItem.title = Strings.TabTrayV2Title
         if #available(iOS 13.0, *) { } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: Strings.CloseButtonTitle, style: .done, target: self, action: #selector(dismissTabTray))
+            TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
         }
         
         // Bottom toolbar
@@ -394,5 +395,11 @@ extension TabTrayV2ViewController: BottomSheetDelegate {
     func closeBottomSheet() {
         showBottomToolbar()
         self.bottomSheetVC?.hideView(shouldAnimate: true)
+    }
+}
+
+extension TabTrayV2ViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 }

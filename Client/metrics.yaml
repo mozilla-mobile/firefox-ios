@@ -353,6 +353,39 @@ tabs:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-21"
+  click_tab:
+    type: event
+    description: |
+      Recorded when a user clicks an open tab
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-03"
+  open_tab_tray:
+    type: event
+    description: |
+      Recorded when a user opens the tab tray
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-03"
+  close_tab_tray:
+    type: event
+    description: |
+      Recorded when a user closes the tab tray
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7526
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7635
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-11-03"
 
 # Bookmark metrics
 bookmarks:

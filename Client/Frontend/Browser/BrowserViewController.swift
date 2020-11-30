@@ -1338,6 +1338,7 @@ extension BrowserViewController: URLBarDelegate {
             let controller: UINavigationController
             if #available(iOS 13.0, *) {
                 controller = UINavigationController(rootViewController: tabTrayViewController)
+                controller.presentationController?.delegate = tabTrayViewController
                 // If we're not using the system theme, override the view's style to match
                 if !ThemeManager.instance.systemThemeIsOn {
                     controller.overrideUserInterfaceStyle = ThemeManager.instance.userInterfaceStyle
@@ -1358,6 +1359,7 @@ extension BrowserViewController: URLBarDelegate {
         if let tab = tabManager.selectedTab {
             screenshotHelper.takeScreenshot(tab)
         }
+        TelemetryWrapper.recordEvent(category: .action, method: .open, object: .tabTray)
     }
 
     func urlBarDidPressReload(_ urlBar: URLBarView) {

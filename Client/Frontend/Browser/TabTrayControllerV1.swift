@@ -521,6 +521,7 @@ extension TabTrayControllerV1 {
         collectionView.layer.removeAllAnimations()
         collectionView.cellForItem(at: IndexPath(row: 0, section: 0))?.layer.removeAllAnimations()
         _ = self.navigationController?.popViewController(animated: true)
+        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
     }
 
 }
