@@ -7,7 +7,7 @@ import UIKit
 import SnapKit
 import Shared
 
-class IntroScreenWelcomeViewV1: UIView, CardTheme {
+class IntroScreenWelcomeView: UIView, CardTheme {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours

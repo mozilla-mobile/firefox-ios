@@ -8,21 +8,21 @@ import SnapKit
 import Shared
 import Leanplum
 
-class IntroViewControllerV2: UIViewController {
+class IntroViewController: UIViewController {
     // private var
     // Private views
-    private lazy var welcomeCardV1: IntroScreenWelcomeViewV1 = {
-        let welcomeCardView = IntroScreenWelcomeViewV1()
+    private lazy var welcomeCard: IntroScreenWelcomeView = {
+        let welcomeCardView = IntroScreenWelcomeView()
         welcomeCardView.clipsToBounds = true
         return welcomeCardView
     }()
-    private lazy var syncCardV2: IntroScreenSyncViewV2 = {
-        let syncCardView = IntroScreenSyncViewV2()
+    private lazy var syncCard: IntroScreenSyncView = {
+        let syncCardView = IntroScreenSyncView()
         syncCardView.clipsToBounds = true
         return syncCardView
     }()
     // Closure delegate
-    var didFinishClosure: ((IntroViewControllerV2, FxAPageType?) -> Void)?
+    var didFinishClosure: ((IntroViewController, FxAPageType?) -> Void)?
     
     // MARK: Initializer
     init() {
@@ -40,64 +40,64 @@ class IntroViewControllerV2: UIViewController {
     
     // MARK: View setup
     private func initialViewSetup() {
-        setupIntroViewV2()
+        setupIntroView()
     }
     
-    private func setupWelcomeCardV1() {
+    private func setupWelcomeCard() {
         // Constraints
-        welcomeCardV1.snp.makeConstraints { make in
+        welcomeCard.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         // Buton action closures
         // Next button action
-        welcomeCardV1.nextClosure = {
+        welcomeCard.nextClosure = {
             UIView.animate(withDuration: 0.3, animations: {
-                self.welcomeCardV1.alpha = 0
+                self.welcomeCard.alpha = 0
             }) { _ in
-                self.welcomeCardV1.isHidden = true
+                self.welcomeCard.isHidden = true
             }
         }
         // Close button action
-        welcomeCardV1.closeClosure = {
+        welcomeCard.closeClosure = {
             self.didFinishClosure?(self, nil)
         }
         // Sign in button closure
-        welcomeCardV1.signInClosure = {
+        welcomeCard.signInClosure = {
             self.didFinishClosure?(self, .emailLoginFlow)
         }
         // Sign up button closure
-        welcomeCardV1.signUpClosure = {
+        welcomeCard.signUpClosure = {
             self.didFinishClosure?(self, .emailLoginFlow)
         }
     }
     
-    // V2 of onboarding intro view
-    private func setupIntroViewV2() {
+    //onboarding intro view
+    private func setupIntroView() {
         // Initialize
-        view.addSubview(syncCardV2)
-        view.addSubview(welcomeCardV1)
+        view.addSubview(syncCard)
+        view.addSubview(welcomeCard)
         // Constraints
-        setupWelcomeCardV1()
-        setupSyncCardV2()
+        setupWelcomeCard()
+        setupSyncCard()
     }
     
-    private func setupSyncCardV2() {
-        syncCardV2.snp.makeConstraints() { make in
+    private func setupSyncCard() {
+        syncCard.snp.makeConstraints() { make in
             make.edges.equalToSuperview()
         }
         // Start browsing button action
-        syncCardV2.startBrowsing = {
+        syncCard.startBrowsing = {
             self.didFinishClosure?(self, nil)
         }
         // Sign-up browsing button action
-        syncCardV2.signUp = {
+        syncCard.signUp = {
             self.didFinishClosure?(self, .emailLoginFlow)
         }
     }
 }
 
 // MARK: UIViewController setup
-extension IntroViewControllerV2 {
+extension IntroViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }

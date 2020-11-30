@@ -38,7 +38,7 @@ to make it center in the top container view.
 
 */
 
-class IntroScreenSyncViewV2: UIView, CardTheme {
+class IntroScreenSyncView: UIView, CardTheme {
     // Private vars
     private var fxTextThemeColour: UIColor {
         // For dark theme we want to show light colours and for light we want to show dark colours
