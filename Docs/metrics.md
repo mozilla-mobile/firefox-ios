@@ -36,6 +36,9 @@ The following metrics are added to the ping:
 | Name | Type | Description | Data reviews | Extras | Expiration | [Data Sensitivity](https://wiki.mozilla.org/Firefox/Data_Collection) |
 | --- | --- | --- | --- | --- | --- | --- |
 | preferences.changed |[event](https://mozilla.github.io/glean/book/user/metrics/event.html) |Recorded when a preference is changed and includes the preference that changed as well as the value changed to recorded in the extra keys.  |[1](https://bugzilla.mozilla.org/show_bug.cgi?id=1644846)|<ul><li>changed_to: The value the preference was changed to. </li><li>preference: The preference that was changed. </li></ul>|2021-07-01 | |
+| tabs.click_tab |[event](https://mozilla.github.io/glean/book/user/metrics/event.html) |Recorded when a user clicks an open tab  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7635)||2021-11-03 | |
+| tabs.close_tab_tray |[event](https://mozilla.github.io/glean/book/user/metrics/event.html) |Recorded when a user closes the tab tray  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7635)||2021-11-03 | |
+| tabs.open_tab_tray |[event](https://mozilla.github.io/glean/book/user/metrics/event.html) |Recorded when a user opens the tab tray  |[1](https://github.com/mozilla-mobile/firefox-ios/pull/7635)||2021-11-03 | |
 
 ## metrics
 
