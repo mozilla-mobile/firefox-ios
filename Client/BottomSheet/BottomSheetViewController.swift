@@ -151,7 +151,6 @@ class BottomSheetViewController: UIViewController, Themeable {
                 // past middle
                 if newYVal > self.maxY + (self.partialHeight * downYShiftSpecifier) {
                     hideView(shouldAnimate: true)
-                    TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
                 } else {
                     self.moveView(state: .partial)
                 }

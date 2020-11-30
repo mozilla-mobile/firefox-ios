@@ -397,3 +397,9 @@ extension TabTrayV2ViewController: BottomSheetDelegate {
         self.bottomSheetVC?.hideView(shouldAnimate: true)
     }
 }
+
+extension TabTrayV2ViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        TelemetryWrapper.recordEvent(category: .action, method: .close, object: .tabTray)
+    }
+}
