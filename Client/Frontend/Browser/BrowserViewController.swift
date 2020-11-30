@@ -1128,7 +1128,7 @@ class BrowserViewController: UIViewController {
 
     fileprivate func popToBVC() {
         guard let currentViewController = navigationController?.topViewController else {
-                return
+            return
         }
         currentViewController.dismiss(animated: true, completion: nil)
         if currentViewController != self {
@@ -1332,7 +1332,7 @@ extension BrowserViewController: URLBarDelegate {
 
         updateFindInPageVisibility(visible: false)
         
-        let shouldShowChronTabs = profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey) ?? (chronTabsUserResearch?.chronTabsState ?? false)
+        let shouldShowChronTabs = UIDevice.current.userInterfaceIdiom != .pad && profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey) ?? (chronTabsUserResearch?.chronTabsState ?? false)
         if shouldShowChronTabs {
             let tabTrayViewController = TabTrayV2ViewController(tabTrayDelegate: self, profile: profile)
             let controller: UINavigationController
