@@ -1,0 +1,77 @@
+{
+  "configurations" : [
+    {
+      "id" : "FB8FB2A0-E461-4F52-AE3D-FB5F222D5262",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "ActivityStreamTest",
+        "AuthenticationTest",
+        "BaseTestCase",
+        "BookmarkingTests",
+        "BrowsingPDFTests",
+        "ClipBoardTests",
+        "CopiedLinksTests",
+        "CronTabsPerformanceTest",
+        "DataManagementTests",
+        "DatabaseFixtureTest",
+        "DesktopModeTestsIpad",
+        "DesktopModeTestsIphone",
+        "DisplaySettingTests",
+        "DomainAutocompleteTest",
+        "DownloadFilesTests",
+        "DragAndDropTestIpad",
+        "DragAndDropTests",
+        "FindInPageTests",
+        "FirstRunTourTests",
+        "FxScreenGraphTests",
+        "HistoryTests",
+        "HomePageSettingsUITests",
+        "IpadOnlyTestCase",
+        "IphoneOnlyTestCase",
+        "LibraryTestsIpad",
+        "LibraryTestsIphone",
+        "MailAppSettingsTests",
+        "NavigationTest",
+        "NewTabSettingsTest",
+        "NightModeTests",
+        "NoImageTests",
+        "PhotonActionSheetTest",
+        "PocketTest",
+        "PrivateBrowsingTest",
+        "PrivateBrowsingTestIpad",
+        "ReaderViewTest",
+        "SaveLoginTest",
+        "ScreenGraphTest",
+        "SearchSettingsUITests",
+        "SearchTests",
+        "SettingsTest",
+        "SiteLoadTest",
+        "SyncUITests",
+        "TabTraySearchTabsTests",
+        "ThirdPartySearchTest",
+        "ToolbarTests",
+        "TopTabsTest",
+        "TopTabsTestIpad",
+        "TopTabsTestIphone",
+        "TrackingProtectionTests",
+        "WhatsNewTest"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "3BFE4B061D342FB800DDF53F",
+        "name" : "XCUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

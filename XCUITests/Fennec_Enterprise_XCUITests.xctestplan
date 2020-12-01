@@ -1,0 +1,118 @@
+{
+  "configurations" : [
+    {
+      "id" : "21E9B57A-0B75-4A4E-B496-7A1894F4CF22",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "FIREFOX_CLEAR_PROFILE"
+      },
+      {
+        "argument" : "FIREFOX_TEST"
+      }
+    ],
+    "language" : "en",
+    "region" : "US",
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Client.xcodeproj",
+      "identifier" : "F84B21BD1A090F8100AAB793",
+      "name" : "Client"
+    }
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : [
+        "ActivityStreamTest\/testActivityStreamPages()",
+        "ActivityStreamTest\/testDefaultSites()",
+        "ActivityStreamTest\/testTopSitesOpenInNewPrivateTab()",
+        "ActivityStreamTest\/testTopSitesOpenInNewPrivateTabDefaultTopSite()",
+        "ActivityStreamTest\/testTopSitesOpenInNewTabDefaultTopSite()",
+        "AuthenticationTest\/testPromptPassCodeUponReentry()",
+        "BaseTestCase",
+        "BookmarkingTests\/testBookmarkLibraryAddDeleteBookmark()",
+        "BookmarkingTests\/testBookmarksAwesomeBar()",
+        "BrowsingPDFTests",
+        "ClipBoardTests\/testClipboardPasteAndGo()",
+        "CronTabsPerformanceTest",
+        "DataManagementTests\/testWebSiteDataEnterFirstTime()",
+        "DomainAutocompleteTest\/testDeletingCharsUpdateTheResults()",
+        "DownloadFilesTests\/testToastButtonToGoToDownloads()",
+        "DragAndDropTestIpad\/testTryDragAndDropBookmarkToURLBar()",
+        "DragAndDropTestIpad\/testTryDragAndDropHistoryToURLBar()",
+        "FindInPageTests\/testFindFromMenu()",
+        "FirstRunTourTests\/testFirstRunTour()",
+        "HistoryTests\/testClearPrivateDataButtonDisabled()",
+        "HistoryTests\/testDeleteHistoryEntryBySwiping()",
+        "HomePageSettingsTest",
+        "HomePageUITest",
+        "IntegrationTests",
+        "IntegrationTests\/testFxASyncBookmark()",
+        "NavigationTest\/testLongPressLinkOptions()",
+        "NavigationTest\/testNavigationPreservesDesktopSiteOnSameHost()",
+        "NavigationTest\/testPopUpBlocker()",
+        "NavigationTest\/testReloadPreservesMobileOrDesktopSite()",
+        "NavigationTest\/testSSL()",
+        "NavigationTest\/testScrollsToTopWithMultipleTabs()",
+        "NavigationTest\/testToggleBetweenMobileAndDesktopSiteFromSite()",
+        "NewTabSettingsTest\/testChangeNewTabSettingsShowBlankPage()",
+        "NewTabSettingsTest\/testChangeNewTabSettingsShowCustomURL()",
+        "NewTabSettingsTest\/testChangeNewTabSettingsShowYourBookmarks()",
+        "NewTabSettingsTest\/testChangeNewTabSettingsShowYourHistory()",
+        "NewTabSettingsTest\/testCheckNewTabSettingsByDefault()",
+        "NewTabSettingsTest\/testToggleOffOnAdditionalContentBookmarks()",
+        "NoImageTests",
+        "PhotonActionSheetTest\/testPinToTop()",
+        "PhotonActionSheetTest\/testSendToDeviceFromShareOption()",
+        "PhotonActionSheetTest\/testShareOptionIsShownFromShortCut()",
+        "PhotonActionSheetTest\/testSharePageWithShareSheetOptions()",
+        "PrivateBrowsingTest\/testClosePrivateTabsOptionClosesPrivateTabsShortCutiPad()",
+        "PrivateBrowsingTest\/testiPadDirectAccessPrivateMode()",
+        "PrivateBrowsingTest\/testiPadDirectAccessPrivateModeBrowserTab()",
+        "PrivateBrowsingTestIpad\/testiPadDirectAccessPrivateMode()",
+        "ReaderViewTest\/testAddToReaderListOptions()",
+        "ReaderViewTest\/testAddToReadingList()",
+        "ReaderViewTest\/testLoadReaderContent()",
+        "SaveLoginTest\/testEditOneLoginEntry()",
+        "SaveLoginTest\/testSaveLogin()",
+        "SaveLoginTest\/testSavedLoginAutofilled()",
+        "ScreenGraphTest\/testUserStateChanges()",
+        "SearchTests\/testDismissPromptPresence()",
+        "SearchTests\/testSearchEngine()",
+        "SearchTests\/testSearchStartAfterTypingTwoWords()",
+        "SiteLoadTest",
+        "SyncUITests\/testAccountManagementPage()",
+        "TabTraySearchTabsTests\/testSearchTabs()",
+        "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingLandscape()",
+        "ToolbarTests\/testShowDoNotShowToolbarWhenScrollingPortrait()",
+        "ToolbarTests\/testShowToolbarWhenScrollingDefaultOption()",
+        "TopTabsTest\/testAddTabFromTabTray()",
+        "TopTabsTest\/testCloseAllTabsPrivateModeUndo()",
+        "TopTabsTest\/testCloseAllTabsUndo()",
+        "TopTabsTest\/testCloseTabFromPageOptionsMenu()",
+        "TopTabsTest\/testLongTapTabCounter()",
+        "TopTabsTest\/testSwitchBetweenTabsNoPrivatePrivateToastButton()",
+        "TopTabsTest\/testSwitchBetweenTabsToastButton()",
+        "TopTabsTestIphone\/testAddPrivateTabByLongPressTabsButton()",
+        "TopTabsTestIphone\/testAddTabByLongPressTabsButton()",
+        "TopTabsTestIphone\/testCloseTabFromLongPressTabsButton()",
+        "TopTabsTestIphone\/testSwitchBetweenTabsNoPrivatePrivateToastButton()",
+        "TopTabsTestIphone\/testSwitchBetweenTabsToastButton()",
+        "TrackingProtectionTests\/testEnableDisableTPforSite()",
+        "TrackingProtectionTests\/testTrackingProtection()"
+      ],
+      "target" : {
+        "containerPath" : "container:Client.xcodeproj",
+        "identifier" : "3BFE4B061D342FB800DDF53F",
+        "name" : "XCUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
