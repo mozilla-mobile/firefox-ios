@@ -86,6 +86,7 @@ struct LPAttributeKey {
     static let experimentName = "Experiment name"
     static let experimentId = "Experiment id"
     static let experimentVariant = "Experiment variant"
+    static let isReleaseBuild = "Build channel is Release"
 }
 
 struct MozillaAppSchemes {
@@ -212,7 +213,8 @@ class LeanPlumClient {
             LPAttributeKey.klarInstalled: klarInstalled(),
             LPAttributeKey.pocketInstalled: pocketInstalled(),
             LPAttributeKey.signedInSync: profile?.hasAccount() ?? false,
-            LPAttributeKey.fxaAccountVerified: profile?.hasSyncableAccount() ?? false
+            LPAttributeKey.fxaAccountVerified: profile?.hasSyncableAccount() ?? false,
+            LPAttributeKey.isReleaseBuild: AppConstants.BuildChannel == .release
         ]
 
         self.setupCustomTemplates()
