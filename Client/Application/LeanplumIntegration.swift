@@ -214,7 +214,7 @@ class LeanPlumClient {
             LPAttributeKey.pocketInstalled: pocketInstalled(),
             LPAttributeKey.signedInSync: profile?.hasAccount() ?? false,
             LPAttributeKey.fxaAccountVerified: profile?.hasSyncableAccount() ?? false,
-            LPAttributeKey.buildChannelIsRelease: AppConstants.BuildChannel == .release
+            LPAttributeKey.isReleaseBuild: AppConstants.BuildChannel == .release
         ]
 
         self.setupCustomTemplates()
