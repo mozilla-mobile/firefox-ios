@@ -12,7 +12,8 @@ class XCodeBuild(object):
     binary = 'xcodebuild'
     destination = 'platform=iOS Simulator,name=iPhone 11'
     logger = logging.getLogger()
-    scheme = 'Fennec_Enterprise_XCUITests_Integration'
+    scheme = 'Fennec_Enterprise_XCUITests'
+    testPlan = 'SyncIntegrationTestPlan'
     xcrun = XCRun()
 
     def __init__(self, log):
@@ -25,7 +26,8 @@ class XCodeBuild(object):
             'test',
             '-scheme', self.scheme,
             '-destination', self.destination,
-            '-only-testing:{}'.format(identifier)]
+            '-only-testing:{}'.format(identifier),
+            '-testPlan', self.testPlan]
         self.logger.info('Running: {}'.format(' '.join(args)))
         try:
             out = subprocess.check_output(

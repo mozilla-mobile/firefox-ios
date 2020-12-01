@@ -3373,6 +3373,9 @@
 		D4B5444899A0721B899F9E46 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D4C34EB8A53AA2CB96BAFD75 /* ur */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ur; path = ur.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D4C4BDCD2253725E00986F04 /* LibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTests.swift; sourceTree = "<group>"; };
+		D4C792B625651FAE00FB7E86 /* Fennec_Enterprise_XCUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = Fennec_Enterprise_XCUITests.xctestplan; path = XCUITests/Fennec_Enterprise_XCUITests.xctestplan; sourceTree = "<group>"; };
+		D4C792CA25651FC500FB7E86 /* PerformanceTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = PerformanceTestPlan.xctestplan; path = XCUITests/PerformanceTestPlan.xctestplan; sourceTree = "<group>"; };
+		D4C794812565A13700FB7E86 /* SyncIntegrationTestPlan.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = SyncIntegrationTestPlan.xctestplan; path = XCUITests/SyncIntegrationTestPlan.xctestplan; sourceTree = "<group>"; };
 		D4DA46389A3E4D1CEFAD83CB /* gd */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = gd; path = gd.lproj/3DTouchActions.strings; sourceTree = "<group>"; };
 		D4F3D788232F960600FBB9AA /* WhatsNewTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewTest.swift; sourceTree = "<group>"; };
 		D50847F69392BA78E952CC1E /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uk; path = uk.lproj/Intro.strings; sourceTree = "<group>"; };
@@ -5675,6 +5678,9 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				D4C794812565A13700FB7E86 /* SyncIntegrationTestPlan.xctestplan */,
+				D4C792B625651FAE00FB7E86 /* Fennec_Enterprise_XCUITests.xctestplan */,
+				D4C792CA25651FC500FB7E86 /* PerformanceTestPlan.xctestplan */,
 				3E82980124BE4C31000A59FF /* FxATelemetryUtils.swift */,
 				C8E2E80623D20FB3005AACE6 /* RustFxA */,
 				E6C191D41E38F7B7000A213B /* Cartfile */,

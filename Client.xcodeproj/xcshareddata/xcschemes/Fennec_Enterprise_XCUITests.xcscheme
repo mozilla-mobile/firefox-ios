@@ -192,6 +192,18 @@
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
+      <TestPlans>
+         <TestPlanReference
+            reference = "container:XCUITests/Fennec_Enterprise_XCUITests.xctestplan"
+            default = "YES">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:XCUITests/PerformanceTestPlan.xctestplan">
+         </TestPlanReference>
+         <TestPlanReference
+            reference = "container:XCUITests/SyncIntegrationTestPlan.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
       <Testables>
          <TestableReference
             skipped = "NO">
