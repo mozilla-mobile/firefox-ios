@@ -86,7 +86,7 @@ struct LPAttributeKey {
     static let experimentName = "Experiment name"
     static let experimentId = "Experiment id"
     static let experimentVariant = "Experiment variant"
-    static let buildChannelIsRelease = "Build channel is Release"
+    static let isReleaseBuild = "Build channel is Release"
 }
 
 struct MozillaAppSchemes {
