@@ -76,6 +76,7 @@ class IntroScreenSyncView: UIView, CardTheme {
         button.layer.cornerRadius = 10
         button.backgroundColor = UIColor.Photon.Blue50
         button.setTitle(Strings.IntroSignUpButtonTitle, for: .normal)
+        button.accessibilityIdentifier = "signUpButtonSyncView"
         return button
     }()
     private lazy var startBrowsingButton: UIButton = {
@@ -85,6 +86,7 @@ class IntroScreenSyncView: UIView, CardTheme {
         button.setTitleColor(UIColor.Photon.Blue50, for: .normal)
         button.setTitle(Strings.StartBrowsingButtonTitle, for: .normal)
         button.titleLabel?.textAlignment = .center
+        button.accessibilityIdentifier = "startBrowsingButtonSyncView"
         return button
     }()
     // Container and combined views
