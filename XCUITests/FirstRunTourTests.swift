@@ -12,7 +12,6 @@ class FirstRunTourTests: BaseTestCase {
     func testFirstRunTour() {
         // Complet the First run from first screen to the latest one
         // Check that the first's tour screen is shown as well as all the elements in there
-
         waitForExistence(app.staticTexts["Welcome to Firefox"])
         XCTAssertTrue(app.buttons["nextOnboardingButton"].exists)
         XCTAssertTrue(app.buttons["signInOnboardingButton"].exists)
@@ -20,9 +19,8 @@ class FirstRunTourTests: BaseTestCase {
 
         // Swipe to the second screen
         app.buttons.staticTexts["Next"].tap()
-        XCTAssertTrue(app.buttons["startBrowsingOnboardingButton"].exists)
-        XCTAssertTrue(app.buttons["signInOnboardingButton"].exists)
-        XCTAssertTrue(app.buttons["signUpOnboardingButton"].exists)
+        XCTAssertTrue(app.buttons["startBrowsingButtonSyncView"].exists)
+        XCTAssertTrue(app.buttons["signUpButtonSyncView"].exists)
     }
 
     private func goToNextScreen() {
@@ -30,7 +28,7 @@ class FirstRunTourTests: BaseTestCase {
     }
 
     private func tapStartBrowsingButton() {
-        app.buttons["startBrowsingOnboardingButton"].tap()
+        app.buttons["startBrowsingButtonSyncView"].tap()
         // User starts in HomePanelScreen with the default Top Sites
         let topSites = app.collectionViews.cells["TopSitesCell"]
         waitForExistence(topSites)

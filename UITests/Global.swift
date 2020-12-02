@@ -253,7 +253,7 @@ class BrowserUtils {
         if (tester.viewExistsWithLabel("Next")) {
             tester.tapView(withAccessibilityIdentifier: "nextOnboardingButton")
             tester.waitForAnimationsToFinish(withTimeout: 3)
-            tester.tapView(withAccessibilityIdentifier: "startBrowsingOnboardingButton")
+            tester.tapView(withAccessibilityIdentifier: "startBrowsingButtonSyncView")
         }
     }
     
