@@ -49,6 +49,13 @@ struct TabState {
     var favicon: Favicon?
 }
 
+enum TabTelemetryUrlType: String {
+    case regular
+    case performedSearch
+    case followOnSearch
+    case organic
+}
+
 class Tab: NSObject {
     fileprivate var _isPrivate: Bool = false
     internal fileprivate(set) var isPrivate: Bool {
@@ -61,7 +68,7 @@ class Tab: NSObject {
             }
         }
     }
-
+    var urlType: TabTelemetryUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
     }

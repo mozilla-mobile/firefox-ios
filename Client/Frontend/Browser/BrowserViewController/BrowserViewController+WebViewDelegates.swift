@@ -657,6 +657,22 @@ extension BrowserViewController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         guard let tab = tabManager[webView] else { return }
+        if shouldSetPerformSearch {
+            tab.urlType = .performedSearch
+            shouldSetPerformSearch = false
+        } else if let webUrl = webView.url {
+            let components = URLComponents(url: webUrl, resolvingAgainstBaseURL: false)!
+            let clientValue = components.valueForQuery("client")
+            print(clientValue)
+            // check if previous tab type is performed search
+            if (tab.urlType == .performedSearch || tab.urlType == .followOnSearch) && clientValue == "firefox-b-1-m" {
+                tab.urlType = .followOnSearch
+            } else if let url = components.url, url.domainURL.absoluteString.starts(with: "https://google.com") {
+                tab.urlType = .organic
+            } else {
+                tab.urlType = .regular
+            }
+        }
 
         tab.url = webView.url
         // When tab url changes after web content starts loading on the page
