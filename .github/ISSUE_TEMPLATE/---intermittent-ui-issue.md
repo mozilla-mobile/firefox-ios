@@ -1,5 +1,5 @@
 ---
-name: "💔 Feature request"
+name: "💔 Intermittent UI Test Issue"
 about: Create an issue to help log a UI test failure
 labels: "eng:intermittent-test"
 
