@@ -1,7 +1,9 @@
 ---
 name: "\U0001F41E Bug report"
 about: Create a report to help us improve
-labels: "Bug 🐞"
+title: ''
+labels: "Bug \U0001F41E"
+assignees: ''
 
 ---
 
@@ -15,4 +17,4 @@ labels: "Bug 🐞"
 * Device: ?
 * Build version: ?
 ### Notes
-Attachments: 
+Attachments:
