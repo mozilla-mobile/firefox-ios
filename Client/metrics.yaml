@@ -58,6 +58,17 @@ search:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-07-01"
+  in_content:
+    type: labeled_counter
+    description: |
+      Records the type of interaction a user has on SERP pages.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7602
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7702
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-05-07"
 
 # Preference metrics
 preferences:
