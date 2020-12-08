@@ -49,6 +49,7 @@ class TabTableViewCell: UITableViewCell, Themeable {
             make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.screenshotMarginTopBottom)
         }
         
+        websiteTitle.numberOfLines = 2
         websiteTitle.snp.makeConstraints { make in
             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
             make.top.equalToSuperview().offset(TabTrayV2ControllerUX.textMarginTopBottom)
