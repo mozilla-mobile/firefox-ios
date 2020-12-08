@@ -49,7 +49,12 @@ class TabTableViewCell: UITableViewCell, Themeable {
             make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.screenshotMarginTopBottom)
         }
         
-        loadTitleConstraint()
+        websiteTitle.snp.makeConstraints { make in
+             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
+            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.textMarginTopBottom)
+            make.bottom.equalTo(urlLabel.snp.top)
+            make.trailing.equalToSuperview().offset(-16)
+        }
 
         urlLabel.snp.makeConstraints { make in
             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
@@ -60,11 +65,11 @@ class TabTableViewCell: UITableViewCell, Themeable {
     }
     
     // Helper method to load website title constraint
-    func loadTitleConstraint() {
+    func remakeTitleConstraint() {
         guard let websiteTitle = websiteTitle, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
         
         websiteTitle.numberOfLines = 2
-        websiteTitle.snp.makeConstraints { make in
+        websiteTitle.snp.remakeConstraints { make in
              make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
             make.top.equalToSuperview().offset(TabTrayV2ControllerUX.textMarginTopBottom)
             make.bottom.equalTo(urlLabel.snp.top)
