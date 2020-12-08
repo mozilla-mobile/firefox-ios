@@ -64,7 +64,7 @@ class TabTableViewCell: UITableViewCell, Themeable {
         }
     }
     
-    // Helper method to load website title constraint
+    // Helper method to remake title constraint
     func remakeTitleConstraint() {
         guard let websiteTitle = websiteTitle, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
         
