@@ -46,6 +46,13 @@ class TabTrayV2ViewModel: NSObject {
         return self.isPrivate ? tabManager.privateTabs : tabManager.normalTabs
     }
     
+    func getTabDomainUrl(tab: Tab) -> URL? {
+        guard tab.url != nil else {
+            return tab.sessionData?.urls.last?.domainURL
+        }
+        return tab.url?.domainURL
+    }
+    
     func countOfNormalTabs() -> Int {
         return tabManager.normalTabs.count
     }
@@ -203,15 +210,18 @@ class TabTrayV2ViewModel: NSObject {
     
     func configure(cell: TabTableViewCell, for index: IndexPath) {
         guard let section = TabSection(rawValue: index.section),
-            let data = dataStore[section]?[index.row],
-            let textLabel = cell.textLabel,
-            let detailTextLabel = cell.detailTextLabel,
-            let imageView = cell.imageView
-            else { return }
-        let baseDomain = data.sessionData?.urls.last?.baseDomain ?? data.url?.baseDomain        
-        detailTextLabel.text = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
-        textLabel.text = data.displayTitle
-        imageView.image = data.screenshot ?? UIImage()
+              let tab = dataStore[section]?[index.row] else { return }
+
+        let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
+        let urlLabel = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
+
+        cell.screenshotView?.image = tab.screenshot
+        // Set Favicon from domain url when screenshot is empty for tab
+        if tab.screenshot == nil, let domainUrl = getTabDomainUrl(tab: tab) {
+            cell.screenshotView?.setImageAndBackground(forIcon: tab.displayFavicon, website: domainUrl) {}
+        }
+        cell.websiteTitle?.text = tab.displayTitle
+        cell.urlLabel?.text = urlLabel
         cell.accessoryView = cell.closeButton
     }
 }
