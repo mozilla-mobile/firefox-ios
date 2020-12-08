@@ -50,7 +50,7 @@ class TabTableViewCell: UITableViewCell, Themeable {
         }
         
         websiteTitle.snp.makeConstraints { make in
-             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
+            make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
             make.top.equalToSuperview().offset(TabTrayV2ControllerUX.textMarginTopBottom)
             make.bottom.equalTo(urlLabel.snp.top)
             make.trailing.equalToSuperview().offset(-16)
