@@ -5,9 +5,13 @@
 import Foundation
 import UIKit
 import Shared
+import SnapKit
 
 class TabTableViewCell: UITableViewCell, Themeable {
     static let identifier = "tabCell"
+    var screenshotView: UIImageView?
+    var websiteTitle: UILabel?
+    var urlLabel: UILabel?
     
     lazy var closeButton: UIButton = {
         let button = UIButton()
@@ -19,10 +23,18 @@ class TabTableViewCell: UITableViewCell, Themeable {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
-        guard let screenshotView = imageView,
-            let websiteTitle = textLabel,
-            let urlLabel = detailTextLabel
-            else { return }
+        guard let imageView = imageView, let title = textLabel, let label = detailTextLabel else { return }
+        
+        self.screenshotView = imageView
+        self.websiteTitle = title
+        self.urlLabel = label
+        
+        viewSetup()
+        applyTheme()
+    }
+    
+    private func viewSetup() {
+        guard let websiteTitle = websiteTitle, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
         
         screenshotView.contentMode = .scaleAspectFill
         screenshotView.clipsToBounds = true
@@ -38,22 +50,32 @@ class TabTableViewCell: UITableViewCell, Themeable {
         }
         
         websiteTitle.numberOfLines = 2
-        
         websiteTitle.snp.makeConstraints { make in
             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
             make.top.equalToSuperview().offset(TabTrayV2ControllerUX.textMarginTopBottom)
             make.bottom.equalTo(urlLabel.snp.top)
             make.trailing.equalToSuperview().offset(-16)
         }
-        
+
         urlLabel.snp.makeConstraints { make in
             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
             make.trailing.equalToSuperview()
             make.top.equalTo(websiteTitle.snp.bottom).offset(3)
             make.bottom.equalToSuperview().offset(-TabTrayV2ControllerUX.textMarginTopBottom * CGFloat(websiteTitle.numberOfLines))
         }
-
-        applyTheme()
+    }
+    
+    // Helper method to remake title constraint
+    func remakeTitleConstraint() {
+        guard let websiteTitle = websiteTitle, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
+        
+        websiteTitle.numberOfLines = 2
+        websiteTitle.snp.remakeConstraints { make in
+            make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
+            make.top.equalToSuperview().offset(TabTrayV2ControllerUX.textMarginTopBottom)
+            make.bottom.equalTo(urlLabel.snp.top)
+            make.trailing.equalToSuperview().offset(-16)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -62,8 +84,7 @@ class TabTableViewCell: UITableViewCell, Themeable {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-
-        self.applyTheme()
+        applyTheme()
     }
 
     func applyTheme() {

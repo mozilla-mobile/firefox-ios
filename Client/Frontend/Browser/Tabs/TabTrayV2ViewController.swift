@@ -229,7 +229,7 @@ extension TabTrayV2ViewController: UITableViewDataSource {
         tabCell.separatorInset = UIEdgeInsets.zero
         
         viewModel.configure(cell: tabCell, for: indexPath)
-        
+        tabCell.remakeTitleConstraint()
         return tabCell
     }
     
