@@ -49,6 +49,13 @@ struct TabState {
     var favicon: Favicon?
 }
 
+enum TabUrlType: String {
+    case regular
+    case search
+    case followOnSearch
+    case organicSearch
+}
+
 class Tab: NSObject {
     fileprivate var _isPrivate: Bool = false
     internal fileprivate(set) var isPrivate: Bool {
@@ -61,7 +68,7 @@ class Tab: NSObject {
             }
         }
     }
-
+    var urlType: TabUrlType = .regular
     var tabState: TabState {
         return TabState(isPrivate: _isPrivate, url: url, title: displayTitle, favicon: displayFavicon)
     }
@@ -591,6 +598,18 @@ class Tab: NSObject {
 
     func applyTheme() {
         UITextField.appearance().keyboardAppearance = isPrivate ? .dark : (ThemeManager.instance.currentName == .dark ? .dark : .light)
+    }
+    
+    func getProviderForUrl() -> SearchEngine {
+        guard let url = self.webView?.url else {
+            return .none
+        }
+        for provider in SearchEngine.allCases {
+            if (url.absoluteString.contains(provider.rawValue)) {
+                return provider
+            }
+        }
+        return .none
     }
 }
 

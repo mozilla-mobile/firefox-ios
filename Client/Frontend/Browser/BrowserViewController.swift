@@ -62,6 +62,7 @@ class BrowserViewController: UIViewController {
     var searchController: SearchViewController?
     var screenshotHelper: ScreenshotHelper!
     fileprivate var homePanelIsInline = false
+    var shouldSetUrlTypeSearch = false
     fileprivate var searchLoader: SearchLoader?
     let alertStackView = UIStackView() // All content that appears above the footer should be added to this view. (Find In Page/SnackBars)
     var findInPageBar: FindInPageBar?
@@ -1601,6 +1602,7 @@ extension BrowserViewController: URLBarDelegate {
             // We couldn't find a matching search keyword, so do a search query.
             Telemetry.default.recordSearch(location: .actionBar, searchEngine: engine.engineID ?? "other")
             GleanMetrics.Search.counts["\(engine.engineID ?? "custom").\(SearchesMeasurement.SearchLocation.actionBar.rawValue)"].add()
+            shouldSetUrlTypeSearch = true
             finishEditingAndSubmit(searchURL, visitType: VisitType.typed, forTab: tab)
         } else {
             // We still don't have a valid URL, so something is broken. Give up.
@@ -1833,6 +1835,7 @@ extension BrowserViewController: HomePanelDelegate {
 extension BrowserViewController: SearchViewControllerDelegate {
     func searchViewController(_ searchViewController: SearchViewController, didSelectURL url: URL) {
         guard let tab = tabManager.selectedTab else { return }
+        shouldSetUrlTypeSearch = true
         finishEditingAndSubmit(url, visitType: VisitType.typed, forTab: tab)
     }
 
