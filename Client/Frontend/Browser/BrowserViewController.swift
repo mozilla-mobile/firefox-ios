@@ -1332,7 +1332,10 @@ extension BrowserViewController: URLBarDelegate {
 
         updateFindInPageVisibility(visible: false)
         
-        let shouldShowChronTabs = UIDevice.current.userInterfaceIdiom != .pad && profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey) ?? (chronTabsUserResearch?.chronTabsState ?? false)
+        let shouldShowChronTabs = AppConstants.CHRONOLOGICAL_TABS // default on in Beta
+                                  && UIDevice.current.userInterfaceIdiom != .pad // only iPhone
+                                  && profile.prefs.boolForKey(PrefsKeys.ChronTabsPrefKey) // check if turned on in debug settings
+                                  ?? (chronTabsUserResearch?.chronTabsState ?? false) // otherwise check a/b test value
         if shouldShowChronTabs {
             let tabTrayViewController = TabTrayV2ViewController(tabTrayDelegate: self, profile: profile)
             let controller: UINavigationController
