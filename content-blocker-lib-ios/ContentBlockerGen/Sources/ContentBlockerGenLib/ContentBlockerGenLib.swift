@@ -27,7 +27,8 @@ public class ContentBlockerGenLib {
     }
 
     func parseEntityList(json: [String: Any]) {
-        json.forEach {
+        let entities = json["entities"]! as! [String: Any]
+        entities.forEach {
             let company = $0.key
             let related = ($0.value as! [String: [String]])["properties"]!
             companyToRelatedDomains[company] = related
