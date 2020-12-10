@@ -207,6 +207,23 @@ class TopTabsTest: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
         XCTAssertTrue(app.staticTexts["Private Browsing"].exists, "Private welcome screen is not shown")
     }
+    
+    // Smoketest
+    func testOpenNewTabLandscape() {
+        navigator.goto(NewTabScreen)
+        XCUIDevice.shared.orientation = .landscapeLeft
+        // Verify the '+' icon is shown
+        waitForExistence(app.buttons["TabToolbar.addNewTabButton"], timeout: 15)
+        // Open a new tab using it
+        app.buttons["TabToolbar.addNewTabButton"].tap()
+        app.typeText("google.com\n")
+        waitUntilPageLoad()
+
+        // Go back to portrait mode
+        XCUIDevice.shared.orientation = .portrait
+        // Verify that the '+' is not displayed
+        waitForNoExistence(app.buttons["TabToolbar.addNewTabButton"])
+    }
 
     // Smoketest
     func testLongTapTabCounter() {

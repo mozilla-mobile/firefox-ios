@@ -85,6 +85,26 @@ class DesktopModeTestsIphone: IphoneOnlyTestCase {
         waitUntilPageLoad()
         XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
     }
+    
+    // Smoketest
+    func testChangeModeInSameTab() {
+        if skipPlatform { return }
+
+        navigator.openURL(path(forTestPage: "test-user-agent.html"))
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+        navigator.goto(PageOptionsMenu)
+        navigator.goto(RequestDesktopSite)
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "DESKTOP_UA").count > 0)
+        
+        navigator.nowAt(BrowserTab)
+        navigator.goto(PageOptionsMenu)
+        // Select Mobile site here, the identifier is the same but the Text is not
+        navigator.goto(RequestDesktopSite)
+        waitUntilPageLoad()
+        XCTAssert(app.webViews.staticTexts.matching(identifier: "MOBILE_UA").count > 0)
+    }
 
     func testPrivateModeOffAlsoRemovesFromNormalMode() {
         if skipPlatform { return }
