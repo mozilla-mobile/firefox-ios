@@ -391,7 +391,6 @@ class NavigationTest: BaseTestCase {
     // Smoketest
     func testVerifyBrowserTabMenu() {
         navigator.goto(BrowserTabMenu)
-        print(app.debugDescription)
         waitForExistence(app.tables["Context Menu"])
 
         XCTAssertTrue(app.tables.cells["menu-sync"].exists)
@@ -407,9 +406,8 @@ class NavigationTest: BaseTestCase {
 
     // Smoketest
     func testURLBar() {
-        // navigator.goto(NewTabScreen)
-        sleep(3)
         let urlBar = app.textFields["url"]
+        waitForExistence(urlBar, timeout: 5)
         urlBar.tap()
         
         let addressBar = app.textFields["address"]
