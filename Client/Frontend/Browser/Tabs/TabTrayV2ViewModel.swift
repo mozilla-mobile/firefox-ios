@@ -214,7 +214,7 @@ class TabTrayV2ViewModel: NSObject {
 
         let baseDomain = tab.sessionData?.urls.last?.baseDomain ?? tab.url?.baseDomain
         let urlLabel = baseDomain != nil ? baseDomain!.contains("local") ? " " : baseDomain : " "
-        // Setting default image as when when there is no screenshot
+        // Setting default image white for cases when we have no screenshot or domain url
         cell.screenshotView?.image = tab.screenshot ?? UIColor.white.image()
         // Set Favicon from domain url when screenshot is empty for tab
         if tab.screenshot == nil, let domainUrl = getTabDomainUrl(tab: tab) {
