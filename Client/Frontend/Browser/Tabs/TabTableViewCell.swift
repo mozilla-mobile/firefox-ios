@@ -67,8 +67,7 @@ class TabTableViewCell: UITableViewCell, Themeable {
     
     // Helper method to remake title constraint
     func remakeTitleConstraint() {
-        guard let websiteTitle = websiteTitle, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
-        
+        guard let websiteTitle = websiteTitle, let text = websiteTitle.text, !text.isEmpty, let screenshotView = screenshotView, let urlLabel = urlLabel else { return }
         websiteTitle.numberOfLines = 2
         websiteTitle.snp.remakeConstraints { make in
             make.leading.equalTo(screenshotView.snp.trailing).offset(TabTrayV2ControllerUX.screenshotMarginLeftRight)
