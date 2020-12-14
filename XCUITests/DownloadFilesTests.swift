@@ -51,7 +51,8 @@ class DownloadFilesTests: BaseTestCase {
         navigator.goto(LibraryPanel_Downloads)
         checkTheNumberOfDownloadedItems(items: 0)
     }
-
+    
+    // Smoketest
     func testDownloadFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)

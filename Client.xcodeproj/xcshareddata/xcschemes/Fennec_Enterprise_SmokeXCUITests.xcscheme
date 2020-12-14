@@ -348,7 +348,19 @@
                   Identifier = "DesktopModeTests">
                </Test>
                <Test
-                  Identifier = "DesktopModeTestsIphone">
+                  Identifier = "DesktopModeTestsIphone/testClearPrivateData()">
+               </Test>
+               <Test
+                  Identifier = "DesktopModeTestsIphone/testLongPressReload()">
+               </Test>
+               <Test
+                  Identifier = "DesktopModeTestsIphone/testPrivateModeOffAlsoRemovesFromNormalMode()">
+               </Test>
+               <Test
+                  Identifier = "DesktopModeTestsIphone/testPrivateModeOnHasNoAffectOnNormalMode()">
+               </Test>
+               <Test
+                  Identifier = "DesktopModeTestsIphone/testSameHostInMultipleTabs()">
                </Test>
                <Test
                   Identifier = "DisplaySettingTests">
@@ -358,9 +370,6 @@
                </Test>
                <Test
                   Identifier = "DownloadFilesTests/testDeleteDownloadedFile()">
-               </Test>
-               <Test
-                  Identifier = "DownloadFilesTests/testDownloadFile()">
                </Test>
                <Test
                   Identifier = "DownloadFilesTests/testDownloadFileContextMenu()">
