@@ -387,4 +387,36 @@ class NavigationTest: BaseTestCase {
         navigator.openURL(path(forTestPage: "test-window-opener.html"))
         waitForExistence(app.links["link-created-by-parent"], timeout: 10)
     }
+
+    // Smoketest
+    func testVerifyBrowserTabMenu() {
+        navigator.goto(BrowserTabMenu)
+        waitForExistence(app.tables["Context Menu"])
+
+        XCTAssertTrue(app.tables.cells["menu-sync"].exists)
+        XCTAssertTrue(app.tables.cells["key"].exists)
+        XCTAssertTrue(app.tables.cells["menu-Home"].exists)
+        XCTAssertTrue(app.tables.cells["menu-library"].exists)
+        XCTAssertTrue(app.tables.cells["menu-NoImageMode"].exists)
+        XCTAssertTrue(app.tables.cells["menu-NightMode"].exists)
+        XCTAssertTrue(app.tables.cells["whatsnew"].exists)
+        XCTAssertTrue(app.tables.cells["menu-Settings"].exists)
+        XCTAssertTrue(app.buttons["PhotonMenu.close"].exists)
+    }
+
+    // Smoketest
+    func testURLBar() {
+        let urlBar = app.textFields["url"]
+        waitForExistence(urlBar, timeout: 5)
+        urlBar.tap()
+        
+        let addressBar = app.textFields["address"]
+        XCTAssertTrue(addressBar.value(forKey: "hasKeyboardFocus") as? Bool ?? false)
+        XCTAssert(app.keyboards.count > 0, "The keyboard is not shown")
+        app.typeText("example.com\n")
+
+        waitUntilPageLoad()
+        waitForValueContains(urlBar, value: "example.com/")
+        XCTAssertFalse(app.keyboards.count > 0, "The keyboard is shown")
+    }
  }
