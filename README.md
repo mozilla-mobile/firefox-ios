@@ -25,8 +25,12 @@ Building the code
     ```shell
     brew update
     brew install carthage
+    brew upgrade carthage
+    carthage version
     brew install node
     ```
+    Comment:
+    carthage version should >= 0.36.0
 1. Clone the repository:
     ```shell
     git clone https://github.com/mozilla-mobile/firefox-ios
@@ -34,8 +38,20 @@ Building the code
 1. Pull in the project dependencies:
     ```shell
     cd firefox-ios
+
+    ulimit -n 88888
+    ulimit -a
+
     sh ./bootstrap.sh
     ```
+
+    Comment:
+    If can't generate libs. 
+    Modify carthage_command.sh 
+    carthage checkout --no-use-binaries
+    Then: carthage build --platform ios
+    Or open xcode project to build. Or download the framework in their githubs.
+
 1. Open `Client.xcodeproj` in Xcode.
 1. Build the `Fennec` scheme in Xcode.
 
@@ -69,6 +85,11 @@ To simplify the build process, these compiled files are checked-in to this repos
 npm run build
 ```
 
+    Comment:
+    if webpack can't be installed by npm. Try this:
+    yarn add webpack-cli --dev
+    yarn global add npm
+    
 ## Contributing
 
 Want to contribute to this repository? Check out [Contributing Guidelines](https://github.com/mozilla-mobile/firefox-ios/blob/main/CONTRIBUTING.md)
