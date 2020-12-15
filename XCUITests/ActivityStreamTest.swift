@@ -200,8 +200,8 @@ class ActivityStreamTest: BaseTestCase {
         waitForNoExistence(app.tables["Context Menu"], timeoutValue: 15)
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
-        waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
-        let numTabsOpen = app.collectionViews.cells.count
+        waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
+        let numTabsOpen = app.tables.cells.count
         XCTAssertEqual(numTabsOpen, 2, "New tab not open")
     }
 
@@ -218,15 +218,15 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
         navigator.goto(TabTray)
-        waitForExistence(app.collectionViews.cells.element(boundBy: 0))
+        waitForExistence(app.cells.staticTexts.element(boundBy: 0))
         if !app.collectionViews["Apple"].exists {
-            app.collectionViews.cells.element(boundBy: 0).tap()
+            app.cells.staticTexts.element(boundBy: 0).tap()
             waitForValueContains(app.textFields["url"], value: "apple")
             app.buttons["Show Tabs"].tap()
         }
         navigator.nowAt(TabTray)
-        waitForExistence(app.cells["Apple"])
-        app.collectionViews.cells["Apple"].tap()
+        waitForExistence(app.tables.cells.staticTexts["Apple"])
+        app.cells.staticTexts["Apple"].tap()
 
         // The website is open
         XCTAssertFalse(TopSiteCellgroup.exists)
@@ -250,7 +250,7 @@ class ActivityStreamTest: BaseTestCase {
 
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
 
-        waitForExistence(app.collectionViews.cells[defaultTopSite["bookmarkLabel"]!])
+        waitForExistence(app.cells.staticTexts[defaultTopSite["bookmarkLabel"]!])
         let numTabsOpen = userState.numTabs
         XCTAssertEqual(numTabsOpen, 1, "New tab not open")
     }
