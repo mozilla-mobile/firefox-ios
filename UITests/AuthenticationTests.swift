@@ -54,8 +54,8 @@ class AuthenticationTests: KIFTestCase {
         } else {
             tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
         }
-        tester().tapView(withAccessibilityIdentifier: "TabTrayController.maskButton")
-        tester().tapView(withAccessibilityIdentifier: "TabTrayController.addTabButton")
+        tester().tapView(withAccessibilityLabel: "smallPrivateMask")
+        tester().tapView(withAccessibilityIdentifier: "newTabButtonTabTray")
         tester().waitForAnimationsToFinish()
         loadAuthPage()
 
