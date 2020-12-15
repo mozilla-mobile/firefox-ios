@@ -343,6 +343,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
         
         if #available(iOS 14.0, *) {
+            // Create top sites cache directory 
+            FaviconFetcher.createWebImageCacheDirectory()
             // TopSite is only available in iOS14 for WidgetKit hence we don't need to write for lower versions
             transformTopSitesAndAttemptWrite()
         }
@@ -368,7 +370,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // sync then that crash will still be reported. But we won't bother the user with the Restore Tabs
         // dialog. We don't have to because at this point we already saved the tab state properly.
         //
-
+        
+//        let widgetKitTopSites = WidgetKitTopSite.get()
+//        let image = FaviconFetcher.getFaviconFromDiskCache(imageKey: widgetKitTopSites.first!.imageKey)
+        
         let defaults = UserDefaults()
         defaults.set(true, forKey: "ApplicationCleanlyBackgrounded")
 

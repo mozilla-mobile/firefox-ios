@@ -10,15 +10,33 @@ struct TopSitesProvider: TimelineProvider {
     public typealias Entry = TopSitesEntry
 
     func placeholder(in context: Context) -> TopSitesEntry {
-        return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
+        return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [], sites2: [])
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
         let topSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesArchivePath())
         
-        let faviconFetchGroup = DispatchGroup()
+//        let faviconFetchGroup = DispatchGroup()
         var tabFaviconDictionary = [String : Image]()
         
+        let widgetKitTopSites = WidgetKitTopSite.get()
+        
+
+        
+        for site in widgetKitTopSites {
+            guard !site.imageKey.isEmpty else { continue }
+            let fetchedImage = FaviconFetcher.getFaviconFromDiskCache(imageKey: site.imageKey)
+            let bundledFavicon = getBundledFavicon(siteUrl: site.url)
+            let letterFavicon = FaviconFetcher.letter(forUrl: site.url)
+            let image = bundledFavicon ?? fetchedImage ?? letterFavicon
+            tabFaviconDictionary[site.imageKey] = Image(uiImage: image)
+        }
+        
+        let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites, sites2: widgetKitTopSites)
+        
+        completion(topSitesEntry)
+        
+        /*
         // Concurrently fetch each of the top sites icons
         for site in topSites {
             faviconFetchGroup.enter()
@@ -61,12 +79,20 @@ struct TopSitesProvider: TimelineProvider {
         }
         
         faviconFetchGroup.notify(queue: .main) {
-            let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites)
+            let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites, sites2: widgetKitTopSites)
             
             completion(topSitesEntry)
         }
+         */
     }
-
+    
+    func getBundledFavicon(siteUrl: URL) -> UIImage? {
+        // Get the bundled top site favicon, if available
+        guard let bundled = FaviconFetcher.getBundledIcon(forUrl: siteUrl), let image = UIImage(contentsOfFile: bundled.filePath) else { return nil }
+        let color = bundled.bgcolor.components.alpha < 0.01 ? UIColor.white : bundled.bgcolor
+        return image.withBackgroundAndPadding(color: color)
+    }
+    
     func getTimeline(in context: Context, completion: @escaping (Timeline<TopSitesEntry>) -> Void) {
         getSnapshot(in: context, completion: { topSitesEntry in
             let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
@@ -76,7 +102,7 @@ struct TopSitesProvider: TimelineProvider {
 
     fileprivate func topSitesArchivePath() -> String? {
         let profilePath: String?
-        profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
+        profilePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
         guard let path = profilePath else { return nil }
         return URL(fileURLWithPath: path).appendingPathComponent("topSites.archive").path
     }
@@ -86,6 +112,7 @@ struct TopSitesEntry: TimelineEntry {
     let date: Date
     let favicons: [String : Image]
     let sites: [TopSite]
+    let sites2: [WidgetKitTopSite]
 }
 
 fileprivate extension UIImage {

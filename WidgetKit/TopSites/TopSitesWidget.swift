@@ -23,12 +23,12 @@ struct TopSitesView: View {
     let entry: TopSitesEntry
     
     @ViewBuilder
-    func topSitesItem(_ site: TopSite) -> some View {
+    func topSitesItem(_ site: WidgetKitTopSite) -> some View {
         let url = site.url
         
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
-            if (entry.favicons[url] != nil) {
-                (entry.favicons[url])!.resizable().frame(width: 60, height: 60).mask(maskShape)
+            if (entry.favicons[site.imageKey] != nil) {
+                (entry.favicons[site.imageKey])!.resizable().frame(width: 60, height: 60).mask(maskShape)
             } else {
                 Rectangle()
                     .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))
@@ -51,40 +51,40 @@ struct TopSitesView: View {
     var body: some View {
         VStack {
             HStack {
-                if entry.sites.count == 0 {
+                if entry.sites2.count == 0 {
                     ForEach(0..<4, id: \.self) { _ in
                         emptySquare
                     }
-                } else if entry.sites.count > 3 {
-                    ForEach(entry.sites.prefix(4), id: \.url) { tab in
+                } else if entry.sites2.count > 3 {
+                    ForEach(entry.sites2.prefix(4), id: \.url) { tab in
                         topSitesItem(tab)
                             .background(Color.clear).frame(maxWidth: .infinity)
                     }
                 } else {
-                    ForEach(entry.sites[0...entry.sites.count - 1], id: \.url) { tab in
+                    ForEach(entry.sites2[0...entry.sites2.count - 1], id: \.url) { tab in
                         topSitesItem(tab).frame(maxWidth: .infinity)
                     }
                     
-                    ForEach(0..<(4 - entry.sites.count), id: \.self) { _ in
+                    ForEach(0..<(4 - entry.sites2.count), id: \.self) { _ in
                         emptySquare
                     }
                 }
             }.padding([.top, .horizontal])
             Spacer()
             HStack {
-                if entry.sites.count > 7 {
-                    ForEach(entry.sites[4...7], id: \.url) { tab in
+                if entry.sites2.count > 7 {
+                    ForEach(entry.sites2[4...7], id: \.url) { tab in
                         topSitesItem(tab).frame(maxWidth: .infinity)
                     }
                 } else {
                     // Ensure there is at least a single site in the second row
-                    if entry.sites.count > 4 {
-                        ForEach(entry.sites[4...entry.sites.count - 1], id: \.url) { tab in
+                    if entry.sites2.count > 4 {
+                        ForEach(entry.sites2[4...entry.sites2.count - 1], id: \.url) { tab in
                             topSitesItem(tab).frame(maxWidth: .infinity)
                         }
                     }
                     
-                    ForEach(0..<(min(4, 8 - entry.sites.count)), id: \.self) { _ in
+                    ForEach(0..<(min(4, 8 - entry.sites2.count)), id: \.self) { _ in
                         emptySquare
                     }
                 }
