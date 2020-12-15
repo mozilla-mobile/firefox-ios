@@ -131,7 +131,7 @@ class TopTabsTest: BaseTestCase {
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
         app.buttons["Undo"].tap()
-        waitForExistence(app.cells.staticTexts["TopSitesCell"], timeout: 5)
+        waitForExistence(app.collectionViews.cells["TopSitesCell"], timeout: 5)
         navigator.nowAt(BrowserTab)
         if !iPad() {
             waitForExistence(app.buttons["TabToolbar.tabsButton"], timeout: 5)
@@ -158,7 +158,7 @@ class TopTabsTest: BaseTestCase {
             waitForExistence(app.buttons["TabToolbar.tabsButton"],timeout: 5)
         }
 
-        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 2)
+        checkNumberOfTabsExpectedToBeOpen(expectedNumberOfTabsOpen: 3)
 
         // Close all tabs, undo it and check that the number of tabs is correct
         navigator.performAction(Action.AcceptRemovingAllTabs)
@@ -362,7 +362,7 @@ class TopTabsTestIphone: IphoneOnlyTestCase {
         XCTAssertTrue(app.links["RFC 2606"].exists)
         waitForExistence(app.buttons["Show Tabs"])
         let numPrivTab = app.buttons["Show Tabs"].value as? String
-        XCTAssertEqual("2", numPrivTab)
+        XCTAssertEqual("3", numPrivTab)
     }
 
     // This test is disabled for iPad because the toast menu is not shown there

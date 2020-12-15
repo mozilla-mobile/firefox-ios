@@ -9,7 +9,7 @@ let newTopSite = ["url": "www.mozilla.org", "topSiteLabel": "mozilla", "bookmark
 let allDefaultTopSites = ["facebook", "youtube", "amazon", "wikipedia", "twitter"]
 
 class ActivityStreamTest: BaseTestCase {
-    let TopSiteCellgroup = XCUIApplication().collectionViews.cells["TopSitesCell"]
+    let TopSiteCellgroup = XCUIApplication().cells["TopSitesCell"]
 
     let testWithDB = ["testActivityStreamPages","testTopSitesAdd", "testTopSitesOpenInNewTab", "testTopSitesOpenInNewPrivateTab", "testTopSitesBookmarkNewTopSite", "testTopSitesShareNewTopSite", "testContextMenuInLandscape"]
 
@@ -107,7 +107,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForExistence(TopSiteCellgroup.cells[newTopSite["topSiteLabel"]!])
+        waitForExistence(TopSiteCellgroup.staticTexts[newTopSite["topSiteLabel"]!])
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 1)
     }
 
@@ -119,8 +119,8 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.AcceptRemovingAllTabs)
         navigator.performAction(Action.OpenNewTabFromTabTray)
 
-        waitForExistence(app.collectionViews.cells["mozilla"])
-        XCTAssertTrue(app.collectionViews.cells["mozilla"].exists)
+        waitForExistence(app.cells.staticTexts["mozilla"])
+        XCTAssertTrue(app.cells.staticTexts["mozilla"].exists)
         // A new site has been added to the top sites
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 6)
 
@@ -128,7 +128,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.performAction(Action.AcceptClearPrivateData)
         navigator.goto(HomePanelsScreen)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
-        XCTAssertFalse(app.collectionViews.cells["mozilla"].exists)
+        XCTAssertFalse(app.cells.staticTexts["mozilla"].exists)
     }
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
@@ -180,12 +180,12 @@ class ActivityStreamTest: BaseTestCase {
         XCTAssert(TopSiteCellgroup.exists)
 
         navigator.goto(TabTray)
-        app.collectionViews.cells["Home"].tap()
+        app.cells.staticTexts["Home"].tap()
         waitForExistence(TopSiteCellgroup.cells["apple"])
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
-        waitForExistence(app.collectionViews.cells["Apple"])
-        XCTAssertTrue(app.collectionViews.cells["Apple"].exists, "A new Tab has not been open")
+        waitForExistence(app.cells.staticTexts["Apple"])
+        XCTAssertTrue(app.cells.staticTexts["Apple"].exists, "A new Tab has not been open")
     }
 
     // Smoketest

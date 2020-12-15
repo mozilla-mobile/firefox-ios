@@ -51,11 +51,8 @@ class PhotonActionSheetTest: BaseTestCase {
         let pageObjectButtonCenter = pageObjectButton.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0))
         pageObjectButtonCenter.press(forDuration: 1)
 
-        if #available(iOS 14.0, *) {
-            waitForExistence(app.collectionViews.buttons["Copy"], timeout: 10)
-        } else {
-            waitForExistence(app.cells["Copy"], timeout: 10)
-        }
+        // Wait to see the Share options sheet
+        waitForExistence(app.buttons["Copy"], timeout: 10)
     }
 
     func testSendToDeviceFromPageOptionsMenu() {
