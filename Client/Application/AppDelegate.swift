@@ -405,9 +405,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     private func transformTopSitesAndAttemptWrite() {
         if let profile = profile {
             TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { result in
-                let topSites = result.map { TopSite(url: $0.url, title: $0.title, faviconUrl: $0.icon?.url) }
-                
-                TopSitesHandler.compareAndUpdateWidgetKitTopSite(clientSites: topSites)
+                var widgetkitTopSites = [WidgetKitTopSite]()
+                result.forEach { site in
+                    // Favicon icon url
+                    let iconUrl = site.icon?.url ?? ""
+                    let webUrl = URL(string: site.url)
+                    let imageKey = site.tileURL.baseDomain ?? ""
+                    widgetkitTopSites.append(WidgetKitTopSite(title: site.title, faviconUrl: iconUrl, url: webUrl ?? URL(string: "")!, imageKey: imageKey))
+                    // fetch favicons and cache them in disk
+                    FaviconFetcher.downloadFaviconAndCache(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil, imageKey: imageKey )
+                }
+                // save top sites for widgetkit use
+                WidgetKitTopSite.save(widgetKitTopSites: widgetkitTopSites)
             }
         }
     }

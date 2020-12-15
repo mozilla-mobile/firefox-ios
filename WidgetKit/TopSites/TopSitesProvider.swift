@@ -10,19 +10,12 @@ struct TopSitesProvider: TimelineProvider {
     public typealias Entry = TopSitesEntry
 
     func placeholder(in context: Context) -> TopSitesEntry {
-        return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [], sites2: [])
+        return TopSitesEntry(date: Date(), favicons: [String: Image](), sites: [])
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
-        let topSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesArchivePath())
-        
-//        let faviconFetchGroup = DispatchGroup()
         var tabFaviconDictionary = [String : Image]()
-        
         let widgetKitTopSites = WidgetKitTopSite.get()
-        
-
-        
         for site in widgetKitTopSites {
             guard !site.imageKey.isEmpty else { continue }
             let fetchedImage = FaviconFetcher.getFaviconFromDiskCache(imageKey: site.imageKey)
@@ -31,59 +24,9 @@ struct TopSitesProvider: TimelineProvider {
             let image = bundledFavicon ?? fetchedImage ?? letterFavicon
             tabFaviconDictionary[site.imageKey] = Image(uiImage: image)
         }
-        
-        let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites, sites2: widgetKitTopSites)
-        
-        completion(topSitesEntry)
-        
-        /*
-        // Concurrently fetch each of the top sites icons
-        for site in topSites {
-            faviconFetchGroup.enter()
 
-            if let siteURL = URL(string: site.url) {
-                
-                // Get the bundled top site favicon, if available
-                if let bundled = FaviconFetcher.getBundledIcon(forUrl: siteURL),
-                   let uiImage = UIImage(contentsOfFile: bundled.filePath) {
-                    let color = bundled.bgcolor.components.alpha < 0.01 ? UIColor.white : bundled.bgcolor
-                    
-                    tabFaviconDictionary[site.url] = Image(uiImage: uiImage.withBackgroundAndPadding(color: color))
-                    faviconFetchGroup.leave()
-                } else {
-                    // Fetch the favicon from the faviconURL if available
-                    if let faviconPath = site.faviconUrl, let faviconURL = URL(string: faviconPath) {
-                        getImageForUrl(faviconURL, completion: { image in
-                            if image != nil {
-                                // Use the image we got back
-                                tabFaviconDictionary[site.url] = image
-                            } else {
-                                tabFaviconDictionary[site.url] = Image(uiImage: FaviconFetcher.letter(forUrl: siteURL))
-                            }
-                            
-                            faviconFetchGroup.leave()
-                            
-                        })
-                    } else {
-                        // If no favicon is available, fall back to the "letter" favicon
-                        tabFaviconDictionary[site.url] =
-                            Image(uiImage: FaviconFetcher.letter(forUrl: siteURL))
-                        
-                        faviconFetchGroup.leave()
-                    }
-                }
-            } else {
-                // We don't even have a real URL, not much we can do to get a favicon.
-                faviconFetchGroup.leave()
-            }
-        }
-        
-        faviconFetchGroup.notify(queue: .main) {
-            let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites, sites2: widgetKitTopSites)
-            
-            completion(topSitesEntry)
-        }
-         */
+        let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: widgetKitTopSites)
+        completion(topSitesEntry)
     }
     
     func getBundledFavicon(siteUrl: URL) -> UIImage? {
@@ -111,8 +54,7 @@ struct TopSitesProvider: TimelineProvider {
 struct TopSitesEntry: TimelineEntry {
     let date: Date
     let favicons: [String : Image]
-    let sites: [TopSite]
-    let sites2: [WidgetKitTopSite]
+    let sites: [WidgetKitTopSite]
 }
 
 fileprivate extension UIImage {

@@ -581,8 +581,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             
             let maxItems = Int(numRows) * self.topSitesManager.numberOfHorizontalItems()
             
-            self.downloadFavicons(sites: result)
-            
             self.topSitesManager.content = Array(result.prefix(maxItems))
             
             self.topSitesManager.urlPressedHandler = { [unowned self] url, indexPath in
@@ -598,22 +596,6 @@ extension FirefoxHomeViewController: DataObserverDelegate {
             // Refresh the AS data in the background so we'll have fresh data next time we show.
             self.profile.panelDataObservers.activityStream.refreshIfNeeded(forceTopSites: false)
         }
-    }
-    
-    func downloadFavicons(sites: [Site]) {
-        var widgetkitTopSites = [WidgetKitTopSite]()
-        sites.forEach { site in
-            // Favicon icon url
-            let iconUrl = site.icon?.url ?? ""
-            let title = site.title
-            let webUrl = URL(string: site.url)
-            let imageKey = site.tileURL.baseDomain ?? ""
-            widgetkitTopSites.append(WidgetKitTopSite(title: title, faviconUrl: iconUrl, url: webUrl ?? URL(string: "")!, imageKey: imageKey))
-            // fetch favicons and cache them in disk
-            FaviconFetcher.downloadFaviconAndCache(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil, imageKey: imageKey )
-        }
-        // save top sites for widgetkit use
-        WidgetKitTopSite.save(widgetKitTopSites: widgetkitTopSites)
     }
 
     func getPocketSites() -> Success {
