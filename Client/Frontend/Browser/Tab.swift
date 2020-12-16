@@ -632,11 +632,7 @@ class Tab: NSObject {
 
         if currentFaviconUrl == nil {
             currentFaviconUrl = faviconUrl
-            FaviconFetcher.downloadFaviconAndCache(imageURL: currentFaviconUrl, imageKey: baseDomain)
-            return
-        }
-        
-        guard let currentFaviconUrl = currentFaviconUrl, !faviconUrl.isEqual(currentFaviconUrl) else {
+        } else if !faviconUrl.isEqual(currentFaviconUrl!) {
             return
         }
         
