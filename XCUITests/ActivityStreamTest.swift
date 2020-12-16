@@ -58,7 +58,8 @@ class ActivityStreamTest: BaseTestCase {
         }
     }
 
-    func testTopSitesRemove() {
+    // Disabled due to issue #7611
+    /*func testTopSitesRemove() {
         loadWebPage("http://example.com")
         waitForTabsButton()
         if iPad() {
@@ -75,7 +76,7 @@ class ActivityStreamTest: BaseTestCase {
         app.tables["Context Menu"].cells["Remove"].tap()
         // A top site has been removed
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
-    }
+    }*/
 
     func testTopSitesRemoveDefaultTopSite() {
         TopSiteCellgroup.cells[defaultTopSite["topSiteLabel"]!].press(forDuration: 1)
@@ -85,7 +86,8 @@ class ActivityStreamTest: BaseTestCase {
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 4)
     }
 
-    func testTopSitesRemoveAllDefaultTopSitesAddNewOne() {
+    // Disabled due to issue #7611
+    /*func testTopSitesRemoveAllDefaultTopSitesAddNewOne() {
         // Remove all default Top Sites
         waitForExistence(app.cells["facebook"])
         for element in allDefaultTopSites {
@@ -109,9 +111,10 @@ class ActivityStreamTest: BaseTestCase {
 
         waitForExistence(TopSiteCellgroup.staticTexts[newTopSite["topSiteLabel"]!])
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 1)
-    }
+    }*/
 
-    func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
+    // Disabled due to issue #7611
+    /*func testTopSitesRemoveAllExceptDefaultClearPrivateData() {
         navigator.goto(BrowserTab)
         waitForTabsButton()
         navigator.goto(TabTray)
@@ -129,7 +132,7 @@ class ActivityStreamTest: BaseTestCase {
         navigator.goto(HomePanelsScreen)
         checkNumberOfExpectedTopSites(numberOfExpectedTopSites: 5)
         XCTAssertFalse(app.cells.staticTexts["mozilla"].exists)
-    }
+    }*/
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
         navigator.goto(BrowserTab)
@@ -184,8 +187,8 @@ class ActivityStreamTest: BaseTestCase {
         waitForExistence(TopSiteCellgroup.cells["apple"])
         navigator.nowAt(HomePanelsScreen)
         navigator.goto(TabTray)
-        waitForExistence(app.cells.staticTexts["Apple"])
-        XCTAssertTrue(app.cells.staticTexts["Apple"].exists, "A new Tab has not been open")
+        waitForExistence(app.cells.staticTexts["apple.com"])
+        XCTAssertTrue(app.cells.staticTexts["apple.com"].exists, "A new Tab has not been open")
     }
 
     // Smoketest
