@@ -194,11 +194,8 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
            if let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier) {
             let directoryPath = container.appendingPathComponent("Library/Caches/fxfavicon")
             var isDir: ObjCBool = false
-            if fileManager.fileExists(atPath: directoryPath.path, isDirectory:&isDir) {
-                if isDir.boolValue {
-                    // file exists and is a directory
-                    // do nothing
-                } else {
+            if fileManager.fileExists(atPath: directoryPath.path, isDirectory: &isDir) {
+                if !isDir.boolValue {
                     // file exists and is not a directory
                     // remove this file and create a directory
                     try fileManager.removeItem(at: directoryPath)
@@ -212,7 +209,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             }
           }
         } catch let error as NSError {
-            print(error.description)
+            Sentry.shared.send(message: "Fx favicon cache directory creation failed", tag: .general, severity: .error, description: error.description)
         }
     }
         
@@ -226,13 +223,6 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         let imageKeyDirectoryUrl = container.appendingPathComponent("Library/Caches/fxfavicon/\(imageKey)")
         guard let data = fileManager.contents(atPath: imageKeyDirectoryUrl.path) else { return nil }
         return UIImage(data: data)
-    }
-    
-    fileprivate func topSitesArchivePath() -> String? {
-        let profilePath: String?
-        profilePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("topSites.archive").path
     }
 }
 

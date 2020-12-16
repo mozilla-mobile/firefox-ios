@@ -5,7 +5,7 @@
 import Foundation
 import Shared
 
-struct WidgetKitTopSite: Codable {
+struct WidgetKitTopSiteModel: Codable {
     var title: String
     var faviconUrl: String
     var url: URL
@@ -13,7 +13,7 @@ struct WidgetKitTopSite: Codable {
     
     static let userDefaults = UserDefaults(suiteName: AppInfo.sharedContainerIdentifier)!
     
-    static func save(widgetKitTopSites: [WidgetKitTopSite]) {
+    static func save(widgetKitTopSites: [WidgetKitTopSiteModel]) {
         userDefaults.removeObject(forKey: PrefsKeys.WidgetKitSimpleTopTab)
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(widgetKitTopSites) {
@@ -21,17 +21,17 @@ struct WidgetKitTopSite: Codable {
         }
     }
     
-    static func get() -> [WidgetKitTopSite] {
+    static func get() -> [WidgetKitTopSiteModel] {
         if let topSites = userDefaults.object(forKey: PrefsKeys.WidgetKitSimpleTopTab) as? Data {
             do {
                 let jsonDecoder = JSONDecoder()
-                let sites = try jsonDecoder.decode([WidgetKitTopSite].self, from: topSites)
+                let sites = try jsonDecoder.decode([WidgetKitTopSiteModel].self, from: topSites)
                 return sites
             }
             catch {
                 print("Error occured")
             }
         }
-        return [WidgetKitTopSite]()
+        return [WidgetKitTopSiteModel]()
     }
 }

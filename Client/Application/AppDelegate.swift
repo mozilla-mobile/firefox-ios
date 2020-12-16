@@ -341,10 +341,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
             self.receivedURLs.removeAll()
             application.applicationIconBadgeNumber = 0
         }
+        // Create fx favicon cache directory
+        FaviconFetcher.createWebImageCacheDirectory()
         
         if #available(iOS 14.0, *) {
-            // Create top sites cache directory 
-            FaviconFetcher.createWebImageCacheDirectory()
             // TopSite is only available in iOS14 for WidgetKit hence we don't need to write for lower versions
             transformTopSitesAndAttemptWrite()
         }
@@ -370,10 +370,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         // sync then that crash will still be reported. But we won't bother the user with the Restore Tabs
         // dialog. We don't have to because at this point we already saved the tab state properly.
         //
-        
-//        let widgetKitTopSites = WidgetKitTopSite.get()
-//        let image = FaviconFetcher.getFaviconFromDiskCache(imageKey: widgetKitTopSites.first!.imageKey)
-        
+
         let defaults = UserDefaults()
         defaults.set(true, forKey: "ApplicationCleanlyBackgrounded")
 
@@ -405,18 +402,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     private func transformTopSitesAndAttemptWrite() {
         if let profile = profile {
             TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { result in
-                var widgetkitTopSites = [WidgetKitTopSite]()
+                var widgetkitTopSites = [WidgetKitTopSiteModel]()
                 result.forEach { site in
                     // Favicon icon url
                     let iconUrl = site.icon?.url ?? ""
                     let webUrl = URL(string: site.url)
                     let imageKey = site.tileURL.baseDomain ?? ""
-                    widgetkitTopSites.append(WidgetKitTopSite(title: site.title, faviconUrl: iconUrl, url: webUrl ?? URL(string: "")!, imageKey: imageKey))
+                    widgetkitTopSites.append(WidgetKitTopSiteModel(title: site.title, faviconUrl: iconUrl, url: webUrl ?? URL(string: "")!, imageKey: imageKey))
                     // fetch favicons and cache them in disk
                     FaviconFetcher.downloadFaviconAndCache(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil, imageKey: imageKey )
                 }
                 // save top sites for widgetkit use
-                WidgetKitTopSite.save(widgetKitTopSites: widgetkitTopSites)
+                WidgetKitTopSiteModel.save(widgetKitTopSites: widgetkitTopSites)
             }
         }
     }

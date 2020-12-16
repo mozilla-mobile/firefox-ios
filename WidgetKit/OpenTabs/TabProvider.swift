@@ -21,11 +21,8 @@ struct TabProvider: TimelineProvider {
         let openTabs = allOpenTabs.values.filter {
             !$0.isPrivate
         }
-
-//        let faviconFetchGroup = DispatchGroup()
         
         var tabFaviconDictionary = [String : Image]()
-        
         let simpleTabs = SimpleTab.getSimpleTabs()
         for (_ , tab) in simpleTabs {
             guard !tab.imageKey.isEmpty else { continue }
@@ -38,32 +35,11 @@ struct TabProvider: TimelineProvider {
         
         let openTabsEntry = OpenTabsEntry(date: Date(), favicons: tabFaviconDictionary, tabs: openTabs)
         completion(openTabsEntry)
-        
-        /*
-        for tab in openTabs {
-            faviconFetchGroup.enter()
-            if let faviconURL = tab.faviconURL {
-                getImageForUrl(URL(string: faviconURL)!, completion: { image in
-                    if image != nil {
-                        tabFaviconDictionary[tab.title!] = image
-                    }
-                    faviconFetchGroup.leave()
-                })
-            } else {
-                faviconFetchGroup.leave()
-            }
-        }
-        
-        faviconFetchGroup.notify(queue: .main) {
-            let openTabsEntry = OpenTabsEntry(date: Date(), favicons: tabFaviconDictionary, tabs: openTabs)
-            completion(openTabsEntry)
-        }
-         */
     }
     
     func getBundledFavicon(siteUrl: URL?) -> UIImage? {
         guard let url = siteUrl else { return nil }
-        // Get the bundled top site favicon, if available
+        // Get the bundled favicon if available
         guard let bundled = FaviconFetcher.getBundledIcon(forUrl: url), let image = UIImage(contentsOfFile: bundled.filePath) else { return nil }
         return image
     }

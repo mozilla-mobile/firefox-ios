@@ -19,7 +19,7 @@ struct TopSitesProvider: TimelineProvider {
         for site in widgetKitTopSites {
             guard !site.imageKey.isEmpty else { continue }
             let fetchedImage = FaviconFetcher.getFaviconFromDiskCache(imageKey: site.imageKey)
-            let bundledFavicon = getBundledFavicon(siteUrl: site.url)
+            let bundledFavicon = getBundledFaviconWithBackground(siteUrl: site.url)
             let letterFavicon = FaviconFetcher.letter(forUrl: site.url)
             let image = bundledFavicon ?? fetchedImage ?? letterFavicon
             tabFaviconDictionary[site.imageKey] = Image(uiImage: image)
@@ -29,9 +29,10 @@ struct TopSitesProvider: TimelineProvider {
         completion(topSitesEntry)
     }
     
-    func getBundledFavicon(siteUrl: URL) -> UIImage? {
-        // Get the bundled top site favicon, if available
+    func getBundledFaviconWithBackground(siteUrl: URL) -> UIImage? {
+        // Get the bundled favicon if available
         guard let bundled = FaviconFetcher.getBundledIcon(forUrl: siteUrl), let image = UIImage(contentsOfFile: bundled.filePath) else { return nil }
+        // Add background and padding
         let color = bundled.bgcolor.components.alpha < 0.01 ? UIColor.white : bundled.bgcolor
         return image.withBackgroundAndPadding(color: color)
     }
@@ -41,13 +42,6 @@ struct TopSitesProvider: TimelineProvider {
             let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
             completion(timeline)
         })
-    }
-
-    fileprivate func topSitesArchivePath() -> String? {
-        let profilePath: String?
-        profilePath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("topSites.archive").path
     }
 }
 

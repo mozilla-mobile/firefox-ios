@@ -152,8 +152,6 @@ class TopSiteItemCell: UICollectionViewCell, Themeable {
 
         accessibilityLabel = titleLabel.text
         faviconBG.backgroundColor = .clear
-//        let iconUrl = site.icon?.url ?? ""
-//        FaviconFetcher.downloadFaviconAndSave(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil)
         self.imageView.setFaviconOrDefaultIcon(forSite: site) { [weak self] in
             self?.imageView.snp.remakeConstraints { make in
                 guard let faviconBG = self?.faviconBG , let frame = self?.frame else { return }
