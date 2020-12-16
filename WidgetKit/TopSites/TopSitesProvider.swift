@@ -15,7 +15,7 @@ struct TopSitesProvider: TimelineProvider {
 
     func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
         var tabFaviconDictionary = [String : Image]()
-        let widgetKitTopSites = WidgetKitTopSite.get()
+        let widgetKitTopSites = WidgetKitTopSiteModel.get()
         for site in widgetKitTopSites {
             guard !site.imageKey.isEmpty else { continue }
             let fetchedImage = FaviconFetcher.getFaviconFromDiskCache(imageKey: site.imageKey)
@@ -48,7 +48,7 @@ struct TopSitesProvider: TimelineProvider {
 struct TopSitesEntry: TimelineEntry {
     let date: Date
     let favicons: [String : Image]
-    let sites: [WidgetKitTopSite]
+    let sites: [WidgetKitTopSiteModel]
 }
 
 fileprivate extension UIImage {

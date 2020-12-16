@@ -23,7 +23,7 @@ struct TopSitesView: View {
     let entry: TopSitesEntry
     
     @ViewBuilder
-    func topSitesItem(_ site: WidgetKitTopSite) -> some View {
+    func topSitesItem(_ site: WidgetKitTopSiteModel) -> some View {
         let url = site.url
         
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
