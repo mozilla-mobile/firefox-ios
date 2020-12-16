@@ -505,7 +505,7 @@ class BrowserViewController: UIViewController {
 
         urlBar.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalTo(urlBarTopTabsContainer)
-            make.height.equalTo(UIConstants.TopToolbarHeight)
+            make.height.lessThanOrEqualTo(UIConstants.TopToolbarHeightMax)
             make.top.equalTo(topTabsContainer.snp.bottom)
         }
 
