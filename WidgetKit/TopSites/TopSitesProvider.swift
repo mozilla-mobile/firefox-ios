@@ -14,78 +14,41 @@ struct TopSitesProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TopSitesEntry) -> Void) {
-        let topSites = SiteArchiver.fetchTopSitesForWidget(topSiteArchivePath: topSitesArchivePath())
-        
-        let faviconFetchGroup = DispatchGroup()
         var tabFaviconDictionary = [String : Image]()
-        
-        // Concurrently fetch each of the top sites icons
-        for site in topSites {
-            faviconFetchGroup.enter()
+        let widgetKitTopSites = WidgetKitTopSiteModel.get()
+        for site in widgetKitTopSites {
+            guard !site.imageKey.isEmpty else { continue }
+            let fetchedImage = FaviconFetcher.getFaviconFromDiskCache(imageKey: site.imageKey)
+            let bundledFavicon = getBundledFaviconWithBackground(siteUrl: site.url)
+            let letterFavicon = FaviconFetcher.letter(forUrl: site.url)
+            let image = bundledFavicon ?? fetchedImage ?? letterFavicon
+            tabFaviconDictionary[site.imageKey] = Image(uiImage: image)
+        }
 
-            if let siteURL = URL(string: site.url) {
-                
-                // Get the bundled top site favicon, if available
-                if let bundled = FaviconFetcher.getBundledIcon(forUrl: siteURL),
-                   let uiImage = UIImage(contentsOfFile: bundled.filePath) {
-                    let color = bundled.bgcolor.components.alpha < 0.01 ? UIColor.white : bundled.bgcolor
-                    
-                    tabFaviconDictionary[site.url] = Image(uiImage: uiImage.withBackgroundAndPadding(color: color))
-                    faviconFetchGroup.leave()
-                } else {
-                    // Fetch the favicon from the faviconURL if available
-                    if let faviconPath = site.faviconUrl, let faviconURL = URL(string: faviconPath) {
-                        getImageForUrl(faviconURL, completion: { image in
-                            if image != nil {
-                                // Use the image we got back
-                                tabFaviconDictionary[site.url] = image
-                            } else {
-                                tabFaviconDictionary[site.url] = Image(uiImage: FaviconFetcher.letter(forUrl: siteURL))
-                            }
-                            
-                            faviconFetchGroup.leave()
-                            
-                        })
-                    } else {
-                        // If no favicon is available, fall back to the "letter" favicon
-                        tabFaviconDictionary[site.url] =
-                            Image(uiImage: FaviconFetcher.letter(forUrl: siteURL))
-                        
-                        faviconFetchGroup.leave()
-                    }
-                }
-            } else {
-                // We don't even have a real URL, not much we can do to get a favicon.
-                faviconFetchGroup.leave()
-            }
-        }
-        
-        faviconFetchGroup.notify(queue: .main) {
-            let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: topSites)
-            
-            completion(topSitesEntry)
-        }
+        let topSitesEntry = TopSitesEntry(date: Date(), favicons: tabFaviconDictionary, sites: widgetKitTopSites)
+        completion(topSitesEntry)
     }
-
+    
+    func getBundledFaviconWithBackground(siteUrl: URL) -> UIImage? {
+        // Get the bundled favicon if available
+        guard let bundled = FaviconFetcher.getBundledIcon(forUrl: siteUrl), let image = UIImage(contentsOfFile: bundled.filePath) else { return nil }
+        // Add background and padding
+        let color = bundled.bgcolor.components.alpha < 0.01 ? UIColor.white : bundled.bgcolor
+        return image.withBackgroundAndPadding(color: color)
+    }
+    
     func getTimeline(in context: Context, completion: @escaping (Timeline<TopSitesEntry>) -> Void) {
         getSnapshot(in: context, completion: { topSitesEntry in
             let timeline = Timeline(entries: [topSitesEntry], policy: .atEnd)
             completion(timeline)
         })
     }
-
-    fileprivate func topSitesArchivePath() -> String? {
-        let profilePath: String?
-        profilePath = FileManager.default.containerURL( forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)?.appendingPathComponent("profile.profile").path
-        guard let path = profilePath else { return nil }
-        return URL(fileURLWithPath: path).appendingPathComponent("topSites.archive").path
-    }
 }
 
 struct TopSitesEntry: TimelineEntry {
     let date: Date
     let favicons: [String : Image]
-    let sites: [TopSite]
+    let sites: [WidgetKitTopSiteModel]
 }
 
 fileprivate extension UIImage {

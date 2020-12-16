@@ -23,12 +23,12 @@ struct TopSitesView: View {
     let entry: TopSitesEntry
     
     @ViewBuilder
-    func topSitesItem(_ site: TopSite) -> some View {
+    func topSitesItem(_ site: WidgetKitTopSiteModel) -> some View {
         let url = site.url
         
         Link(destination: linkToContainingApp("?url=\(url)", query: "widget-medium-topsites-open-url")) {
-            if (entry.favicons[url] != nil) {
-                (entry.favicons[url])!.resizable().frame(width: 60, height: 60).mask(maskShape)
+            if (entry.favicons[site.imageKey] != nil) {
+                (entry.favicons[site.imageKey])!.resizable().frame(width: 60, height: 60).mask(maskShape)
             } else {
                 Rectangle()
                     .fill(Color(UIColor(red: 0.85, green: 0.85, blue: 0.85, alpha: 0.3)))

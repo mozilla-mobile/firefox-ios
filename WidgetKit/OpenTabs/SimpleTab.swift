@@ -13,6 +13,9 @@ struct SimpleTab: Hashable, Codable {
     var faviconURL: String?
     var isPrivate: Bool = false
     var uuid: String = ""
+    var imageKey: String {
+        return url?.baseDomain ?? ""
+    }
 }
 
 extension SimpleTab {
