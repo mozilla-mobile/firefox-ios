@@ -52,6 +52,7 @@ public struct PrefsKeys {
     
     // Widgetkit Key
     public static let WidgetKitSimpleTabKey = "WidgetKitSimpleTabKey"
+    public static let WidgetKitSimpleTopTab = "WidgetKitSimpleTopTab"
 }
 
 public struct PrefsDefaults {

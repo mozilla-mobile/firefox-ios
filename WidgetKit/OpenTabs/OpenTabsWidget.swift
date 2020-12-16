@@ -31,8 +31,8 @@ struct OpenTabsView: View {
         VStack(alignment: .leading) {
             Link(destination: linkToContainingApp("?uuid=\(tab.uuid)", query: query)) {
                 HStack(alignment: .center, spacing: 15) {
-                    if (entry.favicons[tab.title!] != nil) {
-                        (entry.favicons[tab.title!])!.resizable().frame(width: 16, height: 16)
+                    if (entry.favicons[tab.imageKey] != nil) {
+                        (entry.favicons[tab.imageKey])!.resizable().frame(width: 16, height: 16)
                     } else {
                         Image("placeholderFavicon")
                             .foregroundColor(Color.white)
