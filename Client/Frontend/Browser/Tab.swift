@@ -113,12 +113,17 @@ class Tab: NSObject {
     }
 
     var userActivity: NSUserActivity?
-
+    
     var webView: WKWebView?
     var tabDelegate: TabDelegate?
     weak var urlDidChangeDelegate: URLChangeDelegate?     // TODO: generalize this.
     var bars = [SnackBar]()
-    var favicons = [Favicon]()
+    var favicons = [Favicon]() {
+        didSet {
+//            print("Favicons - \(displayFavicon)")
+            updateFaviconCache()
+        }
+    }
     var lastExecutedTime: Timestamp?
     var sessionData: SessionData?
     fileprivate var lastRequest: URLRequest?
@@ -133,7 +138,8 @@ class Tab: NSObject {
     }
     var mimeType: String?
     var isEditing: Bool = false
-
+    var currentFaviconUrl: URL?
+    var lastVisitedUrl: URL?
     // When viewing a non-HTML content type in the webview (like a PDF document), this URL will
     // point to a tempfile containing the content so it can be shared to external applications.
     var temporaryDocument: TemporaryDocument?
@@ -420,7 +426,14 @@ class Tab: NSObject {
     }
 
     var displayFavicon: Favicon? {
-        return favicons.max { $0.width! < $1.width! }
+//        didSet {
+//            print("--Before: displayFavicon: \(displayFavicon)")
+//            displayFavicon = favicons.max { $0.width! < $1.width! }
+//            print("--After: displayFavicon: \(displayFavicon)")
+//        }
+//
+        let favicon = favicons.max { $0.width! < $1.width! }
+        return favicon
     }
 
     var canGoBack: Bool {
@@ -610,6 +623,24 @@ class Tab: NSObject {
             }
         }
         return .none
+    }
+    
+    func updateFaviconCache() {
+        guard let displayFavicon = displayFavicon?.url, let faviconUrl = URL(string: displayFavicon), let baseDomain = url?.baseDomain else {
+            return
+        }
+
+        if currentFaviconUrl == nil {
+            currentFaviconUrl = faviconUrl
+            FaviconFetcher.downloadFaviconAndCache(imageURL: currentFaviconUrl, imageKey: baseDomain)
+            return
+        }
+        
+        guard let currentFaviconUrl = currentFaviconUrl, !faviconUrl.isEqual(currentFaviconUrl) else {
+            return
+        }
+        
+        FaviconFetcher.downloadFaviconAndCache(imageURL: currentFaviconUrl, imageKey: baseDomain)
     }
 }
 

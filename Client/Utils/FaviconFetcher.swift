@@ -160,8 +160,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
     }
     
     class func downloadFaviconAndCache(imageURL: URL?, imageKey: String) {
-        guard imageURL != nil, !imageKey.isEmpty else { return }
-//        let imageKey = imageURL!.shortDisplayString
+        guard let imageURL = imageURL, !imageURL.absoluteString.starts(with: "internal://"), !imageKey.isEmpty else { return }
         // cache found, don't download
         guard !checkImageCache(imageKey: imageKey) else { return }
         // no cache found, download image
