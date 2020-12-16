@@ -16,7 +16,6 @@ import Sync
 import CoreSpotlight
 import UserNotifications
 import Account
-import WidgetKit
 
 #if canImport(BackgroundTasks)
  import BackgroundTasks
@@ -343,11 +342,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         }
         // Create fx favicon cache directory
         FaviconFetcher.createWebImageCacheDirectory()
+        // update top sites widget
+        updateTopSitesWidget()
         
-        if #available(iOS 14.0, *) {
-            // TopSite is only available in iOS14 for WidgetKit hence we don't need to write for lower versions
-            transformTopSitesAndAttemptWrite()
-        }
         // Cleanup can be a heavy operation, take it out of the startup path. Instead check after a few seconds.
         DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             self.profile?.cleanupHistoryIfNeeded()
@@ -355,13 +352,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
-        if #available(iOS 14.0, *) {
-            // Since we only need the topSites data in the archiver, let's write it
-            // only if iOS 14 is available.
-            transformTopSitesAndAttemptWrite()
-            
-            WidgetCenter.shared.reloadAllTimelines()
-        }
+        // update top sites widget
+        updateTopSitesWidget()
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -399,22 +391,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UIViewControllerRestorati
         tabManager.preserveTabs()
     }
     
-    private func transformTopSitesAndAttemptWrite() {
-        if let profile = profile {
-            TopSitesHandler.getTopSites(profile: profile).uponQueue(.main) { result in
-                var widgetkitTopSites = [WidgetKitTopSiteModel]()
-                result.forEach { site in
-                    // Favicon icon url
-                    let iconUrl = site.icon?.url ?? ""
-                    let webUrl = URL(string: site.url)
-                    let imageKey = site.tileURL.baseDomain ?? ""
-                    widgetkitTopSites.append(WidgetKitTopSiteModel(title: site.title, faviconUrl: iconUrl, url: webUrl ?? URL(string: "")!, imageKey: imageKey))
-                    // fetch favicons and cache them in disk
-                    FaviconFetcher.downloadFaviconAndCache(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil, imageKey: imageKey )
-                }
-                // save top sites for widgetkit use
-                WidgetKitTopSiteModel.save(widgetKitTopSites: widgetkitTopSites)
-            }
+    private func updateTopSitesWidget() {
+        // Since we only need the topSites data in the archiver, let's write it
+        // only if iOS 14 is available.
+        if #available(iOS 14.0, *) {
+            guard let profile = profile else { return }
+            TopSitesHandler.writeWidgetKitTopSites(profile: profile)
         }
     }
 
