@@ -167,7 +167,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
         SDWebImageDownloader.shared.downloadImage(with: imageURL) { image, data, err, value in
             guard err == nil else { return }
             do {
-                // save image
+                // save image to disk cache
                 if let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: AppInfo.sharedContainerIdentifier)    {
                     let imageKeyDirectoryUrl = container.appendingPathComponent("Library/Caches/fxfavicon/\(imageKey)")
                     try data?.write(to: imageKeyDirectoryUrl)
@@ -209,7 +209,7 @@ open class FaviconFetcher: NSObject, XMLParserDelegate {
             }
           }
         } catch let error as NSError {
-            Sentry.shared.send(message: "Fx favicon cache directory creation failed", tag: .general, severity: .error, description: error.description)
+            Sentry.shared.send(message: "Favicon cache directory creation failed", tag: .general, severity: .error, description: error.description)
         }
     }
         

@@ -60,7 +60,7 @@ struct TopSitesHandler {
                 let webUrl = URL(string: site.url)
                 let imageKey = site.tileURL.baseDomain ?? ""
                 widgetkitTopSites.append(WidgetKitTopSiteModel(title: site.title, faviconUrl: iconUrl, url: webUrl ?? URL(string: "")!, imageKey: imageKey))
-                // fetch favicons and cache them in disk
+                // fetch favicons and cache them on disk
                 FaviconFetcher.downloadFaviconAndCache(imageURL: !iconUrl.isEmpty ? URL(string: iconUrl) : nil, imageKey: imageKey )
             }
             // save top sites for widgetkit use
