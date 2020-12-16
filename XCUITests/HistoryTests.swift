@@ -212,8 +212,8 @@ class HistoryTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
         waitForExistence(app.cells.staticTexts[webpage["label"]!])
-        // 'x' button to close the tab is not visible, so closing by swiping the tab
-        app.cells.staticTexts[webpage["label"]!].swipeRight()
+        // Close tab by tapping on its 'x' button
+        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
 
         navigator.performAction(Action.OpenNewTabFromTabTray)
         navigator.goto(HomePanelsScreen)

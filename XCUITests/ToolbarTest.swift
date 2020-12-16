@@ -74,7 +74,7 @@ class ToolbarTests: BaseTestCase {
         navigator.goto(TabTray)
 
         waitForExistence(app.cells.staticTexts[website1["label"]!])
-        app.cells.staticTexts[website1["label"]!].swipeRight()
+        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
 
         // Go Back to other tab to see if all buttons are disabled.
         navigator.nowAt(BrowserTab)

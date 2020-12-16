@@ -127,6 +127,7 @@ class Action {
     static let OpenNewTabFromTabTray = "OpenNewTabFromTabTray"
     static let AcceptRemovingAllTabs = "AcceptRemovingAllTabs"
 
+    static let ToggleRegularMode = "ToggleRegularMode"
     static let TogglePrivateMode = "TogglePrivateBrowing"
     static let TogglePrivateModeFromTabBarHomePanel = "TogglePrivateModeFromTabBarHomePanel"
     static let TogglePrivateModeFromTabBarBrowserTab = "TogglePrivateModeFromTabBarBrowserTab"
@@ -908,6 +909,9 @@ func createScreenGraph(for test: XCTestCase, with app: XCUIApplication) -> MMScr
     map.addScreenState(TabTray) { screenState in
         screenState.tap(app.buttons["newTabButtonTabTray"], forAction: Action.OpenNewTabFromTabTray, transitionTo: NewTabScreen)
         screenState.tap(app.buttons["smallPrivateMask"], forAction: Action.TogglePrivateMode) { userState in
+            userState.isPrivate = !userState.isPrivate
+        }
+        screenState.tap(app.toolbars.segmentedControls.buttons.firstMatch, forAction: Action.ToggleRegularMode) { userState in
             userState.isPrivate = !userState.isPrivate
         }
         screenState.tap(app.buttons["closeAllTabsButtonTabTray"], to: CloseTabMenu)
