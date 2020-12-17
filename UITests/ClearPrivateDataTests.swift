@@ -117,7 +117,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
 
     func testClearsCookies() {
         let url = "\(webRoot!)/numberedPage.html?page=1"
-        tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().waitForAnimationsToFinish(withTimeout: 5)
 
         BrowserUtils.enterUrlAddressBar(tester(), typeUrl: url)
         tester().waitForWebViewElementWithAccessibilityLabel("Page 1")
@@ -137,7 +137,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.acceptClearPrivateData(tester())
         BrowserUtils.closeClearPrivateDataDialog(tester())
 
-        tester().waitForAnimationsToFinish(withTimeout: 3)
+        tester().waitForAnimationsToFinish(withTimeout: 5)
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "foo=bar")
         XCTAssertEqual(cookies.localStorage, "foo=bar")

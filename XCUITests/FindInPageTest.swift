@@ -139,8 +139,8 @@ class FindInPageTests: BaseTestCase {
         // Going to tab tray and back to the website hides the search field.
         navigator.goto(TabTray)
 
-        waitForExistence(app.collectionViews.cells["The Book of Mozilla"])
-        app.collectionViews.cells["The Book of Mozilla"].tap()
+        waitForExistence(app.cells.staticTexts["The Book of Mozilla"])
+        app.cells.staticTexts["The Book of Mozilla"].tap()
         XCTAssertFalse(app.textFields[""].exists)
         XCTAssertFalse(app.buttons["FindInPage.find_next"].exists)
         XCTAssertFalse(app.buttons["FindInPage.find_previous"].exists)

@@ -220,6 +220,11 @@ class LoginManagerTests: KIFTestCase {
         tester().wait(forTimeInterval: 2)
         tester().waitForViewWithAccessibilityValue("a0.com/")
         XCTAssertEqual(UIPasteboard.general.string, "http://a0.com")
+
+        // Workaround
+        tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
     }
 
     func testOpenAndFillFromNormalContext() {
@@ -238,6 +243,11 @@ class LoginManagerTests: KIFTestCase {
 
         tester().wait(forTimeInterval: 10)
         tester().waitForViewWithAccessibilityValue("a0.com/")
+
+        // Workaround
+        tester().tapView(withAccessibilityIdentifier: "TabToolbar.tabsButton")
+        tester().tapView(withAccessibilityIdentifier: "closeAllTabsButtonTabTray")
+        tester().tapView(withAccessibilityIdentifier: "TabTrayController.deleteButton.closeAll")
     }
     // This test is disabled until bug 1486243 is fixed
     /*func testOpenAndFillFromPrivateContext() {

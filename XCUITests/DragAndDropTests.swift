@@ -15,7 +15,7 @@ let twitterTitle = "Twitter"
 
 
 class DragAndDropTests: BaseTestCase {
-
+/* Disble test suite since in theory it does not make sense with Chron tabs implementation
     override func tearDown() {
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
         super.tearDown()
@@ -95,7 +95,7 @@ class DragAndDropTests: BaseTestCase {
         dragAndDrop(dragElement: app.collectionViews.cells[firstWebsite.tabName], dropOnElement: app.collectionViews.cells[secondWebsite.tabName])
 
         checkTabsOrder(dragAndDropTab: true, firstTab: secondWebsite.tabName, secondTab: firstWebsite.tabName)
-    }
+    }*/
 }
 
 fileprivate extension BaseTestCase {
