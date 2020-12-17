@@ -65,6 +65,7 @@ class L10nSuite3SnapshotTests: L10nBaseSnapshotTests {
 
     func testPrivateBrowsingTabsEmptyState() {
         navigator.toggleOn(userState.isPrivate, withAction: Action.TogglePrivateMode)
+        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
         snapshot("PrivateBrowsingTabsEmptyState-01")
     }
 }

@@ -60,8 +60,8 @@ class ToolbarTests: BaseTestCase {
         // Open new tab and then go back to previous tab to test navigation buttons.
         waitForTabsButton()
         navigator.goto(TabTray)
-        waitForExistence(app.collectionViews.cells[website1["label"]!])
-        app.collectionViews.cells[website1["label"]!].tap()
+        waitForExistence(app.cells.staticTexts[website1["label"]!])
+        app.cells.staticTexts[website1["label"]!].tap()
         XCTAssertEqual(valueMozilla, urlValueLong)
 
         // Test to see if all the buttons are enabled then close tab.
@@ -73,8 +73,8 @@ class ToolbarTests: BaseTestCase {
         waitForTabsButton()
         navigator.goto(TabTray)
 
-        waitForExistence(app.collectionViews.cells[website1["label"]!])
-        app.collectionViews.cells[website1["label"]!].swipeRight()
+        waitForExistence(app.cells.staticTexts[website1["label"]!])
+        app.tables.cells.element(boundBy: 0).buttons["closeTabButtonTabTray"].tap()
 
         // Go Back to other tab to see if all buttons are disabled.
         navigator.nowAt(BrowserTab)

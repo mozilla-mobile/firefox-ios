@@ -29,6 +29,7 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Now there should not be any shield icon
         waitForNoExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 5)
         navigator.goto(BrowserTab)
 
         // Switch to Private Browsing
@@ -38,6 +39,8 @@ class TrackingProtectionTests: BaseTestCase {
 
         // Make sure TP is off also in PMB
         waitForNoExistence(app.buttons["TabLocationView.trackingProtectionButton"])
+        waitForExistence(app.buttons["TabToolbar.menuButton"], timeout: 10)
+        navigator.goto(SettingsScreen)
         // Enable TP again
         navigator.goto(TrackingProtectionSettings)
         // Turn on ETP
