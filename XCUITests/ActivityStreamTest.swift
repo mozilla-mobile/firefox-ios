@@ -135,7 +135,8 @@ class ActivityStreamTest: BaseTestCase {
     }*/
 
     func testTopSitesRemoveAllExceptPinnedClearPrivateData() {
-        navigator.goto(BrowserTab)
+        waitForExistence(app.cells["TopSitesCell"].cells.element(boundBy: 0), timeout: 3)
+        navigator.openURL("mozilla.org")
         waitUntilPageLoad()
         navigator.performAction(Action.PinToTopSitesPAM)
         // Workaround to have visited website in top sites
