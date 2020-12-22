@@ -5,7 +5,7 @@
 import XCTest
 
 class DatabaseFixtureTest: BaseTestCase {
-    let fixtures = ["testOneBookmark": "testDatabaseFixture-browser.db", "testBookmarksDatabaseFixture": "testBookmarksDatabase1000-browser.db", "testHistoryDatabaseFixture": "testHistoryDatabase4000-browser.db", "testHistoryDatabasePerformance": "testHistoryDatabase4000-browser.db", "testPerfHistory4000startUp": "testHistoryDatabase4000-browser.db", "testPerfHistory4000openMenu": "testHistoryDatabase4000-browser.db", "testPerBookmarks1000openMenu": "testBookmarksDatabase1000-browser.db"]
+    let fixtures = ["testOneBookmark": "testDatabaseFixture-browser.db", "testBookmarksDatabaseFixture": "testBookmarksDatabase1000-browser.db", "testHistoryDatabaseFixture": "testHistoryDatabase4000-browser.db", "testHistoryDatabasePerformance": "testHistoryDatabase4000-browser.db", "testPerfHistory4000startUp": "testHistoryDatabase4000-browser.db", "testPerfHistory4000openMenu": "testHistoryDatabase4000-browser.db", "testPerfBookmarks1000openMenu": "testBookmarksDatabase1000-browser.db", "testPerfBookmarks1000startUp": "testBookmarksDatabase1000-browser.db"]
 
     override func setUp() {
         // Test name looks like: "[Class testFunc]", parse out the function name
