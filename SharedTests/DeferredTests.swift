@@ -123,4 +123,7 @@ class DeferredTests: XCTestCase {
         waitForExpectations(timeout: 3, handler: nil)
     }
 
+    func testDeferMaybe() {
+        XCTAssertTrue(deferMaybe("foo").value.isSuccess)
+    }
 }

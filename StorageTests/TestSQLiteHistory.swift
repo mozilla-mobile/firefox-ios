@@ -1074,7 +1074,7 @@ class TestSQLiteHistory: XCTestCase {
         // Insert something with an invalid domain ID. We have to manually do this since domains are usually hidden.
         let insertDeferred = db.withConnection { connection -> Void in
             try connection.executeChange("PRAGMA foreign_keys = OFF")
-                         let insert = "INSERT INTO history (guid, url, title, local_modified, is_deleted, should_upload, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
+            let insert = "INSERT OR REPLACE INTO history (guid, url, title, local_modified, is_deleted, should_upload, domain_id) VALUES (?, ?, ?, ?, ?, ?, ?)"
             let args: Args = [Bytes.generateGUID(), site.url, site.title, Date.now(), 0, 0, -1]
             try connection.executeChange(insert, withArgs: args)
         }
@@ -1643,5 +1643,8 @@ class TestSQLiteHistoryTransactionUpdate: XCTestCase {
         let ts: MicrosecondTimestamp = baseInstantInMicros
         let local = SiteVisit(site: site, date: ts, type: VisitType.link)
         XCTAssertTrue(history.addLocalVisit(local).value.isSuccess)
+
+        // Doing it again is a no-op and will not fail.
+        history.insertOrUpdatePlace(site.asPlace(), modified: 1234567890).succeeded()
     }
 }
