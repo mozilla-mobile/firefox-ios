@@ -25,7 +25,6 @@ class SearchTests: XCTestCase {
     func testURIFixup() {
         // Check valid URLs. We can load these after some fixup.
         checkValidURL("http://www.mozilla.org", afterFixup: "http://www.mozilla.org")
-        checkValidURL("about:", afterFixup: "about:")
         checkValidURL("about:config", afterFixup: "about:config")
         checkValidURL("about: config", afterFixup: "about:%20config")
         checkValidURL("file:///f/o/o", afterFixup: "file:///f/o/o")
@@ -43,6 +42,10 @@ class SearchTests: XCTestCase {
         checkInvalidURL("创业咖啡")
         checkInvalidURL("创业咖啡 中国")
         checkInvalidURL("创业咖啡. 中国")
+        checkInvalidURL("about:")
+        checkInvalidURL("javascript:")
+        checkInvalidURL("ftp:")
+        
     }
 
     func testURIFixupPunyCode() {
