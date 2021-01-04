@@ -21,11 +21,12 @@ Building the code
 -----------------
 
 1. Install the latest [Xcode developer tools](https://developer.apple.com/xcode/downloads/) from Apple.
-1. Install Carthage and Node
+1. Install Carthage, Node, and a Python 3 virtualenv for localization scripts:
     ```shell
     brew update
     brew install carthage
     brew install node
+    pip3 install virtualenv
     ```
 1. Clone the repository:
     ```shell
