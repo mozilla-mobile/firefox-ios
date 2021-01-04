@@ -18,20 +18,12 @@ public struct SupportUtils {
         }
         return URL(string: "https://support.mozilla.org/1/mobile/\(AppInfo.appVersion)/iOS/\(languageIdentifier)/\(escapedTopic)")
     }
-    
-    private static func getOSInfo()->String {
-        let os = ProcessInfo().operatingSystemVersion
-        return String(os.majorVersion) + "." + String(os.minorVersion) + "." + String(os.patchVersion)
-    }
-    
+
     public static func URLForReportSiteIssue(_ siteUrl: String?) -> URL? {
-        guard let escapedUrl = siteUrl?.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-              let os = "iOS-\(getOSInfo())".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed),
-              let browser = "\(AppInfo.displayName)-\(AppInfo.appVersion)".addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)
+        guard let escapedUrl = siteUrl?.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)
         else {
             return nil
-            
         }
-        return URL(string: "https://webcompat.com/issues/new?src=mobile-reporter&browser=\(browser)&os=\(os)&url=\(escapedUrl)")
+        return URL(string: "https://webcompat.com/issues/new?src=mobile-reporter&url=\(escapedUrl)")
     }
 }

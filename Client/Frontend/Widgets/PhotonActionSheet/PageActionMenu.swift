@@ -224,7 +224,6 @@ extension PhotonActionSheetProtocol {
             
             commonActions.insert(reportSiteIssueAction, at: 0)
         }
-        
 
         if shouldShowNewTabButton && tab.readerModeAvailableOrActive {
             return [refreshActions, mainActions, commonActions]
