@@ -12,54 +12,26 @@ import XCTest
 
 class UserAgentTests: XCTestCase {
     private let fakeUserAgent = "a-fake-browser"
-
-    private let mockUserDefaults = MockUserDefaults()
-
+    
     override func setUp() {
         super.setUp()
-        mockUserDefaults.clear()
+    }
+    
+    func testMobileUserAgent() {
+        let compare: (String) -> Bool = { ua in
+            let range = ua.range(of: "^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\)", options: .regularExpression)
+            return range != nil
+        }
+        XCTAssertTrue(compare(UserAgent.mobileUserAgent()), "User agent computes correctly.")
     }
 
-    func testSetsCachedUserAgent() {
-        mockUserDefaults.set(UIDevice.current.systemVersion, forKey: "LastDeviceSystemVersionNumber")
-        mockUserDefaults.set(AppInfo.shortVersion, forKey: "LastFocusVersionNumber")
-        mockUserDefaults.set(AppInfo.buildNumber, forKey: "LastFocusBuildNumber")
-        mockUserDefaults.set(fakeUserAgent, forKey: "UserAgent")
-
-        _ = UserAgent(userDefaults: mockUserDefaults)
-        XCTAssertNotNil(mockUserDefaults.registerValue)
-        XCTAssertEqual(mockUserDefaults.registerValue!["UserAgent"] as? String, fakeUserAgent)
-    }
-
-    func testSetsGeneratedUserAgent() {
-        mockUserDefaults.removeObject(forKey: "LastDeviceSystemVersionNumber")
-        mockUserDefaults.removeObject(forKey: "LastFocusVersionNumber")
-        mockUserDefaults.removeObject(forKey: "LastFocusBuildNumber")
-        mockUserDefaults.removeObject(forKey: "UserAgent")
-
-        _ = UserAgent(userDefaults: mockUserDefaults)
-        XCTAssertNotNil(mockUserDefaults.registerValue)
-        XCTAssertNotNil(mockUserDefaults.string(forKey: "LastFocusVersionNumber"))
-        XCTAssertTrue(((mockUserDefaults.registerValue!["UserAgent"] as? String)?.contains("FxiOS"))!)
-    }
-
-    func testGetDesktopUserAgent() {
-        XCTAssertEqual(UserAgent.getDesktopUserAgent(), "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.12 (KHTML, like Gecko) Version/11.1 Safari/605.1.12")
-    }
-}
-
-private class MockUserDefaults: UserDefaults {
-    var registerValue: [String: Any]?
-
-    func clear() {
-        removeObject(forKey: "LastFocusVersionNumber")
-        removeObject(forKey: "LastFocusBuildNumber")
-        removeObject(forKey: "LastDeviceSystemVersionNumber")
-        removeObject(forKey: "UserAgent")
-        registerValue = nil
-    }
-
-    override func register(defaults registrationDictionary: [String: Any]) {
-        registerValue = registrationDictionary
+    func testDesktopUserAgent() {
+        let compare: (String) -> Bool = { ua in
+            let range = ua.range(of: "^Mozilla/5\\.0 \\(.+\\) AppleWebKit/[0-9\\.]+ \\(KHTML, like Gecko\\) Version/[0-9\\.]+ Safari/[0-9\\.]", options: .regularExpression)
+            return range != nil
+        }
+        // Sample valid user agent string
+        // Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15
+        XCTAssertTrue(compare(UserAgent.desktopUserAgent()), "Desktop user agent computes correctly.")
     }
 }

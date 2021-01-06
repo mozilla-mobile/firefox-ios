@@ -954,7 +954,7 @@ extension BrowserViewController: URLBarDelegate {
 
         var actionItems = [items.findInPageItem]
 
-        webViewController.userAgentString == UserAgent.getDesktopUserAgent() ? actionItems.append(items.requestMobileItem) : actionItems.append(items.requestDesktopItem)
+        webViewController.userAgentString == UserAgent.desktopUserAgent() ? actionItems.append(items.requestMobileItem) : actionItems.append(items.requestDesktopItem)
 
         let pageActionsMenu = PhotonActionSheet(title: UIConstants.strings.pageActionsTitle, actions: [shareItems, actionItems], style: .overCurrentContext)
         presentPhotonActionSheet(pageActionsMenu, from: urlBar.pageActionsButton)
@@ -996,8 +996,8 @@ extension BrowserViewController: BrowserToolsetDelegate {
         urlBar.dismiss()
 
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let title = webViewController.userAgentString == UserAgent.getDesktopUserAgent() ? "Request Mobile Site" : "Request Desktop Site"
-        let object = webViewController.userAgentString == UserAgent.getDesktopUserAgent() ? TelemetryEventObject.requestMobile : TelemetryEventObject.requestDesktop
+        let title = webViewController.userAgentString == UserAgent.desktopUserAgent() ? "Request Mobile Site" : "Request Desktop Site"
+        let object = webViewController.userAgentString == UserAgent.desktopUserAgent() ? TelemetryEventObject.requestMobile : TelemetryEventObject.requestDesktop
 
         alert.addAction(UIAlertAction(title: title, style: .default, handler: { (action) in
             Telemetry.default.recordEvent(category: TelemetryEventCategory.action, method: TelemetryEventMethod.click, object: object)

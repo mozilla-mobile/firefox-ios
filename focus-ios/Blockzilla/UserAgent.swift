@@ -4,13 +4,29 @@
 
 import Foundation
 
+struct UserAgentExtras {
+    public static let uaBitSafari = "Safari/605.1.15"
+    public static let uaBitMobile = "Mobile/15E148"
+    public static let uaBitFx = "FxiOS/\(AppInfo.shortVersion)"
+    public static let product = "Mozilla/5.0"
+    public static let platform = "AppleWebKit/605.1.15"
+    public static let platformDetails = "(KHTML, like Gecko)"
+    public static let systemInfoDesktop = "(Macintosh; Intel Mac OS X 10_15_4)"
+    public static let systemInfoMobile = "(\(UIDevice.current.model); CPU OS \(UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "_")) like Mac OS X)"
+    // For iPad, we need to append this to the default UA for google.com to show correct page
+    public static let uaBitGoogleIpad = "Version/13.1"
+}
+
+enum UserAgentMode {
+    case desktop
+    case mobile
+}
+
 class UserAgent {
     static let shared = UserAgent()
-
     private var userDefaults: UserDefaults
-    private var isDesktopMode: Bool!
-
-    var browserUserAgent: String?
+    private var defaultUserAgentDesktop = false
+    private var forcedMode: UserAgentMode?
 
     init(userDefaults: UserDefaults = UserDefaults.standard) {
         self.userDefaults = userDefaults
@@ -18,95 +34,30 @@ class UserAgent {
     }
 
     func setup() {
-        isDesktopMode = false
-        if let cachedUserAgent = cachedUserAgent() {
-            setUserAgent(userAgent: cachedUserAgent)
-            return
+        if #available(iOS 13.0, *), UIDevice.current.userInterfaceIdiom == .pad {
+            defaultUserAgentDesktop = true
         }
-
-        guard let userAgent = UserAgent.generateUserAgent() else {
-            return
-        }
-
-        userDefaults.set(userAgent, forKey: "UserAgent")
-        userDefaults.set(AppInfo.shortVersion, forKey: "LastFocusVersionNumber")
-        userDefaults.set(AppInfo.buildNumber, forKey: "LastFocusBuildNumber")
-        userDefaults.set(UIDevice.current.systemVersion, forKey: "LastDeviceSystemVersionNumber")
-
-        setUserAgent(userAgent: userAgent)
     }
 
-    private func cachedUserAgent() -> String? {
-        let currentiOSVersion = UIDevice.current.systemVersion
-        let lastiOSVersion = userDefaults.string(forKey: "LastDeviceSystemVersionNumber")
-        let currentFocusVersion = AppInfo.shortVersion
-        let lastFocusVersion = userDefaults.string(forKey: "LastFocusVersionNumber")
-        let currentFocusBuild = AppInfo.buildNumber
-        let lastFocusBuild = userDefaults.string(forKey: "LastFocusBuildNumber")
-
-        if let focusUA = userDefaults.string(forKey: "UserAgent") {
-            if lastiOSVersion == currentiOSVersion
-                && lastFocusVersion == currentFocusVersion
-                && lastFocusBuild == currentFocusBuild {
-                return focusUA
-            }
-        }
-        return nil
+    public static func desktopUserAgent() -> String {
+        return "\(UserAgentExtras.product) \(UserAgentExtras.systemInfoDesktop) \(UserAgentExtras.platform) \(UserAgentExtras.platformDetails) \(UserAgentExtras.uaBitGoogleIpad) \(UserAgentExtras.uaBitSafari)"
     }
 
-    private static func generateUserAgent() -> String? {
-        let webView = UIWebView()
-
-        let userAgent = webView.stringByEvaluatingJavaScript(from: "navigator.userAgent")!
-
-        // Extract the WebKit version and use it as the Safari version.
-        let webKitVersionRegex = try! NSRegularExpression(pattern: "AppleWebKit/([^ ]+) ", options: [])
-
-        let match = webKitVersionRegex.firstMatch(in: userAgent, options: [],
-                                                  range: NSRange(location: 0, length: userAgent.count))
-
-        if match == nil {
-            print("Error: Unable to determine WebKit version in UA.")
-            return userAgent     // Fall back to Safari's.
-        }
-
-        let webKitVersion = (userAgent as NSString).substring(with: match!.range(at: 1))
-
-        // Insert version before the Mobile/ section.
-        let mobileRange = (userAgent as NSString).range(of: "Mobile/")
-        if mobileRange.location == NSNotFound {
-            print("Error: Unable to find Mobile section in UA.")
-            return userAgent     // Fall back to Safari's.
-        }
-
-        let mutableUA = NSMutableString(string: userAgent)
-        mutableUA.insert("FxiOS/\(AppInfo.shortVersion) ", at: mobileRange.location)
-
-        let focusUA = "\(mutableUA) Safari/\(webKitVersion)"
-
-        return focusUA
+    public static func mobileUserAgent() -> String {
+        return "\(UserAgentExtras.product) \(UserAgentExtras.systemInfoMobile) \(UserAgentExtras.platform) \(UserAgentExtras.platformDetails) FxiOS/\(AppInfo.shortVersion)  \(UserAgentExtras.uaBitMobile) \(UserAgentExtras.uaBitSafari)"
     }
 
-    public static func getDesktopUserAgent() -> String {
-        let userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/605.1.12 (KHTML, like Gecko) Version/11.1 Safari/605.1.12"
-        return String(userAgent)
-    }
-
-    public func getUserAgent() -> String? {
-        let userAgent = isDesktopMode ? UserAgent.getDesktopUserAgent() : userDefaults.string(forKey: "UserAgent")
+    public func getUserAgent() -> String {
+        let isDesktop: Bool = forcedMode == nil ? defaultUserAgentDesktop : forcedMode! == .desktop ? true : false
+        let userAgent = isDesktop ? UserAgent.desktopUserAgent() : UserAgent.mobileUserAgent()
         return userAgent
     }
 
-    private func setUserAgent(userAgent: String) {
-        userDefaults.register(defaults: ["UserAgent": userAgent])
-    }
-
     public func changeUserAgent() {
-        if isDesktopMode {
-            setup()
-        } else {
-            setUserAgent(userAgent: UserAgent.getDesktopUserAgent())
-            isDesktopMode = true
+        guard forcedMode == nil else {
+            forcedMode = forcedMode == .desktop ? .mobile : .desktop
+            return
         }
+        forcedMode = defaultUserAgentDesktop ? .mobile : .desktop
     }
 }
