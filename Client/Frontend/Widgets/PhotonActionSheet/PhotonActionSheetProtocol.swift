@@ -49,7 +49,7 @@ extension PhotonActionSheetProtocol {
         return self.profile.history.isPinnedTopSite(url)
     }
 
-    func getLongPressLocationBarActions(with urlBar: URLBarView) -> [PhotonActionSheetItem] {
+    func getLongPressLocationBarActions(with urlBar: URLBarView, webViewContainer: UIView) -> [PhotonActionSheetItem] {
         let pasteGoAction = PhotonActionSheetItem(title: Strings.PasteAndGoTitle, iconString: "menu-PasteAndGo") { _, _ in
             if let pasteboardContents = UIPasteboard.general.string {
                 urlBar.delegate?.urlBar(urlBar, didSubmitText: pasteboardContents)
@@ -63,6 +63,7 @@ extension PhotonActionSheetProtocol {
         let copyAddressAction = PhotonActionSheetItem(title: Strings.CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
             if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
+                SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: webViewContainer)
             }
         }
         if UIPasteboard.general.string != nil {

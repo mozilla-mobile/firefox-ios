@@ -1534,7 +1534,7 @@ extension BrowserViewController: URLBarDelegate {
     }
 
     func urlBarDidLongPressLocation(_ urlBar: URLBarView) {
-        let urlActions = self.getLongPressLocationBarActions(with: urlBar)
+        let urlActions = self.getLongPressLocationBarActions(with: urlBar, webViewContainer: self.webViewContainer)
         let generator = UIImpactFeedbackGenerator(style: .heavy)
         generator.impactOccurred()
         self.presentSheetWith(actions: [urlActions], on: self, from: urlBar)
