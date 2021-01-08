@@ -63,6 +63,9 @@ extension PhotonActionSheetProtocol {
         let copyAddressAction = PhotonActionSheetItem(title: Strings.CopyAddressTitle, iconString: "menu-Copy-Link") { _, _ in
             if let url = self.tabManager.selectedTab?.canonicalURL?.displayURL ?? urlBar.currentURL {
                 UIPasteboard.general.url = url
+                if let view = urlBar.window {
+                    SimpleToast().showAlertWithText(Strings.AppMenuCopyURLConfirmMessage, bottomContainer: view)
+                }
             }
         }
         if UIPasteboard.general.string != nil {
