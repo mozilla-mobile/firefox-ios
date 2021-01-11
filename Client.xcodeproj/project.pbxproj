@@ -2036,6 +2036,7 @@
 		4EC44325A2E383EBF36EC4FC /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Menu.strings; sourceTree = "<group>"; };
 		4EC746F3A8EBF1EF3A209B12 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/ErrorPages.strings; sourceTree = "<group>"; };
 		4F39407ABD0C752B3DB63643 /* pt-PT */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-PT"; path = "pt-PT.lproj/Today.strings"; sourceTree = "<group>"; };
+		4F50486E25ACF98A0090EFF2 /* SmokeXCUITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = SmokeXCUITests.xctestplan; path = XCUITests/SmokeXCUITests.xctestplan; sourceTree = "<group>"; };
 		4F5141B6B36A07960E35983F /* nb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nb; path = nb.lproj/LoginManager.strings; sourceTree = "<group>"; };
 		4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		4F8146508D20F9CEFFD32A4D /* uz */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = uz; path = uz.lproj/Search.strings; sourceTree = "<group>"; };
@@ -5738,6 +5739,7 @@
 		F84B21B51A090F8100AAB793 = {
 			isa = PBXGroup;
 			children = (
+				4F50486E25ACF98A0090EFF2 /* SmokeXCUITests.xctestplan */,
 				D4C794812565A13700FB7E86 /* SyncIntegrationTestPlan.xctestplan */,
 				D4C792B625651FAE00FB7E86 /* Fennec_Enterprise_XCUITests.xctestplan */,
 				D4C792CA25651FC500FB7E86 /* PerformanceTestPlan.xctestplan */,
