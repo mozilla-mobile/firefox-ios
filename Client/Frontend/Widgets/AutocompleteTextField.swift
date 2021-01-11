@@ -11,7 +11,6 @@ import Shared
 /// callers must use this instead.
 protocol AutocompleteTextFieldDelegate: AnyObject {
     func autocompleteTextField(_ autocompleteTextField: AutocompleteTextField, didEnterText text: String)
-    func autocompleteTextFieldShouldEndEditing(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldReturn(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldShouldClear(_ autocompleteTextField: AutocompleteTextField) -> Bool
     func autocompleteTextFieldDidCancel(_ autocompleteTextField: AutocompleteTextField)
@@ -247,7 +246,7 @@ class AutocompleteTextField: UITextField, UITextFieldDelegate {
 
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
         applyCompletion()
-        return autocompleteDelegate?.autocompleteTextFieldShouldEndEditing(self) ?? true
+        return true
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
