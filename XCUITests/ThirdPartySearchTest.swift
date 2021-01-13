@@ -121,9 +121,10 @@ class ThirdPartySearchTest: BaseTestCase {
         UIPasteboard.general.string = "http://www.google.com/search?q=&btnI"
         
         let tablesQuery = app.tables
-        let customengineurlTextView = tablesQuery.textViews.element(boundBy: 1)
+        let customengineurlTextView = tablesQuery.textViews["customEngineUrl"].staticTexts["URL (Replace Query with %s)"]
 
-        XCTAssertTrue(tablesQuery.textViews["customEngineUrl"].staticTexts["URL (Replace Query with %s)"].exists)
+        XCTAssertTrue(customengineurlTextView.exists)
+        customengineurlTextView.tap()
         customengineurlTextView.press(forDuration: 2.0)
         app.staticTexts["Paste"].tap()
 

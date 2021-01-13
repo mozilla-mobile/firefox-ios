@@ -31,7 +31,7 @@ class DatabaseFixtureTest: BaseTestCase {
 
         let loaded = NSPredicate(format: "count == 1013")
         expectation(for: loaded, evaluatedWith: app.tables["Bookmarks List"].cells, handler: nil)
-        waitForExpectations(timeout: 30, handler: nil)
+        waitForExpectations(timeout: 60, handler: nil)
 
         let bookmarksList = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(bookmarksList, 1013, "There should be an entry in the bookmarks list")
