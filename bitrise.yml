@@ -904,6 +904,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.0.x
+    after_run:
+    - RunSmokeXCUITests
   xcode12-release-and-beta:
     steps:
     - activate-ssh-key@4.0:
