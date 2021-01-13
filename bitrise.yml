@@ -895,6 +895,7 @@ workflows:
         - simulator_device: iPhone 8
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.4:
+        is_always_run: true
         run_if: true
     - slack@3.1:
         inputs:
