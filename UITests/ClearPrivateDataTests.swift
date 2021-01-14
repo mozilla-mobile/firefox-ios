@@ -149,6 +149,7 @@ class ClearPrivateDataTests: KIFTestCase, UITextFieldDelegate {
         BrowserUtils.acceptClearPrivateData(tester())
         BrowserUtils.closeClearPrivateDataDialog(tester())
 
+        tester().waitForAnimationsToFinish(withTimeout: 5)
         cookies = getCookies(webView)
         XCTAssertEqual(cookies.cookie, "")
         XCTAssertEqual(cookies.localStorage, "null")
