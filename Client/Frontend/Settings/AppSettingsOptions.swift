@@ -1071,6 +1071,7 @@ class DefaultBrowserSetting: Setting {
 
     override func onClick(_ navigationController: UINavigationController?) {
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .settingsMenuSetAsDefaultBrowser)
+        LeanPlumClient.shared.track(event: .settingsSetAsDefaultBrowser)
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
     }
 }

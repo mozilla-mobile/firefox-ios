@@ -72,6 +72,8 @@ enum LPEvent: String {
     case onboardingTestLoadedTooSlow = "E_Onboarding_Was_Swiped_Before_AB_Test_Could_Start"
     case dismissDefaultBrowserCard = "E_Dismissed_Default_Browser_Card"
     case goToSettingsDefaultBrowserCard = "E_Default_Browser_Card_Clicked_Go_To_Settings"
+    case appOpenedAsDefaultBrowser = "E_App_Opened_as_Default_Browser"
+    case settingsSetAsDefaultBrowser = "E_Settings_Clicked_Set_Default_Browser"
 }
 
 struct LPAttributeKey {
