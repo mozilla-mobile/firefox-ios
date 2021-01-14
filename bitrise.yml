@@ -897,6 +897,9 @@ workflows:
     - cache-push@2.4:
         is_always_run: true
         run_if: true
+        inputs:
+        - cache_paths: |-
+            $BITRISE_CACHE_DIR
     - slack@3.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
