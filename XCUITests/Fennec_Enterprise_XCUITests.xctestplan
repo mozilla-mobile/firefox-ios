@@ -69,6 +69,7 @@
         "NavigationTest\/testSSL()",
         "NavigationTest\/testScrollsToTopWithMultipleTabs()",
         "NavigationTest\/testToggleBetweenMobileAndDesktopSiteFromSite()",
+        "NavigationTest\/testURLBar()",
         "NavigationTest\/testVerifyBrowserTabMenu()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowBlankPage()",
         "NewTabSettingsTest\/testChangeNewTabSettingsShowCustomURL()",
