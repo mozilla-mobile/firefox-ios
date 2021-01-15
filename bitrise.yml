@@ -44,7 +44,7 @@ workflows:
             https://raw.githubusercontent.com/TitouanVanBelle/XCTestHTMLReport/develop/xchtmlreport.rb
         title: Install XCTestHTMLReport
     - xcode-test@2.0.0:
-        run_if: '{{enveq "BITRISE_SCHEME" "Fennec_Enterprise_SmokeXCUITests"}}'
+        run_if: '{{enveq "BITRISE_SCHEME" "Fennec_Enterprise_XCUITests"}}'
         inputs:
         - output_tool: xcodebuild
         - xcodebuild_test_options: '-resultBundlePath ./ddata/Test.xcresult'
@@ -1132,7 +1132,8 @@ workflows:
         is_always_run: true
     - xcode-test@2:
         inputs:
-        - scheme: Fennec_Enterprise_SmokeXCUITests
+        - scheme: Fennec_Enterprise_XCUITest
+        - xcodebuild_test_options: '-testPlan SmokeXCUITests'
         - simulator_device: iPhone 11
         is_always_run: true
     - deploy-to-bitrise-io@1.9: {}
@@ -1880,7 +1881,8 @@ workflows:
         - xcodebuild_options: >-
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec_Enterprise_SmokeXCUITests
+        - scheme: Fennec_Enterprise_XCUITest
+        - xcodebuild_test_options: '-testPlan SmokeXCUITests'
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2: {}
     - slack@3.1:
