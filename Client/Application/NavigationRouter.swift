@@ -108,6 +108,7 @@ enum NavigationPath {
             self = .glean(url: url)
         } else if urlString.starts(with: "http:") ||  urlString.starts(with: "https:") {
             TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .asDefaultBrowser)
+            LeanPlumClient.shared.track(event: .appOpenedAsDefaultBrowser)
             // Use the last browsing mode the user was in
             let isPrivate = UserDefaults.standard.bool(forKey: "wasLastSessionPrivate")
             self = .url(webURL: url, isPrivate: isPrivate)
