@@ -24,7 +24,8 @@ class DatabaseFixtureTest: BaseTestCase {
         XCTAssertEqual(list, 1, "There should be an entry in the bookmarks list")
     }
 
-    func testBookmarksDatabaseFixture() {
+    // Disabled due to #7789
+    /*func testBookmarksDatabaseFixture() {
         waitForTabsButton()
         navigator.goto(MobileBookmarks)
         waitForExistence(app.tables["Bookmarks List"], timeout: 15)
@@ -35,7 +36,7 @@ class DatabaseFixtureTest: BaseTestCase {
 
         let bookmarksList = app.tables["Bookmarks List"].cells.count
         XCTAssertEqual(bookmarksList, 1013, "There should be an entry in the bookmarks list")
-    }
+    }*/
 
     func testHistoryDatabaseFixture() {
         navigator.goto(LibraryPanel_History)
