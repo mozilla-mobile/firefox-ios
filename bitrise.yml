@@ -1134,7 +1134,7 @@ workflows:
         is_always_run: true
     - xcode-test@2:
         inputs:
-        - scheme: Fennec_Enterprise_XCUITest
+        - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
         - simulator_device: iPhone 11
         is_always_run: true
