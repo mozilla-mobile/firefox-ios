@@ -1307,7 +1307,11 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: ''
+    description: >-
+      This Workflow is to build app on XCode 12.2
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.2.x
   xcode12-release-and-beta-nocache:
     steps:
     - activate-ssh-key@4.0:
