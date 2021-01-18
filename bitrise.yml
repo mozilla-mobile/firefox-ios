@@ -1883,7 +1883,7 @@ workflows:
         - xcodebuild_options: >-
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec_Enterprise_XCUITest
+        - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2: {}
