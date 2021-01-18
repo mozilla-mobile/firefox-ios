@@ -760,7 +760,7 @@ workflows:
 
             cd content-blocker-lib-ios/ContentBlockerGen && swift run
         title: Post clone step for TP updates
-    - cache-pull@2.1: {}
+    - cache-pull@2.4: {}
     - certificate-and-profile-installer@1.10: {}
     - script@1:
         inputs:
@@ -894,7 +894,7 @@ workflows:
         - scheme: Fennec
         - simulator_device: iPhone 8
     - deploy-to-bitrise-io@1.9: {}
-    - cache-push@2.2: {}
+    - cache-push@2.4: {}
     - slack@3.1:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
@@ -904,6 +904,8 @@ workflows:
     meta:
       bitrise.io:
         stack: osx-xcode-12.0.x
+    after_run:
+    - RunSmokeXCUITests
   xcode12-release-and-beta:
     steps:
     - activate-ssh-key@4.0:
@@ -1132,7 +1134,7 @@ workflows:
         is_always_run: true
     - xcode-test@2:
         inputs:
-        - scheme: Fennec_Enterprise_XCUITest
+        - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
         - simulator_device: iPhone 11
         is_always_run: true
@@ -1881,7 +1883,7 @@ workflows:
         - xcodebuild_options: >-
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
             CODE_SIGNING_ALLOWED=NO
-        - scheme: Fennec_Enterprise_XCUITest
+        - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2: {}
