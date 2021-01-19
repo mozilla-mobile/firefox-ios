@@ -14,7 +14,7 @@ github "Leanplum/Leanplum-iOS-SDK"          ~> 2.7.2
 github "mozilla-services/shavar-prod-lists" "83.0"
 
 # Use beta version of A~S for XCode12
-github "nbhasin2/application-services" "63.0b"
+github "nbhasin2/application-services" "68.1b2"
 # Use release version of application-services
 # commenting out until we have a fix for https://github.com/mozilla/application-services/issues/3670
 # github "mozilla/application-services"      "v65.0.0"
