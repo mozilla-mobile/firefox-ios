@@ -9,7 +9,29 @@
     }
   ],
   "defaultOptions" : {
-
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "FIREFOX_CLEAR_PROFILE"
+      },
+      {
+        "argument" : "FIREFOX_TEST"
+      }
+    ],
+    "environmentVariableEntries" : [
+      {
+        "key" : "FXA_PASSWORD",
+        "value" : "$(FXA_PASSWORD)"
+      },
+      {
+        "key" : "FXA_EMAIL",
+        "value" : "$(FXA_EMAIL)"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Client.xcodeproj",
+      "identifier" : "F84B21BD1A090F8100AAB793",
+      "name" : "Client"
+    }
   },
   "testTargets" : [
     {
