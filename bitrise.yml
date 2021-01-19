@@ -2802,8 +2802,6 @@ meta:
   bitrise.io:
     machine_type: performance
 trigger_map:
-- push_branch: ios-xcode12-3
-  workflow: xcode12-3-build-only
 - push_branch: v29.1
   workflow: xcode12-release-and-beta-nocache
 - push_branch: v28.2
