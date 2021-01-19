@@ -1145,6 +1145,176 @@ workflows:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
     description: This Workflow is to run tests UI TESTS
     before_run: []
+  xcode12-2-build-only:
+    steps:
+    - activate-ssh-key@4.0:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - git-clone@4.0: {}
+    - certificate-and-profile-installer@1.10: {}
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            # fail if any commands fails
+
+            set -e
+
+            # debug log
+
+            set -x
+
+
+            echo
+            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
+            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
+
+            echo 'EXCLUDED_ARCHS=$(inherited)
+            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
+            >> /tmp/tmp.xcconfig
+
+            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
+
+            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
+
+            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
+
+            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
+
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+        title: Workaround carthage lipo bug
+    - carthage@3.2:
+        inputs:
+        - carthage_options: ' --platform ios --cache-builds'
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+
+            rm /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value ''
+        title: remove carthage lipo workaround
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            set -e
+
+            set -x
+
+
+            # Import only the shipping locales (from shipping_locales.txt) on
+            Release
+
+            # builds. Import all locales on Beta and Fennec_Enterprise, except
+            for pull
+
+            # requests.
+
+            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
+            exit 1
+
+            pip install --user virtualenv
+
+            cd /usr/local/bin
+
+            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+
+            cd -
+
+            ./ios-l10n-scripts/import-locales-firefox.sh --release
+        title: Pull in L10N
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            set -e
+
+            set -x
+
+
+            cd Client.xcodeproj
+
+            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
+            Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/'
+            project.pbxproj
+
+            cd -
+        title: Set xcodeproj code_sign_identity
+    - script@1.1:
+        title: 'NPM, ContentBlockerGen'
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            npm install
+            npm run build
+
+            cd content-blocker-lib-ios/ContentBlockerGen && swift run
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Client/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/NotificationService/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/ShareTo/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: Extensions/Today/Info.plist
+    - set-xcode-build-number@1:
+        inputs:
+        - plist_path: WidgetKit/Info.plist
+    - script@1:
+        inputs:
+        - content: >-
+            #!/usr/bin/env bash
+
+            # fail if any commands fails
+
+            set -e
+
+            # debug log
+
+            set -x
+
+
+            # write your script here
+
+
+            echo "Setting Leanplum environment to PRODUCTION for
+            $BUDDYBUILD_SCHEME"
+
+            /usr/libexec/PlistBuddy -c "Set LeanplumAppId $LEANPLUM_APP_ID"
+            "Client/Info.plist"
+
+            /usr/libexec/PlistBuddy -c "Set LeanplumProductionKey
+            $LEANPLUM_KEY_PRODUCTION" "Client/Info.plist"
+
+            /usr/libexec/PlistBuddy -c "Set LeanplumDevelopmentKey
+            $LEANPLUM_KEY_DEVELOPMENT" "Client/Info.plist"
+        title: Leanplum Variable Setup
+    envs:
+    - opts:
+        is_expand: false
+      BITRISE_SCHEME: Firefox
+    description: >-
+      This Workflow is to build app on XCode 12.3
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.3.x
   xcode12-release-and-beta-nocache:
     steps:
     - activate-ssh-key@4.0:
