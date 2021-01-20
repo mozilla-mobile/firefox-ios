@@ -1121,6 +1121,7 @@ workflows:
         inputs:
         - scheme: Fennec_Enterprise_UITests
         - simulator_device: iPhone 8
+        is_always_run: true
     - deploy-to-bitrise-io@1.9: {}
     - cache-push@2.2:
         is_always_run: true
@@ -2052,7 +2053,7 @@ workflows:
         - configuration: Release
         - xcodebuild_options: >-
             CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO -testPlan SmokeXCUITests
         - scheme: Fennec_Enterprise_XCUITests
         - xcodebuild_test_options: '-testPlan SmokeXCUITests'
     - deploy-to-bitrise-io@1.9: {}
