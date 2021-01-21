@@ -770,3 +770,29 @@ widget:
     notification_emails:
       - firefox-ios@mozilla.com
     expires: "2021-12-01"
+
+# Experiments
+experiments:
+  experiment_enrollment:
+    type: event
+    description: |
+      Recorded when a preference is changed and includes the
+      preference that changed as well as the value changed to
+      recorded in the extra keys.
+    extra_keys:
+      experiment_id:
+        description: |
+          The experiment ID.
+      experiment_name:
+        description: |
+          The experiment name.
+      experiment_variant:
+        description: |
+          The experiment variant name the user is in.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7097
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7681
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-12-01"

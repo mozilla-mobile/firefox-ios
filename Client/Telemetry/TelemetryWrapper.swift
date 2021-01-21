@@ -499,6 +499,17 @@ extension TelemetryWrapper {
             GleanMetrics.Widget.mQuickActionClosePrivate.add()
         case (.action, .open, .mediumTopSitesWidget, _, _):
             GleanMetrics.Widget.mTopSitesWidget.add()
+        // Experiments
+        case (.enrollment, .add, .experimentEnrollment, _, let extras):
+            if let id = extras?["Experiment id"] as? String, let name = extras?["Experiment name"] as? String, let variant = extras?["Experiment variant"] as? String {
+                GleanMetrics.Experiments.experimentEnrollment.record(
+                extra: [GleanMetrics.Experiments.ExperimentEnrollmentKeys.experimentId: id,
+                        GleanMetrics.Experiments.ExperimentEnrollmentKeys.experimentName: name,
+                        GleanMetrics.Experiments.ExperimentEnrollmentKeys.experimentVariant: variant])
+            } else {
+                let msg = "Uninstrumented pref metric: \(category), \(method), \(object), \(value), \(String(describing: extras))"
+                Sentry.shared.send(message: msg, severity: .debug)
+            }
         default:
             let msg = "Uninstrumented metric recorded: \(category), \(method), \(object), \(value), \(String(describing: extras))"
             Sentry.shared.send(message: msg, severity: .debug)
