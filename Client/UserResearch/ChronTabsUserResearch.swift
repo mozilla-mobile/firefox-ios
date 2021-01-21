@@ -12,6 +12,7 @@ class ChronTabsUserResearch {
     // Constants
     private let enrollmentKey = "chronTabsUserResearchEnrollmentKey"
     private let chronTabsUserResearchKey = "chronTabsUserResearchKey"
+    private let abTestName = "Chronological Tabs AB Test Prod"
     // Saving user defaults
     private let defaults = UserDefaults.standard
     // LP fetched status variable
@@ -91,15 +92,23 @@ class ChronTabsUserResearch {
         guard !hasEnrolled else { return }
         // Printing variant is good to know all details of A/B test fields
         print("lp variant \(String(describing: Leanplum.variants()))")
-        guard let variants = Leanplum.variants(), let lpData = variants.first as? Dictionary<String, AnyObject> else {
+        var lpData: Dictionary<String, Any>?
+        guard let variants = Leanplum.variants() as? [Dictionary<String, Any>] else {
+            return
+        }
+        variants.forEach {
+            if $0["abTestName"] as? String == abTestName {
+                lpData = $0
+            }
+        }
+        guard lpData != nil else {
             return
         }
         var abTestId = ""
-        if let value = lpData["abTestId"] as? Int64 {
+        if let value = lpData?["abTestId"] as? Int64 {
                 abTestId = "\(value)"
         }
-        let abTestName = lpData["abTestName"] as? String ?? ""
-        let abTestVariant = lpData["name"] as? String ?? ""
+        let abTestVariant = lpData?["name"] as? String ?? ""
         let attributesExtras = [LPAttributeKey.experimentId: abTestId, LPAttributeKey.experimentName: abTestName, LPAttributeKey.experimentVariant: abTestVariant]
         // Leanplum telemetry
         LeanPlumClient.shared.set(attributes: attributesExtras)
