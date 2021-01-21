@@ -428,7 +428,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo
     - carthage@3.2:
         inputs:
@@ -442,7 +442,7 @@ workflows:
             # debug log
             set -x
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lip
     - script@1:
@@ -678,13 +678,13 @@ workflows:
             cd Client.xcodeproj
 
             sed -i '' 's/"Firefox Development"/"BR Firefox App Store"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Firefox Today Development/BR Firefox Today App Store/'
-            project.pbxproj  
+            project.pbxproj
 
             sed -i '' 's/Firefox ShareTo Development/BR Firefox ShareTo App
-            Store/' project.pbxproj 
+            Store/' project.pbxproj
 
             sed -i '' 's/PROVISIONING_PROFILE_SPECIFIER =
             ""/PROVISIONING_PROFILE_SPECIFIER = "BR Firefox NotificationService
@@ -788,7 +788,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
         inputs:
@@ -800,7 +800,7 @@ workflows:
             set -e
             set -x
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: Remove carthage lipo workaround
     - script@1:
@@ -848,19 +848,19 @@ workflows:
             cd Client.xcodeproj
 
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj  
+            Fennec Today/' project.pbxproj
 
             sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj 
+            Share To/' project.pbxproj
 
             sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj 
+            WidgetKit/' project.pbxproj
 
             sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
             iOS Dev - Notification Service/' project.pbxproj
@@ -943,7 +943,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
         inputs:
@@ -958,7 +958,7 @@ workflows:
             set -x
 
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
     - script@1:
@@ -1182,7 +1182,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
         inputs:
@@ -1197,7 +1197,7 @@ workflows:
             set -x
 
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
     - script@1:
@@ -1311,8 +1311,7 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: >-
-      This Workflow is to build app on XCode 12.3
+    description: This Workflow is to build app on XCode 12.3
     meta:
       bitrise.io:
         stack: osx-xcode-12.3.x
@@ -1352,7 +1351,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
         inputs:
@@ -1367,7 +1366,7 @@ workflows:
             set -x
 
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
     - script@1:
@@ -1573,7 +1572,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: 'Workaround carthage lipo bug #3019'
     - carthage@3.2:
         inputs:
@@ -1588,7 +1587,7 @@ workflows:
             # debug log
             set -x
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
     - script@1:
         inputs:
@@ -1634,19 +1633,19 @@ workflows:
             cd Client.xcodeproj
 
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj  
+            Fennec Today/' project.pbxproj
 
             sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj 
+            Share To/' project.pbxproj
 
             sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj 
+            WidgetKit/' project.pbxproj
 
             sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
             iOS Dev - Notification Service/' project.pbxproj
@@ -1725,7 +1724,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
         inputs:
@@ -1740,7 +1739,7 @@ workflows:
             set -x
 
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
     - script@1:
@@ -1947,7 +1946,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: 'Workaround carthage lipo bug #3019'
     - carthage@3.2:
         inputs:
@@ -1962,7 +1961,7 @@ workflows:
             # debug log
             set -x
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
     - script@1:
         inputs:
@@ -2011,19 +2010,19 @@ workflows:
             cd Client.xcodeproj
 
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj  
+            Fennec Today/' project.pbxproj
 
             sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj 
+            Share To/' project.pbxproj
 
             sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj 
+            WidgetKit/' project.pbxproj
 
             sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
             iOS Dev - Notification Service/' project.pbxproj
@@ -2118,7 +2117,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: 'Workaround carthage lipo bug #3019'
     - carthage@3.2:
         inputs:
@@ -2133,7 +2132,7 @@ workflows:
             # debug log
             set -x
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
     - script@1:
         inputs:
@@ -2179,19 +2178,19 @@ workflows:
             cd Client.xcodeproj
 
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj  
+            Fennec Today/' project.pbxproj
 
             sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj 
+            Share To/' project.pbxproj
 
             sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj 
+            WidgetKit/' project.pbxproj
 
             sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
             iOS Dev - Notification Service/' project.pbxproj
@@ -2286,7 +2285,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: 'Workaround carthage lipo bug #3019'
     - carthage@3.2:
         inputs:
@@ -2301,7 +2300,7 @@ workflows:
             # debug log
             set -x
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
     - script@1:
         inputs:
@@ -2347,19 +2346,19 @@ workflows:
             cd Client.xcodeproj
 
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj  
+            Fennec Today/' project.pbxproj
 
             sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj 
+            Share To/' project.pbxproj
 
             sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj 
+            WidgetKit/' project.pbxproj
 
             sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
             iOS Dev - Notification Service/' project.pbxproj
@@ -2452,7 +2451,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: 'Workaround carthage lipo bug #3019'
     - carthage@3.2:
         inputs:
@@ -2467,7 +2466,7 @@ workflows:
             # debug log
             set -x
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
     - script@1:
         inputs:
@@ -2513,19 +2512,19 @@ workflows:
             cd Client.xcodeproj
 
             sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj  
+            Fennec Today/' project.pbxproj
 
             sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj 
+            Share To/' project.pbxproj
 
             sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj 
+            WidgetKit/' project.pbxproj
 
             sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj 
+            project.pbxproj
 
             sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
             iOS Dev - Notification Service/' project.pbxproj
@@ -2637,7 +2636,7 @@ workflows:
 
             export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
 
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig 
+            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
         title: Workaround carthage lipo bug
     - carthage@3.2:
         inputs:
@@ -2652,7 +2651,7 @@ workflows:
             set -x
 
 
-            rm /tmp/tmp.xcconfig 
+            rm /tmp/tmp.xcconfig
             envman add --key XCODE_XCCONFIG_FILE --value ''
         title: remove carthage lipo workaround
     - script@1:
@@ -2807,17 +2806,13 @@ meta:
   bitrise.io:
     machine_type: performance
 trigger_map:
-- push_branch: v29.1
-  workflow: xcode12-release-and-beta-nocache
-- push_branch: v28.2
-  workflow: ios13-xcode11.7-28.x-release
 - push_branch: main
   workflow: RunUnitTests
 - push_branch: chronological-tabs
   workflow: RunUnitTests
-- push_branch: v29.2
-  workflow: xcode12-release-and-beta-nocache
 - push_branch: v30.x
+  workflow: xcode12-release-and-beta-nocache
+- push_branch: v31.x
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
   workflow: RunUnitTests
