@@ -8,6 +8,7 @@ import Shared
 import Leanplum
 import Account
 
+private let abTestMessageNames = ["Live_DefBrowser_CAB_ALL_Push_EN_121720", "Live_DefBrowser_AutAB_ALL_Push_EN_121820"] // list of the names of all a/b tests that send messages
 private let LPAppIdKey = "LeanplumAppId"
 private let LPProductionKeyKey = "LeanplumProductionKey"
 private let LPDevelopmentKeyKey = "LeanplumDevelopmentKey"
@@ -253,6 +254,34 @@ class LeanPlumClient {
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
             }
         }
+        recordPushTests()
+    }
+    
+    // Send data to telemetry for a/b tests that send messages
+    func recordPushTests() {
+        var lpData: Dictionary<String, Any>?
+        guard let variants = Leanplum.variants() as? [Dictionary<String, Any>] else {
+            return
+        }
+        variants.forEach {
+            if abTestMessageNames.contains($0["abTestName"] as? String ?? "") {
+                lpData = $0
+            }
+        }
+        guard lpData != nil else {
+            return
+        }
+        var abTestId = ""
+        if let value = lpData?["abTestId"] as? Int64 {
+                abTestId = "\(value)"
+        }
+        let abTestName = lpData?["abTestName"] as? String ?? ""
+        let abTestVariant = lpData?["name"] as? String ?? ""
+        let attributesExtras = [LPAttributeKey.experimentId: abTestId, LPAttributeKey.experimentName: abTestName, LPAttributeKey.experimentVariant: abTestVariant]
+        // Leanplum telemetry
+        LeanPlumClient.shared.set(attributes: attributesExtras)
+        // Legacy telemetry
+        TelemetryWrapper.recordEvent(category: .enrollment, method: .add, object: .experimentEnrollment, extras: attributesExtras)
     }
 
     // Events
