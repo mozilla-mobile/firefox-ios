@@ -247,6 +247,7 @@ class LeanPlumClient {
             self.checkIfAppWasInstalled(key: PrefsKeys.HasFocusInstalled, isAppInstalled: self.focusInstalled(), lpEvent: .downloadedFocus)
             self.checkIfAppWasInstalled(key: PrefsKeys.HasPocketInstalled, isAppInstalled: self.pocketInstalled(), lpEvent: .downloadedPocket)
             self.recordSyncedClients(with: self.profile)
+            self.recordPushTests()
         })
 
         NotificationCenter.default.addObserver(forName: .FirefoxAccountChanged, object: nil, queue: .main) { _ in
@@ -254,7 +255,6 @@ class LeanPlumClient {
                 LeanPlumClient.shared.set(attributes: [LPAttributeKey.signedInSync: false])
             }
         }
-        recordPushTests()
     }
     
     // Send data to telemetry for a/b tests that send messages
