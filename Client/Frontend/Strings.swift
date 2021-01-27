@@ -837,7 +837,7 @@ extension String {
     
     // Widget - Shared
     public static let QuickActionsGalleryTitle = NSLocalizedString("TodayWidget.QuickActionsGalleryTitle", tableName: "Today", value: "Quick Actions", comment: "Quick Actions title when widget enters edit mode")
-   
+    public static let QuickActionsGalleryTitlev2 = NSLocalizedString("TodayWidget.QuickActionsGalleryTitle", tableName: "Today", value: "Firefox Shortcuts", comment: "Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox.")
     
     // Quick View - Gallery View
     public static let QuickViewGalleryTile = NSLocalizedString("TodayWidget.QuickViewGalleryTitle", tableName: "Today", value: "Quick View", comment: "Quick View title user is picking a widget to add.")
@@ -910,7 +910,11 @@ extension String {
 extension String {
     public static let DefaultBrowserCardTitle = NSLocalizedString("DefaultBrowserCard.Title", tableName: "Default Browser", value: "Switch Your Default Browser", comment: "Title for small card shown that allows user to switch their default browser to Firefox.")
     public static let DefaultBrowserCardDescription = NSLocalizedString("DefaultBrowserCard.Description", tableName: "Default Browser", value: "Set links from websites, emails, and Messages to open automatically in Firefox.", comment: "Description for small card shown that allows user to switch their default browser to Firefox.")
-    public static let DefaultBrowserCardButton = NSLocalizedString("DefaultBrowserCard.Button", tableName: "Default Browser", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
+    public static let DefaultBrowserCardButton = NSLocalizedString("DefaultBrowserCard.Button", tableName: "Default Browser", value: "Learn How", comment: "Button string to learn how to set your default browser.")
     public static let DefaultBrowserMenuItem = NSLocalizedString("Settings.DefaultBrowserMenuItem", tableName: "Default Browser", value: "Set as Default Browser", comment: "Menu option for setting Firefox as default browser.")
-    
+    public static let DefaultBrowserOnboardingScreenshot = NSLocalizedString("DefaultBrowserOnboarding.Screenshot", tableName: "Default Browser", value: "Default Browser App", comment: "Text for the screenshot of the iOS system settings page for Firefox.")
+    public static let DefaultBrowserOnboardingDescriptionStep1 = NSLocalizedString("DefaultBrowserOnboarding.Description1", tableName: "Default Browser", value: "1. Go to Settings", comment: "Description for default browser onboarding card.")
+    public static let DefaultBrowserOnboardingDescriptionStep2 = NSLocalizedString("DefaultBrowserOnboarding.Description2", tableName: "Default Browser", value: "2. Tap Default Browser App", comment: "Description for default browser onboarding card.")
+    public static let DefaultBrowserOnboardingDescriptionStep3 = NSLocalizedString("DefaultBrowserOnboarding.Description3", tableName: "Default Browser", value: "3. Select Firefox", comment: "Description for default browser onboarding card.")
+    public static let DefaultBrowserOnboardingButton = NSLocalizedString("DefaultBrowserOnboarding.Button", tableName: "Default Browser", value: "Go to Settings", comment: "Button string to open settings that allows user to switch their default browser to Firefox.")
 }
