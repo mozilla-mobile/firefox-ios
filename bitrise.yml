@@ -2796,6 +2796,22 @@ workflows:
     description: ''
   NewXcodeVersions:
     steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # debug log
+            set -x
+
+            YESTERDAY=`date -d "yesterday" '+%Y-%m-%d'`
+
+            pip install jq
+
+            curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -e -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))'
+            test $? -eq 0 || exit 1
+        title: "Check xcode-test branch for recent activity before continuning"
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4.0: {}
