@@ -305,6 +305,7 @@
 		4F514FD41ACD8F2C0022D7EA /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F514FD31ACD8F2C0022D7EA /* HistoryTests.swift */; };
 		4F97573B1AFA6F37006ECC24 /* readerContent.html in Resources */ = {isa = PBXBuildFile; fileRef = 4F9757391AFA6F37006ECC24 /* readerContent.html */; };
 		5002717C41BC7C50F67F1CAD /* StateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50027345B49B967409DDA348 /* StateTests.swift */; };
+		52262904252505630083DFD5 /* CronTabsPerfTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52262903252505630083DFD5 /* CronTabsPerfTests.swift */; };
 		554867231DC3935A00183DAA /* HomePageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554867221DC3935A00183DAA /* HomePageTests.swift */; };
 		580B0C4221748CFE00448DF8 /* DataManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 580B0C4121748CFE00448DF8 /* DataManagementTests.swift */; };
 		59A681BDFC95A19F05E07223 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59A68CCB63E2A565CB03F832 /* SearchViewController.swift */; };
@@ -553,6 +554,7 @@
 		D3E8EF101B97BE69001900FB /* ClearPrivateDataTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8EEE71B97A87A001900FB /* ClearPrivateDataTableViewController.swift */; };
 		D3FA777B1A43B2990010CD32 /* SearchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FA777A1A43B2990010CD32 /* SearchTests.swift */; };
 		D3FEC38D1AC4B42F00494F45 /* AutocompleteTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FEC38C1AC4B42F00494F45 /* AutocompleteTextField.swift */; };
+		D47A50F7254840210019A838 /* L10nSuite3SnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D47A50F6254840210019A838 /* L10nSuite3SnapshotTests.swift */; };
 		D4C4BDCE2253725E00986F04 /* LibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C4BDCD2253725E00986F04 /* LibraryTests.swift */; };
 		D4F3D789232F960600FBB9AA /* WhatsNewTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4F3D788232F960600FBB9AA /* WhatsNewTest.swift */; };
 		D56068982537A8EB00DEDAAA /* AuthenticationManager.strings in Resources */ = {isa = PBXBuildFile; fileRef = 32484895B328A342AED539C8 /* AuthenticationManager.strings */; };
@@ -7218,6 +7220,7 @@
 				7BEB64451C7345600092C02E /* SnapshotHelper.swift in Sources */,
 				D88C01B722B29EC200936951 /* ScreenGraphTest.swift in Sources */,
 				E40AFC541DD0E93300DA5651 /* L10nPermissionStringsSnapshotTests.swift in Sources */,
+				D47A50F7254840210019A838 /* L10nSuite3SnapshotTests.swift in Sources */,
 				E40AFC6C1DD128DA00DA5651 /* L10nSuite1SnapshotTests.swift in Sources */,
 				E40AFC651DD0F25500DA5651 /* L10nBaseSnapshotTests.swift in Sources */,
 				391B4FFF1F9767F50094F841 /* FxScreenGraph.swift in Sources */,
