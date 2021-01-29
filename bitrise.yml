@@ -1520,10 +1520,7 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: This Workflow is to deploy app on XCode 12.3
-    meta:
-      bitrise.io:
-        stack: osx-xcode-12.3.x
+    description: ''
   RunAllXCUITests:
     steps:
     - activate-ssh-key@4.0:
