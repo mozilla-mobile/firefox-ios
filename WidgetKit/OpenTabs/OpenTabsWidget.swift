@@ -16,7 +16,7 @@ struct OpenTabsWidget: Widget {
         }
         .supportedFamilies([.systemMedium, .systemLarge])
         .configurationDisplayName(String.QuickViewGalleryTitle)
-        .description(String.QuickViewGalleryDescription)
+        .description(String.QuickViewGalleryDescriptionV2)
     }
 }
 
