@@ -2811,7 +2811,7 @@ workflows:
 
             curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -e -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))'
             test $? -eq 0 || exit 1
-        title: "Check xcode-test branch for recent activity before continuning"
+        title: "Check main branch for recent activity before continuing"
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@4.0: {}
@@ -2972,7 +2972,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-10.2.x
     after_run:
     - RunSmokeXCUITests
 app:

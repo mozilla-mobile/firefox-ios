@@ -21,7 +21,7 @@ curl ${BITRISE_STACK_INFO} | jq ' . | keys'
 ]
 '''
 pattern = 'osx-xcode-'
-BITRISE_YML = 'bitrise.yml'
+BITRISE_YML = '../bitrise.yml'
 WORKFLOW = 'NewXcodeVersions'
 
 resp = requests.get(BITRISE_STACK_INFO)
@@ -81,9 +81,9 @@ if __name__ == '__main__':
         current_semver = y['workflows'][WORKFLOW]['meta']['bitrise.io']['stack'] 
 
         if current_semver == largest_semver:
-            print('XCode version unchanged! aborting.')
+            print('Xcode version unchanged! aborting.')
         else:
-            print('New XCode version available: {0} ... updating bitrise.yml!'.format(largest_semver))
+            print('New Xcode version available: {0} ... updating bitrise.yml!'.format(largest_semver))
             y['workflows'][WORKFLOW]['meta']['bitrise.io']['stack'] = largest_semver 
             with open(tmp_file, 'w+') as tmpfile:
                 yaml.dump(y, tmpfile, default_flow_style=False) 
