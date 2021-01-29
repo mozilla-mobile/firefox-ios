@@ -517,7 +517,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-12.3.x
   L10nScreenshotsTests:
     steps:
     - activate-ssh-key@4:
@@ -608,7 +608,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-12.3.x
   ios13-xcode11.7-28.x-release:
     steps:
     - activate-ssh-key@4.0:
@@ -903,7 +903,7 @@ workflows:
       in master
     meta:
       bitrise.io:
-        stack: osx-xcode-12.0.x
+        stack: osx-xcode-12.3.x
     after_run:
     - RunSmokeXCUITests
   xcode12-release-and-beta:
@@ -1146,7 +1146,7 @@ workflows:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
     description: This Workflow is to run tests UI TESTS
     before_run: []
-  xcode12-2-build-only:
+  xcode12-3-build-only:
     steps:
     - activate-ssh-key@4.0:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
@@ -1520,7 +1520,10 @@ workflows:
     - opts:
         is_expand: false
       BITRISE_SCHEME: Firefox
-    description: ''
+    description: This Workflow is to deploy app on XCode 12.3
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.3.x
   RunAllXCUITests:
     steps:
     - activate-ssh-key@4.0:
