@@ -837,7 +837,7 @@ extension String {
     
     // Widget - Shared
     public static let QuickActionsGalleryTitle = NSLocalizedString("TodayWidget.QuickActionsGalleryTitle", tableName: "Today", value: "Quick Actions", comment: "Quick Actions title when widget enters edit mode")
-    public static let QuickActionsGalleryTitlev2 = NSLocalizedString("TodayWidget.QuickActionsGalleryTitle", tableName: "Today", value: "Firefox Shortcuts", comment: "Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox.")
+    public static let QuickActionsGalleryTitlev2 = NSLocalizedString("TodayWidget.QuickActionsGalleryTitleV2", tableName: "Today", value: "Firefox Shortcuts", comment: "Firefox shortcuts title when widget enters edit mode. Do not translate the word Firefox.")
     
     // Quick View - Gallery View
     public static let QuickViewGalleryTile = NSLocalizedString("TodayWidget.QuickViewGalleryTitle", tableName: "Today", value: "Quick View", comment: "Quick View title user is picking a widget to add.")
