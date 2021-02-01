@@ -822,6 +822,8 @@ workflows:
 
             # requests.
 
+            pip uninstall virtualenv
+
             git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
             exit 1
 
