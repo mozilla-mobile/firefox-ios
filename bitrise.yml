@@ -813,7 +813,6 @@ workflows:
 
             set -x
 
-
             # Import only the shipping locales (from shipping_locales.txt) on
             Release
 
@@ -822,8 +821,6 @@ workflows:
 
             # requests.
 
-            pip uninstall virtualenv
-
             git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
             exit 1
 
@@ -831,7 +828,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
