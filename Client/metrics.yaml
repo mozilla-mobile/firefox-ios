@@ -626,6 +626,32 @@ default_browser_card:
       - firefox-ios@mozilla.com
     expires: "2021-03-01"
 
+# Default browser onboarding metrics
+default_browser_onboarding:
+  dismiss_pressed:
+    type: counter
+    description: |
+      Counts the number of times default browser onboarding is dismissed.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-08-01"
+  go_to_settings_pressed:
+    type: counter
+    description: |
+      Counts the number of times the Go To Settings button on
+      default browser onboarding is clicked.
+    bugs:
+      - https://github.com/mozilla-mobile/firefox-ios/issues/7870
+    data_reviews:
+      - https://github.com/mozilla-mobile/firefox-ios/pull/7245
+    notification_emails:
+      - firefox-ios@mozilla.com
+    expires: "2021-08-01"
+
 app:
   opened_as_default_browser:
     type: counter

@@ -54,7 +54,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = Strings.DefaultBrowserCardTitle
+        label.text = String.DefaultBrowserCardTitle
         label.textColor = fxTextThemeColour
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textAlignment = .left
@@ -63,7 +63,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }()
     private lazy var descriptionLabel1: UILabel = {
         let label = UILabel()
-        label.text = Strings.DefaultBrowserOnboardingDescriptionStep1
+        label.text = String.DefaultBrowserOnboardingDescriptionStep1
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
@@ -72,7 +72,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }()
     private lazy var descriptionLabel2: UILabel = {
         let label = UILabel()
-        label.text = Strings.DefaultBrowserOnboardingDescriptionStep2
+        label.text = String.DefaultBrowserOnboardingDescriptionStep2
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
@@ -81,7 +81,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }()
     private lazy var descriptionLabel3: UILabel = {
         let label = UILabel()
-        label.text = Strings.DefaultBrowserOnboardingDescriptionStep3
+        label.text = String.DefaultBrowserOnboardingDescriptionStep3
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
@@ -172,7 +172,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         // Bottom start button constraints
         goToSettingsButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(UpdateViewControllerUX.StartBrowsingButton.edgeInset)
-            make.bottom.equalTo(startBrowsingButton.snp.top).offset(-16)
             make.height.equalTo(UpdateViewControllerUX.StartBrowsingButton.height)
         }
         // Bottom goto settings button
@@ -182,10 +181,12 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     // Button Actions
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
     }
     
     @objc private func goToSettings() {
         viewModel.goToSettings?()
+        TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
     }
 }
 
