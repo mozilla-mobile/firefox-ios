@@ -470,7 +470,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -549,7 +549,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -813,7 +813,6 @@ workflows:
 
             set -x
 
-
             # Import only the shipping locales (from shipping_locales.txt) on
             Release
 
@@ -829,7 +828,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -986,7 +985,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -1225,7 +1224,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -1394,7 +1393,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -1614,7 +1613,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -1767,7 +1766,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -1988,7 +1987,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -2159,7 +2158,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -2327,7 +2326,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -2493,7 +2492,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -2679,7 +2678,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
@@ -2898,7 +2897,7 @@ workflows:
 
             cd /usr/local/bin
 
-            ln -s /Users/vagrant/Library/Python/3.8/bin/virtualenv .
+            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
 
             cd -
 
