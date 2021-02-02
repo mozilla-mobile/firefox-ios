@@ -44,13 +44,14 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var closeButton: UIButton = {
         let imgView = UIButton()
         imgView.setImage(UIImage(named: "db-close-ellipse")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        imgView.tintColor = UIColor.Photon.Grey20
+        imgView.tintColor = UIColor.theme.defaultBrowserCard.closeButtonBackground
         return imgView
     }()
     private var closeButtonImage: UIImageView = {
-        let imgView = UIImageView(image: UIImage(named: "db-close"))
+        let imgView = UIImageView(image: UIImage(named: "db-close")?.withRenderingMode(.alwaysTemplate))
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
+        imgView.tintColor = UIColor.theme.defaultBrowserCard.closeButton
         return imgView
     }()
     private lazy var topImageView: UIImageView = {
@@ -62,6 +63,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var imageText: UILabel = {
         let label = UILabel()
         label.text = viewModel.model?.imageText
+        label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
         label.numberOfLines = 1
