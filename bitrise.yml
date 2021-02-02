@@ -2616,7 +2616,7 @@ workflows:
             # debug log
             set -x
 
-            YESTERDAY=`date -d "yesterday" '+%Y-%m-%d'`
+            YESTERDAY=`date -v -1d '+%Y-%m-%d'`
 
             pip install jq
 
