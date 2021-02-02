@@ -59,6 +59,14 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         imgView.clipsToBounds = true
         return imgView
     }()
+    private lazy var imageText: UILabel = {
+        let label = UILabel()
+        label.text = viewModel.model?.imageText
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.textAlignment = .left
+        label.numberOfLines = 1
+        return label
+    }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = viewModel.model?.titleText
@@ -132,6 +140,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         
         // Initialize
         self.view.addSubview(topImageView)
+        self.view.addSubview(imageText)
         self.view.addSubview(closeButton)
         closeButton.addSubview(closeButtonImage)
         self.view.addSubview(titleLabel)
@@ -163,11 +172,19 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         }
         // The top imageview constraints setup
         topImageView.snp.makeConstraints { make in
-            make.left.equalToSuperview()
-            make.right.equalToSuperview()
+            make.left.right.equalToSuperview()
             make.top.equalTo(closeButton.snp.bottom).offset(18)
             make.bottom.equalTo(titleLabel.snp.top).offset(-32)
             make.height.equalTo(200)
+        }
+        let layoutDirection = UIApplication.shared.userInterfaceLayoutDirection
+        imageText.snp.makeConstraints { make in
+            make.top.equalTo(topImageView.snp.top).offset(122.5)
+            if layoutDirection == .leftToRight {
+                make.left.equalTo(topImageView.snp.left).inset(50)
+            } else {
+                make.right.equalTo(topImageView.snp.right).inset(50)
+            }
         }
         // Top title label constraints setup
         titleLabel.snp.makeConstraints { make in
@@ -193,7 +210,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
             make.bottom.equalTo(goToSettingsButton.snp.top).offset(-52)
             make.left.right.equalToSuperview().inset(36)
         }
-        // Bottom start button constraints
+        // Bottom settings button constraints
         goToSettingsButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(UpdateViewControllerUX.StartBrowsingButton.edgeInset)
             make.height.equalTo(60)
@@ -206,6 +223,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
+        LeanplumClient.shared.track()
     }
     
     @objc private func goToSettings() {

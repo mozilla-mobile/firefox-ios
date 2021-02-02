@@ -10,6 +10,7 @@ struct DefaultBrowserOnboardingModel {
     var titleImage: UIImage
     var titleText: String
     var descriptionText: [String]
+    var imageText: String
 }
 
 class DefaultBrowserOnboardingViewModel {
@@ -40,7 +41,7 @@ class DefaultBrowserOnboardingViewModel {
     }
     
     private func setupUpdateModel() {
-        model = DefaultBrowserOnboardingModel(titleImage: getCorrectImage(), titleText: String.DefaultBrowserCardTitle, descriptionText: [String.DefaultBrowserCardDescription, String.DefaultBrowserOnboardingDescriptionStep1, String.DefaultBrowserOnboardingDescriptionStep2, String.DefaultBrowserOnboardingDescriptionStep3])
+        model = DefaultBrowserOnboardingModel(titleImage: getCorrectImage(), titleText: String.DefaultBrowserCardTitle, descriptionText: [String.DefaultBrowserCardDescription, String.DefaultBrowserOnboardingDescriptionStep1, String.DefaultBrowserOnboardingDescriptionStep2, String.DefaultBrowserOnboardingDescriptionStep3], imageText: String.DefaultBrowserOnboardingScreenshot)
     }
     
     static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
