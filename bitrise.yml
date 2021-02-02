@@ -1128,6 +1128,9 @@ workflows:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
     description: This Workflow is to run tests UI TESTS
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.3.x
   RunSmokeXCUITests:
     steps:
     - cache-pull@2.1:
@@ -1144,6 +1147,9 @@ workflows:
         inputs:
         - webhook_url: $WEBHOOK_SLACK_TOKEN
     description: This Workflow is to run tests UI TESTS
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.3.x
     before_run: []
   xcode12-3-build-only:
     steps:
@@ -1686,6 +1692,9 @@ workflows:
     description: >-
       This Workflow is to run tests (currently SmokeTest) when there is a merge
       in master
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.3.x
   TEMP:
     steps:
     - activate-ssh-key@4.0:
@@ -2062,6 +2071,9 @@ workflows:
     description: >-
       This Workflow is to run tests (currently SmokeTest) when there is a merge
       in master
+    meta:
+      bitrise.io:
+        stack: osx-xcode-12.3.x
     after_run:
     - RunUITests
     - RunSmokeXCUITests
@@ -2391,206 +2403,6 @@ workflows:
         - scheme: L10nSnapshotTests
         - simulator_os_version: '14.0'
         - simulator_device: iPhone 11
-    - deploy-to-bitrise-io@1.10: {}
-    - cache-push@2.2: {}
-    - slack@3.1:
-        inputs:
-        - webhook_url: $WEBHOOK_SLACK_TOKEN
-    description: >-
-      This Workflow is to run tests (currently SmokeTest) when there is a merge
-      in master
-  aaronmt_chrontab_perftests:
-    steps:
-    - activate-ssh-key@4.0:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@4.0: {}
-    - script@1.1:
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            echo "PostClone step"
-            carthage checkout
-
-            cd content-blocker-lib-ios/ContentBlockerGen && swift run
-        title: Post clone step for TP updates
-    - cache-pull@2: {}
-    - certificate-and-profile-installer@1.10: {}
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            # fail if any commands fails
-
-            set -e
-
-            # debug log
-
-            set -x
-
-
-            echo
-            'EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64
-            arm64e armv7 armv7s armv6 armv8' > /tmp/tmp.xcconfig
-
-            echo 'EXCLUDED_ARCHS=$(inherited)
-            $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))'
-            >> /tmp/tmp.xcconfig
-
-            echo 'IPHONEOS_DEPLOYMENT_TARGET=11.4' >> /tmp/tmp.xcconfig
-
-            echo 'SWIFT_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            echo 'GCC_TREAT_WARNINGS_AS_ERRORS=NO' >> /tmp/tmp.xcconfig
-
-            export XCODE_XCCONFIG_FILE=/tmp/tmp.xcconfig
-
-            envman add --key XCODE_XCCONFIG_FILE --value /tmp/tmp.xcconfig
-        title: 'Workaround carthage lipo bug #3019'
-    - carthage@3.2:
-        inputs:
-        - carthage_options: ' --platform ios'
-    - script@1:
-        title: Remove carthage lipo workaround
-        inputs:
-        - content: |-
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            # debug log
-            set -x
-
-            rm /tmp/tmp.xcconfig
-            envman add --key XCODE_XCCONFIG_FILE --value ''
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            # Import only the shipping locales (from shipping_locales.txt) on
-            Release
-
-            # builds. Import all locales on Beta and Fennec_Enterprise, except
-            for pull
-
-            # requests.
-
-            git clone https://github.com/mozilla-mobile/ios-l10n-scripts.git ||
-            exit 1
-
-            pip install --user virtualenv
-
-            cd /usr/local/bin
-
-            ln -s /Users/vagrant/Library/Python/3.9/bin/virtualenv .
-
-            cd -
-
-            ./ios-l10n-scripts/import-locales-firefox.sh --release
-        title: Pull in L10n
-    - script@1:
-        inputs:
-        - content: >-
-            #!/usr/bin/env bash
-
-            set -e
-
-            set -x
-
-
-            cd Client.xcodeproj
-
-            sed -i '' 's/"Fennec Development"/"Bitrise Firefox iOS Dev"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec Today Development/Bitrise Firefox iOS Dev -
-            Fennec Today/' project.pbxproj
-
-            sed -i '' 's/Fennec ShareTo Development/Bitrise Firefox iOS Dev -
-            Share To/' project.pbxproj
-
-            sed -i '' 's/Fennec WidgetKit Development/Bitrise Firefox iOS Dev -
-            WidgetKit/' project.pbxproj
-
-            sed -i '' 's/"XCUITests"/"Bitrise Firefox iOS Dev - XCUI Tests"/'
-            project.pbxproj
-
-            sed -i '' 's/Fennec NotificationService Development/Bitrise Firefox
-            iOS Dev - Notification Service/' project.pbxproj
-
-            sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone
-            Developer"/CODE_SIGN_IDENTITY = "iPhone Distribution"/'
-            project.pbxproj
-
-            cd -
-        title: Set provisioning to Bitrise in xcodeproj
-    - script@1.1:
-        title: NPM install and build
-        inputs:
-        - content: |
-            #!/usr/bin/env bash
-            # fail if any commands fails
-            set -e
-            set -x
-
-            npm install
-            npm run build
-    - 'git::https://github.com/bitrise-steplib/steps-xcode-build-for-test.git@export-fix':
-        inputs:
-        - xcodebuild_options: >-
-            CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO
-            CODE_SIGNING_ALLOWED=NO -testPlan PerformanceTestPlan
-        - scheme: Fennec_Enterprise_XCUITests
-    - xcode-test@2:
-        inputs:
-        - simulator_device: iPhone 11
-        - xcodebuild_test_options: '-testPlan PerformanceTestPlan'
-        - scheme: Fennec_Enterprise_XCUITests
-    - script@1:
-        inputs:
-        - content: >
-            #!/usr/bin/env bash
-
-            # fail if any commands fails
-
-            set -e
-
-            # debug log
-
-            set -x
-
-
-
-            # download xcresult-extract and run it
-
-            git clone https://github.com/AaronMT/xcresult_extract.git || exit 1
-
-            #pip3 install virtualenv
-
-            #virtualenv .
-
-            #source ./bin/activate
-
-            cd xcresult_extract
-
-            python3 xcresult_extract.py -project $BITRISE_PROJECT_PATH -scheme
-            "Fennec_Enterprise_XCUITests" -resultBundlePath
-            $BITRISE_XCRESULT_PATH
-        title: Download and run XCResult Extract
-    - virtual-device-testing-for-ios@0:
-        inputs:
-        - download_test_results: 'true'
-        - test_devices: 'iphone11,13.6,en,portrait'
     - deploy-to-bitrise-io@1.10: {}
     - cache-push@2.2: {}
     - slack@3.1:
