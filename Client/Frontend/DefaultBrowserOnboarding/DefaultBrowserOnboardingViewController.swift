@@ -223,12 +223,13 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     @objc private func dismissAnimated() {
         self.dismiss(animated: true, completion: nil)
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .dismissDefaultBrowserOnboarding)
-        LeanplumClient.shared.track()
+        LeanPlumClient.shared.track(event: .dismissDefaultBrowserOnboarding)
     }
     
     @objc private func goToSettings() {
         viewModel.goToSettings?()
         TelemetryWrapper.recordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserOnboarding)
+        LeanPlumClient.shared.track(event: .goToSettingsDefaultBrowserOnboarding)
     }
 }
 
