@@ -31,7 +31,7 @@ import Leanplum
 
 class DefaultBrowserOnboardingViewController: UIViewController {
     // Public constants
-    let viewModel = ETPViewModel()
+    let viewModel = DefaultBrowserOnboardingViewModel()
     static let theme = BuiltinThemeName(rawValue: ThemeManager.instance.current.name) ?? .normal
     // Private vars
     private var fxTextThemeColour: UIColor {
@@ -47,14 +47,14 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         return button
     }()
     private lazy var topImageView: UIImageView = {
-        let imgView = UIImageView(image: viewModel.etpCoverSheetmodel?.titleImage)
+        let imgView = UIImageView(image: viewModel.model?.titleImage)
         imgView.contentMode = .scaleAspectFit
         imgView.clipsToBounds = true
         return imgView
     }()
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = String.DefaultBrowserCardTitle
+        label.text = viewModel.model?.titleText
         label.textColor = fxTextThemeColour
         label.font = UIFont.boldSystemFont(ofSize: 18)
         label.textAlignment = .left
@@ -63,7 +63,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }()
     private lazy var descriptionLabel1: UILabel = {
         let label = UILabel()
-        label.text = String.DefaultBrowserOnboardingDescriptionStep1
+        label.text = viewModel.model?.descriptionText[0]
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
@@ -72,7 +72,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }()
     private lazy var descriptionLabel2: UILabel = {
         let label = UILabel()
-        label.text = String.DefaultBrowserOnboardingDescriptionStep2
+        label.text = viewModel.model?.descriptionText[1]
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left
@@ -81,7 +81,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     }()
     private lazy var descriptionLabel3: UILabel = {
         let label = UILabel()
-        label.text = String.DefaultBrowserOnboardingDescriptionStep3
+        label.text = viewModel.model?.descriptionText[2]
         label.textColor = fxTextThemeColour
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .left

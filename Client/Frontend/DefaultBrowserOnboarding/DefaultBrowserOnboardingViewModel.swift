@@ -6,24 +6,44 @@ import Foundation
 import Shared
 
 // Data Model
-struct DefaultBrowserCardModel {
-    //TODO: fill this
+struct DefaultBrowserOnboardingModel {
+    var titleImage: UIImage
+    var titleText: String
+    var descriptionText: [String]
 }
 
-class DefaultBrowserCardViewModel {
+class DefaultBrowserOnboardingViewModel {
     //  Internal vars
-    var model: DefaultBrowserCardModel?
+    var model: DefaultBrowserOnboardingModel?
     var goToSettings: (() -> Void)?
     
     init() {
         setupUpdateModel()
     }
 
-    private func setupUpdateModel() {
-        //TODO: fill ths
+    private func getCorrectImage() -> UIImage {
+        let layoutDirection = UIApplication.shared.userInterfaceLayoutDirection
+        switch ThemeManager.instance.currentName {
+        case .dark:
+            if layoutDirection == .leftToRight {
+                return UIImage(named: "Dark-LTR")!
+            } else {
+                return UIImage(named: "Dark-RTL")!
+            }
+        case .normal:
+            if layoutDirection == .leftToRight {
+                return UIImage(named: "Light-LTR")!
+            } else {
+                return UIImage(named: "Light-RTL")!
+            }
+        }
     }
     
-    static func shouldShowDefaultBrowserCard(userPrefs: Prefs) -> Bool {
+    private func setupUpdateModel() {
+        model = DefaultBrowserOnboardingModel(titleImage: getCorrectImage(), titleText: String.DefaultBrowserCardTitle, descriptionText: [String.DefaultBrowserOnboardingDescriptionStep1, String.DefaultBrowserOnboardingDescriptionStep2, String.DefaultBrowserOnboardingDescriptionStep3])
+    }
+    
+    static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
         // 0,1,2 so we show on 3rd session as a requirement
         let maxSessionCount = 2
         var shouldShow = false
