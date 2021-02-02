@@ -41,10 +41,17 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private var fxBackgroundThemeColour: UIColor {
         return DefaultBrowserOnboardingViewController.theme == .dark ? .black : .white
     }
-    private var closeButton: UIButton = {
-        let button = UIButton()
-        button.setImage(UIImage(named: "nav-stop")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        return button
+    private lazy var closeButton: UIButton = {
+        let imgView = UIButton()
+        imgView.setImage(UIImage(named: "db-close-ellipse")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        imgView.tintColor = UIColor.Photon.Grey20
+        return imgView
+    }()
+    private var closeButtonImage: UIImageView = {
+        let imgView = UIImageView(image: UIImage(named: "db-close"))
+        imgView.contentMode = .scaleAspectFit
+        imgView.clipsToBounds = true
+        return imgView
     }()
     private lazy var topImageView: UIImageView = {
         let imgView = UIImageView(image: viewModel.model?.titleImage)
@@ -56,34 +63,43 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         let label = UILabel()
         label.text = viewModel.model?.titleText
         label.textColor = fxTextThemeColour
-        label.font = UIFont.boldSystemFont(ofSize: 18)
+        label.font = UIFont.boldSystemFont(ofSize: 28)
+        label.textAlignment = .center
+        label.numberOfLines = 2
+        return label
+    }()
+    private lazy var descriptionText: UILabel = {
+        let label = UILabel()
+        label.text = viewModel.model?.descriptionText[0]
+        label.textColor = fxTextThemeColour
+        label.font = UIFont.systemFont(ofSize: 24)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
     }()
     private lazy var descriptionLabel1: UILabel = {
         let label = UILabel()
-        label.text = viewModel.model?.descriptionText[0]
+        label.text = viewModel.model?.descriptionText[1]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 24)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
     }()
     private lazy var descriptionLabel2: UILabel = {
         let label = UILabel()
-        label.text = viewModel.model?.descriptionText[1]
+        label.text = viewModel.model?.descriptionText[2]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 24)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
     }()
     private lazy var descriptionLabel3: UILabel = {
         let label = UILabel()
-        label.text = viewModel.model?.descriptionText[2]
+        label.text = viewModel.model?.descriptionText[3]
         label.textColor = fxTextThemeColour
-        label.font = UIFont.systemFont(ofSize: 18)
+        label.font = UIFont.systemFont(ofSize: 24)
         label.textAlignment = .left
         label.numberOfLines = 0
         return label
@@ -91,7 +107,7 @@ class DefaultBrowserOnboardingViewController: UIViewController {
     private lazy var goToSettingsButton: UIButton = {
         let button = UIButton()
         button.setTitle(Strings.CoverSheetETPSettingsButton, for: .normal)
-        button.titleLabel?.font = UpdateViewControllerUX.StartBrowsingButton.font
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
         button.layer.cornerRadius = UpdateViewControllerUX.StartBrowsingButton.cornerRadius
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UpdateViewControllerUX.StartBrowsingButton.colour
@@ -117,7 +133,9 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         // Initialize
         self.view.addSubview(topImageView)
         self.view.addSubview(closeButton)
+        closeButton.addSubview(closeButtonImage)
         self.view.addSubview(titleLabel)
+        self.view.addSubview(descriptionText)
         self.view.addSubview(descriptionLabel1)
         self.view.addSubview(descriptionLabel2)
         self.view.addSubview(descriptionLabel3)
@@ -139,40 +157,46 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         closeButton.snp.makeConstraints { make in
             make.top.equalTo(view.snp.topMargin).offset(UpdateViewControllerUX.DoneButton.paddingTop)
             make.right.equalToSuperview().inset(UpdateViewControllerUX.DoneButton.paddingRight)
-            make.height.equalTo(UpdateViewControllerUX.DoneButton.height)
+        }
+        closeButtonImage.snp.makeConstraints { make in
+            make.center.equalToSuperview()
         }
         // The top imageview constraints setup
         topImageView.snp.makeConstraints { make in
             make.left.equalToSuperview()
             make.right.equalToSuperview()
-            make.top.equalTo(closeButton.snp.bottom).offset(10)
-            make.bottom.equalTo(goToSettingsButton.snp.top).offset(-200)
-            make.height.lessThanOrEqualTo(100)
+            make.top.equalTo(closeButton.snp.bottom).offset(18)
+            make.bottom.equalTo(titleLabel.snp.top).offset(-32)
+            make.height.equalTo(200)
         }
         // Top title label constraints setup
         titleLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(descriptionLabel1.snp.top).offset(-5)
-            make.left.right.equalToSuperview().inset(20)
+            make.bottom.equalTo(descriptionText.snp.top).offset(-24)
+            make.left.right.equalToSuperview().inset(36)
+        }
+        descriptionText.snp.makeConstraints { make in
+            make.bottom.equalTo(descriptionLabel1.snp.top).offset(-24)
+            make.left.right.equalToSuperview().inset(36)
         }
         // Description title label constraints setup
         descriptionLabel1.snp.makeConstraints { make in
-            make.bottom.equalTo(descriptionLabel2.snp.top).offset(-40)
-            make.left.right.equalToSuperview().inset(20)
+            make.bottom.equalTo(descriptionLabel2.snp.top).offset(-24)
+            make.left.right.equalToSuperview().inset(36)
         }
         // Description title label constraints setup
         descriptionLabel2.snp.makeConstraints { make in
-            make.bottom.equalTo(descriptionLabel3.snp.top).offset(-40)
-            make.left.right.equalToSuperview().inset(20)
+            make.bottom.equalTo(descriptionLabel3.snp.top).offset(-24)
+            make.left.right.equalToSuperview().inset(36)
         }
         // Description title label constraints setup
         descriptionLabel3.snp.makeConstraints { make in
-            make.bottom.equalTo(goToSettingsButton.snp.top).offset(-40)
-            make.left.right.equalToSuperview().inset(20)
+            make.bottom.equalTo(goToSettingsButton.snp.top).offset(-52)
+            make.left.right.equalToSuperview().inset(36)
         }
         // Bottom start button constraints
         goToSettingsButton.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(UpdateViewControllerUX.StartBrowsingButton.edgeInset)
-            make.height.equalTo(UpdateViewControllerUX.StartBrowsingButton.height)
+            make.height.equalTo(60)
         }
         // Bottom goto settings button
         goToSettingsButton.addTarget(self, action: #selector(goToSettings), for: .touchUpInside)

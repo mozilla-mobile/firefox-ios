@@ -2131,7 +2131,7 @@ extension BrowserViewController {
             dBOnboardingViewController.preferredContentSize = CGSize(width: ViewControllerConsts.PreferredSize.UpdateViewController.width, height: ViewControllerConsts.PreferredSize.UpdateViewController.height)
             dBOnboardingViewController.modalPresentationStyle = .formSheet
         } else {
-            dBOnboardingViewController.modalPresentationStyle = .fullScreen
+            dBOnboardingViewController.modalPresentationStyle = .popover
         }
         dBOnboardingViewController.viewModel.goToSettings = {
             dBOnboardingViewController.dismiss(animated: true) {
