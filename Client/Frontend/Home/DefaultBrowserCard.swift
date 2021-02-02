@@ -136,6 +136,9 @@ class DefaultBrowserCard: UIView {
         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .tap, object: .goToSettingsDefaultBrowserCard)
         LeanPlumClient.shared.track(event: .goToSettingsDefaultBrowserCard)
+        
+        // Set default browser onboarding counter to max so it will not show if a user clicks this button
+        UserDefaults.standard.set(2, forKey: PrefsKeys.KeyDefaultBrowserCardSessionCount)
     }
     
     func applyTheme() {
