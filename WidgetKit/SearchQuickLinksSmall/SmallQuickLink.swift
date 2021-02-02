@@ -48,7 +48,7 @@ struct SmallQuickLinkWidget: Widget {
             SmallQuickLinkView(entry: entry)
         }
         .supportedFamilies([.systemSmall])
-        .configurationDisplayName(String.QuickActionsGalleryTitle)
+        .configurationDisplayName(String.QuickActionsGalleryTitlev2)
         .description(String.SearchInFirefoxTitle)
     }
 }

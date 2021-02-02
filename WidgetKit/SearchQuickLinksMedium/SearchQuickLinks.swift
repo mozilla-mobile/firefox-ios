@@ -55,7 +55,7 @@ struct SearchQuickLinksWidget: Widget {
             SearchQuickLinksEntryView()
         }
         .supportedFamilies([.systemMedium])
-        .configurationDisplayName(String.QuickActionsGalleryTitle)
+        .configurationDisplayName(String.QuickActionsGalleryTitlev2)
         .description(String.FirefoxShortcutGalleryDescription)
     }
 }
