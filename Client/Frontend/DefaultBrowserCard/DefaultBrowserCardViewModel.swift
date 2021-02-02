@@ -37,10 +37,10 @@ class DefaultBrowserCardViewModel {
 
         // increase session count value
         if sessionCount < maxSessionCount && sessionCount != -1 {
-            userPrefs.setInt(sessionCount + 1, forKey: PrefsKeys.KeyInstallSession)
+            userPrefs.setInt(sessionCount + 1, forKey: PrefsKeys.KeyDefaultBrowserCardSessionCount)
         // reached max count, show card
         } else if sessionCount == maxSessionCount {
-            userPrefs.setInt(-1, forKey: PrefsKeys.KeyInstallSession)
+            userPrefs.setInt(-1, forKey: PrefsKeys.KeyDefaultBrowserCardSessionCount)
             shouldShow = true
         }
 
