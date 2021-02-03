@@ -2618,9 +2618,9 @@ workflows:
 
             YESTERDAY=`date -v -1d '+%Y-%m-%d'`
 
-            pip install jq
+            brew install jq
 
-            curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -e -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))'
+            curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -e -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))'
             test $? -eq 0 || exit 1
         title: "Check main branch for recent activity before continuing"
     - activate-ssh-key@4.0:
@@ -2807,7 +2807,7 @@ trigger_map:
 - push_branch: v31.x
   workflow: xcode12-release-and-beta-nocache
 - pull_request_target_branch: main
-  workflow: RunUnitTests
+  workflow: NewXcodeVersions
 - pull_request_source_branch: '*'
   pull_request_target_branch: chronological-tabs
   workflow: RunUnitTests

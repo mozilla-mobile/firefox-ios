@@ -21,7 +21,7 @@ curl ${BITRISE_STACK_INFO} | jq ' . | keys'
 ]
 '''
 pattern = 'osx-xcode-'
-BITRISE_YML = '../bitrise.yml'
+BITRISE_YML = 'bitrise.yml'
 WORKFLOW = 'NewXcodeVersions'
 
 resp = requests.get(BITRISE_STACK_INFO)
@@ -72,7 +72,7 @@ if __name__ == '__main__':
     4. modify bitrise.yml (update stack value)
     '''
 
-
+    print(os.getcwd())
     largest_semver = largest_version()
 
     tmp_file = 'tmp.yml'
