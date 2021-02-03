@@ -21,8 +21,10 @@ curl ${BITRISE_STACK_INFO} | jq ' . | keys'
 ]
 '''
 pattern = 'osx-xcode-'
-BITRISE_YML = '../bitrise.yml'
+BITRISE_YML = 'bitrise.yml'
 WORKFLOW = 'NewXcodeVersions'
+
+print(os.getcwd())
 
 resp = requests.get(BITRISE_STACK_INFO)
 resp.raise_for_status()
@@ -76,6 +78,8 @@ if __name__ == '__main__':
     largest_semver = largest_version()
 
     tmp_file = 'tmp.yml'
+    print(os.getcwd())
+
     with open(BITRISE_YML, 'r') as infile:
         y = yaml.safe_load(infile)
         current_semver = y['workflows'][WORKFLOW]['meta']['bitrise.io']['stack'] 
