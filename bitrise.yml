@@ -2772,9 +2772,9 @@ workflows:
 
             YESTERDAY=`date -v -1d '+%Y-%m-%d'`
 
-            pip install jq
+            brew install jq
 
-            curl -s -H 'Accept: application/vnd.github.v3+json' https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -e -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))'
+            curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -e -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))' > /dev/null/
             test $? -eq 0 || exit 1
         title: "Check main branch for recent activity before continuing"
     - activate-ssh-key@4.0:
