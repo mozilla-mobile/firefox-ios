@@ -622,7 +622,7 @@ class BrowserViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         presentIntroViewController()
-        presentETPCoverSheetViewController()
+        // presentETPCoverSheetViewController()  Hiding ETP onboarding for DB onboarding
         presentDBOnboardingViewController()
         presentUpdateViewController()
         screenshotHelper.viewIsVisible = true
