@@ -45,8 +45,9 @@ class DefaultBrowserOnboardingViewModel {
     }
     
     static func shouldShowDefaultBrowserOnboarding(userPrefs: Prefs) -> Bool {
-        // 0,1,2 so we show on 3rd session as a requirement
-        let maxSessionCount = 2
+        // Show on 3rd session
+        // sessionCount gets increased after intro onboarding is shown, so this number needs to be 3 instead of 2
+        let maxSessionCount = 3
         var shouldShow = false
         // Session count
         var sessionCount: Int32 = 0
