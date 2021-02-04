@@ -632,7 +632,7 @@ app:
     description: |
       Counts the number of times the app is opened from an external
       link, implying the client has Firefox set as a default browser.
-      
+
       Currently this is our most accurate way of measuring how
       often Firefox is set as the default browser.
     bugs:
