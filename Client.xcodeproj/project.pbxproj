@@ -10530,6 +10530,7 @@
 				INFOPLIST_FILE = UITests/Info.plist;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/UITests/UITests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec;
 		};
@@ -10538,6 +10539,7 @@
 			buildSettings = {
 				INFOPLIST_FILE = UITests/Info.plist;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Release;
 		};
@@ -10593,6 +10595,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Firefox;
 		};
@@ -10922,6 +10925,7 @@
 				INFOPLIST_FILE = UITests/Info.plist;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/UITests/UITests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Client.app/Client";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = Fennec_Enterprise;
 		};
@@ -11076,6 +11080,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
+				VALIDATE_WORKSPACE = YES;
 			};
 			name = FirefoxBeta;
 		};
