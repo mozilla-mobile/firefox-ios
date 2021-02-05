@@ -39,7 +39,7 @@ class EmptyPrivateTabsView: UIView {
     var learnMoreButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(
-            NSLocalizedString("Learn More", tableName: "PrivateBrowsing", comment: "Text button displayed when there are no tabs open while in private mode"),
+            .PrivateBrowsingLearnMore,
             for: [])
         button.setTitleColor(UIColor.theme.tabTray.privateModeLearnMore, for: [])
         button.titleLabel?.font = EmptyPrivateTabsViewUX.LearnMoreFont
@@ -55,10 +55,8 @@ class EmptyPrivateTabsView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        titleLabel.text =  NSLocalizedString("Private Browsing",
-            tableName: "PrivateBrowsing", comment: "Title displayed for when there are no open tabs while in private mode")
-        descriptionLabel.text = NSLocalizedString("Firefox won’t remember any of your history or cookies, but new bookmarks will be saved.",
-            tableName: "PrivateBrowsing", comment: "Description text displayed when there are no open tabs while in private mode")
+        titleLabel.text =  .PrivateBrowsingTitle
+        descriptionLabel.text = .TabTrayPrivateBrowsingDescription
 
         addSubview(titleLabel)
         addSubview(descriptionLabel)

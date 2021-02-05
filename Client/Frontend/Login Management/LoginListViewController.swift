@@ -42,11 +42,6 @@ class LoginListViewController: SensitiveViewController {
     var shownFromAppMenu: Bool = false
     var webpageNavigationHandler: ((_ url: URL?) -> Void)?
 
-    // Titles for selection/deselect/delete buttons
-    fileprivate let deselectAllTitle = NSLocalizedString("Deselect All", tableName: "LoginManager", comment: "Label for the button used to deselect all logins.")
-    fileprivate let selectAllTitle = NSLocalizedString("Select All", tableName: "LoginManager", comment: "Label for the button used to select all logins.")
-    fileprivate let deleteLoginTitle = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
-
     fileprivate lazy var selectionButton: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = LoginListViewModel.LoginListUX.selectionButtonFont
@@ -78,7 +73,7 @@ class LoginListViewController: SensitiveViewController {
             return deferred
         }
 
-        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: AuthenticationStrings.loginsTouchReason, success: {
+        AppAuthenticator.presentAuthenticationUsingInfo(authInfo, touchIDReason: .AuthenticationLoginsTouchReason, success: {
             fillDeferred(ok: true)
         }, cancel: {
             fillDeferred(ok: false)
@@ -220,7 +215,7 @@ class LoginListViewController: SensitiveViewController {
         // Show delete bar button item if we have selected any items
         if loginSelectionController.selectedCount > 0 {
             if navigationItem.rightBarButtonItem == nil {
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: deleteLoginTitle, style: .plain, target: self, action: #selector(tappedDelete))
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: .LoginListDelete, style: .plain, target: self, action: #selector(tappedDelete))
                 navigationItem.rightBarButtonItem?.tintColor = UIColor.Photon.Red50
             }
         } else {
@@ -229,11 +224,8 @@ class LoginListViewController: SensitiveViewController {
     }
 
     fileprivate func toggleSelectionTitle() {
-        if loginSelectionController.selectedCount == viewModel.count {
-            selectionButton.setTitle(deselectAllTitle, for: [])
-        } else {
-            selectionButton.setTitle(selectAllTitle, for: [])
-        }
+        let areAllSelected = loginSelectionController.selectedCount == viewModel.count
+        selectionButton.setTitle(areAllSelected ? .LoginListDeselctAll : .LoginListSelctAll, for: [])
     }
 }
 
@@ -276,7 +268,7 @@ private extension LoginListViewController {
         navigationItem.rightBarButtonItem = nil
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancelSelection))
         selectionButtonHeightConstraint?.update(offset: UIConstants.ToolbarHeight)
-        selectionButton.setTitle(selectAllTitle, for: [])
+        selectionButton.setTitle(.LoginListSelctAll, for: [])
         self.view.layoutIfNeeded()
         tableView.setEditing(true, animated: true)
         tableView.reloadData()

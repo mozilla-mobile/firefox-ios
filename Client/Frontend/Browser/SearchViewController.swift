@@ -215,7 +215,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         searchButton.imageView?.contentMode = .center
         searchButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
         searchButton.addTarget(self, action: #selector(didClickSearchButton), for: .touchUpInside)
-        searchButton.accessibilityLabel = String(format: NSLocalizedString("Search Settings", tableName: "Search", comment: "Label for search settings button."))
+        searchButton.accessibilityLabel = String(format: .SearchSettingsAccessibilityLabel)
 
         searchEngineScrollViewContent.addSubview(searchButton)
         searchButton.snp.makeConstraints { make in
@@ -235,7 +235,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
             engineButton.imageView?.layer.cornerRadius = 4
             engineButton.layer.backgroundColor = SearchViewControllerUX.EngineButtonBackgroundColor
             engineButton.addTarget(self, action: #selector(didSelectEngine), for: .touchUpInside)
-            engineButton.accessibilityLabel = String(format: NSLocalizedString("%@ search", tableName: "Search", comment: "Label for search engine buttons. The argument corresponds to the name of the search engine."), engine.shortName)
+            engineButton.accessibilityLabel = String(format: .SearchSearchEngineAccessibilityLabel, engine.shortName)
 
             engineButton.imageView?.snp.makeConstraints { make in
                 make.width.height.equalTo(SearchViewControllerUX.FaviconSize)
@@ -391,7 +391,7 @@ class SearchViewController: SiteTableViewController, KeyboardHelperDelegate, Loa
         case .searchSuggestions:
             suggestionCell.imageView?.image = searchEngines.defaultEngine.image
             suggestionCell.imageView?.isAccessibilityElement = true
-            suggestionCell.imageView?.accessibilityLabel = String(format: NSLocalizedString("Search suggestions from %@", tableName: "Search", comment: "Accessibility label for image of default search engine displayed left to the actual search suggestions from the engine. The parameter substituted for \"%@\" is the name of the search engine. E.g.: Search suggestions from Google"), searchEngines.defaultEngine.shortName)
+            suggestionCell.imageView?.accessibilityLabel = String(format: .SearchSearchEngineSuggestionAccessibilityLabel, searchEngines.defaultEngine.shortName)
             return suggestionCell
 
         case .bookmarksAndHistory:
@@ -702,7 +702,7 @@ fileprivate class SuggestionButton: InsetButton {
         layer.cornerRadius = SearchViewControllerUX.SuggestionCornerRadius
         contentEdgeInsets = SearchViewControllerUX.SuggestionInsets
 
-        accessibilityHint = NSLocalizedString("Searches for the suggestion", comment: "Accessibility hint describing the action performed when a search suggestion is clicked")
+        accessibilityHint = .SearchSearchSuggestionTapAccessibilityHint
     }
 
     required init?(coder aDecoder: NSCoder) {

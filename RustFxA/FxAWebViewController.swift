@@ -42,7 +42,7 @@ class FxAWebViewController: UIViewController, WKNavigationDelegate {
         config.userContentController = contentController
         webView = WKWebView(frame: .zero, configuration: config)
         webView.allowsLinkPreview = false
-        webView.accessibilityLabel = NSLocalizedString("Web content", comment: "Accessibility label for the main web content view")
+        webView.accessibilityLabel = .FxAWebContentAccessibilityLabel
         webView.scrollView.bounces = false  // Don't allow overscrolling.
         webView.customUserAgent = FxAWebViewModel.mobileUserAgent
 

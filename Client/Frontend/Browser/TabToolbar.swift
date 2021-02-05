@@ -63,16 +63,16 @@ open class TabToolbarHelper: NSObject {
         switch state {
             case .reload:
                 toolbar.multiStateButton.setImage(ImageReload, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
             case .stop:
                 toolbar.multiStateButton.setImage(ImageStop, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Stop", comment: "Accessibility Label for the tab toolbar Stop button")
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarStopAccessibilityLabel
             case .search:
                 toolbar.multiStateButton.setImage(ImageSearch, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Search", comment: "Accessibility Label for the tab toolbar Search button")
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarSearchAccessibilityLabel
             case .newTab:
                 toolbar.multiStateButton.setImage(ImageNewTab, for: .normal)
-                toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility Label for the tab toolbar New tab button")
+                toolbar.multiStateButton.accessibilityLabel = .TabToolbarNewTabAccessibilityLabel
         }
     }
     
@@ -88,19 +88,19 @@ open class TabToolbarHelper: NSObject {
         super.init()
 
         toolbar.backButton.setImage(UIImage.templateImageNamed("nav-back"), for: .normal)
-        toolbar.backButton.accessibilityLabel = NSLocalizedString("Back", comment: "Accessibility label for the Back button in the tab toolbar.")
+        toolbar.backButton.accessibilityLabel = .TabToolbarBackAccessibilityLabel
         let longPressGestureBackButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressBack))
         toolbar.backButton.addGestureRecognizer(longPressGestureBackButton)
         toolbar.backButton.addTarget(self, action: #selector(didClickBack), for: .touchUpInside)
 
         toolbar.forwardButton.setImage(UIImage.templateImageNamed("nav-forward"), for: .normal)
-        toolbar.forwardButton.accessibilityLabel = NSLocalizedString("Forward", comment: "Accessibility Label for the tab toolbar Forward button")
+        toolbar.forwardButton.accessibilityLabel = .TabToolbarForwardAccessibilityLabel
         let longPressGestureForwardButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressForward))
         toolbar.forwardButton.addGestureRecognizer(longPressGestureForwardButton)
         toolbar.forwardButton.addTarget(self, action: #selector(didClickForward), for: .touchUpInside)
 
         toolbar.multiStateButton.setImage(UIImage.templateImageNamed("nav-refresh"), for: .normal)
-        toolbar.multiStateButton.accessibilityLabel = NSLocalizedString("Reload", comment: "Accessibility Label for the tab toolbar Reload button")
+        toolbar.multiStateButton.accessibilityLabel = .TabToolbarReloadAccessibilityLabel
         let longPressMultiStateButton = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressMultiStateButton))
         toolbar.multiStateButton.addGestureRecognizer(longPressMultiStateButton)
         toolbar.multiStateButton.addTarget(self, action: #selector(didPressMultiStateButton), for: .touchUpInside)
@@ -306,7 +306,7 @@ class TabToolbar: UIView {
         addNewTabButton.accessibilityIdentifier = "TabToolbar.addNewTabButton"
         appMenuButton.accessibilityIdentifier = "TabToolbar.menuButton"
         accessibilityNavigationStyle = .combined
-        accessibilityLabel = NSLocalizedString("Navigation Toolbar", comment: "Accessibility label for the navigation toolbar displayed at the bottom of the screen.")
+        accessibilityLabel = .TabToolbarNavigationToolbarAccessibilityLabel
     }
 
     required init(coder aDecoder: NSCoder) {

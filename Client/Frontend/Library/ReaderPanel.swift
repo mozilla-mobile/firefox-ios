@@ -30,11 +30,6 @@ private struct ReadingListTableViewCellUX {
     static let MarkAsReadButtonBackgroundColor = UIColor.Photon.Blue50
     static let MarkAsReadButtonTitleColor = UIColor.Photon.White100
     static let MarkAsReadButtonTitleEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
-
-    // Localizable strings
-    static let DeleteButtonTitleText = NSLocalizedString("Remove", comment: "Title for the button that removes a reading list item")
-    static let MarkAsReadButtonTitleText = NSLocalizedString("Mark as Read", comment: "Title for the button that marks a reading list item as read")
-    static let MarkAsUnreadButtonTitleText = NSLocalizedString("Mark as Unread", comment: "Title for the button that marks a reading list item as unread")
 }
 
 private struct ReadingListPanelUX {
@@ -155,7 +150,7 @@ class ReadingListTableViewCell: UITableViewCell, Themeable {
     fileprivate func updateAccessibilityLabel() {
         if let hostname = hostnameLabel.text,
                   let title = titleLabel.text {
-            let unreadStatus = unread ? NSLocalizedString("unread", comment: "Accessibility label for unread article in reading list. It's a past participle - functions as an adjective.") : NSLocalizedString("read", comment: "Accessibility label for read article in reading list. It's a past participle - functions as an adjective.")
+            let unreadStatus: String = unread ? .ReaderPanelUnreadAccessibilityLabel : .ReaderPanelReadAccessibilityLabel
             let string = "\(title), \(unreadStatus), \(hostname)"
             var label: AnyObject
             if !unread {
@@ -261,7 +256,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
         let welcomeLabel = UILabel()
         overlayView.addSubview(welcomeLabel)
-        welcomeLabel.text = NSLocalizedString("Welcome to your Reading List", comment: "See http://mzl.la/1LXbDOL")
+        welcomeLabel.text = .ReaderPanelWelcome
         welcomeLabel.textAlignment = .center
         welcomeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallBold
         welcomeLabel.adjustsFontSizeToFitWidth = true
@@ -273,7 +268,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
         let readerModeLabel = UILabel()
         overlayView.addSubview(readerModeLabel)
-        readerModeLabel.text = NSLocalizedString("Open articles in Reader View by tapping the book icon when it appears in the title bar.", comment: "See http://mzl.la/1LXbDOL")
+        readerModeLabel.text = .ReaderPanelReadingModeDescription
         readerModeLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         readerModeLabel.numberOfLines = 0
         readerModeLabel.snp.makeConstraints { make in
@@ -291,7 +286,7 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
 
         let readingListLabel = UILabel()
         overlayView.addSubview(readingListLabel)
-        readingListLabel.text = NSLocalizedString("Save pages to your Reading List by tapping the book plus icon in the Reader View controls.", comment: "See http://mzl.la/1LXbDOL")
+        readingListLabel.text = .ReaderPanelReadingListDescription
         readingListLabel.font = DynamicFontHelper.defaultHelper.DeviceFontSmallLight
         readingListLabel.numberOfLines = 0
         readingListLabel.snp.makeConstraints { make in
@@ -345,11 +340,11 @@ class ReadingListPanel: UITableViewController, LibraryPanel {
             return []
         }
 
-        let delete = UITableViewRowAction(style: .default, title: ReadingListTableViewCellUX.DeleteButtonTitleText) { [weak self] action, index in
+        let delete = UITableViewRowAction(style: .default, title: .ReaderPanelRemove) { [weak self] action, index in
             self?.deleteItem(atIndex: index)
         }
 
-        let toggleText = record.unread ? ReadingListTableViewCellUX.MarkAsReadButtonTitleText : ReadingListTableViewCellUX.MarkAsUnreadButtonTitleText
+        let toggleText: String = record.unread ? .ReaderPanelMarkAsRead : .ReaderModeBarMarkAsUnread
         let unreadToggle = UITableViewRowAction(style: .normal, title: toggleText.stringSplitWithNewline()) { [weak self] (action, index) in
             self?.toggleItem(atIndex: index)
         }

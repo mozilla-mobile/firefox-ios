@@ -10,9 +10,6 @@ import CoreSpotlight
 
 private let log = Logger.browserLogger
 
-// Removed Clearables as part of Bug 1226654, but keeping the string around.
-private let removedSavedLoginsLabel = NSLocalizedString("Saved Logins", tableName: "ClearPrivateData", comment: "Settings item for clearing passwords and login data")
-
 // A base protocol for something that can be cleared.
 protocol Clearable {
     func clear() -> Success
@@ -35,9 +32,7 @@ class HistoryClearable: Clearable {
         self.profile = profile
     }
 
-    var label: String {
-        return NSLocalizedString("Browsing History", tableName: "ClearPrivateData", comment: "Settings item for clearing browsing history")
-    }
+    var label: String { .ClearableHistory }
 
     func clear() -> Success {
 
@@ -76,9 +71,7 @@ class CacheClearable: Clearable {
         self.tabManager = tabManager
     }
 
-    var label: String {
-        return NSLocalizedString("Cache", tableName: "ClearPrivateData", comment: "Settings item for clearing the cache")
-    }
+    var label: String { .ClearableCache }
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache])
@@ -121,9 +114,7 @@ class SiteDataClearable: Clearable {
         self.tabManager = tabManager
     }
 
-    var label: String {
-        return NSLocalizedString("Offline Website Data", tableName: "ClearPrivateData", comment: "Settings item for clearing website data")
-    }
+    var label: String { .ClearableOfflineData }
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeOfflineWebApplicationCache])
@@ -141,9 +132,7 @@ class CookiesClearable: Clearable {
         self.tabManager = tabManager
     }
 
-    var label: String {
-        return NSLocalizedString("Cookies", tableName: "ClearPrivateData", comment: "Settings item for clearing cookies")
-    }
+    var label: String { .ClearableCookies }
 
     func clear() -> Success {
         let dataTypes = Set([WKWebsiteDataTypeCookies, WKWebsiteDataTypeLocalStorage, WKWebsiteDataTypeSessionStorage, WKWebsiteDataTypeWebSQLDatabases, WKWebsiteDataTypeIndexedDBDatabases])
@@ -171,9 +160,7 @@ class TrackingProtectionClearable: Clearable {
 
 // Clears our downloaded files in the `~/Documents/Downloads` folder.
 class DownloadedFilesClearable: Clearable {
-    var label: String {
-        return NSLocalizedString("Downloaded Files", tableName: "ClearPrivateData", comment: "Settings item for deleting downloaded files")
-    }
+    var label: String { .ClearableDownloads }
 
     func clear() -> Success {
         if let downloadsPath = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("Downloads"),

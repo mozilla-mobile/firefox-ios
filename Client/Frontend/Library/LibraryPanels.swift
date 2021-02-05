@@ -76,7 +76,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "Bookmarks",
-            accessibilityLabel: NSLocalizedString("Bookmarks", comment: "Panel accessibility label"),
+            accessibilityLabel: .LibraryPanelBookmarksAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.Bookmarks"),
 
         LibraryPanelDescriptor(
@@ -85,7 +85,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "History",
-            accessibilityLabel: NSLocalizedString("History", comment: "Panel accessibility label"),
+            accessibilityLabel: .LibraryPanelHistoryAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.History"),
 
         LibraryPanelDescriptor(
@@ -94,7 +94,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "ReadingList",
-            accessibilityLabel: NSLocalizedString("Reading list", comment: "Panel accessibility label"),
+            accessibilityLabel: .LibraryPanelReadingListAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.ReadingList"),
 
         LibraryPanelDescriptor(
@@ -103,7 +103,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "Downloads",
-            accessibilityLabel: NSLocalizedString("Downloads", comment: "Panel accessibility label"),
+            accessibilityLabel: .LibraryPanelDownloadsAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.Downloads"),
 
         LibraryPanelDescriptor(
@@ -112,7 +112,7 @@ class LibraryPanels {
             },
             profile: profile,
             imageName: "SyncedTabs",
-            accessibilityLabel: NSLocalizedString("Synced Tabs", comment: "Panel accessibility label"),
+            accessibilityLabel: .LibraryPanelSyncedTabsAccessibilityLabel,
             accessibilityIdentifier: "LibraryPanels.SyncedTabs"),
     ]
 }

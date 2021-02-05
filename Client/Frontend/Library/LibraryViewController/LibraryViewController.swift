@@ -26,7 +26,7 @@ class LibraryViewController: UIViewController {
         stackView.spacing = 0
         stackView.clipsToBounds = true
         stackView.accessibilityNavigationStyle = .combined
-        stackView.accessibilityLabel = NSLocalizedString("Panel Chooser", comment: "Accessibility label for the Library panel's bottom toolbar containing a list of the home panels (top sites, bookmarks, history, remote tabs, reading list).")
+        stackView.accessibilityLabel = .LibraryPanelChooserAccessibilityLabel
         return stackView
     }()
 

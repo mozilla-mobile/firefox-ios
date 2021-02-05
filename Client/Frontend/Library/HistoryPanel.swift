@@ -520,7 +520,7 @@ class HistoryPanel: SiteTableViewController, LibraryPanel {
         if indexPath.section == Section.additionalHistoryActions.rawValue {
             return []
         }
-        let title = NSLocalizedString("Delete", tableName: "HistoryPanel", comment: "Action button for deleting history entries in the history panel.")
+        let title: String = .HistoryPanelDelete
 
         let delete = UITableViewRowAction(style: .default, title: title, handler: { (action, indexPath) in
             self.removeHistoryForURLAtIndexPath(indexPath: indexPath)

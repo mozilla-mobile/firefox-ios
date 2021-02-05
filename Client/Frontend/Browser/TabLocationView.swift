@@ -93,8 +93,7 @@ class TabLocationView: UIView {
     }
 
     lazy var placeholder: NSAttributedString = {
-        let placeholderText = NSLocalizedString("Search or enter address", comment: "The text shown in the URL bar on about:home")
-        return NSAttributedString(string: placeholderText, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
+        return NSAttributedString(string: .TabLocationURLPlaceholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.Photon.Grey50])
     }()
 
     lazy var urlTextField: UITextField = {
@@ -124,7 +123,7 @@ class TabLocationView: UIView {
         let lockImageView = UIImageView(image: UIImage.templateImageNamed("lock_verified"))
         lockImageView.isAccessibilityElement = true
         lockImageView.contentMode = .center
-        lockImageView.accessibilityLabel = NSLocalizedString("Secure connection", comment: "Accessibility label for the lock icon, which is only present if the connection is secure")
+        lockImageView.accessibilityLabel = .TabLocationLockIconAccessibilityLabel
         return lockImageView
     }()
 
@@ -161,9 +160,9 @@ class TabLocationView: UIView {
         readerModeButton.isHidden = true
         readerModeButton.imageView?.contentMode = .scaleAspectFit
         readerModeButton.contentHorizontalAlignment = .left
-        readerModeButton.accessibilityLabel = NSLocalizedString("Reader View", comment: "Accessibility label for the Reader View button")
+        readerModeButton.accessibilityLabel = .TabLocationReaderModeAccessibilityLabel
         readerModeButton.accessibilityIdentifier = "TabLocationView.readerModeButton"
-        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: NSLocalizedString("Add to Reading List", comment: "Accessibility label for action adding current page to reading list."), target: self, selector: #selector(readerModeCustomAction))]
+        readerModeButton.accessibilityCustomActions = [UIAccessibilityCustomAction(name: .TabLocationReaderModeAddToReadingListAccessibilityLabel, target: self, selector: #selector(readerModeCustomAction))]
         return readerModeButton
     }()
 
@@ -174,7 +173,7 @@ class TabLocationView: UIView {
         reloadButton.tintColor = UIColor.Photon.Grey50
         reloadButton.imageView?.contentMode = .scaleAspectFit
         reloadButton.contentHorizontalAlignment = .left
-        reloadButton.accessibilityLabel = NSLocalizedString("Reload page", comment: "Accessibility label for the reload button")
+        reloadButton.accessibilityLabel = .TabLocationReloadAccessibilityLabel
         reloadButton.accessibilityIdentifier = "TabLocationView.reloadButton"
         reloadButton.isAccessibilityElement = true
         return reloadButton
@@ -187,7 +186,7 @@ class TabLocationView: UIView {
         pageOptionsButton.isAccessibilityElement = true
         pageOptionsButton.isHidden = true
         pageOptionsButton.imageView?.contentMode = .left
-        pageOptionsButton.accessibilityLabel = NSLocalizedString("Page Options Menu", comment: "Accessibility label for the Page Options menu button")
+        pageOptionsButton.accessibilityLabel = .TabLocationPageOptionsAccessibilityLabel
         pageOptionsButton.accessibilityIdentifier = "TabLocationView.pageOptionsButton"
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(didLongPressPageOptionsButton))
         pageOptionsButton.addGestureRecognizer(longPressGesture)

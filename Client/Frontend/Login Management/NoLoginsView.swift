@@ -19,7 +19,7 @@ class NoLoginsView: UIView {
         let label = UILabel()
         label.font = LoginListViewModel.LoginListUX.NoResultsFont
         label.textColor = LoginListViewModel.LoginListUX.NoResultsTextColor
-        label.text = NSLocalizedString("No logins found", tableName: "LoginManager", comment: "Label displayed when no logins are found after searching.")
+        label.text = .NoLoginsFound
         return label
     }()
 

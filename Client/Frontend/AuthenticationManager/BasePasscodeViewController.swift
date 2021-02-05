@@ -52,23 +52,15 @@ extension BasePasscodeViewController {
     }
 
     func displayLockoutError() {
-        displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
+        displayError(.AuthenticationMaximumAttemptsReachedNoTime)
     }
 
     func failMismatchPasscode() {
-        let mismatchPasscodeError
-            = NSLocalizedString("Passcodes didn’t match. Try again.",
-                tableName: "AuthenticationManager",
-                comment: "Error message displayed to user when their confirming passcode doesn't match the first code.")
-        displayError(mismatchPasscodeError)
+        displayError(.AuthenticationMismatchPasscodeError)
     }
 
     func failMustBeDifferent() {
-        let useNewPasscodeError
-            = NSLocalizedString("New passcode must be different than existing code.",
-                tableName: "AuthenticationManager",
-                comment: "Error message displayed when user tries to enter the same passcode as their existing code when changing it.")
-        displayError(useNewPasscodeError)
+        displayError(.AuthenticationUseNewPasscodeError)
     }
 
     func failIncorrectPasscode(_ inputView: PasscodeInputView) {
@@ -76,11 +68,11 @@ extension BasePasscodeViewController {
         let numberOfAttempts = authenticationInfo?.failedAttempts ?? 0
         if numberOfAttempts == AllowedPasscodeFailedAttempts {
             authenticationInfo?.lockOutUser()
-            displayError(AuthenticationStrings.maximumAttemptsReachedNoTime)
+            displayError(.AuthenticationMaximumAttemptsReachedNoTime)
             inputView.isUserInteractionEnabled = false
             resignFirstResponder()
         } else {
-            displayError(String(format: AuthenticationStrings.incorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))
+            displayError(String(format: .AuthenticationIncorrectAttemptsRemaining, (AllowedPasscodeFailedAttempts - numberOfAttempts)))
         }
 
         inputView.resetCode()

@@ -13,9 +13,9 @@ class AppSettingsTableViewController: SettingsTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationItem.title = NSLocalizedString("Settings", comment: "Title in the settings view controller title bar")
+        navigationItem.title = .AppSettingsTitle
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: NSLocalizedString("Done", comment: "Done button on left side of the Settings view controller title bar"),
+            title: .AppSettingsDone,
             style: .done,
             target: navigationController, action: #selector((navigationController as! ThemedNavigationController).done))
         navigationItem.rightBarButtonItem?.accessibilityIdentifier = "AppSettingsTableViewController.navigationItem.leftBarButtonItem"
@@ -39,8 +39,6 @@ class AppSettingsTableViewController: SettingsTableViewController {
     override func generateSettings() -> [SettingSection] {
         var settings = [SettingSection]()
 
-        let privacyTitle = NSLocalizedString("Privacy", comment: "Privacy section title")
-
         let prefs = profile.prefs
         var generalSettings: [Setting] = [
             SearchSetting(settings: self),
@@ -49,7 +47,7 @@ class AppSettingsTableViewController: SettingsTableViewController {
             OpenWithSetting(settings: self),
             ThemeSetting(settings: self),
             BoolSetting(prefs: prefs, prefKey: PrefsKeys.KeyBlockPopups, defaultValue: true,
-                        titleText: NSLocalizedString("Block Pop-up Windows", comment: "Block pop-up windows setting")),
+                        titleText: .AppSettingsBlockPopups),
            ]
 
         if #available(iOS 14.0, *) {
@@ -107,8 +105,8 @@ class AppSettingsTableViewController: SettingsTableViewController {
             BoolSetting(prefs: prefs,
                 prefKey: "settings.closePrivateTabs",
                 defaultValue: false,
-                titleText: NSLocalizedString("Close Private Tabs", tableName: "PrivateBrowsing", comment: "Setting for closing private tabs"),
-                statusText: NSLocalizedString("When Leaving Private Browsing", tableName: "PrivateBrowsing", comment: "Will be displayed in Settings under 'Close Private Tabs'"))
+                titleText: .AppSettingsClosePrivateTabsTitle,
+                statusText: .AppSettingsClosePrivateTabsDescription)
         ]
 
         privacySettings.append(ContentBlockerSetting(settings: self))
@@ -118,14 +116,14 @@ class AppSettingsTableViewController: SettingsTableViewController {
         ]
 
         settings += [
-            SettingSection(title: NSAttributedString(string: privacyTitle), children: privacySettings),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("Support", comment: "Support section title")), children: [
+            SettingSection(title: NSAttributedString(string: .AppSettingsPrivacyTitle), children: privacySettings),
+            SettingSection(title: NSAttributedString(string: .AppSettingsSupport), children: [
                 ShowIntroductionSetting(settings: self),
                 SendFeedbackSetting(),
                 SendAnonymousUsageDataSetting(prefs: prefs, delegate: settingsDelegate),
                 OpenSupportPageSetting(delegate: settingsDelegate),
             ]),
-            SettingSection(title: NSAttributedString(string: NSLocalizedString("About", comment: "About settings section title")), children: [
+            SettingSection(title: NSAttributedString(string: .AppSettingsAbout), children: [
                 VersionSetting(settings: self),
                 LicenseAndAcknowledgementsSetting(),
                 YourRightsSetting(),

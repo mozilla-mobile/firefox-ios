@@ -161,7 +161,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .usernameItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("Username", tableName: "LoginManager", comment: "Label displayed above the username row in Login Detail View.")
+            loginCell.highlightedLabelTitle = .LoginDetailUsername
             loginCell.descriptionLabel.text = login.username
             loginCell.descriptionLabel.keyboardType = .emailAddress
             loginCell.descriptionLabel.returnKeyType = .next
@@ -172,7 +172,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .passwordItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("Password", tableName: "LoginManager", comment: "Label displayed above the password row in Login Detail View.")
+            loginCell.highlightedLabelTitle = .LoginDetailPassword
             loginCell.descriptionLabel.text = login.password
             loginCell.descriptionLabel.returnKeyType = .default
             loginCell.displayDescriptionAsPassword = true
@@ -183,7 +183,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .websiteItem:
             let loginCell = cell(forIndexPath: indexPath)
-            loginCell.highlightedLabelTitle = NSLocalizedString("Website", tableName: "LoginManager", comment: "Label displayed above the website row in Login Detail View.")
+            loginCell.highlightedLabelTitle = .LoginDetailWebsite
             loginCell.descriptionLabel.text = login.hostname
             websiteField = loginCell.descriptionLabel
             websiteField?.accessibilityIdentifier = "websiteField"
@@ -195,8 +195,8 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .lastModifiedSeparator:
             let cell = CenteredDetailCell(style: .subtitle, reuseIdentifier: nil)
-            let created = NSLocalizedString("Created %@", tableName: "LoginManager", comment: "Label describing when the current login was created with the timestamp as the parameter.")
-            let lastModified = NSLocalizedString("Modified %@", tableName: "LoginManager", comment: "Label describing when the current login was last modified with the timestamp as the parameter.")
+            let created: String = .LoginDetailCreatedAt
+            let lastModified: String = .LoginDetailModifiedAt
 
             let lastModifiedFormatted = String(format: lastModified, Date.fromTimestamp(UInt64(login.timePasswordChanged)).toRelativeTimeString(dateStyle: .medium))
             let createdFormatted = String(format: created, Date.fromTimestamp(UInt64(login.timeCreated)).toRelativeTimeString(dateStyle: .medium, timeStyle: .none))
@@ -209,7 +209,7 @@ extension LoginDetailViewController: UITableViewDataSource {
 
         case .deleteItem:
             let deleteCell = cell(forIndexPath: indexPath)
-            deleteCell.textLabel?.text = NSLocalizedString("Delete", tableName: "LoginManager", comment: "Label for the button used to delete the current login.")
+            deleteCell.textLabel?.text = .LoginDetailDelete
             deleteCell.textLabel?.textAlignment = .center
             deleteCell.textLabel?.textColor = UIColor.theme.general.destructiveRed
             deleteCell.accessibilityTraits = UIAccessibilityTraits.button

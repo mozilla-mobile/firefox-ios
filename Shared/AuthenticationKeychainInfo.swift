@@ -16,6 +16,17 @@ public enum PasscodeInterval: Int {
     case tenMinutes     = 600
     case fifteenMinutes = 900
     case oneHour        = 3600
+    
+    public var settingTitle: String {
+        switch self {
+        case .immediately:      return .AuthenticationImmediately
+        case .oneMinute:        return .AuthenticationOneMinute
+        case .fiveMinutes:      return .AuthenticationFiveMinutes
+        case .tenMinutes:       return .AuthenticationTenMinutes
+        case .fifteenMinutes:   return .AuthenticationFifteenMinutes
+        case .oneHour:          return .AuthenticationOneHour
+        }
+    }
 }
 
 // MARK: - Helper methods for accessing Authentication information from the Keychain
