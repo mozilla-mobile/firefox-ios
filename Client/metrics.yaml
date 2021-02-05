@@ -630,9 +630,11 @@ app:
   opened_as_default_browser:
     type: counter
     description: |
-      Recorded when a preference is changed and includes the
-      preference that changed as well as the value changed to
-      recorded in the extra keys.
+      Counts the number of times the app is opened from an external
+      link, implying the client has Firefox set as a default browser.
+
+      Currently this is our most accurate way of measuring how
+      often Firefox is set as the default browser.
     bugs:
       - https://github.com/mozilla-mobile/firefox-ios/issues/7151
     data_reviews:
