@@ -21,14 +21,6 @@ private struct RemoteTabsPanelUX {
     static let EmptyStateSignInButtonCornerRadius: CGFloat = 4
     static let EmptyStateSignInButtonHeight = 44
     static let EmptyStateSignInButtonWidth = 200
-
-    // Backup and active strings added in Bug 1205294.
-    static let EmptyStateInstructionsSyncTabsPasswordsBookmarksString = NSLocalizedString("Sync your tabs, bookmarks, passwords and more.", comment: "Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in.")
-
-    static let EmptyStateInstructionsSyncTabsPasswordsString = NSLocalizedString("Sync your tabs, passwords and more.", comment: "Text displayed when the Sync home panel is empty, describing the features provided by Sync to invite the user to log in.")
-
-    static let EmptyStateInstructionsGetTabsBookmarksPasswordsString = NSLocalizedString("Get your open tabs, bookmarks, and passwords from your other devices.", comment: "A re-worded offer about Sync, displayed when the Sync home panel is empty, that emphasizes one-way data transfer, not syncing.")
-
     static let HistoryTableViewHeaderChevronInset: CGFloat = 10
     static let HistoryTableViewHeaderChevronSize: CGFloat = 20
     static let HistoryTableViewHeaderChevronLineWidth: CGFloat = 3.0
@@ -101,14 +93,11 @@ enum RemoteTabsError {
 
     func localizedString() -> String {
         switch self {
-        case .notLoggedIn:
-            return "" // This does not have a localized string because we have a whole specific screen for it.
-        case .noClients:
-            return Strings.EmptySyncedTabsPanelNullStateDescription
-        case .noTabs:
-            return NSLocalizedString("You don’t have any tabs open in Firefox on your other devices.", comment: "Error message in the remote tabs panel")
-        case .failedToSync:
-            return NSLocalizedString("There was a problem accessing tabs from your other devices. Try again in a few moments.", comment: "Error message in the remote tabs panel")
+        // This does not have a localized string because we have a whole specific screen for it.
+        case .notLoggedIn: return ""
+        case .noClients: return Strings.EmptySyncedTabsPanelNullStateDescription
+        case .noTabs: return .RemoteTabErrorNoTabs
+        case .failedToSync: return .RemoteTabErrorFailedToSync
         }
     }
 }
@@ -161,16 +150,16 @@ class RemoteTabsPanelClientAndTabsDataSource: NSObject, RemoteTabsPanelDataSourc
         */
 
         let timestamp = clientTabs.approximateLastSyncTime()
-        let label = NSLocalizedString("Last synced: %@", comment: "Remote tabs last synced time. Argument is the relative date string.")
+        let label: String = .RemoteTabLastSync
         view.detailTextLabel?.text = String(format: label, Date.fromTimestamp(timestamp).toRelativeTimeString())
 
         let image: UIImage?
         if client.type == "desktop" {
             image = UIImage.templateImageNamed("deviceTypeDesktop")
-            image?.accessibilityLabel = NSLocalizedString("computer", comment: "Accessibility label for Desktop Computer (PC) image in remote tabs list")
+            image?.accessibilityLabel = .RemoteTabComputerAccessibilityLabel
         } else {
             image = UIImage.templateImageNamed("deviceTypeMobile")
-            image?.accessibilityLabel = NSLocalizedString("mobile device", comment: "Accessibility label for Mobile Device image in remote tabs list")
+            image?.accessibilityLabel = .RemoteTabMobileAccessibilityLabel
         }
         view.imageView.tintColor = UIColor.theme.tableView.rowText
         view.imageView.image = image
@@ -373,7 +362,7 @@ class RemoteTabsNotLoggedInCell: UITableViewCell {
         signInButton.addTarget(self, action: #selector(signIn), for: .touchUpInside)
         contentView.addSubview(signInButton)
 
-        createAnAccountButton.setTitle(NSLocalizedString("Create an account", comment: "See http://mzl.la/1Qtkf0j"), for: [])
+        createAnAccountButton.setTitle(.RemoteTabCreateAccount, for: [])
         createAnAccountButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .caption1)
         createAnAccountButton.addTarget(self, action: #selector(createAnAccount), for: .touchUpInside)
         contentView.addSubview(createAnAccountButton)

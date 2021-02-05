@@ -10,8 +10,8 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        accessibilityLabel = PrivateModeStrings.toggleAccessibilityLabel
-        accessibilityHint = PrivateModeStrings.toggleAccessibilityHint
+        accessibilityLabel = .TabTrayToggleAccessibilityLabel
+        accessibilityHint = .TabTrayToggleAccessibilityHint
         let maskImage = UIImage(named: "smallPrivateMask")?.withRenderingMode(.alwaysTemplate)
         setImage(maskImage, for: [])
     }
@@ -26,7 +26,7 @@ class PrivateModeButton: ToggleButton, PrivateModeUI {
         tintColor = isPrivate ? onTint : offTint
         imageView?.tintColor = tintColor
 
-        accessibilityValue = isSelected ? PrivateModeStrings.toggleAccessibilityValueOn : PrivateModeStrings.toggleAccessibilityValueOff
+        accessibilityValue = isSelected ? .TabTrayToggleAccessibilityValueOn : .TabTrayToggleAccessibilityValueOff
     }
 }
 
@@ -34,7 +34,7 @@ extension UIButton {
     static func newTabButton() -> UIButton {
         let newTab = UIButton()
         newTab.setImage(UIImage.templateImageNamed("quick_action_new_tab"), for: .normal)
-        newTab.accessibilityLabel = NSLocalizedString("New Tab", comment: "Accessibility label for the New Tab button in the tab toolbar.")
+        newTab.accessibilityLabel = .TabTrayButtonNewTabAccessibilityLabel
         return newTab
     }
 }
@@ -43,7 +43,7 @@ extension TabsButton {
     static func tabTrayButton() -> TabsButton {
         let tabsButton = TabsButton()
         tabsButton.countLabel.text = "0"
-        tabsButton.accessibilityLabel = NSLocalizedString("Show Tabs", comment: "Accessibility Label for the tabs button in the tab toolbar")
+        tabsButton.accessibilityLabel = .TabTrayButtonShowTabsAccessibilityLabel
         return tabsButton
     }
 }
