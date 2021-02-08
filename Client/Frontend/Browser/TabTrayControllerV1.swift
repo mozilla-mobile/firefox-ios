@@ -486,7 +486,20 @@ extension TabTrayControllerV1 {
     }
 
     func closeTabsForCurrentTray() {
-        self.tabManager.removeTabsWithNoUndoToast(self.tabDisplayManager.dataStore.compactMap { $0 })
+        let tabs = self.tabDisplayManager.dataStore.compactMap { $0 }
+        self.tabManager.removeTabsWithUndoToast(tabs)
+        guard tabs.count >= 100 else {
+            self.tabManager.removeTabsWithNoUndoToast(tabs)
+            closeTabsTrayHelper()
+            return
+        }
+        tabDisplayManager.hideDisplayedTabs() {
+            self.tabManager.removeTabsWithUndoToast(tabs)
+            self.closeTabsTrayHelper()
+        }
+    }
+    
+    func closeTabsTrayHelper() {
         if self.tabDisplayManager.isPrivate {
             self.emptyPrivateTabsView.isHidden = !self.privateTabsAreEmpty()
             if !self.emptyPrivateTabsView.isHidden {
@@ -501,7 +514,7 @@ extension TabTrayControllerV1 {
             self.dismissTabTray()
         }
     }
-
+    
     func changePrivacyMode(_ isPrivate: Bool) {
         if isPrivate != tabDisplayManager.isPrivate {
             didTogglePrivateMode()
