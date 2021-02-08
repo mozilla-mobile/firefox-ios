@@ -21,8 +21,6 @@ getLocale()
   echo "Creating firefoxios-l10n Git repo"
   rm -rf firefoxios-l10n
   git clone --depth 1 https://github.com/mozilla-l10n/firefoxios-l10n firefoxios-l10n || exit 1
-
-  ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
 }
 
 if [ "$1" == "--locale" ]; then
@@ -37,12 +35,17 @@ if [ "$1" == "--force" ]; then
     rm -rf ~/Library/Caches/org.carthage.CarthageKit
 fi
 
-# Import locales
-if [ -d "/firefoxios-l10n" ] && [ -d "/ios-l10n-scripts" ]; then
-    echo "l10n directories found. Not downloading scripts."
-else
-    echo "l10n directory not found. Downloading repo and scripts."
-    getLocale
+if [ "$1" == "--importLocales" ]; then
+  # Import locales
+  if [ -d "/firefoxios-l10n" ] && [ -d "/ios-l10n-scripts" ]; then
+      echo "l10n directories found. Not downloading scripts."
+  else
+      echo "l10n directory not found. Downloading repo and scripts."
+      getLocale
+  fi
+
+  ./ios-l10n-scripts/ios-l10n-tools --project-path Client.xcodeproj --l10n-project-path ./firefoxios-l10n --import
+  exit 0
 fi
 
 # Run carthage
