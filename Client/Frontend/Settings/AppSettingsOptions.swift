@@ -1059,20 +1059,18 @@ class SiriPageSetting: Setting {
 
 @available(iOS 14.0, *)
 class DefaultBrowserSetting: Setting {
-    let profile: Profile
-
     override var accessibilityIdentifier: String? { return "DefaultBrowserSettings" }
 
-    init(settings: SettingsTableViewController) {
-        self.profile = settings.profile
-
-        super.init(title: NSAttributedString(string: String.DefaultBrowserMenuItem, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowText]))
+    init() {
+        super.init(title: NSAttributedString(string: String.DefaultBrowserMenuItem, attributes: [NSAttributedString.Key.foregroundColor: UIColor.theme.tableView.rowActionAccessory]))
     }
 
     override func onClick(_ navigationController: UINavigationController?) {
         TelemetryWrapper.gleanRecordEvent(category: .action, method: .open, object: .settingsMenuSetAsDefaultBrowser)
         LeanPlumClient.shared.track(event: .settingsSetAsDefaultBrowser)
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:])
+        navigationController?.dismiss(animated: true, completion: {
+            BrowserViewController.foregroundBVC().presentDBOnboardingViewController(true)
+        })
     }
 }
 
