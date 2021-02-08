@@ -2121,9 +2121,9 @@ extension BrowserViewController {
     }
     
     // Default browser onboarding
-    func presentDBOnboardingViewController() {
+    func presentDBOnboardingViewController(_ force: Bool = false) {
         let shouldShow = DefaultBrowserOnboardingViewModel.shouldShowDefaultBrowserOnboarding(userPrefs: profile.prefs)
-        guard shouldShow else {
+        guard force || shouldShow else {
             return
         }
         let dBOnboardingViewController = DefaultBrowserOnboardingViewController()
