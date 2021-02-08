@@ -183,7 +183,7 @@ class DownloadFilesTests: BaseTestCase {
         let list = app.tables["DownloadsTable"].cells.count
         XCTAssertEqual(list, items, "The number of items in the downloads table is not correct")
     }
-
+    // Smoketest
     func testToastButtonToGoToDownloads() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         waitForExistence(app.buttons["Downloads"])
