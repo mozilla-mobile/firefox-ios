@@ -53,7 +53,6 @@ class DownloadFilesTests: BaseTestCase {
     }
     
     // Smoketest
-    /*Issue https://github.com/mozilla-mobile/firefox-ios/issues/7945
     func testDownloadFile() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         navigator.goto(BrowserTabMenu)
@@ -64,7 +63,7 @@ class DownloadFilesTests: BaseTestCase {
         checkTheNumberOfDownloadedItems(items: 1)
         XCTAssertTrue(app.tables.cells.staticTexts[testFileName].exists)
         XCTAssertTrue(app.tables.cells.staticTexts[testFileSize].exists)
-    }*/
+    }
 
     func testDownloadBLOBFile() {
         downloadBLOBFile()
@@ -185,12 +184,11 @@ class DownloadFilesTests: BaseTestCase {
         XCTAssertEqual(list, items, "The number of items in the downloads table is not correct")
     }
     // Smoketest
-    /*Issue https://github.com/mozilla-mobile/firefox-ios/issues/7945
     func testToastButtonToGoToDownloads() {
         downloadFile(fileName: testFileName, numberOfDownlowds: 1)
         waitForExistence(app.buttons["Downloads"])
         app.buttons["Downloads"].tap()
         waitForExistence(app.tables["DownloadsTable"], timeout: 3)
         checkTheNumberOfDownloadedItems(items: 1)
-    }*/
+    }
 }
