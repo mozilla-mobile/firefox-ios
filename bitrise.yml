@@ -2733,7 +2733,7 @@ workflows:
 
             resp=$(curl -X GET -s -H 'Accept: application/vnd.github.v3+json' -H "authorization: Bearer ${GITHUB_ACCESS_TOKEN}" https://api.github.com/repos/mozilla-mobile/firefox-ios/commits\?sha\=main\&since\=$YESTERDAY | jq -r '.[].commit.author | select(.name | contains("BITRISE.YML-bot"))')
             echo $resp
-            if [ -z $resp ]
+            if [ -z "$resp" ]
             then
                 echo "There is not any new commit, stop building"
             else
