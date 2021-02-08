@@ -42,17 +42,14 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         return DefaultBrowserOnboardingViewController.theme == .dark ? .black : .white
     }
     private lazy var closeButton: UIButton = {
-        let imgView = UIButton()
-        imgView.setImage(UIImage(named: "db-close-ellipse")?.withRenderingMode(.alwaysTemplate), for: .normal)
-        imgView.tintColor = UIColor.theme.defaultBrowserCard.closeButtonBackground
-        return imgView
-    }()
-    private var closeButtonImage: UIImageView = {
-        let imgView = UIImageView(image: UIImage(named: "db-close")?.withRenderingMode(.alwaysTemplate))
-        imgView.contentMode = .scaleAspectFit
-        imgView.clipsToBounds = true
-        imgView.tintColor = UIColor.theme.defaultBrowserCard.closeButton
-        return imgView
+        let closeButton = UIButton()
+        closeButton.setImage(UIImage(named: "close-large"), for: .normal)
+        if #available(iOS 13, *) {
+            closeButton.tintColor = .secondaryLabel
+        } else {
+            closeButton.tintColor = .black
+        }
+        return closeButton
     }()
     private lazy var topImageView: UIImageView = {
         let imgView = UIImageView(image: viewModel.model?.titleImage)
@@ -144,7 +141,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         self.view.addSubview(topImageView)
         self.view.addSubview(imageText)
         self.view.addSubview(closeButton)
-        closeButton.addSubview(closeButtonImage)
         self.view.addSubview(titleLabel)
         self.view.addSubview(descriptionText)
         self.view.addSubview(descriptionLabel1)
@@ -168,9 +164,6 @@ class DefaultBrowserOnboardingViewController: UIViewController {
         closeButton.snp.makeConstraints { make in
             make.top.equalTo(view.snp.topMargin).offset(UpdateViewControllerUX.DoneButton.paddingTop)
             make.right.equalToSuperview().inset(UpdateViewControllerUX.DoneButton.paddingRight)
-        }
-        closeButtonImage.snp.makeConstraints { make in
-            make.center.equalToSuperview()
         }
         // The top imageview constraints setup
         topImageView.snp.makeConstraints { make in
